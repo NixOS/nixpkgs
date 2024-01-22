@@ -90,17 +90,28 @@ stdenv.mkDerivation rec {
     extraModules = [
       {
         node.pkgsReadOnly = false;
-        defaults.nixpkgs.overlays = lib.mkForce [
-          (final: _: { mpi = final.mpich.override { pmixSupport = false; }; })
+        defaults.nixpkgs.overlays = [
+          (final: _: { mpi = final.mpich.override { pmixSupport = false; withSlurm = false; }; })
         ];
 
-        slurmTest.steps."30-srun-cpi".enable = false; # no direct-srun
-        slurmTest.steps."30-srun-pmix".enable = false; # No pmix
+        slurmTest.srun.implementations = [ "pmi2" ];
+        slurmTest.mpirun.enable = true;
 
-        # tests a failure, but only fails with openmpi?
-        slurmTest.steps."30-srun-pmix-cpi-asan".enable = false;
+        # Asan only fails with openmpi?
+        slurmTest.steps."30-srun-cpi-asan".enable = false;
+      }
+    ];
+  };
+  passthru.tests.slurm-srun = nixosTests.slurm.override {
+    extraModules = [
+      {
+        node.pkgsReadOnly = false;
+        defaults.nixpkgs.overlays = [
+          (final: _: { mpi = final.mpich.override { pmixSupport = false; withSlurm = true; }; })
+        ];
 
-        slurmTest.steps."30-mpirun-cpi".enable = true;
+        slurmTest.srun.implementations = [ "pmi2" ];
+        slurmTest.steps."30-srun-cpi-asan".enable = false;
       }
     ];
   };
@@ -108,7 +119,7 @@ stdenv.mkDerivation rec {
     extraModules = [
       {
         node.pkgsReadOnly = false;
-        defaults.nixpkgs.overlays = lib.mkForce [ (final: _: { mpi = final.mpich-pmix; }) ];
+        defaults.nixpkgs.overlays = [ (final: _: { mpi = final.mpich-pmix; }) ];
       }
     ];
   };

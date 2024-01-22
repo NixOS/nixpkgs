@@ -45,9 +45,46 @@ in
           internal = true;
           default = "${toString testCfg.firstNodeId}-${toString testCfg.lastNodeId}";
         };
+
         steps = mkOption {
           type = types.attrsOf Step;
           description = "Lexicographically-ordered parts of the testScript";
+        };
+
+        srun.enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc "Whether to test running samples using `srun`";
+        };
+        srun.mode = mkOption {
+          type = types.enum [
+            "none"
+            "pmix"
+            "pmi2"
+            "cray_shasta"
+          ];
+          description = lib.mdDoc "Default value for `--mpi` when executing `srun`";
+          default = "pmi2";
+        };
+        srun.implementations = mkOption {
+          type = types.listOf (
+            types.enum [
+              "none"
+              "pmix"
+              "pmi2"
+              "cray_shasta"
+            ]
+          );
+          description = lib.mdDoc "Valid values for `--mpi` when executing `srun`";
+          default = [
+            "pmix"
+            "pmi2"
+          ];
+        };
+        mpirun.enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Whether to test running samples using `sbatch` and the mpi library's `mpirun`";
         };
       };
       config.nodes =
@@ -189,7 +226,8 @@ in
 
           environment.systemPackages = [
             (lib.getBin pkgs.mpi) # mpiexec
-            (pkgs.writeShellScriptBin "mpirun-cpi" "${lib.getExe' pkgs.mpi "mpirun"} ${lib.getExe nodeCfg.cpi.package}")
+            (pkgs.writeShellScriptBin "mpirun-cpi" "${lib.getExe' pkgs.mpi "mpirun"} ${lib.getExe nodeCfg.cpi.package}"
+            )
             nodeCfg.mpitest.package
             nodeCfg.cpi.package
           ];
@@ -213,6 +251,8 @@ in
       from sys import stderr
       start_all()
     '';
+
+    "21-broken-startup".enable = testCfg.srun.enable;
     "21-broken-startup".script = ''
       # The automatic startup of munge, slurmd, slurmctld, and slurmdbd is mostly
       # broken. E.g. slurmctld errors out if it can't reach slurmdbd immediately,
@@ -228,7 +268,7 @@ in
           else:
             raise RuntimeError("slurmd.service no longer fails to start")
 
-          submit.fail("srun -N 3 --mpi=pmix mpitest | grep size=3")
+          submit.fail("srun -N 3 --mpi=${testCfg.srun.mode} mpitest | grep size=3")
     '';
 
     "22-systemctl-restart".script = ''
@@ -255,40 +295,45 @@ in
               node.wait_for_unit("slurmd")
     '';
 
+    "23-srun-mpi-list".enable = testCfg.srun.enable;
+    "23-srun-mpi-list".script = ''
+      print(submit.succeed("srun --mpi=list"))
+    '';
+
     # Test that the cluster works and can distribute jobs;
-    "23-srun-hostname".script = ''
+    "24-srun-hostname".enable = testCfg.srun.enable;
+    "24-srun-hostname".script = ''
       with subtest("run_distributed_command"):
           # Run `hostname` on 3 nodes of the partition (so on all the 3 nodes).
           # The output must contain the 3 different names
-          submit.succeed("srun -N 3 hostname | sort | uniq | wc -l | xargs test 3 -eq")
+          submit.succeed("srun -N 3 --mpi=${testCfg.srun.mode} hostname | sort | uniq | wc -l | xargs test 3 -eq")
 
           with subtest("check_slurm_dbd"):
               # find the srun job from above in the database
               control.succeed("sleep 5")
               control.succeed("sacct | grep hostname")
     '';
+
+    "30-srun-pmix".enable = lib.mkDefault (builtins.elem "pmix" testCfg.srun.implementations);
     "30-srun-pmix".script = ''
       with subtest("Test PMIx (verifies the ranks and world size, but performs no actual communication)"):
           submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
     '';
-    # Another failure case to be fixed
-    "30-srun-pmix-cpi-asan".script = ''
-      with subtest("Demonstrate that pmix breaks with address sanitizers"):
-          submit.fail("srun -N 3 --mpi=pmix cpi-asan")
-    '';
-    "30-srun-cpi-asan".enable = lib.mkDefault false; # openmpi not built with pmi2.h
+
+    "30-srun-cpi-asan".enable = lib.mkDefault testCfg.srun.enable;
     "30-srun-cpi-asan".script = ''
-      with subtest("Demonstrate that cpi w/o pmix succeeds satisfies asan"):
-          submit.succeed("srun -N 3 cpi-asan")
+      with subtest("Demonstrate cpi broken with asan"):
+          submit.fail("srun -N 3 --mpi=${testCfg.srun.mode} cpi-asan")
     '';
-    # Works without asan though
+
+    "30-srun-cpi".enable = lib.mkDefault testCfg.srun.enable;
     "30-srun-cpi".script = ''
       with subtest("Run the cpi example from mpich (test communication)"):
-          submit.succeed("srun -N 3 --mpi=pmix cpi")
+          submit.succeed("srun -N 3 --mpi=${testCfg.srun.mode} cpi")
     '';
 
     # To be used with the overrides, e.g. by mpich
-    "30-mpirun-cpi".enable = lib.mkDefault false;
+    "30-mpirun-cpi".enable = lib.mkDefault testCfg.mpirun.enable;
     "30-mpirun-cpi".script = ''
       with subtest("Run the cpi example from mpich (test communication)"):
           submit.succeed("sbatch --wait -n 3 mpirun-cpi")
