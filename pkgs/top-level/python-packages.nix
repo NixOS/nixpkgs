@@ -5171,6 +5171,8 @@ self: super: with self; {
 
   hiro = callPackage ../development/python-modules/hiro { };
 
+  hishel = callPackage ../development/python-modules/hishel { };
+
   hist = callPackage ../development/python-modules/hist { };
 
   histoprint = callPackage ../development/python-modules/histoprint { };
