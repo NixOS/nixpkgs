@@ -22426,6 +22426,13 @@ with self; {
       url = "mirror://cpan/authors/id/F/FR/FRACTAL/Session-Token-1.503.tar.gz";
       hash = "sha256-MsPflu9FXHGHA2Os2VDdxPvISMWU9LxVshtEz5efeaE=";
     };
+    patches = [
+      # Add final null-byte to tokens. https://github.com/hoytech/Session-Token/pull/3
+      (fetchpatch {
+        url = "https://github.com/hoytech/Session-Token/commit/cd64e7b69986054bb715755290811308159b7959.patch";
+        hash = "sha256-nMQmdvVQW8cQYO0+bLJcdVfSOLVIsongk+71fQ7fQdU=";
+      })
+    ];
     meta = {
       description = "Secure, efficient, simple random session token generation";
       homepage = "https://github.com/hoytech/Session-Token";
