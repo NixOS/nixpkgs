@@ -572,8 +572,8 @@ in {
   netdata = handleTest ./netdata.nix {};
   networking.networkd = handleTest ./networking.nix { networkd = true; };
   networking.scripted = handleTest ./networking.nix { networkd = false; };
-  netbox_3_5 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_5; };
   netbox_3_6 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_6; };
+  netbox_3_7 = handleTest ./web-apps/netbox.nix { netbox = pkgs.netbox_3_7; };
   netbox-upgrade = handleTest ./web-apps/netbox-upgrade.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
