@@ -607,6 +607,8 @@ self: super: with self; {
 
   anyqt = callPackage ../development/python-modules/anyqt { };
 
+  anysqlite = callPackage ../development/python-modules/anysqlite { };
+
   anytree = callPackage ../development/python-modules/anytree {
     inherit (pkgs) graphviz;
   };
