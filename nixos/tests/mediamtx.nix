@@ -23,6 +23,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
           DynamicUser = true;
           Restart = "on-failure";
           RestartSec = "1s";
+          # restart service without going through failed/inactive state that confuses wait_for_unit
+          RestartMode = "direct";
           TimeoutStartSec = "10s";
           ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -re -f lavfi -i smptebars=size=800x600:rate=10 -c libx264 -f flv rtmp://localhost:1935/test";
         };
@@ -37,6 +39,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
           DynamicUser = true;
           Restart = "on-failure";
           RestartSec = "1s";
+          # restart service without going through failed/inactive state that confuses wait_for_unit
+          RestartMode = "direct";
           TimeoutStartSec = "10s";
           ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -y -re -i rtmp://localhost:1935/test -f flv /dev/null";
         };
