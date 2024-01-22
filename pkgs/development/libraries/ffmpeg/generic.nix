@@ -525,7 +525,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withZimg "libzimg")
     (enableFeature withZlib "zlib")
     (enableFeature withVulkan "vulkan")
-    (enableFeature withShaderc "libshaderc")
+    (optionalString (lib.versionAtLeast version "5") (enableFeature withShaderc "libshaderc"))
     (enableFeature withSamba "libsmbclient")
     /*
      * Developer flags
