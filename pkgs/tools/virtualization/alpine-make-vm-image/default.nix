@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/alpinelinux/alpine-make-vm-image";
     description = "Make customized Alpine Linux disk image for virtual machines";
-    maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "alpine-make-vm-image";
