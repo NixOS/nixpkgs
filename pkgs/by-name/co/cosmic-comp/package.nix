@@ -12,6 +12,7 @@
 , xwayland
 , wayland
 , xorg
+, useXWayland ? true
 }:
 
 rustPlatform.buildRustPackage {
@@ -56,11 +57,13 @@ rustPlatform.buildRustPackage {
   # These libraries are only used by the X11 backend, which will not
   # be the common case, so just make them available, don't link them.
   postInstall = ''
-    wrapProgram $out/bin/cosmic-comp \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+    wrapProgramArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
-      ]} \
-      --prefix PATH : ${lib.makeBinPath [ xwayland ]}
+    ]})
+  '' + lib.optionalString useXWayland ''
+    wrapProgramArgs+=(--prefix PATH : ${lib.makeBinPath [ xwayland ]})
+  '' + ''
+    wrapProgram $out/bin/cosmic-comp "''${wrapProgramArgs[@]}"
   '';
 
   meta = with lib; {
