@@ -1,4 +1,5 @@
 { lib
+, bleak
 , buildPythonPackage
 , dotmap
 , fetchFromGitHub
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.2.18";
+  version = "2.2.19";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-r3Hs3oD6CyYa/Ew0wMiLeUj/R4aa8Wc/W65EXMrPGmw=";
+    hash = "sha256-5VXvh0W3llSnpIalg1e+JyFgmlTV5J2x4VC/j2+9Xb8=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bleak
     dotmap
     pexpect
     protobuf

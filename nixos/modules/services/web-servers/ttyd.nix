@@ -180,10 +180,11 @@ in
         # Runs login which needs to be run as root
         # login: Cannot possibly work without effective root
         User = "root";
+        LoadCredential = lib.optionalString (cfg.passwordFile != null) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
       };
 
       script = if cfg.passwordFile != null then ''
-        PASSWORD=$(cat ${escapeShellArg cfg.passwordFile})
+        PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
         ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
           --credential ${escapeShellArg cfg.username}:"$PASSWORD" \
           ${pkgs.shadow}/bin/login
