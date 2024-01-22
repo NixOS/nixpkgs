@@ -21,7 +21,7 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/etc/prometheus-pve-exporter/pve.env";
-      description = lib.mdDoc ''
+      description = ''
         Path to the service's environment file. This path can either be a computed path in /nix/store or a path in the local filesystem.
 
         The environment file should NOT be stored in /nix/store as it contains passwords and/or keys in plain text.
@@ -34,7 +34,7 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/etc/prometheus-pve-exporter/pve.yml";
-      description = lib.mdDoc ''
+      description = ''
         Path to the service's config file. This path can either be a computed path in /nix/store or a path in the local filesystem.
 
         The config file should NOT be stored in /nix/store as it will contain passwords and/or keys in plain text.
@@ -45,46 +45,66 @@ in
       '';
     };
 
+    server = {
+      keyFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        example = "/var/lib/prometheus-pve-exporter/privkey.key";
+        description = ''
+          Path to a SSL private key file for the server
+        '';
+      };
+
+      certFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        example = "/var/lib/prometheus-pve-exporter/full-chain.pem";
+        description = ''
+          Path to a SSL certificate file for the server
+        '';
+      };
+    };
+
     collectors = {
       status = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Collect Node/VM/CT status
         '';
       };
       version = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Collect PVE version info
         '';
       };
       node = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Collect PVE node info
         '';
       };
       cluster = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Collect PVE cluster info
         '';
       };
       resources = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Collect PVE resources info
         '';
       };
       config = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Collect PVE onboot status
         '';
       };
@@ -102,8 +122,10 @@ in
           --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
           --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
           --${optionalString (!cfg.collectors.config) "no-"}collector.config \
-          %d/configFile \
-          ${toString cfg.port} ${cfg.listenAddress}
+          ${optionalString (cfg.server.keyFile != null) "--server.keyfile ${cfg.server.keyFile}"} \
+          ${optionalString (cfg.server.certFile != null) "--server.certfile ${cfg.server.certFile}"} \
+          --config.file %d/configFile \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port}
       '';
     } // optionalAttrs (cfg.environmentFile != null) {
       EnvironmentFile = cfg.environmentFile;
