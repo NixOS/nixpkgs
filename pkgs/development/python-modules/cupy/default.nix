@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7gNhW7vonyBkhYkPjUV/fdeRg57SQnFbgVlKc04HVt8=";
+    hash = "sha256-St9a22Af2QV3gOR80LmDMeq0x9tf/ZJz9Z4IgeeM80I=";
   };
 
-  # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
+  # See https://docs.cupy.dev/en/v13.0.0/reference/environment.html. Seting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
   # a small amount of thrashing but it turns out there are a large number of
   # very short builds and a few extremely long ones, so setting both ends up
