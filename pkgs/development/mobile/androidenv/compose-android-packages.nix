@@ -151,7 +151,7 @@ rec {
     postInstall = ''
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
       ${linkPlugin { name = "patcher"; plugin = patcher; }}
-      ${linkPlugin { name = "emulator"; plugin = emulator; }}
+      ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
     '';
   };
 
@@ -171,14 +171,14 @@ rec {
     }
   ) buildToolsVersions;
 
-  emulator = callPackage ./emulator.nix {
+  emulator = lib.optionals includeEmulator (callPackage ./emulator.nix {
     inherit deployAndroidPackage os;
     package = check-version packages "emulator" emulatorVersion;
 
     postInstall = ''
       ${linkSystemImages { images = system-images; check = includeSystemImages; }}
     '';
-  };
+  });
 
   platforms = map (version:
     deployAndroidPackage {
@@ -373,9 +373,11 @@ rec {
           ln -s $i $out/bin
       done
 
-      for i in ${emulator}/bin/*; do
-          ln -s $i $out/bin
-      done
+      ${lib.optionalString includeEmulator ''
+        for i in ${emulator}/bin/*; do
+            ln -s $i $out/bin
+        done
+      ''}
 
       find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
           ln -s $i $out/bin
