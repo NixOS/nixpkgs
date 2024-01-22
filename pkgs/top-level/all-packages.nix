@@ -28757,6 +28757,11 @@ with pkgs;
     pname = "systemd-minimal-libs";
     buildLibsOnly = true;
   };
+  # We do not want to include ukify in the normal systemd attribute as it
+  # relies on Python at runtime.
+  systemdUkify = systemd.override {
+    withUkify = true;
+  };
 
   udev =
     if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
