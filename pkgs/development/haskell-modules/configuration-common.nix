@@ -2571,10 +2571,6 @@ self: super: {
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
   hasura-ekg-core = doJailbreak super.hasura-ekg-core;
 
-  # tar-conduit-0.4.0 has a correctness bug that is fixed in 0.4.1:
-  # https://github.com/snoyberg/tar-conduit/issues/37
-  tar-conduit = assert super.tar-conduit.version == "0.4.0"; super.tar-conduit_0_4_1;
-
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
@@ -2913,10 +2909,5 @@ self: super: {
     #   repa-array, repa-convert, repa-eval, repa-flow,
     #   repa-query, repa-scalar, repa-store, repa-stream
   ;
-
-  # 2024-01-15: needs safe >= 0.3.20
-  hoogle = super.hoogle.override {
-    safe = self.safe_0_3_20;
-  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
