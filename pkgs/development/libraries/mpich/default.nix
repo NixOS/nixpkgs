@@ -20,6 +20,8 @@
   # PMIX support is likely incompatible with process managers (`--with-pm`)
   # https://github.com/NixOS/nixpkgs/pull/274804#discussion_r1432601476
   pmixSupport ? false,
+  withSlurm ? true,
+  slurm,
   nixosTests,
   mpich-pmix,
 }:
@@ -54,6 +56,11 @@ stdenv.mkDerivation rec {
       "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
       "FCFLAGS=-fallow-argument-mismatch"
     ]
+    ++ lib.optionals withSlurm
+    [
+      "--with-pmi=pmi2"
+      "--with-pmilib=slurm"
+    ]
     ++ lib.optionals pmixSupport [ "--with-pmix=${lib.getDev pmix}" ];
 
   enableParallelBuilding = true;
@@ -66,7 +73,9 @@ stdenv.mkDerivation rec {
     perl
     openssh
     hwloc
-  ] ++ lib.optional (!stdenv.isDarwin) ch4backend;
+  ]
+  ++ lib.optionals withSlurm [ (lib.getLib slurm) (lib.getDev slurm) ]
+  ++ lib.optionals (!stdenv.isDarwin) [ ch4backend ];
 
   doCheck = true;
 
