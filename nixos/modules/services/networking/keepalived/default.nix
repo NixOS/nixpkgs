@@ -140,6 +140,7 @@ let
 
 in
 {
+  meta.maintainers = [ lib.maintainers.raitobezarius ];
 
   options = {
     services.keepalived = {
