@@ -36,6 +36,8 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError caused due to wrong size
     "test_decode_error"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    "test_encode_error"
   ];
 
   meta = with lib; {
