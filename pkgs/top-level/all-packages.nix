@@ -5207,8 +5207,6 @@ with pkgs;
 
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
-  EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
-
   ecasound = callPackage ../applications/audio/ecasound { };
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
