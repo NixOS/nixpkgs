@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GDK_BACKEND : x11
+    )
+  '';
+
   meta = with lib; {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
