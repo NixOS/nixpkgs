@@ -24,6 +24,7 @@ let
     "ghc948"
     "ghc96"
     "ghc963"
+    "ghc964"
     "ghc98"
     "ghc981"
     "ghcHEAD"

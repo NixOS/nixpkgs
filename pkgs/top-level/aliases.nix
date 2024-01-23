@@ -170,6 +170,7 @@ mapAliases ({
   compton = throw "'compton' has been renamed to/replaced by 'picom'"; # Converted to throw 2023-09-10
   concurrencykit = libck; # Added 2021-03
   connmanPackages = throw "'connmanPackages' was removed and their subpackages/attributes were promoted to top level."; # Added 2023-10-08
+  convoy = throw "'convoy' has been removed from nixpkgs, as it was archived upstream"; # Added 2023-12-27
   cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
   cvs_fast_export = cvs-fast-export; # Added 2021-06-10
 
@@ -209,6 +210,9 @@ mapAliases ({
   devserver = throw "'devserver' has been removed in favor of 'miniserve' or other alternatives"; # Added 2023-01-13
   dhcp = throw "dhcp (ISC DHCP) has been removed from nixpkgs, because it reached its end of life"; # Added 2023-04-04
   dnnl = oneDNN; # Added 2020-04-22
+  docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
+  docker-machine-kvm = throw "'docker-machine-kvm' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
+  docker-machine-xhyve = throw "'docker-machine-xhyve' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
   dolphin-emu-beta = dolphin-emu; # Added 2023-02-11
   dolphinEmu = dolphin-emu; # Added 2021-11-10
   dolphinEmuMaster = dolphin-emu-beta; # Added 2021-11-10
@@ -225,6 +229,7 @@ mapAliases ({
 
   ### E ###
 
+  EBTKS = ebtks; # Added 2024-01-21
   ec2_ami_tools = ec2-ami-tools; # Added 2021-10-08
   ec2_api_tools = ec2-api-tools; # Added 2021-10-08
   ec2-utils = amazon-ec2-utils; # Added 2022-02-01
@@ -772,6 +777,7 @@ mapAliases ({
   ### P ###
 
   packet-cli = metal-cli; # Added 2021-10-25
+  PageEdit = pageedit; # Added 2024-01-21
   palemoon = throw "palemoon has been dropped due to python2 being EOL and marked insecure. Use 'palemoon-bin' instead"; # Added 2023-05-18
   paperless = paperless-ngx; # Added 2021-06-06
   paperless-ng = paperless-ngx; # Added 2022-04-11

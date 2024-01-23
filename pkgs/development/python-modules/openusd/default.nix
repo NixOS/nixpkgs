@@ -23,7 +23,7 @@
 , ptex
 , embree
 , alembic
-, openexr
+, imath
 , flex
 , bison
 , qt6
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     ptex
     embree
     alembic.dev
-    openexr
+    imath
     flex
     bison
     boost
