@@ -38,6 +38,13 @@ buildPythonPackage rec {
     appdirs
   ];
 
+  # Temporarily fix rpyc version requirement before upstream switch to latest
+  # See: https://github.com/linien-org/pyrp3/pull/10#pullrequestreview-1585887668
+  preConfigure = ''
+    substituteInPlace setup.py \
+      --replace "rpyc>=4.0,<5.0" "rpyc"
+  '';
+
   pythonImportsCheck = [ "linien_common" ];
 
   passthru.tests = {
