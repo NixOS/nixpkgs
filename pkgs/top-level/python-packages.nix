@@ -13988,6 +13988,8 @@ self: super: with self; {
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
+  switchbot-api = callPackage ../development/python-modules/switchbot-api { };
+
   swift = callPackage ../development/python-modules/swift { };
 
   swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
