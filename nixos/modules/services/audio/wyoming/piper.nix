@@ -118,6 +118,7 @@ in
       nameValuePair "wyoming-piper-${server}" {
         inherit (options) enable;
         description = "Wyoming Piper server instance ${server}";
+        wants = [ "network-online.target" ];
         after = [
           "network-online.target"
         ];
