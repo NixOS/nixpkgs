@@ -5210,8 +5210,6 @@ with pkgs;
 
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
-  EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
-
   ecasound = callPackage ../applications/audio/ecasound { };
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
@@ -11827,7 +11825,9 @@ with pkgs;
 
   page = callPackage ../tools/misc/page { };
 
-  PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
+  pageedit = libsForQt5.callPackage ../applications/office/PageEdit {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
@@ -30878,8 +30878,6 @@ with pkgs;
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
-
-  clipcat = callPackage ../applications/misc/clipcat { };
 
   clipmenu = callPackage ../applications/misc/clipmenu { };
 

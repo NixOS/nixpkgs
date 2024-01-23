@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 , pkg-config
 , bzip2
 , xz
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-K+pqyH3Ajfp+tPhAuK7XCNfGdXa15oNqfsQcogvmQ8o=";
+    hash = "sha256-AyxC1YS1VvCBIS6lKDtT2zX3bhorF4G+qg+brm4tJm8=";
   };
 
-  cargoHash = "sha256-ZJdVhSznznnF1P28XkwtoeWoeymtPNaAZgOaKby+gnk=";
+  cargoHash = "sha256-kStLY/Hjj0DeisjXzw2BbmJalNljUP0ogBEXcoDX3FE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,11 +52,13 @@ rustPlatform.buildRustPackage rec {
     rm cargo-dist/tests/cli-tests.rs
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "A tool for building final distributable artifacts and uploading them to an archive";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer mistydemeo ];
   };
 }

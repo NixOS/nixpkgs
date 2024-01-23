@@ -12388,6 +12388,12 @@
       fingerprint = "7088 C742 1873 E0DB 97FF  17C2 245C AB70 B4C2 25E9";
     }];
   };
+  mistydemeo = {
+    email = "misty@axo.dev";
+    github = "mistydemeo";
+    githubId = 780485;
+    name = "Misty De Méo";
+  };
   misuzu = {
     email = "bakalolka@gmail.com";
     github = "misuzu";

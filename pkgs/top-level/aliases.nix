@@ -231,6 +231,7 @@ mapAliases ({
 
   ### E ###
 
+  EBTKS = ebtks; # Added 2024-01-21
   ec2_ami_tools = ec2-ami-tools; # Added 2021-10-08
   ec2_api_tools = ec2-api-tools; # Added 2021-10-08
   ec2-utils = amazon-ec2-utils; # Added 2022-02-01
@@ -786,6 +787,7 @@ mapAliases ({
   ### P ###
 
   packet-cli = metal-cli; # Added 2021-10-25
+  PageEdit = pageedit; # Added 2024-01-21
   palemoon = throw "palemoon has been dropped due to python2 being EOL and marked insecure. Use 'palemoon-bin' instead"; # Added 2023-05-18
   paperless = paperless-ngx; # Added 2021-06-06
   paperless-ng = paperless-ngx; # Added 2022-04-11

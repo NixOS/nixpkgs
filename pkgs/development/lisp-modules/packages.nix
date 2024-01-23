@@ -507,7 +507,7 @@ let
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
-      rm -v $out/nyxt
+      rm -fv $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \
