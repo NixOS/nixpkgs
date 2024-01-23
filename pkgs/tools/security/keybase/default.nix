@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "keybase";
-  version = "6.0.2";
+  version = "6.2.4";
 
   modRoot = "go";
   subPackages = [ "kbnm" "keybase" ];
@@ -16,9 +16,9 @@ buildGoModule rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    sha256 = "sha256-JiYufEsoj/98An2qKdm/Uu4YHJr6ttc/VHn4kMgkuwI=";
+    hash = "sha256-z7vpCUK+NU7xU9sNBlQnSy9sjXD7/m8jSRKfJAgyyN8=";
   };
-  vendorSha256 = "sha256-D8b/pvmBGCnaRuf92FYgRcSSbN59Yu0CHKxAybdYjS4=";
+  vendorHash = "sha256-tXEEVEfjoKub2A4m7F3hDc5ABJ+R+axwX1+1j7e3BAM=";
 
   patches = [
     (substituteAll {
@@ -38,5 +38,7 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ avaq carlsverre np rvolosatovs Br1ght0ne shofius ];
     license = licenses.bsd3;
+
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
