@@ -11821,7 +11821,9 @@ with pkgs;
 
   page = callPackage ../tools/misc/page { };
 
-  PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
+  pageedit = libsForQt5.callPackage ../applications/office/PageEdit {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
