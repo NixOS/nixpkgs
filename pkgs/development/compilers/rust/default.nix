@@ -16,6 +16,7 @@
 , CoreFoundation, Security, SystemConfiguration
 , pkgsBuildBuild
 , pkgsBuildHost
+, pkgsBuildTarget
 , pkgsTargetTarget
 , makeRustPlatform
 , wrapRustcWith
@@ -23,7 +24,9 @@
 
 let
   # Use `import` to make sure no packages sneak in here.
-  lib' = import ../../../build-support/rust/lib { inherit lib stdenv pkgsBuildHost pkgsTargetTarget; };
+  lib' = import ../../../build-support/rust/lib {
+    inherit lib stdenv pkgsBuildHost pkgsBuildTarget pkgsTargetTarget;
+  };
   # Allow faster cross compiler generation by reusing Build artifacts
   fastCross = (stdenv.buildPlatform == stdenv.hostPlatform) && (stdenv.hostPlatform != stdenv.targetPlatform);
 in

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , pkgsBuildHost
+, pkgsBuildTarget
 , pkgsTargetTarget
 }:
 
@@ -24,7 +25,7 @@ rec {
     cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
     linkerForHost = if shouldUseLLD stdenv.targetPlatform
       && !stdenv.cc.bintools.isLLVM
-      then "${pkgsBuildHost.lld}/bin/ld.lld"
+      then "${pkgsBuildHost.llvmPackages.bintools}/bin/${stdenv.cc.targetPrefix}ld.lld"
       else ccForHost;
 
     # Unfortunately we must use the dangerous `pkgsTargetTarget` here
@@ -35,7 +36,7 @@ rec {
     cxxForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++";
     linkerForTarget = if shouldUseLLD pkgsTargetTarget.stdenv.targetPlatform
       && !pkgsTargetTarget.stdenv.cc.bintools.isLLVM # whether stdenv's linker is lld already
-      then "${pkgsBuildHost.lld}/bin/ld.lld"
+      then "${pkgsBuildTarget.llvmPackages.bintools}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}ld.lld"
       else ccForTarget;
 
     rustBuildPlatform = stdenv.buildPlatform.rust.rustcTarget;

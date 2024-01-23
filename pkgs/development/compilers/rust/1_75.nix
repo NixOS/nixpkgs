@@ -56,4 +56,4 @@ import ./default.nix {
   rustcPatches = [ ];
 }
 
-(builtins.removeAttrs args [ "pkgsBuildTarget" "llvmPackages_17" "llvm_17"])
+(builtins.removeAttrs args [ "llvmPackages_17" "llvm_17"])
