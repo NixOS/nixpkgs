@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "A enterprise resource planning (ERP) and customer relationship manager (CRM) server";
     homepage = "https://dolibarr.org/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raitobezarius ];
+    maintainers = [ ];
   };
 }
