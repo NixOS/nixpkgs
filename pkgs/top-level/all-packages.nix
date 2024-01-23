@@ -13006,6 +13006,8 @@ with pkgs;
 
   sanjuuni = callPackage ../tools/graphics/sanjuuni { };
 
+  sarif-tools = with python3Packages; toPythonApplication sarif-tools;
+
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
