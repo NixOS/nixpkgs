@@ -1,0 +1,39 @@
+From b95195b66c8c7d91004cfff8e24de7a0256eed65 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Wed, 22 Nov 2023 18:32:12 +0000
+Subject: [PATCH 2/4] autodiff: link tsl/xxhash/lz4 directly
+
+---
+ src/autodiff/CMakeLists.txt | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/autodiff/CMakeLists.txt b/src/autodiff/CMakeLists.txt
+index dc6c3de3..13d9d84b 100644
+--- a/src/autodiff/CMakeLists.txt
++++ b/src/autodiff/CMakeLists.txt
+@@ -1,9 +1,9 @@
+ set(DRJIT_AUTODIFF_VARIANTS drjit-autodiff-scalar-f32:float drjit-autodiff-scalar-f64:double)
+ 
+-include_directories(
+-  ../../ext/drjit-core/ext/robin_map/include
+-  ../../ext/drjit-core/ext/lz4
+-)
++find_package(xxHash REQUIRED)
++find_package(tsl-robin-map REQUIRED)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(lz4 liblz4 IMPORTED_TARGET REQUIRED)
+ 
+ if (DRJIT_ENABLE_JIT)
+   set(DRJIT_AUTODIFF_VARIANTS ${DRJIT_AUTODIFF_VARIANTS}
+@@ -35,7 +35,7 @@ foreach(DRJIT_AUTODIFF_VARIANT ${DRJIT_AUTODIFF_VARIANTS})
+   else()
+     target_compile_options(${DRJIT_AUTODIFF_VARIANT_NAME} PRIVATE -fvisibility=hidden)
+   endif()
+-  target_link_libraries(${DRJIT_AUTODIFF_VARIANT_NAME} PRIVATE drjit)
++  target_link_libraries(${DRJIT_AUTODIFF_VARIANT_NAME} PRIVATE drjit xxHash::xxhash tsl::robin_map PkgConfig::lz4)
+   if (DRJIT_ENABLE_JIT)
+     target_link_libraries(${DRJIT_AUTODIFF_VARIANT_NAME} PRIVATE drjit-core)
+     target_compile_definitions(${DRJIT_AUTODIFF_VARIANT_NAME} PRIVATE -DDRJIT_ENABLE_JIT=1)
+-- 
+2.42.0
+

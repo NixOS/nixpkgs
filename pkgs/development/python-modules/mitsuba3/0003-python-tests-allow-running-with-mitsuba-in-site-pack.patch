@@ -1,0 +1,26 @@
+From 89c1f5edc6602e6b08c5c7590ae47ac549de6961 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Thu, 23 Nov 2023 20:13:29 +0000
+Subject: [PATCH 3/4] python tests: allow running with mitsuba in site-packages
+ instead of _skbuild
+
+---
+ src/python/python/test/util.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/python/python/test/util.py b/src/python/python/test/util.py
+index b5ae0d90..2e744f31 100644
+--- a/src/python/python/test/util.py
++++ b/src/python/python/test/util.py
+@@ -11,7 +11,7 @@ import pytest
+ import drjit as dr
+ 
+ def find_resource(fname):
+-    path = os.path.dirname(os.path.realpath(__file__))
++    path = os.environ.get("MI_FIND_RESOURCE_ROOT", os.path.dirname(os.path.realpath(__file__)))
+     while True:
+         full = os.path.join(path, fname)
+         if os.path.exists(full):
+-- 
+2.42.0
+

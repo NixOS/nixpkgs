@@ -1,0 +1,25 @@
+From 89b47030133efb41f109dc068da17a3776c011b6 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Thu, 23 Nov 2023 02:18:58 +0000
+Subject: [PATCH 3/4] cmake: export the drjit-python target too
+
+---
+ src/python/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/python/CMakeLists.txt b/src/python/CMakeLists.txt
+index 0f6311a8..cae62fad 100644
+--- a/src/python/CMakeLists.txt
++++ b/src/python/CMakeLists.txt
+@@ -54,7 +54,7 @@ set_target_properties(drjit-python PROPERTIES
+ target_compile_options(drjit-python PRIVATE ${DRJIT_NATIVE_FLAGS})
+ 
+ if (DRJIT_MASTER_PROJECT)
+-  install(TARGETS drjit-python LIBRARY DESTINATION drjit)
++  install(TARGETS drjit-python EXPORT drjitTargets LIBRARY DESTINATION drjit)
+ endif()
+ 
+ configure_file(
+-- 
+2.42.0
+

@@ -1,0 +1,37 @@
+From 6938fada92f22285698ad57e2fac9476487c08a0 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Thu, 23 Nov 2023 05:21:31 +0000
+Subject: [PATCH 2/4] setup.py: try PYTHONPATH before git-submodules
+
+---
+ setup.py | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 89f3a33a..7309e1a9 100644
+--- a/setup.py
++++ b/setup.py
+@@ -22,11 +22,15 @@ with open(os.path.join(this_directory, "include/mitsuba/mitsuba.h")) as f:
+     matches = dict(mi_version_regex.findall(f.read()))
+     mitsuba_version = "{MAJOR}.{MINOR}.{PATCH}".format(**matches)
+ 
+-with open(os.path.join(this_directory, "ext/drjit/include/drjit/fwd.h")) as f:
+-    drjit_version_regex = re.compile(
+-        r"^\s*#\s*define\s+DRJIT_VERSION_([A-Z]+)\s+(.*)$", re.MULTILINE)
+-    matches = dict(drjit_version_regex.findall(f.read()))
+-    drjit_version = "{MAJOR}.{MINOR}.{PATCH}".format(**matches)
++try:
++    import drjit
++    drjit_version = drjit.__version__
++except ImportError:
++    with open(os.path.join(this_directory, "ext/drjit/include/drjit/fwd.h")) as f:
++        drjit_version_regex = re.compile(
++            r"^\s*#\s*define\s+DRJIT_VERSION_([A-Z]+)\s+(.*)$", re.MULTILINE)
++        matches = dict(drjit_version_regex.findall(f.read()))
++        drjit_version = "{MAJOR}.{MINOR}.{PATCH}".format(**matches)
+ 
+ with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+     long_description = f.read()
+-- 
+2.42.0
+

@@ -1,0 +1,75 @@
+From 95b72dbdc5dd79b8626bc8bd4269a60c3f95a85d Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Wed, 22 Nov 2023 20:32:40 +0000
+Subject: [PATCH] cmake: unbreak and add install targets
+
+---
+ CMakeLists.txt         | 28 ++++++++++++++++++----------
+ tinyformatConfig.cmake |  1 +
+ 2 files changed, 19 insertions(+), 10 deletions(-)
+ create mode 100644 tinyformatConfig.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7715dd0..51442fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,17 +9,16 @@ set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+     "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel."
+ )
+ 
+-set(CXX_STD "c++11" CACHE STRING "Version of C++ standard in use")
+-
+-# This project is infrastructure.  Warnings from common warning levels should
+-# be errors on all compilers, unless explicitly silenced.
+-if(NOT WIN32)
+-    set(CMAKE_CXX_FLAGS "-Wall -Werror -std=${CXX_STD}" CACHE STRING "Flags used by the compiler during all build types.")
+-endif()
+-
+ project(tinyformat)
+ cmake_minimum_required(VERSION 2.8)
+-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
++
++add_library(tinyformat INTERFACE)
++target_compile_features(tinyformat INTERFACE cxx_std_11)
++target_include_directories(
++  tinyformat
++  INTERFACE
++  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
++  $<INSTALL_INTERFACE:include>)
+ 
+ if(WIN32)
+     # Treat warnings as errors.  Would set this above, but need the default
+@@ -28,9 +27,10 @@ if(WIN32)
+ endif()
+ 
+ # Dummy translation unit to test for missing `inline`s
+-include_directories(${CMAKE_SOURCE_DIR})
+ file(WRITE ${CMAKE_BINARY_DIR}/_empty.cpp "#include \"tinyformat.h\"")
+ add_executable(tinyformat_test tinyformat_test.cpp ${CMAKE_BINARY_DIR}/_empty.cpp)
++target_link_libraries(tinyformat_test tinyformat)
++
+ enable_testing()
+ if(CMAKE_CONFIGURATION_TYPES)
+     set(ctest_config_opt -C ${CMAKE_BUILD_TYPE})
+@@ -42,3 +42,11 @@ option(COMPILE_SPEED_TEST FALSE)
+ if (COMPILE_SPEED_TEST)
+     add_executable(tinyformat_speed_test tinyformat_speed_test.cpp)
+ endif ()
++
++install(TARGETS tinyformat EXPORT tinyformatTargets)
++install(FILES tinyformat.h DESTINATION include)
++install(FILES tinyformatConfig.cmake DESTINATION lib/cmake/tinyformat)
++install(
++  EXPORT tinyformatTargets
++  FILE tinyformatTargets.cmake
++  DESTINATION lib/cmake/tinyformat)
+diff --git a/tinyformatConfig.cmake b/tinyformatConfig.cmake
+new file mode 100644
+index 0000000..877f0e9
+--- /dev/null
++++ b/tinyformatConfig.cmake
+@@ -0,0 +1 @@
++include("${CMAKE_CURRENT_LIST_DIR}/tinyformatTargets.cmake")
+-- 
+2.42.0
+

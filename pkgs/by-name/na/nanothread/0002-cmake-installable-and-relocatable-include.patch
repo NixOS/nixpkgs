@@ -1,0 +1,38 @@
+From 47614d6dc5280ba15258af51edb478a8eb91b02f Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Tue, 21 Nov 2023 20:16:16 +0000
+Subject: [PATCH 2/2] cmake: installable and relocatable include/
+
+---
+ CMakeLists.txt | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4d6dd11..8ba73e9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -60,7 +60,7 @@ endif()
+ 
+ target_include_directories(
+   nanothread PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+-                    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
++                    $<INSTALL_INTERFACE:include>)
+ 
+ target_compile_definitions(nanothread PRIVATE -DNANOTHREAD_BUILD=1)
+ set_target_properties(nanothread PROPERTIES INTERPROCEDURAL_OPTIMIZATION_RELEASE
+@@ -74,7 +74,11 @@ configure_file(
+   nanothreadConfig.cmake
+   "${CMAKE_CURRENT_BINARY_DIR}/nanothread/nanothreadConfig.cmake" COPYONLY)
+ install(FILES nanothreadConfig.cmake DESTINATION lib/cmake/nanothread)
+-install(TARGETS nanothread EXPORT nanothreadTargets)
++install(
++  TARGETS nanothread
++  EXPORT nanothreadTargets
++  INCLUDES DESTINATION include)
++install(DIRECTORY include/nanothread DESTINATION include)
+ install(
+   EXPORT nanothreadTargets
+   FILE nanothreadTargets.cmake
+-- 
+2.42.0
+

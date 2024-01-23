@@ -1,0 +1,26 @@
+From d8ee6b78106a910ca8613c44bfec822b9435b82c Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Fri, 24 Nov 2023 00:56:52 +0000
+Subject: [PATCH 4/4] mitsuba's __init__.py: don't check the 'expected
+ location' if drjit comes from the nix store
+
+---
+ src/python/__init__.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/python/__init__.py b/src/python/__init__.py
+index dca9c8c9..ac0e06b8 100644
+--- a/src/python/__init__.py
++++ b/src/python/__init__.py
+@@ -15,7 +15,7 @@ if _sys.version_info < (3, 8):
+ mi_dir = _os.path.dirname(_os.path.realpath(__file__))
+ drjit_expected_loc = _os.path.realpath(_os.path.join(mi_dir, "..", "drjit"))
+ drjit_loc = _os.path.realpath(_dr.__path__[0])
+-if _os.name != 'nt' and drjit_expected_loc != drjit_loc:
++if _os.name != 'nt' and drjit_expected_loc != drjit_loc and not drjit_loc.startswith("/nix/store/"):
+     logging.warning("The `mitsuba` package relies on `drjit` and needs it "
+                     "to be installed at a specific location. Currently, "
+                     "`drjit` is located at \"%s\" when it is expected to be "
+-- 
+2.42.0
+

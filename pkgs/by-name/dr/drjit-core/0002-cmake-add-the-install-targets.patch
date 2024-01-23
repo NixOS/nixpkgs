@@ -1,0 +1,60 @@
+From cbb72da0c1a9aaa753a585084f976eebd409e472 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Tue, 21 Nov 2023 19:45:22 +0000
+Subject: [PATCH 2/3] cmake: add the install targets
+
+---
+ .gitignore              |  1 +
+ CMakeLists.txt          | 11 ++++++++++-
+ drjit-core-config.cmake |  1 +
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+ create mode 100644 drjit-core-config.cmake
+
+diff --git a/.gitignore b/.gitignore
+index aabfccc..f3a36f6 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,6 +1,7 @@
+ /.clangd
+ /compile_commands.json
+ *.cmake
++!drjit-core-config.cmake
+ CMakeCache.txt
+ CMakeFiles
+ Makefile
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6b5a60c..bb1f694 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -189,7 +189,7 @@ target_compile_definitions(drjit-core PRIVATE -DLZ4LIB_VISIBILITY=)
+ target_include_directories(drjit-core
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
++  $<INSTALL_INTERFACE:include>)
+ 
+ target_compile_definitions(drjit-core PRIVATE -DDRJIT_BUILD=1)
+ target_link_libraries(drjit-core PRIVATE nanothread)
+@@ -248,3 +248,12 @@ set_target_properties(drjit-core PROPERTIES INTERPROCEDURAL_OPTIMIZATION_DEBUG
+ if (DRJIT_ENABLE_TESTS)
+   add_subdirectory(tests)
+ endif()
++
++configure_file(drjit-core-config.cmake "${CMAKE_CURRENT_BINARY_DIR}/drjit-core/drjit-core-config.cmake")
++install(TARGETS drjit-core EXPORT drjit-core-targets)
++install(DIRECTORY include/drjit-core DESTINATION include)
++install(FILES drjit-core-config.cmake DESTINATION lib/cmake/drjit-core)
++install(
++  EXPORT drjit-core-targets
++  FILE drjit-core-targets.cmake
++  DESTINATION lib/cmake/drjit-core)
+diff --git a/drjit-core-config.cmake b/drjit-core-config.cmake
+new file mode 100644
+index 0000000..0b800fd
+--- /dev/null
++++ b/drjit-core-config.cmake
+@@ -0,0 +1 @@
++include("${CMAKE_CURRENT_LIST_DIR}/drjit-core-targets.cmake")
+-- 
+2.42.0
+

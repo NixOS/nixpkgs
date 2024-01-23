@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, ispc, tbb, glfw,
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, ispc, tbbLatest, glfw,
   openimageio, libjpeg, libpng, libpthreadstubs, libX11, glib }:
 
 stdenv.mkDerivation rec {
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DEMBREE_TUTORIALS=OFF"
     "-DEMBREE_RAY_MASK=ON"
-    "-DTBB_ROOT=${tbb}"
-    "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
+    "-DTBB_ROOT=${tbbLatest}"
+    "-DTBB_INCLUDE_DIR=${tbbLatest.dev}/include"
   ];
 
   nativeBuildInputs = [ ispc pkg-config cmake ];
-  buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
+  buildInputs = [ tbbLatest glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
                 ++ lib.optionals stdenv.isDarwin [ glib ];
 
   meta = with lib; {
