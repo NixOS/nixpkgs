@@ -55,7 +55,14 @@ stdenv.mkDerivation rec {
     (lib.enableFeature ideSupport "ide")
   ];
 
+  outputs = [ "out" "dev" ];
+
   installTargets = [ "install" "install-lib" ];
+
+  postInstall = ''
+    mkdir -p $dev/lib
+    mv $out/lib/ocaml $dev/lib/
+  '';
 
   passthru.withProvers = callPackage ./with-provers.nix {};
 
