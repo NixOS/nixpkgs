@@ -4,7 +4,7 @@
 , imagemagick
 , mesa
 , libdrm
-, flutter313
+, flutter
 , pulseaudio
 , makeDesktopItem
 , gnome
@@ -14,19 +14,20 @@
 
 let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter313.buildFlutterApplication (rec {
+flutter.buildFlutterApplication (rec {
   pname = "fluffychat-${targetFlutterPlatform}";
-  version = "1.14.1";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "krille-chan";
     repo = "fluffychat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VTpZvoyZXJ5SCKr3Ocfm4iT6Z/+AWg+SCw/xmp68kMg=";
+    hash = "sha256-SCZtdmpUaCwORIJgT9lQO/It+WSzkhBOd6liLzPBerU=";
   };
 
-  pubspecLock = lib.importJSON ./pubspec.lock.json;
+  inherit pubspecLock;
 
   gitHashes = {
     keyboard_shortcuts = "sha256-U74kRujftHPvpMOIqVT0Ph+wi1ocnxNxIFA1krft4Os=";
@@ -82,8 +83,7 @@ flutter313.buildFlutterApplication (rec {
     # https://github.com/krille-chan/fluffychat/blob/v1.17.1/scripts/prepare-web.sh
     let
       # Use Olm 1.3.2, the oldest version, for FluffyChat 1.14.1 which depends on olm_flutter 1.2.0.
-      # In the future, this should be changed to use self.pubspecLock.dependencyVersions.flutter_olm as the script does.
-      olmVersion = "1.3.2";
+      olmVersion = pubspecLock.packages.flutter_olm.version;
       olmJs = fetchzip {
         url = "https://github.com/famedly/olm/releases/download/v${olmVersion}/olm.zip";
         stripRoot = false;

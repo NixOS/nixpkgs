@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/alpinelinux/alpine-make-vm-image";
     description = "Make customized Alpine Linux disk image for virtual machines";
     license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;
     mainProgram = "alpine-make-vm-image";
   };
