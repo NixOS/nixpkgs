@@ -15,6 +15,7 @@
 , glew
 , lua
 , mpg123
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     zip
+    wrapGAppsHook
   ];
 
   buildInputs = [
