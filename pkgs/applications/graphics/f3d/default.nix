@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, help2man
+, gzip
 , vtk_9
 , autoPatchelfHook
 , libX11
@@ -14,6 +16,8 @@ stdenv.mkDerivation rec {
   pname = "f3d";
   version = "2.2.1";
 
+  outputs = [ "out" "man" ];
+
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
@@ -23,18 +27,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    help2man
+    gzip
     # https://github.com/f3d-app/f3d/pull/1217
     autoPatchelfHook
   ];
 
   buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
-  # conflict between VTK and Nixpkgs;
-  # see https://github.com/NixOS/nixpkgs/issues/89167
   cmakeFlags = [
+    # conflict between VTK and Nixpkgs;
+    # see https://github.com/NixOS/nixpkgs/issues/89167
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+
+    "-DF3D_LINUX_GENERATE_MAN=ON"
   ];
 
   meta = with lib; {
