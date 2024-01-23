@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
     description = "A tool to find out the processes doing the most IO";
     homepage = "http://guichaz.free.fr/iotop";
     license = licenses.gpl2;
+    mainProgram = "iotop";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
   };
