@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, vtk_9
+, autoPatchelfHook
+, libX11
+, libGL
+, Cocoa
+, OpenGL
+}:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
@@ -11,7 +21,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-3Pg8uvrUGPKPmsn24q5HPMg9dgvukAXBgSVTW0NiCME=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    # https://github.com/f3d-app/f3d/pull/1217
+    autoPatchelfHook
+  ];
 
   buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
