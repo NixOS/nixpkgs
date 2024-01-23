@@ -35,15 +35,14 @@ in {
         Slice = "system-rustdesk.slice";
         User  = "rustdesk";
         Group = "rustdesk";
+        DynamicUser = "yes";
         Environment = [];
         WorkingDirectory = "/var/lib/rustdesk";
         StateDirectory   = "rustdesk";
         StateDirectoryMode = "0750";
         LockPersonality = true;
-        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
-        PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -53,10 +52,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
         RestrictNamespaces = true;
-        RestrictSUIDSGID = true;
       };
     };
   in lib.mkIf cfg.enable {
