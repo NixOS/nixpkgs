@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openexr, boost, jemalloc, c-blosc, ilmbase, tbb }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, jemalloc, c-blosc, tbb, zlib }:
 
 stdenv.mkDerivation rec
 {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ openexr boost tbb jemalloc c-blosc ilmbase ];
+  buildInputs = [ boost tbb jemalloc c-blosc zlib ];
 
   cmakeFlags = [ "-DOPENVDB_CORE_STATIC=OFF" ];
 
