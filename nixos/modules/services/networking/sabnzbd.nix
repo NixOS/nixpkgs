@@ -21,8 +21,15 @@ in
 
       configFile = mkOption {
         type = types.path;
-        default = "/var/lib/sabnzbd/sabnzbd.ini";
+        default = "${cfg.dataDir}/sabnzbd.ini";
+        defaultText = literalExpression ''"''${dataDir}/sabnzbd.ini"'';
         description = lib.mdDoc "Path to config file.";
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/sabnzbd/";
+        description = lib.mdDoc "The directory where sabnzbd stores its data files.";
       };
 
       user = mkOption {
@@ -48,7 +55,7 @@ in
           uid = config.ids.uids.sabnzbd;
           group = "sabnzbd";
           description = "sabnzbd user";
-          home = "/var/lib/sabnzbd/";
+          home = cfg.dataDir;
           createHome = true;
     };
 
