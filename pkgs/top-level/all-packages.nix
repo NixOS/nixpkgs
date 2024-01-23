@@ -5208,7 +5208,9 @@ with pkgs;
 
   easyabc = callPackage ../applications/audio/easyabc { };
 
-  easycrypt = callPackage ../applications/science/logic/easycrypt { };
+  easycrypt = callPackage ../applications/science/logic/easycrypt {
+    why3 = pkgs.why3.override { ideSupport = false; };
+  };
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
 
