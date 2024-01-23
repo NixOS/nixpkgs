@@ -64405,24 +64405,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "@tailwindcss/language-server" = nodeEnv.buildNodePackage {
-    name = "_at_tailwindcss_slash_language-server";
-    packageName = "@tailwindcss/language-server";
-    version = "0.0.16";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@tailwindcss/language-server/-/language-server-0.0.16.tgz";
-      sha512 = "9zmvTppvma6WaA8L1VLwa+YeVgpEhsUOuslDFNzHt5lJ04SdHTc9VwF9EeOximFohXyts8Q3qSn3PWbFVBDNVg==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Tailwind CSS Language Server";
-      homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense/tree/HEAD/packages/tailwindcss-language-server#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   "@tailwindcss/line-clamp" = nodeEnv.buildNodePackage {
     name = "_at_tailwindcss_slash_line-clamp";
     packageName = "@tailwindcss/line-clamp";
