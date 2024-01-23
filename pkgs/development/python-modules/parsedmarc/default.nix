@@ -110,5 +110,7 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ talyz ];
     mainProgram = "parsedmarc";
+    # https://github.com/domainaware/parsedmarc/issues/464
+    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }
