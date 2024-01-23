@@ -10,7 +10,7 @@
 }:
 let
   sgxVersion = sgx-sdk.versionTag;
-  opensslVersion = "1.1.1u";
+  opensslVersion = "3.0.12";
 in
 stdenv.mkDerivation {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
@@ -19,15 +19,15 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-sgx-ssl";
-    rev = "lin_${sgxVersion}_${opensslVersion}";
-    hash = "sha256-zbXEQz72VUPqnGrboX6oXliaLpbcos7tV6K9lX+zleg=";
+    rev = "3.0_Rev2";
+    hash = "sha256-dmLyaG6v+skjSa0KxLAfIfSBOxp9grrI7ds6WdGPe0I=";
   };
 
   postUnpack =
     let
       opensslSourceArchive = fetchurl {
         url = "https://www.openssl.org/source/openssl-${opensslVersion}.tar.gz";
-        hash = "sha256-4vjYS1I+7NBse+diaDA3AwD7zBU4a/UULXJ1j2lj68Y=";
+        hash = "sha256-+Tyejt3l6RZhGd4xdV/Ie0qjSGNmL2fd/LoU0La2m2E=";
       };
     in
     ''
