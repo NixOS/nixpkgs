@@ -105,8 +105,9 @@ qtModule {
     which
     gn
     nodejs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
+  ] ++ lib.optionals stdenv.isDarwin [
     bootstrap_cmds
     cctools
     xcbuild
