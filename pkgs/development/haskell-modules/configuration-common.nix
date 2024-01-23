@@ -2849,6 +2849,9 @@ self: super: {
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
 
+  # 2024-01-23: https://github.com/composewell/unicode-data/issues/118
+  unicode-data = dontCheck super.unicode-data;
+
   # Too strict bounds on base, ghc-prim, primitive
   # https://github.com/kowainik/typerep-map/pull/128
   typerep-map = doJailbreak super.typerep-map;
