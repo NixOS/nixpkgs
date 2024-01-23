@@ -1,16 +1,30 @@
-{ stdenv, lib, fetchurl, perl, gfortran
-, openssh, hwloc, python3
-# either libfabric or ucx work for ch4backend on linux. On darwin, neither of
-# these libraries currently build so this argument is ignored on Darwin.
-, ch4backend
-# Process managers to build (`--with-pm`),
-# cf. https://github.com/pmodels/mpich/blob/b80a6d7c24defe7cdf6c57c52430f8075a0a41d6/README.vin#L562-L586
-, withPm ? [ "hydra" "gforker" ]
-, pmix
-# PMIX support is likely incompatible with process managers (`--with-pm`)
-# https://github.com/NixOS/nixpkgs/pull/274804#discussion_r1432601476
-, pmixSupport ? false
-} :
+{
+  stdenv,
+  lib,
+  fetchurl,
+  perl,
+  gfortran,
+  openssh,
+  hwloc,
+  python3,
+  # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
+  # these libraries currently build so this argument is ignored on Darwin.
+  ch4backend,
+  # Process managers to build (`--with-pm`),
+  # cf. https://github.com/pmodels/mpich/blob/b80a6d7c24defe7cdf6c57c52430f8075a0a41d6/README.vin#L562-L586
+  withPm ? [
+    "hydra"
+    "gforker"
+  ],
+  pmix,
+  # PMIX support is likely incompatible with process managers (`--with-pm`)
+  # https://github.com/NixOS/nixpkgs/pull/274804#discussion_r1432601476
+  pmixSupport ? false,
+  withSlurm ? true,
+  slurm,
+  nixosTests,
+  mpich-pmix,
+}:
 
 let
   withPmStr = if withPm != [ ] then builtins.concatStringsSep ":" withPm else "no";
@@ -18,7 +32,7 @@ in
 
 assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "mpich";
   version = "4.1.2";
 
@@ -27,23 +41,41 @@ stdenv.mkDerivation  rec {
     sha256 = "sha256-NJLpitq2K1l+8NKS+yRZthI7yABwqKoKML5pYgdaEvA=";
   };
 
-  outputs = [ "out" "doc" "man" ];
-
-  configureFlags = [
-    "--enable-shared"
-    "--with-pm=${withPmStr}"
-  ] ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
-    "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
-    "FCFLAGS=-fallow-argument-mismatch"
-  ] ++ lib.optionals pmixSupport [
-    "--with-pmix=${lib.getDev pmix}"
+  outputs = [
+    "out"
+    "doc"
+    "man"
   ];
+
+  configureFlags =
+    [
+      "--enable-shared"
+      "--with-pm=${withPmStr}"
+    ]
+    ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
+      "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
+      "FCFLAGS=-fallow-argument-mismatch"
+    ]
+    ++ lib.optionals withSlurm
+    [
+      "--with-pmi=pmi2"
+      "--with-pmilib=slurm"
+    ]
+    ++ lib.optionals pmixSupport [ "--with-pmix=${lib.getDev pmix}" ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ gfortran python3 ];
-  buildInputs = [ perl openssh hwloc ]
-    ++ lib.optional (!stdenv.isDarwin) ch4backend;
+  nativeBuildInputs = [
+    gfortran
+    python3
+  ];
+  buildInputs = [
+    perl
+    openssh
+    hwloc
+  ]
+  ++ lib.optionals withSlurm [ (lib.getLib slurm) (lib.getDev slurm) ]
+  ++ lib.optionals (!stdenv.isDarwin) [ ch4backend ];
 
   doCheck = true;
 
@@ -53,6 +85,44 @@ stdenv.mkDerivation  rec {
     sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' $out/bin/mpicxx
     sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
   '';
+
+  passthru.tests.slurm-mpirun = nixosTests.slurm.override {
+    extraModules = [
+      {
+        node.pkgsReadOnly = false;
+        defaults.nixpkgs.overlays = [
+          (final: _: { mpi = final.mpich.override { pmixSupport = false; withSlurm = false; }; })
+        ];
+
+        slurmTest.srun.implementations = [ "pmi2" ];
+        slurmTest.mpirun.enable = true;
+
+        # Asan only fails with openmpi?
+        slurmTest.steps."30-srun-cpi-asan".enable = false;
+      }
+    ];
+  };
+  passthru.tests.slurm-srun = nixosTests.slurm.override {
+    extraModules = [
+      {
+        node.pkgsReadOnly = false;
+        defaults.nixpkgs.overlays = [
+          (final: _: { mpi = final.mpich.override { pmixSupport = false; withSlurm = true; }; })
+        ];
+
+        slurmTest.srun.implementations = [ "pmi2" ];
+        slurmTest.steps."30-srun-cpi-asan".enable = false;
+      }
+    ];
+  };
+  passthru.tests.slurm-pmix = nixosTests.slurm.override {
+    extraModules = [
+      {
+        node.pkgsReadOnly = false;
+        defaults.nixpkgs.overlays = [ (final: _: { mpi = final.mpich-pmix; }) ];
+      }
+    ];
+  };
 
   meta = with lib; {
     # As far as we know, --with-pmix silently disables all of `--with-pm`

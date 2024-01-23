@@ -10,6 +10,7 @@
 # enable internal X11 support via libssh2
 , enableX11 ? true
 , enableGtk2 ? false, gtk2
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -26,13 +27,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-dfCQKKw44bD5d7Sv7e40Qm3df9Mzz7WvmWf7SP8R1KQ=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  patches = [
-    # increase string length to allow for full
-    # path of 'echo' in nix store
-    ./common-env-echo.patch
-  ];
+  outputs = [ "out" "lib" "dev" "doc" ];
 
   prePatch = ''
     substituteInPlace src/common/env.c \
@@ -42,12 +37,32 @@ stdenv.mkDerivation rec {
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
   '');
 
+  patches = [
+    # increase string length to allow for full
+    # path of 'echo' in nix store
+    ./common-env-echo.patch
+  ];
+
+  # Install the plugins into the same output as the binaries
+  # when splitting libpmi2 out.
+  postPatch = ''
+    substituteInPlace src/common/Makefile.{am,in} \
+      --replace \
+        'default_plugin_path = \"$(pkglibdir)\"' \
+        "default_plugin_path = \\\"''${!outputBin}/lib/slurm\\\""
+  '';
+
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
   # this doesn't fix tests completely at least makes slurmd to launch
   hardeningDisable = [ "bindnow" ];
 
-  nativeBuildInputs = [ pkg-config libtool python3 perl ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+    python3
+    perl
+  ];
   buildInputs = [
     curl python3 munge pam
     libmysqlclient ncurses lz4 rdma-core
@@ -76,12 +91,52 @@ stdenv.mkDerivation rec {
 
 
   preConfigure = ''
-    patchShebangs ./doc/html/shtml2html.py
-    patchShebangs ./doc/man/man2html.py
+   # We're going to move the internal libraries that cause cyclic dependencies to $out,
+   # and only keep things like libpmi2 in $lib:
+   export NIX_LDFLAGS="-rpath ''${!outputLib}/lib/slurm -rpath ''${!outputBin}/lib/slurm ''${NIX_LDFLAGS-}"
+
+    while IFS= read -r -d ''$'\0' path ; do
+      patchShebangs "$path"
+    done < <( find -print0 -iname '*.py' -or -iname '*.sh')
   '';
 
-  postInstall = ''
-    rm -f $out/lib/*.la $out/lib/slurm/*.la
+  makeFlags = [
+    "perlpath=${lib.getExe buildPackages.perl}"
+  ];
+
+  installTargets = [
+    "install-recursive"
+    "install-contrib" # libpmi2
+    "PAM_DIR=${placeholder "out"}/lib/security"
+  ];
+
+  # At the time of writing, the primary motivation for splitting out $lib is to
+  # expose `libpmi2.so`, which we do. Several of the produced DSOs, however,
+  # contain references to $out (the absolute paths to $out/bin/srun, the path
+  # to $out/sbin, etc). These are cyclic references which Nix refuses to put in
+  # the store, so we move them back to $out.
+  outputBinReferences = [
+    "lib/libpmi.so*"
+    "lib/libslurm.so*"
+    "lib/slurm/libslurmfull.so*"
+    "lib/slurm/libslurm_pmi.so*"
+    "lib/slurm/mpi_pmi2.so*"
+  ];
+
+  # Note that the libtool (.la) files contain a ton of references, but we put
+  # them in a separate output so they don't affect the $out's runtime closure
+  # size
+  preFixup = ''
+    moveToOutput 'lib/slurm' "''${!outputBin}"
+    while read -r -d' ' pattern || [[ -n "$pattern" ]] ; do
+      echo "moveToOutput \"$pattern\" \"''${!outputBin}\"" >&2
+      moveToOutput "$pattern" "''${!outputBin}"
+    done <<< "$outputBinReferences"
+
+    moveToOutput '**/*.la' "''${!outputDev}"
+
+    moveToOutput share/doc/ "''${!outputDoc}"
+    moveToOutput share/man/ "''${!outputMan}"
   '';
 
   enableParallelBuilding = true;
