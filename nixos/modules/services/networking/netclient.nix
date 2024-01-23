@@ -15,6 +15,7 @@ in
     systemd.services.netclient = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       description = "Netclient Daemon";
       serviceConfig = {
         Type = "simple";
