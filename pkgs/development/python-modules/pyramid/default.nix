@@ -7,12 +7,12 @@
 , pastedeploy
 , plaster
 , plaster-pastedeploy
-, repoze_lru
+, repoze-lru
 , translationstring
 , venusian
 , webob
 , zope-deprecation
-, zope_interface
+, zope-interface
 , pythonOlder
 }:
 
@@ -33,12 +33,12 @@ buildPythonPackage rec {
     pastedeploy
     plaster
     plaster-pastedeploy
-    repoze_lru
+    repoze-lru
     translationstring
     venusian
     webob
     zope-deprecation
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [

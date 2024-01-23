@@ -24,12 +24,19 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
     "aws-sam-translator"
     "boto3-stubs"
     "tzlocal"
+    "cookiecutter"
+    "docker"
+    "aws-lambda-builders"
+    "tomlkit"
+    "rich"
+    "jsonschema"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

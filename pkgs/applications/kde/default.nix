@@ -187,6 +187,7 @@ let
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpmcore = callPackage ./kpmcore {};
       kpublictransport = callPackage ./kpublictransport.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
@@ -230,6 +231,7 @@ let
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
       palapeli = callPackage ./palapeli.nix {};
+      partitionmanager = callPackage ./partitionmanager {};
       picmi = callPackage ./picmi.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.11";
-  format = "setuptools";
+  version = "0.2.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-L/HCw+O8bidtE5nDdO+cLS54m64dlJL+9Gjcye5gM+w=";
+    hash = "sha256-K7gsTLYcXmKmEQzOXrJ2kvvLzKaDkZ/NRLRc0USii5M=";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +42,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Tests requires network access
+    "test_document_cannot_identify_image"
+    "test_document_with_broken_image"
+  ];
+
   pythonImportsCheck = [
     "xhtml2pdf"
+    "xhtml2pdf.pisa"
   ];
 
   meta = with lib; {
@@ -52,5 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+    mainProgram = "xhtml2pdf";
   };
 }

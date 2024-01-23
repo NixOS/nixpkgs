@@ -30,5 +30,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
     platforms = with platforms; unix;
+    # As of 2024-01-20, this fails with:
+    # error while loading shared libraries: libvtkInteractionWidgets.so.1: cannot open shared object file: No such file or directory
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/262328
+    broken = true;
   };
 }

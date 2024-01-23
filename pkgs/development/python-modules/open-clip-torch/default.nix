@@ -21,14 +21,14 @@
 }:
 buildPythonPackage rec {
   pname = "open-clip-torch";
-  version = "2.23.0";
+  version = "2.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlfoundations";
     repo = "open_clip";
-    rev = "v${version}";
-    hash = "sha256-Txm47Tc4KMbz1i2mROT+IYbgS1Y0yHK80xY0YldgBFQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ugbXnXiOY9FrNvr8ZxnAgZO/SLCVoXbRgupi8cUwflU=";
   };
 
   nativeBuildInputs = [

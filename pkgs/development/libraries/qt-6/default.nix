@@ -66,6 +66,16 @@ let
             revert = true;
             hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
           })
+          # CVE-2023-51714: Potential Integer Overflow in Qt's HTTP2 implementation
+          # https://www.qt.io/blog/security-advisory-potential-integer-overflow-in-qts-http2-implementation
+          (fetchpatch2 {
+            url = "https://download.qt.io/official_releases/qt/6.5/0001-CVE-2023-51714-qtbase-6.5.diff";
+            hash = "sha256-0Xnolq9dWkKUrmLUlv15uQ9nkZXrY3AsmvChaLX8P2I=";
+          })
+          (fetchpatch2 {
+            url = "https://download.qt.io/official_releases/qt/6.6/0002-CVE-2023-51714-qtbase-6.6.diff";
+            hash = "sha256-+/u3vy5Ci6Z4jy00L07iYAnqHvVdqUzqVnT9uVIqs60=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -154,7 +164,7 @@ let
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
-        inherit (darwin) bootstrap_cmds cctools xnu;
+        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds cctools xnu;
         inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)

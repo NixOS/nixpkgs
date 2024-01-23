@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, fetchpatch
+, setuptools
 , formulaic
 , click
 , num2words
@@ -9,7 +9,6 @@
 , scipy
 , pandas
 , nibabel
-, patsy
 , bids-validator
 , sqlalchemy
 , pytestCheckHook
@@ -18,35 +17,46 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.16.3";
-  format = "setuptools";
   pname = "pybids";
+  version = "0.16.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EOJ5NQyNFMpgLA1EaaXkv3/zk+hkPIMaVGrnNba4LMM=";
+    hash = "sha256-pahl8wi6Sf8AuVqkvi7H90ViHr+9utb14ZVmKK3rFm4=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  pythonRelaxDeps = [ "sqlalchemy" ];
-
-  propagatedBuildInputs = [
-    click
-    formulaic
-    num2words
-    numpy
-    scipy
-    pandas
-    nibabel
-    patsy
-    bids-validator
-    sqlalchemy
-    versioneer
+  pythonRelaxDeps = [
+    "formulaic"
+    "sqlalchemy"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "bids" ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+    versioneer
+  ] ++ versioneer.optional-dependencies.toml;
+
+  propagatedBuildInputs = [
+    bids-validator
+    click
+    formulaic
+    nibabel
+    num2words
+    numpy
+    pandas
+    scipy
+    sqlalchemy
+  ];
+
+  pythonImportsCheck = [
+    "bids"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   disabledTests = [
     # looks for missing data:
     "test_config_filename"
@@ -58,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
     homepage = "https://github.com/bids-standard/pybids";
+    changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

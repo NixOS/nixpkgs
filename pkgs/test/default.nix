@@ -64,7 +64,6 @@ with pkgs;
             # libcxxStdenv broken
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            (filterAttrs (n: _: n != "llvmPackages_6"))
             (filterAttrs (n: _: n != "llvmPackages_8"))
             (filterAttrs (n: _: n != "llvmPackages_9"))
             (filterAttrs (n: _: n != "llvmPackages_10"))
@@ -112,6 +111,8 @@ with pkgs;
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
 
   install-shell-files = callPackage ./install-shell-files {};
+
+  checkpointBuildTools = callPackage ./checkpointBuild {};
 
   kernel-config = callPackage ./kernel.nix {};
 
@@ -167,4 +168,6 @@ with pkgs;
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
 
   nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
+
+  auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 }

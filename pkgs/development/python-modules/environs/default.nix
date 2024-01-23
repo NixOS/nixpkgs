@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "environs";
-  version = "10.0.0";
+  version = "10.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "sloria";
     repo = "environs";
     rev = "refs/tags/${version}";
-    hash = "sha256-B/ICzopFuOAWMlDn950LXmi/XQaQxh5jFVmLdmt7Dlg=";
+    hash = "sha256-D6Kp8aHiUls7+cACJ3DwrS4OftA5uMbAu4l5IyR4F5U=";
   };
 
   nativeBuildInputs = [

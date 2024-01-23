@@ -5,13 +5,13 @@
 
 appimageTools.wrapAppImage rec {
   pname = "bazecor";
-  version = "1.3.8";
+  version = "1.3.9";
 
   src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
-      hash = "sha256-SwlSH5z0p9ZVoDQzj4GxO3g/iHG8zQZndE4TmqdMtZQ=";
+      hash = "sha256-qve5xxhhyVej8dPDkZ7QQdeDUmqGO4pHJTykbS4RhAk=";
     };
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370
@@ -26,7 +26,7 @@ appimageTools.wrapAppImage rec {
 
   # also make sure to update the udev rules in ./10-dygma.rules; most recently
   # taken from
-  # https://github.com/Dygmalab/Bazecor/blob/v1.3.8/src/main/utils/udev.ts#L6
+  # https://github.com/Dygmalab/Bazecor/blob/v1.3.9/src/main/utils/udev.ts#L6
 
   extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
     p.glib
@@ -38,6 +38,12 @@ appimageTools.wrapAppImage rec {
 
   extraInstallCommands = ''
     mv $out/bin/bazecor-* $out/bin/bazecor
+
+    install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/Bazecor.desktop \
+      --replace 'Exec=Bazecor' 'Exec=bazecor'
+
+    install -m 444 -D ${src}/bazecor.png -t $out/share/pixmaps
 
     mkdir -p $out/lib/udev/rules.d
     ln -s --target-directory=$out/lib/udev/rules.d ${./10-dygma.rules}

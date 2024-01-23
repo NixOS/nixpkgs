@@ -16,7 +16,7 @@
 , requests
 , six
 , zope-component
-, zope_interface
+, zope-interface
 , setuptools
 , dialog
 , gnureadline
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     requests
     six
     zope-component
-    zope_interface
+    zope-interface
     setuptools # for pkg_resources
   ];
 

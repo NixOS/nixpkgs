@@ -55,6 +55,7 @@
 , e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, gnutls
 , iptables
 , withSelinux ? false
 , libselinux
@@ -88,7 +89,11 @@
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
-, withBootloader ? withEfi && !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
+  # compiles systemd-boot, assumes EFI is available.
+, withBootloader ? withEfi
+    && !stdenv.hostPlatform.isMusl
+    # "Unknown 64-bit data model"
+    && !stdenv.hostPlatform.isRiscV32
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -105,6 +110,10 @@
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # can't find gnu/stubs-32.h
+    && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
+    # https://reviews.llvm.org/D43106#1019077
+    && (stdenv.hostPlatform.isRiscV32 -> stdenv.cc.isClang)
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
     # but we do it this way to avoid taking llvmPackages as an input, and
     # risking making it too easy to ignore the above comment about llvmPackages.
@@ -151,7 +160,7 @@ assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
-assert withUkify -> withEfi;
+assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 # passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
@@ -205,6 +214,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
+    ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -434,7 +445,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optionals withRemote [ libmicrohttpd gnutls ]
     ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
@@ -771,7 +782,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
-      inherit (nixosTests) switchTest;
+      inherit (nixosTests)
+        switchTest
+        systemd-journal
+        systemd-journal-gateway
+        systemd-journal-upload;
       cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };

@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.3.3";
+  version = "1.4.1";
 
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-73vgwgBqyRLQ/Tts7bl6DhZMOs8ndIOiCke5tN89Wps=";
+    hash = "sha256-+KqTiIp9dIJWG2KvgvPwXC7p754XfgvKHjvwjCdbvCs=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}"
+    "DESTDIR=${placeholder "out"}"
+    "PREFIX="
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ];
@@ -81,13 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       smoke-test = nixosTests.bcachefs;
-
-      inherit (nixosTests.installer)
-        bcachefsSimple
-        bcachefsEncrypted
-        bcachefsMulti
-        bcachefsLinuxTesting
-        bcachefsUpgradeToLinuxTesting;
+      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
 
     updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''

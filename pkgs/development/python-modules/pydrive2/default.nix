@@ -1,25 +1,36 @@
 { lib
+, appdirs
 , buildPythonPackage
 , fetchPypi
+, fsspec
+, funcy
 , google-api-python-client
 , oauth2client
 , pyopenssl
-, pyyaml
 , pythonOlder
+, pyyaml
+, setuptools
+, setuptools-scm
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.17.0";
-  format = "setuptools";
+  version = "1.19.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "PyDrive2";
     inherit version;
-    hash = "sha256-aP6pNDR7thK3qEiBHUgUnbhAvPtfpNeothYbLSrf7HA=";
+    hash = "sha256-Ia6n2idjXCw/cFDgICBhkfOwMFxlUDFebo491Sb4tTE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     google-api-python-client
@@ -28,6 +39,16 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  passthru.optional-dependencies = {
+    fsspec = [
+      appdirs
+      fsspec
+      funcy
+      tqdm
+    ];
+  };
+
+  # Tests require a account and network access
   doCheck = false;
 
   pythonImportsCheck = [

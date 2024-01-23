@@ -33,8 +33,6 @@ buildPythonPackage rec {
       --replace "django-phonenumber-field[phonenumberslite]" "django-phonenumber-field"
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];

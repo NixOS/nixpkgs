@@ -1044,7 +1044,11 @@ _defaultUnpack() {
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$fn" | tar xf - --warning=no-timestamp
+                # Additionally, we have multiple different xz binaries with different feature sets in different
+                # stages. The XZ_OPT env var is only used by the full "XZ utils" implementation, which supports
+                # the --threads (-T) flag. This allows us to enable multithreaded decompression exclusively on
+                # that implementation, without the use of complex bash conditionals and checks.
+                XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn" | tar xf - --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method

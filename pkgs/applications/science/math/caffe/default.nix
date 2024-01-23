@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
       || cudaSupport
       || !(leveldbSupport -> (leveldb != null && snappy != null))
       || !(cudnnSupport -> (hasCudnn && cudaSupport))
-      || !(ncclSupport -> cudaSupport)
+      || !(ncclSupport -> (cudaSupport && !nccl.meta.unsupported))
       || !(pythonSupport -> (python != null && numpy != null))
     ;
     license = licenses.bsd2;

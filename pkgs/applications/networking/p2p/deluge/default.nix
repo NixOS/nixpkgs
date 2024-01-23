@@ -39,7 +39,7 @@ let
         pillow
         rencode
         six
-        zope_interface
+        zope-interface
         dbus-python
         pycairo
         librsvg

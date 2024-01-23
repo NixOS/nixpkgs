@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
 , pythonOlder
 , fonttools
 , defcon
@@ -34,14 +33,16 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "4.0.0";
+  version = "4.0.0+unstable-2023-11-07";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-66faoWBuCW0lQZP8/mBJLT+ErRGBl396HdG1RfPOYcM=";
+  src = fetchFromGitHub {
+    owner = "adobe-type-tools";
+    repo = pname;
+    rev = "6c832edbd81ecf689dbe66e840bf18ae61cf4bca";
+    hash = "sha256-XXkksHggUIs2O0/OSGsft8ofogcbtAa3w5JdldIAJAI=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +64,11 @@ buildPythonPackage rec {
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
   ];
+
+  # Happy new year
+  postPatch = ''
+    substituteInPlace tests/tx_data/expected_output/alt-missing-glif.pfb --replace 2023 2024
+  '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
     "-Wno-error=incompatible-function-pointer-types"
@@ -98,6 +104,9 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH=$PATH:$out/bin
+
+    # Remove build artifacts to prevent them from messing with the tests
+    rm -rf _skbuild
   '';
 
   disabledTests = lib.optionals (!runAllTests) [

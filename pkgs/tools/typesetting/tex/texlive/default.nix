@@ -2,7 +2,10 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeShellScript, writeText, buildEnv
+{ lib
+#, stdenv
+, gcc12Stdenv
+, fetchurl, runCommand, writeShellScript, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
@@ -11,6 +14,7 @@
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
+let stdenv = gcc12Stdenv; in
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {

@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
+    "-W" "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
     "--rootdir" "src/ablog"
   ];
 

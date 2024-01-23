@@ -50,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pyload/pyload";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ ruby0b ];
+    mainProgram = "pyload";
   };
 }

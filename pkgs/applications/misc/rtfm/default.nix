@@ -18,14 +18,14 @@ let
 in
 crystal.buildCrystalPackage rec {
   pname = "rtfm";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "rtfm";
     rev = "v${version}";
     name = "rtfm";
-    hash = "sha256-ulv5US5EBBb0rK/Qaw8ZpHI4QwEQGlzscmAoe17946k=";
+    hash = "sha256-IfI7jYM1bsrCq2NiANv/SWkCjPyT/HYUofJMUYy0Sbk=";
   };
 
   patches = [

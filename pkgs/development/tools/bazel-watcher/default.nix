@@ -10,7 +10,6 @@
 let
   patches = [
     ./use-go-in-path.patch
-    ./fix-rules-go-3408.patch
   ];
 
   # Patch the protoc alias so that it always builds from source.
@@ -30,13 +29,13 @@ let
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
-  version = "0.21.2";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "sha256-wigrE9u1VuFnqLWyVJK3M7xsjyme2dDG6YTcD9whKnw=";
+    sha256 = "sha256-fnhbxrgwffFQDIRLGisi1Wk3EjfkN8Mi8wtWT/Gy+78=";
   };
 
   nativeBuildInputs = [ go git python3 ];
@@ -82,7 +81,7 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "sha256-lC9e5Z2cxLAeWXkiFGmcB6aOaurMvwrP/k5jl3gCfAc=";
+    sha256 = "sha256-7/sLGgUCG4SU2nbK0596467dlrKylewiewhIvNFTMvY=";
   };
 
   buildAttrs = {

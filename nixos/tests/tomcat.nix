@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "tomcat";
   meta.maintainers = [ lib.maintainers.anthonyroussel ];
 

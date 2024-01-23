@@ -3,14 +3,17 @@
 , aioresponses
 , buildPythonPackage
 , callee
+, cryptography
 , fetchFromGitHub
 , mock
 , poetry-core
 , poetry-dynamic-versioning
 , pyjwt
+, pyopenssl
 , pytestCheckHook
 , pythonOlder
 , requests
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -33,8 +36,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    requests
+    aiohttp
+    cryptography
     pyjwt
+    pyopenssl
+    requests
+    urllib3
   ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [

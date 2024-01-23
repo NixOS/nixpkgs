@@ -1,23 +1,29 @@
 { lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# build-system
+, cython_3
+, setuptools
+
+# dependencies
 , aiohappyeyeballs
 , async-timeout
-, buildPythonPackage
 , chacha20poly1305-reuseable
-, cython_3
-, fetchFromGitHub
-, mock
 , noiseprotocol
 , protobuf
+, zeroconf
+
+# tests
+, mock
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
-, setuptools
-, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "21.0.0";
+  version = "21.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +32,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KT38NY1BZM6Qr1EeC05vM9IcVKO7GaEx0102TUzkyRE=";
+    hash = "sha256-HPnyFHHx1BahqzvRChT85BaG4eJM3qvTq2Tpbqb3SDI=";
   };
 
   nativeBuildInputs = [

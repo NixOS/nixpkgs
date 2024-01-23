@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , fetchpatch
+, gitUpdater
 , makeFontsConf
 , buildLua
 , buildGoModule
@@ -17,6 +18,7 @@ buildLua (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-+4k8T1yX3IRXK3XkUShsuJSH9w1Zla7CaRENcIqX4iM=";
   };
+  passthru.updateScript = gitUpdater {};
 
   tools = buildGoModule {
     pname = "uosc-bin";

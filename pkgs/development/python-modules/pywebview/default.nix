@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "4.3.3";
+  version = "4.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "r0x0r";
     repo = "pywebview";
     rev = "refs/tags/${version}";
-    hash = "sha256-8BkbO7C8cYDIQWWCKaXFjfD45L5KVG1tDZJl+uW5g9g=";
+    hash = "sha256-uanv6v/xwi4COY0WjoyxG4khK1kAucBmpr/plCKYxkQ=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,6 @@ buildPythonPackage rec {
     qtpy
     xvfb-run
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   checkPhase = ''
     # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED

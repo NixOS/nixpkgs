@@ -3,14 +3,15 @@
 , fetchFromGitHub
 , cmake
 , blas
+, llvmPackages
 }:
 
 let
-  suitesparseVersion = "7.2.0";
+  suitesparseVersion = "7.5.1";
 in
 stdenv.mkDerivation {
   pname = "mongoose";
-  version = "3.2.1";
+  version = "3.3.1";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${suitesparseVersion}";
-    hash = "sha256-Ss1R3P1fyRwlGQxJchydV36xLEMAGJabMMiQiKykKrc=";
+    hash = "sha256-6eC26rag9kZ1E4qJ5KY/dLXGld+EHP2OUpyikjXQhQk=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     blas
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   dontUseCmakeConfigure = true;

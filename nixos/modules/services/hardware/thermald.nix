@@ -19,6 +19,12 @@ in
         '';
       };
 
+     ignoreCpuidCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to ignore the cpuid check to allow running on unsupported platforms";
+      };
+
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -42,6 +48,7 @@ in
           ${cfg.package}/sbin/thermald \
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
+            ${optionalString cfg.ignoreCpuidCheck "--ignore-cpuid-check"} \
             ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
             --dbus-enable \
             --adaptive

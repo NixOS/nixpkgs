@@ -36,7 +36,7 @@ in buildGoModule {
     runHook postCheck
   '';
 
-  passthru.tests.owncast = nixosTests.testOwncast;
+  passthru.tests.owncast = nixosTests.owncast;
 
   meta = with lib; {
     description = "self-hosted video live streaming solution";

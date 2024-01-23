@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , rustPlatform
 , coreutils
-, bash
 , installShellFiles
 , libiconv
 , mdbook
@@ -12,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.16.0";
+  version = "1.23.0";
   outputs = [ "out" "man" "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-lXZCRoTVIguufyhHn7h4vAajG53qIn8AeDBZuha6be8=";
+    hash = "sha256-GAi5wAp2o95pbjzV2Ez4BaUjLvrzEBIe9umO6Z1aGXE=";
   };
 
-  cargoHash = "sha256-+r8fcoG23p7ug3xireAnUvJHiB/PXAUzBAKowGqKN8E=";
+  cargoHash = "sha256-V1S4zQ/a0IAueNt81fAaw8grk7Rm7DM0+KyzzLJg+bg=";
 
   nativeBuildInputs = [ installShellFiles mdbook ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];

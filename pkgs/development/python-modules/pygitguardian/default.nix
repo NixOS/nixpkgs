@@ -5,6 +5,7 @@
 , marshmallow-dataclass
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , responses
 , setuptools
@@ -14,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.11.0";
-  format = "pyproject";
+  version = "1.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,10 +24,15 @@ buildPythonPackage rec {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vr0+y3Zi7DsXzm2COOlMqUVjlZMRJkaVxT8QpSePhuA=";
+    hash = "sha256-ybl6QOLb1xE6v0D1C2wKMsSU+r2gWzj24Q4pPIMBsCY=";
   };
 
+  pythonRelaxDeps = [
+    "marshmallow-dataclass"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -49,6 +55,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require an API key
+    "test_bogus_rate_limit"
     "test_compute_sca_files"
     "test_content_scan_exceptions"
     "test_content_scan"
@@ -60,6 +67,7 @@ buildPythonPackage rec {
     "test_multi_content_scan"
     "test_multiscan_parameters"
     "test_quota_overview"
+    "test_rate_limit"
     "test_sca_client_scan_diff"
     "test_sca_scan_directory_invalid_tar"
     "test_sca_scan_directory"

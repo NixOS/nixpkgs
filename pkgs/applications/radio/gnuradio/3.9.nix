@@ -276,7 +276,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   '';
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
-    ./modtool-newmod-permissions.patch
+    ./modtool-newmod-permissions.3_9.patch
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must

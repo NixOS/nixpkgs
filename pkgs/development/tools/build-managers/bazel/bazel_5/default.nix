@@ -11,8 +11,6 @@
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , runtimeShell
-# Downstream packages for tests
-, bazel-watcher
 # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
 # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
@@ -287,7 +285,7 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
-    in (lib.optionalSttrs (!stdenv.hostPlatform.isDarwin) {
+    in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
     }) // {
@@ -303,12 +301,6 @@ stdenv.mkDerivation rec {
       javaWithNixHacks = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
       protobufWithNixHacks = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
       pythonBinPathWithNixHacks = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
-
-      # downstream packages using buildBazelPackage
-      # fixed-output hashes of the fetch phase need to be spot-checked manually
-      downstream = recurseIntoAttrs ({
-        inherit bazel-watcher;
-      });
     };
 
   src_for_updater = stdenv.mkDerivation rec {

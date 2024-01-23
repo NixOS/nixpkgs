@@ -1,12 +1,12 @@
 diff --git a/coq/__main__.py b/coq/__main__.py
-index dd40afc1..36bcca21 100644
+index f588f718..36bcca21 100644
 --- a/coq/__main__.py
 +++ b/coq/__main__.py
 @@ -78,7 +78,7 @@ _EXEC_PATH = Path(executable)
  _EXEC_PATH = _EXEC_PATH.parent.resolve(strict=True) / _EXEC_PATH.name
  _REQ = REQUIREMENTS.read_text()
  
--_IN_VENV = _RT_PY == _EXEC_PATH
+-_IN_VENV = _RT_PY.parent.resolve() / _RT_PY.name == _EXEC_PATH
 +_IN_VENV = True
  
  

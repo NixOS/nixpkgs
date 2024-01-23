@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, zope_interface
-, zope_schema
+, zope-interface
+, zope-schema
 , zope-cachedescriptors
 , pytz
 , webtest
@@ -13,7 +13,7 @@
 , six
 , mock
 , zope-testing
-, zope_testrunner
+, zope-testrunner
 , python
 }:
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     setuptools
-    zope_interface
-    zope_schema
+    zope-interface
+    zope-schema
     zope-cachedescriptors
     pytz
     webtest
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     zope-testing
-    zope_testrunner
+    zope-testrunner
   ];
 
   checkPhase = ''

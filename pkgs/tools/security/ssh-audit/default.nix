@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ssh-audit";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jtesta";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-+v+DLZPDC5uffTIJPzMvY/nLoy7BGiAsTddjNZZhTpo=";
+    sha256 = "sha256-pO6qpY1gqE40bb7q8J/35Dd0XckoFAaIBwWjFsxFO3c=";
   };
 
   nativeCheckInputs = with python3Packages; [

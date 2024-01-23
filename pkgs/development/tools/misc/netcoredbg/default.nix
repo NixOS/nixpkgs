@@ -1,15 +1,17 @@
-{ lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnetCorePackages, buildDotnetModule }:
+{ lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnetCorePackages, buildDotnetModule, netcoredbg, testers }:
 let
   pname = "netcoredbg";
-  version = "2.2.0-961";
-  hash = "0gbjm8x40hzf787kccfxqb2wdgfks81f6hzr6rrmid42s4bfs5w7";
+  build = "1018";
+  release = "3.0.0";
+  version = "${release}-${build}";
+  hash = "sha256-9Rd0of1psQTVLaTOCPWsYgvIXN7apZKDQNxuZGj4vXw=";
 
-  coreclr-version = "v7.0.4";
+  coreclr-version = "v7.0.14";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    sha256 = "sha256-gPl9sfn3eL3AUli1gdPizDK4lciTJ1ImBcics5BA63M=";
+    sha256 = "sha256-n7ySUTB4XOXxeeVomySdZIYepdp0PNNGW9pU/2wwVGM=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -18,17 +20,12 @@ let
     owner = "Samsung";
     repo = pname;
     rev = version;
-    sha256 = hash;
+    inherit hash;
   };
 
   unmanaged = clangStdenv.mkDerivation {
     inherit src pname version;
 
-    # patch for arm from: https://github.com/Samsung/netcoredbg/pull/103#issuecomment-1446375535
-    # needed until https://github.com/dotnet/runtime/issues/78286 is resolved
-    # patch for darwin from: https://github.com/Samsung/netcoredbg/pull/103#issuecomment-1446457522
-    # needed until: ?
-    patches = [ ./arm64.patch ./darwin.patch ];
     nativeBuildInputs = [ cmake dotnet-sdk ];
 
     hardeningDisable = [ "strictoverflow" ];
@@ -59,7 +56,7 @@ let
     selfContainedBuild = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
   # managed brings external binaries (libdbgshim.*)
   # include source here so that autoPatchelfHook can do it's job
@@ -77,8 +74,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit (managed) fetch-deps;
-
-    updateScript = [ ./update.sh pname version meta.homepage ];
+    tests.version = testers.testVersion {
+      package = netcoredbg;
+      command = "netcoredbg --version";
+      version = "NET Core debugger ${release}";
+    };
   };
 
   meta = with lib; {

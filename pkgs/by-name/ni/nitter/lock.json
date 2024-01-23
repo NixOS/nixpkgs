@@ -62,11 +62,11 @@
       "packages": [
         "jsony"
       ],
-      "path": "/nix/store/bzcq8q439rdsqhhihikzv3rsx4l4ybdm-source",
-      "rev": "ea811be",
-      "sha256": "1720iqsxjhqmhw1zhhs7d2ncdz25r8fqadls1p1iry1wfikjlnba",
+      "path": "/nix/store/l84av0wdc0s4r4alsvkaxcxhpd6j4bzg-source",
+      "rev": "1de1f08",
+      "sha256": "0rj205cs3v6g80h8ys9flbdq4wyd1csmkwdxv0lz21972zcsrcfh",
       "srcDir": "src",
-      "url": "https://github.com/treeform/jsony/archive/ea811be.tar.gz"
+      "url": "https://github.com/treeform/jsony/archive/1de1f08.tar.gz"
     },
     {
       "method": "fetchzip",
@@ -95,11 +95,22 @@
       "packages": [
         "nimcrypto"
       ],
-      "path": "/nix/store/dnj20qh97ylf57nka9wbxs735wbw7yxv-source",
-      "rev": "4014ef9",
-      "sha256": "1kgqr2lqaffglc1fgbanwcvhkqcbbd20d5b6w4lf0nksfl9c357a",
+      "path": "/nix/store/zyr8zwh7vaiycn1s4r8cxwc71f2k5l0h-source",
+      "rev": "a079df9",
+      "sha256": "1dmdmgb6b9m5f8dyxk781nnd61dsk3hdxqks7idk9ncnpj9fng65",
       "srcDir": "",
-      "url": "https://github.com/cheatfate/nimcrypto/archive/4014ef9.tar.gz"
+      "url": "https://github.com/cheatfate/nimcrypto/archive/a079df9.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "oauth"
+      ],
+      "path": "/nix/store/bwmrrzs6xpwizmww35461x3lqpgd0942-source",
+      "rev": "b8c163b",
+      "sha256": "0k5slyzjngbdr6g0b0dykhqmaf8r8n2klbkg2gpid4ckm8hg62v5",
+      "srcDir": "src",
+      "url": "https://github.com/CORDEA/oauth/archive/b8c163b.tar.gz"
     },
     {
       "method": "fetchzip",
@@ -155,6 +166,18 @@
       "sha256": "19d78787k97l5cis81800hxa9qjr0yzjshlzdp727gh6pn8kc8fj",
       "srcDir": "src",
       "url": "https://github.com/dom96/sass/archive/7dfdd03.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "sha1"
+      ],
+      "path": "/nix/store/a6a0ycxsaxpqks42aq9wicj8ars7z7ai-source",
+      "ref": "master",
+      "rev": "92ccc5800bb0ac4865b275a2ce3c1544e98b48bc",
+      "sha256": "00zvvd8ssy22srg74xzapknmgmi82v534npjdrk5805shswfhqdm",
+      "srcDir": "",
+      "url": "https://github.com/onionhammer/sha1/archive/92ccc5800bb0ac4865b275a2ce3c1544e98b48bc.tar.gz"
     },
     {
       "method": "fetchzip",

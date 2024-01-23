@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , setuptools
 , setuptools-scm
 , wheel
@@ -18,6 +19,9 @@ buildPythonPackage rec {
   pname = "tqdm";
   version = "4.66.1";
   format = "pyproject";
+
+  # https://github.com/tqdm/tqdm/issues/1537
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

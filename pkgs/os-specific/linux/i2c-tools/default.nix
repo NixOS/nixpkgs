@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchgit
+, fetchzip
 , perl
 , read-edid
 }:
@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
   pname = "i2c-tools";
   version = "4.3";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git";
-    rev = "v${version}";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/i2c-tools/i2c-tools.git/snapshot/i2c-tools-v${version}.tar.gz";
     sha256 = "sha256-HlmIocum+HZEKNiS5BUwEIswRfTMUhD1vCPibAuAK0Q=";
   };
 

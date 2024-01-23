@@ -1,33 +1,53 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
+, flit-core
+, packaging
 , sphinx
-, importlib-resources
+, click
+, myst-parser
+, pytest-regressions
+, pytestCheckHook
+, sphinx-external-toc
+, sphinxcontrib-bibtex
+, texsoup
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-jupyterbook-latex";
-  version = "0.5.2";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "sphinx_jupyterbook_latex";
-    hash = "sha256-2h060Cj1XdvxC5Ewu58k/GDK+2ccvTnf2VU3qvyQly4=";
+  src = fetchFromGitHub {
+    owner = "executablebooks";
+    repo = "sphinx-jupyterbook-latex";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "sphinx>=4,<5.1" "sphinx"
-  '';
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [ sphinx ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  propagatedBuildInputs = [
+    packaging
+    sphinx
+  ];
 
   pythonImportsCheck = [ "sphinx_jupyterbook_latex" ];
+
+  nativeCheckInputs = [
+    click
+    myst-parser
+    pytest-regressions
+    pytestCheckHook
+    sphinx-external-toc
+    sphinxcontrib-bibtex
+    texsoup
+  ];
 
   meta = with lib; {
     description = "Latex specific features for jupyter book";

@@ -5,6 +5,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , habluetooth
+, lru-dict
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-esphome";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "bleak-esphome";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XJxx9m8ZJtCmH9R1A4J+EFSTP4z9acDgRbaASKR/tZY=";
+    hash = "sha256-cLjQg54DL17VtM/NFOQUE0dJThz5EhjipW2t9yhAMQ0=";
   };
 
   postPatch = ''
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     bleak
     bluetooth-data-tools
     habluetooth
+    lru-dict
   ];
 
   nativeCheckInputs = [

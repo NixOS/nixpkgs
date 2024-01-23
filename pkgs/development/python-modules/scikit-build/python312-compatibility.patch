@@ -1,0 +1,40 @@
+diff --git a/skbuild/resources/cmake/FindPythonExtensions.cmake b/skbuild/resources/cmake/FindPythonExtensions.cmake
+index 59b30c2..62298d5 100644
+--- a/skbuild/resources/cmake/FindPythonExtensions.cmake
++++ b/skbuild/resources/cmake/FindPythonExtensions.cmake
+@@ -254,19 +254,23 @@ endif()
+ include(targetLinkLibrariesWithDynamicLookup)
+ 
+ set(_command "
+-import distutils.sysconfig
++import sys
++
++if sys.version_info >= (3,10):
++  import sysconfig
++else:
++  from distutils import sysconfig
+ import itertools
+ import os
+ import os.path
+ import site
+-import sys
+ 
+ result = None
+ rel_result = None
+ candidate_lists = []
+ 
+ try:
+-    candidate_lists.append((distutils.sysconfig.get_python_lib(),))
++    candidate_lists.append((sysconfig.get_python_lib(),))
+ except AttributeError: pass
+ 
+ try:
+@@ -293,7 +297,7 @@ sys.stdout.write(\";\".join((
+     sys.prefix,
+     result,
+     rel_result,
+-    distutils.sysconfig.get_config_var('EXT_SUFFIX')
++    sysconfig.get_config_var('EXT_SUFFIX')
+ )))
+ ")
+ 

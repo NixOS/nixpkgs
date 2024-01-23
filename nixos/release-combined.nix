@@ -5,7 +5,7 @@
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "aarch64-linux" "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+, limitedSupportedSystems ? [ ]
 }:
 
 let
@@ -90,6 +90,7 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootZfs")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBootFat")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.separateBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.simpleLabels")
@@ -167,10 +168,11 @@ in rec {
         (onFullSupported "nixos.tests.xfce")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
+        (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
         ["nixpkgs.tarball"]
 
-        # Ensure that nixpkgs-check-by-name is available in all release channels and nixos-unstable,
-        # so that a pre-built version can be used in CI for PR's on the corresponding development branches.
+        # Ensure that nixpkgs-check-by-name is available in nixos-unstable,
+        # so that a pre-built version can be used in CI for PR's
         # See ../pkgs/test/nixpkgs-check-by-name/README.md
         (onSystems ["x86_64-linux"] "nixpkgs.tests.nixpkgs-check-by-name")
       ];

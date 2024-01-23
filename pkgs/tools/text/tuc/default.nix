@@ -1,16 +1,16 @@
 { lib, fetchFromGitHub, rustPlatform }:
 rustPlatform.buildRustPackage rec {
   pname = "tuc";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "riquito";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-83tS0sYqQqGQVXFBQ/mIDxL9QKqPjAM48vTXA8NKdtE=";
+    sha256 = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
   };
 
-  cargoHash = "sha256-ka6h60ettSsho7QnWmpWrEPEyHIIyTVSW2r1Hk132CY=";
+  cargoHash = "sha256-NbqmXptLmqLd6QizRB1bIM53Rdj010Hy3JqSuLQ4H24=";
 
   meta = with lib; {
     description = "When cut doesn't cut it";

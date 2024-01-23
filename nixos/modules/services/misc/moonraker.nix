@@ -103,7 +103,7 @@ in {
 
   config = mkIf cfg.enable {
     warnings = []
-      ++ optional (cfg.settings ? update_manager)
+      ++ optional (cfg.settings.update_manager.enable_system_updates or false)
         ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.''
       ++ optional (cfg.configDir != null)
         ''
@@ -184,6 +184,12 @@ in {
         Group = cfg.group;
         User = cfg.user;
       };
+    };
+
+    # set this to false, otherwise we'll get a warning indicating that `/etc/klipper.cfg`
+    # is not located in the moonraker config directory.
+    services.moonraker.settings = lib.mkIf (!config.services.klipper.mutableConfig) {
+      file_manager.check_klipper_config_path = false;
     };
 
     security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''

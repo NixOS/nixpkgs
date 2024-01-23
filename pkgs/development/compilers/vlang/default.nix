@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
 let
-  version = "0.4.3";
+  version = "0.4.4";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
@@ -10,12 +10,12 @@ let
   # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "0.4.3";
+    version = "0.4.4";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "5e691a82c01957870b451e06216a9fb3a4e83a18";
-      hash = "sha256-Ti2b88NDG1pppj34BeK8+UsT2HiG/jcAF2mHgiBBRaI=";
+      rev = "66eb8eae253d31fa5622e35a69580d9ad8efcccb";
+      hash = "sha256-YGlzr0Qq7+NtrnbaFPBuclzjOZBOnTe3BOhsuwdsQ5c=";
     };
 
     # patch the ptrace reference for darwin
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    hash = "sha256-ZFBQD7SP38VnEMoOnwr/n8zZuLtR7GR3OCYhvfz3apI=";
+    hash = "sha256-Aqecw8K+igHx5R34lQiWtdNfeGn+umcjcS4w0vXgpLM=";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]

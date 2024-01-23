@@ -1,0 +1,28 @@
+diff --git a/src/arjun.cpp b/src/arjun.cpp
+index d6ad786..119a267 100644
+--- a/src/arjun.cpp
++++ b/src/arjun.cpp
+@@ -98,6 +98,11 @@ DLL_PUBLIC bool Arjun::add_clause(const vector<CMSat::Lit>& lits)
+     return arjdata->common.solver->add_clause(lits);
+ }
+ 
++DLL_PUBLIC bool Arjun::add_red_clause(const vector<CMSat::Lit>& lits)
++{
++    return arjdata->common.solver->add_red_clause(lits);
++}
++
+ DLL_PUBLIC bool Arjun::add_xor_clause(const vector<uint32_t>& vars, bool rhs)
+ {
+     assert(false && "Funnily enough this does NOT work. The XORs would generate a BVA variable, and that would then not be returned as part of the simplified CNF. We could calculate a smaller independent set, but that's all.");
+diff --git a/src/arjun.h b/src/arjun.h
+index a39070c..907472a 100644
+--- a/src/arjun.h
++++ b/src/arjun.h
+@@ -61,6 +61,7 @@ namespace ArjunNS {
+         void new_var();
+         bool add_xor_clause(const std::vector<uint32_t>& vars, bool rhs);
+         bool add_clause(const std::vector<CMSat::Lit>& lits);
++        bool add_red_clause(const std::vector<CMSat::Lit>& lits);
+         bool add_bnn_clause(
+             const std::vector<CMSat::Lit>& lits,
+             signed cutoff,

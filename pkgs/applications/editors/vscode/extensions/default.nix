@@ -7,7 +7,7 @@
 , nodePackages
 , python3Packages
 , jdk
-, llvmPackages_8
+, llvmPackages
 , llvmPackages_14
 , nixpkgs-fmt
 , protobuf
@@ -344,8 +344,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.0.1";
-          sha256 = "1yf065syb5hskds47glnv18nk0fg7d84w1j72hg1pqb082gn1sdv";
+          version = "1.5.0";
+          sha256 = "1glad9xmzq58jc7js8afjmqrxgd3rqm80fk528wv5kqcmn90bgk3";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -591,8 +591,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.10.1";
-          sha256 = "sha256-VZQ3dpwj4RWZuyMba8DM7+JcIBSYB8zimZOkP5mJbms=";
+          version = "1.10.2";
+          sha256 = "sha256-he/aPcsxfqYWI/RJ51d5V0reaTPTATci34xPm93qxGs=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -675,6 +675,22 @@ let
         };
       };
 
+      carrie999.cyberpunk-2020 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cyberpunk-2020";
+          publisher = "carrie999";
+          version = "0.1.4";
+          sha256 = "sha256-tVbd+j9+90Z07+jGAiT0gylZN9YWHdJmq2sh1wf2oGE=";
+        };
+        meta = {
+          description = "A cyberpunk-inspired colour theme to satisfy your neon dreams";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=carrie999.cyberpunk-2020";
+          homepage = "https://github.com/Carrie999/cyberpunk";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       catppuccin = {
         catppuccin-vsc = buildVscodeMarketplaceExtension {
           mktplcRef = {
@@ -710,8 +726,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.40.0";
-          sha256 = "sha256-Ym76WtKvz18NgxH9o8O/Ozn+/AtqLvjJs8ffLhPOWkQ=";
+          version = "2023.60.0";
+          sha256 = "sha256-zxE4QcWt8M6djTbdIf0YNSpeF1w7vMK4/BW5ArCOYbE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1073,6 +1089,23 @@ let
         meta = { license = lib.licenses.mit; };
       };
 
+      dhedgecock.radical-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "radical-vscode";
+          publisher = "dhedgecock";
+          version = "3.3.1";
+          sha256 = "sha256-VvFQovuE+I0lqXU9fHrmk7nWMpuuWafqm9Acwb0+QYg=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/dhedgecock.radical-vscode/changelog";
+          description = "A dark theme for radical hacking inspired by retro futuristic design";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dhedgecock.radical-vscode";
+          homepage = "https://github.com/dhedgecock/radical-vscode";
+          license = lib.licenses.isc;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       disneystreaming.smithy = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "disneystreaming";
@@ -1101,6 +1134,12 @@ let
       };
 
       donjayamanne.githistory = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "githistory";
+          publisher = "donjayamanne";
+          version = "0.6.20";
+          sha256 = "sha256-nEdYS9/cMS4dcbFje23a47QBZr9eDK3dvtkFWqA+OHU=";
+        };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/donjayamanne.githistory/changelog";
           description = "View git log, file history, compare branches or commits";
@@ -1108,12 +1147,6 @@ let
           homepage = "https://github.com/DonJayamanne/gitHistoryVSCode/";
           license = lib.licenses.mit;
           maintainers = [ ];
-        };
-        mktplcRef = {
-          name = "githistory";
-          publisher = "donjayamanne";
-          version = "0.6.20";
-          sha256 = "sha256-nEdYS9/cMS4dcbFje23a47QBZr9eDK3dvtkFWqA+OHU=";
         };
       };
 
@@ -1151,8 +1184,8 @@ let
         mktplcRef = {
           name = "theme-dracula";
           publisher = "dracula-theme";
-          version = "2.24.2";
-          sha256 = "sha256-YNqWEIvlEI29mfPxOQVdd4db9G2qNodhz8B0MCAAWK8=";
+          version = "2.24.3";
+          sha256 = "sha256-3B18lEu8rXVXySdF3+xsPnAyruIuEQJDhlNw82Xm6b0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
@@ -1234,8 +1267,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.17.10";
-          sha256 = "sha256-4/B70DyNlImz60PSTSL5CKihlOJen/tR1/dXGc3s1ZY=";
+          version = "0.19.0";
+          sha256 = "sha256-31eenBOVUEY3MFaVmAjZsypr7U0d6IfVR3ZJfDqi3OY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1580,8 +1613,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.135.544";
-          sha256 = "sha256-OeG1nkQbQAfu8NuDEA+iaWy0ioFyXPe7Qm/CZIKPiX8=";
+          version = "1.151.659";
+          sha256 = "sha256-6jz7Nb9SGON7AXL4KJwC4H03la9JqLCX+AyBEvxD4HA=";
         };
 
         meta = {
@@ -1597,8 +1630,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.11.2023111001";
-          sha256 = "sha256-sBDvqqyq0R0ZyS81G61fI9Vd860RIjhNzCqY0bdz1mg=";
+          version = "0.11.2023120102";
+          sha256 = "sha256-EUegM4sVP/vDikNr4LwnWzhDBSgfxYe6mxnrhSdXhIQ=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -1630,8 +1663,8 @@ let
         mktplcRef = {
           name = "vscode-github-actions";
           publisher = "github";
-          version = "0.25.6";
-          sha256 = "sha256-HRj/AQI9E6HDkZ2ok/h/+c9HHq1wVXQPAt5mb/Ij+BI=";
+          version = "0.26.2";
+          sha256 = "sha256-sEc6Fbn4XpK8vNK32R4fjnx/R+1xYOwcuhKlo7sPd5o=";
         };
         meta = {
           description = "A Visual Studio Code extension for GitHub Actions workflows and runs for github.com hosted repositories";
@@ -1651,8 +1684,8 @@ let
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they can require insider versions
           # of VS Code
-          version = "0.75.2023101209";
-          sha256 = "1saz4brd5k1wyy7pz1h3jcl4kq35f78s2q8drjd7v2k97jhy8la1";
+          version = "0.78.1";
+          sha256 = "sha256-T9oW6o4ItZfR8E1qrcH3nhMvVB6ihi4kpiDz7YGHOcI=";
         };
         meta = { license = lib.licenses.mit; };
       };
@@ -1884,8 +1917,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.5.4";
-          sha256 = "sha256-cM3ssUzQnqt5WL8UaLYkrmfHscVa2sGa7/UWLXMIHGg=";
+          version = "7.17.0";
+          sha256 = "sha256-CC6ySeuO61O/mAkQYGoK/1cd4hlyS0vG+Lqv0HQ7K6c=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2162,7 +2195,7 @@ let
         };
       };
 
-      llvm-org.lldb-vscode = llvmPackages_8.lldb;
+      llvm-org.lldb-vscode = llvmPackages.lldb;
 
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2306,14 +2339,14 @@ let
         };
       };
 
-      # Keep pkgs/tools/typesetting/typst-preview/default.nix in sync with this
+      # Keep pkgs/by-name/ty/typst-preview/package.nix in sync with this
       # extension
       mgt19937.typst-preview = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-preview";
           publisher = "mgt19937";
-          version = "0.9.2";
-          sha256 = "sha256-/2ZD5LOQ1vTIKab2qX+5AqNqaRs90MNz1jUMDaV1wUY=";
+          version = "0.10.5";
+          sha256 = "sha256-cR5Pyokzmf8dNlsUkcwwfPx3jtJCQHRwTpYk78ovgrM=";
         };
 
         buildInputs = [
@@ -2376,8 +2409,8 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.15.2";
-          sha256 = "06lp4qgnksklgc6nvx1l9z38y7apbx0a6v886nd15aq9rq8my0ka";
+          version = "0.16.0";
+          sha256 = "sha256-u2AFjvhm3zio1ygW9yD9ZwbywLrEssd0O7/0AtfCvMo=";
         };
 
         meta = {
@@ -2743,14 +2776,30 @@ let
         };
       };
 
+      nur.just-black = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "just-black";
+          publisher = "nur";
+          version = "3.1.1";
+          sha256 = "sha256-fatJZquCDsLDFGVzBol2D6LIZUbZ6GzqcVEFAwLodW0=";
+        };
+        meta = {
+          description = "A dark theme designed specifically for syntax highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=nur.just-black";
+          homepage = "https://github.com/nurmohammed840/extension.vsix/tree/Just-Black";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
+      };
+
       nvarner.typst-lsp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-lsp";
           publisher = "nvarner";
           # Please update the corresponding binary (typst-lsp) when updating
           # this extension.
-          version = "0.12.0";
-          sha256 = "sha256-9v6zJyeUBj0TOpK2otLqZ0ksjmzExKTJYRF+9akvuuo=";
+          version = "0.12.1";
+          sha256 = "sha256-JcfFaR1wU5XwapH8vnfVy7Cb7DfUWVeoLfBV3wEtCpE=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -3111,8 +3160,8 @@ let
         mktplcRef = {
           name = "crates";
           publisher = "serayuzgur";
-          version = "0.6.0";
-          sha256 = "080zd103vjrz86vllr1ricq2vi3hawn4534n492m7xdcry9l9dpc";
+          version = "0.6.5";
+          sha256 = "sha256-HgqM4PKGk3R5MLY4cVjKxv79p5KlOkVDeDbv7/6FmpM=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3163,6 +3212,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      silofy.hackthebox = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "hackthebox";
+          publisher = "silofy";
+          version = "0.2.9";
+          sha256 = "sha256-WSPuEh+osu0DpXgPAzMU5Fw0Sh8sZFst7kx26s2BsyQ=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/silofy.hackthebox/changelog";
+          description = "A Visual Studio Code theme built for hackers by hackers";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=silofy.hackthebox";
+          homepage = "https://github.com/silofy/hackthebox";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
         };
       };
 
@@ -3441,6 +3507,23 @@ let
           sha256 = "sha256-7v4q0OEqv7q2ejHp4lph2Dsqg0GWE65pxyz9goQEm8g=";
         };
         meta.license = lib.licenses.mit;
+      };
+
+      thorerik.hacker-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "hacker-theme";
+          publisher = "thorerik";
+          version = "3.0.1";
+          sha256 = "sha256-Ugk9kTJxW1kbD+X6PF96WBc1k7x4KaGu5WbCYPGQ3qE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/thorerik.hacker-theme/changelog";
+          description = "The perfect theme for writing IP tracers in Visual Basic and reverse-proxying a UNIX-system firewall";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=thorerik.hacker-theme";
+          homepage = "https://github.com/thorerik/vscode-hacker-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.d3vil0p3r ];
+        };
       };
 
       tiehuis.zig = buildVscodeMarketplaceExtension {

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
                   "authorization (Helsinki Systems fork)";
     homepage = "https://github.com/helsinki-systems/libspf2";
     license = with licenses; [ lgpl21Plus bsd2 ];
-    maintainers = with maintainers; [ pacien ajs124 das_j ];
+    maintainers = with maintainers; [ pacien ] ++ teams.helsinki-systems.members;
     platforms = platforms.all;
   };
 }

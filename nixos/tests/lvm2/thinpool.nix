@@ -1,7 +1,7 @@
 { kernelPackages ? null }:
 import ../make-test-python.nix ({ pkgs, lib, ... }: {
   name = "lvm2-thinpool";
-  meta.maintainers = with pkgs.lib.maintainers; [ ajs124 ];
+  meta.maintainers = lib.teams.helsinki-systems.members;
 
   nodes.machine = { pkgs, lib, ... }: {
     virtualisation.emptyDiskImages = [ 4096 ];

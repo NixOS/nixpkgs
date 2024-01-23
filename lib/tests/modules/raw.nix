@@ -1,4 +1,4 @@
-{ lib, ... }: {
+{ lib, config, ... }: {
 
   options = {
     processedToplevel = lib.mkOption {
@@ -12,6 +12,9 @@
     };
     priorities = lib.mkOption {
       type = lib.types.raw;
+    };
+    unprocessedNestingEvaluates = lib.mkOption {
+      default = builtins.tryEval config.unprocessedNesting;
     };
   };
 

@@ -131,6 +131,20 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/461727b453712550a2c5dc0ae11933523255aaed.diff";
       sha256 = "sha256-mC8084VQoUBk4hocALF+Y9Cwb38Zt360eldi/SSjna8=";
     })
+
+    # https://github.com/sagemath/sage/pull/36218, landed in 10.2.beta3
+    (fetchpatch {
+      name = "sageenv-disable-file-validation.patch";
+      url = "https://github.com/sagemath/sage/commit/31a764f4a9ec54d3ea970aa9514a088c4e603ebd.diff";
+      sha256 = "sha256-NhYUTTmYlyjss3eS8HZXP8U11TElQY0cv6KW4wBOaJY=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36235, landed in 10.2.beta3
+    (fetchpatch {
+      name = "ecl-23.9.9.patch";
+      url = "https://github.com/sagemath/sage/commit/b6b50a80e9660c002d069019f5b8f04e9324a423.diff";
+      sha256 = "sha256-nF+5oKad1VYms6Dxr1t9/V0XBkoMfhy0KCY/ZPddrm0=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

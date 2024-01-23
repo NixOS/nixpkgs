@@ -97,7 +97,10 @@ mkDerivation rec {
     (lib.withFeature stdenv.isLinux "inotify")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DNIXPKGS"
+    "-fpermissive" # libxml2-2.12 changed const qualifiers
+  ];
 
   patches = [
     # fix "No/bad main configuration file" error

@@ -52,19 +52,7 @@ let
       });
       # apache-airflow doesn't work with sqlalchemy 2.x
       # https://github.com/apache/airflow/issues/28723
-      sqlalchemy = pySuper.sqlalchemy.overridePythonAttrs (o: rec {
-        version = "1.4.48";
-        src = fetchFromGitHub {
-          owner = "sqlalchemy";
-          repo = "sqlalchemy";
-          rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-          hash = "sha256-qyD3uoxEnD2pdVvwpUlSqHB3drD4Zg/+ov4CzLFIlLs=";
-        };
-        disabledTestPaths = [
-           "test/aaa_profiling"
-           "test/ext/mypy"
-        ];
-      });
+      sqlalchemy = pySuper.sqlalchemy_1_4;
 
       apache-airflow = pySelf.callPackage ./python-package.nix { };
     };

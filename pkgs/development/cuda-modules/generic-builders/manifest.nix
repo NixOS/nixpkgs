@@ -26,6 +26,7 @@
   redistribRelease,
   # See ./modules/generic/manifests/feature/release.nix
   featureRelease,
+  cudaMajorMinorVersion,
 }:
 let
   inherit (lib)
@@ -42,7 +43,12 @@ let
   # Get the redist architectures for which package provides distributables.
   # These are used by meta.platforms.
   supportedRedistArchs = builtins.attrNames featureRelease;
+  # redistArch :: String
+  # The redistArch is the name of the architecture for which the redistributable is built.
+  # It is `"unsupported"` if the redistributable is not supported on the target platform.
   redistArch = flags.getRedistArch hostPlatform.system;
+
+  sourceMatchesHost = flags.getNixSystem redistArch == stdenv.hostPlatform.system;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
@@ -77,7 +83,7 @@ backendStdenv.mkDerivation (
             false
             featureRelease;
         # Order is important here so we use a list.
-        additionalOutputs = builtins.filter hasOutput [
+        possibleOutputs = [
           "bin"
           "lib"
           "static"
@@ -86,15 +92,32 @@ backendStdenv.mkDerivation (
           "sample"
           "python"
         ];
+        # Filter out outputs that don't exist in the redistributable.
+        # NOTE: In the case the redistributable isn't supported on the target platform,
+        # we will have `outputs = [ "out" ] ++ possibleOutputs`. This is of note because platforms which
+        # aren't supported would otherwise have evaluation errors when trying to access outputs other than `out`.
+        # The alternative would be to have `outputs = [ "out" ]` when`redistArch = "unsupported"`, but that would
+        # require adding guards throughout the entirety of the CUDA package set to ensure `cudaSupport` is true --
+        # recall that OfBorg will evaluate packages marked as broken and that `cudaPackages` will be evaluated with
+        # `cudaSupport = false`!
+        additionalOutputs =
+          if redistArch == "unsupported"
+          then possibleOutputs
+          else builtins.filter hasOutput possibleOutputs;
         # The out output is special -- it's the default output and we always include it.
-        outputs = ["out"] ++ additionalOutputs;
+        outputs = [ "out" ] ++ additionalOutputs;
       in
       outputs;
 
     # Traversed in the order of the outputs speficied in outputs;
     # entries are skipped if they don't exist in outputs.
     outputToPatterns = {
-      bin = ["bin"];
+      bin = [ "bin" ];
+      dev = [
+        "share/pkgconfig"
+        "**/*.pc"
+        "**/*.cmake"
+      ];
       lib = [
         "lib"
         "lib64"
@@ -104,17 +127,62 @@ backendStdenv.mkDerivation (
       python = ["**/*.whl"];
     };
 
-    # Useful for introspecting why something went wrong.
-    # Maps descriptions of why the derivation would be marked broken to
-    # booleans indicating whether that description is true.
-    brokenConditions = {};
+    # Useful for introspecting why something went wrong. Maps descriptions of why the derivation would be marked as
+    # broken on have badPlatforms include the current platform.
 
-    src = fetchurl {
-      url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${
-        redistribRelease.${redistArch}.relative_path
-      }";
-      inherit (redistribRelease.${redistArch}) sha256;
+    # brokenConditions :: AttrSet Bool
+    # Sets `meta.broken = true` if any of the conditions are true.
+    # Example: Broken on a specific version of CUDA or when a dependency has a specific version.
+    brokenConditions = { };
+
+    # badPlatformsConditions :: AttrSet Bool
+    # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
+    # Example: Broken on a specific architecture when some condition is met (like targeting Jetson).
+    badPlatformsConditions = {
+      "No source" = !sourceMatchesHost;
     };
+
+    # src :: Optional Derivation
+    src = trivial.pipe redistArch [
+      # If redistArch doesn't exist in redistribRelease, return null.
+      (redistArch: redistribRelease.${redistArch} or null)
+      # If the release is non-null, fetch the source; otherwise, return null.
+      (trivial.mapNullable (
+        { relative_path, sha256, ... }:
+        fetchurl {
+          url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+          inherit sha256;
+        }
+      ))
+    ];
+
+    # Handle the pkg-config files:
+    # 1. No FHS
+    # 2. Location expected by the pkg-config wrapper
+    # 3. Generate unversioned names too
+    postPatch = ''
+      for path in pkg-config pkgconfig ; do
+        [[ -d "$path" ]] || continue
+        mkdir -p share/pkgconfig
+        mv "$path"/* share/pkgconfig/
+        rmdir "$path"
+      done
+
+      for pc in share/pkgconfig/*.pc ; do
+        sed -i \
+          -e "s|^cudaroot\s*=.*\$|cudaroot=''${!outputDev}|" \
+          -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib|" \
+          -e "s|^includedir\s*=.*/include\$|includedir=''${!outputDev}/include|" \
+          "$pc"
+      done
+
+      # E.g. cuda-11.8.pc -> cuda.pc
+      for pc in share/pkgconfig/*-"$majorMinorVersion.pc" ; do
+        ln -s "$(basename "$pc")" "''${pc%-$majorMinorVersion.pc}".pc
+      done
+    '';
+
+    env.majorMinorVersion = cudaMajorMinorVersion;
 
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
@@ -197,12 +265,25 @@ backendStdenv.mkDerivation (
         runHook postInstall
       '';
 
+    doInstallCheck = true;
+    allowFHSReferences = true; # TODO: Default to `false`
+    postInstallCheck = ''
+      echo "Executing postInstallCheck"
+
+      if [[ -z "''${allowFHSReferences-}" ]] ; then
+        mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "''${!o}"; done)
+        if grep --max-count=5 --recursive --exclude=LICENSE /usr/ "''${outputPaths[@]}" ; then
+          echo "Detected references to /usr" >&2
+          exit 1
+        fi
+      fi
+    '';
+
     # libcuda needs to be resolved during runtime
-    # NOTE: Due to the use of __structuredAttrs, we can't use a list for autoPatchelfIgnoreMissingDeps, since it
-    # will take only the first value. Instead, we produce a string with the values separated by spaces.
-    # Using the `env` attribute ensures that the value is representable as one of the primitives allowed by
-    # bash's environment variables.
-    env.autoPatchelfIgnoreMissingDeps = "libcuda.so libcuda.so.*";
+    autoPatchelfIgnoreMissingDeps = [
+      "libcuda.so"
+      "libcuda.so.*"
+    ];
 
     # The out output leverages the same functionality which backs the `symlinkJoin` function in
     # Nixpkgs:
@@ -243,17 +324,18 @@ backendStdenv.mkDerivation (
     meta = {
       description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
       sourceProvenance = [sourceTypes.binaryNativeCode];
-      platforms =
-        lists.concatMap
-          (
-            redistArch:
-            let
-              nixSystem = builtins.tryEval (flags.getNixSystem redistArch);
-            in
-            if nixSystem.success then [nixSystem.value] else []
-          )
-          supportedRedistArchs;
       broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
+      platforms = trivial.pipe supportedRedistArchs [
+        # Map each redist arch to the equivalent nix system or null if there is no equivalent.
+        (builtins.map flags.getNixSystem)
+        # Filter out unsupported systems
+        (builtins.filter (nixSystem: !(strings.hasPrefix "unsupported-" nixSystem)))
+      ];
+      badPlatforms =
+        let
+          isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
+        in
+        lists.optionals isBadPlatform finalAttrs.meta.platforms;
       license = licenses.unfree;
       maintainers = teams.cuda.members;
       # Force the use of the default, fat output by default (even though `dev` exists, which

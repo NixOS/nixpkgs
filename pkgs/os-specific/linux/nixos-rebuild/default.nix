@@ -1,4 +1,5 @@
-{ substituteAll
+{ callPackage
+, substituteAll
 , runtimeShell
 , coreutils
 , gnused
@@ -36,8 +37,10 @@ substituteAll {
   # run some a simple installer tests to make sure nixos-rebuild still works for them
   passthru.tests = {
     install-bootloader = nixosTests.nixos-rebuild-install-bootloader;
+    repl = callPackage ./test/repl.nix {};
     simple-installer = nixosTests.installer.simple;
     specialisations = nixosTests.nixos-rebuild-specialisations;
+    target-host = nixosTests.nixos-rebuild-target-host;
   };
 
   meta = {

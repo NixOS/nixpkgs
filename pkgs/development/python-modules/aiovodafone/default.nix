@@ -10,8 +10,8 @@
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "0.4.3";
-  format = "pyproject";
+  version = "0.5.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiovodafone";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nYMruxEqLvkcspz0damh9tBYYROz5gleLiyhjco+rsQ=";
+    hash = "sha256-a9V5rocQmloNkg9IsxOAle8zmOIQ7jf1xPLjdsjntVw=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control Vodafon Station";
     homepage = "https://github.com/chemelli74/aiovodafone";
-    changelog = "https://github.com/chemelli74/aiovodafone/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/chemelli74/aiovodafone/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

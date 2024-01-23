@@ -32,7 +32,7 @@ rec {
   nvidia-video-samples = fetchFromGitHub {
     owner = "Igalia";
     repo = "vk_video_samples";
-    rev = "cts-integration-0.9.9-2";
+    rev = "138bbe048221d315962ddf8413aa6a08cc62a381";
     hash = "sha256-ftHhb5u3l7WbgEu6hHynBnvNbVOn5TFne915M17jiAQ=";
   };
 

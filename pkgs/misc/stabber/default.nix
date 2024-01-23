@@ -15,6 +15,11 @@ stdenv.mkDerivation {
     sha256 = "0042nbgagl4gcxa5fj7bikjdi1gbk0jwyqnzc5lswpb0l5y0i1ql";
   };
 
+  postPatch = ''
+    # New toolchainsd like gcc-13 trigger warnings and fail the build.
+    substituteInPlace configure.ac --replace "-Werror" ""
+  '';
+
   preAutoreconf = ''
     mkdir m4
   '';

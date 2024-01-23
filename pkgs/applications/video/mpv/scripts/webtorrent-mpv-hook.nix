@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, nodejs, python3 }:
+{ lib, buildNpmPackage, fetchFromGitHub, gitUpdater, nodejs, python3 }:
 
 buildNpmPackage rec {
   pname = "webtorrent-mpv-hook";
@@ -9,6 +9,9 @@ buildNpmPackage rec {
     repo = pname;
     rev = "v${version}";
     hash = "sha256-/dMtXcIyfAs++Zgz2CxRW0tkzn5QjS+WVGChlCyrU0U=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   postPatch = ''

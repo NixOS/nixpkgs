@@ -1,19 +1,22 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    kramdown (2.3.2)
+    kramdown (2.4.0)
       rexml
-    mini_portile2 (2.8.0)
-    mustache (0.99.8)
-    nokogiri (1.13.4)
-      mini_portile2 (~> 2.8.0)
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
+    mini_portile2 (2.8.5)
+    mustache (1.1.1)
+    nokogiri (1.16.0)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    racc (1.6.0)
-    rexml (3.2.5)
-    ronn-ng (0.9.1)
-      kramdown (~> 2.1)
-      mustache (~> 0.7, >= 0.7.0)
-      nokogiri (~> 1.9, >= 1.9.0)
+    racc (1.7.3)
+    rexml (3.2.6)
+    ronn-ng (0.10.1)
+      kramdown (~> 2, >= 2.1)
+      kramdown-parser-gfm (~> 1, >= 1.0.1)
+      mustache (~> 1)
+      nokogiri (~> 1, >= 1.14.3)
 
 PLATFORMS
   ruby
@@ -22,4 +25,4 @@ DEPENDENCIES
   ronn-ng
 
 BUNDLED WITH
-   2.3.9
+   2.5.3

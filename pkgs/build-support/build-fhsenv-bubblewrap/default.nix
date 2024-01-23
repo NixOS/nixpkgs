@@ -187,6 +187,26 @@ let
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
+    ${lib.optionalString privateTmp ''
+    # sddm places XAUTHORITY in /tmp
+    if [[ "$XAUTHORITY" == /tmp/* ]]; then
+      x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
+    fi
+
+    # dbus-run-session puts the socket in /tmp
+    IFS=";" read -ra addrs <<<"$DBUS_SESSION_BUS_ADDRESS"
+    for addr in "''${addrs[@]}"; do
+      [[ "$addr" == unix:* ]] || continue
+      IFS="," read -ra parts <<<"''${addr#unix:}"
+      for part in "''${parts[@]}"; do
+        printf -v part '%s' "''${part//\\/\\\\}"
+        printf -v part '%b' "''${part//%/\\x}"
+        [[ "$part" == path=/tmp/* ]] || continue
+        x11_args+=(--ro-bind-try "''${part#path=}" "''${part#path=}")
+      done
+    done
+    ''}
+
     cmd=(
       ${bubblewrap}/bin/bwrap
       --dev-bind /dev /dev

@@ -1,33 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonRelaxDepsHook
-, pbr
-, python-mimeparse
-, extras
-, traceback2
-, testscenarios
+
+# build-system
+, hatchling
+, hatch-vcs
+
+# dependencies
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "2.6.0";
-  format = "setuptools";
+  version = "2.7.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KLZeFMDy0+y7+19VydzeXk+qgKwWo3qCOQmh/jy8swo=";
+    sha256 = "sha256-323pYBDinuIfY3oUfqvzDVCyXjhB3R1o+T7onOd+Nmw=";
   };
 
-  propagatedBuildInputs = [ pbr python-mimeparse extras ];
-  buildInputs = [ traceback2 ];
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+    pythonRelaxDepsHook
+  ];
+
+  pythonRemoveDeps = [
+    "fixtures"
+  ];
+
+  propagatedBuildInputs = lib.optionals (pythonAtLeast "3.12") [
+    setuptools
+  ];
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;
-  nativeCheckInputs = [ testscenarios ];
-
-  pythonRemoveDeps = [ "fixtures" ];
 
   meta = {
     description = "A set of extensions to the Python standard library's unit testing framework";

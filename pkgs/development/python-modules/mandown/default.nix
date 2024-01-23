@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "mandown";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2kFzB1xLVEvO7Vo39lwQsVirRY6Z8GMczWK2b1oVYTg=";
+    hash = "sha256-oHa7/2fv+BG5KIKFIICYBqddub5SokDvAI6frbVwGSo=";
   };
 
   nativeBuildInputs = [

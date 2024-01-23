@@ -3,12 +3,15 @@
 , aresponses
 , async-modbus
 , async-timeout
+, asyncclick
 , buildPythonPackage
 , construct
 , exceptiongroup
 , fetchFromGitHub
+, pandas
 , pytest-asyncio
 , pytestCheckHook
+, python-slugify
 , pythonOlder
 , setuptools
 , tenacity
@@ -16,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.5.2";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +28,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "nibe";
     rev = "refs/tags/${version}";
-    hash = "sha256-qlGQtjRG92AhFY+sF3mB4ghIn4kydkbDOolLu9Qh0JM=";
+    hash = "sha256-hNxOB/H/KK9qHd+3FQHn9zjmCZRtY6H0nYKNqUc0FIg=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +42,16 @@ buildPythonPackage rec {
     exceptiongroup
     tenacity
   ];
+
+  passthru.optional-dependencies = {
+    convert = [
+      pandas
+      python-slugify
+    ];
+    cli = [
+      asyncclick
+    ];
+  };
 
   nativeCheckInputs = [
     aresponses

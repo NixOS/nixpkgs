@@ -14,7 +14,6 @@
 , glib
 , gdk-pixbuf
 , gobject-introspection
-, gtk2
 , gtk3
 , gtk4
 , gtk-doc
@@ -84,6 +83,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ibus/ibus/commit/8f706d160631f1ffdbfa16543a38b9d5f91c16ad.patch";
       hash = "sha256-YzS9TmUWW0OmheDeCeU00kFK2U2QEmKYMSRJAbu14ec=";
     })
+    # fix missing key releases in Wine https://github.com/ibus/ibus/issues/2480
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/497f0c74230a65309e22ce5569060ce48310406b.patch";
+      hash = "sha256-PAZcUxmzjChs1/K8hXgOcytyS4LYoNL1dtU6X5Tx8ic=";
+    })
   ];
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -103,6 +107,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature (libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
     (lib.enableFeature enableUI "ui")
+    "--disable-gtk2"
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
@@ -144,7 +149,6 @@ stdenv.mkDerivation rec {
     dconf
     gdk-pixbuf
     python3.pkgs.pygobject3 # for pygobject overrides
-    gtk2
     gtk3
     gtk4
     isocodes

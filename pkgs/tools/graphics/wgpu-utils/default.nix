@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API.";
+    description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API";
     homepage = "https://wgpu.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ erictapen ];

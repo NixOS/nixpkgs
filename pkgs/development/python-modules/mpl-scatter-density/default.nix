@@ -44,8 +44,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ matplotlib numpy fast-histogram ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl

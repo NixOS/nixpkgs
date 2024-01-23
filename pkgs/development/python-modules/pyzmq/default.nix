@@ -1,6 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPyPy
+
+# build-system
+, cython_3
+, setuptools
+, setuptools-scm
+, packaging
+, cffi
+
+# dependencies
+
 , py
 , pytestCheckHook
 , python
@@ -13,7 +24,7 @@
 buildPythonPackage rec {
   pname = "pyzmq";
   version = "25.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -22,12 +33,22 @@ buildPythonPackage rec {
     hash = "sha256-JZwiSFtxq6zfqL95cgzXvPS50SizDqVU8BrnH9v9qiM=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    packaging
+  ] ++ (if isPyPy then [
+    cffi
+  ] else [
+    cython_3
+  ]);
+
   buildInputs = [
     zeromq
   ];
 
-  propagatedBuildInputs = [
-    py
+  propagatedBuildInputs = lib.optionals isPyPy [
+    cffi
   ];
 
   nativeCheckInputs = [
@@ -45,6 +66,7 @@ buildPythonPackage rec {
     # pytest.ini is missing in pypi's sdist
     # https://github.com/zeromq/pyzmq/issues/1853#issuecomment-1592731986
     "--asyncio-mode auto"
+    "--ignore=$out/lib/python3.12/site-packages/zmq/tests/test_mypy.py"
   ];
 
   disabledTests = [

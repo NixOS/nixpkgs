@@ -27,6 +27,7 @@
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
+, cargo, rustc, rustPlatform
 , autoSignDarwinBinariesHook, fetchpatch
 }@args:
 
@@ -295,6 +296,33 @@ in
       getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
     in ''
       substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+    '';
+  } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
+    cargoRoot = "ext/fast_mmaped_file_rs";
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = stdenv.mkDerivation {
+        inherit (buildRubyGem { inherit (attrs) gemName version source; })
+          name
+          src
+          unpackPhase
+          nativeBuildInputs
+        ;
+        dontBuilt = true;
+        installPhase = ''
+          cp -R ext/fast_mmaped_file_rs $out
+        '';
+      };
+      hash = "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+    };
+    nativeBuildInputs = [
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+      rustPlatform.bindgenHook
+    ];
+    preBuild = ''
+      cat ../.cargo/config > ext/fast_mmaped_file_rs/.cargo/config.toml
+      sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
     '';
   };
 

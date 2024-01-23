@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${version}";
-    hash = "sha256-rI6GBDUzI0pHjULoNKWZ4GKlrtpX/4x6Q1Q+DByNqRs=";
+    hash = "sha256-DqxE+wEHDmOmh+iJa312uAWQcg/1ApOTZNLrhGq5KmY=";
   };
 
-  cargoHash = "sha256-8/0WkoDxUJz0QoQiDGHTuU7HmiY9nqUNPvztI0xmqvk=";
+  cargoHash = "sha256-/fd3XIBHwJ95bwirUbMldw2cAfdF2Sv8CPxrbM4WWBI=";
 
   nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
 
@@ -37,7 +37,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ]);
 
-  buildFeatures = [ "shell_completion" ];
+  buildFeatures = [
+    "shell_completion"
+  ] ++ lib.optionals stdenv.isLinux [
+    "systemd"
+  ];
 
   postInstall = ''
     installShellCompletion \

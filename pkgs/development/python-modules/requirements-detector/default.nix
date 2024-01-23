@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , packaging
 , poetry-core
-, poetry-semver
+, semver
 , pytestCheckHook
 , pythonOlder
 , toml
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     astroid
     packaging
-    poetry-semver
     toml
+    semver
   ];
 
   nativeCheckInputs = [

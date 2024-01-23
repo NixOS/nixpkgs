@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.greenfoot.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2ClasspathPlus;
-    mainProgram = pname;
+    mainProgram = "greenfoot";
     maintainers = [ maintainers.chvp ];
     platforms = platforms.linux;
   };

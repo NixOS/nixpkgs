@@ -10,12 +10,13 @@
 , cryptography
 , joblib
 , gitpython
+, sqlalchemy
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.19.6";
+  version = "0.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
-    rev = "v${version}";
-    hash = "sha256-T4DVidz4Xu4M+G7CzrUxRQPotg8ciwCQfa95e0IgpkM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uqXQbSk/diyTq4d+J1ubc6ylJpETmJt699vfbSuY290=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     cryptography
     joblib
     gitpython
+    sqlalchemy
   ];
 
   nativeCheckInputs = [
@@ -54,8 +56,6 @@ buildPythonPackage rec {
     # requires network access
     "test_basic_parse"
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonImportsCheck = [ "edk2toollib" ];
 

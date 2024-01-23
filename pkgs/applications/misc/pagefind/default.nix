@@ -7,7 +7,7 @@
 , binaryen
 , gzip
 , nodejs
-, rustc-wasm32
+, rustc
 , wasm-bindgen-cli
 , wasm-pack
 }:
@@ -66,8 +66,8 @@ rustPlatform.buildRustPackage rec {
     binaryen
     gzip
     nodejs
-    rustc-wasm32
-    rustc-wasm32.llvmPackages.lld
+    rustc
+    rustc.llvmPackages.lld
     wasm-bindgen-84
     wasm-pack
   ];

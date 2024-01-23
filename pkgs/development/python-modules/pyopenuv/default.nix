@@ -3,6 +3,7 @@
 , aresponses
 , backoff
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2023.11.0";
+  version = "2023.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "pyopenuv";
     rev = "refs/tags/${version}";
-    hash = "sha256-qlyKLovM0h3iWvhGecaFPswnchZXPNkr0PbSqK2UW0c=";
+    hash = "sha256-r+StbiU77/1dz41tCseleIWjiIvuvRveVgPNr3n4CEY=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backoff
+    certifi
   ];
 
   __darwinAllowLocalNetworking = true;

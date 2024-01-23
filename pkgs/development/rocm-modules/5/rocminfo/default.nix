@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rocminfo";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "rocminfo";
     rev = "rocm-${finalAttrs.version}";
     sha256 = "sha256-UzOo2qDT/uM+vdGdBM4pV5e143mfa+/6sZLBExOO26g=";
@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm Application for Reporting System Info";
-    homepage = "https://github.com/RadeonOpenCompute/rocminfo";
+    homepage = "https://github.com/ROCm/rocminfo";
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64 || versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = stdenv.isAarch64 || versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

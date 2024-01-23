@@ -35,6 +35,12 @@ let
         type = lib.types.str;
       };
 
+      extraGroups = lib.mkOption {
+        default = [ "keys" ];
+        description = lib.mdDoc "Groups the user for this buildkite agent should belong to";
+        type = lib.types.listOf lib.types.str;
+      };
+
       runtimePackages = lib.mkOption {
         default = [ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ];
         defaultText = lib.literalExpression "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
@@ -150,7 +156,7 @@ in
       home = cfg.dataDir;
       createHome = true;
       description = "Buildkite agent user";
-      extraGroups = [ "keys" ];
+      extraGroups = cfg.extraGroups;
       isSystemUser = true;
       group = "buildkite-agent-${name}";
     };

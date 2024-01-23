@@ -5,15 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.10.2";
-
-  format = "pyproject";
+  version = "0.10.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ep1cman";
-    repo = pname;
+    repo = "unifi-protect-backup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EQCI7TkkOhDASMo5yKfAca/gB4ayyPOaDVK6WEaAIgc=";
+    hash = "sha256-jICnm9EfPyOLVbZfF+TYcQJo0ZXUDpFgYpL5Zf9b8Bc=";
   };
 
   pythonRelaxDeps = [
@@ -30,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     aiocron
+    aiolimiter
     aiorun
     aiosqlite
     apprise
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ep1cman/unifi-protect-backup";
     changelog = "https://github.com/ep1cman/unifi-protect-backup/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = teams.helsinki-systems.members;
     mainProgram = "unifi-protect-backup";
   };
 }

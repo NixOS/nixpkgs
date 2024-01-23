@@ -513,7 +513,7 @@ let
   postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
 
 
-  stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: let
+  stage1Crypttab = pkgs.writeText "initrd-crypttab" (lib.concatLines (lib.mapAttrsToList (n: v: let
     opts = v.crypttabExtraOpts
       ++ optional v.allowDiscards "discard"
       ++ optionals v.bypassWorkqueues [ "no-read-workqueue" "no-write-workqueue" ]

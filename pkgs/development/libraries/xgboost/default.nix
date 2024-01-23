@@ -14,7 +14,7 @@
 , rPackages
 }@inputs:
 
-assert ncclSupport -> cudaSupport;
+assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);
 # Disable regular tests when building the R package
 # because 1) the R package runs its own tests and
 # 2) the R package creates a different binary shared

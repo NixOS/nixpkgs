@@ -27,20 +27,13 @@ let stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.2.1";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "v${version}";
-    sha256 = "sha256-36njngcGmRtYh/U3wkZUAU6ivPQ8qP8zVj1JzI9TuDY=";
-
-    # The source contains both test/end-to-end/targets and
-    # test/end-to-end/TARGETS, causing issues on case-insensitive filesystems.
-    # Remove them, since we're not running end-to-end tests.
-    postFetch = ''
-      rm -rf $out/test/end-to-end/targets $out/test/end-to-end/TARGETS
-    '';
+    sha256 = "sha256-+ZQuMWqZyK7x/tPSi2ldSOpAexpX6ku4ikk/V8m6Ksg=";
   };
 
   bazelapi = fetchurl {
@@ -142,7 +135,7 @@ stdenv.mkDerivation rec {
     # Bootstrap just
     export PACKAGE=YES
     export NON_LOCAL_DEPS='[ "google_apis", "bazel_remote_apis" ]'
-    export JUST_BUILD_CONF=`echo $PATH | jq -R '{ ENV: { PATH: . }, "ADD_CFLAGS": ["-Wno-error=pedantic"], "ADD_CXXFLAGS": ["-Wno-error=pedantic", "-D__unix__", "-DFMT_HEADER_ONLY"], "ARCH": "'$(uname -m)'" }'`
+    export JUST_BUILD_CONF=`echo $PATH | jq -R '{ ENV: { PATH: . }, "ADD_CXXFLAGS": ["-D__unix__", "-DFMT_HEADER_ONLY"], "ARCH": "'$(uname -m)'" }'`
 
     mkdir ../build
     python3 ./bin/bootstrap.py `pwd` ../build "`pwd`/.distfiles"
@@ -152,7 +145,7 @@ stdenv.mkDerivation rec {
     ../build/out/bin/just install 'installed just-mr' -c ../build/build-conf.json -C ../build/repo-conf.json --output-dir ../build/out --local-build-root ../build-root
 
     # convert man pages from Markdown to man
-    find "./share/man" -name "*.md" -exec sh -c '${pandoc}/bin/pandoc --standalone --to man -o "''${0%.md}.man" "''${0}"' {} \;
+    find "./share/man" -name "*.md" -exec sh -c '${pandoc}/bin/pandoc --standalone --to man -o "''${0%.md}" "''${0}"' {} \;
 
     runHook postBuild
   '';
@@ -170,8 +163,8 @@ stdenv.mkDerivation rec {
     install -m 0644 ./share/just_complete.bash "$out/share/bash-completion/completions/just"
 
     mkdir -p "$out/share/man/"{man1,man5}
-    install -m 0644 -t "$out/share/man/man1" ./share/man/*.1.man
-    install -m 0644 -t "$out/share/man/man5" ./share/man/*.5.man
+    install -m 0644 -t "$out/share/man/man1" ./share/man/*.1
+    install -m 0644 -t "$out/share/man/man5" ./share/man/*.5
 
     runHook postInstall
   '';

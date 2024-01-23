@@ -36,6 +36,9 @@ buildPythonPackage rec {
     "pyatag.discovery"
   ];
 
+  # it would use the erroneous tag 3.5.1
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Python module to talk to Atag One";
     homepage = "https://github.com/MatsNl/pyatag";

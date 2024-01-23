@@ -763,6 +763,12 @@ in {
     Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
     The first argument allows configuration with an attribute set,
     while the second argument is the path to the Git working tree.
+
+    `gitTrackedWith` does not perform any filtering when the path is a [Nix store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path) and not a repository.
+    In this way, it accommodates the use case where the expression that makes the `gitTracked` call does not reside in an actual git repository anymore,
+    and has presumably already been fetched in a way that excludes untracked files.
+    Fetchers with such equivalent behavior include `builtins.fetchGit`, `builtins.fetchTree` (experimental), and `pkgs.fetchgit` when used without `leaveDotGit`.
+
     If you don't need the configuration,
     you can use [`gitTracked`](#function-library-lib.fileset.gitTracked) instead.
 

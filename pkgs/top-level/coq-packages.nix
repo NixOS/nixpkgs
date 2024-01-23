@@ -33,6 +33,7 @@ let
       );
       compcert = callPackage ../development/coq-modules/compcert {
         inherit fetchpatch makeWrapper coq2html lib stdenv;
+        ocamlPackages = ocamlPackages_4_14;
       };
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
@@ -189,6 +190,7 @@ in rec {
   coq_8_16 = mkCoq "8.16";
   coq_8_17 = mkCoq "8.17";
   coq_8_18 = mkCoq "8.18";
+  coq_8_19 = mkCoq "8.19";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5 // { __attrsFailEvaluation = true; };
   coqPackages_8_6 = mkCoqPackages coq_8_6 // { __attrsFailEvaluation = true; };
@@ -204,6 +206,7 @@ in rec {
   coqPackages_8_16 = mkCoqPackages coq_8_16 // { __attrsFailEvaluation = true; };
   coqPackages_8_17 = mkCoqPackages coq_8_17 // { __attrsFailEvaluation = true; };
   coqPackages_8_18 = mkCoqPackages coq_8_18 // { __attrsFailEvaluation = true; };
+  coqPackages_8_19 = mkCoqPackages coq_8_19 // { __attrsFailEvaluation = true; };
   coqPackages =
     let cp = recurseIntoAttrs coqPackages_8_18;
     in cp // { coqPackages = cp.coqPackages // { __attrsFailEvaluation = true; }; } // { __recurseIntoDerivationForReleaseJobs = true; };

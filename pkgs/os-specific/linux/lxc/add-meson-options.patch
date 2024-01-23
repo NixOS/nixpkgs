@@ -1,0 +1,153 @@
+diff --git a/meson.build b/meson.build
+index 21a8705d0..f12b81442 100644
+--- a/meson.build
++++ b/meson.build
+@@ -50,7 +50,7 @@ rootfsmount = get_option('rootfs-mount-path')
+ user_network_db_opt = get_option('usernet-db-path')
+ user_network_conf_opt = get_option('usernet-config-path')
+ 
+-bashcompletiondir = join_paths('/', 'usr', 'share', 'bash-completion', 'completions')
++bashcompletiondir = join_paths(prefixdir, get_option('datadir'), 'bash-completion', 'completions')
+ bindir = join_paths(prefixdir, get_option('bindir'))
+ datadir = join_paths(prefixdir, get_option('datadir'))
+ mandir = join_paths(prefixdir, get_option('mandir'))
+@@ -123,22 +123,6 @@ conf.set('PACKAGE_VERSION', meson.project_version())
+ conf.set('RUNTIME_PATH', runtimepath)
+ conf.set('SYSCONFDIR', sysconfdir)
+ 
+-# Set sysconfdir
+-fs = import('fs')
+-distrosysconfdir = get_option('distrosysconfdir')
+-if distrosysconfdir != ''
+-    distrosysconfdir = join_paths(sysconfdir, distrosysconfdir)
+-    conf.set('LXC_DISTRO_SYSCONF', distrosysconfdir)
+-elif fs.is_dir('/etc/sysconfig')
+-    distrosysconfdir = join_paths(sysconfdir, 'sysconfig')
+-    conf.set('LXC_DISTRO_SYSCONF', distrosysconfdir)
+-elif fs.is_dir('/etc/default')
+-    distrosysconfdir = join_paths(sysconfdir, 'default')
+-    conf.set('LXC_DISTRO_SYSCONF', distrosysconfdir)
+-else
+-    error('"distrosysconfdir" is not set')
+-endif
+-
+ # Cross-compile on Android.
+ srcconf.set10('IS_BIONIC', host_machine.system() == 'android')
+ 
+@@ -148,6 +132,7 @@ coverity = get_option('coverity-build')
+ init_script = get_option('init-script')
+ sanitize = get_option('b_sanitize')
+ want_examples = get_option('examples')
++want_install_init = get_option('install-init-files')
+ want_io_uring = get_option('io-uring-event-loop')
+ want_pam_cgroup = get_option('pam-cgroup')
+ want_mans = get_option('man')
+@@ -160,10 +145,30 @@ want_openssl = get_option('openssl')
+ want_selinux = get_option('selinux')
+ want_oss_fuzz = get_option('oss-fuzz')
+ want_seccomp = get_option('seccomp')
++want_spec = get_option('specfile')
++want_state_dirs = get_option('install-state-dirs')
+ want_thread_safety = get_option('thread-safety')
+ want_memfd_rexec = get_option('memfd-rexec')
+ want_sd_bus = get_option('sd-bus')
+ 
++# Set sysconfdir
++fs = import('fs')
++if want_install_init
++    distrosysconfdir = get_option('distrosysconfdir')
++    if distrosysconfdir != ''
++        distrosysconfdir = join_paths(sysconfdir, distrosysconfdir)
++        conf.set('LXC_DISTRO_SYSCONF', distrosysconfdir)
++    elif fs.is_dir('/etc/sysconfig')
++        distrosysconfdir = join_paths(sysconfdir, 'sysconfig')
++        conf.set('LXC_DISTRO_SYSCONF', distrosysconfdir)
++    elif fs.is_dir('/etc/default')
++        distrosysconfdir = join_paths(sysconfdir, 'default')
++        conf.set('LXC_DISTRO_SYSCONF', distrosysconfdir)
++    else
++        error('"distrosysconfdir" is not set')
++    endif
++endif
++
+ srcconf.set_quoted('DEFAULT_CGROUP_PATTERN', cgrouppattern)
+ if coverity
+     srcconf.set('ENABLE_COVERITY_BUILD', 1)
+@@ -926,14 +931,16 @@ if want_apparmor
+ endif
+ subdir('config/bash')
+ subdir('config/etc')
+-subdir('config/init/common')
+-subdir('config/init/systemd')
+-subdir('config/init/sysvinit')
+-subdir('config/init/upstart')
++if want_install_init
++    subdir('config/init/common')
++    subdir('config/init/systemd')
++    subdir('config/init/sysvinit')
++    subdir('config/init/upstart')
++    subdir('config/sysconfig')
++endif
+ if want_selinux
+     subdir('config/selinux')
+ endif
+-subdir('config/sysconfig')
+ subdir('config/templates')
+ subdir('config/templates/common.conf.d')
+ subdir('config/yum')
+@@ -963,21 +970,25 @@ pkg_config_file = pkgconfig.generate(liblxc,
+ )
+ 
+ # Empty dirs.
+-install_emptydir(join_paths(localstatedir, 'cache', 'lxc'))
+-install_emptydir(join_paths(localstatedir, 'lib', 'lxc'))
++if want_state_dirs
++    install_emptydir(join_paths(localstatedir, 'cache', 'lxc'))
++    install_emptydir(join_paths(localstatedir, 'lib', 'lxc'))
++endif
+ 
+ # RPM spec file.
+-specconf = configuration_data()
+-specconf.set('LXC_VERSION_BASE', meson.project_version())
+-specconf.set('LXC_VERSION_BETA', version_data.get('LXC_VERSION_BETA'))
+-specconf.set('PACKAGE', meson.project_name())
+-specconf.set('LXC_DISTRO_SYSCONF', conf.get('LXC_DISTRO_SYSCONF'))
+-
+-configure_file(
+-    configuration: specconf,
+-    input: 'lxc.spec.in',
+-    output: 'lxc.spec',
+-    install: false)
++if want_spec
++    specconf = configuration_data()
++    specconf.set('LXC_VERSION_BASE', meson.project_version())
++    specconf.set('LXC_VERSION_BETA', version_data.get('LXC_VERSION_BETA'))
++    specconf.set('PACKAGE', meson.project_name())
++    specconf.set('LXC_DISTRO_SYSCONF', conf.get('LXC_DISTRO_SYSCONF'))
++
++    configure_file(
++        configuration: specconf,
++        input: 'lxc.spec.in',
++        output: 'lxc.spec',
++        install: false)
++endif
+ 
+ # Build overview.
+ status = [
+diff --git a/meson_options.txt b/meson_options.txt
+index 9803473d2..84a6d45b5 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -120,3 +120,12 @@ option('memfd-rexec', type : 'boolean', value : 'true',
+ 
+ option('distrosysconfdir', type : 'string', value: '',
+        description: 'relative path to sysconfdir for distro default configuration')
++
++option('specfile', type : 'boolean', value: true,
++       description: 'whether to prepare RPM spec')
++
++option('install-init-files', type : 'boolean', value: true,
++       description: 'whether to install init files for local init (e.g. systemd, sysvinit)')
++
++option('install-state-dirs', type : 'boolean', value: true,
++       description: 'whether to create state directories on install')

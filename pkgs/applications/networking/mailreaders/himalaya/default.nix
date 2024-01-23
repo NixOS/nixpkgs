@@ -2,37 +2,53 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, pkg-config
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
 , notmuch
-, withImapBackend ? true
-, withNotmuchBackend ? false
-, withSmtpSender ? true
+, gpgme
+, withMaildir ? true
+, withImap ? true
+, withNotmuch ? false
+, withSendmail ? true
+, withSmtp ? true
+, withPgpCommands ? false
+, withPgpGpg ? false
+, withPgpNative ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.8.4";
+  version = "1.0.0-beta";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AImLYRRCL6IvoSeMFH2mbkNOvUmLwIvhWB3cOoqDljk=";
+    hash = "sha256-39XYtxmo/12hkCS7zVIQi3UbLzaIKH1OwfdDB/ghU98=";
   };
 
-  cargoSha256 = "deJZPaZW6rb7A6wOL3vcphBXu0F7EXc1xRwSDY/v8l4=";
+  cargoSha256 = "HIDmBPrcOcK2coTaD4v8ntIZrv2SwTa8vUTG8Ky4RhM=";
 
-  nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
+  nativeBuildInputs = [ ]
+    ++ lib.optional withPgpGpg pkg-config
+    ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  buildInputs = lib.optional withNotmuchBackend notmuch;
+  buildInputs = [ ]
+    ++ lib.optional withNotmuch notmuch
+    ++ lib.optional withPgpGpg gpgme;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ ]
-    ++ lib.optional withImapBackend "imap-backend"
-    ++ lib.optional withNotmuchBackend "notmuch-backend"
-    ++ lib.optional withSmtpSender "smtp-sender";
+    ++ lib.optional withMaildir "maildir"
+    ++ lib.optional withImap "imap"
+    ++ lib.optional withNotmuch "notmuch"
+    ++ lib.optional withSmtp "smtp"
+    ++ lib.optional withSendmail "sendmail"
+    ++ lib.optional withPgpCommands "pgp-commands"
+    ++ lib.optional withPgpGpg "pgp-gpg"
+    ++ lib.optional withPgpNative "pgp-native";
 
   postInstall = lib.optionalString installManPages ''
     mkdir -p $out/man
@@ -46,8 +62,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "CLI to manage your emails.";
-    homepage = "https://pimalaya.org/himalaya/";
+    description = "CLI to manage emails";
+    homepage = "https://pimalaya.org/himalaya/cli/latest/";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ soywod toastal yanganto ];

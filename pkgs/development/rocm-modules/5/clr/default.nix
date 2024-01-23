@@ -43,7 +43,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-1gZJhvBbUFdKH9p/7SRfzEV/fM+gIN2Qvlxf2VbmAIw=";
@@ -82,7 +82,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DROCM_PATH=${rocminfo}"
 
     # Temporarily set variables to work around upstream CMakeLists issue
-    # Can be removed once https://github.com/ROCm-Developer-Tools/hipamd/issues/55 is fixed
+    # Can be removed once https://github.com/ROCm/rocm-cmake/issues/121 is fixed
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -122,7 +122,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # All known and valid general GPU targets
     # We cannot use this for each ROCm library, as each defines their own supported targets
-    # See: https://github.com/RadeonOpenCompute/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
+    # See: https://github.com/ROCm/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
     gpuTargets = lib.forEach [
       "803"
       "900"
@@ -161,10 +161,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
-    homepage = "https://github.com/ROCm-Developer-Tools/clr";
+    homepage = "https://github.com/ROCm/clr";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

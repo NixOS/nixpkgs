@@ -75,6 +75,11 @@ mkDerivation rec {
     "-DALLOW_BUNDLED_LEVMAR=ON"
   ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'int16_t' has not been declared in 'std'
+    "-include cstdint"
+  ];
+
   postFixup = ''
     patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
   '';

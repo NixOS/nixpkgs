@@ -1,5 +1,6 @@
 { lib
 , autoreconfHook
+, fetchpatch
 , fetchPypi
 , buildPythonPackage
 , cython
@@ -10,13 +11,21 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.11.2";
+  version = "1.11.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5858b1760fbe21848121b826b2463a67ac5a45caf3d73105497a68618c5a6fa6";
+    hash = "sha256-Dx4yHlWgf5AchqNqHkSX9v+d/nAGgdATCjjDbk6yOMM=";
   };
+
+  patches = [
+    # https://github.com/sagemath/cysignals/pull/193
+    (fetchpatch {
+      url = "https://github.com/sagemath/cysignals/commit/474179c87ab0ff562fdfd2471b02797e4bdd3148.diff";
+      sha256 = "sha256-qEAmf4kU+QDI/JPFNjQMZIjMBk8dnaLmOpagIBMsh7w=";
+    })
+  ];
 
   # explicit check:
   # build/src/cysignals/implementation.c:27:2: error: #error "cysignals must be compiled without _FORTIFY_SOURCE"

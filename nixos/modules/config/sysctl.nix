@@ -31,16 +31,18 @@ in
         };
       in types.submodule {
         freeformType = types.attrsOf sysctlOption;
-        options."net.core.rmem_max" = mkOption {
-          type = types.nullOr highestValueType;
-          default = null;
-          description = lib.mdDoc "The maximum socket receive buffer size. In case of conflicting values, the highest will be used.";
-        };
+        options = {
+          "net.core.rmem_max" = mkOption {
+            type = types.nullOr highestValueType;
+            default = null;
+            description = lib.mdDoc "The maximum receive socket buffer size in bytes. In case of conflicting values, the highest will be used.";
+          };
 
-        options."net.core.wmem_max" = mkOption {
-          type = types.nullOr highestValueType;
-          default = null;
-          description = lib.mdDoc "The maximum socket send buffer size. In case of conflicting values, the highest will be used.";
+          "net.core.wmem_max" = mkOption {
+            type = types.nullOr highestValueType;
+            default = null;
+            description = lib.mdDoc "The maximum send socket buffer size in bytes. In case of conflicting values, the highest will be used.";
+          };
         };
       };
       default = {};

@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
+, setuptools
 , click
 , prompt-toolkit
 , pygments
@@ -17,6 +19,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-gkgLAedUtzGv/4P+D56M2Pb5YecyqyVYp06ST62sjdY=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "sqlparse"
+  ];
 
   propagatedBuildInputs = [
     click

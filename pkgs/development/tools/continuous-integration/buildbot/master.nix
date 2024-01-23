@@ -9,7 +9,7 @@
 , twisted
 , jinja2
 , msgpack
-, zope_interface
+, zope-interface
 , sqlalchemy
 , alembic
 , python-dateutil
@@ -36,7 +36,6 @@
 , importlib-resources
 , packaging
 , unidiff
-, pythonRelaxDepsHook
 , glibcLocales
 , nixosTests
 , callPackage
@@ -71,14 +70,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.10.0";
+    version = "3.10.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Jlppe6LgDQKQgywINkOX9zKWTomzIz28M5scrj3H94Y=";
+      hash = "sha256-/J4jWoIZEObSZKw04Ib6h4AvJtfNwzwozRu+gFek1Dk=";
     };
 
     propagatedBuildInputs = [
@@ -86,7 +85,7 @@ let
       twisted
       jinja2
       msgpack
-      zope_interface
+      zope-interface
       sqlalchemy
       alembic
       python-dateutil
@@ -119,10 +118,7 @@ let
       git
       openssh
       glibcLocales
-      pythonRelaxDepsHook
     ];
-
-    pythonRelaxDeps = [ "Twisted" ];
 
     patches = [
       # This patch disables the test that tries to read /etc/os-release which
@@ -160,7 +156,7 @@ let
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
       homepage = "https://buildbot.net/";
       changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2Only;
       broken = stdenv.isDarwin;
     };

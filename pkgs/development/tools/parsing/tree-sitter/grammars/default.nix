@@ -3,6 +3,7 @@
   tree-sitter-bash = lib.importJSON ./tree-sitter-bash.json;
   tree-sitter-beancount = lib.importJSON ./tree-sitter-beancount.json;
   tree-sitter-bibtex = lib.importJSON ./tree-sitter-bibtex.json;
+  tree-sitter-bitbake = lib.importJSON ./tree-sitter-bitbake.json;
   tree-sitter-c = lib.importJSON ./tree-sitter-c.json;
   tree-sitter-c-sharp = lib.importJSON ./tree-sitter-c-sharp.json;
   tree-sitter-clojure = lib.importJSON ./tree-sitter-clojure.json;
@@ -48,6 +49,7 @@
   tree-sitter-json5 = lib.importJSON ./tree-sitter-json5.json;
   tree-sitter-jsonnet = lib.importJSON ./tree-sitter-jsonnet.json;
   tree-sitter-julia = lib.importJSON ./tree-sitter-julia.json;
+  tree-sitter-just = lib.importJSON ./tree-sitter-just.json;
   tree-sitter-kotlin = lib.importJSON ./tree-sitter-kotlin.json;
   tree-sitter-latex = lib.importJSON ./tree-sitter-latex.json;
   tree-sitter-ledger = lib.importJSON ./tree-sitter-ledger.json;

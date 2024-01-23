@@ -11,6 +11,7 @@ let
     "bin-x86_64-efi/ipxe.efi" = null;
     "bin-x86_64-efi/ipxe.efirom" = null;
     "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-x86_64-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.hostPlatform.isx86 {
     "bin/ipxe.dsk" = null;
     "bin/ipxe.usb" = null;
@@ -21,10 +22,12 @@ let
     "bin-arm32-efi/ipxe.efi" = null;
     "bin-arm32-efi/ipxe.efirom" = null;
     "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm32-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.isAarch64 {
     "bin-arm64-efi/ipxe.efi" = null;
     "bin-arm64-efi/ipxe.efirom" = null;
     "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm64-efi/snp.efi" = null;
   };
 in
 

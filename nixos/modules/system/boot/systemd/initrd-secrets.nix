@@ -11,7 +11,8 @@
       description = "Copy secrets into place";
       # Run as early as possible
       wantedBy = [ "sysinit.target" ];
-      before = [ "cryptsetup-pre.target" ];
+      before = [ "cryptsetup-pre.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
 
       # We write the secrets to /.initrd-secrets and move them because this allows
