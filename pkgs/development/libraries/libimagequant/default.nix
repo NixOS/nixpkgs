@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, rust, rustPlatform, cargo-c, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, rust
+, rustPlatform
+, cargo-c
+, python3
+
+# tests
+, testers
+, vips
+, libimagequant
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
@@ -34,7 +47,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru.tests = {
+    inherit vips;
     inherit (python3.pkgs) pillow;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = libimagequant;
+      moduleNames = [ "imagequant" ];
+    };
   };
 
   meta = with lib; {
