@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clap";
-  version = "1.1.10";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap";
     rev = version;
-    hash = "sha256-AH3kSCp4Q8Nw3To2vuPuMH/cWm3cmzj2OEH/Azcbdmo=";
+    hash = "sha256-BNT2yWIlWk8kzhZteh7TaamliwJI+lzWVs/8XCFsuUc=";
   };
 
   postPatch = ''
