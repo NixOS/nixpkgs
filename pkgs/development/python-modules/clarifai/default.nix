@@ -2,11 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , clarifai-grpc
+, llama-index
 , numpy
 , opencv4
+, pandas
 , pillow
+, pypdf
 , pyyaml
 , rich
 , schema
@@ -17,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "9.11.1";
+  version = "10.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,23 +30,31 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-fVari/SnrUnEbrYefV9j2yA/EMJoGiLOV7q/DrS0AQ8=";
+    hash = "sha256-7y/PoQ1zRdbnNKQii6JUouXBuvgNSZm222RkNTAN+Y8=";
   };
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRemoveDeps = [
+    "opencv-python"
   ];
 
   propagatedBuildInputs = [
     clarifai-grpc
+    pandas
     numpy
     tqdm
     opencv4
     tritonclient
     rich
+    pyyaml
     schema
     pillow
-    pyyaml
+    llama-index
+    pypdf
   ];
 
   nativeCheckInputs = [
