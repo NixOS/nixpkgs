@@ -4756,7 +4756,8 @@
       zeroconf
     ];
     "switchbot_cloud" = ps: with ps; [
-    ]; # missing inputs: switchbot-api
+      switchbot-api
+    ];
     "switcher_kis" = ps: with ps; [
       aioswitcher
     ];
@@ -6358,6 +6359,7 @@
     "switch_as_x"
     "switchbee"
     "switchbot"
+    "switchbot_cloud"
     "switcher_kis"
     "syncthing"
     "syncthru"
