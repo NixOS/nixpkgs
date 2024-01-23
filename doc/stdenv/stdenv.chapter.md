@@ -515,7 +515,7 @@ For simple packages, this is often enough, and will ensure that the package is u
 
 ##### How update scripts are executed? {#var-passthru-updateScript-execution}
 
-Update scripts are to be invoked by `maintainers/scripts/update.nix` script. You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it. `update.nix` offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
+Update scripts are to be invoked by the `maintainers/scripts/update` script. You can run `maintainers/scripts/update` for information on how to use it. It offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
 
 Each update script will be passed the following environment variables:
 
@@ -529,7 +529,7 @@ An update script will be usually run from the root of the Nixpkgs repository but
 :::
 
 ::: {.tip}
-While update scripts should not create commits themselves, `maintainers/scripts/update.nix` supports automatically creating commits when running it with `--argstr commit true`. If you need to customize commit message, you can have the update script implement [`commit`](#var-passthru-updateScript-commit) feature.
+While update scripts should not create commits themselves, `maintainers/scripts/update` supports automatically creating commits when running it with `--argstr commit true`. If you need to customize commit message, you can have the update script implement [`commit`](#var-passthru-updateScript-commit) feature.
 :::
 
 ##### Supported features {#var-passthru-updateScript-supported-features}

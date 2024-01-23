@@ -1,7 +1,7 @@
 /*
-  To run:
+  Run with:
 
-      nix-shell maintainers/scripts/update.nix
+      maintainers/scripts/update
 
   See https://nixos.org/manual/nixpkgs/unstable/#var-passthru-updateScript
 */
