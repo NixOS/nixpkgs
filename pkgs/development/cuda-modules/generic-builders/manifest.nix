@@ -204,7 +204,12 @@ backendStdenv.mkDerivation (
     ++ lib.optionals (pname != "cuda_compat" && flags.isJetsonBuild) [
       # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
       # See its documentation in ./setup-hooks/extension.nix.
-      autoAddCudaCompatRunpath
+      # NOTE(@connorbaker): Because autoAddCudaCompatRunpath is in nativeBuildInputs, it tries to use toolchains
+      # from buildPlatform, but that's not what we want. We want to use our host/target toolchains!
+      # To overcome this, we access the `__spliced` attribute and choose the `hostTarget` attribute.
+      # In the case the `__spliced` attribute doesn't exist, we just use the hook directly (because we're not
+      # cross-compiling).
+      autoAddCudaCompatRunpath.__spliced.hostTarget or autoAddCudaCompatRunpath
     ];
 
     buildInputs =
