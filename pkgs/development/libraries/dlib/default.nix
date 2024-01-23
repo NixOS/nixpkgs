@@ -1,4 +1,5 @@
-{ stdenv
+{ config
+, stdenv
 , lib
 , fetchFromGitHub
 , cmake
@@ -14,17 +15,18 @@
   # see http://dlib.net/compile.html
 , sse4Support ? stdenv.hostPlatform.sse4_1Support
 , avxSupport ? stdenv.hostPlatform.avxSupport
-, cudaSupport ? true
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
 }:
 
-stdenv.mkDerivation rec {
+(if cudaSupport then cudaPackages.backendStdenv else stdenv).mkDerivation rec {
   pname = "dlib";
   version = "19.24.2";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    rev ="v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Z1fScuaIHjj2L1uqLIvsZ7ARKNjM+iaA8SAtWUTPFZk=";
   };
 
@@ -33,12 +35,14 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "USE_DLIB_USE_CUDA" cudaSupport)
     (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
+    (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)))
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optional cudaSupport cudaPackages.cuda_nvcc;
 
   buildInputs = [
     fftw
@@ -46,7 +50,22 @@ stdenv.mkDerivation rec {
     libjpeg
     libwebp
     openblas
-  ] ++ lib.optional guiSupport libX11;
+  ]
+  ++ lib.optional guiSupport libX11
+  ++ lib.optionals config.cudaSupport (with cudaPackages; [
+    cuda_cudart
+    cuda_nvcc.dev # crt/host_config.h
+    libcublas
+    libcurand
+    libcusolver
+    cudnn
+  ]);
+
+  passthru = {
+    inherit
+      cudaSupport cudaPackages
+      sse4Support avxSupport;
+  };
 
   meta = with lib; {
     description = "A general purpose cross-platform C++ machine learning library";
