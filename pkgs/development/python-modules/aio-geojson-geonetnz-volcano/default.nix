@@ -1,11 +1,12 @@
 { lib
 , aio-geojson-client
 , aiohttp
-, aresponses
+, aioresponses
 , mock
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
+, pytest-xdist
 , pytestCheckHook
 , pytz
 , pythonOlder
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
-  version = "0.8";
+  version = "0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wJVFjy6QgYb6GX9pZTylYFvCRWmD2lAFZKnodsa8Yqo=";
+    hash = "sha256-ZmGDO9EROFMlxdj5txNh719M+3l/0jRFbB2h2AyZAdI=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +40,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     mock
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ];
 
