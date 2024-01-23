@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.archisteamfarm;
 
   format = pkgs.formats.json { };
 
-  asf-config = format.generate "ASF.json" (cfg.settings // {
+  configFile = format.generate "ASF.json" (cfg.settings // {
     # we disable it because ASF cannot update itself anyways
     # and nixos takes care of restarting the service
     # is in theory not needed as this is already the default for default builds
@@ -30,8 +28,8 @@ let
 in
 {
   options.services.archisteamfarm = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       description = lib.mdDoc ''
         If enabled, starts the ArchisSteamFarm service.
         For configuring the SteamGuard token you will need to use the web-ui, which is enabled by default over on 127.0.0.1:1242.
@@ -40,14 +38,14 @@ in
       default = false;
     };
 
-    web-ui = mkOption {
-      type = types.submodule {
+    web-ui = lib.mkOption {
+      type = lib.types.submodule {
         options = {
-          enable = mkEnableOption "" // {
+          enable = lib.mkEnableOption "" // {
             description = lib.mdDoc "Whether to start the web-ui. This is the preferred way of configuring things such as the steam guard token.";
           };
 
-          package = mkPackageOption pkgs [ "ArchiSteamFarm" "ui" ] {
+          package = lib.mkPackageOption pkgs [ "ArchiSteamFarm" "ui" ] {
             extraDescription = ''
               ::: {.note}
               Contents must be in lib/dist
@@ -65,7 +63,7 @@ in
       description = lib.mdDoc "The Web-UI hosted on 127.0.0.1:1242.";
     };
 
-    package = mkPackageOption pkgs "ArchiSteamFarm" {
+    package = lib.mkPackageOption pkgs "ArchiSteamFarm" {
       extraDescription = ''
         ::: {.warning}
         Should always be the latest version, for security reasons,
@@ -74,15 +72,15 @@ in
       '';
     };
 
-    dataDir = mkOption {
-      type = types.path;
-      default = "/var/lib/asf";
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/archisteamfarm";
       description = lib.mdDoc ''
         The ASF home directory used to store all data.
         If left as the default value this directory will automatically be created before the ASF server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.'';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       description = lib.mdDoc ''
         The ASF.json file, all the options are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config).
@@ -96,13 +94,13 @@ in
       default = { };
     };
 
-    ipcPasswordFile = mkOption {
-      type = types.nullOr types.path;
+    ipcPasswordFile = lib.mkOption {
+      type = with lib.types; nullOr path;
       default = null;
-      description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `asf` user/group.";
+      description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.";
     };
 
-    ipcSettings = mkOption {
+    ipcSettings = lib.mkOption {
       type = format.type;
       description = lib.mdDoc ''
         Settings to write to IPC.config.
@@ -120,25 +118,25 @@ in
       default = { };
     };
 
-    bots = mkOption {
-      type = types.attrsOf (types.submodule {
+    bots = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule {
         options = {
-          username = mkOption {
-            type = types.str;
+          username = lib.mkOption {
+            type = lib.types.str;
             description = lib.mdDoc "Name of the user to log in. Default is attribute name.";
             default = "";
           };
-          passwordFile = mkOption {
-            type = types.path;
-            description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `asf` user/group.";
+          passwordFile = lib.mkOption {
+            type = lib.types.path;
+            description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.";
           };
-          enabled = mkOption {
-            type = types.bool;
+          enabled = lib.mkOption {
+            type = lib.types.bool;
             default = true;
             description = lib.mdDoc "Whether to enable the bot on startup.";
           };
-          settings = mkOption {
-            type = types.attrs;
+          settings = lib.mkOption {
+            type = lib.types.attrs;
             description = lib.mdDoc ''
               Additional settings that are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config).
             '';
@@ -152,7 +150,7 @@ in
       example = {
         exampleBot = {
           username = "alice";
-          passwordFile = "/var/lib/asf/secrets/password";
+          passwordFile = "/var/lib/archisteamfarm/secrets/password";
           settings = { SteamParentalCode = "1234"; };
         };
       };
@@ -160,32 +158,34 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    # TODO: drop with 24.11
+    services.archisteamfarm.dataDir = lib.mkIf (lib.versionAtLeast config.system.stateVersion "24.05") (lib.mkDefault "/var/lib/asf");
 
     users = {
-      users.asf = {
+      users.archisteamfarm = {
         home = cfg.dataDir;
         isSystemUser = true;
-        group = "asf";
+        group = "archisteamfarm";
         description = "Archis-Steam-Farm service user";
       };
-      groups.asf = { };
+      groups.archisteamfarm = { };
     };
 
     systemd.services = {
-      asf = {
+      archisteamfarm = {
         description = "Archis-Steam-Farm Service";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        serviceConfig = mkMerge [
-          (mkIf (cfg.dataDir == "/var/lib/asf") {
-            StateDirectory = "asf";
+        serviceConfig = lib.mkMerge [
+          (lib.mkIf (lib.hasPrefix "/var/lib/" cfg.dataDir) {
+            StateDirectory = lib.last (lib.splitString "/" cfg.dataDir);
             StateDirectoryMode = "700";
           })
           {
-            User = "asf";
-            Group = "asf";
+            User = "archisteamfarm";
+            Group = "archisteamfarm";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
             ExecStart = "${lib.getExe cfg.package} --no-restart --process-required --service --system-required --path ${cfg.dataDir}";
@@ -217,12 +217,10 @@ in
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
-            SystemCallArchitectures = "native";
-            UMask = "0077";
-
-            # we luckily already have systemd v247+
             SecureBits = "noroot-locked";
+            SystemCallArchitectures = "native";
             SystemCallFilter = [ "@system-service" "~@privileged" ];
+            UMask = "0077";
           }
         ];
 
@@ -232,7 +230,7 @@ in
               mkdir -p $out
               # clean potential removed bots
               rm -rf $out/*.json
-              for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
+              for i in ${lib.concatStringsSep " " (map (x: "${lib.getName x},${x}") (lib.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
                 set -- $i
                 ln -fs $2 $out/$1
               done
@@ -242,22 +240,22 @@ in
           ''
             mkdir -p config
 
-            cp --no-preserve=mode ${asf-config} config/ASF.json
+            cp --no-preserve=mode ${configFile} config/ASF.json
 
-            ${optionalString (cfg.ipcPasswordFile != null) ''
+            ${lib.optionalString (cfg.ipcPasswordFile != null) ''
               ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
             ''}
 
-            ${optionalString (cfg.ipcSettings != {}) ''
+            ${lib.optionalString (cfg.ipcSettings != {}) ''
               ln -fs ${ipc-config} config/IPC.config
             ''}
 
-            ${optionalString (cfg.ipcSettings != {}) ''
+            ${lib.optionalString (cfg.ipcSettings != {}) ''
               ln -fs ${createBotsScript}/* config/
             ''}
 
             rm -f www
-            ${optionalString cfg.web-ui.enable ''
+            ${lib.optionalString cfg.web-ui.enable ''
               ln -s ${cfg.web-ui.package}/ www
             ''}
           '';
@@ -267,6 +265,6 @@ in
 
   meta = {
     buildDocsInSandbox = false;
-    maintainers = with maintainers; [ lom SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ lom SuperSandro2000 ];
   };
 }
