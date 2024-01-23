@@ -29053,8 +29053,6 @@ with pkgs;
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
-  banana-cursor = callPackage ../data/icons/banana-cursor { };
-
   barlow = callPackage ../data/fonts/barlow { };
 
   base16-schemes = callPackage ../data/themes/base16-schemes { };
