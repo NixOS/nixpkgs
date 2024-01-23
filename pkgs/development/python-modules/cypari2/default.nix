@@ -30,20 +30,13 @@ buildPythonPackage rec {
     })
   ];
 
-  # This differs slightly from the default python installPhase in that it pip-installs
-  # "." instead of "*.whl".
-  # That is because while the default install phase succeeds to build the package,
-  # it fails to generate the file "auto_paridecl.pxd".
-  installPhase = ''
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-
-    # install "." instead of "*.whl"
-    pip install . --no-index --no-warn-script-location --prefix="$out" --no-cache
+  preBuild = ''
+    # generate cythonized extensions (auto_paridecl.pxd is crucial)
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
   nativeBuildInputs = [
     pari
-    python.pythonOnBuildForHost.pkgs.pip
   ];
 
   buildInputs = [
@@ -56,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    test -f "$out/${python.sitePackages}/cypari2/auto_paridecl.pxd"
     make check
   '';
 

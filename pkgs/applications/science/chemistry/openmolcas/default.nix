@@ -59,6 +59,9 @@ stdenv.mkDerivation {
 
     # Required for a local QCMaquis build
     ./qcmaquis.patch
+
+    # PyParsing >= 3.11 compatibility, can be removed on next release
+    ./pyparsing.patch
   ];
 
   postPatch = ''

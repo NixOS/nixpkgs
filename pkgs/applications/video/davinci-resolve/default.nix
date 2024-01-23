@@ -82,6 +82,7 @@ let
             "email" = "someone@nixos.org";
             "phone" = "+31 71 452 5670";
             "country" = "nl";
+            "street" = "-";
             "state" = "Province of Utrecht";
             "city" = "Utrecht";
             "product" = PRODUCT;
@@ -109,6 +110,7 @@ let
           --data-ascii "$REQJSON" \
           --compressed \
           "$SITEURL/$DOWNLOADID")
+        echo "resolveurl is $RESOLVEURL"
 
         curl \
           --retry 3 --retry-delay 3 \
@@ -252,7 +254,7 @@ buildFHSEnv {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll ];
+    maintainers = with maintainers; [ jshcmpbll orivej ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve";

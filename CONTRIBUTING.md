@@ -378,7 +378,7 @@ The staging workflow exists to batch Hydra builds of many packages together.
 It works by directing commits that cause [mass rebuilds][mass-rebuild] to a separate `staging` branch that isn't directly built by Hydra.
 Regularly, the `staging` branch is _manually_ merged into a `staging-next` branch to be built by Hydra using the [`nixpkgs:staging-next` jobset](https://hydra.nixos.org/jobset/nixpkgs/staging-next).
 The `staging-next` branch should then only receive direct commits in order to fix Hydra builds.
-Once it is verified that there are no major regressions, it is merged into `master` using [a pull requests](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
+Once it is verified that there are no major regressions, it is merged into `master` using [a pull request](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
 This is done manually in order to ensure it's a good use of Hydra's computing resources.
 By keeping the `staging-next` branch separate from `staging`, this batching does not block developers from merging changes into `staging`.
 

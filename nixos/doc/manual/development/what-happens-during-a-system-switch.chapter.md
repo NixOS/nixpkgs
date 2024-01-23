@@ -56,4 +56,5 @@ explained in the next sections.
 unit-handling.section.md
 activation-script.section.md
 non-switchable-systems.section.md
+etc-overlay.section.md
 ```

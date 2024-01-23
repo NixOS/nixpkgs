@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.4.5";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,11 +21,12 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4mvd5G4qpebocg74Kz/+XtJovDnGJJYPigyhke9YDjA=";
+    hash = "sha256-6lgjblCyc4NSnw+nlCH0SKV7f9aa4qcfa7v9pgzusKo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'pydantic = "^1.9"' 'pydantic = "*"' \
       --replace " --cov=aioopenexchangerates --cov-report=term-missing:skip-covered" ""
   '';
 

@@ -51,12 +51,7 @@ let
     (mkCustomFlutter args).overrideAttrs (prev: next: {
       passthru = next.passthru // rec {
         inherit wrapFlutter mkCustomFlutter mkFlutter;
-        buildFlutterApplication = callPackage ../../../build-support/flutter {
-          # Package a minimal version of Flutter that only uses Linux desktop release artifacts.
-          flutter = (wrapFlutter (mkCustomFlutter args)).override {
-            supportedTargetFlutterPlatforms = [ "universal" "linux" ];
-          };
-        };
+        buildFlutterApplication = callPackage ../../../build-support/flutter { flutter = wrapFlutter (mkCustomFlutter args); };
       };
     });
 

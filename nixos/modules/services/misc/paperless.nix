@@ -297,6 +297,7 @@ in
       wantedBy = [ "paperless-scheduler.service" ];
       before = [ "paperless-scheduler.service" ];
       after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         Type = "oneshot";

@@ -15,22 +15,20 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-g5OqdnPtGGV4wBwPRAjH3lweguwlfVcgpNLlq54OHKA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "attrs~=21.4" "attrs>=21.4"
-  '';
-
   nativeBuildInputs = with python3.pkgs; [
     flit-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = with python3.pkgs; [
     attrs
-    ipython
     jinja2
     lxml
     pypubsub
     pyyaml
+    termcolor
   ];
 
   # Project has no tests

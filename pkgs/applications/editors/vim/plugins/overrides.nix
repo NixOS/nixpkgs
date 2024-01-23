@@ -284,6 +284,10 @@
     dependencies = with self; [ nvim-cmp nvim-snippy ];
   };
 
+  cmp-tabby = super.cmp-tabby.overrideAttrs {
+    dependencies = with self; [ nvim-cmp ];
+  };
+
   cmp-tabnine = super.cmp-tabnine.overrideAttrs {
     buildInputs = [ tabnine ];
 
@@ -1112,7 +1116,7 @@
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-U+EGS0GMWzE2yFyMH04gXpR9lR7HRMgWBecqICfTUbE=";
+        cargoHash = "sha256-BDNFZ/7nnfvtBA7T6a7MDNJsq/cOI9tgW0kxUoIcbV8=";
 
         nativeBuildInputs = [ pkg-config ];
 

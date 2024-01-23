@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.39.0";
+  version = "0.39.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-mVIGT7kb8+eQcTAF7/S+0KraQiDzS9VdyrBsxzqpBHI=";
+    hash = "sha256-1YHfwiQzt348fuyKpr5YXLeAnXzZljargnTugytvNK0=";
   };
 
   nativeBuildInputs = [

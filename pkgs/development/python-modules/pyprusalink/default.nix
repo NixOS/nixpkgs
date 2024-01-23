@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyprusalink";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-wboyISggzC50cZ+J/NC0ytWXwCLBmBpP9/MtPkRb+Zs=";
+    hash = "sha256-wwH4LE8wi8eb7QwT7N1mNtVleoWscDEOu2vrXKDktwU=";
   };
 
   nativeBuildInputs = [

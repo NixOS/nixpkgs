@@ -12,6 +12,7 @@
 , django
 , pytest-django
 , pytestCheckHook
+, nixosTests
 }:
 
 buildPythonPackage rec {
@@ -45,6 +46,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "django_mailman3"
   ];
+
+  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = with lib; {
     description = "Django library for Mailman UIs";

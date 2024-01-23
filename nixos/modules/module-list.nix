@@ -506,7 +506,7 @@
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
   ./services/finance/odoo.nix
-  ./services/games/asf.nix
+  ./services/games/archisteamfarm.nix
   ./services/games/crossfire-server.nix
   ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
@@ -832,6 +832,7 @@
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
   ./services/monitoring/riemann.nix
+  ./services/monitoring/rustdesk-server.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/snmpd.nix
@@ -849,6 +850,7 @@
   ./services/monitoring/vmagent.nix
   ./services/monitoring/vmalert.nix
   ./services/monitoring/vnstat.nix
+  ./services/monitoring/watchdogd.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
@@ -1340,6 +1342,7 @@
   ./services/web-apps/restya-board.nix
   ./services/web-apps/rimgo.nix
   ./services/web-apps/sftpgo.nix
+  ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
@@ -1467,6 +1470,7 @@
   ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
+  ./system/boot/uki.nix
   ./system/boot/unl0kr.nix
   ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
@@ -1487,6 +1491,7 @@
   ./system/boot/systemd/repart.nix
   ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/sysupdate.nix
+  ./system/boot/systemd/sysusers.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
   ./system/boot/systemd/userdbd.nix

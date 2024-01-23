@@ -8,7 +8,7 @@
 let
   pname = "soupault";
 
-  version = "4.7.0";
+  version = "4.8.0";
 in
 ocamlPackages.buildDunePackage {
   inherit pname version;
@@ -20,7 +20,7 @@ ocamlPackages.buildDunePackage {
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "nwXyOwDUbkMnyHPrvCvmToyONdbg5kJm2mt5rWrB6HA=";
+    hash = "sha256-/QpT0zgrfMgRKjHyLHugaAlICpPkqaQ7f8fFAL0P02Y=";
   };
 
   buildInputs = with ocamlPackages; [

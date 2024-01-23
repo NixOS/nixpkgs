@@ -5,6 +5,7 @@
 , marshmallow-dataclass
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , responses
 , setuptools
@@ -26,7 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-ybl6QOLb1xE6v0D1C2wKMsSU+r2gWzj24Q4pPIMBsCY=";
   };
 
+  pythonRelaxDeps = [
+    "marshmallow-dataclass"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 

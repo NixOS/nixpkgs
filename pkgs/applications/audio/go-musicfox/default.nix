@@ -1,5 +1,5 @@
 { lib
-, buildGo121Module
+, buildGoModule
 , fetchFromGitHub
 , pkg-config
 , alsa-lib
@@ -7,7 +7,7 @@
 , nix-update-script
 }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "go-musicfox";
   version = "4.3.0";
 

@@ -158,7 +158,9 @@ let
       start_all()
       ${optionalString clevisTest ''
       tang.wait_for_unit("sockets.target")
+      tang.systemctl("start network-online.target")
       tang.wait_for_unit("network-online.target")
+      machine.systemctl("start network-online.target")
       machine.wait_for_unit("network-online.target")
       ''}
       machine.wait_for_unit("multi-user.target")
@@ -187,6 +189,7 @@ let
 
       ${optionalString clevisTest ''
         with subtest("Create the Clevis secret with Tang"):
+             machine.systemctl("start network-online.target")
              machine.wait_for_unit("network-online.target")
              machine.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
 

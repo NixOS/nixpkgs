@@ -12,6 +12,8 @@ let
 
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };
+    lomiri-sounds = callPackage ./data/lomiri-sounds { };
+    lomiri-wallpapers = callPackage ./data/lomiri-wallpapers { };
     suru-icon-theme = callPackage ./data/suru-icon-theme { };
 
     #### Development tools / libraries
@@ -22,6 +24,7 @@ let
     libusermetrics = callPackage ./development/libusermetrics { };
     lomiri-api = callPackage ./development/lomiri-api { };
     lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
+    qtmir = callPackage ./development/qtmir { };
     trust-store = callPackage ./development/trust-store { };
     u1db-qt = callPackage ./development/u1db-qt { };
 
@@ -31,6 +34,7 @@ let
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
     lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
     lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
+    qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
 
     #### Services
     biometryd = callPackage ./services/biometryd { };
@@ -38,8 +42,11 @@ let
     hfd-service = callPackage ./services/hfd-service { };
     history-service = callPackage ./services/history-service { };
     lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
+    lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
+    lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
     lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
     mediascanner2 = callPackage ./services/mediascanner2 { };
+    telephony-service = callPackage ./services/telephony-service { };
   };
 in
   lib.makeScope libsForQt5.newScope packages

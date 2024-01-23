@@ -80,6 +80,7 @@ in {
       description = "c2FmZQ-server";
       documentation = [ "https://github.com/c2FmZQ/c2FmZQ/blob/main/README.md" ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
 
       serviceConfig = {

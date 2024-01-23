@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Library for unpacking unencrypted mobi files";
     homepage = "https://github.com/iscc/mobi";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
   };
 }

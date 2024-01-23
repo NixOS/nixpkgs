@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.1.3";
+  version = "2024.1.5";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -4507,7 +4507,8 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-    ]; # missing inputs: pysnmp-lextudio
+      pysnmp-lextudio
+    ];
     "snooz" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -6317,6 +6318,7 @@
     "smtp"
     "snapcast"
     "snips"
+    "snmp"
     "snooz"
     "solaredge"
     "solarlog"

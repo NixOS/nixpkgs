@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "goflow2";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "netsampler";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RgHCUuP2EE38X6iMaYD2a8f/C2fBcBEHM5ErlKBkMqI=";
+    hash = "sha256-eI5Czx721aty1b+rs8uHrx0IBM/DK7bkPck1QIYPcNI=";
   };
 
   ldflags = [

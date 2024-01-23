@@ -1,11 +1,11 @@
 { lib
-, buildGo121Module
+, buildGoModule
 , fetchFromGitHub
 , testers
 , risor
 }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "risor";
   version = "1.1.2";
 

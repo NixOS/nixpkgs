@@ -393,6 +393,7 @@ in
     systemd.services.hydra-evaluator =
       { wantedBy = [ "multi-user.target" ];
         requires = [ "hydra-init.service" ];
+        wants = [ "network-online.target" ];
         after = [ "hydra-init.service" "network.target" "network-online.target" ];
         path = with pkgs; [ hydra-package nettools jq ];
         restartTriggers = [ hydraConf ];

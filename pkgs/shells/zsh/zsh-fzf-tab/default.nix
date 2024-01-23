@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ncurses }:
+{ stdenv, lib, fetchFromGitHub, ncurses, nix-update-script }:
 
 let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     owner = "Aloxaf";
     repo = "fzf-tab";
     rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
-    sha256 = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
+    hash = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
   };
 
   strictDeps = true;
@@ -43,6 +43,12 @@ in stdenv.mkDerivation rec {
      install -D fzf-tab.plugin.zsh ${INSTALL_PATH}/fzf-tab.plugin.zsh
      install -D modules/Src/aloxaf/fzftab.so ${INSTALL_PATH}/modules/Src/aloxaf/fzftab.so
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version" "branch=master" ];
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/Aloxaf/fzf-tab";

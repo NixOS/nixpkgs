@@ -3,6 +3,7 @@
 , rustPlatform
 , fetchFromGitHub
 , Security
+, SystemConfiguration
 , nixosTests
 , nix-update-script
 }:
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = true;
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    Security SystemConfiguration
   ];
 
   passthru = {

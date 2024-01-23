@@ -1,8 +1,10 @@
 { lib
+, aiohttp
 , anyio
 , async-timeout
 , asyncclick
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , kasa-crypt
 , orjson
@@ -17,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.5.4";
-  format = "pyproject";
+  version = "0.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "python-kasa";
+    repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-wGPMrYaTtKkkNW88eyiiciFcBSTRqqChYi6e15WUCHo=";
+    hash = "sha256-JFd9Ka/96Y4nu2HnL/Waf5EBKb06+7rZdI72F8G472I=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +36,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiohttp
     anyio
     async-timeout
     asyncclick
+    cryptography
     pydantic
   ];
 

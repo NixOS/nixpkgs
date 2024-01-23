@@ -48,7 +48,7 @@ buildGoModule rec {
     description = "A lightweight LDAP server for development, home use, or CI";
     homepage = "https://github.com/glauth/glauth";
     license = licenses.mit;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor christoph-heiss ];
     mainProgram = "glauth";
   };
 }

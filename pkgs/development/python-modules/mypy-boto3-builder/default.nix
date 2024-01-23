@@ -9,17 +9,19 @@
 , md-toc
 , mdformat
 , newversion
+, pip
 , poetry-core
 , pyparsing
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
   version = "7.21.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -43,8 +45,10 @@ buildPythonPackage rec {
     md-toc
     mdformat
     newversion
+    pip
     pyparsing
     setuptools
+    typing-extensions
   ];
 
   nativeCheckInputs = [
