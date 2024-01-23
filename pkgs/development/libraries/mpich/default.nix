@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  callPackage,
   perl,
   gfortran,
   openssh,
@@ -109,6 +110,8 @@ stdenv.mkDerivation  rec {
     sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' $out/bin/mpicxx
     sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
   '';
+
+  passthru.tests.samples = callPackage ./tests { };
 
   meta = with lib; {
     broken =
