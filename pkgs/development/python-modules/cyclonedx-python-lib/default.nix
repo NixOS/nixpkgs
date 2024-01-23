@@ -24,7 +24,7 @@
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
   version = "6.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
