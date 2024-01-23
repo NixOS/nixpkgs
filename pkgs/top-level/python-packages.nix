@@ -15554,6 +15554,8 @@ self: super: with self; {
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 
+  typeshed-client = callPackage ../development/python-modules/typeshed-client { };
+
   typesystem = callPackage ../development/python-modules/typesystem { };
 
   typical = callPackage ../development/python-modules/typical { };
