@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.0.2";
+  version = "4.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "absperf";
     repo = "asyncinotify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q7b406UENCmD9SGbaml+y2YLDi7VLZBmDkYMo8CLuVw=";
+    hash = "sha256-RXx6i5dIB2oySVaLoHPRGD9VKgiO5OAXmrzVBq8Ad18=";
   };
 
   nativeBuildInputs = [
