@@ -7795,7 +7795,11 @@ with pkgs;
 
   stratis-cli = callPackage ../tools/filesystems/stratis-cli { };
 
-  strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
+  strawberry-qt5 = libsForQt5.callPackage ../applications/audio/strawberry { };
+
+  strawberry-qt6 = qt6Packages.callPackage ../applications/audio/strawberry { };
+
+  strawberry = strawberry-qt5;
 
   schleuder = callPackage ../tools/security/schleuder { };
 
