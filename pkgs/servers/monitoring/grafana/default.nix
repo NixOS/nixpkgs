@@ -1,5 +1,35 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub
+, tzdata, wire
+, yarn, nodejs, cacert
+, jq, moreutils
+, nix-update-script, nixosTests
+}:
 
+let
+  # We need dev dependencies to run webpack, but patch away
+  # `cypress` (and @grafana/e2e which has a direct dependency on cypress).
+  # This attempts to download random blobs from the Internet in
+  # postInstall. Also, it's just a testing framework, so not worth the hassle.
+  patchAwayGrafanaE2E = ''
+    find . -name package.json | while IFS=$'\n' read -r pkg_json; do
+      <"$pkg_json" jq '. + {
+        "devDependencies": .devDependencies | del(."@grafana/e2e") | del(.cypress)
+      }' | sponge "$pkg_json"
+    done
+    rm -r packages/grafana-e2e
+  '';
+
+  # Injects a `t.Skip()` into a given test since
+  # there's apparently no other way to skip tests here.
+  skipTest = lineOffset: testCase: file:
+    let
+      jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);
+    in ''
+      sed -i -e '/${testCase}/{
+      ${jumpAndAppend} t.Skip();
+      }' ${file}
+    '';
+in
 buildGoModule rec {
   pname = "grafana";
   version = "10.2.3";
@@ -13,25 +43,38 @@ buildGoModule rec {
     hash = "sha256-F61RtPEjQ4uFVcJLG04CD4//w8X7uJinxzYyoW/MosA=";
   };
 
-  srcStatic = fetchurl {
-    url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    hash = "sha256-xoZgaml1SB9PEI3kTE3zRlJR5O4tog58bua2blvc8to=";
+  offlineCache = stdenv.mkDerivation {
+    name = "${pname}-${version}-yarn-offline-cache";
+    inherit src;
+    nativeBuildInputs = [
+      yarn nodejs cacert
+      jq moreutils
+    ];
+    buildPhase = ''
+      ${patchAwayGrafanaE2E}
+      export HOME="$(mktemp -d)"
+      yarn config set enableTelemetry 0
+      yarn config set cacheFolder $out
+      yarn config set --json supportedArchitectures.os '[ "linux" ]'
+      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
+      yarn
+    '';
+    dontConfigure = true;
+    dontInstall = true;
+    dontFixup = true;
+    outputHashMode = "recursive";
+    outputHash = "sha256-cD9Y72OWSj7zwhhAcrZouLpEFFwURSsWgDFRjwMQAxI=";
   };
 
   vendorHash = "sha256-rQOnuh6t+cUqyAAnUhGgxMaW88pawnauAGQd6w0T57Q=";
 
-  nativeBuildInputs = [ wire ];
+  nativeBuildInputs = [ wire yarn jq moreutils ];
 
-  postConfigure = let
-    skipTest = lineOffset: testCase: file:
-      let
-        jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);
-      in ''
-        sed -i -e '/${testCase}/{
-        ${jumpAndAppend} t.Skip();
-        }' ${file}
-      '';
-  in ''
+  postPatch = ''
+    ${patchAwayGrafanaE2E}
+  '';
+
+  postConfigure = ''
     # Generate DI code that's required to compile the package.
     # From https://github.com/grafana/grafana/blob/v8.2.3/Makefile#L33-L35
     wire gen -tags oss ./pkg/server
@@ -69,6 +112,18 @@ buildGoModule rec {
     # grafana> 2023/08/24 08:30:23 failed to copy objects, err: Post "https://storage.googleapis.com/upload/storage/v1/b/grafana-testing-repo/o?alt=json&name=test-path%2Fbuild%2FTestCopyLocalDir2194093976%2F001%2Ffile2.txt&prettyPrint=false&projection=full&uploadType=multipart": dial tcp: lookup storage.googleapis.com on [::1]:53: read udp [::1]:36436->[::1]:53: read: connection refused
     # grafana> panic: test timed out after 10m0s
     rm pkg/build/gcloud/storage/gsutil_test.go
+
+    # Setup node_modules
+    export HOME="$(mktemp -d)"
+    yarn config set enableTelemetry 0
+    yarn config set cacheFolder $offlineCache
+    yarn --immutable-cache
+  '';
+
+  postBuild = ''
+    # After having built all the Go code, run the JS builders now.
+    yarn run build
+    yarn run plugins:build-bundled
   '';
 
   ldflags = [
@@ -86,16 +141,13 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    tar -xvf $srcStatic
     mkdir -p $out/share/grafana
-    mv grafana-*/{public,conf,tools} $out/share/grafana/
-
-    cp ./conf/defaults.ini $out/share/grafana/conf/
+    cp -r public conf $out/share/grafana/
   '';
 
   passthru = {
     tests = { inherit (nixosTests) grafana; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
