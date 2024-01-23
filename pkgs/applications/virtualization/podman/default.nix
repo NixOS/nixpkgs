@@ -62,13 +62,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.8.3";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-Q4LdBRJed1Vm5Qo3wyEsU3Pj2t9FfyB9rjiM4Vi0ZEw=";
+    hash = "sha256-ygYBSZdxpE3HrFz585p7NFgHHSAfxAce/fFCQ7fcvgk=";
   };
 
   patches = [
