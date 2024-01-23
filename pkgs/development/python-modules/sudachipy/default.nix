@@ -10,6 +10,7 @@
 , pytestCheckHook
 , sudachidict-core
 , tokenizers
+, sudachipy
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,9 @@ buildPythonPackage rec {
     cd python
   '';
 
+  # avoid infinite recursion due to sudachidict
+  doCheck = false;
+
   nativeCheckInputs = [
     pytestCheckHook
     sudachidict-core
@@ -49,6 +53,16 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (sudachi-rs) updateScript;
+    tests = {
+      pytest = sudachipy.overridePythonAttrs (
+        _: {
+          doCheck = true;
+          # avoid catchConflicts of sudachipy
+          # we don't need to install this package since it is just a test
+          dontInstall = true;
+        }
+      );
+    };
   };
 
   meta = sudachi-rs.meta // {
