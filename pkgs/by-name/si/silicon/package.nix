@@ -10,9 +10,7 @@
 , libxcb
 , python3
 , libiconv
-, AppKit
-, CoreText
-, Security
+, darwin
 , fira-code
 , fontconfig
 , harfbuzz
@@ -38,7 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ expat freetype fira-code fontconfig harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      libiconv
+      AppKit
+      CoreText
+      Security
+    ]);
 
   nativeBuildInputs = [ cmake pkg-config rustPlatform.bindgenHook ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
