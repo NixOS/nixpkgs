@@ -5,8 +5,8 @@ with lib;
 let
   cfg = config.services.etebase-server;
 
-  pythonEnv = pkgs.python3.withPackages (ps: with ps;
-    [ etebase-server daphne ]);
+  pythonEnv = cfg.pythonPackage.withPackages (ps: with ps;
+    [ cfg.package daphne ]);
 
   iniFmt = pkgs.formats.ini {};
 
@@ -44,6 +44,20 @@ in
           the user specified by the `user` option or a superuser.
           Then you can login and create accounts on your-etebase-server.com/admin
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = cfg.pythonPackage.pkgs.etebase-server;
+        defaultText = literalExpression "pkgs.etebase-server";
+        description = lib.mdDoc "etebase-server package to use.";
+      };
+
+      pythonPackage = mkOption {
+        type = types.package;
+        default = pkgs.python3;
+        defaultText = literalExpression "pkgs.python3";
+        description = lib.mdDoc "python interpreter to run etebase-server with.";
       };
 
       dataDir = mkOption {
@@ -191,10 +205,10 @@ in
       preStart = ''
         # Auto-migrate on first run or if the package has changed
         versionFile="${cfg.dataDir}/src-version"
-        if [[ $(cat "$versionFile" 2>/dev/null) != ${pkgs.etebase-server} ]]; then
+        if [[ $(cat "$versionFile" 2>/dev/null) != ${cfg.package} ]]; then
           etebase-server migrate --no-input
           etebase-server collectstatic --no-input --clear
-          echo ${pkgs.etebase-server} > "$versionFile"
+          echo ${cfg.package} > "$versionFile"
         fi
       '';
       script =
