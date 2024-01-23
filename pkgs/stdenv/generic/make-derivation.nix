@@ -21,6 +21,7 @@ let
           "python-remove-bin-bytecode-hook"
           "python-remove-tests-dir-hook"
           "python-remove-tests-dir-hook"
+          "python-runtime-deps-check-hook.sh"
           "python3-3.11.5-env"
           "setuptools-check-hook"
           "setuptools-setup-hook"
@@ -37,9 +38,8 @@ let
           "libunwind"
 
           # shame on you, embedded ARM!
-          "arm-none-eabi-stage-final-gcc-wrapper"
-          "arm-none-eabi-binutils-wrapper"
           "arm-none-eabi-gcc-wrapper"
+          "arm-none-eabi-binutils-wrapper"
 
           # wasm doesn't care about shamefulness, so I won't bother...
           "rustc-wasm32"
@@ -49,16 +49,16 @@ let
           # improvement: convert makeScope to makeScopeWithSplicing'
           # may not fix it but it'll improve the set
           # https://github.com/NixOS/nixpkgs/blob/53aa767c849b159cdb8c59dce4a5a44f167fc31b/pkgs/os-specific/windows/default.nix#L20
-          "mcfgthreads"
-          "i686-w64-mingw32-stage-final-gcc-wrapper"
-          "x86_64-w64-mingw32-stage-final-gcc-wrapper"
+          "mcfgthread"
+          "i686-w64-mingw32-gcc-wrapper"
+          "x86_64-w64-mingw32-gcc-wrapper"
 
           # other shameful derivations
           "git-minimal"
           "busybox"
-          "avr-stage-final-gcc-wrapper"
+          "avr-gcc-wrapper"
           "boost-build"
-          "cmake-boot"
+          "cmake-minimal"
           "perl" # only for libxcrypt; we should fix this
         ]);
 in
