@@ -39,6 +39,7 @@ let
           # shame on you, embedded ARM!
           "arm-none-eabi-stage-final-gcc-wrapper"
           "arm-none-eabi-binutils-wrapper"
+          "arm-none-eabi-gcc-wrapper"
 
           # wasm doesn't care about shamefulness, so I won't bother...
           "rustc-wasm32"
