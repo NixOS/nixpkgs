@@ -438,7 +438,7 @@ in
             ];
         dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [{
           name = "parsedmarc";
-          options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
+          options.path = "${pkgs.parsedmarc.dashboard}";
         }];
       };
     };
@@ -530,7 +530,7 @@ in
             MemoryDenyWriteExecute = true;
             LockPersonality = true;
             SystemCallArchitectures = "native";
-            ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
+            ExecStart = "${lib.getExe pkgs.parsedmarc} -c /run/parsedmarc/parsedmarc.ini";
           };
         };
 
