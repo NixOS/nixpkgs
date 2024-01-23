@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub
+{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
 , tzdata, wire
 , yarn, nodejs, cacert
 , jq, moreutils
@@ -50,14 +50,18 @@ buildGoModule rec {
       yarn nodejs cacert
       jq moreutils
     ];
-    buildPhase = ''
+    postPatch = ''
       ${patchAwayGrafanaE2E}
+    '';
+    buildPhase = ''
+      runHook preBuild
       export HOME="$(mktemp -d)"
       yarn config set enableTelemetry 0
       yarn config set cacheFolder $out
       yarn config set --json supportedArchitectures.os '[ "linux" ]'
       yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
       yarn
+      runHook postBuild
     '';
     dontConfigure = true;
     dontInstall = true;
@@ -66,9 +70,11 @@ buildGoModule rec {
     outputHash = "sha256-70eMa8E483f/Bz7iy+4Seap1EfIdjD5krnt6W9CUows=";
   };
 
+  disallowedRequisites = [ offlineCache ];
+
   vendorHash = "sha256-Gf2A22d7/8xU/ld7kveqGonVKGFCArGNansPRGhfyXM=";
 
-  nativeBuildInputs = [ wire yarn jq moreutils ];
+  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo ];
 
   postPatch = ''
     ${patchAwayGrafanaE2E}
@@ -143,6 +149,12 @@ buildGoModule rec {
   postInstall = ''
     mkdir -p $out/share/grafana
     cp -r public conf $out/share/grafana/
+  '';
+
+  postFixup = ''
+    while read line; do
+      remove-references-to -t $offlineCache "$line"
+    done < <(find $out -type f -name '*.js.map' -or -name '*.js')
   '';
 
   passthru = {
