@@ -22,11 +22,12 @@ stdenv.mkDerivation rec {
     batteries
     dune-build-info
     inifiles
+    why3
     yojson
     zarith
   ];
 
-  propagatedBuildInputs = [ why3 ];
+  propagatedBuildInputs = [ why3.out ];
 
   strictDeps = true;
 
