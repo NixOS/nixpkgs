@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , cargo
 , rustc
@@ -42,6 +43,22 @@ stdenv.mkDerivation rec {
       "loopdev-0.4.0" = "sha256-YS0hqxphxbbImT/mn/XBzkgabK2kbIym5VqG3XDVAx8=";
     };
   };
+
+  patches = [
+    # Can be removed with the next release after v. 3.6.3
+    (fetchpatch {
+      name = "remove-unused-imports.patch";
+      url = "https://github.com/stratis-storage/stratisd/commit/78440de6e6ed8eab5ddd25dbdfb7804d0698f2a2.patch";
+      hash = "sha256-RW2nyAWaoIbqrgbhCApQsMXkJWtWoOWL3VO7fIImJgY=";
+    })
+
+    # Can be removed with the next release after v. 3.6.3
+    (fetchpatch {
+      name = "flag-import-not-used-in-build-as-test-only.patch";
+      url = "https://github.com/stratis-storage/stratisd/commit/0d1c67f71338d0ee6c1e6aa06f7fd6264ce9a4c5.patch";
+      hash = "sha256-6Nb8izUqYUirjy0dTFhITxoM/AKoChoc0w6Qm9K6+7I=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace udev/61-stratisd.rules \
