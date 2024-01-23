@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moe";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchurl {
     url = "mirror://gnu/moe/moe-${finalAttrs.version}.tar.lz";
-    hash = "sha256-Q6VXvFEvidbHGOX0ECnP46BVaCYg642+zmMC80omFGs=";
+    hash = "sha256-9Lq9bOCuGVFvmDRU+yDTLf9xrTFjN6xr+TpCpf8gnJ0=";
   };
 
   prePatch = ''
