@@ -13,13 +13,13 @@
 buildPythonPackage rec {
   pname = "aesedb";
   version = "0.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skelsec";
-    repo = pname;
+    repo = "aesedb";
     rev = "refs/tags/${version}";
     hash = "sha256-QqPy68rWabRY0Y98W+odwP/10gMtLAQ0Ah2+ZLkqHPI=";
   };
