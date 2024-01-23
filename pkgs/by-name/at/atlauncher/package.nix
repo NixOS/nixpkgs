@@ -32,16 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "--no-launcher-update"
 
     mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp $ICON $out/share/icons/hicolor/scalable/apps/${finalAttrs.pname}.svg
+    cp $ICON $out/share/icons/hicolor/scalable/apps/atlauncher.svg
 
     runHook postInstall
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
+      name = "atlauncher";
+      exec = "atlauncher";
+      icon = "atlauncher";
       desktopName = "ATLauncher";
       categories = [ "Game" ];
     })
