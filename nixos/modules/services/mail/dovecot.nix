@@ -5,7 +5,8 @@ let
     concatStringsSep flatten imap1 isList literalExpression mapAttrsToList
     mkEnableOption mkIf mkOption mkRemovedOptionModule optional optionalAttrs
     optionalString singleton types mkRenamedOptionModule nameValuePair
-    mapAttrs' listToAttrs;
+    mapAttrs' listToAttrs filter;
+  inherit (lib.strings) match;
 
   cfg = config.services.dovecot2;
   dovecotPkg = pkgs.dovecot;
@@ -32,6 +33,34 @@ let
       value = "file:${stateDir}/imapsieve/after/${baseNameOf el.after}";
     }
   ) cfg.imapsieve.mailbox));
+
+  mkExtraConfigCollisionWarning = term: ''
+    You referred to ${term} in `services.dovecot2.extraConfig`.
+
+    Due to gradual transition to structured configuration for plugin configuration, it is possible
+    this will cause your plugin configuration to be ignored.
+
+    Consider setting `services.dovecot2.pluginSettings.${term}` instead.
+  '';
+
+  # Those settings are automatically set based on other parts
+  # of this module.
+  automaticallySetPluginSettings = [
+    "sieve_plugins"
+    "sieve_extensions"
+    "sieve_global_extensions"
+    "sieve_pipe_bin_dir"
+  ]
+  ++ (builtins.attrNames sieveScriptSettings)
+  ++ (builtins.attrNames imapSieveMailboxSettings);
+
+  # The idea is to match everything that looks like `$term =`
+  # but not `# $term something something`
+  # or `# $term = some value` because those are comments.
+  configContainsSetting = lines: term: (match "^[^#]*\b${term}\b.*=" lines) != null;
+
+  warnAboutExtraConfigCollisions = map mkExtraConfigCollisionWarning (filter (configContainsSetting cfg.extraConfig) automaticallySetPluginSettings);
+
   sievePipeBinScriptDirectory = pkgs.linkFarm "sieve-pipe-bins" (map (el: {
       name = builtins.unsafeDiscardStringContext (baseNameOf el);
       path = el;
@@ -623,9 +652,7 @@ in
 
     environment.systemPackages = [ dovecotPkg ];
 
-    warnings = mkIf (any isList options.services.dovecot2.mailboxes.definitions) [
-      "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.05! See the release notes for more info for migration."
-    ];
+    warnings = warnAboutExtraConfigCollisions;
 
     assertions = [
       {
