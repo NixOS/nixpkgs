@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "The Banana Cursor";
     homepage = "https://github.com/ful1e5/banana-cursor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ yrd ];
+    maintainers = with maintainers; [ getpsyched yrd ];
     platforms = platforms.linux;
   };
 })
