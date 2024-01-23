@@ -15,6 +15,10 @@ runCommand "${firmware.name}-xz" args ''
           sh -c 'xz -9c -T1 -C crc32 --lzma2=dict=2MiB "${firmware}/$1" > "$1.xz"' --)
   (cd ${firmware} && find lib/firmware -type l) | while read link; do
       target="$(readlink "${firmware}/$link")"
-      ln -vs -- "''${target/^${firmware}/$out}.xz" "$out/$link.xz"
+      if [ -f $target ]; then
+        ln -vs -- "''${target/^${firmware}/$out}.xz" "$out/$link.xz"
+      else
+        ln -vs -- "''${target/^${firmware}/$out}" "$out/$link"
+      fi
   done
 ''
