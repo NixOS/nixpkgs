@@ -14,6 +14,7 @@ in
     environment.systemPackages = [ cfg.package ];
     systemd.services.netclient = {
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       description = "Netclient Daemon";
       serviceConfig = {
