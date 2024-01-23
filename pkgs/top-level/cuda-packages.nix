@@ -87,7 +87,7 @@ let
   composedExtension = fixedPoints.composeManyExtensions [
     (builtins.import ../development/cuda-modules/setup-hooks/extension.nix)
     (builtins.import ../development/cuda-modules/cuda/extension.nix {inherit cudaVersion lib;})
-    (builtins.import ../development/cuda-modules/cuda/overrides.nix {inherit cudaVersion lib;})
+    (builtins.import ../development/cuda-modules/cuda/overrides.nix)
     # (callPackage ../development/cuda-modules/generic-builders/multiplex.nix {
     #   inherit cudaVersion flags mkVersionedPackageName;
     #   pname = "cudnn";
