@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, vtk_9
+, autoPatchelfHook
+, libX11
+, libGL
+, Cocoa
+, OpenGL
+}:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
@@ -11,7 +21,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-3Pg8uvrUGPKPmsn24q5HPMg9dgvukAXBgSVTW0NiCME=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    # https://github.com/f3d-app/f3d/pull/1217
+    autoPatchelfHook
+  ];
 
   buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
@@ -30,9 +44,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
     platforms = with platforms; unix;
-    # As of 2024-01-20, this fails with:
-    # error while loading shared libraries: libvtkInteractionWidgets.so.1: cannot open shared object file: No such file or directory
-    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/262328
-    broken = true;
   };
 }
