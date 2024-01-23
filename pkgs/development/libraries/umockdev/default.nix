@@ -12,7 +12,7 @@
 , ninja
 , pkg-config
 , python3
-, systemd
+, systemdMinimal
 , usbutils
 , vala
 , which
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdMinimal
     libpcap
   ];
 
@@ -59,9 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     python3
-    which
+    systemdMinimal
     usbutils
+    which
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dgtk_doc=true"
