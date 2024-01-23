@@ -76,6 +76,7 @@ in {
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "sound.target" ];
       description = "mopidy music player daemon";
       serviceConfig = {
