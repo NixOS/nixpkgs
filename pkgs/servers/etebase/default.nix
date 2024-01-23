@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, buildPythonPackage
 , aiofiles
 , django_3
 , fastapi
@@ -9,13 +8,22 @@
 , redis
 , typing-extensions
 , withLdap ? true
+, python3
 , python-ldap
 , withPostgres ? true
 , psycopg2
 , nix-update-script
+, nixosTests
 }:
 
-buildPythonPackage rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pydantic = super.pydantic_1;
+    };
+  };
+in
+python.pkgs.buildPythonPackage rec {
   pname = "etebase-server";
   version = "0.11.0";
   format = "other";
@@ -49,6 +57,9 @@ buildPythonPackage rec {
   '';
 
   passthru.updateScript = nix-update-script {};
+  passthru.tests = {
+    nixosTest = nixosTests.etebase-server;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/etesync/server";
