@@ -185,6 +185,8 @@ filterAndCreateOverrides {
     cuda_nvcc.overrideAttrs (
       prevAttrs: {
         # Remove once cuda-find-redist-features has a special case for libcuda
+        # TODO(@connorbaker): The order of build outputs matters as we traverse them when creating split outputs.
+        # The `lib` output cannot come after `static` as it moves all the static libraries back to the `lib` output.
         outputs =
           prevAttrs.outputs
           ++ lib.lists.optionals (!(builtins.elem "lib" prevAttrs.outputs)) [ "lib" ];
@@ -204,6 +206,7 @@ filterAndCreateOverrides {
 
         nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ backendStdenv.cc ];
 
+        # TODO(@connorbaker): We should specify the spliced version of backendStdenv and cuda_cudart to use here.
         postPatch =
           (prevAttrs.postPatch or "")
           + ''
