@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jdt-language-server";
-  version = "1.26.0";
-  timestamp = "202307271613";
+  version = "1.31.0";
+  timestamp = "202401111522";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${version}/jdt-language-server-${version}-${timestamp}.tar.gz";
-    sha256 = "sha256-ul/l7jsqg5UofiSu8gzm4Xg0z46HcRfmyqysamiKbFM=";
+    sha256 = "sha256-bCX2LQt00d2SqxmvuvvlBB6wbCuFPqtX9/Qv5v6wH3w=";
   };
 
   sourceRoot = ".";
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       configDir = if stdenv.isDarwin then "config_mac" else "config_linux";
     in
       ''
+      runHook preInstall
+
       # Copy jars
       install -D -t $out/share/java/plugins/ plugins/*.jar
 
@@ -89,6 +91,8 @@ stdenv.mkDerivation rec {
         --add-flags "--add-modules=ALL-SYSTEM" \
         --add-flags "--add-opens java.base/java.util=ALL-UNNAMED" \
         --add-flags "--add-opens java.base/java.lang=ALL-UNNAMED"
+
+      runHook postInstall
     '';
 
   meta = with lib; {
