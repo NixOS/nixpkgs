@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gUNUX9/8EfvNpNcFpra81Iid6bw1JLeN+GajbdDeCks=";
+    hash = "sha256-Snxx9q24YMvhSs39bKQ9zSns2a7T84wCzXbagP+l0Bw=";
   };
 
   nativeBuildInputs = [

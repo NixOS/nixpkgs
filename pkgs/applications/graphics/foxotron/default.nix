@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , cmake
 , pkg-config
@@ -35,9 +36,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-s1eWZMVitVSP7nJJ5wXvnV8uI6yto7LmvlvocOwVAxw=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "0001-assimp-Include-cstdint-for-std-uint32_t.patch";
+      url = "https://github.com/assimp/assimp/commit/108e3192a201635e49e99a91ff2044e1851a2953.patch";
+      stripLen = 1;
+      extraPrefix = "externals/assimp/";
+      hash = "sha256-rk0EFmgeZVwvx3NJOOob5Jwj9/J+eOtuAzfwp88o+J4=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
+
+    # Outdated vendored assimp, many warnings with newer compilers, too old for CMake option to control this
+    # Note that this -Werror caused issues on darwin, so make sure to re-check builds there before removing this
+    substituteInPlace externals/assimp/code/CMakeLists.txt \
+      --replace 'TARGET_COMPILE_OPTIONS(assimp PRIVATE -Werror)' ""
   '';
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];

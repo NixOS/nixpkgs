@@ -75,13 +75,17 @@ in {
     package = lib.mkOption {
       type = lib.types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "23.11"
+        if lib.versionAtLeast config.system.stateVersion "24.05"
+        then pkgs.netbox_3_7
+        else if lib.versionAtLeast config.system.stateVersion "23.11"
         then pkgs.netbox_3_6
         else if lib.versionAtLeast config.system.stateVersion "23.05"
         then pkgs.netbox_3_5
         else pkgs.netbox_3_3;
       defaultText = lib.literalExpression ''
-        if lib.versionAtLeast config.system.stateVersion "23.11"
+        if lib.versionAtLeast config.system.stateVersion "24.05"
+        then pkgs.netbox_3_7
+        else if lib.versionAtLeast config.system.stateVersion "23.11"
         then pkgs.netbox_3_6
         else if lib.versionAtLeast config.system.stateVersion "23.05"
         then pkgs.netbox_3_5
@@ -306,12 +310,13 @@ in {
           ${pkg}/bin/netbox trace_paths --no-input
           ${pkg}/bin/netbox collectstatic --no-input
           ${pkg}/bin/netbox remove_stale_contenttypes --no-input
-          # TODO: remove the condition when we remove netbox_3_3
-          ${lib.optionalString
-            (lib.versionAtLeast cfg.package.version "3.5.0")
-            "${pkg}/bin/netbox reindex --lazy"}
+          ${pkg}/bin/netbox reindex --lazy
           ${pkg}/bin/netbox clearsessions
-          ${pkg}/bin/netbox clearcache
+          ${lib.optionalString
+            # The clearcache command was removed in 3.7.0:
+            # https://github.com/netbox-community/netbox/issues/14458
+            (lib.versionOlder cfg.package.version "3.7.0")
+            "${pkg}/bin/netbox clearcache"}
 
           echo "${cfg.package.version}" > "$versionFile"
         '';
