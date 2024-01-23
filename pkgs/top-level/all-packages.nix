@@ -25014,6 +25014,8 @@ with pkgs;
     tipidee
     utmps;
 
+  s6-overlay = callPackage ../tools/virtualization/s6-overlay { };
+
   kgt = callPackage ../development/tools/kgt {
     inherit (skawarePackages) cleanPackaging;
   };
