@@ -24,16 +24,16 @@ stdenv.mkDerivation rec {
       # attestation quotes, and do platform certification.
       ae.prebuilt = fetchurl {
         url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-        hash = "sha256-IckW4p1XWkWCDCErXyTtnKYKeAUaCrp5iAMsRBMjLX0=";
+        hash = "sha256-IGV9VEwY/cQBV4Vz2sps4JgRweWRl/l08ocb9P4SH8Q=";
       };
       # Also include the Data Center Attestation Primitives (DCAP) platform
       # enclaves.
       dcap = rec {
-        version = "1.18";
+        version = "1.20";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-9ceys7ozOEienug+9MTZ6dw3nx7VBfxLNiwhZYv4SzY=";
+          hash = "sha256-nPsI89KSBA3cSNTMWyktZP5dkf+BwL3NZ4MuUf6G98o=";
         };
       };
     in
