@@ -263,6 +263,16 @@ let
         '';
       };
 
+      howdyAuth = mkOption {
+        default = config.services.howdy.enable;
+        defaultText = literalExpression "config.services.howdy.enable";
+        type = types.bool;
+        description = ''
+          If set, IR camera will be used (if exists and your
+          facial models are enrolled).
+        '';
+      };
+
       oathAuth = mkOption {
         default = config.security.pam.oath.enable;
         defaultText = literalExpression "config.security.pam.oath.enable";
@@ -684,6 +694,7 @@ let
             dp9ik.authserver
           ]; })
           { name = "fprintd"; enable = cfg.fprintAuth; control = "sufficient"; modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so"; }
+          { name = "howdy"; enable = cfg.howdyAuth; control = "sufficient"; modulePath = "${config.services.howdy.package}/lib/security/pam_howdy.so"; }
         ] ++
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
