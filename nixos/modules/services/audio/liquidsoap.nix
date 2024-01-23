@@ -10,6 +10,7 @@ let
     let stream = builtins.getAttr name config.services.liquidsoap.streams; in
     { inherit name;
       value = {
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" "sound.target" ];
         description = "${name} liquidsoap stream";
         wantedBy = [ "multi-user.target" ];
