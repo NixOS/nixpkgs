@@ -87,6 +87,7 @@ in
     systemd.services = mapAttrs' (server: options:
       nameValuePair "tts-${server}" {
         description = "Coqui TTS server instance ${server}";
+        wants = [ "network-online.target" ];
         after = [
           "network-online.target"
         ];
