@@ -33882,7 +33882,7 @@ with pkgs;
 
   mm-common = callPackage ../development/libraries/mm-common { };
 
-  mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
+  mpc-qt = qt6Packages.callPackage ../applications/video/mpc-qt { };
 
   mplayer = callPackage ../applications/video/mplayer ({
     libdvdnav = libdvdnav_4_2_1;
