@@ -1,0 +1,13 @@
+diff --git a/retroshare-service/CMakeLists.txt b/retroshare-service/CMakeLists.txt
+index c756072..40fb17d 100644
+--- a/retroshare-service/CMakeLists.txt
++++ b/retroshare-service/CMakeLists.txt
+@@ -141,7 +141,7 @@ if(RS_SERVICE_TERMINAL_LOGIN)
+ endif(RS_SERVICE_TERMINAL_LOGIN)
+ 
+ if(RS_WEBUI)
+-	set(RS_WEBUI_DEVEL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../webui/")
++	set(RS_WEBUI_DEVEL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../retroshare-webui/")
+ 	if(EXISTS "${RS_WEBUI_DEVEL_DIR}/CMakeLists.txt" )
+ 		message(
+ 			STATUS
