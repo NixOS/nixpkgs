@@ -1,0 +1,12 @@
+diff --git a/src/Linux/local_cache.cpp b/src/Linux/local_cache.cpp
+index fe48b90..aa91cb8 100644
+--- a/src/Linux/local_cache.cpp
++++ b/src/Linux/local_cache.cpp
+@@ -6,6 +6,7 @@
+ #include <algorithm>
+ #include <cstring>
+ #include <mutex>
++#include <stdexcept>
+ 
+ #include <fcntl.h>
+ #include <ftw.h>

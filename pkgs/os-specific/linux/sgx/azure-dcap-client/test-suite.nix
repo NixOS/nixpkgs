@@ -11,6 +11,7 @@ sgx-azure-dcap-client.overrideAttrs (old: {
 
   patches = [
     ./tests-missing-includes.patch
+    ./missing-include.patch
   ];
 
   buildFlags = [
