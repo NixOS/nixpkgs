@@ -192,5 +192,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ moredread tweber tmarkus ];
   } // lib.optionalAttrs (stdenv.isDarwin) {
     mainProgram = "PrusaSlicer";
+    # Reported on 2024-01-21
+    # Error: binary_function can't be found
+    # https://github.com/NixOS/nixpkgs/issues/282618
+    broken = true;
   };
 })
