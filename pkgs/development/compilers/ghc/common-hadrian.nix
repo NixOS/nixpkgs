@@ -148,11 +148,15 @@
     inherit rev;
   })
 
+  # Patches applied to both GHC and Hadrian.
+, patches ? []
+
   # GHC's build system hadrian built from the GHC-to-build's source tree
   # using our bootstrap GHC.
 , hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
     ghcSrc = ghcSrc;
     ghcVersion = version;
+    inherit patches;
     userSettings = hadrianUserSettings;
     # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
     enableHyperlinkedSource =
@@ -277,7 +281,7 @@ stdenv.mkDerivation ({
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
     ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-  ];
+  ] ++ patches;
 
   postPatch = ''
     patchShebangs --build .

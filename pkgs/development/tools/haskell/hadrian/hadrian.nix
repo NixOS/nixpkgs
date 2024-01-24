@@ -9,6 +9,7 @@
   # GHC source tree to build hadrian from
 , ghcSrc
 , ghcVersion
+, patches ? []
   # Customization
 , userSettings ? null
 , enableHyperlinkedSource
@@ -18,15 +19,13 @@ mkDerivation {
   pname = "hadrian";
   version = ghcVersion;
   src = ghcSrc;
-  postUnpack = ''
-    sourceRoot="$sourceRoot/hadrian"
-  '';
-  patches = lib.optionals (!enableHyperlinkedSource) [
+  patches = patches ++ lib.optionals (!enableHyperlinkedSource) [
     ./disable-hyperlinked-source.patch
   ];
   # Overwrite UserSettings.hs with a provided custom one
   postPatch = lib.optionalString (userSettings != null) ''
-    install -m644 "${writeText "UserSettings.hs" userSettings}" src/UserSettings.hs
+    install -m644 "${writeText "UserSettings.hs" userSettings}" hadrian/src/UserSettings.hs
+    cd hadrian
   '';
   configureFlags = [
     # avoid QuickCheck dep which needs shared libs / TH

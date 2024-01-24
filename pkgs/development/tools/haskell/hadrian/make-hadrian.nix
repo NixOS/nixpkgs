@@ -29,6 +29,7 @@
   # These are passed on to the actual package expressions.
   ghcSrc
 , ghcVersion
+, patches
   # Contents of a non-default UserSettings.hs to use when building hadrian, if any.
   # Should be a string or null.
 , userSettings ? null
@@ -50,7 +51,7 @@ let
 in
 
 callPackage' ./hadrian.nix ({
-  inherit userSettings enableHyperlinkedSource;
+  inherit userSettings enableHyperlinkedSource patches;
 } // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.9") {
   # Starting with GHC 9.9 development, additional in tree packages are required
   # to build hadrian. (Hackage-released conditional dependencies are handled
