@@ -5,7 +5,7 @@
 , mock
 , pytestCheckHook
 , requests
-, requests_ntlm
+, requests-ntlm
 , six
 , xmltodict
 }:
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
-    requests_ntlm
+    requests-ntlm
     six
     xmltodict
   ];

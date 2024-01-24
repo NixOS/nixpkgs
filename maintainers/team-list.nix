@@ -307,6 +307,20 @@ with lib.maintainers; {
     shortName = "Flying Circus employees";
   };
 
+  formatter = {
+    members = [
+      piegames
+      infinisil
+      das_j
+      tomberek
+      _0x4A6F
+      # Not in the maintainer list
+      # Sereja313
+    ];
+    scope = "Tentative Nix formatter team to be established in https://github.com/NixOS/rfcs/pull/166";
+    shortName = "Nix formatter team";
+  };
+
   freedesktop = {
     members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
