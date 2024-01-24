@@ -2011,8 +2011,6 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd { };
 
-  pocket-updater-utility = callPackage ../tools/games/pocket-updater-utility { };
-
   polygon-cli = callPackage ../tools/networking/polygon-cli { };
 
   pricehist = python3Packages.callPackage ../tools/misc/pricehist { };
