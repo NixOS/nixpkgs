@@ -27776,8 +27776,6 @@ with pkgs;
 
   fwanalyzer = callPackage ../tools/filesystems/fwanalyzer { };
 
-  fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
-
   fwupd-efi = callPackage ../os-specific/linux/firmware/fwupd-efi { };
 
   firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
