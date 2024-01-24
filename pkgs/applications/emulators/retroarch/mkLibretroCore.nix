@@ -63,7 +63,7 @@ stdenv.mkDerivation ({
 
     install -Dt ${coreDir} ${coreFilename}
     makeWrapper ${retroarch}/bin/retroarch $out/bin/${mainProgram} \
-      --add-flags "-L ${coreDir}/${coreFilename} $@"
+      --add-flags "-L ${coreDir}/${coreFilename}"
 
     runHook postInstall
   '';
