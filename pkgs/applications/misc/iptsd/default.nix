@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     description = "Userspace daemon for Intel Precise Touch & Stylus";
     homepage = "https://github.com/linux-surface/iptsd";
     license = licenses.gpl2Plus;
+    mainProgram = "iptsd";
     maintainers = with maintainers; [ tomberek dotlambda ];
     platforms = platforms.linux;
   };
