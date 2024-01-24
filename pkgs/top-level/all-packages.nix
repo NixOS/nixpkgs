@@ -16759,9 +16759,7 @@ with pkgs;
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = callPackage ../development/compilers/nextpnr { };
-
-  nextpnrWithGui = libsForQt5.callPackage ../development/compilers/nextpnr {
+  nextpnrWithGui = libsForQt5.callPackage ../by-name/ne/nextpnr/package.nix {
     enableGui = true;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
