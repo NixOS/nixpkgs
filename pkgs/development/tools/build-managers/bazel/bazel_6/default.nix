@@ -25,12 +25,12 @@
 }:
 
 let
-  version = "6.4.0";
+  version = "6.5.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-vYj/YCyLuynugroqaxKtCS1R7GaMZXf5Yo8Y5I/05R4=";
+    hash = "sha256-/InakZQVKJ8p5P8YpeAScOzppv6Dy2CWchi6xKO7PtI=";
   };
 
   # Update with
