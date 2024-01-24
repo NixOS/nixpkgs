@@ -1,47 +1,62 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsa-lib, gtk3
-, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg-utils
-, libepoxy, gdk-pixbuf, gnome, wrapGAppsHook
+{ lib
+, SDL2
+, alsa-lib
+, autoconf-archive
+, autoreconfHook
+, fetchFromGitHub
+, fltk
+, libGL
+, libGLU
+, libao
+, libarchive
+, libepoxy
+, makeWrapper
+, pkg-config
+, stdenv
+, unzip
+, wrapGAppsHook
+, xdg-utils
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.47";
+stdenv.mkDerivation (finalAttrs: {
   pname = "nestopia";
+  version = "1.52.0";
 
   src = fetchFromGitHub {
-    owner = "rdanbrook";
+    owner = "0ldsk00l";
     repo = "nestopia";
-    rev = version;
-    sha256 = "0frr0gvjh5mxzdhj0ii3sh671slgnzlm8naqlc4h87rx4p4sz2y2";
+    rev = finalAttrs.version;
+    hash = "sha256-kd5hZ88fCLL8ysGMj7HsrSA7eCI5SL2xxiRXJiZqBZ8=";
   };
-
-  # nondeterministic failures when creating directories
-  enableParallelBuilding = false;
-
-  hardeningDisable = [ "format" ];
 
   buildInputs = [
     SDL2
     alsa-lib
+    fltk
     libepoxy
-    gtk3
-    gdk-pixbuf
-    libGLU libGL
+
+    libGLU
+    libGL
     libarchive
     libao
     xdg-utils
-    gnome.adwaita-icon-theme
   ];
 
   nativeBuildInputs = [
+    SDL2
+    autoconf-archive
+    autoreconfHook
+    fltk
     pkg-config
     makeWrapper
     wrapGAppsHook
     unzip
   ];
 
-  installPhase = ''
+  strictDeps = true;
+
+  preInstall = ''
     mkdir -p $out/{bin,share/nestopia}
-    make install PREFIX=$out
   '';
 
   preFixup = ''
@@ -51,23 +66,13 @@ stdenv.mkDerivation rec {
      done
   '';
 
-  patches = [
-    #(fetchpatch {
-    #  url = "https://github.com/rdanbrook/nestopia/commit/f4bc74ac4954328b25e961e7afb7337377084079.patch";
-    #  name = "gcc6.patch";
-    #  sha256 = "1jy0c85xsfk9hrv5a6v0kk48d94864qb62yyni9fp93kyl33y2p4";
-    #})
-    ./gcc6.patch
-    ./build-fix.patch
-  ];
-
   meta = {
     homepage = "http://0ldsk00l.ca/nestopia/";
-    description = "NES emulator with a focus on accuracy";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ MP2E ];
+    description = "Cross-platform Nestopia emulator core with a GUI";
+    changelog = "https://raw.githubusercontent.com/0ldsk00l/nestopia/${finalAttrs.src.rev}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "nestopia";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
-
+})
