@@ -967,6 +967,7 @@ mapAliases ({
   solr_8 = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
   solr = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
   soundOfSorting = sound-of-sorting; # Added 2023-07-07
+  soundux = throw "'soundux' has been removed, as it is unmaintained."; # Added on 2024-02-14
   spark2 = throw "'spark2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_2_4 = throw "'spark_2_4' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_3_1 = throw "'spark_3_1' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08

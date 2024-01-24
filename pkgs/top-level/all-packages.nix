@@ -26874,10 +26874,6 @@ with pkgs;
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
-  soundux = callPackage ../applications/audio/soundux {
-    yt-dlp = yt-dlp.override { withAlias = true; };
-  };
-
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
