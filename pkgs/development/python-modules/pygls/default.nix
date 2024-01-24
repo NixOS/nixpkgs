@@ -8,12 +8,13 @@
 , typeguard
 , pytest-asyncio
 , pytestCheckHook
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "pygls";
   version = "1.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -33,6 +34,12 @@ buildPythonPackage rec {
     typeguard
   ];
 
+  passthru.optional-dependencies = {
+    ws = [
+      websockets
+    ];
+  };
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
@@ -46,12 +53,14 @@ buildPythonPackage rec {
     ulimit -n 1024
   '';
 
-  pythonImportsCheck = [ "pygls" ];
+  pythonImportsCheck = [
+    "pygls"
+  ];
 
   meta = with lib; {
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
-    changelog = "https://github.com/openlawlibrary/pygls/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ kira-bruneau ];
   };
