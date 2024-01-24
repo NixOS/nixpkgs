@@ -5,6 +5,7 @@
 , runCommandLocal
 , bison
 , flex
+, intel-compute-runtime
 , llvmPackages_14
 , opencl-clang
 , python3
@@ -72,6 +73,10 @@ stdenv.mkDerivation rec {
     "-DIGC_OPTION__VC_INTRINSICS_MODE=Source"
     "-Wno-dev"
   ];
+
+  passthru.tests = {
+    inherit intel-compute-runtime;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/intel/intel-graphics-compiler";
