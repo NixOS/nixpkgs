@@ -36,14 +36,16 @@ stdenv.mkDerivation  rec {
     "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
     "FCFLAGS=-fallow-argument-mismatch"
   ] ++ lib.optionals pmixSupport [
-    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix"
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ gfortran python3 ];
   buildInputs = [ perl openssh hwloc ]
-    ++ lib.optional (!stdenv.isDarwin) ch4backend;
+    ++ lib.optional (!stdenv.isDarwin) ch4backend
+    ++ lib.optional pmixSupport pmix;
+
 
   doCheck = true;
 
