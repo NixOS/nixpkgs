@@ -1,7 +1,11 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, config
 , llama-cpp
+, makeWrapper
+, cudaSupport ? config.cudaSupport
+# TODO: missing ROCm support
 }:
 
 let
@@ -16,20 +20,17 @@ buildGoModule rec {
     repo = "ollama";
     rev = "v${version}";
     hash = "sha256-0hwzIJV3RiQrhAqoHzWYV2/bSXHae2JhbJ5wqEmc4VM=";
-    fetchSubmodules = true;
   };
 
-  preConfigure = ''
-    export CGO_CFLAGS="-g"
-  '';
 
   preBuild = ''
     go mod vendor
     go generate ./...
   '';
 
+  # TODO: missing darwin support
   postPatch = ''
-    local arch="x86_64"
+    local arch="foo"
     local buildType="release"
 
     pushd llm
@@ -49,8 +50,11 @@ buildGoModule rec {
     mkdir -p $out/bin
 
     cp ollama $out/bin
+
+  '' + lib.optionalString cudaSupport ''
+    wrapProgram $out/bin/ollama --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
   '';
-  
+
   vendorHash = "sha256-wXRbfnkbeXPTOalm7SFLvHQ9j46S/yLNbFy+OWNSamQ=";
 
   ldflags = [
@@ -58,6 +62,10 @@ buildGoModule rec {
     "-w"
     "-X=github.com/jmorganca/ollama/version.Version=${version}"
     "-X=github.com/jmorganca/ollama/server.mode=release"
+  ];
+
+  nativeBuildInputs = lib.optionals cudaSupport [
+    makeWrapper
   ];
 
   meta = with lib; {
