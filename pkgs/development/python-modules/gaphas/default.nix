@@ -1,41 +1,49 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , poetry-core
 , gobject-introspection
-, gtk3
+, gtk4
 , pycairo
 , pygobject3
-, typing-extensions
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gaphas";
-  version = "3.11.3";
-  format = "pyproject";
+  version = "4.0.0";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NpmNIwZqvWAJDkUEb6+GpfQaRCVtjQk4odkaOd2D2ok=";
+  src = fetchFromGitHub {
+    owner = "gaphor";
+    repo = "gaphas";
+    rev = version;
+    hash = "sha256-GvEa1plRA4LtmIxdRv2F20pAL+C21bVNsJ+FCKVSwYw=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    # Solves ValueError: Namespace Gdk not available
     gobject-introspection
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
   ];
 
   propagatedBuildInputs = [
     pycairo
     pygobject3
-    typing-extensions
   ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  # Getting a segmentation fault when running tests
+  doCheck = false;
 
   pythonImportsCheck = [
     "gaphas"
