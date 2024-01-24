@@ -27,15 +27,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.21.100.1";
+  version = "2.23.100.2";
   # Version as used in the Git tag
-  versionTag = "2.21";
+  versionTag = "2.23";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-Yo2G0H0XUI2p9W7lDRLkFHw2t8X1220brGohQJ0r2WY=";
+    hash = "sha256-i+fE6xKiuljG8LY8TIHgrW15DVpdp46bZdNo/BjgT/I=";
     fetchSubmodules = true;
   };
 
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
+    # no timestamp in mini zip archives
+    ./CppMicroServices-no-mtime.patch
     # Fix missing pthread_compat.h, see https://github.com/intel/linux-sgx/pull/784
     (fetchpatch {
       url = "https://github.com/intel/linux-sgx/commit/254b58f922a6bd49c308a4f47f05f525305bd760.patch";
@@ -76,6 +78,20 @@ stdenv.mkDerivation rec {
     pushd external/protobuf/protobuf_code
       git apply ../sgx_protobuf.patch >/dev/null 2>&1 \
         || git apply ../sgx_protobuf.patch --check -R
+    popd
+
+    pushd external/cbor
+      cp -r libcbor sgx_libcbor
+    popd
+
+    pushd external/cbor/libcbor
+      git apply ../raw_cbor.patch >/dev/null 2>&1 \
+        || git apply ../raw_cbor.patch --check -R
+    popd
+
+    pushd external/cbor/sgx_libcbor
+      git apply ../sgx_cbor.patch >/dev/null 2>&1 \
+        || git apply ../sgx_cbor.patch --check -R
     popd
 
     ./external/sgx-emm/create_symlink.sh
