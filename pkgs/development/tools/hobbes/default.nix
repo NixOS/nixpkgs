@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, llvmPackages_10
 , fetchFromGitHub
 , cmake
 , llvm_12
@@ -10,9 +9,9 @@
 , libxml2
 , python3
 }:
-llvmPackages_10.stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "hobbes";
-  version = "unstable-2023-06-03";
+  version = "0-unstable-2023-06-03";
 
   src = fetchFromGitHub {
     owner = "morganstanley";
@@ -25,6 +24,8 @@ llvmPackages_10.stdenv.mkDerivation {
   # currently failing with "I don't know how to decode the primitive type: b'bool'"
   postPatch = ''
     rm test/Python.C
+    sed -i "13i #include <cstdint>" include/hobbes/util/array.H
+    sed -i "15i #include <signal.h>" lib/hobbes/ipc/prepl.C
   '';
 
   nativeBuildInputs = [
@@ -40,11 +41,19 @@ llvmPackages_10.stdenv.mkDerivation {
     python3
   ];
 
-  doCheck = true;
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error=deprecated-copy"
+    "-Wno-error=mismatched-new-delete"
+  ] ++ lib.optionals stdenv.cc.isGNU [
+    "-Wno-error=dangling-reference"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=unused-private-field"
+  ]);
+
+  doCheck = !stdenv.isDarwin;
   checkTarget = "test";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A language and an embedded JIT compiler";
     longDescription = ''
       Hobbes is a a language, embedded compiler, and runtime for efficient
