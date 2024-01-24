@@ -209,6 +209,7 @@ rec {
       xorg.libxshmfence # for apple-music-electron
       at-spi2-core
       pciutils # for FreeCAD
+      pipewire # immersed-vr wayland support
     ];
   };
 }
