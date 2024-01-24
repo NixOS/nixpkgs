@@ -18324,8 +18324,6 @@ with pkgs;
 
   javascript-typescript-langserver = callPackage ../development/tools/language-servers/javascript-typescript-langserver { };
 
-  jdt-language-server = callPackage ../development/tools/language-servers/jdt-language-server { };
-
   jsonnet-language-server = callPackage ../development/tools/language-servers/jsonnet-language-server { };
 
   kotlin-language-server = callPackage ../development/tools/language-servers/kotlin-language-server { };
