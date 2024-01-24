@@ -4,33 +4,54 @@
 , llama-cpp
 }:
 
+let
+  llama-cppNonStatic = (llama-cpp.override { static = false; });
+in
 buildGoModule rec {
   pname = "ollama";
-  version = "0.1.20";
+  version = "0.1.21";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-3rB/L0dNiRBlxUElfmcjbxtE9O7ErykEWwgIZscKWj0=";
+    hash = "sha256-0hwzIJV3RiQrhAqoHzWYV2/bSXHae2JhbJ5wqEmc4VM=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    # disable passing the deprecated gqa flag to llama-cpp-server
-    # see https://github.com/ggerganov/llama.cpp/issues/2975
-    ./disable-gqa.patch
-
-    # replace the call to the bundled llama-cpp-server with the one in the llama-cpp package
-    ./set-llamacpp-path.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace llm/llama.go \
-      --subst-var-by llamaCppServer "${llama-cpp}/bin/llama-cpp-server"
-    substituteInPlace server/routes_test.go --replace "0.0.0" "${version}"
+  preConfigure = ''
+    export CGO_CFLAGS="-g"
   '';
 
-  vendorHash = "sha256-yGdCsTJtvdwHw21v0Ot6I8gxtccAvNzZyRu1T0vaius=";
+  preBuild = ''
+    go mod vendor
+    go generate ./...
+  '';
+
+  postPatch = ''
+    local arch="x86_64"
+    local buildType="release"
+
+    pushd llm
+
+    mkdir -p llama.cpp/build/linux/$buildType/$arch
+
+    cp -r ${llama-cppNonStatic}/lib llama.cpp/build/linux/$buildType/$arch
+
+    popd
+  '';
+
+  buildPhase = ''
+    go build .
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+
+    cp ollama $out/bin
+  '';
+  
+  vendorHash = "sha256-wXRbfnkbeXPTOalm7SFLvHQ9j46S/yLNbFy+OWNSamQ=";
 
   ldflags = [
     "-s"
