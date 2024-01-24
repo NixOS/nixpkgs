@@ -15,12 +15,12 @@
 }:
 
 let
-  version = "unstable-2023-06-30";
+  version = "0-unstable-2024-01-20";
   src = fetchFromGitHub {
     owner = "OctopusET";
     repo = "sway-contrib";
-    rev = "7e138bfc112872b79ac9fd766bc57c0f125b96d4";
-    hash = "sha256-u4sw1NeAhl4FJCG2YOeY45SHoN7tw6cSJwEL5iqr0uQ=";
+    rev = "b7825b218e677c65f6849be061b93bd5654991bf";
+    hash = "sha256-ZTfItJ77mrNSzXFVcj7OV/6zYBElBj+1LcLLHxBFypk=";
   };
 
   meta = with lib; {
