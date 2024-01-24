@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = "2.0.1";
 
-  outputs = [ "bin" "out" "dev" "doc" "man" ];
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature polkitSupport "polkit")
   ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
-    "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
   makeFlags = [
