@@ -1,13 +1,14 @@
 { lib
 , stdenv
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
-, poetry-core
 , lsprotocol
-, typeguard
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
+, typeguard
 , websockets
 }:
 
@@ -25,8 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-ARez9fs50kScfMp/W/aFIOcJonpFrcfyrzJuVwou7fk=";
   };
 
+  pythonRelaxDeps = [
+    # https://github.com/openlawlibrary/pygls/pull/432
+    "lsprotocol"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
