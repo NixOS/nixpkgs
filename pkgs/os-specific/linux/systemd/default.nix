@@ -636,8 +636,11 @@ stdenv.mkDerivation (finalAttrs: {
       # exhaustive. If another (unhandled) case is found in the source code the
       # build fails with an error message.
       binaryReplacements = [
-        { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
-
+        {
+          search = "/usr/bin/getent";
+          replacement = "${getent}/bin/getent";
+          where = [ "src/nspawn/nspawn-setuid.c" ];
+        }
         {
           search = "/sbin/mkswap";
           replacement = "${lib.getBin util-linux}/sbin/mkswap";
@@ -645,8 +648,19 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        {
+          search = "/sbin/swapon";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon";
+          where = [
+            "src/core/swap.c"
+            "src/basic/unit-def.h"
+          ];
+        }
+        {
+          search = "/sbin/swapoff";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff";
+          where = [ "src/core/swap.c" ];
+        }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
@@ -663,14 +677,15 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [
+            "test/test-execute/exec-noexecpaths-simple.service"
+            "src/journal/cat.c"
+          ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
-          where = [
-            "man/systemd-fsck@.service.xml"
-          ];
+          where = [ "man/systemd-fsck@.service.xml" ];
         }
       ] ++ lib.optionals withImportd [
         {
@@ -699,10 +714,14 @@ stdenv.mkDerivation (finalAttrs: {
           ];
         }
       ] ++ lib.optionals withKmod [
-        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
+        {
+          search = "/sbin/modprobe";
+          replacement = "${lib.getBin kmod}/sbin/modprobe";
+          where = [ "units/modprobe@.service" ];
+        }
       ];
 
-      # { replacement, search, where } -> List[str]
+      # { replacement, search, where, ignore } -> List[str]
       mkSubstitute = { replacement, search, where, ignore ? [ ] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
       mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
@@ -831,7 +850,8 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled
+      withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests)
@@ -839,7 +859,14 @@ stdenv.mkDerivation (finalAttrs: {
         systemd-journal
         systemd-journal-gateway
         systemd-journal-upload;
-      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
+      cross =
+        let
+          systemString =
+            if stdenv.buildPlatform.isAarch64
+            then "gnu64"
+            else "aarch64-multiplatform";
+        in
+        pkgsCross.${systemString}.systemd;
     };
   };
 
