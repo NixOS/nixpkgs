@@ -90,6 +90,8 @@ in stdenv.mkDerivation rec {
     ./dont-redefine-strlcat.patch
   ];
 
+  env.CXXFLAGS = "-include cstdint";
+
   postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in
     lib.optionalString withDocs ''
       mkdir -p ${docDir};
