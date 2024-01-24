@@ -26,7 +26,7 @@ let
     pygobject3
   ] ++ lib.optionals withGui [
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
   ]);
 in
 stdenv.mkDerivation rec {

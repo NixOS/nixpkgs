@@ -20,6 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-moCWUPzn9stxehVEnjqpx8ILYhxzuy8QG+uxR53rCew=";
   };
 
+  postPatch = ''
+    # Upstream doesn't set a version in the pyproject.toml file
+    substituteInPlace pyproject.toml \
+      --replace "0.0.0" "${version}"
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ pillow ];

@@ -1344,6 +1344,10 @@ let
 
     flowClust = old.flowClust.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
+    httr2 = old.httr2.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
     geomorph = old.geomorph.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
     });
@@ -1357,7 +1361,6 @@ let
     });
 
     rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
-      propagatedBuildInputs = with pkgs; attrs.propagatedBuildInputs ++ [ (hdf5-blosc.override {hdf5 = self.Rhdf5lib.hdf5;}) ];
       patches = [ ./patches/rhdf5filters.patch ];
     });
 

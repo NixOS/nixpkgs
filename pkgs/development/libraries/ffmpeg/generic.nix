@@ -86,7 +86,7 @@
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps # Vdpau hardware acceleration
 , withVidStab ? withFullDeps # Video stabilization
-, withVmaf ? withFullDeps && withGPLv3 && !stdenv.isAarch64 # Netflix's VMAF (Video Multi-Method Assessment Fusion)
+, withVmaf ? withFullDeps && withGPLv3 && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
@@ -447,7 +447,7 @@ stdenv.mkDerivation (finalAttrs: {
      */
     (enableFeature withAlsa "alsa")
     # FIXME: see if jellyfin-ffmpeg is already on a version >= 6.1 to use enableFeature
-    (optionalString withAribcaption "--enable-libaribcaption")
+    (optionalString (withAribcaption && lib.versionAtLeast finalAttrs.version "6.1") "--enable-libaribcaption")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCelt "libcelt")
     (enableFeature withCuda "cuda")

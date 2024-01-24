@@ -5,12 +5,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ablog";
-  version = "0.11.4.post1";
+  version = "0.11.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zyvx7lVUQtjoGsSpFmH8pFrgTGgsFd4GMsL3fXKtUpU=";
+    hash = "sha256-fV4W4AaiqyruIz3OQ7/lGkMPMKmyiFa+fdU2QeeQCvs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   pytestFlagsArray = [
     "-W" "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
     "--rootdir" "src/ablog"
+    "-W" "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
 
   meta = with lib; {

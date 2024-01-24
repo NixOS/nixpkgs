@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "CastXML";
     repo = "CastXML";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x27koa0q+rDqPmfHMf7v7KTx3bfDgqS/FkPAX5auqaw=";
+    hash = "sha256-g/BgKkU8Me6EacDm+KFAsKq5++v/b+Par0x7lzBzHw8=";
   };
 
   nativeBuildInputs = [

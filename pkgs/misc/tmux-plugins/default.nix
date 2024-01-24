@@ -243,7 +243,7 @@ in rec {
   };
 
   fingers = mkTmuxPlugin rec {
-    pluginName = "fingers";
+    pluginName = "tmux-fingers";
     rtpFilePath = "load-config.tmux";
     version = "2.1.1";
     src = fetchFromGitHub {

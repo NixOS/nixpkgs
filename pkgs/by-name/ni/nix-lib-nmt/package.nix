@@ -1,22 +1,19 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromSourcehut }:
 
-let version = "0.5.0";
+let version = "0.5.1";
 in stdenv.mkDerivation {
   pname = "nix-lib-nmt";
   inherit version;
 
-  # TODO: Restore when Sourcehut once its back from DDoS attack.
-  # src = fetchFromSourcehut {
-  #   owner = "~rycee";
-  #   repo = "nmt";
-  #   rev = "v${version}";
-  #   hash = "sha256-1glxIg/b+8qr+ZsSsBqZIqGpsYWzRuMyz74/sy765Uk=";
-  # };
-
-  src = fetchurl {
-    url = "https://rycee.net/tarballs/nmt-${version}.tar.gz";
-    hash = "sha256-AO1iLsfZSLbR65tRBsAqJ98CewfSl5yNf7C6XaZj0wM=";
+  src = fetchFromSourcehut {
+    owner = "~rycee";
+    repo = "nmt";
+    rev = "v${version}";
+    hash = "sha256-krVKx3/u1mDo8qe5qylYgmwAmlAPHa1BSPDzxq09FmI=";
   };
+
+  outputHashMode = "recursive";
+  outputHash = "sha256-N7kGGDDXsXtc1S3Nqw7lCIbnVHtGNNLM1oO+Xe64hSE=";
 
   installPhase = ''
     mkdir -pv "$out"

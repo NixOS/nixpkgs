@@ -2,14 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "man-pages";
-  version = "5.13";
+  version = "6.05.01";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YU2uPv59/UgJhnY6KiqBeSFQMqWkUmwL5eiZol8Ja4s=";
+    sha256 = "sha256-uWq2tEpojJHRtXLlL+zlGeHP0rtMM/5wFPw/0e8/nK4=";
   };
 
   makeFlags = [ "prefix=$(out)" ];
+
+  dontBuild = true;
+
   postInstall = ''
     # conflict with shadow-utils
     rm $out/share/man/man5/passwd.5 \
@@ -20,6 +23,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
   outputDocdev = "out";
+
+  enableParallelInstalling = true;
 
   meta = with lib; {
     description = "Linux development manual pages";

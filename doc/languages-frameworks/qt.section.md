@@ -26,6 +26,17 @@ It is important to import Qt modules directly, that is: `qtbase`, `qtdeclarative
 
 Additionally all Qt packages must include `wrapQtAppsHook` in `nativeBuildInputs`, or you must explicitly set `dontWrapQtApps`.
 
+`pkgs.callPackage` does not provide injections for `qtbase` or the like.
+Instead you want to either use `pkgs.libsForQt5.callPackage`, or `pkgs.qt6Packages.callPackage`, depending on the Qt version you want to use.
+
+For example (from [here](https://github.com/NixOS/nixpkgs/blob/2f9286912cb215969ece465147badf6d07aa43fe/pkgs/top-level/all-packages.nix#L30106))
+
+```nix
+  zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
+  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal { };
+  zeal = zeal-qt5;
+```
+
 ## Locating runtime dependencies {#qt-runtime-dependencies}
 
 Qt applications must be wrapped to find runtime dependencies.

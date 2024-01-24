@@ -177,28 +177,44 @@ runCmd() {
 }
 
 buildHostCmd() {
+    local c
+    if [[ "${useSudo:-x}" = 1 ]]; then
+        c=("${sudoCommand[@]}")
+    else
+        c=()
+    fi
+
     if [ -z "$buildHost" ]; then
         runCmd "$@"
     elif [ -n "$remoteNix" ]; then
-        runCmd ssh $SSHOPTS "$buildHost" "${useSudo:+${sudoCommand[@]}}" env PATH="$remoteNix":'$PATH' "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" env PATH="$remoteNix":'$PATH' "$@"
     else
-        runCmd ssh $SSHOPTS "$buildHost" "${useSudo:+${sudoCommand[@]}}" "$@"
+        runCmd ssh $SSHOPTS "$buildHost" "${c[@]}" "$@"
     fi
 }
 
 targetHostCmd() {
-    if [ -z "$targetHost" ]; then
-        runCmd "${useSudo:+${sudoCommand[@]}}" "$@"
+    local c
+    if [[ "${useSudo:-x}" = 1 ]]; then
+        c=("${sudoCommand[@]}")
     else
-        runCmd ssh $SSHOPTS "$targetHost" "${useSudo:+${sudoCommand[@]}}" "$@"
+        c=()
+    fi
+
+    if [ -z "$targetHost" ]; then
+        runCmd "${c[@]}" "$@"
+    else
+        runCmd ssh $SSHOPTS "$targetHost" "${c[@]}" "$@"
     fi
 }
 
 targetHostSudoCmd() {
     if [ -n "$remoteSudo" ]; then
-        useSudo=1 targetHostCmd "$@"
+        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
     else
-        targetHostCmd "$@"
+        # While a tty might not be necessary, we apply it to be consistent with
+        # sudo usage, and an experience that is more consistent with local deployment.
+        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
     fi
 }
 
@@ -436,7 +452,7 @@ if [ "$action" = edit ]; then
     exit 1
 fi
 
-SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60 -t"
+SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
@@ -556,6 +572,7 @@ if [ "$action" = repl ]; then
                     - ${blue}config${reset}   All option values
                     - ${blue}options${reset}  Option data and metadata
                     - ${blue}pkgs${reset}     Nixpkgs package set
+                    - ${blue}lib${reset}      Nixpkgs library functions
                     - other module arguments
 
                     - ${blue}flake${reset}    Flake outputs, inputs and source info of $flake
@@ -576,6 +593,7 @@ if [ "$action" = repl ]; then
                 configuration._module.specialArgs //
                 {
                   inherit (configuration) config options;
+                  lib = configuration.lib or configuration.pkgs.lib;
                   inherit flake;
                 };
           in builtins.seq scope builtins.trace motd scope

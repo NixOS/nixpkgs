@@ -5,6 +5,7 @@
 , buildPythonPackage
 , empty-files
 , fetchFromGitHub
+, mock
 , mrjob
 , numpy
 , pyperclip
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest

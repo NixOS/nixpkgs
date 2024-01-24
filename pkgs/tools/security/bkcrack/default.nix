@@ -2,22 +2,20 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, openmp
 }:
 
 stdenv.mkDerivation rec {
   pname = "bkcrack";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "kimci86";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iyx4mOTr6MHECk9S9zrIAE5pt+cxWnOKS7iQPUyWfzs=";
+    hash = "sha256-VfPRX9lOPyen8CujiBtTCbD5e7xd9X2OQ1uZ6JWKwtY=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openmp ];
 
   postInstall = ''
     mkdir -p $out/bin $out/share/licenses/bkcrack

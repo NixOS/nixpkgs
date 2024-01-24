@@ -18,10 +18,10 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

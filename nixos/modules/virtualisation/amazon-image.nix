@@ -71,6 +71,7 @@ in
 
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = ["network-online.target"];
       path = [ pkgs.curl ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;

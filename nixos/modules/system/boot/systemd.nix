@@ -451,6 +451,38 @@ in
         cfg.services
     );
 
+    assertions = let
+      mkOneAssert = typeStr: name: def: {
+        assertion = lib.elem "network-online.target" def.after -> lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo);
+        message = "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
+      };
+      mkAsserts = typeStr: lib.mapAttrsToList (mkOneAssert typeStr);
+      mkMountAsserts = typeStr: map (m: mkOneAssert typeStr m.what m);
+    in mkMerge [
+      (concatLists (
+        mapAttrsToList
+          (name: service:
+            map (message: {
+              assertion = false;
+              inherit message;
+            }) (concatLists [
+              (optional ((builtins.elem "network-interfaces.target" service.after) || (builtins.elem "network-interfaces.target" service.wants))
+                "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
+              )
+            ])
+          )
+          cfg.services
+      ))
+      (mkAsserts "target" cfg.targets)
+      (mkAsserts "service" cfg.services)
+      (mkAsserts "socket" cfg.sockets)
+      (mkAsserts "timer" cfg.timers)
+      (mkAsserts "path" cfg.paths)
+      (mkMountAsserts "mount" cfg.mounts)
+      (mkMountAsserts "automount" cfg.automounts)
+      (mkAsserts "slice" cfg.slices)
+    ];
+
     system.build.units = cfg.units;
 
     system.nssModules = [ cfg.package.out ];
@@ -554,6 +586,13 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
+    # This target only exists so that services ordered before sysinit.target
+    # are restarted in the correct order, notably BEFORE the other services,
+    # when switching configurations.
+    systemd.targets.sysinit-reactivation = {
+      description = "Reactivate sysinit units";
+    };
+
     systemd.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
@@ -619,7 +658,6 @@ in
     systemd.services.systemd-udev-settle.restartIfChanged = false; # Causes long delays in nixos-rebuild
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
-    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 

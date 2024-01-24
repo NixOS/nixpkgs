@@ -41,7 +41,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     pyqtwebengine
     pyzmq
     requests
-    sip_4
+    sip4
   ];
 
   strictDeps = true;

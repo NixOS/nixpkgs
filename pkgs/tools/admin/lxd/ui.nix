@@ -5,6 +5,7 @@
 , nodejs
 , prefetch-yarn-deps
 , yarn
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.default = nixosTests.lxd.ui;
 
   meta = {
     description = "Web user interface for LXD";

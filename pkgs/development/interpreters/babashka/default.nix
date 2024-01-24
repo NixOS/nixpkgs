@@ -9,11 +9,11 @@
 let
   babashka-unwrapped = buildGraalvmNativeImage rec {
     pname = "babashka-unwrapped";
-    version = "1.3.186";
+    version = "1.3.188";
 
     src = fetchurl {
       url = "https://github.com/babashka/babashka/releases/download/v${version}/babashka-${version}-standalone.jar";
-      sha256 = "sha256-T7inTJHSnUySituU0fcgZ0xWjIY3yb8BlSakqym67ew=";
+      sha256 = "sha256-EjsSUPWiLQcCos2oyVXt3VzLlGEfiXK5CqJZ1NMvF/E=";
     };
 
     graalvmDrv = graalvmCEPackages.graalvm-ce;

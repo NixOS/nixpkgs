@@ -159,6 +159,7 @@ in
     systemd.services.openvscode-server = {
       description = "OpenVSCode server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;
       environment = cfg.extraEnvironment;

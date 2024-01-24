@@ -89,7 +89,11 @@
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
-, withBootloader ? withEfi && !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
+  # compiles systemd-boot, assumes EFI is available.
+, withBootloader ? withEfi
+    && !stdenv.hostPlatform.isMusl
+    # "Unknown 64-bit data model"
+    && !stdenv.hostPlatform.isRiscV32
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -108,6 +112,8 @@
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
     # can't find gnu/stubs-32.h
     && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
+    # https://reviews.llvm.org/D43106#1019077
+    && (stdenv.hostPlatform.isRiscV32 -> stdenv.cc.isClang)
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
     # but we do it this way to avoid taking llvmPackages as an input, and
     # risking making it too easy to ignore the above comment about llvmPackages.
@@ -208,6 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let

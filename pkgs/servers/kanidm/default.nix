@@ -25,14 +25,21 @@ rustPlatform.buildRustPackage rec {
     owner = pname;
     repo = pname;
     # Latest 1.1.0-rc.15 tip
-    rev = "a5ca8018e3a636dbb0a79b3fd869db059d92979d";
-    hash = "sha256-PFGoeGn7a/lVR6rOmOKA3ydAoo3/+9RlkwBAKS22Psg=";
+    rev = "4d250f817dbd24d77f72427bb93ef3a367a553c6";
+    hash = "sha256-cXPqTIDHMWcsRFi1/u8lIpwk2m6rh4C70IwVky7B2qs=";
   };
+
+  patches = [
+    # TODO: Remove in the next update
+    # or when https://github.com/kanidm/kanidm/commit/dbf476fe5ea2c120dff9a85e552be9f898c69ce7 is backported
+    ./0001-fix-warnings-for-rust-v1.75.patch
+  ];
+
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "base64urlsafedata-0.1.3" = "sha256-D+u4CIhx8BNyx+EH1efS4mrinjeSJopWCteSaMY1kh8=";
+      "base64urlsafedata-0.1.3" = "sha256-JLUxLQCwZgxCmXt636baZYo8nQW/ZfHZOqnOIrIks2s=";
       "sshkeys-0.3.2" = "sha256-CNG9HW8kSwezAdIYW+CR5rqFfmuso4R0+m4OpIyXbSM=";
     };
   };

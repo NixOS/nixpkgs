@@ -1,8 +1,9 @@
 { lib
 , autoreconfHook
+, fetchpatch
 , fetchPypi
 , buildPythonPackage
-, cython_3
+, cython
 , pariSupport ? true, pari # for interfacing with the PARI/GP signal handler
 }:
 
@@ -17,6 +18,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Dx4yHlWgf5AchqNqHkSX9v+d/nAGgdATCjjDbk6yOMM=";
   };
+
+  patches = [
+    # https://github.com/sagemath/cysignals/pull/193
+    (fetchpatch {
+      url = "https://github.com/sagemath/cysignals/commit/474179c87ab0ff562fdfd2471b02797e4bdd3148.diff";
+      sha256 = "sha256-qEAmf4kU+QDI/JPFNjQMZIjMBk8dnaLmOpagIBMsh7w=";
+    })
+  ];
 
   # explicit check:
   # build/src/cysignals/implementation.c:27:2: error: #error "cysignals must be compiled without _FORTIFY_SOURCE"
@@ -34,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    cython_3
+    cython
   ] ++ lib.optionals pariSupport [
     # When cysignals is built with pari, including cysignals into the
     # buildInputs of another python package will cause cython to link against

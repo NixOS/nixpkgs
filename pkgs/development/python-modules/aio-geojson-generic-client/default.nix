@@ -8,6 +8,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pytz
 , setuptools
 }:
@@ -29,7 +30,13 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    # geojson>=2.4.0,<3, but we have 3.x
+    "geojson"
   ];
 
   propagatedBuildInputs = [

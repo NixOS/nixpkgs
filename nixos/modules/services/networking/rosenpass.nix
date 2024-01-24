@@ -208,6 +208,7 @@ in
       in
       rec {
         wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         path = [ cfg.package pkgs.wireguard-tools ];
 

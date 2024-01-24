@@ -2,6 +2,8 @@
 , fetchFromGitea
 , rustPlatform
 , nix-update-script
+, imagemagick
+, makeWrapper
 }:
 let
   version = "2.9.0";
@@ -19,6 +21,13 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-O9w18ae83mgF3zjk0WUMeu16Ap7CF2ubuPnOqeCt4Nw=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/wallust \
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
+  '';
 
   passthru.updateScript = nix-update-script { };
 

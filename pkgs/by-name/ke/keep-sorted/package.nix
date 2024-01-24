@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "keep-sorted";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
     rev = "v${version}";
-    hash = "sha256-bCV0XcwgyFTORl/RF1BS7vsM8DmU0Wox3OIEuZBrwSs=";
+    hash = "sha256-qCR1JVDC/+NVz+CAY/2mMP8Sk71WDl2+Ig7QWwXTUrQ=";
   };
 
-  vendorHash = "sha256-yaeqfMAJbQdrqZ0uco6Y5T8vnfjlBJY4IQuGzZg3Ubw=";
+  vendorHash = "sha256-tPTWWvr+/8wWUnQcI4Ycco2OEgA2mDQt15OGCk/ZjrQ=";
 
   CGO_ENABLED = "0";
 

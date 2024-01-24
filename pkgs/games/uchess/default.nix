@@ -24,7 +24,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Play chess against UCI engines in your terminal.";
+    description = "Play chess against UCI engines in your terminal";
     homepage = "https://tmountain.github.io/uchess/";
     maintainers = with maintainers; [ tmountain ];
     license = licenses.mit;

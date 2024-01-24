@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "logging-journald";
-  version = "0.6.5";
+  version = "0.6.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-EyKXc/Qr9mRFngDqbCPNVs/0eD9OCbQq0FbymA6kpLQ=";
+    hash = "sha256-RQ9opkAOZfhYuqOXJ2Mtnig8soL+lCveYH2YdXL1AGM=";
   };
 
   nativeBuildInputs = [

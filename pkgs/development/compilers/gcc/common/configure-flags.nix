@@ -249,6 +249,11 @@ let
     ++ lib.optionals (targetPlatform.isMips && targetPlatform.parsed.abi.name == "gnu" && lib.versions.major version == "12") [
       "--disable-libsanitizer"
     ]
+    ++ lib.optionals targetPlatform.isAlpha [
+      # Workaround build failures like:
+      #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
+      "--disable-werror"
+    ]
   ;
 
 in configureFlags

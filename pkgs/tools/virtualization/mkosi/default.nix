@@ -10,6 +10,9 @@
 , gnutar
 , util-linux
 , cpio
+, bash
+, coreutils
+, btrfs-progs
 
   # Python packages
 , setuptools
@@ -55,7 +58,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "19";
+  version = "20.1";
   format = "pyproject";
 
   outputs = [ "out" "man" ];
@@ -64,7 +67,7 @@ buildPythonApplication rec {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-KjJM+KZCgUnsaEN2ZorhH0AR5nmiV2h3i7Vb3KdGFtI=";
+    hash = "sha256-gkn5d9ybfrV/QYKSUyzyHAouU++NCEBDT22zFMrEZt8=";
   };
 
   # Fix ctypes finding library
@@ -88,7 +91,10 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
+    bash
+    btrfs-progs
     bubblewrap
+    coreutils
     cpio
     gnutar
     kmod

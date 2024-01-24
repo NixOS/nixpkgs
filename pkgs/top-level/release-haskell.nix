@@ -71,6 +71,7 @@ let
     ghc947
     ghc948
     ghc963
+    ghc964
     ghc981
   ];
 

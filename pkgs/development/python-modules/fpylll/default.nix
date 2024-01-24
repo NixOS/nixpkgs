@@ -1,10 +1,11 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 
 # build-system
 , cysignals
-, cython_3
+, cython
 , pkgconfig
 , setuptools
 
@@ -30,8 +31,21 @@ buildPythonPackage rec {
     hash = "sha256-EyReCkVRb3CgzIRal5H13OX/UdwWi+evDe7PoS1qP4A=";
   };
 
+  # temporarily revert to cython 0.29
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fplll/fpylll/commit/528243c6fa6491c8e9652b99bdf9758766273d66.diff";
+      revert = true;
+      sha256 = "sha256-IRppkESy0CRwARhxBAsZxP6JkTe0M91apG4CTSSYNUU=";
+      excludes = ["requirements.txt"];
+    })
+  ];
+  postPatch = ''
+    substituteInPlace requirements.txt --replace "Cython>=3.0" "Cython"
+  '';
+
   nativeBuildInputs = [
-    cython_3
+    cython
     cysignals
     pkgconfig
     setuptools

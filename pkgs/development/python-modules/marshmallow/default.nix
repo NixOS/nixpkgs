@@ -6,21 +6,26 @@
 , pytz
 , simplejson
 , packaging
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.20.1";
-  format = "setuptools";
+  version = "3.20.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
-    repo = pname;
+    repo = "marshmallow";
     rev = "refs/tags/${version}";
-    hash = "sha256-sPYiup7ontnubtBxv+rIT0up4IHPJNCUlH9J4FlHsss=";
+    hash = "sha256-z6Quf6uTelGwB/uYayVXtVmculwaoI5LL8I0kKiM/e8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     packaging

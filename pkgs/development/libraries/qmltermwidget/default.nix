@@ -38,6 +38,14 @@ stdenv.mkDerivation {
       hash = "sha256-1GjC2mdfP3NpePDWZaT8zvIq3vwWIZs+iQ9o01iQtD4=";
     })
 
+    # A fix to the above series of patches, to fix a crash in lomiri-terminal-app
+    # Remove (and update the above fetchpatch) when https://github.com/gber/qmltermwidget/pull/1 merged
+    (fetchpatch {
+      name = "0002-qmltermwidget-Mark-ColorSchemeManager-singleton-as-C++-owned.patch";
+      url = "https://github.com/gber/qmltermwidget/commit/f3050bda066575eebdcff70fc1c3a393799e1d6d.patch";
+      hash = "sha256-O8fEpVLYMze6q4ps7RDGbNukRmZZBjLwqmvRqpp+H+Y=";
+    })
+
     # Some files are copied twice to the output which makes the build fails
     ./do-not-copy-artifacts-twice.patch
   ];

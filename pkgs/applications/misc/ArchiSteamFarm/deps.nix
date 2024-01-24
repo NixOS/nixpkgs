@@ -75,7 +75,7 @@
   (fetchNuGet { pname = "Microsoft.IdentityModel.JsonWebTokens"; version = "7.0.3"; sha256 = "1ayh85xqdq8rqjk2iqcn7iaczcl7d8qg6bxk0b4rgx59fmsmbqj7"; })
   (fetchNuGet { pname = "Microsoft.IdentityModel.Logging"; version = "7.0.3"; sha256 = "13cjqmf59k895q6gkd5ycl89mnpalckda7rhsdl11jdyr32hsfnv"; })
   (fetchNuGet { pname = "Microsoft.IdentityModel.Tokens"; version = "7.0.3"; sha256 = "1pmhd0imh9wlhvbvvwjrpjsqvzagi2ly22nddwr4r0pi234khyz1"; })
-  (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "8.0.0"; sha256 = "13y3bilk9rrrgsk9abks7xvpwp12zw150xcyi0diig2hqswys1h4"; })
+  (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "8.0.1"; sha256 = "1drbgqdcvbpisjn8mqfgba1pwb6yri80qc4mfvyczqwrcsj5k2ja"; })
   (fetchNuGet { pname = "Microsoft.NET.Test.Sdk"; version = "17.8.0"; sha256 = "1syvl3g0hbrcgfi9rq6pld8s8hqqww4dflf1lxn59ccddyyx0gmv"; })
   (fetchNuGet { pname = "Microsoft.NETCore.Platforms"; version = "5.0.0"; sha256 = "0mwpwdflidzgzfx2dlpkvvnkgkr2ayaf0s80737h4wa35gaj11rc"; })
   (fetchNuGet { pname = "Microsoft.OpenApi"; version = "1.2.3"; sha256 = "07b19k89whj69j87afkz86gp9b3iybw8jqwvlgcn43m7fb2y99rr"; })

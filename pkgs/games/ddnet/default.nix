@@ -35,19 +35,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "17.4.2";
+  version = "18.0.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-cu6EmCaT8nMCcXUwvZdWog/4bvHQo9+DZHDHRvun2E4=";
+    hash = "sha256-CgmFljI9/S544Hm9J4CEqvNgepPM02JgJZJ5HX1d3wU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-O4ORWuTlmEMsTpMEhnauNfXOKWfg8hB32rZKRe8Nmp4=";
+    hash = "sha256-oGZOgSPMnrzwEyUvXqdfquCWCFslPfD9C0vT8mILI+s=";
   };
 
   nativeBuildInputs = [
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Teeworlds modification with a unique cooperative gameplay.";
+    description = "A Teeworlds modification with a unique cooperative gameplay";
     longDescription = ''
       DDraceNetwork (DDNet) is an actively maintained version of DDRace,
       a Teeworlds modification with a unique cooperative gameplay.

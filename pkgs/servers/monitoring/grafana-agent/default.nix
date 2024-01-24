@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.39.0";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-mUPWww7RnrCwJKGWXIsX7vnTmxj2h31AzM8a0eKa15g=";
+    hash = "sha256-GUsLscLbDnHBO+BWiuo/qCxrV+mW5XUlLpqj8iWUxzo=";
   };
 
-  vendorHash = "sha256-nOuinJXTiTumHlOWcuGTBcrw9ArIdb/R8jIT/5+i0vM=";
+  vendorHash = "sha256-lC6ESGT0dheATVDjJZxDP8YU4RtJMEfTJSyETDtGzTc=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {

@@ -7,11 +7,11 @@
 }:
 
 let
-  suitesparseVersion = "7.4.0";
+  suitesparseVersion = "7.5.1";
 in
 stdenv.mkDerivation {
   pname = "mongoose";
-  version = "3.3.0";
+  version = "3.3.1";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${suitesparseVersion}";
-    hash = "sha256-oR/lISsa+0NGueJJyutswxOEQVl8MmSVgb/q3GMUCn4=";
+    hash = "sha256-6eC26rag9kZ1E4qJ5KY/dLXGld+EHP2OUpyikjXQhQk=";
   };
 
   nativeBuildInputs = [

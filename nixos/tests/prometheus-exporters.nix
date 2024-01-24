@@ -1392,9 +1392,11 @@ let
     snmp = {
       exporterConfig = {
         enable = true;
-        configuration.default = {
-          version = 2;
-          auth.community = "public";
+        configuration = {
+          auths.public_v2 = {
+            community = "public";
+            version = 2;
+          };
         };
       };
       exporterTest = ''

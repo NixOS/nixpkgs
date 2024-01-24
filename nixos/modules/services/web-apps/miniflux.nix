@@ -21,10 +21,10 @@ in
       package = mkPackageOption pkgs "miniflux" { };
 
       config = mkOption {
-        type = types.attrsOf types.str;
+        type = with types; attrsOf (oneOf [ str int ]);
         example = literalExpression ''
           {
-            CLEANUP_FREQUENCY = "48";
+            CLEANUP_FREQUENCY = 48;
             LISTEN_ADDR = "localhost:8080";
           }
         '';
@@ -51,12 +51,11 @@ in
   };
 
   config = mkIf cfg.enable {
-
     services.miniflux.config =  {
       LISTEN_ADDR = mkDefault defaultAddress;
       DATABASE_URL = "user=miniflux host=/run/postgresql dbname=miniflux";
-      RUN_MIGRATIONS = "1";
-      CREATE_ADMIN = "1";
+      RUN_MIGRATIONS = 1;
+      CREATE_ADMIN = 1;
     };
 
     services.postgresql = {
@@ -90,7 +89,7 @@ in
         User = "miniflux";
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
-        RuntimeDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0750";
         EnvironmentFile = cfg.adminCredentialsFile;
         # Hardening
         CapabilityBoundingSet = [ "" ];
@@ -117,7 +116,7 @@ in
         UMask = "0077";
       };
 
-      environment = cfg.config;
+      environment = lib.mapAttrs (_: toString) cfg.config;
     };
     environment.systemPackages = [ cfg.package ];
 

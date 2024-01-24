@@ -1068,6 +1068,8 @@ let
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
+    middleware = callPackage ../development/ocaml-modules/middleware { };
+
     mimic = callPackage ../development/ocaml-modules/mimic { };
 
     mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
@@ -1173,6 +1175,8 @@ let
     msgpck = callPackage ../development/ocaml-modules/msgpck { };
 
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
+
+    msat = callPackage ../development/ocaml-modules/msat { };
 
     mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
     mtime =  callPackage ../development/ocaml-modules/mtime { };
@@ -1979,7 +1983,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_5_1;
 
-  ocamlPackages = ocamlPackages_4_14;
+  ocamlPackages = ocamlPackages_5_1;
 
   # This is a nasty way to replace toplevel janestreet attributes in the scope,
   # so that modules outside of ocamlPackages that depend on JS OCaml libraries

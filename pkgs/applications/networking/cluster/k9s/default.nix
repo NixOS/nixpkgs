@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.31.1";
+  version = "0.31.5";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
     rev = "v${version}";
-    hash = "sha256-01Hlf/wFJjqQbvr/yvzEb+W8Z3krkPlQHUWw04FM7ts=";
+    hash = "sha256-ZNYIGs8oBy4U7y4GiOCcIhnAGRx92V+cQzTE+40QE+A=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-F7RxqxfjcmBAa8MmgRfUvEEtGMvs7NK5P257n7isl9E=";
+  vendorHash = "sha256-RXKotLyH97EgfDxQzFSSgATGu96SnfwZyR3WprhwsMM=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);

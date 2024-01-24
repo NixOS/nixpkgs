@@ -11,6 +11,7 @@
 , pycryptodomex
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , sensor-state-data
 }:
 
@@ -30,12 +31,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" "" \
-      --replace 'pycryptodomex = ">=3.18.0"' 'pycryptodomex = ">=3.17.0"'
+      --replace " --cov=xiaomi_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pycryptodomex"
   ];
 
   propagatedBuildInputs = [

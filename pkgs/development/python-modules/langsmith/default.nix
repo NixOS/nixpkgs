@@ -12,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.75";
-  format = "pyproject";
+  version = "0.0.83";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BbDB3xP3OCRXxbOqFIzFNrpK5+wHbIZ/VlurNXrXpTw=";
+    hash = "sha256-WRrwekh4pcn3I0U/A2Q91ePrRx2RUC3XX+z4bez0BzU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -49,6 +49,8 @@ buildPythonPackage rec {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+    # requires git repo
+    "test_git_info"
   ];
 
   disabledTestPaths = [

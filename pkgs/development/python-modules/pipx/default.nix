@@ -10,6 +10,7 @@
 , pytestCheckHook
 , pythonOlder
 , userpath
+, git
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    git
   ];
 
   preCheck = ''

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.1.2";
+  version = "2024.1.5";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -1580,6 +1580,7 @@
       dbus-fast
       esphome-dashboard-api
       fnv-hash-fast
+      gardena-bluetooth
       ha-ffmpeg
       habluetooth
       hassil
@@ -1592,7 +1593,7 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
-    ]; # missing inputs: gardena-bluetooth
+    ];
     "gaviota" = ps: with ps; [
     ];
     "gc100" = ps: with ps; [
@@ -4506,7 +4507,8 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-    ]; # missing inputs: pysnmp-lextudio
+      pysnmp-lextudio
+    ];
     "snooz" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -5927,6 +5929,7 @@
     "frontier_silicon"
     "fully_kiosk"
     "garages_amsterdam"
+    "gardena_bluetooth"
     "gdacs"
     "generic"
     "generic_hygrostat"
@@ -6315,6 +6318,7 @@
     "smtp"
     "snapcast"
     "snips"
+    "snmp"
     "snooz"
     "solaredge"
     "solarlog"

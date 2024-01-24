@@ -16,7 +16,7 @@ buildPythonApplication rec {
     lilypond
     pygame
     python-ly
-    sip_4
+    sip4
     pyqt5
     poppler-qt5
     pyqtwebengine

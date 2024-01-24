@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , libosmium
 , protozero
@@ -10,12 +9,14 @@
 , bzip2
 , zlib
 , pybind11
-, shapely
 , pythonOlder
+, pytest-httpserver
+, pytestCheckHook
+, shapely
+, werkzeug
 , isPyPy
 , lz4
 , requests
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,14 +32,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-DBFDAKNrD93MRXjoM8dIJQ/HJ9Aj8oMJuPVQxTrKYfI=";
   };
-
-  patches = [
-    # Compatibility with recent pybind versions
-    (fetchpatch {
-      url = "https://github.com/osmcode/pyosmium/commit/31b1363389b423f49e14140ce868ecac83e92f69.patch";
-      hash = "sha256-maBuwzyZ4/wVLLGVr4gZFZDKvJckUXiBluxZRPGETag=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,6 +57,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     shapely
+    werkzeug
+    pytest-httpserver
   ];
 
   meta = with lib; {

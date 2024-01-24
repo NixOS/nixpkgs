@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pytoolconfig";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "bagel897";
     repo = "pytoolconfig";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V7dANGnvhBhRy8IyO/gg73BMwpWRaV/xTF8JmRC7DPA=";
+    hash = "sha256-h21SDgVsnCDZQf5GS7sFE19L/p+OlAFZGEYKc0RHn30=";
   };
 
   outputs = [

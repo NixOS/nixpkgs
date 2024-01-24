@@ -1450,7 +1450,7 @@ self: with self; {
     buildInputs = [ libX11 libXext xorgproto libXt ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
-      pkgConfigModules = [ "xmuu" "xmu" ];
+      pkgConfigModules = [ "xmu" "xmuu" ];
       platforms = lib.platforms.unix;
     };
   })) {};
@@ -1650,7 +1650,7 @@ self: with self; {
     buildInputs = [ xorgproto libX11 libXext libXv ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
-      pkgConfigModules = [ "xvmc-wrapper" "xvmc" ];
+      pkgConfigModules = [ "xvmc" "xvmc-wrapper" ];
       platforms = lib.platforms.unix;
     };
   })) {};
@@ -1811,7 +1811,7 @@ self: with self; {
     buildInputs = [ libxslt libpthreadstubs libXau xcbproto libXdmcp ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
-      pkgConfigModules = [ "xcb-composite" "xcb-xtest" "xcb-record" "xcb-glx" "xcb-dpms" "xcb-xevie" "xcb-dri2" "xcb-shm" "xcb-sync" "xcb-xprint" "xcb-dri3" "xcb-screensaver" "xcb-render" "xcb-xkb" "xcb-xinput" "xcb-shape" "xcb-ge" "xcb-xfixes" "xcb" "xcb-damage" "xcb-present" "xcb-xf86dri" "xcb-xvmc" "xcb-randr" "xcb-xinerama" "xcb-xselinux" "xcb-xv" "xcb-res" ];
+      pkgConfigModules = [ "xcb" "xcb-composite" "xcb-damage" "xcb-dbe" "xcb-dpms" "xcb-dri2" "xcb-dri3" "xcb-ge" "xcb-glx" "xcb-present" "xcb-randr" "xcb-record" "xcb-render" "xcb-res" "xcb-screensaver" "xcb-shape" "xcb-shm" "xcb-sync" "xcb-xevie" "xcb-xf86dri" "xcb-xfixes" "xcb-xinerama" "xcb-xinput" "xcb-xkb" "xcb-xprint" "xcb-xselinux" "xcb-xtest" "xcb-xv" "xcb-xvmc" ];
       platforms = lib.platforms.unix;
     };
   })) {};
@@ -2271,7 +2271,7 @@ self: with self; {
     buildInputs = [ gperf libxcb xorgproto ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
-      pkgConfigModules = [ "xcb-atom" "xcb-event" "xcb-aux" "xcb-util" ];
+      pkgConfigModules = [ "xcb-atom" "xcb-aux" "xcb-event" "xcb-util" ];
       platforms = lib.platforms.unix;
     };
   })) {};
@@ -2391,7 +2391,7 @@ self: with self; {
     buildInputs = [ gperf libxcb xorgproto ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
-      pkgConfigModules = [ "xcb-icccm" "xcb-ewmh" ];
+      pkgConfigModules = [ "xcb-ewmh" "xcb-icccm" ];
       platforms = lib.platforms.unix;
     };
   })) {};
@@ -4151,7 +4151,7 @@ self: with self; {
     buildInputs = [ libXt ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
-      pkgConfigModules = [ "xf86vidmodeproto" "xineramaproto" "xproxymngproto" "glproto" "presentproto" "applewmproto" "xcmiscproto" "recordproto" "resourceproto" "printproto" "xcalibrateproto" "renderproto" "fontsproto" "dpmsproto" "kbproto" "videoproto" "dri2proto" "bigreqsproto" "dri3proto" "evieproto" "inputproto" "fixesproto" "lg3dproto" "xf86rushproto" "compositeproto" "xwaylandproto" "trapproto" "dmxproto" "xextproto" "xproto" "xf86dgaproto" "xf86miscproto" "xf86bigfontproto" "windowswmproto" "scrnsaverproto" "damageproto" "xf86driproto" "randrproto" "fontcacheproto" ];
+      pkgConfigModules = [ "applewmproto" "bigreqsproto" "compositeproto" "damageproto" "dmxproto" "dpmsproto" "dri2proto" "dri3proto" "evieproto" "fixesproto" "fontcacheproto" "fontsproto" "glproto" "inputproto" "kbproto" "lg3dproto" "presentproto" "printproto" "randrproto" "recordproto" "renderproto" "resourceproto" "scrnsaverproto" "trapproto" "videoproto" "windowswmproto" "xcalibrateproto" "xcmiscproto" "xextproto" "xf86bigfontproto" "xf86dgaproto" "xf86driproto" "xf86miscproto" "xf86rushproto" "xf86vidmodeproto" "xineramaproto" "xproto" "xproxymngproto" "xwaylandproto" ];
       platforms = lib.platforms.unix;
     };
   })) {};
@@ -4159,11 +4159,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xorgserver = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, openssl, libX11, libXau, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xorg-server";
-    version = "21.1.10";
+    version = "21.1.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xserver/xorg-server-21.1.10.tar.xz";
-      sha256 = "1l0iaq83vbl9jr34sa7v7630c5bnp64drlw8yg6c6yn5xyib7c6f";
+      url = "mirror://xorg/individual/xserver/xorg-server-21.1.11.tar.xz";
+      sha256 = "1vr6sc38sqipazsm61bcym2ggbgfgaamz7wf05mb31pvayyssg8x";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
