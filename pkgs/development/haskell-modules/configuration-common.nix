@@ -2852,6 +2852,9 @@ self: super: {
   # 2024-01-23: https://github.com/composewell/unicode-data/issues/118
   unicode-data = dontCheck super.unicode-data;
 
+  # 2024-01-24: https://github.com/haskellari/tree-diff/issues/79
+  tree-diff = dontCheck super.tree-diff;
+
   # Too strict bounds on base, ghc-prim, primitive
   # https://github.com/kowainik/typerep-map/pull/128
   typerep-map = doJailbreak super.typerep-map;
