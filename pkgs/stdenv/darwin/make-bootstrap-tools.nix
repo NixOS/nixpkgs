@@ -4,18 +4,18 @@
 # mismatching versions.
 #
 # The llvmPackages that we take things (clang, libc++ and such) from
-# is specified explicitly to be llvmPackages_11 to keep the
+# is specified explicitly to be llvmPackages_16 to keep the
 # bootstrap-tools stable.  However, tools like otool,
 # install_name_tool and strip are taken straight from stdenv.cc,
 # which, after the bump, is a different LLVM version altogether.
 #
-# The original intent was that bootstrap-tools specified LLVM 11
+# The original intent was that bootstrap-tools specified LLVM 16
 # exhaustively but it didn't. That should be rectified with this
-# PR. As to why stick with 11? That's just to keep the
+# PR. As to why stick with 16? That's just to keep the
 # bootstrap-tools unchanged.
 #
 # https://github.com/NixOS/nixpkgs/pull/267058/files#r1390889848
-, overlays ? [(self: super: { llvmPackages = super.llvmPackages_11; })]
+, overlays ? [(self: super: { llvmPackages = super.llvmPackages_16; })]
 , crossSystem ? null
 , bootstrapFiles ? null
 }:
