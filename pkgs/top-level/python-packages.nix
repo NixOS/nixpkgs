@@ -10338,6 +10338,8 @@ self: super: with self; {
 
   pydoods = callPackage ../development/python-modules/pydoods { };
 
+  pydoe = callPackage ../development/python-modules/pydoe { };
+
   pydot = callPackage ../development/python-modules/pydot {
     inherit (pkgs) graphviz;
   };
