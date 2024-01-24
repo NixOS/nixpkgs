@@ -19953,6 +19953,13 @@
     github = "wamserma";
     githubId = 60148;
   };
+  Wanten = {
+    name = "Wanten";
+    email = "WantenMN@gmail.com";
+    matrix = "@wanten:matrix.org";
+    github = "WantenMN";
+    githubId = 41904684;
+  };
   water-sucks = {
     email = "varun@snare.dev";
     name = "Varun Narravula";
