@@ -75,6 +75,7 @@ in stdenv.mkDerivation {
     yarn --immutable-cache
     yarn run build
 
+    rm bin/heroku
     patchShebangs bin/*
 
     runHook postBuild
@@ -86,6 +87,11 @@ in stdenv.mkDerivation {
     mkdir -p $out
     cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
 
+    for bin in $out/bin/*; do
+      wrapProgram $bin \
+        --set NODE_ENV production \
+        --set NODE_PATH "$out/lib/node_modules"
+    done
     makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
       --add-flags $out/app.js \
       --set NODE_ENV production \

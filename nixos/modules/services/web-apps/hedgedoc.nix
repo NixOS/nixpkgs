@@ -263,7 +263,7 @@ in
         Group = name;
 
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/hedgedoc";
+        ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = [ name ];
         StateDirectory = [ name ];
         WorkingDirectory = "/run/${name}";
