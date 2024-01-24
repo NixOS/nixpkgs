@@ -59,5 +59,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ lammermann ];
+    # note: Undefined symbols for architecture x86_64
+    broken = stdenv.isDarwin;
   };
 }
