@@ -9984,6 +9984,8 @@ self: super: with self; {
 
   pweave = callPackage ../development/python-modules/pweave { };
 
+  pwlf = callPackage ../development/python-modules/pwlf { };
+
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
   };
