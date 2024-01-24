@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "0lz1sly8p2lhr425ggj3dacz0i28xg32041zdg3nl916yayvqj2p",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.3/calendar-v4.6.3.tar.gz",
-    "version": "4.6.3",
+    "sha256": "06blkrgc9jq8zizgchn8az2cj0s3yy8s05kyhiwj1nb1rx32682j",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.4/calendar-v4.6.4.tar.gz",
+    "version": "4.6.4",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -50,9 +50,9 @@
     ]
   },
   "deck": {
-    "sha256": "1dkvvk7n120hgk3pf03g2ixlylp7nxmi3wh9qsp8b0fimclpd5hz",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.9.5/deck-v1.9.5.tar.gz",
-    "version": "1.9.5",
+    "sha256": "1vf4vmwzfyj5ylb571h1wgh8f3aiivzla11y14ggikg5fj9lgyqi",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.9.6/deck-v1.9.6.tar.gz",
+    "version": "1.9.6",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "mail": {
-    "sha256": "1r4vqxmzfzv9g29smqj14a3k97hwxb9dswg7z501wgq901959bx2",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.2/mail-v3.5.2.tar.gz",
-    "version": "3.5.2",
+    "sha256": "15268xavb4wpkc12anz6wiry87hvy55nf141lc660wr22iivy79r",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.5/mail-v3.5.5.tar.gz",
+    "version": "3.5.5",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -140,8 +140,8 @@
     ]
   },
   "maps": {
-    "sha256": "1gyxg5xp4mpdrw8630nqcf5yk8cs7a0kvfik2q01p05d533phc4d",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.2.0/maps-1.2.0.tar.gz",
+    "sha256": "049hrp79fj1bp9nk9isjrk427k238974x7gsj68jplxfrgq3sdkz",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.2.0-2-nightly/maps-1.2.0-2-nightly.tar.gz",
     "version": "1.2.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -190,9 +190,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1by9qw9bsf48cyczhfxpz9ifrg2dayvcn26m309dicqgjqkz91hd",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.6/notify_push-v0.6.6.tar.gz",
-    "version": "0.6.6",
+    "sha256": "07snlkvs5fxdgcwhhcdp3282y1nvfhk610pbd941gp0rsnhssmpv",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.8/notify_push-v0.6.8.tar.gz",
+    "version": "0.6.8",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -320,9 +320,9 @@
     ]
   },
   "user_saml": {
-    "sha256": "0q189wkh0nh5y4z9j4bpgn4xnwwn8y8m8y34bp5nbzfz05xpgr9f",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.5/user_saml-v5.2.5.tar.gz",
-    "version": "5.2.5",
+    "sha256": "0rsrbbdvf8kb9l6afz86af33ri0ng9yj7d4xw28j50mfcx3kifg3",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.6/user_saml-v5.2.6.tar.gz",
+    "version": "5.2.6",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
