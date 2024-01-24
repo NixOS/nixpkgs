@@ -4,6 +4,7 @@
 , SDL2
 , makeWrapper
 , wget
+, which
 , Accelerate
 , CoreGraphics
 , CoreML
@@ -39,6 +40,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   patches = [ ./download-models.patch ];
 
   nativeBuildInputs = [
+      which
       makeWrapper
     ] ++ lib.optionals cudaSupport ( with cudaPackages ;[
       cuda_nvcc
@@ -60,6 +62,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
       # A temporary hack for reducing the closure size, remove once cudaPackages
       # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
+      cuda_cccl.dev # provides nv/target
       cuda_cudart.dev
       cuda_cudart.lib
       cuda_cudart.static
