@@ -1068,6 +1068,8 @@ let
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
+    middleware = callPackage ../development/ocaml-modules/middleware { };
+
     mimic = callPackage ../development/ocaml-modules/mimic { };
 
     mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
