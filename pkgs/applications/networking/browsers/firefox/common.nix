@@ -205,382 +205,356 @@ let
     pref("${key}", ${builtins.toJSON value.value});
   '') defaultPrefs));
 
-in
+  # profileGen: whether build firefox to generate profdata.
+  # profdata: the derivation that has the generated profdata.
+  # if profileGen is true, profdata is ignored.
+  mkFirefox = profileGen: profdata: let
+    suffix = if profileGen then "-profiled" else "";
+  in buildStdenv.mkDerivation {
+    pname = "${pname}-unwrapped${suffix}";
+    version = packageVersion;
 
-buildStdenv.mkDerivation {
-  pname = "${pname}-unwrapped";
-  version = packageVersion;
+    inherit src unpackPhase meta;
 
-  inherit src unpackPhase meta;
+    outputs = [
+      "out"
+    ]
+    ++ lib.optionals crashreporterSupport [ "symbols" ];
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals crashreporterSupport [ "symbols" ];
+    patches = lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "122") [
+      # dbus cflags regression fix
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+      (fetchpatch {
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/f1f5f98290b3";
+        hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
+      })
+    ]
+    ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
+    ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
+    ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
+    ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "120.0.1") [
+      (fetchpatch {
+        # Do not crash on systems without an expected statically assumed page size.
+        # https://phabricator.services.mozilla.com/D194458
+        name = "mozbz1866025.patch";
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
+        hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
+      })
+    ]
+    ++ extraPatches;
 
-  # Add another configure-build-profiling run before the final configure phase if we build with pgo
-  preConfigurePhases = lib.optionals pgoSupport [
-    "configurePhase"
-    "buildPhase"
-    "profilingPhase"
-  ];
+    postPatch = ''
+      rm -rf obj-x86_64-pc-linux-gnu
+      patchShebangs mach build
+    ''
+    + extraPostPatch;
 
-  patches = lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "122") [
-    # dbus cflags regression fix
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
-    (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f1f5f98290b3";
-      hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
-    })
-  ]
-  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
-  ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
-  ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "120.0.1") [
-    (fetchpatch {
-      # Do not crash on systems without an expected statically assumed page size.
-      # https://phabricator.services.mozilla.com/D194458
-      name = "mozbz1866025.patch";
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
-      hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
-    })
-  ]
-  ++ extraPatches;
+    # Ignore trivial whitespace changes in patches, this fixes compatibility of
+    # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
+    # two patches.
+    patchFlags = [ "-p1" "-l" ];
 
-  postPatch = ''
-    rm -rf obj-x86_64-pc-linux-gnu
-    patchShebangs mach build
-  ''
-  + extraPostPatch;
+    # if not explicitly set, wrong cc from buildStdenv would be used
+    HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
+    HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
 
-  # Ignore trivial whitespace changes in patches, this fixes compatibility of
-  # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
-  # two patches.
-  patchFlags = [ "-p1" "-l" ];
+    nativeBuildInputs = [
+      autoconf
+      cargo
+      gnum4
+      llvmPackagesBuildBuild.bintools
+      makeWrapper
+      nodejs
+      perl
+      pkg-config
+      python3
+      rust-cbindgen
+      rustPlatform.bindgenHook
+      rustc
+      unzip
+      which
+      wrapGAppsHook
+    ]
+    ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
+    ++ lib.optionals profileGen [ xvfb-run ]
+    ++ extraNativeBuildInputs;
 
-  # if not explicitly set, wrong cc from buildStdenv would be used
-  HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
-  HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
+    setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
-  nativeBuildInputs = [
-    autoconf
-    cargo
-    gnum4
-    llvmPackagesBuildBuild.bintools
-    makeWrapper
-    nodejs
-    perl
-    pkg-config
-    python3
-    rust-cbindgen
-    rustPlatform.bindgenHook
-    rustc
-    unzip
-    which
-    wrapGAppsHook
-  ]
-  ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
-  ++ lib.optionals pgoSupport [ xvfb-run ]
-  ++ extraNativeBuildInputs;
+    preConfigure = ''
+      # remove distributed configuration files
+      rm -f configure js/src/configure .mozconfig*
 
-  setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
+      # Runs autoconf through ./mach configure in configurePhase
+      configureScript="$(realpath ./mach) configure"
 
-  preConfigure = ''
-    # remove distributed configuration files
-    rm -f configure js/src/configure .mozconfig*
+      # Set predictable directories for build and state
+      export MOZ_OBJDIR=$(pwd)/mozobj
+      export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
 
-    # Runs autoconf through ./mach configure in configurePhase
-    configureScript="$(realpath ./mach) configure"
+      # Don't try to send libnotify notifications during build
+      export MOZ_NOSPAM=1
 
-    # Set predictable directories for build and state
-    export MOZ_OBJDIR=$(pwd)/mozobj
-    export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
+      # Set consistent remoting name to ensure wmclass matches with desktop file
+      export MOZ_APP_REMOTINGNAME="${binaryName}"
 
-    # Don't try to send libnotify notifications during build
-    export MOZ_NOSPAM=1
+      # AS=as in the environment causes build failure
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+      unset AS
 
-    # Set consistent remoting name to ensure wmclass matches with desktop file
-    export MOZ_APP_REMOTINGNAME="${binaryName}"
+      # Use our own python
+      export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
-    # AS=as in the environment causes build failure
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
-    unset AS
-
-    # Use our own python
-    export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
-
-    # RBox WASM Sandboxing
-    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
-    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
-  '' + lib.optionalString pgoSupport ''
-    if [ -e "$TMPDIR/merged.profdata" ]; then
-      echo "Configuring with profiling data"
-      for i in "''${!configureFlagsArray[@]}"; do
-        if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
-          unset 'configureFlagsArray[i]'
-        fi
-      done
-      configureFlagsArray+=(
-        "--enable-profile-use=cross"
-        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-        "--with-pgo-jarlog="$TMPDIR/jarlog""
-      )
-      ${lib.optionalString stdenv.hostPlatform.isMusl ''
-        LDFLAGS="$OLD_LDFLAGS"
-        unset OLD_LDFLAGS
-      ''}
-    else
-      echo "Configuring to generate profiling data"
-      configureFlagsArray+=(
-        "--enable-profile-generate=cross"
-      )
-      ${lib.optionalString stdenv.hostPlatform.isMusl
+      # RBox WASM Sandboxing
+      export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
+      export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+    '' + lib.optionalString (stdenv.hostPlatform.isMusl && profileGen) ''
       # Set the rpath appropriately for the profiling run
       # During the profiling run, loading libraries from $out would fail,
       # since the profiling build has not been installed to $out
-      ''
-        OLD_LDFLAGS="$LDFLAGS"
-        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
-      ''}
-    fi
-  '' + lib.optionalString googleAPISupport ''
-    # Google API key used by Chromium and Firefox.
-    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-    # please get your own set of keys at https://www.chromium.org/developers/how-tos/api-keys/.
-    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/google-api-key
-    # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
-    configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/google-api-key")
-    configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/google-api-key")
-  '' + lib.optionalString mlsAPISupport ''
-    # Mozilla Location services API key
-    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-    # please get your own set of keys at https://location.services.mozilla.com/api.
-    echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
-    configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
-  '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
-    export MOZILLA_OFFICIAL=1
-  '' + lib.optionalString (!requireSigning) ''
-    export MOZ_REQUIRE_SIGNING=
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
-    # TODO: Default vm.max_map_count has been increased, retest without this
-    export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-  '';
+      export LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+    '' + lib.optionalString googleAPISupport ''
+      # Google API key used by Chromium and Firefox.
+      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+      # please get your own set of keys at https://www.chromium.org/developers/how-tos/api-keys/.
+      echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/google-api-key
+      # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
+      configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/google-api-key")
+      configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/google-api-key")
+    '' + lib.optionalString mlsAPISupport ''
+      # Mozilla Location services API key
+      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+      # please get your own set of keys at https://location.services.mozilla.com/api.
+      echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
+      configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
+    '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
+      export MOZILLA_OFFICIAL=1
+    '' + lib.optionalString (!requireSigning) ''
+      export MOZ_REQUIRE_SIGNING=
+    '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+      # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+      # TODO: Default vm.max_map_count has been increased, retest without this
+      export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
+    '';
 
-  # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
-  configurePlatforms = [ ];
+    # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
+    configurePlatforms = [ ];
 
-  configureFlags = [
-    "--disable-tests"
-    "--disable-updater"
-    "--enable-application=${application}"
-    "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
-    "--enable-system-pixman"
-    "--with-distribution-id=org.nixos"
-    "--with-libclang-path=${llvmPackagesBuildBuild.libclang.lib}/lib"
-    "--with-system-ffi"
-    "--with-system-icu"
-    "--with-system-jpeg"
-    "--with-system-libevent"
-    "--with-system-libvpx"
-    "--with-system-nspr"
-    "--with-system-nss"
-    "--with-system-png" # needs APNG support
-    "--with-system-webp"
-    "--with-system-zlib"
-    "--with-wasi-sysroot=${wasiSysRoot}"
-    # for firefox, host is buildPlatform, target is hostPlatform
-    "--host=${buildStdenv.buildPlatform.config}"
-    "--target=${buildStdenv.hostPlatform.config}"
-  ]
-  # LTO is done using clang and lld on Linux.
-  ++ lib.optionals ltoSupport [
-     "--enable-lto=cross" # Cross-Language LTO
-     "--enable-linker=lld"
-  ]
-  # elf-hack is broken when using clang+lld:
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
-  ++ lib.optional (!drmSupport) "--disable-eme"
-  ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
-  ++ [
-    (enableFeature alsaSupport "alsa")
-    (enableFeature crashreporterSupport "crashreporter")
-    (enableFeature ffmpegSupport "ffmpeg")
-    (enableFeature geolocationSupport "necko-wifi")
-    (enableFeature gssSupport "negotiateauth")
-    (enableFeature jackSupport "jack")
-    (enableFeature jemallocSupport "jemalloc")
-    (enableFeature pulseaudioSupport "pulseaudio")
-    (enableFeature sndioSupport "sndio")
-    (enableFeature webrtcSupport "webrtc")
-    (enableFeature debugBuild "debug")
-    (if debugBuild then "--enable-profiling" else "--enable-optimize")
-    # --enable-release adds -ffunction-sections & LTO that require a big amount
-    # of RAM, and the 32-bit memory space cannot handle that linking
-    (enableFeature (!debugBuild && !stdenv.is32bit) "release")
-    (enableFeature enableDebugSymbols "debug-symbols")
-  ]
-  ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
-  ++ lib.optional enableOfficialBranding "--enable-official-branding"
-  ++ lib.optional (branding != null) "--with-branding=${branding}"
-  ++ extraConfigureFlags;
+    configureFlags = [
+      "--disable-tests"
+      "--disable-updater"
+      "--enable-application=${application}"
+      "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
+      "--enable-system-pixman"
+      "--with-distribution-id=org.nixos"
+      "--with-libclang-path=${llvmPackagesBuildBuild.libclang.lib}/lib"
+      "--with-system-ffi"
+      "--with-system-icu"
+      "--with-system-jpeg"
+      "--with-system-libevent"
+      "--with-system-libvpx"
+      "--with-system-nspr"
+      "--with-system-nss"
+      "--with-system-png" # needs APNG support
+      "--with-system-webp"
+      "--with-system-zlib"
+      "--with-wasi-sysroot=${wasiSysRoot}"
+      # for firefox, host is buildPlatform, target is hostPlatform
+      "--host=${buildStdenv.buildPlatform.config}"
+      "--target=${buildStdenv.hostPlatform.config}"
+    ]
+    # LTO is done using clang and lld on Linux.
+    ++ lib.optionals ltoSupport [
+       "--enable-lto=cross" # Cross-Language LTO
+       "--enable-linker=lld"
+    ]
+    # elf-hack is broken when using clang+lld:
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
+    ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
+    ++ lib.optional (!drmSupport) "--disable-eme"
+    ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
+    ++ [
+      (enableFeature alsaSupport "alsa")
+      (enableFeature crashreporterSupport "crashreporter")
+      (enableFeature ffmpegSupport "ffmpeg")
+      (enableFeature geolocationSupport "necko-wifi")
+      (enableFeature gssSupport "negotiateauth")
+      (enableFeature jackSupport "jack")
+      (enableFeature jemallocSupport "jemalloc")
+      (enableFeature pulseaudioSupport "pulseaudio")
+      (enableFeature sndioSupport "sndio")
+      (enableFeature webrtcSupport "webrtc")
+      (enableFeature debugBuild "debug")
+      (if debugBuild then "--enable-profiling" else "--enable-optimize")
+      # --enable-release adds -ffunction-sections & LTO that require a big amount
+      # of RAM, and the 32-bit memory space cannot handle that linking
+      (enableFeature (!debugBuild && !stdenv.is32bit) "release")
+      (enableFeature enableDebugSymbols "debug-symbols")
+    ]
+    ++ lib.optional profileGen "--enable-profile-generate=cross"
+    ++ lib.optionals (!profileGen && profdata != null) [
+      "--enable-profile-use=cross"
+      ''--with-pgo-profile-path=${profdata}/merged.profdata''
+      ''--with-pgo-jarlog=${profdata}/jarlog''
+    ]
+    ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
+    ++ lib.optional enableOfficialBranding "--enable-official-branding"
+    ++ lib.optional (branding != null) "--with-branding=${branding}"
+    ++ extraConfigureFlags;
 
-  buildInputs = [
-    bzip2
-    dbus
-    dbus-glib
-    file
-    fontconfig
-    freetype
-    glib
-    gtk3
-    libffi
-    libGL
-    libGLU
-    libevent
-    libjpeg
-    libpng
-    libstartup_notification
-    libvpx
-    libwebp
-    nasm
-    nspr
-    pango
-    perl
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXft
-    xorg.libXi
-    xorg.libXrender
-    xorg.libXt
-    xorg.libXtst
-    xorg.pixman
-    xorg.xorgproto
-    zip
-    zlib
-  ]
-  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
-  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
-  ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
-  ++ lib.optional  alsaSupport alsa-lib
-  ++ lib.optional  jackSupport libjack2
-  ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  sndioSupport sndio
-  ++ lib.optional  gssSupport libkrb5
-  ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
-  ++ lib.optional  jemallocSupport jemalloc
-  ++ extraBuildInputs;
+    buildInputs = [
+      bzip2
+      dbus
+      dbus-glib
+      file
+      fontconfig
+      freetype
+      glib
+      gtk3
+      libffi
+      libGL
+      libGLU
+      libevent
+      libjpeg
+      libpng
+      libstartup_notification
+      libvpx
+      libwebp
+      nasm
+      nspr
+      pango
+      perl
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXft
+      xorg.libXi
+      xorg.libXrender
+      xorg.libXt
+      xorg.libXtst
+      xorg.pixman
+      xorg.xorgproto
+      zip
+      zlib
+    ]
+    # icu73 changed how it follows symlinks which breaks in the firefox sandbox
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
+    ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+    ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
+    ++ lib.optional  alsaSupport alsa-lib
+    ++ lib.optional  jackSupport libjack2
+    ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
+    ++ lib.optional  sndioSupport sndio
+    ++ lib.optional  gssSupport libkrb5
+    ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
+    ++ lib.optional  jemallocSupport jemalloc
+    ++ extraBuildInputs;
 
-  profilingPhase = lib.optionalString pgoSupport ''
-    # Package up Firefox for profiling
-    ./mach package
+    preBuild = ''
+      cd mozobj
+    '';
 
-    # Run profiling
-    (
-      export HOME=$TMPDIR
-      export LLVM_PROFDATA=llvm-profdata
-      export JARLOG_FILE="$TMPDIR/jarlog"
+    postBuild = ''
+      cd ..
+    '';
 
-      xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
-        ./mach python ./build/pgo/profileserver.py
-    )
+    makeFlags = extraMakeFlags;
+    separateDebugInfo = enableDebugSymbols;
+    enableParallelBuilding = true;
+    env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+      # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
+      # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
+      # On musl we have to explicity set the rpath to include these libraries.
+      LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
+    };
 
-    # Copy profiling data to a place we can easily reference
-    cp ./merged.profdata $TMPDIR/merged.profdata
+    # tests were disabled in configureFlags
+    doCheck = false;
 
-    # Clean build dir
-    ./mach clobber
-  '';
+    # Generate build symbols once after the final build
+    # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
+    preInstall = lib.optionalString crashreporterSupport ''
+      ./mach buildsymbols
+      mkdir -p $symbols/
+      cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+    '' + lib.optionalString profileGen ''
+      # Package up Firefox for profiling
+      ./mach package
 
-  preBuild = ''
-    cd mozobj
-  '';
+      # Run profiling
+      (
+        export HOME=$out
+        export LLVM_PROFDATA=llvm-profdata
+        export JARLOG_FILE="$out/jarlog"
 
-  postBuild = ''
-    cd ..
-  '';
+        xvfb-run -w 10 -s "-screen 0 1920x1080x24" \
+          ./mach python ./build/pgo/profileserver.py
+      )
 
-  makeFlags = extraMakeFlags;
-  separateDebugInfo = enableDebugSymbols;
-  enableParallelBuilding = true;
-  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
-    # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
-    # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
-    # On musl we have to explicity set the rpath to include these libraries.
-    LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
+      # Copy profiling data to a place we can easily reference
+      cp ./merged.profdata $out/merged.profdata
+    '' + ''
+      cd mozobj
+    '';
+
+    postInstall = ''
+      # Install distribution customizations
+      install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
+      install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
+
+    '' + lib.optionalString buildStdenv.isLinux ''
+      # Remove SDK cruft. FIXME: move to a separate output?
+      rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
+
+      # Needed to find Mozilla runtime
+      gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
+    '';
+
+    postFixup = lib.optionalString crashreporterSupport ''
+      patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
+    '';
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      # Some basic testing
+      "$out/bin/${binaryName}" --version
+    '';
+
+    passthru = {
+      inherit application extraPatches;
+      inherit updateScript;
+      inherit alsaSupport;
+      inherit binaryName;
+      inherit jackSupport;
+      inherit pipewireSupport;
+      inherit sndioSupport;
+      inherit nspr;
+      inherit ffmpegSupport;
+      inherit gssSupport;
+      inherit tests;
+      inherit gtk3;
+      inherit wasiSysRoot;
+      version = packageVersion;
+    } // extraPassthru;
+
+    hardeningDisable = [ "format" ]; # -Werror=format-security
+
+    # the build system verifies checksums of the bundled rust sources
+    # ./third_party/rust is be patched by our libtool fixup code in stdenv
+    # unfortunately we can't just set this to `false` when we do not want it.
+    # See https://github.com/NixOS/nixpkgs/issues/77289 for more details
+    # Ideally we would figure out how to tell the build system to not
+    # care about changed hashes as we are already doing that when we
+    # fetch the sources. Any further modifications of the source tree
+    # is on purpose by some of our tool (or by accident and a bug?).
+    dontFixLibtool = true;
+
+    # on aarch64 this is also required
+    dontUpdateAutotoolsGnuConfigScripts = true;
+
+    requiredSystemFeatures = [ "big-parallel" ];
   };
-
-  # tests were disabled in configureFlags
-  doCheck = false;
-
-  # Generate build symbols once after the final build
-  # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
-  preInstall = lib.optionalString crashreporterSupport ''
-    ./mach buildsymbols
-    mkdir -p $symbols/
-    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
-  '' + ''
-    cd mozobj
-  '';
-
-  postInstall = ''
-    # Install distribution customizations
-    install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
-    install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
-
-  '' + lib.optionalString buildStdenv.isLinux ''
-    # Remove SDK cruft. FIXME: move to a separate output?
-    rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
-
-    # Needed to find Mozilla runtime
-    gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
-  '';
-
-  postFixup = lib.optionalString crashreporterSupport ''
-    patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    # Some basic testing
-    "$out/bin/${binaryName}" --version
-  '';
-
-  passthru = {
-    inherit application extraPatches;
-    inherit updateScript;
-    inherit alsaSupport;
-    inherit binaryName;
-    inherit jackSupport;
-    inherit pipewireSupport;
-    inherit sndioSupport;
-    inherit nspr;
-    inherit ffmpegSupport;
-    inherit gssSupport;
-    inherit tests;
-    inherit gtk3;
-    inherit wasiSysRoot;
-    version = packageVersion;
-  } // extraPassthru;
-
-  hardeningDisable = [ "format" ]; # -Werror=format-security
-
-  # the build system verifies checksums of the bundled rust sources
-  # ./third_party/rust is be patched by our libtool fixup code in stdenv
-  # unfortunately we can't just set this to `false` when we do not want it.
-  # See https://github.com/NixOS/nixpkgs/issues/77289 for more details
-  # Ideally we would figure out how to tell the build system to not
-  # care about changed hashes as we are already doing that when we
-  # fetch the sources. Any further modifications of the source tree
-  # is on purpose by some of our tool (or by accident and a bug?).
-  dontFixLibtool = true;
-
-  # on aarch64 this is also required
-  dontUpdateAutotoolsGnuConfigScripts = true;
-
-  requiredSystemFeatures = [ "big-parallel" ];
-}
+in
+if pgoSupport then mkFirefox false (mkFirefox true null)
+else mkFirefox false null
