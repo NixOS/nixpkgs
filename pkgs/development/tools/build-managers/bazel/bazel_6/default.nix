@@ -678,6 +678,13 @@ stdenv.mkDerivation rec {
     # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
     hello_test
 
+    ## Test that the GSON serialisation files are present
+    gson_classes=$(unzip -l $($out/bin/bazel info install_base)/A-server.jar | grep -F -c _GsonTypeAdapter.class)
+    if [ "$gson_classes" -lt 10 ]; then
+      echo "Missing GsonTypeAdapter classes in A-server.jar. Lockfile generation will not work"
+      exit 1
+    fi
+
     runHook postInstall
   '';
 
