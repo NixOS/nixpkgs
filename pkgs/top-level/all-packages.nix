@@ -41681,6 +41681,7 @@ with pkgs;
 
   openvino = callPackage ../development/libraries/openvino {
     python = python3;
+    stdenv = stdenvAdapters.useLibsFrom stdenv gcc12Stdenv;
   };
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
