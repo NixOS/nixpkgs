@@ -5,7 +5,7 @@
 , llama-cpp
 , makeWrapper
 , cudaSupport ? config.cudaSupport
-# TODO: missing ROCm support
+  # TODO: missing ROCm support
 }:
 
 let
@@ -38,8 +38,10 @@ buildGoModule rec {
     mkdir -p llama.cpp/build/linux/$buildType/$arch
 
     cp -r ${llama-cppNonStatic}/lib llama.cpp/build/linux/$buildType/$arch
-
+    
     popd
+
+    substituteInPlace version/version.go --replace "0.0.0" "${version}"
   '';
 
   buildPhase = ''
