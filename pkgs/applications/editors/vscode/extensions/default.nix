@@ -1308,12 +1308,12 @@ let
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/earthly.earthfile-syntax-highlighting/changelog";
           description = "Syntax highlighting for Earthly build Earthfiles.";
-          downloadPage = "https://marketplace.visualstudio.com/items/earthly.earthfile-syntax-highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=earthly.earthfile-syntax-highlighting";
           homepage = "https://github.com/earthly/earthfile-grammar";
           license = lib.licenses.mpl20;
           maintainers = [ lib.maintainers.DataHearth ];
         };
-      }
+      };
 
       elixir-lsp.vscode-elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
