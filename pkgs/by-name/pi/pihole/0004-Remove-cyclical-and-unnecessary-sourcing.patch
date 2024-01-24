@@ -1,0 +1,37 @@
+From 4c2217e585d9df0e35546d28462166359cc3bf45 Mon Sep 17 00:00:00 2001
+From: williamvds <william@williamvds.me>
+Date: Thu, 27 Jul 2023 22:02:10 +0100
+Subject: [PATCH 4/4] Remove cyclical and unnecessary sourcing
+
+Resholve currently can't cope with the cyclical sourcing used by the pihole
+scripts, particularly between webpage.sh and basic-install.sh.
+
+Remove the reference to piholeCheckout.sh in the main script to reduce the
+amount of resholving needed.
+---
+ automated install/basic-install.sh | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/automated install/basic-install.sh b/automated install/basic-install.sh
+index 24fe9e5..e71ab4f 100755
+--- a/automated install/basic-install.sh	
++++ b/automated install/basic-install.sh	
+@@ -1854,7 +1854,6 @@ finalExports() {
+     # Bring in the current settings and the functions to manipulate them
+     source "${setupVars}"
+     # shellcheck source=advanced/Scripts/webpage.sh
+-    source "${PI_HOLE_LOCAL_REPO}/advanced/Scripts/webpage.sh"
+ 
+     # Look for DNS server settings which would have to be reapplied
+     ProcessDNSSettings
+@@ -2674,7 +2673,6 @@ main() {
+             # generate a random password
+             pw=$(tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c 8)
+             # shellcheck disable=SC1091
+-            . /opt/pihole/webpage.sh
+             echo "WEBPASSWORD=$(HashPassword "${pw}")" >> "${setupVars}"
+         fi
+     fi
+-- 
+2.40.1
+
