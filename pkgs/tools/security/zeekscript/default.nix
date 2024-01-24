@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
   version = "1.2.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
