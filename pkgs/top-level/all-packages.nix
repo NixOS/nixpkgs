@@ -21135,8 +21135,6 @@ with pkgs;
   factor-lang-scope = callPackage ../development/compilers/factor-lang/scope.nix { };
   factor-lang = factor-lang-scope.interpreter;
 
-  fancypp = callPackage ../development/libraries/fancypp { };
-
   far2l = callPackage ../applications/misc/far2l {
     inherit (darwin.apple_sdk.frameworks) IOKit Carbon Cocoa AudioToolbox OpenGL System;
   };
