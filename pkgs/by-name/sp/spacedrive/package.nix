@@ -9,20 +9,20 @@
 
 let
   pname = "spacedrive";
-  version = "0.1.4";
+  version = "0.2.0";
 
   src = fetchurl {
     aarch64-darwin = {
       url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
-      hash = "sha256-gKboB5W0vW6ssZHRRivqbVPE0d0FCUdiNCsP0rKKtNo=";
+      hash = "sha256-4G8L7eDSHBu0oHTrhhcxKpH7euPPlobewvMIBqvSong=";
     };
     x86_64-darwin = {
       url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
-      hash = "sha256-KD1hw6aDyqCsXLYM8WrOTI2AfFx7t++UWV7SaCmtypI=";
+      hash = "sha256-6FuVKqMskOB/sG7MH6IpxzOEVXn4TPJS8xBwklJ3qRA=";
     };
     x86_64-linux = {
       url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.AppImage";
-      hash = "sha256-iBdW8iPuvztP0L5xLyVs7/K8yFe7kD7QwdTuKJLhB+c=";
+      hash = "sha256-ZzkQVLA1bNsUNPqIuRNUEma73SmOvymGvz74P7wKYwY=";
     };
   }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
@@ -69,9 +69,9 @@ else appimageTools.wrapType2 {
       mv $out/bin/spacedrive-"${version}" $out/bin/spacedrive
 
       # Install .desktop files
-      install -Dm444 ${appimageContents}/spacedrive.desktop -t $out/share/applications
+      install -Dm444 ${appimageContents}/com.spacedrive.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/spacedrive.png -t $out/share/pixmaps
-      substituteInPlace $out/share/applications/spacedrive.desktop \
+      substituteInPlace $out/share/applications/com.spacedrive.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=spacedrive'
     '';
 }
