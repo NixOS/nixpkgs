@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   # prebuilt in the source tarball.
   configureFlags = [ "LATEX2MAN=${buildPackages.coreutils}/bin/true" ]
   # See https://github.com/libunwind/libunwind/issues/693
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isMusl) [
+  ++ lib.optionals (with stdenv.hostPlatform; isAarch64 && isMusl && !isStatic) [
     "CFLAGS=-mno-outline-atomics"
   ];
 
