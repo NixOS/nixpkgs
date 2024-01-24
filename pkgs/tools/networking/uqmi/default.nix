@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "uqmi";
-  version = "unstable-2023-10-30";
+  version = "unstable-2024-01-16";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uqmi.git";
-    rev = "eea292401c388a4eb59c0caf5d00aa046c6059f4";
-    hash = "sha256-Uz5GjGcSKatbii09CsvzsYMz8Vm+Am4RUeCZuFIK1Ag=";
+    rev = "c3488b831ce6285c8107704156b9b8ed7d59deb3";
+    hash = "sha256-O5CeLk0WYuBs3l5xBUk9kXDRMzFvYSRoqP28KJ5Ztos=";
   };
 
   postPatch = ''
