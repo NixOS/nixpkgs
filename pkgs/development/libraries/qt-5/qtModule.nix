@@ -1,12 +1,11 @@
 { lib
 , stdenv
-, buildPackages
 , mkDerivation
 , perl
 , qmake
 , patches
 , srcs
-, pkgsHostTarget
+, qtbase-bootstrap
 }:
 
 let inherit (lib) licenses maintainers platforms; in
@@ -23,18 +22,10 @@ mkDerivation (args // {
   inherit pname version src;
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
-  nativeBuildInputs =
-    (args.nativeBuildInputs or []) ++ [
-      perl qmake
-    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      pkgsHostTarget.qt5.qtbase.dev
-    ];
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl qmake ];
   propagatedBuildInputs =
     (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
     (args.propagatedBuildInputs or []);
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-  depsBuildBuild = [ buildPackages.stdenv.cc ] ++ (args.depsBuildBuild or []);
-} // {
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
@@ -48,6 +39,7 @@ mkDerivation (args // {
     ${args.preConfigure or ""}
 
     fixQtBuiltinPaths . '*.pr?'
+    fixQtBuiltinPaths . '*.cmake.in'
   '' + lib.optionalString (builtins.compareVersions "5.15.0" version <= 0)
   # Note: We use ${version%%-*} to remove any tag from the end of the version
   # string. Version tags are added by Nixpkgs maintainers and not reflected in
@@ -83,6 +75,8 @@ mkDerivation (args // {
 
     ${args.postFixup or ""}
   '';
+
+  disallowedReferences = (args.disallowedReferences or []) ++ [ qtbase-bootstrap.qmake ];
 
   meta = {
     homepage = "https://www.qt.io";

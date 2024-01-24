@@ -1,6 +1,6 @@
-{ qtModule, qtdeclarative }:
+{ qtModule, qtbase, qtdeclarative }:
 
 qtModule {
   pname = "qtquickcontrols";
-  propagatedBuildInputs = [ qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
 }

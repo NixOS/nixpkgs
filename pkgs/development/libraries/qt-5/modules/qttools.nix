@@ -1,8 +1,15 @@
-{ qtModule, stdenv, lib, qtbase, qtdeclarative }:
+{ qtModule, stdenv, lib, qtbase, qtdeclarative, qttools }:
+
+let
+  isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
+in
 
 qtModule {
   pname = "qttools";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
+  buildInputs = [ qtbase qtdeclarative ];
+  # We don't need this to build qttools itself, only for the packages that include qttools
+  # in their buildInputs and expect to get not only libs but also runnable tools.
+  propagatedNativeBuildInputs = lib.optional isCrossBuild qttools;
   outputs = [ "out" "dev" "bin" ];
 
   # fixQtBuiltinPaths overwrites a builtin path we should keep
@@ -12,6 +19,9 @@ qtModule {
     sed -i "src/qtattributionsscanner/qtattributionsscanner.pro" \
         -e '/^cmake_qattributionsscanner_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
   '';
+
+  # Bootstrap build produces no out, and that makes nix unhappy and results in an unannotated failure for remote builds.
+  postFixup = ''[ -e $out ] || mkdir $out'';
 
   devTools = [
     "bin/qcollectiongenerator"

@@ -1,8 +1,8 @@
 { stdenv, lib
 , src, patches, version, qtCompatVersion
 
-, coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
-, which
+, coreutils, bison, flex, gdb, gperf, perl, pkg-config, python3
+, which, distccMasquerade, qtbase-bootstrap
   # darwin support
 , libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, AVFoundation, Carbon, Cocoa, CoreAudio, CoreBluetooth
 , CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
@@ -15,29 +15,43 @@
   # optional dependencies
 , cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
-, withQttranslation ? true, qttranslations ? null
+, qttranslations ? null
 
   # options
 , libGLSupported ? !stdenv.isDarwin
 , libGL
-  # qmake detection for libmysqlclient does not seem to work when cross compiling
-, mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+, mysqlSupport ? true
 , libmysqlclient
 , buildExamples ? false
 , buildTests ? false
 , debug ? false
 , developerBuild ? false
+, bootstrapBuild ? false
 , decryptSslTraffic ? false
 , testers
-, buildPackages
 }:
 
 let
   debugSymbols = debug || developerBuild;
-  qtPlatformCross = plat: with plat;
+  isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  qtPlatformCross = with stdenv.hostPlatform;
     if isLinux
-    then "linux-generic-g++"
-    else throw "Please add a qtPlatformCross entry for ${plat.config}";
+    then "devices/linux-generic-g++"
+    else if isDarwin
+    then
+      # the logic from the configure script
+      if isAarch64 then "macx-clang-arm64"
+      else "macx-clang-x64"
+    else
+      if isCrossBuild then throw "Please add a qtPlatformCross entry for ${config}"
+      else null;
+
+  # We need to keep the original mkspec name in the string for pyqt-builder to determine
+  # the target platform.
+  nixCrossConf = builtins.baseNameOf qtPlatformCross + "-nix-cross";
+
+  postFixupPatch = ../${lib.versions.majorMinor version}/qtbase.patch.d/0016-qtbase-cross-build-postFixup.patch;
 in
 
 stdenv.mkDerivation (finalAttrs: ({
@@ -74,7 +88,14 @@ stdenv.mkDerivation (finalAttrs: ({
     ] ++ lib.optional libGLSupported libGL
   );
 
-  buildInputs = [ python3 at-spi2-core ]
+  buildInputs = [
+    # We need python3 for hostPlatform to properly patch the shebang of the
+    # mkspecs/features/uikit/devices.py script that we're publishing.
+    python3
+    # We need perl for hostPlatform to properly patch shebangs of the
+    # fixqt4headers.pl and syncqt.pl scripts that we're publishing.
+    perl
+    at-spi2-core ]
     ++ lib.optionals (!stdenv.isDarwin)
     (
       [ libinput ]
@@ -85,17 +106,22 @@ stdenv.mkDerivation (finalAttrs: ({
     ++ lib.optional (mysqlSupport) libmysqlclient
     ++ lib.optional (postgresql != null) postgresql;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+  nativeBuildInputs = [ bison flex gperf perl pkg-config which ]
+    ++ lib.optionals stdenv.isDarwin [ xcbuild ]
+    ++ lib.optionals isCrossBuild [
+    # `qtbase` expects to find `cc` (with no prefix) in the `$PATH` for qmake and host_build marked projects.
+    # And we need those to be built for the hostPlatform. So instead of patching configure and mkspeks even
+    # more I'm just masqurading the prefixed tools.
+    # I probably should be using the distccMasquerade._spliced.buildHost here, but it works as it is. It's magic!
+    # Pure wall-of-bash-code-directly-in-derivation-attribute magic!
+    (distccMasquerade.override {gccRaw=stdenv.cc; binutils=stdenv.cc.bintools;})
+    ];
 
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-    # `qtbase` expects to find `cc` (with no prefix) in the
-    # `$PATH`, so the following is needed even if
-    # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-  } // {
-
-  propagatedNativeBuildInputs = [ lndir ];
+  # qtbase needs a runnable qmake and the accompanying tools to build itself, and there are also packages
+  # out there that use cmake as their main configurator (i.e. don't depend on qmake-the-package) but
+  # still need qmake&co to be available at build time. In fact, cmake scripts provided by qtbase.dev
+  # itself look for those tools.
+  propagatedNativeBuildInputs = lib.optional isCrossBuild qtbase-bootstrap.qmake;
 
   # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
   # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.
@@ -105,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: ({
 
   enableParallelBuilding = true;
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "bin" "dev" "out" "qmake" ];
 
   inherit patches;
 
@@ -135,6 +161,10 @@ stdenv.mkDerivation (finalAttrs: ({
     sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 
+    #Always build uic and qvkgen for qtbase-bootstrap
+    sed -i '/^TOOLS =/ s/$/ src_tools_qvkgen src_tools_uic/' src/src.pro
+    sed -i '/^SUBDIRS += src_corelib/ s/$/ src_tools_qvkgen src_tools_uic/' src/src.pro
+
     # https://bugs.gentoo.org/803470
     sed -i 's/-lpthread/-pthread/' mkspecs/common/linux.conf src/corelib/configure.json
 
@@ -145,7 +175,6 @@ stdenv.mkDerivation (finalAttrs: ({
             -e 's|/usr/bin/xcode-select|xcode-select|' \
             -e 's|/usr/bin/xcrun|xcrun|' \
             -e 's|/usr/bin/xcodebuild|xcodebuild|' \
-            -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
             ./configure
             substituteInPlace ./mkspecs/common/mac.conf \
                 --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
@@ -174,13 +203,22 @@ stdenv.mkDerivation (finalAttrs: ({
     export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
 
     ./bin/syncqt.pl -version $version
-  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+
+  ''
+    # generate a cross compilation config even for native builds so we can pass a natively-built qtbase
+    # as a build dependency for a cross build and to avoid specifying CROSS_COMPILE prefix for qmake later
+    + lib.optionalString (qtPlatformCross != null) ''
+    mkdir mkspecs/${nixCrossConf}
+    echo 'CROSS_COMPILE=${stdenv.hostPlatform.config + "-"}' > mkspecs/${nixCrossConf}/qmake.conf
+    echo 'QMAKE_PKG_CONFIG=''$''$(PKG_CONFIG)' >> mkspecs/${nixCrossConf}/qmake.conf
+    echo 'include(../${qtPlatformCross}/qmake.conf)' >> mkspecs/${nixCrossConf}/qmake.conf
+    echo '#include "../${qtPlatformCross}/qplatformdefs.h"' > mkspecs/${nixCrossConf}/qplatformdefs.h
+
+  ''
     # QT's configure script will refuse to use pkg-config unless these two environment variables are set
+    + lib.optionalString isCrossBuild ''
     export PKG_CONFIG_SYSROOT_DIR=/
     export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
-    echo "QMAKE_LFLAGS=''${LDFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-    echo "QMAKE_CFLAGS=''${CFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-    echo "QMAKE_CXXFLAGS=''${CXXFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
   '';
 
   postConfigure = ''
@@ -208,7 +246,6 @@ stdenv.mkDerivation (finalAttrs: ({
   env = {
     NIX_CFLAGS_COMPILE = toString ([
       "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
-    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "-Wno-warn=free-nonheap-object"
       "-Wno-free-nonheap-object"
       "-w"
@@ -226,12 +263,6 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
       ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
     ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-    NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
-      "-Wno-warn=free-nonheap-object"
-      "-Wno-free-nonheap-object"
-      "-w"
-    ]);
   };
 
   prefixKey = "-prefix ";
@@ -241,63 +272,78 @@ stdenv.mkDerivation (finalAttrs: ({
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  } // lib.optionalAttrs isCrossBuild {
   configurePlatforms = [ ];
   } // {
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
-    "-plugindir $(out)/$(qtPluginPrefix)"
-    "-qmldir $(out)/$(qtQmlPrefix)"
-    "-docdir $(out)/$(qtDocPrefix)"
-
+  # common options for all types of builds
     "-verbose"
     "-confirm-license"
     "-opensource"
 
     "-release"
     "-shared"
-    "-accessibility"
-    "-optimized-qmake"
     # for separateDebugInfo
     "-no-strip"
-    "-system-proxies"
     "-pkg-config"
 
-    "-gui"
-    "-widgets"
-    "-opengl desktop"
+    "-make tools"
+    ''-${lib.optionalString (!buildExamples || bootstrapBuild) "no"}make examples''
+    ''-${lib.optionalString (!buildTests) "no"}make tests''
+
     "-icu"
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
     "-pch"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-device ${qtPlatformCross stdenv.hostPlatform}"
-    "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ]
-  ++ lib.optional debugSymbols "-debug"
-  ++ lib.optionals developerBuild [
-    "-developer-build"
-    "-no-warnings-are-errors"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-no-warnings-are-errors"
-  ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
-    "-no-sse2"
-  ] else [
-    "-sse2"
-    "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
-    "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_1Support) "-no"}-sse4.1"
-    "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
-    "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
-    "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
-    ]
-  ) ++ [
-    "-no-mips_dsp"
-    "-no-mips_dspr2"
-  ] ++ [
     "-system-zlib"
     "-L" "${zlib.out}/lib"
     "-I" "${zlib.dev}/include"
+
+  ] ++ (if stdenv.isDarwin then [
+    "-no-fontconfig"
+    "-no-framework"
+  ] else [
+    "-rpath"
+
+  # a bare bones build only to get build tools and mkspecs
+  ]) ++ (if bootstrapBuild then [
+    # We probably can go slimmer than this with some patching and/or selective run of Makefiles
+    # but this is already good enough.
+    "-no-gui"
+    "-no-widgets"
+    "-no-feature-sqlmodel"
+    "-no-sql-sqlite"
+    "-no-feature-bearermanagement"
+    "-no-feature-netlistmgr"
+    "-no-feature-networkdiskcache"
+    "-no-feature-networkinterface"
+    "-no-feature-networkproxy"
+    "-no-feature-concurrent"
+    "-no-feature-dnslookup"
+    "-no-feature-dtls"
+    "-no-feature-ftp"
+    "-no-feature-http"
+    "-no-feature-gssapi"
+    "-no-feature-localserver"
+    "-no-feature-ocsp"
+    "-no-feature-socks5"
+    "-no-feature-sspi"
+    "-no-feature-udpsocket"
+
+  # regular build, platform-independent options
+  ] else ([
+    "-gui"
+    "-widgets"
+    "-opengl desktop"
+    "-accessibility"
+    "-system-proxies"
+    "-make libs"
+
+    "-plugindir $(out)/$(qtPluginPrefix)"
+    "-qmldir $(out)/$(qtQmlPrefix)"
+    "-docdir $(out)/$(qtDocPrefix)"
+
     "-system-libjpeg"
     "-L" "${libjpeg.out}/lib"
     "-I" "${libjpeg.dev}/include"
@@ -312,20 +358,16 @@ stdenv.mkDerivation (finalAttrs: ({
     ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
-    "-make libs"
-    "-make tools"
-    ''-${lib.optionalString (!buildExamples) "no"}make examples''
-    ''-${lib.optionalString (!buildTests) "no"}make tests''
-  ]
-    ++ (
-      if stdenv.isDarwin then [
-      "-no-fontconfig"
+  ] ++ lib.optionals (qttranslations != null) [
+    "-translationdir" "${qttranslations}/translations"
+
+  # regular build, Darwin options
+    ] ++ (if stdenv.isDarwin then [
       "-qt-freetype"
       "-qt-libpng"
-      "-no-framework"
+
+  # regular build, other Unixes options
     ] else [
-      "-rpath"
-    ] ++ [
       "-xcb"
       "-qpa xcb"
       "-L" "${libX11.out}/lib"
@@ -340,26 +382,68 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
       "-glib"
-    ] ++ [
+
       "-system-libpng"
+      "-inotify"
+
     ] ++ lib.optional withGtk3 "-gtk"
-      ++ [
-        "-inotify"
-    ] ++ lib.optionals (cups != null) [
+      ++ lib.optionals (cups != null) [
       "-L" "${cups.lib}/lib"
       "-I" "${cups.dev}/include"
+
     ] ++ lib.optionals (mysqlSupport) [
-      "-L" "${libmysqlclient}/lib"
-      "-I" "${libmysqlclient}/include"
-    ] ++ lib.optional (withQttranslation && (qttranslations != null)) [
-      # depends on x11
-      "-translationdir" "${qttranslations}/translations"
+      "-L" "${libmysqlclient}/lib/mysql"
+      "-I" "${libmysqlclient.dev}/include/mysql"
     ]
-  );
+
+  # cross compilation options
+  ))) ++ lib.optionals isCrossBuild [
+    "-xplatform ${nixCrossConf}"
+    "-external-hostbindir ${qtbase-bootstrap.qmake}/bin"
+  ]
+
+  # debugging options
+  ++ lib.optional debugSymbols "-debug"
+  ++ lib.optionals developerBuild [
+    "-developer-build"
+    "-no-warnings-are-errors"
+
+  # CPU features support
+  ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
+    "-no-sse2"
+  ] else [
+    "-sse2"
+    "${lib.optionalString (!stdenv.hostPlatform.sse3Support)   "-no"}-sse3"
+    "${lib.optionalString (!stdenv.hostPlatform.ssse3Support)  "-no"}-ssse3"
+    "${lib.optionalString (!stdenv.hostPlatform.sse4_1Support) "-no"}-sse4.1"
+    "${lib.optionalString (!stdenv.hostPlatform.sse4_2Support) "-no"}-sse4.2"
+    "${lib.optionalString (!stdenv.hostPlatform.avxSupport)    "-no"}-avx"
+    "${lib.optionalString (!stdenv.hostPlatform.avx2Support)   "-no"}-avx2"
+    ]
+  ) ++ [
+    "-no-mips_dsp"
+    "-no-mips_dspr2"
+  ];
 
   # Move selected outputs.
+  # I don't want to patch moveQtDevTools to support qmake output, so here's a bit of moving binaries around
   postInstall = ''
     moveToOutput "mkspecs" "$dev"
+
+    # Move development tools to $dev and update paths to them in mkspecs
+    moveQtDevTools
+
+    # Move all binaries to $qmake
+    mkdir -p "$qmake/bin"
+    mv "$dev"/bin/* "$qmake/bin/"
+    moveToOutput "bin" "$qmake"
+    patchShebangs --host --update "$qmake"
+
+    patchShebangs --host --update "$dev"
+
+    # Symlinks from $dev to $qmake for backward compatibility
+    mkdir -p "$dev/bin"
+    lndir "$qmake/bin" "$dev/bin"
   '';
 
   devTools = [
@@ -377,12 +461,16 @@ stdenv.mkDerivation (finalAttrs: ({
   postFixup = ''
     # Don't retain build-time dependencies like gdb.
     sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+
+    # Don't propagate nativeBuildInputs
+    sed '/HOST_QT_TOOLS/ d' -i $dev/mkspecs/qmodule.pri
+    sed '/PKG_CONFIG_LIBDIR/ d' -i $dev/mkspecs/qconfig.pri
+
+    # Dynamically detect cross-compilation. This patch breaks the build of qtbase itself, so we need to appy it late.
+    patch -p1 -d $dev < ${postFixupPatch}
+
     fixQtModulePaths "''${!outputDev}/mkspecs/modules"
     fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
-
-    # Move development tools to $dev
-    moveQtDevTools
-    moveToOutput bin "$dev"
 
     # fixup .pc file (where to find 'moc' etc.)
     sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \

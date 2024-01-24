@@ -24622,17 +24622,9 @@ with pkgs;
 
   quartoMinimal = callPackage ../development/libraries/quarto { rWrapper = null; python3 = null; };
 
-  qt5 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-5/5.15) {
-      inherit (__splicedPackages)
-        makeScopeWithSplicing' generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
-        bison cups dconf harfbuzz libGL perl gtk3 python3
-        llvmPackages_15 overrideSDK overrideLibcxx
-        darwin;
-      inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
-      inherit config;
-      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-    });
+  qt5 = recurseIntoAttrs (__splicedPackages.callPackage ../development/libraries/qt-5/5.15 {
+    stdenv = with __splicedPackages; if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  });
 
   libsForQt5 = (recurseIntoAttrs (import ./qt5-packages.nix {
     inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
