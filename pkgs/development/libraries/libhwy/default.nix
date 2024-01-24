@@ -4,6 +4,7 @@
 , ninja
 , gtest
 , fetchFromGitHub
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
   };
+
+  patches = lib.optional stdenv.hostPlatform.isRiscV
+    # Adds CMake option HWY_CMAKE_RVV
+    # https://github.com/google/highway/pull/1743
+    (fetchpatch {
+      name = "libhwy-add-rvv-optout.patch";
+      url = "https://github.com/google/highway/commit/5d58d233fbcec0c6a39df8186a877329147324b3.patch";
+      hash = "sha256-ileSNYddOt1F5rooRB0fXT20WkVlnG+gP5w7qJdBuww=";
+    });
 
   nativeBuildInputs = [ cmake ninja ];
 
@@ -43,6 +53,11 @@ stdenv.mkDerivation rec {
     #   HwyMathTestGroup/HwyMathTest.TestAllAtanh/EMU128
     #   HwyMathTestGroup/HwyMathTest.TestAllLog1p/EMU128
     "-DHWY_CMAKE_SSE2=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    # Runtime dispatch is not implemented https://github.com/google/highway/issues/838
+    # so tests (and likely normal operation) fail with SIGILL on processors without V.
+    # Until the issue is resolved, we disable RVV completely.
+    "-DHWY_CMAKE_RVV=OFF"
   ];
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
