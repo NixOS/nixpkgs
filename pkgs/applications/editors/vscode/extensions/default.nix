@@ -183,7 +183,7 @@ let
           sha256 = "44ac46f826625f0a4aec40f2542f32c161e672ff96f45a548d0bccd9feed04ef";
         };
         meta = {
-          changelog = "https://marketplace.visualstudio.com/items?itemName=alexisvt.flutter-snippets/changelog";
+          changelog = "https://marketplace.visualstudio.com/items/alexisvt.flutter-snippets/changelog";
           description = "Syntax highlighting for Earthly build Earthfiles.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=alexisvt.flutter-snippets";
           homepage = "https://github.com/Alexisvt/flutter-snippets";
@@ -784,7 +784,7 @@ let
           sha256 = "962b851a7cafbd51f34afeb4a0b91e985caff3947e46218a12b448533d8f60ab";
         };
         meta = {
-          changelog = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.npm-intellisense/changelog";
+          changelog = "https://marketplace.visualstudio.com/items/christian-kohler.npm-intellisense/changelog";
           description = "Visual Studio Code plugin that autocompletes npm modules in import statements";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.npm-intellisense";
           homepage = "https://github.com/ChristianKohler/NpmIntellisense";
