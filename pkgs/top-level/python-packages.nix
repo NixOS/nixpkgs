@@ -12786,6 +12786,8 @@ self: super: with self; {
 
   rpyc = callPackage ../development/python-modules/rpyc { };
 
+  rpyc4 = callPackage ../development/python-modules/rpyc4 { };
+
   rq = callPackage ../development/python-modules/rq { };
 
   rsa = callPackage ../development/python-modules/rsa { };
@@ -13911,6 +13913,8 @@ self: super: with self; {
   stubserver = callPackage ../development/python-modules/stubserver { };
 
   stumpy = callPackage ../development/python-modules/stumpy { };
+
+  stupidartnet = callPackage ../development/python-modules/stupidartnet { };
 
   stups-cli-support = callPackage ../development/python-modules/stups-cli-support { };
 
