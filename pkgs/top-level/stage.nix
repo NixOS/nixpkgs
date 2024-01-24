@@ -272,8 +272,10 @@ let
           if stdenv.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else stdenv.hostPlatform.parsed;
-      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
-        gcc.abi = "elfv2";
+        gcc = stdenv.hostPlatform.gcc or {} //
+          lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+            abi = "elfv2";
+          };
       };
     });
   };
