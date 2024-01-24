@@ -676,6 +676,7 @@ If our package sets `includeStorePaths` to `false`, we'll end up with only the f
 dockerTools.streamLayeredImage {
   name = "hello";
   contents = [ hello ];
+  includeStorePaths = false;
 }
 ```
 
