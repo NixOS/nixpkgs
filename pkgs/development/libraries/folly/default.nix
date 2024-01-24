@@ -18,6 +18,10 @@
 , zstd
 , jemalloc
 , follyMobile ? false
+
+# for passthru.tests
+, python3
+, watchman
 }:
 
 stdenv.mkDerivation rec {
@@ -80,11 +84,16 @@ stdenv.mkDerivation rec {
       --replace '$'{_IMPORT_PREFIX}/lib/ $out/lib/
   '';
 
-  # folly-config.cmake, will `find_package` these, thus there should be
-  # a way to ensure abi compatibility.
   passthru = {
+    # folly-config.cmake, will `find_package` these, thus there should be
+    # a way to ensure abi compatibility.
     inherit boost;
     fmt = fmt_8;
+
+    tests = {
+      inherit watchman;
+      inherit (python3.pkgs) django pywatchman;
+    };
   };
 
   meta = with lib; {
