@@ -18763,7 +18763,6 @@ with pkgs;
   devbox = callPackage ../development/tools/devbox { };
 
   libcxx = llvmPackages.libcxx;
-  libcxxabi = llvmPackages.libcxxabi;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
