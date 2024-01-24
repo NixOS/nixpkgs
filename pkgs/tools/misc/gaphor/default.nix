@@ -1,52 +1,77 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromGitHub
 , copyDesktopItems
 , gobject-introspection
 , poetry-core
 , wrapGAppsHook
-, gtksourceview4
+, gtksourceview5
+, libadwaita
 , pango
+, babel
+, better-exceptions
+, defusedxml
 , gaphas
 , generic
 , jedi
+, pillow
 , pycairo
+, pydot
+, pygit2
 , pygobject3
 , tinycss2
-, gtk3
+, gtk4
 , librsvg
 , makeDesktopItem
 , python
+, hypothesis
+, ipython
+, pytest-archon
+, sphinx
+, xdoctest
+, pytestCheckHook
 }:
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.8.2";
+  version = "2.23.2";
+  pyproject = true;
 
-  format = "pyproject";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
+  src = fetchFromGitHub {
+    owner = "gaphor";
+    repo = "gaphor";
+    rev = version;
+    hash = "sha256-ZSKhDKEgexQe4XLQrZUIZNCdOR55FFuF6XfJhktobXw=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
+    # Needed to load namespaces
     gobject-introspection
     poetry-core
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gtksourceview4
+    # Adds Gtk4 namespace
+    gtksourceview5
+    # Adds Adw namespace
+    libadwaita
+    # Adds Pango namespace
     pango
   ];
 
   propagatedBuildInputs = [
+    babel
+    better-exceptions
+    defusedxml
     gaphas
     generic
     jedi
+    pillow
     pycairo
+    pydot
+    pygit2
     pygobject3
     tinycss2
   ];
@@ -69,10 +94,22 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}/" \
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
     )
   '';
+
+  checkInputs = [
+    hypothesis
+    ipython
+    pytest-archon
+    sphinx
+    xdoctest
+    pytestCheckHook
+  ];
+
+  # Throws a segmentation fault
+  doCheck = false;
 
   meta = with lib; {
     description = "Simple modeling tool written in Python";
