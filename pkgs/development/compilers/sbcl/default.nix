@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, clisp, fetchurl, strace, texinfo, which, writeText, zstd
+{ lib, stdenv, callPackage, clisp, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
@@ -100,7 +100,7 @@ stdenv.mkDerivation (self: rec {
     ./fix-2.4.0-aarch64-darwin.patch
   ];
 
-  postPatch = (lib.optionalString (builtins.elem stdenv.hostPlatform.system [
+  postPatch = lib.optionalString (builtins.elem stdenv.hostPlatform.system [
     "x86_64-linux"
     "x86_64-darwin"
     "aarch64-linux"
@@ -110,19 +110,25 @@ stdenv.mkDerivation (self: rec {
     # https://sourceforge.net/p/sbcl/mailman/message/58728554/
     rm -f tests/compiler.pure.lisp \
           tests/float.pure.lisp
-  '') + (if purgeNixReferences
-    then
-      # This is the default location to look for the core; by default in $out/lib/sbcl
-      ''
-        sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
-          -i src/runtime/runtime.c
-      ''
-    else
-      # Fix software version retrieval
-      ''
-        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
-          src/code/run-program.lisp
-      '');
+  ''
+  + lib.optionalString purgeNixReferences ''
+    # This is the default location to look for the core; by default in $out/lib/sbcl
+    sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
+        -i src/runtime/runtime.c
+  ''
+  + ''
+    (
+      shopt -s nullglob
+      # Tests need patching regardless of purging of paths from the final
+      # binary. There are some tricky files in nested directories which should
+      # definitely NOT be patched this way, hence just a single * (and no
+      # globstar).
+      substituteInPlace ${if purgeNixReferences then "tests" else "{tests,src/code}"}/*.{lisp,sh} \
+        --replace-quiet /usr/bin/env "${coreutils}/bin/env" \
+        --replace-quiet /bin/uname "${coreutils}/bin/uname" \
+        --replace-quiet /bin/sh "${stdenv.shell}"
+    )
+  '';
 
   preBuild = ''
     export INSTALL_ROOT=$out
