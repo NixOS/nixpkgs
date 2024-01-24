@@ -279,7 +279,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with maintainers; [ sbellem arturcygan veehaitch ];
+    maintainers = with maintainers; [ phlip9 sbellem arturcygan veehaitch ];
     platforms = [ "x86_64-linux" ];
     license = with licenses; [ bsd3 ];
   };
