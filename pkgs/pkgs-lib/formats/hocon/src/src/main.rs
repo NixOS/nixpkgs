@@ -10,6 +10,7 @@ enum HOCONValue {
     List(Vec<HOCONValue>),
     Substitution(String, bool),
     Object(Vec<HOCONInclude>, Vec<(String, HOCONValue)>),
+    Literal(String),
 }
 
 #[derive(Debug)]
@@ -91,6 +92,15 @@ fn parse_special_types(o: &Map<String, Value>) -> Option<HOCONValue> {
                 let value = o.get("value").expect("Missing value for append");
 
                 HOCONValue::Append(Box::new(json_to_hocon(value)))
+            }
+            "unquoted_string" => {
+                let value = o
+                    .get("value")
+                    .expect("Missing value for unquoted_string")
+                    .as_str()
+                    .unwrap_or_else(|| panic!("Unquoted string value is not a string: {:?}", o));
+
+                HOCONValue::Literal(value.to_string())
             }
             _ => panic!(
                 "\
@@ -210,6 +220,7 @@ impl ToString for HOCONValue {
                 format!("{{\n{}\n}}", content)
             }
             HOCONValue::Append(_) => panic!("Append should not be present at this point"),
+            Self::Literal(s) => s.to_string(),
         }
     }
 }

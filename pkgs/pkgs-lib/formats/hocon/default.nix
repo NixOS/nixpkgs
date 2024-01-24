@@ -35,26 +35,8 @@ in
     # In the case that you need this functionality,
     # you will have to disable pyhocon validation.
     , doCheck ? true
-  }: {
-    type = let
-      type' = with lib.types; let
-        atomType = nullOr (oneOf [
-          bool
-          float
-          int
-          path
-          str
-        ]);
-      in (oneOf [
-        atomType
-        (listOf atomType)
-        (attrsOf type')
-      ]) // {
-        description = "HOCON value";
-      };
-    in type';
-
-    lib = {
+  }: let
+    hoconLib = {
       mkInclude = value: let
         includeStatement = if lib.isAttrs value && !(lib.isDerivation value) then {
           required = false;
@@ -101,7 +83,65 @@ in
           };
     };
 
+  in {
+    type = let
+      type' = with lib.types; let
+        atomType = nullOr (oneOf [
+          bool
+          float
+          int
+          path
+          str
+        ]);
+      in (oneOf [
+        atomType
+        (listOf atomType)
+        (attrsOf type')
+      ]) // {
+        description = "HOCON value";
+      };
+    in type';
+
+    lib = hoconLib;
+
     generate = name: value:
+      let
+        # TODO: remove in 24.11
+        # Backwards compatability for generators in the following locations:
+        #  - nixos/modules/services/networking/jibri/default.nix (__hocon_envvar)
+        #  - nixos/modules/services/networking/jicofo.nix (__hocon_envvar, __hocon_unquoted_string)
+        #  - nixos/modules/services/networking/jitsi-videobridge.nix (__hocon_envvar)
+        replaceOldIndicators = value:
+          if lib.isAttrs value then
+            (if value ? "__hocon_envvar"
+              then
+              lib.warn ''
+                Use of `__hocon_envvar` has been deprecated, and will
+                be removed in the future.
+
+                Please use `(pkgs.formats.hocon {}).lib.mkSubstitution` instead.
+              ''
+              (hoconLib.mkSubstitution value.__hocon_envvar)
+            else if value ? "__hocon_unquoted_string"
+              then
+              lib.warn ''
+                Use of `__hocon_unquoted_string` has been deprecated, and will
+                be removed in the future.
+
+                Please make use of the freeform options of
+                `(pkgs.formats.hocon {}).format` instead.
+              ''
+              {
+                value = value.__hocon_unquoted_string;
+                _type = "unquoted_string";
+              }
+            else lib.mapAttrs (_: replaceOldIndicators) value)
+          else if lib.isList value
+            then map replaceOldIndicators value
+          else value;
+
+        finalValue = replaceOldIndicators value;
+      in
       callPackage
         ({
           stdenvNoCC
@@ -114,7 +154,7 @@ in
 
           dontUnpack = true;
 
-          json = builtins.toJSON value;
+          json = builtins.toJSON finalValue;
           passAsFile = [ "json" ];
 
           strictDeps = true;
