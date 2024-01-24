@@ -88,6 +88,7 @@ in
         Restart = "always";
         EnvironmentFile = cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/livebook start";
+        KillMode = "mixed";
       };
       environment = mapAttrs (name: value:
         if isBool value then boolToString value else toString value)
