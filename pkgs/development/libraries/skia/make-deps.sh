@@ -1,9 +1,16 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p coreutils-full curl jq nix-prefetch-git
+
+# Generates a file containing a Nix function that can be used for skia depSrcs.
+# For example:
+#   ./make-deps.sh 'angle2|dng_sdk|piex|sfntly' chrome/m102
+
+set -e
 
 FILTER=$1
-OUT=skia-deps.nix
-REVISION=861e4743af6d9bf6077ae6dda7274e5a136ee4e2
-DEPS=$(curl -s https://raw.githubusercontent.com/aseprite/skia/$REVISION/DEPS)
+REVISION=$2
+OUT="skia-deps-${REVISION##*/}.nix"
+DEPS=$(curl -s https://skia.googlesource.com/skia/+/$REVISION/DEPS?format=TEXT | base64 --decode)
 THIRD_PARTY_DEPS=$(echo "$DEPS" | grep third_party | grep "#" -v | sed 's/"//g')
 
 function write_fetch_defs ()
@@ -32,6 +39,7 @@ EOF
 }
 
 echo "{ fetchgit }:" > "$OUT"
+echo "# $0 '$FILTER' $REVISION" >> "$OUT"
 echo "{" >> "$OUT"
 write_fetch_defs "$(echo "$THIRD_PARTY_DEPS" | grep -E "$FILTER")"
 echo "}" >> "$OUT"
