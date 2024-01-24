@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
        --replace "/usr/include/libxml2" "${libxml2.dev}/include/libxml2"
     substituteInPlace src/core/basetypes/MCHTMLCleaner.cpp \
       --replace buffio.h tidybuffio.h
+    substituteInPlace src/core/basetypes/MCICUTypes.h \
+      --replace "__CHAR16_TYPE__ UChar" "char16_t UChar"
+    substituteInPlace src/core/basetypes/MCString.cpp \
+      --replace "xmlErrorPtr" "const xmlError *"
   '';
 
   cmakeFlags = [
