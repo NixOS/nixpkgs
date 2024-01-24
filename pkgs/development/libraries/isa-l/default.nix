@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "isa-l";
-  version = "2.30.0";
+  version = "2.31.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
     rev = "v${version}";
-    sha256 = "sha256-AAuSdDQfDW4QFRu0jHwCZ+ZCSjoVqlQiSW1OOFye1Rs=";
+    sha256 = "sha256-xBBtpjtWyba0DogdLobtuWmiiAHTXMK4oRnjYuTUCNk=";
   };
 
   nativeBuildInputs = [ nasm autoreconfHook ];
