@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/nextpnr-gowin
   '';
 
+  strictDeps = true;
+
   meta = with lib; {
     description = "Place and route tool for FPGAs";
     homepage    = "https://github.com/yosyshq/nextpnr";
