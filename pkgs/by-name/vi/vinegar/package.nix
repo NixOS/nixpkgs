@@ -29,13 +29,13 @@ let
 in
 buildGoModule rec {
   pname = "vinegar";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     rev = "v${version}";
-    hash = "sha256-TebRAqMPrXSSKg05iX3Y/S0uACePOR/QNnNcOOMw+Xk=";
+    hash = "sha256-uRdWE5NwRVSuUZyU5B5u5DfJOxu/gUqwM682eORTDOs=";
   };
 
   vendorHash = "sha256-Ex6PRd3rD2jbLXlY36koNvZF3P+gAZTE9hExIfOw9CE=";
