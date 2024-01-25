@@ -2,11 +2,20 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+
 , exiv2
 , flex
+, git
 , libewf
+, libgcrypt
+, libgpg-error
+, libpcap
+, libuuid
 , libxml2
+, ncurses
 , openssl
+, sqlite
+, termcap
 , tre
 , zlib
 }:
@@ -28,9 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     exiv2
     flex
+    git
     libewf
+    libgcrypt
+    libgpg-error
+    libpcap
+    libuuid
     libxml2
+    ncurses
     openssl
+    sqlite
+    termcap
     tre
     zlib
   ];
