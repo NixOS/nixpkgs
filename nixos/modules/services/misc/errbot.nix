@@ -88,6 +88,7 @@ in {
         "/var/lib/errbot/${name}";
     in {
       after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p ${dataDir}
