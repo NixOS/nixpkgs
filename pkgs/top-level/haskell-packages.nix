@@ -66,7 +66,8 @@ in {
     };
 
     ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
-      llvmPackages = pkgs.llvmPackages_9;
+      # Should be llvmPackages_9 which has been removed from nixpkgs
+      llvmPackages = null;
     };
 
     ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {

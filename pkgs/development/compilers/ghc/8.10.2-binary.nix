@@ -148,7 +148,7 @@ let
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
   ]
-  ++ lib.optionals useLLVM [
+  ++ lib.optionals (assert useLLVM -> !(llvmPackages == null); useLLVM) [
     (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
