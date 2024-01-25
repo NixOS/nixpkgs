@@ -132,6 +132,13 @@ stdenv.mkDerivation {
     (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
     (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
     (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
+    # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
+    # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
+    # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
+    (strings.cmakeBool "USE_FORTRAN" true)
+    (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
+    (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
+    (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
   ] ++ lists.optionals cudaSupport [
     (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
