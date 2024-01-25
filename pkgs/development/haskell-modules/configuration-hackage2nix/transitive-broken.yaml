@@ -1864,7 +1864,6 @@ dont-distribute-packages:
  - haskell-docs
  - haskell-eigen-util
  - haskell-ftp
- - haskell-language-server
  - haskell-lsp
  - haskell-lsp-client
  - haskell-pdf-presenter
@@ -2056,7 +2055,6 @@ dont-distribute-packages:
  - hledger-api
  - hls
  - hls-exactprint-utils
- - hls-semantic-tokens-plugin
  - hmark
  - hmatrix-sundials
  - hmeap
