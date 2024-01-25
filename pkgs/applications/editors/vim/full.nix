@@ -66,7 +66,7 @@ in stdenv.mkDerivation {
 
   pname = "vim-full";
 
-  inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
+  inherit (common) version outputs postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
     default = common.src; # latest release
@@ -181,7 +181,7 @@ in stdenv.mkDerivation {
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '';
 
-  postFixup = lib.optionalString wrapPythonDrv ''
+  postFixup = common.postFixup + lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
       --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
   '';

@@ -13,21 +13,20 @@ so showing the taint isn't really helpful.
 
 See also: https://github.com/systemd/systemd/issues/24191
 ---
- src/core/manager.c | 4 ----
- 1 file changed, 4 deletions(-)
+ src/core/manager.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index acf3ead8d7..bdbab16829 100644
+index 5dc7d4504f..6208c9aa31 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
-@@ -4754,10 +4754,6 @@ char* manager_taint_string(const Manager *m) {
-         if (m->taint_usr)
-                 stage[n++] = "split-usr";
+@@ -4800,9 +4800,6 @@ char* manager_taint_string(const Manager *m) {
+         const char* stage[12] = {};
+         size_t n = 0;
  
 -        _cleanup_free_ char *usrbin = NULL;
 -        if (readlink_malloc("/bin", &usrbin) < 0 || !PATH_IN_SET(usrbin, "usr/bin", "/usr/bin"))
 -                stage[n++] = "unmerged-usr";
--
+ 
          if (access("/proc/cgroups", F_OK) < 0)
                  stage[n++] = "cgroups-missing";
- 

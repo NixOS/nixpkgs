@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, gfortran, perl, procps
+{ lib, stdenv, fetchFromGitLab, gfortran, which, perl, procps
 , libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
 , python3
 , enableFma ? stdenv.hostPlatform.fmaSupport
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    which
     perl
     procps
     autoreconfHook
