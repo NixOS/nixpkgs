@@ -114,7 +114,6 @@ self: super: builtins.intersectAttrs super {
       }))
       super)
     hls-brittany-plugin
-    hls-stan-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-overloaded-record-dot-plugin
@@ -123,6 +122,9 @@ self: super: builtins.intersectAttrs super {
   # PLUGINS WITH DISABLED TESTS
   # 2023-04-01: TODO: We should reenable all these tests to figure if they are still broken.
   inherit (pkgs.lib.mapAttrs (_: dontCheck) super)
+    # Tests require ghcide-test-utils which is broken
+    hls-semantic-tokens-plugin
+
     # Tests have file permissions expections that don’t work with the nix store.
     hls-gadt-plugin
 
@@ -173,6 +175,9 @@ self: super: builtins.intersectAttrs super {
 
     # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3549
     hls-retrie-plugin
+
+    # 2024-01-25: Golden files are missing
+    hls-stan-plugin
   ;
 
   ###########################################
