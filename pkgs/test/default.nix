@@ -9,10 +9,12 @@ with pkgs;
       pkgSets = lib.pipe pkgNames [
         (filter (lib.hasPrefix "llvmPackages"))
         (filter (n: n != "rocmPackages.llvm"))
-        # Is a throw alias.
+        # Are throw aliases.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
         (filter (n: n != "llvmPackages_git"))
+        (filter (n: n != "llvmPackages_6"))
+        (filter (n: n != "llvmPackages_7"))
       ];
       tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
         clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };

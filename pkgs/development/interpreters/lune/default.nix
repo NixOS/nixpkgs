@@ -6,30 +6,39 @@
 , darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+in
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.7.11";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     rev = "v${version}";
-    hash = "sha256-5agoAXeO16/CihsgvUHt+pgA+/ph6PualTY6xqDQbeU=";
+    hash = "sha256-ZVETw+GdkrR2V8RrHAWBR+avAuN0158DlJkYBquju8E=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-kPBPxlsicoFDyOsuJWhvQHDC2uwYQqpd7S+kQPRd8DY=";
+  cargoHash = "sha256-zOjDT8Sn/p3YaG+dWyYxSWUOo11p9/WG3EyNagZRtQQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    Security
+    SystemConfiguration
   ];
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   checkFlags = [
-    # these all require internet access
+    # require internet access
     "--skip=tests::net_request_codes"
     "--skip=tests::net_request_compression"
     "--skip=tests::net_request_methods"
@@ -40,15 +49,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::roblox_instance_custom_async"
     "--skip=tests::serde_json_decode"
 
-    # this tries to use the root directory as the CWD
+    # uses root as the CWD
     "--skip=tests::process_spawn_cwd"
   ];
 
   meta = with lib; {
     description = "A standalone Luau script runtime";
-    homepage = "https://github.com/filiptibell/lune";
-    changelog = "https://github.com/filiptibell/lune/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/lune-org/lune";
+    changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ lammermann ];
+    # note: Undefined symbols for architecture x86_64
+    broken = stdenv.isDarwin;
   };
 }
