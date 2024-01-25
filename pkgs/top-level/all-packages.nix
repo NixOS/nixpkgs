@@ -32526,8 +32526,6 @@ with pkgs;
 
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
 
-  sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
-
   siproxd = callPackage ../applications/networking/siproxd { };
 
   sish = callPackage ../tools/networking/sish { };
