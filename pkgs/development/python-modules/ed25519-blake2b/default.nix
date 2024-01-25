@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "ed25519-blake2b";
-  version = "1.4";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0aHLkDLsMHzpW0HGGUQP1NP87MGPIkA1zH1tx6fY70A=";
+    hash = "sha256-cx6fk80awaZGSVdfNRmpn/4LseTPe/X18L5ROjnfc2M=";
   };
 
   nativeBuildInputs = [
