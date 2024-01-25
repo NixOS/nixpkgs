@@ -30,7 +30,7 @@
 
 let
   inherit (lib) lists strings trivial;
-  inherit (cudaPackages) backendStdenv cudaFlags cudaVersion;
+  inherit (cudaPackages) backendStdenv cudaAtLeast cudaFlags cudaOlder;
   inherit (magmaRelease) version hash supportedGpuTargets;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
@@ -114,11 +114,11 @@ stdenv.mkDerivation {
     libcublas.lib # cublas
     libcusparse.dev # cusparse.h
     libcusparse.lib # cusparse
-  ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
+  ] ++ lists.optionals (cudaOlder "11.8") [
     cuda_nvprof.dev # <cuda_profiler_api.h>
-  ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+  ] ++ lists.optionals (cudaAtLeast "11.8") [
     cuda_profiler_api.dev # <cuda_profiler_api.h>
-  ] ++ lists.optionals (strings.versionAtLeast cudaVersion "12.0") [
+  ] ++ lists.optionals (cudaAtLeast "12.0") [
     cuda_cccl.dev # <nv/target>
   ]) ++ lists.optionals rocmSupport [
     rocmPackages.clr
@@ -167,6 +167,6 @@ stdenv.mkDerivation {
     broken =
       !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
-      || (cudaSupport && strings.versionOlder cudaVersion "9");
+      || (cudaSupport && cudaOlder "9.0");
   };
 }
