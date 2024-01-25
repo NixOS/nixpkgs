@@ -151,7 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
         openexr
         xercesc
       ] ++ arrowDeps);
-    in [
+    in
+    [
       c-blosc
       brunsli
       cfitsio
@@ -185,17 +186,17 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       python3.pkgs.numpy
     ] ++ tileDbDeps
-      ++ libHeifDeps
-      ++ libJxlDeps
-      ++ mysqlDeps
-      ++ postgresDeps
-      ++ popplerDeps
-      ++ arrowDeps
-      ++ hdfDeps
-      ++ netCdfDeps
-      ++ armadilloDeps
-      ++ darwinDeps
-      ++ nonDarwinDeps;
+    ++ libHeifDeps
+    ++ libJxlDeps
+    ++ mysqlDeps
+    ++ postgresDeps
+    ++ popplerDeps
+    ++ arrowDeps
+    ++ hdfDeps
+    ++ netCdfDeps
+    ++ armadilloDeps
+    ++ darwinDeps
+    ++ nonDarwinDeps;
 
   postInstall = ''
     wrapPythonPrograms
