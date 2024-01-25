@@ -6,6 +6,7 @@
 , platformio
 , esptool
 , git
+, stdenv
 }:
 
 let
@@ -80,6 +81,9 @@ python.pkgs.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
     "--prefix PYTHONPATH : $PYTHONPATH" # will show better error messages
     "--set ESPHOME_USE_SUBPROCESS ''"
+    "--suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+      stdenv.cc.cc.lib # libstdc++.so.6
+    ]}"
   ];
 
   nativeCheckInputs = with python3Packages; [
