@@ -188,7 +188,8 @@ In that case, please open an issue about the particular documentation convention
   }
   ```
 
-- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments. For example:
+- Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
+  For example:
 
   ```markdown
   # pkgs.coolFunction
@@ -196,16 +197,15 @@ In that case, please open an issue about the particular documentation convention
   Description of what `coolFunction` does.
   `coolFunction` expects a single argument which should be an attribute set, with the following possible attributes:
 
-  `name`
+  `name` (String)
 
   : The name of the resulting image.
 
-  `tag` _optional_
+  `tag` (String; _optional_)
 
   : Tag of the generated image.
 
-    _Default value:_ the output path's hash.
-
+    _Default:_ the output path's hash.
   ```
 
 ## Getting help
