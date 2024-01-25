@@ -135,7 +135,9 @@ in
 
       systemd.packages = [ pkgs.lifecycled ];
       systemd.services.lifecycled = {
-        wantedBy = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
         restartTriggers = [ configFile ];
       };
     })
