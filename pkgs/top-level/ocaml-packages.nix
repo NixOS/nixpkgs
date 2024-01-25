@@ -957,7 +957,7 @@ let
     linol-lwt = callPackage ../development/ocaml-modules/linol/lwt.nix { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      libllvm = pkgs.llvmPackages_10.libllvm;
+      libllvm = pkgs.llvmPackages.libllvm;
     };
 
     lo = callPackage ../development/ocaml-modules/lo { };
