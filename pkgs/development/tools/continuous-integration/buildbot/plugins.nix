@@ -210,6 +210,28 @@
     };
   };
 
+  react-wsgi-dashboards = buildPythonPackage rec {
+    pname = "buildbot-react-wsgi-dashboards";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-0CCD1Zrj1xodUITvLzTDrLgLGaEVqt8y26f+exsP4N8=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot WSGI dashboards Plugin (React)";
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
   badges = buildPythonPackage rec {
     pname = "buildbot-badges";
     inherit (buildbot-pkg) version;
