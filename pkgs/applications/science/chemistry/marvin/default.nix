@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gawk, gnugrep, gnused, jre }:
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gawk, gnugrep, gnused, openjdk17 }:
 
 with lib;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
-        --set INSTALL4J_JAVA_HOME "${jre}" \
+        --set INSTALL4J_JAVA_HOME "${openjdk17}" \
         --prefix PATH : ${makeBinPath [ coreutils gawk gnugrep gnused ]}
     }
     cp -r opt $out
