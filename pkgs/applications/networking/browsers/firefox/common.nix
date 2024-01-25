@@ -210,11 +210,15 @@ let
   # if profileGen is true, profdata is ignored.
   mkFirefox = profileGen: profdata: let
     suffix = if profileGen then "-profiled" else "";
+    meta' = meta // (lib.optionalAttrs profileGen {
+      hydraPlatforms = [];
+    });
   in buildStdenv.mkDerivation {
     pname = "${pname}-unwrapped${suffix}";
     version = packageVersion;
+    meta = meta';
 
-    inherit src unpackPhase meta;
+    inherit src unpackPhase;
 
     outputs = [
       "out"
