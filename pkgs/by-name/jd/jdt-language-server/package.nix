@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm444 -t $out/bin bin/jdtls.py
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://github.com/eclipse/eclipse.jdt.ls";
     description = "Java language server";
