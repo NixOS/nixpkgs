@@ -1,7 +1,8 @@
-{ lib,
-  fetchurl,
-  appimageTools,
-  stdenvNoCC }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, appimageTools
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "deskreen";
