@@ -1245,7 +1245,7 @@ let
           name = "vscode-html-css";
           publisher = "ecmel";
           version = "2.0.7";
-          sha256 = "44ac46f826625f0a4aec40f2542f32c161e672ff96f45a548d0bccd9feed04ef";
+          sha256 = "865719b24597de28171aa3c737fce9a6678eee96c63b553bd0ecdd60d0fc6cf6";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ecmel.vscode-html-css/changelog";
