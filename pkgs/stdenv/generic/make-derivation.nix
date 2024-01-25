@@ -352,6 +352,8 @@ else let
   references = nativeBuildInputs ++ buildInputs
             ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
+  # Returns dep.__spliced if it exists or warns if the package is
+  # not spliced correctly.
   getSpliced = type: dep:
     dep.__spliced or
       (let approximate-pname = dep.pname or dep.name; in
@@ -367,43 +369,41 @@ else let
            !(list-of-shame ? ${approximate-pname})
           )
 
-            # Hi there!  If you're reading this, it's probably
+            # If you're reading this, it's probably
             # because the line below caused your PR to fail CI.
-            # Don't panic!  Most likely, what happened is that you
-            # used one of the following as a dependency:
+            # Most likely, what happened is that you
+            # used one of the following as a dependency (i.e. in a
+            # `buildInputs`, `nativeBuildInputs`, or
+            # `deps{Build,Host,Target}{Build,Host,Target}` attribute).
             #
             # - `buildPackages.something`
             # - `targetPackages.something`
             # - `pkgs{Build,Host,Target}{Build,Host,Target}.something`
             #
-            # You can't use those as dependencies (i.e. in a
-            # `buildInputs`, `nativeBuildInputs`, or
-            # `deps{Build,Host,Target}{Build,Host,Target}`
-            # attribute).  The reason is a bit obscure, but the fix
-            # is easy: just use `something` instead!  The explicit
+            # Instead just use `something` instead. The explicit
             # packagesets (the three bullet points above) are mainly
             # for when you need to reference a package with string
-            # interpolation (e.g. "cat blah | ${buildPackages.jq}").
+            # interpolation (e.g. "cat blah | ${buildPackages.jq}")
+            # since interpolation cannot use splicing.
             # For dependencies, you control which packageset is used
             # by *which attribute you put the dependency in* -- if
             # you put it in `depsBuildHost`, it will get pulled from
             # `pkgsBuildHost`.
             #
-            # Please take a moment to try to fix your PR.  If you
-            # can't get it fixed, ping @amjoseph-nixpkgs who can
-            # help you fix it.  If this is a crisis situation and
+            # Please take a moment to try to fix your PR.
+            # If this is a crisis situation and
             # the future of humanity depends on your PR passing CI
             # pronto, you can mute the warning by adding your
             # package's `pname` to the `list-of-shame` at the top of
-            # this file.  But please don't do that.
+            # this file but please avoid that if possible as it is a bug.
             #
                -> lib.warn
                  ''derivation ${attrs.pname or "!!no pname!!"}:
-                     unspliced ${type} dependency ${approximate-pname}
+                     has unspliced ${type} dependency ${approximate-pname}
                        build=${dep.stdenv.buildPlatform.config}
                        host=${dep.stdenv.hostPlatform.config}
                        target=${dep.stdenv.targetPlatform.config}
-                       For advice on fixing this, read the comment above the lib.warn that produced this message.
+                     For advice on fixing this, read the comment above the lib.warn that produced this message.
                  '' true;
         {});
 
