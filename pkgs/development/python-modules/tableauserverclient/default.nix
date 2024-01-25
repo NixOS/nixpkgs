@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.29";
+  version = "0.30";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FVJeKt1+qL4XuxFNqhWRtCJu5yEmcP/RLeQQyXndU0c=";
+    hash = "sha256-MIE6V84xLEbgmTwvP6jQC0H//gBnMTO1sowL1HIMbpQ=";
   };
 
   postPatch = ''
