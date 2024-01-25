@@ -355,6 +355,7 @@ in
 
       (mapAttrs' (name: cfg: nameValuePair "tarsnap-restore-${name}"{
         description = "Tarsnap restore '${name}'";
+        after       = [ "network-online.target" ];
         requires    = [ "network-online.target" ];
 
         path = with pkgs; [ iputils gcfg.package util-linux ];
