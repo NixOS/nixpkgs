@@ -500,8 +500,6 @@ dont-distribute-packages:
  - antiope-s3
  - antiope-shell
  - antlrc
- - apecs-gloss
- - apecs-physics-gloss
  - apelsin
  - api-rpc-accumulate
  - api-rpc-pegnet

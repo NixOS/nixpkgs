@@ -183,7 +183,6 @@ broken-packages:
   - aosd # failure in job https://hydra.nixos.org/build/233207331 at 2023-09-02
   - apache-md5 # failure in job https://hydra.nixos.org/build/233193946 at 2023-09-02
   - apart # failure in job https://hydra.nixos.org/build/233219668 at 2023-09-02
-  - apecs-physics # failure in job https://hydra.nixos.org/build/233212565 at 2023-09-02
   - api-builder # failure in job https://hydra.nixos.org/build/233205755 at 2023-09-02
   - api-rpc-factom # failure in job https://hydra.nixos.org/build/233198474 at 2023-09-02
   - apns-http2 # failure in job https://hydra.nixos.org/build/233248620 at 2023-09-02
