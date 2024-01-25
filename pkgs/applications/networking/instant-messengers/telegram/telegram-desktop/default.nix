@@ -64,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.14.4";
+  version = "4.14.9";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-kApiPJN9hdOv9WLRiqIO94Pd3Stuv+wrV4RM6x8Ak9M=";
+    hash = "sha256-VqLCkGav6qtam9qk2MsjCdyVSj3630FGQg50Mv0OBNE=";
   };
 
   patches = [
@@ -227,6 +227,7 @@ stdenv.mkDerivation rec {
       the MTProto secure protocol.
     '';
     license = licenses.gpl3Only;
+    platforms = platforms.all;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ nickcao ];
