@@ -6,29 +6,27 @@
 , exiv2
 , flex
 , git
+, json_c
 , libewf
-, libgcrypt
-, libgpg-error
-, libpcap
-, libuuid
 , libxml2
-, ncurses
 , openssl
 , sqlite
-, termcap
 , tre
 , zlib
+
+, withBEViewer ? true
+, jdk
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bulk_extractor";
-  version = "2.0.6";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "simsong";
     repo = "bulk_extractor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LNdRN4pEA0rVEyKiBKGJgTKA4veVvsuP3ufiolHTk/s=";
+    hash = "sha256-w09dEBoZ4nEdKgeDbEdwB2tBeblplxKWyHbKGcFsTtk=";
     fetchSubmodules = true;
   };
 
@@ -38,19 +36,22 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     flex
     git
+    json_c
     libewf
-    libgcrypt
-    libgpg-error
-    libpcap
-    libuuid
     libxml2
-    ncurses
     openssl
     sqlite
-    termcap
     tre
     zlib
+  ]
+  ++ lib.optionals withBEViewer [
+    jdk
   ];
+
+  postInstall = lib.optionalString withBEViewer ''
+    substituteInPlace $out/bin/BEViewer \
+      --replace 'java' "${jdk}/bin/java"
+  '';
 
   inherit (import ./common.nix { inherit lib finalAttrs; }) meta;
 })
