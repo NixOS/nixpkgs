@@ -128,21 +128,18 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DGPU_TARGET=${gpuTargetString}"
-    (lib.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
-    (lib.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
-  ] ++ lists.optionals static [
-    "-DBUILD_SHARED_LIBS=OFF"
+    (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
+    (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
+    (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
+    (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
   ] ++ lists.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${cudaArchitecturesString}"
-    "-DMIN_ARCH=${minArch}" # Disarms magma's asserts
-    "-DCMAKE_C_COMPILER=${backendStdenv.cc}/bin/cc"
-    "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
+    (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
+    (strings.cmakeFeature "CMAKE_C_COMPILER" "${backendStdenv.cc}/bin/cc")
+    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${backendStdenv.cc}/bin/c++")
   ] ++ lists.optionals rocmSupport [
-    "-DCMAKE_C_COMPILER=${rocmPackages.clr}/bin/hipcc"
-    "-DCMAKE_CXX_COMPILER=${rocmPackages.clr}/bin/hipcc"
-  ] ++ lists.optionals (cudaPackages.cudaAtLeast "12.0.0") [
-    (lib.cmakeBool "USE_FORTRAN" false)
+    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
   ];
 
   buildFlags = [
