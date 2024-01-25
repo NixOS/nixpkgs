@@ -1110,7 +1110,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
-    icu =  icu69;
+    icu =  icu73;
     protobuf = protobuf_21;
   };
 
@@ -6809,8 +6809,14 @@ with pkgs;
 
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
-    lua = lua5_4;
-    fmt = fmt_8;
+    lua = lua5_4; # Ceph currently requires >= 5.3
+
+    # To see which `fmt` version Ceph upstream recommends, check its `src/fmt` submodule.
+    #
+    # Ceph does not currently build with `fmt_10`; see https://github.com/NixOS/nixpkgs/issues/281027#issuecomment-1899128557
+    # If we want to switch for that before upstream fixes it, use this patch:
+    # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
+    fmt = fmt_9;
   })
     ceph
     ceph-client;
@@ -16631,7 +16637,8 @@ with pkgs;
       else if platform.isAndroid then 12
       else if platform.isLinux then 16
       else if platform.isWasm then 16
-      else 14;
+      # For unknown systems, assume the latest version is required.
+      else 17;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
     # taking the min bound of that.
@@ -18048,8 +18055,6 @@ with pkgs;
 
   ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
 
-  starlark = callPackage ../development/interpreters/starlark { };
-
   starlark-rust = callPackage ../development/interpreters/starlark-rust { };
 
   supercollider = libsForQt5.callPackage ../development/interpreters/supercollider {
@@ -18321,8 +18326,6 @@ with pkgs;
   helm-ls = callPackage ../development/tools/language-servers/helm-ls { };
 
   javascript-typescript-langserver = callPackage ../development/tools/language-servers/javascript-typescript-langserver { };
-
-  jdt-language-server = callPackage ../development/tools/language-servers/jdt-language-server { };
 
   jsonnet-language-server = callPackage ../development/tools/language-servers/jsonnet-language-server { };
 
@@ -23825,8 +23828,6 @@ with pkgs;
 
   litehtml = callPackage ../development/libraries/litehtml { };
 
-  live555 = callPackage ../development/libraries/live555 { };
-
   llhttp = callPackage ../development/libraries/llhttp { };
 
   log4cpp = callPackage ../development/libraries/log4cpp { };
@@ -24928,9 +24929,9 @@ with pkgs;
 
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
-  sdrpp = pin-to-gcc12-if-gcc13 (callPackage ../applications/radio/sdrpp {
+  sdrpp = callPackage ../applications/radio/sdrpp {
     inherit (darwin.apple_sdk.frameworks) AppKit;
-  });
+  };
 
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
 
@@ -25916,6 +25917,17 @@ with pkgs;
   };
   buildGo121Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_21;
+  };
+
+  # requires a newer Apple SDK
+  go_1_22 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.22.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
+  };
+  buildGo122Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_22;
+  };
+  buildGo122Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
+    go = buildPackages.go_1_22;
   };
 
   leaps = callPackage ../development/tools/leaps { };
@@ -27779,8 +27791,6 @@ with pkgs;
   fsverity-utils = callPackage ../os-specific/linux/fsverity-utils { };
 
   fwanalyzer = callPackage ../tools/filesystems/fwanalyzer { };
-
-  fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
   fwupd-efi = callPackage ../os-specific/linux/firmware/fwupd-efi { };
 
@@ -41646,7 +41656,7 @@ with pkgs;
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
 
-  nitrokey-app2 = libsForQt5.callPackage ../tools/security/nitrokey-app2 { };
+  nitrokey-app2 = python3Packages.callPackage ../tools/security/nitrokey-app2 { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 

@@ -117,6 +117,14 @@ rec {
     persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
 
     broken = kernel.kernelAtLeast "6.2";
+
+    # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+    # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+    # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+    postInstall = ''
+      mv $out/lib/tls/* $out/lib
+      rmdir $out/lib/tls
+    '';
   };
 
   legacy_340 = let
@@ -154,5 +162,13 @@ rec {
 
     broken = kernel.kernelAtLeast "6.7";
     patches = map (patch: "${aurPatches}/${patch}") patchset;
+
+    # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+    # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+    # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+    postInstall = ''
+      mv $out/lib/tls/* $out/lib
+      rmdir $out/lib/tls
+    '';
   };
 }

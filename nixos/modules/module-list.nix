@@ -446,6 +446,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/surrealdb.nix
+  ./services/databases/tigerbeetle.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/ayatana-indicators.nix
@@ -1518,6 +1519,7 @@
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
+  ./tasks/filesystems/sshfs.nix
   ./tasks/filesystems/squashfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vboxsf.nix

@@ -121,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.11";
+  version = "1.9.12";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-chPZ9nGhFcaExoJDJvFy8terIGZRU6S90RKBYkoWyGQ=";
+    hash = "sha256-hPRp61m/XTXFacYkBOb4SsG4fcFvWrdMfc+sxLk5/sQ=";
   };
 
   patches = [
@@ -255,9 +255,6 @@ stdenv.mkDerivation (finalAttrs: {
       contrib/generate-version-script.py \
       contrib/generate-man.py \
       po/test-deps
-
-    substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
-      --replace "gdbus" ${glib.bin}/bin/gdbus
 
     # tests fail with: Failed to load SMBIOS: neither SMBIOS or DT found
     sed -i 's/test(.*)//' plugins/lenovo-thinklmi/meson.build
