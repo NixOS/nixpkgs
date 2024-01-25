@@ -13,7 +13,7 @@
     homepage = "https://github.com/simsong/bulk_extractor";
     downloadPage = "http://downloads.digitalcorpora.org/downloads/bulk_extractor/";
     changelog = "https://github.com/simsong/bulk_extractor/blob/${finalAttrs.src.rev}/ChangeLog";
-    maintainers = with maintainers; [ d3vil0p3r ];
+    maintainers = with maintainers; [ d3vil0p3r h7x4 ];
     platforms = with platforms; unix ++ windows;
     license = with licenses; [
       mit
