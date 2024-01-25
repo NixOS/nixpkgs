@@ -1,15 +1,16 @@
 { lib
-  , buildPythonPackage
-  , fetchFromGitHub
-  , flask
-  , flask-restful
-  , flask-sqlalchemy
-  , requests
-  , jwcrypto
-  , cryptography
-  , dnspython
-  , gunicorn
-  , pip
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, flask-restful
+, flask-sqlalchemy
+, requests
+, jwcrypto
+, cryptography
+, dnspython
+, gunicorn
+, pip
+, zeep
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     jwcrypto
     cryptography
     dnspython
+    zeep
   ];
 
   patches = [
