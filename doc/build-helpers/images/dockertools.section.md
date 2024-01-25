@@ -376,7 +376,6 @@ buildLayeredImage {
   name = "shadow-layered";
 
   fakeRootCommands = ''
-    #!${pkgs.runtimeShell}
     ${pkgs.dockerTools.shadowSetup}
   '';
   enableFakechroot = true;
