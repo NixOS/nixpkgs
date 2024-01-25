@@ -153,6 +153,7 @@ in
       systemd.timers.lifecycled-queue-cleaner = {
         description = "Lifecycle Daemon Queue Cleaner Timer";
         wantedBy = [ "timers.target" ];
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         timerConfig = {
           Unit = "lifecycled-queue-cleaner.service";
