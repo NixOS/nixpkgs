@@ -220,7 +220,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
       "x86_64-darwin"
-      "powerpc64le-linux"
     ];
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
