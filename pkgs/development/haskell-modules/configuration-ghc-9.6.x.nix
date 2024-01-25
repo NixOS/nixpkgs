@@ -129,7 +129,6 @@ self: super: {
     hls-cabal-plugin
     ghc-trace-events
     gi-cairo-connector          # mtl <2.3
-    lens-family-th              # template-haskell <2.19
     ghc-prof                    # base <4.18
     env-guard                   # doctest <0.21
     package-version             # doctest <0.21, tasty-hedgehog <1.4
