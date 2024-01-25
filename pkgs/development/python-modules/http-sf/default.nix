@@ -7,17 +7,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "http-sfv";
-  version = "0.9.9";
+  pname = "http-sf";
+  version = "1.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mnot";
-    repo = "http_sfv";
-    rev = "http_sfv-${version}";
-    hash = "sha256-xf9bGDfsEcQnFQ2b1bLRGYug+H4e5jeV/LJstQtp6Bw=";
+    repo = "http-sf";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8xK8/IVrhqMDgkxZY10QqSGswCrttc29FZLCntmSUQ4=";
   };
 
   nativeBuildInputs = [
@@ -32,13 +32,14 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [
-    "http_sfv"
+    "http_sf"
   ];
 
   meta = with lib; {
     description = "Module to parse and serialise HTTP structured field values";
-    homepage = "https://github.com/mnot/http_sfv";
-    license = licenses.asl20;
+    homepage = "https://github.com/mnot/http-sf";
+    changelog = "https://github.com/mnot/http-sf/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
