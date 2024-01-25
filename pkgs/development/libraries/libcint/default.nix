@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcint";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    hash = "sha256-qcVVp+81S3Y0fxDWA/PWQeFT2g0N6tIHNUaOHSru2GA=";
+    hash = "sha256-wV3y+NobV6J+J6I2z3dJdCvTwvfgMspMtAGNpbwfsYk=";
   };
 
   postPatch = ''
