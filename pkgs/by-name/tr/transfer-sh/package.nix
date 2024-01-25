@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, nix-update-script
+, nixosTests
+}:
 
 buildGoModule rec {
   pname = "transfer-sh";
@@ -12,6 +17,13 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-C8ZfUIGT9HiQQiJ2hk18uwGaQzNCIKp/Jiz6ePZkgDQ=";
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) transfer-sh;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Easy and fast file sharing and pastebin server with access from the command-line";
