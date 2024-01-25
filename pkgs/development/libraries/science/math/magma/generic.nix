@@ -25,7 +25,6 @@
 , rocmSupport ? !cudaSupport
 , static ? stdenv.hostPlatform.isStatic
 , stdenv
-, symlinkJoin
 }:
 
 
