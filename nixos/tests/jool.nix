@@ -16,7 +16,6 @@ let
   webserver = ip: msg: {
     systemd.services.webserver = {
       description = "Mock webserver";
-      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
         while true; do
