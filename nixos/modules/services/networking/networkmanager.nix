@@ -550,7 +550,13 @@ in
     ];
 
     systemd.services.NetworkManager = {
-      wantedBy = [ "network.target" ];
+      # see systemd.special(7): since we are a provider, we pull in
+      # network.target, while ordered before it.
+      before = [ "network.target" "NetworkManager-wait-online.service" ];
+      after = [ "network-pre.target" ];
+      wants = [ "network.target" ];
+
+      wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
 
       aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
@@ -582,7 +588,7 @@ in
     systemd.services.NetworkManager-ensure-profiles = mkIf (cfg.ensureProfiles.profiles != { }) {
       description = "Ensure that NetworkManager declarative profiles are created";
       wantedBy = [ "multi-user.target" ];
-      before = [ "network-online.target" ];
+      before = [ "network-pre.target" ];
       script = let
         path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
       in ''
