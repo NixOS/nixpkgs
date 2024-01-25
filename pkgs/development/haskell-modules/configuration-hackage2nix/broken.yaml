@@ -2308,7 +2308,6 @@ broken-packages:
   - heidi # failure in job https://hydra.nixos.org/build/233199241 at 2023-09-02
   - hein # failure in job https://hydra.nixos.org/build/233241797 at 2023-09-02
   - heist-emanote # failure in job https://hydra.nixos.org/build/233242732 at 2023-09-02
-  - heist # failure in job https://hydra.nixos.org/build/233217810 at 2023-09-02
   - helisp # failure in job https://hydra.nixos.org/build/233221194 at 2023-09-02
   - helix # failure in job https://hydra.nixos.org/build/233254335 at 2023-09-02
   - helm # failure in job https://hydra.nixos.org/build/233251620 at 2023-09-02
