@@ -1799,6 +1799,8 @@ let
 
     twt = callPackage ../development/ocaml-modules/twt { };
 
+    type_eq = callPackage ../development/ocaml-modules/type_eq { };
+
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
     tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
