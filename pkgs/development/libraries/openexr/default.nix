@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1281
-  doCheck = !stdenv.isAarch32 && !stdenv.isi686;
+  doCheck = !stdenv.isAarch32 && !stdenv.isi686 && !stdenv.hostPlatform.isPower;
 
   meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";
