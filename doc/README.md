@@ -71,6 +71,11 @@ If you **omit a link text** for a link pointing to a section, the text will be s
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
+
+#### HTML
+
+Inlining HTML is not allowed. Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+
 #### Roles
 
 If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``. The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
@@ -264,6 +269,79 @@ You, as the writer of documentation, are still in charge of its content.
 
     _Default:_ the output path's hash.
   ```
+
+#### Examples
+
+To define a referenceable figure use the following fencing:
+
+```markdown
+:::{.example #an-attribute-set-example}
+# An attribute set example
+
+You can add text before
+
+    ```nix
+    { a = 1; b = 2;}
+    ```
+
+and after code fencing
+:::
+```
+
+Defining examples through the `example` fencing class adds them to a "List of Examples" section after the Table of Contents.
+Though this is not shown in the rendered documentation on nixos.org.
+
+#### Figures
+
+To define a referencable figure use the following fencing:
+
+```markdown
+::: {.figure #nixos-logo}
+# NixOS Logo
+![NixOS logo](./nixos_logo.png)
+:::
+```
+
+Defining figures through the `figure` fencing class adds them to a `List  of Figures` after the `Table of Contents`.
+Though this is not shown in the rendered documentation on nixos.org.
+
+#### Footnotes
+
+To add a foonote explanation, use the following syntax:
+
+```markdown
+Sometimes it's better to add context [^context] in a footnote.
+
+[^context]: This explanation will be rendered at the end of the chapter.
+```
+
+#### Inline comments
+
+Inline comments are supported with following syntax:
+
+```markdown
+<!-- This is an inline comment -->
+```
+
+The comments will not be rendered in the rendered HTML.
+
+#### Link reference definitions
+
+Links can reference a label, for example, to make the link target reusable:
+
+```markdown
+::: {.note}
+Reference links can also be used to [shorten URLs][url-id] and keep the markdown readable.
+:::
+
+[url-id]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/doc/README.md
+```
+
+This syntax is taken from [CommonMark](https://spec.commonmark.org/0.30/#link-reference-definitions).
+
+#### Typographic replacements
+
+Typographic replacements are enabled. Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
 
 ## Getting help
 
