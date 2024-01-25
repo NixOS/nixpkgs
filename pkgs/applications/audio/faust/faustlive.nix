@@ -1,25 +1,25 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , which
 , alsa-lib
-, bc
-, coreutils
 , curl
 , faust
 , flac
 , gnutls
 , libjack2
 , libmicrohttpd
+, libmpg123
 , libogg
 , libopus
 , libsndfile
 , libtasn1
 , libvorbis
 , libxcb
-, llvm_10
+, llvm
 , p11-kit
 , qrencode
 , qt5
@@ -32,44 +32,55 @@ stdenv.mkDerivation rec {
     owner = "grame-cncm";
     repo = "faustlive";
     rev = version;
-    sha256 = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
+    hash = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # move mutex initialization outside assert call
+    # https://github.com/grame-cncm/faustlive/pull/59
+    (fetchpatch {
+      name = "initalize-mutexes.patch";
+      url = "https://github.com/grame-cncm/faustlive/commit/fdd46b12202def9731b9ed2f6363287af16be892.patch";
+      hash = "sha256-yH95Y4Jbqgs8siE9rtutmu5C2sNZwQMJzCgDYqNBDj4=";
+    })
+  ];
+
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
+    faust
+    llvm
     pkg-config
     qt5.wrapQtAppsHook
+    which
   ];
 
   buildInputs = [
     alsa-lib
-    bc
-    coreutils
     curl
     faust
     flac
     gnutls
     libjack2
     libmicrohttpd
+    libmpg123
     libogg
     libopus
     libsndfile
     libtasn1
     libvorbis
     libxcb
-    llvm_10
+    llvm
     p11-kit
     qrencode
     qt5.qtbase
-    which
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/FaustLive --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmicrohttpd libsndfile faust llvm_10 ]}"
-  '';
+  cmakeFlags = [
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+  ];
 
   postPatch = "cd Build";
 
