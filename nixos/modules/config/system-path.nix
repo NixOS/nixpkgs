@@ -30,7 +30,9 @@ let
       pkgs.less
       pkgs.libcap
       pkgs.ncurses
+    ] ++ lib.optionals (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.netcat) [
       pkgs.netcat
+    ] ++ [
       config.programs.ssh.package
       pkgs.mkpasswd
       pkgs.procps
