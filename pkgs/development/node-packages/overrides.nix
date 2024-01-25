@@ -400,9 +400,10 @@ final: prev: {
       };
   };
 
-  volar = final."@volar/vue-language-server".override {
+  volar = final."@volar/vue-language-server".override ({ meta, ... }: {
     name = "volar";
-  };
+    meta = meta // { mainProgram = "vue-language-server"; };
+  });
 
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "terraform-plugin-docs";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ID+4Pz6SUPzZTZYX6IHn/U02Ffw95he/gogV0mNA2OA=";
+    sha256 = "sha256-8rNoH01fWNGWH3cSqqFCGetl5S/d3yVh+pmIzg79g3k=";
   };
 
-  vendorHash = "sha256-HseQBCvflmnlKX4PygWejPbyXRJmNUyl2K2//b4/tik=";
+  vendorHash = "sha256-9ddxgceILBP1NqbGr08cfdPs0BHSjQWN0MkFA5oqyPE=";
 
   nativeBuildInputs = [ makeWrapper ];
 

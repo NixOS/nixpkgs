@@ -1,24 +1,24 @@
-{ pkgs ? import <nixpkgs> { system = builtins.currentSystem; }
-, stdenv ? pkgs.stdenv
-, lib ? pkgs.lib
-, fetchFromGitHub ? pkgs.fetchFromGitHub
-, buildDotnetModule ? pkgs.buildDotnetModule
-, dotnetCorePackages ? pkgs.dotnetCorePackages
-, openssl ? pkgs.openssl
-, zlib ? pkgs.zlib
-, hostPlatform ? stdenv.hostPlatform
-, nix-update-script ? stdenv.nix-update-script
+{ pkgs
+, stdenv
+, lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, openssl
+, zlib
+, hostPlatform
+, nix-update-script
 }:
 
 buildDotnetModule rec {
-  pname = "pocket-updater-utility";
-  version = "2.43.1";
+  pname = "pupdate";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-ur7BEsG4MIEcdiRt5BkK4GCa7aVkrh2Djd10KhaWf3U=";
+    hash = "sha256-Lr3orYOSzFQCLduBhp2MtGbgiKtFB1CgP/iMMySSvEk=";
   };
 
   buildInputs = [
@@ -30,17 +30,17 @@ buildDotnetModule rec {
   # See https://github.com/NixOS/nixpkgs/pull/196648/commits/0fb17c04fe34ac45247d35a1e4e0521652d9c494
   patches = [ ./add-runtime-identifier.patch ];
   postPatch = ''
-    substituteInPlace pocket_updater.csproj \
+    substituteInPlace pupdate.csproj \
       --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid hostPlatform.system}"
   '';
 
-  projectFile = "pocket_updater.csproj";
+  projectFile = "pupdate.csproj";
 
   nugetDeps = ./deps.nix;
 
   selfContainedBuild = true;
 
-  executables = [ "pocket_updater" ];
+  executables = [ "pupdate" ];
 
   dotnetFlags = [
     "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
@@ -54,11 +54,11 @@ buildDotnetModule rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/mattpannella/pocket-updater-utility";
-    description = "Analogue Pocket Updater Utility";
+    homepage = "https://github.com/mattpannella/pupdate";
+    description = "Pupdate - A thing for updating your Analogue Pocket ";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-rintz ];
-    mainProgram = "pocket_updater";
+    mainProgram = "pupdate";
   };
 }

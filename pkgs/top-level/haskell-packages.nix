@@ -65,10 +65,6 @@ in {
       llvmPackages = null;
     };
 
-    ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
-      llvmPackages = pkgs.llvmPackages_9;
-    };
-
     ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
       llvmPackages = pkgs.llvmPackages_12;
     };
@@ -361,12 +357,6 @@ in {
       buildHaskellPackages = bh.packages.ghc865Binary;
       ghc = bh.compiler.ghc865Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
-    ghc8102Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8102Binary;
-      ghc = bh.compiler.ghc8102Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc8107Binary = callPackage ../development/haskell-modules {
