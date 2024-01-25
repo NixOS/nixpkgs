@@ -444,10 +444,14 @@ in {
       tls_letsencrypt_cache_dir = "${dataDir}/.cache";
     };
 
-    # Setup the headscale configuration in a known path in /etc to
-    # allow both the Server and the Client use it to find the socket
-    # for communication.
-    environment.etc."headscale/config.yaml".source = configFile;
+    environment = {
+      # Setup the headscale configuration in a known path in /etc to
+      # allow both the Server and the Client use it to find the socket
+      # for communication.
+      etc."headscale/config.yaml".source = configFile;
+
+      systemPackages = [ cfg.package ];
+    };
 
     users.groups.headscale = mkIf (cfg.group == "headscale") {};
 
