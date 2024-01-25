@@ -24,7 +24,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/linux-pam/linux-pam/commit/77bd338125cde583ecdfb9fd69619bcd2baf15c2.patch";
       hash = "sha256-tlc9RcLZpEH315NFD4sdN9yOco8qhC6+bszl4OHm+AI=";
     })
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
+      name = "missing-termio.patch";
+      url = "https://github.com/linux-pam/linux-pam/commit/5374f677e4cae669eb9accf2449178b602e8a40a.patch";
+      hash = "sha256-b6n8f16ETSNj5h+5/Yhn32XMfVO8xEnZRRhw+nuLP/8=";
+    })
+  ;
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
   postPatch = if stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform then ''
