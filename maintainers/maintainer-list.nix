@@ -19772,6 +19772,15 @@
     githubId = 326263;
     name = "Danny Wilson";
   };
+  vizid = {
+    email = "vizid1337@gmail.com";
+    github = "ViZiD";
+    githubId = 7444430;
+    name = "Radik Islamov";
+    keys = [{
+      fingerprint = "4B70 4CAC 5D3A 7126 A6EF  48E1 D0B0 CBDA F7A9 02DC";
+    }];
+  };
   vklquevs = {
     email = "vklquevs@gmail.com";
     github = "vklquevs";
