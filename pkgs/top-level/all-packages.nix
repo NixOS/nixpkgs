@@ -17229,8 +17229,6 @@ with pkgs;
 
   serialdv = callPackage ../development/libraries/serialdv {  };
 
-  serles-acme = callPackage ../applications/networking/serles-acme { };
-
   serpent = callPackage ../development/compilers/serpent { };
 
   shmig = callPackage ../development/tools/database/shmig { };
