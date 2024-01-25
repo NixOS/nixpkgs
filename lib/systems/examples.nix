@@ -235,6 +235,10 @@ rec {
     libc = "newlib";
   };
 
+  alpha-unknown-linux-gnu = {
+    config = "alpha-unknown-linux-gnu";
+  };
+
   #
   # Redox
   #
