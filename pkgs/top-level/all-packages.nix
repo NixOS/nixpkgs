@@ -19741,7 +19741,6 @@ with pkgs;
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
-  patchelf_0_13 = callPackage ../development/tools/misc/patchelf/0.13.nix { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
