@@ -35212,7 +35212,7 @@ with pkgs;
 
   simple-scan = gnome.simple-scan;
 
-  sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
+  sioyek = qt6.callPackage ../applications/misc/sioyek { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
