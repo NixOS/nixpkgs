@@ -20049,10 +20049,6 @@ with pkgs;
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
-  silicon = callPackage ../tools/misc/silicon {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreText Security;
-  };
-
   simpleTpmPk11 = callPackage ../tools/security/simple-tpm-pk11 { };
 
   slimerjs = callPackage ../development/tools/slimerjs { };
