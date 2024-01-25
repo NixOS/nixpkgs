@@ -53,12 +53,15 @@
 , libvaSupport ? mediaSupport
 , libva
 
+, p7zip
+, darwin
+
 # Extra preferences
 , extraPrefs ? ""
 }:
 
 let
-  libPath = lib.makeLibraryPath (
+  libPath = if stdenv.isLinux then lib.makeLibraryPath (
     [
       alsa-lib
       atk
@@ -88,21 +91,31 @@ let
       ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
       ++ lib.optionals libvaSupport [ libva ]
       ++ lib.optionals mediaSupport [ ffmpeg ]
-  );
+  ) else "";
 
   version = "13.5.1";
 
+  mkUrls = platform: extension: [
+    "https://cdn.mullvad.net/browser/${version}/mullvad-browser-${platform}-${version}.${extension}"
+    "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-${platform}-${version}.${extension}"
+    "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-${platform}-${version}.${extension}"
+    "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-${platform}-${version}.${extension}"
+    "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-${platform}-${version}.${extension}"
+    "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-${platform}-${version}.${extension}"
+  ];
+
   sources = {
     x86_64-linux = fetchurl {
-      urls = [
-        "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
-      ];
+      urls = mkUrls "linux-x86_64" "tar.xz";
       hash = "sha256-YUITJ7YyK+210ASH1zxlILJ10r0L6SJjbiw2UVASCbw=";
+    };
+    aarch64-darwin = fetchurl {
+      urls = mkUrls "macos" "dmg";
+      hash = "sha256-retc3y03Z/tsVRQIK2tlsfzYVMRBN9/DmQVl8hHKXpw=";
+    };
+    x86_64-darwin = fetchurl {
+      urls = mkUrls "macos" "dmg";
+      hash = "sha256-retc3y03Z/tsVRQIK2tlsfzYVMRBN9/DmQVl8hHKXpw=";
     };
   };
 
@@ -123,14 +136,24 @@ stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
+  dontUnpack = stdenv.isDarwin;
+  dontFixup = stdenv.isDarwin;
+
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook3 autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    copyDesktopItems wrapGAppsHook3 autoPatchelfHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    p7zip
+  ];
   buildInputs = [
-    gtk3
-    alsa-lib
     dbus-glib
     libXtst
+  ] ++ lib.optionals stdenv.isLinux [
+    gtk3
+    alsa-lib
   ];
 
   preferLocalBuild = true;
@@ -154,7 +177,10 @@ stdenv.mkDerivation rec {
     ];
   })];
 
-  buildPhase = ''
+  buildPhase = if stdenv.isDarwin then ''
+    # undmg does not support AFS
+    7z x "$src"
+  '' else ''
     runHook preBuild
 
     # For convenience ...
@@ -243,7 +269,19 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase = if stdenv.isDarwin then ''
+    runHook preInstall
+
+    mkdir -p "$out/Applications/"
+    cp -r "Mullvad Browser/Mullvad Browser.app" "$out/Applications"
+
+    chmod +x "$out/Applications/Mullvad Browser.app/Contents/MacOS/mullvadbrowser"
+    makeWrapper "$out/Applications/Mullvad Browser.app/Contents/MacOS/mullvadbrowser" "$out/bin/mullvad-browser"
+
+    ${darwin.xattr}/bin/xattr -r -d com.apple.quarantine "$out/Applications/Mullvad Browser.app"
+
+    runHook postInstall
+  '' else ''
     runHook preInstall
 
     # Install distribution customizations
@@ -267,7 +305,7 @@ stdenv.mkDerivation rec {
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr panicgh ];
+    maintainers = with maintainers; [ felschr panicgh heywoodlh ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
