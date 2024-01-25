@@ -6,6 +6,7 @@
 , wheel
 , nss
 , nix-update-script
+, stdenv
 }:
 
 buildPythonApplication rec {
