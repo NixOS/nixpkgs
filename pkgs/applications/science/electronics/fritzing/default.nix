@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , wrapQtAppsHook
 , qmake
 , pkg-config
@@ -15,6 +14,7 @@
 , libngspice
 , libgit2
 , quazip
+, clipper
 }:
 
 let
@@ -38,24 +38,16 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fritzing";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "fritzing";
     repo = "fritzing-app";
-    rev = "8f5f1373835050ce014299c78d91c24beea9b633";
-    hash = "sha256-jLVNzSh2KwXpi3begtp/53sdBmQQbCnKMCm2p770etg=";
+    rev = "dbdbe34c843677df721c7b3fc3e32c0f737e7e95";
+    hash = "sha256-Xi5sPU2RGkqh7T+EOvwxJJKKYDhJfccyEZ8LBBTb2s4=";
   };
-
-  patches = [
-    # Fix error caused by implicit call
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/0003-ParseResult-operator-bool-in-explicit.patch?h=fritzing&id=b2c79b55f0a2811e80bb1136b1e021fbc56937c9";
-      hash = "sha256-9HdcNqLHEB0HQbF7AaTdUIJUbafwsRKPA+wfF4g8veU=";
-    })
-  ];
 
   nativeBuildInputs = [ qmake pkg-config qttools wrapQtAppsHook ];
   buildInputs = [
@@ -68,6 +60,7 @@ stdenv.mkDerivation rec {
     libgit2
     quazip
     libngspice
+    clipper
   ];
 
   postPatch = ''
@@ -81,13 +74,17 @@ stdenv.mkDerivation rec {
     substituteInPlace src/fapplication.cpp \
       --replace 'PartsChecker::getSha(dir.absolutePath());' '"${partsSha}";'
 
+    substituteInPlace phoenix.pro \
+      --replace "6.5.10" "${qtbase.version}"
+
     mkdir parts
     cp -a ${parts}/* parts/
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-    "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip"
+    "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
     "-I${svgpp}/include"
+    "-I${clipper}/include/polyclipping"
   ];
   env.NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
 
