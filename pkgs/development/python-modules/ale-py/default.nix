@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mgbellemare";
+    owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
     hash = "sha256-B2AxhlzvBy1lJ3JttJjImgTjMtEUyZBv+xHU2IC7BVE=";
