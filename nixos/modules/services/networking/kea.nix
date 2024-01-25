@@ -283,6 +283,7 @@ in
         "network-online.target"
         "time-sync.target"
       ];
+      wants = [ "network-online.target" ];
       wantedBy = [
         "kea-dhcp4-server.service"
         "kea-dhcp6-server.service"
