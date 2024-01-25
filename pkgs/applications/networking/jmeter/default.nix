@@ -28,9 +28,11 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${jre}/bin"
     done
 
-    wrapProgram $out/bin/jmeter --set JAVA_HOME "${jre}"
-    wrapProgram $out/bin/jmeter.sh --set JAVA_HOME "${jre}"
-    wrapProgram $out/bin/jmeter --set _JAVA_AWT_WM_NONREPARENTING=1
+    wrapProgram $out/bin/jmeter \
+      --set JAVA_HOME "${jre}" \
+      --set _JAVA_AWT_WM_NONREPARENTING=1
+    wrapProgram $out/bin/jmeter.sh \
+      --set JAVA_HOME "${jre}"
   '';
 
   doInstallCheck = false; #NoClassDefFoundError: org/apache/logging/log4j/Level for tests
