@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     makeWrapper
+    protobufc
   ];
 
   buildInputs = [
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     lxc
     mesa
     properties-cpp
-    protobuf protobufc
+    protobuf
     python3
     SDL2 SDL2_image
     systemd
