@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 403483f..e24ac01 100644
+--- a/setup.py
++++ b/setup.py
+@@ -13,7 +13,6 @@ setup(
+     version="1.1.0",
+     packages=find_packages(),
+     python_requires=">=3.6",
+-    scripts=["bin/serles"],
+     install_requires=[
+         "flask",
+         "Flask-RESTful",
