@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sed -i 's/ -static / /' makefile
   '';
 
+  enableParallelBuilding = true;
+
   installPhase = ''
     runHook preInstall
     install -Dt $out/bin whisper whisper-index
