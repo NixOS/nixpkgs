@@ -1,6 +1,28 @@
-{ lib, stdenv, fetchFromGitHub
-, llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
-, bc, coreutils, which, libsndfile, flac, libogg, libvorbis, libopus, pkg-config, libxcb, cmake, gnutls, libtasn1, p11-kit
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, which
+, alsa-lib
+, bc
+, coreutils
+, curl
+, faust
+, flac
+, gnutls
+, libjack2
+, libmicrohttpd
+, libogg
+, libopus
+, libsndfile
+, libtasn1
+, libvorbis
+, libxcb
+, llvm_10
+, p11-kit
+, qrencode
+, qt5
 }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +36,33 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
-    llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
-    bc coreutils which libsndfile flac libogg libvorbis libopus libxcb gnutls libtasn1 p11-kit
+    alsa-lib
+    bc
+    coreutils
+    curl
+    faust
+    flac
+    gnutls
+    libjack2
+    libmicrohttpd
+    libogg
+    libopus
+    libsndfile
+    libtasn1
+    libvorbis
+    libxcb
+    llvm_10
+    p11-kit
+    qrencode
+    qt5.qtbase
+    which
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
