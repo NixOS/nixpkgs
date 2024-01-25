@@ -34,5 +34,6 @@ appimageTools.wrapType2 rec {
     maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ledger-live-desktop";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
