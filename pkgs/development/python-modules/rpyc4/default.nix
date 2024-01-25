@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "rpyc4";
   # Pinned version for linien, see also:
   # https://github.com/linien-org/pyrp3/pull/10#discussion_r1302816237
-  version = "4.1.5";
+  version = "5.3.1";
   format = "pyproject";
 
   # Since this is an outdated version, upstream might have fixed the
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "rpyc";
-    rev = version;
-    hash = "sha256-8NOcXZDR3w0TNj1+LZ7lzQAt7yDgspjOp2zk1bsbVls=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2b6ryqDqZPs5VniLhCwA1/c9+3CT+JJrr3VwP3G6tpY=";
   };
 
   nativeBuildInputs = [
