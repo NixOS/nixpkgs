@@ -10,20 +10,33 @@
 
 stdenv.mkDerivation rec {
   pname = "protobuf-c";
-  version = "unstable-2023-07-08";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "protobuf-c";
     repo = "protobuf-c";
-    rev = "fa86fddbd000316772d1deb5a8d1201fa7599ef7";
-    hash = "sha256-pmqZYFREPgSrWPekymTglhtAv6gQR1gP3dOl3hqjYig=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Dkpcc7ZfvAIVY91trRiHuiRFcUGUbQxbheYKTBcq80I=";
   };
+
+  outputs = [ "out" "dev" "lib" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ protobuf zlib ];
 
   env.PROTOC = lib.getExe buildPackages.protobuf;
+
+  postInstall = ''
+    # workaround for unbound configure script, which expects
+    # both lib and include dirs in the same base path
+    mkdir -p $dev/lib
+    for file in $lib/lib/*; do
+      ln -s $file $dev/lib
+    done
+    mkdir -p $out/nix-support
+    echo "$lib" >> $out/nix-support/propagated-native-build-inputs
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/protobuf-c/protobuf-c/";

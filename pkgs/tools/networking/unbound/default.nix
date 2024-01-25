@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium=${symlinkJoin { name = "libsodium-full"; paths = [ libsodium.dev libsodium.out ]; }}"
   ] ++ lib.optionals withDNSTAP [
     "--enable-dnstap"
-    "--with-protobuf-c=${protobufc}"
+    "--with-protobuf-c=${protobufc.dev}"
   ] ++ lib.optionals withTFO [
     "--enable-tfo-client"
     "--enable-tfo-server"
