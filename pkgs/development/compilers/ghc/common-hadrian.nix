@@ -116,8 +116,12 @@
     -- no way to set this via the command line
     finalStage :: Stage
     finalStage = ${
-      if stdenv.hostPlatform == stdenv.targetPlatform
-      then "Stage2" # native compiler
+      # Always build the stage 2 compiler if possible. Note we can currently
+      # assume hostPlatform == buildPlatform.
+      # TODO(@sternenseemann): improve this condition when we can cross-compile GHC
+      # TODO(@sternenseemann): use stdenv.hostPlatform.canExecute?
+      if stdenv.hostPlatform.system == stdenv.targetPlatform.system
+      then "Stage2" # native compiler or “native” cross e.g. pkgsStatic
       else "Stage1" # cross compiler
     }
 
