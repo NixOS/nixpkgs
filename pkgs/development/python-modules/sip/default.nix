@@ -9,7 +9,11 @@
 , ply
 , toml
 , tomli
+
+# tests
 , poppler-qt5
+, qgis
+, qgis-ltr
 }:
 
 buildPythonPackage rec {
@@ -38,7 +42,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sipbuild" ];
 
   passthru.tests = {
-    inherit poppler-qt5;
+    # test depending packages
+    inherit poppler-qt5 qgis qgis-ltr;
   };
 
   meta = with lib; {
