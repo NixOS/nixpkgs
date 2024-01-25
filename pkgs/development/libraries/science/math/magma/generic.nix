@@ -5,7 +5,8 @@
 #  supportedGpuTargets: List String
 # }
 
-{ blas
+{ autoPatchelfHook
+, blas
 , cmake
 , cudaPackages
 , cudaSupport ? config.cudaSupport
@@ -19,6 +20,7 @@
 , libpthreadstubs
 , magmaRelease
 , ninja
+, python3
 , config
   # At least one back-end has to be enabled,
   # and we can't default to CUDA since it's unfree
@@ -94,7 +96,21 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
+  # Magma doesn't have anything which could be run under doCheck, but it does build test suite executables.
+  # These are moved to $test/bin/ and $test/lib/ in postInstall.
+  outputs = ["out" "test"];
+
+  # Fixup for the python test runners
+  postPatch = ''
+    patchShebangs ./testing/run_{tests,summarize}.py
+    substituteInPlace ./testing/run_tests.py \
+      --replace-fail \
+        "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
+        "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
+  '';
+
   nativeBuildInputs = [
+    autoPatchelfHook
     cmake
     ninja
     gfortran
@@ -106,6 +122,7 @@ stdenv.mkDerivation {
     libpthreadstubs
     lapack
     blas
+    python3
   ] ++ lists.optionals cudaSupport (with cudaPackages; [
     cuda_cudart.dev # cuda_runtime.h
     cuda_cudart.lib # cudart
@@ -147,12 +164,36 @@ stdenv.mkDerivation {
     (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
   ];
 
-  buildFlags = [
-    "magma"
-    "magma_sparse"
-  ];
-
+  # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
   doCheck = false;
+
+  # Copy the files to the test output and fix the RPATHs.
+  postInstall =
+    # NOTE: The python scripts aren't copied by CMake into the build directory, so we must copy them from the source.
+    # TODO(@connorbaker): This should be handled by having CMakeLists.txt install them, but such a patch is
+    # out of the scope of the PR which introduces the `test` output: https://github.com/NixOS/nixpkgs/pull/283777.
+    # See https://github.com/NixOS/nixpkgs/pull/283777#discussion_r1482125034 for more information.
+    ''
+      install -Dm755 ../testing/run_{tests,summarize}.py -t "$test/bin/"
+    ''
+    # Copy core test executables and libraries over to the test output.
+    # NOTE: Magma doesn't provide tests for sparse solvers for ROCm, but it does for CUDA -- we put them both in the same
+    # install command to avoid the case where a glob would fail to find any files and cause the install command to fail
+    # because it has no files to install.
+    + ''
+      install -Dm755 ./testing/testing_* ./sparse/testing/testing_* -t "$test/bin/"
+      install -Dm755 ./lib/libtester.so ./lib/liblapacktest.so -t "$test/lib/"
+    ''
+    # All of the test executables and libraries will have a reference to the build directory in their RPATH, which we
+    # must remove. We do this by shrinking the RPATH to only include the Nix store. The autoPatchelfHook will take care
+    # of supplying the correct RPATH for needed libraries (like `libtester.so`).
+    + ''
+      find "$test" -type f -exec \
+        patchelf \
+          --shrink-rpath \
+          --allowed-rpath-prefixes "$NIX_STORE" \
+          {} \;
+    '';
 
   passthru = {
     inherit cudaPackages cudaSupport rocmSupport gpuTargets;
