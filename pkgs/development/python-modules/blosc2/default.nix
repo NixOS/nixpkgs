@@ -1,46 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-
-# build-system
 , cmake
 , cython_3
-, ninja
-, oldest-supported-numpy
-, scikit-build
-, setuptools
-, wheel
-
-# propagates
+, fetchFromGitHub
 , msgpack
 , ndindex
+, ninja
 , numpy
-, py-cpuinfo
-, rich
-
-# tests
+, oldest-supported-numpy
 , psutil
+, py-cpuinfo
 , pytestCheckHook
+, scikit-build
+, setuptools
 , torch
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "2.3.2";
-  format = "pyproject";
+  version = "2.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-tRcyntJlmLPbqnX7nzdBQ/50uXy0fVLb2YGVOIwJjxU=";
+    hash = "sha256-72TBZ0EXMz8BeKJxjnG44//ICgdvoZG9gYC4gdq3+nA=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements-runtime.txt \
-      --replace "pytest" ""
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -59,13 +47,16 @@ buildPythonPackage rec {
     ndindex
     numpy
     py-cpuinfo
-    rich
   ];
 
   nativeCheckInputs = [
     psutil
     pytestCheckHook
     torch
+  ];
+
+  pythonImportsCheck = [
+    "blosc2"
   ];
 
   meta = with lib; {
