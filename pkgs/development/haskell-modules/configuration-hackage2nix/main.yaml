@@ -278,7 +278,6 @@ package-maintainers:
     - pandoc
     - pandoc-cli
     - pandoc-crossref
-    - paths
     - postgresql-simple
     - purebred-email
     - reflex-dom
