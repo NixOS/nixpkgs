@@ -9,6 +9,8 @@
 , qtsvg
 , qttools
 , qtserialport
+, qtwayland
+, qt5compat
 , boost
 , libngspice
 , libgit2
@@ -18,38 +20,60 @@
 let
   # SHA256 of the fritzing-parts HEAD on the master branch,
   # which contains the latest stable parts definitions
-  partsSha = "4713511c894cb2894eae505b9307c6555afcc32c";
+  partsSha = "015626e6cafb1fc7831c2e536d97ca2275a83d32";
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
     rev = partsSha;
-    sha256 = "sha256-QiOGWc+99MJhOVrXyNOinR8rTVvW/E+wPfoB6QvbhY0=";
+    hash = "sha256-5jw56cqxpT/8bf1q551WG53J6Lw5pH0HEtRUoNNMc+A=";
+  };
+
+  # Header-only library
+  svgpp = fetchFromGitHub {
+    owner = "svgpp";
+    repo = "svgpp";
+    rev = "v1.3.0";
+    hash = "sha256-kJEVnMYnDF7bThDB60bGXalYgpn9c5/JCZkRSK5GoE4=";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "fritzing";
-  version = "unstable-2022-07-01";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "fritzing-app";
-    rev = "40d23c29b0463d5c968c3c4b34ed5ffc05c5a258";
-    sha256 = "sha256-smvfuxQWF/LMFFXHOKb3zUZsEet/XoiaxXOR5QMaYzw=";
+    rev = "8f5f1373835050ce014299c78d91c24beea9b633";
+    hash = "sha256-jLVNzSh2KwXpi3begtp/53sdBmQQbCnKMCm2p770etg=";
   };
 
-  buildInputs = [ qtbase qtsvg qtserialport boost libgit2 quazip libngspice ];
-  nativeBuildInputs = [ qmake pkg-config qttools wrapQtAppsHook ];
-
   patches = [
+    # Fix error caused by implicit call
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Quick-Dirty-patch-to-allow-finding-quazip-qt5-on-Arc.patch?h=fritzing&id=1ae0dc88464f375a54b156e6761315bcb04bcc1f";
-      sha256 = "sha256-iS18EWw920gyeXDoHBRGwXvwMJurJS21H77Erl+fqog=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0003-ParseResult-operator-bool-in-explicit.patch?h=fritzing&id=b2c79b55f0a2811e80bb1136b1e021fbc56937c9";
+      hash = "sha256-9HdcNqLHEB0HQbF7AaTdUIJUbafwsRKPA+wfF4g8veU=";
     })
   ];
 
+  nativeBuildInputs = [ qmake pkg-config qttools wrapQtAppsHook ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtserialport
+    qtwayland
+    qt5compat
+    boost
+    libgit2
+    quazip
+    libngspice
+  ];
+
   postPatch = ''
+    # Use packaged quazip, libgit and ngspice
+    sed -i "/pri\/quazipdetect.pri/d" phoenix.pro
+    sed -i "/pri\/spicedetect.pri/d" phoenix.pro
     substituteInPlace phoenix.pro \
       --replace 'LIBGIT_STATIC = true' 'LIBGIT_STATIC = false'
 
@@ -61,7 +85,11 @@ stdenv.mkDerivation rec {
     cp -a ${parts}/* parts/
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip";
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+    "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip"
+    "-I${svgpp}/include"
+  ];
+  env.NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
 
   qmakeFlags = [
     "phoenix.pro"

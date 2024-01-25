@@ -2558,10 +2558,10 @@ self: super: with self; {
   cython = callPackage ../development/python-modules/cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.6";
+    version = "3.0.7";
     src = old.src.override {
       inherit version;
-      hash = "sha256-OZ0YVnLGZ7Juq73KQgyYVkWDeYrzvEdnCooJ6fGd1mA=";
+      hash = "sha256-+ymazzpXhXPBkMhY1J4M+ddfS8ScPyTFpjgEmX7wkhM=";
     };
     patches = [ ];
   });
@@ -11165,7 +11165,7 @@ self: super: with self; {
 
   pyrituals = callPackage ../development/python-modules/pyrituals { };
 
-  pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
+  pyrfc3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
@@ -14144,6 +14144,8 @@ self: super: with self; {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
+  tensordict = callPackage ../development/python-modules/tensordict { };
+
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     inherit (pkgs.config) cudaSupport;
   };
@@ -14547,6 +14549,8 @@ self: super: with self; {
   torchinfo = callPackage ../development/python-modules/torchinfo { };
 
   torchlibrosa = callPackage ../development/python-modules/torchlibrosa { };
+
+  torchrl = callPackage ../development/python-modules/torchrl { };
 
   torchsde = callPackage ../development/python-modules/torchsde { };
 

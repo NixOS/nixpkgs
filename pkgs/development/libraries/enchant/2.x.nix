@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-wcVxnypZfOPgbJOM+5n7aX2gk96nuFfMAE3B3PG7oYI=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     groff
     pkg-config
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     nuspell
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     unittest-cpp
   ];
 

@@ -3,7 +3,7 @@
 , cryptography
 , pyasn1
 , pyopenssl
-, pyRFC3339
+, pyrfc3339
 , josepy
 , pytz
 , requests
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   propagatedBuildInputs = [
-    cryptography pyasn1 pyopenssl pyRFC3339 pytz requests requests-toolbelt six
+    cryptography pyasn1 pyopenssl pyrfc3339 pytz requests requests-toolbelt six
     werkzeug ndg-httpsclient josepy
   ];
 
