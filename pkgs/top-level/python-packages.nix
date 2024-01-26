@@ -14002,6 +14002,8 @@ self: super: with self; {
 
   svgelements = callPackage ../development/python-modules/svgelements { };
 
+  svgutils = callPackage ../development/python-modules/svgutils { };
+
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
   sv-ttk = callPackage ../development/python-modules/sv-ttk { };
