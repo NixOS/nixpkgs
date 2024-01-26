@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , text-unidecode
 , unidecode
 }:
@@ -10,16 +11,20 @@
 buildPythonPackage rec {
   pname = "python-slugify";
   version = "8.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "un33k";
-    repo = pname;
+    repo =  "python-slugify";
     rev = "refs/tags/v${version}";
     hash = "sha256-MJac63XjgWdUQdyyEm8O7gAGVszmHxZzRF4frJtR0BU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     text-unidecode
