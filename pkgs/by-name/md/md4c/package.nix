@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "md4c";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mity";
     repo = "md4c";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-YPM1jdKy3i81hc66wMlGweiSzqBgaHwzkQP/o2RvDnI=";
+    hash = "sha256-BWmzNV3iC2g8MHoYtqIcUtLQz3oaQwH+Pyy4fN3N7/k=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
