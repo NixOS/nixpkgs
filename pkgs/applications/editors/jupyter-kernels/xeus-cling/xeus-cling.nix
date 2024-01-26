@@ -1,11 +1,8 @@
 { lib
-, callPackage
 , clangStdenv
 , cmake
 , fetchFromGitHub
-, gcc
-, git
-, llvmPackages_9
+, fetchpatch
 # Libraries
 , argparse
 , cling
@@ -52,6 +49,11 @@ clangStdenv.mkDerivation rec {
   patches = [
     ./0001-Fix-bug-in-extract_filename.patch
     ./0002-Don-t-pass-extra-includes-configure-this-with-flags.patch
+    (fetchpatch {
+      name = "0002-Use-llvm-from-cling.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0002-Use-llvm-from-cling.patch?h=xeus-cling&id=294d0aa6648c0f8a95fd0435c993130627059934";
+      hash = "sha256-z3KUYMEc4RqLwzbb4hC9qBRBYsB1jtLIRt8fWb3zj5k=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -60,7 +62,6 @@ clangStdenv.mkDerivation rec {
     cling.unwrapped
     cppzmq
     libuuid
-    llvmPackages_9.llvm
     ncurses
     openssl
     pugixml
