@@ -17,7 +17,10 @@ in
       # for external modules that test with e.g. testers.nixosTest and rely on that
       # version number.
       config.system.nixos.revision = mkForce "constant-nixos-revision";
-    }
 
+      # Avoid getting different hashes for test runs between classical nix and flake-enabled nix.
+      # For flakes, lib.trivial.versionSuffix gets overridden in flake-version-info.nix.
+      config.system.nixos.versionSuffix = mkForce "-vm-test";
+     }
   ];
 }
