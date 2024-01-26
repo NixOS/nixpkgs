@@ -2760,6 +2760,8 @@ self: super: with self; {
 
   dctorch = callPackage ../development/python-modules/dctorch { };
 
+  ddcci-plasmoid-backend = callPackage ../development/python-modules/ddcci-plasmoid-backend { };
+
   ddt = callPackage ../development/python-modules/ddt { };
 
   deal = callPackage ../development/python-modules/deal { };
