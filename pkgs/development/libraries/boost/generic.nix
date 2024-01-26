@@ -9,7 +9,7 @@
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? !(with stdenv.hostPlatform; isStatic || libc == "msvcrt") # problems for now
+, enableShared ? !(with stdenv.hostPlatform; isStatic || isMinGW) # problems for now
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
@@ -30,9 +30,6 @@
 assert enableShared || enableStatic;
 
 assert enableNumpy -> enablePython;
-
-# Boost <1.69 can't be built on linux with clang >8, because pth was removed
-assert with lib; (stdenv.isLinux && toolset == "clang" && versionAtLeast stdenv.cc.version "8.0.0") -> versionAtLeast version "1.69";
 
 let
 
@@ -75,7 +72,9 @@ let
                     then if lib.versionOlder version "1.78" then "mips1" else "mips"
                     else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
-    "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
+    # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
+    "binary-format=${if stdenv.hostPlatform.isMacho then "mach-o"
+                     else toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
     "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
     # adapted from table in boost manual
@@ -91,7 +90,7 @@ let
     ++ lib.optional (!enablePython) "--without-python"
     ++ lib.optional needUserConfig "--user-config=user-config.jam"
     ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
-    ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "threadapi=win32"
   ] ++ extraB2Args
   );
@@ -107,41 +106,60 @@ stdenv.mkDerivation {
 
   patches = patches
   ++ lib.optional stdenv.isDarwin ./darwin-no-system-python.patch
-  # Fix boost-context segmentation faults on ppc64 due to ABI violation
-  ++ lib.optional (lib.versionOlder version "1.71") (fetchpatch {
-    url = "https://github.com/boostorg/context/commit/2354eca9b776a6739112833f64754108cc0d1dc5.patch";
-    sha256 = "067m4bjpmcanqvg28djax9a10avmdwhlpfx6gn73kbqqq70dnz29";
-    stripLen = 1;
-    extraPrefix = "libs/context/";
-  })
-  ++ lib.optional (lib.versionOlder version "1.70") (fetchpatch {
-    # support for Mips64n64 appeared in boost-context 1.70
-    url = "https://github.com/boostorg/context/commit/e3f744a1862164062d579d1972272d67bdaa9c39.patch";
-    sha256 = "sha256-qjQy1b4jDsIRrI+UYtcguhvChrMbGWO0UlEzEJHYzRI=";
-    stripLen = 1;
-    extraPrefix = "libs/context/";
-  })
-  ++ lib.optional (lib.versionAtLeast version "1.70" && lib.versionOlder version "1.73") ./cmake-paths.patch
-  ++ lib.optional (lib.versionAtLeast version "1.73") ./cmake-paths-173.patch
+  ++ [ ./cmake-paths-173.patch ]
   ++ lib.optional (version == "1.77.0") (fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
     relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
-  });
+  })
+  # Fixes ABI detection
+  ++ lib.optional (version == "1.83.0") (fetchpatch {
+    url = "https://github.com/boostorg/context/commit/6fa6d5c50d120e69b2d8a1c0d2256ee933e94b3b.patch";
+    stripLen = 1;
+    extraPrefix = "libs/context/";
+    sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
+  })
+  # This fixes another issue regarding ill-formed constant expressions, which is a default error
+  # in clang 16 and will be a hard error in clang 17.
+  ++ lib.optional (lib.versionOlder version "1.80") (fetchpatch {
+    url = "https://github.com/boostorg/log/commit/77f1e20bd69c2e7a9e25e6a9818ae6105f7d070c.patch";
+    relative = "include";
+    hash = "sha256-6qOiGJASm33XzwoxVZfKJd7sTlQ5yd+MMFQzegXm5RI=";
+  })
+  ++ lib.optionals (lib.versionOlder version "1.81") [
+    # libc++ 15 dropped support for `std::unary_function` and `std::binary_function` in C++17+.
+    # C++17 is the default for clang 16, but clang 15 is also affected in that language mode.
+    # This patch is for Boost 1.80, but it also applies to earlier versions.
+    (fetchpatch {
+      url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
+      hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
+    })
+    # This fixes another ill-formed contant expressions issue flagged by clang 16.
+    (fetchpatch {
+      url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
+      relative = "include";
+      hash = "sha256-dq4SVgxkPJSC7Fvr59VGnXkM4Lb09kYDaBksCHo9C0s=";
+    })
+    # This fixes an issue in Python 3.11 about Py_TPFLAGS_HAVE_GC
+    (fetchpatch {
+      name = "python311-compatibility.patch";
+      url = "https://github.com/boostorg/python/commit/a218babc8daee904a83f550fb66e5cb3f1cb3013.patch";
+      hash = "sha256-IHxLtJBx0xSy7QEr8FbCPofsjcPuSYzgtPwDlx1JM+4=";
+      stripLen = 1;
+      extraPrefix = "libs/python/";
+    })
+  ];
 
   meta = with lib; {
     homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
-    badPlatforms = optionals (versionOlder version "1.73") platforms.riscv;
+    # boost-context lacks support for the N32 ABI on mips64.  The build
+    # will succeed, but packages depending on boost-context will fail with
+    # a very cryptic error message.
+    badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
-
-    broken =
-      # boost-context lacks support for the N32 ABI on mips64.  The build
-      # will succeed, but packages depending on boost-context will fail with
-      # a very cryptic error message.
-      stdenv.hostPlatform.isMips64n32;
   };
 
   passthru = {
@@ -240,7 +258,7 @@ stdenv.mkDerivation {
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
       -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-  '' + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
+  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
     $RANLIB "$out/lib/"*.a
   '';
 

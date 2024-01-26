@@ -4,6 +4,9 @@
 , fetchFromGitHub
 , go
 , lib
+, libcap
+, libgcrypt
+, libgpg-error
 , libsecret
 , pkg-config
 , polkit
@@ -23,47 +26,50 @@
 
 let
   pname = "mozillavpn";
-  version = "2.14.1";
+  version = "2.19.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-xWm21guI+h0bKd/rEyxVMyxypCitLWEbVy7TaVBKh4o=";
+    hash = "sha256-aXfxUtGm+vq8U3jYTxYhOP7UXL6ukCJgmGQO2Wsqobo=";
   };
+  patches = [ ];
 
-  netfilter-go-modules = (buildGoModule {
-    inherit pname version src;
+  netfilterGoModules = (buildGoModule {
+    inherit pname version src patches;
     modRoot = "linux/netfilter";
     vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
-  }).go-modules;
+  }).goModules;
 
   extensionBridgeDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+    inherit src patches;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-XW47EnNHm5JUWCqDU/iHB6ZRGny4v5x7Fs/1dv5TfzM=";
+    hash = "sha256-23GTXsbjL8qfGA5NdPlrbdaA8rg8vOZsZCXvevi7Chc=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+    inherit src patches;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-CNPL1Orn+ZbX0HL+CHMaoXPI9G8MoC+hY8pJTJlWH1U=";
+    hash = "sha256-TB172hVIilDTl+y0shNp55if+FhrXjWSaGNF7K6GSH8=";
   };
-  vpngleanDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}-vpnglean";
-    preBuild = "cd vpnglean";
-    hash = "sha256-5vazbCqzJG6iA0MFaTNha42jb1pgLhr0P9I8rQxSKtw=";
+  qtgleanDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    name = "${pname}-${version}-qtglean";
+    preBuild = "cd qtglean";
+    hash = "sha256-tfQ2ogSDDXNPeygBy+el+71iwcafSfY78hvYPHurKPE=";
   };
 
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  inherit pname version src patches;
 
   buildInputs = [
+    libcap
+    libgcrypt
+    libgpg-error
     libsecret
-    polkit
     qt5compat
     qtbase
     qtnetworkauth
@@ -71,6 +77,7 @@ stdenv.mkDerivation {
     qtwebsockets
   ];
   nativeBuildInputs = [
+    cargo
     cmake
     go
     pkg-config
@@ -78,8 +85,8 @@ stdenv.mkDerivation {
     python3.pkgs.glean-parser
     python3.pkgs.pyyaml
     python3.pkgs.setuptools
+    qttools
     rustPlatform.cargoSetupHook
-    cargo
     rustc
     wrapQtAppsHook
   ];
@@ -95,30 +102,23 @@ stdenv.mkDerivation {
     signatureDepsCopy="$cargoDepsCopy"
     popd
 
-    pushd source/vpnglean
-    cargoDeps='${vpngleanDeps}' cargoSetupPostUnpackHook
-    vpngleanDepsCopy="$cargoDepsCopy"
+    pushd source/qtglean
+    cargoDeps='${qtgleanDeps}' cargoSetupPostUnpackHook
+    qtgleanDepsCopy="$cargoDepsCopy"
     popd
   '';
   dontCargoSetupPostUnpack = true;
 
   postPatch = ''
-    substituteInPlace src/apps/vpn/platforms/linux/daemon/org.mozilla.vpn.dbus.service --replace /usr/bin/mozillavpn "$out/bin/mozillavpn"
-
-    substituteInPlace scripts/addon/build.py \
-      --replace 'qtbinpath = args.qtpath' 'qtbinpath = "${qttools.dev}/bin"' \
-      --replace 'rcc = os.path.join(qtbinpath, rcc_bin)' 'rcc = "${qtbase.dev}/libexec/rcc"'
-
-    substituteInPlace src/apps/vpn/cmake/linux.cmake \
+    substituteInPlace src/cmake/linux.cmake \
       --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '${"$"}{POLKIT_POLICY_DIR}' "$out/share/polkit-1/actions" \
       --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
       --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    ln -s '${netfilter-go-modules}' linux/netfilter/vendor
+    ln -s '${netfilterGoModules}' linux/netfilter/vendor
 
     pushd extension/bridge
     cargoDepsCopy="$extensionBridgeDepsCopy" cargoSetupPostPatchHook
@@ -128,8 +128,8 @@ stdenv.mkDerivation {
     cargoDepsCopy="$signatureDepsCopy" cargoSetupPostPatchHook
     popd
 
-    pushd vpnglean
-    cargoDepsCopy="$vpngleanDepsCopy" cargoSetupPostPatchHook
+    pushd qtglean
+    cargoDepsCopy="$qtgleanDepsCopy" cargoSetupPostPatchHook
     popd
 
     cargoSetupPostPatchHook() { true; }

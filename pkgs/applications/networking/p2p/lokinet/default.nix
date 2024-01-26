@@ -8,13 +8,20 @@
 , nlohmann_json
 , pkg-config
 , spdlog
+, fmt_9
 , sqlite
 , systemd
 , unbound
 , zeromq
 }:
+let
+  # Upstream has received reports of incompatibilities with fmt, and other
+  # dependencies, see: https://github.com/oxen-io/lokinet/issues/2200.
+  spdlog' = spdlog.override {
+    fmt = fmt_9;
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "lokinet";
   version = "0.9.11";
 
@@ -36,7 +43,7 @@ stdenv.mkDerivation rec {
     libuv
     libsodium
     nlohmann_json
-    spdlog
+    spdlog'
     sqlite
     systemd
     unbound

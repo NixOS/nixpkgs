@@ -1,8 +1,6 @@
 { lib
-, stdenvNoCC
 , buildDotnetModule
 , fetchFromGitHub
-, fetchpatch
 , dotnetCorePackages
 , gtk4
 , libadwaita
@@ -10,54 +8,56 @@
 , wrapGAppsHook4
 , glib
 , shared-mime-info
-, python3
-, desktop-file-utils
 , gdk-pixbuf
+, blueprint-compiler
 }:
 
 buildDotnetModule rec {
   pname = "denaro";
-  version = "2023.2.2";
+  version = "2024.1.0";
 
   src = fetchFromGitHub {
-    owner = "nlogozzo";
-    repo = "NickvisionMoney";
+    owner = "NickvisionApps";
+    repo = "Denaro";
     rev = version;
-    hash = "sha256-B84uzJ+B7kGU+O2tuObrIFCvgUfszLd1VU7F5tL90bU=";
+    hash = "sha256-1LGcJmNucLmP5JbtZcLGuIE0UTmeUxLl9j31Oe0k93s=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "NickvisionMoney.GNOME/NickvisionMoney.GNOME.csproj";
   nugetDeps = ./deps.nix;
   executables = "NickvisionMoney.GNOME";
-
-  # Prevent installing native libraries for all platforms
-  dotnetBuildFlags = [ "--runtime" (dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system) ];
-  dotnetInstallFlags = [ "--runtime" (dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system) ];
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
     glib # For glib-compile-resources
     shared-mime-info # For update-mime-database
-    python3
-    desktop-file-utils
     gdk-pixbuf # Fixes icon missing in envs where GDK_PIXBUF_MODULE_FILE is not set
+    blueprint-compiler
   ];
 
+  buildInputs = [ gtk4 libadwaita ]; # Used by blueprint-compiler
+
+  # Denaro switches installation tool frequently (bash -> just -> cake)
+  # For maintainability, let's do it ourselves
   postInstall = ''
-    sh NickvisionMoney.GNOME/install_extras.sh $out
-    desktop-file-edit $out/share/applications/org.nickvision.money.desktop \
-      --set-key=Exec --set-value=$out/bin/NickvisionMoney.GNOME
+    substituteInPlace NickvisionMoney.Shared/Linux/org.nickvision.money.desktop.in --replace '@EXEC@' "NickvisionMoney.GNOME"
+    install -Dm444 NickvisionMoney.Shared/Resources/org.nickvision.money.svg -t $out/share/icons/hicolor/scalable/apps/
+    install -Dm444 NickvisionMoney.Shared/Resources/org.nickvision.money-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps/
+    install -Dm444 NickvisionMoney.Shared/Linux/org.nickvision.money.desktop.in -T $out/share/applications/org.nickvision.money.desktop
   '';
 
   runtimeDeps = [
     gtk4
     libadwaita
     glib # Fixes "Could not retrieve parent type - is the typeid valid?"
+    gdk-pixbuf
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Personal finance manager for GNOME";
@@ -65,7 +65,7 @@ buildDotnetModule rec {
     mainProgram = "NickvisionMoney.GNOME";
     license = licenses.mit;
     changelog = "https://github.com/nlogozzo/NickvisionMoney/releases/tag/${version}";
-    maintainers = with maintainers; [ chuangzhu ];
+    maintainers = with maintainers; [ chuangzhu kashw2 ];
     platforms = platforms.linux;
   };
 }

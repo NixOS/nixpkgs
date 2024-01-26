@@ -45,6 +45,8 @@ let
           name = "source-${rev}";
           inherit owner repo rev hash;
         };
+        # nixpkgs-update: no auto update
+        # easier to update all providers together
 
         meta = {
           inherit homepage;
@@ -80,6 +82,8 @@ let
       # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
       checkly = automated-providers.checkly.override { spdx = "MIT"; };
       gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
+      # actions update always fails but can't reproduce the failure.
+      heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
     };
@@ -91,7 +95,7 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      ksyun = removed "ksyun" "2023/04";
+      fly = archived "fly" "2023/10";
     };
 
   # excluding aliases, used by terraform-full

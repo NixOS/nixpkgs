@@ -37,6 +37,10 @@ rec {
     config = "armv6l-unknown-linux-gnueabihf";
   } // platforms.raspberrypi;
 
+  bluefield2 = {
+    config = "aarch64-unknown-linux-gnu";
+  } // platforms.bluefield2;
+
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
   } // platforms.zero-gravitas;
@@ -91,22 +95,16 @@ rec {
   } // platforms.fuloong2f_n32;
 
   # can execute on 32bit chip
-  mips-linux-gnu                = { config = "mips-unknown-linux-gnu";                } // platforms.gcc_mips32r2_o32;
-  mipsel-linux-gnu              = { config = "mipsel-unknown-linux-gnu";              } // platforms.gcc_mips32r2_o32;
-  mipsisa32r6-linux-gnu         = { config = "mipsisa32r6-unknown-linux-gnu";         } // platforms.gcc_mips32r6_o32;
-  mipsisa32r6el-linux-gnu       = { config = "mipsisa32r6el-unknown-linux-gnu";       } // platforms.gcc_mips32r6_o32;
+  mips-linux-gnu           = { config = "mips-unknown-linux-gnu";           } // platforms.gcc_mips32r2_o32;
+  mipsel-linux-gnu         = { config = "mipsel-unknown-linux-gnu";         } // platforms.gcc_mips32r2_o32;
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
-  mips64-linux-gnuabin32        = { config = "mips64-unknown-linux-gnuabin32";        } // platforms.gcc_mips64r2_n32;
-  mips64el-linux-gnuabin32      = { config = "mips64el-unknown-linux-gnuabin32";      } // platforms.gcc_mips64r2_n32;
-  mipsisa64r6-linux-gnuabin32   = { config = "mipsisa64r6-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r6_n32;
-  mipsisa64r6el-linux-gnuabin32 = { config = "mipsisa64r6el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r6_n32;
+  mips64-linux-gnuabin32   = { config = "mips64-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r2_n32;
+  mips64el-linux-gnuabin32 = { config = "mips64el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r2_n32;
 
   # 64bit pointers
-  mips64-linux-gnuabi64         = { config = "mips64-unknown-linux-gnuabi64";         } // platforms.gcc_mips64r2_64;
-  mips64el-linux-gnuabi64       = { config = "mips64el-unknown-linux-gnuabi64";       } // platforms.gcc_mips64r2_64;
-  mipsisa64r6-linux-gnuabi64    = { config = "mipsisa64r6-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r6_64;
-  mipsisa64r6el-linux-gnuabi64  = { config = "mipsisa64r6el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r6_64;
+  mips64-linux-gnuabi64    = { config = "mips64-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r2_64;
+  mips64el-linux-gnuabi64  = { config = "mips64el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r2_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -117,6 +115,7 @@ rec {
   };
 
   gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32  = { config = "i686-unknown-linux-gnu"; };
 
   musl64 = { config = "x86_64-unknown-linux-musl"; };
@@ -132,6 +131,16 @@ rec {
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
+    libc = "newlib";
+  };
+
+  mips64-embedded = {
+    config = "mips64-none-elf";
+    libc = "newlib";
+  };
+
+  mips-embedded = {
+    config = "mips-none-elf";
     libc = "newlib";
   };
 
@@ -198,6 +207,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
+    rustc.config = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
@@ -303,6 +313,11 @@ rec {
     # That's the triplet they use in the mingw-w64 docs.
     config = "x86_64-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
+  };
+
+  ucrt64 = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
   # BSDs

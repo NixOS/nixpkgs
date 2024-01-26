@@ -15,6 +15,7 @@ in
 buildPythonPackage rec {
   pname = "editorconfig";
   version = "0.12.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "editorconfig";
@@ -48,6 +49,6 @@ buildPythonPackage rec {
     description = "EditorConfig File Locator and Interpreter for Python";
     homepage = "https://github.com/editorconfig/editorconfig-core-py";
     license = licenses.psfl;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

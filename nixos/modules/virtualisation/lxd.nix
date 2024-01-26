@@ -2,21 +2,22 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.virtualisation.lxd;
+  preseedFormat = pkgs.formats.yaml {};
 in {
-  imports = [
-    (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
-  ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
-  ###### interface
+  imports = [
+    (lib.mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+  ];
 
   options = {
     virtualisation.lxd = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc ''
           This option enables lxd, a daemon that manages
@@ -32,28 +33,18 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.lxd;
-        defaultText = literalExpression "pkgs.lxd";
-        description = lib.mdDoc ''
-          The LXD package to use.
+      package = lib.mkPackageOption pkgs "lxd" { };
+
+      lxcPackage = lib.mkPackageOption pkgs "lxc" {
+        extraDescription = ''
+          Required for AppArmor profiles.
         '';
       };
 
-      lxcPackage = mkOption {
-        type = types.package;
-        default = pkgs.lxc;
-        defaultText = literalExpression "pkgs.lxc";
-        description = lib.mdDoc ''
-          The LXC package to use with LXD (required for AppArmor profiles).
-        '';
-      };
-
-      zfsSupport = mkOption {
-        type = types.bool;
+      zfsSupport = lib.mkOption {
+        type = lib.types.bool;
         default = config.boot.zfs.enabled;
-        defaultText = literalExpression "config.boot.zfs.enabled";
+        defaultText = lib.literalExpression "config.boot.zfs.enabled";
         description = lib.mdDoc ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -62,8 +53,8 @@ in {
         '';
       };
 
-      recommendedSysctlSettings = mkOption {
-        type = types.bool;
+      recommendedSysctlSettings = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = lib.mdDoc ''
           Enables various settings to avoid common pitfalls when
@@ -75,8 +66,67 @@ in {
         '';
       };
 
-      startTimeout = mkOption {
-        type = types.int;
+      preseed = lib.mkOption {
+        type = lib.types.nullOr (lib.types.submodule {
+          freeformType = preseedFormat.type;
+        });
+
+        default = null;
+
+        description = lib.mdDoc ''
+          Configuration for LXD preseed, see
+          <https://documentation.ubuntu.com/lxd/en/latest/howto/initialize/#initialize-preseed>
+          for supported values.
+
+          Changes to this will be re-applied to LXD which will overwrite existing entities or create missing ones,
+          but entities will *not* be removed by preseed.
+        '';
+
+        example = lib.literalExpression ''
+          {
+            networks = [
+              {
+                name = "lxdbr0";
+                type = "bridge";
+                config = {
+                  "ipv4.address" = "10.0.100.1/24";
+                  "ipv4.nat" = "true";
+                };
+              }
+            ];
+            profiles = [
+              {
+                name = "default";
+                devices = {
+                  eth0 = {
+                    name = "eth0";
+                    network = "lxdbr0";
+                    type = "nic";
+                  };
+                  root = {
+                    path = "/";
+                    pool = "default";
+                    size = "35GiB";
+                    type = "disk";
+                  };
+                };
+              }
+            ];
+            storage_pools = [
+              {
+                name = "default";
+                driver = "dir";
+                config = {
+                  source = "/var/lib/lxd/storage-pools/default";
+                };
+              }
+            ];
+          }
+        '';
+      };
+
+      startTimeout = lib.mkOption {
+        type = lib.types.int;
         default = 600;
         apply = toString;
         description = lib.mdDoc ''
@@ -85,11 +135,17 @@ in {
           considered failed and systemd will attempt to restart it.
         '';
       };
+
+      ui = {
+        enable = lib.mkEnableOption (lib.mdDoc "(experimental) LXD UI");
+
+        package = lib.mkPackageOption pkgs [ "lxd-unwrapped" "ui" ] { };
+      };
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     # Note: the following options are also declared in virtualisation.lxc, but
@@ -131,17 +187,21 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [
         "network-online.target"
-        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+        (lib.mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
       ];
       requires = [
         "network-online.target"
         "lxd.socket"
-        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+        (lib.mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
       ];
       documentation = [ "man:lxd(1)" ];
 
       path = [ pkgs.util-linux ]
-        ++ optional cfg.zfsSupport config.boot.zfs.package;
+        ++ lib.optional cfg.zfsSupport config.boot.zfs.package;
+
+      environment = lib.mkIf (cfg.ui.enable) {
+        "LXD_UI" = cfg.ui.package;
+      };
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
@@ -154,15 +214,28 @@ in {
         LimitNPROC = "infinity";
         TasksMax = "infinity";
 
-        Restart = "on-failure";
-        TimeoutStartSec = "${cfg.startTimeout}s";
-        TimeoutStopSec = "30s";
-
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
         # explicitly tell it where the actual configuration files are
-        Environment = mkIf (config.virtualisation.lxc.lxcfs.enable)
+        Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
           "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
+      };
+
+      unitConfig.ConditionPathExists = "!/var/lib/incus/.migrated-from-lxd";
+    };
+
+    systemd.services.lxd-preseed = lib.mkIf (cfg.preseed != null) {
+      description = "LXD initialization with preseed file";
+      wantedBy = ["multi-user.target"];
+      requires = ["lxd.service"];
+      after = ["lxd.service"];
+
+      script = ''
+        ${pkgs.coreutils}/bin/cat ${preseedFormat.generate "lxd-preseed.yaml" cfg.preseed} | ${cfg.package}/bin/lxd init --preseed
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
       };
     };
 
@@ -173,18 +246,18 @@ in {
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
     };
 
-    boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {
+    boot.kernel.sysctl = lib.mkIf cfg.recommendedSysctlSettings {
       "fs.inotify.max_queued_events" = 1048576;
       "fs.inotify.max_user_instances" = 1048576;
       "fs.inotify.max_user_watches" = 1048576;
-      "vm.max_map_count" = 262144;
+      "vm.max_map_count" = 262144; # TODO: Default vm.max_map_count has been increased system-wide
       "kernel.dmesg_restrict" = 1;
       "net.ipv4.neigh.default.gc_thresh3" = 8192;
       "net.ipv6.neigh.default.gc_thresh3" = 8192;
       "kernel.keys.maxkeys" = 2000;
     };
 
-    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" ]
-      ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" "vhost_vsock" ]
+      ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }

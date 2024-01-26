@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -18,35 +17,21 @@
 
 stdenv.mkDerivation rec {
   pname = "health";
-  version = "0.94.0";
+  version = "0.95.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-KS0sdCQg2LqQB0K1cUbAjA8VITn5rAb8XCWjOKYbPqM=";
+    hash = "sha256-PrNPprSS98yN8b8yw2G6hzTSaoE65VbsM3q7FVB4mds=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    patches = [ ./update_gtk4_cargo_deps.patch ];
     name = "${pname}-${version}";
-    hash = "sha256-j0I0vKoGaf2pce2C/xkz+nJYCfLvHB5F6Q9XpJtABMI=";
+    hash = "sha256-8fa3fa+sFi5H+49B5sr2vYPkp9C9s6CcE0zv4xB8gww=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/max_size_tightending_thresh_0.94.0.patch?h=health&id=d35d89760964b00ad457eca07855143a1dcbabdf";
-      hash = "sha256-ndoxyrm+SVGVxfUbc5sQItQwzK75ZtKMSGUOB9mzBmo=";
-    })
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/max_value_0.94.0.patch?h=health&id=d35d89760964b00ad457eca07855143a1dcbabdf";
-      hash = "sha256-YKVQNtz+RWN6Ydw+kbStCVf0vu0eTrMKGd6kEijFG00=";
-    })
-    # patch both or it will complain Cargo.lock mismatch
-    ./update_gtk4_cargo_deps.patch
-  ];
 
   nativeBuildInputs = [
     meson

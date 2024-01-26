@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, python3
-, boost175, curl, fuse, openssl, range-v3, spdlog
+, boost, curl, fuse, openssl, range-v3, spdlog
 # cryptopp and gtest on standby - using the vendored ones for now
 # see https://github.com/cryfs/cryfs/issues/369
 , llvmPackages
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-7luTCDjrquG8aBZ841VPwV9/ea8faHGLQtmRahqGTss=";
+    hash = "sha256-OkJhLg+YzS3kDhlpUQe9A+OiVBPG/iKs6OU7aKFJ5wY=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [ boost175 curl fuse openssl range-v3 spdlog ]
+  buildInputs = [ boost curl fuse openssl range-v3 spdlog ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   #nativeCheckInputs = [ gtest ];

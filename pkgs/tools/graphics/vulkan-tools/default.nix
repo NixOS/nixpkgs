@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, buildPackages
 , cmake
 , pkg-config
+, python3
 , glslang
 , libffi
 , libX11
@@ -12,6 +14,7 @@
 , libXrandr
 , vulkan-headers
 , vulkan-loader
+, vulkan-volk
 , wayland
 , wayland-protocols
 , moltenvk
@@ -21,24 +24,26 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.249";
+  version = "1.3.275.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
-    rev = "v${version}";
-    hash = "sha256-+d0Yp+e/wzlRmUIs4SffiphkqmM/7avJrt3JNOgO19I=";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-0sAwO8gXzpMst+7l7LS1oiDLo9E6otDktCti+v8jwDw=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
   ];
 
   buildInputs = [
     glslang
     vulkan-headers
     vulkan-loader
+    vulkan-volk
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libffi
     libX11
@@ -55,40 +60,36 @@ stdenv.mkDerivation rec {
     Cocoa
   ];
 
-  libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
-
-  patches = [
-    # Vulkan-Tools expects to find the MoltenVK ICD and `libMoltenVK.dylib` in its source repo.
-    # Patch it to use the already-built binaries and ICD in nixpkgs.
-    ./use-nix-moltenvk.patch
-  ];
-
-  # vkcube.app and vkcubepp.app require `ibtool`, but the version in `xib2nib` is not capable of
-  # building these apps. Build them using `ibtool` from Xcode, but don’t allow any other binaries
-  # into the sandbox. Note that the CLT are not supported because `ibtool` requires Xcode.
-  sandboxProfile = lib.optionalString stdenv.isDarwin ''
-    (allow process-exec
-      (literal "/usr/bin/ibtool")
-      (regex "/Xcode.app/Contents/Developer/usr/bin/ibtool")
-      (regex "/Xcode.app/Contents/Developer/usr/bin/xcodebuild"))
-    (allow file-read*)
-    (deny file-read* (subpath "/usr/local") (with no-log))
-    (allow file-write* (subpath "/private/var/folders"))
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Modify mac_common.cmake to find the ICD where nixpkgs puts it.
+    substituteInPlace mac_common.cmake \
+      --replace MoltenVK/icd/MoltenVK_icd.json MoltenVK_icd.json
+    # Remove the unconditional check for `ibtool` since the cube demo that needs it won’t be built.
+    sed -e '/#.*Interface Builder/,/^endif()/d' -i mac_common.cmake
+    # Install `vulkaninfo` to $out/bin even on Darwin.
+    substituteInPlace vulkaninfo/CMakeLists.txt \
+      --replace 'install(TARGETS vulkaninfo RUNTIME DESTINATION "vulkaninfo")' 'install(TARGETS vulkaninfo)'
   '';
 
+  libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
+
   dontPatchELF = true;
+
+  env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER="${buildPackages.wayland-scanner}/bin/wayland-scanner";
 
   cmakeFlags = [
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
-    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
+    "-DPKG_CONFIG_EXECUTABLE=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
+    "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DMOLTENVK_REPO_ROOT=${moltenvk}/share/vulkan/icd.d"
-    "-DIBTOOL=/usr/bin/ibtool"
+    # Don’t build the cube demo because it requires `ibtool`, which is not available in nixpkgs.
+    "-DBUILD_CUBE=OFF"
   ];
 
   meta = with lib; {
@@ -99,7 +100,6 @@ stdenv.mkDerivation rec {
       use of the Vulkan API.
     '';
     homepage    = "https://github.com/KhronosGroup/Vulkan-Tools";
-    hydraPlatforms = [ "x86_64-linux" "i686-linux" ];
     platforms   = platforms.unix;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];

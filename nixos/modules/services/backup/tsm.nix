@@ -3,6 +3,7 @@
 let
 
   inherit (lib.attrsets) hasAttr;
+  inherit (lib.meta) getExe';
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.types) nonEmptyStr nullOr;
@@ -10,7 +11,7 @@ let
   options.services.tsmBackup = {
     enable = mkEnableOption (lib.mdDoc ''
       automatic backups with the
-      IBM Spectrum Protect (Tivoli Storage Manager, TSM) client.
+      IBM Storage Protect (Tivoli Storage Manager, TSM) client.
       This also enables
       {option}`programs.tsmClient.enable`
     '');
@@ -78,10 +79,10 @@ in
   config = mkIf cfg.enable {
     inherit assertions;
     programs.tsmClient.enable = true;
-    programs.tsmClient.servers.${cfg.servername}.passwdDir =
+    programs.tsmClient.servers.${cfg.servername}.passworddir =
       mkDefault "/var/lib/tsm-backup/password";
     systemd.services.tsm-backup = {
-      description = "IBM Spectrum Protect (Tivoli Storage Manager) Backup";
+      description = "IBM Storage Protect (Tivoli Storage Manager) Backup";
       # DSM_LOG needs a trailing slash to have it treated as a directory.
       # `/var/log` would be littered with TSM log files otherwise.
       environment.DSM_LOG = "/var/log/tsm-backup/";
@@ -89,12 +90,12 @@ in
       environment.HOME = "/var/lib/tsm-backup";
       serviceConfig = {
         # for exit status description see
-        # https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=clients-client-return-codes
+        # https://www.ibm.com/docs/en/storage-protect/8.1.20?topic=clients-client-return-codes
         SuccessExitStatus = "4 8";
         # The `-se` option must come after the command.
         # The `-optfile` option suppresses a `dsm.opt`-not-found warning.
         ExecStart =
-          "${cfgPrg.wrappedPackage}/bin/dsmc ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
+          "${getExe' cfgPrg.wrappedPackage "dsmc"} ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
         LogsDirectory = "tsm-backup";
         StateDirectory = "tsm-backup";
         StateDirectoryMode = "0750";

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.1.1";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,10 +18,8 @@ buildPythonPackage rec {
     owner = "codingjoe";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-D2mww3sEc2SvufWNmT450a2CW+ogROn3RHypljkebuY=";
+    hash = "sha256-mORjMEg7Q/2CKZBLICSGF8dcdl98S6mBgJ4jujPGs6M=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \

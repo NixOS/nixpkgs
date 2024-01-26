@@ -20,7 +20,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "lyrebird";
-  version = "1.1.0";
+  version = "1.2.0";
 
   format = "other";
   doCheck = false;
@@ -28,15 +28,15 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "chxrlt";
     repo = "lyrebird";
-    rev = "v${version}";
-    sha256 = "0wmnww2wi8bb9m8jgc18n04gjia8pf9klmvij0w98xz11l6kxb13";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-VIYcOxvSpzRvJMzEv2i5b7t0WMF7aQxB4Y1jfvuZN/Y=";
   };
 
   propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
-  buildInputs = [ gtk3 gobject-introspection sox ];
+  buildInputs = [ gtk3 sox ];
 
   dontWrapGApps = true;
   makeWrapperArgs = [

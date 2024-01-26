@@ -115,6 +115,7 @@ in
       start_all()
 
       # Wait for network and miniupnpd.
+      router.systemctl("start network-online.target")
       router.wait_for_unit("network-online.target")
       router.wait_for_unit("miniupnpd")
 
@@ -129,6 +130,7 @@ in
       tracker.succeed("chmod 644 /tmp/test.torrent")
 
       # Start the tracker.  !!! use a less crappy tracker
+      tracker.systemctl("start network-online.target")
       tracker.wait_for_unit("network-online.target")
       tracker.wait_for_unit("opentracker.service")
       tracker.wait_for_open_port(6969)
@@ -140,6 +142,7 @@ in
 
       # Now we should be able to download from the client behind the NAT.
       tracker.wait_for_unit("httpd")
+      client1.systemctl("start network-online.target")
       client1.wait_for_unit("network-online.target")
       client1.succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent >&2 &")
       client1.wait_for_file("${download-dir}/test.tar.bz2")
@@ -148,10 +151,11 @@ in
       )
 
       # Bring down the initial seeder.
-      # tracker.stop_job("transmission")
+      tracker.stop_job("transmission")
 
       # Now download from the second client.  This can only succeed if
       # the first client created a NAT hole in the router.
+      client2.systemctl("start network-online.target")
       client2.wait_for_unit("network-online.target")
       client2.succeed(
           "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht >&2 &"

@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , pythonOlder
 , cmake
-, cython
+, cython_3
 , pytestCheckHook
 , rapidfuzz
 , rapidfuzz-cpp
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.21.0";
+  version = "0.23.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -22,12 +22,13 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j28OQkJymkh6tIGYLoZLad7OUUImjZqXdqM2zU3haac=";
+    hash = "sha256-xQimslz/G6nf2uYerLSaRAK5gvmfDmWTzEx/fh+nqg0=";
+    fetchSubmodules = true; ## for vendored `rapidfuzz-cpp`
   };
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_3
     scikit-build
   ];
 

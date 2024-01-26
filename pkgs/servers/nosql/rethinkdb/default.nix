@@ -1,22 +1,21 @@
 { lib, stdenv, fetchurl, which, m4
-, protobuf, boost170, zlib, curl, openssl, icu, jemalloc, libtool
-, python2Packages, makeWrapper
+, protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
+, python3Packages, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "rethinkdb";
-  version = "2.4.1";
+  version = "2.4.4";
 
   src = fetchurl {
     url = "https://download.rethinkdb.com/repository/raw/dist/${pname}-${version}.tgz";
-    sha256 = "5f1786c94797a0f8973597796e22545849dc214805cf1962ef76969e0b7d495b";
+    hash = "sha256-UJEjdgK2KDDbLLParKarNGMjI3QeZxDC8N5NhPRCcR8=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
-
-    # very meta
-    substituteInPlace mk/support/pkg/re2.sh --replace "-i '''" "-i"
+  postPatch = ''
+    substituteInPlace external/quickjs_*/Makefile \
+      --replace "gcc-ar" "${stdenv.cc.targetPrefix}ar" \
+      --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   preConfigure = ''
@@ -31,17 +30,17 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "rethinkdb" ];
 
-  buildInputs = [ protobuf boost170 zlib curl openssl icu ]
+  buildInputs = [ protobuf boost zlib curl openssl icu ]
     ++ lib.optional (!stdenv.isDarwin) jemalloc
     ++ lib.optional stdenv.isDarwin libtool;
 
-  nativeBuildInputs = [ which m4 python2Packages.python makeWrapper ];
+  nativeBuildInputs = [ which m4 python3Packages.python makeWrapper ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/rethinkdb \
-      --prefix PATH ":" "${python2Packages.rethinkdb}/bin"
+      --prefix PATH ":" "${python3Packages.rethinkdb}/bin"
   '';
 
   meta = {
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "https://rethinkdb.com";
     license     = lib.licenses.asl20;
-    platforms   = lib.platforms.linux;
+    platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice bluescreen303 ];
   };
 }

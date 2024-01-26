@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "tensorboard-data-server";
-  version = "0.6.1";
+  version = "0.7.2";
   format = "wheel";
   disabled = pythonOlder "3.6";
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     inherit version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-gJ/piHaC01wffR9U8PQPmLsfdxsUJltFPKBR4s5Y/Kc=";
+    hash = "sha256-fgYQ0gWIlYiYODbsBdwJjoD5e357v/fplOu3j1eNDds=";
   };
 
   pythonImportsCheck = [ "tensorboard_data_server" ];

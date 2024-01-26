@@ -39,7 +39,7 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
-              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
+              || stdenv.targetPlatform.isAarch64
               || stdenv.targetPlatform.isGhcjs)
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
@@ -57,8 +57,7 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+, enableProfiledLibs ? true
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -143,14 +142,31 @@
         return $ verbosity >= Verbose
   ''
 
+, ghcSrc ? (if rev != null then fetchgit else fetchurl) ({
+    inherit url sha256;
+  } // lib.optionalAttrs (rev != null) {
+    inherit rev;
+  })
+
+  # GHC's build system hadrian built from the GHC-to-build's source tree
+  # using our bootstrap GHC.
+, hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
+    ghcSrc = ghcSrc;
+    ghcVersion = version;
+    userSettings = hadrianUserSettings;
+    # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+    enableHyperlinkedSource =
+      # TODO(@sternenseemann): Disabling currently doesn't work with GHC >= 9.8
+      lib.versionAtLeast version "9.8" ||
+      !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+  }
+
 , #  Whether to build sphinx documentation.
+  # TODO(@sternenseemann): Hadrian ignores the --docs flag if finalStage = Stage1
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , # Whether to disable the large address space allocator
@@ -161,12 +177,6 @@
 assert !enableNativeBignum -> gmp != null;
 
 let
-  src = (if rev != null then fetchgit else fetchurl) ({
-    inherit url sha256;
-  } // lib.optionalAttrs (rev != null) {
-    inherit rev;
-  });
-
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -187,14 +197,6 @@ let
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
     ];
-
-  # GHC's build system hadrian built from the GHC-to-build's source tree
-  # using our bootstrap GHC.
-  hadrian = bootPkgs.callPackage ../../tools/haskell/hadrian {
-    ghcSrc = src;
-    ghcVersion = version;
-    userSettings = hadrianUserSettings;
-  };
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
@@ -258,9 +260,24 @@ stdenv.mkDerivation ({
   pname = "${targetPrefix}ghc${variantSuffix}";
   inherit version;
 
-  inherit src;
+  src = ghcSrc;
 
   enableParallelBuilding = true;
+
+  patches = [
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    (if lib.versionAtLeast version "9.8"
+      then ./docs-sphinx-7-ghc98.patch
+      else ./docs-sphinx-7.patch )
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+  ];
 
   postPatch = ''
     patchShebangs --build .
@@ -385,6 +402,12 @@ stdenv.mkDerivation ({
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${lib.getDev elfutils}/include"
     "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+  ] ++ lib.optionals targetPlatform.isDarwin [
+    # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
+    # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    "fp_cv_prog_ar_supports_dash_l=no"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -461,6 +484,14 @@ stdenv.mkDerivation ({
   preInstall = ''
     pushd _build/bindist/*
 
+  ''
+  # the bindist configure script uses different env variables than the GHC configure script
+  # see https://github.com/NixOS/nixpkgs/issues/267250 and https://gitlab.haskell.org/ghc/ghc/-/issues/24211
+  + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    export InstallNameToolCmd=$INSTALL_NAME_TOOL
+    export OtoolCmd=$OTOOL
+  ''
+  + ''
     $configureScript $configureFlags "''${configureFlagsArray[@]}"
   '';
 
@@ -483,6 +514,10 @@ stdenv.mkDerivation ({
 
     # Expose hadrian used for bootstrapping, for debugging purposes
     inherit hadrian;
+
+    # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
+    # so haddock isn't available for GHC cross-compilers. Can we fix that?
+    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
   };
 
   meta = {

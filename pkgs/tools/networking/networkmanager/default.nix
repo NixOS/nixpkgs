@@ -4,7 +4,6 @@
 , substituteAll
 , gettext
 , pkg-config
-, fetchpatch
 , dbus
 , gnome
 , systemd
@@ -54,15 +53,15 @@
 }:
 
 let
-  pythonForDocs = python3.pythonForBuild.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  pythonForDocs = python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.42.6";
+  version = "1.44.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-jDiKw3daxrzrYF+uIb4sPiYcr+YGeZSonw36RhDtAnk=";
+    sha256 = "sha256-S1i/OsV+LO+1ZS79CUXrC0vDamPZKmGrRx2LssmkIOE=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -81,6 +80,7 @@ stdenv.mkDerivation rec {
     "-Dkernel_firmware_dir=/run/current-system/firmware"
 
     # Platform
+    "-Dmodprobe=${kmod}/bin/modprobe"
     "-Dsession_tracking=systemd"
     "-Dlibaudit=yes-disabled-by-default"
     "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
@@ -119,23 +119,16 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit iputils kmod openconnect ethtool gnused systemd;
+      inherit iputils openconnect ethtool gnused systemd;
       inherit runtimeShell;
     })
 
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
-
-    # Support for building with ppp 2.5.0
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/5df19f5b26c5921a401e63fb329e844a02d6b1f2.diff";
-      hash = "sha256-BDm0P2U4HENAtq7OowWVDxqALNbG0nr9k/CLdE61Sck=";
-    })
   ];
 
   buildInputs = [
-    gobject-introspection
     systemd
     libselinux
     audit
@@ -217,7 +210,7 @@ stdenv.mkDerivation rec {
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz maxeaubrey ]);
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz amaxine ]);
     platforms = platforms.linux;
   };
 }

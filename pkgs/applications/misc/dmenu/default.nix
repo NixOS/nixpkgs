@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pSub globin ];
     platforms = platforms.all;
+    mainProgram = "dmenu";
   };
 }

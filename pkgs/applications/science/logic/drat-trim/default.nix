@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "drat-trim-unstable";
-  version = "2020-06-05";
+  pname = "drat-trim";
+  version = "2023-05-22";
 
   src = fetchFromGitHub {
     owner = "marijnheule";
     repo = "drat-trim";
-    rev = "9afad0f7156a1e9c6ce19dce5d72cf1cb9a3ef27";
-    sha256 = "1zq585igfaknwqbvv2cji744016zxadbvr0ifr5l6yq13m0vvn3b";
+    rev = "refs/tags/v05.22.2023";
+    hash = "sha256-sV3A0f1TLSaTIdAtT6y8rU3ZS2UqEePJYSf3UySOlSA=";
   };
 
   postPatch = ''

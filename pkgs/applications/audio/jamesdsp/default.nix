@@ -1,37 +1,34 @@
-{ stdenv
-, lib
-, mkDerivation
+{ copyDesktopItems
 , fetchFromGitHub
-, pipewire
-, pulseaudio
-, gst_all_1
 , glibmm
+, gst_all_1
+, lib
+, libarchive
+, makeDesktopItem
+, pipewire
+, pkg-config
+, pulseaudio
 , qmake
 , qtbase
 , qtsvg
-, wrapQtAppsHook
-, makeDesktopItem
-, pkg-config
-, libarchive
-, copyDesktopItems
+, stdenv
 , usePipewire ? true
 , usePulseaudio ? false
+, wrapQtAppsHook
 }:
 
 assert lib.asserts.assertMsg (usePipewire != usePulseaudio) "You need to enable one and only one of pulseaudio or pipewire support";
 
-let
-  pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ]);
-in
-  mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jamesdsp";
-  version = "2.4";
-  src = fetchFromGitHub rec {
+  version = "2.7.0";
+
+  src = fetchFromGitHub {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
-    rev = version;
-    hash = "sha256-wD1JZQD8dR24cBN4QJCSrEsS4aoMD+MQmqnOIFKOeoE=";
+    rev = finalAttrs.version;
+    hash = "sha256-eVndqIqJ3DRceuFMT++g2riXq0CL5r+TWbvzvaYIfZ8=";
   };
 
   nativeBuildInputs = [
@@ -46,15 +43,18 @@ in
     libarchive
     qtbase
     qtsvg
-  ] ++ lib.optional usePipewire pipewire
-  ++ lib.optionals usePulseaudio [
+  ] ++ lib.optionals usePipewire [
+    pipewire
+  ] ++ lib.optionals usePulseaudio [
     pulseaudio
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
   ];
 
-  qtWrapperArgs = lib.optionals usePulseaudio [ "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${pluginPath}" ];
+  preFixup = lib.optionalString usePulseaudio ''
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
 
   qmakeFlags = lib.optionals usePulseaudio [ "CONFIG+=USE_PULSEAUDIO" ];
 
@@ -77,12 +77,12 @@ in
     install -D resources/icons/icon.svg $out/share/icons/hicolor/scalable/apps/jamesdsp.svg
   '';
 
-  meta = with lib;{
+  meta = {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "An audio effect processor for PipeWire clients";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ pasqui23 rewine ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ pasqui23 rewine ];
+    platforms = lib.platforms.linux;
   };
-}
+})

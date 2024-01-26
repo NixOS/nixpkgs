@@ -2,55 +2,34 @@
 , autoPatchelfHook
 , fuse3
 , maven, jdk, makeShellWrapper, glib, wrapGAppsHook
+, libayatana-appindicator
 }:
 
+
 let
+  mavenJdk = maven.override {
+    jdk = jdk;
+  };
+in
+assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
+mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.8.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-4MjF2PDH0JB1biY4HO2wOC0i6EIGSlzkK6tDm8nzvIo=";
+    hash = "sha256-Y+oG2NF4Vsklp1W22Xv+XrkY6vwn23FkzAXG/5828Og=";
   };
 
-  # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
-  deps = stdenv.mkDerivation {
-    name = "cryptomator-${version}-deps";
-    inherit src;
+  mvnParameters = "-Dmaven.test.skip=true -Plinux";
+  mvnHash = "sha256-cXmnJHgKW6SGnhHFuFJP/DKNmFacfHbC3nQ2uVdIvUE=";
 
-    nativeBuildInputs = [ jdk maven ];
-    buildInputs = [ jdk ];
-
-    buildPhase = ''
-      while mvn -Plinux package -Dmaven.test.skip=true -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
-        echo "timeout, restart maven to continue downloading"
-      done
-    '';
-
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''
-      find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete
-      find $out/.m2 -type f -iname '*.pom' -exec sed -i -e 's/\r\+$//' {} \;
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-2nCaSL7OlS9f+PZPh0YiMvnjOaAqlQimkKWDSjSP+bQ=";
-
-    doCheck = false;
-  };
-
-in stdenv.mkDerivation rec {
-  inherit pname version src;
-
-  buildPhase = ''
+  preBuild = ''
     VERSION=${version}
     SEMVER_STR=${version}
-
-    mvn -Plinux package --offline -Dmaven.test.skip=true -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
-
 
   # This is based on the instructins in https://github.com/cryptomator/cryptomator/blob/develop/dist/linux/appimage/build.sh
   installPhase = ''
@@ -59,26 +38,29 @@ in stdenv.mkDerivation rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
+    makeShellWrapper ${jdk}/bin/java $out/bin/${pname} \
       --add-flags "--enable-preview" \
+      --add-flags "--enable-native-access=org.cryptomator.jfuse.linux.amd64,org.purejava.appindicator" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
-      --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
-      --add-flags "-Dcryptomator.pluginDir='~/.local/share/Cryptomator/plugins'" \
-      --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
-      --add-flags "-Dcryptomator.ipcSocketPath='~/.config/Cryptomator/ipc.socket'" \
-      --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
-      --add-flags "-Dcryptomator.showTrayIcon=false" \
-      --add-flags "-Dcryptomator.buildNumber='nix'" \
+      --add-flags "-Dfile.encoding='utf-8'" \
+      --add-flags "-Dcryptomator.logDir='@{userhome}/.local/share/Cryptomator/logs'" \
+      --add-flags "-Dcryptomator.pluginDir='@{userhome}/.local/share/Cryptomator/plugins'" \
+      --add-flags "-Dcryptomator.settingsPath='@{userhome}/.config/Cryptomator/settings.json'" \
+      --add-flags "-Dcryptomator.p12Path='@{userhome}/.config/Cryptomator/key.p12'" \
+      --add-flags "-Dcryptomator.ipcSocketPath='@{userhome}/.config/Cryptomator/ipc.socket'" \
+      --add-flags "-Dcryptomator.mountPointsDir='@{userhome}/.local/share/Cryptomator/mnt'" \
+      --add-flags "-Dcryptomator.showTrayIcon=true" \
+      --add-flags "-Dcryptomator.buildNumber='nix-${src.rev}'" \
       --add-flags "-Dcryptomator.appVersion='${version}'" \
-      --add-flags "-Djdk.gtk.version=3" \
+      --add-flags "-Djava.net.useSystemProxies=true" \
       --add-flags "-Xss20m" \
       --add-flags "-Xmx512m" \
-      --add-flags "-Djavafx.embed.singleThread=true " \
-      --add-flags "-Dawt.useSystemAAFontSettings=on" \
+      --add-flags "-Dcryptomator.disableUpdateCheck=true" \
+      --add-flags "-Dcryptomator.integrationsLinux.trayIconsDir='$out/share/icons/hicolor/symbolic/apps'" \
       --add-flags "--module org.cryptomator.desktop/org.cryptomator.launcher.Cryptomator" \
       --prefix PATH : "$out/share/cryptomator/libs/:${lib.makeBinPath [ jdk glib ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse3 ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse3 libayatana-appindicator ]}" \
       --set JAVA_HOME "${jdk.home}"
 
     # install desktop entry and icons
@@ -95,12 +77,11 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    maven
     makeShellWrapper
     wrapGAppsHook
     jdk
   ];
-  buildInputs = [ fuse3 jdk glib ];
+  buildInputs = [ fuse3 jdk glib libayatana-appindicator ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";

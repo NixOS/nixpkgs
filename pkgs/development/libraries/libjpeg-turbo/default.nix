@@ -24,11 +24,12 @@
 , opencv
 , python3
 , vips
+, testers
 }:
 
 assert !(enableJpeg7 && enableJpeg8);  # pick only one or none, not both
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "libjpeg-turbo";
   version = "2.1.5.1";
@@ -36,13 +37,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-96SBBZp+/4WkXLvHKSPItNi5WuzdVccI/ZcbJOFjYYk=";
   };
 
   # This is needed by freeimage
   patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
-    ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+    ++ lib.optional stdenv.hostPlatform.isMinGW
     ./mingw-boolean.patch;
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
@@ -91,13 +92,15 @@ stdenv.mkDerivation rec {
       opencv
       vips;
     inherit (python3.pkgs) pillow imread pyturbojpeg;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
     homepage = "https://libjpeg-turbo.org/";
     description = "A faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses
+    pkgConfigModules = [ "libjpeg" "libturbojpeg" ];
     maintainers = with maintainers; [ vcunat colemickens kamadorueda ];
     platforms = platforms.all;
   };
-}
+})

@@ -7,7 +7,7 @@
 , mako
 , nose
 , pyramid
-, pyramid_mako
+, pyramid-mako
 , pytestCheckHook
 , six
 , tornado
@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "pypugjs";
   version = "5.9.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kakulukia";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     nose
     tornado
     pyramid
-    pyramid_mako
+    pyramid-mako
     pytestCheckHook
   ];
 

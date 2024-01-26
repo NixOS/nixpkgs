@@ -3,97 +3,70 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, argon2-cffi
-, glibcLocales
-, mock
-, jinja2
+, hatch-jupyter-builder
+, hatchling
+, jupyter-server
+, jupyterlab
+, jupyterlab-server
+, notebook-shim
 , tornado
-, ipython_genutils
-, traitlets
-, jupyter-core
-, jupyter-client
-, nbformat
-, nbclassic
-, nbconvert
-, ipykernel
-, terminado
-, requests
-, send2trash
-, pexpect
-, prometheus-client
+, pytest-jupyter
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.5.2";
-  disabled = pythonOlder "3.7";
+  version = "7.0.6";
+  disabled = pythonOlder "3.8";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wYl+UxfiJfx4tFVJpqtLZo5MmW/QOgTpOP5eevK//9A=";
+    hash = "sha256-7GETsGUpAZ9/KHgZrwbJeiuvepWsIaj24yGSiY6fmlg=";
   };
 
-  LC_ALL = "en_US.utf8";
-
-  nativeCheckInputs = [ pytestCheckHook glibcLocales ];
-
-  propagatedBuildInputs = [
-    jinja2
-    tornado
-    ipython_genutils
-    traitlets
-    jupyter-core
-    send2trash
-    jupyter-client
-    nbformat
-    nbclassic
-    nbconvert
-    ipykernel
-    terminado
-    requests
-    pexpect
-    prometheus-client
-    argon2-cffi
-  ];
-
   postPatch = ''
-    # Remove selenium tests
-    rm -rf notebook/tests/selenium
-    export HOME=$TMPDIR
+    substituteInPlace pyproject.toml \
+      --replace "timeout = 300" ""
   '';
 
-  disabledTests = [
-    # a "system_config" is generated, and fails many tests
-    "config"
-    "load_ordered"
-    # requires jupyter, but will cause circular imports
-    "test_run"
-    "TestInstallServerExtension"
-    "launch_socket"
-    "sock_server"
-    "test_list_formats" # tries to find python MIME type
-    "KernelCullingTest" # has a race condition failing on slower hardware
-    "test_connections" # tornado.simple_httpclient.HTTPTimeoutError: Timeout during request"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_delete"
-    "test_checkpoints_follow_file"
+  nativeBuildInputs = [
+    hatch-jupyter-builder
+    hatchling
+    jupyterlab
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    # requires local networking
-    "notebook/auth/tests/test_login.py"
-    "notebook/bundler/tests/test_bundler_api.py"
+  propagatedBuildInputs = [
+    jupyter-server
+    jupyterlab
+    jupyterlab-server
+    notebook-shim
+    tornado
   ];
+
+  nativeCheckInputs = [
+    pytest-jupyter
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
+  env = {
+    JUPYTER_PLATFORM_DIRS = 1;
+  };
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-    homepage = "https://jupyter.org/";
+    changelog = "https://github.com/jupyter/notebook/blob/v${version}/CHANGELOG.md";
+    description = "Web-based notebook environment for interactive computing";
+    homepage = "https://github.com/jupyter/notebook";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = lib.teams.jupyter.members;
     mainProgram = "jupyter-notebook";
   };
 }

@@ -3,25 +3,25 @@
 , fetchPypi
 , python-dateutil
 , jmespath
-, docutils
 , urllib3
 , pytestCheckHook
 , jsonschema
+, awscrt
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.29.79"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.33.6"; # N.B: if you change this, change boto3 and awscli to a matching version
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x97UQGK+07kolEz7CeFXjtP+0OTJjeTyM/PCBWqNSR4=";
+    hash = "sha256-k4BWurgxgp+Q4J7NcN1rKVr9UrFIL1WC7noR2CQ9lmE=";
   };
 
   propagatedBuildInputs = [
     python-dateutil
     jmespath
-    docutils
     urllib3
   ];
 
@@ -29,8 +29,6 @@ buildPythonPackage rec {
     pytestCheckHook
     jsonschema
   ];
-
-  doCheck = true;
 
   disabledTestPaths = [
     # Integration tests require networking
@@ -43,6 +41,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "botocore"
   ];
+
+  passthru.optional-dependencies = {
+    crt = [ awscrt ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/boto/botocore";

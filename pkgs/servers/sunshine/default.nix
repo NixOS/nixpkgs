@@ -1,9 +1,6 @@
 { lib
 , stdenv
-, callPackage
 , fetchFromGitHub
-, fetchurl
-, fetchpatch
 , autoPatchelfHook
 , makeWrapper
 , buildNpmPackage
@@ -15,7 +12,6 @@
 , libxcb
 , openssl
 , libopus
-, ffmpeg_5-full
 , boost
 , pkg-config
 , libdrm
@@ -24,51 +20,46 @@
 , libcap
 , mesa
 , curl
+, pcre
+, pcre2
+, libuuid
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, libepoxy
 , libva
 , libvdpau
+, libglvnd
 , numactl
 , amf-headers
+, intel-media-sdk
 , svt-av1
 , vulkan-loader
 , libappindicator
-, cudaSupport ? false
+, libnotify
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
-let
-  libcbs = callPackage ./libcbs.nix { };
-  # get cmake file used to find external ffmpeg from previous sunshine version
-  findFfmpeg = fetchurl {
-    url = "https://raw.githubusercontent.com/LizardByte/Sunshine/6702802829869547708dfec98db5b8cbef39be89/cmake/FindFFMPEG.cmake";
-    sha256 = "sha256:1hl3sffv1z8ghdql5y9flk41v74asvh23y6jmaypll84f1s6k1xa";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.19.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-fifwctVrSkAcMK8juAirIbIP64H7GKEwC+sUR/U6Q3Y=";
+    sha256 = "sha256-uvQAJkoKazFLz5iTpYSAGYJQZ2EprQ+p9+tryqorFHM=";
     fetchSubmodules = true;
   };
-
-  # remove pre-built ffmpeg; use ffmpeg from nixpkgs
-  patches = [
-    ./ffmpeg.diff
-    # fix for X11 not being added to libraries unless prebuilt FFmpeg is used: https://github.com/LizardByte/Sunshine/pull/1166
-    (fetchpatch {
-      url = "https://github.com/LizardByte/Sunshine/commit/a067da6cae72cf36f76acc06fcf1e814032af886.patch";
-      sha256 = "sha256-HMxM7luiFBEmFkvQtkdAMMSjAaYPEFX3LL0T/ActUhM=";
-    })
-  ];
 
   # fetch node_modules needed for webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-sdwvM/Irejo8DgMHJWWCxwOykOK9foqLFFd/tuzrkxI=";
+    npmDepsHash = "sha256-+T1XAf4SThoJLOFpnVxDa2qiKFLIKQPGewjA83GQovM=";
 
     dontNpmBuild = true;
 
@@ -93,9 +84,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libcbs
     avahi
-    ffmpeg_5-full
     libevdev
     libpulseaudio
     xorg.libX11
@@ -114,6 +103,16 @@ stdenv.mkDerivation rec {
     libcap
     libdrm
     curl
+    pcre
+    pcre2
+    libuuid
+    libselinux
+    libsepol
+    libthai
+    libdatrie
+    xorg.libXdmcp
+    libxkbcommon
+    libepoxy
     libva
     libvdpau
     numactl
@@ -121,8 +120,11 @@ stdenv.mkDerivation rec {
     amf-headers
     svt-av1
     libappindicator
+    libnotify
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
+  ] ++ lib.optionals stdenv.isx86_64 [
+    intel-media-sdk
   ];
 
   runtimeDependencies = [
@@ -130,6 +132,7 @@ stdenv.mkDerivation rec {
     mesa
     xorg.libXrandr
     libxcb
+    libglvnd
   ];
 
   cmakeFlags = [
@@ -137,16 +140,13 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # fix hardcoded libevdev and icon path
-    substituteInPlace CMakeLists.txt \
-      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0' \
-      --replace '/usr/share' "$out/share"
+    # fix hardcoded libevdev path
+    substituteInPlace cmake/compile_definitions/linux.cmake \
+      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
 
     substituteInPlace packaging/linux/sunshine.desktop \
-      --replace '@PROJECT_NAME@' 'Sunshine'
-
-    # add FindFFMPEG to source tree
-    cp ${findFfmpeg} cmake/FindFFMPEG.cmake
+      --replace '@PROJECT_NAME@' 'Sunshine' \
+      --replace '@PROJECT_DESCRIPTION@' 'Self-hosted game stream host for Moonlight'
   '';
 
   preBuild = ''
@@ -168,9 +168,10 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
-    description = "Sunshine is a Game stream host for Moonlight.";
+    description = "Sunshine is a Game stream host for Moonlight";
     homepage = "https://github.com/LizardByte/Sunshine";
     license = licenses.gpl3Only;
+    mainProgram = "sunshine";
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;
   };

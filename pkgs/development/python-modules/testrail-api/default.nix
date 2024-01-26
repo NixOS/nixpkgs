@@ -1,29 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, requests
 , pytestCheckHook
+, pythonOlder
+, requests
 , responses
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "testrail-api";
-  version = "1.12.0";
+  version = "1.12.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";
-    rev = version;
-    sha256 = "sha256-VuAW5Dl3pkA6mtn/mbzxTFoavO5jPoqFSFVlrxc7KRk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lIlTrAdNtBJdwiSFwpcHA2e+fRC+MbHS0PX7prAN+RY=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    requests
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
 
-  propagatedBuildInputs = [
-    requests
+  pythonImportsCheck = [
+    "testrail_api"
   ];
 
   meta = with lib; {

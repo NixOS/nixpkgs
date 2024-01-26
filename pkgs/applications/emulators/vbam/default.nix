@@ -18,12 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "visualboyadvance-m";
-  version = "2.1.5";
+  version = "2.1.8";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "1sc3gdn7dqkipjsvlzchgd98mia9ic11169dw8v341vr9ppb1b6m";
+    sha256 = "sha256-r/LF9mYwKPwkIidMAb4k4B6Q2UYjW0TucKI5LJ2gjl0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='Release'"
     "-DENABLE_FFMPEG='true'"
     "-DENABLE_LINK='true'"
     "-DSYSCONFDIR=etc"

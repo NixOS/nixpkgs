@@ -8,6 +8,7 @@
 , fetchurl
 , flex
 , gnutls
+, installShellFiles
 , libuuid
 , meson-tools
 , ncurses
@@ -24,11 +25,21 @@
 }:
 
 let
-  defaultVersion = "2023.01";
+  defaultVersion = "2023.07.02";
   defaultSrc = fetchurl {
-    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-aUI7rTgPiaCRZjbonm3L0uRRLVhDCNki0QOdHkMxlQ8=";
+    url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
+    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
   };
+
+  # Dependencies for the tools need to be included as either native or cross,
+  # depending on which we're building
+  toolsDeps = [
+    ncurses # tools/kwboot
+    libuuid # tools/mkeficapsule
+    gnutls # tools/mkeficapsule
+    openssl # tools/mkimage
+  ];
+
   buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
@@ -39,6 +50,7 @@ let
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , crossTools ? false
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
@@ -48,16 +60,11 @@ let
 
     patches = [
       ./0001-configs-rpi-allow-for-bigger-kernels.patch
-
-      # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
-      # See also: https://github.com/NixOS/nixpkgs/issues/135828
-      # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
-      ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
     ] ++ extraPatches;
 
     postPatch = ''
       patchShebangs tools
-      patchShebangs arch/arm/mach-rockchip
+      patchShebangs scripts
     '';
 
     nativeBuildInputs = [
@@ -66,21 +73,17 @@ let
       bison
       dtc
       flex
-      openssl
+      installShellFiles
       (buildPackages.python3.withPackages (p: [
         p.libfdt
         p.setuptools # for pkg_resources
+        p.pyelftools
       ]))
       swig
       which # for scripts/dtc-version.sh
-    ];
+    ] ++ lib.optionals (!crossTools) toolsDeps;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-    buildInputs = [
-      ncurses # tools/kwboot
-      libuuid # tools/mkeficapsule
-      gnutls # tools/mkeficapsule
-    ];
+    buildInputs = lib.optionals crossTools toolsDeps;
 
     hardeningDisable = [ "all" ];
 
@@ -135,7 +138,15 @@ in {
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = lib.platforms.linux;
-    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+
+    crossTools = true;
+    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "NO_SDL=1" "cross_tools" ];
+
+    outputs = [ "out" "man" ];
+
+    postInstall = ''
+      installManPage doc/*.1
+    '';
     filesToInstall = [
       "tools/dumpimage"
       "tools/fdtgrep"
@@ -179,6 +190,7 @@ in {
     defconfig = "bananapi_m64_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -186,7 +198,7 @@ in {
   ubootClearfog = buildUBoot {
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-spl.kwb"];
+    filesToInstall = ["u-boot-with-spl.kwb"];
   };
 
   ubootCubieboard2 = buildUBoot {
@@ -337,6 +349,7 @@ in {
     defconfig = "a64-olinuxino-emmc_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -350,6 +363,7 @@ in {
     defconfig = "orangepi_zero_plus2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -370,6 +384,7 @@ in {
     defconfig = "orangepi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinnerH6}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -383,6 +398,7 @@ in {
     defconfig = "pine64_plus_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -390,6 +406,7 @@ in {
     defconfig = "pine64-lts_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -397,6 +414,7 @@ in {
     defconfig = "pinebook_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -479,37 +497,31 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootRock64 = let
-    rkbin = fetchFromGitHub {
-      owner = "ayufan-rock64";
-      repo = "rkbin";
-      rev = "f79a708978232a2b6b06c2e4173c5314559e0d3a";
-      sha256 = "0h7xm4ck3p3380c6bqm5ixrkxwcx6z5vysqdwvfa7gcqx5d6x5zz";
-    };
-  in buildUBoot {
-    extraMakeFlags = [ "all" "u-boot.itb" ];
+  ubootRock64 = buildUBoot {
     defconfig = "rock64-rk3328_defconfig";
-    extraMeta = {
-      platforms = [ "aarch64-linux" ];
-      license = lib.licenses.unfreeRedistributableFirmware;
-    };
+    extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
-    filesToInstall = [ "u-boot.itb" "idbloader.img"];
-    # Derive MAC address from cpuid
-    # Submitted upstream: https://patchwork.ozlabs.org/patch/1203686/
-    extraConfig = ''
-      CONFIG_MISC_INIT_R=y
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
+  # A special build with much lower memory frequency (666 vs 1600 MT/s) which
+  # makes ROCK64 V2 boards stable. This is necessary because the DDR3 routing
+  # on that revision is marginal and not uncoditionally stable at the specified
+  # frequency. If your ROCK64 is unstable you can try this u-boot variant to
+  # see if it works better for you. The only disadvantage is lowered memory
+  # bandwidth.
+  ubootRock64v2 = buildUBoot {
+    prePatch = ''
+      substituteInPlace arch/arm/dts/rk3328-rock64-u-boot.dtsi \
+        --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
     '';
-    # Close to being blob free, but the U-Boot TPL causes random memory
-    # corruption
-    postBuild = ''
-      ./tools/mkimage -n rk3328 -T rksd -d ${rkbin}/rk33/rk3328_ddr_786MHz_v1.13.bin idbloader.img
-      cat spl/u-boot-spl.bin >> idbloader.img
-    '';
+    defconfig = "rock64-rk3328_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31="${armTrustedFirmwareRK3328}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
   ubootRockPro64 = buildUBoot {
-    extraMakeFlags = [ "all" "u-boot.itb" ];
     extraPatches = [
       # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
       (fetchpatch {
@@ -540,6 +552,7 @@ in {
     defconfig = "sopine_baseboard_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 

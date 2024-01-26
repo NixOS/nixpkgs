@@ -1,21 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, glibcLocales
+, setuptools
 , unittestCheckHook
  }:
 
 buildPythonPackage rec {
   pname = "geojson";
-  version = "3.0.1";
-  format = "setuptools";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "geojson";
     rev = "refs/tags/${version}";
-    hash = "sha256-VlP/odzRH6Eg0BMZPBQkbHL/O2cIwWTKJcL5SfZoUWQ=";
+    hash = "sha256-OL+7ntgzpA63ALQ8whhKRePsKxcp81PLuU1bHJvxN9U=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [
     "geojson"

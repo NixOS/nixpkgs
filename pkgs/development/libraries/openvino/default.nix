@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , substituteAll
+, cudaSupport ? opencv.cudaSupport or false
 
 # build
 , addOpenGLRunpath
@@ -18,48 +18,39 @@
 # runtime
 , libusb1
 , libxml2
+, ocl-icd
 , opencv
 , protobuf
 , pugixml
 , tbb
+, cudaPackages
 }:
 
 let
-  # See FIRMWARE_PACKAGE_VERSION in src/plugins/intel_myriad/myriad_dependencies.cmake
-  myriad_firmware_version = "20221129_35";
-  myriad_usb_firmware = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/myriad/firmware_usb-ma2x8x_${myriad_firmware_version}.zip";
-    hash = "sha256-HKNWbSlMjSafOgrS9WmenbsmeaJKRVssw0NhIwPYZ70=";
-  };
-  myriad_pcie_firmware = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/myriad/firmware_pcie-ma2x8x_${myriad_firmware_version}.zip";
-    hash = "sha256-VmfrAoKQ++ySIgAxWQul+Hd0p7Y4sTF44Nz4RHpO6Mo=";
-  };
-
   # See GNA_VERSION in cmake/dependencies.cmake
-  gna_version = "03.00.00.1910";
+  gna_version = "03.05.00.1906";
   gna = fetchurl {
     url = "https://storage.openvinotoolkit.org/dependencies/gna/gna_${gna_version}.zip";
-    hash = "sha256-iU3bwK40WfBFE7hTsMq8MokN1Oo3IooCK2oyEBvbt/g=";
+    hash = "sha256-SlvobZwCaw4Qr6wqV/x8mddisw49UGq7OjOA+8/icm4=";
   };
 
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
-    url = "https://download.01.org/opencv/master/openvinotoolkit/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v2.tgz";
-    hash = "sha256-hl54lMWEAiM8rw0bKIBW4OarK/fJ0AydxgVhxIS8kPQ=";
+    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v3.tgz";
+    hash = "sha256-053rJiwGmBteLS48WT6fyb5izk/rkd1OZI6SdTZZprM=";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2022.3.0";
+  version = "2023.0.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-Ie58zTNatiYZZQJ8kJh/+HlSetQjhAtf2Us83z1jGv4=";
+    hash = "sha256-z88SgAZ0UX9X7BhBA7/NU/UhVLltb6ANKolruU8YiZQ=";
   };
 
   outputs = [
@@ -80,6 +71,8 @@ stdenv.mkDerivation rec {
       setuptools
     ]))
     shellcheck
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   patches = [
@@ -90,14 +83,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    mkdir -p temp/vpu/firmware/{pcie,usb}-ma2x8x
-    pushd temp/vpu/firmware
-    bsdtar -xf ${myriad_pcie_firmware} -C pcie-ma2x8x
-    echo "${myriad_pcie_firmware.url}" > pcie-ma2x8x/ie_dependency.info
-    bsdtar -xf ${myriad_usb_firmware} -C usb-ma2x8x
-    echo "${myriad_usb_firmware.url}" > usb-ma2x8x/ie_dependency.info
-    popd
-
     mkdir -p temp/gna_${gna_version}
     pushd temp/
     bsdtar -xf ${gna}
@@ -138,6 +123,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_CPPLINT:BOOL=OFF"
     "-DBUILD_TESTING:BOOL=OFF"
     "-DENABLE_SAMPLES:BOOL=OFF"
+    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
@@ -149,10 +135,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     libxml2
-    opencv
+    ocl-icd
+    opencv.cxxdev
     protobuf
     pugixml
     tbb
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
   enableParallelBuilding = true;
@@ -184,7 +173,8 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Cannot find macos sdk
+    broken = (stdenv.isLinux && stdenv.isAarch64) # requires scons, then fails with *** Source directory cannot be under variant directory.
+      || stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

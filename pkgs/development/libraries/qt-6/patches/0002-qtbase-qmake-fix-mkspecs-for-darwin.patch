@@ -1,7 +1,7 @@
-From 41e32c41f781261726722628122c924abb532575 Mon Sep 17 00:00:00 2001
+From a804a9b1efdab0a71b9947e5c2bf9f6f5e316e0e Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Fri, 14 Apr 2023 21:43:04 +0800
-Subject: [PATCH 2/6] qtbase: qmake: fix mkspecs for darwin
+Subject: [PATCH 02/11] qtbase: qmake: fix mkspecs for darwin
 
 ---
  mkspecs/common/mac.conf               |   2 +-
@@ -26,7 +26,7 @@ index 61bea952b22..9909dae7260 100644
  
  QMAKE_LFLAGS_REL_RPATH  =
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index 4acf3b19d5c..aadfce875e2 100644
+index f364716717c..3b40328304d 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
 @@ -1,9 +1,5 @@
@@ -39,7 +39,7 @@ index 4acf3b19d5c..aadfce875e2 100644
  contains(TEMPLATE, .*app) {
      !macx-xcode:if(isEmpty(BUILDS)|build_pass) {
          # Detect changes to the platform SDK
-@@ -15,37 +11,6 @@ contains(TEMPLATE, .*app) {
+@@ -15,269 +11,10 @@ contains(TEMPLATE, .*app) {
  
          QMAKE_EXTRA_INCLUDES += $$shell_quote($$PWD/sdk.mk)
      }
@@ -77,9 +77,6 @@ index 4acf3b19d5c..aadfce875e2 100644
  }
  
  !no_objective_c:CONFIG += objective_c
-@@ -73,234 +38,6 @@ qt {
-     }
- }
  
 -# Add the same default rpaths as Xcode does for new projects.
 -# This is especially important for iOS/tvOS/watchOS where no other option is possible.
@@ -486,5 +483,5 @@ index df191eb13c4..e69de29bb2d 100644
 -
 -load(toolchain)
 -- 
-2.39.2
+2.42.0
 

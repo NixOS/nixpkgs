@@ -10,7 +10,7 @@
 , pytestCheckHook
 , freefont_ttf
 , makeFontsConf
-, fetchpatch
+, setuptools
 }:
 
 let
@@ -20,21 +20,18 @@ let
 in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.12.2";
+  version = "0.13.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
-    rev = "pyqtgraph-${version}";
-    sha256 = "093kkxwj75nb508vz7px4x7lxrwpaff10pl15m4h74hjwyvbsg3d";
+    rev = "refs/tags/pyqtgraph-${version}";
+    hash = "sha256-kFTNhv8pgIRSJX0ePmp1I0+MGfCaW8b86baIYZ2bZQM=";
   };
 
-  # TODO: remove when updating to 0.12.3
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pyqtgraph/pyqtgraph/commit/2de5cd78da92b48e48255be2f41ae332cf8bb675.patch";
-      sha256 = "1hy86psqyl6ipvbg23zvackkd6f7ajs6qll0mbs0x2zmrj92hk00";
-    })
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -52,6 +49,11 @@ buildPythonPackage rec {
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
     export FONTCONFIG_FILE=${fontsConf}
   '';
+
+  pytestFlagsArray = [
+    # we only want to run unittests
+    "tests"
+  ];
 
   disabledTests = lib.optionals (!stdenv.hostPlatform.isx86) [
     # small precision-related differences on other architectures,

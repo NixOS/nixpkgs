@@ -39,18 +39,18 @@
 , withX ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "open-vm-tools";
-  version = "12.2.0";
+  version = "12.3.5";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
-    rev = "stable-${version}";
-    hash = "sha256-ikodKEvlg+QU0af8IjiMjhMyQSV6icHVUczf0rWfVaI=";
+    rev = "stable-${finalAttrs.version}";
+    hash = "sha256-OuESPenXVDKLckIZ3sQCtQXZXCL6xSLZOxZWVEX2XMk=";
   };
 
-  sourceRoot = "${src.name}/open-vm-tools";
+  sourceRoot = "${finalAttrs.src.name}/open-vm-tools";
 
   outputs = [ "out" "dev" ];
 
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/vmware/open-vm-tools";
-    changelog = "https://github.com/vmware/open-vm-tools/releases/tag/stable-${version}";
+    changelog = "https://github.com/vmware/open-vm-tools/releases/tag/stable-${finalAttrs.version}";
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''
       A set of services and modules that enable several features in VMware products for
@@ -145,6 +145,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ joamaki ];
+    maintainers = with maintainers; [ joamaki kjeremy ];
   };
-}
+})

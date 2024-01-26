@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, clarabel
 , cvxopt
 , ecos
 , fetchPypi
@@ -11,29 +12,42 @@
 , scipy
 , scs
 , setuptools
+, wheel
+, pybind11
 , useOpenmp ? (!stdenv.isDarwin)
 }:
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.3.1";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Hv+k2d6dVqFVMT9piLvAeIkes6Zs6eBB6qQcODQo8s=";
+    hash = "sha256-CjhqV4jb14t7IN0HFSTsY2yPpys2KOafGrxxTI+YEeU=";
   };
 
+  # we need to patch out numpy version caps from upstream
+  postPatch = ''
+    sed -i 's/\(numpy>=[0-9.]*\),<[0-9.]*;/\1;/g' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+    pybind11
+  ];
+
   propagatedBuildInputs = [
+    clarabel
     cvxopt
     ecos
     numpy
     osqp
     scipy
     scs
-    setuptools
   ];
 
   nativeCheckInputs = [
@@ -56,6 +70,8 @@ buildPythonPackage rec {
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
+    # https://github.com/cvxpy/cvxpy/issues/2174
+    "test_scipy_mi_time_limit_reached"
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_ecos_bb_mi_lp_2" # https://github.com/cvxpy/cvxpy/issues/1241#issuecomment-780912155
   ];

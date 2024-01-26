@@ -1,13 +1,21 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, cython
+
+# build-system
+, cython_3
 , git
 , pkgconfig
+, setuptools
 , setuptools-scm
-, future
+
+# dependneices
 , numpy
+
+# optional-dependenices
 , pyusb
+
+# tests
 , mock
 , pytestCheckHook
 , zipp
@@ -20,33 +28,34 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "1.3.0";
+  version = "2.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "v${version}";
-    sha256 = "1hm9aalpb9sdp8s7ckn75xvyiacp5678pv9maybm5nz0z2h29ibq";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-25rFGpfwJKj9lLDO/ZsqJ2NfCsgSSJghLZxffjX/+7w=";
     leaveDotGit = true;
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
-
   nativeBuildInputs = [
-    cython
+    cython_3
     git
     pkgconfig
+    setuptools
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    future
     numpy
-    pyusb
   ];
+
+  passthru.optional-dependencies = {
+    pyseabreeze = [
+      pyusb
+    ];
+  };
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
@@ -58,7 +67,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 

@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trunk-io";
-  version = "1.2.4";
+  version = "1.2.7";
 
   src = fetchurl {
-    url = "https://trunk.io/releases/launcher/${version}/trunk";
-    hash = "sha256-ylQ4tcPVO367PtLtBkw+MKxoIY7b14Gse3IxnIxMtqc=";
+    url = "https://trunk.io/releases/launcher/${finalAttrs.version}/trunk";
+    hash = "sha256-i2m+6Y6gvkHYwzESJv0DkLcHkXqz+g4e43TV6u1UTj8=";
   };
 
   dontUnpack = true;
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ aaronjheng ];
   };
-}
+})

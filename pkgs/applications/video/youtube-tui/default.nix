@@ -7,24 +7,29 @@
 , stdenv
 , python3
 , libsixel
+, mpv
 , CoreFoundation
 , Security
 , AppKit
-,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "youtube-tui";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Siriusmart";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Dhdtdc8LmTeg9cxKPfdxRowTsAaJXKtvJXqJHK1t3P4=";
+    hash = "sha256-FOiK3yQcQuwdCEjBtRPW4iBd+8uNsvZ6l5tclHVzL+M=";
   };
 
-  cargoHash = "sha256-hT3Ygn0zcQdU1iU22e5SP5ZF6S6GiZzWieBsCqViN8Y=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libmpv-2.0.1" = "sha256-efbXk0oXkzlIqgbP4wKm7sWlVZBT2vzDSN3iwsw2vL0=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -35,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     xorg.libxcb
     libsixel
+    mpv
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     Security
@@ -46,5 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://siriusmart.github.io/youtube-tui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Ruixi-rebirth ];
+    mainProgram = "youtube-tui";
   };
 }

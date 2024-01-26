@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyfnip";
   version = "0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,6 +8,7 @@
 , autoPatchelfHook
 
 # runtime
+, libnl
 , openssl_1_1
 
 # propagates
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2023.5.2";
+  version = "2023.12.0";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -36,11 +37,11 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-25TzM5UMkeGJe4NLUWQXeZ8TQvfdd9NAdsRIw870/0s=";
+        hash = "sha256-mWJ3/IKm/kcNztr7+Q9Rhjka9niGOshLvGShS3ugR6g=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-KfQ/Ta+BqOHCrB+6ipaPWKkM7fH/ChtkrvtZdVrNpnI=";
+        hash = "sha256-wRJWgT+uycCwNKMgHaiACv1y+AvOLrPOpcm2I8hVAxk=";
       };
     }.${stdenv.system} or (throw "Unsupported system");
   in fetchPypi {
@@ -58,6 +59,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    libnl
     openssl_1_1
   ];
 
@@ -76,12 +78,17 @@ buildPythonPackage rec {
     pygobject3
   ];
 
+  pythonNamespaces = [
+    "chip"
+    "chip.clusters"
+  ];
+
   pythonImportsCheck = [
     "chip"
     "chip.ble"
-    # https://github.com/project-chip/connectedhomeip/pull/24376
-    #"chip.configuration"
+    "chip.configuration"
     "chip.discovery"
+    "chip.exceptions"
     "chip.native"
     "chip.storage"
   ];

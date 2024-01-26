@@ -7,7 +7,7 @@
 , django-debug-toolbar
 , django-extensions
 , django-taggit
-, django_tagging
+, django-tagging
 , mock
 , pytest-django
 , selenium
@@ -20,6 +20,7 @@
 buildPythonPackage rec {
   pname = "django-autocomplete-light";
   version = "3.9.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yourlabs";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     django-debug-toolbar
     django-extensions
     django-taggit
-    django_tagging
+    django-tagging
     mock
     pytest-django
     selenium

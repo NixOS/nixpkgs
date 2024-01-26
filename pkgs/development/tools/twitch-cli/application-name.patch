@@ -1,0 +1,13 @@
+diff --git a/cmd/root.go b/cmd/root.go
+index 3d85c19..cbbe40c 100644
+--- a/cmd/root.go
++++ b/cmd/root.go
+@@ -16,7 +16,7 @@ import (
+ var cfgFile string
+ 
+ var rootCmd = &cobra.Command{
+-	Use:   "twitch",
++	Use:   "twitch-cli",
+ 	Short: "A simple CLI tool for the New Twitch API and Webhook products.",
+ }
+ 

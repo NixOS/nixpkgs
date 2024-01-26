@@ -7,10 +7,10 @@
 
 stdenv.mkDerivation rec {
   pname = "bilibili";
-  version = "1.10.1-1";
+  version = "1.13.0-2";
   src = fetchurl {
     url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
-    hash = "sha256-Kx45erpxS66/CWmo4Csw0jhp23u03fn7r+vkq5CtJg0=";
+    hash = "sha256-svTD8YZBFj0K9/3ggojiH+8cMRkCxHr/hHTC24NL2tE=";
   };
 
   unpackPhase = ''
@@ -41,8 +41,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Electron-based bilibili desktop client";
     homepage = "https://github.com/msojocs/bilibili-linux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jedsek ];
-    platforms = platforms.unix;
+    license = with licenses; [ unfree mit ];
+    maintainers = with maintainers; [ jedsek kashw2 ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "bilibili";
   };
 }

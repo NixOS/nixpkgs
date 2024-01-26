@@ -26,7 +26,7 @@ let
   # Declaration of versions for everything. This is useful since these
   # versions may be used in multiple places in this Nix expression.
   android = {
-    platforms = [ "33" ];
+    platforms = [ "34" ];
     systemImageTypes = [ "google_apis" ];
     abis = [ "arm64-v8a" "x86_64" ];
   };
@@ -78,6 +78,7 @@ let
   androidComposition = androidEnv.composeAndroidPackages sdkArgs;
   androidEmulator = androidEnv.emulateApp {
     name = "android-sdk-emulator-demo";
+    configOptions = { "hw.keyboard" = "yes"; };
     sdkExtraArgs = sdkArgs;
   };
   androidSdk = androidComposition.androidsdk;
@@ -115,10 +116,10 @@ pkgs.mkShell rec {
       echo "installed_packages_section: ''${installed_packages_section}"
 
       packages=(
-        "build-tools;33.0.2" "cmdline-tools;9.0" \
-        "emulator" "patcher;v4" "platform-tools" "platforms;android-33" \
-        "system-images;android-33;google_apis;arm64-v8a" \
-        "system-images;android-33;google_apis;x86_64"
+        "build-tools;34.0.0" "cmdline-tools;11.0" \
+        "emulator" "patcher;v4" "platform-tools" "platforms;android-34" \
+        "system-images;android-34;google_apis;arm64-v8a" \
+        "system-images;android-34;google_apis;x86_64"
       )
 
       for package in "''${packages[@]}"; do
@@ -135,7 +136,7 @@ pkgs.mkShell rec {
       nativeBuildInputs = [ androidSdk androidEmulator jdk ];
     } ''
       avdmanager delete avd -n testAVD || true
-      echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-33;google_apis;x86_64'
+      echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-34;google_apis;x86_64'
       result=$(avdmanager list avd)
 
       if [[ ! $result =~ "Name: testAVD" ]]; then

@@ -1,30 +1,33 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, curl
-, gawk
+, bash
 , python3
 , installShellFiles
-, bash
+, gawk
+, curl
 }:
+
 stdenv.mkDerivation rec {
   pname = "amazon-ec2-utils";
-  version = "2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
-    owner = "aws";
+    owner = "amazonlinux";
     repo = "amazon-ec2-utils";
-    rev = "v${version}";
-    hash = "sha256-u1rHBV8uVcCywvQNYagtDleYB12tmhyqDbXTBzt45dk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Yr6pVwyvyVGV4xrjL7VFSkRH8d1w8VLPMTVjXfneJUM=";
   };
 
   outputs = [ "out" "man" ];
 
   strictDeps = true;
+
   buildInputs = [
-    python3
     bash
+    python3
   ];
+
   nativeBuildInputs = [
     installShellFiles
   ];
@@ -66,9 +69,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/aws/amazon-ec2-utils";
+    changelog = "https://github.com/amazonlinux/amazon-ec2-utils/releases/tag/v${version}";
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
+    homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ ketzacoatl thefloweringash ];
+    maintainers = with maintainers; [ ketzacoatl thefloweringash anthonyroussel ];
   };
 }

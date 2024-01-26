@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.markbeep ];
+    mainProgram = "ramfetch";
   };
 }

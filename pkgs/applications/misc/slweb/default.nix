@@ -2,28 +2,34 @@
 , stdenv
 , fetchFromSourcehut
 , redo-apenwarr
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slweb";
-  version = "0.5.5";
+  version = "0.9.0";
 
   src = fetchFromSourcehut {
     owner = "~strahinja";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Hk3L++J8JiCRXitNHi9uWb7aYN8lMG3GjfpmNyIpoKU=";
+    repo = "slweb";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-QDHcp5pCmapgOlJpDDyyC12JOfh/biDyF6O+iKGbOGg=";
   };
 
   nativeBuildInputs = [ redo-apenwarr ];
 
   installPhase = ''
     runHook preInstall
+    export FALLBACKVER=${finalAttrs.version}
     PREFIX=$out redo install
     runHook postInstall
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "A static website generator which aims at being simplistic";
@@ -32,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ GaetanLepage ];
   };
-}
+})

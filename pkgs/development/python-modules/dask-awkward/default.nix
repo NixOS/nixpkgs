@@ -13,19 +13,17 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2023.4.2";
-  format = "pyproject";
+  version = "2024.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
-    repo = pname;
+    repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-c3NnARost/406cALQDKmeUsl2kFSQHAswAEwgreFXPc=";
+    hash = "sha256-5UyB/qFfQPLA1N3L6NipW6+FzI0x6hZXu6ickAktlYw=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "awkward"
@@ -55,6 +53,7 @@ buildPythonPackage rec {
     # Tests require network access
     "test_remote_double"
     "test_remote_single"
+    "test_from_text"
   ];
 
   meta = with lib; {

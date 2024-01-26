@@ -1,10 +1,10 @@
-{ qtModule, qtbase, qtquickcontrols, wayland, pkg-config }:
+{ qtModule, qtbase, qtquickcontrols, wayland, wayland-scanner, pkg-config }:
 
 qtModule {
   pname = "qtwayland";
-  qtInputs = [ qtbase qtquickcontrols ];
+  propagatedBuildInputs = [ qtbase qtquickcontrols ];
   buildInputs = [ wayland ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wayland-scanner ];
   outputs = [ "out" "dev" "bin" ];
   patches = [
     # NixOS-specific, ensure that app_id is correctly determined for

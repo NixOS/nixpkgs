@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.14.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
     rev = "v${version}";
-    sha256 = "sha256-gREAtCh4jerqxhwNslXIXRMLkoj0RlhbIwQXbb8LVws=";
+    sha256 = "sha256-6gSJJ3ptqpYydjg+xf5Pz3iTk0D+bkC6N79OeiKxPHY=";
   };
 
-  cargoSha256 = "sha256-xuxWOVSUJVQvSDA5xhFBjdO/ODLA4fzEnzG9p0DRF2Q=";
+  cargoHash = "sha256-MRoEFP7VXBNBe6/e3ezPnzhKACwqTApGH9c0T4ycvg4=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin
     [ libiconv CoreServices Security ];
 
-  # test broken with rust 1.69:
-  # * https://github.com/evcxr/evcxr/issues/294
-  # * https://github.com/NixOS/nixpkgs/issues/229524
   checkFlags = [
+    # test broken with rust 1.69:
+    # * https://github.com/evcxr/evcxr/issues/294
+    # * https://github.com/NixOS/nixpkgs/issues/229524
     "--skip=check_for_errors"
   ];
 

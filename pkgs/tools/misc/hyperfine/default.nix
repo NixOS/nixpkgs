@@ -1,6 +1,6 @@
 { lib
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , installShellFiles
 , stdenv
 , Security
@@ -8,14 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperfine";
-  version = "1.16.1";
+  version = "1.18.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-OdOlFdhIYxBi3e94QAief0xZqVdr+wnbaPFSKJ20DNM=";
+  src = fetchFromGitHub {
+    owner = "sharkdp";
+    repo = "hyperfine";
+    rev = "v${version}";
+    hash = "sha256-9YfnCHiG9TDOsEAcrrb0GOxdq39Q+TiltWKwnr3ObAQ=";
   };
 
-  cargoSha256 = "sha256-RgoMq52GkRbfhsBipMKhCSu3YQoOtDB/Fdg+9OPzGtk=";
+  cargoHash = "sha256-E2y/hQNcpW6b/ZJBlsp+2RDH2OgpX4kbn36aBHA5X6U=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optional stdenv.isDarwin Security;
@@ -34,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/hyperfine/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda thoughtpolice ];
+    mainProgram = "hyperfine";
   };
 }

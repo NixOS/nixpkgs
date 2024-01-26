@@ -4,6 +4,7 @@
   "date": "2023-03-28T17:13:15-04:00",
   "path": "/nix/store/biqm93z4n1ravfi5bs466fbp4bxadjmk-tree-sitter-tlaplus",
   "sha256": "0md800h54792nv1mfzdw7wyjzz8wx5cvl6mzlb8l70p0ihjfrk1s",
+  "hash": "sha256-OszsJIzggkPRor8aulnpHP0vPT+8fVfDtiIdUiAAqFU=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

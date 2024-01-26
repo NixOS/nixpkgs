@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
@@ -15,6 +15,7 @@
   ), libkrb5
 , http2Support ? true, nghttp2
 , http3Support ? false, nghttp3, ngtcp2
+, websocketSupport ? false
 , idnSupport ? false, libidn2
 , ldapSupport ? false, openldap
 , opensslSupport ? zlibSupport, openssl
@@ -47,18 +48,20 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.0.1";
+  version = "8.5.0";
 
   src = fetchurl {
     urls = [
-      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
-      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
+      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
+      "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-m2selrdI0EuWh4a2vfQHqlx1q1Oj03wcjIHNtzZVXM8=";
+    hash = "sha256-QquNueINgpCjtjPn+7POwV2zTfZf0QFe+KweRyN1Dus=";
   };
 
   patches = [
-    ./7.79.1-darwin-no-systemconfiguration.patch
+    # fix ipv6 autodetect compile error in configure script
+    # remove once https://github.com/curl/curl/pull/12607 released (8.6.0)
+    ./configure-ipv6-autodetect.diff
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -90,7 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
     optional wolfsslSupport wolfssl ++
     optional rustlsSupport rustls-ffi ++
     optional zlibSupport zlib ++
-    optional zstdSupport zstd;
+    optional zstdSupport zstd ++
+    optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreFoundation
+      CoreServices
+      SystemConfiguration
+    ]);
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
@@ -104,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
+      (lib.enableFeature websocketSupport "websockets")
       # --with-ca-fallback is only supported for openssl and gnutls https://github.com/curl/curl/blame/curl-8_0_1/acinclude.m4#L1640
       (lib.withFeature (opensslSupport || gnutlsSupport) "ca-fallback")
       (lib.withFeature http3Support "nghttp3")
@@ -196,5 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
+    mainProgram = "curl";
   };
 })

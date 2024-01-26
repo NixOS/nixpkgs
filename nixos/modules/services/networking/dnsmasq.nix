@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.dnsmasq;
-  dnsmasq = pkgs.dnsmasq;
+  dnsmasq = cfg.package;
   stateDir = "/var/lib/dnsmasq";
 
   # True values are just put as `name` instead of `name=true`, and false values
@@ -52,6 +52,8 @@ in
           Whether to run dnsmasq.
         '';
       };
+
+      package = mkPackageOption pkgs "dnsmasq" {};
 
       resolveLocalQueries = mkOption {
         type = types.bool;
@@ -179,4 +181,6 @@ in
         restartTriggers = [ config.environment.etc.hosts.source ];
     };
   };
+
+  meta.doc = ./dnsmasq.md;
 }

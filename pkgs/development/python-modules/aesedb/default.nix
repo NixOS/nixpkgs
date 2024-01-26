@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "aesedb";
-  version = "0.1.3";
-  format = "pyproject";
+  version = "0.1.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "skelsec";
-    repo = pname;
+    repo = "aesedb";
     rev = "refs/tags/${version}";
-    hash = "sha256-TXGRXo3754dEgRotDO5vSl9vj119Xday/176yem3cqk=";
+    hash = "sha256-nYuMWE03Rsw1XuD/bxccpu8rddeXgS/EKJcO1VBLTLU=";
   };
 
   nativeBuildInputs = [

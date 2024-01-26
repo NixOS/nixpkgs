@@ -1,7 +1,7 @@
-{ bctoolbox
+{ lib
+, bc-soci
 , belcard
 , belle-sip
-, belr
 , cmake
 , doxygen
 , fetchFromGitLab
@@ -10,9 +10,7 @@
 , lime
 , mediastreamer
 , python3
-, bc-soci
 , sqlite
-, lib
 , stdenv
 , xercesc
 , zxing-cpp
@@ -20,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "5.2.17";
+  version = "5.2.98";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -28,8 +26,14 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-zxp+jcClfKm+VsylRtydF2rlDCkO+sa9vw8GpwAfKHM=";
+    hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
   };
+
+  patches = [
+    # zxing-cpp 2.0+ requires C++ 17
+    # Manual backport as upstream ran formatters in the meantime
+    ./backport-cpp17.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
@@ -40,6 +44,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_STATIC=NO" # Do not build static libraries
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+    "-DENABLE_STRICT=NO" # Do not build with -Werror
   ];
 
   buildInputs = [

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "watchgod";
   version = "0.8.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

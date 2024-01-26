@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "0.15.5";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "exaloop";
     repo = "codon";
     rev = "v${version}";
-    sha256 = "sha256-/IUGX5iSRvZzwyRdkGe0IVHp44D+GXZtbkdtswekwSU=";
+    hash = "sha256-s2GqiFcekXRts8BU5CSmTrkFZ9xLqq4A5MybhB1o1Gg=";
   };
 
   depsDir = "deps";
@@ -31,7 +31,7 @@ let
       owner = "exaloop";
       repo = "llvm-project";
       rev = "55b0b8fa1c9f9082b535628fc9fa6313280c0b9a";
-      sha256 = "sha256-03SPQgNdrpR6/JZ5aR/ntoh/FnZvCjT/6bTAcZaFafw=";
+      hash = "sha256-03SPQgNdrpR6/JZ5aR/ntoh/FnZvCjT/6bTAcZaFafw=";
     };
 
     nativeBuildInputs = [
@@ -43,8 +43,6 @@ let
     ];
 
     cmakeFlags = [
-      "-DCMAKE_CXX_COMPILER=clang++"
-      "-DCMAKE_C_COMPILER=clang"
       "-DLLVM_ENABLE_RTTI=ON"
       "-DLLVM_ENABLE_TERMINFO=OFF"
       "-DLLVM_ENABLE_ZLIB=OFF"
@@ -88,7 +86,12 @@ let
             _deps/googletest-subbuild/googletest-populate-prefix/src/*.zip
     '';
 
-    outputHash = "sha256-a1zGSpbMjfQBrcgW/aiIdKX8+uI3p/S9pgZjHe2HtWs=";
+    outputHash =
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-KfemYV42xBAhsPbwTkzdc3GxCVHiWRbyUZORPWxx4vg="
+      else
+        "sha256-a1zGSpbMjfQBrcgW/aiIdKX8+uI3p/S9pgZjHe2HtWs=";
+
     outputHashAlgo = "sha256";
   };
 in
@@ -117,20 +120,21 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DCMAKE_CXX_COMPILER=clang++"
-    "-DCMAKE_C_COMPILER=clang"
     "-DCPM_SOURCE_CACHE=${depsDir}"
     "-DLLVM_DIR=${codon-llvm}/lib/cmake/llvm"
     "-DLLVM_USE_LINKER=lld"
   ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    ln -s $out/lib/codon/*.dylib $out/lib/
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A high-performance, zero-overhead, extensible Python compiler using LLVM";
     homepage = "https://docs.exaloop.io/codon";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
     license = lib.licenses.bsl11;
     platforms = lib.platforms.all;
   };

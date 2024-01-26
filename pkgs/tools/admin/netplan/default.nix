@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "netplan";
-  version = "0.106";
+  version = "0.106.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
     rev = version;
-    hash = "sha256-oKHnhUEYdWutkkL8hbSX43+6qzlts1vqxrr/L42VztY=";
+    hash = "sha256-wQ4gd9+9YU92WGRMjSiF/zLCGxhaSl8s22pH1jr+Mm0=";
   };
 
   nativeBuildInputs = [

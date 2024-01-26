@@ -10,7 +10,7 @@ let
     inherit version;
 
     inherit src;
-    sourceRoot = "source/clang";
+    sourceRoot = "${src.name}/clang";
 
     nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
@@ -43,7 +43,7 @@ let
       ./revert-malloc-alignment-assumption.patch
       ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
-        src = ../../clang-11-12-LLVMgold-path.patch;
+        src = ../../clang-11-15-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
@@ -66,12 +66,13 @@ let
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
-      mkdir -p $python/bin $python/share/clang/
+      mkdir -p $python/bin $python/share/{clang,scan-view}
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+      mv $out/share/scan-view/*.py $python/share/scan-view
       rm $out/bin/c-index-test
       patchShebangs $python/bin
 

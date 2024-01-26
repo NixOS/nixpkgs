@@ -1,88 +1,125 @@
-{ alsa-lib
-, cmake
+{ cmake
 , fetchFromGitHub
-, fmt
-, gettext
-, glib
-, gtk3
-, harfbuzz
 , lib
+, llvmPackages_17
+, cubeb
+, curl
+, extra-cmake-modules
+, ffmpeg
 , libaio
+, libbacktrace
 , libpcap
-, libpng
-, libpulseaudio
-, libsamplerate
-, libXdmcp
-, openssl
-, pcre
-, perl
+, libwebp
+, libXrandr
+, libzip
+, lz4
+, makeWrapper
 , pkg-config
-, portaudio
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
 , SDL2
 , soundtouch
-, stdenv
-, udev
+, strip-nondeterminism
 , vulkan-headers
 , vulkan-loader
-, wrapGAppsHook
-, wxGTK
-, zlib
 , wayland
+, wrapQtAppsHook
+, xz
+, zip
+, zstd
 }:
 
-stdenv.mkDerivation rec {
+let
+  # The pre-zipped files in releases don't have a versioned link, we need to zip them ourselves
+  pcsx2_patches = fetchFromGitHub {
+    owner = "PCSX2";
+    repo = "pcsx2_patches";
+    rev = "619e75bb8db50325b44863f2ccf3c39470c3d5a3";
+    sha256 = "sha256-2KE0W3WwBJCLe8DosyDVsFtEofKgBsChpQEQe+3O+Hg=";
+  };
+in
+llvmPackages_17.stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.3331";
-  # nixpkgs-update: no auto update
+  version = "1.7.5474";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-0RcmBMxKj/gnkNEjn2AUSSO1DzyNSf1lOZWPSUq6764=";
+    sha256 = "sha256-5ZCXw6PEQ6Ed6kEP27m9O0U79uVGEFR/vwee6/dZBD8=";
   };
 
-  cmakeFlags = [
-    "-DDISABLE_ADVANCE_SIMD=TRUE"
-    "-DDISABLE_PCSX2_WRAPPER=TRUE"
-    "-DPACKAGE_MODE=TRUE"
-    "-DWAYLAND_API=TRUE"
-    "-DXDG_STD=TRUE"
-    "-DUSE_VULKAN=TRUE"
+  patches = [
+    ./define-rev.patch
   ];
 
-  nativeBuildInputs = [ cmake perl pkg-config vulkan-headers wrapGAppsHook ];
+  cmakeFlags = [
+    "-DDISABLE_ADVANCE_SIMD=ON"
+    "-DUSE_LINKED_FFMPEG=ON"
+    "-DPCSX2_GIT_REV=v${version}"
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    strip-nondeterminism
+    wrapQtAppsHook
+    zip
+  ];
 
   buildInputs = [
-    alsa-lib
-    fmt
-    gettext
-    glib
-    gtk3
-    harfbuzz
+    curl
+    ffmpeg
     libaio
+    libbacktrace
     libpcap
-    libpng
-    libpulseaudio
-    libsamplerate
-    libXdmcp
-    openssl
-    pcre
-    portaudio
+    libwebp
+    libXrandr
+    libzip
+    lz4
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
     SDL2
     soundtouch
-    udev
-    vulkan-loader
+    vulkan-headers
     wayland
-    wxGTK
-    zlib
-  ];
+    xz
+    zstd
+  ]
+  ++ cubeb.passthru.backendLibs;
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
-    )
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -a bin/pcsx2-qt bin/resources $out/bin/
+
+    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
+    install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
+
+    zip -jq $out/bin/resources/patches.zip ${pcsx2_patches}/patches/*
+    strip-nondeterminism $out/bin/resources/patches.zip
+  '';
+
+  qtWrapperArgs =
+    let
+      libs = lib.makeLibraryPath ([
+        vulkan-loader
+      ] ++ cubeb.passthru.backendLibs);
+    in [
+      "--prefix LD_LIBRARY_PATH : ${libs}"
+    ];
+
+  # https://github.com/PCSX2/pcsx2/pull/10200
+  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
+  postFixup = ''
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/pcsx2-qt \
+      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
 
   meta = with lib; {
@@ -95,13 +132,9 @@ stdenv.mkDerivation rec {
       PC, with many additional features and benefits.
     '';
     homepage = "https://pcsx2.net";
+    license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ hrdinka govanify ];
-
-    # PCSX2's source code is released under LGPLv3+. It However ships
-    # additional data files and code that are licensed differently.
-    # This might be solved in future, for now we should stick with
-    # license.free
-    license = licenses.free;
+    mainProgram = "pcsx2-qt";
     platforms = platforms.x86_64;
   };
 }

@@ -38,7 +38,7 @@
 , makeWrapper
 , ncurses5
 , nspr
-, nss
+, nss_latest
 , pciutils
 , pkgsi686Linux
 , ps
@@ -146,7 +146,7 @@ let
           libXfixes
           libGL
           nspr
-          nss
+          nss_latest
           systemd
 
           # For GTKLookAndFeel
@@ -222,9 +222,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ alapshin ];
-        beta = [ alapshin ];
-        canary = [ alapshin ];
+        stable = [ alapshin msfjarvis ];
+        beta = [ alapshin msfjarvis ];
+        canary = [ alapshin msfjarvis ];
         dev = canary;
       }."${channel}";
       mainProgram = pname;

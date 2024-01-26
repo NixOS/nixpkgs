@@ -6,17 +6,18 @@
 , withPcsc ? !enableMinimal, pcsclite
 , guiSupport ? stdenv.isDarwin, pinentry
 , withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
+, nixosTests
 }:
 
 assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.0";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
+    hash = "sha256-onGubXMvb02AwlitnuiN2clMj9wzw+RTKMTXwSa9IZ0=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
     ./24-allow-import-of-previously-known-keys-even-without-UI.patch
+    ./24-revert-rfc4880bis-defaults.patch
     # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
     ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
   ];
@@ -62,12 +64,6 @@ stdenv.mkDerivation rec {
       rm $f
     done
   '' else ''
-    mkdir -p $out/lib/systemd/user
-    for f in doc/examples/systemd-user/*.{service,socket} ; do
-      substitute $f $out/lib/systemd/user/$(basename $f) \
-        --replace /usr/bin $out/bin
-    done
-
     # add gpg2 symlink to make sure git does not break when signing commits
     ln -s $out/bin/gpg $out/bin/gpg2
 
@@ -85,7 +81,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests.connman = lib.nixosTests.gnupg;
+  passthru.tests = nixosTests.gnupg;
 
   meta = with lib; {
     homepage = "https://gnupg.org";

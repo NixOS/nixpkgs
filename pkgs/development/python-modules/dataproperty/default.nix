@@ -1,39 +1,55 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
+, loguru
 , mbstrdecoder
-, typepy
 , pytestCheckHook
+, pythonOlder
+, tcolorpy
 , termcolor
+, typepy
 }:
 
 buildPythonPackage rec {
   pname = "dataproperty";
-  version = "0.55.0";
+  version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ODSrKZ8M/ni9r2gkVIKWaKkdr+3AVi4INkEKJ+cmb44=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-adUxUU9eASkC9n5ppZYNN0MP19u4xcL8XziBWSCp2L8=";
   };
 
-  propagatedBuildInputs = [ mbstrdecoder typepy ];
+  propagatedBuildInputs = [
+    mbstrdecoder
+    typepy
+    tcolorpy
+  ] ++ typepy.optional-dependencies.datetime;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  checkInputs = [ termcolor ];
+  passthru.optional-dependencies = {
+    logging = [
+      loguru
+    ];
+  };
 
-  # Tests fail, even on non-nixos
-  pytestFlagsArray = [
-    "--deselect test/test_dataproperty.py::Test_DataPeroperty_len::test_normal_ascii_escape_sequence"
-    "--deselect test/test_dataproperty.py::Test_DataPeroperty_is_include_ansi_escape::test_normal"
-    "--deselect test/test_dataproperty.py::Test_DataPeroperty_repr::test_normal"
+  nativeCheckInputs = [
+    pytestCheckHook
+    termcolor
+  ];
+
+  pythonImportsCheck = [
+    "dataproperty"
   ];
 
   meta = with lib; {
+    description = "Library for extracting properties from data";
     homepage = "https://github.com/thombashi/dataproperty";
-    description = "A library for extracting properties from data";
-    maintainers = with maintainers; [ genericnerdyusername ];
+    changelog = "https://github.com/thombashi/DataProperty/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ genericnerdyusername ];
   };
 }

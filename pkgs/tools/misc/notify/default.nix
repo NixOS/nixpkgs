@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "notify";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PZSt4mhon0JbFxeq5tOXb+xWKOoxT6rjRS1E3Jf2V3c=";
+    sha256 = "sha256-CXzxrY8G7Zh5xafuiIY9SsPkrYoSkMt15v2KLZBs0Jo=";
   };
 
-  vendorSha256 = "sha256-MoGaIs2WmJk+E8pTljrahuaJ1VwYBhGBf1XGYVYOVt4=";
+  vendorHash = "sha256-tjaVEmOd/MJnDcS/mhvw95ZZ8giaUDTdDTyAMbjTckM=";
 
   modRoot = ".";
   subPackages = [
@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/projectdiscovery/notify";
     license = licenses.mit;
     maintainers = with maintainers; [ hanemile ];
+    mainProgram = "notify";
   };
 }

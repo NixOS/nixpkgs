@@ -1,23 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, m17n_db, autoreconfHook, pkg-config }:
+{ lib
+, stdenv
+, fetchurl
+, m17n_db
+, autoreconfHook
+, pkg-config
+}:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
-  version = "1.8.0";
+  version = "1.8.4";
 
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/m17n/m17n-lib-${version}.tar.gz";
-    sha256 = "0jp61y09xqj10mclpip48qlfhniw8gwy8b28cbzxy8hq8pkwmfkq";
+    hash = "sha256-xqJYLG5PKowueihE+lx+s2Oq0lOLBS8gPHEGSd1CHMg=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Patch pending upstream inclusion:
-      #   https://savannah.nongnu.org/bugs/index.php?61377
-      name = "parallel-build.patch";
-      url = "https://savannah.nongnu.org/bugs/download.php?file_id=53704";
-      hash = "sha256-1smKSIFVRJZSwCv0NiUsnndxKcPnJ/wqzH8+ka6nfNM=";
-      excludes = [ "src/ChangeLog" ];
-    })
-  ];
 
   strictDeps = true;
 

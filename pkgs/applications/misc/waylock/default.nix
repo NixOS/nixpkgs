@@ -1,27 +1,34 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, zig
-, wayland
-, pkg-config
-, scdoc
-, wayland-protocols
+, fetchFromGitea
 , libxkbcommon
 , pam
+, pkg-config
+, scdoc
+, wayland
+, wayland-protocols
+, zig_0_11
 }:
-stdenv.mkDerivation rec {
-  pname = "waylock";
-  version = "0.6.2";
 
-  src = fetchFromGitHub {
+stdenv.mkDerivation (finalAttrs: {
+  pname = "waylock";
+  version = "0.6.4";
+
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "ifreund";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-jl4jSDWvJB6OfBbVXfVQ7gv/aDkN6bBy+/yK+AQDQL0=";
+    repo = "waylock";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-RSAUSlsBB9IphvdSiFqJIvyhhJoAKKb+KyGhdoTa3vs=";
   };
 
-  nativeBuildInputs = [ zig wayland scdoc pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+    wayland
+    zig_0_11.hook
+  ];
 
   buildInputs = [
     wayland-protocols
@@ -29,23 +36,14 @@ stdenv.mkDerivation rec {
     pam
   ];
 
-  dontConfigure = true;
+  zigBuildFlags = [ "-Dman-pages" ];
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    zig build -Drelease-safe -Dman-pages -Dcpu=baseline --prefix $out install
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ifreund/waylock";
     description = "A small screenlocker for Wayland compositors";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jordanisaacs ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ adamcstephens jordanisaacs ];
+    mainProgram = "waylock";
+    platforms = lib.platforms.linux;
   };
-}
+})

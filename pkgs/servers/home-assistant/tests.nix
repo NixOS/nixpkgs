@@ -5,67 +5,82 @@
 let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    alexa = [ av ];
-    bluetooth = [ pyswitchbot ];
-    bthome = [ xiaomi-ble ];
-    camera = [ av ];
-    cloud = [ mutagen ];
-    config = [ pydispatcher ];
-    generic = [ av ];
-    google_translate = [ mutagen ];
-    google_sheets = [ oauth2client ];
-    govee_ble = [ ibeacon-ble ];
-    hassio = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
-    homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    lovelace = [ pychromecast ];
-    mopeka = [ pyswitchbot ];
-    nest = [ av ];
-    onboarding = [ pymetno radios rpi-bad-power ];
-    otbr = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
-    raspberry_pi = [ rpi-bad-power ];
-    shelly = [ pyswitchbot ];
-    tilt_ble = [ govee-ble ibeacon-ble ];
-    tomorrowio = [ pyclimacell ];
-    version = [ aioaseko ];
-    xiaomi_miio = [ arrow ];
-    voicerss = [ mutagen ];
-    yandextts = [ mutagen ];
-    zha = [ pydeconz ];
-    zwave_js = [ homeassistant-pyozw ];
+    airzone_cloud = [
+      aioairzone
+    ];
+    bluetooth = [
+      pyswitchbot
+    ];
+    govee_ble = [
+      ibeacon-ble
+    ];
+    lovelace = [
+      pychromecast
+    ];
+    matrix = [
+      pydantic
+    ];
+    mopeka = [
+      pyswitchbot
+    ];
+    onboarding = [
+      pymetno
+      radios
+      rpi-bad-power
+    ];
+    raspberry_pi = [
+      rpi-bad-power
+    ];
+    shelly = [
+      pyswitchbot
+    ];
+    tilt_ble = [
+      ibeacon-ble
+    ];
+    xiaomi_miio = [
+      arrow
+    ];
+    zha = [
+      pydeconz
+    ];
   };
 
   extraDisabledTestPaths = {
   };
 
   extraDisabledTests = {
-    vesync = [
-      # homeassistant.components.vesync:config_validation.py:863 The 'vesync' option has been removed, please remove it from your configuration
-      "test_async_get_config_entry_diagnostics__single_humidifier"
-      "test_async_get_device_diagnostics__single_fan"
+    private_ble_device = [
+      # AssertionError: assert '90' == '90.0'
+      "test_estimated_broadcast_interval"
+    ];
+    shell_command = [
+      # tries to retrieve file from github
+      "test_non_text_stdout_capture"
+    ];
+    sma = [
+      # missing operating_status attribute in entity
+      "test_sensor_entities"
     ];
   };
 
   extraPytestFlagsArray = {
+    cloud = [
+      # Tries to connect to alexa-api.nabucasa.com:443
+      "--deselect tests/components/cloud/test_http_api.py::test_websocket_update_preferences_alexa_report_state"
+    ];
     dnsip = [
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
     ];
-    history_stats = [
-      # Flaky: AssertionError: assert '0.0' == '12.0'
-      "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
-    ];
-    modbus = [
-      # homeassistant.components.modbus.modbus:modbus.py:317 Pymodbus: modbusTest: Modbus Error: test connect exception
-      "--deselect tests/components/modbus/test_init.py::test_pymodbus_connect_fail"
+    jellyfin = [
+      # AssertionError: assert 'audio/x-flac' == 'audio/flac'
+      "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
+      # AssertionError: assert [+ received] == [- snapshot]
+      "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
     ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
-    ];
-    unifiprotect = [
-      # "TypeError: object Mock can't be used in 'await' expression
-      "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
     ];
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (
@@ -87,7 +102,6 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     dontUsePytestXdist = true;
 
     pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
-      ++ [ "--numprocesses=2" ]
       ++ extraPytestFlagsArray.${component} or [ ]
       ++ [ "tests/components/${component}" ];
 
@@ -97,6 +111,10 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
+        # pinned version incompatible with urllib3>=2.0
+        "telegram_bot"
+        # depends on telegram_bot
+        "telegram"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;

@@ -1,46 +1,53 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pyserial
 , pyserial-asyncio
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.18.0";
-  # https://github.com/Martiusweb/asynctest/issues/152
-  # broken by upstream python bug with asynctest and
-  # is used exclusively by home-assistant with python 3.8
+  version = "0.20.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-zSaT9WdA4tR8tJAShSzqL+f/nTLQJbeIZnbSBe1EOks=";
+    hash = "sha256-H0rs4EOzz2Nx5YuwqTZp2FGF1z2phBgSIyraKHHx4RA=";
   };
 
-  buildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
     pyserial
     pyserial-asyncio
     zigpy
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
-    # https://github.com/zigpy/zigpy-xbee/issues/126
-    "test_form_network"
+    # fixed in https://github.com/zigpy/zigpy-xbee/commit/f85233fc28ae01c08267965e99a29e43b00e1561
+    "test_shutdown"
   ];
 
   meta = with lib; {

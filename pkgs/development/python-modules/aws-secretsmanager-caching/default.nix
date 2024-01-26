@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, setuptools
 , setuptools-scm
 , botocore
 , pytestCheckHook
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     botocore
+    setuptools  # Needs pkg_resources at runtime.
   ];
 
   patches = [

@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, which, sedlex, easy-format, xmlm, base64 }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "piqi is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   version = "0.6.16";
   pname = "piqi";

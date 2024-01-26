@@ -1,4 +1,4 @@
-{ makeScopeWithSplicing, generateSplicesForMkScope
+{ makeScopeWithSplicing', generateSplicesForMkScope
 , stdenv, buildFHSEnv, pkgsi686Linux, glxinfo
 }:
 
@@ -32,6 +32,7 @@ let
 
     steamcmd = callPackage ./steamcmd.nix { };
   };
-  keep = self: { };
-  extra = spliced0: { };
-in makeScopeWithSplicing (generateSplicesForMkScope "steamPackages") keep extra steamPackagesFun
+in makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "steamPackages";
+  f = steamPackagesFun;
+}

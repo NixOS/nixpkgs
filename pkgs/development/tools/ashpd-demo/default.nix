@@ -23,18 +23,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ashpd-demo";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "bilelmoussaoui";
     repo = "ashpd";
     rev = "${finalAttrs.version}-demo";
-    hash = "sha256-isc0+Mke6XeCCLiuxnjHqrnlGqYuQnmcU1acM14UOno=";
+    hash = "sha256-fIyJEUcyTcjTbBycjuJb99wALQelMT7Zq6PHKcL2F80=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = "${finalAttrs.src}/ashpd-demo";
-    hash = "sha256-9L/WFL2fLCRahjGCVdgV+3HfDMrntdIWcuuOJbzdPiI=";
+    hash = "sha256-ldflCBErM9w3eO2DwWfYTrdO7lowZtqfj7Fft6Crl1w=";
   };
 
   nativeBuildInputs = [

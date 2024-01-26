@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "palace";
   version = "0.2.5";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromSourcehut {

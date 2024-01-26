@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cupy
 , fetchFromGitHub
 , filelock

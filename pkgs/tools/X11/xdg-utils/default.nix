@@ -2,6 +2,7 @@
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
 , mimiSupport ? false, gawk
+, bash
 , glib
 , withXdgOpenUsePortalPatch ? true }:
 
@@ -22,14 +23,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xdg-utils";
-  version = "unstable-2020-10-21";
+  version = "unstable-2022-11-06";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
-    sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
+    rev = "8ae02631a9806da11b34cd6b274af02d28aee5da";
+    sha256 = "sha256-WdnnAiPYbREny633FnBi5tD9hDuF8NCVVbUaAVIKTxM=";
   };
 
   patches = lib.optionals withXdgOpenUsePortalPatch [
@@ -48,6 +49,9 @@ stdenv.mkDerivation rec {
   # just needed when built from git
   nativeBuildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
 
+  # explicitly provide a runtime shell so patchShebangs is consistent across build platforms
+  buildInputs = [ bash ];
+
   postInstall = lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
   '' + ''
@@ -65,7 +69,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/bin/xdg-open \
       --replace "/usr/bin/printf" "${coreutils}/bin/printf" \
-      --replace "gdbus" "${glib}/bin/gdbus"
+      --replace "gdbus" "${glib}/bin/gdbus" \
+      --replace "mimeopen" "${perlPackages.FileMimeInfo}/bin/mimeopen"
 
     substituteInPlace $out/bin/xdg-mime \
       --replace "/usr/bin/file" "${file}/bin/file"
@@ -80,7 +85,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = if mimiSupport then licenses.gpl2 else licenses.free;
+    license = if mimiSupport then licenses.gpl2 else licenses.mit;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };

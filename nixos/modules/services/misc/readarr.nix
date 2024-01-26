@@ -16,12 +16,7 @@ in
         description = lib.mdDoc "The directory where Readarr stores its data files.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.readarr;
-        defaultText = literalExpression "pkgs.readarr";
-        description = lib.mdDoc "The Readarr package to use";
-      };
+      package = mkPackageOption pkgs "readarr" { };
 
       openFirewall = mkOption {
         type = types.bool;
@@ -50,9 +45,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-readarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.readarr = {
       description = "Readarr";

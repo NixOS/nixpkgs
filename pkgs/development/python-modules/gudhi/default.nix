@@ -5,7 +5,7 @@
 , boost
 , eigen
 , gmp
-, cgal_5  # see https://github.com/NixOS/nixpkgs/pull/94875 about cgal
+, cgal  # see https://github.com/NixOS/nixpkgs/pull/94875 about cgal
 , mpfr
 , tbb
 , numpy
@@ -19,26 +19,26 @@
 
 buildPythonPackage rec {
   pname = "gudhi";
-  version = "3.4.1";
+  version = "3.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GUDHI";
     repo = "gudhi-devel";
     rev = "tags/gudhi-release-${version}";
     fetchSubmodules = true;
-    sha256 = "1m03qazzfraxn62l1cb11icjz4x8q2sg9c2k3syw5v0yv9ndgx1v";
+    sha256 = "sha256-f2ajy4muG9vuf4JarGWZmdk/LF9OYd2KLSaGyY6BQrY=";
   };
 
   patches = [ ./remove_explicit_PYTHONPATH.patch ];
 
   nativeBuildInputs = [ cmake numpy cython pybind11 matplotlib ];
-  buildInputs = [ boost eigen gmp cgal_5 mpfr ]
+  buildInputs = [ boost eigen gmp cgal mpfr ]
     ++ lib.optionals enableTBB [ tbb ];
   propagatedBuildInputs = [ numpy scipy ];
   nativeCheckInputs = [ pytest ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_GUDHI_PYTHON=ON"
     "-DPython_ADDITIONAL_VERSIONS=3"
   ];

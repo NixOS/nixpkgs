@@ -11,18 +11,8 @@ let
 in {
   options.services.vikunja = with lib; {
     enable = mkEnableOption (lib.mdDoc "vikunja service");
-    package-api = mkOption {
-      default = pkgs.vikunja-api;
-      type = types.package;
-      defaultText = literalExpression "pkgs.vikunja-api";
-      description = lib.mdDoc "vikunja-api derivation to use.";
-    };
-    package-frontend = mkOption {
-      default = pkgs.vikunja-frontend;
-      type = types.package;
-      defaultText = literalExpression "pkgs.vikunja-frontend";
-      description = lib.mdDoc "vikunja-frontend derivation to use.";
-    };
+    package-api = mkPackageOption pkgs "vikunja-api" { };
+    package-frontend = mkPackageOption pkgs "vikunja-frontend" { };
     environmentFiles = mkOption {
       type = types.listOf types.path;
       default = [ ];
@@ -147,5 +137,9 @@ in {
     };
 
     environment.etc."vikunja/config.yaml".source = configFile;
+
+    environment.systemPackages = [
+      cfg.package-api # for admin `vikunja` CLI
+    ];
   };
 }

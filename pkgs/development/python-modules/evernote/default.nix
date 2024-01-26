@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "evernote";
   version = "1.25.3";
+  format = "setuptools";
   disabled = ! isPy27; #some dependencies do not work with py3
 
   src = fetchPypi {

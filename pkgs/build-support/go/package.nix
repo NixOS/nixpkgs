@@ -7,12 +7,6 @@
 , preFixup ? ""
 , shellHook ? ""
 
-# Go linker flags, passed to go via -ldflags
-, ldflags ? []
-
-# Go tags, passed to go via -tag
-, tags ? []
-
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -43,14 +37,13 @@
 
 , CGO_ENABLED ? go.CGO_ENABLED
 
+, ldflags ? [ ]
+
 # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
 
 , meta ? {}, ... } @ args:
-
-
-with builtins;
 
 let
   dep2src = goDep:
@@ -95,9 +88,13 @@ let
     inherit CGO_ENABLED enableParallelBuilding;
 
     GO111MODULE = "off";
+    GOTOOLCHAIN = "local";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+
+    # If not set to an explicit value, set the buildid empty for reproducibility.
+    ldflags = ldflags ++ lib.optionals (!lib.any (lib.hasPrefix "-buildid=") ldflags) [ "-buildid=" ];
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -172,7 +169,7 @@ let
 
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
-        flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
+        flags+=(''${tags:+-tags=''${tags// /,}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
         flags+=("-p" "$NIX_BUILD_CORES")
 
@@ -288,4 +285,5 @@ let
 in
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
   package

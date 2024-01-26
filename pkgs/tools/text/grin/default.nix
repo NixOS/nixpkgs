@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "grin";
@@ -9,10 +9,21 @@ python3Packages.buildPythonApplication rec {
     owner = "matthew-brett";
     repo = pname;
     rev = "1.3.0";
-    sha256 = "057d05vzx4sf415vnh3qj2g351xhb3illjxjs9mdl3nsnb5r84kv";
+    hash = "sha256-exKUy7LaDtpq0rJLSuNYsIcynpB4QLtLIE6T/ncB7RQ=";
   };
 
-  buildInputs = with python3Packages; [ nose ];
+  patches = [
+    # https://github.com/matthew-brett/grin/pull/4
+    (fetchpatch {
+      name = "replace-nose-with-nose3.patch";
+      url = "https://github.com/matthew-brett/grin/commit/ba473fa4f5da1b337ee80d7d31772a4e41ffa62d.patch";
+      hash = "sha256-CnWHynKSsXYjSsTLdPuwpcIndrCdq3cQYS8teg5EM0A=";
+    })
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    nose3
+  ];
 
   meta = {
     homepage = "https://github.com/matthew-brett/grin";

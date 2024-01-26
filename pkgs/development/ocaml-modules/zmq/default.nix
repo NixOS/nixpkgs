@@ -2,18 +2,14 @@
 
 buildDunePackage rec {
   pname = "zmq";
-  version = "5.1.5";
-
-  duneVersion = "3";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "https://github.com/issuu/ocaml-zmq/releases/download/${version}/zmq-lwt-${version}.tbz";
-    sha256 = "sha256-mUfRPatLPFeSzWDwCIoFaVl85VkvDch4i6pOn3Kme1Y=";
+    url = "https://github.com/issuu/ocaml-zmq/releases/download/${version}/zmq-${version}.tbz";
+    hash = "sha256-hVKfaTrUFqEBsv5hFB7JwsR630M0DKnqhB0QHpxcHKc=";
   };
 
   buildInputs = [ czmq dune-configurator ];
-
-  propagatedBuildInputs = [ stdint ];
 
   meta = {
     description = "ZeroMQ bindings for OCaml";

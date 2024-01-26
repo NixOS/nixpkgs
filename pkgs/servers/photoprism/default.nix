@@ -1,40 +1,40 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, makeWrapper, testers }:
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, imagemagick, makeWrapper, testers }:
 
 let
-  version = "221118-e58fee0fb";
+  version = "231011-63f708417";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Bx9SJLK97uZ/k09LIj8dHwmRetg6krI5iO7mtojV3PU=";
+    hash = "sha256-g/j+L++vb+wiE23d/lm6lga0MeaPrCotEojD9Sajkmg=";
   };
 
   libtensorflow = pkgs.callPackage ./libtensorflow.nix { };
   backend = pkgs.callPackage ./backend.nix { inherit libtensorflow src version; };
   frontend = pkgs.callPackage ./frontend.nix { inherit src version; };
 
-  fetchModel = { name, sha256 }:
+  fetchModel = { name, hash }:
     fetchzip {
-      inherit sha256;
+      inherit hash;
       url = "https://dl.photoprism.org/tensorflow/${name}.zip";
       stripRoot = false;
     };
 
   facenet = fetchModel {
     name = "facenet";
-    sha256 = "sha256-aS5kkNhxOLSLTH/ipxg7NAa1w9X8iiG78jmloR1hpRo=";
+    hash = "sha256-aS5kkNhxOLSLTH/ipxg7NAa1w9X8iiG78jmloR1hpRo=";
   };
 
   nasnet = fetchModel {
     name = "nasnet";
-    sha256 = "sha256-bF25jPmZLyeSWy/CGXZE/VE2UupEG2q9Jmr0+1rUYWE=";
+    hash = "sha256-bF25jPmZLyeSWy/CGXZE/VE2UupEG2q9Jmr0+1rUYWE=";
   };
 
   nsfw = fetchModel {
     name = "nsfw";
-    sha256 = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
+    hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
   };
 
   assets_path = "$out/share/${pname}";
@@ -62,7 +62,8 @@ stdenv.mkDerivation {
       --set PHOTOPRISM_RAWTHERAPEE_BIN ${rawtherapee}/bin/rawtherapee-cli \
       --set PHOTOPRISM_HEIFCONVERT_BIN ${libheif}/bin/heif-convert \
       --set PHOTOPRISM_FFMPEG_BIN ${ffmpeg}/bin/ffmpeg \
-      --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool
+      --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool \
+      --set PHOTOPRISM_IMAGEMAGICK_BIN ${imagemagick}/bin/convert
 
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
@@ -82,5 +83,6 @@ stdenv.mkDerivation {
     inherit (libtensorflow.meta) platforms;
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ benesim ];
+    mainProgram = "photoprism";
   };
 }

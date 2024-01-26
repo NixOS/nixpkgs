@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , imagemagickBig
 , pkg-config
 , withXorg ? true
@@ -42,6 +43,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VhVrngAX7pXZp+szqv95R6RGAJojp3svdbaRKigGb0w=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-40889.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0003-CVE-2023-40889-qrdec.c-Fix-array-out-of-bounds-acces.patch";
+      hash = "sha256-z0IADJwUt9PBoox5xJJN//5vrcRbIrWB9H7wtxNVUZU=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-40890.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0004-Add-bounds-check-for-CVE-2023-40890.patch";
+      hash = "sha256-YgiptwXpRpz0qIcXBpARfIzSB8KYmksZR58o5yFPahs=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     xmlto
@@ -50,6 +64,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableVideo [
     wrapGAppsHook
     wrapQtAppsHook
+    qtbase
   ];
 
   buildInputs = [

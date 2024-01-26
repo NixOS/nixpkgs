@@ -1,25 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , pythonOlder
+
+# build-system
+, setuptools
 , setuptools-scm
+
+# dependencies
+, attrs
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "0.11.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2ZYaZ8F5HoweMtznpw7R5U87HmQQh/IJTy03CHq3+xc=";
+    hash = "sha256-UYZciEV1RfUftyARlC8KPGkB7p4ky/ttG53BNIuvvjc=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    attrs
   ];
 
   nativeCheckInputs = [

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "xattr";
-  version = "0.10.1";
+  version = "1.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wS59gf+qBgWzrIwiwplKjhipzxxZKHobdyKiKJyVLsU=";
+    hash = "sha256-osfLLvRBv2eeJAtl4gXwij7jFeGQ/qVnPmD9aBLmNKU=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postBuild = ''
-    ${python.pythonForBuild.interpreter} -m compileall -f xattr
+    ${python.pythonOnBuildForHost.interpreter} -m compileall -f xattr
   '';
 
   pythonImportsCheck = [

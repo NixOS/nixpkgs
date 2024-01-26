@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   pname = "micronucleus";
   version = "2.04";
 
-  sourceRoot = "source/commandline";
+  sourceRoot = "${src.name}/commandline";
 
   src = fetchFromGitHub {
     owner = "micronucleus";

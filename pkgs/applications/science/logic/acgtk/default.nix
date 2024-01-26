@@ -3,14 +3,14 @@
 stdenv.mkDerivation {
 
   pname = "acgtk";
-  version = "1.5.4";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "acg";
     repo = "dev/acgtk";
-    rev = "8e630b6d91bad022bd1d1a075e7768034065c428";
-    sha256 = "sha256-W/BDhbng5iYuiB7desMKvRtDFdhoaxiJNvNvtbLlA6E=";
+    rev = "release-2.0.0-20231009";
+    hash = "sha256-ZymSQkBMBePPw7pJkfLkmqbIkQyIqB+7Pyrih2WAO50=";
   };
 
   strictDeps = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = with ocamlPackages; [ menhir ocaml findlib dune_3 ];
 
   buildInputs = with ocamlPackages; [
-    ansiterminal cairo2 cmdliner fmt logs menhirLib mtime sedlex yojson
+    ansiterminal cairo2 cmdliner fmt logs menhirLib mtime ocamlgraph readline sedlex yojson
   ];
 
   buildPhase = ''

@@ -23,7 +23,8 @@
 , at-spi2-atk
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , fribidi
 , xorg
 , libepoxy
@@ -63,7 +64,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.37";
+  version = "3.24.39";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
   in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-Z0XwtMBTeUFR/Q8OJHSwd8zP9fg+ndG/PTn+n+X7f1c=";
+    sha256 = "sha256-HKw+VmubLzZTpFjAjC3N/cqfkIA3rAPJ2FZLQpV3jXk=";
   };
 
   patches = [
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     # For xmllint
     libxml2
-  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals ((withIntrospection || compileSchemas) && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
@@ -182,6 +183,10 @@ stdenv.mkDerivation (finalAttrs: {
     # See https://github.com/NixOS/nixpkgs/issues/132259
     substituteInPlace meson.build \
       --replace "x11_enabled = false" ""
+
+    # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
+    substituteInPlace meson.build \
+      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
 
     files=(
       build-aux/meson/post-install.py

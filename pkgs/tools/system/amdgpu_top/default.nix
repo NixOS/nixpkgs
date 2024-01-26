@@ -14,16 +14,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amdgpu_top";
-  version = "0.1.8";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QsoOqkRtIwkLn7zg4hggGLNzyjdneYYs0XfQMdIEcCM=";
+    hash = "sha256-/8fYoIp0EezqamKYoZYLllKm5BmljJ0iRpaM2uSPw5Q=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    outputHashes = {
+      "libdrm_amdgpu_sys-0.4.1" = "sha256-4z6f0vQHF2sAbvAoGMTrAzI953bjsA7Kw719HDuhjg4=";
+    };
+    lockFile = ./Cargo.lock;
+  };
 
   buildInputs = [
     libdrm
@@ -51,5 +56,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Umio-Yasuno/amdgpu_top/releases";
     license = licenses.mit;
     maintainers = with maintainers; [ geri1701 ];
+    platforms = platforms.linux;
+    mainProgram = "amdgpu_top";
   };
 }

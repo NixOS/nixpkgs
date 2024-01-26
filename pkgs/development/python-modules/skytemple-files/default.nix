@@ -12,6 +12,8 @@
 , tilequant
 , pyyaml
 , pmdsky-debug-py
+, range-typed-integers
+, importlib-resources
 , typing-extensions
 , pythonOlder
 , # optional dependancies for SpriteCollab
@@ -20,7 +22,7 @@
 , graphql-core
 , gql
 , armips
-# tests
+  # tests
 , pytestCheckHook
 , parameterized
 , xmldiff
@@ -28,19 +30,19 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.4.7";
+  version = "1.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-SLRZ9ThrH2UWqfr5BbjJKDM/SRkCfMNK70XZT4+Ks7w=";
-    fetchSubmodules = true;
+    hash = "sha256-P0VME1keazqcyb0JuQ4iXPyJH7/gTmYE7uASpjvhqUo=";
   };
 
   postPatch = ''
-    substituteInPlace skytemple_files/patch/arm_patcher.py \
-      --replace "exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')" "exec_name = \"${armips}/bin/armips\""
+    substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
+      --replace "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" "exec_name = \"${armips}/bin/armips\""
   '';
 
   buildInputs = [ armips ];
@@ -56,7 +58,9 @@ buildPythonPackage rec {
     tilequant
     pyyaml
     pmdsky-debug-py
+    range-typed-integers
   ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
     typing-extensions
   ];
 
@@ -70,7 +74,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook parameterized xmldiff ] ++ passthru.optional-dependencies.spritecollab;
-  pytestFlagsArray = "test/";
+  pytestFlagsArray = [ "test/" ];
   disabledTestPaths = [
     "test/skytemple_files_test/common/spritecollab/sc_online_test.py"
     "test/skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test

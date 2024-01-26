@@ -109,7 +109,14 @@ def osabi_are_compatible(wanted: str, got: str) -> bool:
 
 
 def glob(path: Path, pattern: str, recursive: bool) -> Iterator[Path]:
-    return path.rglob(pattern) if recursive else path.glob(pattern)
+    if path.is_dir():
+        return path.rglob(pattern) if recursive else path.glob(pattern)
+    else:
+        # path.glob won't return anything if the path is not a directory.
+        # We extend that behavior by matching the file name against the pattern.
+        # This allows to pass single files instead of dirs to auto_patchelf,
+        # for greater control on the files to consider.
+        return [path] if path.match(pattern) else []
 
 
 cached_paths: Set[Path] = set()
@@ -167,7 +174,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List[Path] = []) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List[Path] = [], extra_args: List[str] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -206,7 +213,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List
     if file_is_dynamic_executable:
         print("setting interpreter of", path)
         subprocess.run(
-                ["patchelf", "--set-interpreter", interpreter_path.as_posix(), path.as_posix()],
+                ["patchelf", "--set-interpreter", interpreter_path.as_posix(), path.as_posix()] + extra_args,
                 check=True)
         rpath += runtime_deps
 
@@ -243,7 +250,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List
     if rpath:
         print("setting RPATH to:", rpath_str)
         subprocess.run(
-                ["patchelf", "--set-rpath", rpath_str, path.as_posix()],
+                ["patchelf", "--set-rpath", rpath_str, path.as_posix()] + extra_args,
                 check=True)
 
     return dependencies
@@ -255,7 +262,8 @@ def auto_patchelf(
         runtime_deps: List[Path],
         recursive: bool = True,
         ignore_missing: List[str] = [],
-        append_rpaths: List[Path] = []) -> None:
+        append_rpaths: List[Path] = [],
+        extra_args: List[str] = []) -> None:
 
     if not paths_to_patch:
         sys.exit("No paths to patch, stopping.")
@@ -268,7 +276,7 @@ def auto_patchelf(
     dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths)
+            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths, extra_args)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -305,21 +313,35 @@ def main() -> None:
         "--no-recurse",
         dest="recursive",
         action="store_false",
-        help="Patch only the provided paths, and ignore their children")
+        help="Disable the recursive traversal of paths to patch.")
     parser.add_argument(
         "--paths", nargs="*", type=Path,
-        help="Paths whose content needs to be patched.")
+        help="Paths whose content needs to be patched."
+             " Single files and directories are accepted."
+             " Directories are traversed recursively by default.")
     parser.add_argument(
         "--libs", nargs="*", type=Path,
-        help="Paths where libraries are searched for.")
+        help="Paths where libraries are searched for."
+             " Single files and directories are accepted."
+             " Directories are not searched recursively.")
     parser.add_argument(
         "--runtime-dependencies", nargs="*", type=Path,
-        help="Paths to prepend to the runtime path of executable binaries.")
+        help="Paths to prepend to the runtime path of executable binaries."
+             " Subject to deduplication, which may imply some reordering.")
     parser.add_argument(
         "--append-rpaths",
         nargs="*",
         type=Path,
         help="Paths to append to all runtime paths unconditionally",
+    )
+    parser.add_argument(
+        "--extra-args",
+        # Undocumented Python argparse feature: consume all remaining arguments
+        # as values for this one. This means this argument should always be passed
+        # last.
+        nargs="...",
+        type=str,
+        help="Extra arguments to pass to patchelf. This argument should always come last."
     )
 
     print("automatically fixing dependencies for ELF files")
@@ -332,7 +354,8 @@ def main() -> None:
         args.runtime_dependencies,
         args.recursive,
         args.ignore_missing,
-        append_rpaths=args.append_rpaths)
+        append_rpaths=args.append_rpaths,
+        extra_args=args.extra_args)
 
 
 interpreter_path: Path  = None # type: ignore

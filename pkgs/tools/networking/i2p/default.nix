@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchurl {
     urls = map (mirror: "${mirror}/${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de"
       "https://download.i2p2.no/releases"
     ];
-    sha256 = "sha256-5LoGpuKTWheZDwV6crjXnkUqJVamzv5QEtXdY0Zv7r8=";
+    sha256 = "sha256-MO+K/K0P/6/ZTTCsMH+GtaazGOLB9EoCMAWEGh/NB3w=";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -64,8 +64,22 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    license = with licenses; [
+      asl20
+      boost
+      bsd2
+      bsd3
+      cc-by-30
+      cc0
+      epl10
+      gpl2
+      gpl3
+      lgpl21Only
+      lgpl3Only
+      mit
+      publicDomain
+    ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ joelmo ];
   };
 })

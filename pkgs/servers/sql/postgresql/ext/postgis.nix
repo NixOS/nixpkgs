@@ -5,38 +5,46 @@
 , postgresql
 , geos
 , proj
-, gdal
+, gdalMinimal
 , json_c
 , pkg-config
 , file
 , protobufc
 , libiconv
+, pcre2
 , nixosTests
 }:
+
+let
+  gdal = gdalMinimal;
+in
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.3.2";
+  version = "3.4.1";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-miohnaAFoXMKOdGVmhx87GGbHvsAm2W+gP/CW60pkGg=";
+    sha256 = "sha256-/vahQSE9D/J79FszuEnMOWwi3bH/xv7UNUacnokfyB0=";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
+  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
                 ++ lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
-  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
+  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib"
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+    + lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) " -l${stdenv.cc.libcxx.cxxabi.libName}";
+
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --docdir=$doc/share/doc/${pname} --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev} --disable-extension-upgrades-install"
 
-    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin"
+    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin docdir=$doc/share/doc/${pname}"
   '';
   postConfigure = ''
     sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
@@ -73,7 +81,8 @@ stdenv.mkDerivation rec {
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2;
-    maintainers = [ maintainers.marcweber ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
     inherit (postgresql.meta) platforms;
+    broken = versionOlder postgresql.version "12";
   };
 }

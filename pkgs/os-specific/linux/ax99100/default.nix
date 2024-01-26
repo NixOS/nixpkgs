@@ -1,6 +1,6 @@
-{ kernel, stdenv, kmod, lib, fetchzip, fetchpatch, dos2unix }:
-stdenv.mkDerivation
-{
+{ kernel, stdenv, kmod, lib, fetchzip, dos2unix }:
+
+stdenv.mkDerivation {
   pname = "ax99100";
   version = "1.8.0";
 
@@ -26,9 +26,10 @@ stdenv.mkDerivation
   patches = [
     ./kernel-5.18-pci_free_consistent-pci_alloc_consistent.patch
     ./kernel-6.1-set_termios-const-ktermios.patch
-  ] ++ (lib.optional (lib.versionAtLeast kernel.version "6.2") [
+  ] ++ lib.optionals (lib.versionAtLeast kernel.version "6.2") [
     ./kernel-6.2-fix-pointer-type.patch
-  ]);
+    ./kernel-6.4-fix-define-semaphore.patch
+  ];
 
   patchFlags = [ "-p0" ];
 

@@ -3,6 +3,7 @@
 , abc-verifier
 , bash
 , bison
+, boost
 , fetchFromGitHub
 , flex
 , libffi
@@ -18,6 +19,7 @@
 , yosys-bluespec
 , yosys-ghdl
 , yosys-symbiflow
+, enablePython ? true # enable python binding
 }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that
@@ -68,21 +70,25 @@ let
     ghdl     = yosys-ghdl;
   } // (yosys-symbiflow);
 
+  boost_python = boost.override {
+    enablePython = true;
+    python = python3;
+  };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.29";
+  version = "0.37";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "${pname}-${version}";
-    hash  = "sha256-qsuKXYuKsMAALIy1SjxhEhZIMO8B4MF2vmVbwqgzLyM=";
+    rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
+    hash  = "sha256-JRztXMZMBFhdZMeVHkRxFulRrFzyuNaLzcRlmgAz6Gc=";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config bison flex ];
-  buildInputs = [
+  propagatedBuildInputs = [
     tcl
     readline
     libffi
@@ -90,7 +96,7 @@ in stdenv.mkDerivation rec {
     (python3.withPackages (pp: with pp; [
       click
     ]))
-  ];
+  ] ++ lib.optional enablePython boost_python;
 
   makeFlags = [ "PREFIX=${placeholder "out"}"];
 
@@ -101,7 +107,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
+      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
 
     chmod +x ./misc/yosys-config.in
     patchShebangs tests ./misc/yosys-config.in
@@ -120,9 +126,13 @@ in stdenv.mkDerivation rec {
     fi
 
     if ! grep -q "YOSYS_VER := $version" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${version}), failing."
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
       exit 1
     fi
+  '' + lib.optionalString enablePython ''
+    echo "ENABLE_PYOSYS := 1" >> Makefile.conf
+    echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
+    echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
   '';
 
   checkTarget = "test";
@@ -150,6 +160,6 @@ in stdenv.mkDerivation rec {
     homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ shell thoughtpolice emily ];
+    maintainers = with maintainers; [ shell thoughtpolice emily Luflosi ];
   };
-}
+})

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , docopt
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , hypothesis
 , inform
 , nestedtext
@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nestedtext";
-  version = "3.5";
+  version = "3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "nestedtext";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RGCcrGsDkBhThuUZd2LuuyXG9r1S7iOA75HYRxkwUrU=";
+    hash = "sha256-SHY/MTmYbNh3azkyvwEtuvT+V7YzfLi2B3FvBzv6Omo=";
   };
 
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
 
   propagatedBuildInputs = [

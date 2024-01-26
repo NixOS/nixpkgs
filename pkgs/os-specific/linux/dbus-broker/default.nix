@@ -11,6 +11,7 @@
 }:
 
 let
+
   dep = { pname, version, hash, rev ? "v${version}", buildInputs ? [ ] }:
     stdenv.mkDerivation {
       inherit pname version;
@@ -27,28 +28,31 @@ let
   #
   # If that changes, we can always break them out, but they are essentially
   # part of the dbus-broker project, just in separate repositories.
-  c-dvar = dep { pname = "c-dvar"; version = "1.0.0"; hash = "sha256-P7y7gUHXQn2eyS6IcV7m7yGy4VGtQ2orgBkS7Y729ZY="; buildInputs = [ c-stdaux c-utf8 ]; };
-  c-ini = dep { pname = "c-ini"; version = "1.0.0"; hash = "sha256-VKxoGexMcquakMmiH5IJt0382TjkV1FLncTSyEqf4X0="; buildInputs = [ c-list c-rbtree c-stdaux c-utf8 ]; };
+  c-dvar = dep { pname = "c-dvar"; version = "1.1.0"; hash = "sha256-p/C+BktclVseCtZJ1Q/YK03vP2ClnYRLB1Vmj2OQJD4="; buildInputs = [ c-stdaux c-utf8 ]; };
+  c-ini = dep { pname = "c-ini"; version = "1.1.0"; hash = "sha256-wa7aNl20hkb/83c4AkQ/0YFDdmBs4XGW+WLUtBWIC98="; buildInputs = [ c-list c-rbtree c-stdaux c-utf8 ]; };
   c-list = dep { pname = "c-list"; version = "3.1.0"; hash = "sha256-fp3EAqcbFCLaT2EstLSzwP2X13pi2EFpFAullhoCtpw="; };
-  # TODO: Fetch c-rbtree from a tag after its next release
-  c-rbtree = dep { pname = "c-rbtree"; version = "unstable-2022-07-07"; rev = "431a4746705223673e43940ca1ad9b5f52473a4b"; hash = "sha256-ExSPgNqhTjSwRgYfZOAyoaehOpFNHKFqPYkcCfptkrs="; buildInputs = [ c-stdaux ]; };
-  c-shquote = dep { pname = "c-shquote"; version = "1.0.0"; hash = "sha256-Ze1enX0VJ6Xi5e4EhWzaiHc7PnuaifrUP+JuJnauv5c="; buildInputs = [ c-stdaux ]; };
-  c-stdaux = dep { pname = "c-stdaux"; version = "1.2.0"; hash = "sha256-/D+IFdqn1XHDfdOsDnLMO5IHQ5B4P4ELyMpRcPBg/4s="; };
-  c-utf8 = dep { pname = "c-utf8"; version = "1.0.0"; hash = "sha256-QEnjmfQ6kxJdsHfyRgXAlP+oGrKLYQ0m9r+D2L+pizI="; buildInputs = [ c-stdaux ]; };
+  c-rbtree = dep { pname = "c-rbtree"; version = "3.2.0"; hash = "sha256-dTMeawhPLRtHvMXfXCrT5iCdoh7qS3v+raC6c+t+X38="; buildInputs = [ c-stdaux ]; };
+  c-shquote = dep { pname = "c-shquote"; version = "1.1.0"; hash = "sha256-z6hpQ/kpCYAngMNfxLkfsxaGtvP4yBMigX1lGpIIzMQ="; buildInputs = [ c-stdaux ]; };
+  c-stdaux = dep { pname = "c-stdaux"; version = "1.5.0"; hash = "sha256-MsnuEyVCmOIr/q6I1qyPsNXp48jxIEcXoYLHbOAZtW0="; };
+  c-utf8 = dep { pname = "c-utf8"; version = "1.1.0"; hash = "sha256-9vBYylbt1ypJwIAQJd/oiAueh+4VYcn/KzofQuhUea0="; buildInputs = [ c-stdaux ]; };
 
 in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-broker";
-  version = "32";
+  version = "35";
 
   src = fetchFromGitHub {
     owner = "bus1";
     repo = "dbus-broker";
-    rev = "v${version}";
-    hash = "sha256-PVdRyg/t6D3HjSHeap5L8AiEm39iSO5qXohLw2UAUYY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Qwi9X5jXHiQ3TOWefzv/p7x8/JkQW1QgdYji5SpLej0=";
   };
 
-  patches = [ ./paths.patch ];
+  patches = [
+    ./paths.patch
+    ./disable-test.patch
+  ];
 
   nativeBuildInputs = [ docutils meson ninja pkg-config ];
 
@@ -92,4 +96,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
   };
-}
+})

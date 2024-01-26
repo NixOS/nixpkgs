@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat}:
+{lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libxml2, libzip, boost179, lua, luabind, tbb, expat}:
 
 stdenv.mkDerivation rec {
   pname = "osrm-backend";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
+  buildInputs = [ bzip2 libxml2 libzip boost179 lua luabind tbb expat ];
 
   patches = [ ./darwin.patch ];
 

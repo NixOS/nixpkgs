@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "twm";
-  version = "0.6.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OUaT/JMh4JgFbzIYlU34EN7gxEydNKBXSLJfYKOeck4=";
+    sha256 = "sha256-r9l5gNWoIkKHzjHOCK7qnPLfg6O+km7OX+6pHQKhN6g=";
   };
 
-  cargoHash = "sha256-VGbY3QRkO4znEGs2daUhpDeNntONwvGeUg1ryFyWmjE=";
+  cargoHash = "sha256-0nCMgfnEqr0D3HpocUN/Hc9tG9byu2CYvBy/8vIU+bI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     description = "A customizable workspace manager for tmux";
     homepage = "https://github.com/vinnymeller/twm";
     changelog = "https://github.com/vinnymeller/twm/releases/tag/v${version}";
-    license = licenses.gpl2Only;
+    license = licenses.mit;
     maintainers = with maintainers; [ vinnymeller ];
+    mainProgram = "twm";
   };
 }

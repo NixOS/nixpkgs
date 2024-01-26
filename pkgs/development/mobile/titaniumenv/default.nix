@@ -3,7 +3,6 @@
 rec {
   titaniumsdk = let
     titaniumSdkFile = if tiVersion == "8.2.1.GA" then ./titaniumsdk-8.2.nix
-      else if tiVersion == "7.5.1.GA" then ./titaniumsdk-7.5.nix
       else if tiVersion == "8.3.2.GA" then ./titaniumsdk-8.3.nix
       else throw "Titanium version not supported: "+tiVersion;
     in
@@ -12,8 +11,8 @@ rec {
     };
 
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv lib python which file jdk nodejs;
-    inherit (pkgs.nodePackages) alloy titanium;
+    inherit (pkgs) stdenv lib python which file jdk nodejs titanium;
+    alloy = pkgs.titanium-alloy;
     inherit (androidenv) composeAndroidPackages;
     inherit (xcodeenv) composeXcodeWrapper;
     inherit titaniumsdk;

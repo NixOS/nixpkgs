@@ -1,15 +1,18 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
-python3Packages.buildPythonApplication rec {
-  pname = "tuifimanager";
-  version = "2.3.4";
-  format = "setuptools";
+python3.pkgs.buildPythonApplication rec {
+  pname = "tuifi-manager";
+  version = "3.3.5";
+  format = "pyproject";
 
   src = fetchFromGitHub {
-    repo = pname;
     owner = "GiorgosXou";
-    rev = "v.${version}";
-    hash = "sha256-KJYPpeBALyg6Gd1GQgJbvGdJbAT47qO9FnSH7GhO4oQ=";
+    repo = "TUIFIManager";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-O4cAHFurgF6QzpeAMoipX2/JywU1drZOTw/Ob9Pa8WQ=";
   };
 
   postPatch = ''
@@ -17,11 +20,16 @@ python3Packages.buildPythonApplication rec {
       --replace "Send2Trash == 1.8.0" "Send2Trash >= 1.8.0"
   '';
 
-  propagatedBuildInputs = with python3Packages; [ unicurses send2trash ];
-  pythonImportsCheck = [ "TUIFIManager" ];
+  nativeBuildInputs = [
+    python3.pkgs.setuptools
+    python3.pkgs.setuptools-scm
+  ];
 
-  # Tests currently cause build to fail
-  doCheck = false;
+  propagatedBuildInputs = with python3.pkgs; [
+    send2trash
+    unicurses
+  ];
+  pythonImportsCheck = [ "TUIFIManager" ];
 
   meta = with lib; {
     description = "A cross-platform terminal-based termux-oriented file manager";
@@ -31,6 +39,7 @@ python3Packages.buildPythonApplication rec {
       attempt to get more attention to the Uni-Curses project.
     '';
     homepage = "https://github.com/GiorgosXou/TUIFIManager";
+    changelog = "https://github.com/GiorgosXou/TUIFIManager/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ michaelBelsanti ];
     mainProgram = "tuifi";

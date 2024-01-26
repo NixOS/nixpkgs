@@ -2,11 +2,14 @@
 , pkgs
 , newScope
 , darwin
+, llvmPackages
 , llvmPackages_15
 , overrideCC
 }:
 
 let
+  swiftLlvmPackages = llvmPackages_15;
+
   self = rec {
 
     callPackage = newScope self;
@@ -24,12 +27,25 @@ let
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
     clang = if pkgs.stdenv.isDarwin
       then
-        llvmPackages_15.clang.override rec {
+        swiftLlvmPackages.clang.override rec {
           libc = apple_sdk.Libsystem;
           bintools = pkgs.bintools.override { inherit libc; };
+          # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
+          # default Darwin stdenv. Using the default libc++ avoids issues (such as crashes)
+          # that can happen when a Swift application dynamically links different versions
+          # of libc++ and libc++abi than libraries it links are using.
+          inherit (llvmPackages) libcxx;
+          extraPackages = [
+            llvmPackages.libcxxabi
+            # Use the compiler-rt associated with clang, but use the libc++abi from the stdenv
+            # to avoid linking against two different versions (for the same reasons as above).
+            (swiftLlvmPackages.compiler-rt.override {
+              inherit (llvmPackages) libcxxabi;
+            })
+          ];
         }
       else
-        llvmPackages_15.clang;
+        swiftLlvmPackages.clang;
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`. These are similar to
@@ -39,7 +55,8 @@ let
     darwin = pkgs.darwin.overrideScope (_: prev: {
       inherit apple_sdk;
       inherit (apple_sdk) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
-      CF = apple_sdk.CoreFoundation;
+      CF = apple_sdk.CoreFoundation // { __attrsFailEvaluation = true; };
+      __attrsFailEvaluation = true;
     });
     xcodebuild = pkgs.xcbuild.override {
       inherit (apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;

@@ -4,15 +4,6 @@
 , gdk-pixbuf, wrapGAppsHook
 }:
 
-let why3_1_5 = why3.overrideAttrs (o: rec {
-    version = "1.5.1";
-    src = fetchurl {
-      url = "https://why3.gitlabpages.inria.fr/releases/${o.pname}-${version}.tar.gz";
-      hash = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
-    };
-  }); in
-let why3 = why3_1_5; in
-
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
@@ -37,6 +28,7 @@ let
     sexplib0
     parsexp
     base
+    unionFind
     yojson
     zarith
   ];
@@ -45,34 +37,31 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "26.1";
-  slang   = "Iron";
+  version = "28.0";
+  slang   = "Nickel";
 
   src = fetchurl {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-UT7ajIyu8e5vzrz2oBKDDrtZqUacgUP/TRi0/kz9Qkg=";
+    hash = "sha256-KWEogjMOy27d0LTKOvwEkrcND+szeaG46JMZTG4XOYM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fixes-yojson-2_1-support.patch";
-      url = "https://git.frama-c.com/pub/frama-c/-/commit/647eace02ed8dac46e75452898c3470f82576818.patch";
-      hash = "sha256-XfLi4kW1Y2MCLjHHQZAD8DvXvfZuDH3OKd9hlTV0XCw=";
-    })
-  ];
+  preConfigure = ''
+    substituteInPlace src/dune --replace " bytes " " "
+  '';
 
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 ]);
+  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
 
   buildInputs = with ocamlPackages; [
     dune-site dune-configurator
     ltl2ba ocamlgraph yojson menhirLib camlzip
     lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
-    ppx_deriving ppx_import ppx_deriving_yojson
+    ppx_deriving ppx_import ppx_deriving_yaml ppx_deriving_yojson
     gdk-pixbuf
+    unionFind
   ];
 
   buildPhase = ''

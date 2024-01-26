@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "clifford";
   version = "1.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -62,6 +63,6 @@ buildPythonPackage rec {
     description = "Numerical Geometric Algebra Module";
     homepage = "https://clifford.readthedocs.io";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

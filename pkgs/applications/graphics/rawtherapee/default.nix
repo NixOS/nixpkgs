@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     "-Wno-deprecated-declarations"
     "-Wno-unused-result"
   ];
+  env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications/RawTherapee.app $out/bin

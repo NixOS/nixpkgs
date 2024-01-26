@@ -3,7 +3,6 @@
 , dunamai
 , fetchFromGitHub
 , jinja2
-, markupsafe
 , poetry-core
 , poetry
 , pytestCheckHook
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "0.21.5";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFbIQLIbedErdKiPlZf0+6qtZexuJ6Q6pzhy54vSK5Y=";
+    hash = "sha256-qkRnlLLzbYf7C2VjPDjYfllej8an4WftNahPLz/Wkxw=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dunamai
     jinja2
-    markupsafe
     tomlkit
   ];
 
@@ -55,6 +53,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "poetry_dynamic_versioning"
   ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "Plugin for Poetry to enable dynamic versioning based on VCS tags";

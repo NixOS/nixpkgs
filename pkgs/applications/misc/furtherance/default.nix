@@ -4,21 +4,21 @@
 , dbus, gtk4, sqlite
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "furtherance";
-  version = "1.7.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "lakoliu";
     repo = "Furtherance";
-    rev = "v${version}";
-    sha256 = "sha256-M3k2q32/vMG9uTHk2qqUz0E4ptzxfCOrs9NMjtyxZ5Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tr7TBqfqKzMnYBMHJmrAW/HViqT4rydBBZvBqgpnfSk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "sha256-qLrX3X8wgNrI8G0RgWydVA35cdxcblSUxTKHty+eCds=";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-MFiMoTMW83QxV3BOyZaa1XmfRNieCT007N/4vfSD67Y=";
   };
 
   nativeBuildInputs = [
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ CaptainJawZ ];
   };
-}
+})

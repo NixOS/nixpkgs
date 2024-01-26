@@ -118,3 +118,33 @@ the symlink, and this path is in `/nix/store/.../lib/systemd/user/`.
 Hence [garbage collection](#sec-nix-gc) will remove that file and you
 will wind up with a broken symlink in your systemd configuration, which
 in turn will not make the service / timer start on login.
+
+## Template units {#sect-nixos-systemd-template-units}
+
+systemd supports templated units where a base unit can be started multiple
+times with a different parameter. The syntax to accomplish this is
+`service-name@instance-name.service`. Units get the instance name passed to
+them (see `systemd.unit(5)`). NixOS has support for these kinds of units and
+for template-specific overrides. A service needs to be defined twice, once
+for the base unit and once for the instance. All instances must include
+`overrideStrategy = "asDropin"` for the change detection to work. This
+example illustrates this:
+```nix
+{
+  systemd.services = {
+    "base-unit@".serviceConfig = {
+      ExecStart = "...";
+      User = "...";
+    };
+    "base-unit@instance-a" = {
+      overrideStrategy = "asDropin"; # needed for templates to work
+      wantedBy = [ "multi-user.target" ]; # causes NixOS to manage the instance
+    };
+    "base-unit@instance-b" = {
+      overrideStrategy = "asDropin"; # needed for templates to work
+      wantedBy = [ "multi-user.target" ]; # causes NixOS to manage the instance
+      serviceConfig.User = "root"; # also override something for this specific instance
+    };
+  };
+}
+```

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-On7QBTzKfnuuzwMQ8m1odxGqfIKL+EDg5V05Kxuhmqw=";
   };
 
-  vendorSha256 = "sha256-oRlsD99XiI/0ZWibjyRcycmGab+vMbXrV5hIdIyUDYg=";
+  vendorHash = "sha256-oRlsD99XiI/0ZWibjyRcycmGab+vMbXrV5hIdIyUDYg=";
 
   ldflags = [ "-s" "-w" "-X main.BuildVersion=${version}" ];
 
@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/github/git-sizer";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
+    mainProgram = "git-sizer";
   };
 }

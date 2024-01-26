@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nwg-piotr/nwg-launchers";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ ];
   };
 }

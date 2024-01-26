@@ -4,36 +4,34 @@
 , makeWrapper
 , ncurses
 , readline
-, util-linux
+, unixtools
 , enableReadline ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calc";
-  version = "2.14.1.5";
+  version = "2.15.0.2";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/v${finalAttrs.version}/calc-${finalAttrs.version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/calc-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-bPacYnEJBdQsIP+Z8D/ODskyEcvhgAy3ra4wasYMo6A=";
+    hash = "sha256-dPEj32SiR7RhI9fBa9ny9+EEuuiXS2WswRcDVuOMJXc=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile \
+    substituteInPlace Makefile.target \
       --replace '-install_name ''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' \
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
   '';
 
   nativeBuildInputs = [
     makeWrapper
+    unixtools.col
   ];
 
-  buildInputs = [
-    util-linux
-  ]
-  ++ lib.optionals enableReadline [
+  buildInputs = lib.optionals enableReadline [
     ncurses
     readline
   ];

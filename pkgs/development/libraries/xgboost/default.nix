@@ -5,7 +5,7 @@
 , cmake
 , gtest
 , doCheck ? true
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , ncclSupport ? false
 , rLibrary ? false
 , cudaPackages
@@ -14,7 +14,7 @@
 , rPackages
 }@inputs:
 
-assert ncclSupport -> cudaSupport;
+assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);
 # Disable regular tests when building the R package
 # because 1) the R package runs its own tests and
 # 2) the R package creates a different binary shared
@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "1.7.5";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-IBqtyz40VVHdncibnZQAe5oDsjb5isWBYQ6pGx/zt38=";
+    hash = "sha256-tRx6kJwIoVSN701ppuyZpIFUQIFy4LBMFyirLtwApjA=";
   };
 
   nativeBuildInputs = [ cmake ]

@@ -62,6 +62,16 @@ let
     ]) etc'}
   '';
 
+  etcHardlinks = filter (f: f.mode != "symlink") etc';
+
+  build-composefs-dump = pkgs.runCommand "build-composefs-dump.py"
+    {
+      buildInputs = [ pkgs.python3 ];
+    } ''
+    install ${./build-composefs-dump.py} $out
+    patchShebangs --host $out
+  '';
+
 in
 
 {
@@ -71,6 +81,30 @@ in
   ###### interface
 
   options = {
+
+    system.etc.overlay = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Mount `/etc` as an overlayfs instead of generating it via a perl script.
+
+          Note: This is currently experimental. Only enable this option if you're
+          confident that you can recover your system if it breaks.
+        '';
+      };
+
+      mutable = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether to mount `/etc` mutably (i.e. read-write) or immutably (i.e. read-only).
+
+          If this is false, only the immutable lowerdir is mounted. If it is
+          true, a writable upperdir is mounted on top.
+        '';
+      };
+    };
 
     environment.etc = mkOption {
       default = {};
@@ -173,7 +207,7 @@ in
           config = {
             target = mkDefault name;
             source = mkIf (config.text != null) (
-              let name' = "etc-" + baseNameOf name;
+              let name' = "etc-" + lib.replaceStrings ["/"] ["-"] name;
               in mkDerivedConfig options.text (pkgs.writeText name')
             );
           };
@@ -190,12 +224,84 @@ in
   config = {
 
     system.build.etc = etc;
-    system.build.etcActivationCommands =
-      ''
-        # Set up the statically computed bits of /etc.
-        echo "setting up /etc..."
-        ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl ${./setup-etc.pl} ${etc}/etc
+    system.build.etcActivationCommands = let
+      etcOverlayOptions = lib.concatStringsSep "," ([
+        "relatime"
+        "redirect_dir=on"
+        "metacopy=on"
+      ] ++ lib.optionals config.system.etc.overlay.mutable [
+        "upperdir=/.rw-etc/upper"
+        "workdir=/.rw-etc/work"
+      ]);
+    in if config.system.etc.overlay.enable then ''
+      # This script atomically remounts /etc when switching configuration. On a (re-)boot
+      # this should not run because /etc is mounted via a systemd mount unit
+      # instead. To a large extent this mimics what composefs does. Because
+      # it's relatively simple, however, we avoid the composefs dependency.
+      if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]]; then
+        echo "remounting /etc..."
+
+        tmpMetadataMount=$(mktemp --directory)
+        mount --type erofs ${config.system.build.etcMetadataImage} $tmpMetadataMount
+
+        # Mount the new /etc overlay to a temporary private mount.
+        # This needs the indirection via a private bind mount because you
+        # cannot move shared mounts.
+        tmpEtcMount=$(mktemp --directory)
+        mount --bind --make-private $tmpEtcMount $tmpEtcMount
+        mount --type overlay overlay \
+          --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
+          $tmpEtcMount
+
+        # Move the new temporary /etc mount underneath the current /etc mount.
+        #
+        # This should eventually use util-linux to perform this move beneath,
+        # however, this functionality is not yet in util-linux. See this
+        # tracking issue: https://github.com/util-linux/util-linux/issues/2604
+        ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
+
+        # Unmount the top /etc mount to atomically reveal the new mount.
+        umount /etc
+
+      fi
+    '' else ''
+      # Set up the statically computed bits of /etc.
+      echo "setting up /etc..."
+      ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl ${./setup-etc.pl} ${etc}/etc
+    '';
+
+    system.build.etcBasedir = pkgs.runCommandLocal "etc-lowerdir" { } ''
+      set -euo pipefail
+
+      makeEtcEntry() {
+        src="$1"
+        target="$2"
+
+        mkdir -p "$out/$(dirname "$target")"
+        cp "$src" "$out/$target"
+      }
+
+      mkdir -p "$out"
+      ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
+        "makeEtcEntry"
+        # Force local source paths to be added to the store
+        "${etcEntry.source}"
+        etcEntry.target
+      ]) etcHardlinks}
+    '';
+
+    system.build.etcMetadataImage =
+      let
+        etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
+        etcDump = pkgs.runCommand "etc-dump" { } "${build-composefs-dump} ${etcJson} > $out";
+      in
+      pkgs.runCommand "etc-metadata.erofs" {
+        nativeBuildInputs = [ pkgs.composefs pkgs.erofs-utils ];
+      } ''
+        mkcomposefs --from-file ${etcDump} $out
+        fsck.erofs $out
       '';
+
   };
 
 }

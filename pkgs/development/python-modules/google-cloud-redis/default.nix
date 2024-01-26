@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.12.1";
+  version = "2.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gQ3xG2QcnrSvl1hsvlcY9g77JW8fFk/Pci01tNqpAUs=";
+    hash = "sha256-TzuRWGGdQrsmOLidvLiC80e9t9VVu8LUNhq2Ikk0Pco=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-redis";
     changelog = "https://github.com/googleapis/python-redis/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

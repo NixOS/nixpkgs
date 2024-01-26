@@ -14,7 +14,7 @@ buildGoModule {
 
   buildInputs = [ olm ];
 
-  vendorSha256 = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
+  vendorHash = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
 
   doCheck = false;
 

@@ -1,23 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_proxy
-, zope_testrunner
+, zope-proxy
+, zope-testrunner
 }:
 
 buildPythonPackage rec {
   pname = "zope-deferredimport";
-  version = "4.4";
+  version = "5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.deferredimport";
     inherit version;
-    sha256 = "2ae3257256802787e52ad840032f39c1496d3ce0b7e11117f663420e4a4c9add";
+    sha256 = "sha256-Orvw4YwfF2WRTs0dQbVJ5NBFshso5AZfsMHeCtc2ssM=";
   };
 
-  propagatedBuildInputs = [ zope_proxy ];
+  propagatedBuildInputs = [ zope-proxy ];
 
-  nativeCheckInputs = [ zope_testrunner ];
+  nativeCheckInputs = [ zope-testrunner ];
 
   checkPhase = ''
     zope-testrunner --test-path=src []

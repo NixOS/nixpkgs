@@ -13,14 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libaio ];
 
-  preConfigure = ''
-    sed s,/usr/local,$out, -i Makefile
-  '';
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CC:=$(CC)"
+  ];
 
   meta = with lib; {
     description = "Block layer IO tracing mechanism";
-    maintainers = with maintainers; [ ];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ nickcao ];
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

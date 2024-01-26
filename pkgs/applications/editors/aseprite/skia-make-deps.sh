@@ -2,7 +2,7 @@
 
 FILTER=$1
 OUT=skia-deps.nix
-REVISION=89e4ca4352d05adc892f5983b108433f29b2c0c2
+REVISION=861e4743af6d9bf6077ae6dda7274e5a136ee4e2
 DEPS=$(curl -s https://raw.githubusercontent.com/aseprite/skia/$REVISION/DEPS)
 THIRD_PARTY_DEPS=$(echo "$DEPS" | grep third_party | grep "#" -v | sed 's/"//g')
 

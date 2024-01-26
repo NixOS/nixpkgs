@@ -4,6 +4,7 @@
   "date": "2023-02-06T19:11:08+01:00",
   "path": "/nix/store/mch0z6q00g2pp5vjjcdcl2xzs1h96jzh-tree-sitter-embedded-template",
   "sha256": "0gf33p08a6hqbxwy9zlp8y65gds2d6siqpgasc58ladh5p5n99j9",
+  "hash": "sha256-SaZkyy2wKYoK0+pdHLVpQrdXjEeX/uR5XxgahcAdwz0=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

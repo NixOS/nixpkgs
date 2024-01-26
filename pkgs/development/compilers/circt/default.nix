@@ -6,35 +6,37 @@
 , git
 , fetchFromGitHub
 , ninja
+, lit
+, gitUpdater
+, callPackage
 }:
 
 let
   pythonEnv = python3.withPackages (ps: [ ps.psutil ]);
+  circt-llvm = callPackage ./circt-llvm.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.40.0";
+  version = "1.63.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    sha256 = "sha256-L114Xh0O/Wu8IyrKohxalyXeSe/8oVcAXD4hpa6ocwU=";
+    sha256 = "sha256-ln56E66AHga80TkeiVd3A3WobdTe1UnE7o5t6+tmR0Q=";
     fetchSubmodules = true;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
   nativeBuildInputs = [ cmake ninja git pythonEnv ];
+  buildInputs = [ circt-llvm ];
 
-  cmakeDir = "../llvm/llvm";
   cmakeFlags = [
-    "-DLLVM_ENABLE_BINDINGS=OFF"
-    "-DLLVM_ENABLE_OCAMLDOC=OFF"
-    "-DLLVM_BUILD_EXAMPLES=OFF"
-    "-DLLVM_OPTIMIZED_TABLEGEN=ON"
-    "-DLLVM_ENABLE_PROJECTS=mlir"
-    "-DLLVM_EXTERNAL_PROJECTS=circt"
-    "-DLLVM_EXTERNAL_CIRCT_SOURCE_DIR=.."
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DMLIR_DIR=${circt-llvm.dev}/lib/cmake/mlir"
+
+    # LLVM_EXTERNAL_LIT is executed by python3, the wrapped bash script will not work
+    "-DLLVM_EXTERNAL_LIT=${lit}/bin/.lit-wrapped"
     "-DCIRCT_LLHD_SIM_ENABLED=OFF"
   ];
 
@@ -53,25 +55,33 @@ stdenv.mkDerivation rec {
   LIT_FILTER_OUT = if stdenv.cc.isClang then "CIRCT :: Target/ExportSystemC/.*\.mlir" else null;
 
   preConfigure = ''
-    substituteInPlace test/circt-reduce/test/annotation-remover.mlir --replace "/usr/bin/env" "${coreutils}/bin/env"
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    mv bin/{{fir,hls}tool,circt-{as,dis,lsp-server,opt,reduce,translate}} $out/bin
-    runHook postInstall
+    find ./test -name '*.mlir' -exec sed -i 's|/usr/bin/env|${coreutils}/bin/env|g' {} \;
+    # circt uses git to check its version, but when cloned on nix it can't access git.
+    # So this hard codes the version.
+    substituteInPlace cmake/modules/GenVersionFile.cmake --replace "unknown git version" "${src.rev}"
   '';
 
   doCheck = true;
   checkTarget = "check-circt check-circt-integration";
 
+  outputs = [ "out" "lib" "dev" ];
+
+  postInstall = ''
+    moveToOutput lib "$lib"
+  '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "firtool-";
+    };
+    llvm = circt-llvm;
+  };
+
   meta = {
     description = "Circuit IR compilers and tools";
     homepage = "https://circt.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sharzy ];
+    maintainers = with lib.maintainers; [ sharzy pineapplehunter ];
     platforms = lib.platforms.all;
   };
 }
-

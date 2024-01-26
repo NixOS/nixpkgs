@@ -5,6 +5,7 @@
 , meson
 , ninja
 , pkg-config
+, substituteAll
 , gettext
 , dbus
 , glib
@@ -45,28 +46,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.50.4";
+  version = "1.52.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "q5BZpnalN+2+ohOIwqr+Gn4sjxrC39xtZFUCMwdUV/0=";
+    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
+    hash = "sha256-pkOs6qBTyqwNjv+aAV9jbkvRuwnP4nhk40fbZ0YOe5E=";
   };
 
   patches = [
-    # Hardcode the ssh path again.
-    # https://gitlab.gnome.org/GNOME/gvfs/-/issues/465
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/gvfs/-/commit/8327383e262e1e7f32750a8a2d3dd708195b0f53.patch";
-      hash = "sha256-ReD7qkezGeiJHyo9jTqEQNBjECqGhV9nSD+dYYGZWJ8=";
-      revert = true;
+    (substituteAll {
+      src = ./hardcode-ssh-path.patch;
+      ssh_program = "${lib.getBin openssh}/bin/ssh";
     })
   ];
 
   postPatch = ''
-    # patchShebangs requires executable file
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-    patchShebangs test test-driver
+    patchShebangs test
   '';
 
   nativeBuildInputs = [
@@ -76,7 +71,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     wrapGAppsHook
-    libxml2
     libxslt
     docbook_xsl
     docbook_xml_dtd_42
@@ -92,7 +86,7 @@ stdenv.mkDerivation rec {
     libimobiledevice
     libbluray
     libnfs
-    openssh
+    libxml2
     gsettings-desktop-schemas
     libsoup_3
   ] ++ lib.optionals udevSupport [

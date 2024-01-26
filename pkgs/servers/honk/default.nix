@@ -1,21 +1,36 @@
-{ lib, buildGoModule, fetchurl, installShellFiles, sqlite }:
+{ lib
+, buildGoModule
+, fetchurl
+, sqlite
+, installShellFiles
+, nixosTests
+}:
 
 buildGoModule rec {
   pname = "honk";
-  version = "0.9.91";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
-    hash = "sha256-+NFWTTMVdngWsC8/EIN2xJC/5C4naaAekk/YoA17wFk=";
+    hash = "sha256-kcrEg0KBdCaA4g8ivIgOWIGJVDCtY5rI4P7cp/ZyXe4=";
   };
   vendorHash = null;
 
-  buildInputs = [ sqlite ];
-  nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [
+    sqlite
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   subPackages = [ "." ];
 
+  # This susbtitution is not mandatory. It is only existing to have something
+  # working out of the box. This value can be overriden by the user, by
+  # providing the `-viewdir` parameter in the command line.
   postPatch = ''
-    substituteInPlace honk.go --replace \
+    substituteInPlace main.go --replace \
       "var viewDir = \".\"" \
       "var viewDir = \"$out/share/honk\""
   '';
@@ -35,10 +50,16 @@ buildGoModule rec {
     mv views $out/share/${pname}
   '';
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) honk;
+  };
+
+  meta = {
+    changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";
     description = "An ActivityPub server with minimal setup and support costs.";
     homepage = "https://humungus.tedunangst.com/r/honk";
-    license = licenses.isc;
-    maintainers = with maintainers; [ huyngo ];
+    license = lib.licenses.isc;
+    mainProgram = "honk";
+    maintainers = with lib.maintainers; [ huyngo ];
   };
 }

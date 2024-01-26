@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-forgit";
-  version = "23.05.0";
+  version = "24.01.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    sha256 = "sha256-oBPN8ehz00cDIs6mmGfCBzuDQMLG5z3G6KetJ1FK7e8=";
+    sha256 = "sha256-WHhyllOr/PgR+vlrfMQs/3/d3xpmDylT6BlLCu50a2g=";
   };
 
   strictDeps = true;
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D bin/git-forgit $out/bin/git-forgit
+    install -D completions/_git-forgit $out/share/zsh/site-functions/_git-forgit
+    install -D completions/git-forgit.zsh $out/share/zsh/${pname}/git-forgit.zsh
     install -D forgit.plugin.zsh $out/share/zsh/${pname}/forgit.plugin.zsh
     wrapProgram $out/bin/git-forgit \
       --prefix PATH : ${lib.makeBinPath [ bash coreutils findutils fzf git gnugrep gnused ]}

@@ -22,11 +22,11 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2023.3.4";
+  version = "2023.12.30";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Jl1dqXp2wV19mkCIpnt4rNXc9vjP2CV8UvWB/5lv9RU=";
+    hash = "sha256-oRhi5XchsKDwiD3+taTXm6ITotTEXhiA6f1w+OZXDDg=";
   };
 
   propagatedBuildInputs = [
@@ -77,5 +77,6 @@ buildPythonPackage rec {
     '';
     license = licenses.unlicense;
     maintainers = with maintainers; [ mkg20001 SuperSandro2000 marsam ];
+    mainProgram = "yt-dlp";
   };
 }

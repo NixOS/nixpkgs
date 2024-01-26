@@ -2,15 +2,17 @@
 , stdenv
 , fetchFromGitHub
 
+, autoPatchelfHook
 , copyDesktopItems
 , makeDesktopItem
 
-, godot-export-templates
-, godot-headless
+, godot3-export-templates
+, godot3-headless
 
 , alsa-lib
 , libGL
 , libGLU
+, libpulseaudio
 , libX11
 , libXcursor
 , libXext
@@ -31,18 +33,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lorien";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "mbrlabs";
     repo = "Lorien";
     rev = "v${version}";
-    sha256 = "sha256-x81Obana2BEGrYSoJHDdCkL6UaULfQGQ94tlrH5+kdY=";
+    sha256 = "sha256-mPv/3hyLGF3IUy6cKfGoABidIsyw4UfmhfhS4AD72K8=";
   };
 
   nativeBuildInputs = [
+    autoPatchelfHook
     copyDesktopItems
-    godot-headless
+    godot3-headless
   ];
 
   buildInputs = [
@@ -83,11 +86,11 @@ stdenv.mkDerivation rec {
     # Link the export-templates to the expected location. The --export commands
     # expects the template-file at .../templates/{godot-version}.stable/linux_x11_64_release
     mkdir -p $HOME/.local/share/godot
-    ln -s ${godot-export-templates}/share/godot/templates $HOME/.local/share/godot
+    ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
 
     mkdir -p $out/share/lorien
 
-    godot-headless --path lorien --export "${preset}" $out/share/lorien/lorien
+    godot3-headless --path lorien --export "${preset}" $out/share/lorien/lorien
 
     runHook postBuild
   '';
@@ -109,6 +112,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  runtimeDependencies = map lib.getLib [
+    alsa-lib
+    libpulseaudio
+    udev
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mbrlabs/Lorien";

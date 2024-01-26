@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, fetchurl
 , glib
 , gnome-shell
 , gtk-engine-murrine
@@ -21,8 +20,27 @@
 }:
 
 let
+
   pname = "mojave-gtk-theme";
+  version = "2023-08-04";
+
+  main_src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = pname;
+    rev = version;
+    hash = "sha256-boS/GPjuJV5lZjyHW7tG74T6a3SASQVGnSz++5HkCuw=";
+  };
+
+  wallpapers_src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = pname;
+    rev = "1dc23c2b45d7e073e080cfb02f43aab0e59b6b2c";
+    hash = "sha256-nkw8gXYx8fN1yn0A5M2fWwOvfUQ6izynxRw5JA61InM=";
+    name = "wallpapers";
+  };
+
 in
+
 lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] buttonSizeVariants
 lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
 lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
@@ -30,26 +48,11 @@ lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityV
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
 
 stdenvNoCC.mkDerivation rec {
-  inherit pname;
-  version = "2022-10-21";
+  inherit pname version;
 
-  srcs = [
-    (fetchFromGitHub {
-      owner = "vinceliuice";
-      repo = pname;
-      rev = version;
-      sha256 = "sha256-0OqQXyv/fcbKTzvQUVIbUw5Y27hU1bzwx/0DelMEZIs=";
-    })
-  ]
-  ++
-  lib.optional wallpapers
-    (fetchurl {
-      url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
-      sha256 = "18zzkwm1kqzsdaj8swf0xby1n65gxnyslpw4lnxcx1rphip0rwf7";
-    })
-  ;
+  srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;
 
-  sourceRoot = "source";
+  sourceRoot = main_src.name;
 
   nativeBuildInputs = [
     glib
@@ -97,6 +100,12 @@ stdenvNoCC.mkDerivation rec {
         --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
         --replace /usr/bin/optipng ${optipng}/bin/optipng
     done
+
+    ${lib.optionalString wallpapers ''
+      for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
+        substituteInPlace $f --replace /usr $out
+      done
+    ''}
   '';
 
   installPhase = ''
@@ -108,10 +117,15 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
       ${lib.optionalString (opacityVariants != []) "--opacity " + builtins.toString opacityVariants} \
       ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      --icon nixos \
       --dest $out/share/themes
 
     ${lib.optionalString wallpapers ''
-      install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
+      mkdir -p $out/share/backgrounds/Mojave
+      mkdir -p $out/share/gnome-background-properties
+      cp -a ../${wallpapers_src.name}/Mojave*.jpeg $out/share/backgrounds/Mojave/
+      cp -a ../${wallpapers_src.name}/Mojave-timed.xml $out/share/backgrounds/Mojave/
+      cp -a ../${wallpapers_src.name}/Mojave.xml $out/share/gnome-background-properties/
     ''}
 
     # Replace duplicate files with soft links to the first file in each

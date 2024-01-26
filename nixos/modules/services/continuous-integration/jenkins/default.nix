@@ -79,12 +79,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        default = pkgs.jenkins;
-        defaultText = literalExpression "pkgs.jenkins";
-        type = types.package;
-        description = lib.mdDoc "Jenkins package to use.";
-      };
+      package = mkPackageOption pkgs "jenkins" { };
 
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ];
@@ -210,9 +205,7 @@ in {
 
       preStart =
         let replacePlugins =
-              if cfg.plugins == null
-              then ""
-              else
+              optionalString (cfg.plugins != null) (
                 let pluginCmds = lib.attrsets.mapAttrsToList
                       (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
@@ -220,7 +213,7 @@ in {
                   rm -r ${cfg.home}/plugins || true
                   mkdir -p ${cfg.home}/plugins
                   ${lib.strings.concatStringsSep "\n" pluginCmds}
-                '';
+                '');
         in ''
           rm -rf ${cfg.home}/war
           ${replacePlugins}
@@ -243,6 +236,7 @@ in {
 
       serviceConfig = {
         User = cfg.user;
+        StateDirectory = mkIf (hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
       };
     };
   };

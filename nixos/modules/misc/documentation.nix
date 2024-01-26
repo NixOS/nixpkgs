@@ -77,7 +77,11 @@ let
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filter (pkgs.path + "/nixos");
-          modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
+          modules =
+            "[ "
+            + concatMapStringsSep " " (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy
+            + " ]";
+          passAsFile = [ "modules" ];
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
@@ -87,7 +91,7 @@ let
             --argstr libPath "$libPath" \
             --argstr pkgsLibPath "$pkgsLibPath" \
             --argstr nixosPath "$nixosPath" \
-            --arg modules "[ $modules ]" \
+            --arg modules "import $modulesPath" \
             --argstr stateVersion "${options.system.stateVersion.default}" \
             --argstr release "${config.system.nixos.release}" \
             $nixosPath/lib/eval-cacheable-options.nix > $out \
@@ -107,7 +111,7 @@ let
             } >&2
         '';
 
-    inherit (cfg.nixos.options) warningsAreErrors allowDocBook;
+    inherit (cfg.nixos.options) warningsAreErrors;
   };
 
 
@@ -160,6 +164,9 @@ in
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkRemovedOptionModule
+      [ "documentation" "nixos" "options" "allowDocBook" ]
+      "DocBook option documentation is no longer supported")
   ];
 
   options = {
@@ -264,23 +271,6 @@ in
         '';
       };
 
-      nixos.options.allowDocBook = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          Whether to allow DocBook option docs. When set to `false` all option using
-          DocBook documentation will cause a manual build error; additionally a new
-          renderer may be used.
-
-          ::: {.note}
-          The `false` setting for this option is not yet fully supported. While it
-          should work fine and produce the same output as the previous toolchain
-          using DocBook it may not work in all circumstances. Whether markdown option
-          documentation is allowed is independent of this option.
-          :::
-        '';
-      };
-
       nixos.options.warningsAreErrors = mkOption {
         type = types.bool;
         default = true;
@@ -359,16 +349,8 @@ in
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      system.activationScripts.check-manual-docbook = ''
-        if [[ $(cat ${manual.optionsUsedDocbook}) = 1 ]]; then
-          echo -e "\e[31;1mwarning\e[0m: This configuration contains option documentation in docbook." \
-                  "Support for docbook is deprecated and will be removed after NixOS 23.05." \
-                  "See nix-store --read-log ${builtins.unsafeDiscardStringContext manual.optionsJSON.drvPath}"
-        fi
-      '';
-
       environment.systemPackages = []
-        ++ optional cfg.man.enable manual.manpages
+        ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
     })
 

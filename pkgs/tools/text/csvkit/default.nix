@@ -6,21 +6,7 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.46";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
-        };
-        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
-          pytest-xdist
-        ]);
-        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      });
+      sqlalchemy = super.sqlalchemy_1_4;
     };
   };
 in
@@ -39,6 +25,7 @@ python.pkgs.buildPythonApplication rec {
     agate-excel
     agate-dbf
     agate-sql
+    setuptools # csvsql imports pkg_resources
   ];
 
   nativeCheckInputs = with python.pkgs; [

@@ -4,12 +4,13 @@ let
   cfg = config.services.openvscode-server;
   defaultUser = "openvscode-server";
   defaultGroup = defaultUser;
-in {
+in
+{
   options = {
     services.openvscode-server = {
       enable = lib.mkEnableOption (lib.mdDoc "openvscode-server");
 
-      package = lib.mkPackageOptionMD pkgs "openvscode-server" { };
+      package = lib.mkPackageOption pkgs "openvscode-server" { };
 
       extraPackages = lib.mkOption {
         default = [ ];
@@ -126,12 +127,12 @@ in {
       };
 
       telemetryLevel = lib.mkOption {
-        default = "off";
+        default = null;
         example = "crash";
         description = lib.mdDoc ''
           Sets the initial telemetry level. Valid levels are: 'off', 'crash', 'error' and 'all'.
         '';
-        type = lib.types.str;
+        type = lib.types.nullOr (lib.types.enum [ "off" "crash" "error" "all" ]);
       };
 
       connectionToken = lib.mkOption {
@@ -158,6 +159,7 @@ in {
     systemd.services.openvscode-server = {
       description = "OpenVSCode server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;
       environment = cfg.extraEnvironment;
@@ -167,23 +169,23 @@ in {
             --accept-server-license-terms \
             --host=${cfg.host} \
             --port=${toString cfg.port} \
-          '' + lib.optionalString (cfg.telemetryLevel == true) ''
-            --telemetry-level=${cfg.telemetryLevel} \
-          '' + lib.optionalString (cfg.withoutConnectionToken == true) ''
-            --without-connection-token \
-          '' + lib.optionalString (cfg.socketPath != null) ''
-            --socket-path=${cfg.socketPath} \
-          '' + lib.optionalString (cfg.userDataDir != null) ''
-            --user-data-dir=${cfg.userDataDir} \
-          '' + lib.optionalString (cfg.serverDataDir != null) ''
-            --server-data-dir=${cfg.serverDataDir} \
-          '' + lib.optionalString (cfg.extensionsDir != null) ''
-            --extensions-dir=${cfg.extensionsDir} \
-          '' + lib.optionalString (cfg.connectionToken != null) ''
-            --connection-token=${cfg.connectionToken} \
-          '' + lib.optionalString (cfg.connectionTokenFile != null) ''
-            --connection-token-file=${cfg.connectionTokenFile} \
-          '' + lib.escapeShellArgs cfg.extraArguments;
+        '' + lib.optionalString (cfg.telemetryLevel != null) ''
+          --telemetry-level=${cfg.telemetryLevel} \
+        '' + lib.optionalString (cfg.withoutConnectionToken) ''
+          --without-connection-token \
+        '' + lib.optionalString (cfg.socketPath != null) ''
+          --socket-path=${cfg.socketPath} \
+        '' + lib.optionalString (cfg.userDataDir != null) ''
+          --user-data-dir=${cfg.userDataDir} \
+        '' + lib.optionalString (cfg.serverDataDir != null) ''
+          --server-data-dir=${cfg.serverDataDir} \
+        '' + lib.optionalString (cfg.extensionsDir != null) ''
+          --extensions-dir=${cfg.extensionsDir} \
+        '' + lib.optionalString (cfg.connectionToken != null) ''
+          --connection-token=${cfg.connectionToken} \
+        '' + lib.optionalString (cfg.connectionTokenFile != null) ''
+          --connection-token-file=${cfg.connectionTokenFile} \
+        '' + lib.escapeShellArgs cfg.extraArguments;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = cfg.user;
         User = cfg.user;

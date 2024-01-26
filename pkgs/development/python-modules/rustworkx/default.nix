@@ -7,6 +7,7 @@
 , numpy
 , fixtures
 , networkx
+, testtools
 , libiconv
 , stdenv
 , lib
@@ -14,18 +15,19 @@
 
 buildPythonPackage rec {
   pname = "rustworkx";
-  version = "0.12.1";
+  version = "0.13.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    hash = "sha256-d/KCxhJdyzhTjwJZ+GsXJE4ww30iPaXcPngpCi4hBZw=";
+    hash = "sha256-WwQuvRMDGiY9VrWPfxL0OotPCUhCsvbXoVSCNhmIF/g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-imhiPj763iumRQb+oeBOpICD1nCvzZx+3yQWu1QRRQQ=";
+    hash = "sha256-QuzBJyM83VtB6CJ7i9/SFE8h6JbxkX/LQ9lOFSQIidU=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +39,12 @@ buildPythonPackage rec {
 
   buildInputs = [ numpy ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  checkInputs = [ fixtures networkx ];
+  checkInputs = [ fixtures networkx testtools ];
 
   pythonImportsCheck = [ "rustworkx" ];
 
   meta = with lib; {
-    description = "A high performance Python graph library implemented in Rust.";
+    description = "A high performance Python graph library implemented in Rust";
     homepage = "https://github.com/Qiskit/rustworkx";
     license = licenses.asl20;
     maintainers = with maintainers; [ raitobezarius ];

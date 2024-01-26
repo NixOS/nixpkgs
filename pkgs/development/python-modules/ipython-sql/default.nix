@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , ipython
-, ipython_genutils
+, ipython-genutils
 , pandas
 , prettytable
 , pytest
@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "ipython-sql";
   version = "0.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -29,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ipython
-    ipython_genutils
+    ipython-genutils
     prettytable
     sqlalchemy
     sqlparse

@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/blais/xannotate";
+    mainProgram = "xannotate";
   };
 }

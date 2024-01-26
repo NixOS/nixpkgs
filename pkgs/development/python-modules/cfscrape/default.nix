@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "cfscrape";
   version = "2.1.1";
+  format = "setuptools";
   src = fetchFromGitHub ({
     owner = "Anorov";
     repo = "cloudflare-scrape";
@@ -23,6 +24,6 @@ buildPythonPackage rec {
     description = "A Python module to bypass Cloudflare's anti-bot page";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ WeebSorceress ];
+    maintainers = with maintainers; [ ];
   };
 }

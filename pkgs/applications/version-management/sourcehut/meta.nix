@@ -2,63 +2,66 @@
 , fetchFromSourcehut
 , buildPythonPackage
 , buildGoModule
-, pgpy
-, srht
-, redis
-, bcrypt
-, qrcode
-, stripe
-, zxcvbn
 , alembic
-, pystache
+, bcrypt
 , dnspython
-, sshpubkeys
-, weasyprint
+, qrcode
+, redis
+, srht
+, stripe
 , prometheus-client
+, zxcvbn
 , python
 , unzip
+, pip
+, pythonOlder
+, setuptools
 }:
 let
-  version = "0.61.3";
+  version = "0.64.8";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    hash = "sha256-wMcpdRSRvxYEV163mdTGOemk62gljua89SOtwe6qGXU=";
+    hash = "sha256-eiNvoy68PvjZ3iwdeNPjsXJjxAXb2PMF1/HvJquWa/U=";
   };
 
   metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
     modRoot = "api";
-    vendorHash = "sha256-ZoDRGmGe9o5pn89gJ60wjSp5Cc0yxRfvdhNnbwAhmSI=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; });
+    vendorHash = "sha256-D3stDSb99uXze49kKZgGrAq5Zmg6hkIzIpsQKlnKVtE=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
 in
 buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api" ""
   '';
 
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    pgpy
-    srht
-    redis
-    bcrypt
-    qrcode
-    stripe
-    zxcvbn
     alembic
-    pystache
-    sshpubkeys
-    weasyprint
-    prometheus-client
+    bcrypt
     dnspython
+    qrcode
+    redis
+    srht
+    stripe
+    prometheus-client
+    zxcvbn
   ];
 
   preBuild = ''

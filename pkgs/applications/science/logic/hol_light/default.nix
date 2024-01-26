@@ -1,9 +1,8 @@
-{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, num, camlp5 }:
+{ lib, stdenv, runtimeShell, fetchFromGitHub, fetchpatch, ocaml, findlib, num, camlp5, camlp-streams }:
 
 let
   load_num =
-    if num == null then "" else
-    ''
+    lib.optionalString (num != null) ''
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \
@@ -13,22 +12,28 @@ let
     ''
       #!${runtimeShell}
       cd $out/lib/hol_light
+      export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}${camlp5}/lib/ocaml/${ocaml.version}/site-lib/"
       exec ${ocaml}/bin/ocaml \
         -I \`${camlp5}/bin/camlp5 -where\` \
         ${load_num} \
+        -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ \
+        -I ${camlp-streams}/lib/ocaml/${ocaml.version}/site-lib/camlp-streams camlp_streams.cma \
         -init make.ml
     '';
 in
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "hol_light is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation {
   pname = "hol_light";
-  version = "unstable-2019-10-06";
+  version = "unstable-2023-11-03";
 
   src = fetchFromGitHub {
     owner = "jrh13";
     repo = "hol-light";
-    rev = "5c91b2ded8a66db571824ecfc18b4536c103b23e";
-    sha256 = "0sxsk8z08ba0q5aixdyczcx5l29lb51ba4ip3d2fry7y604kjsx6";
+    rev = "dcd765c6032f52a0c0bf21fce5da4794a823e880";
+    hash = "sha256-k2RBNDo4tc3eobKB84Y2xr0UQJvef0hv6jyFCaDCQFM=";
   };
 
   patches = [
@@ -40,8 +45,8 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml camlp5 ];
-  propagatedBuildInputs = [ num ];
+  nativeBuildInputs = [ ocaml findlib camlp5 ];
+  propagatedBuildInputs = [ camlp-streams num ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"

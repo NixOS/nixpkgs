@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.10.0";
+  version = "0.13.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-bHnCa7laDYi424czCGCPZuomqEOAeihjDTTW35ZTiac=";
+    hash = "sha256-RbpbFd+GqFPl88FqKvYEE6HcwFRzPDUTs3vMYM6x7es=";
   };
 
   propagatedBuildInputs = [

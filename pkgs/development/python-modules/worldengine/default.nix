@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "worldengine";
   version = "0.19.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";
@@ -68,7 +69,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://world-engine.org";
+    broken = true;
+    homepage = "https://github.com/mindwerks/worldengine";
     description = "World generator using simulation of plates, rain shadow, erosion, etc";
     license = licenses.mit;
     maintainers = with maintainers; [ rardiol ];

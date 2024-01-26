@@ -5,16 +5,26 @@
 
 buildGoModule rec {
   pname = "zfs_exporter";
-  version = "2.2.8";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "pdf";
     repo = pname;
     rev = "v" + version;
-    hash = "sha256-NTlYMznUfDfLftvuR5YWOW4Zu0rWfLkKPHPTrD/62+Q=";
+    hash = "sha256-JpLrCkPg0vVR0bKKHY5qf1/OD+O7yvWxS7kb7Yg3+c4=";
   };
 
-  vendorHash = "sha256-ZJRxH9RhNSnVmcsonaakbvvjQ+3ovnyMny1Pe/vyQxE=";
+  vendorHash = "sha256-uIilESEmAxANxFOy7qvYxlF/bId/Kqh4jUspNknlhlc=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Revision=unknown"
+    "-X github.com/prometheus/common/version.Branch=unknown"
+    "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
+    "-X github.com/prometheus/common/version.BuildDate=unknown"
+  ];
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} *.md
@@ -25,6 +35,5 @@ buildGoModule rec {
     homepage = "https://github.com/pdf/zfs_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
   };
 }

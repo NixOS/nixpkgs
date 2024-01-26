@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   version = "0.61.1";
+  format = "setuptools";
   pname = "azure-graphrbac";
 
   src = fetchPypi {

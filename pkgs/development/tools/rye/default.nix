@@ -1,36 +1,66 @@
 { lib
-, fetchFromGitHub
 , rustPlatform
-, openssl
+, fetchFromGitHub
+, installShellFiles
 , pkg-config
+, openssl
 , stdenv
+, CoreServices
+, Libsystem
 , SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "unstable-2023-04-23";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
-    rev = "b3fe43a4e462d10784258cad03c19c9738367346";
-    hash = "sha256-q9/VUWyrP/NsuLYY1+/5teYvDJGq646WbMXptnUUUyw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-c5PIJMqe5ljNy582LuYJK18ixrphVhYRtiF5X5CB20Y=";
   };
 
-  cargoHash = "sha256-eyJ6gXFVnSC1aEt5YLl5rFoa3+M73smu5wJdAN15HQM=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
+      "monotrail-utils-0.0.1" = "sha256-4x5jnXczXnToU0QXpFalpG5A+7jeyaEBt8vBwxbFCKQ=";
+    };
+  };
 
-  nativeBuildInputs = [ pkg-config ];
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
+
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [
     openssl
   ]
-  ++ lib.optional stdenv.isDarwin SystemConfiguration;
+  ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+    Libsystem
+    SystemConfiguration
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rye \
+      --bash <($out/bin/rye self completion -s bash) \
+      --fish <($out/bin/rye self completion -s fish) \
+      --zsh <($out/bin/rye self completion -s zsh)
+  '';
+
+  checkFlags = [
+    "--skip=utils::test_is_inside_git_work_tree"
+  ];
 
   meta = with lib; {
     description = "A tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
+    changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
+    mainProgram = "rye";
   };
 }

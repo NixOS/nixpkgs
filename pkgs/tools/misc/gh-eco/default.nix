@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-TE1AymNlxjUtkBnBO/VBjYaqLuRyxL75s6sMidKUXTE=";
   };
 
-  vendorSha256 = "sha256-K85fYV1uP/qSw8GPoG1u6UQo94vQOUo4cd9Ro+UApQ0=";
+  vendorHash = "sha256-K85fYV1uP/qSw8GPoG1u6UQo94vQOUo4cd9Ro+UApQ0=";
 
   ldflags = [
     "-s"
@@ -27,6 +27,7 @@ buildGoModule rec {
     description = "gh extension to explore the ecosystem";
     license = licenses.mit;
     maintainers = with maintainers; [ helium ];
+    mainProgram = "gh-eco";
   };
 }
 

@@ -1,13 +1,20 @@
-{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
+{ lib, stdenv, fetchpatch, fetchzip, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.1.6";
+  version = "3.2";
 
-  src = fetchgit {
-    url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
-    rev    = "trace-cmd-v${version}";
-    sha256 = "sha256-qjfeomeExjsx/6XrUaGm5szbL7XVlekGd4Hsuncv8NY=";
+  src = fetchzip {
+    url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
+    hash   = "sha256-rTcaaEQ3Y4cneNnZSGiMZNp+Z7dyAa3oNTNMAEXr28g=";
   };
+
+  patches = [
+    # Upstream patches to be released in the next version
+    (fetchpatch {
+      sha256 = "sha256-eGuHODm29M7rbGYsyXUPoNe1xsIG3eJYhwXQDakRJHA=";
+      url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/patch/?id=6b07a7df871342068604b204711ab741d421d051";
+    })
+  ];
 
   # Don't build and install html documentation
   postPatch = ''
@@ -20,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtraceevent libtracefs zstd ];
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [ "out" "lib" "dev" "man" "devman" ];
 
   MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
@@ -59,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.trace-cmd.org/";
     license     = with licenses; [ lgpl21Only gpl2Only ];
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice basvandijk ];
+    maintainers = with maintainers; [ thoughtpolice basvandijk wentasah ];
   };
 }

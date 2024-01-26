@@ -1,8 +1,8 @@
 diff --git a/Makefile b/Makefile
-index df7ed196..3a3b393d 100644
+index f8902b4f..57844bd7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -57,11 +57,7 @@ endif
+@@ -59,11 +59,7 @@ endif
  
  export MAKEOPT=-j ${NPROCS}
  
@@ -15,7 +15,7 @@ index df7ed196..3a3b393d 100644
  USERCHECK := $(shell getent passwd proxysql)
  GROUPCHECK := $(shell getent group proxysql)
  
-@@ -784,16 +780,10 @@ cleanbuild:
+@@ -303,16 +299,10 @@ cleanbuild:
  
  .PHONY: install
  install: src/proxysql
@@ -36,10 +36,10 @@ index df7ed196..3a3b393d 100644
  	install -m 0755 etc/init.d/proxysql /etc/init.d
  ifeq ($(DISTRO),"CentOS Linux")
 diff --git a/deps/Makefile b/deps/Makefile
-index 47c0f3c3..80d33d11 100644
+index 710e070b..fd1352f6 100644
 --- a/deps/Makefile
 +++ b/deps/Makefile
-@@ -66,10 +66,7 @@ endif
+@@ -69,10 +69,7 @@ default: $(tmpdefault)
  
  
  libinjection/libinjection/src/libinjection.a:
@@ -50,16 +50,19 @@ index 47c0f3c3..80d33d11 100644
  	cd libinjection/libinjection && patch -p1 < ../libinjection_sqli.c.patch
  endif
  ifeq ($(UNAME_S),Darwin)
-@@ -83,8 +80,6 @@ libinjection: libinjection/libinjection/src/libinjection.a
+@@ -86,11 +83,7 @@ libinjection: libinjection/libinjection/src/libinjection.a
  
  
  libssl/openssl/libssl.a:
 -	cd libssl && rm -rf openssl-openssl-*/ openssl-3*/ || true
 -	cd libssl && tar -zxf openssl-*.tar.gz
- #	cd libssl/openssl && patch crypto/ec/curve448/curve448.c < ../curve448.c-multiplication-overflow.patch
- #	cd libssl/openssl && patch crypto/asn1/a_time.c < ../a_time.c-multiplication-overflow.patch
+ 	cd libssl && ./verify-bio_st-match.sh
+-#	cd libssl/openssl && patch crypto/ec/curve448/curve448.c < ../curve448.c-multiplication-overflow.patch
+-#	cd libssl/openssl && patch crypto/asn1/a_time.c < ../a_time.c-multiplication-overflow.patch
  	cd libssl/openssl && ./config no-ssl3 no-tests
-@@ -103,8 +98,6 @@ ifeq ($(MIN_VERSION),$(lastword $(SORTED_VERSIONS)))
+ 	cd libssl/openssl && CC=${CC} CXX=${CXX} ${MAKE}
+ 	cd libssl/openssl && ln -s . lib # curl wants this path
+@@ -108,8 +101,6 @@ ifeq ($(MIN_VERSION),$(lastword $(SORTED_VERSIONS)))
  endif
  
  libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a: libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a re2/re2/obj/libre2.a
@@ -68,7 +71,7 @@ index 47c0f3c3..80d33d11 100644
  #ifeq ($(REQUIRE_PATCH), true)
  	cd libhttpserver/libhttpserver && patch -p1 < ../noexcept.patch
  	cd libhttpserver/libhttpserver && patch -p1 < ../re2_regex.patch
-@@ -122,8 +115,6 @@ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
+@@ -127,8 +118,6 @@ libhttpserver: libhttpserver/libhttpserver/build/src/.libs/libhttpserver.a
  
  
  libev/libev/.libs/libev.a:
@@ -77,16 +80,16 @@ index 47c0f3c3..80d33d11 100644
  	cd libev/libev && patch ev.c < ../ev.c-multiplication-overflow.patch
  	cd libev/libev && ./configure
  	cd libev/libev && CC=${CC} CXX=${CXX} ${MAKE}
-@@ -132,8 +123,6 @@ ev: libev/libev/.libs/libev.a
- 
+@@ -144,8 +133,6 @@ coredumper/coredumper/src/libcoredumper.a:
+ coredumper: coredumper/coredumper/src/libcoredumper.a
  
  curl/curl/lib/.libs/libcurl.a: libssl/openssl/libssl.a
 -	cd curl && rm -rf curl-*/ || true
 -	cd curl && tar -zxf curl-*.tar.gz
  #	cd curl/curl && ./configure --disable-debug --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-manual --disable-ipv6 --disable-sspi --disable-crypto-auth --disable-ntlm-wb --disable-tls-srp --without-nghttp2 --without-libidn2 --without-libssh2 --without-brotli --with-ssl=$(shell pwd)/../../libssl/openssl/ && CC=${CC} CXX=${CXX} ${MAKE}
- #	cd curl/curl && patch configure < ../configure.patch
  	cd curl/curl && autoreconf -fi
-@@ -143,16 +132,6 @@ curl: curl/curl/lib/.libs/libcurl.a
+ ifeq ($(UNAME_S),Darwin)
+@@ -157,16 +144,6 @@ curl: curl/curl/lib/.libs/libcurl.a
  
  
  libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a:
@@ -100,10 +103,10 @@ index 47c0f3c3..80d33d11 100644
 -	cd libmicrohttpd && tar -zxf libmicrohttpd-0.9.75.tar.gz
 -#	cd libmicrohttpd/libmicrohttpd && patch src/microhttpd/connection.c < ../connection.c-snprintf-overflow.patch
 -endif
- ifeq ($(UNAME_S),Darwin)
- 	cd libmicrohttpd/libmicrohttpd && patch src/microhttpd/mhd_sockets.c < ../mhd_sockets.c-issue-5977.patch
- endif
-@@ -171,8 +150,6 @@ cityhash: cityhash/cityhash/src/.libs/libcityhash.a
+ 	cd libmicrohttpd/libmicrohttpd && ./configure --enable-https && CC=${CC} CXX=${CXX} ${MAKE}
+ 
+ microhttpd: libmicrohttpd/libmicrohttpd/src/microhttpd/.libs/libmicrohttpd.a
+@@ -182,8 +159,6 @@ cityhash: cityhash/cityhash/src/.libs/libcityhash.a
  
  
  lz4/lz4/lib/liblz4.a:
@@ -112,16 +115,16 @@ index 47c0f3c3..80d33d11 100644
  	cd lz4/lz4 && CC=${CC} CXX=${CXX} ${MAKE}
  
  lz4: lz4/lz4/lib/liblz4.a
-@@ -197,8 +174,6 @@ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-s
+@@ -209,8 +184,6 @@ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib-s
  
  
  libdaemon/libdaemon/libdaemon/.libs/libdaemon.a:
 -	cd libdaemon && rm -rf libdaemon-*/ || true
 -	cd libdaemon && tar -zxf libdaemon-0.14.tar.gz
+ 	cd libdaemon/libdaemon && patch -p0 < ../daemon_fork_umask.patch
  	cd libdaemon/libdaemon && cp ../config.guess . && chmod +x config.guess && cp ../config.sub . && chmod +x config.sub && ./configure --disable-examples
  	cd libdaemon/libdaemon && CC=${CC} CXX=${CXX} ${MAKE}
- 
-@@ -282,8 +257,6 @@ sqlite3: sqlite3/sqlite3/sqlite3.o
+@@ -299,8 +272,6 @@ sqlite3: sqlite3/sqlite3/sqlite3.o
  
  
  libconfig/libconfig/lib/.libs/libconfig++.a:
@@ -130,7 +133,7 @@ index 47c0f3c3..80d33d11 100644
  	cd libconfig/libconfig && ./configure --disable-examples
  	cd libconfig/libconfig && CC=${CC} CXX=${CXX} ${MAKE}
  
-@@ -291,9 +264,6 @@ libconfig: libconfig/libconfig/lib/.libs/libconfig++.a
+@@ -308,9 +279,6 @@ libconfig: libconfig/libconfig/lib/.libs/libconfig++.a
  
  
  prometheus-cpp/prometheus-cpp/lib/libprometheus-cpp-core.a:
@@ -140,18 +143,7 @@ index 47c0f3c3..80d33d11 100644
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../serial_exposer.patch
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../registry_counters_reset.patch
  	cd prometheus-cpp/prometheus-cpp && patch -p1 < ../fix_old_distros.patch
-@@ -304,10 +274,6 @@ prometheus-cpp: prometheus-cpp/prometheus-cpp/lib/libprometheus-cpp-core.a
- 
- 
- re2/re2/obj/libre2.a:
--	cd re2 && rm -rf re2-*/ || true
--	cd re2 && tar -zxf re2-*.tar.gz
--#	cd re2/re2 && sed -i -e 's/-O3 -g /-O3 -fPIC /' Makefile
--#	cd re2/re2 && patch util/mutex.h < ../mutex.h.patch
- 	cd re2/re2 && patch re2/onepass.cc < ../onepass.cc-multiplication-overflow.patch
- ifeq ($(UNAME_S),Darwin)
- 	cd re2/re2 && sed -i '' -e 's/-O3 -g/-O3 -g -std=c++11 -fPIC -DMEMORY_SANITIZER -DRE2_ON_VALGRIND /' Makefile
-@@ -322,8 +288,6 @@ re2: re2/re2/obj/libre2.a
+@@ -339,8 +303,6 @@ re2: re2/re2/obj/libre2.a
  
  
  pcre/pcre/.libs/libpcre.a:

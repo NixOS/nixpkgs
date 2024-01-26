@@ -8,13 +8,14 @@
 
 buildPythonPackage rec {
   pname = "configshell";
-  version = "1.1.29";
+  version = "1.1.30";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     rev = "v${version}";
-    sha256 = "0mjj3c9335sph8rhwww7j4zvhyk896fbmx887vibm89w3jpvjjr9";
+    hash = "sha256-7iWmYVCodwncoPdpw85zrNsZSEq+ume412lyiiJqRPc=";
   };
 
   propagatedBuildInputs = [
@@ -22,11 +23,6 @@ buildPythonPackage rec {
     six
     urwid
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyparsing >=2.0.2,<3.0" "pyparsing >=2.0.2"
-  '';
 
   # Module has no tests
   doCheck = false;

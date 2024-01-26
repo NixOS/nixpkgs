@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, dos2unix
 , pythonRelaxDepsHook
 , asn1crypto
 , astunparse
@@ -17,16 +16,22 @@
 , deepmerge
 , fastjsonschema
 , hexdump
+, importlib-metadata
 , jinja2
 , libusbsio
 , oscrypto
 , pycryptodome
+, pyftdi
 , pylink-square
 , pyocd
 , pypemicro
 , pyserial
+, requests
 , ruamel-yaml
+, setuptools
 , sly
+, spsdk
+, testers
 , typing-extensions
 , pytestCheckHook
 , voluptuous
@@ -34,17 +39,19 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.10.0";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "NXPmicro";
+    owner = "nxp-mcuxpresso";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-KJUtAWENS3+VAs3Iai1aKYzMYtfetMeI0MHeQ6NraNY=";
+    rev = version;
+    hash = "sha256-C6cz5jhIHI4WkCYT0rURFa4kBAu6cMcKpQHiHACIiu8=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -57,6 +64,8 @@ buildPythonPackage rec {
     "pylink-square"
     "pyocd"
     "typing-extensions"
+    "click"
+    "ruamel.yaml"
   ];
 
   pythonRemoveDeps = [
@@ -78,6 +87,7 @@ buildPythonPackage rec {
     deepmerge
     fastjsonschema
     hexdump
+    importlib-metadata
     jinja2
     libusbsio
     oscrypto
@@ -86,22 +96,28 @@ buildPythonPackage rec {
     pyocd
     pypemicro
     pyserial
+    requests
     ruamel-yaml
     sly
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    pyftdi
     pytestCheckHook
     voluptuous
   ];
 
   pythonImportsCheck = [ "spsdk" ];
 
+  passthru.tests.version = testers.testVersion { package = spsdk; };
+
   meta = with lib; {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
-    homepage = "https://github.com/NXPmicro/spsdk";
+    homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = licenses.bsd3;
     maintainers = with maintainers; [ frogamic sbruder ];
+    mainProgram = "spsdk";
   };
 }

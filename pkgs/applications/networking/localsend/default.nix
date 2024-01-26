@@ -1,44 +1,74 @@
-{ lib, stdenv, appimageTools, fetchurl, undmg }:
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, flutter313
+, makeDesktopItem
+, pkg-config
+, libayatana-appindicator
+, undmg
+}:
 
 let
   pname = "localsend";
-  version = "1.9.1";
+  version = "1.13.1";
 
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.AppImage";
-      hash = "sha256-YAhGkJwDno8GeOepyokHv068IhY8H+L88VrKP76VHjU=";
+  linux = flutter313.buildFlutterApplication {
+    inherit pname version;
+
+    src = fetchFromGitHub {
+      owner = pname;
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-GJHCKNtKvwQAG3AUkhk0G4k/qsmLOUQAyyi9Id7NJh8=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-GXyFSsTK3S8nhwixDgZTQEwRt3SOcsnbARzb/BhTk8w=";
+
+    sourceRoot = "source/app";
+
+    pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+    gitHashes = {
+      "permission_handler_windows" = "sha256-a7bN7/A65xsvnQGXUvZCfKGtslbNWEwTWR8fAIjMwS0=";
+      "tray_manager" = "sha256-eF14JGf5jclsKdXfCE7Rcvp72iuWd9wuSZ8Bej17tjg=";
     };
-  };
-  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
+    nativeBuildInputs = [ pkg-config ];
 
-  linux = appimageTools.wrapType2 rec {
-    inherit pname version src meta;
+    buildInputs = [ libayatana-appindicator ];
 
-    extraPkgs = p: [ p.ayatana-ido p.libayatana-appindicator p.libayatana-indicator p.libdbusmenu p.libepoxy ];
-
-    extraInstallCommands = ''
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-
-      install -m 444 -D ${appimageContents}/org.localsend.localsend_app.desktop \
-        $out/share/applications/${pname}.desktop
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Icon=application-vnd.appimage' 'Icon=${pname}' \
-        --replace 'Exec=localsend_app' 'Exec=$out/bin/localsend'
-
-      install -m 444 -D ${appimageContents}/application-vnd.appimage.svg \
-        $out/share/icons/hicolor/scalable/apps/${pname}.svg
+    postInstall = ''
+      for s in 32 128 256 512; do
+        d=$out/share/icons/hicolor/''${s}x''${s}/apps
+        mkdir -p $d
+        ln -s $out/app/data/flutter_assets/assets/img/logo-''${s}.png $d/localsend.png
+      done
+      mkdir -p $out/share/applications
+      cp $desktopItem/share/applications/*.desktop $out/share/applications
+      substituteInPlace $out/share/applications/*.desktop --subst-var out
     '';
+
+    desktopItem = makeDesktopItem {
+      name = "LocalSend";
+      exec = "@out@/bin/localsend_app";
+      icon = "localsend";
+      desktopName = "LocalSend";
+      startupWMClass = "localsend_app";
+      genericName = "An open source cross-platform alternative to AirDrop";
+      categories = [ "Network" ];
+    };
+
+    meta = meta // {
+      mainProgram = "localsend_app";
+    };
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit pname version;
+
+    src = fetchurl {
+      url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
+      hash = "sha256-YCy6NlmEPsOFtIZ27mOYDnMPd1tj3YO2bwNDdM3K/uY=";
+    };
 
     nativeBuildInputs = [ undmg ];
 
@@ -48,15 +78,19 @@ let
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
     '';
+
+    meta = meta // {
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+    };
   };
 
   meta = with lib; {
     description = "An open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = builtins.attrNames srcs;
+    mainProgram = "localsend";
+    maintainers = with maintainers; [ sikmir linsui ];
   };
 in
 if stdenv.isDarwin

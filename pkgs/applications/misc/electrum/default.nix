@@ -8,14 +8,15 @@
 , secp256k1
 , enableQt ? true
 , callPackage
+, qtwayland
 }:
 
 let
-  version = "4.4.0";
+  version = "4.5.0";
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    if stdenv.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
@@ -28,7 +29,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-lXMz0U7zgtCApBCGZcpOHvLcyOeGG0yJE/gr7Gv+yBQ=";
+    sha256 = "sha256-IEKuHUlH+dg+8w+n7XV7hdDOPOFZ/lpUsIlYldwR44Y=";
 
     postFetch = ''
       mv $out ./all
@@ -44,7 +45,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-SHV+fCDhfgIh7s8L7eDbKj8bkHSVm7J2PPQ4CQpp6cI=";
+    sha256 = "sha256-s4FH8FtPg4wepU/5XI062dAN9fCYR1xJGwrxftCSKzw=";
   };
 
   postUnpack = ''
@@ -53,6 +54,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -70,6 +72,8 @@ python3.pkgs.buildPythonApplication {
     qrcode
     requests
     tlslite-ng
+    certifi
+    jsonpatch
     # plugins
     btchip-python
     ledger-bitcoin
@@ -133,5 +137,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ joachifm np prusnak ];
+    mainProgram = "electrum";
   };
 }

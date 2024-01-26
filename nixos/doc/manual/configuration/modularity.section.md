@@ -36,8 +36,8 @@ Here, we include two modules from the same directory, `vpn.nix` and
 Note that both `configuration.nix` and `kde.nix` define the option
 [](#opt-environment.systemPackages). When multiple modules define an
 option, NixOS will try to *merge* the definitions. In the case of
-[](#opt-environment.systemPackages), that's easy: the lists of
-packages can simply be concatenated. The value in `configuration.nix` is
+[](#opt-environment.systemPackages) the lists of packages will be
+concatenated. The value in `configuration.nix` is
 merged last, so for list-type options, it will appear at the end of the
 merged list. If you want it to appear first, you can use `mkBefore`:
 

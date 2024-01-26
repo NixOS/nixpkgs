@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "kanshi";
     rev = "v${version}";
-    sha256 = "sha256-eGcgqj214fcfOrKqrAsxLG9LiNlAsWu0sgjxBB01u6Q=";
+    sha256 = "sha256-vxysZWFcfYwOgFMcRuPzYpWmFOFMiwc62DqI+nTQ4MI=";
   };
 
   strictDeps = true;
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       wlr-output-management protocol.
     '';
     license = licenses.mit;
+    mainProgram = "kanshi";
     maintainers = with maintainers; [ balsoft danielbarter ];
     platforms = platforms.linux;
   };

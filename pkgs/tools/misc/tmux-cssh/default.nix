@@ -38,5 +38,6 @@ stdenv.mkDerivation {
 
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ zimbatm ];
+    mainProgram = "tmux-cssh";
   };
 }

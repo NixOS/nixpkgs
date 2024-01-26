@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     license = [ licenses.gpl3 ];
     maintainers = [ maintainers.sb0 ];
     platforms = platforms.unix;
+    mainProgram = "amp";
   };
 }

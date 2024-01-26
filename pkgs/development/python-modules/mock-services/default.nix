@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "mock-services";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "peopledoc";

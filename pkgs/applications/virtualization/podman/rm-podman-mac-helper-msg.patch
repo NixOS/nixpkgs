@@ -1,16 +1,19 @@
-diff --git a/pkg/machine/qemu/machine.go b/pkg/machine/qemu/machine.go
-index 4f25b4d26..8a79862fd 100644
---- a/pkg/machine/qemu/machine.go
-+++ b/pkg/machine/qemu/machine.go
-@@ -1509,11 +1509,6 @@ func (v *MachineVM) waitAPIAndPrintInfo(forwardState apiForwardingState, forward
- 			case notInstalled:
- 				fmt.Printf("\nThe system helper service is not installed; the default Docker API socket\n")
- 				fmt.Printf("address can't be used by podman. ")
--				if helper := findClaimHelper(); len(helper) > 0 {
--					fmt.Printf("If you would like to install it run the\nfollowing commands:\n")
--					fmt.Printf("\n\tsudo %s install\n", helper)
--					fmt.Printf("\tpodman machine stop%s; podman machine start%s\n\n", suffix, suffix)
--				}
- 			case machineLocal:
+diff --git a/pkg/machine/machine_common.go b/pkg/machine/machine_common.go
+index 4e43dd54c..a981d93bf 100644
+--- a/pkg/machine/machine_common.go
++++ b/pkg/machine/machine_common.go
+@@ -127,14 +127,6 @@ address can't be used by podman. `
+ 
+ 				if len(helper) < 1 {
+ 					fmt.Print(fmtString)
+-				} else {
+-					fmtString += `If you would like to install it, run the following commands:
+-
+-        sudo %s install
+-        podman machine stop%[2]s; podman machine start%[2]s
+-
+-                `
+-					fmt.Printf(fmtString, helper, suffix)
+ 				}
+ 			case MachineLocal:
  				fmt.Printf("\nAnother process was listening on the default Docker API socket address.\n")
- 			case claimUnsupported:

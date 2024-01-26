@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-asyncio
 , pytest-mock
 , pytestCheckHook
 , python-socks
@@ -11,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.0.5";
+  version = "1.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
-    repo = pname;
+    repo = "asyncwhois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ILKnJlPT8BuZK06xk7fWYXcdn9SRL5zA3+B6CfJwvKM=";
+    hash = "sha256-5T/h4YzODH7zFyQpG8qVZetTK7V+Ii9jc+MQFgMUA8w=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
@@ -52,6 +54,8 @@ buildPythonPackage rec {
     "test_whois_query_run"
     "test_whois_query_create_connection"
     "test_whois_query_send_and_recv"
+    "test_input_parameters_for_domain_query"
+    "test__get_top_level_domain"
   ];
 
   pythonImportsCheck = [

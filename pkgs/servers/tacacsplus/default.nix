@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.shrubbery.net/pub/tac_plus/tacacs-F${version}.tar.gz";
-    sha256 = "17i18z3s58c8yy8jxp01q3hzz5nirs4cjxms18zzkli6ip4jszql";
+    hash = "sha256-FH8tyY0m0vk/Crp2yYjO0Zb/4cAB3C6R94ihosdHIZ4=";
   };
 
   nativeBuildInputs = [ flex bison ];

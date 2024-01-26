@@ -38,4 +38,6 @@ stdenvNoCC.mkDerivation {
     shell = lib.getBin shell + (shell.shellPath or "");
     signingUtils = lib.optionalString darwinCodeSign signingUtils;
   };
+
+  meta.mainProgram = "nuke-refs";
 }

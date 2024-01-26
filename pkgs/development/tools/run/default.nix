@@ -19,6 +19,5 @@ buildGoModule rec {
     homepage    = "https://github.com/TekWizely/run";
     license     = licenses.mit;
     maintainers = with maintainers; [ rawkode Br1ght0ne ];
-    platforms   = platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../ -i python3 -p "python3.withPackages (ps: with ps; [ requests nix-prefetch-github ])" -p "git"
+#!nix-shell -I nixpkgs=../../../../ -i python3 -p "python3.withPackages (ps: with ps; [ nix-prefetch-github ])" -p "git"
 
 import json
 import os
@@ -12,15 +12,16 @@ SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
 GET_REPO_THREADS = int(os.environ.get("GET_REPO_THREADS", 8))
 CORES = {
+    "2048": {"repo": "libretro-2048"},
     "atari800": {"repo": "libretro-atari800"},
     "beetle-gba": {"repo": "beetle-gba-libretro"},
     "beetle-lynx": {"repo": "beetle-lynx-libretro"},
     "beetle-ngp": {"repo": "beetle-ngp-libretro"},
+    "beetle-pce": {"repo": "beetle-pce-libretro"},
     "beetle-pce-fast": {"repo": "beetle-pce-fast-libretro"},
     "beetle-pcfx": {"repo": "beetle-pcfx-libretro"},
     "beetle-psx": {"repo": "beetle-psx-libretro"},
     "beetle-saturn": {"repo": "beetle-saturn-libretro"},
-    "beetle-snes": {"repo": "beetle-bsnes-libretro"},
     "beetle-supafaust": {"repo": "supafaust"},
     "beetle-supergrafx": {"repo": "beetle-supergrafx-libretro"},
     "beetle-vb": {"repo": "beetle-vb-libretro"},
@@ -35,13 +36,15 @@ CORES = {
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},
     "dosbox": {"repo": "dosbox-libretro"},
+    "dosbox-pure": {"repo": "dosbox-pure", "owner": "schellingb"},
     "eightyone": {"repo": "81-libretro"},
     "fbalpha2012": {"repo": "fbalpha2012"},
     "fbneo": {"repo": "fbneo"},
     "fceumm": {"repo": "libretro-fceumm"},
-    "flycast": {"repo": "flycast"},
+    "flycast": {"repo": "flycast", "owner": "flyinghead", "fetch_submodules": True},
     "fmsx": {"repo": "fmsx-libretro"},
     "freeintv": {"repo": "freeintv"},
+    "fuse": {"repo": "fuse-libretro"},
     "gambatte": {"repo": "gambatte-libretro"},
     "genesis-plus-gx": {"repo": "Genesis-Plus-GX"},
     "gpsp": {"repo": "gpsp"},
@@ -68,7 +71,10 @@ CORES = {
     "o2em": {"repo": "libretro-o2em"},
     "opera": {"repo": "opera-libretro"},
     "parallel-n64": {"repo": "parallel-n64"},
-    "pcsx2": {"repo": "pcsx2"},
+    # libretro/lrps2 is a hard-fork of pcsx2 with simplified code to target
+    # only libretro, while libretro/pcsx2 is supposedly closer to upstream.
+    # TODO: switch to libretro/pcsx2 since this is more up-to-date
+    "pcsx2": {"repo": "lrps2"},
     "pcsx_rearmed": {"repo": "pcsx_rearmed"},
     "picodrive": {"repo": "picodrive", "fetch_submodules": True},
     "play": {"repo": "Play-", "owner": "jpd002", "fetch_submodules": True},
@@ -78,7 +84,13 @@ CORES = {
     "puae": {"repo": "libretro-uae"},
     "quicknes": {"repo": "QuickNES_Core"},
     "sameboy": {"repo": "sameboy"},
-    "scummvm": {"repo": "scummvm"},
+    "same_cdi": {"repo": "same_cdi"},
+    # This is the old source code before they upstreamed the source code,
+    # so now the libretro related code lives in the scummvm/scummvm repository.
+    # However this broke the old way we were doing builds, so for now point
+    # to a mirror with the old source code until this issue is fixed.
+    # TODO: switch to libretro/scummvm since this is more up-to-date
+    "scummvm": {"repo": "scummvm", "owner": "libretro-mirrors"},
     "smsplus-gx": {"repo": "smsplus-gx"},
     "snes9x": {"repo": "snes9x", "owner": "snes9xgit"},
     "snes9x2002": {"repo": "snes9x2002"},

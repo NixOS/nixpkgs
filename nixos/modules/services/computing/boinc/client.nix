@@ -27,13 +27,8 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.boinc;
-        defaultText = literalExpression "pkgs.boinc";
-        description = lib.mdDoc ''
-          Which BOINC package to use.
-        '';
+      package = mkPackageOption pkgs "boinc" {
+        example = "boinc-headless";
       };
 
       dataDir = mkOption {
@@ -53,7 +48,7 @@ in
           only the hosts listed in {var}`dataDir`/remote_hosts.cfg will be allowed to
           connect.
 
-          See also: <http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access>
+          See also: <https://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access>
         '';
       };
 

@@ -3,21 +3,24 @@
 , fetchurl
 , pkg-config
 , iproute2
+, libcap_ng
+, libnl
+, lz4
 , lzo
 , openssl
 , pam
 , useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , update-systemd-resolved
-, util-linux
 , pkcs11Support ? false
 , pkcs11helper
+, nixosTests
 }:
 
 let
   inherit (lib) versionOlder optional optionals optionalString;
 
-  generic = { version, sha256, extraBuildInputs ? [] }:
+  generic = { version, sha256, extraBuildInputs ? [ ] }:
     let
       withIpRoute = stdenv.isLinux && (versionOlder version "2.5.4");
     in
@@ -33,8 +36,8 @@ let
 
         nativeBuildInputs = [ pkg-config ];
 
-        buildInputs = [ lzo ]
-          ++ optional stdenv.isLinux pam
+        buildInputs = [ lz4 lzo ]
+          ++ optionals stdenv.isLinux [ libcap_ng libnl pam ]
           ++ optional withIpRoute iproute2
           ++ optional useSystemd systemd
           ++ optional pkcs11Support pkcs11helper
@@ -63,6 +66,7 @@ let
 
         meta = with lib; {
           description = "A robust and highly flexible tunneling application";
+          mainProgram = "openvpn";
           downloadPage = "https://openvpn.net/community-downloads/";
           homepage = "https://openvpn.net/";
           license = licenses.gpl2Only;
@@ -73,9 +77,14 @@ let
 
 in
 {
-  openvpn = generic {
-    version = "2.5.8";
-    sha256 = "1cixqm4gn2d1v8qkbww75j30fzvxz13gc7whcmz54i0x4fvibwx6";
+  openvpn = (generic {
+    version = "2.6.8";
+    sha256 = "sha256-Xt4VZcim2IAQD38jUxen7p7qg9UFLbVUfxOp52r3gF0=";
     extraBuildInputs = [ openssl ];
-  };
+  }).overrideAttrs
+    (_: {
+      passthru.tests = {
+        inherit (nixosTests) initrd-network-openvpn systemd-initrd-networkd-openvpn;
+      };
+    });
 }

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "fastdiff";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     description = "A fast native implementation of diff algorithm with a pure Python fallback";
     homepage = "https://github.com/syrusakbary/fastdiff";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
     # resulting compiled object panics at import
     broken = stdenv.is32bit;
   };

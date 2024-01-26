@@ -12,18 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.12.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
-    rev = "v${version}";
-    sha256 = "0gi1nx4bcc1vwfw41cif3xi2i59229vy0kc2r5959d8n6yv31kfr"; # v0.9.1
+    rev = version;
+    sha256 = "sha256-aRBhg4RwK2jUQWW/OmzNSMUScaFUPdbWbApD37CXPoI=";
   };
 
   dontWrapQtApps = true;
 
-  patches = [ ./0002-Fix-install-name-Darwin.patch ];
+  # HACK `propagatedSandboxProfile` does not appear to actually propagate the sandbox profile from `qtbase`
+  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
 
   cmakeFlags = [
     "-DBUILD_WITH_QT6=${if lib.versions.major qtbase.version == "6" then "ON" else "OFF"}"

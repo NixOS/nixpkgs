@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/hound-search/hound";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc SuperSandro2000 ];
-    platforms = platforms.unix;
   };
 }

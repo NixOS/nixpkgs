@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "wsproto";
   version = "1.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -26,6 +27,6 @@ buildPythonPackage rec {
     description = "Pure Python, pure state-machine WebSocket implementation";
     homepage = "https://github.com/python-hyper/wsproto/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

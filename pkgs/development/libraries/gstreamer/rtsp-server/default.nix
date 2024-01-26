@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.22.2";
+  version = "1.22.8";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-K+Suz7iHEBAOpxFe0CFkA+gJQ0Tr8UYJQnG41Nc4KL8=";
+    hash = "sha256-cFF3BRwimXbxca3Nerl2Kua8xLt33DCKC9gKY9psM38=";
   };
 
   outputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     gst-plugins-bad
-    gobject-introspection
   ];
 
   mesonFlags = [
@@ -62,6 +61,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bkchr ];
+    maintainers = with maintainers; [ bkchr lilyinstarlight ];
   };
 }

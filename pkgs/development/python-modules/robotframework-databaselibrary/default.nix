@@ -1,22 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , robotframework
 }:
 
 buildPythonPackage rec {
-  version = "1.2.4";
   pname = "robotframework-databaselibrary";
+  version = "1.4.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "627d872b3dda6a308a650ac9e676dadedf9c294e4ef70ad207cbb86b78eb8847";
+    sha256 = "sha256-/n4+xA/eLrcVEwlWyLQLrkX5waYaJKRkphwT22b7hTU=";
   };
+
+  nativeBuildInputs = [
+    robotframework
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    robotframework
+  ];
 
   # unit tests are impure
   doCheck = false;
-
-  propagatedBuildInputs = [ robotframework ];
 
   meta = with lib; {
     description = "Database Library contains utilities meant for Robot Framework";

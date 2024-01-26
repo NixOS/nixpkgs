@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
-, openssl, openldap, libedit, keyutils, libverto
+, openssl, openldap, libedit, keyutils, libverto, darwin
 
 # for passthru.tests
 , bind
@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
-  version = "1.20.1";
+  version = "1.21.2";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    sha256 = "sha256-cErtSbGetacXizSyhzYg7CmdsIdS1qhXT5XUGHmriFE=";
+    hash = "sha256-lWCUGp2EPAJDpxsXp6xv4xx867W845g9t55Srn6FBJE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
     ++ lib.optionals (!libOnly) [ openldap libedit ]
     ++ lib.optionals withVerto [ libverto ];
+
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [
+    libs.xpc
+    frameworks.Kerberos
+  ]);
 
   sourceRoot = "krb5-${version}/src";
 

@@ -13,46 +13,67 @@
 , libxml2
 , xar
 , wasi-libc
-, avrgcc
 , binaryen
 , avrdude
 , gdb
 , openocd
+, runCommand
 , tinygoTests ? [ "smoketest" ]
 }:
 
 let
   llvmMajor = lib.versions.major llvm.version;
   inherit (llvmPackages) llvm clang compiler-rt lld;
+
+  # only doing this because only on darwin placing clang.cc in nativeBuildInputs
+  # doesn't build
+  bootstrapTools = runCommand "tinygo-bootstap-tools" { } ''
+    mkdir -p $out
+    ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/ld.lld $out/ld.lld-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/wasm-ld $out/wasm-ld-${llvmMajor}
+    # GDB upstream does not support ARM darwin
+    ${lib.optionalString (!(stdenv.isDarwin && stdenv.isAarch64)) "ln -s ${gdb}/bin/gdb $out/gdb-multiarch" }
+  '';
 in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.26.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "rI8CADPWKdNvfknEsrpp2pCeZobf9fAp0GDIWjupzZA=";
+    sha256 = "sha256-hOccfMKuvTKYKDRcEgTJ8k/c/H+qNDpvotWIqk6p2u8=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
+  vendorHash = "sha256-2q3N6QhfRmwbs4CTWrFWr1wyhf2jPS2ECAn/wrrpXdM=";
 
   patches = [
     ./0001-Makefile.patch
 
+    # clang.cc does not have any paths in the include path.
+    # For TinyGo, we want to have no include paths, _except_ for the built-in
+    # Clang header files (things like stdint.h). That's why we use -nostdlibinc.
+    # So to make Clang work like we want, we will have to manually add this one
+    # include path.
+    # We can't use a regular clang command (something like
+    # llvmPackages.clangUseLLVM) because there are various bugs, see:
+    # https://github.com/NixOS/nixpkgs/issues/259397
+    # https://github.com/NixOS/nixpkgs/issues/259386
     (substituteAll {
       src = ./0002-Add-clang-header-path.patch;
-      clang_include = "${clang.cc.lib}/lib/clang/${clang.cc.version}/include";
+      clang_include = "${clang.cc.lib}/lib/clang/${llvmMajor}/include";
     })
 
     #TODO(muscaln): Find a better way to fix build ID on darwin
     ./0003-Use-out-path-as-build-id-on-darwin.patch
+    ./0004-fix-darwin-build.patch
   ];
 
-  nativeCheckInputs = [ avrgcc binaryen ];
+  nativeCheckInputs = [ binaryen ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ llvm clang.cc ]
     ++ lib.optionals stdenv.isDarwin [ zlib ncurses libffi libxml2 xar ];
@@ -96,51 +117,31 @@ buildGoModule rec {
     substituteInPlace builder/buildid.go \
       --replace "OUT_PATH" "$out"
 
-    # TODO: Fix mingw and darwin
-    # Disable windows and darwin cross-compile tests
+    # TODO: Fix mingw
+    # Disable windows cross-compile tests
     sed -i "/GOOS=windows/d" Makefile
-    sed -i "/GOOS=darwin/d" Makefile
-
-    # tinygo needs versioned binaries
-    mkdir -p $out/libexec/tinygo
-    ln -s ${lib.getBin clang.cc}/bin/clang $out/libexec/tinygo/clang-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/ld.lld $out/libexec/tinygo/ld.lld-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/wasm-ld $out/libexec/tinygo/wasm-ld-${llvmMajor}
-    ln -s ${gdb}/bin/gdb $out/libexec/tinygo/gdb-multiarch
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace Makefile \
       --replace "./build/tinygo" "${buildPackages.tinygo}/bin/tinygo"
   '';
 
   preBuild = ''
-    export PATH=$out/libexec/tinygo:$PATH
+    export PATH=${bootstrapTools}:$PATH
     export HOME=$TMPDIR
   '';
 
-  postBuild = let
-    tinygoForBuild = if (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      then "build/tinygo"
-      else "${buildPackages.tinygo}/bin/tinygo";
-    in ''
+  postBuild = ''
     # Move binary
     mkdir -p build
     mv $GOPATH/bin/tinygo build/tinygo
 
-    make gen-device
+    make gen-device -j $NIX_BUILD_CORES
 
     export TINYGOROOT=$(pwd)
-    finalRoot=$out/share/tinygo
-
-    for target in thumbv6m-unknown-unknown-eabi-cortex-m0 thumbv6m-unknown-unknown-eabi-cortex-m0plus thumbv7em-unknown-unknown-eabi-cortex-m4; do
-      mkdir -p $finalRoot/pkg/$target
-      for lib in compiler-rt picolibc; do
-        ${tinygoForBuild} build-library -target=''${target#*eabi-} -o $finalRoot/pkg/$target/$lib $lib
-      done
-    done
   '';
 
   checkPhase = lib.optionalString (tinygoTests != [ ] && tinygoTests != null) ''
-    make ''${tinygoTests[@]} XTENSA=0 ${lib.optionalString stdenv.isDarwin "AVR=0"}
+    make ''${tinygoTests[@]} XTENSA=0
   '';
 
   installPhase = ''
@@ -149,7 +150,7 @@ buildGoModule rec {
     make build/release
 
     wrapProgram $out/bin/tinygo \
-      --prefix PATH : ${lib.makeBinPath [ go avrdude openocd avrgcc binaryen ]}:$out/libexec/tinygo
+      --prefix PATH : ${lib.makeBinPath [ go avrdude openocd binaryen ]}:${bootstrapTools}
 
     runHook postInstall
   '';

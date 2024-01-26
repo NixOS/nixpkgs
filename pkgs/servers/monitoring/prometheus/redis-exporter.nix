@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "redis_exporter";
-  version = "1.50.0";
+  version = "1.57.0";
 
   src = fetchFromGitHub {
     owner = "oliver006";
     repo = "redis_exporter";
     rev = "v${version}";
-    sha256 = "sha256-FP5X+2OFEFUJWtMKbVgcCkNSV3BtQyMVsXGD6dn3mjY=";
+    sha256 = "sha256-M5Mv2gAQMR0j2zIX6OwePA9w7OtjJ0i2mR9I4BvUcXI=";
   };
 
-  vendorHash = "sha256-Owfxy7WkucQ6BM8yjnZg9/8CgopGTtbQTTUuxoT3RRE=";
+  vendorHash = "sha256-32EjLEPeFsihdG83ru4SSf03F2XJGD8+tbO9ANaI1hs=";
 
   ldflags = [
     "-X main.BuildVersion=${version}"
@@ -29,6 +29,5 @@ buildGoModule rec {
     homepage = "https://github.com/oliver006/redis_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ eskytthe srhb ma27 ];
-    platforms = platforms.unix;
   };
 }

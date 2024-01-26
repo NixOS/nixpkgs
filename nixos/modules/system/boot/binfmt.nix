@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption mkDefault types optionalString stringAfter;
+  inherit (lib) mkOption mkDefault types optionalString;
 
   cfg = config.boot.binfmt;
 
@@ -20,17 +20,13 @@ let
                  optionalString fixBinary "F";
   in ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
-  activationSnippet = name: { interpreter, wrapInterpreterInShell, ... }: if wrapInterpreterInShell then ''
-    rm -f /run/binfmt/${name}
-    cat > /run/binfmt/${name} << 'EOF'
-    #!${pkgs.bash}/bin/sh
-    exec -- ${interpreter} "$@"
-    EOF
-    chmod +x /run/binfmt/${name}
-  '' else ''
-    rm -f /run/binfmt/${name}
-    ln -s ${interpreter} /run/binfmt/${name}
-  '';
+  mkInterpreter = name: { interpreter, wrapInterpreterInShell, ... }:
+    if wrapInterpreterInShell
+    then pkgs.writeShellScript "${name}-interpreter" ''
+           #!${pkgs.bash}/bin/sh
+           exec -- ${interpreter} "$@"
+         ''
+    else interpreter;
 
   getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
   getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
@@ -102,20 +98,28 @@ let
       mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\x00'';
     };
     mips-linux = {
-      magicOrExtension = ''\x7fELF\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08'';
-      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
+      magicOrExtension = ''\x7fELF\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20'';
     };
     mipsel-linux = {
-      magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00'';
-      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+      magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00'';
     };
     mips64-linux = {
       magicOrExtension = ''\x7fELF\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08'';
-      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
     };
     mips64el-linux = {
       magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00'';
-      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+    };
+    mips64-linuxabin32 = {
+      magicOrExtension = ''\x7fELF\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20'';
+    };
+    mips64el-linuxabin32 = {
+      magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00'';
     };
     riscv32-linux = {
       magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xf3\x00'';
@@ -137,14 +141,8 @@ let
       magicOrExtension = ''\x00asm'';
       mask = ''\xff\xff\xff\xff'';
     };
-    x86_64-windows = {
-      magicOrExtension = "exe";
-      recognitionType = "extension";
-    };
-    i686-windows = {
-      magicOrExtension = "exe";
-      recognitionType = "extension";
-    };
+    x86_64-windows.magicOrExtension = "MZ";
+    i686-windows.magicOrExtension = "MZ";
   };
 
 in {
@@ -277,7 +275,7 @@ in {
           support your new systems.
           Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
         '';
-        type = types.listOf types.str;
+        type = types.listOf (types.enum (builtins.attrNames magics));
       };
     };
   };
@@ -316,17 +314,25 @@ in {
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));
-    system.activationScripts.binfmt = stringAfter [ "specialfs" ] ''
-      mkdir -p -m 0755 /run/binfmt
-      ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
-    '';
-    systemd = lib.mkIf (config.boot.binfmt.registrations != {}) {
-      additionalUpstreamSystemUnits = [
-        "proc-sys-fs-binfmt_misc.automount"
-        "proc-sys-fs-binfmt_misc.mount"
-        "systemd-binfmt.service"
-      ];
-      services.systemd-binfmt.restartTriggers = [ (builtins.toJSON config.boot.binfmt.registrations) ];
-    };
+
+    systemd = lib.mkMerge [
+      ({ tmpfiles.rules = [
+          "d /run/binfmt 0755 -"
+        ] ++ lib.mapAttrsToList
+          (name: interpreter:
+            "L+ /run/binfmt/${name} - - - - ${interpreter}"
+          )
+          (lib.mapAttrs mkInterpreter config.boot.binfmt.registrations);
+      })
+
+      (lib.mkIf (config.boot.binfmt.registrations != {}) {
+        additionalUpstreamSystemUnits = [
+          "proc-sys-fs-binfmt_misc.automount"
+          "proc-sys-fs-binfmt_misc.mount"
+          "systemd-binfmt.service"
+        ];
+        services.systemd-binfmt.restartTriggers = [ (builtins.toJSON config.boot.binfmt.registrations) ];
+      })
+    ];
   };
 }

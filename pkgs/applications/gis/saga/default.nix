@@ -1,9 +1,9 @@
 { stdenv
-, mkDerivation
 , lib
 , fetchurl
 # native
 , cmake
+, desktopToDarwinBundle
 , pkg-config
 # not native
 , gdal
@@ -29,13 +29,13 @@
 , fftw
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.0.1";
+  version = "9.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/saga-gis/SAGA%20-%20${lib.versions.major version}/SAGA%20-%20${version}/saga-${version}.tar.gz";
-    sha256 = "sha256-8S8Au+aLwl8X0GbqPPv2Q6EL98KSoT665aILc5vcbpA=";
+    url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
+    sha256 = "sha256-QrpEbb8zN003Afnu9UZUanWE0lIiy95POSWd1jB8EtA=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
@@ -43,7 +43,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     curl
@@ -79,9 +79,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "System for Automated Geoscientific Analyses";
-    homepage = "http://www.saga-gis.org";
+    homepage = "https://saga-gis.sourceforge.io";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ michelk mpickering ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ michelk mpickering ];
     platforms = with platforms; unix;
   };
 }

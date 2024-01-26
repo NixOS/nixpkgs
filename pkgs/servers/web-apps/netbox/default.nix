@@ -1,38 +1,39 @@
-{ lib, nixosTests, callPackage, fetchpatch }:
+{ lib, nixosTests, callPackage, }:
 let
   generic = import ./generic.nix;
 in
-{
-  netbox_3_3 = callPackage generic {
-    version = "3.3.10";
-    hash = "sha256-MeOfTU5IxNDoUh7FyvwAQNRC/CE0R6p40WnlF+3RuxA=";
-    extraPatches = [
-      # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
-      ./config_3_3.patch
-      ./graphql-3_2_0.patch
-      # fix compatibility ith django 4.1
-      (fetchpatch {
-        url = "https://github.com/netbox-community/netbox/pull/10341/commits/ce6bf9e5c1bc08edc80f6ea1e55cf1318ae6e14b.patch";
-        sha256 = "sha256-aCPQp6k7Zwga29euASAd+f13hIcZnIUu3RPAzNPqgxc=";
-      })
-    ];
+lib.fix (self: {
+  netbox = self.netbox_3_7;
 
-    tests.netbox = nixosTests.netbox_3_3;
-    maintainers = with lib.maintainers; [ n0emis raitobezarius ];
-    eol = true;
-  };
-
-  netbox = callPackage generic {
-    version = "3.5.0";
-    hash = "sha256-LsUitX/e+ec/9mRBw+cbGOG2Idl9ZQwf/vxIC3YS5LU=";
+  netbox_3_6 = callPackage generic {
+    version = "3.6.9";
+    hash = "sha256-R/hcBKrylW3GnEy10DkrLVr8YJtsSCvCP9H9LhafO9I=";
     extraPatches = [
       # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
       ./config.patch
     ];
     tests = {
-      inherit (nixosTests) netbox;
+      netbox = nixosTests.netbox_3_6;
+      inherit (nixosTests) netbox-upgrade;
+    };
+
+    maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];
+    eol = true;
+  };
+
+  netbox_3_7 = callPackage generic {
+    version = "3.7.1";
+    hash = "sha256-hAwkrrjrV+XVIYe3C8f/342SPlllXUhiFuaAp+TLMUw=";
+    extraPatches = [
+      # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
+      ./config.patch
+      ./fix-doc-link.patch
+    ];
+    tests = {
+      netbox = nixosTests.netbox_3_7;
+      inherit (nixosTests) netbox-upgrade;
     };
 
     maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];
   };
-}
+})

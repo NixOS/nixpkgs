@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "wsgi-intercept";
-  version = "1.11.0";
+  version = "1.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "wsgi_intercept";
     inherit version;
-    hash = "sha256-KvrZs+EgeK7Du7ni6icKHfcF0W0RDde0W6Aj/EPZ2Hw=";
+    hash = "sha256-StUxEN91fU7qoptH9iKJFpZWIBIOtIe6S4gvdBgN48E=";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Module that acts as a WSGI application in place of a real URI for testing";
     homepage = "https://github.com/cdent/wsgi-intercept";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

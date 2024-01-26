@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, readline
 , compat ? false
-, callPackage
 , makeWrapper
 , self
 , packageOverrides ? (final: prev: {})
@@ -18,38 +17,43 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 , luaAttr ? "lua${lib.versions.major version}_${lib.versions.minor version}"
 } @ inputs:
-let
-  luaPackages = self.pkgs;
 
-  luaversion = lib.versions.majorMinor version;
+stdenv.mkDerivation (finalAttrs:
+  let
+    luaPackages = self.pkgs;
 
-plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
-       else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
-       else if stdenv.isDarwin then "macosx"
-       else if stdenv.hostPlatform.isMinGW then "mingw"
-       else if stdenv.isFreeBSD then "freebsd"
-       else if stdenv.isSunOS then "solaris"
-       else if stdenv.hostPlatform.isBSD then "bsd"
-       else if stdenv.hostPlatform.isUnix then "posix"
-       else "generic";
+    luaversion = lib.versions.majorMinor version;
 
-compatFlags = if (lib.versionOlder self.luaversion "5.3") then " -DLUA_COMPAT_ALL"
-              else if (lib.versionOlder self.luaversion "5.4") then " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
-              else " -DLUA_COMPAT_5_3";
-in
+    plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
+          else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
+          else if stdenv.isDarwin then "macosx"
+          else if stdenv.hostPlatform.isMinGW then "mingw"
+          else if stdenv.isFreeBSD then "freebsd"
+          else if stdenv.isSunOS then "solaris"
+          else if stdenv.hostPlatform.isBSD then "bsd"
+          else if stdenv.hostPlatform.isUnix then "posix"
+          else "generic";
 
-stdenv.mkDerivation rec {
+    compatFlags = if (lib.versionOlder self.luaversion "5.3") then " -DLUA_COMPAT_ALL"
+                  else if (lib.versionOlder self.luaversion "5.4") then " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
+                  else " -DLUA_COMPAT_5_3";
+  in
+
+  {
   pname = "lua";
   inherit version;
+  outputs = [ "out" "doc" ];
 
   src = fetchurl {
-    url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
+    url = "https://www.lua.org/ftp/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = hash;
   };
 
-  LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
-  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+  LuaPathSearchPaths  = luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths = luaPackages.luaLib.luaCPathList;
+  setupHook = luaPackages.lua-setup-hook
+    finalAttrs.LuaPathSearchPaths
+    finalAttrs.LuaCPathSearchPaths;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ readline ];
@@ -132,6 +136,9 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua-${luaversion}.pc"
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
+
+    # Make documentation outputs of different versions co-installable.
+    mv $out/share/doc/lua $out/share/doc/lua-${version}
   '';
 
   # copied from python
@@ -146,7 +153,7 @@ stdenv.mkDerivation rec {
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
     luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
     luaOnHostForHost = override pkgsHostHost.${luaAttr};
-    luaOnTargetForTarget = if lib.hasAttr luaAttr pkgsTargetTarget then (override pkgsTargetTarget.${luaAttr}) else {};
+    luaOnTargetForTarget = lib.optionalAttrs (lib.hasAttr luaAttr pkgsTargetTarget) (override pkgsTargetTarget.${luaAttr});
   };
 
   meta = {
@@ -163,4 +170,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

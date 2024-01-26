@@ -4,12 +4,13 @@
 , fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, xz, dejagnu, sourceHighlight, libiconv
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
 , hostCpuOnly ? false
+, enableSim ? false
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
@@ -29,11 +30,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "13.1";
+  version = "14.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-EVrVwY1ppr4qsViC02XdoqIhHBT0gLNQLG66V24ulaA=";
+    hash = "sha256-1m31EnYUNFH8v/RkzIcj1o8enfRaai1WNaVOcWQ+24A=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -48,22 +49,17 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
-
-    # Backport musl fix
-    (fetchpatch {
-      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=2e977d9901393ea1bacbe1896af0929e968bc811";
-      hash = "sha256-/+UYjiOxrszJy1x8xavs63/ptNZ+ISIAQhG+i86VDpA=";
-    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd guile sourceHighlight ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd xz guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
-    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
+    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -118,7 +114,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
-    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
+    ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
+    ++ lib.optional (!enableSim) "--disable-sim";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

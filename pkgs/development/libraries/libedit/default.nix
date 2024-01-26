@@ -14,6 +14,17 @@ stdenv.mkDerivation rec {
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   # NROFF = "${groff}/bin/nroff";
 
+  # GCC automatically include `stdc-predefs.h` while Clang does not do
+  # this by default. While Musl is ISO 10646 compliant, doesn't define
+  # __STDC_ISO_10646__. This definition is in `stdc-predefs.h` that's
+  # why libedit builds just fine with GCC and Musl.
+  # There is a DR to fix this issue with Clang which is not merged
+  # yet.
+  # https://reviews.llvm.org/D137043
+  env.NIX_CFLAGS_COMPILE =
+    lib.optionalString (stdenv.targetPlatform.isMusl && stdenv.cc.isClang)
+      "-D__STDC_ISO_10646__=201103L";
+
   patches = [ ./01-cygwin.patch ];
 
   propagatedBuildInputs = [ ncurses ];

@@ -19,13 +19,13 @@ let
   aliceUsername = "alice";
   aliceUserId = "2";
   alicePassword = "R5twyCgU0uXC71wT9BBTCqLs6HFZ7h3L";
-  aliceProjectId = "2";
+  aliceProjectId = "1";
   aliceProjectName = "test-alice";
 
   bobUsername = "bob";
   bobUserId = "3";
   bobPassword = "XwkkBbl2SiIwabQzgcoaTbhsotijEEtF";
-  bobProjectId = "3";
+  bobProjectId = "2";
 in {
   name = "gitlab";
   meta.maintainers = with lib.maintainers; [ globin yayayayaka ];
@@ -34,7 +34,7 @@ in {
     gitlab = { ... }: {
       imports = [ common/user-account.nix ];
 
-      virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
+      virtualisation.memorySize = 6144;
       virtualisation.cores = 4;
       virtualisation.useNixStoreImage = true;
       virtualisation.writableStore = false;

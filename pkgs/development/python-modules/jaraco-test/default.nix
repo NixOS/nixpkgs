@@ -5,10 +5,10 @@
 , setuptools
 , setuptools-scm
 , toml
-, jaraco_functools
+, jaraco-functools
 , jaraco-context
 , more-itertools
-, jaraco_collections
+, jaraco-collections
 , pytestCheckHook
 }:
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     toml
-    jaraco_functools
+    jaraco-functools
     jaraco-context
     more-itertools
-    jaraco_collections
+    jaraco-collections
   ];
 
   nativeCheckInputs = [

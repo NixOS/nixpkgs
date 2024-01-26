@@ -8,18 +8,15 @@
 , gtk3
 , nemo
 , gnome
+, cinnamon-translations
 }:
 
+let
+  srcs = import ../srcs.nix { inherit fetchFromGitHub; };
+in
 stdenv.mkDerivation rec {
   pname = "nemo-fileroller";
-  version = "5.6.1";
-
-  src = fetchFromGitHub {
-    owner = "linuxmint";
-    repo = "nemo-extensions";
-    rev = "nemo-fileroller-${version}";
-    sha256 = "sha256-dPmAHuJ0ZRTAwhnMMZEu1e9+qZRYCnlaaoCdUP45W+s=";
-  };
+  inherit (srcs) version src;
 
   sourceRoot = "${src.name}/nemo-fileroller";
 
@@ -37,7 +34,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/nemo-fileroller.c \
-      --replace "file-roller" "${lib.getExe gnome.file-roller}"
+      --replace "file-roller" "${lib.getExe gnome.file-roller}" \
+      --replace "GNOMELOCALEDIR" "${cinnamon-translations}/share/locale"
   '';
 
   PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";

@@ -1,28 +1,61 @@
-{ lib, stdenv, fetchurl, pkg-config, nixosTests
-, boost, yaml-cpp, libsodium, sqlite, protobuf, openssl, systemd
-, mariadb-connector-c, postgresql, lua, openldap, geoip, curl, unixODBC, lmdb, tinycdb
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, nixosTests
+, boost
+, yaml-cpp
+, libsodium
+, sqlite
+, protobuf
+, openssl
+, systemd
+, mariadb-connector-c
+, postgresql
+, lua
+, openldap
+, geoip
+, curl
+, unixODBC
+, lmdb
+, tinycdb
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.7.4";
+  version = "4.8.4";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    hash = "sha256-dGndgft98RGX9JY4+knO/5+XMiX8j5xxYLC/wAoudHE=";
+    url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-f0DIy8RlDQb+Sau6eZAuurs4Q2Pau9XO8nGWSgfDZFw=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    boost mariadb-connector-c postgresql lua openldap sqlite protobuf geoip
-    yaml-cpp libsodium curl unixODBC openssl systemd lmdb tinycdb
+    boost
+    mariadb-connector-c
+    postgresql
+    lua
+    openldap
+    sqlite
+    protobuf
+    geoip
+    yaml-cpp
+    libsodium
+    curl
+    unixODBC
+    openssl
+    systemd
+    lmdb
+    tinycdb
   ];
 
   # Configure phase requires 64-bit time_t even on 32-bit platforms.
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.is32bit [
-    "-D_TIME_BITS=64" "-D_FILE_OFFSET_BITS=64"
+    "-D_TIME_BITS=64"
+    "-D_FILE_OFFSET_BITS=64"
   ]);
 
   configureFlags = [
@@ -36,6 +69,7 @@ stdenv.mkDerivation rec {
     "--with-libsodium"
     "--with-sqlite3"
     "--with-libcrypto=${openssl.dev}"
+    "sysconfdir=/etc/pdns"
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -45,6 +79,11 @@ stdenv.mkDerivation rec {
       "--with-dynmodules=bind geoip gmysql godbc gpgsql gsqlite3 ldap lmdb lua2 pipe remote tinydns"
     )
   '';
+
+  # We want the various utilities to look for the powerdns config in
+  # /etc/pdns, but to actually install the sample config file in
+  # $out
+  installFlags = [ "sysconfdir=$(out)/etc/pdns" ];
 
   enableParallelBuilding = true;
   doCheck = true;
@@ -61,4 +100,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ mic92 disassembler nickcao ];
   };
-}
+})

@@ -670,7 +670,7 @@
     },
     "netsnmp": {
       "attrPath": [
-        "net_snmp"
+        "net-snmp"
       ]
     },
     "nix-cmd": {
@@ -766,16 +766,6 @@
     "python": {
       "attrPath": [
         "python3"
-      ]
-    },
-    "ruby-2.7": {
-      "attrPath": [
-        "ruby_2_7"
-      ]
-    },
-    "ruby-3.0": {
-      "attrPath": [
-        "ruby_3_0"
       ]
     },
     "ruby-3.1": {

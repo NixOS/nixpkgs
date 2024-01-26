@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
@@ -20,30 +21,30 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Fixes build with Musl.
-    (fetchurl {
+    (fetchpatch {
       url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/GLIBC-PREREQ-is-not-defined-on-musl.patch";
-      sha256 = "gUfXQ9OZQ82qD6brgauBCsKdjLvyHafMc18B+KxZoYs=";
+      hash = "sha256-Oo5FSBPPBaOziWEBOlRmTmbulExMsAmQWBR5faOj1a0=";
     })
 
     # Fixes build with Musl.
-    (fetchurl {
+    (fetchpatch {
       url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/0001-mallinfo-is-glibc-specific-API-mark-it-so.patch";
-      sha256 = "fhorfqO1hHKZ61uq+yTR7eQ8KYdyLwpM3K7WpwJpV74=";
+      hash = "sha256-xp8J/il855VTFIKCN/bFtf+vif6HzcVl4t4/L9nW/xk=";
     })
 
     # Fixes build with upcoming gcc-13:
     #  https://github.com/oneapi-src/oneTBB/pull/833
-    (fetchurl {
+    (fetchpatch {
       name = "gcc-13.patch";
       url = "https://github.com/oneapi-src/oneTBB/pull/833/commits/c18342ba667d1f33f5e9a773aa86b091a9694b97.patch";
-      sha256 = "ZUExE3nsW80Z5GPWZnDNuDiHHaD1EF7qNl/G5M+Wcxg=";
+      hash = "sha256-LWgf7Rm6Zp4TJdvMqnAkoAebbVS+WV2kB+4iY6jRka4=";
     })
 
     # Fixes build for aarch64-darwin
-    (fetchurl {
+    (fetchpatch {
       name = "aarch64-darwin.patch";
       url = "https://github.com/oneapi-src/oneTBB/pull/258/commits/86f6dcdc17a8f5ef2382faaef860cfa5243984fe.patch";
-      sha256 = "sha256-JXqrFPCb3q1vfxk752tQu7HhApCB4YH2LoVnGRwmspk=";
+      hash = "sha256-+sNU8yEsVVmQYOCKmlNiyJfKmB/U0GKAmrydwkfrDFQ=";
     })
   ];
 

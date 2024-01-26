@@ -24,11 +24,11 @@ jobs:
     - name: print list of changed files
       run: |
         cat "$HOME/changed_files"
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       with:
         # pull_request_target checks out the base branch by default
         ref: refs/pull/${{ github.event.pull_request.number }}/merge
-    - uses: cachix/install-nix-action@v20
+    - uses: cachix/install-nix-action@6004951b182f8860210c8d6f0d808ec5b1a33d28 # v25
       with:
         # nixpkgs commit is pinned so that it doesn't break
         # editorconfig-checker 2.4.0

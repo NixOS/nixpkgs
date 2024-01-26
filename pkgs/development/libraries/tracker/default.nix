@@ -3,12 +3,13 @@
 , fetchurl
 , gettext
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , asciidoc
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , python3
 , gi-docgen
@@ -31,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.5.1";
+  version = "3.6.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+XLVCse6/czxE7HrmdyuNUBGhameVb/vFvOsg7Tel00=";
+    sha256 = "Ulks/hm6/9FtvkdHW+fadQ29C2Mz/XrLYPqp2lvEDfI=";
   };
 
   strictDeps = true;
@@ -56,10 +57,12 @@ stdenv.mkDerivation rec {
     wrapGAppsNoGuiHook
     gi-docgen
     graphviz
-    (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [

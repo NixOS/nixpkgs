@@ -14,11 +14,11 @@ $a}
 }
 
 # form an attrmap per package
-# ignore packages whose name contains "." (such as binaries)
-:next-package
+# ignore packages whose name contains "." (such as binaries) except for texlive.infra
 /^name ([^.]+|texlive\.infra)$/,/^$/{
-  # quote package names, as some start with a number :-/
-  s/^name (.*)$/"\1" = {/p
+  # quote invalid names
+  s/^name ([0-9].*|texlive\.infra)$/"\1" = {/p
+  s/^name (.*)$/\1 = {/p
 
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
@@ -36,34 +36,94 @@ $a}
   /^catalogue-version/s/[\#,:\(\)]//g
   s/^catalogue-version_(.*)/  version = "\1";/p
 
+  /^catalogue-license/{
+    # wrap licenses in quotes
+    s/ ([^ ]+)/ "\1"/g
+    # adjust naming as in nixpkgs, the full texts of the licenses are available at https://www.ctan.org/license/${licenseName}
+    s/"(cc-by(-sa)?-[1-4])"/"\10"/g
+    s/"apache2"/"asl20"/g
+    s/"artistic"/"artistic1-cl8"/g
+    s/"bsd"/"bsd3"/g          # license text does not match exactly, but is pretty close
+    s/"bsd4"/"bsdOriginal"/g
+    s/"collection"/"free"/g   # used for collections of individual packages with distinct licenses. As TeXlive only contains free software, we can use "free" as a catchall
+    s/"fdl"/"fdl13Only"/g
+    s/"gpl1?"/"gpl1Only"/g
+    s/"gpl2\+"/"gpl2Plus"/g
+    s/"gpl3\+"/"gpl3Plus"/g
+    s/"lgpl"/"lgpl2"/g
+    s/"lgpl2\.1"/"lgpl21"/g
+    s/"lppl"/"lppl13c"/g      # not used consistently, sometimes "lppl" refers to an older version of the license
+    s/"lppl1\.2"/"lppl12"/g
+    s/"lppl1\.3"/"lppl13c"/g  # If a work refers to LPPL 1.3 as its license, this is interpreted as the latest version of the 1.3 license (https://www.latex-project.org/lppl/)
+    s/"lppl1\.3a"/"lppl13a"/g
+    s/"lppl1\.3c"/"lppl13c"/g
+    s/"other-free"/"free"/g
+    s/"opl"/"opubl"/g
+    s/"pd"/"publicDomain"/g
+
+    s/^catalogue-license (.*)/  license = [ \1 ];/p
+  }
+
   # extract deps
-  /^depend [^.]+$/{
-    s/^depend (.+)$/  deps = [\n    "\1"/
+  /^depend ([^.]+|texlive\.infra)$/{
+    # open a list
+    i\  deps = [
 
     # loop through following depend lines
-    :next
-      h ; N     # save & read next line
-      s/\ndepend ([^.]+|texlive\.infra)$/\n    "\1"/
-      s/\ndepend (.+)$//
-      t next    # loop if the previous lines matched
+    :next-dep
+      s/^\n?depend ([^.]+|texlive\.infra)$/    "\1"/p # print dep
+      s/^.*$//                                        # clear pattern space
+      N; /^\ndepend /b next-dep
 
-    x; s/$/\n  ];/p ; x     # print saved deps
-    s/^.*\n//   # remove deps, resume processing
+    # close the list
+    i\  ];
+    D # restart cycle from the current line
   }
 
   # detect presence of notable files
-  /^runfiles /{
-    s/^runfiles .*$//  # ignore the first line
-    :next-file
-      h ; N            # save to hold space & read next line
-      s!\n (.+)$! \1!  # save file name
-      t next-file      # loop if the previous lines matched
+  /^docfiles /{
+    s/^.*$//  # ignore the first line
 
-    x                  # work on saved lines in hold space
+    # read all files
+    :next-doc
+      N
+      s/\n / /   # remove newline
+      t next-doc # loop if the previous lines matched
+
+    / (texmf-dist|RELOC)\/doc\/man\//i\  hasManpages = true;
+    / (texmf-dist|RELOC)\/doc\/info\//i\  hasInfo = true;
+
+    D # restart cycle
+  }
+
+  /^runfiles /{
+    s/^.*$//  # ignore the first line
+
+    # read all files
+    :next-file
+      N
+      s/\n / /    # remove newline
+      t next-file # loop if previous line matched
+    s/\n/ \n/     # add space before last newline for accurate matching below
+
     / (RELOC|texmf-dist)\//i\  hasRunfiles = true;
     / tlpkg\//i\  hasTlpkg = true;
-    x                  # restore pattern space
-    s/^.*\n//          # remove saved lines, resume processing
+
+    # extract script extensions
+    / texmf-dist\/scripts\/.*\.(jar|lua|py|rb|sno|tcl|texlua|tlu) /{
+      i\  scriptExts = [
+        / texmf-dist\/scripts\/.*\.jar /i\    "jar"
+        / texmf-dist\/scripts\/.*\.lua /i\    "lua"
+        / texmf-dist\/scripts\/.*\.py /i\    "py"
+        / texmf-dist\/scripts\/.*\.rb /i\    "rb"
+        / texmf-dist\/scripts\/.*\.sno /i\    "sno"
+        / texmf-dist\/scripts\/.*\.tcl /i\    "tcl"
+        / texmf-dist\/scripts\/.*\.texlua /i\    "texlua"
+        / texmf-dist\/scripts\/.*\.tlu /i\    "tlu"
+      i\  ];
+    }
+
+    D # restart cycle from the current line
   }
 
   # extract postaction scripts (right now, at most one per package, so a string suffices)
@@ -72,11 +132,50 @@ $a}
   # extract hyphenation patterns and formats
   # (this may create duplicate lines, use uniq to remove them)
   /^execute\sAddHyphen/i\  hasHyphens = true;
-  /^execute\sAddFormat/i\  hasFormats = true;
+
+  # extract format details
+  /^execute\sAddFormat\s/{
+    # open a list
+    i\  formats = [
+
+    # create one attribute set per format
+    # note that format names are not unique
+
+    # plain keys: name, engine, patterns
+    # optionally double quoted key: options
+    # boolean key: mode (enabled/disabled)
+    # comma-separated lists: fmttriggers, patterns
+    :next-fmt
+      s/(^|\n)execute\sAddFormat/    {/
+      s/\s+options="([^"]+)"/\n      options = "\1";/
+      s/\s+(name|engine|options)=([^ \t\n]+)/\n      \1 = "\2";/g
+      s/\s+mode=enabled//
+      s/\s+mode=disabled/\n      enabled = false;/
+      s/\s+(fmttriggers|patterns)=([^ \t\n]+)/\n      \1 = [ "\2" ];/g
+      s/$/\n    }/
+
+      :split-triggers
+        s/"([^,]+),([^"]+)" ]/"\1" "\2" ]/;
+        t split-triggers   # repeat until there are no commas
+
+      p
+      s/^.*$// # clear pattern space
+      N
+      /^\nexecute\sAddFormat\s/b next-fmt
+
+    # close the list
+    i\  ];
+    D # restart cycle from the current line
+  }
 
   # close attrmap
-  /^$/{
-    i};
-    b next-package
-  }
+  /^$/i};
+}
+
+# add list of binaries from one of the architecture-specific packages
+/^name ([^.]+|texlive\.infra)\.x86_64-linux$/,/^$/{
+  s/^name ([0-9].*|texlive\.infra)\.x86_64-linux$/"\1".binfiles = [/p
+  s/^name (.*)\.x86_64-linux$/\1.binfiles = [/p
+  s!^ bin/x86_64-linux/(.+)$!  "\1"!p
+  /^$/i];
 }

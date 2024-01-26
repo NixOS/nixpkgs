@@ -1,27 +1,25 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, python3
+, nodejs_18
 , nixosTests
 , nix-update-script
 }:
 
 buildNpmPackage rec {
   pname = "zigbee2mqtt";
-  version = "1.30.4";
+  version = "1.35.1";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    hash = "sha256-jS5O52frZY+OVLtMZkjZQskKuHs5T8zKTwjGKh77EAo=";
+    hash = "sha256-ZOIV7PLBnPbisIStC+MNMZgf+Hw/+n4lONpgomRkZEE=";
   };
 
-  npmDepsHash = "sha256-71BbMBt0vXsuL8senZ7IvT3Y3OtvewQtWk1bzKUBtjI=";
+  npmDepsHash = "sha256-2WSuc9bmt5kK477c3AMOLFguvXZ2Nl+Qb67j5k7eL3o=";
 
-  nativeBuildInputs = [
-    python3
-  ];
+  nodejs = nodejs_18;
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
   passthru.updateScript = nix-update-script { };
@@ -39,5 +37,6 @@ buildNpmPackage rec {
     '';
     maintainers = with maintainers; [ sweber hexa ];
     platforms = platforms.linux;
+    mainProgram = "zigbee2mqtt";
   };
 }

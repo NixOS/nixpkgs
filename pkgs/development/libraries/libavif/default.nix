@@ -8,17 +8,24 @@
 , libjpeg
 , dav1d
 , libyuv
+, gdk-pixbuf
+, makeWrapper
 }:
+
+let
+  gdkPixbufModuleDir = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+  gdkPixbufModuleFile = "${placeholder "out"}/${gdk-pixbuf.binaryDir}/avif-loaders.cache";
+in
 
 stdenv.mkDerivation rec {
   pname = "libavif";
-  version = "0.11.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mUi0DU99XV3FzUZ8/9uJZU+W3fc6Bk6+y6Z78IRZ9Qs=";
+    hash = "sha256-0MLr9wdIs3c4pOAF4rlC8QNQXlrK3YGXILS9foVKfVM=";
   };
 
   # reco: encode libaom slowest but best, decode dav1d fastest
@@ -29,14 +36,18 @@ stdenv.mkDerivation rec {
     "-DAVIF_CODEC_DAV1D=ON" # best decoder (fast)
     "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
+    "-DAVIF_BUILD_GDK_PIXBUF=ON"
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    gdk-pixbuf
+    makeWrapper
   ];
 
   buildInputs = [
+    gdk-pixbuf
     libaom
     zlib
     libpng
@@ -44,6 +55,26 @@ stdenv.mkDerivation rec {
     dav1d
     libyuv
   ];
+
+  postPatch = ''
+    substituteInPlace contrib/gdk-pixbuf/avif.thumbnailer.in \
+      --replace '@CMAKE_INSTALL_FULL_BINDIR@/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-avif"
+  '';
+
+  env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = gdkPixbufModuleDir;
+
+  postInstall = ''
+    GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
+    GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
+    gdk-pixbuf-query-loaders --update-cache
+
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
+      --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
+  '';
 
   meta = with lib; {
     description  = "C implementation of the AV1 Image File Format";

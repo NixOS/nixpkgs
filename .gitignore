@@ -5,10 +5,12 @@
 .\#*
 \#*\#
 .idea/
+.nixos-test-history
 .vscode/
 outputs/
 result-*
 result
+repl-result-*
 !pkgs/development/python-modules/result
 /doc/NEWS.html
 /doc/NEWS.txt

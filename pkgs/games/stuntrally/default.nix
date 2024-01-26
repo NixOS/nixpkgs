@@ -3,7 +3,7 @@
 , stdenv
 , cmake
 , boost
-, ogre
+, ogre_13
 , mygui
 , ois
 , SDL2
@@ -19,7 +19,7 @@
 }:
 
 let
-  stuntrally_ogre = ogre.overrideAttrs (old: {
+  stuntrally_ogre = ogre_13.overrideAttrs (old: {
     cmakeFlags = old.cmakeFlags ++ [
       "-DOGRE_NODELESS_POSITIONING=ON"
       "-DOGRE_RESOURCEMANAGER_STRICT=0"
@@ -27,7 +27,7 @@ let
   });
   stuntrally_mygui = mygui.override {
     withOgre = true;
-    inherit ogre;
+    ogre = stuntrally_ogre;
   };
 in
 
@@ -47,6 +47,13 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-fglm1FetFGHM/qGTtpxDb8+k2iAREn5DQR5GPujuLms=";
   };
+
+  postPatch = ''
+    substituteInPlace config/*-default.cfg \
+      --replace "screenshot_png = off" "screenshot_png = on"
+    substituteInPlace source/*/BaseApp_Create.cpp \
+      --replace "Codec_FreeImage" "Codec_STBI"
+  '';
 
   preConfigure = ''
     rmdir data/tracks

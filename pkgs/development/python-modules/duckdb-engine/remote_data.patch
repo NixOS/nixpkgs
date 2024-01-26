@@ -1,0 +1,24 @@
+diff --git a/duckdb_engine/tests/test_basic.py b/duckdb_engine/tests/test_basic.py
+index 302636f..ed20f12 100644
+--- a/duckdb_engine/tests/test_basic.py
++++ b/duckdb_engine/tests/test_basic.py
+@@ -183,7 +183,6 @@ def test_get_views(engine: Engine) -> None:
+ 
+ 
+ @mark.skipif(os.uname().machine == "aarch64", reason="not supported on aarch64")
+-@mark.remote_data
+ def test_preload_extension() -> None:
+     duckdb.default_connection.execute("INSTALL httpfs")
+     engine = create_engine(
+diff --git a/duckdb_engine/tests/test_integration.py b/duckdb_engine/tests/test_integration.py
+index 349c976..bf3dbaa 100644
+--- a/duckdb_engine/tests/test_integration.py
++++ b/duckdb_engine/tests/test_integration.py
+@@ -24,7 +24,6 @@ def test_integration(engine: Engine) -> None:
+         conn.execute(text("select * from test_df"))
+ 
+ 
+-@mark.remote_data
+ @mark.skipif(
+     "dev" in duckdb.__version__, reason="md extension not available for dev builds"  # type: ignore[attr-defined]
+ )

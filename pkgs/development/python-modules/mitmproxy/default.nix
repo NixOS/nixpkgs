@@ -1,8 +1,11 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, pythonRelaxDepsHook
   # Mitmproxy requirements
+, aioquic
 , asgiref
 , blinker
 , brotli
@@ -14,7 +17,8 @@
 , hyperframe
 , kaitaistruct
 , ldap3
-, mitmproxy-wireguard
+, mitmproxy-macos
+, mitmproxy-rs
 , msgpack
 , passlib
 , protobuf
@@ -26,7 +30,7 @@
 , setuptools
 , sortedcontainers
 , tornado
-, urwid
+, urwid-mitmproxy
 , wsproto
 , zstandard
   # Additional check requirements
@@ -41,19 +45,28 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "9.0.1";
+  version = "10.2.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-CINKvRnBspciS+wefJB8gzBE13L8CjbYCkmLmTTeYlA=";
+    hash = "sha256-oxhpaFW++on3eRXm0anXZDRo6g/X5IflTcZkFF8Kcps=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "aioquic"
+  ];
+
   propagatedBuildInputs = [
-    setuptools
-    # setup.py
+    aioquic
     asgiref
     blinker
     brotli
@@ -65,20 +78,23 @@ buildPythonPackage rec {
     hyperframe
     kaitaistruct
     ldap3
-    mitmproxy-wireguard
+    mitmproxy-rs
     msgpack
     passlib
     protobuf
-    pyopenssl
     publicsuffix2
+    pyopenssl
     pyparsing
     pyperclip
     ruamel-yaml
+    setuptools
     sortedcontainers
     tornado
-    urwid
+    urwid-mitmproxy
     wsproto
     zstandard
+  ] ++ lib.optionals stdenv.isDarwin [
+    mitmproxy-macos
   ];
 
   nativeCheckInputs = [
@@ -91,10 +107,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  postPatch = ''
-    # remove dependency constraints
-    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
-  '';
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -105,20 +118,14 @@ buildPythonPackage rec {
     "test_get_version"
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
-    "test_integration"
+    "test_commands_exist"
     "test_contentview_flowview"
     "test_flowview"
-    # ValueError: Exceeds the limit (4300) for integer string conversion
-    "test_roundtrip_big_integer"
-
-    "test_wireguard"
-    "test_commands_exist"
+    "test_integration"
     "test_statusbar"
-  ];
-
-  disabledTestPaths = [
-    # teardown of half the tests broken
-    "test/mitmproxy/addons/test_onboarding.py"
+    # FileNotFoundError: [Errno 2] No such file or directory
+    # likely wireguard is also not working in the sandbox
+    "test_wireguard"
   ];
 
   dontUsePytestXdist = true;
@@ -128,7 +135,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

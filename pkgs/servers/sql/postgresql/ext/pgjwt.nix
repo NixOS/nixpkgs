@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, unstableGitUpdater }:
 
 stdenv.mkDerivation {
   pname = "pgjwt";
-  version = "unstable-2021-11-13";
+  version = "unstable-2023-03-02";
 
   src = fetchFromGitHub {
     owner  = "michelp";
     repo   = "pgjwt";
-    rev    = "9742dab1b2f297ad3811120db7b21451bca2d3c9";
-    sha256 = "sha256-Hw3R9bMGDmh+dMzjmqZSy/rT4mX8cPU969OJiARFg10=";
+    rev    = "f3d82fd30151e754e19ce5d6a06c71c20689ce3d";
+    sha256 = "sha256-nDZEDf5+sFc1HDcG2eBNQj+kGcdAYRXJseKi9oww+JU=";
   };
 
   dontBuild = true;
@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/postgresql/extension
     cp pg*sql *.control $out/share/postgresql/extension
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "PostgreSQL implementation of JSON Web Tokens";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
-  version = "2.5.8";
+  version = "2.5.11";
 
   src = fetchzip {
     url = "mirror://maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
-    sha256 = "sha256-Xn6uIHEsyIXA9ls0bZZHdW7aKcgdub9C6g7lQ853tiQ=";
+    sha256 = "sha256-Eagq8a6xTMonaiyhuuHc47pD8gE6jqWx7cZ3xJykmeQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];
+    mainProgram = "asciidoctorj";
   };
 }

@@ -10,6 +10,7 @@
 , packaging
 , psutil
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , setuptools
 , setuptools-scm
@@ -19,33 +20,38 @@
 , tornado
 , urllib3
 , versioneer
-, wheel
 , zict
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2023.4.1";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
+    repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-KCgftu3i8N0WSelHiqWqa1vLN5gUtleftSUx1Zu4nZg=";
+    hash = "sha256-Zv31BTzY31eXkU7wqa+h33qGrH+OTzKEj6L7Ei/aizk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace "versioneer[toml]==" "versioneer[toml]>=" \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer
+  ] ++ versioneer.optional-dependencies.toml;
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   propagatedBuildInputs = [
@@ -78,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://distributed.readthedocs.io/";
     changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh costrouc ];
+    maintainers = with maintainers; [ teh ];
   };
 }

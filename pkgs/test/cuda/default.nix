@@ -1,28 +1,51 @@
-{ callPackage }:
+{
+  lib,
+  recurseIntoAttrs,
 
-rec {
-  cuda-samplesPackages = callPackage ./cuda-samples { };
-  inherit (cuda-samplesPackages)
-    cuda-samples_cudatoolkit_10
-    cuda-samples_cudatoolkit_10_0
-    cuda-samples_cudatoolkit_10_1
-    cuda-samples_cudatoolkit_10_2
-    cuda-samples_cudatoolkit_11
-    cuda-samples_cudatoolkit_11_0
-    cuda-samples_cudatoolkit_11_1
-    cuda-samples_cudatoolkit_11_2
-    cuda-samples_cudatoolkit_11_3
-    cuda-samples_cudatoolkit_11_4;
+  cudaPackages,
+  cudaPackagesGoogle,
 
-  cuda-library-samplesPackages = callPackage ./cuda-library-samples { };
-  inherit (cuda-library-samplesPackages)
-    cuda-library-samples_cudatoolkit_10
-    cuda-library-samples_cudatoolkit_10_1
-    cuda-library-samples_cudatoolkit_10_2
-    cuda-library-samples_cudatoolkit_11
-    cuda-library-samples_cudatoolkit_11_0
-    cuda-library-samples_cudatoolkit_11_1
-    cuda-library-samples_cudatoolkit_11_2
-    cuda-library-samples_cudatoolkit_11_3
-    cuda-library-samples_cudatoolkit_11_4;
-}
+  cudaPackages_10_0,
+  cudaPackages_10_1,
+  cudaPackages_10_2,
+  cudaPackages_10,
+
+  cudaPackages_11_0,
+  cudaPackages_11_1,
+  cudaPackages_11_2,
+  cudaPackages_11_3,
+  cudaPackages_11_4,
+  cudaPackages_11_5,
+  cudaPackages_11_6,
+  cudaPackages_11_7,
+  cudaPackages_11_8,
+  cudaPackages_11,
+
+  cudaPackages_12_0,
+  cudaPackages_12_1,
+  cudaPackages_12_2,
+  cudaPackages_12_3,
+  cudaPackages_12,
+}@args:
+
+let
+  isTest =
+    name: package:
+    builtins.elem (package.pname or null) [
+      "cuda-samples"
+      "cuda-library-samples"
+      "saxpy"
+    ];
+in
+(lib.trivial.pipe args [
+  (lib.filterAttrs (name: _: lib.hasPrefix "cudaPackages" name))
+  (lib.mapAttrs (
+    _: ps:
+    lib.pipe ps [
+      (lib.filterAttrs isTest)
+      (as: as // { __attrsFailEvaluation = true; })
+      recurseIntoAttrs
+    ]
+  ))
+  recurseIntoAttrs
+])

@@ -6,6 +6,7 @@
 , numba
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -25,14 +26,13 @@ buildPythonPackage rec {
     numba
   ];
 
-  postPatch = ''
-    # https://github.com/numba/numba-scipy/pull/76
-    substituteInPlace setup.py \
-      --replace "scipy>=0.16,<=1.7.3" "scipy>=0.16"
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
+    pythonRelaxDepsHook
+  ];
+  pythonRelaxDeps = [
+    "scipy"
+    "numba"
   ];
 
   pythonImportsCheck = [

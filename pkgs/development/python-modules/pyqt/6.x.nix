@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , pkg-config
 , dbus
@@ -15,9 +14,7 @@
 , pythonOlder
 , withMultimedia ? true
 , withWebSockets ? true
-# FIXME: Once QtLocation is available for Qt6 enable this
-# https://bugreports.qt.io/browse/QTBUG-96795
-#, withLocation ? true
+, withLocation ? true
 # Not currently part of PyQt6
 #, withConnectivity ? true
 , withPrintSupport ? true
@@ -26,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "PyQt6";
-  version = "6.5.0";
+  version = "6.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uXy0vpssiZeQTqZozzsKSuWCIZb3eSWQ0F7N5iFqn7w=";
+    hash = "sha256-nxWKop0gUULFbw810HeEuN8L4oN40gqXvNqL1k/9A3k=";
   };
 
   patches = [
@@ -83,7 +80,7 @@ buildPythonPackage rec {
   # ++ lib.optional withConnectivity qtconnectivity
   ++ lib.optional withMultimedia qtmultimedia
   ++ lib.optional withWebSockets qtwebsockets
-  # ++ lib.optional withLocation qtlocation
+  ++ lib.optional withLocation qtlocation
   ;
 
   buildInputs = with qt6Packages; [
@@ -97,7 +94,7 @@ buildPythonPackage rec {
   ]
   # ++ lib.optional withConnectivity qtconnectivity
   ++ lib.optional withWebSockets qtwebsockets
-  # ++ lib.optional withLocation qtlocation
+  ++ lib.optional withLocation qtlocation
   ;
 
   propagatedBuildInputs = [
@@ -132,8 +129,10 @@ buildPythonPackage rec {
   ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
   ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-  # ++ lib.optional withLocation "PyQt6.QtPositioning"
+  ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
 
   meta = with lib; {
     description = "Python bindings for Qt6";

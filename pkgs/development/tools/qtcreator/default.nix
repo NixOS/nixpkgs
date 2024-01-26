@@ -1,96 +1,104 @@
-{ mkDerivation, lib, fetchurl, fetchgit, fetchpatch
-, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake, llvmPackages_8, elfutils, perf
-, withDocumentation ? false, withClangPlugins ? true
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, ninja
+, python3
+, qtbase
+, qt5compat
+, qtdeclarative
+, qtdoc
+, qtquick3d
+, qtquicktimeline
+, qtserialport
+, qtsvg
+, qttools
+, qtwebengine
+, qtwayland
+, qtshadertools
+, wrapQtAppsHook
+, yaml-cpp
+, litehtml
+, gumbo
+, llvmPackages
+, rustc-demangle
+, elfutils
+, perf
 }:
 
-let
-  # Fetch clang from qt vendor, this contains submodules like this:
-  # clang<-clang-tools-extra<-clazy.
-  clang_qt_vendor = llvmPackages_8.clang-unwrapped.overrideAttrs (oldAttrs: {
-    # file RPATH_CHANGE could not write new RPATH
-    cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
-    src = fetchgit {
-      url = "https://code.qt.io/clang/clang.git";
-      rev = "c12b012bb7465299490cf93c2ae90499a5c417d5";
-      sha256 = "0mgmnazgr19hnd03xcrv7d932j6dpz88nhhx008b0lv4bah9mqm0";
-    };
-    unpackPhase = "";
-  });
-in
-
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "5.0.3";
-  baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
+  version = "12.0.1";
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "1sz21ijzvhf5avblikffykbqa8zdq3sbg32g2dmyxv5w211v3lvz";
+    url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    hash = "sha256-ZvuSws7QkoKeMyHFoJEeLemDCdAxDnq5SaOaUCOOA/M=";
   };
 
-  buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++
-    lib.optionals withClangPlugins [ llvmPackages_8.libclang
-                                 clang_qt_vendor
-                                 llvmPackages_8.llvm ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    (qttools.override { withClang = true; })
+    wrapQtAppsHook
+    python3
+    ninja
+  ];
 
-  nativeBuildInputs = [ qmake ];
+  buildInputs = [
+    qtbase
+    qtdoc
+    qtsvg
+    qtquick3d
+    qtwebengine
+    qtwayland
+    qtserialport
+    qtshadertools
+    qt5compat
+    qtdeclarative
+    qtquicktimeline
+    yaml-cpp
+    litehtml
+    gumbo
+    llvmPackages.libclang
+    llvmPackages.llvm
+    rustc-demangle
+    elfutils
+  ];
 
-  # 0001-Fix-clang-libcpp-regexp.patch is for fixing regexp that is used to
-  # find clang libc++ library include paths. By default it's not covering paths
-  # like libc++-version, which is default name for libc++ folder in nixos.
-  # ./0002-Dont-remove-clang-header-paths.patch is for forcing qtcreator to not
-  # remove system clang include paths.
-  patches = [ ./0001-Fix-clang-libcpp-regexp.patch
-              ./0002-Dont-remove-clang-header-paths.patch ];
+  cmakeFlags = [
+    # workaround for missing CMAKE_INSTALL_DATAROOTDIR
+    # in pkgs/development/tools/build-managers/cmake/setup-hook.sh
+    "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
+    # qtdeclarative in nixpkgs does not provide qmlsc
+    # fix can't find Qt6QmlCompilerPlusPrivate
+    "-DQT_NO_FIND_QMLSC=TRUE"
+    "-DWITH_DOCS=ON"
+    "-DBUILD_DEVELOPER_DOCS=ON"
+    "-DBUILD_QBS=OFF"
+    "-DQTC_CLANG_BUILDMODE_MATCH=ON"
+    "-DCLANGTOOLING_LINK_CLANG_DYLIB=ON"
+  ];
 
-  doCheck = true;
-
-  buildFlags = lib.optional withDocumentation "docs";
-
-  installFlags = [ "INSTALL_ROOT=$(out)" ] ++ lib.optional withDocumentation "install_docs";
-
-  qtWrapperArgs = [ "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin" ];
-
-  preConfigure = ''
-    substituteInPlace src/plugins/plugins.pro \
-      --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
-    substituteInPlace src/libs/libs.pro \
-      --replace '$$[QT_INSTALL_QML]/QtQuick/Controls' '${qtquickcontrols}/${qtbase.qtQmlPrefix}/QtQuick/Controls'
-    '' + lib.optionalString withClangPlugins ''
-    # Fix paths for llvm/clang includes directories.
-    substituteInPlace src/shared/clang/clang_defines.pri \
-      --replace '$$clean_path($${LLVM_LIBDIR}/clang/$${LLVM_VERSION}/include)' '${clang_qt_vendor}/lib/clang/8.0.0/include' \
-      --replace '$$clean_path($${LLVM_BINDIR})' '${clang_qt_vendor}/bin'
-
-    # Fix paths to libclang library.
-    substituteInPlace src/shared/clang/clang_installation.pri \
-      --replace 'LIBCLANG_LIBS = -L$${LLVM_LIBDIR}' 'LIBCLANG_LIBS = -L${llvmPackages_8.libclang.lib}/lib' \
-      --replace 'LIBCLANG_LIBS += $${CLANG_LIB}' 'LIBCLANG_LIBS += -lclang' \
-      --replace 'LIBTOOLING_LIBS = -L$${LLVM_LIBDIR}' 'LIBTOOLING_LIBS = -L${clang_qt_vendor}/lib' \
-      --replace 'LLVM_CXXFLAGS ~= s,-gsplit-dwarf,' '${lib.concatStringsSep "\n" ["LLVM_CXXFLAGS ~= s,-gsplit-dwarf," "    LLVM_CXXFLAGS += -fno-rtti"]}'
-  '';
-
-  preBuild = lib.optionalString withDocumentation ''
-    ln -s ${lib.getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
-  '';
+  qtWrapperArgs = [
+    "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
+  ];
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp share/applications/org.qt-project.qtcreator.desktop $out/share/applications
     substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
       --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
     longDescription = ''
       Qt Creator is a cross-platform IDE (integrated development environment)
       tailored to the needs of Qt developers. It includes features such as an
       advanced code editor, a visual debugger and a GUI designer.
     '';
-    homepage = "https://wiki.qt.io/Category:Tools::QtCreator";
-    license = "LGPL";
-    maintainers = [ lib.maintainers.akaWolf ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    homepage = "https://wiki.qt.io/Qt_Creator";
+    license = licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
+    maintainers = [ maintainers.rewine ];
+    platforms = platforms.linux;
   };
 }

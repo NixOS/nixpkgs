@@ -24,7 +24,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
     inherit version sha256 patches;
     src = fetchFromGitHub {
       owner = "Z3Prover";
-      repo = pname;
+      repo = "z3";
       rev = "${tag}-${version}";
       sha256 = sha256;
     };
@@ -47,7 +47,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
 
     configurePhase = concatStringsSep " "
       (
-        [ "${python.pythonForBuild.interpreter} scripts/mk_make.py --prefix=$out" ]
+        [ "${python.pythonOnBuildForHost.interpreter} scripts/mk_make.py --prefix=$out" ]
           ++ optional javaBindings "--java"
           ++ optional ocamlBindings "--ml"
           ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
@@ -80,6 +80,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
     meta = with lib; {
       description = "A high-performance theorem prover and SMT solver";
       homepage = "https://github.com/Z3Prover/z3";
+      changelog = "https://github.com/Z3Prover/z3/releases/tag/z3-${version}";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ thoughtpolice ttuegel ];
@@ -87,9 +88,13 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
   };
 in
 {
+  z3_4_12 = common {
+    version = "4.12.4";
+    sha256 = "sha256-cxl7D47dRn+uMVOHbF0avj5+ZFWjaJ7lXj/8l6r9q2I=";
+  };
   z3_4_11 = common {
-    version = "4.11.0";
-    sha256 = "sha256-ItmtZHDhCeLAVtN7K80dqyAh20o7TM4xk2sTb9QgHvk=";
+    version = "4.11.2";
+    sha256 = "sha256-OO0wtCvSKwGxnKvu+AfXe4mEzv4nofa7A00BjX+KVjc=";
   };
   z3_4_8 = common {
     version = "4.8.17";

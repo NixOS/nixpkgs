@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiopvpc";
-  version = "4.1.0";
+  version = "4.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "azogue";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ixHLFVPlDZKQkPMrOt8PG5z+e84UlygQutkyS8wCZR4=";
+    hash = "sha256-k02lNjFjOcMfHa1jLJlMFUOOVrdTrACNoEXDSZ693K8=";
   };
 
   postPatch = ''

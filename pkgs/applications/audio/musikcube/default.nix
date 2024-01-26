@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    hash = "sha512-W+Zug1SiOGJ+o6FBf2jeDGHFj87vudR4drtjyXiOzdoM8fUCnCj4pp7+70eZGilg6CvBi7CYkbVn53LXJf5qWA==";
+    hash = "sha512-IakZy6XsAE39awjzQI+R11JCPeQSaibx6+uX8Iea5WdlCundeovnPwSAi6RzzZl9dr2UftzzEiF4Aun8VMtqVA==";
   };
 
   outputs = [ "out" "dev" ];
@@ -85,11 +85,11 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = with maintainers; [ aanderse srapenne afh ];
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ aanderse afh ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

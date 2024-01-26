@@ -3,6 +3,7 @@
 , pkgs
 , fetchFromGitHub
 , fetchurl
+, mpiCheckPhaseHook
 , which
 , openssh
 , gcc
@@ -53,13 +54,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.2.0";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    hash = "sha256-/biwHOSMGpdnYRGrGlDounKKLVaG2XkBgCmpE0IKR/Y=";
+    hash = "sha256-BcYRqPaPR24OTRY0MJgBxi46HvUG4uFaY0unZmu5b9k=";
   };
 
   nativeBuildInputs = [
@@ -104,6 +105,9 @@ stdenv.mkDerivation rec {
 
     # Overwrite script, skipping the download
     echo -e '#!/bin/sh\n cd ga-${versionGA};autoreconf -ivf' > src/tools/get-tools-github
+
+    # /usr/bin/env bash fails in sandbox/Makefile setting
+    substituteInPlace src/config/makefile.h --replace '/usr/bin/env bash' "${stdenv.shell}"
 
     patchShebangs ./
   '';
@@ -168,7 +172,6 @@ stdenv.mkDerivation rec {
     cp -r $NWCHEM_TOP/src/data $out/share/nwchem/
     cp -r $NWCHEM_TOP/src/basis/libraries $out/share/nwchem/data
     cp -r $NWCHEM_TOP/src/nwpw/libraryps $out/share/nwchem/data
-    cp -r $NWCHEM_TOP/QA $out/share/nwchem
 
     wrapProgram $out/bin/nwchem \
       --set-default NWCHEM_BASIS_LIBRARY $out/share/nwchem/data/libraries/
@@ -190,16 +193,15 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
+  nativeCheckInputs = [ mpiCheckPhaseHook ];
   installCheckPhase = ''
-    export OMP_NUM_THREADS=1
-
-    # Fix to make mpich run in a sandbox
-    export HYDRA_IFACE=lo
-    export OMPI_MCA_rmaps_base_oversubscribe=1
+    runHook preInstallCheck
 
     # run a simple water test
-    mpirun -np 2 $out/bin/nwchem $out/share/nwchem/QA/tests/h2o/h2o.nw > h2o.out
+    mpirun -np 2 $out/bin/nwchem $NWCHEM_TOP/QA/tests/h2o/h2o.nw > h2o.out
     grep "Total SCF energy" h2o.out  | grep 76.010538
+
+    runHook postInstallCheck
   '';
 
   passthru = { inherit mpi; };

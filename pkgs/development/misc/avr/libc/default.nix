@@ -15,8 +15,11 @@ stdenv.mkDerivation rec {
   stripDebugList = [ "bin" ];
   dontPatchELF = true;
 
+  enableParallelBuilding = true;
+
   passthru = {
     incdir = "/avr/include";
+    libdir = "/avr/lib";
   };
 
   meta = with lib; {

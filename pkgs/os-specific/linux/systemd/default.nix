@@ -5,7 +5,6 @@
 , nixosTests
 , pkgsCross
 , fetchFromGitHub
-, fetchpatch
 , fetchzip
 , buildPackages
 , makeBinaryWrapper
@@ -20,7 +19,6 @@
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
 , glib
-, substituteAll
 , gettext
 , python3Packages
 
@@ -52,10 +50,9 @@
 , intltool
 , bzip2
 , pcre2
-, e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, gnu-efi
+, gnutls
 , iptables
 , withSelinux ? false
 , libselinux
@@ -68,6 +65,8 @@
 , libmicrohttpd
 , libfido2
 , p11-kit
+, libpwquality
+, qrencode
 
   # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
   # Only libbpf should be a runtime dependency.
@@ -82,24 +81,39 @@
 , bpftools
 , libbpf
 
+  # Needed to produce a ukify that works for cross compiling UKIs.
+, targetPackages
+
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
+  # compiles systemd-boot, assumes EFI is available.
+, withBootloader ? withEfi
+    && !stdenv.hostPlatform.isMusl
+    # "Unknown 64-bit data model"
+    && !stdenv.hostPlatform.isRiscV32
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
+, withRepart ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
+, withFirstboot ? false # conflicts with the NixOS /etc management
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
+, withIptables ? true
 , withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
     && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # can't find gnu/stubs-32.h
+    && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
+    # https://reviews.llvm.org/D43106#1019077
+    && (stdenv.hostPlatform.isRiscV32 -> stdenv.cc.isClang)
     # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
     # but we do it this way to avoid taking llvmPackages as an input, and
     # risking making it too easy to ignore the above comment about llvmPackages.
@@ -112,20 +126,27 @@
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
 , withPam ? true
+, withPasswordQuality ? true
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
+, withQrencode ? true
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
+, withSysusers ? true
+, withSysupdate ? true
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
 , withUkify ? false  # adds python to closure which is too much by default
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
+, withVmspawn ? true
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
+  # build only libudev and libsystemd
+, buildLibsOnly ? false
 
   # name argument
 , pname ? "systemd"
@@ -134,24 +155,27 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , docbook_xml_dtd_45
+, withLogTrace ? false
 }:
 
 assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
-assert withUkify -> withEfi;
+assert withUkify -> (withEfi && withBootloader);
+assert withRepart -> withCryptsetup;
+assert withBootloader -> withEfi;
 
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.3";
+  version = "255.2";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1676488940";
+  releaseTimestamp = "1701895110";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -162,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-iy1kyqiVeXIhFJAQ+nYorrXm/xb2gfakyrEfMyNR5l8=";
+    hash = "sha256-8SfJY/pcH4yrDeJi0GfIUpetTbpMwyswvSu+RSfgqfY=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -174,27 +198,27 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
-    ./0004-fsck-look-for-fsck-binary-not-just-in-sbin.patch
-    ./0005-Add-some-NixOS-specific-unit-directories.patch
-    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
-    ./0008-Fix-hwdb-paths.patch
-    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-add-rootprefix-to-lookup-dir-paths.patch
-    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0016-pkg-config-derive-prefix-from-prefix.patch
-    ./0017-inherit-systemd-environment-when-calling-generators.patch
-    ./0018-core-don-t-taint-on-unmerged-usr.patch
-    ./0019-tpm2_context_init-fix-driver-name-checking.patch
+    ./0004-Add-some-NixOS-specific-unit-directories.patch
+    ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0007-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0008-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0009-add-rootprefix-to-lookup-dir-paths.patch
+    ./0010-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0011-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0012-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0013-inherit-systemd-environment-when-calling-generators.patch
+    ./0014-core-don-t-taint-on-unmerged-usr.patch
+    ./0015-tpm2_context_init-fix-driver-name-checking.patch
+    ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
+    ./0017-meson.build-do-not-create-systemdstatedir.patch
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
+    ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-f34f6ab04b443608497b73668365819343d0c2fe.tar.gz";
-        sha256 = "DFcLPvjQIxGEDADpP232ZRd7cOEKt6B48Ah29nIGTt4=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-eb8a86fee9eeae787cc0a58ef2ed087fd48d93eb.tar.gz";
+        sha256 = "tE2KpXLvOknIpEZFdOnNxvBmDvZrra3kvQp9tKxa51c=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
@@ -202,14 +226,12 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
       (musl-patches + "/0005-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
-      (musl-patches + "/0007-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0009-missing_type.h-add-comparison_fn_t.patch")
       (musl-patches + "/0010-add-fallback-parse_printf_format-implementation.patch")
       (musl-patches + "/0011-src-basic-missing.h-check-for-missing-strndupa.patch")
       (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
       (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
       (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
@@ -219,22 +241,24 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0022-Handle-__cpu_mask-usage.patch")
       (musl-patches + "/0023-Handle-missing-gshadow.patch")
       (musl-patches + "/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0026-src-boot-efi-efi-string.c-define-wchar_t-from-__WCHA.patch")
+      (musl-patches + "/0028-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
+      (musl-patches + "/0029-shared-Do-not-use-malloc_info-on-musl.patch")
     ]
   );
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
-    substituteInPlace src/boot/efi/meson.build \
-      --replace \
-      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
-      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + lib.optionalString withLibBPF ''
     substituteInPlace meson.build \
       --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
-    # BPF does not work with stack protector
-    substituteInPlace src/core/bpf/meson.build \
-      --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
+  '' + lib.optionalString withUkify ''
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'readelf'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
+      --replace \
+      "/usr/lib/systemd/boot/efi" \
+      "$out/lib/systemd/boot/efi"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -273,14 +297,17 @@ stdenv.mkDerivation (finalAttrs: {
           { name = "libbpf.so.1"; pkg = opt withLibBPF libbpf; }
           { name = "libbpf.so.0"; pkg = null; }
 
-          # We did never provide support for libxkbcommon & qrencode
+          # We did never provide support for libxkbcommon
           { name = "libxkbcommon.so.0"; pkg = null; }
-          { name = "libqrencode.so.4"; pkg = null; }
+
+          # qrencode
+          { name = "libqrencode.so.4"; pkg = opt withQrencode qrencode; }
           { name = "libqrencode.so.3"; pkg = null; }
 
-          # We did not provide libpwquality before so it is safe to disable it for
-          # now.
-          { name = "libpwquality.so.1"; pkg = null; }
+          # Password quality
+          # We currently do not package passwdqc, only libpwquality.
+          { name = "libpwquality.so.1"; pkg = opt withPasswordQuality libpwquality; }
+          { name = "libpasswdqc.so.1"; pkg = null; }
 
           # Only include cryptsetup if it is enabled. We might not be able to
           # provide it during "bootstrap" in e.g. the minimal systemd build as
@@ -311,6 +338,8 @@ stdenv.mkDerivation (finalAttrs: {
 
           # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
           { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
+
+          { name = "libip4tc.so.2"; pkg = opt withIptables iptables; }
         ];
 
       patchDlOpen = dl:
@@ -360,7 +389,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
 
   nativeBuildInputs =
     [
@@ -381,7 +410,7 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xml_dtd_42
       docbook_xml_dtd_45
       bash
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ] ++ lib.optional withEfi ps.pyelftools))
     ]
     ++ lib.optionals withLibBPF [
       bpftools
@@ -405,147 +434,184 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional withAudit audit
     ++ lib.optional wantCurl (lib.getDev curl)
-    ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
+    ++ lib.optionals withCompression [ zlib bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
     ++ lib.optional withKmod kmod
     ++ lib.optional withLibidn2 libidn2
     ++ lib.optional withLibseccomp libseccomp
-    ++ lib.optional withNetworkd iptables
+    ++ lib.optional withIptables iptables
     ++ lib.optional withPam pam
     ++ lib.optional withPCRE2 pcre2
     ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optionals withRemote [ libmicrohttpd gnutls ]
     ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss
     ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
+    ++ lib.optionals withPasswordQuality [ libpwquality ]
+    ++ lib.optionals withQrencode [ qrencode ]
   ;
 
-  #dontAddPrefix = true;
+  mesonBuildType = "release";
 
   mesonFlags = [
-    "-Dversion-tag=${version}"
+    # Options
+
     # We bump this variable on every (major) version change to ensure
     # that we have known-good value for a timestamp that is in the (not so distant) past.
     # This serves as a lower bound for valid system timestamps during startup. Systemd will
     # reset the system timestamp if this date is +- 15 years from the system time.
     # See the systemd v250 release notes for further details:
     # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
-    "-Dtime-epoch=${releaseTimestamp}"
+    (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    "-Dmode=release"
-    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
-    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
-    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
-    "-Dpam=${lib.boolToString withPam}"
-    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
-    "-Drootprefix=${placeholder "out"}"
-    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
-    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
-    "-Dloadkeys-path=${kbd}/bin/loadkeys"
-    "-Dsetfont-path=${kbd}/bin/setfont"
-    "-Dtty-gid=3" # tty in NixOS has gid 3
-    "-Ddebug-shell=${bashInteractive}/bin/bash"
-    "-Dglib=${lib.boolToString withTests}"
-    # while we do not run tests we should also not build them. Removes about 600 targets
-    "-Dtests=false"
-    "-Dacl=${lib.boolToString withAcl}"
-    "-Danalyze=${lib.boolToString withAnalyze}"
-    "-Daudit=${lib.boolToString withAudit}"
-    "-Dgcrypt=${lib.boolToString wantGcrypt}"
-    "-Dimportd=${lib.boolToString withImportd}"
-    "-Dlz4=${lib.boolToString withCompression}"
-    "-Dhomed=${lib.boolToString withHomed}"
-    "-Dlogind=${lib.boolToString withLogind}"
-    "-Dlocaled=${lib.boolToString withLocaled}"
-    "-Dhostnamed=${lib.boolToString withHostnamed}"
-    "-Dmachined=${lib.boolToString withMachined}"
-    "-Dnetworkd=${lib.boolToString withNetworkd}"
-    "-Doomd=${lib.boolToString withOomd}"
-    "-Dpolkit=${lib.boolToString withPolkit}"
-    "-Dlibcryptsetup=${lib.boolToString withCryptsetup}"
-    "-Dportabled=${lib.boolToString withPortabled}"
-    "-Dhwdb=${lib.boolToString withHwdb}"
-    "-Dremote=${lib.boolToString withRemote}"
-    "-Dsysusers=false"
-    "-Dtimedated=${lib.boolToString withTimedated}"
-    "-Dtimesyncd=${lib.boolToString withTimesyncd}"
-    "-Duserdb=${lib.boolToString withUserDb}"
-    "-Dcoredump=${lib.boolToString withCoredump}"
-    "-Dfirstboot=false"
-    "-Dresolve=${lib.boolToString withResolved}"
-    "-Dsplit-usr=false"
-    "-Dlibcurl=${lib.boolToString wantCurl}"
-    "-Dlibidn=false"
-    "-Dlibidn2=${lib.boolToString withLibidn2}"
-    "-Dquotacheck=false"
-    "-Dldconfig=false"
-    "-Dsmack=true"
-    "-Db_pie=true"
-    "-Dinstall-sysconfdir=false"
-    "-Dsbat-distro=nixos"
-    "-Dsbat-distro-summary=NixOS"
-    "-Dsbat-distro-url=https://nixos.org/"
-    "-Dsbat-distro-pkgname=${pname}"
-    "-Dsbat-distro-version=${version}"
-    /*
-      As of now, systemd doesn't allow runtime configuration of these values. So
-      the settings in /etc/login.defs have no effect on it. Many people think this
-      should be supported however, see
-      - https://github.com/systemd/systemd/issues/3855
-      - https://github.com/systemd/systemd/issues/4850
-      - https://github.com/systemd/systemd/issues/9769
-      - https://github.com/systemd/systemd/issues/9843
-      - https://github.com/systemd/systemd/issues/10184
-    */
-    "-Dsystem-uid-max=999"
-    "-Dsystem-gid-max=999"
-
-    "-Dsysvinit-path="
-    "-Dsysvrcnd-path="
-
-    "-Dsulogin-path=${util-linux}/bin/sulogin"
-    "-Dmount-path=${util-linux}/bin/mount"
-    "-Dumount-path=${util-linux}/bin/umount"
-    "-Dcreate-log-dirs=false"
-
+    (lib.mesonOption "version-tag" version)
+    (lib.mesonOption "mode" "release")
+    (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
+    (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
+    (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
-    "-Ddefault-hierarchy=unified"
-    # Upstream defaulted to disable manpages since they optimize for the much
-    # more frequent development builds
-    "-Dman=true"
+    (lib.mesonOption "default-hierarchy" "unified")
+    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
-    "-Defi=${lib.boolToString withEfi}"
-    "-Dgnu-efi=${lib.boolToString withEfi}"
+    # D-Bus
+    (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.mesonOption "dbussessionservicedir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
 
-    "-Dukify=${lib.boolToString withUkify}"
-  ] ++ lib.optionals withEfi [
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
+    # pkgconfig
+    (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
+    (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
+
+    # Keyboard
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+
+    # SBAT
+    (lib.mesonOption "sbat-distro" "nixos")
+    (lib.mesonOption "sbat-distro-summary" "NixOS")
+    (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
+    (lib.mesonOption "sbat-distro-pkgname" pname)
+    (lib.mesonOption "sbat-distro-version" version)
+
+    # Users
+    (lib.mesonOption "system-uid-max" "999")
+    (lib.mesonOption "system-gid-max" "999")
+
+    # SysVinit
+    (lib.mesonOption "sysvinit-path" "")
+    (lib.mesonOption "sysvrcnd-path" "")
+
+    # Login
+    (lib.mesonOption "sulogin-path" "${util-linux.login}/bin/sulogin")
+    (lib.mesonOption "nologin-path" "${util-linux.login}/bin/nologin")
+
+    # Mount
+    (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
+    (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+
+
+    # Features
+
+    # Tests
+    (lib.mesonBool "tests" withTests)
+    (lib.mesonEnable "glib" withTests)
+    (lib.mesonEnable "dbus" withTests)
+
+    # Compression
+    (lib.mesonEnable "bzip2" withCompression)
+    (lib.mesonEnable "lz4" withCompression)
+    (lib.mesonEnable "xz" withCompression)
+    (lib.mesonEnable "zstd" withCompression)
+    (lib.mesonEnable "zlib" withCompression)
+
+    # NSS
+    (lib.mesonEnable "nss-mymachines" withNss)
+    (lib.mesonEnable "nss-resolve" withNss)
+    (lib.mesonBool "nss-myhostname" withNss)
+    (lib.mesonBool "nss-systemd" withNss)
+
+    # Cryptsetup
+    (lib.mesonEnable "libcryptsetup" withCryptsetup)
+    (lib.mesonEnable "libcryptsetup-plugins" withCryptsetup)
+    (lib.mesonEnable "p11kit" (withHomed || withCryptsetup))
+
+    # FIDO2
+    (lib.mesonEnable "libfido2" withFido2)
+    (lib.mesonEnable "openssl" withFido2)
+
+    # Password Quality
+    (lib.mesonEnable "pwquality" withPasswordQuality)
+    (lib.mesonEnable "passwdqc" false)
+
+    # Remote
+    (lib.mesonEnable "remote" withRemote)
+    (lib.mesonEnable "microhttpd" withRemote)
+
+    (lib.mesonEnable "pam" withPam)
+    (lib.mesonEnable "acl" withAcl)
+    (lib.mesonEnable "audit" withAudit)
+    (lib.mesonEnable "apparmor" withApparmor)
+    (lib.mesonEnable "gcrypt" wantGcrypt)
+    (lib.mesonEnable "importd" withImportd)
+    (lib.mesonEnable "homed" withHomed)
+    (lib.mesonEnable "polkit" withPolkit)
+    (lib.mesonEnable "elfutils" withCoredump)
+    (lib.mesonEnable "libcurl" wantCurl)
+    (lib.mesonEnable "libidn" false)
+    (lib.mesonEnable "libidn2" withLibidn2)
+    (lib.mesonEnable "libiptc" withIptables)
+    (lib.mesonEnable "repart" withRepart)
+    (lib.mesonEnable "sysupdate" withSysupdate)
+    (lib.mesonEnable "selinux" withSelinux)
+    (lib.mesonEnable "tpm2" withTpm2Tss)
+    (lib.mesonEnable "pcre2" withPCRE2)
+    (lib.mesonEnable "bpf-framework" withLibBPF)
+    (lib.mesonEnable "bootloader" withBootloader)
+    (lib.mesonEnable "ukify" withUkify)
+    (lib.mesonEnable "kmod" withKmod)
+    (lib.mesonEnable "qrencode" withQrencode)
+    (lib.mesonEnable "vmspawn" withVmspawn)
+    (lib.mesonEnable "xenctrl" false)
+    (lib.mesonEnable "gnutls" false)
+    (lib.mesonEnable "xkbcommon" false)
+    (lib.mesonEnable "man" true)
+
+    (lib.mesonBool "analyze" withAnalyze)
+    (lib.mesonBool "logind" withLogind)
+    (lib.mesonBool "localed" withLocaled)
+    (lib.mesonBool "hostnamed" withHostnamed)
+    (lib.mesonBool "machined" withMachined)
+    (lib.mesonBool "networkd" withNetworkd)
+    (lib.mesonBool "oomd" withOomd)
+    (lib.mesonBool "portabled" withPortabled)
+    (lib.mesonBool "hwdb" withHwdb)
+    (lib.mesonBool "timedated" withTimedated)
+    (lib.mesonBool "timesyncd" withTimesyncd)
+    (lib.mesonBool "userdb" withUserDb)
+    (lib.mesonBool "coredump" withCoredump)
+    (lib.mesonBool "firstboot" withFirstboot)
+    (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "sysusers" withSysusers)
+    (lib.mesonBool "efi" withEfi)
+    (lib.mesonBool "utmp" withUtmp)
+    (lib.mesonBool "log-trace" withLogTrace)
+    (lib.mesonBool "quotacheck" false)
+    (lib.mesonBool "ldconfig" false)
+    (lib.mesonBool "install-sysconfdir" false)
+    (lib.mesonBool "create-log-dirs" false)
+    (lib.mesonBool "smack" true)
+    (lib.mesonBool "b_pie" true)
+
   ] ++ lib.optionals (withShellCompletions == false) [
-    "-Dbashcompletiondir=no"
-    "-Dzshcompletiondir=no"
-  ] ++ lib.optionals (!withNss) [
-    "-Dnss-myhostname=false"
-    "-Dnss-mymachines=false"
-    "-Dnss-resolve=false"
-    "-Dnss-systemd=false"
-  ] ++ lib.optionals withLibBPF [
-    "-Dbpf-framework=true"
-  ] ++ lib.optionals withTpm2Tss [
-    "-Dtpm2=true"
-  ] ++ lib.optionals (!withUtmp) [
-    "-Dutmp=false"
+    (lib.mesonOption "bashcompletiondir" "no")
+    (lib.mesonOption "zshcompletiondir" "no")
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    "-Dgshadow=false"
-    "-Didn=false"
-  ] ++ lib.optionals withKmod [
-    "-Dkmod=true"
-    "-Dkmod-path=${kmod}/bin/kmod"
+    (lib.mesonBool "gshadow" false)
+    (lib.mesonBool "idn" false)
   ];
   preConfigure =
     let
@@ -561,14 +627,15 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getBin util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getBin util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
           where = [
             "man/systemd-analyze.xml"
             "man/systemd.service.xml"
+            "man/systemd-run.xml"
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
@@ -578,7 +645,7 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
@@ -684,7 +751,9 @@ stdenv.mkDerivation (finalAttrs: {
     export DESTDIR=/
   '';
 
-  postInstall = ''
+  mesonInstallTags = lib.optionals buildLibsOnly [ "devel" "libudev" "libsystemd" ];
+
+  postInstall = lib.optionalString (!buildLibsOnly) ''
     mkdir -p $out/example/systemd
     mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
@@ -702,8 +771,10 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
-  '' + lib.optionalString withKmod ''
+  '' + lib.optionalString (withKmod && !buildLibsOnly) ''
     mv $out/lib/modules-load.d $out/example
+  '' + lib.optionalString withSysusers ''
+    mv $out/lib/sysusers.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip
@@ -711,18 +782,23 @@ stdenv.mkDerivation (finalAttrs: {
   #   https://github.com/NixOS/nixpkgs/issues/169693
   # The hack is to move EFI file out of lib/ before doStrip
   # run and return it after doStrip run.
-  preFixup = lib.optionalString withEfi ''
+  preFixup = lib.optionalString withBootloader ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
 
   # Wrap in the correct path for LUKS2 tokens.
   postFixup = lib.optionalString withCryptsetup ''
-    for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
+    for f in bin/systemd-cryptsetup bin/systemd-cryptenroll; do
       # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
       wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
     done
-  '' + lib.optionalString withEfi ''
+  '' + lib.optionalString withBootloader ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '' + lib.optionalString withUkify ''
+    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
+    # ukify with the correct binutils. When wrapping, no splicing happens so we
+    # have to explicitly pull binutils from targetPackages.
+    wrapProgram $out/bin/ukify --prefix PATH : ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }:${placeholder "out"}/lib/systemd
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
@@ -741,7 +817,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
-      inherit (nixosTests) switchTest;
+      inherit (nixosTests)
+        switchTest
+        systemd-journal
+        systemd-journal-gateway
+        systemd-journal-upload;
       cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };
@@ -755,6 +835,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;
-    maintainers = with maintainers; [ flokli kloenk mic92 ];
+    maintainers = with maintainers; [ flokli kloenk ];
   };
 })

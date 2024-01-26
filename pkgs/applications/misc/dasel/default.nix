@@ -1,24 +1,34 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "dasel";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = "dasel";
     rev = "v${version}";
-    sha256 = "sha256-DPfahZIb6Cp+E5GxIqNW+IruDZWBvJTRc7gxQOfeJqA=";
+    hash = "sha256-frd4jNn5uruz9oX40ly/AR5I/uKRIfQ8IjOlIvlsOlY=";
   };
 
-  vendorHash = "sha256-+3RcjOZjmYu4eNpgczwY4Uyz1+poYA/TXc2Mb+VwRKc=";
+  vendorHash = "sha256-B3d+pbk0smBXqcJnac5he0TZPLiT1cLtz02OAGfqhC0=";
 
   ldflags = [
     "-s" "-w" "-X github.com/tomwright/dasel/v2/internal.Version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd dasel \
+      --bash <($out/bin/dasel completion bash) \
+      --fish <($out/bin/dasel completion fish) \
+      --zsh <($out/bin/dasel completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -42,7 +52,7 @@ buildGoModule rec {
     homepage = "https://github.com/TomWright/dasel";
     changelog = "https://github.com/TomWright/dasel/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.unix;
+    mainProgram = "dasel";
     maintainers = with maintainers; [ _0x4A6F ];
   };
 }

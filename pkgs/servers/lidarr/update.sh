@@ -25,7 +25,7 @@ updateVersion()
     sed -i "s/version = \"[0-9.]*\";/version = \"$1\";/g" "$dirname/default.nix"
 }
 
-currentVersion=$(cd $dirname && nix eval --raw -f ../../.. radarr.version)
+currentVersion=$(cd $dirname && nix eval --raw -f ../../.. lidarr.version)
 
 latestTag=$(curl https://api.github.com/repos/Lidarr/Lidarr/releases/latest | jq -r ".tag_name")
 latestVersion="$(expr $latestTag : 'v\(.*\)')"

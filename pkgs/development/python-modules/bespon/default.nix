@@ -1,18 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
-  pname = "BespON";
+  version = "0.7.0";
+  pname = "bespon";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f2bda67fea8ee95c8aa7e885835ab88bdbfa392a94077ce1c9d29017420ce7a";
+    hash = "sha256-dGtXw4uq6pdyXBVfSi9s7kCFUqA1PO7qWEGY0JNAz8Q=";
   };
 
-  propagatedBuildInputs = [ ];
+  nativeBuildInputs = [ setuptools ];
   # upstream doesn't contain tests
   doCheck = false;
 

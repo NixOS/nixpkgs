@@ -18,15 +18,15 @@
 , obs-vkcapture32
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.3.2";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "nowrep";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-UQQ8oBEnOxmSN4ZyW4LdPZYvd5eB9EmdR0UvE1wgMZw=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/EbavDDeFQys9zu3FAgsAeVVbs1Rrv8YR4949XCHc6s=";
   };
 
   cmakeFlags = lib.optionals stdenv.isi686 [
@@ -60,8 +60,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OBS Linux Vulkan/OpenGL game capture";
     homepage = "https://github.com/nowrep/obs-vkcapture";
+    changelog = "https://github.com/nowrep/obs-vkcapture/releases/tag/v${finalAttrs.version}";
     maintainers = with maintainers; [ atila pedrohlc ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
-}
+})

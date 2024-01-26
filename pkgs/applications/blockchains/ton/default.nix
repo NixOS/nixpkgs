@@ -9,17 +9,18 @@
 , openssl
 , readline
 , zlib
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "ton";
-  version = "2023.05";
+  version = "2023.10";
 
   src = fetchFromGitHub {
     owner = "ton-blockchain";
     repo = "ton";
     rev = "v${version}";
-    sha256 = "sha256-EuFKoqOzKoaBCiVAsb8K053kAL4bw1WqmmybVJX2Fmo=";
+    sha256 = "sha256-K1RhhW7EvwYV7/ng3NPjSGdHEQvJZ7K97YXd7s5wghc=";
     fetchSubmodules = true;
   };
 
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     readline
     zlib
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A fully decentralized layer-1 blockchain designed by Telegram";

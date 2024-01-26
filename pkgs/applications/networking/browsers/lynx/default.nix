@@ -13,27 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "lynx";
-  version = "2.8.9rel.1";
+  version = "2.9.0dev.12";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/lynx/tarballs/lynx${version}.tar.bz2"
       "https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
     ];
-    sha256 = "15cmyyma2kz1hfaa6mwjgli8zwdzq3jv0q2cl6nwzycjfwyijzrq";
+    hash = "sha256-pkVbFZ0Ad22OwQUShcly3B8MVS0FcaDP8Coj7BRu6OU=";
   };
 
   enableParallelBuilding = true;
 
   hardeningEnable = [ "pie" ];
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2021-38165.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lynx/CVE-2021-38165.patch?id=3400945dbbb8a87065360963e4caa0e17d3dcc61";
-      sha256 = "1aykb9y2g2vdpbbpvjlm4r40x7py2yv6jbywwcqcxrlciqcw4x57";
-    })
-  ];
 
   configureFlags = [
     "--enable-default-colors"
@@ -58,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
+    mainProgram = "lynx";
     maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

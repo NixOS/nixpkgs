@@ -6,7 +6,7 @@
 , gnupatch
 }:
 let
-  pname = "coreutils";
+  pname = "bootstrap-coreutils";
   version = "5.0";
 
   src = fetchurl {

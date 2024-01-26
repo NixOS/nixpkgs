@@ -1,18 +1,22 @@
-{ lib, stdenv, fetchurl, openssl
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+{
+  fetchurl
+, lib
 , nixosTests
+, openssl
+, stdenv
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stunnel";
-  version = "5.69";
+  version = "5.71";
 
   outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
-    url    = "https://www.stunnel.org/archive/${lib.versions.major version}.x/${pname}-${version}.tar.gz";
-    sha256 = "sha256-H/fZ8wiEx1uYyKCk4VNPp5rcraIyJjXmeHM3tOOP24E=";
+    url = "https://www.stunnel.org/archive/${lib.versions.major finalAttrs.version}.x/stunnel-${finalAttrs.version}.tar.gz";
+    hash = "sha256-8COq6DfC0y3rkggxpe4QgeEceKXVc0D45vCCnwMQF/U=";
     # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };
@@ -48,9 +52,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Universal tls/ssl wrapper";
-    homepage    = "https://www.stunnel.org/";
-    license     = lib.licenses.gpl2Plus;
-    platforms   = lib.platforms.unix;
+    homepage = "https://www.stunnel.org/";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.thoughtpolice ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.22.2";
+  version = "1.22.8";
 
   outputs = [
     "bin"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-sq/nNgOSHGCLpIlp27fXQ3dnRL/l2AWeziQRN7f4jiE=";
+    hash = "sha256-rU49sXcRObHbF7Gvp8BdsIOuAQC9TaJEtx8WLczkG/w=";
   };
 
   depsBuildBuild = [
@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash-completion
-    gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
@@ -120,6 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
       "gstreamer-controller-1.0"
     ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel matthewbauer ];
+    maintainers = with maintainers; [ ttuegel matthewbauer lilyinstarlight ];
   };
 })

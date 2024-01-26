@@ -14,26 +14,18 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           # pull_request_target checks out the base branch by default
           ref: refs/pull/${{ github.event.pull_request.number }}/merge
-      - uses: cachix/install-nix-action@v20
+      - uses: cachix/install-nix-action@6004951b182f8860210c8d6f0d808ec5b1a33d28 # v25
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
-      - uses: cachix/cachix-action@v12
+      - uses: cachix/cachix-action@18cf96c7c98e048e10a83abd92116114cd8504be # v14
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
           signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-      - name: Building NixOS manual with DocBook options
+      - name: Building NixOS manual
         run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true nixos/release.nix -A manual.x86_64-linux
-      - name: Building NixOS manual with Markdown options
-        run: |
-          export NIX_PATH=nixpkgs=$(pwd)
-          nix-build \
-            --option restrict-eval true \
-            --arg configuration '{ documentation.nixos.options.allowDocBook = false; }' \
-            nixos/release.nix \
-            -A manual.x86_64-linux

@@ -1,7 +1,5 @@
 # Multiple-output packages {#chap-multiple-output}
 
-## Introduction {#sec-multiple-outputs-introduction}
-
 The Nix language allows a derivation to produce multiple outputs, which is similar to what is utilized by other Linux distribution packaging systems. The outputs reside in separate Nix store paths, so they can be mostly handled independently of each other, including passing to build inputs, garbage collection or binary substitution. The exception is that building from source always produces all the outputs.
 
 The main motivation is to save disk space by reducing runtime closure sizes; consequently also sizes of substituted binaries get reduced. Splitting can be used to have more granular runtime dependencies, for example the typical reduction is to split away development-only files, as those are typically not needed during runtime. As a result, closure sizes of many packages can get reduced to a half or even much less.
@@ -10,44 +8,12 @@ The main motivation is to save disk space by reducing runtime closure sizes; con
 The reduction effects could be instead achieved by building the parts in completely separate derivations. That would often additionally reduce build-time closures, but it tends to be much harder to write such derivations, as build systems typically assume all parts are being built at once. This compromise approach of single source package producing multiple binary packages is also utilized often by rpm and deb.
 :::
 
-A number of attributes can be used to work with a derivation with multiple outputs. The attribute `outputs` is a list of strings, which are the names of the outputs. For each of these names, an identically named attribute is created, corresponding to that output. The attribute `meta.outputsToInstall` is used to determine the default set of outputs to install when using the derivation name unqualified.
+A number of attributes can be used to work with a derivation with multiple outputs.
+The attribute `outputs` is a list of strings, which are the names of the outputs.
+For each of these names, an identically named attribute is created, corresponding to that output.
 
-## Installing a split package {#sec-multiple-outputs-installing}
-
-When installing a package with multiple outputs, the package’s `meta.outputsToInstall` attribute determines which outputs are actually installed. `meta.outputsToInstall` is a list whose [default installs binaries and the associated man pages](https://github.com/NixOS/nixpkgs/blob/f1680774340d5443a1409c3421ced84ac1163ba9/pkgs/stdenv/generic/make-derivation.nix#L310-L320). The following sections describe ways to install different outputs.
-
-### Selecting outputs to install via NixOS {#sec-multiple-outputs-installing-nixos}
-
-NixOS provides two ways to select the outputs to install for packages listed in `environment.systemPackages`:
-
-- The configuration option `environment.extraOutputsToInstall` is appended to each package’s `meta.outputsToInstall` attribute to determine the outputs to install. It can for example be used to install `info` documentation or debug symbols for all packages.
-
-- The outputs can be listed as packages in `environment.systemPackages`. For example, the `"out"` and `"info"` outputs for the `coreutils` package can be installed by including `coreutils` and `coreutils.info` in `environment.systemPackages`.
-
-### Selecting outputs to install via `nix-env` {#sec-multiple-outputs-installing-nix-env}
-
-`nix-env` lacks an easy way to select the outputs to install. When installing a package, `nix-env` always installs the outputs listed in `meta.outputsToInstall`, even when the user explicitly selects an output.
-
-::: {.warning}
-`nix-env` silently disregards the outputs selected by the user, and instead installs the outputs from `meta.outputsToInstall`. For example,
-
-```ShellSession
-$ nix-env -iA nixpkgs.coreutils.info
-```
-
-installs the `"out"` output (`coreutils.meta.outputsToInstall` is `[ "out" ]`) instead of the requested `"info"`.
-:::
-
-The only recourse to select an output with `nix-env` is to override the package’s `meta.outputsToInstall`, using the functions described in [](#chap-overrides). For example, the following overlay adds the `"info"` output for the `coreutils` package:
-
-```nix
-self: super:
-{
-  coreutils = super.coreutils.overrideAttrs (oldAttrs: {
-    meta = oldAttrs.meta // { outputsToInstall = oldAttrs.meta.outputsToInstall or [ "out" ] ++ [ "info" ]; };
-  });
-}
-```
+The attribute `meta.outputsToInstall` is used to determine the [default set of outputs to install](https://github.com/NixOS/nixpkgs/blob/08c3198f1c6fd89a09f8f0ea09b425028a34de3e/pkgs/stdenv/generic/check-meta.nix#L411-L426) when using the derivation name unqualified:
+`bin`, or `out`, or the first specified output; as well as `man` if that is specified.
 
 ## Using a split package {#sec-multiple-outputs-using-split-packages}
 

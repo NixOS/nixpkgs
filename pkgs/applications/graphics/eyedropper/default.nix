@@ -6,6 +6,7 @@
 , pkg-config
 , meson
 , ninja
+, blueprint-compiler
 , glib
 , gtk4
 , libadwaita
@@ -17,25 +18,26 @@
 
 stdenv.mkDerivation rec {
   pname = "eyedropper";
-  version = "0.5.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kc/UREQpmw3suA6bYEr9fCIwMzNMrEY9E5qf+rhKsC4=";
+    hash = "sha256-PStQC9n+DTTOiNO9fHUjIkwgvKeA2alVbtX5qfqhTYo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/eas1PObrj9IuDIzlBVbfhEhH8eDyZ7CD871JmAqnyY=";
+    hash = "sha256-WRjoyIoVvOYcw2i/cMycE67iziZ8dvQrZ3EfE2v2jkQ=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    blueprint-compiler
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A powerful color picker and formatter";
+    description = "Pick and format colors";
     homepage = "https://github.com/FineFindus/eyedropper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

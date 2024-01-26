@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , libgit2
 , openssl
@@ -12,16 +13,34 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "josh";
-  version = "22.06.22";
+  version = "23.02.14";
+  JOSH_VERSION = "r${version}";
 
   src = fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = "r" + version;
-    sha256 = "0511qv9zyjvv4zfz6zyi69ssbkrwa24n0ah5w9mb4gzd547as8pq";
+    rev = JOSH_VERSION;
+    sha256 = "1sqa8xi5d55zshky7gicac02f67vp944hclkdsmwy0bczk9hgssr";
   };
 
-  cargoSha256 = "0zfjjyyz4pxar1mfkkj9aij4dnwqy3asdrmay1iy6ijjn1qd97n4";
+  patches = [
+    # Unreleased patch allowing compilation from the GitHub tarball download
+    (fetchpatch {
+      name = "josh-version-without-git.patch";
+      url = "https://github.com/josh-project/josh/commit/13e7565ab029206598881391db4ddc6dface692b.patch";
+      sha256 = "1l5syqj51sn7kcqvffwl6ggn5sq8wfkpviga860agghnw5dpf7ns";
+    })
+
+    # Merged upstream, fixes builds with newer rustc
+    (fetchpatch {
+      name = "josh-fix-builds-with-rust-173.patch";
+      url = "https://github.com/josh-project/josh/commit/7b8259b81a9acabb528ddebc4ab30fc712f756fb.patch";
+      sha256 = "sha256-YfrVlH6Ox05ZbmB/15HVaFlOyRTOFbYflq0edi6/X9k=";
+      includes = [ "josh-proxy/src/bin/josh-proxy.rs" ];
+    })
+  ];
+
+  cargoSha256 = "0f6cvz2s8qs53b2g6xja38m24hafqla61s4r5za0a1dyndgms7sl";
 
   nativeBuildInputs = [
     pkg-config

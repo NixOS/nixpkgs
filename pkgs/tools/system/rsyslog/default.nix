@@ -49,7 +49,6 @@
 , withRdkafka ? true
 , rdkafka
 , withMongo ? true
-, libmongo-client
 , mongoc
 , withCzmq ? true
 , czmq
@@ -62,11 +61,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2304.0";
+  version = "8.2312.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-0JDpAoPrS4Dei0Pl/8bktZxOOXDyqpHmO+7woRcg100=";
+    hash = "sha256-d0AyAGEoqJZDf1kT4TKqJ9v7k3zYhH5ElSLVoS1j0D4=";
   };
 
   nativeBuildInputs = [
@@ -97,7 +96,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withNet libnet
   ++ lib.optional withHadoop hadoop
   ++ lib.optional withRdkafka rdkafka
-  ++ lib.optionals withMongo [ libmongo-client mongoc ]
+  ++ lib.optionals withMongo [ mongoc ]
   ++ lib.optional withCzmq czmq
   ++ lib.optional withRabbitmq rabbitmq-c
   ++ lib.optional withHiredis hiredis

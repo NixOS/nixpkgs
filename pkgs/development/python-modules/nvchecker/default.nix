@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.11";
+  version = "2.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-b/EGn26gTpnYuy2h6shnJI1dRwhl41eKJHzDJoFG1YI=";
+    hash = "sha256-6mhVDC2jpIIOZeoKz4AxxU7jj8dqPVBKRWupbuY/T7E=";
   };
 
   nativeBuildInputs = [
@@ -44,9 +44,12 @@ buildPythonPackage rec {
     pycurl
     setuptools
     structlog
-    tomli
     tornado
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     flaky
@@ -73,8 +76,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
+    homepage = "https://github.com/lilydjwg/nvchecker";
+    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

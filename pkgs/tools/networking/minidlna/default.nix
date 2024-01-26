@@ -2,7 +2,7 @@
 
 let
   pname = "minidlna";
-  version = "1.3.2";
+  version = "1.3.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://git.code.sf.net/p/${pname}/git";
     rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-v+puglrbuLqHIAbrO7bhOA0npc/GYp0Bdi3DnD9qyII=";
+    hash = "sha256-InsSguoGi1Gp8R/bd4/c16xqRuk0bRsgw7wvcbokgKo=";
   };
 
   preConfigure = ''

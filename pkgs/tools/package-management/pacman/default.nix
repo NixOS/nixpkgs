@@ -48,9 +48,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-fY4+jFEhrsCWXfcfWb7fRgUsbPFPljZcRBHsPeCkwaU=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     asciidoc
     installShellFiles
+    libarchive
     makeWrapper
     meson
     ninja
@@ -105,6 +108,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ];
+
+  hardeningDisable = [ "fortify3" ];
 
   postInstall = ''
     installShellCompletion --bash scripts/pacman --zsh scripts/_pacman

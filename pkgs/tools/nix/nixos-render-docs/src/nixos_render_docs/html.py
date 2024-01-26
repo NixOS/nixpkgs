@@ -44,6 +44,9 @@ class HTMLRenderer(Renderer):
         result += self._close_headings(None)
         return result
 
+    def _pull_image(self, path: str) -> str:
+        raise NotImplementedError()
+
     def text(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return escape(token.content)
     def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -67,7 +70,8 @@ class HTMLRenderer(Renderer):
             if tokens[i + 1].type == 'link_close':
                 tag, text = "xref", xref.title_html
             if xref.title:
-                title = f'title="{escape(xref.title, True)}"'
+                # titles are not attribute-safe on their own, so we need to replace quotes.
+                title = 'title="{}"'.format(xref.title.replace('"', '&quot;'))
             target, href = "", xref.href()
         return f'<a class="{tag}" href="{href}" {title} {target}>{text}'
     def link_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -93,8 +97,8 @@ class HTMLRenderer(Renderer):
     def strong_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return "</strong></span>"
     def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        # TODO use token.info. docbook doesn't so we can't yet.
-        return f'<pre class="programlisting">\n{escape(token.content)}</pre>'
+        info = f" {escape(token.info, True)}" if token.info != "" else ""
+        return f'<pre><code class="programlisting{info}">{escape(token.content)}</code></pre>'
     def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '<div class="blockquote"><blockquote class="blockquote">'
     def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -211,7 +215,7 @@ class HTMLRenderer(Renderer):
         self._ordered_list_nesting += 1
         return f'<div class="orderedlist"><ol class="orderedlist {extra}" {start} type="{style}">'
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        self._ordered_list_nesting -= 1;
+        self._ordered_list_nesting -= 1
         return "</ol></div>"
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if id := cast(str, token.attrs.get('id', '')):
@@ -223,6 +227,106 @@ class HTMLRenderer(Renderer):
         return '<p class="title"><strong>'
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '</strong></p><div class="example-contents">'
+    def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        src = self._pull_image(cast(str, token.attrs['src']))
+        alt = f'alt="{escape(token.content, True)}"' if token.content else ""
+        if title := cast(str, token.attrs.get('title', '')):
+            title = f'title="{escape(title, True)}"'
+        return (
+            '<div class="mediaobject">'
+            f'<img src="{escape(src, True)}" {alt} {title} />'
+            '</div>'
+        )
+    def figure_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        if anchor := cast(str, token.attrs.get('id', '')):
+            anchor = f'<a id="{escape(anchor, True)}"></a>'
+        return f'<div class="figure">{anchor}'
+    def figure_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            ' </div>'
+            '</div><br class="figure-break" />'
+        )
+    def figure_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '<p class="title">'
+            ' <strong>'
+        )
+    def figure_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            ' </strong>'
+            '</p>'
+            '<div class="figure-contents">'
+        )
+    def table_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '<div class="informaltable">'
+            '<table class="informaltable" border="1">'
+        )
+    def table_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '</table>'
+            '</div>'
+        )
+    def thead_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        cols = []
+        for j in range(i + 1, len(tokens)):
+            if tokens[j].type == 'thead_close':
+                break
+            elif tokens[j].type == 'th_open':
+                cols.append(cast(str, tokens[j].attrs.get('style', 'left')).removeprefix('text-align:'))
+        return "".join([
+            "<colgroup>",
+            "".join([ f'<col align="{col}" />' for col in cols ]),
+            "</colgroup>",
+            "<thead>",
+        ])
+    def thead_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</thead>"
+    def tr_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<tr>"
+    def tr_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</tr>"
+    def th_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return f'<th align="{cast(str, token.attrs.get("style", "left")).removeprefix("text-align:")}">'
+    def th_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</th>"
+    def tbody_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<tbody>"
+    def tbody_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</tbody>"
+    def td_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return f'<td align="{cast(str, token.attrs.get("style", "left")).removeprefix("text-align:")}">'
+    def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</td>"
+    def footnote_ref(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        href = self._xref_targets[token.meta['target']].href()
+        id = escape(cast(str, token.attrs["id"]), True)
+        return (
+            f'<a href="{href}" class="footnote" id="{id}">'
+            f'<sup class="footnote">[{token.meta["id"] + 1}]</sup>'
+            '</a>'
+        )
+    def footnote_block_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '<div class="footnotes">'
+            '<br />'
+            '<hr style="width:100; text-align:left;margin-left: 0" />'
+        )
+    def footnote_block_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</div>"
+    def footnote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # meta id,label
+        id = escape(self._xref_targets[token.meta["label"]].id, True)
+        return f'<div id="{id}" class="footnote">'
+    def footnote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</div>"
+    def footnote_anchor(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        href = self._xref_targets[token.meta['target']].href()
+        return (
+            f'<a href="{href}" class="para">'
+            f'<sup class="para">[{token.meta["id"] + 1}]</sup>'
+            '</a>'
+        )
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         return f"h{min(6, max(1, level + self._hlevel_offset))}", ""

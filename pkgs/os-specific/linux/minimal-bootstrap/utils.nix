@@ -29,11 +29,9 @@ rec {
     , text
     , executable ? false # run chmod +x ?
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
-    , allowSubstitutes ? false
-    , preferLocalBuild ? true
     }:
     derivationWithMeta {
-      inherit name text allowSubstitutes preferLocalBuild;
+      inherit name text;
       passAsFile = [ "text" ];
 
       builder = "${kaem}/bin/kaem";

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , writeText
-, fetchurl
+, fetchFromGitHub
 , buildcatrust
 , blacklist ? []
 , extraCertificateFiles ? []
@@ -17,20 +17,10 @@
 }:
 
 let
-  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" (blacklist ++ [
-    # Mozilla does not trust new certificates issued by these CAs after 2022/11/30¹
-    # in their products, but unfortunately we don't have such a fine-grained
-    # solution for most system packages², so we decided to eject these.
-    #
-    # [1] https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/oxX69KFvsm4/m/yLohoVqtCgAJ
-    # [2] https://utcc.utoronto.ca/~cks/space/blog/linux/CARootStoreTrustProblem
-    "TrustCor ECA-1"
-    "TrustCor RootCert CA-1"
-    "TrustCor RootCert CA-2"
-  ]));
+  blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.89.1";
+  srcVersion = "3.95";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
@@ -43,9 +33,11 @@ let
     pname = "nss-cacert-certdata";
     inherit version;
 
-    src = if nssOverride != null then nssOverride.src else fetchurl {
-      url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      hash = "sha256-OtrtuecMPF9AYDv2CgHjNhkKbb4Bkp05XxawH+hKAVY=";
+    src = if nssOverride != null then nssOverride.src else fetchFromGitHub {
+      owner = "nss-dev";
+      repo = "nss";
+      rev = "NSS_${lib.replaceStrings ["."] ["_"] version}_RTM";
+      hash = "sha256-qgSbzlRbU+gElC2ae3FEGRUFSM1JHd/lNGNXC0x4xt4=";
     };
 
     dontBuild = true;
@@ -54,7 +46,7 @@ let
       runHook preInstall
 
       mkdir $out
-      cp nss/lib/ckfw/builtins/certdata.txt $out
+      cp lib/ckfw/builtins/certdata.txt $out
 
       runHook postInstall
     '';

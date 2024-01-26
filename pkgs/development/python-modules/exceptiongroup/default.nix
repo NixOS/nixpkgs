@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,14 +18,12 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "exceptiongroup";
     rev = version;
-    hash = "sha256-XQcYYz4MOxWj9QlgM6KuwBaCHjYzGRkQw3cN5WBSnAo=";
+    hash = "sha256-iGeaRVJeFAWfJpwr7N4kST7d8YxpX3WgDqQemlR0cLU=";
   };
 
   nativeBuildInputs = [
     flit-scm
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 

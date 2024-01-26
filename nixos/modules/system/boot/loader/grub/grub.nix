@@ -1,8 +1,32 @@
 { config, options, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    all
+    concatMap
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    escapeShellArg
+    flip
+    foldr
+    forEach
+    hasPrefix
+    mapAttrsToList
+    literalExpression
+    makeBinPath
+    mkDefault
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionals
+    optionalString
+    replaceStrings
+    types
+  ;
 
   cfg = config.boot.loader.grub;
 
@@ -12,7 +36,7 @@ let
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
-  realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
+  realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; zfs = cfg.zfsPackage; }
     else grubPkgs.grub2;
 
   grub =
@@ -40,7 +64,10 @@ let
       backgroundColor = f cfg.backgroundColor;
       entryOptions = f cfg.entryOptions;
       subEntryOptions = f cfg.subEntryOptions;
-      grub = f grub;
+      # PC platforms (like x86_64-linux) have a non-EFI target (`grubTarget`), but other platforms
+      # (like aarch64-linux) have an undefined `grubTarget`. Avoid providing the path to a non-EFI
+      # GRUB on those platforms.
+      grub = f (if (grub.grubTarget or "") != "" then grub else "");
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
       fullName = lib.getName realGrub;
@@ -60,13 +87,15 @@ let
         extraGrubInstallArgs
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios
-        users;
+        users
+        timeoutStyle
+      ;
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
         ++ optional cfg.efiSupport efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
-      font = if cfg.font == null then ""
-        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
+      font = lib.optionalString (cfg.font != null) (
+             if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
              else "${convertedFont}");
     });
@@ -145,7 +174,7 @@ in
           (as opposed to external files) will be copied into the Nix store, and
           will be visible to all local users.
         '';
-        type = with types; attrsOf (submodule {
+        type = types.attrsOf (types.submodule {
           options = {
             hashedPasswordFile = mkOption {
               example = "/path/to/file";
@@ -310,7 +339,7 @@ in
           See the
           [
           GRUB source code
-          ](http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/commands/nativedisk.c?h=grub-2.04#n326)
+          ](https://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/commands/nativedisk.c?h=grub-2.04#n326)
           for which disk modules are available.
 
           The list elements are passed directly as `argv`
@@ -352,10 +381,6 @@ in
         default = "";
         type = types.lines;
         example = ''
-          # GRUB 1 example (not GRUB 2 compatible)
-          title Windows
-            chainloader (hd0,1)+1
-
           # GRUB 2 example
           menuentry "Windows 7" {
             chainloader (hd0,4)+1
@@ -410,14 +435,6 @@ in
           Set to `null` to run GRUB in text mode.
 
           ::: {.note}
-          For grub 1:
-          It must be a 640x480,
-          14-colour image in XPM format, optionally compressed with
-          {command}`gzip` or {command}`bzip2`.
-          :::
-
-          ::: {.note}
-          For grub 2:
           File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
           not be progressive.
           The image will be scaled if necessary to fit the screen.
@@ -431,10 +448,28 @@ in
         default = null;
         description = lib.mdDoc ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
+        '';
+      };
+
+      timeoutStyle = mkOption {
+        default = "menu";
+        type = types.enum [ "menu" "countdown" "hidden" ];
+        description = lib.mdDoc ''
+           - `menu` shows the menu.
+           - `countdown` uses a text-mode countdown.
+           - `hidden` hides GRUB entirely.
+
+          When using a theme, the default value (`menu`) is appropriate for the graphical countdown.
+
+          When attempting to do flicker-free boot, `hidden` should be used.
+
+          See the [GRUB documentation section about `timeout_style`](https://www.gnu.org/software/grub/manual/grub/html_node/timeout.html).
 
           ::: {.note}
-          This options has no effect for GRUB 1.
+          If this option is set to ‘countdown’ or ‘hidden’ [...] and ESC or F4 are pressed, or SHIFT is held down during that time, it will display the menu and wait for input.
           :::
+
+          From: [Simple configuration handling page, under GRUB_TIMEOUT_STYLE](https://www.gnu.org/software/grub/manual/grub/html_node/Simple-configuration.html).
         '';
       };
 
@@ -443,10 +478,6 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           Options applied to the primary NixOS menu entry.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -455,10 +486,6 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           Options applied to the secondary NixOS submenu entry.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -468,10 +495,6 @@ in
         default = null;
         description = lib.mdDoc ''
           Grub theme to be used.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -480,10 +503,6 @@ in
         default = "stretch";
         description = lib.mdDoc ''
           Whether to stretch the image or show the image in the top-left corner unstretched.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -592,8 +611,16 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether GRUB should be built against libzfs.
-          ZFS support is only available for GRUB v2.
-          This option is ignored for GRUB v1.
+        '';
+      };
+
+      zfsPackage = mkOption {
+        type = types.package;
+        internal = true;
+        default = pkgs.zfs;
+        defaultText = literalExpression "pkgs.zfs";
+        description = lib.mdDoc ''
+          Which ZFS package to use if `config.boot.loader.grub.zfsSupport` is true.
         '';
       };
 
@@ -602,8 +629,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether GRUB should be built with EFI support.
-          EFI support is only available for GRUB v2.
-          This option is ignored for GRUB v1.
         '';
       };
 
@@ -732,7 +757,7 @@ in
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/cp -pf "${v}" "@bootPath@/${n}"
+          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
         '') config.boot.loader.grub.extraFiles);
 
       assertions = [

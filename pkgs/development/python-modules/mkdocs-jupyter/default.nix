@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.24.1";
+  version = "0.24.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,12 +23,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
-    hash = "sha256-lncDf7fpMSaPPfdZn8CCjCYSR989FXW87TILqLfR1G0=";
+    hash = "sha256-ify+ipUjhk1UFt4aYHEWQLa8KXInnSrfRu0ndsLZ/3w=";
   };
 
   postPatch = ''
     sed -i "/--cov/d" pyproject.toml
-    substituteInPlace mkdocs_jupyter/tests/test_base_usage.py \
+    substituteInPlace src/mkdocs_jupyter/tests/test_base_usage.py \
       --replace "[\"mkdocs\"," "[\"${mkdocs.out}/bin/mkdocs\","
   '';
 

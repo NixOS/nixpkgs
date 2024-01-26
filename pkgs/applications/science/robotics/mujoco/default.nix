@@ -1,122 +1,187 @@
-{ cmake
+{ cereal_1_3_2
+, cmake
 , fetchFromGitHub
 , fetchFromGitLab
-, git
+, glfw
+, glm
 , lib
-, libGL
+, spdlog
 , stdenv
-, xorg
 }:
 
 let
-  # See https://github.com/deepmind/mujoco/blob/573d331b69845c5d651b70f5d1b0f3a0d2a3a233/cmake/MujocoDependencies.cmake#L21-L59
-  abseil-cpp = fetchFromGitHub {
-    owner = "abseil";
-    repo = "abseil-cpp";
-    rev = "8c0b94e793a66495e0b1f34a5eb26bd7dc672db0";
-    hash = "sha256-Od1FZOOWEXVQsnZBwGjDIExi6LdYtomyL0STR44SsG8=";
-  };
-  benchmark = fetchFromGitHub {
-    owner = "google";
-    repo = "benchmark";
-    rev = "d845b7b3a27d54ad96280a29d61fa8988d4fddcf";
-    hash = "sha256-XTnTM1k6xMGXUws/fKdJUbpCPcc4U0IelL6BPEEnpEQ=";
-  };
-  ccd = fetchFromGitHub {
-    owner = "danfis";
-    repo = "libccd";
-    rev = "7931e764a19ef6b21b443376c699bbc9c6d4fba8";
-    hash = "sha256-TIZkmqQXa0+bSWpqffIgaBela0/INNsX9LPM026x1Wk=";
-  };
-  eigen3 = fetchFromGitLab {
-    owner = "libeigen";
-    repo = "eigen";
-    rev = "3bb6a48d8c171cf20b5f8e48bfb4e424fbd4f79e";
-    hash = "sha256-k71DoEsx8JpC9AlQ0cCRI0fWMIWFBFL/Yscx+2iBtNM=";
-  };
-  googletest = fetchFromGitHub {
-    owner = "google";
-    repo = "googletest";
-    rev = "58d77fa8070e8cec2dc1ed015d66b454c8d78850";
-    hash = "sha256-W+OxRTVtemt2esw4P7IyGWXOonUN5ZuscjvzqkYvZbM=";
-  };
-  lodepng = fetchFromGitHub {
-    owner = "lvandeve";
-    repo = "lodepng";
-    rev = "b4ed2cd7ecf61d29076169b49199371456d4f90b";
-    hash = "sha256-5cCkdj/izP4e99BKfs/Mnwu9aatYXjlyxzzYiMD/y1M=";
-  };
-  qhull = fetchFromGitHub {
-    owner = "qhull";
-    repo = "qhull";
-    rev = "3df027b91202cf179f3fba3c46eebe65bbac3790";
-    hash = "sha256-aHO5n9Y35C7/zb3surfMyjyMjo109DoZnkozhiAKpYQ=";
-  };
-  tinyobjloader = fetchFromGitHub {
-    owner = "tinyobjloader";
-    repo = "tinyobjloader";
-    rev = "1421a10d6ed9742f5b2c1766d22faa6cfbc56248";
-    hash = "sha256-9z2Ne/WPCiXkQpT8Cun/pSGUwgClYH+kQ6Dx1JvW6w0=";
-  };
-  tinyxml2 = fetchFromGitHub {
-    owner = "leethomason";
-    repo = "tinyxml2";
-    rev = "1dee28e51f9175a31955b9791c74c430fe13dc82";
-    hash = "sha256-AQQOctXi7sWIH/VOeSUClX6hlm1raEQUOp+VoPjLM14=";
+  pin = {
+
+    # See https://github.com/google-deepmind/mujoco/blob/3.0.0/cmake/MujocoDependencies.cmake#L17-L64
+    abseil-cpp = fetchFromGitHub {
+      owner = "abseil";
+      repo = "abseil-cpp";
+      rev = "fb3621f4f897824c0dbe0615fa94543df6192f30";
+      hash = "sha256-uNGrTNg5G5xFGtc+BSWE389x0tQ/KxJQLHfebNWas/k=";
+    };
+    benchmark = fetchFromGitHub {
+      owner = "google";
+      repo = "benchmark";
+      rev = "e45585a4b8e75c28479fa4107182c28172799640";
+      hash = "sha256-pgHvmRpPd99ePUVRsi7WXLVSZngZ5q6r1vWW4mdGvxY=";
+    };
+    ccd = fetchFromGitHub {
+      owner = "danfis";
+      repo = "libccd";
+      rev = "7931e764a19ef6b21b443376c699bbc9c6d4fba8";
+      hash = "sha256-TIZkmqQXa0+bSWpqffIgaBela0/INNsX9LPM026x1Wk=";
+    };
+    eigen3 = fetchFromGitLab {
+      owner = "libeigen";
+      repo = "eigen";
+      rev = "454f89af9d6f3525b1df5f9ef9c86df58bf2d4d3";
+      hash = "sha256-a9QAnv6vIM8a9Bn8ZmfeMT0+kbtb0QGxM0+m5xwIqm8=";
+    };
+    googletest = fetchFromGitHub {
+      owner = "google";
+      repo = "googletest";
+      rev = "f8d7d77c06936315286eb55f8de22cd23c188571";
+      hash = "sha256-t0RchAHTJbuI5YW4uyBPykTvcjy90JW9AOPNjIhwh6U=";
+    };
+    lodepng = fetchFromGitHub {
+      owner = "lvandeve";
+      repo = "lodepng";
+      rev = "b4ed2cd7ecf61d29076169b49199371456d4f90b";
+      hash = "sha256-5cCkdj/izP4e99BKfs/Mnwu9aatYXjlyxzzYiMD/y1M=";
+    };
+    qhull = fetchFromGitHub {
+      owner = "qhull";
+      repo = "qhull";
+      rev = "0c8fc90d2037588024d9964515c1e684f6007ecc";
+      hash = "sha256-Ptzxad3ewmKJbbcmrBT+os4b4SR976zlCG9F0nq0x94=";
+    };
+    tinyobjloader = fetchFromGitHub {
+      owner = "tinyobjloader";
+      repo = "tinyobjloader";
+      rev = "1421a10d6ed9742f5b2c1766d22faa6cfbc56248";
+      hash = "sha256-9z2Ne/WPCiXkQpT8Cun/pSGUwgClYH+kQ6Dx1JvW6w0=";
+    };
+    tinyxml2 = fetchFromGitHub {
+      owner = "leethomason";
+      repo = "tinyxml2";
+      rev = "9a89766acc42ddfa9e7133c7d81a5bda108a0ade";
+      hash = "sha256-YGAe4+Ttv/xeou+9FoJjmQCKgzupTYdDhd+gzvtz/88=";
+    };
+    marchingcubecpp = fetchFromGitHub {
+      owner = "aparis69";
+      repo = "MarchingCubeCpp";
+      rev = "5b79e5d6bded086a0abe276a4b5a69fc17ae9bf1";
+      hash = "sha256-L0DH1GJZ/3vatQAU/KZj/2xTKE6Fwcw9eQYzLdqX2N4=";
+    };
+
+    tmd = stdenv.mkDerivation rec {
+      name = "TriangleMeshDistance";
+
+      src = fetchFromGitHub {
+        owner = "InteractiveComputerGraphics";
+        repo = name;
+        rev = "e55a15c20551f36242fd6368df099a99de71d43a";
+        hash = "sha256-vj6TMMT8mp7ciLa5nzVAhMWPcAHXq+ZwHlWsRA3uCmg=";
+      };
+
+      installPhase = ''
+        mkdir -p $out/include/tmd
+        cp ${name}/include/tmd/${name}.h $out/include/tmd/
+      '';
+    };
+
+    sdflib = stdenv.mkDerivation rec {
+      name = "SdfLib";
+
+      src = fetchFromGitHub {
+        owner = "UPC-ViRVIG";
+        repo = name;
+        rev = "7c49cfba9bbec763b5d0f7b90b26555f3dde8088";
+        hash = "sha256-5bnQ3rHH9Pw1jRVpZpamFnhIJHWnGm6krgZgIBqNtVg=";
+      };
+
+      patches = [ ./sdflib-system-deps.patch ];
+
+      cmakeFlags = [
+        "-DSDFLIB_USE_ASSIMP=OFF"
+        "-DSDFLIB_USE_OPENMP=OFF"
+        "-DSDFLIB_USE_ENOKI=OFF"
+        "-DSDFLIB_USE_SYSTEM_GLM=ON"
+        "-DSDFLIB_USE_SYSTEM_SPDLOG=ON"
+        "-DSDFLIB_USE_SYSTEM_CEREAL=ON"
+        "-DSDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE=ON"
+      ];
+
+      nativeBuildInputs = [ cmake ];
+      buildInputs = [
+        pin.tmd
+
+        # Mainline. The otherwise pinned glm realease from 2018 does
+        # not build due to test failures and missing files.
+        glm
+
+        spdlog
+        cereal_1_3_2
+      ];
+    };
+
   };
 
-  # See https://github.com/deepmind/mujoco/blob/573d331b69845c5d651b70f5d1b0f3a0d2a3a233/simulate/cmake/SimulateDependencies.cmake#L32-L35
-  glfw = fetchFromGitHub {
-    owner = "glfw";
-    repo = "glfw";
-    rev = "7482de6071d21db77a7236155da44c172a7f6c9e";
-    hash = "sha256-4+H0IXjAwbL5mAWfsIVhW0BSJhcWjkQx4j2TrzZ3aIo=";
-  };
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "2.3.0";
+  version = "3.1.1";
 
+  # Bumping version? Make sure to look though the MuJoCo's commit
+  # history for bumped dependency pins!
   src = fetchFromGitHub {
-    owner = "deepmind";
-    repo = pname;
-    rev = version;
-    hash = "sha256-FxMaXl7yfUAyY6LE1sxaw226dBtp1DOCWNnROp0WX2I=";
+    owner = "google-deepmind";
+    repo = "mujoco";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+2nt7G8j6Pi60cfMBPYWPGwD8wpxDOSylenm0oCitzM=";
   };
 
-  patches = [ ./dependencies.patch ];
+  patches = [ ./mujoco-system-deps-dont-fetch.patch ];
 
-  nativeBuildInputs = [ cmake git ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    libGL
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
+    pin.sdflib
+    glm
+
+    # non-numerical
+    spdlog
+    cereal_1_3_2
+    glfw
+  ];
+
+  cmakeFlags = [
+    "-DMUJOCO_USE_SYSTEM_sdflib=ON"
+    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
+    "-DMUJOCO_SAMPLES_USE_SYSTEM_GLFW=ON"
   ];
 
   # Move things into place so that cmake doesn't try downloading dependencies.
   preConfigure = ''
     mkdir -p build/_deps
-    ln -s ${abseil-cpp} build/_deps/abseil-cpp-src
-    ln -s ${benchmark} build/_deps/benchmark-src
-    ln -s ${ccd} build/_deps/ccd-src
-    ln -s ${eigen3} build/_deps/eigen3-src
-    ln -s ${glfw} build/_deps/glfw-src
-    ln -s ${googletest} build/_deps/googletest-src
-    ln -s ${lodepng} build/_deps/lodepng-src
-    ln -s ${qhull} build/_deps/qhull-src
-    ln -s ${tinyobjloader} build/_deps/tinyobjloader-src
-    ln -s ${tinyxml2} build/_deps/tinyxml2-src
+    ln -s ${pin.abseil-cpp} build/_deps/abseil-cpp-src
+    ln -s ${pin.benchmark} build/_deps/benchmark-src
+    ln -s ${pin.ccd} build/_deps/ccd-src
+    ln -s ${pin.eigen3} build/_deps/eigen3-src
+    ln -s ${pin.googletest} build/_deps/googletest-src
+    ln -s ${pin.lodepng} build/_deps/lodepng-src
+    ln -s ${pin.qhull} build/_deps/qhull-src
+    ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
+    ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
+    ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
+
+  passthru.pin = { inherit (pin) lodepng eigen3 abseil-cpp; };
 
   meta = with lib; {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator.";
     homepage = "https://mujoco.org/";
+    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with maintainers; [ samuela tmplt ];
   };
 }

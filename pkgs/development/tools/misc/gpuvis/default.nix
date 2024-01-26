@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gpuvis";
-  version = "20211204";
+  version = "0.1";
 
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = pname;
-    rev = "7f47419470687c7ecbdf086b81f5bafdb05d1bef";
-    sha256 = "sha256-29Bv+y0zWzn7QtpsjRV6hr19bCeyVJusPcYiAIEIluk=";
+    rev = "v${version}";
+    hash = "sha256-a9eAYDsiwyzZc4FAPo0wANysisIT4qCHLh2PrYswJtw=";
   };
 
   # patch dlopen path for gtk3
@@ -31,11 +31,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 gtk3 freetype ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' has not been declared
+    "-include cstdint"
+  ];
+
   meta = with lib; {
     description = "GPU Trace Visualizer";
     homepage = "https://github.com/mikesart/gpuvis";
     license = licenses.mit;
     maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

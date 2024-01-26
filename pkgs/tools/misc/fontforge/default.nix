@@ -1,5 +1,5 @@
-{ stdenv, fetchpatch, fetchFromGitHub, lib
-, cmake, perl, uthash, pkg-config, gettext
+{ stdenv, fetchFromGitHub, lib
+, cmake, uthash, pkg-config
 , python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq
 , withSpiro ? false, libspiro

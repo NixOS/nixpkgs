@@ -4,21 +4,24 @@
 , esbuild
 , deno
 , fetchurl
-, nodePackages
+, dart-sass
 , rWrapper
 , rPackages
 , extraRPackages ? []
 , makeWrapper
+, runCommand
 , python3
+, quarto
 , extraPythonPackages ? ps: with ps; []
+, sysctl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.2.475";
+  version = "1.3.450";
   src = fetchurl {
-    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${version}/quarto-${version}-linux-amd64.tar.gz";
-    sha256 = "sha256-oyKjDlTKt2fIzirOqgNRrpuM7buNCG5mmgIztPa28rY=";
+    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
+    sha256 = "sha256-bcj7SzEGfQxsw9P8WkcLrKurPupzwpgIGtxoE3KVwAU=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +46,9 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ deno ]} \
       --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
       --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
-      --prefix QUARTO_DART_SASS : ${nodePackages.sass}/bin/sass \
-      --prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R \
-      --prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3
+      --prefix QUARTO_DART_SASS : ${dart-sass}/bin/dart-sass \
+      ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"} \
+      ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"}
   '';
 
   installPhase = ''
@@ -58,8 +61,18 @@ stdenv.mkDerivation rec {
       mv bin/* $out/bin
       mv share/* $out/share
 
-      runHook preInstall
+      runHook postInstall
   '';
+
+  passthru.tests = {
+    quarto-check = runCommand "quarto-check" {
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+    } ''
+      export HOME="$(mktemp -d)"
+      ${quarto}/bin/quarto check
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "Open-source scientific and technical publishing system built on Pandoc";
@@ -70,8 +83,8 @@ stdenv.mkDerivation rec {
     homepage = "https://quarto.org/";
     changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mrtarantoga ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ minijackson mrtarantoga ];
+    platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
   };
-}
+})

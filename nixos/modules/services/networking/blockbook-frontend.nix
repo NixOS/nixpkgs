@@ -12,12 +12,7 @@ let
 
       enable = mkEnableOption (lib.mdDoc "blockbook-frontend application");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.blockbook;
-        defaultText = literalExpression "pkgs.blockbook";
-        description = lib.mdDoc "Which blockbook package to use.";
-      };
+      package = mkPackageOption pkgs "blockbook" { };
 
       user = mkOption {
         type = types.str;

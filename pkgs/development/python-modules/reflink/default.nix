@@ -7,11 +7,12 @@
 
 buildPythonPackage rec {
   pname = "reflink";
-  version = "0.2.1";
+  version = "0.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ySU1gtskQTv9cDq/wbKkneePMbSQcjnyhumhkpoebjo=";
+    hash = "sha256-iCN17nMZJ1rl9qahKHQGNl2sHpZDuRrRDlGH0/hCU70=";
   };
 
   propagatedBuildInputs = [ cffi ];

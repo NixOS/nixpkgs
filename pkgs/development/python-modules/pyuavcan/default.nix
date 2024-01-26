@@ -4,6 +4,7 @@
  buildPythonPackage rec {
   pname = "pyuavcan";
   version = "1.1.0.dev1";
+  format = "setuptools";
   disabled = pythonOlder "3.7"; # only python>=3.7 is supported
 
   src = fetchFromGitHub {

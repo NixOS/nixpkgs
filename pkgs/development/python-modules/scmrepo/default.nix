@@ -2,6 +2,8 @@
 , asyncssh
 , buildPythonPackage
 , dulwich
+, dvc-http
+, dvc-objects
 , fetchFromGitHub
 , fsspec
 , funcy
@@ -17,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "1.0.3";
+  version = "2.0.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,10 +28,8 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Ne0iN1rVbdxyoN8XiM9Xj8uyzlEL6WHPUZbFWt/qH40=";
+    hash = "sha256-gBGfL6Xet7ASdwRTFJ5nHpyeXi/pqlrL9o5nC3m48hk=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -39,6 +39,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asyncssh
     dulwich
+    dvc-http
+    dvc-objects
     fsspec
     funcy
     gitpython

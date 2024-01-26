@@ -2,17 +2,15 @@
 
 buildDunePackage rec {
   pname = "minisat";
-  version = "0.4";
+  version = "0.5";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   src = fetchFromGitHub {
     owner  = "c-cube";
     repo   = "ocaml-minisat";
     rev    = "v${version}";
-    sha256 = "009jncrvnl9synxx6jnm6gp0cs7zlj71z22zz7bs1750b0jrfm2r";
+    hash   = "sha256-hqGSHxhT+Z2slRCIXnfYuasG1K3tVG/tsM0IXxmy9hQ=";
   };
 
   meta = {

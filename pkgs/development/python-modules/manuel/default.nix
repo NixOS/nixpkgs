@@ -5,12 +5,13 @@
 , python
 , isPy27
 , six
-, zope_testing
+, zope-testing
 }:
 
 buildPythonPackage rec {
   pname = "manuel";
   version = "1.12.4";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ six ];
-  nativeCheckInputs = [ zope_testing ];
+  nativeCheckInputs = [ zope-testing ];
 
   meta = with lib; {
     description = "A documentation builder";

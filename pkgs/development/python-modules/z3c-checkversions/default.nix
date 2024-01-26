@@ -4,22 +4,23 @@
 , fetchPypi
 , python
 , zc-buildout
-, zope_testrunner
+, zope-testrunner
 }:
 
 buildPythonPackage rec {
   pname = "z3c-checkversions";
-  version = "2.0";
+  version = "2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "z3c.checkversions";
-    hash = "sha256-rn4kl8Pn6YNqbE+VD6L8rVBQHkQqXSD47ZIy77+ashE=";
+    hash = "sha256-j5So40SyJf7XfCz3P9YFR/6z94up3LY2/dfEmmIbxAk=";
   };
 
   propagatedBuildInputs = [ zc-buildout ];
 
-  nativeCheckInputs = [ zope_testrunner ];
+  nativeCheckInputs = [ zope-testrunner ];
 
   checkPhase = ''
     ${python.interpreter} -m zope.testrunner --test-path=src []

@@ -1,21 +1,27 @@
-{ lib, stdenv, fetchurl, buildPackages, perl, coreutils, fetchFromGitHub
-, makeWrapper
-, withCryptodev ? false, cryptodev
+{
+  buildPackages
+, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
-, static ? stdenv.hostPlatform.isStatic
+, fetchFromGitHub
+, lib
+, makeWrapper
+, perl
 , removeReferencesTo
+, static ? stdenv.hostPlatform.isStatic
+, stdenv
+, withCryptodev ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quictls";
-  version = "3.0.8+quic";
+  version = "3.1.4-quic1";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "openssl-${version}";
-    sha256 = "sha256-6t23EY+Gk/MvLOcYpDbL5jEr0rMaaPYOsc+12WFgv1c=";
+    rev = "openssl-${finalAttrs.version}";
+    hash = "sha256-WOWoY6rmAAUvuWWXPTWsllUkew5ZIULjL1CEg/RRPsE=";
   };
 
   patches = [
@@ -26,8 +32,8 @@ stdenv.mkDerivation rec {
     ../openssl/3.0/openssl-disable-kernel-detection.patch
 
     (if stdenv.hostPlatform.isDarwin
-      then ../openssl/use-etc-ssl-certs-darwin.patch
-      else ../openssl/use-etc-ssl-certs.patch)
+    then ../openssl/use-etc-ssl-certs-darwin.patch
+    else ../openssl/use-etc-ssl-certs.patch)
   ];
 
   postPatch = ''
@@ -42,56 +48,66 @@ stdenv.mkDerivation rec {
                 '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
   '';
 
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+    removeReferencesTo
+  ];
+
+  buildInputs = lib.optionals withCryptodev [
+    cryptodev
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "doc" ];
+
   setOutputFlags = false;
+
   separateDebugInfo =
     !stdenv.hostPlatform.isDarwin &&
     !(stdenv.hostPlatform.useLLVM or false) &&
     stdenv.cc.isGNU;
 
-  nativeBuildInputs = [ makeWrapper perl removeReferencesTo ];
-  buildInputs = lib.optional withCryptodev cryptodev;
-
   # TODO(@Ericson2314): Improve with mass rebuild
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configureScript = {
-      armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
-      armv6l-linux = "./Configure linux-armv4 -march=armv6";
-      armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
-      x86_64-darwin  = "./Configure darwin64-x86_64-cc";
-      aarch64-darwin = "./Configure darwin64-arm64-cc";
-      x86_64-linux = "./Configure linux-x86_64";
-      x86_64-solaris = "./Configure solaris64-x86_64-gcc";
-      riscv64-linux = "./Configure linux64-riscv64";
-      mips64el-linux =
-        if stdenv.hostPlatform.isMips64n64
-        then "./Configure linux64-mips64"
-        else if stdenv.hostPlatform.isMips64n32
-        then "./Configure linux-mips64"
-        else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
-    }.${stdenv.hostPlatform.system} or (
-      if stdenv.hostPlatform == stdenv.buildPlatform
-        then "./config"
-      else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
-        then "./Configure BSD-x86_64"
-      else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
-        then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
-      else if stdenv.hostPlatform.isBSD
-        then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
-      else if stdenv.hostPlatform.isMinGW
-        then "./Configure mingw${lib.optionalString
+    armv5tel-linux = "./Configure linux-armv4 -march=armv5te";
+    armv6l-linux = "./Configure linux-armv4 -march=armv6";
+    armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
+    x86_64-darwin = "./Configure darwin64-x86_64-cc";
+    aarch64-darwin = "./Configure darwin64-arm64-cc";
+    x86_64-linux = "./Configure linux-x86_64";
+    x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+    riscv64-linux = "./Configure linux64-riscv64";
+    mips64el-linux =
+      if stdenv.hostPlatform.isMips64n64
+      then "./Configure linux64-mips64"
+      else if stdenv.hostPlatform.isMips64n32
+      then "./Configure linux-mips64"
+      else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
+  }.${stdenv.hostPlatform.system} or (
+    if stdenv.hostPlatform == stdenv.buildPlatform
+    then "./config"
+    else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
+    then "./Configure BSD-x86_64"
+    else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
+    then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
+    else if stdenv.hostPlatform.isBSD
+    then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    else if stdenv.hostPlatform.isMinGW
+    then "./Configure mingw${lib.optionalString
                                    (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                    (toString stdenv.hostPlatform.parsed.cpu.bits)}"
-      else if stdenv.hostPlatform.isLinux
-        then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
-      else if stdenv.hostPlatform.isiOS
-        then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
-      else
-        throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
-    );
+    else if stdenv.hostPlatform.isLinux
+    then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    else if stdenv.hostPlatform.isiOS
+    then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+    else
+      throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
+  );
 
   # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
   dontAddStaticConfigureFlags = true;
+
   configureFlags = [
     "shared" # "shared" builds both shared and static libraries
     "--libdir=lib"
@@ -100,19 +116,18 @@ stdenv.mkDerivation rec {
     "-DHAVE_CRYPTODEV"
     "-DUSE_CRYPTODEV_DIGESTS"
   ] ++ lib.optional enableSSL2 "enable-ssl2"
-    ++ lib.optional enableSSL3 "enable-ssl3"
-    # We select KTLS here instead of the configure-time detection (which we patch out).
-    # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
-    ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
-    ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
-    # OpenSSL needs a specific `no-shared` configure flag.
-    # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
-    # for a comprehensive list of configuration options.
-    ++ lib.optional static "no-shared"
-    # This introduces a reference to the CTLOG_FILE which is undesired when
-    # trying to build binaries statically.
-    ++ lib.optional static "no-ct"
-    ;
+  ++ lib.optional enableSSL3 "enable-ssl3"
+  # We select KTLS here instead of the configure-time detection (which we patch out).
+  # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+  ++ lib.optional (stdenv.isLinux && lib.versionAtLeast finalAttrs.version "3.0.0") "enable-ktls"
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
+  # OpenSSL needs a specific `no-shared` configure flag.
+  # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
+  # for a comprehensive list of configuration options.
+  ++ lib.optional static "no-shared"
+  # This introduces a reference to the CTLOG_FILE which is undesired when
+  # trying to build binaries statically.
+  ++ lib.optional static "no-ct";
 
   makeFlags = [
     "MANDIR=$(man)/share/man"
@@ -160,11 +175,12 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
-    homepage = "https://quictls.github.io";
+  meta = {
+    changelog = "https://github.com/quictls/openssl/blob/${finalAttrs.src.rev}/CHANGES.md";
     description = "TLS/SSL and crypto library with QUIC APIs";
-    license = licenses.openssl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ izorkin ];
+    homepage = "https://quictls.github.io";
+    license = lib.licenses.openssl;
+    maintainers = with lib.maintainers; [ izorkin ];
+    platforms = lib.platforms.all;
   };
-}
+})

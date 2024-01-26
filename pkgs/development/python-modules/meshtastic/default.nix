@@ -1,4 +1,5 @@
 { lib
+, bleak
 , buildPythonPackage
 , dotmap
 , fetchFromGitHub
@@ -20,8 +21,8 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.1.6";
-  format = "setuptools";
+  version = "2.2.19";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,10 +30,15 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-xfE4hfnf9NFA9iwce1onclLJOYgMWxuionmVUPDVEuw=";
+    hash = "sha256-5VXvh0W3llSnpIalg1e+JyFgmlTV5J2x4VC/j2+9Xb8=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    bleak
     dotmap
     pexpect
     protobuf
@@ -41,8 +47,8 @@ buildPythonPackage rec {
     pyqrcode
     pyserial
     pyyaml
-    setuptools
     requests
+    setuptools
     tabulate
     timeago
   ];
@@ -110,6 +116,7 @@ buildPythonPackage rec {
     "test_MeshInterface"
     "test_getNode_not_local"
     "test_getNode_not_local_timeout"
+    "test_main_onConnected_exception"
   ];
 
   meta = with lib; {

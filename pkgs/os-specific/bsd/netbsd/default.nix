@@ -1,5 +1,5 @@
 { stdenv, lib, stdenvNoCC
-, makeScopeWithSplicing, generateSplicesForMkScope
+, makeScopeWithSplicing', generateSplicesForMkScope
 , buildPackages
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
 , zlib
@@ -26,17 +26,15 @@ let
       else "no"}"
   ];
 
-in makeScopeWithSplicing
-  (generateSplicesForMkScope "netbsd")
-  (_: {})
-  (_: {})
-  (self: let
+in makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "netbsd";
+  f = (self: let
     inherit (self) mkDerivation;
   in {
 
   # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
   #
-  # We use `makeScopeWithSplicing` because this should be used for all
+  # We use `makeScopeWithSplicing'` because this should be used for all
   # nested package sets which support cross, so the inner `callPackage` works
   # correctly. But for the inline packages we don't bother to use
   # `callPackage`.
@@ -212,7 +210,7 @@ in makeScopeWithSplicing
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # GNU objcopy produces broken .a libs which won't link into dependers.
       # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
-      "OBJCOPY=${buildPackages.darwin.cctools}/bin/strip"
+      "OBJCOPY=${buildPackages.darwin.cctools-port}/bin/strip"
     ];
     RENAME = "-D";
 
@@ -605,6 +603,12 @@ in makeScopeWithSplicing
     version = "9.2";
     sha256 = "03s18q8d9giipf05bx199fajc2qwikji0djz7hw63d2lya6bfnpj";
 
+    # Make the build ignore linker warnings
+    prePatch = ''
+      substituteInPlace sys/conf/Makefile.kern.inc \
+        --replace "-Wa,--fatal-warnings" ""
+    '';
+
     patches = [
       # Fix this error when building bootia32.efi and bootx64.efi:
       # error: PHDR segment not covered by LOAD segment
@@ -614,8 +618,13 @@ in makeScopeWithSplicing
       ./sys-headers-incsdir.patch
     ];
 
-    # multiple header dirs, see above
-    inherit (self.include) postPatch;
+    postPatch =
+      ''
+        substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
+          --replace "-nocombreloc" "-z nocombreloc"
+      '' +
+      # multiple header dirs, see above
+      self.include.postPatch;
 
     CONFIG = "GENERIC";
 
@@ -636,7 +645,11 @@ in makeScopeWithSplicing
     makeFlags = defaultMakeFlags ++ [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
     hardeningDisable = [ "pic" ];
     MKKMOD = "no";
-    env.NIX_CFLAGS_COMPILE = toString [ "-Wa,--no-warn" ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=array-parameter"
+      "-Wno-error=array-bounds"
+      "-Wa,--no-warn"
+    ];
 
     postBuild = ''
       make -C arch/$MACHINE/compile/$CONFIG $makeFlags
@@ -753,11 +766,11 @@ in makeScopeWithSplicing
     version = "9.2";
     sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
     buildInputs = with self; [ libterminfo ];
-    env.NIX_CFLAGS_COMPILE = toString [
+    env.NIX_CFLAGS_COMPILE = toString ([
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
-    ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=";
+    ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=");
     propagatedBuildInputs = with self; compatIfNeeded;
     MKDOC = "no"; # missing vfontedpr
     makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
@@ -1011,4 +1024,5 @@ in makeScopeWithSplicing
   # END MISCELLANEOUS
   #
 
-})
+});
+}

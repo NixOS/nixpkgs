@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitLab
 , wrapGAppsHook
-, makeWrapper
 , pkg-config
 , meson
 , ninja
@@ -29,16 +28,17 @@ let
    requests
    rx
    gtk3
+   reactivex
  ]);
 in stdenv.mkDerivation rec {
   pname = "gwe";
-  version = "0.15.5";
+  version = "0.15.6";
 
   src = fetchFromGitLab {
     owner = "leinardi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bey/G+muDZsMMU3lVdNS6E/BnAJr29zLPE0MMT4sh1c=";
+    sha256 = "sha256-xlAz67sThXZ5o2kABb+aQI/7N7jmRpWU/5m24u8TkII=";
   };
 
   prePatch = ''
@@ -85,5 +85,6 @@ in stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3Only;
     maintainers = [ maintainers.ivar ];
+    mainProgram = "gwe";
   };
 }

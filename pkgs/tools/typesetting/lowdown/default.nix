@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fixDarwinDylibNames, which
-, enableShared ? !(stdenv.hostPlatform.isStatic)
+{ lib, stdenv, fetchurl, fixDarwinDylibNames, which, dieHook
+, enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 # for passthru.tests
 , nix
@@ -7,16 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "1.0.1";
+  version = "1.1.0";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "2jsskdrx035vy5kyb371swcn23vj7ww1fmrsalmyp1jc3459vgh2lk4nlvrw74r93z9yyzsq9vra2sspx173cpjlr8lyyqdw5h91lms";
+    hash = "sha512-EpAWTz7Zy+2qqJGgzLrt0tK7WEZ+hHbdyqzAmMiaqc6uNXscR88git6/UbTjvB9Yanvetvw9huSuyhcORCEIug==";
   };
 
-  nativeBuildInputs = [ which ]
+  nativeBuildInputs = [ which dieHook ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
@@ -44,20 +44,27 @@ stdenv.mkDerivation rec {
     "install_static"
   ];
 
-  # Fix lib extension so that fixDarwinDylibNames detects it, see
-  # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
   postInstall =
     let
-      inherit (stdenv.hostPlatform.extensions) sharedLibrary;
+      soVersion = "1";
     in
 
-    lib.optionalString (enableShared && stdenv.isDarwin) ''
-      darwinDylib="$lib/lib/liblowdown.2.dylib"
-      mv "$lib/lib/liblowdown.so.2" "$darwinDylib"
+    # Check that soVersion is up to date even if we are not on darwin
+    lib.optionalString (enableShared && !stdenv.isDarwin) ''
+      test -f $lib/lib/liblowdown.so.${soVersion} || \
+        die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
+    ''
+    # Fix lib extension so that fixDarwinDylibNames detects it, see
+    # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
+    + lib.optionalString (enableShared && stdenv.isDarwin) ''
+      darwinDylib="$lib/lib/liblowdown.${soVersion}.dylib"
+      mv "$lib/lib/liblowdown.so.${soVersion}" "$darwinDylib"
 
       # Make sure we are re-creating a symbolic link here
-      test -L "$lib/lib/liblowdown.so"
+      test -L "$lib/lib/liblowdown.so" || \
+        die "postInstall: expected $lib/lib/liblowdown.so to be a symlink"
       ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
+      rm "$lib/lib/liblowdown.so"
     '';
 
   doInstallCheck = true;

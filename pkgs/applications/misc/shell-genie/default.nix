@@ -16,8 +16,13 @@ buildPythonPackage rec {
     hash = "sha256-z7LiAq2jLzqjg4Q/r9o7M6VbedeT34NyPpgctfqBp+8=";
   };
 
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

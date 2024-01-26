@@ -1,77 +1,73 @@
-{ lib
-, python3
+{ stdenv
+, lib
 , fetchFromGitHub
+, gobject-introspection
+, meson
+, ninja
+, python3
 , wrapGAppsHook
 , cinnamon
 , glib
 , gspell
 , gtk3
-, gobject-introspection
 , gitUpdater
 }:
 
-python3.pkgs.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.14";
-  format = "other";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-7UZbCbzQ1ZrSzxTUdbA+wsH3p27qj/c/cM4GY/kzG6E=";
+    hash = "sha256-nvnft62vZ9ivijYnQGULW7ff2aAVJiIx9xq09My2NxE=";
   };
 
   postPatch = ''
+    sed -i -e "s|/usr/bin|$out/bin|" data/org.x.sticky.service
+    sed -i -e "s|/usr/lib|$out/lib|" usr/bin/sticky
     sed -i -e "s|/usr/share|$out/share|" usr/lib/sticky/*.py
   '';
 
   nativeBuildInputs = [
     gobject-introspection
+    meson
+    ninja
+    python3.pkgs.wrapPython
     wrapGAppsHook
   ];
 
   buildInputs = [
-    glib
-    gobject-introspection
     cinnamon.xapp
+    glib
     gspell
+    gtk3
+    python3 # for patchShebangs
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pygobject3
     xapp
   ];
 
-  postBuild = ''
-    glib-compile-schemas usr/share/glib-2.0/schemas
+  postInstall = ''
+    # https://github.com/linuxmint/sticky/pull/118
+    cp -r ../etc $out
+    cp -r ../usr/* $out
+
+    glib-compile-schemas $out/share/glib-2.0/schemas
   '';
-
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
-  # no tests
-  doCheck = false;
 
   dontWrapGApps = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    mv usr/lib $out
-    mv usr/share $out
-    patchShebangs $out/lib/sticky
-    mv $out/lib/sticky/sticky.py $out/bin/sticky
-    sed -i -e "1aimport sys;sys.path.append('$out/lib/sticky')" $out/bin/sticky
-
-    runHook postInstall
-  '';
-
-  # Arguments to be passed to `makeWrapper`, only used by buildPython*
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    buildPythonPath "$out $pythonPath"
+
+    chmod +x $out/bin/sticky
+    wrapProgram $out/bin/sticky \
+      --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      ''${gappsWrapperArgs[@]}
   '';
 
   passthru = {

@@ -27,6 +27,7 @@
 , libxkbcommon
 , libavif
 , libepoxy
+, libjxl
 , at-spi2-core
 , libxml2
 , libsoup
@@ -34,7 +35,6 @@
 , libxslt
 , harfbuzz
 , libpthreadstubs
-, pcre
 , nettle
 , libtasn1
 , p11-kit
@@ -51,7 +51,6 @@
 , openjpeg
 , geoclue2
 , sqlite
-, enableGLES ? true
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
@@ -71,7 +70,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.40.1";
+  version = "2.42.4";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -82,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ZOUmmE+M0hYe8DrpSa+ZwAL/Mz1hXmOGtGAWSjwbfvY=";
+    hash = "sha256-UiiLML2iI3NELOy4b5yaVprY1HaaH5ezUikO2Spn7YY=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -132,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     enchant2
     libavif
     libepoxy
+    libjxl
     gnutls
     gst-plugins-bad
     gst-plugins-base
@@ -153,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
     nettle
     openjpeg
     p11-kit
-    pcre
     sqlite
     woff2
   ] ++ (with xorg; [
@@ -173,13 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
-    bubblewrap
     libseccomp
     libmanette
     wayland
     libwpe
     libwpe-fdo
-    xdg-dbus-proxy
   ] ++ lib.optionals systemdSupport [
     systemd
   ] ++ lib.optionals enableGeoLocation [
@@ -204,6 +201,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+  ] ++ lib.optionals stdenv.isLinux [
+    # Have to be explicitly specified when cross.
+    # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
+    "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
+    "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -216,8 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
     "-DENABLE_JOURNALD_LOG=OFF"
-  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
-    "-DENABLE_GLES2=ON"
   ];
 
   postPatch = ''

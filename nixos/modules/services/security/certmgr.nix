@@ -37,12 +37,7 @@ in
   options.services.certmgr = {
     enable = mkEnableOption (lib.mdDoc "certmgr");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.certmgr;
-      defaultText = literalExpression "pkgs.certmgr";
-      description = lib.mdDoc "Which certmgr package to use in the service.";
-    };
+    package = mkPackageOption pkgs "certmgr" { };
 
     defaultRemote = mkOption {
       type = types.str;
@@ -187,6 +182,7 @@ in
     systemd.services.certmgr = {
       description = "certmgr";
       path = mkIf (cfg.svcManager == "command") [ pkgs.bash ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit preStart;

@@ -47,7 +47,7 @@ buildGoModule rec {
     homepage = "https://wakatime.com/";
     description = "WakaTime command line interface";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ aaronjheng ];
+    maintainers = with maintainers; [ ];
     mainProgram = "wakatime-cli";
   };
 }

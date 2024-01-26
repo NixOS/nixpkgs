@@ -1,0 +1,26 @@
+From 4b4ac26ef1cbb0b5b2354c251b216498325d0411 Mon Sep 17 00:00:00 2001
+From: Flakebi <flakebi@t-online.de>
+Date: Sat, 2 Dec 2023 16:31:50 +0100
+Subject: [PATCH 4/6] Fix flask-session and powerdns-admin compatibility
+
+flask-session and powerdns-admin both try to add sqlalchemy to flask.
+Reuse the database for flask-session.
+---
+ powerdnsadmin/__init__.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/powerdnsadmin/__init__.py b/powerdnsadmin/__init__.py
+index d447a00..653af33 100755
+--- a/powerdnsadmin/__init__.py
++++ b/powerdnsadmin/__init__.py
+@@ -60,6 +60,7 @@ def create_app(config=None):
+     if 'SESSION_TYPE' in os.environ:
+         app.config['SESSION_TYPE'] = os.environ.get('SESSION_TYPE')
+ 
++    app.config['SESSION_SQLALCHEMY'] = models.base.db
+     sess = Session(app)
+ 
+     # create sessions table if using sqlalchemy backend
+-- 
+2.42.0
+

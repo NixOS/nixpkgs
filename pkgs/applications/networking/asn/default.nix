@@ -15,16 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "asn";
-  version = "0.74";
+  version = "0.75.2";
 
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
-    rev = "v${version}";
-    sha256 = "sha256-400I8aWQaPE7qCV/HqyPzuMmKpUyLc+RK7GCVgbt7JQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-G8TDl9R5nbUzmjcr1m+eNNybSDqb64c7ZOO/viL5/Q4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   installPhase = ''
     install -Dv asn "$out/bin/asn"
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ curl whois bind mtr jq ipcalc grepcidr nmap aha ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "OSINT command line tool for investigating network data";
     longDescription = ''
       ASN / RPKI validity / BGP stats / IPv4v6 / Prefix / URL / ASPath / Organization /
@@ -41,7 +43,9 @@ stdenv.mkDerivation rec {
       lookup API server / Web traceroute server
     '';
     homepage = "https://github.com/nitefood/asn";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ devhell ];
+    changelog = "https://github.com/nitefood/asn/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ devhell ];
+    mainProgram = "asn";
   };
 }

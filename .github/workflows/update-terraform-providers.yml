@@ -1,8 +1,8 @@
 name: "Update terraform-providers"
 
 on:
-  schedule:
-    - cron: "0 3 * * *"
+  #schedule:
+  #  - cron: "0 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,8 +16,8 @@ jobs:
     if: github.repository_owner == 'NixOS' && github.ref == 'refs/heads/master' # ensure workflow_dispatch only runs on master
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v20
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: cachix/install-nix-action@6004951b182f8860210c8d6f0d808ec5b1a33d28 # v25
         with:
           nix_path: nixpkgs=channel:nixpkgs-unstable
       - name: setup
@@ -46,7 +46,7 @@ jobs:
         run: |
           git clean -f
       - name: create PR
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38 # v5.0.2
         with:
           body: |
             Automatic update by [update-terraform-providers](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/update-terraform-providers.yml) action.
@@ -60,7 +60,7 @@ jobs:
 
             Check that all providers build with:
             ```
-            @ofborg build terraform.full
+            @ofborg build opentofu.full
             ```
             If there is more than ten commits in the PR `ofborg` won't build it automatically and you will need to use the above command.
           branch: terraform-providers-update

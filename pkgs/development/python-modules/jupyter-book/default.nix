@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pname = "jupyter-book";
   version = "0.15.1";
 
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -65,7 +65,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "docutils"
-    "sphinx-design"
+    "myst-nb"
+    "sphinx"
+    "sphinx-thebe"
+    "sphinxcontrib-bibtex"
   ];
 
   pythonImportsCheck = [

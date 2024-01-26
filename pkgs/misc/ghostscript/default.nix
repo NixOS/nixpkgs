@@ -60,12 +60,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "ghostscript${lib.optionalString (x11Support) "-with-X"}";
-  version = "10.01.1";
+  pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
+  version = "10.02.1";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha512-2US+norvaNEXbWTEDbb6htVdDJ4wBH8hR8AoBqthz+msLLANTlshj/PFHMbtR87/4brE3Z1MwXYLeXTzDGwnNQ==";
+    hash = "sha512-7g91TBvYoYQorRTqo+rYD/i5YnWvUBLnqDhPHxBJDaBW7smuPMeRp6E6JOFuVN9bzN0QnH1ToUU0u9c2CjALEQ=";
   };
 
   patches = [
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals dynamicDrivers [
     "--enable-dynamic"
     "--disable-hidden-visibility"
-  ] ++ lib.optional x11Support [
+  ] ++ lib.optionals x11Support [
     "--with-x"
   ] ++ lib.optionals cupsSupport [
     "--enable-cups"
@@ -122,7 +122,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # don't build/install statically linked bin/gs
-  buildFlags = [ "so" ];
+  buildFlags = [ "so" ]
+    # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
+    # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+    ++ lib.optional (x11Support && stdenv.isDarwin) "LDFLAGS=-headerpad_max_install_names";
   installTargets = [ "soinstall" ];
 
   postInstall = ''
@@ -141,6 +144,7 @@ stdenv.mkDerivation rec {
   dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
 
   # validate dynamic linkage
@@ -149,6 +153,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    $out/bin/gsx --version
     pushd examples
     for f in *.{ps,eps,pdf}; do
       echo "Rendering $f"

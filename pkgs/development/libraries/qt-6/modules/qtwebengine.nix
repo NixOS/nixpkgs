@@ -14,8 +14,6 @@
 , python3
 , which
 , nodejs
-, qtbase
-, perl
 , xorg
 , libXcursor
 , libXScrnSaver
@@ -51,8 +49,6 @@
 , systemd
 , pipewire
 , gn
-, runCommand
-, writeScriptBin
 , ffmpeg_4
 , lib
 , stdenv
@@ -60,13 +56,11 @@
 , libxml2
 , libxslt
 , lcms2
-, re2
 , libkrb5
 , mesa
-, xkeyboard_config
 , enableProprietaryCodecs ? true
   # darwin
-, clang_14
+, autoSignDarwinBinariesHook
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -99,7 +93,6 @@
 
 qtModule {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
     bison
     coreutils
@@ -112,8 +105,9 @@ qtModule {
     which
     gn
     nodejs
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ] ++ lib.optionals stdenv.isDarwin [
-    clang_14
     bootstrap_cmds
     cctools
     xcbuild
@@ -135,6 +129,15 @@ qtModule {
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
+
+    ../patches/qtwebengine-link-pulseaudio.patch
+
+    # Override locales install path so they go to QtWebEngine's $out
+    ../patches/qtwebengine-locales-path.patch
+
+    # Cherry-pick libxml 2.12 build fix
+    # FIXME: remove for 6.7
+    ../patches/qtwebengine-libxml-2.12.patch
   ];
 
   postPatch = ''
@@ -167,7 +170,7 @@ qtModule {
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   ''
   + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.cmake \
+    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
       --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
@@ -185,16 +188,19 @@ qtModule {
     "-DQT_FEATURE_pdf_xfa_gif=ON"
     "-DQT_FEATURE_pdf_xfa_png=ON"
     "-DQT_FEATURE_pdf_xfa_tiff=ON"
-    "-DQT_FEATURE_webengine_system_icu=ON"
     "-DQT_FEATURE_webengine_system_libevent=ON"
-    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
   ] ++ lib.optionals stdenv.isLinux [
+    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+
+    # Appears not to work on some platforms
+    # https://github.com/Homebrew/homebrew-core/issues/104008
+    "-DQT_FEATURE_webengine_system_icu=ON"
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -202,6 +208,11 @@ qtModule {
   ];
 
   propagatedBuildInputs = [
+    qtdeclarative
+    qtwebchannel
+    qtwebsockets
+    qtpositioning
+
     # Image formats
     libjpeg
     libpng
@@ -217,14 +228,11 @@ qtModule {
 
     # Text rendering
     harfbuzz
-    icu
 
     openssl
     glib
-    libxml2
     libxslt
     lcms2
-    re2
 
     libevent
     ffmpeg_4
@@ -236,6 +244,9 @@ qtModule {
     nss
     protobuf
     jsoncpp
+
+    icu
+    libxml2
 
     # Audio formats
     alsa-lib
@@ -308,8 +319,7 @@ qtModule {
 
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

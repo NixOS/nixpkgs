@@ -45,6 +45,8 @@ buildPythonPackage rec {
     cython
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     export HOME=$TMPDIR
     cp -R tests examples $TMPDIR

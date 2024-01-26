@@ -1,10 +1,9 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , mock
 , parameterized
+, pip
 , pyelftools
 , pytestCheckHook
 , pythonOlder
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.28.0";
+  version = "1.45.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,25 +21,22 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JSN51zwIh9N/Id3fhBXjmwGa2tLK/LoyPlHPl2rbVU4=";
+    hash = "sha256-TmU7neEnHaRuGNzK9VuXUiEayBLZaPqjrnPLvBOQj5g=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=read_version()," 'version="${version}",'
+  '';
 
   propagatedBuildInputs = [
     six
   ];
 
-  patches = [
-    # This patch can be removed once https://github.com/aws/aws-lambda-builders/pull/475 has been merged.
-    (fetchpatch {
-      name = "setuptools-66-support";
-      url = "https://patch-diff.githubusercontent.com/raw/aws/aws-lambda-builders/pull/475.patch";
-      sha256 = "sha256-EkYQ6DNzbSnvkOads0GFwpGzeuBoLVU42THlSZNOHMc=";
-    })
-  ];
-
   nativeCheckInputs = [
     mock
     parameterized
+    pip
     pyelftools
     pytestCheckHook
   ];
@@ -71,7 +67,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Tool to compile, build and package AWS Lambda functions";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
     changelog = "https://github.com/aws/aws-lambda-builders/releases/tag/v${version}";

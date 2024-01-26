@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiobiketrax";
-  version = "0.5.0";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "basilfx";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-exxpJJA+JnVuehCnWs/ihk/SSPUqV7ODXZxvbmuHe8U=";
+    hash = "sha256-71gPdA1snPJCR0Pmcaki55Ukf5xtUjuZ+xX8VvspKC4=";
   };
 
   postPatch = ''

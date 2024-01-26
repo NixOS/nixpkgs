@@ -28,20 +28,20 @@ assert (versionAtLeast version "4.9");
   #
   # We set SECURITY_WRITABLE_HOOKS n primarily for documentation purposes; the
   # config builder fails to detect that it has indeed been unset.
-  SECURITY_SELINUX_DISABLE = no;
+  SECURITY_SELINUX_DISABLE = whenOlder "6.4" no; # On 6.4: error: unused option: SECURITY_SELINUX_DISABLE
   SECURITY_WRITABLE_HOOKS  = option no;
 
   STRICT_KERNEL_RWX = yes;
 
   # Perform additional validation of commonly targeted structures.
-  DEBUG_CREDENTIALS     = yes;
+  DEBUG_CREDENTIALS     = whenOlder "6.6" yes;
   DEBUG_NOTIFIERS       = yes;
   DEBUG_PI_LIST         = whenOlder "5.2" yes; # doesn't BUG()
   DEBUG_PLIST           = whenAtLeast "5.2" yes;
   DEBUG_SG              = yes;
   SCHED_STACK_END_CHECK = yes;
 
-  REFCOUNT_FULL = whenOlder "5.5" yes;
+  REFCOUNT_FULL = whenOlder "5.4.208" yes;
 
   # Randomize page allocator when page_alloc.shuffle=1
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;

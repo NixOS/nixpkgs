@@ -1,38 +1,49 @@
 { lib
 , buildPythonPackage
-, cryptography
 , deprecated
 , fetchFromGitHub
 , pynacl
+, typing-extensions
 , pyjwt
+, python-dateutil
 , pythonOlder
 , requests
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "1.58.0";
+  version = "2.1.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DZmKF0C5zexTQ/kbDtTg0FLEocNU4dYMOFCJyvuiV98=";
+    hash = "sha256-ysa1RAWuFFQCF6bYwAUVFou7nxCKHLZbUtrUtXiSpPk=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    deprecated
-    pynacl
-    pyjwt
-    requests
+  nativeBuildInputs = [
+    setuptools-scm
   ];
+
+  propagatedBuildInputs = [
+    deprecated
+    pyjwt
+    pynacl
+    python-dateutil
+    requests
+    typing-extensions
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   # Test suite makes REST calls against github.com
   doCheck = false;
-  pythonImportsCheck = [ "github" ];
+
+  pythonImportsCheck = [
+    "github"
+  ];
 
   meta = with lib; {
     description = "Python library to access the GitHub API v3";

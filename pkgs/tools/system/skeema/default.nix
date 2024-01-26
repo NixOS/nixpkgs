@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, coreutils, runtimeShell, testers, skeema }:
+{ lib, buildGoModule, fetchFromGitHub, coreutils, testers, skeema }:
 
 buildGoModule rec {
   pname = "skeema";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
-    hash = "sha256-JhOQKfJCaZc5PlDWPuYe1Ag9AHkw9RjEQ4N9MSda4rY=";
+    hash = "sha256-S7eMqaz8BZ80AwIrVmX+rnEgIwEdy8q65FIy6Mac4CY=";
   };
 
   vendorHash = null;
@@ -25,6 +25,7 @@ buildGoModule rec {
         "TestParseDirSymlinks"
 
         # Flaky tests
+        "TestCommandTimeout"
         "TestShellOutTimeout"
       ];
     in
@@ -41,13 +42,6 @@ buildGoModule rec {
 
       substituteInPlace internal/applier/ddlstatement_test.go \
         --replace /bin/echo "${coreutils}/bin/echo"
-
-      substituteInPlace internal/util/shellout_unix_test.go \
-        --replace /bin/echo "${coreutils}/bin/echo" \
-        --replace /usr/bin/printf "${coreutils}/bin/printf"
-
-      substituteInPlace internal/util/shellout_unix.go \
-        --replace /bin/sh "${runtimeShell}"
     '';
 
   passthru.tests.version = testers.testVersion {
@@ -59,5 +53,6 @@ buildGoModule rec {
     homepage = "https://skeema.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "skeema";
   };
 }

@@ -1,20 +1,27 @@
 { lib
+, stdenv
+, darwin
 , rustPlatform
 , fetchFromGitHub
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "darklua";
-  version = "0.9.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "seaofvoices";
     repo = "darklua";
     rev = "v${version}";
-    hash = "sha256-ABzhtAbWv2oM4VqxRUWC+xh2fwUw1s2iU1IWb5EEhiE=";
+    hash = "sha256-hCyTsXSeingVRrohAGTzzcHoYv+hqOXPpWhBrbA70CA=";
   };
 
-  cargoHash = "sha256-36YN/7aI69xsnwGz8oQG5RZu8XjQ9vwQtRNMWQ7pT0Q=";
+  cargoHash = "sha256-D274Dx3ad14VnJxQMhf//NEA7EIZZ1RFzFITI4YoJTc=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
+
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

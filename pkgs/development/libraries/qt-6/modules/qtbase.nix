@@ -11,11 +11,9 @@
 , lndir
 , perl
 , pkg-config
-, python3
 , which
 , cmake
 , ninja
-, ccache
 , xmlstarlet
 , libproxy
 , xorg
@@ -93,6 +91,7 @@
 , libGL
 , debug ? false
 , developerBuild ? false
+, qttranslations ? null
 }:
 
 let
@@ -233,12 +232,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
-  ];
+  ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
-  NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
     "-framework GSS"
   ]);
+
+  env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
   outputs = [ "out" "dev" ];
 

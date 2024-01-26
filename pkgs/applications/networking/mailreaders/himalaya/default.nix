@@ -2,53 +2,53 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, pkg-config
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
-, pkg-config
-, Security
-, libiconv
-, openssl
 , notmuch
-, withRusttlsTls ? true
-, withRusttlsNativeCerts ? withRusttlsTls
-, withNativeTls ? false
-, withNativeTlsVendored ? withNativeTls
-, withImapBackend ? true
-, withNotmuchBackend ? false
-, withSmtpSender ? true
+, gpgme
+, withMaildir ? true
+, withImap ? true
+, withNotmuch ? false
+, withSendmail ? true
+, withSmtp ? true
+, withPgpCommands ? false
+, withPgpGpg ? false
+, withPgpNative ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.7.3";
+  version = "1.0.0-beta";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "HmH4qL70ii8rS8OeUnUxsy9/wMx+f2SBd1AyRqlfKfc=";
+    hash = "sha256-39XYtxmo/12hkCS7zVIQi3UbLzaIKH1OwfdDB/ghU98=";
   };
 
-  cargoSha256 = "NJFOtWlfKZRLr9vvDvPQjpT4LGMeytk0JFJb0r77bwE=";
+  cargoSha256 = "HIDmBPrcOcK2coTaD4v8ntIZrv2SwTa8vUTG8Ky4RhM=";
 
   nativeBuildInputs = [ ]
-    ++ lib.optional (installManPages || installShellCompletions) installShellFiles
-    ++ lib.optional (withNativeTls && !stdenv.hostPlatform.isDarwin) pkg-config;
+    ++ lib.optional withPgpGpg pkg-config
+    ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = [ ]
-    ++ lib.optional withNativeTls (if stdenv.hostPlatform.isDarwin then [ Security libiconv ] else [ openssl ])
-    ++ lib.optional withNotmuchBackend notmuch;
+    ++ lib.optional withNotmuch notmuch
+    ++ lib.optional withPgpGpg gpgme;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ ]
-    ++ lib.optional withRusttlsTls "rustls-tls"
-    ++ lib.optional withRusttlsNativeCerts "rustls-native-certs"
-    ++ lib.optional withNativeTls "native-tls"
-    ++ lib.optional withNativeTlsVendored "native-tls-vendored"
-    ++ lib.optional withImapBackend "imap-backend"
-    ++ lib.optional withNotmuchBackend "notmuch-backend"
-    ++ lib.optional withSmtpSender "smtp-sender";
+    ++ lib.optional withMaildir "maildir"
+    ++ lib.optional withImap "imap"
+    ++ lib.optional withNotmuch "notmuch"
+    ++ lib.optional withSmtp "smtp"
+    ++ lib.optional withSendmail "sendmail"
+    ++ lib.optional withPgpCommands "pgp-commands"
+    ++ lib.optional withPgpGpg "pgp-gpg"
+    ++ lib.optional withPgpNative "pgp-native";
 
   postInstall = lib.optionalString installManPages ''
     mkdir -p $out/man
@@ -62,8 +62,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "CLI to manage your emails.";
-    homepage = "https://pimalaya.org/himalaya/";
+    description = "CLI to manage emails";
+    homepage = "https://pimalaya.org/himalaya/cli/latest/";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ soywod toastal yanganto ];

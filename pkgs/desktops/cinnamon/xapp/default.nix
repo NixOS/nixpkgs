@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "2.4.3";
+  version = "2.8.2";
 
   outputs = [ "out" "dev" ];
 
@@ -30,8 +30,12 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-j04vy/uVWY08Xdxqfo2MMUAlqsUMJTsAt67+XjkdhFg=";
+    hash = "sha256-n600mc8/4+bYUtYaHUnmr90ThVkngcu8Ft02iuSrWWQ=";
   };
+
+  # Recommended by upstream, which enables the build of xapp-debug.
+  # https://github.com/linuxmint/xapp/issues/169#issuecomment-1574962071
+  mesonBuildType = "debugoptimized";
 
   nativeBuildInputs = [
     meson
@@ -40,10 +44,10 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     (python3.withPackages (ps: with ps; [
       pygobject3
       setproctitle # mate applet
@@ -70,20 +74,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
-
-    patchShebangs \
-      libxapp/g-codegen.py \
-      meson-scripts/g-codegen.py \
-      schemas/meson_install_schemas.py
+    patchShebangs schemas/meson_install_schemas.py
 
     # Patch pastebin & inxi location
     sed "s|/usr/bin/pastebin|$out/bin/pastebin|" -i scripts/upload-system-info
     sed "s|'inxi'|'${inxi}/bin/inxi'|" -i scripts/upload-system-info
-
-    # Patch gtk3 module target dir
-    substituteInPlace libxapp/meson.build \
-         --replace "gtk3_dep.get_pkgconfig_variable('libdir')" "'$out'"
   '';
+
+  # Fix gtk3 module target dir. Proper upstream solution should be using define_variable.
+  PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/xapp";

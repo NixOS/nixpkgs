@@ -6,12 +6,7 @@ in {
     services.pleroma = with lib; {
       enable = mkEnableOption (lib.mdDoc "pleroma");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.pleroma;
-        defaultText = literalExpression "pkgs.pleroma";
-        description = lib.mdDoc "Pleroma package to use.";
-      };
+      package = mkPackageOption pkgs "pleroma" { };
 
       user = mkOption {
         type = types.str;
@@ -97,6 +92,7 @@ in {
 
     systemd.services.pleroma = {
       description = "Pleroma social network";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
@@ -146,6 +142,6 @@ in {
     };
 
   };
-  meta.maintainers = with lib.maintainers; [ ninjatrappeur ];
+  meta.maintainers = with lib.maintainers; [ picnoir ];
   meta.doc = ./pleroma.md;
 }

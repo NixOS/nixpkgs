@@ -322,7 +322,7 @@ def update_plugins():
                         for [discourse_version, plugin_rev]
                         in [line.split(':')
                             for line
-                            in compatibility_spec.splitlines()]]
+                            in compatibility_spec.splitlines() if line != '']]
             discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
             versions = list(filter(lambda ver: ver[0] >= discourse_version, versions))
             if versions == []:

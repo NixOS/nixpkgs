@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "juju";
-  version = "3.1.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "juju";
     repo = "juju";
     rev = "juju-${version}";
-    sha256 = "sha256-nleWdgIYmIltZKjjFl6axQd2fkL8UIXZRbATU96cdQ0=";
+    sha256 = "sha256-8VSSTeN4a1zvMi4L4dR3q+kWKgYq8Jg1jDvFjEBD7jI=";
   };
 
-  vendorHash = "sha256-b6C1FbVXHeJqG9Vh8dqqZ+94T42oRM9kVbDmLuOiPvA=";
+  vendorHash = "sha256-3hZywUpJe6g8IujbK0hcp12S6OKswLj/YYJGuPG06Es=";
 
   # Disable tests because it attempts to use a mongodb instance
   doCheck = false;
@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://juju.is";
     license = licenses.mit;
     maintainers = with maintainers; [ citadelcore ];
+    mainProgram = "juju";
   };
 }

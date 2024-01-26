@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iotop-c";
-  version = "1.23";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "Tomas-M";
     repo = "iotop";
     rev = "v${version}";
-    sha256 = "sha256-4DTYtUltmZ+nkm4ZLac+6JbBW3z+qby7sP33LwEXtcQ=";
+    sha256 = "sha256-ZIvWdNxGSUmQtMKB/MVHEZ0fJ8b//zSXz+1r/P9ZDkE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     description = "iotop identifies processes that use high amount of input/output requests on your machine";
     homepage = "https://github.com/Tomas-M/iotop";
     maintainers = [ maintainers.arezvov ];
+    mainProgram = "iotop-c";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

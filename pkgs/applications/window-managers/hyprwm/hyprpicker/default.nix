@@ -6,11 +6,13 @@
 , ninja
 , cairo
 , fribidi
+, libGL
 , libdatrie
 , libjpeg
 , libselinux
 , libsepol
 , libthai
+, libxkbcommon
 , pango
 , pcre
 , util-linux
@@ -23,16 +25,16 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8Tc8am5+iQvzRdnTYIpD3Ewge6TIctrm8tr0H+RvcsE=";
+    hash = "sha256-bys8S7wuY9FJRLD5WriktWED5Hi7nCKSiNbs1Rvfk4s=";
   };
 
-  cmakeFlags = lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   nativeBuildInputs = [
     cmake
@@ -43,11 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     fribidi
+    libGL
     libdatrie
     libjpeg
     libselinux
     libsepol
     libthai
+    libxkbcommon
     pango
     pcre
     wayland
@@ -91,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     platforms = wayland.meta.platforms;
+    mainProgram = "hyprpicker";
   };
 })

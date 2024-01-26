@@ -40,6 +40,10 @@ in mkDerivation rec {
     sha256 = "0lrcmcxc924ixddii8cyglqlwwxvk7f00g4yzbss5i3fgcbh8n96";
   };
 
+  patches = [
+    ./boost-placeholders.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     doxygen

@@ -1,26 +1,26 @@
 { python3
 , lib
 , fetchFromGitHub
+, cinnamon-translations
 }:
 
+let
+  srcs = import ../srcs.nix { inherit fetchFromGitHub; };
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "nemo-emblems";
-  version = "5.6.0";
+  inherit (srcs) version src;
 
   format = "setuptools";
-
-  src = fetchFromGitHub {
-    owner = "linuxmint";
-    repo = "nemo-extensions";
-    rev = version;
-    sha256 = "sha256-cxutiz5bc/dZ9D7XzvMWodWNYvNJPj+5IhJDPJwnb5I=";
-  };
 
   sourceRoot = "${src.name}/nemo-emblems";
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "/usr/share" "share"
+
+    substituteInPlace nemo-extension/nemo-emblems.py \
+      --replace "/usr/share/locale" "${cinnamon-translations}/share/locale"
   '';
 
   meta = with lib; {

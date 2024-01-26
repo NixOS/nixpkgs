@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsvm";
-  version = "3.31";
+  version = "3.32";
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "sha256-AKtWH0jfX8kqhCCa2P5Rmery5Rmzwnm6z8k1l4p1zx8=";
+    sha256 = "sha256-hkTMZRjKiLvFDYyOrRc08aubbxcBcEXvmuOHc6plPa0=";
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];
@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     let
       libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
       soVersion = "3";
+      libName = if stdenv.isDarwin then "libsvm.${soVersion}${libSuff}" else "libsvm${libSuff}.${soVersion}";
     in
     ''
       runHook preInstall
 
-      install -D libsvm.so.${soVersion} $out/lib/libsvm.${soVersion}${libSuff}
-      ln -s $out/lib/libsvm.${soVersion}${libSuff} $out/lib/libsvm${libSuff}
+      install -D libsvm.so.${soVersion} $out/lib/${libName}
+      ln -s $out/lib/${libName} $out/lib/libsvm${libSuff}
 
       install -Dt $bin/bin/ svm-scale svm-train svm-predict
 

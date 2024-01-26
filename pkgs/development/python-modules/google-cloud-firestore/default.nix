@@ -2,6 +2,7 @@
 , aiounittest
 , buildPythonPackage
 , fetchPypi
+, freezegun
 , google-api-core
 , google-cloud-core
 , google-cloud-testutils
@@ -11,19 +12,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.11.1";
-  format = "setuptools";
+  version = "2.14.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f336hlZ8jWbGbI26i8XvhWd8hTK0IGBVozlBP4BxUl0=";
+    hash = "sha256-mr+3U+s89wB2uc/whvcdOYwJfAsbD9ll1a8n1a5K5AE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -34,6 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiounittest
+    freezegun
     google-cloud-testutils
     mock
     pytest-asyncio
@@ -49,12 +56,12 @@ buildPythonPackage rec {
     # Tests are broken
     "tests/system/test_system.py"
     "tests/system/test_system_async.py"
-    # requires credentials
+    # Test requires credentials
     "tests/unit/v1/test_bulk_writer.py"
   ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_collections"
   ];
 
@@ -68,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-firestore";
     changelog = "https://github.com/googleapis/python-firestore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

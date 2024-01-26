@@ -3,17 +3,19 @@
 , fetchFromGitHub
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "demoit";
-  version = "unstable-2022-09-03";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "dgageot";
     repo = "demoit";
-    rev = "258780987922e46abde8e848247af0a9435e3099";
-    sha256 = "sha256-yRfdnqk93GOTBa0zZrm4K3AkUqxGmlrwlKYcD6CtgRg=";
+    rev = "v${version}";
+    hash = "sha256-3g0k2Oau0d9tXYDtxHpUKvAQ1FnGhjRP05YVTlmgLhM=";
   };
-  vendorSha256 = null;
+
+  vendorHash = null;
+
   subPackages = [ "." ];
 
   meta = with lib; {
@@ -21,5 +23,6 @@ buildGoModule {
     homepage = "https://github.com/dgageot/demoit";
     license = licenses.asl20;
     maintainers = [ maintainers.freezeboy ];
+    mainProgram = "demoit";
   };
 }

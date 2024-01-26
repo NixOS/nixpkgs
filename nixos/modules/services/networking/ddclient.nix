@@ -20,7 +20,6 @@ let
     ${lib.optionalString (cfg.zone != "")   "zone=${cfg.zone}"}
     ssl=${boolToStr cfg.ssl}
     wildcard=YES
-    ipv6=${boolToStr cfg.ipv6}
     quiet=${boolToStr cfg.quiet}
     verbose=${boolToStr cfg.verbose}
     ${cfg.extraConfig}
@@ -49,9 +48,10 @@ with lib;
     (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
       (config:
         let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in if value != "" then [ value ] else []))
+        in optional (value != "") value))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
     (mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
+    (mkRemovedOptionModule [ "services" "ddclient" "ipv6" ] "")
   ];
 
   ###### interface
@@ -126,7 +126,7 @@ with lib;
         default = "dyndns2";
         type = str;
         description = lib.mdDoc ''
-          Protocol to use with dynamic DNS provider (see https://sourceforge.net/p/ddclient/wiki/protocols).
+          Protocol to use with dynamic DNS provider (see https://ddclient.net/protocols.html ).
         '';
       };
 
@@ -145,15 +145,6 @@ with lib;
           Whether to use SSL/TLS to connect to dynamic DNS provider.
         '';
       };
-
-      ipv6 = mkOption {
-        default = false;
-        type = bool;
-        description = lib.mdDoc ''
-          Whether to use IPv6.
-        '';
-      };
-
 
       quiet = mkOption {
         default = false;
@@ -226,8 +217,8 @@ with lib;
         inherit RuntimeDirectory;
         inherit StateDirectory;
         Type = "oneshot";
-        ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
-        ExecStart = "${lib.getBin cfg.package}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStartPre = [ "!${pkgs.writeShellScript "ddclient-prestart" preStart}" ];
+        ExecStart = "${lib.getExe cfg.package} -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };
 

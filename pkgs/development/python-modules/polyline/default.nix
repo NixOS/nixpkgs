@@ -4,11 +4,12 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "polyline";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frederickjansen";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-e9ZDqcS3MaMlXi2a2JHI6NtRPqIV7rjsucGXEH6V8LA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fbGGfZdme4OiIGNlXG1uVl1xP+rPVI9l5hjHM0gwAsE=";
   };
 
   postPatch = ''
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   nativeCheckInputs = [

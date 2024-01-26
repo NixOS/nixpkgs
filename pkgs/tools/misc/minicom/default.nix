@@ -1,19 +1,28 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, makeWrapper, pkg-config
-, lrzsz, ncurses, libiconv }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, lrzsz
+, ncurses
+, libiconv
+, IOKit
+}:
 
 stdenv.mkDerivation rec {
   pname = "minicom";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "minicom-team";
     repo = pname;
     rev = version;
-    sha256 = "165zhi88swvkhl3v17223r0f27hb3y0qzrgl51jkk0my2m4xscgg";
+    sha256 = "sha256-+fKvHrApDXm94LItXv+xSDIE5zD7rTY5IeNSuzQglpg=";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ ncurses ] ++ lib.optionals stdenv.isDarwin [ libiconv IOKit ];
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
 

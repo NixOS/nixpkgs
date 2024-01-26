@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.tckmn ];
     platforms = platforms.unix;
+    mainProgram = "ipbt";
   };
 }

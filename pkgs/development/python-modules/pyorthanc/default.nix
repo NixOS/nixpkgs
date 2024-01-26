@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, pythonRelaxDepsHook
 , poetry-core
 , httpx
 , pydicom
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyorthanc";
-  version = "1.11.5";
+  version = "1.16.0";
   disabled = pythonOlder "3.8";
 
   format = "pyproject";
@@ -19,12 +20,16 @@ buildPythonPackage rec {
     owner = "gacou54";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RZJ7BuQRJ+yaHFv9iq4uFvMtH8NvGvmpjmgmyvw9rGk=";
+    hash = "sha256-qwH3kJzJRHuuGW7tgcaQjT+JwDsAZksQDZciaJLC55Q=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ pythonRelaxDepsHook poetry-core ];
 
   propagatedBuildInputs = [ httpx pydicom ];
+
+  pythonRelaxDeps = [
+    "httpx"
+  ];
 
   doCheck = false;  # requires orthanc server (not in Nixpkgs)
 

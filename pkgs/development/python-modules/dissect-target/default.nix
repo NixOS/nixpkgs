@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , asn1crypto
 , buildPythonPackage
 , defusedxml
@@ -16,6 +17,7 @@
 , dissect-ntfs
 , dissect-regf
 , dissect-sql
+, dissect-shellitem
 , dissect-thumbcache
 , dissect-util
 , dissect-volume
@@ -37,19 +39,22 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.8";
-  format = "pyproject";
+  version = "3.14";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-CPN8g6LDeS77fveFOK6gExIJq9g+5qXhwDhjw3tWuJc=";
+    hash = "sha256-vp1upVwohMXFKxlHy5lWmigdq9MUk1UknSsPpCXt50s=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "flow.record~=" "flow.record>="
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -80,6 +85,7 @@ buildPythonPackage rec {
       dissect-extfs
       dissect-fat
       dissect-ffs
+      dissect-shellitem
       dissect-sql
       dissect-thumbcache
       dissect-xfs
@@ -105,13 +111,22 @@ buildPythonPackage rec {
     "test_exec_target_command"
     # Issue with tar file
     "test_tar_sensitive_drive_letter"
+    "test_dpapi_decrypt_blob"
+    "test_notifications_appdb"
+    "test_md"
+    "test_notifications_wpndatabase"
+    "test_nested_md_lvm"
     # Tests compare dates and times
     "yum"
-  ];
+    # Filesystem access, windows defender tests
+    "test_defender_quarantine_recovery"
+  ] ++
+  # test is broken on Darwin
+  lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
 
   disabledTestPaths = [
     # Tests are using Windows paths
-    "tests/test_plugins_browsers.py"
+    "tests/plugins/apps/browser/test_browser.py"
   ];
 
   meta = with lib; {

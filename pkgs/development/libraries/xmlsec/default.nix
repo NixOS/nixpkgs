@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
+{ stdenv, fetchurl, fetchpatch, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
 , openssl, nss, lib, runCommandCC, writeText }:
 
 lib.fix (self:
@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./lt_dladdsearchdir.patch
+
+    # Fix build with libxml2 2.12
+    (fetchpatch {
+      url = "https://github.com/lsh123/xmlsec/commit/ffb327376f5bb69e8dfe7f805529e45a40118c2b.patch";
+      hash = "sha256-o8CLemOiGIHJsYfVQtNzJNVyk03fdmCbvgA8c3OYxo4=";
+    })
   ] ++ lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
   postPatch = ''
     substituteAllInPlace src/dl.c

@@ -8,12 +8,12 @@ buildGoModule rec {
     owner = "uber";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02ih9pqnziwl2k4z6c59w1p4bxmb3xki5y33pdfkxqn2467s792g";
+    hash = "sha256-T6SjjyHC4j5du2P4Emcfq/ZFbuCpMPPJFJTHb/FNMAo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  vendorHash = "sha256-W924cy6bd3V/ep3JmzUCV7iuYNukEetr90SKmLMH0j8=";
 
-  vendorSha256 = "0gyj0yrri2j4yxmyn4d4vdhaxf2p08srpjcxg9zpaxwv5rrvipav";
+  nativeBuildInputs = [ makeWrapper ];
 
   doCheck = false;
 
@@ -30,6 +30,5 @@ buildGoModule rec {
     description = "Your Swiss Army Knife for Protocol Buffers";
     maintainers = [ maintainers.marsam ];
     license = licenses.mit;
-    platforms = platforms.unix;
   };
 }

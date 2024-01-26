@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "git-gone";
     rev = "v${version}";
-    hash = "sha256-bb7xeLxo/qk2yKctaX1JXzru1+tGTt8DmDVH6ZaARkU=";
+    hash = "sha256-cEMFbG7L48s1SigLD/HfQ2NplGZPpO+KIgs3oV3rgQQ=";
   };
 
-  cargoHash = "sha256-tngsqAnQ2Um0UCSqBvrnpbDygF6CvL2fi0o9MVY0f4g=";
+  cargoHash = "sha256-CCPVjOWM59ELd4AyT968v6kvGdVwkMxxLZGDiJlLkzA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "git-gone";
   };
 }

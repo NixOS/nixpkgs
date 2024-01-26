@@ -27,20 +27,21 @@
 , setuptools
 , pytestCheckHook
 , pytest-cov
+, pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "0.25.0";
-  format = "pyproject";
+  version = "0.30.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-drH1N1rKFu/zdLmLsD1jH5xUkzK37V/+nJqGQ38vsTI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rJjuraiTvCmZgz8ysFBbYPowkLIuwt8RaFNl+gDSfLk=";
   };
 
   buildInputs = [
@@ -88,6 +89,7 @@ buildPythonPackage rec {
     coverage
     flake8
     pytest-cov
+    pytest-mock
     nbval
     matplotlib
     pyvisa
@@ -98,6 +100,12 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  # test_calibration.py generates a divide by zero error on darwin
+  # https://github.com/scikit-rf/scikit-rf/issues/972
+  disabledTestPaths =
+    lib.optional (stdenv.isAarch64 && stdenv.isDarwin)
+    "skrf/calibration/tests/test_calibration.py";
 
   pythonImportsCheck = [
     "skrf"

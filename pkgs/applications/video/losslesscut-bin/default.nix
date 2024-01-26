@@ -6,31 +6,32 @@
 
 let
   pname = "losslesscut";
-  version = "3.48.2";
+  version = "3.58.0";
   metaCommon = with lib; {
     description = "The swiss army knife of lossless video/audio editing";
     homepage = "https://mifi.no/losslesscut/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ShamrockLee ];
+    mainProgram = "losslesscut";
   };
   x86_64-appimage = callPackage ./build-from-appimage.nix {
     inherit pname version metaCommon;
-    hash = "sha256-5T5+eBVbyOI89YA9NMLWweHagD09RB3P03HFvaDAOZ8=";
+    hash = "sha256-wmOdW5LdGLs6Wrt/VBlbC1ScFZBmd5gVQaj/cYADnWc=";
     inherit (buildPackages) makeWrapper;
   };
   x86_64-dmg = callPackage ./build-from-dmg.nix {
     inherit pname version metaCommon;
-    hash = "sha256-PzjE0oJOuPG0S+mA7pgNU3MRgaE2jAPxWEN9J4PfqMQ=";
+    hash = "sha256-ZNUkzxpFTmsFcdC4oJWDxvqunpaBKz7Fnmrsa4W12Bg=";
     isAarch64 = false;
   };
   aarch64-dmg = callPackage ./build-from-dmg.nix {
     inherit pname version metaCommon;
-    hash = "sha256-927CSczgFJcbBJm2cYXucFRidkGAtcowoLMlm2GTafc=";
+    hash = "sha256-PpQF31qsn9TOIRVzOdDoLUqti+m1uRpBQrrqKtxFleE=";
     isAarch64 = true;
   };
   x86_64-windows = callPackage ./build-from-windows.nix {
     inherit pname version metaCommon;
-    hash = "sha256-+isxkGKxW7H+IjuA5G4yXuvDmX+4UlsD8sXwoHxgLM8=";
+    hash = "sha256-AgWvLU9m2q7fxZYXgHGMgEj1WLP5XzERq7tWcin2/30=";
   };
 in
 (

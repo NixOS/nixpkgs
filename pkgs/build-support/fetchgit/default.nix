@@ -11,7 +11,7 @@
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
 lib.makeOverridable (
-{ url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
+{ url, rev ? "HEAD", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? []
@@ -54,16 +54,14 @@ lib.makeOverridable (
 */
 
 assert deepClone -> leaveDotGit;
-assert nonConeMode -> !(sparseCheckout == "" || sparseCheckout == []);
+assert nonConeMode -> (sparseCheckout != []);
 
-if md5 != "" then
-  throw "fetchgit does not support md5 anymore, please use sha256"
-else if hash != "" && sha256 != "" then
+if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
+else if builtins.isString sparseCheckout then
+  # Changed to throw on 2023-06-04
+  throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
 else
-# Added 2022-11-12
-lib.warnIf (builtins.isString sparseCheckout)
-  "Please provide directories/patterns for sparse checkout as a list of strings. Support for passing a (multi-line) string is deprecated and will be removed in the next release."
 stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
@@ -84,7 +82,7 @@ stdenvNoCC.mkDerivation {
   # git-sparse-checkout(1) says:
   # > When the --stdin option is provided, the directories or patterns are read
   # > from standard in as a newline-delimited list instead of from the arguments.
-  sparseCheckout = if builtins.isString sparseCheckout then sparseCheckout else builtins.concatStringsSep "\n" sparseCheckout;
+  sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
 
   inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
 
@@ -92,6 +90,7 @@ stdenvNoCC.mkDerivation {
     ${netrcPhase}
     # required that git uses the netrc file
     mv {,.}netrc
+    export NETRC=$PWD/.netrc
     export HOME=$PWD
   '';
 

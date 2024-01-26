@@ -15,7 +15,6 @@
 , libjpeg
 , libpcap
 , libpulseaudio
-, lua5_3
 , makeDesktopItem
 , makeWrapper
 , papirus-icon-theme
@@ -39,14 +38,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.252";
+  version = "0.261";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-snef00pTbukiLQp8eAMfuIqNV3l0wP1+KlpFnS3iKFg=";
+    hash = "sha256-Tbsu4dYOBGwsPW94W0xN2+t4vqb1cWI7J1C2l6WU3qI=";
   };
 
   outputs = [ "out" "tools" ];
@@ -61,7 +60,8 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_FLAC=1"
     "USE_SYSTEM_LIB_GLM=1"
     "USE_SYSTEM_LIB_JPEG=1"
-    "USE_SYSTEM_LIB_LUA=1"
+    # https://www.mamedev.org/?p=523
+    # "USE_SYSTEM_LIB_LUA=1"
     "USE_SYSTEM_LIB_PORTAUDIO=1"
     "USE_SYSTEM_LIB_PORTMIDI=1"
     "USE_SYSTEM_LIB_PUGIXML=1"
@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
     expat
     zlib
     flac
-    lua5_3
     portmidi
     portaudio
     utf8proc
@@ -116,10 +115,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/emu/emuopts.cpp \
       --subst-var-by mamePath "$out/opt/mame"
   '';
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=use-after-free"
-  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -201,5 +196,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+    mainProgram = "mame";
   };
 }

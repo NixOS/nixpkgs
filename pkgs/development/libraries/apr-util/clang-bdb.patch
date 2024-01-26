@@ -1,0 +1,12 @@
+diff -ur a/build/dbm.m4 b/build/dbm.m4
+--- a/build/dbm.m4	2013-11-23 13:00:53.000000000 -0500
++++ b/build/dbm.m4	2023-10-22 20:16:37.764571446 -0400
+@@ -235,7 +235,7 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <$apu_try_berkeley_db_header>
+-main ()
++int main ()
+ {
+   int major, minor, patch;
+ 

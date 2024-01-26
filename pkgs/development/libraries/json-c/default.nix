@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "json-c";
-  version = "0.16";
+  version = "0.17";
 
-  src = fetchurl {
-    url    = "https://s3.amazonaws.com/json-c_releases/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jkWsj5bsd5Hq87t+5Q6cIQC7vIe40PHQMMW6igKI2Ws=";
+  src = fetchFromGitHub {
+    owner = "json-c";
+    repo = "json-c";
+    rev = "json-c-0.17-20230812";
+    hash = "sha256-R5KIJ0xVgGqffjzJaZvvvhAneJ+ZBuanyF6KYTTxb58=";
   };
 
   outputs = [ "out" "dev" ];
@@ -21,9 +27,10 @@ stdenv.mkDerivation rec {
       and parse JSON formatted strings back into the C representation of JSON
       objects.
     '';
-    homepage    = "https://github.com/json-c/json-c/wiki";
+    homepage = "https://github.com/json-c/json-c/wiki";
+    changelog = "https://github.com/json-c/json-c/blob/${finalAttrs.src.rev}/ChangeLog";
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     license = licenses.mit;
   };
-}
+})

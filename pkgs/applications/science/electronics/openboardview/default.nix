@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DGLAD_REPRODUCIBLE=On"
   ];
 

@@ -76,12 +76,11 @@ in {
 
     users.groups.${cfg.group} = {};
     users.users.${cfg.user} =
-      if cfg.user == "roon-server" then {
+      optionalAttrs (cfg.user == "roon-server") {
         isSystemUser = true;
         description = "Roon Server user";
         group = cfg.group;
         extraGroups = [ "audio" ];
-      }
-      else {};
+      };
   };
 }

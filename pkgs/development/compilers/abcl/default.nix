@@ -1,39 +1,37 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
+, writeShellScriptBin
 , fetchurl
 , ant
-, jre
 , jdk
+, jre
 , makeWrapper
+, canonicalize-jars-hook
 }:
 
-stdenv.mkDerivation rec {
+let
+  fakeHostname = writeShellScriptBin "hostname" ''
+    echo nix-builder.localdomain
+  '';
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "abcl";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchurl {
-    url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-pbxnfJRB9KgzwgpUG93Rb/+SZIRmkd6aHa9mmfj/EeI=";
+    url = "https://common-lisp.net/project/armedbear/releases/${finalAttrs.version}/abcl-src-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Ti9Lj4Xi2V2V5b282foXrWExoX4vzxK8Gf+5e0i8HTg=";
   };
-
-  configurePhase = ''
-    runHook preConfigure
-
-    mkdir nix-tools
-    export PATH="$PWD/nix-tools:$PATH"
-    echo "echo nix-builder.localdomain" > nix-tools/hostname
-    chmod a+x nix-tools/*
-
-    hostname
-
-    runHook postConfigure
-  '';
-
-  buildInputs = [ jre ];
 
   # note for the future:
   # if you use makeBinaryWrapper, you will trade bash for glibc, the closure will be slightly larger
-  nativeBuildInputs = [ makeWrapper ant jdk ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    fakeHostname
+    makeWrapper
+    canonicalize-jars-hook
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -46,13 +44,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"/{bin,share/doc/abcl,lib/abcl}
+    mkdir -p "$out"/{share/doc/abcl,lib/abcl}
     cp -r README COPYING CHANGES examples/  "$out/share/doc/abcl/"
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
 
     makeWrapper ${jre}/bin/java $out/bin/abcl \
-      --prefix CLASSPATH : $out/lib/abcl/abcl.jar \
-      --prefix CLASSPATH : $out/lib/abcl/abcl-contrib.jar \
+      --add-flags "-classpath $out/lib/abcl/\*" \
       ${lib.optionalString (lib.versionAtLeast jre.version "17")
         # Fix for https://github.com/armedbear/abcl/issues/484
         "--add-flags --add-opens=java.base/java.util.jar=ALL-UNNAMED \\"
@@ -66,9 +63,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A JVM-based Common Lisp implementation";
-    license = lib.licenses.gpl3 ;
-    maintainers = lib.teams.lisp.members;
-    platforms = lib.platforms.linux;
     homepage = "https://common-lisp.net/project/armedbear/";
+    license = lib.licenses.gpl2Classpath;
+    mainProgram = "abcl";
+    maintainers = lib.teams.lisp.members;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

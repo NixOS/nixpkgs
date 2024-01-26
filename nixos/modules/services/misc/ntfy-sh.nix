@@ -12,15 +12,40 @@ in
   options.services.ntfy-sh = {
     enable = mkEnableOption (mdDoc "[ntfy-sh](https://ntfy.sh), a push notification service");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.ntfy-sh;
-      defaultText = literalExpression "pkgs.ntfy-sh";
-      description = mdDoc "The ntfy.sh package to use.";
+    package = mkPackageOption pkgs "ntfy-sh" { };
+
+    user = mkOption {
+      default = "ntfy-sh";
+      type = types.str;
+      description = lib.mdDoc "User the ntfy-sh server runs under.";
+    };
+
+    group = mkOption {
+      default = "ntfy-sh";
+      type = types.str;
+      description = lib.mdDoc "Primary group of ntfy-sh user.";
     };
 
     settings = mkOption {
-      type = types.submodule { freeformType = settingsFormat.type; };
+      type = types.submodule {
+        freeformType = settingsFormat.type;
+        options = {
+          base-url = mkOption {
+            type = types.str;
+            example = "https://ntfy.example";
+            description = lib.mdDoc ''
+              Public facing base URL of the service
+
+              This setting is required for any of the following features:
+              - attachments (to return a download URL)
+              - e-mail sending (for the topic URL in the email footer)
+              - iOS push notifications for self-hosted servers
+                (to calculate the Firebase poll_request topic)
+              - Matrix Push Gateway (to validate that the pushkey is correct)
+            '';
+          };
+        };
+      };
 
       default = { };
 
@@ -61,12 +86,8 @@ in
         after = [ "network.target" ];
 
         serviceConfig = {
-          ExecStartPre = [
-            "${pkgs.coreutils}/bin/touch ${cfg.settings.auth-file}"
-            "${pkgs.coreutils}/bin/mkdir -p ${cfg.settings.attachment-cache-dir}"
-            "${pkgs.coreutils}/bin/touch ${cfg.settings.cache-file}"
-          ];
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
+          User = cfg.user;
           StateDirectory = "ntfy-sh";
 
           DynamicUser = true;
@@ -84,8 +105,19 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           MemoryDenyWriteExecute = true;
-          # Upstream Requirements
+          # Upstream Recommandation
           LimitNOFILE = 20500;
+        };
+      };
+
+      users.groups = optionalAttrs (cfg.group == "ntfy-sh") {
+        ntfy-sh = { };
+      };
+
+      users.users = optionalAttrs (cfg.user == "ntfy-sh") {
+        ntfy-sh = {
+          isSystemUser = true;
+          group = cfg.group;
         };
       };
     };

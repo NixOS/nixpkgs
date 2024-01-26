@@ -12,10 +12,10 @@ buildGoModule rec {
     owner = "markbates";
     repo = "pkger";
     rev = "v${version}";
-    sha256 = "12zcvsd6bv581wwhahp1wy903495s51lw86b99cfihwmxc5qw6ww";
+    hash = "sha256-nBuOC+uVw+hYSssgTkPRJZEBkufhQgU5D6jsZZre7Is=";
   };
 
-  vendorSha256 = "1b9gpym6kb4hpdbrixphfh1qylmqr265jrmcd4vxb87ahvrsrvgp";
+  vendorHash = "sha256-9+2s84bqoNU3aaxmWYzIuFKPA3Tw9phXu5Csaaq/L60=";
 
   doCheck = false;
 

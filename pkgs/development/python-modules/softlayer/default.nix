@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.1.4";
+  version = "6.1.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "softlayer-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ofl8MmGn70CJPuPZi0W0GJiMiceMNMACSNVKaOPdQN8=";
+    hash = "sha256-2iN3T58aICQlGwr10/e/mWE9pA4rbJCBTE1jTu3GeGk=";
   };
 
   postPatch = ''
@@ -48,6 +48,8 @@ buildPythonPackage rec {
     rich
     urllib3
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     mock
@@ -76,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
-    changelog = "https://github.com/softlayer/softlayer-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

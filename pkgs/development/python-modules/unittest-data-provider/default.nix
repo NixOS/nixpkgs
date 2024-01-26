@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   version = "1.0.1";
+  format = "setuptools";
   pname = "unittest-data-provider";
 
   src = fetchPypi {

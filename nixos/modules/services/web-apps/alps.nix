@@ -94,6 +94,7 @@ in {
       description = "alps is a simple and extensible webmail.";
       documentation = [ "https://git.sr.ht/~migadu/alps" ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network.target" "network-online.target" ];
 
       serviceConfig = {

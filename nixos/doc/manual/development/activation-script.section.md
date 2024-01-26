@@ -69,4 +69,4 @@ do:
   `/etc/group` and `/etc/shadow`. This also creates home directories
 - `usrbinenv` creates `/usr/bin/env`
 - `var` creates some directories in `/var` that are not service-specific
-- `wrappers` creates setuid wrappers like `ping` and `sudo`
+- `wrappers` creates setuid wrappers like `sudo`

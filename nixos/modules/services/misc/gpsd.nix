@@ -92,6 +92,16 @@ in {
         '';
       };
 
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "-r" "-s" "19200" ];
+        description = lib.mdDoc ''
+          A list of extra command line arguments to pass to gpsd.
+          Check gpsd(8) mangpage for possible arguments.
+        '';
+      };
+
     };
 
   };
@@ -117,12 +127,14 @@ in {
         Type = "forking";
         ExecStart = let
           devices = utils.escapeSystemdExecArgs cfg.devices;
+          extraArgs = utils.escapeSystemdExecArgs cfg.extraArgs;
         in ''
           ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
             -S "${toString cfg.port}"                             \
             ${optionalString cfg.readonly "-b"}                   \
             ${optionalString cfg.nowait "-n"}                     \
             ${optionalString cfg.listenany "-G"}                  \
+            ${extraArgs}                                          \
             ${devices}
         '';
       };

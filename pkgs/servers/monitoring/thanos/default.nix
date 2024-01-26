@@ -1,16 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, go
+, nix-update-script
+, nixosTests
+, testers
+, thanos
+}:
+
 buildGoModule rec {
   pname = "thanos";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "thanos-io";
     repo = "thanos";
-    sha256 = "sha256-EJZGc4thu0WhVSSRolIRYg39S81Cgm+JHwpW5eE7mDc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AM4gJmUea8/Rfg7i4yTIK1ie+8MHz0M+ZG2F//wYHNA=";
   };
 
-  vendorHash = "sha256-bNQwDttJ7YuQFrpp0alqe37/lue0CX5gB2UDRWWtTXQ=";
+  vendorHash = "sha256-JLj0HhcT4Hlc/FpYNGasqbfNz4cV12UueCYuXjamxks=";
 
   doCheck = true;
 
@@ -22,13 +31,26 @@ buildGoModule rec {
     "-X ${t}.Branch=unknown"
     "-X ${t}.BuildUser=nix@nixpkgs"
     "-X ${t}.BuildDate=unknown"
+    "-X ${t}.GoVersion=${lib.getVersion go}"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) prometheus;
+      version = testers.testVersion {
+        command = "thanos --version";
+        package = thanos;
+      };
+    };
+  };
 
   meta = with lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
+    changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ basvandijk ];
-    platforms = platforms.unix;
+    mainProgram = "thanos";
+    maintainers = with maintainers; [ basvandijk anthonyroussel ];
   };
 }

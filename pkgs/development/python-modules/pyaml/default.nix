@@ -1,18 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pyyaml
 , unidecode
 }:
 
 buildPythonPackage rec {
   pname = "pyaml";
-  version = "21.10.1";
+  version = "23.9.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6519fee13bf06e3bb3f20cacdea8eba9140385a7c2546df5dbae4887f768383";
+    hash = "sha256-WB6k6Z8OMIhkQH4EwDxgkkGu+joV37qJZNp2RLrzshc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyyaml

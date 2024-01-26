@@ -9,20 +9,22 @@
 , python3
 , sqlite
 , vala
+, libwebsockets
 }:
 
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
-  version = "8.0.3";
+  version = "9.0.4";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
-    rev = "0fdc14d5175979919b7c741f6bb97bfaaacbbfbe";
-    sha256 = "1cr1hvpp96s5arnzh1r5sazapcghhvbazbf7zym37yp3fy3lpya1";
+    rev = "v${version}";
+    sha256 = "sha256-WBbJ6e2I7SGqvZo3yH8L1ZbNPkyA6zTGS12Gq186DL4=";
   };
 
   nativeBuildInputs = [
+    libwebsockets
     autoreconfHook
     vala
     pkg-config

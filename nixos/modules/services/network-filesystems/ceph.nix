@@ -3,18 +3,18 @@
 with lib;
 
 let
-  cfg  = config.services.ceph;
+  cfg = config.services.ceph;
 
   # function that translates "camelCaseOptions" to "camel case options", credits to tilpner in #nixos@freenode
   expandCamelCase = replaceStrings upperChars (map (s: " ${s}") lowerChars);
   expandCamelCaseAttrs = mapAttrs' (name: value: nameValuePair (expandCamelCase name) value);
 
-  makeServices = (daemonType: daemonIds:
+  makeServices = daemonType: daemonIds:
     mkMerge (map (daemonId:
-      { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName pkgs.ceph; })
-      daemonIds));
+      { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName cfg.${daemonType}.package; })
+      daemonIds);
 
-  makeService = (daemonType: daemonId: clusterName: ceph:
+  makeService = daemonType: daemonId: clusterName: ceph:
     let
       stateDirectory = "ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}"; in {
     enable = true;
@@ -54,9 +54,9 @@ let
     } // optionalAttrs ( daemonType == "mon") {
       RestartSec = "10";
     };
-  });
+  };
 
-  makeTarget = (daemonType:
+  makeTarget = daemonType:
     {
       "ceph-${daemonType}" = {
         description = "Ceph target allowing to start/stop all ceph-${daemonType} services at once";
@@ -65,8 +65,7 @@ let
         before = [ "ceph.target" ];
         unitConfig.StopWhenUnneeded = true;
       };
-    }
-  );
+    };
 in
 {
   options.services.ceph = {
@@ -211,6 +210,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mgr.name1
         '';
       };
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -231,6 +231,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mon.name1
         '';
       };
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -251,7 +252,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in osd.name1
         '';
       };
-
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {
@@ -279,6 +280,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mds.name1
         '';
       };
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -290,6 +292,7 @@ in
 
     rgw = {
       enable = mkEnableOption (lib.mdDoc "Ceph RadosGW daemon");
+      package = mkPackageOption pkgs "ceph" { };
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
@@ -328,16 +331,16 @@ in
       { assertion = cfg.global.fsid != "";
         message = "fsid has to be set to a valid uuid for the cluster to function";
       }
-      { assertion = cfg.mon.enable == true -> cfg.mon.daemons != [];
+      { assertion = cfg.mon.enable -> cfg.mon.daemons != [];
         message = "have to set id of atleast one MON if you're going to enable Monitor";
       }
-      { assertion = cfg.mds.enable == true -> cfg.mds.daemons != [];
+      { assertion = cfg.mds.enable -> cfg.mds.daemons != [];
         message = "have to set id of atleast one MDS if you're going to enable Metadata Service";
       }
-      { assertion = cfg.osd.enable == true -> cfg.osd.daemons != [];
+      { assertion = cfg.osd.enable -> cfg.osd.daemons != [];
         message = "have to set id of atleast one OSD if you're going to enable OSD";
       }
-      { assertion = cfg.mgr.enable == true -> cfg.mgr.daemons != [];
+      { assertion = cfg.mgr.enable -> cfg.mgr.daemons != [];
         message = "have to set id of atleast one MGR if you're going to enable MGR";
       }
     ];
@@ -395,12 +398,18 @@ in
       in
         mkMerge targets;
 
-    systemd.tmpfiles.rules = [
-      "d /etc/ceph - ceph ceph - -"
-      "d /run/ceph 0770 ceph ceph -"
-      "d /var/lib/ceph - ceph ceph - -"]
-    ++ optionals cfg.mgr.enable [ "d /var/lib/ceph/mgr - ceph ceph - -"]
-    ++ optionals cfg.mon.enable [ "d /var/lib/ceph/mon - ceph ceph - -"]
-    ++ optionals cfg.osd.enable [ "d /var/lib/ceph/osd - ceph ceph - -"];
+    systemd.tmpfiles.settings."10-ceph" = let
+      defaultConfig = {
+        user = "ceph";
+        group = "ceph";
+      };
+    in {
+      "/etc/ceph".d = defaultConfig;
+      "/run/ceph".d = defaultConfig // { mode = "0770"; };
+      "/var/lib/ceph".d = defaultConfig;
+      "/var/lib/ceph/mgr".d = mkIf (cfg.mgr.enable) defaultConfig;
+      "/var/lib/ceph/mon".d = mkIf (cfg.mon.enable) defaultConfig;
+      "/var/lib/ceph/osd".d = mkIf (cfg.osd.enable) defaultConfig;
+    };
   };
 }

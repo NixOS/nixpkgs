@@ -1,19 +1,37 @@
-{ lib, stdenv, fetchurl, pam, libxcrypt }:
+{ lib
+, stdenv
+, coreutils
+, fetchurl
+, libxcrypt
+, pam
+, procps
+, unixtools
+, util-linux
+}:
 
 stdenv.mkDerivation rec {
   pname = "otpw";
-  version = "1.3";
+  version = "1.5";
 
   src = fetchurl {
     url = "https://www.cl.cam.ac.uk/~mgk25/download/otpw-${version}.tar.gz";
-    sha256 = "1k3hc7xbxz6hkc55kvddi3cibafwf93ivn58sy1l888d3l5dwmrk";
+    hash = "sha256-mKyjimHHcTZ3uW8kQmynBTSAwP0HfZGx6ZvJ+SzLgyo=";
   };
 
   patchPhase = ''
     sed -i 's/^CFLAGS.*/CFLAGS=-O2 -fPIC/' Makefile
-    sed -i -e 's,PATH=.*;,,' conf.h
-    sed -i -e '/ENTROPY_ENV/d' otpw-gen.c
+    substituteInPlace otpw-gen.c \
+      --replace "head -c 20 /dev/urandom 2>&1" "${coreutils}/bin/head -c 20 /dev/urandom 2>&1" \
+      --replace "ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." "${coreutils}/bin/ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." \
+      --replace "PATH=/usr/ucb:/bin:/usr/bin;ps lax" "PATH=/usr/ucb:/bin:/usr/bin;${unixtools.procps}/bin/ps lax" \
+      --replace "last | head -50" "${util-linux}/bin/last | ${coreutils}/bin/head -50" \
+      --replace "uptime;netstat -n;hostname;date;w" "${coreutils}/bin/uptime; ${unixtools.nettools}/bin/netstat -n; ${unixtools.nettools}/bin/hostname; ${coreutils}/bin/date; ${procps}/bin/w"
   '';
+
+  buildInputs = [
+    libxcrypt
+    pam
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/security $out/share/man/man{1,8}
@@ -23,14 +41,15 @@ stdenv.mkDerivation rec {
     cp *.8 $out/share/man/man8
   '';
 
-  buildInputs = [ pam libxcrypt ];
+  hardeningDisable = [
+    "stackprotector"
+  ];
 
-  hardeningDisable = [ "stackprotector" ];
-
-  meta = {
-    homepage = "http://www.cl.cam.ac.uk/~mgk25/otpw.html";
+  meta = with lib; {
     description = "A one-time password login package";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    homepage = "http://www.cl.cam.ac.uk/~mgk25/otpw.html";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

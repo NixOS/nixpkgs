@@ -1,12 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
-, cacert, moreutils, jq, git, rsync, pkg-config, yarn, python3
-, esbuild, nodejs_16, node-gyp, libsecret, xorg, ripgrep
-, AppKit, Cocoa, CoreServices, Security, cctools, xcbuild, quilt }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, makeWrapper
+, cacert
+, moreutils
+, jq
+, git
+, rsync
+, pkg-config
+, yarn
+, python3
+, esbuild
+, nodejs
+, node-gyp
+, libsecret
+, xorg
+, ripgrep
+, AppKit
+, Cocoa
+, CoreServices
+, Security
+, cctools
+, xcbuild
+, quilt
+, nixosTests
+}:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs_16;
   python = python3;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ ];
@@ -25,50 +48,52 @@ let
   };
 
   # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path : version : ''
+  patchEsbuild = path: version: ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
     sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
     ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
 
-in stdenv.mkDerivation rec {
+  # Comment from @code-asher, the code-server maintainer
+  # See https://github.com/NixOS/nixpkgs/pull/240001#discussion_r1244303617
+  #
+  # If the commit is missing it will break display languages (Japanese, Spanish,
+  # etc). For some reason VS Code has a hard dependency on the commit being set
+  # for that functionality.
+  # The commit is also used in cache busting. Without the commit you could run
+  # into issues where the browser is loading old versions of assets from the
+  # cache.
+  # Lastly, it can be helpful for the commit to be accurate in bug reports
+  # especially when they are built outside of our CI as sometimes the version
+  # numbers can be unreliable (since they are arbitrarily provided).
+  #
+  # To compute the commit when upgrading this derivation, do:
+  # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
+  # Example: `$ git rev-parse v4.16.1`
+  commit = "0c98611e6b43803a9d5dba222d7023b569abfb49";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.12.0";
+  version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-PQp5dji2Ynp+LJRWBka41umwe1/IR76C+at/wyOWGcI=";
-  };
-
-  cloudAgent = buildGoModule rec {
-    pname = "cloud-agent";
-    version = "0.2.6";
-
-    src = fetchFromGitHub {
-      owner = "coder";
-      repo = "cloud-agent";
-      rev = "v${version}";
-      sha256 = "1s3jpgvzizc9skc27c3x35sya2p4ywhvdi3l73927z3j47wszy7f";
-    };
-
-    vendorSha256 = "14xzlbmki8fk8mbcci62q8sklyd0nyga07ww1ap0vdrv7d1g31hn";
-
-    postPatch = ''
-      # the cloud-agent release tag has an empty version string, so add it back in
-      substituteInPlace internal/version/version.go \
-        --replace 'var Version string' 'var Version string = "v${version}"'
-    '';
+    hash = "sha256-J+6zuqVf1YKQjiRiqO4867DEwYzZsgQYgbsRXPo2hwY=";
   };
 
   yarnCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-${system}-yarn-cache";
-    inherit src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
+    inherit (finalAttrs) src;
+
     nativeBuildInputs = [ yarn' git cacert ];
+
     buildPhase = ''
+      runHook preBuild
+
       export HOME=$PWD
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
 
@@ -83,25 +108,42 @@ in stdenv.mkDerivation rec {
       find ./lib/vscode -name "yarn.lock" -printf "%h\n" | \
         xargs -I {} yarn --cwd {} \
           --ignore-scripts --ignore-engines
+
+      runHook postBuild
     '';
+
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-
-    # to get hash values use nix-build -A code-server.prefetchYarnCache
-    outputHash = "sha256-4Vr9u3+W/IhbbTc39jyDyDNQODlmdF+M/N8oJn0Z4+w=";
+    outputHash = "sha256-g2rwB+PuWuYgrzIuW0ngia7cdPMC8s7ffBEkbmPPzB4=";
   };
 
   nativeBuildInputs = [
-    nodejs yarn' python pkg-config makeWrapper git rsync jq moreutils quilt
+    nodejs
+    yarn'
+    python
+    pkg-config
+    makeWrapper
+    git
+    rsync
+    jq
+    moreutils
+    quilt
   ];
+
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile ])
     ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa CoreServices Security cctools xcbuild
-    ];
+    AppKit
+    Cocoa
+    CoreServices
+    Security
+    cctools
+    xcbuild
+  ];
 
   patches = [
-    # remove git calls from vscode build script
+    # Remove all git calls from the VS Code build script except `git rev-parse
+    # HEAD` which is replaced in postPatch with the commit.
     ./build-vscode-nogit.patch
   ];
 
@@ -111,11 +153,15 @@ in stdenv.mkDerivation rec {
     patchShebangs ./ci
 
     # inject git commit
-    substituteInPlace ci/build/build-release.sh \
-      --replace '$(git rev-parse HEAD)' "$commit"
+    substituteInPlace ./ci/build/build-vscode.sh \
+      --replace '$(git rev-parse HEAD)' "${commit}"
+    substituteInPlace ./ci/build/build-release.sh \
+      --replace '$(git rev-parse HEAD)' "${commit}"
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     # run yarn offline by default
     echo '--install.offline true' >> .yarnrc
 
@@ -125,7 +171,7 @@ in stdenv.mkDerivation rec {
     '') defaultYarnOpts}
 
     # set offline mirror to yarn cache we created in previous steps
-    yarn --offline config set yarn-offline-mirror "${yarnCache}"
+    yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
 
     # skip unnecessary electron download
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
@@ -140,9 +186,13 @@ in stdenv.mkDerivation rec {
     # use updated node-gyp. fixes the following error on Darwin:
     # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
     export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     # install code-server dependencies
     yarn --offline --ignore-scripts
 
@@ -191,7 +241,7 @@ in stdenv.mkDerivation rec {
 
     ${patchEsbuild "./lib/vscode/build" "0.12.6"}
     ${patchEsbuild "./lib/vscode/extensions" "0.11.23"}
-    '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
     # (see issue #101229)
     pushd ./lib/vscode/remote/node_modules/@parcel/watcher
@@ -207,21 +257,34 @@ in stdenv.mkDerivation rec {
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
 
     # run postinstall scripts after patching
-    find ./lib/vscode -path "*node_modules" -prune -o \
-      -path "./*/*/*/*/*" -name "yarn.lock" -printf "%h\n" | \
+    find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
+      -and -type f -name "yarn.lock" -printf "%h\n" | \
         xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
 
     # build code-server
     yarn build
 
     # build vscode
-    VERSION=${version} yarn build:vscode
+    VERSION=${finalAttrs.version} yarn build:vscode
+
+    # inject version into package.json
+    jq --slurp '.[0] * .[1]' ./package.json <(
+      cat << EOF
+    {
+      "version": "${finalAttrs.version}"
+    }
+    EOF
+    ) | sponge ./package.json
 
     # create release
     yarn release
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/libexec/code-server $out/bin
 
     # copy release to libexec path
@@ -230,30 +293,35 @@ in stdenv.mkDerivation rec {
     # install only production dependencies
     yarn --offline --cwd "$out/libexec/code-server" --production
 
-    # link coder-cloud agent from nix store
-    mkdir -p $out/libexec/code-server/lib
-    ln -s "${cloudAgent}/bin/cloud-agent" $out/libexec/code-server/lib/coder-cloud-agent
-
     # create wrapper
-    makeWrapper "${nodejs_16}/bin/node" "$out/bin/code-server" \
+    makeWrapper "${nodejs}/bin/node" "$out/bin/code-server" \
       --add-flags "$out/libexec/code-server/out/node/entry.js"
+
+    runHook postInstall
   '';
 
   passthru = {
-    prefetchYarnCache = lib.overrideDerivation yarnCache (d: {
+    prefetchYarnCache = lib.overrideDerivation finalAttrs.yarnCache (d: {
       outputHash = lib.fakeSha256;
     });
+    tests = {
+      inherit (nixosTests) code-server;
+    };
+    # vscode-with-extensions compatibility
+    executableName = "code-server";
+    longName = "Visual Studio Code Server";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run VS Code on a remote server";
     longDescription = ''
       code-server is VS Code running on a remote server, accessible through the
       browser.
     '';
     homepage = "https://github.com/coder/code-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ offline henkery ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ offline henkery code-asher ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    mainProgram = "code-server";
   };
-}
+})

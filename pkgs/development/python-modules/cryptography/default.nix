@@ -1,50 +1,47 @@
 { lib
 , stdenv
-, callPackage
 , buildPythonPackage
-, fetchPypi
-, rustPlatform
+, callPackage
 , cargo
-, rustc
-, setuptools-rust
-, openssl
-, Security
-, packaging
-, six
-, isPyPy
 , cffi
-, pkg-config
-, pytestCheckHook
-, pytest-subtests
-, pythonOlder
-, pretend
+, cryptography-vectors ? (callPackage ./vectors.nix { })
+, fetchPypi
+, hypothesis
+, iso8601
+, isPyPy
 , libiconv
 , libxcrypt
-, iso8601
+, openssl
+, pkg-config
+, pretend
 , py
+, pytest-subtests
+, pytestCheckHook
+, pythonOlder
 , pytz
-, hypothesis
+, rustc
+, rustPlatform
+, Security
+, setuptoolsRustBuildHook
 }:
 
-let
-  cryptography-vectors = callPackage ./vectors.nix { };
-in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "40.0.1"; # Also update the hash in vectors.nix
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "41.0.7"; # Also update the hash in vectors.nix
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
+    hash = "sha256-E/k86b6oAWwlOzSvxr1qdZk+XEBnLtVAWpyDLw1KALw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+    hash = "sha256-VeZhKisCPDRvmSjGNwCgJJeVj65BZ0Ge+yvXbZw86Rw=";
   };
 
   postPatch = ''
@@ -54,19 +51,24 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-    pkg-config
-  ] ++ [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    setuptools-rust
+    setuptoolsRustBuildHook
     cargo
     rustc
+    pkg-config
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    libiconv
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
@@ -74,8 +76,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cryptography-vectors
-    # "hypothesis" indirectly depends on cryptography to build its documentation
-    (hypothesis.override { enableDocumentation = false; })
+    hypothesis
     iso8601
     pretend
     py
@@ -103,8 +104,6 @@ buildPythonPackage rec {
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
-      Our goal is for it to be your "cryptographic standard library". It
-      supports Python 2.7, Python 3.5+, and PyPy 5.4+.
     '';
     homepage = "https://github.com/pyca/cryptography";
     changelog = "https://cryptography.io/en/latest/changelog/#v"

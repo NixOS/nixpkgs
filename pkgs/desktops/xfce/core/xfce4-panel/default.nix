@@ -16,9 +16,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
-  version = "4.18.4";
+  version = "4.18.5";
 
-  sha256 = "sha256-OEU9NzvgWn6zJGdK9Te2qBbARlwvRrLHuaUocNyGd/g=";
+  sha256 = "sha256-1oh9C2ZlpcUulqhxUEPLhX22R7tko0rMmDixgkgaU9o=";
 
   nativeBuildInputs = [
     gobject-introspection

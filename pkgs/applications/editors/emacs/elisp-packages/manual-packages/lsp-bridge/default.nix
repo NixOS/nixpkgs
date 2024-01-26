@@ -5,59 +5,61 @@
 , substituteAll
 , acm
 , markdown-mode
-, posframe
 , git
 , go
 , gopls
 , pyright
+, ruff
 , tempel
 , writeText
 , unstableGitUpdater
 }:
 
 let
-  rev = "7e1e6a4c349e720d75c892cd7230b29c35148342";
+  rev = "0b30d95c6de95b150d93ecee325b95e04ff09e46";
   python = python3.withPackages (ps: with ps; [
     epc
     orjson
+    paramiko
+    rapidfuzz
     sexpdata
     six
   ]);
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "20230424.1642"; # 16:42 UTC
+  version = "20231021.309"; # 3:09 UTC
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
     inherit rev;
-    sha256 = "sha256-e0XVQpsyjy8HeZN6kLRjnoTpyEefTqstsgydEKlEQ1c=";
+    hash = "sha256-hR7bZh0ElJ8F9ToJ4dkazF19T8PE01MTcxKrjeaEp4o=";
   };
 
   commit = rev;
 
-  # Hardcode the python dependencies needed for lsp-bridge, so users
-  # don't have to modify their global environment
-  postPatch = ''
-    substituteInPlace lsp-bridge.el --replace \
-     '(defcustom lsp-bridge-python-command (if (memq system-type '"'"'(cygwin windows-nt ms-dos)) "python.exe" "python3")' \
-     '(defcustom lsp-bridge-python-command "${python.interpreter}"'
-  '';
+  patches = [
+    # Hardcode the python dependencies needed for lsp-bridge, so users
+    # don't have to modify their global environment
+    (substituteAll {
+      src = ./hardcode-dependencies.patch;
+      python = python.interpreter;
+    })
+  ];
 
   packageRequires = [
     acm
     markdown-mode
-    posframe
   ];
-
-  buildInputs = [ python ];
 
   checkInputs = [
     git
     go
     gopls
     pyright
+    python
+    ruff
     tempel
   ];
 

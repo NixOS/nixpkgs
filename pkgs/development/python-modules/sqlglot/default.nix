@@ -1,37 +1,56 @@
 { lib
 , buildPythonPackage
+, duckdb
 , fetchFromGitHub
-, pythonOlder
 , pytestCheckHook
 , python-dateutil
-, duckdb
-, pyspark
+, pythonOlder
+, setuptools
+, setuptools-scm
 }:
+
 buildPythonPackage rec {
   pname = "sqlglot";
-  version = "10.5.2";
+  version = "20.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "sqlglot";
     owner = "tobymao";
-    rev = "v${version}";
-    hash = "sha256-ZFc2aOhCTRFlrzgnYDSdIZxRqKZ8FvkYSZRU0OMHI34=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4czhmAJUDRj0x8dCmIXg5BQ1Uvie5vx+UtWdSSY5mnM=";
   };
 
-  propagatedBuildInputs = [ python-dateutil ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook duckdb pyspark ];
+  propagatedBuildInputs = [
+    # Optional dependency used in the sqlglot optimizer
+    python-dateutil
+  ];
 
-  # these integration tests assume a running Spark instance
-  disabledTestPaths = [ "tests/dataframe/integration" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    duckdb
+  ];
 
-  pythonImportsCheck = [ "sqlglot" ];
+  disabledTestPaths = [
+    # These integration tests assume a running Spark instance
+    "tests/dataframe/integration"
+  ];
+
+  pythonImportsCheck = [
+    "sqlglot"
+  ];
 
   meta = with lib; {
     description = "A no dependency Python SQL parser, transpiler, and optimizer";
     homepage = "https://github.com/tobymao/sqlglot";
+    changelog = "https://github.com/tobymao/sqlglot/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

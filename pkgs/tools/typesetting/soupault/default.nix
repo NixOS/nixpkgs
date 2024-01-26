@@ -8,27 +8,26 @@
 let
   pname = "soupault";
 
-  version = "4.4.0";
+  version = "4.8.0";
 in
 ocamlPackages.buildDunePackage {
   inherit pname version;
 
   minimalOCamlVersion = "4.13";
 
-  duneVersion = "3";
-
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M4gaPxBxQ1Bk2C3BwvobYHyaWKIZgQ6buZ6S5wBlvPg=";
+    hash = "sha256-/QpT0zgrfMgRKjHyLHugaAlICpPkqaQ7f8fFAL0P02Y=";
   };
 
   buildInputs = with ocamlPackages; [
     base64
     camomile
     containers
+    csv
     digestif
     ezjsonm
     fileutils
@@ -57,5 +56,6 @@ ocamlPackages.buildDunePackage {
     changelog = "https://codeberg.org/PataphysicalSociety/soupault/src/branch/main/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ toastal ];
+    mainProgram = "soupault";
   };
 }

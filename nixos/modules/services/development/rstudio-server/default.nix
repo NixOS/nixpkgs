@@ -39,14 +39,8 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.rstudio-server;
-      defaultText = literalExpression "pkgs.rstudio-server";
-      example = literalExpression "pkgs.rstudioServerWrapper.override { packages = [ pkgs.rPackages.ggplot2 ]; }";
-      description = lib.mdDoc ''
-        Rstudio server package to use. Can be set to rstudioServerWrapper to provide packages.
-      '';
+    package = mkPackageOption pkgs "rstudio-server" {
+      example = "rstudioServerWrapper.override { packages = [ pkgs.rPackages.ggplot2 ]; }";
     };
 
     rserverExtraConfig = mkOption {

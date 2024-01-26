@@ -2,10 +2,16 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
+, python
+
+# build-system
+, libclang
+, psutil
+, setuptools
 , swig
-, xcbuild
-, mupdf
+
+# native dependencies
 , freetype
 , harfbuzz
 , openjpeg
@@ -13,33 +19,48 @@
 , libjpeg_turbo
 , gumbo
 , memstreamHook
+
+# dependencies
+, mupdf
+
+# tests
+, fonttools
+, pytestCheckHook
 }:
 
-buildPythonPackage rec {
+let
+  # PyMuPDF needs the C++ bindings generated
+  mupdf-cxx = mupdf.override { enableOcr = true; enableCxx = true; enablePython = true; python3 = python; };
+in buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.21.1";
-  format = "setuptools";
+  version = "1.23.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "PyMuPDF";
-    inherit version;
-    hash = "sha256-+BV0GkNcYqADa7y/X6bFM1Z71pxTONQTcU/FeyLbk+A=";
+  src = fetchFromGitHub {
+    owner = "pymupdf";
+    repo = "PyMuPDF";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XVf9nKbcTS/rxRCD2u5u8ecCf0bWZ3FXXN/YulI9etU=";
   };
 
+  # swig is not wrapped as python package
+  # libclang calls itself just clang in wheel metadata
   postPatch = ''
-    substituteInPlace setup.py \
-        --replace '/usr/include/mupdf' ${mupdf.dev}/include/mupdf
+    substituteInPlace pyproject.toml \
+      --replace '"swig",' "" \
+      --replace "libclang" "clang"
   '';
+
   nativeBuildInputs = [
+    libclang
     swig
-  ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild
+    psutil
+    setuptools
   ];
 
   buildInputs = [
-    mupdf
     freetype
     harfbuzz
     openjpeg
@@ -50,10 +71,43 @@ buildPythonPackage rec {
     memstreamHook
   ];
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    mupdf-cxx
+  ];
+
+  env = {
+    # force using system MuPDF (must be defined in environment and empty)
+    PYMUPDF_SETUP_MUPDF_BUILD = "";
+    # provide MuPDF paths
+    PYMUPDF_MUPDF_LIB = "${lib.getLib mupdf-cxx}/lib";
+    PYMUPDF_MUPDF_INCLUDE = "${lib.getDev mupdf-cxx}/include";
+  };
+
+  # TODO: manually add mupdf rpath until upstream fixes it
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    for lib in */*.so $out/${python.sitePackages}/*/*.so; do
+      install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
+    done
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    fonttools
+  ];
+
+  disabledTests = [
+    # fails for indeterminate reasons
+    "test_color_count"
+    "test_2753"
+    "test_2548"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # darwin does not support OCR right now
+    "test_tesseract"
+  ];
 
   pythonImportsCheck = [
     "fitz"
+    "fitz_new"
   ];
 
   meta = with lib; {

@@ -55,7 +55,6 @@
 , kxmlgui
 , plasma-framework
 , libqaccessibilityclient
-, python3
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure

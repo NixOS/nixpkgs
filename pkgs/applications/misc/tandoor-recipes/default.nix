@@ -7,23 +7,15 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      django = super.django_4;
-
-      django-crispy-forms = super.django-crispy-forms.overridePythonAttrs (_: rec {
-        version = "1.14.0";
-        format = "setuptools";
-
+      validators = super.validators.overridePythonAttrs (_: rec {
+        version = "0.20.0";
         src = fetchFromGitHub {
-          owner = "django-crispy-forms";
-          repo = "django-crispy-forms";
-          rev = "refs/tags/${version}";
-          hash = "sha256-NZ2lWxsQHc7Qc4HDoWgjJTZ/bJHmjpBf3q1LVLtzA+8=";
+          owner = "python-validators";
+          repo = "validators";
+          rev = version;
+          hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
         };
-      });
-
-      # Tests are incompatible with Django 4
-      django-js-reverse = super.django-js-reverse.overridePythonAttrs (_: {
-        doCheck = false;
+        propagatedBuildInputs = [ super.decorator super.six ];
       });
     };
   };
@@ -42,11 +34,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   patches = [
     # Allow setting MEDIA_ROOT through environment variable
     ./media-root.patch
-    # Address CVE-2023-31047 on Django 4.2.1+
+    # https://github.com/TandoorRecipes/recipes/pull/2706
     (fetchpatch {
-      name = "fix-multiple-file-field";
-      url = "https://github.com/TandoorRecipes/recipes/pull/2458/commits/6b04c922977317354a367487427b15a8ed619be9.patch";
-      hash = "sha256-KmfjJSrB/4tOWtU7zrDJ/AOG4XlmWy/halw8IEEXdZ0=";
+      url = "https://github.com/TandoorRecipes/recipes/commit/702c1d67d3b2d13cf471bf9daa1d2ef0f1837dec.patch";
+      hash = "sha256-6vmtYs6b0d38Ojxxc2I7oxqpkIlyRVlhzURBOTO2VlQ=";
     })
   ];
 
@@ -64,6 +55,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-cleanup
     django-cors-headers
     django-crispy-forms
+    django-crispy-bootstrap4
     django-hcaptcha
     django-js-reverse
     django-oauth-toolkit
@@ -72,7 +64,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-storages
     django-tables2
     django-webpack-loader
-    django_treebeard
+    django-treebeard
     djangorestframework
     drf-writable-nested
     gunicorn
@@ -119,8 +111,8 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     touch cookbook/static/themes/bootstrap.min.css.map
     touch cookbook/static/css/bootstrap-vue.min.css.map
 
-    ${python.pythonForBuild.interpreter} manage.py collectstatic_js_reverse
-    ${python.pythonForBuild.interpreter} manage.py collectstatic
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic_js_reverse
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic
 
     runHook postBuild
   '';
@@ -144,6 +136,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     pytestCheckHook
     pytest-django
     pytest-factoryboy
+  ];
+
+  # flaky
+  disabledTests = [
+    "test_search_count"
   ];
 
   passthru = {

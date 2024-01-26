@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cargo
 , hypothesis
 , libiconv
@@ -19,34 +20,41 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.4.9";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "instagram";
-    repo = pname;
+    repo = "libcst";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ikddvKsvXMNHMfA9jUhvyiDXII0tTs/rE97IGI/azgA=";
+    hash = "sha256-kFs7edBWz0GRbgbLDmtpUVi5R+6mYXsJSvceOoPW9ck=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/${cargoRoot}";
+    sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-FWQGv3E5X+VEnTYD0uKN6W4USth8EQlEGbYgUAWZ5EQ=";
+    hash = "sha256-fhaHiz64NH6S61fSXj4gNxxcuB+ECxWSSmG5StiFr1k=";
   };
 
   cargoRoot = "native";
 
-  postPatch = ''
-    # test try to format files, which isn't necessary when consuming releases
-    sed -i libcst/codegen/generate.py \
-      -e '/ufmt/c\        pass'
-  '';
+  patches = [
+    # https://github.com/Instagram/LibCST/pull/1042
+    (fetchpatch {
+      name = "remove-distutils.patch";
+      url = "https://github.com/Instagram/LibCST/commit/a6834aa0e6eb78e41549fd1087d7ba60ca4dd237.patch";
+      hash = "sha256-lyIXJhm4UMwdCOso6McDslIvtK7Ar8sF5Zy7qo1nicQ=";
+    })
+  ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    # avoid infinite recursion by not formatting the release files
+    substituteInPlace libcst/codegen/generate.py \
+      --replace '"ufmt"' '"true"'
+  '';
 
   nativeBuildInputs = [
     setuptools-rust
@@ -70,8 +78,12 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
+    # otherwise import libcst.native fails
+    cp build/lib.*/libcst/native.* libcst/
+
     ${python.interpreter} -m libcst.codegen.generate visitors
     ${python.interpreter} -m libcst.codegen.generate return_types
+
     # Can't run all tests due to circular dependency on hypothesmith -> libcst
     rm -r {libcst/tests,libcst/codegen/tests,libcst/m*/tests}
   '';
@@ -88,7 +100,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
+    changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 psfl ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

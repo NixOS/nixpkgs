@@ -8,8 +8,8 @@
 
 buildPythonPackage rec {
   pname = "pyprusalink";
-  version = "1.1.0";
-  format = "pyproject";
+  version = "2.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
+    hash = "sha256-wwH4LE8wi8eb7QwT7N1mNtVleoWscDEOu2vrXKDktwU=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to communicate with PrusaLink ";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
+    changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

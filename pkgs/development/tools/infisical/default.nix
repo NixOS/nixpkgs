@@ -1,59 +1,87 @@
-{ stdenv, lib, callPackage, fetchurl }:
+{ stdenv, lib, fetchurl, testers, infisical, installShellFiles }:
+
+# this expression is mostly automated, and you are STRONGLY
+# RECOMMENDED to use to nix-update for updating this expression when new
+# releases come out, which runs the sibling `update.sh` script.
+#
+# from the root of the nixpkgs git repository, run:
+#
+#    nix-shell maintainers/scripts/update.nix \
+#      --argstr commit true \
+#      --argstr package infisical
 
 let
-  inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
+  # build hashes, which correspond to the hashes of the precompiled binaries procured by GitHub Actions.
+  buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
-  plat = {
-    x86_64-linux = "linux_amd64";
-    x86_64-darwin = "darwin_amd64";
-    aarch64-linux = "linux_arm64";
-    aarch64-darwin = "darwin_arm64";
-  }.${system} or throwSystem;
+  # the version of infisical
+  version = "0.16.10";
 
-  archive_fmt = "tar.gz";
+  # the platform-specific, statically linked binary
+  src =
+    let
+      suffix = {
+        # map the platform name to the golang toolchain suffix
+        # NOTE: must be synchronized with update.sh!
+        x86_64-linux = "linux_amd64";
+        x86_64-darwin = "darwin_amd64";
+        aarch64-linux = "linux_arm64";
+        aarch64-darwin = "darwin_arm64";
+      }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  sha256 = {
-    x86_64-linux = "194akxb692xpqppakw49aywp5ma43yfcwv5imw4pm05cna0n06b1";
-    x86_64-darwin = "0bgjx54c00v0nb88rzdv09g92yw9qsf2fxd8565g6fsw591va1pa";
-    aarch64-linux = "0z07aikjhk9055apbvyaxdp8cgjl291fqgwgfbp9y3826q7s0riq";
-    aarch64-darwin = "0garlx458jy6dpqbfd0y2p7xj9hagm815cflybbbxf5yz2v9da01";
-  }.${system} or throwSystem;
+      name = "infisical_${version}_${suffix}.tar.gz";
+      hash = buildHashes."${stdenv.hostPlatform.system}";
+      url = "https://github.com/Infisical/infisical/releases/download/infisical-cli%2Fv${version}/${name}";
+    in
+    fetchurl { inherit name url hash; };
+
 in
-  stdenv.mkDerivation (finalAttrs: {
-    pname = "infisical";
-    version = "0.3.7";
+stdenv.mkDerivation {
+  pname = "infisical";
+  version = version;
+  inherit src;
 
-    src = fetchurl {
-      url = "https://github.com/Infisical/infisical/releases/download/v${finalAttrs.version}/infisical_${finalAttrs.version}_${plat}.tar.gz";
-      inherit sha256;
-    };
+  nativeBuildInputs = [ installShellFiles ];
 
-    sourceRoot = ".";
-    installPhase = ''
-      mkdir -p $out/bin/ $out/share/completions/ $out/share/man/
-      cp completions/* $out/share/completions/
-      cp manpages/* $out/share/man/
-      cp infisical $out/bin
+  doCheck = true;
+  dontConfigure = true;
+  dontStrip = true;
+
+  sourceRoot = ".";
+  buildPhase = "chmod +x ./infisical";
+  checkPhase = "./infisical --version";
+  installPhase = ''
+    mkdir -p $out/bin/ $out/share/completions/ $out/share/man/
+    cp infisical $out/bin
+    cp completions/* $out/share/completions/
+    cp manpages/* $out/share/man/
+  '';
+  postInstall = ''
+    installManPage share/man/infisical.1.gz
+    installShellCompletion share/completions/infisical.{bash,fish,zsh}
+  '';
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion { package = infisical; };
+  };
+
+  meta = with lib; {
+    description = "The official Infisical CLI";
+    longDescription = ''
+      Infisical is the open-source secret management platform:
+      Sync secrets across your team/infrastructure and prevent secret leaks.
     '';
-
-    postInstall = ''
-      installManPage share/man/infisical.1.gz
-      installShellCompletion share/completions/infisical.{bash,fish,zsh}
-      chmod +x bin/infisical
-    '';
-
-    meta = with lib; {
-      description = "The official Infisical CLI";
-      longDescription = ''
-        Infisical is an Open Source, End-to-End encrypted platform that lets you
-        securely sync secrets and configs across your team, devices, and infrastructure
-      '';
-      mainProgram = "infisical";
-      homepage = "https://infisical.com/";
-      downloadPage = "https://github.com/Infisical/infisical/releases/";
-      license = licenses.mit;
-      maintainers = [ maintainers.ivanmoreau ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
-    };
-  })
+    homepage = "https://infisical.com";
+    changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
+    license = licenses.mit;
+    mainProgram = "infisical";
+    maintainers = [ maintainers.ivanmoreau maintainers.jgoux ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+  };
+}

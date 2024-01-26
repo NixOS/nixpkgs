@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lndmanage";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "bitromortac";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-G6KpF/c8FsXrqI0hB0fZlModQThnAOHrCv482UjRng0=";
+    hash = "sha256-zEz1k98LIOWzqzZ+WNHBHY2hPwWE75bjP+quSdfI/8s=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -40,5 +40,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/bitromortac/lndmanage";
     license = licenses.mit;
     maintainers = with maintainers; [ mmilata ];
+    mainProgram = "lndmanage";
   };
 }

@@ -1,27 +1,72 @@
-{ lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
-, fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
-, libxsmm, spglib, which, pkg-config, plumed, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, mpiCheckPhaseHook
+, python3
+, gfortran
+, blas
+, lapack
+, fftw
+, libint
+, libvori
+, libxc
+, mpi
+, gsl
+, scalapack
+, openssh
+, makeWrapper
+, libxsmm
+, spglib
+, which
+, pkg-config
+, plumed
+, zlib
+, hdf5-fortran
+, sirius
+, libvdwxc
+, spla
+, spfft
 , enableElpa ? false
 , elpa
-} :
+, cudaPackages
+, rocmPackages
+, config
+, gpuBackend ? (
+  if config.cudaSupport
+  then "cuda"
+  else if config.rocmSupport
+  then "rocm"
+  else "none"
+)
+# Change to a value suitable for your target GPU.
+# For AMD values see https://github.com/cp2k/cp2k/blob/master/INSTALL.md#2v-rocmhip-support-for-amd-gpu
+# and for Nvidia see https://github.com/cp2k/cp2k/blob/master/INSTALL.md#2i-cuda-optional-improved-performance-on-gpu-systems
+, gpuVersion ? ( if gpuBackend == "cuda" then "A100" else "Mi100" )
+, gpuArch ? ( if gpuBackend == "cuda" then "sm_80" else "gfx908" )
+}:
+
+assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
 
 let
   cp2kVersion = "psmp";
   arch = "Linux-x86-64-gfortran";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2023.1";
+  version = "2024.1";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-SG5Gz0cDiSfbSZ8m4K+eARMLU4iMk/xK3esN5yt05RE=";
+    hash = "sha256-6PB6wjdTOa55dXV7QIsjxI77hhc95WFEjNePfupBUJQ=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ python3 which openssh makeWrapper pkg-config ];
+  nativeBuildInputs = [ python3 which openssh makeWrapper pkg-config ]
+    ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+
   buildInputs = [
     gfortran
     fftw
@@ -36,7 +81,25 @@ in stdenv.mkDerivation rec {
     lapack
     plumed
     zlib
-  ] ++ lib.optional enableElpa elpa;
+    hdf5-fortran
+    sirius
+    spla
+    spfft
+    libvdwxc
+  ]
+  ++ lib.optional enableElpa elpa
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvrtc
+  ] ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocm-core
+    rocmPackages.hipblas
+    rocmPackages.hipfft
+    rocmPackages.rocblas
+  ]
+  ;
 
   propagatedBuildInputs = [ mpi ];
   propagatedUserEnvPkgs = [ mpi ];
@@ -46,7 +109,7 @@ in stdenv.mkDerivation rec {
     "VERSION=${cp2kVersion}"
   ];
 
-  doCheck = true;
+  doCheck = gpuBackend == "none";
 
   enableParallelBuilding = true;
 
@@ -64,44 +127,76 @@ in stdenv.mkDerivation rec {
     FC         = mpif90
     LD         = mpif90
     AR         = ar -r
+    ${lib.strings.optionalString (gpuBackend == "cuda") ''
+    OFFLOAD_CC = nvcc
+    OFFLOAD_FLAGS = -O3 -g -w --std=c++11 -arch ${gpuArch}
+    OFFLOAD_TARGET = cuda
+    GPUVER = ${gpuVersion}
+    CXX = mpicxx
+    CXXFLAGS = -std=c++11 -fopenmp
+    ''}
+    ${lib.strings.optionalString (gpuBackend == "rocm") ''
+    GPUVER = ${gpuVersion}
+    OFFLOAD_CC = hipcc
+    OFFLOAD_FLAGS = -fopenmp -m64 -pthread -fPIC -D__GRID_HIP -O2 --offload-arch=${gpuArch} --rocm-path=${rocmPackages.rocm-core}
+    OFFLOAD_TARGET = hip
+    CXX = mpicxx
+    CXXFLAGS = -std=c++11 -fopenmp -D__HIP_PLATFORM_AMD__
+    ''}
     DFLAGS     = -D__FFTW3 -D__LIBXC -D__LIBINT -D__parallel -D__SCALAPACK \
                  -D__MPI_VERSION=3 -D__F2008 -D__LIBXSMM -D__SPGLIB \
                  -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"} \
-                 -D__PLUMED2
-    CFLAGS    = -fopenmp
+                 -D__PLUMED2 -D__HDF5 -D__GSL -D__SIRIUS -D__LIBVDWXC -D__SPFFT -D__SPLA \
+                 ${lib.strings.optionalString (gpuBackend == "cuda") "-D__OFFLOAD_CUDA -D__ACC -D__DBCSR_ACC -D__NO_OFFLOAD_PW"} \
+                 ${lib.strings.optionalString (gpuBackend == "rocm") "-D__OFFLOAD_HIP -D__DBCSR_ACC -D__NO_OFFLOAD_PW"}
+    CFLAGS    = -fopenmp -I${lib.getDev hdf5-fortran}/include -I${lib.getDev gsl}/include
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
-                 -I${libxc}/include -I${libxsmm}/include \
-                 -I${libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"}
+                 -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
+                 -I${lib.getDev sirius}/include/sirius \
+                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -I${lib.getDev hdf5-fortran}/include \
+                 -fallow-argument-mismatch
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
                  -lxcf03 -lxc -lxsmmf -lxsmm -lsymspg \
                  -lint2 -lstdc++ -lvori \
                  -lgomp -lpthread -lm \
                  -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"} \
-                 -lz -ldl -lstdc++ ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
-                 -lplumed
+                 -lz -ldl ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
+                 -lplumed -lhdf5_fortran -lhdf5_hl -lhdf5 -lgsl -lsirius -lspla -lspfft -lvdwxc \
+                 ${lib.strings.optionalString (gpuBackend == "cuda") ''
+                   -L${cudaPackages.cuda_cudart}/lib/stubs/ \
+                   -lcudart -lnvrtc -lcuda -lcublas
+                   ''
+                 } \
+                 ${lib.strings.optionalString (gpuBackend == "rocm") "-lamdhip64 -lhipfft -lhipblas -lrocblas"}
     LDFLAGS    = \$(FCFLAGS) \$(LIBS)
     include ${plumed}/lib/plumed/src/lib/Plumed.inc
     EOF
   '';
 
+  nativeCheckInputs = [
+    mpiCheckPhaseHook
+    openssh
+  ];
+
   checkPhase = ''
-    export OMP_NUM_THREADS=1
+    runHook preCheck
 
-    export HYDRA_IFACE=lo  # Fix to make mpich run in a sandbox
-    export OMPI_MCA_rmaps_base_oversubscribe=1
     export CP2K_DATA_DIR=data
-
     mpirun -np 2 exe/${arch}/libcp2k_unittest.${cp2kVersion}
+
+    runHook postCheck
   '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/cp2k
 
     cp exe/${arch}/* $out/bin
+    rm $out/bin/*_unittest.*
 
     for i in cp2k cp2k_shell graph; do
       wrapProgram $out/bin/$i.${cp2kVersion} \

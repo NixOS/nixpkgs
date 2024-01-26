@@ -22,24 +22,28 @@
 , libnotify
 , libX11
 , libxcb
+, headless ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "7.22.1";
+  version = "7.24.2";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-DYbcWBJEjSJWRXNdumDhhybKSs8ofyREWqj2ghrvmBE=";
+    hash = "sha256-Aaoqf53wagCkzkZUs7mVbE2Z2P6GvxiQYxPrL6ahGqA=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
 
   buildInputs = [
     curl
+    sqlite
+    patchelf
+  ] ++ lib.optionals (!headless) [
     libGLU
     libGL
     libXmu
@@ -47,17 +51,15 @@ stdenv.mkDerivation rec {
     freeglut
     libjpeg
     wxGTK32
-    sqlite
     gtk3
     libXScrnSaver
     libnotify
-    patchelf
     libX11
     libxcb
     xcbutil
   ];
 
-  NIX_LDFLAGS = "-lX11";
+  NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";
 
   preConfigure = ''
     ./_autosetup
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--disable-server" ];
+  configureFlags = [ "--disable-server" ] ++ lib.optionals headless [ "--disable-manager" ];
 
   postInstall = ''
     install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"

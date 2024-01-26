@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , pytestCheckHook
@@ -21,6 +22,11 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i '/^addopts/d' setup.cfg
   '';
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [
+    # error: incompatible pointer to integer conversion initializing 'int' with an expression of type 'void *'
+    "-Wno-error=int-conversion"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

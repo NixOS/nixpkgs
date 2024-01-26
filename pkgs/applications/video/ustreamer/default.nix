@@ -2,23 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "ustreamer";
-  version = "5.38";
+  version = "5.48";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
     rev = "v${version}";
-    sha256 = "sha256-pc1Pf8KnjGPb74GbcmHaj/XCD0wjgiglaAKjnZUa6Ag=";
+    hash = "sha256-R1HL8tYFDtHrxArcoJwlM0Y7MbSyNxNiZ2tjyh1OCn4=";
   };
 
   buildInputs = [ libbsd libevent libjpeg ];
 
-  enableParallelBuilding = true;
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ustreamer $out/bin/
-  '';
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://github.com/pikvm/ustreamer";

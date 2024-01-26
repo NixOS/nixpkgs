@@ -11,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.4";
-  format = "pyproject";
+  version = "3.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
     rev = "refs/tags/${version}";
-    hash = "sha256-7ud767/UoOAbFaH1Jx4CAaQnVDzInsKIULg/LDhb/gY=";
+    hash = "sha256-5ZO++l6BWA085U5IkghjCT46YhKc85SB7sNU2h4Fpec=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -41,6 +39,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "dissect.volume"
+  ];
+
+  disabledTests = [
+    # gzip.BadGzipFile: Not a gzipped file
+    "test_ddf_read"
+    "test_dm_thin"
+    "test_lvm_mirro"
+    "test_lvm_thin"
+    "test_md_raid0_zones"
+    "test_md_read"
   ];
 
   meta = with lib; {

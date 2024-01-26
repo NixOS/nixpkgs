@@ -11,13 +11,12 @@
 , json-glib
 , libgee
 , libhandy
-, libsoup
+, libportal-gtk3
+, libsoup_3
 , libxml2
 , meson
 , ninja
-, packagekit
 , pkg-config
-, python3
 , vala
 , polkit
 , wrapGAppsHook
@@ -25,27 +24,22 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.2.1";
+  version = "7.4.0-unstable-2023-12-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-jtNPRsq33bIn3jy3F63UNrwrhaTBYbRYLDxyxgAXjIc=";
+    # Add support for AppStream 1.0.
+    # https://github.com/elementary/appcenter/pull/2099
+    rev = "d93e135a0b0c9a6e0fbad18fe90d46425823a42c";
+    hash = "sha256-b7xux6MuvYZFxufQ5T7DoDNBlsJ/fDR0aUY2Hk/xJoY=";
   };
-
-  patches = [
-    # Having a working nix packagekit backend will supersede this.
-    # https://github.com/NixOS/nixpkgs/issues/177946
-    ./disable-packagekit-backend.patch
-  ];
 
   nativeBuildInputs = [
     dbus # for pkg-config
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -59,21 +53,19 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libhandy
-    libsoup
+    libportal-gtk3
+    libsoup_3
     libxml2
-    packagekit
     polkit
   ];
 
   mesonFlags = [
+    # We don't have a working nix packagekit backend yet.
+    "-Dpackagekit_backend=false"
+    "-Dubuntu_drivers_backend=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

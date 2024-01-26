@@ -40,10 +40,10 @@ PKG_SET = "home-assistant.python.pkgs"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
-    "ha-av": "av",
     "HAP-python": "hap-python",
+    "SQLAlchemy": "sqlalchemy",
     "tensorflow": "tensorflow",
-    "youtube_dl": "youtube-dl-light",
+    "yt-dlp": "yt-dlp",
 }
 
 # Some dependencies are loaded dynamically at runtime, and are not
@@ -55,6 +55,15 @@ EXTRA_COMPONENT_DEPS = {
     "default_config": [
         "backup",
     ],
+}
+
+# Sometimes we have unstable versions for libraries that are not
+# well-maintained. This allows us to mark our weird version as newer
+# than a certain wanted version
+OUR_VERSION_IS_NEWER_THAN = {
+    "blinkstick": "1.2.0",
+    "gps3": "0.33.3",
+    "pybluez": "0.22",
 }
 
 
@@ -227,7 +236,12 @@ def main() -> None:
                         Version.parse(our_version)
                     except InvalidVersion:
                         print(f"Attribute {attr_name} has invalid version specifier {our_version}", file=sys.stderr)
-                        attr_outdated = True
+
+                        # allow specifying that our unstable version is newer than some version
+                        if newer_than_version := OUR_VERSION_IS_NEWER_THAN.get(attr_name):
+                            attr_outdated = Version.parse(newer_than_version) < Version.parse(required_version)
+                        else:
+                            attr_outdated = True
                     else:
                         attr_outdated = Version.parse(our_version) < Version.parse(required_version)
                     finally:
@@ -263,13 +277,13 @@ def main() -> None:
             available, extras, missing = deps
             f.write(f'    "{component}" = ps: with ps; [')
             if available:
-                f.write("\n      " + "\n      ".join(available))
+                f.write("\n      " + "\n      ".join(sorted(available)))
             f.write("\n    ]")
             if extras:
-                f.write("\n    ++ " + "\n    ++ ".join(extras))
+                f.write("\n    ++ " + "\n    ++ ".join(sorted(extras)))
             f.write(";")
             if len(missing) > 0:
-                f.write(f" # missing inputs: {' '.join(missing)}")
+                f.write(f" # missing inputs: {' '.join(sorted(missing))}")
             f.write("\n")
         f.write("  };\n")
         f.write("  # components listed in tests/components for which all dependencies are packaged\n")

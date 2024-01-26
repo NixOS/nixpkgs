@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     description = "Combines a several mount points into the single one";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.makefu ];
+    mainProgram = "mhddfs";
   };
 }

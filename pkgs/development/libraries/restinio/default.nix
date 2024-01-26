@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "restinio";
-  version = "0.6.18";
+  version = "0.6.19";
 
   src = fetchurl {
     url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-4OksmaW6NBpZ8npqLiZGn6zmCB7KxXlU5NKfKmA7Zr8=";
+    hash = "sha256-fyHuvrlm4XDWq1TpsZiskn1DkJASFzngN8D6O7NnskA=";
   };
 
   sourceRoot = ".";

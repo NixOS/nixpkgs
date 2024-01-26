@@ -3,7 +3,6 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
-, fetchpatch
 , pythonOlder
 , curl
 , openssl
@@ -14,23 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.45.1";
+  version = "7.45.2";
+  format = "setuptools";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qGOtGP9Hj1VFkkBXiHza5CLhsnRuQWdGFfaHSY6luIo=";
+    hash = "sha256-VzBZC+AnE2Slvd2eJFycwPtxDEy6y92VJkoxItIyJMo=";
   };
-
-  patches = [
-    # Pull upstream patch for curl-3.83:
-    #  https://github.com/pycurl/pycurl/pull/753
-    (fetchpatch {
-      name = "curl-3.83.patch";
-      url = "https://github.com/pycurl/pycurl/commit/d47c68b1364f8a1a45ab8c584c291d44b762f7b1.patch";
-      hash = "sha256-/lGq7O7ZyytzBAxWJPigcWdvypM7OHLBcp9ItmX7z1g=";
-    })
-  ];
 
   preConfigure = ''
     substituteInPlace setup.py --replace '--static-libs' '--libs'
@@ -45,6 +35,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     curl
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     bottle
@@ -73,6 +65,15 @@ buildPythonPackage rec {
     "test_libcurl_ssl_gnutls"
     # AssertionError: assert 'crypto' in ['curl']
     "test_ssl_in_static_libs"
+    # tests that require curl with http3Support
+    "test_http_version_3"
+    # https://github.com/pycurl/pycurl/issues/819
+    "test_multi_socket_select"
+    # https://github.com/pycurl/pycurl/issues/729
+    "test_easy_pause_unpause"
+    "test_multi_socket_action"
+    # https://github.com/pycurl/pycurl/issues/822
+    "test_request_with_verifypeer"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fatal Python error: Segmentation fault
     "cadata_test"
@@ -82,6 +83,6 @@ buildPythonPackage rec {
     homepage = "http://pycurl.io/";
     description = "Python Interface To The cURL library";
     license = with licenses; [ lgpl2Only mit ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

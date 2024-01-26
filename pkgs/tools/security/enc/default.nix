@@ -7,17 +7,16 @@
 
 buildGoModule rec {
   pname = "enc";
-  version = "1.1.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "life4";
     repo = "enc";
-    rev = "v${version}";
-    sha256 = "Tt+J/MnYJNewSl5UeewS0b47NGW2yzfcVHA5+9UQWSs=";
+    rev = version;
+    hash = "sha256-G6x17CDAKpmqvl7FTycSQ5bF0JndNP+SlUoBVUk76IQ=";
   };
-  vendorSha256 = "lB6GkE6prfBG7OCOJ1gm23Ee5+nAgmJg8I9Nqe1fsRw=";
 
-  proxyVendor = true;
+  vendorHash = "sha256-lB4DoHB+hGKjIcrAjeCd8a5prTn8XFIWhzNakA7utHI=";
 
   nativeBuildInputs = [ installShellFiles ];
 

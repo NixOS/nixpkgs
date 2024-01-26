@@ -9,7 +9,6 @@
 , future
 , numpy
 , autoPatchelfHook
-, patchelf
 , pyyaml
 , requests
 , setuptools
@@ -25,7 +24,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.0.1";
+  version = "2.1.2";
 in buildPythonPackage {
   inherit version;
 
@@ -38,20 +37,19 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
     cudaPackages.autoAddOpenGLRunpathHook
-    patchelf
   ];
 
-  buildInputs = with cudaPackages; [
+  buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
     # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
     # libnvToolsExt-$hash.so.1
     cuda_nvtx
-  ];
+  ]);
 
-  autoPatchelfIgnoreMissingDeps = [
+  autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.isLinux [
     # This is the hardware-dependent userspace driver that comes from
     # nvidia_x11 package. It must be deployed at runtime in
     # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
@@ -70,7 +68,7 @@ in buildPythonPackage {
     jinja2
     networkx
     filelock
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [
     openai-triton
   ];
 
@@ -79,7 +77,7 @@ in buildPythonPackage {
     rm -rf $out/bin
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
 
     patchelf $out/${python.sitePackages}/torch/lib/libcudnn.so.8 --add-needed libcudnn_cnn_infer.so.8

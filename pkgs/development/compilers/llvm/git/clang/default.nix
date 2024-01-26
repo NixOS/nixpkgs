@@ -30,6 +30,7 @@ let
       "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
+      "-DLLVM_INCLUDE_TESTS=OFF"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -52,8 +53,8 @@ let
       ./gnu-install-dirs.patch
       ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
-        src = ../../clang-11-12-LLVMgold-path.patch;
-        libllvmLibdir = "${libllvm.lib}/lib";
+        src = ../../clang-at-least-16-LLVMgold-path.patch;
+       libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
 
@@ -65,14 +66,11 @@ let
 
     outputs = [ "out" "lib" "dev" "python" ];
 
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-      # The following warning is triggered with (at least) gcc >=
-      # 12, but appears to occur only for cross compiles.
-      NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
-    };
-
     postInstall = ''
       ln -sv $out/bin/clang $out/bin/cpp
+
+      mkdir -p $lib/lib/clang
+      mv $lib/lib/18 $lib/lib/clang/18
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"

@@ -1,32 +1,68 @@
-{ lib, stdenv, wrapGAppsHook, fetchFromGitHub, pkg-config, gtk3, json-glib, curl
-, glib, appstream-glib, desktop-file-utils, meson, ninja, geoip, gettext
-, libappindicator, libmrss, libproxy }:
+{ lib
+, stdenv
+, appstream-glib
+, curl
+, desktop-file-utils
+, fetchFromGitHub
+, geoip
+, gettext
+, glib
+, glib-networking
+, gtk3
+, json-glib
+, libappindicator
+, libmrss
+, libproxy
+, libsoup_3
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "transmission-remote-gtk";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
-    rev = version;
-    sha256 = "4/ID12JukDDvJzWupc76r7W8Us5erwv8oXZhDnB6VDk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/syZI/5LhuYLvXrNknnpbGHEH0z5iHeye2YRNJFWZJ0=";
   };
 
-  nativeBuildInputs =
-    [ desktop-file-utils wrapGAppsHook meson ninja pkg-config appstream-glib ];
+  nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook
+  ];
 
-  buildInputs =
-    [ gtk3 json-glib curl glib gettext libmrss geoip libproxy libappindicator ];
+  buildInputs = [
+    curl
+    geoip
+    gettext
+    glib
+    gtk3
+    json-glib
+    libappindicator
+    libmrss
+    libproxy
+    libsoup_3
+    # For TLS support.
+    glib-networking
+  ];
 
   doCheck = false; # Requires network access
 
   meta = with lib; {
     description = "GTK remote control for the Transmission BitTorrent client";
-    homepage =
-      "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
+    homepage = "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
+    changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${version}";
     license = licenses.gpl2;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
   };
 }

@@ -7,32 +7,32 @@
 , kimageannotator
 , wrapQtAppsHook
 , qtsvg
-, qttranslations
+, qttools
 , qtx11extras
 }:
 
 stdenv.mkDerivation rec {
   pname = "ksnip";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "ksnip";
     rev = "v${version}";
-    sha256 = "sha256-a5mS2mrbs0CyZ83hwwFdherq6kMS93ItQIDKu1AjnN4=";
+    sha256 = "sha256-n7YwDXd73hyrzb6L8utZFuHh9HnjVtkU6CC4jfWPj/I=";
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
     kcolorpicker
     kimageannotator
     qtsvg
-    qttranslations
     qtx11extras
   ];
 
@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
+    mainProgram = "ksnip";
   };
 }

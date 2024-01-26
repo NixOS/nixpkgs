@@ -2,15 +2,16 @@
 , fetchFromGitHub
 , lib
 , numpy
-, opencv3
-, sphinx-rtd-theme
+, opencv4
 , lxml
 , xmljson
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "imantics";
   version = "0.1.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jsbroks";
@@ -21,8 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    opencv3
-    sphinx-rtd-theme
+    opencv4
     lxml
     xmljson
   ];
@@ -32,8 +32,7 @@ buildPythonPackage rec {
       --replace "'opencv-python>=3'," ""
   '';
 
-  # failing on NixOS
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "imantics" ];
 

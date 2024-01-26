@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-hJPcxnc4iQzsYNNVJ9fw6yQl+5K7pdtjHT6oMmBx/Zs=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
-
   propagatedBuildInputs = [
     click
     jsonschema

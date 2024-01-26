@@ -8,14 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "liboqs";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cwrTHj/WFDZ9Ez2FhjpRhEx9aC5xBnh7HR/9T+zUpZc=";
+    sha256 = "sha256-h3mXoGRYgPg0wKQ1u6uFP7wlEUMQd5uIBt4Hr7vjNtA=";
   };
+
+  patches = [ ./fix-openssl-detection.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl ];

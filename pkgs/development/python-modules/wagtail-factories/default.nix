@@ -1,6 +1,6 @@
 { buildPythonPackage
 , callPackage
-, factory_boy
+, factory-boy
 , fetchFromGitHub
 , lib
 , wagtail
@@ -8,17 +8,18 @@
 
 buildPythonPackage rec {
   pname = "wagtail-factories";
-  version = "4.0.0";
+  version = "4.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "wagtail";
-    rev = version;
-    sha256 = "sha256-JmFWf+TODQNsSSxYD/JYVhWc82o6rJL13j5J23r8J9A=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-xNLHJ/8IZt3pzHAzr9swcL6GcIQyIjIFfoeHUW1i76U=";
   };
 
   propagatedBuildInputs = [
-    factory_boy
+    factory-boy
     wagtail
   ];
 

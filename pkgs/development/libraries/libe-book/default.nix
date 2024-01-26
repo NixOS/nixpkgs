@@ -15,11 +15,20 @@
 stdenv.mkDerivation rec {
   pname = "libe-book";
   version = "0.1.3";
+
   src = fetchurl {
-    url = "https://kent.dl.sourceforge.net/project/libebook/libe-book-${version}/libe-book-${version}.tar.xz";
-    sha256 = "sha256-fo2P808ngxrKO8b5zFMsL5DSBXx3iWO4hP89HjTf4fk=";
+    url = "mirror://sourceforge/libebook/libe-book-${version}/libe-book-${version}.tar.xz";
+    hash = "sha256-fo2P808ngxrKO8b5zFMsL5DSBXx3iWO4hP89HjTf4fk=";
   };
+
+  # restore compatibility with icu68+
+  postPatch = ''
+    substituteInPlace src/lib/EBOOKCharsetConverter.cpp --replace \
+      "TRUE, TRUE, &status)" \
+      "true, true, &status)"
+  '';
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     gperf
     librevenge
@@ -30,12 +39,9 @@ stdenv.mkDerivation rec {
     zlib
     liblangtag
   ];
-  # Boost 1.59 compatibility fix
-  # Attempt removing when updating
-  postPatch = ''
-    sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
-  '';
+
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
+
   meta = with lib; {
     description = "Library for import of reflowable e-book formats";
     license = licenses.lgpl21Plus;

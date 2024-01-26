@@ -123,5 +123,6 @@ stdenv.mkDerivation rec {
       maintainers = with maintainers; [ qknight xfix thiagokokada ];
       platforms = platforms.unix;
       broken = (withGtk && stdenv.isDarwin);
+      mainProgram = "snes9x";
     };
 }

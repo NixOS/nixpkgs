@@ -7,19 +7,23 @@
 , nbval
 , numpy
 , parameterized
-, protobuf
+, protobuf_21
 , pybind11
 , pytestCheckHook
 , pythonOlder
 , tabulate
 , typing-extensions
+, abseil-cpp
+, google-re2
+, pillow
+, protobuf
 }:
 
 let
   gtestStatic = gtest.override { static = true; };
 in buildPythonPackage rec {
   pname = "onnx";
-  version = "1.14.0";
+  version = "1.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +32,7 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-f+s25Y/jGosaSdoZY6PE3j6pENkfDcD+IQndrbtuzWg=";
+    hash = "sha256-Jzga1IiUO5LN5imSUmnbsjYtapRatTihx38EOUjm9Os=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +40,15 @@ in buildPythonPackage rec {
     pybind11
   ];
 
+  buildInputs = [
+    abseil-cpp
+    protobuf
+    google-re2
+    pillow
+  ];
+
   propagatedBuildInputs = [
+    protobuf_21
     protobuf
     numpy
     typing-extensions

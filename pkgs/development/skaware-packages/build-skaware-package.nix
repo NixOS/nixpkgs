@@ -5,7 +5,7 @@
   # : string
 , version
   # : string
-, sha256
+, sha256 ? lib.fakeSha256
   # : string
 , description
   # : list Platform

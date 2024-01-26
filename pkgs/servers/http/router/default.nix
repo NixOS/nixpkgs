@@ -2,6 +2,7 @@
 , callPackage
 , fetchFromGitHub
 , rustPlatform
+, cmake
 , pkg-config
 , protobuf
 , elfutils
@@ -9,18 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.18.1";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g5QDKYdXwZuVZZLpT0qA/Mp0kR9cZaGKa0VqLX6gyec=";
+    sha256 = "sha256-mQtIjfXDcEy5HfZbWauL0NQLPneGq9EJt/yB8zMuhSU=";
   };
 
-  cargoHash = "sha256-n7FV2Gu0ZoJo2TPPBwzcM0ztEZzwPckqQHdjuUv03to=";
+  cargoHash = "sha256-XCDU6cXw+Wf5MR6m+HCI8/VFRRylMywktZbd5k7Lcwo=";
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     protobuf
   ];
@@ -40,7 +42,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
-    license = licenses.elastic;
+    license = licenses.elastic20;
     maintainers = [ maintainers.bbigras ];
+    knownVulnerabilities = [ "CVE-2023-45812" ];
   };
 }

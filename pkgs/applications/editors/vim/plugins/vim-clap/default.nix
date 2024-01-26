@@ -7,16 +7,17 @@
 , stdenv
 , darwin
 , vimUtils
+, nix-update-script
 }:
 
 let
-  version = "0.43";
+  version = "0.49";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     rev = "v${version}";
-    hash = "sha256-UHsDSah8Fn67w11s/lwL76qbGPqXhz6tYlBBuiqTNXs=";
+    hash = "sha256-xir0v3SzfkxNXKR6N7Rso0QFtVQIRfu0TIPGWSEwsHM=";
   };
 
   meta = with lib; {
@@ -35,6 +36,7 @@ let
       lockFile = ./Cargo.lock;
       outputHashes = {
         "subprocess-0.2.10" = "sha256-WcGrJ103ofGlQwi32kRGM3Z+uvKSCFBmFZbZXAtuWwM=";
+        "tree-sitter-vim-0.3.1-dev.0" = "sha256-CWxZ28LdptiMNO2VIk+Ny/DhQXdN604EuqRIb9oaCmI=";
       };
     };
 
@@ -46,13 +48,14 @@ let
       libgit2
       zlib
     ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
   };
 in
 
-vimUtils.buildVimPluginFrom2Nix {
+vimUtils.buildVimPlugin {
   pname = "vim-clap";
   inherit version src meta;
 
@@ -62,5 +65,8 @@ vimUtils.buildVimPluginFrom2Nix {
 
   passthru = {
     inherit maple;
+    updateScript = nix-update-script {
+      attrPath = "vimPlugins.vim-clap.maple";
+    };
   };
 }

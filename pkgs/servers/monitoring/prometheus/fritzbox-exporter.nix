@@ -8,12 +8,12 @@ buildGoModule rec {
     rev = "fd36539bd7db191b3734e17934b5f1e78e4e9829";
     owner = "mxschmitt";
     repo = "fritzbox_exporter";
-    sha256 = "0w9gdcnfc61q6mzm95i7kphsf1rngn8rb6kz1b6knrh5d8w61p1n";
+    hash = "sha256-NtxgOGoFZjvNCn+alZF9Ngen4Z0nllR/NTgY5ixrL3E=";
   };
 
-  subPackages = [ "cmd/exporter" ];
+  vendorHash = "sha256-VhQAEVxRJjIzFP67LUKhfGxdUbTQB7UCK8/JKwpoy0w=";
 
-  vendorSha256 = "0k6bd052pjfg5c1ba1yhni8msv3wl512vfzy2hrk49jibh8h052n";
+  subPackages = [ "cmd/exporter" ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) fritzbox; };
 
@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/mxschmitt/fritzbox_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ bachp flokli sbruder ];
-    platforms = platforms.unix;
   };
 }

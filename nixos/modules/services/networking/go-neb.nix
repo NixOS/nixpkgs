@@ -9,7 +9,7 @@ let
   configFile = settingsFormat.generate "config.yaml" cfg.config;
 in {
   options.services.go-neb = {
-    enable = mkEnableOption (lib.mdDoc "Extensible matrix bot written in Go");
+    enable = mkEnableOption (lib.mdDoc "an extensible matrix bot written in Go");
 
     bindAddress = mkOption {
       type = types.str;

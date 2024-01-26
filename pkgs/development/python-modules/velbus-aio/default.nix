@@ -6,22 +6,27 @@
 , pyserial
 , pyserial-asyncio
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2023.5.0";
-  format = "setuptools";
+  version = "2023.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = pname;
-    rev = version;
-    hash = "sha256-8wRgH7t1s2X7mg3oN38KMvJQfWcn/ePw6rNIl2K9nNA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cYqEF2Odouu7U0DiU+n/gKUYJia8I4Qs1l+UI6JrWTM=";
     fetchSubmodules = true;
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     backoff

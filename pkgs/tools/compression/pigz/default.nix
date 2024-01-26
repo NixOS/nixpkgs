@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pigz";
-  version = "2.6";
+  version = "2.8";
 
   src = fetchFromGitHub {
       owner = "madler";
-      repo = "${pname}";
+      repo = pname;
       rev = "refs/tags/v${version}";
-      sha256 = "146qkmzi199xwmmf6bllanqfyl702fm1rnad8cd5r5yyrp5ks115";
+      sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
 
   enableParallelBuilding = true;
@@ -20,11 +20,15 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 pigz "$out/bin/pigz"
     ln -s pigz "$out/bin/unpigz"
     install -Dm755 pigz.1 "$out/share/man/man1/pigz.1"
     ln -s pigz.1 "$out/share/man/man1/unpigz.1"
     install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "23.02.2.1";
+  version = "23.11.1.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-UWDtq4JSVaxiYOdplava9XUzFdMjEMQ4j8BCzVK8Ve0=";
+    hash = "sha256-dfCQKKw44bD5d7Sv7e40Qm3df9Mzz7WvmWf7SP8R1KQ=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,13 +32,18 @@ stdenv.mkDerivation rec {
     # increase string length to allow for full
     # path of 'echo' in nix store
     ./common-env-echo.patch
-    # Required for configure to pick up the right dlopen path
-    ./pmix-configure.patch
   ];
 
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${coreutils}/bin/echo"
+
+    # Autoconf does not support split packages for pmix (libs and headers).
+    # Fix the path to the pmix libraries, so dlopen can find it.
+    substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
+        --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+                  'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
+
   '' + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
         --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
@@ -62,16 +67,17 @@ stdenv.mkDerivation rec {
   configureFlags = with lib;
     [ "--with-freeipmi=${freeipmi}"
       "--with-http-parser=${http-parser}"
-      "--with-hwloc=${hwloc.dev}"
-      "--with-json=${json_c.dev}"
+      "--with-hwloc=${lib.getDev hwloc}"
+      "--with-json=${lib.getDev json_c}"
       "--with-jwt=${libjwt}"
-      "--with-lz4=${lz4.dev}"
+      "--with-lz4=${lib.getDev lz4}"
       "--with-munge=${munge}"
-      "--with-yaml=${libyaml}"
-      "--with-ofed=${rdma-core}"
+      "--with-yaml=${lib.getDev libyaml}"
+      "--with-ofed=${lib.getDev rdma-core}"
       "--sysconfdir=/etc/slurm"
-      "--with-pmix=${pmix}"
+      "--with-pmix=${lib.getDev pmix}"
       "--with-bpf=${libbpf}"
+      "--without-rpath" # Required for configure to pick up the right dlopen path
     ] ++ (optional enableGtk2  "--disable-gtktest")
       ++ (optional (!enableX11) "--disable-x11");
 

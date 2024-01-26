@@ -1,472 +1,254 @@
-{ lib, stdenv, callPackage, fetchurl
-, jdk, cmake, gdb, zlib, python3, icu
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+
+, jdk
+, zlib
+, python3
 , lldb
-, dotnet-sdk_6
+, dotnet-sdk_7
 , maven
-, autoPatchelfHook
-, libdbusmenu
-, patchelf
 , openssl
 , expat
+, libxcrypt
 , libxcrypt-legacy
+, fontconfig
+, libxml2
+, runCommand
+, musl
+, R
+, libgcc
+, lttng-ust_2_12
+, xz
+, xorg
+, libGL
+
 , vmopts ? null
 }:
 
 let
-  platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
-  ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" ];
-
   inherit (stdenv.hostPlatform) system;
 
-  versions = builtins.fromJSON (lib.readFile (./versions.json));
-  versionKey = if stdenv.isLinux then "linux" else system;
-  products = versions.${versionKey} or (throw "Unsupported system: ${system}");
+  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
+  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+  ideInfo = lib.importJSON ./bin/ides.json;
+  versions = lib.importJSON ./bin/versions.json;
+  products = versions.${system} or (throw "Unsupported system: ${system}");
 
-  package = if stdenv.isDarwin then ./darwin.nix else ./linux.nix;
-  mkJetBrainsProduct = callPackage package { inherit vmopts; };
+  package = if stdenv.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
+  mkJetBrainsProductCore = callPackage package { inherit vmopts; };
+  mkMeta = meta: fromSource: {
+    inherit (meta) homepage longDescription;
+    description = meta.description + lib.optionalString meta.isOpenSource (if fromSource then " (built from source)" else " (patched binaries from jetbrains)");
+    maintainers = map (x: lib.maintainers."${x}") meta.maintainers;
+    license = if meta.isOpenSource then lib.licenses.asl20 else lib.licenses.unfree;
+  };
 
-  # Sorted alphabetically
-
-  buildClion = { pname, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "CLion";
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/clion/";
-        inherit description license platforms;
-        longDescription = ''
-          Enhancing productivity for every C and C++
-          developer on Linux, macOS and Windows.
-        '';
-        maintainers = with maintainers; [ edwtjo mic92 ];
+  mkJetBrainsProduct =
+    { pname
+    , fromSource ? false
+    , extraWrapperArgs ? [ ]
+    , extraLdPath ? [ ]
+    , extraBuildInputs ? [ ]
+    }:
+    mkJetBrainsProductCore {
+      inherit pname jdk extraWrapperArgs extraLdPath extraBuildInputs;
+      src = if fromSource then communitySources."${pname}" else
+      fetchurl {
+        url = products."${pname}".url;
+        sha256 = products."${pname}".sha256;
       };
-    }).overrideAttrs (attrs: {
-      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ lib.optionals (stdenv.isLinux) [
-        autoPatchelfHook
-        patchelf
-      ];
-      buildInputs = (attrs.buildInputs or []) ++ lib.optionals (stdenv.isLinux) [
-        python3
-        stdenv.cc.cc
-        libdbusmenu
-        openssl.out
-        expat
-        libxcrypt-legacy
-      ];
-      dontAutoPatchelf = true;
-      postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
-        (
-          cd $out/clion
-          # bundled cmake does not find libc
-          rm -rf bin/cmake/linux
-          ln -s ${cmake} bin/cmake/linux
-          # bundled gdb does not find libcrypto 10
-          rm -rf bin/gdb/linux
-          ln -s ${gdb} bin/gdb/linux
+      inherit (products."${pname}") version;
+      buildNumber = products."${pname}".build_number;
+      inherit (ideInfo."${pname}") wmClass product;
+      productShort = ideInfo."${pname}".productShort or ideInfo."${pname}".product;
+      meta = mkMeta ideInfo."${pname}".meta fromSource;
+      libdbm = if ideInfo."${pname}".meta.isOpenSource then communitySources."${pname}".libdbm else communitySources.idea-community.libdbm;
+      fsnotifier = if ideInfo."${pname}".meta.isOpenSource then communitySources."${pname}".fsnotifier else communitySources.idea-community.fsnotifier;
+    };
 
-          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
-          xargs patchelf \
-            --replace-needed libssl.so.10 libssl.so \
-            --replace-needed libcrypto.so.10 libcrypto.so
+  communitySources = callPackage ./source { };
 
-          autoPatchelf $PWD/bin
-
-          wrapProgram $out/bin/clion \
-            --set CL_JDK "${jdk}"
-        )
-      '';
-    });
-
-  buildDataGrip = { pname, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "DataGrip";
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/datagrip/";
-        inherit description license platforms;
-        longDescription = ''
-          DataGrip is a new IDE from JetBrains built for database admins.
-          It allows you to quickly migrate and refactor relational databases,
-          construct efficient, statically checked SQL queries and much more.
-        '';
-        maintainers = with maintainers; [ ];
-      };
-    });
-
-  buildGateway = { pname, version, src, license, description, wmClass, product, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk product;
-      productShort = "Gateway";
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/remote-development/gateway/";
-        inherit description license platforms;
-        longDescription = ''
-          JetBrains Gateway is a lightweight launcher that connects a remote
-          server with your local machine, downloads necessary components on the
-          backend, and opens your project in JetBrains Client.
-        '';
-        maintainers = with maintainers; [ kouyk ];
-      };
-    });
-
-  buildGoland = { pname, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "Goland";
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/go/";
-        inherit description license platforms;
-        longDescription = ''
-          Goland is the codename for a new commercial IDE by JetBrains
-          aimed at providing an ergonomic environment for Go development.
-          The new IDE extends the IntelliJ platform with the coding assistance
-          and tool integrations specific for the Go language
-        '';
-        maintainers = [ ];
-      };
-    }).overrideAttrs (attrs: {
-      postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
-        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
-
-        chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
-
-        # fortify source breaks build since delve compiles with -O0
-        wrapProgram $out/bin/goland \
-          --prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
-      '';
-    });
-
-  buildIdea = { pname, version, src, license, description, wmClass, product, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk product;
-      productShort = "IDEA";
+  buildIdea = args:
+    mkJetBrainsProduct (args // {
       extraLdPath = [ zlib ];
       extraWrapperArgs = [
         ''--set M2_HOME "${maven}/maven"''
         ''--set M2 "${maven}/maven/bin"''
       ];
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/idea/";
-        inherit description license;
-        longDescription = ''
-          IDE for Java SE, Groovy & Scala development Powerful
-          environment for building Google Android apps Integration
-          with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
-          as IntelliJ.
-        '';
-        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot AnatolyPopov ];
-        platforms = ideaPlatforms;
-      };
     });
 
-  buildMps = { pname, version, src, license, description, wmClass, product, ... }:
-    (mkJetBrainsProduct rec {
-      inherit pname version src wmClass jdk product;
-      productShort = "MPS";
-      meta = with lib; {
-        broken = (stdenv.isLinux && stdenv.isAarch64);
-        homepage = "https://www.jetbrains.com/mps/";
-        inherit license description platforms;
-        longDescription = ''
-          A metaprogramming system which uses projectional editing
-          which allows users to overcome the limits of language
-          parsers, and build DSL editors, such as ones with tables and
-          diagrams.
-        '';
-        maintainers = with maintainers; [ rasendubi ];
-      };
-    });
-
-  buildPhpStorm = { pname, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "PhpStorm";
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/phpstorm/";
-        inherit description license platforms;
-        longDescription = ''
-          PhpStorm provides an editor for PHP, HTML and JavaScript
-          with on-the-fly code analysis, error prevention and
-          automated refactorings for PHP and JavaScript code.
-        '';
-        maintainers = with maintainers; [ dritter ];
-      };
-    });
-
-  buildPycharm = { pname, version, src, license, description, wmClass, product, cythonSpeedup ? stdenv.isLinux, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk product;
-      productShort = "PyCharm";
-      meta = with lib; {
-        broken = (stdenv.isLinux && stdenv.isAarch64);
-        homepage = "https://www.jetbrains.com/pycharm/";
-        inherit description license platforms;
-        longDescription = ''
-          Python IDE with complete set of tools for productive
-          development with Python programming language. In addition, the
-          IDE provides high-class capabilities for professional Web
-          development with Django framework and Google App Engine. It
-          has powerful coding assistance, navigation, a lot of
-          refactoring features, tight integration with various Version
-          Control Systems, Unit testing, powerful all-singing
-          all-dancing Debugger and entire customization. PyCharm is
-          developer driven IDE. It was developed with the aim of
-          providing you almost everything you need for your comfortable
-          and productive development!
-        '';
-        maintainers = with maintainers; [ ];
-      };
-    }).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs cythonSpeedup {
-      buildInputs = with python3.pkgs; [ python3 setuptools ];
+  buildPycharm = args:
+    (mkJetBrainsProduct args).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs stdenv.isLinux {
+      buildInputs = with python3.pkgs; (previousAttrs.buildInputs or []) ++ [ python3 setuptools ];
       preInstall = ''
-      echo "compiling cython debug speedups"
-      if [[ -d plugins/python-ce ]]; then
-          ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
-      else
-          ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
-      fi
+        echo "compiling cython debug speedups"
+        if [[ -d plugins/python-ce ]]; then
+            ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
+        else
+            ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
+        fi
       '';
       # See https://www.jetbrains.com/help/pycharm/2022.1/cython-speedups.html
     });
 
-  buildRider = { pname, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "Rider";
-      # icu is required by Rider.Backend
-      extraLdPath = [ icu ];
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/rider/";
-        inherit description license platforms;
-        longDescription = ''
-          JetBrains Rider is a new .NET IDE based on the IntelliJ
-          platform and ReSharper. Rider supports .NET Core,
-          .NET Framework and Mono based projects. This lets you
-          develop a wide array of applications including .NET desktop
-          apps, services and libraries, Unity games, ASP.NET and
-          ASP.NET Core web applications.
-        '';
-        maintainers = with maintainers; [ raphaelr ];
-      };
-    }).overrideAttrs (attrs: {
-      postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
-        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp \
-          lib/ReSharperHost/linux-x64/Rider.Backend \
-          plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
-
-        rm -rf lib/ReSharperHost/linux-x64/dotnet
-        ln -s ${dotnet-sdk_6} lib/ReSharperHost/linux-x64/dotnet
-      '');
-    });
-
-  buildRubyMine = { pname, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "RubyMine";
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/ruby/";
-        inherit description license platforms;
-        longDescription = description;
-        maintainers = with maintainers; [ edwtjo ];
-      };
-    });
-
-  buildWebStorm = { pname, version, src, license, description, wmClass, ... }:
-    (mkJetBrainsProduct {
-      inherit pname version src wmClass jdk;
-      product = "WebStorm";
-      meta = with lib; {
-        homepage = "https://www.jetbrains.com/webstorm/";
-        inherit description license platforms;
-        longDescription = ''
-          WebStorm provides an editor for HTML, JavaScript (incl. Node.js),
-          and CSS with on-the-fly code analysis, error prevention and
-          automated refactorings for JavaScript code.
-        '';
-        maintainers = with maintainers; [ abaldeau ];
-      };
-    });
-
 in
-
-{
+rec {
   # Sorted alphabetically
 
-  clion = buildClion rec {
+  clion = (mkJetBrainsProduct {
     pname = "clion";
-    version = products.clion.version;
-    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.clion.url;
-      sha256 = products.clion.sha256;
-    };
-    wmClass = "jetbrains-clion";
-    update-channel = products.clion.update-channel;
+    extraBuildInputs = lib.optionals (stdenv.isLinux) [
+      python3
+      stdenv.cc.cc
+      openssl
+      libxcrypt-legacy
+      musl
+    ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      expat
+      libxml2
+      xz
+    ];
+  }).overrideAttrs (attrs: {
+    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+      (
+        cd $out/clion
+
+        # I think the included gdb has a couple of patches, so we patch it instead of replacing
+        ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
+        xargs patchelf \
+          --replace-needed libssl.so.10 libssl.so \
+          --replace-needed libcrypto.so.10 libcrypto.so
+
+        ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+        xargs patchelf \
+          --replace-needed libssl.so.10 libssl.so \
+          --replace-needed libcrypto.so.10 libcrypto.so
+      )
+    '';
+  });
+
+  datagrip = mkJetBrainsProduct { pname = "datagrip"; extraBuildInputs = [ stdenv.cc.cc ]; };
+
+  dataspell = let
+    libr = runCommand "libR" {} ''
+      mkdir -p $out/lib
+      ln -s ${R}/lib/R/lib/libR.so $out/lib/libR.so
+    '';
+  in mkJetBrainsProduct {
+    pname = "dataspell";
+    extraBuildInputs = [ libgcc libr stdenv.cc.cc ];
   };
 
-  datagrip = buildDataGrip rec {
-    pname = "datagrip";
-    version = products.datagrip.version;
-    description = "Your Swiss Army Knife for Databases and SQL";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.datagrip.url;
-      sha256 = products.datagrip.sha256;
-    };
-    wmClass = "jetbrains-datagrip";
-    update-channel = products.datagrip.update-channel;
-  };
+  gateway = mkJetBrainsProduct { pname = "gateway"; };
 
-  gateway = buildGateway rec {
-    pname = "gateway";
-    product = "JetBrains Gateway";
-    version = products.gateway.version;
-    description = "Your single entry point to all remote development environments";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.gateway.url;
-      sha256 = products.gateway.sha256;
-    };
-    wmClass = "jetbrains-gateway";
-    update-channel = products.gateway.update-channel;
-  };
-
-  goland = buildGoland rec {
+  goland = (mkJetBrainsProduct {
     pname = "goland";
-    version = products.goland.version;
-    description = "Up and Coming Go IDE";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.goland.url;
-      sha256 = products.goland.sha256;
-    };
-    wmClass = "jetbrains-goland";
-    update-channel = products.goland.update-channel;
-  };
+    extraWrapperArgs = [
+      # fortify source breaks build since delve compiles with -O0
+      ''--prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"''
+    ];
+    extraBuildInputs = [ libgcc stdenv.cc.cc ];
+  }).overrideAttrs
+    (attrs: {
+      postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
+        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+        patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
+        chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
+      '';
+    });
 
-  idea-community = buildIdea rec {
-    pname = "idea-community";
-    product = "IntelliJ IDEA CE";
-    version = products.idea-community.version;
-    description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
-    license = lib.licenses.asl20;
-    src = fetchurl {
-      url = products.idea-community.url;
-      sha256 = products.idea-community.sha256;
-    };
-    wmClass = "jetbrains-idea-ce";
-    update-channel = products.idea-community.update-channel;
-  };
+  idea-community-bin = buildIdea { pname = "idea-community"; extraBuildInputs = [ stdenv.cc.cc ]; };
 
-  idea-ultimate = buildIdea rec {
-    pname = "idea-ultimate";
-    product = "IntelliJ IDEA";
-    version = products.idea-ultimate.version;
-    description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.idea-ultimate.url;
-      sha256 = products.idea-ultimate.sha256;
-    };
-    wmClass = "jetbrains-idea";
-    update-channel = products.idea-ultimate.update-channel;
-  };
+  idea-community-src = buildIdea { pname = "idea-community"; extraBuildInputs = [ stdenv.cc.cc ]; fromSource = true; };
 
-  mps = buildMps rec {
-    pname = "mps";
-    product = "MPS ${products.mps.version}";
-    version = products.mps.version;
-    description = "Create your own domain-specific language";
-    license = lib.licenses.asl20;
-    src = fetchurl {
-      url = products.mps.url;
-      sha256 = products.mps.sha256;
-    };
-    wmClass = "jetbrains-mps";
-    update-channel = products.mps.update-channel;
-  };
+  idea-community = if stdenv.isDarwin || stdenv.isAarch64 then idea-community-bin else idea-community-src;
 
-  phpstorm = buildPhpStorm rec {
-    pname = "phpstorm";
-    version = products.phpstorm.version;
-    description = "Professional IDE for Web and PHP developers";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.phpstorm.url;
-      sha256 = products.phpstorm.sha256;
-    };
-    wmClass = "jetbrains-phpstorm";
-    update-channel = products.phpstorm.update-channel;
-  };
+  idea-ultimate = buildIdea { pname = "idea-ultimate"; extraBuildInputs = [ stdenv.cc.cc lldb musl ]; };
 
-  pycharm-community = buildPycharm rec {
-    pname = "pycharm-community";
-    product = "PyCharm CE";
-    version = products.pycharm-community.version;
-    description = "PyCharm Community Edition";
-    license = lib.licenses.asl20;
-    src = fetchurl {
-      url = products.pycharm-community.url;
-      sha256 = products.pycharm-community.sha256;
-    };
-    wmClass = "jetbrains-pycharm-ce";
-    update-channel = products.pycharm-community.update-channel;
-  };
+  mps = mkJetBrainsProduct { pname = "mps"; };
 
-  pycharm-professional = buildPycharm rec {
-    pname = "pycharm-professional";
-    product = "PyCharm";
-    version = products.pycharm-professional.version;
-    description = "PyCharm Professional Edition";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.pycharm-professional.url;
-      sha256 = products.pycharm-professional.sha256;
-    };
-    wmClass = "jetbrains-pycharm";
-    update-channel = products.pycharm-professional.update-channel;
-  };
+  phpstorm = mkJetBrainsProduct { pname = "phpstorm"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
 
-  rider = buildRider rec {
-    pname = "rider";
-    version = products.rider.version;
-    description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.rider.url;
-      sha256 = products.rider.sha256;
-    };
-    wmClass = "jetbrains-rider";
-    update-channel = products.rider.update-channel;
-  };
+  pycharm-community-bin = buildPycharm { pname = "pycharm-community"; };
 
-  ruby-mine = buildRubyMine rec {
-    pname = "ruby-mine";
-    version = products.ruby-mine.version;
-    description = "The Most Intelligent Ruby and Rails IDE";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.ruby-mine.url;
-      sha256 = products.ruby-mine.sha256;
-    };
-    wmClass = "jetbrains-rubymine";
-    update-channel = products.ruby-mine.update-channel;
-  };
+  pycharm-community-src = buildPycharm { pname = "pycharm-community"; fromSource = true; };
 
-  webstorm = buildWebStorm rec {
-    pname = "webstorm";
-    version = products.webstorm.version;
-    description = "Professional IDE for Web and JavaScript development";
-    license = lib.licenses.unfree;
-    src = fetchurl {
-      url = products.webstorm.url;
-      sha256 = products.webstorm.sha256;
-    };
-    wmClass = "jetbrains-webstorm";
-    update-channel = products.webstorm.update-channel;
-  };
+  pycharm-community = if stdenv.isDarwin then pycharm-community-bin else pycharm-community-src;
+
+  pycharm-professional = buildPycharm { pname = "pycharm-professional"; extraBuildInputs = [ musl ]; };
+
+  rider = (mkJetBrainsProduct {
+      pname = "rider";
+      extraBuildInputs = [
+        fontconfig
+        stdenv.cc.cc
+        openssl
+        libxcrypt
+        lttng-ust_2_12
+        musl
+      ];
+    }).overrideAttrs (attrs: {
+      postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.isLinux) ''
+        (
+          cd $out/rider
+
+          ls -d $PWD/plugins/cidr-debugger-plugin/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+          xargs patchelf \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so \
+            --replace-needed libcrypt.so.1 libcrypt.so
+
+          for dir in lib/ReSharperHost/linux-*; do
+            rm -rf $dir/dotnet
+            ln -s ${dotnet-sdk_7} $dir/dotnet
+          done
+        )
+      '';
+    });
+
+  ruby-mine = mkJetBrainsProduct { pname = "ruby-mine"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
+
+  rust-rover = (mkJetBrainsProduct {
+    pname = "rust-rover";
+    extraBuildInputs = lib.optionals (stdenv.isLinux) [
+      python3
+      openssl
+      libxcrypt-legacy
+      fontconfig
+      xorg.libX11
+      libGL
+    ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      expat
+      libxml2
+      xz
+    ];
+  }).overrideAttrs (attrs: {
+    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+      (
+        cd $out/rust-rover
+
+        # Copied over from clion (gdb seems to have a couple of patches)
+        ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
+        xargs patchelf \
+          --replace-needed libssl.so.10 libssl.so \
+          --replace-needed libcrypto.so.10 libcrypto.so
+
+        ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
+        xargs patchelf \
+          --replace-needed libssl.so.10 libssl.so \
+          --replace-needed libcrypto.so.10 libcrypto.so
+
+        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+        patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
+        chmod +x $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
+      )
+    '';
+  });
+
+  webstorm = mkJetBrainsProduct { pname = "webstorm"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
+
+  plugins = callPackage ./plugins { } // { __attrsFailEvaluation = true; };
 
 }

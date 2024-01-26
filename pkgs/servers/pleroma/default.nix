@@ -1,39 +1,31 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab, fetchHex
 , file, cmake
-, libxcrypt-legacy
 , nixosTests, writeText
 , ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.1";
+  version = "2.6.1";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-3iG2s7jVEnhq1kLLgtaHnFmLYBO2Xr5M5jjZfSNA9z4=";
+    sha256 = "sha256-VIGlJ5+99l+VSUl7c9jiQf94X/JV0+HFgI8xQ4ZLQ9s=";
   };
+
+  patches = [
+    ./Revert-Config-Restrict-permissions-of-OTP-config.patch
+  ];
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
-    overrides = (final: prev: {
+    overrides = final: prev: {
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
-      gettext = beamPackages.buildMix rec {
-        name = "gettext";
-        version = "0.19.1";
-
-        src = fetchFromGitHub {
-          owner = "tusooa";
-          repo = "gettext";
-          rev = "72fb2496b6c5280ed911bdc3756890e7f38a4808";
-          sha256 = "sha256-V0qmE+LcAbVoWsJmWE4fwrduYFIZ5BzK/sGzgLY3eH0=";
-        };
-      };
       prometheus_ex = beamPackages.buildMix rec {
         name = "prometheus_ex";
         version = "3.0.5";
@@ -136,7 +128,7 @@ beamPackages.mixRelease rec {
 
         src = fetchHex {
           pkg = "${name}";
-          version = "${version}";
+          inherit version;
           sha256 = "120znzz0yw1994nk6v28zql9plgapqpv51n9g6qm6md1f4x7gj0z";
         };
 
@@ -160,14 +152,7 @@ beamPackages.mixRelease rec {
           cp ${cfgFile} config/config.exs
         '';
       };
-
-      crypt = let
-        version = prev.crypt.version;
-      in prev.crypt.override {
-        buildInputs = [ libxcrypt-legacy ];
-        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{hex-source-crypt-${version},crypt}.so";
-      };
-    });
+    };
   };
 
   passthru = {
@@ -179,7 +164,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ ninjatrappeur yuka kloenk ];
+    maintainers = with maintainers; [ picnoir yuka kloenk yayayayaka ];
     platforms = platforms.unix;
   };
 }

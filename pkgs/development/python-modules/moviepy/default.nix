@@ -11,7 +11,6 @@
 , tqdm
   # Advanced image processing (triples size of output)
 , advancedProcessing ? false
-, opencv3
 , scikit-image
 , scikit-learn
 , scipy
@@ -22,6 +21,7 @@
 buildPythonPackage rec {
   pname = "moviepy";
   version = "1.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -47,7 +47,6 @@ buildPythonPackage rec {
     requests
     proglog
   ] ++ lib.optionals advancedProcessing [
-    opencv3
     scikit-image
     scikit-learn
     scipy

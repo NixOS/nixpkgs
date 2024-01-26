@@ -2,9 +2,13 @@
 , aiofiles
 , aiohttp
 , aioshutil
+, async-timeout
 , buildPythonPackage
 , dateparser
 , fetchFromGitHub
+, ffmpeg
+, hatch-vcs
+, hatchling
 , ipython
 , orjson
 , packaging
@@ -22,37 +26,34 @@
 , python-dotenv
 , pythonOlder
 , pytz
-, setuptools
-, setuptools-scm
 , termcolor
 , typer
-, ffmpeg
 }:
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.9.0";
-  format = "pyproject";
+  version = "4.23.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "briis";
-    repo = pname;
+    repo = "pyunifiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fIkZh/fkeVzQyEa4goGnaCxOWsKLKRlw+0/nGBDmKlY=";
+    hash = "sha256-X4LRi2hNpKgnmk3GeoI+ziboBKIosSZye5lPWaBPL1s=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pyunifiprotect --cov-append" ""
+      --replace "--strict-markers -ra -Wd --ignore=.* --no-cov-on-fail --cov=pyunifiprotect --cov-append --maxfail=10 -n=auto" ""
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -67,7 +68,10 @@ buildPythonPackage rec {
     pyjwt
     pytz
     typer
-  ] ++ typer.optional-dependencies.all;
+  ] ++ typer.optional-dependencies.all
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ];
 
   passthru.optional-dependencies = {
     shell = [

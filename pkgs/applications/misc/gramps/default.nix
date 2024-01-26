@@ -12,8 +12,8 @@ in buildPythonApplication rec {
   version = "5.1.4";
   pname = "gramps";
 
-  nativeBuildInputs = [ wrapGAppsHook intltool gettext ];
-  buildInputs = [ gtk3 gobject-introspection pango gexiv2 ]
+  nativeBuildInputs = [ wrapGAppsHook intltool gettext gobject-introspection ];
+  buildInputs = [ gtk3 pango gexiv2 ]
     # Map support
     ++ lib.optionals enableOSM [ osm-gps-map glib-networking ]
     # Graphviz support

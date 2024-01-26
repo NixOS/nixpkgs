@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "py-ubjson";
   version = "0.16.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Iotic-Labs";
@@ -19,9 +20,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  disabledTests = [
+    # https://github.com/Iotic-Labs/py-ubjson/issues/18
+    "test_recursion"
+  ];
 
-  pythonImportsCheck = [ "ubjson" ];
+  pytestFlagsArray = [
+    "test/test.py"
+  ];
+
+  pythonImportsCheck = [
+    "ubjson"
+  ];
 
   meta = with lib; {
     description = "Universal Binary JSON draft-12 serializer for Python";

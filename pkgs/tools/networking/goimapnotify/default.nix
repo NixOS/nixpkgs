@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "goimapnotify";
-  version = "2.3.7";
+  version = "2.3.10";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
     rev = version;
-    sha256 = "sha256-Wot+E+rDgXQ4FVgdfqe6a3O9oYUK3X1xImC33eDuUBo=";
+    sha256 = "sha256-RGEHKOmJqy9Cz5GWfck3VBZD6Q3DySoTYg0+Do4sy/4=";
   };
 
-  vendorSha256 = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
+  vendorHash = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
 
   postPatch = ''
     for f in command.go command_test.go; do
@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://gitlab.com/shackra/goimapnotify";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wohanley ];
+    mainProgram = "goimapnotify";
   };
 }

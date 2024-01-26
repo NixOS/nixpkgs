@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "tzdata";
-  version = "2022.7";
+  version = "2023.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/l+Gbt3YuW6fy6l4+OUDyQmxnqfv2hHlLjlJS606e/o=";
+    hash = "sha256-Ee8eCOVKyw1Plb2xvgXaZZZz3krL0hv5xp6UzF6Qejo=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Provider of IANA time zone data";
     homepage = "https://github.com/python/tzdata";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,25 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, adcli, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
   nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
   docbook_xsl, docbook_xml_dtd_44,
-  nixosTests,
+  testers, nix-update-script, nixosTests,
   withSudo ? false }:
 
 let
   docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.0";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "SSSD";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-H9Snh2RzbnjGPqvC9fJHeZvAkGX/O/vmVsl143yb194=";
+    repo = "sssd";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-VJXZndbmC6mAVxzvv5Wjb4adrQkP16Rt4cgjl4qGDIc=";
   };
 
   postPatch = ''
@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
+    "-I${libxml2.dev}/include/libxml2"
+  ];
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
@@ -96,14 +99,23 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
+  passthru = {
+    tests = {
+      inherit (nixosTests) sssd sssd-ldap;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "sssd --version";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "System Security Services Daemon";
     homepage = "https://sssd.io/";
-    changelog = "https://sssd.io/release-notes/sssd-${version}.html";
+    changelog = "https://sssd.io/release-notes/sssd-${finalAttrs.version}.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ illustris ];
   };
-}
+})

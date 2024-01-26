@@ -1,8 +1,7 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, python
+, setuptools
 , robotframework
 , robotframework-pythonlibcore
 , selenium
@@ -13,16 +12,21 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.1.0";
   pname = "robotframework-seleniumlibrary";
+  version = "6.2.0";
+  pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iCZU+9xFUPoyucdQ/26dgxAm8jRf92P3JyA2KqV8bYI=";
+    sha256 = "sha256-lvtu6z/PD2Ckj70SgDF69BwrhaoA36SDrAvj0XJsmCc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     robotframework

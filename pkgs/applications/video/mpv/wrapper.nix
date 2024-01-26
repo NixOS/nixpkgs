@@ -1,8 +1,11 @@
 # Arguments that this derivation gets when it is created with `callPackage`
 { stdenv
+, buildEnv
 , lib
 , makeWrapper
+, mpvScripts
 , symlinkJoin
+, writeTextDir
 , yt-dlp
 }:
 
@@ -71,6 +74,20 @@ let
 
       passthru.unwrapped = mpv;
 
+      passthru.tests.mpv-scripts-should-not-collide = buildEnv {
+        name = "mpv-scripts-env";
+        paths = lib.pipe mpvScripts [
+          # filters "override" "overrideDerivation" "recurseForDerivations"
+          (lib.filterAttrs (key: script: lib.isDerivation script))
+          # replaces unfree and meta.broken scripts with decent placeholders
+          (lib.mapAttrsToList (key: script:
+            if (builtins.tryEval script.outPath).success
+            then script
+            else writeTextDir "share/mpv/scripts/${script.scriptName}" "placeholder of ${script.name}"
+          ))
+        ];
+      };
+
       postBuild = ''
         # wrapProgram can't operate on symlinks
         rm "$out/bin/mpv"
@@ -80,7 +97,7 @@ let
       '' + lib.optionalString stdenv.isDarwin ''
         # wrapProgram can't operate on symlinks
         rm "$out/Applications/mpv.app/Contents/MacOS/mpv"
-        makeWrapper "${mpv}/Applications/mpv.app/Contents/MacOS/mpv" "$out/Applications/mpv.app/Contents/MacOS/mpv" ${mostMakeWrapperArgs}
+        makeWrapper "${mpv}/Applications/mpv.app/Contents/MacOS/mpv-bundle" "$out/Applications/mpv.app/Contents/MacOS/mpv" ${mostMakeWrapperArgs}
       '';
 
       meta = {

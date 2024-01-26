@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , libgpg-error
 , enableCapabilities ? false, libcap
@@ -16,20 +15,12 @@ assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    hash = "sha256-O5wCoAS2jCVq3ZlwHeALODrMzPNxd+DWxYKJZkzODAM=";
+    hash = "sha256-iwhwiXrFrGfe1Wjc+t9Flpz6imvrD9YK8qnq3Coycqo=";
   };
-
-  patches = lib.optionals (!stdenv.isLinux) [ # not everywhere to avoid rebuild for now
-    (fetchpatch {
-      name = "getrandom-conditionalize.patch";
-      url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=commitdiff_plain;h=d41177937cea4aa1e9042ebcd195a349c40e8071";
-      hash = "sha256-CgQjNtC1qLe5LicIc8rESc6Z1u4fk7ErMUVcG/2G9gM=";
-    })
-  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev";
@@ -59,6 +50,8 @@ stdenv.mkDerivation rec {
         -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
   '';
 
+  enableParallelBuilding = true;
+
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postFixup = ''
@@ -75,6 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  enableParallelChecking = true;
 
   passthru.tests = {
     inherit gnupg libotr rsyslog;

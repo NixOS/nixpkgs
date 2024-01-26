@@ -10,6 +10,7 @@
 , gsettings-qt
 , lshw
 , libuchardet
+, spdlog
 , dtkcommon
 , systemd
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
@@ -17,14 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkcore";
-  version = "5.6.10";
+  version = "5.6.17";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ge8DiJMSaZo7GeQEgnDbi5SLsLxtOQ/P5/9aBgaG7Ds=";
+    hash = "sha256-/MGSvT8tPn+KqqlM6FY2iFsArmAkYMW5Q3Sl4g4zvH0=";
   };
+
+  patches = [
+    ./fix-pkgconfig-path.patch
+    ./fix-pri-path.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/dsysinfo.cpp \
@@ -39,25 +45,27 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
+  dontWrapQtApps = true;
+
   buildInputs = [
     qtbase
     gsettings-qt
     lshw
     libuchardet
+    spdlog
   ]
   ++ lib.optional withSystemd systemd;
 
   propagatedBuildInputs = [ dtkcommon ];
 
   cmakeFlags = [
-    "-DDVERSION=${version}"
-    "-DBUILD_EXAMPLES=OFF"
+    "-DDTK_VERSION=${version}"
     "-DBUILD_DOCS=ON"
-    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
+    "-DBUILD_EXAMPLES=OFF"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
     "-DDSG_PREFIX_PATH='/run/current-system/sw'"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
     "-DD_DSG_APP_DATA_FALLBACK=/var/dsg/appdata"
     "-DBUILD_WITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
   ];
@@ -67,6 +75,8 @@ stdenv.mkDerivation rec {
     # A workaround is to set QT_PLUGIN_PATH explicitly
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
+
+  outputs = [ "out" "dev" "doc" ];
 
   meta = with lib; {
     description = "Deepin tool kit core library";

@@ -7,34 +7,61 @@
 , python3Packages
 , pypy3Packages
 , runCommand
+, testers
 , writers
 , writeText
 }:
 with writers;
 let
+  expectSuccess = test:
+    runCommand "run-${test.name}" {} ''
+      if [[ "$(${test})" != success ]]; then
+        echo 'test ${test.name} failed'
+        exit 1
+      fi
 
-  bin = {
-    bash = writeBashBin "test-writers-bash-bin" ''
+      touch $out
+    '';
+
+  expectSuccessBin = test:
+    runCommand "run-${test.name}" {} ''
+      if [[ "$(${lib.getExe test})" != success ]]; then
+        echo 'test ${test.name} failed'
+        exit 1
+      fi
+
+      touch $out
+    '';
+
+  expectDataEqual = { file, expected }:
+    let
+      expectedFile = writeText "${file.name}-expected" expected;
+    in
+    testers.testEqualContents { expected = expectedFile; actual = file; assertion = "${file.name} matches"; };
+in
+lib.recurseIntoAttrs {
+  bin = lib.recurseIntoAttrs {
+    bash = expectSuccessBin (writeBashBin "test-writers-bash-bin" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
-    '';
+    '');
 
-    dash = writeDashBin "test-writers-dash-bin" ''
+    dash = expectSuccessBin (writeDashBin "test-writers-dash-bin" ''
      test '~' = '~' && echo 'success'
-    '';
+    '');
 
-    fish = writeFishBin "test-writers-fish-bin" ''
+    fish = expectSuccessBin (writeFishBin "test-writers-fish-bin" ''
       if test "test" = "test"
         echo "success"
       end
-    '';
+    '');
 
-    rust = writeRustBin "test-writers-rust-bin" {} ''
+    rust = expectSuccessBin (writeRustBin "test-writers-rust-bin" {} ''
       fn main(){
         println!("success")
       }
-    '';
+    '');
 
-    haskell = writeHaskellBin "test-writers-haskell-bin" { libraries = [ haskellPackages.acme-default ]; } ''
+    haskell = expectSuccessBin (writeHaskellBin "test-writers-haskell-bin" { libraries = [ haskellPackages.acme-default ]; } ''
       import Data.Default
 
       int :: Int
@@ -44,9 +71,9 @@ let
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
-    '';
+    '');
 
-    js = writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
+    js = expectSuccessBin (writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
       var semver = require('semver');
 
       if (semver.valid('1.2.3')) {
@@ -54,59 +81,57 @@ let
       } else {
         console.log('fail')
       }
-    '';
+    '');
 
-    perl = writePerlBin "test-writers-perl-bin" { libraries = [ perlPackages.boolean ]; } ''
+    perl = expectSuccessBin (writePerlBin "test-writers-perl-bin" { libraries = [ perlPackages.boolean ]; } ''
       use boolean;
       print "success\n" if true;
-    '';
+    '');
 
-    pypy2 = writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
+    pypy2 = expectSuccessBin (writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
       from enum import Enum
-
 
       class Test(Enum):
           a = "success"
 
-
       print Test.a
-    '';
+    '');
 
-    python3 = writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
+    python3 = expectSuccessBin (writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
       import yaml
 
-      y = yaml.load("""
+      y = yaml.safe_load("""
         - test: success
       """)
       print(y[0]['test'])
-    '';
+    '');
 
-    pypy3 = writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
+    pypy3 = expectSuccessBin (writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
       import yaml
 
-      y = yaml.load("""
+      y = yaml.safe_load("""
         - test: success
       """)
       print(y[0]['test'])
-    '';
+    '');
   };
 
-  simple = {
-    bash = writeBash "test-writers-bash" ''
+  simple = lib.recurseIntoAttrs {
+    bash = expectSuccess (writeBash "test-writers-bash" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
-    '';
+    '');
 
-    dash = writeDash "test-writers-dash" ''
+    dash = expectSuccess (writeDash "test-writers-dash" ''
      test '~' = '~' && echo 'success'
-    '';
+    '');
 
-    fish = writeFish "test-writers-fish" ''
+    fish = expectSuccess (writeFish "test-writers-fish" ''
       if test "test" = "test"
         echo "success"
       end
-    '';
+    '');
 
-    haskell = writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
+    haskell = expectSuccess (writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
       import Data.Default
 
       int :: Int
@@ -116,9 +141,9 @@ let
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
-    '';
+    '');
 
-    js = writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
+    js = expectSuccess (writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
       var semver = require('semver');
 
       if (semver.valid('1.2.3')) {
@@ -126,45 +151,44 @@ let
       } else {
         console.log('fail')
       }
-    '';
+    '');
 
-    perl = writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
+    perl = expectSuccess (writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
       use boolean;
       print "success\n" if true;
-    '';
+    '');
 
-    pypy2 = writePyPy2 "test-writers-pypy2" { libraries = [ pypy2Packages.enum ]; } ''
+    pypy2 = expectSuccess (writePyPy2 "test-writers-pypy2" { libraries = [ pypy2Packages.enum ]; } ''
       from enum import Enum
-
 
       class Test(Enum):
           a = "success"
 
-
       print Test.a
-    '';
+    '');
 
-    python3 = writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
+    python3 = expectSuccess (writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
       import yaml
 
-      y = yaml.load("""
+      y = yaml.safe_load("""
         - test: success
       """)
       print(y[0]['test'])
-    '';
+    '');
 
-    pypy3 = writePyPy3 "test-writers-pypy3" { libraries = [ pypy3Packages.pyyaml ]; } ''
+    pypy3 = expectSuccess (writePyPy3 "test-writers-pypy3" { libraries = [ pypy3Packages.pyyaml ]; } ''
       import yaml
 
-      y = yaml.load("""
+      y = yaml.safe_load("""
         - test: success
       """)
       print(y[0]['test'])
-    '';
+    '');
 
-    fsharp = makeFSharpWriter {
+    fsharp = expectSuccess (makeFSharpWriter {
       libraries = { fetchNuGet }: [
         (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
+        (fetchNuGet { pname = "System.Text.Json"; version = "4.6.0"; sha256 = "0ism236hwi0k6axssfq58s1d8lihplwiz058pdvl8al71hagri39"; })
       ];
     } "test-writers-fsharp" ''
       #r "nuget: FSharp.SystemTextJson, 0.17.4"
@@ -183,31 +207,31 @@ let
       then "success"
       else "failed"
       |> printfn "%s"
-    '';
+    '');
 
-    pypy2NoLibs = writePyPy2 "test-writers-pypy2-no-libs" {} ''
+    pypy2NoLibs = expectSuccess (writePyPy2 "test-writers-pypy2-no-libs" {} ''
       print("success")
-    '';
+    '');
 
-    python3NoLibs = writePython3 "test-writers-python3-no-libs" {} ''
+    python3NoLibs = expectSuccess (writePython3 "test-writers-python3-no-libs" {} ''
       print("success")
-    '';
+    '');
 
-    pypy3NoLibs = writePyPy3 "test-writers-pypy3-no-libs" {} ''
+    pypy3NoLibs = expectSuccess (writePyPy3 "test-writers-pypy3-no-libs" {} ''
       print("success")
-    '';
+    '');
 
-    fsharpNoNugetDeps = writeFSharp "test-writers-fsharp-no-nuget-deps" ''
+    fsharpNoNugetDeps = expectSuccess (writeFSharp "test-writers-fsharp-no-nuget-deps" ''
       printfn "success"
-    '';
+    '');
   };
 
-
-  path = {
-    bash = writeBash "test-writers-bash-path" (writeText "test" ''
+  path = lib.recurseIntoAttrs {
+    bash = expectSuccess (writeBash "test-writers-bash-path" (writeText "test" ''
       if [[ "test" == "test" ]]; then echo "success"; fi
-    '');
-    haskell = writeHaskell "test-writers-haskell-path" { libraries = [ haskellPackages.acme-default ]; } (writeText "test" ''
+    ''));
+
+    haskell = expectSuccess (writeHaskell "test-writers-haskell-path" { libraries = [ haskellPackages.acme-default ]; } (writeText "test" ''
       import Data.Default
 
       int :: Int
@@ -217,26 +241,29 @@ let
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
-    '');
+    ''));
   };
 
-  writeTest = expectedValue: name: test:
-    writeDash "run-${name}" ''
-      if test "$(${test})" != "${expectedValue}"; then
-        echo 'test ${test} failed'
-        exit 1
-      fi
-    '';
+  data = {
+    json = expectDataEqual {
+      file = writeJSON "data.json" { hello = "world"; };
+      expected = ''
+        {
+          "hello": "world"
+        }
+      '';
+    };
 
-in runCommand "test-writers" {
-  passthru = { inherit writeTest bin simple path; };
-  meta.platforms = lib.platforms.all;
-} ''
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name "${test}/bin/${test.name}") (lib.attrValues bin)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test) (lib.attrValues simple)}
-  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test) (lib.attrValues path)}
+    toml = expectDataEqual {
+      file = writeTOML "data.toml" { hello = "world"; };
+      expected = ''
+        hello = "world"
+      '';
+    };
 
-  echo 'nix-writers successfully tested' >&2
-  touch $out
-''
-
+    yaml = expectDataEqual {
+      file = writeYAML "data.yaml" { hello = "world"; };
+      expected = "hello: world\n";
+    };
+  };
+}

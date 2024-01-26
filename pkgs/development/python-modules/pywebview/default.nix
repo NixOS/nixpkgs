@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools-scm
 , bottle
 , importlib-resources
-, proxy_tools
+, proxy-tools
 , pygobject3
 , pyqtwebengine
 , pytest
@@ -16,8 +17,8 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "4.0.2";
-  format = "setuptools";
+  version = "4.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -25,17 +26,18 @@ buildPythonPackage rec {
     owner = "r0x0r";
     repo = "pywebview";
     rev = "refs/tags/${version}";
-    hash = "sha256-awgX862p1jU/LWdg7QMC9by0OJMkzGwnC0yrc93I/c0=";
+    hash = "sha256-uanv6v/xwi4COY0WjoyxG4khK1kAucBmpr/plCKYxkQ=";
   };
 
   nativeBuildInputs = [
+    setuptools-scm
     qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
     bottle
     pyqtwebengine
-    proxy_tools
+    proxy-tools
     six
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources

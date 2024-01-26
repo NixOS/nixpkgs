@@ -117,7 +117,17 @@ in stdenv.mkDerivation (rec {
       relative = "llvm";
       hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
     })
-  ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
+  ] ++ lib.optionals enablePolly [
+    ./gnu-install-dirs-polly.patch
+    # Add missing isl header includess required to build LLVM 8 + Polly with clang 16.
+    (fetchpatch {
+      name = "polly-ppcg-isl-headers.patch";
+      url = "https://repo.or.cz/ppcg.git/patch/098ba285306114dc71497f7b51c357f69c9b4472";
+      hash = "sha256-c9L30rDROYAMbUSuaK9U/ixyFMlH/Sa1n+VgLODzSCQ=";
+      extraPrefix = "tools/polly/lib/External/ppcg/";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -178,6 +188,8 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
+  cmakeBuildType = if debugVersion then "Debug" else "Release";
+
   cmakeFlags = with stdenv; let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
@@ -193,7 +205,6 @@ in stdenv.mkDerivation (rec {
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
   in flagsForLlvmConfig ++ [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
@@ -211,7 +222,7 @@ in stdenv.mkDerivation (rec {
   ] ++ optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

@@ -1,43 +1,65 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools
+, fetchFromGitHub
+, hatchling
+, anyio
+, distro
+, dirty-equals
 , httpx
-, importlib-metadata
-, requests
+, google-auth
+, sniffio
+, pydantic
+, pytest-asyncio
+, respx
 , tokenizers
-, aiohttp
+, typing-extensions
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.2.9";
-  format = "pyproject";
+  version = "0.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LURWTTYsztbo5mI2bk3n+U3NxsthNGpeUoNZsK/B8vM=";
+  src = fetchFromGitHub {
+    owner = "anthropics";
+    repo = "anthropic-sdk-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1g3Bbij9HbMK+JJASe+VTBXx5jCQheXLrcnAD0qMs8g=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   propagatedBuildInputs = [
+    anyio
+    distro
     httpx
-    requests
+    sniffio
+    pydantic
     tokenizers
-    aiohttp
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+    typing-extensions
   ];
 
-  # try downloading tokenizer in tests
-  # relates https://github.com/anthropics/anthropic-sdk-python/issues/24
-  doCheck = false;
+  passthru.optional-dependencies = {
+    vertex = [ google-auth ];
+  };
+
+  nativeCheckInputs = [
+    dirty-equals
+    pytest-asyncio
+    pytestCheckHook
+    respx
+  ];
+
+  disabledTestPaths = [
+    # require network access
+    "tests/api_resources"
+  ];
 
   pythonImportsCheck = [
     "anthropic"

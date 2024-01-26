@@ -16,6 +16,7 @@
 buildPythonPackage rec {
   pname = "kmapper";
   version = "2.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
     homepage = "https://kepler-mapper.scikit-tda.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
+    broken = true;
   };
 }

@@ -1,33 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "rkm-codes";
-  version = "0.5";
+  version = "0.6";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "rkm_codes";
-    rev = "v${version}";
-    hash = "sha256-r4F72iHxH7BoPtgYm1RD6BeSZszKRrpeBQccmT4wzuw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CkLLZuWcNL8sqAupc7lHXu0DXUXrX3qwd1g/ekyHdw4=";
   };
 
-  format = "pyproject";
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
+
   propagatedBuildInputs = [
     setuptools
   ];
 
   # this has a circular dependency on quantiphy
   preBuild = ''
-    sed -i '/quantiphy/d' ./setup.py
-    sed -i '/pytest-runner/d' ./setup.py
+    sed -i '/quantiphy/d' pyproject.toml
   '';
 
   # this import check will fail as quantiphy is imported by this package

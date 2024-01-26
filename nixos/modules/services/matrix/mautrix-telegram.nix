@@ -80,6 +80,9 @@ in {
               "example.com" = "full";
               "@admin:example.com" = "admin";
             };
+            telegram = {
+              connection.use_ipv6 = true;
+            };
           }
         '';
         description = lib.mdDoc ''
@@ -119,9 +122,9 @@ in {
 
       serviceDependencies = mkOption {
         type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        default = optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
         defaultText = literalExpression ''
-          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+          optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         '';
         description = lib.mdDoc ''
           List of Systemd services to require and wait for when starting the application service.
@@ -156,7 +159,6 @@ in {
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
             --generate-registration \
-            --base-config='${pkgs.mautrix-telegram}/${pkgs.mautrix-telegram.pythonModule.sitePackages}/mautrix_telegram/example-config.yaml' \
             --config='${settingsFile}' \
             --registration='${registrationFile}'
         fi

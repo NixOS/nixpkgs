@@ -35,10 +35,6 @@ stdenv.mkDerivation rec {
     "UDEVLIBDIR=${placeholder "out"}/lib/udev/"
   ];
 
-  preBuild = ''
-    sed -e "s|/bin/sh|${bash}/bin/sh|" -i *.rules
-  '';
-
   preInstall = ''
     mkdir -p "$out/sbin" "$out/lib/udev/rules.d" "$out/share/man/man8"
   '';

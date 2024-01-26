@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
-  version = "1.22.2";
+  version = "1.22.8";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-0uZC+XRfl9n3On9Qhedlmpox/iCbd05uRdrgQbQ13wY=";
+    hash = "sha256-Epi6NHpwxCuIzev5G2Wf6gKxu3Jp6r+OKePAvVgniSg=";
   };
 
   outputs = [
@@ -62,10 +62,11 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libSM
     xorg.libICE
-    libGL
-    libGLU
     nasm
     libvpx
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
+    libGLU
   ];
 
   strictDeps = true;
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

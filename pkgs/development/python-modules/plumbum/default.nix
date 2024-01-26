@@ -13,22 +13,20 @@
 
 buildPythonPackage rec {
   pname = "plumbum";
-  version = "1.8.1";
+  version = "1.8.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5nRI9y2Y7itkqDdLRSX4qWfh96WmhqdP1Eo7HLoRHaQ=";
+    hash = "sha256-b8JcGRHiZSv/ViyEogpLgGXOMHHSC+cjWT0FqhkolcA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace '"--cov-config=setup.cfg", ' ""
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.2.3";
+  version = "1.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oNdH0oZNo8XWx+bbzwZs7iXD0Af6zx1k6wBYksgtp4w=";
+    hash = "sha256-N2StqGUqOYS9mW/DAeSntNg3kii+UPdTUHDV7g1Hvus=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "spacy"
     "transformers"
   ];
 

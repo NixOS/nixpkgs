@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/libmarkdown.dylib $out/lib/libmarkdown.dylib
+    install_name_tool -id "$out/lib/libmarkdown.dylib" "$out/lib/libmarkdown.dylib"
+    for exe in $out/bin/*; do
+      install_name_tool -change libmarkdown.dylib "$out/lib/libmarkdown.dylib" "$exe"
+    done
   '';
 
   meta = with lib; {

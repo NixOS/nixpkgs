@@ -62,7 +62,7 @@ config.security.apparmor.includes = {
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/base"
     r ${pkgs.stdenv.cc.libc}/share/locale/**,
     r ${pkgs.stdenv.cc.libc}/share/locale.alias,
-    ${lib.optionalString (pkgs.glibcLocales != null) "r ${pkgs.glibcLocales}/lib/locale/locale-archive,"}
+    r ${config.i18n.glibcLocales}/lib/locale/locale-archive,
     ${etcRule "localtime"}
     r ${pkgs.tzdata}/share/zoneinfo/**,
     r ${pkgs.stdenv.cc.libc}/share/i18n/**,
@@ -72,7 +72,7 @@ config.security.apparmor.includes = {
 
     # bash inspects filesystems at startup
     # and /etc/mtab is linked to /proc/mounts
-    @{PROC}/mounts
+    r @{PROC}/mounts,
 
     # system-wide bash configuration
     '' + lib.concatMapStringsSep "\n" etcRule [
@@ -211,6 +211,9 @@ config.security.apparmor.includes = {
   "abstractions/nis" = ''
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nis"
   '';
+  "abstractions/nss-systemd" = ''
+    include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nss-systemd"
+  '';
   "abstractions/nvidia" = ''
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nvidia"
     ${etcRule "vdpau_wrapper.cfg"}
@@ -278,6 +281,8 @@ config.security.apparmor.includes = {
     r /var/lib/acme/*/cert.pem,
     r /var/lib/acme/*/chain.pem,
     r /var/lib/acme/*/fullchain.pem,
+
+    r /etc/pki/tls/certs/,
 
     '' + lib.concatMapStringsSep "\n" etcRule [
       "ssl/certs/ca-certificates.crt"

@@ -12,6 +12,7 @@
 , python-ldap
 , withPostgres ? true
 , psycopg2
+, nix-update-script
 }:
 
 buildPythonPackage rec {
@@ -46,6 +47,8 @@ buildPythonPackage rec {
     wrapProgram $out/bin/etebase-server --prefix PYTHONPATH : "$PYTHONPATH"
     chmod +x $out/bin/etebase-server
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     homepage = "https://github.com/etesync/server";

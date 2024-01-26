@@ -9,12 +9,19 @@ let
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;
+    nativeBuildInputs = [
+      pkgs.installShellFiles
+    ];
+    postInstall = ''
+      installManPage ${args.manPage}
+    '';
   });
 
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
     inherit (pkgs) runtimeShell;
+    manPage = ./manpages/nixos-build-vms.8;
   };
 
   nixos-install = makeProg {
@@ -27,6 +34,7 @@ let
       nixos-enter
       pkgs.util-linuxMinimal
     ];
+    manPage = ./manpages/nixos-install.8;
   };
 
   nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
@@ -35,17 +43,15 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    system = pkgs.stdenv.hostPlatform.system;
+    hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
+    manPage = ./manpages/nixos-generate-config.8;
   };
 
-  nixos-option =
-    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-    then null
-    else pkgs.nixos-option;
+  inherit (pkgs) nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -60,6 +66,7 @@ let
     } // optionalAttrs (config.system.configurationRevision != null) {
       configurationRevision = config.system.configurationRevision;
     });
+    manPage = ./manpages/nixos-version.8;
   };
 
   nixos-enter = makeProg {
@@ -69,6 +76,7 @@ let
     path = makeBinPath [
       pkgs.util-linuxMinimal
     ];
+    manPage = ./manpages/nixos-enter.8;
   };
 
 in
@@ -122,14 +130,14 @@ in
     '';
   };
 
-  config = lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
+  config = lib.mkMerge [ (lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
-      # your system.  Help is available in the configuration.nix(5) man page
-      # and in the NixOS manual (accessible by running `nixos-help`).
+      # your system. Help is available in the configuration.nix(5) man page, on
+      # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-      { config, pkgs, ... }:
+      { config, lib, pkgs, ... }:
 
       {
         imports =
@@ -155,15 +163,15 @@ in
         # console = {
         #   font = "Lat2-Terminus16";
         #   keyMap = "us";
-        #   useXkbConfig = true; # use xkbOptions in tty.
+        #   useXkbConfig = true; # use xkb.options in tty.
         # };
 
       $xserverConfig
 
       $desktopConfiguration
         # Configure keymap in X11
-        # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = "eurosign:e,caps:escape";
+        # services.xserver.xkb.layout = "us";
+        # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
         # Enable CUPS to print documents.
         # services.printing.enable = true;
@@ -216,12 +224,23 @@ in
         # accidentally delete configuration.nix.
         # system.copySystemConfiguration = true;
 
-        # This value determines the NixOS release from which the default
-        # settings for stateful data, like file locations and database versions
-        # on your system were taken. It's perfectly fine and recommended to leave
-        # this value at the release version of the first install of this system.
-        # Before changing this value read the documentation for this option
-        # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+        # This option defines the first version of NixOS you have installed on this particular machine,
+        # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+        #
+        # Most users should NEVER change this value after the initial install, for any reason,
+        # even if you've upgraded your system to a new NixOS release.
+        #
+        # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+        # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+        # to actually do that.
+        #
+        # This value being lower than the current NixOS release does NOT mean your system is
+        # out of date, out of support, or vulnerable.
+        #
+        # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+        # and migrated your data accordingly.
+        #
+        # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
         system.stateVersion = "${config.system.nixos.release}"; # Did you read the comment?
 
       }
@@ -232,16 +251,20 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
+        nixos-option
         nixos-version
         nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
+      ];
 
     documentation.man.man-db.skipPackages = [ nixos-version ];
 
+  })
+
+  # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
+  ({
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
     };
-
-  };
+  })];
 
 }

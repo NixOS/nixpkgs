@@ -15,13 +15,11 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.deliantra-server;
-      defaultText = literalExpression "pkgs.deliantra-server";
-      description = lib.mdDoc ''
-        The package to use for the Deliantra server (and map/arch data, if you
-        don't change dataDir).
+    package = mkPackageOption pkgs "deliantra-server" {
+      extraDescription = ''
+        ::: {.note}
+        This will also be used for map/arch data, if you don't change {option}`dataDir`
+        :::
       '';
     };
 

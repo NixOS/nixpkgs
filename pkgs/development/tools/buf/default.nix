@@ -10,22 +10,21 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.19.0";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vLiOAlzIrIwMKPn8yl/YyFmXbFHFAZB1yLejQbAEivg=";
+    hash = "sha256-wFUSf3+EZa1pzpKci4dPa9MVfNk5XQHraUFcoiTd/0Q=";
   };
 
-  vendorHash = "sha256-DT3vffs33hGlylQLKc5o7Xble8Blyy4hgvE27CHnmJc=";
+  vendorHash = "sha256-REAU2FoEYWRYlPQel6oDLLdhbJOiGRaWZO6inefSd3M=";
 
   patches = [
-    # Skip a test that requires networking to be available to work.
-    ./skip_test_requiring_network.patch
-    # Skip TestWorkspaceGit which requires .git and commits.
-    ./skip_test_requiring_dotgit.patch
+    # Skip a test that requires networking to be available to work,
+    # and a test which requires the source checkout to be part of a git repository
+    ./skip_broken_tests.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -40,8 +39,6 @@ buildGoModule rec {
   preCheck = ''
     # The tests need access to some of the built utilities
     export PATH="$PATH:$GOPATH/bin"
-    # To skip TestCloneBranchAndRefToBucket
-    export CI=true
   '';
 
   # Allow tests that bind or connect to localhost on macOS.

@@ -7,20 +7,20 @@
 , pythonOlder
 , pyyaml
 , requests
+, setuptools
 , tomli
 , tomli-w
 , types-pyyaml
 , types-toml
-, typing-extensions
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.23.1";
-  format = "setuptools";
+  version = "0.24.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
@@ -28,8 +28,12 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BU90nUZVqowFMn78KfbBEf59X7Q/1itvkGFdOzy4D2c=";
+    hash = "sha256-fvfEHJioyjQoEvIgZZKt9/AKtzTgo0APGUK7lDrbahs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyyaml
@@ -37,10 +41,7 @@ buildPythonPackage rec {
     types-pyyaml
     types-toml
     urllib3
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
-
 
   nativeCheckInputs = [
     pytest-asyncio

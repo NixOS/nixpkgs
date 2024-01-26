@@ -17,6 +17,7 @@ let
     text = builtins.toJSON cfg.settings;
     checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
+  defaultBindPort = 3000;
 
 in
 {
@@ -38,6 +39,20 @@ in
       description = lib.mdDoc ''
         Open ports in the firewall for the AdGuard Home web interface. Does not
         open the port needed to access the DNS resolver.
+      '';
+    };
+
+    allowDHCP = mkOption {
+      default = cfg.settings.dhcp.enabled or false;
+      defaultText = literalExpression ''config.services.adguardhome.settings.dhcp.enabled or false'';
+      type = bool;
+      description = lib.mdDoc ''
+        Allows AdGuard Home to open raw sockets (`CAP_NET_RAW`), which is
+        required for the integrated DHCP server.
+
+        The default enables this conditionally if the declarative configuration
+        enables the integrated DHCP server. Manually setting this option is only
+        required for non-declarative setups.
       '';
     };
 
@@ -72,7 +87,7 @@ in
             '';
           };
           bind_port = mkOption {
-            default = 3000;
+            default = defaultBindPort;
             type = port;
             description = lib.mdDoc ''
               Port to serve HTTP pages on.
@@ -147,7 +162,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.adguardhome}/bin/adguardhome ${args}";
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ] ++ optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         Restart = "always";
         RestartSec = 10;
         RuntimeDirectory = "AdGuardHome";
@@ -155,6 +170,6 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.bind_port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.bind_port or defaultBindPort ];
   };
 }

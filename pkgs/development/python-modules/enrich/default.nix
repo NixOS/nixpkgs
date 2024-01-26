@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "enrich";
   version = "1.2.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,6 +27,6 @@ buildPythonPackage rec {
     description = "Enrich adds few missing features to the wonderful rich library";
     homepage = "https://github.com/pycontribs/enrich";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

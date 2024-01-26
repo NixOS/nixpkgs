@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , nixosTests
 , pkg-config
 , systemd
@@ -45,11 +46,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.11";
+  version = "4.12";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-QpqRf+SlUmDxUs+zGIpYflsS6UoU4kCsElMZ/xS4yD0=";
+    hash = "sha256-roWr5BX3vs9LaiuYl+FxLyflqsnDXfvd28zgrX39mfc=";
   };
 
   strictDeps = true;
@@ -113,6 +114,14 @@ stdenv.mkDerivation rec {
         -e '/test ! -d $(NSSDIR)/,+3d' \
         -i configs/Makefile
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "ignoring-return-value.patch";
+      url = "https://github.com/libreswan/libreswan/commit/ba5bad09f55959872022fa506d5ac06eafe3a314.diff";
+      hash = "sha256-xJ8rZWoRtJixamGY8sjOS+63Lw3RX7620HlRWYfvSxc=";
+    })
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

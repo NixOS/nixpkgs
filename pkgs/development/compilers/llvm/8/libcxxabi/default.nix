@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   patches = [
-    ./no-threads.patch
+    ../../common/libcxxabi/no-threads.patch
     ./gnu-install-dirs.patch
   ];
 

@@ -14,11 +14,12 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.5";
+  version = "1.21.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zu8MO13EOJeBr9eG5tw2l68qL+DYck7h9jfCPXW7xbI=";
+    hash = "sha256-TDuTBos9/KaWmrERFV5N1vey1oC5h3jej9Rgt4N72w0=";
   };
 
   postPatch = ''

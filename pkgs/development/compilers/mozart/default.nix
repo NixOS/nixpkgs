@@ -1,11 +1,10 @@
 { lib
-, fetchFromGitHub
 , fetchurl
+, fetchpatch
 , cmake
 , unzip
 , makeWrapper
-, boost169
-, pinnedBoost ? boost169
+, boost
 , llvmPackages
 , gmp
 , emacs
@@ -33,7 +32,14 @@ in stdenv.mkDerivation rec {
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
 
-  patches = [ ./patch-limits.diff ];
+  patches = [
+    ./patch-limits.diff
+    (fetchpatch {
+      name = "remove-uses-of-deprecated-boost-apis.patch";
+      url = "https://github.com/mozart/mozart2/commit/4256d3a9122e1cbb01400a1807bdee66088ff274.patch";
+      hash = "sha256-AnOrBnxoCxqis+RdCsq8EKBg//jcNHSOFYUvf7vh+Hc=";
+    })
+  ];
 
   postConfigure = ''
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
@@ -55,7 +61,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    pinnedBoost
+    boost
     gmp
     emacs
     jre_headless
@@ -68,6 +74,9 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ layus h7x4 ];
     license = licenses.bsd2;
     homepage = "https://mozart.github.io";
+    platforms = platforms.all;
+    # Trace/BPT trap: 5
+    broken = stdenv.isDarwin;
   };
 
 }

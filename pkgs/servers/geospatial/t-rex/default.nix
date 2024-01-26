@@ -22,8 +22,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://t-rex.tileserver.ch/";
     changelog = "https://github.com/t-rex-tileserver/t-rex/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
     mainProgram = "t_rex";
     platforms = platforms.unix;
+    broken = true;  # https://github.com/t-rex-tileserver/t-rex/issues/302
   };
 }

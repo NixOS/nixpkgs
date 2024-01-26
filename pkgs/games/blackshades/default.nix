@@ -1,34 +1,43 @@
-{ lib, stdenv, fetchFromSourcehut
-, zig, glfw, libGLU, libGL, openal, libsndfile }:
+{ lib
+, stdenv
+, fetchFromSourcehut
+, glfw
+, libGL
+, libGLU
+, libsndfile
+, openal
+, zig_0_11
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blackshades";
-  version = "2.4.9";
+  version = "2.5.1";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
-    repo = pname;
-    rev = version;
+    repo = "blackshades";
+    rev = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "sha256-Hg+VcWI28GzY/CPm1lUftP0RGztOnzizrKJQVTmeJ9I=";
+    hash = "sha256-qdpXpuXHr9w2XMfgOVveWv3JoqdJHVB8TCqZdyaw/DM=";
   };
 
-  nativeBuildInputs = [ zig ];
-  buildInputs = [ glfw libGLU libGL openal libsndfile ];
+  nativeBuildInputs = [ zig_0_11.hook ];
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
-
-  installPhase = ''
-    zig build -Drelease-fast -Dcpu=baseline --prefix $out install
-  '';
+  buildInputs = [
+    glfw
+    libGLU
+    libGL
+    libsndfile
+    openal
+  ];
 
   meta = {
     homepage = "https://sr.ht/~cnx/blackshades";
     description = "A psychic bodyguard FPS";
+    changelog = "https://git.sr.ht/~cnx/blackshades/refs/${finalAttrs.version}";
+    mainProgram = "blackshades";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ McSinyx viric ];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

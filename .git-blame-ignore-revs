@@ -39,3 +39,60 @@ d1c1a0c656ccd8bd3b25d3c4287f2d075faf3cf3
 
 # fix indentation in meteor default.nix
 a37a6de881ec4c6708e6b88fd16256bbc7f26bbd
+
+# treewide: automatically md-convert option descriptions
+2e751c0772b9d48ff6923569adfa661b030ab6a2
+
+# nixos/*: automatically convert option docs
+087472b1e5230ffc8ba642b1e4f9218adf4634a2
+
+# nixos/*: automatically convert option descriptions
+ef176dcf7e76c3639571d7c6051246c8fbadf12a
+
+# nixos/*: automatically convert option docs to MD
+61e93df1891972bae3e0c97a477bd44e8a477aa0
+
+# nixos/*: convert options with admonitions to MD
+722b99bc0eb57711c0498a86a3f55e6c69cdb05f
+
+# nixos/*: automatically convert option docs
+6039648c50c7c0858b5e506c6298773a98e0f066
+
+# nixos/*: md-convert options with unordered lists
+c915b915b5e466a0b0b2af2906cd4d2380b8a1de
+
+# nixos/*: convert options with listings
+f2ea09ecbe1fa1da32eaa6e036d64ac324a2986f
+
+# nixos/*: convert straggler options to MD
+1d41cff3dc4c8f37bb5841f51fcbff705e169178
+
+# nixos/*: normalize manpage references to single-line form
+423545fe4865d126e86721ba30da116e29c65004
+
+# nixos/documentation: split options doc build
+fc614c37c653637e5475a0b0a987489b4d1f351d
+
+# nixos/*: convert options with admonitions to MD
+722b99bc0eb57711c0498a86a3f55e6c69cdb05f
+
+# nixos/*: convert internal option descriptions to MD
+9547123258f69efd92b54763051d6dc7f3bfcaca
+
+# nixos/*: replace </para><para> with double linebreaks
+694d5b19d30bf66687b42fb77f43ea7cd1002a62
+
+# treewide: add defaultText for options with simple interpolation defaults
+fb0e5be84331188a69b3edd31679ca6576edb75a
+
+# nixos/*: mark pre-existing markdown descriptions as mdDoc
+7e7d68a250f75678451cd44f8c3d585bf750461e
+
+# nixos/*: normalize link format
+3aebb4a2be8821a6d8a695f0908d8567dc00de31
+
+# nixos/*: replace <code> in option docs with <literal>
+16102dce2fbad670bd47dd75c860a8daa5fe47ad
+
+# nixos/*: add trivial defaultText for options with simple defaults
+25124556397ba17bfd70297000270de1e6523b0a

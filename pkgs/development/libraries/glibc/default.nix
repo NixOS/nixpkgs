@@ -3,7 +3,8 @@
 , profilingLibraries ? false
 , withGd ? false
 , withLibcrypt? false
-, buildPackages
+, pkgsBuildBuild
+, libgcc
 }:
 
 let
@@ -16,7 +17,7 @@ in
 
 (callPackage ./common.nix { inherit stdenv; } {
   inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
-  pname = "glibc" + lib.optionalString withGd "-gd";
+  pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 
     # Note:
@@ -90,21 +91,30 @@ in
     #
     makeFlags =
       (previousAttrs.makeFlags or [])
-      ++ lib.optionals (stdenv.cc.cc?libgcc) [
-        "user-defined-trusted-dirs=${stdenv.cc.cc.libgcc}/lib"
+      ++ lib.optionals (libgcc != null) [
+        "user-defined-trusted-dirs=${libgcc}/lib"
       ];
 
-    postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+    postInstall = previousAttrs.postInstall + (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
-    '' else lib.optionalString stdenv.buildPlatform.isLinux ''
+    '' else lib.optionalString stdenv.buildPlatform.isLinux
       # This is based on http://www.linuxfromscratch.org/lfs/view/development/chapter06/glibc.html
       # Instead of using their patch to build a build-native localedef,
-      # we simply use the one from buildPackages
+      # we simply use the one from pkgsBuildBuild.
+      #
+      # Note that we can't use pkgsBuildHost (aka buildPackages) here, because
+      # that will cause an eval-time infinite recursion: "buildPackages.glibc
+      # depended on buildPackages.libgcc, which, since it's GCC, depends on the
+      # target's bintools, which depend on the target's glibc, which, again,
+      # depends on buildPackages.glibc, causing an infinute recursion when
+      # evaluating buildPackages.glibc when glibc hasn't come from stdenv
+      # (e.g. on musl)." https://github.com/NixOS/nixpkgs/pull/259964
+    ''
       pushd ../glibc-2*/localedata
       export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
-      mkdir -p $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale
-      ${lib.getBin buildPackages.glibc}/bin/localedef \
+      mkdir -p $NIX_BUILD_TOP/${pkgsBuildBuild.glibc}/lib/locale
+      ${lib.getBin pkgsBuildBuild.glibc}/bin/localedef \
         --alias-file=../intl/locale.alias \
         -i locales/C \
         -f charmaps/UTF-8 \
@@ -114,7 +124,7 @@ in
           else
             "--big-endian"} \
         C.UTF-8
-      cp -r $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale $out/lib
+      cp -r $NIX_BUILD_TOP/${pkgsBuildBuild.glibc}/lib/locale $out/lib
       popd
     '') + ''
 
@@ -144,7 +154,7 @@ in
       ln -sf $out/lib/libpthread.so.0 $out/lib/libpthread.so
       ln -sf $out/lib/librt.so.1 $out/lib/librt.so
       ln -sf $out/lib/libdl.so.2 $out/lib/libdl.so
-      ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
+      test -f $out/lib/libutil.so.1 && ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
       touch $out/lib/libpthread.a
 
       # Put libraries for static linking in a separate output.  Note
@@ -153,6 +163,8 @@ in
       mkdir -p $static/lib
       mv $out/lib/*.a $static/lib
       mv $static/lib/lib*_nonshared.a $out/lib
+      # If libutil.so.1 is missing, libutil.a is required.
+      test -f $out/lib/libutil.so.1 || mv $static/lib/libutil.a $out/lib
       # Some of *.a files are linker scripts where moving broke the paths.
       sed "/^GROUP/s|$out/lib/lib|$static/lib/lib|g" \
         -i "$static"/lib/*.a
@@ -166,8 +178,8 @@ in
 
     passthru =
       (previousAttrs.passthru or {})
-      // lib.optionalAttrs (stdenv.cc.cc?libgcc) {
-        inherit (stdenv.cc.cc) libgcc;
+      // lib.optionalAttrs (libgcc != null) {
+        inherit libgcc;
       };
 
   meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };

@@ -6,8 +6,11 @@
 , fetchPypi
 , glean-parser
 , iso8601
+, lmdb
+, pkg-config
 , pytest-localserver
 , pytestCheckHook
+, python
 , pythonOlder
 , rustc
 , rustPlatform
@@ -18,6 +21,7 @@
 buildPythonPackage rec {
   pname = "glean-sdk";
   version = "52.7.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -34,9 +38,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cargo
+    pkg-config
     rustc
     rustPlatform.cargoSetupHook
     setuptools-rust
+  ];
+
+  buildInputs = [
+    lmdb
   ];
 
   propagatedBuildInputs = [
@@ -56,6 +65,10 @@ buildPythonPackage rec {
     "test_client_activity_api"
     "test_flipping_upload_enabled_respects_order_of_events"
   ];
+
+  postInstallCheck = lib.optionalString stdenv.hostPlatform.isElf ''
+    readelf -a $out/${python.sitePackages}/glean/libglean_ffi.so | grep -F 'Shared library: [liblmdb.so'
+  '';
 
   pythonImportsCheck = [
     "glean"

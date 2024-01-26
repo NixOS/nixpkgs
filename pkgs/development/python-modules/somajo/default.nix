@@ -3,13 +3,14 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, setuptools
 , regex
 }:
 
 buildPythonPackage rec {
   pname = "somajo";
-  version = "2.2.3";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +18,12 @@ buildPythonPackage rec {
     owner = "tsproisl";
     repo = "SoMaJo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EnYw8TSZLXgB4pZaZBgxaO13PpTDx4lGsdGJ+51A6wE=";
+    hash = "sha256-k0sjA6IgFKwS1dCAeCHSLdU4GJZ3uMSQ/my0KQvVx50=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     regex

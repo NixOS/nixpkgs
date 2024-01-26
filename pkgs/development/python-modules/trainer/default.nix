@@ -1,24 +1,22 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
-, pythonAtLeast
 
 , coqpit
 , fsspec
-, torch-bin
-, tensorboardx
+, torch
+, tensorboard
 , protobuf
 , psutil
 
 , pytestCheckHook
 , soundfile
-, torchvision-bin
+, torchvision
 }:
 
 let
   pname = "trainer";
-  version = "0.0.25";
+  version = "0.0.36";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +26,7 @@ buildPythonPackage {
     owner = "coqui-ai";
     repo = "Trainer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XhE3CbcbCZjuUI6dx1gNNpQrxycqCgmOgjkaQ8MtL9E=";
+    hash = "sha256-z6TOzWqE3NytkdG3nUzh9GpFVGQEXFyzSQ8gvdB4wiw=";
   };
 
   postPatch = ''
@@ -41,8 +39,8 @@ buildPythonPackage {
     protobuf
     psutil
     soundfile
-    tensorboardx
-    torch-bin
+    tensorboard
+    torch
   ];
 
   # only one test and that requires training data from the internet
@@ -50,7 +48,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    torchvision-bin
+    torchvision
   ];
 
   pythonImportsCheck = [

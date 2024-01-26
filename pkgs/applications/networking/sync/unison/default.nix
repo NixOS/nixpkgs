@@ -6,30 +6,30 @@
 , copyDesktopItems
 , makeDesktopItem
 , wrapGAppsHook
-, glib
 , gsettings-desktop-schemas
 , zlib
 , enableX11 ? true
 , Cocoa
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
   version = "2.53.2";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-H+70NZZP0cUsxetFcsjWEx2kENsgMdo/41wBwwaX6zg=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ glib wrapGAppsHook ocamlPackages.ocaml ]
-    ++ lib.optional enableX11 copyDesktopItems;
-  buildInputs = [ gsettings-desktop-schemas ncurses zlib ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
+  nativeBuildInputs = [ ocamlPackages.ocaml ]
+    ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook ];
+  buildInputs = [ ncurses zlib ]
+    ++ lib.optionals enableX11 [ gsettings-desktop-schemas ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   preBuild = lib.optionalString enableX11 ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk3}"/lib/ocaml/*/site-lib/lablgtk3)|" src/Makefile.OCaml
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   dontStrip = !ocamlPackages.ocaml.nativeCompilers;
 
   desktopItems = lib.optional enableX11 (makeDesktopItem {
-    name = pname;
+    name = finalAttrs.pname;
     desktopName = "Unison";
     comment = "Bidirectional file synchronizer";
     genericName = "File synchronization tool";
@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
+    mainProgram = "unison";
   };
-}
+})

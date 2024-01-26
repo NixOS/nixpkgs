@@ -1,10 +1,10 @@
 diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
-index b82852e1..c998b21e 100644
+index 79e26235..bdc32c52 100644
 --- a/cloudinit/distros/__init__.py
 +++ b/cloudinit/distros/__init__.py
-@@ -74,6 +74,7 @@ OSFAMILIES = {
+@@ -91,6 +91,7 @@ OSFAMILIES = {
      ],
-     "openEuler": ["openEuler"],
+     "openeuler": ["openeuler"],
      "OpenCloudOS": ["OpenCloudOS", "TencentOS"],
 +    "nixos": ["nixos"],
  }
@@ -12,10 +12,10 @@ index b82852e1..c998b21e 100644
  LOG = logging.getLogger(__name__)
 diff --git a/cloudinit/distros/nixos.py b/cloudinit/distros/nixos.py
 new file mode 100644
-index 00000000..d53d2a61
+index 00000000..67c049b8
 --- /dev/null
 +++ b/cloudinit/distros/nixos.py
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,109 @@
 +# vi: ts=4 expandtab
 +#
 +#    Copyright (C) 2012 Canonical Ltd.
@@ -38,15 +38,16 @@ index 00000000..d53d2a61
 +#    You should have received a copy of the GNU General Public License
 +#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 +
++import logging
 +import os
 +
 +from cloudinit import distros
 +from cloudinit import helpers
-+from cloudinit import log as logging
 +from cloudinit import util
 +from cloudinit import atomic_helper
 +
 +from cloudinit.distros.parsers.hostname import HostnameConf
++from cloudinit.net import dhcp
 +
 +LOG = logging.getLogger(__name__)
 +
@@ -61,6 +62,11 @@ index 00000000..d53d2a61
 +        self.usr_lib_exec = os.path.join(os.path.dirname(__file__),
 +                                         "../../../../../libexec")
 +        self.osfamily = 'nixos'
++        self.dhcp_client_priority = [
++            dhcp.Udhcpc,
++            dhcp.IscDhclient,
++            dhcp.Dhcpcd,
++        ]
 +
 +    def _select_hostname(self, hostname, fqdn):
 +        # Prefer the short hostname over the long
@@ -112,10 +118,10 @@ index 00000000..d53d2a61
 +        raise NotImplementedError()
 +
 +    def package_command(self, command, args=None, pkgs=None):
-+        raise NotImplementedError()
++        pass
 +
 +    def set_timezone(self, tz):
-+        raise NotImplementedError()
++        pass
 +
 +    def update_package_sources(self):
-+        raise NotImplementedError()
++        pass

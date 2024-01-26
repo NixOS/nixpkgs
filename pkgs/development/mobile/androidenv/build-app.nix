@@ -9,7 +9,7 @@
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
 
 let
-  androidSdkFormalArgs = builtins.functionArgs composeAndroidPackages;
+  androidSdkFormalArgs = lib.functionArgs composeAndroidPackages;
   androidArgs = builtins.intersectAttrs androidSdkFormalArgs args;
   androidsdk = (composeAndroidPackages androidArgs).androidsdk;
 

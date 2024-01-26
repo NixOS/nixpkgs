@@ -5,20 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terraform-compliance";
-  version = "1.3.34";
+  version = "1.3.46";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-1TFLpBwkpMMdiJJfVvDXlJg4SXWQ8VV605wMFGU+InQ=";
+    sha256 = "sha256-30aQA+VJY2qarpYGZpgt5ebYFt5UHUHJcuBNgKiGnt0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "IPython==7.16.1" "IPython" \
-      --replace "diskcache==5.1.0" "diskcache>=5.1.0"
+      --replace "diskcache==5.1.0" "diskcache>=5.1.0" \
+      --replace "radish-bdd==0.13.1" "radish-bdd" \
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -33,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     netaddr
     radish-bdd
     semver
+    orjson
   ];
 
   nativeCheckInputs = with python3.pkgs; [
@@ -53,6 +55,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/terraform-compliance/cli";
     changelog = "https://github.com/terraform-compliance/cli/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [ kalbasit kashw2 ];
   };
 }

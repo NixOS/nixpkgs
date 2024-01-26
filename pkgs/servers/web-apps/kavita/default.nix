@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "kavita-frontend";
     inherit (finalAttrs) version src;
 
-    sourceRoot = "source/UI/Web";
+    sourceRoot = "${finalAttrs.src.name}/UI/Web";
 
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
@@ -73,5 +73,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ misterio77 ];
+    mainProgram = "kavita";
   };
 })

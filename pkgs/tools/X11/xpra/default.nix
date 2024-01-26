@@ -16,6 +16,7 @@
 , gobject-introspection
 , gst_all_1
 , gtk3
+, libappindicator
 , libfakeXinerama
 , librsvg
 , libvpx
@@ -46,8 +47,6 @@ let
       ./0002-Constant-DPI.patch
       # https://github.com/Xpra-org/xpra/issues/349
       ./0003-fix-pointer-limits.patch
-      # patch provided by Xpra upstream
-      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
     ];
   });
 
@@ -69,11 +68,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.4.4";
+  version = "4.4.6";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-oPa9ECqCE9+PrcZufsHWYR6EHxTZVFJOMUlK2b0mwLE=";
+    hash = "sha256-BWf3nypfSrYCzpJ0OfBkecoHGbG1lEgu5jLZhfkIejQ=";
   };
 
   patches = [
@@ -120,6 +119,7 @@ in buildPythonApplication rec {
     gdk-pixbuf
     glib
     gtk3
+    libappindicator
     librsvg
     libvpx
     libwebp
@@ -211,6 +211,7 @@ in buildPythonApplication rec {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     description = "Persistent remote applications for X";
+    changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ offline numinit mvnetbiz ];

@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "bayespy";
   version = "0.5.26";
+  format = "setuptools";
 
   # Python 2 not supported and not some old Python 3 because MPL doesn't support
   # them properly.

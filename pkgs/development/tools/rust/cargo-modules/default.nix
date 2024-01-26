@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.8.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hbhj+D/zJDmRtPuEfg6ECvbfi2P7ecoiJASE8UXs9UE=";
+    hash = "sha256-dfeY9YylHF1QHNv7yTNYxUBxzcb276H80WL6JgXR/KY=";
   };
 
-  cargoSha256 = "sha256-ydL2LQVewDmTsMWWAvTXSEp2bkfZdCSBxCIY8+DnABQ=";
+  cargoHash = "sha256-elzLO2YNDsD9FjCW0+2pUWgcJzOvzK+lyZBxrjVXoA8=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/regexident/cargo-modules";
     changelog = "https://github.com/regexident/cargo-modules/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ figsoda rvarago ];
+    maintainers = with maintainers; [ figsoda rvarago matthiasbeyer ];
   };
 }

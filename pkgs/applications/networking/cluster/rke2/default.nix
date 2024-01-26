@@ -1,27 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "rke2";
-  version = "1.27.1+rke2r1";
+  version = "1.29.0+rke2r1";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MPhE4dkFDLMG/Zxn9UqUMmbV95wfNDJU9C5CT8Ap5iA=";
+    hash = "sha256-E59GUcbnbvsGZYn87RGNrGTVUsydKsjL+C5h15q74p0=";
   };
 
-  vendorHash = "sha256-STpM7GxLdEhe7tfa6n6jyUSQsE9D91pCBvw1n7Q9qMc=";
+  vendorHash = "sha256-Og0CqxNnhRN6PdggneGK05uprZ2D7lux/snXcArIm8Q=";
 
-  subPackages = [ "." ];
+  postPatch = ''
+    # Patch the build scripts so they work in the Nix build environment.
+    patchShebangs ./scripts
 
-  ldflags = [ "-s" "-w" "-X github.com/k3s-io/k3s/pkg/version.Version=v${version}" ];
+    # Disable the static build as it breaks.
+    sed -e 's/STATIC_FLAGS=.*/STATIC_FLAGS=/g' -i scripts/build-binary
+  '';
+
+  buildPhase = ''
+    DRONE_TAG="v${version}" ./scripts/build-binary
+  '';
+
+  installPhase = ''
+    install -D ./bin/rke2 $out/bin/rke2
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/rancher/rke2";
     description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution.";
     changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zygot ];
+    maintainers = with maintainers; [ zimbatm zygot ];
+    mainProgram = "rke2";
+    broken = stdenv.isDarwin;
   };
 }

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hblock";
-  version = "3.4.1";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "hectorm";
     repo = "hblock";
     rev = "v${version}";
-    hash = "sha256-yOX/CsWs5HVH9s0KCzZm6PPqlDJHxz46jJB6KKC7Hsg=";
+    hash = "sha256-x9gkPCuGAPMCh9i4gM+9bIY8zVFiWlJ3eTNlhG6zR8Y=";
   };
 
   buildInputs = [ coreutils curl gnugrep gawk ];
@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hectorm/hblock";
     license = licenses.mit;
     maintainers = with maintainers; [ alanpearce ];
+    platforms = platforms.unix;
   };
 }

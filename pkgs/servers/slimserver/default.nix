@@ -1,117 +1,162 @@
-{ lib
+{ faad2
 , fetchFromGitHub
-, makeWrapper
-, perlPackages
 , flac
-, faad2
-, sox
 , lame
+, lib
+, makeWrapper
 , monkeysAudio
+, nixosTests
+, perl538Packages
+, sox
+, stdenv
 , wavpack
+, zlib
+, enableUnfreeFirmware ? false
 }:
 
+let
+  perlPackages = perl538Packages;
+
+  binPath = lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio));
+  libPath = lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ];
+in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "7.9.2";
+  version = "8.3.1";
 
   src = fetchFromGitHub {
     owner = "Logitech";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-P4CSu/ff6i48uWV5gXsJgayZ1S1s0RAqa5O5y3Y0g9Y=";
+    hash = "sha256-yMFOwh/oPiJnUsKWBGvd/GZLjkWocMAUK0r+Hx/SUPo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [
-    perlPackages.perl
-    perlPackages.AnyEvent
-    perlPackages.ArchiveZip
-    perlPackages.AudioScan
-    perlPackages.CarpClan
-    perlPackages.CGI
-    perlPackages.ClassXSAccessor
-    perlPackages.DataDump
-    perlPackages.DataURIEncode
-    perlPackages.DBDSQLite
-    perlPackages.DBI
-    perlPackages.DBIxClass
-    perlPackages.DigestSHA1
-    perlPackages.EV
-    perlPackages.ExporterLite
-    perlPackages.FileBOM
-    perlPackages.FileCopyRecursive
-    perlPackages.FileNext
-    perlPackages.FileReadBackwards
-    perlPackages.FileSlurp
-    perlPackages.FileWhich
-    perlPackages.HTMLParser
-    perlPackages.HTTPCookies
-    perlPackages.HTTPDaemon
-    perlPackages.HTTPMessage
-    perlPackages.ImageScale
-    perlPackages.IOSocketSSL
-    perlPackages.IOString
-    perlPackages.JSONXSVersionOneAndTwo
-    perlPackages.LogLog4perl
-    perlPackages.LWP
-    perlPackages.NetHTTP
-    perlPackages.NetHTTPSNB
-    perlPackages.ProcBackground
-    perlPackages.SubName
-    perlPackages.TemplateToolkit
-    perlPackages.TextUnidecode
-    perlPackages.TieCacheLRU
-    perlPackages.TieCacheLRUExpires
-    perlPackages.TieRegexpHash
-    perlPackages.TimeDate
-    perlPackages.URI
-    perlPackages.URIFind
-    perlPackages.UUIDTiny
-    perlPackages.XMLParser
-    perlPackages.XMLSimple
-    perlPackages.YAMLLibYAML
-  ];
 
+  buildInputs = with perlPackages; [
+    AnyEvent
+    ArchiveZip
+    AsyncUtil
+    AudioScan
+    CarpClan
+    CGI
+    ClassAccessor
+    ClassAccessorChained
+    ClassC3
+    # ClassC3Componentised # Error: DBIx::Class::Row::throw_exception(): DBIx::Class::Relationship::BelongsTo::belongs_to(): Can't infer join condition for track
+    ClassDataInheritable
+    ClassInspector
+    ClassISA
+    ClassMember
+    ClassSingleton
+    ClassVirtual
+    ClassXSAccessor
+    CompressRawZlib
+    CryptOpenSSLRSA
+    DataDump
+    DataPage
+    DataURIEncode
+    DBDSQLite
+    DBI
+    # DBIxClass # https://github.com/Logitech/slimserver/issues/138
+    DigestSHA1
+    EncodeDetect
+    EV
+    ExporterLite
+    FileBOM
+    FileCopyRecursive
+    FileNext
+    FileReadBackwards
+    FileSlurp
+    FileWhich
+    HTMLParser
+    HTTPCookies
+    HTTPDaemon
+    HTTPMessage
+    ImageScale
+    IOAIO
+    IOInterface
+    IOSocketSSL
+    IOString
+    JSONXS
+    JSONXSVersionOneAndTwo
+    # LogLog4perl # Internal error: Root Logger not initialized.
+    LWP
+    LWPProtocolHttps
+    MP3CutGapless
+    NetHTTP
+    NetHTTPSNB
+    PathClass
+    ProcBackground
+    # SQLAbstract # DBI Exception: DBD::SQLite::db prepare_cached failed: no such function: ARRAY
+    SQLAbstractLimit
+    SubName
+    TemplateToolkit
+    TextUnidecode
+    TieCacheLRU
+    TieCacheLRUExpires
+    TieRegexpHash
+    TimeDate
+    URI
+    URIFind
+    UUIDTiny
+    XMLParser
+    XMLSimple
+    YAMLLibYAML
+  ]
+  # ++ (lib.optional stdenv.isDarwin perlPackages.MacFSEvents)
+  ++ (lib.optional stdenv.isLinux perlPackages.LinuxInotify2);
 
   prePatch = ''
-    mkdir CPAN_used
-    # slimserver doesn't work with current DBIx/SQL versions, use bundled copies
-    mv CPAN/DBIx CPAN/SQL CPAN_used
-    rm -rf CPAN
+    # remove vendored binaries
     rm -rf Bin
+
+    # remove most vendored modules, keeping necessary ones
+    mkdir -p CPAN_used/Class/C3/ CPAN_used/SQL
+    rm -r CPAN/SQL/Abstract/Limit.pm
+    cp -rv CPAN/Class/C3/Componentised.pm CPAN_used/Class/C3/
+    cp -rv CPAN/DBIx CPAN_used/
+    cp -rv CPAN/Log CPAN_used/
+    cp -rv CPAN/SQL/* CPAN_used/SQL/
+    rm -r CPAN
+    mv CPAN_used CPAN
+
+    # another set of vendored/modified modules exist in lib, more selectively cleaned for now
+    rm -rf lib/Audio
+
+    ${lib.optionalString (!enableUnfreeFirmware) ''
+      # remove unfree firmware
+      rm -rf Firmware
+    ''}
+
     touch Makefile.PL
-
-    # relax audio scan version constraints
-    substituteInPlace lib/Audio/Scan.pm --replace "0.93" "1.01"
-    substituteInPlace modules.conf --replace "Audio::Scan 0.93 0.95" "Audio::Scan 0.93"
-  '';
-
-  preConfigurePhase = "";
-
-  buildPhase = ''
-    mv lib tmp
-    mkdir -p ${perlPackages.perl.libPrefix}
-    mv CPAN_used/* ${perlPackages.perl.libPrefix}
-    cp -rf tmp/* ${perlPackages.perl.libPrefix}
   '';
 
   doCheck = false;
 
   installPhase = ''
     cp -r . $out
-    wrapProgram $out/slimserver.pl \
-      --prefix PATH : "${lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
+    wrapProgram $out/slimserver.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
+    wrapProgram $out/scanner.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
+    mkdir $out/bin
+    ln -s $out/slimserver.pl $out/bin/slimserver
   '';
 
   outputs = [ "out" ];
 
+  passthru.tests = {
+    inherit (nixosTests) slimserver;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/Logitech/slimserver";
     description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
-    # the firmware is not under a free license!
-    # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
-    license = licenses.unfree;
-    maintainers = [ ];
+    # the firmware is not under a free license, but not included in the default package
+    # https://github.com/Logitech/slimserver/blob/public/8.3/License.txt
+    license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
+    mainProgram = "slimserver";
+    maintainers = with maintainers; [ adamcstephens jecaro ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

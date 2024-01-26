@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysmartapp";
-  version = "0.3.4";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "andrewsayre";
     repo = pname;
     rev = version;
-    hash = "sha256-zYjv7wRxQTS4PnNaY69bw9xE6I4DZMocwUzEICBfwqM=";
+    hash = "sha256-RiRGOO5l5hcHllyDDGLtQHr51JOTZhAa/wK8BfMqmAY=";
   };
 
   propagatedBuildInputs = [

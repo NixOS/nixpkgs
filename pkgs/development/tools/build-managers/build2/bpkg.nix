@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpkg";
-  version = "0.15.0";
+  version = "0.16.0";
 
   outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bpkg-${version}.tar.gz";
-    sha256 = "sha256-3F4Pv8YX++cNa6aKhPM67mrt/5oE1IeoZUSmljHqBfI=";
+    hash = "sha256-sxzVidVL8dpoH82IevcwjcIWj4LQzliGv9zasTYqeok=";
   };
 
   strictDeps = true;

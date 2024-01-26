@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.luis ];
     platforms = platforms.linux;
+    mainProgram = "rmount";
   };
 }

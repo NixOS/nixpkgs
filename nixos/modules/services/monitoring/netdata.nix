@@ -12,6 +12,7 @@ let
     ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
     ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
+    ln -s /run/wrappers/bin/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
   '';
 
   plugins = [
@@ -51,12 +52,7 @@ in {
     services.netdata = {
       enable = mkEnableOption (lib.mdDoc "netdata");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.netdata;
-        defaultText = literalExpression "pkgs.netdata";
-        description = lib.mdDoc "Netdata package to use.";
-      };
+      package = mkPackageOption pkgs "netdata" { };
 
       user = mkOption {
         type = types.str;
@@ -159,6 +155,15 @@ in {
         '';
       };
 
+      claimTokenFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          If set, automatically registers the agent using the given claim token
+          file.
+        '';
+      };
+
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
@@ -193,6 +198,7 @@ in {
         }
       ];
 
+    services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 
@@ -200,11 +206,20 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk iproute2 which procps bash ])
+      path = (with pkgs; [
+          curl
+          gawk
+          iproute2
+          which
+          procps
+          bash
+          util-linux # provides logger command; required for syslog health alarms
+      ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
+        NETDATA_PIPENAME = "/run/netdata/ipc";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
       };
@@ -216,7 +231,7 @@ in {
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
-          while [ "$(${pkgs.netdata}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
+          while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
         '';
 
         TimeoutStopSec = cfg.deadlineBeforeStopSec;
@@ -244,7 +259,7 @@ in {
         # Capabilities
         CapabilityBoundingSet = [
           "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
-          "CAP_DAC_READ_SEARCH"   # is required for apps plugin
+          "CAP_DAC_READ_SEARCH"   # is required for apps and systemd-journal plugin
           "CAP_FOWNER"            # is required for freeipmi plugin
           "CAP_SETPCAP"           # is required for apps, perf and slabinfo plugins
           "CAP_SYS_ADMIN"         # is required for perf plugin
@@ -253,6 +268,7 @@ in {
           "CAP_NET_RAW"           # is required for fping app
           "CAP_SYS_CHROOT"        # is required for cgroups plugin
           "CAP_SETUID"            # is required for cgroups and cgroups-network plugins
+          "CAP_SYSLOG"            # is required for systemd-journal plugin
         ];
         # Sandboxing
         ProtectSystem = "full";
@@ -260,7 +276,25 @@ in {
         PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
-      };
+      } // (lib.optionalAttrs (cfg.claimTokenFile != null) {
+        LoadCredential = [
+          "netdata_claim_token:${cfg.claimTokenFile}"
+        ];
+
+        ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
+          set -euo pipefail
+
+          if [[ -f /var/lib/netdata/cloud.d/claimed_id ]]; then
+            # Already registered
+            exit
+          fi
+
+          exec ${cfg.package}/bin/netdata-claim.sh \
+            -token="$(< "$CREDENTIALS_DIRECTORY/netdata_claim_token")" \
+            -url=https://app.netdata.cloud \
+            -daemon-not-running
+        '';
+      });
     };
 
     systemd.enableCgroupAccounting = true;
@@ -285,6 +319,14 @@ in {
       "perf.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/perf.plugin.org";
         capabilities = "cap_sys_admin+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+
+      "systemd-journal.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/systemd-journal.plugin.org";
+        capabilities = "cap_dac_read_search,cap_syslog+ep";
         owner = cfg.user;
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";

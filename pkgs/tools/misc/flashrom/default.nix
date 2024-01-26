@@ -1,5 +1,4 @@
 { fetchurl
-, fetchpatch
 , stdenv
 , installShellFiles
 , lib
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ libftdi1 libusb1 ]
-    ++ lib.optional (!stdenv.isDarwin) [ pciutils ]
+    ++ lib.optionals (!stdenv.isDarwin) [ pciutils ]
     ++ lib.optional jlinkSupport libjaylink;
 
   postPatch = ''
@@ -44,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz felixsinger ];
     platforms = platforms.all;
+    mainProgram = "flashrom";
   };
 }

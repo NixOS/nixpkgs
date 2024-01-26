@@ -4,69 +4,102 @@
 , buildPythonPackage
 , python
 , srht
-, pygit2
 , scmsrht
+, pygit2
+, minio
+, pythonOlder
 , unzip
+, pip
+, setuptools
 }:
 let
-  version = "0.78.20";
+  version = "0.84.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-rZsTtHobsgRVmMOjPa1fiKrPsNyFu/gOsmO0cTl5MqQ=";
+    sha256 = "sha256-sAkTsQlWtNDQ5vAhA2EeOvuJcj9A6AG8pgDyIKtr65s=";
   };
 
   gitApi = buildGoModule ({
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
+    vendorHash = "sha256-LAYp0zgosZnFEbtxzjuTH9++0lbxhACr705HqXJz3D0=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   gitDispatch = buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatch";
     modRoot = "gitsrht-dispatch";
-    vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
+    vendorHash = "sha256-EDvSZ3/g0xDSohrsAIpNhk+F0yy8tbnTW/3tURTonMc=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-dispatch/main.go \
+        --replace /var/log/gitsrht-dispatch /var/log/sourcehut/gitsrht-dispatch
+    '';
   };
 
   gitKeys = buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
     modRoot = "gitsrht-keys";
-    vendorSha256 = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
+    vendorHash = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-keys/main.go \
+        --replace /var/log/gitsrht-keys /var/log/sourcehut/gitsrht-keys
+    '';
   };
 
   gitShell = buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
     modRoot = "gitsrht-shell";
-    vendorSha256 = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
+    vendorHash = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-shell/main.go \
+        --replace /var/log/gitsrht-shell /var/log/sourcehut/gitsrht-shell
+    '';
   };
 
   gitUpdateHook = buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
     modRoot = "gitsrht-update-hook";
-    vendorSha256 = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
+    vendorHash = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
+
+    postPatch = ''
+      substituteInPlace gitsrht-update-hook/main.go \
+        --replace /var/log/gitsrht-update-hook /var/log/sourcehut/gitsrht-update-hook
+    '';
   };
 
 in
 buildPythonPackage rec {
   inherit src version;
   pname = "gitsrht";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
   '';
 
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     srht
-    pygit2
     scmsrht
+    pygit2
+    minio
   ];
 
   preBuild = ''

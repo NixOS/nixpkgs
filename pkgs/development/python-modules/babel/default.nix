@@ -1,27 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPyPy
 , pythonAtLeast
 , pythonOlder
+
+# build-system
+, setuptools
 
 # tests
 , freezegun
 , pytestCheckHook
 , pytz
+, tzdata
 }:
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.12.1";
-  format = "setuptools";
+  version = "2.14.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Babel";
     inherit version;
-    hash = "sha256-zC2ZmZzQHURCCuclohyeNxGzqtx5dtYUf2IthYGWNFU=";
+    hash = "sha256-aRmGfbA2OYuiHrXHoPayirjLw656c6ROvjSudKTn02M=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
     pytz
@@ -31,11 +40,12 @@ buildPythonPackage rec {
   doCheck = pythonAtLeast "3.9";
 
   nativeCheckInputs = [
-    # via setup.py
     freezegun
     pytestCheckHook
-    # via tox.ini
+    # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz
+  ] ++ lib.optionals isPyPy [
+    tzdata
   ];
 
   disabledTests = [
@@ -49,6 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
     description = "Collection of internationalizing tools";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

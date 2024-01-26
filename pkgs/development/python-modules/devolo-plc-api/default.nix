@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , httpx
 , protobuf
 , pytest-asyncio
@@ -9,13 +8,15 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, segno
 , setuptools-scm
+, syrupy
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "devolo-plc-api";
-  version = "1.3.0";
+  version = "1.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,10 +25,13 @@ buildPythonPackage rec {
     owner = "2Fake";
     repo = "devolo_plc_api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ika0mypHo7a8GCa2eNhOLIhMZ2ASwJOxV4mmAzvJm0E=";
+    hash = "sha256-EP99AswHmLO+8ZQAPjJyw/P9QqfDawy3AqyJR870Qms=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "protobuf>=4.22.0" "protobuf"
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
@@ -36,14 +40,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     httpx
     protobuf
+    segno
     zeroconf
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpx
     pytest-mock
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [

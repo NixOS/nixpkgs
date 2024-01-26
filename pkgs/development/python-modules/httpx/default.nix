@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, anyio
 , brotli
 , brotlicffi
 , buildPythonPackage
@@ -11,12 +12,12 @@
 , hatch-fancy-pypi-readme
 , hatchling
 , httpcore
+, idna
 , isPyPy
 , multipart
 , pygments
 , python
 , pythonOlder
-, rfc3986
 , rich
 , sniffio
 , socksio
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.23.3";
+  version = "0.25.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZLRzkyoFbAY2Xs1ORWBqvc2gpKovg9wRs/RtAryOcVg=";
+    hash = "sha256-rGtIrs4dffs7Ndtjb400q7JrZh+HG9k0uwHw9pRlC5s=";
   };
 
   nativeBuildInputs = [
@@ -47,9 +48,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    anyio
     certifi
     httpcore
-    rfc3986
+    idna
     sniffio
   ];
 
@@ -83,14 +85,7 @@ buildPythonPackage rec {
     pytest-trio
     trustme
     uvicorn
-  ] ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.brotli
-    ++ passthru.optional-dependencies.socks;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
-  '';
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
@@ -125,6 +120,6 @@ buildPythonPackage rec {
     description = "The next generation HTTP client";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

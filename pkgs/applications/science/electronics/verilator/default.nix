@@ -1,24 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, perl, flex, bison, python3, autoconf
-, which, cmake, help2man
-, makeWrapper, glibcLocales
-}:
+{ lib, stdenv, fetchFromGitHub, perl, flex, bison, python3, autoconf,
+  which, cmake, ccache, help2man, makeWrapper, glibcLocales,
+  systemc, git, numactl }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.010";
+  version = "5.020";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NaWatK4sAc+MJolbQs4TDaD9TvY6VAj/KVZBkIq++sQ=";
+    hash = "sha256-7kxH/RPM+fjDuybwJgTYm0X6wpaqesGfu57plrExd8c=";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ perl ];
-  nativeBuildInputs = [ makeWrapper flex bison python3 autoconf help2man ];
-  nativeCheckInputs = [ which ];
+  buildInputs = [ perl python3 systemc ];  # ccache
+  nativeBuildInputs = [ makeWrapper flex bison autoconf help2man git ];
+  nativeCheckInputs = [ which numactl ];  # cmake
 
   doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
@@ -26,8 +24,12 @@ stdenv.mkDerivation rec {
   preConfigure = "autoconf";
 
   postPatch = ''
-    patchShebangs bin/* src/{flexfix,vlcovgen} test_regress/{driver.pl,t/*.pl}
+    patchShebangs bin/* src/* nodist/* docs/bin/* examples/xml_py/* \
+    test_regress/{driver.pl,t/*.{pl,pf}} \
+    ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
   '';
+  # grep '^#!/' -R . | grep -v /nix/store | less
+  # (in nix-shell after patchPhase)
 
   postInstall = lib.optionalString stdenv.isLinux ''
     for x in $(ls $out/bin/verilator*); do
@@ -36,10 +38,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Fast and robust (System)Verilog simulator/compiler";
-    homepage    = "https://www.veripool.org/wiki/verilator";
+    description = "Fast and robust (System)Verilog simulator/compiler and linter";
+    homepage    = "https://www.veripool.org/verilator";
     license     = with licenses; [ lgpl3Only artistic2 ];
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice amiloradovsky ];
   };
 }

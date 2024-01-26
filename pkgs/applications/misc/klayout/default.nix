@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.28.7";
+  version = "0.28.12";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-CA6PNoQtg59Mo7dKIgSVeC4owVuAirJ3mFds1J9IQtI=";
+    hash = "sha256-QvEoXKJ9sH5WIarYPsYEWwoFwA/pZa2etegA+AD8rPo=";
   };
 
   postPatch = ''
@@ -43,6 +43,9 @@ mkDerivation rec {
   postBuild = ''
     mkdir $out/bin
     mv $out/lib/klayout $out/bin/
+
+    install -Dm444 etc/klayout.desktop -t $out/share/applications
+    install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];

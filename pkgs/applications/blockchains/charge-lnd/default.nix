@@ -35,5 +35,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/accumulator/charge-lnd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ mmilata mariaa144 ];
+    mainProgram = "charge-lnd";
   };
 }

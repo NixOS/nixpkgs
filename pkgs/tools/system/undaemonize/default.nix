@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.canndrew ];
     platforms = lib.platforms.linux;
+    mainProgram = "undaemonize";
   };
 }
 

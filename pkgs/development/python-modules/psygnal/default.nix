@@ -6,16 +6,17 @@
 , mypy-extensions
 , numpy
 , pydantic
-, pytest-mypy-plugins
 , pytestCheckHook
 , pythonOlder
+, toolz
 , typing-extensions
 , wrapt
+, attrs
 }:
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.9.0";
+  version = "0.9.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,10 +25,8 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9rYG0XqwFJQojnvM5ygm1RVu9NbeFASns0llOGKaP+4=";
+    hash = "sha256-eDfGWmTKJrkkzRy1I3wl3WYPCxtPHSRzqAoOiO7QQ9Y=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     hatch-vcs
@@ -42,9 +41,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
     pydantic
-    pytest-mypy-plugins
     pytestCheckHook
+    toolz
     wrapt
+    attrs
   ];
 
   pythonImportsCheck = [

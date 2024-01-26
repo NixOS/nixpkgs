@@ -10,22 +10,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "codemov";
-  version = "unstable-2022-10-24";
+  version = "unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "sloganking";
     repo = "codemov";
-    rev = "d51e83246eafef32c3a3f54407fe49eb9801f5ea";
-    hash = "sha256-4Z3XASFlALCnX1guDqhBfvGNZ0V1XSruJvvSm0xr/t4=";
+    rev = "8a4d6e50c21010866ca06f845f30c2aa54c09854";
+    hash = "sha256-nOqh8kXS5mx0AM4NvIcwvC0lAZRHsQwrxI0c+9PeroU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-cyzoMD97ofrbm3BDAtl8pSezcM4B2TVbW9V5J6xRVLc=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -50,5 +44,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/sloganking/codemov";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "codemov";
   };
 }

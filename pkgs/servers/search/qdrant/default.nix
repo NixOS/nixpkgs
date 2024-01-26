@@ -5,43 +5,50 @@
 , stdenv
 , pkg-config
 , openssl
+, rust-jemalloc-sys
 , nix-update-script
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.1.3";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-CGGJLyhhwQvW9AIzA7Fg85CvPbnuyELR+mmhoc4hJtk=";
+    sha256 = "sha256-5c8lQ1CTtYjzrIfHev5aq1FbfctKr5UXylZzzJtyo+o=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quantization-0.1.0" = "sha256-4TY08ScRbL4zVG428BTZu42ocAsPk/8wM+zzI8EFSrs=";
-      "wal-0.1.2" = "sha256-EfCvwgHMfyiId8VjV+yFyNqoIv6fxF8UFcw1s46hF5k=";
+      "quantization-0.1.0" = "sha256-ggVqJiftu0nvyEM0dzsH0JqIc/Z1XILyUSKiJHeuuZs=";
+      "tonic-0.9.2" = "sha256-ZlcDUZy/FhxcgZE7DtYhAubOq8DMSO17T+TCmXar1jE=";
+      "wal-0.1.2" = "sha256-nBGwpphtj+WBwL9TmWk7qXiEqlIWkgh/2V9uProqhMk=";
     };
   };
 
-  prePatch = lib.optionalString stdenv.isAarch64 ''
-    substituteInPlace .cargo/config.toml \
-      --replace "[target.aarch64-unknown-linux-gnu]" "" \
-      --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
-  '';
-
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    openssl
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
   nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+  env = {
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
+  } // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-faligned-allocation";
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   passthru = {
     updateScript = nix-update-script { };

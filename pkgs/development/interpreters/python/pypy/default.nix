@@ -1,9 +1,12 @@
 { lib, stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
+, zlibSupport ? true, zlib
+, bzip2, pkg-config, libffi, libunwind, Security
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, libX11
-, self, gdbm, db, xz
-, python-setup-hook
+, gdbm, db, xz, python-setup-hook
+, optimizationLevel ? "jit", boehmgc
 # For the Python package set
+, hash
+, self
 , packageOverrides ? (self: super: {})
 , pkgsBuildBuild
 , pkgsBuildHost
@@ -12,7 +15,6 @@
 , pkgsTargetTarget
 , sourceVersion
 , pythonVersion
-, hash
 , passthruFun
 , pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
 }:
@@ -59,6 +61,8 @@ in with passthru; stdenv.mkDerivation rec {
     stdenv.cc.libc
   ] ++ lib.optionals zlibSupport [
     zlib
+  ] ++ lib.optionals (lib.any (l: l == optimizationLevel) [ "0" "1" "2" "3"]) [
+    boehmgc
   ] ++ lib.optionals stdenv.isDarwin [
     libunwind Security
   ];
@@ -102,7 +106,7 @@ in with passthru; stdenv.mkDerivation rec {
 
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
-      -Ojit \
+      -O${optimizationLevel} \
       --batch pypy/goal/targetpypystandalone.py
 
     runHook postBuild
@@ -195,10 +199,11 @@ in with passthru; stdenv.mkDerivation rec {
   enableParallelBuilding = true;  # almost no parallelization without STM
 
   meta = with lib; {
-    homepage = "http://pypy.org/";
+    homepage = "https://www.pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    broken = optimizationLevel == "0"; # generates invalid code
     maintainers = with maintainers; [ andersk ];
   };
 }

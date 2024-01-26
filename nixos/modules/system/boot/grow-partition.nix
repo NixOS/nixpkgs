@@ -12,33 +12,32 @@ with lib;
   ];
 
   options = {
-    boot.growPartition = mkEnableOption (lib.mdDoc "grow the root partition on boot");
+    boot.growPartition = mkEnableOption (lib.mdDoc "growing the root partition on boot");
   };
 
   config = mkIf config.boot.growPartition {
+    assertions = [
+      {
+        assertion = !config.boot.initrd.systemd.repart.enable && !config.systemd.repart.enable;
+        message = "systemd-repart already grows the root partition and thus you should not use boot.growPartition";
+      }
+    ];
+    systemd.services.growpart = {
+      wantedBy = [ "-.mount" ];
+      after = [ "-.mount" ];
+      before = [ "systemd-growfs-root.service" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        TimeoutSec = "infinity";
+        # growpart returns 1 if the partition is already grown
+        SuccessExitStatus = "0 1";
+      };
 
-    assertions = [{
-      assertion = !config.boot.initrd.systemd.enable;
-      message = "systemd stage 1 does not support 'boot.growPartition' yet.";
-    }];
-
-    boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.gawk}/bin/gawk
-      copy_bin_and_libs ${pkgs.gnused}/bin/sed
-      copy_bin_and_libs ${pkgs.util-linux}/sbin/sfdisk
-      copy_bin_and_libs ${pkgs.util-linux}/sbin/lsblk
-
-      substitute "${pkgs.cloud-utils.guest}/bin/.growpart-wrapped" "$out/bin/growpart" \
-        --replace "${pkgs.bash}/bin/sh" "/bin/sh" \
-        --replace "awk" "gawk" \
-        --replace "sed" "gnused"
-
-      ln -s sed $out/bin/gnused
-    '';
-
-    boot.initrd.postDeviceCommands = ''
-      rootDevice="${config.fileSystems."/".device}"
-      if waitDevice "$rootDevice"; then
+      script = ''
+        rootDevice="${config.fileSystems."/".device}"
         rootDevice="$(readlink -f "$rootDevice")"
         parentDevice="$rootDevice"
         while [ "''${parentDevice%[0-9]}" != "''${parentDevice}" ]; do
@@ -48,11 +47,8 @@ with lib;
         if [ "''${parentDevice%[0-9]p}" != "''${parentDevice}" ] && [ -b "''${parentDevice%p}" ]; then
           parentDevice="''${parentDevice%p}"
         fi
-        TMPDIR=/run sh $(type -P growpart) "$parentDevice" "$partNum"
-        udevadm settle
-      fi
-    '';
-
+        "${pkgs.cloud-utils.guest}/bin/growpart" "$parentDevice" "$partNum"
+      '';
+    };
   };
-
 }

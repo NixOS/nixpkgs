@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sonarr.tv/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fadenb purcell ];
+    mainProgram = "NzbDrone";
     platforms = lib.platforms.all;
   };
 }

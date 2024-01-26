@@ -4,13 +4,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "4.0.2";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TxfpzKAsU/5ble4VzJ+4pokCiyJsdisjmNwWfxOMKzE=";
+    hash = "sha256-f4wR5OPzWbtSqE+hSW2zD8u3pPl5nPTtGvf2LzOXjI4=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -42,7 +42,6 @@ buildPythonApplication rec {
 
   preFixup = ''
     wrapProgram "$out/bin/thonny" \
-       --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3.pkgs.jedi})
   '';
 
@@ -64,6 +63,7 @@ buildPythonApplication rec {
     homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "thonny";
   };
 }

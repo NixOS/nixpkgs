@@ -97,12 +97,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.hydra_unstable;
-        defaultText = literalExpression "pkgs.hydra_unstable";
-        description = lib.mdDoc "The Hydra package.";
-      };
+      package = mkPackageOption pkgs "hydra_unstable" { };
 
       hydraURL = mkOption {
         type = types.str;
@@ -398,6 +393,7 @@ in
     systemd.services.hydra-evaluator =
       { wantedBy = [ "multi-user.target" ];
         requires = [ "hydra-init.service" ];
+        wants = [ "network-online.target" ];
         after = [ "hydra-init.service" "network.target" "network-online.target" ];
         path = with pkgs; [ hydra-package nettools jq ];
         restartTriggers = [ hydraConf ];

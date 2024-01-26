@@ -1,17 +1,18 @@
 { lib
 , buildPythonPackage
-, rns
 , fetchFromGitHub
 , lxmf
-, urwid
 , pythonOlder
 , qrcode
+, rns
+, setuptools
+, urwid
 }:
 
 buildPythonPackage rec {
   pname = "nomadnet";
-  version = "0.3.5";
-  format = "setuptools";
+  version = "0.4.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,8 +20,12 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "NomadNet";
     rev = "refs/tags/${version}";
-    hash = "sha256-SPQ/3ntdD+EBW2YZJKfg2lornlg1ktnvTd1PNAqNSIg=";
+    hash = "sha256-+w/Earu76mMJFp8ALvaDEkZOGJqlKbO7jfpW/xxvd1o=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     rns

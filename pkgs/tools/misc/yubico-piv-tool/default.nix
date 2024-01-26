@@ -1,38 +1,53 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , pkg-config
 , openssl
 , check
 , pcsclite
 , PCSC
 , gengetopt
+, help2man
 , cmake
+, zlib
 , withApplePCSC ? stdenv.isDarwin
-, gitUpdater
+, nix-update-script
 , testers
-, yubico-piv-tool
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yubico-piv-tool";
-  version = "2.3.1";
+  version = "2.4.2";
 
-  src = fetchurl {
-    url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
-    hash = "sha256-2ona/YthhapjU0Z1P53bKa8pvEq9kt2B832dZWC11k4=";
+  outputs = [ "out" "dev" "man" ];
+
+  src = fetchFromGitHub {
+    owner = "Yubico";
+    repo = "yubico-piv-tool";
+    rev = "refs/tags/yubico-piv-tool-${finalAttrs.version}";
+    hash = "sha256-viTPLg5vakDQEs8ggQro10nNMbQC4CSKEE34d/Ba/V8=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace "-Werror" ""
   '';
 
-  nativeBuildInputs = [ pkg-config cmake gengetopt ];
-  buildInputs = [ openssl check ]
-    ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    gengetopt
+    help2man
+  ];
+
+  buildInputs = [
+    openssl
+    check
+    zlib.dev
+  ]
+  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
-    "-DGENERATE_MAN_PAGES=OFF" # Use the man page generated at release time
+    "-DGENERATE_MAN_PAGES=ON"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_MANDIR=share/man"
@@ -42,13 +57,11 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
 
   passthru = {
-    updateScript = gitUpdater {
-      url = "https://github.com/Yubico/yubico-piv-tool.git";
-      rev-prefix = "yubico-piv-tool-";
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "yubico-piv-tool-([0-9.]+)$" ];
     };
     tests.version = testers.testVersion {
-      inherit version;
-      package = yubico-piv-tool;
+      package = finalAttrs.finalPackage;
       command = "yubico-piv-tool --version";
     };
   };
@@ -70,5 +83,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ viraptor anthonyroussel ];
+    mainProgram = "yubico-piv-tool";
   };
-}
+})

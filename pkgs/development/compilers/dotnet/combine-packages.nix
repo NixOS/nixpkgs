@@ -17,16 +17,11 @@ assert lib.assertMsg ((builtins.length dotnetPackages) > 0)
     paths = dotnetPackages;
     pathsToLink = [ "/host" "/packs" "/sdk" "/sdk-manifests" "/shared" "/templates" ];
     ignoreCollisions = true;
-    nativeBuildInputs = [
-      makeWrapper
-    ];
     postBuild = ''
       cp -R ${cli}/{dotnet,share,nix-support} $out/
 
       mkdir $out/bin
       ln -s $out/dotnet $out/bin/dotnet
-      wrapProgram $out/bin/dotnet \
-        --prefix LD_LIBRARY_PATH : ${cli.icu}/lib
     '';
     passthru = {
       inherit (cli) icu;

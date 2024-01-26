@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     popt
   ];
 
-  sourceRoot = "source/xmlroff/";
+  sourceRoot = "${src.name}/xmlroff";
 
   enableParallelBuilding = true;
 
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "http://xmlroff.org/";
     platforms = platforms.unix;
     license = licenses.bsd3;
+    mainProgram = "xmlroff";
   };
 }

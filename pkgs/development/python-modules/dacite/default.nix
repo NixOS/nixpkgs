@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "dacite";
-  version = "1.8.0";
+  version = "1.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "konradhalas";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-aQwQHFWaXwTaA6GQgDcWT6ivE9YtWtHCTOtxDi503+M=";
+    hash = "sha256-lvObQ+jyBH2s4GOwyDXEAYmG7ZGQN9WDqL8ftNItPCQ=";
   };
 
   postPatch = ''

@@ -9,7 +9,7 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_102
+, spidermonkey_115
 , pango
 , cairo
 , readline
@@ -23,21 +23,22 @@
 , which
 , xvfb-run
 , nixosTests
+, installTests ? true
 }:
 
 let
   testDeps = [
     gtk3 atk pango.out gdk-pixbuf harfbuzz
   ];
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.76.0";
+  version = "1.78.1";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pj8VaWSxNgU+q1HqATEU59fBk7dRjSjAQLawLDyTOm0=";
+    url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fpBRHEKRJ8OerABoxKyaNT335vu8ZG9fGOiWKILBhkE=";
   };
 
   patches = [
@@ -65,7 +66,7 @@ in stdenv.mkDerivation rec {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_102
+    spidermonkey_115
   ];
 
   nativeCheckInputs = [
@@ -107,12 +108,12 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     # TODO: make the glib setup hook handle moving the schemas in other outputs.
-    installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/${pname}-${version}"
+    installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/gjs-${finalAttrs.version}"
     mkdir -p "$installedTestsSchemaDatadir"
     mv "$installedTests/share/glib-2.0" "$installedTestsSchemaDatadir"
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString installTests ''
     wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
       --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
       --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" testDeps}"
@@ -145,4 +146,4 @@ in stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

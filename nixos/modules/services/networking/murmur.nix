@@ -19,8 +19,8 @@ let
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
 
-    ${if cfg.hostName == "" then "" else "host="+cfg.hostName}
-    ${if cfg.password == "" then "" else "serverpassword="+cfg.password}
+    ${optionalString (cfg.hostName != "") "host=${cfg.hostName}"}
+    ${optionalString (cfg.password != "") "serverpassword=${cfg.password}"}
 
     bandwidth=${toString cfg.bandwidth}
     users=${toString cfg.users}
@@ -32,17 +32,17 @@ let
     bonjour=${boolToString cfg.bonjour}
     sendversion=${boolToString cfg.sendVersion}
 
-    ${if cfg.registerName     == "" then "" else "registerName="+cfg.registerName}
-    ${if cfg.registerPassword == "" then "" else "registerPassword="+cfg.registerPassword}
-    ${if cfg.registerUrl      == "" then "" else "registerUrl="+cfg.registerUrl}
-    ${if cfg.registerHostname == "" then "" else "registerHostname="+cfg.registerHostname}
+    ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
+    ${optionalString (cfg.registerPassword == "") "registerPassword=${cfg.registerPassword}"}
+    ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
+    ${optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${boolToString cfg.clientCertRequired}
-    ${if cfg.sslCert == "" then "" else "sslCert="+cfg.sslCert}
-    ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
-    ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
+    ${optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
+    ${optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
+    ${optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
 
-    ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
+    ${optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
     ${cfg.extraConfig}
   '';
@@ -119,12 +119,7 @@ in
         description = lib.mdDoc "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.murmur;
-        defaultText = literalExpression "pkgs.murmur";
-        description = lib.mdDoc "Overridable attribute of the murmur package to use.";
-      };
+      package = mkPackageOption pkgs "murmur" { };
 
       password = mkOption {
         type = types.str;
@@ -313,7 +308,7 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target" ];
+      after       = [ "network.target" ];
       preStart    = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
@@ -355,5 +350,37 @@ in
       '';
       destination = "/share/dbus-1/system.d/murmur.conf";
     })];
+
+    security.apparmor.policies."bin.mumble-server".profile = ''
+      include <tunables/global>
+
+      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+        pix ${cfg.package}/bin/.mumble-server-wrapped,
+
+        r ${config.environment.etc."os-release".source},
+        r ${config.environment.etc."lsb-release".source},
+        owner rwk /var/lib/murmur/murmur.sqlite,
+        owner rw /var/lib/murmur/murmur.sqlite-journal,
+        owner r /var/lib/murmur/,
+        r /run/murmur/murmurd.pid,
+        r /run/murmur/murmurd.ini,
+        r ${configFile},
+      '' + optionalString (cfg.logFile != null) ''
+        rw ${cfg.logFile},
+      '' + optionalString (cfg.sslCert != "") ''
+        r ${cfg.sslCert},
+      '' + optionalString (cfg.sslKey != "") ''
+        r ${cfg.sslKey},
+      '' + optionalString (cfg.sslCa != "") ''
+        r ${cfg.sslCa},
+      '' + optionalString (cfg.dbus != null) ''
+        dbus bus=${cfg.dbus}
+      '' + ''
+      }
+    '';
   };
 }

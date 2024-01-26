@@ -19,15 +19,15 @@
 , webkitgtk
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sonobus";
-  version = "1.6.2";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "sonosaurus";
     repo = "sonobus";
-    rev = version;
-    sha256 = "sha256-/Pb+PYmoCYA6Qcy/tR1Ejyt+rZ3pfJeWV4j7bQWYE58=";
+    rev = finalAttrs.version;
+    hash = "sha256-NOdmHFKrV7lb8XbeG5GdLKYZ0c/vcz3fcqYj9JvE+/Q=";
     fetchSubmodules = true;
   };
 
@@ -56,6 +56,9 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath (finalAttrs.runtimeDependencies)}";
+  dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
+
   postPatch = lib.optionalString (stdenv.isLinux) ''
     # needs special setup on Linux, dunno if it can work on Darwin
     # https://github.com/NixOS/nixpkgs/issues/19098
@@ -80,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})

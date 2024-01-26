@@ -7,23 +7,16 @@
 
 buildGoModule rec {
   pname = "soju";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "soju";
     rev = "v${version}";
-    hash = "sha256-e3yA8gXuLxRzJIQQIjhajIOWVtikd+gNVxbhzfy56b0=";
+    hash = "sha256-nzaYa4h+UZcP6jqFHxVjgQ/F3q9aOeOPgVKFWBy6Fag=";
   };
 
-  vendorHash = "sha256-iT/QMm6RM6kvw69Az+aLTtBuaCX7ELAiYlj5wXAtBd4=";
-
-  subPackages = [
-    "cmd/soju"
-    "cmd/sojuctl"
-    "contrib/migrate-db"
-    "contrib/znc-import"
-  ];
+  vendorHash = "sha256-JLght6bOrtc/VP3tfQboASa68VL2GGBTdK02DOC5EQk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,17 +26,14 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   postBuild = ''
-    make doc/soju.1
+    make doc/soju.1 doc/sojuctl.1
   '';
 
   postInstall = ''
-    installManPage doc/soju.1
+    installManPage doc/soju.1 doc/sojuctl.1
   '';
 
   preCheck = ''
-    # Test all targets.
-    unset subPackages
-
     # Disable a test that requires an additional service.
     rm database/postgres_test.go
   '';

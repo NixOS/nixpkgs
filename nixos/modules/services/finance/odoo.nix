@@ -11,12 +11,7 @@ in
     services.odoo = {
       enable = mkEnableOption (lib.mdDoc "odoo");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.odoo;
-        defaultText = literalExpression "pkgs.odoo";
-        description = lib.mdDoc "Odoo package to use.";
-      };
+      package = mkPackageOption pkgs "odoo" { };
 
       addons = mkOption {
         type = with types; listOf package;
@@ -30,6 +25,12 @@ in
         default = {};
         description = lib.mdDoc ''
           Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
+        '';
+        example = literalExpression ''
+          options = {
+            db_user = "odoo";
+            db_password="odoo";
+          };
         '';
       };
 
@@ -112,11 +113,11 @@ in
     services.postgresql = {
       enable = true;
 
+      ensureDatabases = [ "odoo" ];
       ensureUsers = [{
         name = "odoo";
-        ensurePermissions = { "DATABASE odoo" = "ALL PRIVILEGES"; };
+        ensureDBOwnership = true;
       }];
-      ensureDatabases = [ "odoo" ];
     };
   });
 }

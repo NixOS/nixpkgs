@@ -1,0 +1,200 @@
+From 1e4f1550996334d2a631a5d769e937d29ace47bb Mon Sep 17 00:00:00 2001
+From: Jakub Jelen <jjelen@redhat.com>
+Date: Thu, 9 Feb 2023 16:38:58 +0100
+Subject: [PATCH gnupg] Revert the introduction of the RFC4880bis draft into
+ defaults
+
+This reverts commit 4583f4fe2 (gpg: Merge --rfc4880bis features into
+--gnupg, 2022-10-31).
+---
+ g10/gpg.c    | 35 ++++++++++++++++++++++++++++++++---
+ g10/keygen.c | 30 ++++++++++++++++++------------
+ 2 files changed, 50 insertions(+), 15 deletions(-)
+
+diff --git a/g10/gpg.c b/g10/gpg.c
+index dcab0a11a..796888013 100644
+--- a/g10/gpg.c
++++ b/g10/gpg.c
+@@ -247,6 +247,7 @@ enum cmd_and_opt_values
+     oGnuPG,
+     oRFC2440,
+     oRFC4880,
++    oRFC4880bis,
+     oOpenPGP,
+     oPGP7,
+     oPGP8,
+@@ -636,6 +637,7 @@ static gpgrt_opt_t opts[] = {
+   ARGPARSE_s_n (oGnuPG, "no-pgp8", "@"),
+   ARGPARSE_s_n (oRFC2440, "rfc2440", "@"),
+   ARGPARSE_s_n (oRFC4880, "rfc4880", "@"),
++  ARGPARSE_s_n (oRFC4880bis, "rfc4880bis", "@"),
+   ARGPARSE_s_n (oOpenPGP, "openpgp", N_("use strict OpenPGP behavior")),
+   ARGPARSE_s_n (oPGP7, "pgp6", "@"),
+   ARGPARSE_s_n (oPGP7, "pgp7", "@"),
+@@ -978,7 +980,6 @@ static gpgrt_opt_t opts[] = {
+   ARGPARSE_s_n (oNoop, "no-allow-multiple-messages", "@"),
+   ARGPARSE_s_s (oNoop, "aead-algo", "@"),
+   ARGPARSE_s_s (oNoop, "personal-aead-preferences","@"),
+-  ARGPARSE_s_n (oNoop, "rfc4880bis", "@"),
+   ARGPARSE_s_n (oNoop, "override-compliance-check", "@"),
+ 
+ 
+@@ -2227,7 +2228,7 @@ static struct gnupg_compliance_option compliance_options[] =
+   {
+     { "gnupg",      oGnuPG },
+     { "openpgp",    oOpenPGP },
+-    { "rfc4880bis", oGnuPG },
++    { "rfc4880bis", oRFC4880bis },
+     { "rfc4880",    oRFC4880 },
+     { "rfc2440",    oRFC2440 },
+     { "pgp6",       oPGP7 },
+@@ -2243,8 +2244,28 @@ static struct gnupg_compliance_option compliance_options[] =
+ static void
+ set_compliance_option (enum cmd_and_opt_values option)
+ {
++  opt.flags.rfc4880bis = 0;  /* Clear because it is initially set.  */
++
+   switch (option)
+     {
++    case oRFC4880bis:
++      opt.flags.rfc4880bis = 1;
++      opt.compliance = CO_RFC4880;
++      opt.flags.dsa2 = 1;
++      opt.flags.require_cross_cert = 1;
++      opt.rfc2440_text = 0;
++      opt.allow_non_selfsigned_uid = 1;
++      opt.allow_freeform_uid = 1;
++      opt.escape_from = 1;
++      opt.not_dash_escaped = 0;
++      opt.def_cipher_algo = 0;
++      opt.def_digest_algo = 0;
++      opt.cert_digest_algo = 0;
++      opt.compress_algo = -1;
++      opt.s2k_mode = 3; /* iterated+salted */
++      opt.s2k_digest_algo = DIGEST_ALGO_SHA256;
++      opt.s2k_cipher_algo = CIPHER_ALGO_AES256;
++      break;
+     case oOpenPGP:
+     case oRFC4880:
+       /* This is effectively the same as RFC2440, but with
+@@ -2288,6 +2309,7 @@ set_compliance_option (enum cmd_and_opt_values option)
+     case oPGP8:  opt.compliance = CO_PGP8;  break;
+     case oGnuPG:
+       opt.compliance = CO_GNUPG;
++      opt.flags.rfc4880bis = 1;
+       break;
+ 
+     case oDE_VS:
+@@ -2491,6 +2513,7 @@ main (int argc, char **argv)
+     opt.emit_version = 0;
+     opt.weak_digests = NULL;
+     opt.compliance = CO_GNUPG;
++    opt.flags.rfc4880bis = 1;
+ 
+     /* Check special options given on the command line.  */
+     orig_argc = argc;
+@@ -3033,6 +3056,7 @@ main (int argc, char **argv)
+           case oOpenPGP:
+           case oRFC2440:
+           case oRFC4880:
++          case oRFC4880bis:
+           case oPGP7:
+           case oPGP8:
+           case oGnuPG:
+@@ -3862,6 +3886,11 @@ main (int argc, char **argv)
+     if( may_coredump && !opt.quiet )
+ 	log_info(_("WARNING: program may create a core file!\n"));
+ 
++    if (!opt.flags.rfc4880bis)
++      {
++        opt.mimemode = 0; /* This will use text mode instead.  */
++      }
++
+     if (eyes_only) {
+       if (opt.set_filename)
+ 	  log_info(_("WARNING: %s overrides %s\n"),
+@@ -4078,7 +4107,7 @@ main (int argc, char **argv)
+     /* Check our chosen algorithms against the list of legal
+        algorithms. */
+ 
+-    if(!GNUPG)
++    if(!GNUPG && !opt.flags.rfc4880bis)
+       {
+ 	const char *badalg=NULL;
+ 	preftype_t badtype=PREFTYPE_NONE;
+diff --git a/g10/keygen.c b/g10/keygen.c
+index a2cfe3ccf..2a1dd1f81 100644
+--- a/g10/keygen.c
++++ b/g10/keygen.c
+@@ -404,7 +404,7 @@ keygen_set_std_prefs (const char *string,int personal)
+ 	      strcat(dummy_string,"S7 ");
+ 	    strcat(dummy_string,"S2 "); /* 3DES */
+ 
+-            if (!openpgp_aead_test_algo (AEAD_ALGO_OCB))
++            if (opt.flags.rfc4880bis && !openpgp_aead_test_algo (AEAD_ALGO_OCB))
+ 	      strcat(dummy_string,"A2 ");
+ 
+             if (personal)
+@@ -889,7 +889,7 @@ keygen_upd_std_prefs (PKT_signature *sig, void *opaque)
+   /* Make sure that the MDC feature flag is set if needed.  */
+   add_feature_mdc (sig,mdc_available);
+   add_feature_aead (sig, aead_available);
+-  add_feature_v5 (sig, 1);
++  add_feature_v5 (sig, opt.flags.rfc4880bis);
+   add_keyserver_modify (sig,ks_modify);
+   keygen_add_keyserver_url(sig,NULL);
+ 
+@@ -3382,7 +3382,10 @@ parse_key_parameter_part (ctrl_t ctrl,
+                 }
+             }
+           else if (!ascii_strcasecmp (s, "v5"))
+-            keyversion = 5;
++            {
++              if (opt.flags.rfc4880bis)
++                keyversion = 5;
++            }
+           else if (!ascii_strcasecmp (s, "v4"))
+             keyversion = 4;
+           else
+@@ -3641,7 +3644,7 @@ parse_key_parameter_part (ctrl_t ctrl,
+  *   ecdsa := Use algorithm ECDSA.
+  *   eddsa := Use algorithm EdDSA.
+  *   ecdh  := Use algorithm ECDH.
+- *   v5    := Create version 5 key
++ *   v5    := Create version 5 key (requires option --rfc4880bis)
+  *
+  * There are several defaults and fallbacks depending on the
+  * algorithm.  PART can be used to select which part of STRING is
+@@ -4513,9 +4516,9 @@ read_parameter_file (ctrl_t ctrl, const char *fname )
+ 	    }
+ 	}
+ 
+-        if ((keywords[i].key == pVERSION
+-             || keywords[i].key == pSUBVERSION))
+-          ; /* Ignore version.  */
++        if (!opt.flags.rfc4880bis && (keywords[i].key == pVERSION
++                                      || keywords[i].key == pSUBVERSION))
++          ; /* Ignore version unless --rfc4880bis is active.  */
+         else
+           {
+             r = xmalloc_clear( sizeof *r + strlen( value ) );
+@@ -4610,11 +4613,14 @@ quickgen_set_para (struct para_data_s *para, int for_subkey,
+       para = r;
+     }
+ 
+-  r = xmalloc_clear (sizeof *r + 20);
+-  r->key = for_subkey? pSUBVERSION : pVERSION;
+-  snprintf (r->u.value, 20, "%d", version);
+-  r->next = para;
+-  para = r;
++  if (opt.flags.rfc4880bis)
++    {
++      r = xmalloc_clear (sizeof *r + 20);
++      r->key = for_subkey? pSUBVERSION : pVERSION;
++      snprintf (r->u.value, 20, "%d", version);
++      r->next = para;
++      para = r;
++    }
+ 
+   if (keytime)
+     {

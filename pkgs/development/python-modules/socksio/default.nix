@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , pythonAtLeast
 , flit-core
@@ -18,6 +19,15 @@ buildPythonPackage {
     inherit pname version;
     hash = "sha256-+IvrPaW1w4uYkEad5n0MsPnUlLeLEGyhhF+WwQuRxKw=";
   };
+
+  patches = [
+    # https://github.com/sethmlarson/socksio/pull/61
+    (fetchpatch {
+      name = "unpin-flit-core.patch";
+      url = "https://github.com/sethmlarson/socksio/commit/5c50fd76e7459bb822ff8f712172a78e21b8dd04.patch";
+      hash = "sha256-VVUzFvF2KCXXkCfCU5xu9acT6OLr+PlQQPeVGONtU4A=";
+    })
+  ];
 
   nativeBuildInputs = [
     flit-core

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "acme-client";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.gz";
-    hash = "sha256-lMCDis4CZQF6YwZGzdWD92/S1yT2cEAXXlTAipYYxro=";
+    hash = "sha256-nVB0VIT6mwKwSTY+wDcuxMtpEjtZ9Z0ke0lJ7SzdsJ0=";
   };
 
   nativeBuildInputs = [

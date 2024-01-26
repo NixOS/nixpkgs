@@ -36,14 +36,14 @@ rec {
   # not exposed in all-packages
   resholveBuildTimeOnly = removeKnownVulnerabilities resholve;
   # resholve itself
-  resholve = callPackage ./resholve.nix {
+  resholve = (callPackage ./resholve.nix {
     inherit (source) rSrc version;
     inherit (deps.oil) oildev;
     inherit (deps) configargparse;
     inherit resholve-utils;
     # used only in tests
     resholve = resholveBuildTimeOnly;
-  };
+  });
   # funcs to validate and phrase invocations of resholve
   # and use those invocations to build packages
   resholve-utils = callPackage ./resholve-utils.nix {

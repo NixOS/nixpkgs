@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, cython
+, cython_3
 , fetchFromGitHub
 , libiconv
 , pandas
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.2.1";
+  version = "1.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     owner = "Roche";
     repo = "pyreadstat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7DpmWIRzhB32YZCDpR+rEIAzn5OuZqt7wvS0GnxnT/g=";
+    hash = "sha256-VcPpGRrE/5udNijodO88Lw69JPOm6ZN7BZb4xD34srQ=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
   ];
 
   buildInputs = [

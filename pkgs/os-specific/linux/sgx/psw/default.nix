@@ -5,15 +5,11 @@
 , coreutils
 , curl
 , file
-, glibc
 , makeWrapper
 , nixosTests
 , protobuf
 , python3
 , sgx-sdk
-, shadow
-, systemd
-, util-linux
 , which
 , debug ? false
 }:
@@ -23,16 +19,21 @@ stdenv.mkDerivation rec {
 
   postUnpack =
     let
+      # Fetch the pre-built, Intel-signed Architectural Enclaves (AE). They help
+      # run user application enclaves, verify launch policies, produce remote
+      # attestation quotes, and do platform certification.
       ae.prebuilt = fetchurl {
         url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-        hash = "sha256-JriA9UGYFkAPuCtRizk8RMM1YOYGR/eO9ILnx47A40s=";
+        hash = "sha256-IckW4p1XWkWCDCErXyTtnKYKeAUaCrp5iAMsRBMjLX0=";
       };
+      # Also include the Data Center Attestation Primitives (DCAP) platform
+      # enclaves.
       dcap = rec {
-        version = "1.13";
+        version = "1.18";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-0kD6hxN8qZ/7/H99aboQx7Qg7ewmYPEexoU6nqczAik=";
+          hash = "sha256-9ceys7ozOEienug+9MTZ6dw3nx7VBfxLNiwhZYv4SzY=";
         };
       };
     in
@@ -59,7 +60,10 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
-  hardeningDisable = lib.optionals debug [
+  hardeningDisable = [
+    # causes redefinition of _FORTIFY_SOURCE
+    "fortify3"
+  ] ++ lib.optionals debug [
     "fortify"
   ];
 
@@ -71,9 +75,6 @@ stdenv.mkDerivation rec {
   '';
 
   dontUseCmakeConfigure = true;
-
-  # Randomly fails if enabled
-  enableParallelBuilding = false;
 
   buildFlags = [
     "psw_install_pkg"
@@ -117,7 +118,17 @@ stdenv.mkDerivation rec {
     rm $sgxPswDir/{cleanup.sh,startup.sh}
     rm -r $sgxPswDir/scripts
 
+    # Move aesmd binaries/libraries/enclaves
     mv $sgxPswDir/aesm/ $out/
+
+    # We absolutely MUST avoid stripping or patching these ".signed.so" SGX
+    # enclaves. Stripping would change each enclave measurement (hash of the
+    # binary).
+    #
+    # We're going to temporarily move these enclave libs to another directory
+    # until after stripping/patching in the fixupPhase.
+    mkdir $TMPDIR/enclaves
+    mv $out/aesm/*.signed.so* $TMPDIR/enclaves
 
     mkdir $out/bin
     makeWrapper $out/aesm/aesm_service $out/bin/aesm_service \
@@ -128,10 +139,23 @@ stdenv.mkDerivation rec {
     rmdir $sgxPswDir || (echo "Error: The directory $installDir still contains unhandled files: $(ls -A $installDir)" >&2 && exit 1)
   '';
 
-  # Most—if not all—of those fixups are not relevant for NixOS as we have our own
-  # NixOS module which is based on those files without relying on them. Still, it
-  # is helpful to have properly patched versions for non-NixOS distributions.
+  stripDebugList = [
+    "lib"
+    "bin"
+    # Also strip binaries/libs in the `aesm` directory
+    "aesm"
+  ];
+
   postFixup = ''
+    # Move the SGX enclaves back after everything else has been stripped.
+    mv $TMPDIR/enclaves/*.signed.so* $out/aesm/
+    rmdir $TMPDIR/enclaves
+
+    # Fixup the aesmd systemd service
+    #
+    # Most—if not all—of those fixups are not relevant for NixOS as we have our own
+    # NixOS module which is based on those files without relying on them. Still, it
+    # is helpful to have properly patched versions for non-NixOS distributions.
     echo "Fixing aesmd.service"
     substituteInPlace $out/lib/systemd/system/aesmd.service \
       --replace '@aesm_folder@' \
@@ -148,11 +172,6 @@ stdenv.mkDerivation rec {
                 "${coreutils}/bin/chmod" \
       --replace "/bin/kill" \
                 "${coreutils}/bin/kill"
-
-    echo "Fixing remount-dev-exec.service"
-    substituteInPlace $out/lib/systemd/system/remount-dev-exec.service \
-      --replace '/bin/mount' \
-                "${util-linux}/bin/mount"
   '';
 
   passthru.tests = {

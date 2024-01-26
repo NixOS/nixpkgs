@@ -1,19 +1,21 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
+, acl, attr, boost, btrfs-progs, coreutils, dbus, diffutils, e2fsprogs, libxml2
 , lvm2, pam, util-linux, json_c, nixosTests
 , ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.10.4";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "sha256-Eq9b49zEIb3wMHUw9/jpfYDaMXBY5JHZ2u5RTTtD5I8=";
+    sha256 = "sha256-ELhWVimZWKaHL/PK7HtALKCTmzjcZN2ScDS0yOX3lVs=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook pkg-config
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-ext4"	# requires patched kernel & e2fsprogs
+    "DIFFBIN=${diffutils}/bin/diff"
+    "RMBIN=${coreutils}/bin/rm"
   ];
 
   enableParallelBuilding = true;
@@ -62,7 +66,8 @@ stdenv.mkDerivation rec {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    mainProgram = "snapper";
     maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.linux;
   };
 }

@@ -1,0 +1,34 @@
+diff --git a/src/libdecor-plugin.h b/src/libdecor-plugin.h
+index ba80ce6..59199dd 100644
+--- a/src/libdecor-plugin.h
++++ b/src/libdecor-plugin.h
+@@ -132,12 +132,6 @@ struct libdecor_plugin_interface {
+ struct wl_surface *
+ libdecor_frame_get_wl_surface(struct libdecor_frame *frame);
+ 
+-int
+-libdecor_frame_get_content_width(struct libdecor_frame *frame);
+-
+-int
+-libdecor_frame_get_content_height(struct libdecor_frame *frame);
+-
+ enum libdecor_window_state
+ libdecor_frame_get_window_state(struct libdecor_frame *frame);
+ 
+diff --git a/src/libdecor.h b/src/libdecor.h
+index af67e2f..b5eba41 100644
+--- a/src/libdecor.h
++++ b/src/libdecor.h
+@@ -532,6 +532,12 @@ bool
+ libdecor_configuration_get_window_state(struct libdecor_configuration *configuration,
+ 					enum libdecor_window_state *window_state);
+ 
++int
++libdecor_frame_get_content_width(struct libdecor_frame *frame);
++
++int
++libdecor_frame_get_content_height(struct libdecor_frame *frame);
++
+ #ifdef __cplusplus
+ }
+ #endif

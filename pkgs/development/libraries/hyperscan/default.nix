@@ -1,55 +1,64 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3
-, util-linux, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ragel
+, python3
+, util-linux
+, pkg-config
 , boost
+, pcre
 , withStatic ? false # build only shared libs by default, build static+shared if true
 }:
 
-# NOTICE: pkg-config, pcap and pcre intentionally omitted from build inputs
-#         pcap used only in examples, pkg-config used only to check for pcre
-#         which is fixed 8.41 version requirement (nixpkgs have 8.42+, and
-#         I not see any reason (for now) to backport 8.41.
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyperscan";
-  version = "5.4.0";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = pname;
-    sha256 = "sha256-AJAjaXVnGqIlMk+gb6lpTLUdZr8nxn2XSW4fj6j/cmk=";
-    rev = "v${version}";
+    repo = "hyperscan";
+    hash = "sha256-tzmVc6kJPzkFQLUM1MttQRLpgs0uckbV6rCxEZwk1yk=";
+    rev = "v${finalAttrs.version}";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [ boost ];
   nativeBuildInputs = [
-    cmake ragel python3
-    # Consider simply using busybox for these
-    # Need at least: rev, sed, cut, nm
-    util-linux
+    cmake ragel python3 util-linux pkg-config
   ];
 
   cmakeFlags = [
-    "-DFAT_RUNTIME=ON"
     "-DBUILD_AVX512=ON"
   ]
+  ++ lib.optional (!stdenv.isDarwin) "-DFAT_RUNTIME=ON"
   ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
   ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
 
-  patches = [
-    (fetchpatch {
-      # part of https://github.com/intel/hyperscan/pull/336
-      url = "https://github.com/intel/hyperscan/commit/e2c4010b1fc1272cab816ba543940b3586e68a0c.patch";
-      sha256 = "sha256-doVNwROL6MTcgOW8jBwGTnxe0zvxjawiob/g6AvXLak=";
-    })
-  ];
+  # hyperscan CMake is completely broken for chimera builds when pcre is compiled
+  # the only option to make it build - building from source
+  # In case pcre is built from source, chimera build is turned on by default
+  preConfigure = lib.optional withStatic ''
+    mkdir -p pcre
+    tar xvf ${pcre.src} --strip-components 1 -C pcre
+  '';
 
   postPatch = ''
     sed -i '/examples/d' CMakeLists.txt
     substituteInPlace libhs.pc.in \
       --replace "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
       --replace "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    bin/unit-hyperscan
+    ${lib.optionalString withStatic ''bin/unit-chimera''}
+
+    runHook postCheck
   '';
 
   meta = with lib; {
@@ -69,7 +78,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.hyperscan.io/";
     maintainers = with maintainers; [ avnik ];
-    platforms = [ "x86_64-linux" ]; # can't find nm on darwin ; might build on aarch64 but untested
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = licenses.bsd3;
   };
-}
+})

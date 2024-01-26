@@ -18,7 +18,7 @@ in
 {
   basic = makeTest {
     name = "systemd-boot";
-    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer julienmalka ];
 
     nodes.machine = common;
 
@@ -42,7 +42,7 @@ in
   # Check that specialisations create corresponding boot entries.
   specialisation = makeTest {
     name = "systemd-boot-specialisation";
-    meta.maintainers = with pkgs.lib.maintainers; [ lukegb ];
+    meta.maintainers = with pkgs.lib.maintainers; [ lukegb julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -65,7 +65,7 @@ in
   # Boot without having created an EFI entry--instead using default "/EFI/BOOT/BOOTX64.EFI"
   fallback = makeTest {
     name = "systemd-boot-fallback";
-    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -91,7 +91,7 @@ in
 
   update = makeTest {
     name = "systemd-boot-update";
-    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
+    meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer julienmalka ];
 
     nodes.machine = common;
 
@@ -107,31 +107,28 @@ in
       )
 
       output = machine.succeed("/run/current-system/bin/switch-to-configuration boot")
-      assert "updating systemd-boot from 000.0-1-notnixos to " in output
+      assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
     '';
   };
 
   memtest86 = makeTest {
     name = "systemd-boot-memtest86";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "memtest86-efi"
-      ];
     };
 
     testScript = ''
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
-      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+      machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
   };
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -146,27 +143,24 @@ in
 
   entryFilename = makeTest {
     name = "systemd-boot-entry-filename";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
       boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "memtest86-efi"
-      ];
     };
 
     testScript = ''
       machine.fail("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/loader/entries/apple.conf")
-      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+      machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
   };
 
   extraEntries = makeTest {
     name = "systemd-boot-extra-entries";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -185,7 +179,7 @@ in
 
   extraFiles = makeTest {
     name = "systemd-boot-extra-files";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -202,16 +196,22 @@ in
 
   switch-test = makeTest {
     name = "systemd-boot-switch-test";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
 
     nodes = {
       inherit common;
 
-      machine = { pkgs, ... }: {
+      machine = { pkgs, nodes, ... }: {
         imports = [ common ];
         boot.loader.systemd-boot.extraFiles = {
           "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;
         };
+
+        # These are configs for different nodes, but we'll use them here in `machine`
+        system.extraDependencies = [
+          nodes.common.system.build.toplevel
+          nodes.with_netbootxyz.system.build.toplevel
+        ];
       };
 
       with_netbootxyz = { pkgs, ... }: {
@@ -221,9 +221,9 @@ in
     };
 
     testScript = { nodes, ... }: let
-      originalSystem = nodes.machine.config.system.build.toplevel;
-      baseSystem = nodes.common.config.system.build.toplevel;
-      finalSystem = nodes.with_netbootxyz.config.system.build.toplevel;
+      originalSystem = nodes.machine.system.build.toplevel;
+      baseSystem = nodes.common.system.build.toplevel;
+      finalSystem = nodes.with_netbootxyz.system.build.toplevel;
     in ''
       machine.succeed("test -e /boot/efi/fruits/tomato.efi")
       machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
@@ -251,4 +251,75 @@ in
           machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
     '';
   };
+
+  garbage-collect-entry = makeTest {
+    name = "systemd-boot-garbage-collect-entry";
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+    nodes = {
+      inherit common;
+      machine = { pkgs, nodes, ... }: {
+        imports = [ common ];
+
+        # These are configs for different nodes, but we'll use them here in `machine`
+        system.extraDependencies = [
+          nodes.common.system.build.toplevel
+        ];
+      };
+    };
+
+    testScript = { nodes, ... }:
+      let
+        baseSystem = nodes.common.system.build.toplevel;
+      in
+      ''
+        machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${baseSystem}")
+        machine.succeed("nix-env -p /nix/var/nix/profiles/system --delete-generations 1")
+        machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+        machine.fail("test -e /boot/loader/entries/nixos-generation-1.conf")
+        machine.succeed("test -e /boot/loader/entries/nixos-generation-2.conf")
+      '';
+  };
+
+  # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
+  # itself, systems with such firmware won't boot without this fix
+  uefiLargeFileWorkaround = makeTest {
+    name = "uefi-large-file-workaround";
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+    nodes.machine = { pkgs, ... }: {
+      imports = [common];
+      virtualisation.efi.OVMF = pkgs.OVMF.overrideAttrs (old: {
+        # This patch deliberately breaks the FAT driver in EDK2 to
+        # exhibit (part of) the firmware bug that we are testing
+        # for. Files greater than 10MiB will fail to be read in a
+        # single Read() call, so systemd-boot will fail to load the
+        # initrd without a workaround. The number 10MiB was chosen
+        # because if it were smaller than the kernel size, even the
+        # LoadImage call would fail, which is not the failure mode
+        # we're testing for. It needs to be between the kernel size
+        # and the initrd size.
+        patches = old.patches or [] ++ [ ./systemd-boot-ovmf-broken-fat-driver.patch ];
+      });
+    };
+
+    testScript = ''
+      machine.wait_for_unit("multi-user.target")
+    '';
+  };
+
+  no-bootspec = makeTest
+    {
+      name = "systemd-boot-no-bootspec";
+      meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+      nodes.machine = {
+        imports = [ common ];
+        boot.bootspec.enable = false;
+      };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+      '';
+    };
 }

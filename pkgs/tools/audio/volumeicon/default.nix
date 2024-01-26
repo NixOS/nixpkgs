@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ bobvanderlinden ];
     license = licenses.gpl3;
+    mainProgram = "volumeicon";
   };
 }
 

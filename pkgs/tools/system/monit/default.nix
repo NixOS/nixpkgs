@@ -24,15 +24,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.DiskArbitration
+      darwin.apple_sdk.frameworks.System
     ];
 
   buildInputs = [ zlib.dev libxcrypt ] ++
     lib.optionals useSSL [ openssl ] ++
     lib.optionals usePAM [ pam ];
-
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace configure --replace "-framework System" "-lSystem"
-  '';
 
   configureFlags = [
     (lib.withFeature usePAM "pam")
@@ -53,5 +50,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3;
     maintainers = with lib.maintainers; [ raskin wmertens ryantm ];
     platforms = with lib; platforms.linux ++ platforms.darwin;
+    mainProgram = "monit";
   };
 }

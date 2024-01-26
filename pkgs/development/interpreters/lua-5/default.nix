@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
+{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
 
 
 let
@@ -23,7 +23,7 @@ let
         # - imports lua-packages.nix
         # - adds spliced package sets to the package set
         # - applies overrides from `packageOverrides`
-        ({ lua, overrides, callPackage, makeScopeWithSplicing }: let
+        ({ lua, overrides, callPackage, makeScopeWithSplicing' }: let
           luaPackagesFun = callPackage ../../../top-level/lua-packages.nix {
             lua = self;
           };
@@ -39,18 +39,21 @@ let
             selfHostHost = luaOnHostForHost.pkgs;
             selfTargetTarget = luaOnTargetForTarget.pkgs or {};
           };
-          keep = self: { };
-          extra = spliced0: {};
+
+          aliases = final: prev:
+            lib.optionalAttrs config.allowAliases
+              (import ../../lua-modules/aliases.nix lib final prev);
+
           extensions = lib.composeManyExtensions [
+            aliases
             generatedPackages
             overriddenPackages
             overrides
           ];
-        in makeScopeWithSplicing
-          otherSplices
-          keep
-          extra
-          (lib.extends extensions luaPackagesFun))
+        in makeScopeWithSplicing' {
+          inherit otherSplices;
+          f = lib.extends extensions luaPackagesFun;
+        })
         {
           overrides = packageOverrides;
           lua = self;
@@ -62,7 +65,8 @@ let
           inherit (luaPackages) requiredLuaModules;
         };
         withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
-        pkgs = luaPackages;
+        pkgs = let lp = luaPackages;
+               in lp // { luaPackages = lp.luaPackages // { __attrsFailEvaluation = true; }; };
         interpreter = "${self}/bin/${executable}";
         inherit executable luaversion;
         luaOnBuild = luaOnBuildForHost.override { inherit packageOverrides; self = luaOnBuild; };
@@ -77,29 +81,12 @@ in
 rec {
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
-    version = "5.4.4";
-    hash = "sha256-Fkx4SWU7gK5nvsS3RzuIS/XMjS3KBWU0dewu0nuev2E=";
+    version = "5.4.6";
+    hash = "sha256-fV6huctqoLWco93hxq3LV++DobqOVDLA7NBr9DmzrYg=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 
-    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch
-      ++ [
-        (fetchpatch {
-          name = "CVE-2022-28805.patch";
-          url = "https://github.com/lua/lua/commit/1f3c6f4534c6411313361697d98d1145a1f030fa.patch";
-          sha256 = "sha256-YTwoolSnRNJIHFPVijSO6ZDw35BG5oWYralZ8qOb9y8=";
-          stripLen = 1;
-          extraPrefix = "src/";
-          excludes = [ "src/testes/*" ];
-        })
-        (fetchpatch {
-          name = "CVE-2022-33099.patch";
-          url = "https://github.com/lua/lua/commit/42d40581dd919fb134c07027ca1ce0844c670daf.patch";
-          sha256 = "sha256-qj1Dq1ojVoknALSa67jhgH3G3Kk4GtJP6ROFElVF+D0=";
-          stripLen = 1;
-          extraPrefix = "src/";
-        })
-      ];
+    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
   };
 
   lua5_4_compat = lua5_4.override({

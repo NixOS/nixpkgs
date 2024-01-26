@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.0.910";
+  version = "2.0.917";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     rev = "refs/tags/v${version}";
-    hash = "sha256-24yI6pXSHxhT30N3rJXAMtpCOhhGsBuDrwx9jMO1FW0=";
+    hash = "sha256-Qrh6ruB/e7ZeZ33fD9VmtAX+I6OUL5I/zjRv9oh1bO0=";
   };
 
-  # disable test coverage
+  # remove addops as they add test directory and coverage parameters to pytest
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
+    substituteInPlace setup.cfg --replace 'addopts =' 'no-opts ='
   '';
 
   propagatedBuildInputs = [

@@ -1,36 +1,22 @@
-From c5d32ef5d656b0aa4b2c1fc61c901d40bf2fb96a Mon Sep 17 00:00:00 2001
-From: Alexander Ben Nasrallah <me@abn.sh>
-Date: Mon, 19 Jul 2021 17:24:41 +0200
-Subject: [PATCH] Revert "Fix MacOS wheels platform tag"
-
-This reverts commit d1e89fd3d7391084cdf35b0806cb5d2a4b413654.
----
- cpydist/__init__.py | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
 diff --git a/cpydist/__init__.py b/cpydist/__init__.py
-index 0e7f341..2619d7a 100644
+index 7fdbaf2..3c427da 100644
 --- a/cpydist/__init__.py
 +++ b/cpydist/__init__.py
-@@ -41,7 +41,7 @@ from distutils.command.install import install
- from distutils.command.install_lib import install_lib
- from distutils.core import Command
- from distutils.dir_util import mkpath, remove_tree
--from distutils.sysconfig import get_config_vars, get_python_version
-+from distutils.sysconfig import get_python_version
- from distutils.version import LooseVersion
- from subprocess import check_call, Popen, PIPE
- 
-@@ -57,9 +57,6 @@ version_py = os.path.join("lib", "mysql", "connector", "version.py")
+@@ -38,7 +38,7 @@ import tempfile
+ from glob import glob
+ from pathlib import Path
+ from subprocess import PIPE, Popen, check_call
+-from sysconfig import get_config_vars, get_python_version
++from sysconfig import get_python_version
+
+ from setuptools import Command
+ from setuptools.command.build_ext import build_ext
+@@ -68,8 +68,6 @@ version_py = os.path.join("lib", "mysql", "connector", "version.py")
  with open(version_py, "rb") as fp:
      exec(compile(fp.read(), version_py, "exec"))
- 
+
 -if "MACOSX_DEPLOYMENT_TARGET" in get_config_vars():
 -    get_config_vars()["MACOSX_DEPLOYMENT_TARGET"] = "11.0"
--
- COMMON_USER_OPTIONS = [
-     ("byte-code-only", None,
-      "remove Python .py files; leave byte code .pyc only"),
--- 
-2.31.1
 
+ COMMON_USER_OPTIONS = [
+     (

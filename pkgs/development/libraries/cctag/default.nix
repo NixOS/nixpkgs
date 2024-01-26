@@ -3,7 +3,7 @@
 , fetchFromGitHub
 
 , cmake
-, boost
+, boost179
 , eigen
 , opencv
 , tbb
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost179
     eigen
-    opencv
+    opencv.cxxdev
   ];
 
   # Tests are broken on Darwin (linking issue)

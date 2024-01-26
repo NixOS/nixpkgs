@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 }:
 
@@ -15,15 +16,20 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-nZv1PdR0kGrke2AjcDWjDWBdsw64UpHYFNDFAe/UoJo=";
   };
 
-  pythonRelaxDeps = true;
+  patches = [
+    # https://github.com/thegeeklab/ansible-doctor/pull/541
+    (fetchpatch {
+      name = "poetry-dynamic-versioning-pep517.patch";
+      url = "https://github.com/thegeeklab/ansible-doctor/commit/b77ba9dccaef4b386bd54b128136c948665eb61a.patch";
+      hash = "sha256-XfdTkRk9B857V5DQnxlbwxTb098YwHzKGzNQBTQzWCM=";
+    })
+  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
-  '';
+  pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    poetry-dynamic-versioning
     pythonRelaxDepsHook
   ];
 

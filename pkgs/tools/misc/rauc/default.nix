@@ -1,7 +1,6 @@
 { curl
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , glib
 , json-glib
 , lib
@@ -18,29 +17,22 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.9";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VpHcJUTRZ5aJyfYypjVsYyRNrK0+9ci42mmlZQSkWAk=";
+    sha256 = "sha256-xvuBMOAXnuRYCkripjwfv64BCTLySNxebyHF3sB8EQw=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Patch to install the man page when using meson, remove on package bump
-      url = "https://github.com/rauc/rauc/commit/756c677d031c435070a6900e6778d06961822261.patch";
-      hash = "sha256-QgIUagioRo61PeC0JyKjZtnauFiYP1Fz9wrxGEikBGI=";
-    })
-  ];
   passthru = {
     updateScript = nix-update-script { };
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja glib ];
 
   buildInputs = [ curl dbus glib json-glib openssl util-linux libnl systemd ];
 
@@ -58,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
+    mainProgram = "rauc";
   };
 }

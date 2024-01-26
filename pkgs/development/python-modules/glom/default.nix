@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "23.1.1";
+  version = "23.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t0QjCeAT/rb+qyBhl6v4rsMoNexwnYqSqFFDIvZMDv8=";
+    hash = "sha256-Bq9eNIaqzFk4K6NOU+vqvXqTRdePfby+4m8DuqS4O6w=";
   };
 
   postPatch = ''

@@ -13,9 +13,7 @@ let
 
   envFile = pkgs.writeText "nifi.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
-      if value != null then [
-        "${name}=\"${toString value}\""
-      ] else []
+      lib.optional (value != null) ''${name}="${toString value}"''
     ) env))));
 
   nifiEnv = pkgs.writeShellScriptBin "nifi-env" ''
@@ -165,10 +163,15 @@ in {
       Please do not disable HTTPS mode in production. In this mode, access to the nifi is opened without authentication.
     '';
 
-    systemd.tmpfiles.rules = [
-      "d '/var/lib/nifi/conf' 0750 ${cfg.user} ${cfg.group}"
-      "L+ '/var/lib/nifi/lib' - - - - ${cfg.package}/lib"
-    ];
+    systemd.tmpfiles.settings."10-nifi" = {
+      "/var/lib/nifi/conf".d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      "/var/lib/nifi/lib"."L+" = {
+        argument = "${cfg.package}/lib";
+      };
+    };
 
 
     systemd.services.nifi = {

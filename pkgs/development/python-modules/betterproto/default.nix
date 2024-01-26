@@ -9,31 +9,37 @@
 , jinja2
 , isort
 , python
+, pydantic
 , pytestCheckHook
 , pytest-asyncio
 , pytest-mock
+, typing-extensions
 , tomlkit
 , grpcio-tools
 }:
 
 buildPythonPackage rec {
   pname = "betterproto";
-  version = "2.0.0b5";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "2.0.0b6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
-    rev = "v${version}";
-    hash = "sha256-XyXdpo3Yo4aO1favMWC7i9utz4fNDbKbsnYXJW0b7Gc=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     grpclib
     python-dateutil
+    typing-extensions
   ];
 
   passthru.optional-dependencies.compiler = [
@@ -42,31 +48,45 @@ buildPythonPackage rec {
     isort
   ];
 
-  pythonImportsCheck = [ "betterproto" ];
-
   nativeCheckInputs = [
-    pytestCheckHook
+    grpcio-tools
+    pydantic
     pytest-asyncio
     pytest-mock
+    pytestCheckHook
     tomlkit
-    grpcio-tools
-  ] ++ passthru.optional-dependencies.compiler;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "betterproto"
+  ];
 
   # The tests require the generation of code before execution. This requires
   # the protoc-gen-python_betterproto script from the package to be on PATH.
   preCheck = ''
     export PATH=$PATH:$out/bin
+    patchShebangs src/betterproto/plugin/main.py
     ${python.interpreter} -m tests.generate
   '';
 
+  disabledTestPaths = [
+    # https://github.com/danielgtaylor/python-betterproto/issues/530
+    "tests/inputs/oneof/test_oneof.py"
+  ];
+
+  disabledTests = [
+    "test_pydantic_no_value"
+  ];
+
   meta = with lib; {
-    description = "Clean, modern, Python 3.6+ code generator & library for Protobuf 3 and async gRPC";
+    description = "Code generator & library for Protobuf 3 and async gRPC";
     longDescription = ''
       This project aims to provide an improved experience when using Protobuf /
       gRPC in a modern Python environment by making use of modern language
       features and generating readable, understandable, idiomatic Python code.
     '';
     homepage = "https://github.com/danielgtaylor/python-betterproto";
+    changelog = "https://github.com/danielgtaylor/python-betterproto/blob/v.${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ nikstur ];
   };

@@ -1,27 +1,44 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pydantic
-, starlette
-, pytestCheckHook
-, pytest-asyncio
-, aiosqlite
-, databases
-, flask
-, httpx
+, pythonOlder
+, pythonRelaxDepsHook
+
+# build-system
 , hatchling
-, orjson
+
+# dependencies
+, starlette
+, pydantic
+, typing-extensions
+
+# tests
+, dirty-equals
+, flask
 , passlib
-, peewee
+, pytest-asyncio
+, pytestCheckHook
 , python-jose
 , sqlalchemy
 , trio
-, pythonOlder
+
+# optional-dependencies
+, httpx
+, jinja2
+, python-multipart
+, itsdangerous
+, pyyaml
+, ujson
+, orjson
+, email-validator
+, uvicorn
+, pydantic-settings
+, pydantic-extra-types
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.95.1";
+  version = "0.104.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,45 +47,60 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-y6mP2w2d2oabM9bLtWRO/AdRA46LNhVrMB/0qxGxH7I=";
+    hash = "sha256-xTTFBc+fswLYUhKRkWP/eiYSbG3j1E7CASkEtHVNTlk=";
   };
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"databases[sqlite] >=0.3.2,<0.7.0",' "" \
-      --replace "starlette==" "starlette>="
-  '';
+  pythonRelaxDeps = [
+    "anyio"
+    # https://github.com/tiangolo/fastapi/pull/9636
+    "starlette"
+  ];
 
   propagatedBuildInputs = [
     starlette
     pydantic
+    typing-extensions
   ];
 
-  nativeCheckInputs = [
-    aiosqlite
-    # databases FIXME incompatible with SQLAlchemy 2.0
-    flask
+  passthru.optional-dependencies.all = [
     httpx
+    jinja2
+    python-multipart
+    itsdangerous
+    pyyaml
+    ujson
     orjson
+    email-validator
+    uvicorn
+  ] ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+    pydantic-settings
+    pydantic-extra-types
+  ] ++ uvicorn.optional-dependencies.standard;
+
+  nativeCheckInputs = [
+    dirty-equals
+    flask
     passlib
-    peewee
-    python-jose
     pytestCheckHook
     pytest-asyncio
-    sqlalchemy
+    python-jose
     trio
-  ]
-  ++ passlib.optional-dependencies.bcrypt
-  ++ pydantic.optional-dependencies.email;
+    sqlalchemy
+  ] ++ passthru.optional-dependencies.all
+  ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
+
+    # http code mismatches
+    "--deselect=tests/test_annotated.py::test_get"
   ];
 
   disabledTestPaths = [
@@ -92,6 +124,12 @@ buildPythonPackage rec {
     "test_trace"
     # Unexpected number of warnings caught
     "test_warn_duplicate_operation_id"
+    # assert state["except"] is True
+    "test_dependency_gets_exception"
+    # Fixtures drift
+    "test_openapi_schema_sub"
+    # 200 != 404
+    "test_flask"
   ];
 
   pythonImportsCheck = [

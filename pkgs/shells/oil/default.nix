@@ -7,18 +7,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.15.0";
+  version = "0.19.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    hash = "sha256-1oYP/sRhYG2oJYY80WOxqSXwqyUMbjIZdznBHcnGMxg=";
+    hash = "sha256-iCoEFudFqxjYZerhOe7u6bPzN5EUOpwSpWCbTzUmF8U=";
   };
 
   postPatch = ''
     patchShebangs build
-    # TODO: workaround for https://github.com/oilshell/oil/issues/1467
-    #       check for removability on updates :)
-    substituteInPlace configure --replace "echo '#define HAVE_READLINE 1'" "echo '#define HAVE_READLINE 1' && return 0"
   '';
 
   preInstall = ''
@@ -27,6 +24,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   buildInputs = lib.optional withReadline readline;
+  # As of 0.19.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
+  # whereas running it outside of Nix with clang version 15.0.0 generates just a warning. The shell seems to
+  # work just fine though, so we disable the error here.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
   configureFlags = [
     "--datarootdir=${placeholder "out"}"
   ] ++ lib.optionals withReadline [

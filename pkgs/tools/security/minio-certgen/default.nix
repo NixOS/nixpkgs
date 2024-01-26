@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-qi+SeNLW/jE2dGar4Lf16TKRT3ZTmWB/j8EsnoyrdxI=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "A simple Minio tool to generate self-signed certificates, and provides SAN certificates with DNS and IP entries";

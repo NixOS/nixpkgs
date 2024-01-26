@@ -2,6 +2,7 @@
 , fetchurl
 , autoPatchelfHook
 , makeWrapper
+, undmg
 
 , alsa-lib
 , curl
@@ -14,41 +15,49 @@
 , xdotool
 , which
 
-, jackSupport ? true
+, jackSupport ? stdenv.isLinux
 , jackLibrary
-, pulseaudioSupport ? config.pulseaudio or true
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 }:
 
 let
-  url_for_platform = version: arch: "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${arch}.tar.xz";
+  url_for_platform = version: arch: if stdenv.isDarwin
+    then "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_universal.dmg"
+    else "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${arch}.tar.xz";
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.79";
+  version = "7.08";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
-    hash = {
-      x86_64-linux = "sha256-Bpsc09y5R/zyVXiDAqRF6n09qKOrBTLjk84z+noeko0=";
-      aarch64-linux = "sha256-jbyXXeVtFmt7xoIWd4YKFu4AUM6W9LzeIiGoGyaO2lU=";
+    hash = if stdenv.isDarwin then "sha256-PgYAwSSRwew+QLx6/Gs+J1v3iZ4U22bn6V8XWZk8Pz0=" else {
+      x86_64-linux = "sha256-lya/B9k9uWrvRbMnWRT0YDV9o+DpmjPGynBVPFij3rs=";
+      aarch64-linux = "sha256-0ePUvVrArUdg0t+CQK37yXA4UlHlMj2Mafe0dTyz5JU=";
     }.${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
     makeWrapper
-    xdg-utils # Required for desktop integration
+  ] ++ lib.optionals stdenv.isLinux [
     which
+    autoPatchelfHook
+    xdg-utils # Required for desktop integration
+  ] ++ lib.optionals stdenv.isDarwin [
+    undmg
   ];
+
+  sourceRoot = lib.optionalString stdenv.isDarwin "Reaper.app";
 
   buildInputs = [
-    alsa-lib
     stdenv.cc.cc.lib # reaper and libSwell need libstdc++.so.6
+  ] ++ lib.optionals stdenv.isLinux [
     gtk3
+    alsa-lib
   ];
 
-  runtimeDependencies = [
+  runtimeDependencies = lib.optionals stdenv.isLinux [
     gtk3 # libSwell needs libgdk-3.so.0
   ]
   ++ lib.optional jackSupport jackLibrary
@@ -56,7 +65,13 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = ''
+  installPhase = if stdenv.isDarwin then ''
+    runHook preInstall
+    mkdir -p "$out/Applications/Reaper.app"
+    cp -r * "$out/Applications/Reaper.app/"
+    makeWrapper "$out/Applications/Reaper.app/Contents/MacOS/REAPER" "$out/bin/reaper"
+    runHook postInstall
+  '' else ''
     runHook preInstall
 
     HOME="$out/share" XDG_DATA_HOME="$out/share" ./install-reaper.sh \
@@ -89,7 +104,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.reaper.fm/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer viraptor ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [ ilian orivej uniquepointer viraptor ];
   };
 }

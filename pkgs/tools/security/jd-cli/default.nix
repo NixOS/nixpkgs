@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, jre, makeWrapper, maven }:
+{ lib, fetchFromGitHub, jre, makeWrapper, maven }:
 
-let
+maven.buildMavenPackage rec {
   pname = "jd-cli";
   version = "1.2.1";
 
@@ -11,38 +11,9 @@ let
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
 
-  deps = stdenv.mkDerivation {
-    name = "${pname}-${version}-deps";
-    inherit src;
+  mvnHash = "sha256-yqMAEjaNHxm/c/cbApiMjkN7V6Gx/crs1LPbD0k0cgk=";
 
-    nativeBuildInputs = [ maven ];
-    buildPhase = ''
-      mvn package -Dmaven.repo.local=$out
-    '';
-
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''
-      find $out -type f \
-        -name \*.lastUpdated -or \
-        -name resolver-status.properties -or \
-        -name _remote.repositories \
-        -delete
-    '';
-
-    dontFixup = true;
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-5d3ZLuzoEkPjh01uL/BuhJ6kevLdsm1P4PMLkEWaVUM=";
-  };
-
-in stdenv.mkDerivation rec {
-  inherit pname version src;
-
-  nativeBuildInputs = [ maven makeWrapper ];
-
-  buildPhase = ''
-    mvn --offline -Dmaven.repo.local=${deps} package;
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/jd-cli
@@ -56,7 +27,6 @@ in stdenv.mkDerivation rec {
     description = "Simple command line wrapper around JD Core Java Decompiler project";
     homepage = "https://github.com/intoolswetrust/jd-cli";
     license = licenses.gpl3;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ majiir ];
   };
 }

@@ -1,22 +1,24 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchzip }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "junicode";
-  version = "1.003";
+  version = "2.203";
 
-  src = fetchFromGitHub {
-    owner = "psb1558";
-    repo = "Junicode-font";
-    rev = "55d816d91a5e19795d9b66edec478379ee2b9ddb";
-    hash = "sha256-eTiMgI8prnpR4H6sqKRaB3Gcnt4C5QWZalRajWW49G4=";
+  src = fetchzip {
+    url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
+    hash = "sha256-RG12veiZXqjfK2gONmauhGReuLEkqxbQ4h4PEwaih/U=";
   };
+
+  outputs = [ "out" "doc" ];
 
   installPhase = ''
     runHook preInstall
 
-    local out_ttf=$out/share/fonts/junicode-ttf
-    mkdir -p $out_ttf
-    cp legacy/*.ttf $out_ttf
+    install -Dm 444 -t $out/share/fonts/truetype TTF/*.ttf VAR/*.ttf
+    install -Dm 444 -t $out/share/fonts/opentype OTF/*.otf
+    install -Dm 444 -t $out/share/fonts/woff2 WOFF2/*.woff2
+
+    install -Dm 444 -t $doc/share/doc/${pname}-${version} docs/*.pdf
 
     runHook postInstall
   '';

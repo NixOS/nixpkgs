@@ -8,18 +8,18 @@
 , qt5
 , CoreServices
 , libiconv
-, withSqlite ? true, sqlite
+, sqlite
 }:
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.9.6";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-SqboPBqK7gDVTTjGgCUB9oIGBZR55EA7x65a0wumiKw=";
+    sha256 = "sha256-FPI5ICdn9Tne/g9SP6jAQS813AAyoDNooDR/Hyvq6R4=";
   };
 
   nativeBuildInputs = [
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [ libiconv ]
-    ++ lib.optionals withSqlite [ sqlite ]
+  buildInputs = [ libiconv sqlite ]
     ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  cmakeFlags = [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ]
-    ++ lib.optional withSqlite "-Duse_sqlite3=ON"
-    ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+  cmakeFlags = [
+    "-DICONV_INCLUDE_DIR=${libiconv}/include"
+    "-Duse_sys_sqlite3=ON"
+  ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";

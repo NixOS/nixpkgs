@@ -7,23 +7,24 @@
 , expect
 }:
 let
-  inherit (dotnetCorePackages) sdk_6_0 runtime_6_0;
+  inherit (dotnetCorePackages) sdk_8_0 runtime_6_0;
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.39.6";
+  version = "1.39.11";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "6KCHZ5I5OkDaensqHO//owI/nrQkOoF60f/n3YV7jaE=";
+    hash = "sha256-b7LC3NJyw0ek3y6D3p4bKVH4Od2gXmW5/8fCCY9n3iE=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
   nugetDeps = ./deps.nix;
 
-  useAppHost = false;
+  dotnet-sdk = sdk_8_0;
+  dotnet-runtime = sdk_8_0;
 
   dotnetInstallFlags = [ "--framework net6.0" ];
   dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
@@ -39,8 +40,8 @@ let finalPackage = buildDotnetModule rec {
 
   postPatch = ''
     # Relax the version requirement
-    substituteInPlace global.json \
-      --replace '7.0.100-rc.1.22431.12' '${sdk_6_0.version}'
+    rm global.json
+
     # Patch the project files so we can compile them properly
     for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
       substituteInPlace $project \
@@ -48,24 +49,8 @@ let finalPackage = buildDotnetModule rec {
     done
   '';
 
-  dontDotnetFixup = true; # we'll fix it ourselves
-  preFixup = ''
-    # We create a wrapper that will run the OmniSharp dll using the `dotnet`
-    # executable from PATH. Doing it this way allows it to run using newer SDK
-    # versions than it was build with, which allows it to properly find those SDK
-    # versions - OmniSharp only finds SDKs with the same version or newer as
-    # itself. We still provide a fallback, in case no `dotnet` is provided in
-    # PATH
-    mkdir -p "$out/bin"
-
-    cat << EOF > "$out/bin/OmniSharp"
-    #!${stdenv.shell}
-    export PATH="\''${PATH}:${sdk_6_0}/bin"
-    dotnet "$out/lib/omnisharp-roslyn/OmniSharp.dll" "\$@"
-    EOF
-
-    chmod +x "$out/bin/OmniSharp"
-  '';
+  useDotnetFromEnv = true;
+  executables = [ "OmniSharp" ];
 
   passthru.tests = let
     with-sdk = sdk: runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"
@@ -77,7 +62,7 @@ let finalPackage = buildDotnetModule rec {
           send_error "timeout!\n"
           exit 1
         }
-        expect ".NET Core SDK ${if sdk ? version then sdk.version else sdk_6_0.version}"
+        expect ".NET Core SDK ${if sdk ? version then sdk.version else sdk_8_0.version}"
         expect "{\"Event\":\"started\","
         send \x03
         expect eof
@@ -88,8 +73,9 @@ let finalPackage = buildDotnetModule rec {
     '';
   in {
     # Make sure we can run OmniSharp with any supported SDK version, as well as without
-    with-net6-sdk = with-sdk sdk_6_0;
+    with-net6-sdk = with-sdk dotnetCorePackages.sdk_6_0;
     with-net7-sdk = with-sdk dotnetCorePackages.sdk_7_0;
+    with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
     no-sdk = with-sdk null;
   };
 

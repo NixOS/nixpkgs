@@ -10,13 +10,13 @@
 , texinfo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librep";
   version = "0.92.7";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/${pname}/${pname}_${version}.tar.xz";
-    sha256 = "1bmcjl1x1rdh514q9z3hzyjmjmwwwkziipjpjsl301bwmiwrd8a8";
+    url = "https://download.tuxfamily.org/librep/librep_${finalAttrs.version}.tar.xz";
+    hash = "sha256-SKGWeax8BTCollfeGP/knFdZpf9w/IRJKLDl0AOVrK4=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ];
+
   buildInputs = [
     gdbm
     gmp
@@ -31,12 +32,14 @@ stdenv.mkDerivation rec {
     readline
   ];
 
+  strictDeps = true;
+
   # ensure libsystem/ctype functions don't get duplicated when using clang
   configureFlags = lib.optionals stdenv.isDarwin [ "CFLAGS=-std=gnu89" ];
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib;{
+  meta = {
     homepage = "http://sawfish.tuxfamily.org/";
     description = "Fast, lightweight, and versatile Lisp environment";
     longDescription = ''
@@ -44,9 +47,9 @@ stdenv.mkDerivation rec {
       compiler, and a virtual machine. It can serve as an application extension
       language but is also suitable for standalone scripts.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
 # TODO: investigate fetchFromGithub

@@ -1,38 +1,36 @@
 { lib
 , stdenv
-, python3Packages
+, fetchFromGitHub
 , nix-update-script
 , pyrosimple
+, python3
 , testers
-, fetchPypi
-, buildPythonPackage
-, bencode-py
-, apscheduler
-, jinja2
-, python-daemon
-, importlib-resources
-, parsimonious
-, prometheus-client
-, prompt-toolkit
-, requests
-, shtab
-, inotify
 , withInotify ? stdenv.isLinux
-, python-box
-, tomli
-, tomli-w
 }:
 
-let
+python3.pkgs.buildPythonApplication rec {
   pname = "pyrosimple";
-  version = "2.7.0";
+  version = "2.12.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SMqzvTbWFHwnbMQ+6K0m1v+PybceQK5EHEuN8FB6SaU=";
+  src = fetchFromGitHub {
+    owner = "kannibalox";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ppSQknpRoxq35t7lPbqz7MPJzy98yq/GgSchPOx4VT4=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "prometheus-client"
+    "python-daemon"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     bencode-py
     apscheduler
     jinja2
@@ -44,12 +42,14 @@ let
     requests
     shtab
     python-box
-    tomli
     tomli-w
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ] ++ lib.optional withInotify inotify;
 
-in buildPythonPackage {
-  inherit pname version src propagatedBuildInputs;
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -59,14 +59,11 @@ in buildPythonPackage {
     };
   };
 
-  meta = let inherit (lib) licenses platforms maintainers;
-  in {
+  meta = with lib; {
+    description = "A rTorrent client";
     homepage = "https://kannibalox.github.io/pyrosimple/";
-    description = "A rTorrent client and Python 3 fork of the pyrocore tools";
-    license = licenses.gpl3Plus;
     changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
-    platforms = platforms.all;
-    maintainers = builtins.attrValues { inherit (maintainers) ne9z; };
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ne9z vamega ];
   };
-
 }

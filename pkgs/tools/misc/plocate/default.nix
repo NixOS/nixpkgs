@@ -1,8 +1,6 @@
-{ config
-, stdenv
+{ stdenv
 , lib
 , fetchgit
-, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -10,27 +8,15 @@
 , liburing
 , zstd
 }:
-let
-  dbfile = lib.attrByPath [ "locate" "dbfile" ] "/var/cache/locatedb" config;
-in
 stdenv.mkDerivation rec {
   pname = "plocate";
-  version = "1.1.17";
+  version = "1.1.22";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
-    sha256 = "sha256-EcWzvbY8ey5asEJxUeSl10ozApgg+wL5o8NCNw7/W7k=";
+    sha256 = "sha256-ejv1IsjbImnvI1oorvMoIvTBu3HuVy7VtgHNTIkqqro=";
   };
-
-  patches = [
-    # fix redefinition error
-    (fetchpatch {
-      url = "https://git.sesse.net/?p=plocate;a=patch;h=0125004cd28c5f9124632b594e51dde73af1691c";
-      revert = true;
-      sha256 = "sha256-1TDpxIdpDZQ0IZ/wGG91RVZDrpMpWkvhRF8oE0CJWIY=";
-    })
-  ];
 
   postPatch = ''
     sed -i meson.build \
@@ -43,8 +29,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "-Dsharedstatedir=${builtins.dirOf dbfile}"
-    "-Ddbpath=${builtins.baseNameOf dbfile}"
+    "-Dsharedstatedir=/var/cache"
+    "-Ddbpath=locatedb"
   ];
 
   meta = with lib; {

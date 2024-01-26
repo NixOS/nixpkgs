@@ -33,7 +33,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
-    installShellCompletion target/*/release/solo2.{bash,fish,zsh}
+    installShellCompletion target/*/release/solo2.{bash,fish}
+    installShellCompletion --zsh target/*/release/_solo2
   '';
 
   doCheck = true;
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "cli" ];
 
   meta = with lib; {
-    description = "A CLI tool for managing SoloKeys' Solo2 USB security keys.";
+    description = "A CLI tool for managing SoloKeys' Solo2 USB security keys";
     homepage = "https://github.com/solokeys/solo2-cli";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ lukegb ];

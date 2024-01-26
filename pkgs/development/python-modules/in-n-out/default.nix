@@ -6,27 +6,28 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
-, setuptools
-, setuptools-scm
+, hatchling
+, hatch-vcs
 , toolz
 }:
 
 buildPythonPackage rec {
   pname = "in-n-out";
-  version = "0.1.6";
-  format = "setuptools";
+  version = "0.1.9";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PuzjidORMFVlmFZbmnu9O92FoiuXrC8NNRyjwdodriY=";
+    pname = "in_n_out";
+    inherit version;
+    hash = "sha256-if65ROQg+vQtPCVCFFaBtNVxRDVZMsK4WWlfzcT5oto=";
   };
 
   nativeBuildInputs = [
     cython_3
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [
@@ -52,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for dependency injection and result processing";
-    homepage = "https://app-model.readthedocs.io/";
+    homepage = "https://github.com/pyapp-kit/in-n-out";
     changelog = "https://github.com/pyapp-kit/in-n-out/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

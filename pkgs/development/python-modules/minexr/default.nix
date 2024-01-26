@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "minexr";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cheind";

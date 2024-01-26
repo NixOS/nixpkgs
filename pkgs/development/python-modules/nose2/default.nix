@@ -1,36 +1,55 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, six
 , pythonOlder
+
+# build-system
+, setuptools
+
+# optional-dependencies
 , coverage
+
+# tests
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.12.0";
-  format = "setuptools";
+  version = "0.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lW55ub1VjuCLYgDAWtLHZGW344YMDAU3aGCJKFwyARM=";
+    hash = "sha256-XCjXcKC5pwKGK9bDdVuizS95lN1RjJguXOKY1/N0ZqQ=";
   };
 
-  propagatedBuildInputs = [
-    coverage
-    six
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  passthru.optional-dependencies = {
+    coverage = [
+      coverage
+    ];
+  };
 
   pythonImportsCheck = [
     "nose2"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  preCheck = ''
+    # https://github.com/nose-devs/nose2/issues/588
+    substituteInPlace nose2/tests/functional/test_junitxml_plugin.py \
+      --replace "test_skip_reason_in_message" "dont_test_skip_reason_in_message"
+  '';
 
   meta = with lib; {
     description = "Test runner for Python";

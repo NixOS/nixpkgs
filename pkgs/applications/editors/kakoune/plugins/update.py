@@ -55,11 +55,6 @@ packages = ( self:
 {"""
             )
             for pluginDesc, plugin in sorted_plugins:
-                if plugin.has_submodules:
-                    submodule_attr = "\n      fetchSubmodules = true;"
-                else:
-                    submodule_attr = ""
-
                 f.write(
                     f"""
   {plugin.normalized_name} = buildKakounePluginFrom2Nix {{
@@ -77,6 +72,9 @@ in lib.fix' (lib.extends overrides packages)
 """
             )
         print(f"updated {outfile}")
+
+    def update(self, args):
+        pluginupdate.update_plugins(self, args)
 
 
 def main():

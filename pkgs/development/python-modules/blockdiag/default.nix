@@ -2,6 +2,7 @@
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
+, fetchpatch
 , funcparserlib
 , nose
 , pillow
@@ -27,6 +28,15 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
+
+  patches = [
+    # https://github.com/blockdiag/blockdiag/pull/179
+    (fetchpatch {
+      name = "pillow-10-compatibility.patch";
+      url = "https://github.com/blockdiag/blockdiag/commit/20d780cad84e7b010066cb55f848477957870165.patch";
+      hash = "sha256-t1zWFzAsLL2EUa0nD4Eui4Y5AhAZLRmp/yC9QpzzeUA=";
+    })
+  ];
 
   propagatedBuildInputs = [
     setuptools
@@ -61,6 +71,6 @@ buildPythonPackage rec {
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

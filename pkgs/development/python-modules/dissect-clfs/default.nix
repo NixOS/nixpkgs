@@ -10,19 +10,17 @@
 
 buildPythonPackage rec {
   pname = "dissect-clfs";
-  version = "1.4";
-  format = "pyproject";
+  version = "1.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.clfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-/QZuet54ws0IsjHKlv2a3hqoXhY5VaQQ0jU81J46Cyg=";
+    hash = "sha256-JdfO9KVuK1TsDyqEQkuHPJtSHDCym63imvLSHsVwQ3k=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

@@ -18,22 +18,10 @@
     "solana-gossip"
     "solana-install"
     "solana-keygen"
+    "solana-ledger-tool"
     "solana-log-analyzer"
     "solana-net-shaper"
-    "solana-sys-tuner"
-    "rbpf-cli"
     "solana-validator"
-    "solana-ledger-tool"
-    "cargo-build-bpf"
-    "cargo-test-bpf"
-    "solana-dos"
-    "solana-install-init"
-    "solana-stake-accounts"
-    "solana-test-validator"
-    "solana-tokens"
-    "solana-watchtower"
-    "cargo-test-sbf"
-    "cargo-build-sbf"
 ] ++ [
     # XXX: Ensure `solana-genesis` is built LAST!
     # See https://github.com/solana-labs/solana/issues/5826
@@ -41,16 +29,15 @@
   ]
 }:
 let
-  version = "1.14.17";
-  sha256 = "sha256-pYbnEF8MgF7fCBf/MOPT//UCeOQj9tuIkDj8UIVFz3E=";
-  cargoSha256 = "sha256-n9nuBiKV3FCgq5fJ5BuqIIAp1yZ6IO+zHjrMaUBfgzs=";
+  version = "1.16.27";
+  sha256 = "sha256-xd0FCSlpPJDVWOlt9rIlnSbjksmvlXJWHkvlZONd2dM=";
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
   inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";
-  inherit version cargoSha256;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "solana-labs";
@@ -59,8 +46,22 @@ rustPlatform.buildRustPackage rec {
     inherit sha256;
   };
 
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+
+    outputHashes = {
+      "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
+      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+    };
+  };
+
+  patches = [
+    # Fix: https://github.com/solana-labs/solana/issues/34203
+    # From https://github.com/Homebrew/homebrew-core/pull/156930/files#diff-f27c55b86df31cd4935c956efee1be743eae0958e3850f3f9891d51bfea50b1cR76
+    ./account-info.patch
+  ];
+
   strictDeps = true;
-  verifyCargoDeps = true;
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 
   # Even tho the tests work, a shit ton of them try to connect to a local RPC
@@ -102,7 +103,7 @@ rustPlatform.buildRustPackage rec {
     description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
     homepage = "https://solana.com";
     license = licenses.asl20;
-    maintainers = with maintainers; [ netfox happysalada ];
+    maintainers = with maintainers; [ netfox happysalada aikooo7 ];
     platforms = platforms.unix;
   };
 

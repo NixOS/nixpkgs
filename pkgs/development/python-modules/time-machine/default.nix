@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonAtLeast
 , pythonOlder
+, setuptools
 , backports-zoneinfo
 , python-dateutil
 , pytestCheckHook
@@ -10,17 +11,21 @@
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.9.0";
-  format = "setuptools";
+  version = "2.13.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = pname;
     rev = version;
-    hash = "sha256-mE9unzVh0QXSl93hHH43o8AshDEzrl2NXsBJ2fph5is=";
+    hash = "sha256-SjenPLLr4JoWK5HAokwgW+bw3mfAZiuDb1N7Za5wtrw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-dateutil
@@ -33,6 +38,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.9") [
+    # https://github.com/adamchainz/time-machine/issues/405
+    "test_destination_string_naive"
     # Assertion Errors related to Africa/Addis_Ababa
     "test_destination_datetime_tzinfo_zoneinfo_nested"
     "test_destination_datetime_tzinfo_zoneinfo_no_orig_tz"
@@ -45,6 +52,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
     license = licenses.mit;

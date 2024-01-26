@@ -19,7 +19,7 @@ buildGoModule rec {
     sha256 = "sha256-3I6NOzDMhzRyVSOURl7TjJ1Z0P0RcKrSs5rNaZ0Ho9M=";
   };
 
-  vendorSha256 = "sha256-wXgAmZEXdM4FcMCQbAs+ydXshCAMu7nl/yVv/3sqaXE=";
+  vendorHash = "sha256-wXgAmZEXdM4FcMCQbAs+ydXshCAMu7nl/yVv/3sqaXE=";
 
   propagatedBuildInputs = lib.optionals stdenv.isLinux [ trezor-udev-rules ]
     ++ lib.optionals stdenv.isDarwin [ AppKit ];
@@ -35,6 +35,5 @@ buildGoModule rec {
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ canndrew jb55 prusnak mmahut _1000101 ];
     mainProgram = "trezord-go";
-    platforms = platforms.unix;
   };
 }
