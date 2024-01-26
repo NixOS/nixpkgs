@@ -6,6 +6,7 @@
 , distro
 , dirty-equals
 , httpx
+, google-auth
 , sniffio
 , pydantic
 , pytest-asyncio
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.7.8";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1mpNwZJbYdKVmUeUM+PBL6vPhwe8tr2SnAP/t/MMKpI=";
+    hash = "sha256-1g3Bbij9HbMK+JJASe+VTBXx5jCQheXLrcnAD0qMs8g=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  passthru.optional-dependencies = {
+    vertex = [ google-auth ];
+  };
+
   nativeCheckInputs = [
     dirty-equals
     pytest-asyncio
@@ -51,8 +56,9 @@ buildPythonPackage rec {
     respx
   ];
 
-  disabledTests = [
-    "api_resources"
+  disabledTestPaths = [
+    # require network access
+    "tests/api_resources"
   ];
 
   pythonImportsCheck = [
