@@ -6,11 +6,11 @@
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.0.14";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-m54jBeUAWYMXYl2KVw0GMpb7Y3dFGEtzKIanN4WyZSk=";
+    hash = "sha256-NNBI1S33jD6ZKbztZXSRtYwt3w0T4A5Bg2zxMWw74cY=";
   };
 
   npmDepsHash = "sha256-Nk0Aoyv4eEXZD4B9B/B6mJd/UDy8Kc/sHtQWXrLukSk=";
