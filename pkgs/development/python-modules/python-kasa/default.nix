@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    speedup = [
+    speedups = [
       kasa-crypt
       orjson
     ];

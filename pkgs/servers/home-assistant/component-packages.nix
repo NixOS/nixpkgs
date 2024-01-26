@@ -5073,7 +5073,8 @@
       psutil-home-assistant
       python-kasa
       sqlalchemy
-    ]; # missing inputs: python-kasa.optional-dependencies.speedups
+    ]
+    ++ python-kasa.optional-dependencies.speedups;
     "tplink_lte" = ps: with ps; [
     ]; # missing inputs: tp-connected
     "tplink_omada" = ps: with ps; [
@@ -5256,7 +5257,8 @@
     "valve" = ps: with ps; [
     ];
     "vasttrafik" = ps: with ps; [
-    ]; # missing inputs: vtjp
+      vtjp
+    ];
     "velbus" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -6400,6 +6402,7 @@
     "tomorrowio"
     "toon"
     "totalconnect"
+    "tplink"
     "tplink_omada"
     "traccar"
     "trace"
