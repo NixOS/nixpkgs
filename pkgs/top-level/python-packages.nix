@@ -4097,8 +4097,6 @@ self: super: with self; {
 
   flask-assets = callPackage ../development/python-modules/flask-assets { };
 
-  flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
-
   flask-babel = callPackage ../development/python-modules/flask-babel { };
 
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
