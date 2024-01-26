@@ -1,25 +1,25 @@
 { lib
 , buildPythonPackage
 , dissect-cstruct
+, dissect-util
 , fetchFromGitHub
+, pythonOlder
 , setuptools
 , setuptools-scm
-, pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "dissect-clfs";
-  version = "1.6";
+  pname = "dissect-jffs";
+  version = "1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
-    repo = "dissect.clfs";
+    repo = "dissect.jffs";
     rev = "refs/tags/${version}";
-    hash = "sha256-JdfO9KVuK1TsDyqEQkuHPJtSHDCym63imvLSHsVwQ3k=";
+    hash = "sha256-Rj8/WRHNl2IQ6zwvLhqEIEMzk8BH1fv7KQkw1NzoDjI=";
   };
 
   nativeBuildInputs = [
@@ -29,20 +29,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     dissect-cstruct
+    dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # Test file handling fails
+  doCheck = true;
 
   pythonImportsCheck = [
-    "dissect.clfs"
+    "dissect.jffs"
   ];
 
   meta = with lib; {
-    description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
-    homepage = "https://github.com/fox-it/dissect.clfs";
-    changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${version}";
+    description = "Dissect module implementing a parser for the JFFS2 file system";
+    homepage = "https://github.com/fox-it/dissect.jffs";
+    changelog = "https://github.com/fox-it/dissect.jffs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

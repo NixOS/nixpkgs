@@ -3001,6 +3001,21 @@ let
         };
       };
 
+      quicktype.quicktype = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "quicktype";
+          publisher = "quicktype";
+          version = "12.0.46";
+          sha256 = "sha256-NTZ0BujnA+COg5txOLXSZSp8TPD1kZNfZPjnvZUL9lc=";
+        };
+        meta = {
+          description = "Infer types from sample JSON data";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=quicktype.quicktype";
+          homepage = "https://github.com/glideapps/quicktype";
+          license = lib.licenses.asl20;
+        };
+      };
+
       rebornix.ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ruby";
