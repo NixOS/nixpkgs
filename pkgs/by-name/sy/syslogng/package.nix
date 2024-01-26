@@ -31,6 +31,7 @@
 , rabbitmq-c
 , libesmtp
 , rdkafka
+, gperf
 }:
 let
   python-deps = ps: with ps; [
@@ -59,16 +60,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
     rev = "syslog-ng-${version}";
-    hash = "sha256-cWlTGACuHm8o2563Axh43Ks7EhYok6+V9mOkrYp4km8=";
+    hash = "sha256-B9s7mprPpS4xc7mfJbsDaq2hB1rjYmuOnOnpu+NnMRs=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf ];
 
   buildInputs = [
     libcap

@@ -6442,8 +6442,6 @@ with pkgs;
 
   skeema = callPackage ../tools/system/skeema { };
 
-  syslogng = callPackage ../tools/system/syslog-ng { };
-
   svt-av1 = callPackage ../tools/video/svt-av1 { };
 
   inherit (callPackages ../servers/rainloop { })
