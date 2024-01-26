@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-semantic-interfaces";
     rev = "refs/tags/v${version}";
     hash = "sha256-mYAOAi0Qb89zp4o7vRdR7fw7vrlXt1TFVqGR09QcRSA=";
   };
@@ -59,7 +59,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-semantic-interfaces";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
-    # https://github.com/dbt-labs/dbt-semantic-interfaces/issues/134
-    broken = versionAtLeast pydantic.version "2";
   };
 }
