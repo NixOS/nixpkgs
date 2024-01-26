@@ -29,14 +29,15 @@
 
 ## Operational Modes
 
-The Botnix OS will be available in three different variants:
+The Botnix OS will be available in five different variants:
 
 * Agent
 * Orchestrator
+* Monitor
 * Simulator (via [AutonomySim](https://github.com/nervosys/AutonomySim))
 * Developer
 
-At present, we are focusing on the `Agent Mode`. Each of the modes reflects different use cases within the realm of autonomous systems.
+At present, we are focusing on the `Agent` mode. Each of the modes reflects different use cases within the realm of autonomous systems.
 
 ## Getting Started
 
