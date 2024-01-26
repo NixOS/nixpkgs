@@ -32130,8 +32130,6 @@ with pkgs;
 
   mi2ly = callPackage ../applications/audio/mi2ly { };
 
-  moe =  callPackage ../applications/editors/moe { };
-
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
   multiviewer-for-f1 = callPackage ../applications/video/multiviewer-for-f1 { };
