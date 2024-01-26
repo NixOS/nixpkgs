@@ -13,8 +13,8 @@ popd
 
 update-source-version kavita "$latest_version"
 
-$(nix-build -A kavita.backend.fetch-deps --no-out-link)
-
-cd "$(dirname "${BASH_SOURCE[0]}")"
+pushd "$(dirname "${BASH_SOURCE[0]}")"
 sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'"$npmDepsHash"'"#' -i default.nix
+popd
 
+$(nix-build -A kavita.backend.fetch-deps --no-out-link)
