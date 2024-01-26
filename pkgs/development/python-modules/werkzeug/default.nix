@@ -3,27 +3,39 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+
+# build-system
 , flit-core
+
+# dependencies
+, markupsafe
+
+# optional-dependencies
 , watchdog
+
+# tests
+, cryptography
 , ephemeral-port-reserve
+, greenlet
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
-, markupsafe
-# for passthru.tests
-, moto, sentry-sdk
+
+# reverse dependencies
+, moto
+, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.3.8";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VUslfHS763oNJUFgpPj/4YUkP1KlIDUGC3Ycpi2XfwM=";
+    hash = "sha256-UH6BHs6nKxikBJR63tSzOQ4duPgmtJTXZVDvRbs7Hcw=";
   };
 
   nativeBuildInputs = [
@@ -36,16 +48,19 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     watchdog = lib.optionals (!stdenv.isDarwin) [
-      # watchdog requires macos-sdk 10.13[
+      # watchdog requires macos-sdk 10.13
       watchdog
     ];
   };
 
   nativeCheckInputs = [
+    cryptography
     ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess
     pytestCheckHook
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    greenlet
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -68,6 +83,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://werkzeug.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "The comprehensive WSGI web application library";
     longDescription = ''

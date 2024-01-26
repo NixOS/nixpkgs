@@ -27,6 +27,7 @@
 , pytest-watch
 , pytestCheckHook
 , pythonOlder
+, quart
 , rq
 , sanic
 , setuptools
@@ -96,7 +97,7 @@ buildPythonPackage rec {
       pure-eval
     ];
     quart = [
-      # quart missing
+      quart
       blinker
     ];
     rq = [
