@@ -1023,6 +1023,9 @@ let
       # Bump the maximum number of CPUs to support systems like EC2 x1.*
       # instances and Xeon Phi.
       NR_CPUS = freeform "384";
+
+      # Enable LEDS to display link-state status of PHY devices (i.e. eth lan/wan interfaces)
+      LED_TRIGGER_PHY = whenAtLeast "4.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
       SUN8I_DE2_CCU = yes;
