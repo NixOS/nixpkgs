@@ -1,0 +1,75 @@
+From cfeedccee6c6e7c309369b5dc37b6525aac859b6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Thu, 7 Dec 2023 18:45:37 +0100
+Subject: [PATCH 2/3] rutabaga_gfx: super ugly workaround to get private
+ keyboard resources forwarded
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ .../rutabaga_os/sys/linux/memory_mapping.rs   | 34 +++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
+
+diff --git a/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs b/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs
+index 6d9f19124..afd8771c8 100644
+--- a/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs
++++ b/rutabaga_gfx/src/rutabaga_os/sys/linux/memory_mapping.rs
+@@ -9,6 +9,7 @@
+ use nix::sys::mman::munmap;
+ use nix::sys::mman::MapFlags;
+ use nix::sys::mman::ProtFlags;
++use nix::errno::Errno;
+ 
+ use crate::rutabaga_os::descriptor::SafeDescriptor;
+ use crate::rutabaga_utils::RutabagaError;
+@@ -55,14 +56,43 @@ pub fn from_safe_descriptor(
+             // TODO(b/315870313): Add safety comment
+             #[allow(clippy::undocumented_unsafe_blocks)]
+             let addr = unsafe {
+-                mmap(
++                let mut res = mmap(
+                     None,
+                     non_zero_size,
+                     prot,
+                     MapFlags::MAP_SHARED,
+                     Some(descriptor),
+                     0,
+-                )?
++                );
++                if let Err(Errno::EPERM) = res {
++                    if prot == ProtFlags::PROT_READ {
++                        let tmp = mmap(
++                            None,
++                            non_zero_size,
++                            ProtFlags::PROT_READ,
++                            MapFlags::MAP_PRIVATE,
++                            Some(descriptor),
++                            0)?;
++
++                        let addr = libc::mmap(
++                            std::ptr::null_mut(),
++                            non_zero_size.into(),
++                            libc::PROT_READ|libc::PROT_WRITE,
++                            libc::MAP_SHARED | libc::MAP_ANONYMOUS,
++                            -1,
++                            0);
++
++                        if addr == libc::MAP_FAILED {
++                            munmap(tmp, non_zero_size.into()).unwrap();
++                            return Err(RutabagaError::SpecViolation("failed to mmap"));
++                        } else {
++                            std::ptr::copy_nonoverlapping(tmp, addr, non_zero_size.into());
++                            munmap(tmp, non_zero_size.into()).unwrap();
++                            res = Ok(addr);
++                        }
++                    }
++                }
++                res?
+             };
+             Ok(MemoryMapping { addr, size })
+         } else {
+-- 
+2.42.0
+
