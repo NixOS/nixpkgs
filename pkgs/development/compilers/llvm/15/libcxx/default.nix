@@ -56,6 +56,14 @@ stdenv.mkDerivation rec {
       hash = "sha256-AaM9A6tQ4YAw7uDqCIV4VaiUyLZv+unwcOqbakwW9/k=";
       relative = "libcxx";
     })
+    # fix for https://github.com/NixOS/nixpkgs/issues/269548
+    # https://github.com/llvm/llvm-project/pull/77218
+    (fetchpatch {
+      name = "darwin-system-libcxxabi-link-flags.patch";
+      url = "https://github.com/llvm/llvm-project/commit/c5b89b29ee6e3c444a355fd1cf733ce7ab2e316a.patch";
+      hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
+      relative = "libcxx";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];
