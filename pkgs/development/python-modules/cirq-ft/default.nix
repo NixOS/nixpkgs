@@ -36,6 +36,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Upstream doesn't always adjust the version
+    "test_version"
+  ];
+
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_ft" ];
 
