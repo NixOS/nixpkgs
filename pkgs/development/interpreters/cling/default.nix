@@ -4,7 +4,6 @@
 , git
 , lib
 , libffi
-, llvmPackages_9
 , makeWrapper
 , ncurses
 , python3
@@ -21,7 +20,8 @@
 , clangStdenv
 
 # For runtime C++ standard library
-, gcc-unwrapped
+, gcc13
+, llvmPackages_14
 
 # Build with debug symbols
 , debug ? false
@@ -34,36 +34,37 @@
 let
   stdenv = clangStdenv;
 
-  # The LLVM 9 headers have a couple bugs we need to patch
-  fixedLlvmDev = runCommand "llvm-dev-${llvmPackages_9.llvm.version}" { buildInputs = [git]; } ''
-    mkdir $out
-    cp -r ${llvmPackages_9.llvm.dev}/include $out
-    cd $out
-    chmod -R u+w include
-    git apply ${./fix-llvm-include.patch}
-  '';
+  version = "0.9";
 
-  unwrapped = stdenv.mkDerivation rec {
+  llvmSrc = fetchgit {
+    url = "http://root.cern/git/llvm.git";
+    rev = "cling-v${version}";
+    hash = "sha256-jts7DMnXwZF/pzUfWEQeJmj5XlOb51aXn6KExMbmcXg=";
+  };
+
+  clangSrc = fetchgit {
+    url = "http://root.cern/git/clang.git";
+    rev = "cling-v${version}";
+    hash = "sha256-ft1NUIclSiZ9lN3Z3DJCWA0U9q/K1M0TKkZr+PjsFYk=";
+  };
+
+  clingSrc = fetchFromGitHub {
+    owner = "root-project";
+    repo = "cling";
+    rev = "v${version}";
+    hash = "sha256-STQvG+zW9keBY3kq3lo63gwSEQjIUTYLvEw6nkJ0o3M=";
+  };
+
+  unwrapped = stdenv.mkDerivation {
     pname = "cling-unwrapped";
-    version = "0.9";
+    inherit version;
 
-    src = fetchgit {
-      url = "http://root.cern/git/clang.git";
-      rev = "cling-v0.9";
-      sha256 = "sha256-ft1NUIclSiZ9lN3Z3DJCWA0U9q/K1M0TKkZr+PjsFYk=";
-    };
-
-    clingSrc = fetchFromGitHub {
-      owner = "root-project";
-      repo = "cling";
-      rev = "v0.9";
-      sha256 = "0wx3fi19wfjcph5kclf8108i436y79ddwakrcf0lgxnnxhdjyd29";
-    };
+    src = llvmSrc;
 
     prePatch = ''
-      echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
-
-      cp -r $clingSrc ./tools/cling
+      cp -r ${clangSrc} ./tools/clang
+      chmod -R a+w ./tools/clang
+      cp -r ${clingSrc} ./tools/cling
       chmod -R a+w ./tools/cling
     '';
 
@@ -76,18 +77,18 @@ let
       ./force-install-cling-targets.patch
     ];
 
+    # patch missing header file
+    postPatch = ''
+      sed -i '/^#include <vector>$/i #include <limits>' \
+        utils/benchmark/src/benchmark_register.h
+    '';
+
     nativeBuildInputs = [ python3 git cmake ];
     buildInputs = [ libffi ncurses zlib ];
 
     strictDeps = true;
 
     cmakeFlags = [
-      "-DLLVM_BINARY_DIR=${llvmPackages_9.llvm.out}"
-      "-DLLVM_CONFIG=${llvmPackages_9.llvm.dev}/bin/llvm-config"
-      "-DLLVM_LIBRARY_DIR=${llvmPackages_9.llvm.lib}/lib"
-      "-DLLVM_MAIN_INCLUDE_DIR=${fixedLlvmDev}/include"
-      "-DLLVM_TABLEGEN_EXE=${llvmPackages_9.llvm.out}/bin/llvm-tblgen"
-      "-DLLVM_TOOLS_BINARY_DIR=${llvmPackages_9.llvm.out}/bin"
       "-DLLVM_BUILD_TOOLS=Off"
       "-DLLVM_TOOL_CLING_BUILD=ON"
 
@@ -97,7 +98,6 @@ let
       # Setting -DCLING_INCLUDE_TESTS=ON causes the cling/tools targets to be built;
       # see cling/tools/CMakeLists.txt
       "-DCLING_INCLUDE_TESTS=ON"
-      "-DCLANG-TOOLS=OFF"
     ] ++ lib.optionals debug [
       "-DCMAKE_BUILD_TYPE=Debug"
     ] ++ lib.optionals useLLVMLibcxx [
@@ -105,11 +105,11 @@ let
       "-DLLVM_ENABLE_LIBCXXABI=ON"
     ];
 
-    CPPFLAGS = if useLLVMLibcxx then [ "-stdlib=libc++" ] else [];
+    env.CPPFLAGS = lib.optionalString useLLVMLibcxx "-stdlib=libc++";
 
     postInstall = lib.optionalString (!stdenv.isDarwin) ''
       mkdir -p $out/share/Jupyter
-      cp -r /build/clang/tools/cling/tools/Jupyter/kernel $out/share/Jupyter
+      cp -r $NIX_BUILD_TOP/llvm/tools/cling/tools/Jupyter/kernel $out/share/Jupyter
     '';
 
     dontStrip = debug;
@@ -125,12 +125,12 @@ let
 
   # Runtime flags for the C++ standard library
   cxxFlags = if useLLVMLibcxx then [
-    "-I" "${lib.getDev llvmPackages_9.libcxx}/include/c++/v1"
-    "-L" "${llvmPackages_9.libcxx}/lib"
-    "-l" "${llvmPackages_9.libcxx}/lib/libc++.so"
+    "-I" "${lib.getDev llvmPackages_14.libcxx}/include/c++/v1"
+    "-L" "${llvmPackages_14.libcxx}/lib"
+    "-l" "${llvmPackages_14.libcxx}/lib/libc++${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] else [
-    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
-    "-I" "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/x86_64-unknown-linux-gnu"
+    "-I" "${gcc13.cc}/include/c++/${gcc13.version}"
+    "-I" "${gcc13.cc}/include/c++/${gcc13.version}/${stdenv.hostPlatform.config}"
   ];
 
   # The flags passed to the wrapped cling should

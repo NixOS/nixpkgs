@@ -1,7 +1,7 @@
-diff --git a/tools/driver/CMakeLists.txt b/tools/driver/CMakeLists.txt
+diff --git a/tools/clang/tools/driver/CMakeLists.txt b/tools/clang/tools/driver/CMakeLists.txt
 index 590d708d83..340ae529d4 100644
---- a/tools/driver/CMakeLists.txt
-+++ b/tools/driver/CMakeLists.txt
+--- a/tools/clang/tools/driver/CMakeLists.txt
++++ b/tools/clang/tools/driver/CMakeLists.txt
 @@ -63,7 +63,7 @@ endif()
  add_dependencies(clang clang-resource-headers)
 
