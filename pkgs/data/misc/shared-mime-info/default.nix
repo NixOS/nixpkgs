@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -14,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "shared-mime-info";
-  version = "2.3";
+  version = "2.4";
 
   outputs = [ "out" "dev" ];
 
@@ -23,14 +22,8 @@ stdenv.mkDerivation rec {
     owner = "xdg";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cEfknRVtOJykEO9Iqlb0UoiayYtu+ugvmmZqAD5cGnE=";
+    hash = "sha256-5eyMkfSBUOD7p8woIYTgz5C/L8uQMXyr0fhL0l23VMA=";
   };
-
-  patches = [
-    # Submitted upstream at
-    # https://gitlab.freedesktop.org/xdg/shared-mime-info/-/issues/211
-    ./fix-clang-warnings.patch
-  ];
 
   nativeBuildInputs = [
     meson
