@@ -1757,6 +1757,10 @@ let
 
     timed = callPackage ../development/ocaml-modules/timed { };
 
+    timedesc = callPackage ../development/ocaml-modules/timedesc { };
+    timedesc-tzdb = callPackage ../development/ocaml-modules/timedesc/tzdb.nix { };
+    timedesc-tzlocal = callPackage ../development/ocaml-modules/timedesc/tzlocal.nix { };
+
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 
     tls = callPackage ../development/ocaml-modules/tls { };
