@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-slugify";
-  version = "8.0.1";
+  version = "8.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "un33k";
     repo =  "python-slugify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MJac63XjgWdUQdyyEm8O7gAGVszmHxZzRF4frJtR0BU=";
+    hash = "sha256-hMEl3Xhjht3VXKp+CQU0JOmZSwNuEbjqcoCiwb+HmE4=";
   };
 
   nativeBuildInputs = [
