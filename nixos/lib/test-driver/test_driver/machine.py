@@ -768,7 +768,9 @@ class Machine:
             self.booted = False
             self.connected = False
 
-    def wait_for_qmp_event(self, event_filter: Callable[[dict[str, Any]], bool], timeout: int = 60 * 10) -> dict[str, Any]:
+    def wait_for_qmp_event(
+        self, event_filter: Callable[[dict[str, Any]], bool], timeout: int = 60 * 10
+    ) -> dict[str, Any]:
         """
         Wait for a QMP event which you can filter with the `event_filter` function.
         The function takes as an input a dictionary of the event and if it returns True, we return that event,
@@ -780,7 +782,7 @@ class Machine:
         By default, it will wait up to 10 minutes, `timeout` is in seconds.
         """
         if self.qmp_client is None:
-            raise RuntimeError('QMP API is not ready yet, is the VM ready?')
+            raise RuntimeError("QMP API is not ready yet, is the VM ready?")
 
         start = time.time()
         while True:
