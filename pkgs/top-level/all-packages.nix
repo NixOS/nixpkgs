@@ -3925,8 +3925,6 @@ with pkgs;
 
   goperf = callPackage ../development/tools/goperf { };
 
-  graphite-cli = nodePackages.graphite-cli;
-
   gucci = callPackage ../tools/text/gucci { };
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
