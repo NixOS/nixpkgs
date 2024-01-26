@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-fuzz";
     repo = "cargo-fuzz";
     rev = version;
-    sha256 = "sha256-+k1kHiHRQER/8JTOeQdxcbsfMvS6eC74Wkd9IlLldok=";
+    hash = "sha256-+k1kHiHRQER/8JTOeQdxcbsfMvS6eC74Wkd9IlLldok=";
   };
 
   cargoHash = "sha256-N3niTnSSIfOVOGhcHHgTbLnpYNmM4bow7qX539P+kHQ=";
