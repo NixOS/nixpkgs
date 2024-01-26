@@ -7,7 +7,7 @@ let
     functionArgs isFunction mirrorFunctionArgs isAttrs setFunctionArgs
     optionalAttrs attrNames filter elemAt concatStringsSep sortOn take length
     filterAttrs optionalString flip pathIsDirectory head pipe isDerivation listToAttrs
-    mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends
+    mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends rfc0169Renamed
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -107,7 +107,7 @@ rec {
     in
       if isAttrs result then
         result // {
-          override = overrideArgs;
+          override = rfc0169Renamed overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
             overrideResult (x: x.overrideAttrs fdrv);
@@ -115,7 +115,7 @@ rec {
       else if isFunction result then
         # Transform the result into a functor while propagating its arguments
         setFunctionArgs result (functionArgs result) // {
-          override = overrideArgs;
+          override = rfc0169Renamed overrideArgs;
         }
       else result);
 
