@@ -35533,8 +35533,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
-  sunvox = callPackage ../applications/audio/sunvox { };
-
   supersonic-wayland = supersonic.override {
     waylandSupport = true;
   };
