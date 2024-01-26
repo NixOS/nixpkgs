@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ff2mpv";
-  version = "4.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sxUp/JlmnYW2sPDpIO2/q40cVJBVDveJvbQMT70yjP4=";
+    hash = "sha256-unSnySEhaaLIW/6R+vmNONb5xMSgQLtSsOLGcfuW0RY=";
   };
 
   buildInputs = [ python3 mpv ];
