@@ -2930,6 +2930,8 @@ self: super: with self; {
 
   dissect-hypervisor = callPackage ../development/python-modules/dissect-hypervisor { };
 
+  dissect-jffs = callPackage ../development/python-modules/dissect-jffs { };
+
   dissect-ntfs = callPackage ../development/python-modules/dissect-ntfs { };
 
   dissect-ole = callPackage ../development/python-modules/dissect-ole { };
