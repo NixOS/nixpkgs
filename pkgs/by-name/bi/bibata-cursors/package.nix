@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchurl
 , clickgen
-, attrs
+, python3Packages
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "zCk7qgPeae0BfzhxxU2Dk1SOWJQOxiWyJuzH/ri+Gq4=";
   };
 
-  buildInputs = [ clickgen attrs ];
+  buildInputs = [ clickgen python3Packages.attrs ];
 
   buildPhase = ''
     ctgen build.toml -p x11 -d 'bitmaps/Bibata-Modern-Amber' -n 'Bibata-Modern-Amber' -c 'Yellowish and rounded edge bibata cursors.'
