@@ -10,11 +10,17 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.4.3";
+  version = "2.5.0";
 
-  src = fetchurl {
-    url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    sha256 = "sha256-cXisvF+W/Uxe3Q0ZRhkvF13UWXxbsIQSzG172lzwruo=";
+  src = let
+    binaryTarget = "arm64";
+    throwError = throw "Unknown target ${binaryTarget} for tart package!";
+    hash = {
+        "arm64" = "sha256-wQBvMRsywYiqi65RrtqCKEsOVCdnL3KfR8VTj+7/uA8=";
+    }.${binaryTarget} or throwError;
+  in fetchurl {
+      url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart-${binaryTarget}.tar.gz";
+      inherit hash;
   };
   sourceRoot = ".";
 
