@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "biome";
-  version = "1.4.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "biomejs";
     repo = "biome";
     rev = "cli/v${version}";
-    hash = "sha256-lzY1Eh1jZixsKi+ObQlhzV4KSV7ZSGPBJtaO9ZiJjEk=";
+    hash = "sha256-0xLpZIqBaM4hTWsJzkVZMuDySFSXCLpQm/maCaXDJQo=";
   };
 
   cargoHash = "sha256-Hy5UH2VwqboRD+akl1FxBZoXr2+SmVH5Jx0lSAB/P7w=";
