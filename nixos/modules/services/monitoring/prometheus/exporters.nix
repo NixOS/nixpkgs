@@ -47,6 +47,7 @@ let
     "kea"
     "keylight"
     "knot"
+    "libvirt"
     "lnd"
     "mail"
     "mikrotik"
