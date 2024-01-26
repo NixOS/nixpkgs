@@ -7,14 +7,19 @@
 , nbconvert
 , nbformat
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cirq-ft";
-  format = "setuptools";
+  pyproject = true;
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
