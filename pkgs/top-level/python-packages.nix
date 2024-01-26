@@ -15968,6 +15968,8 @@ self: super: with self; {
 
   vt-py = callPackage ../development/python-modules/vt-py { };
 
+  vtjp = callPackage ../development/python-modules/vtjp { };
+
   vtk = toPythonModule (pkgs.vtk_9.override {
     inherit python;
     enablePython = true;
