@@ -89,6 +89,9 @@ in {
           dbFile = pkgs.writeText "dbsecret" "we2quaeZ";
           jwsFile = pkgs.runCommand "oidcKeyBase" {} "${pkgs.openssl}/bin/openssl genrsa 2048 > $out";
         };
+        sidekiq.queueGroups = {
+          cronjob = [ "cronjob" ];
+        };
       };
     };
   };
@@ -172,7 +175,8 @@ in {
         gitlab.wait_for_unit("gitlab-mailroom.service")
         gitlab.wait_for_unit("gitlab.service")
         gitlab.wait_for_unit("gitlab-pages.service")
-        gitlab.wait_for_unit("gitlab-sidekiq.service")
+        gitlab.wait_for_unit("gitlab-sidekiq-cluster.service")
+        gitlab.wait_for_unit("gitlab-sidekiq-cluster-filtered.service")
         gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/tmp/sockets/gitlab.socket")
         gitlab.wait_until_succeeds("curl -sSf http://gitlab/users/sign_in")
       '';
@@ -180,6 +184,13 @@ in {
       # The actual test of GitLab. Only push data to GitLab if
       # `doSetup` is is true.
       test = doSetup: ''
+        gitlab.fail(
+            "journalctl -u gitlab-sidekiq-cluster.service | grep 'Listening on queues' | grep cronjob"
+        )
+        gitlab.succeed(
+            "journalctl -u gitlab-sidekiq-cluster-filtered.service | grep 'Listening on queues' | grep cronjob"
+        )
+
         GIT_SSH_COMMAND = "ssh -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/dev/null"
 
         gitlab.succeed(

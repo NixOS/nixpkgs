@@ -944,6 +944,19 @@ in {
         '';
       };
 
+      sidekiq.queueGroups = mkOption {
+        type = types.attrsOf (types.listOf types.str);
+        default = {};
+        apply = x: builtins.mapAttrs (_: v: lib.concatStringsSep "," v) x;
+        description = ''
+          TODO
+          Every named queue or queue namespace is removed from the default sidekiq-cluster instance.
+          Use this options to have dedicated sidekiq process for some queues.
+
+          mailers and default queue is always added on all processes. This is a GitLab imposed restriction.
+        '';
+      };
+
       logrotate = {
         enable = mkOption {
           type = types.bool;
@@ -1413,7 +1426,7 @@ in {
       };
     };
 
-    systemd.services.gitlab-sidekiq = {
+    systemd.services.gitlab-sidekiq-cluster = {
       after = [
         "network.target"
         "redis-gitlab.service"
@@ -1454,7 +1467,65 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
+        ExecStart=
+        let
+          queueGroups = if cfg.sidekiq.queueGroups == {} then
+            # when no custom queue groups are specified we need to add all queues, as `--negate` without
+            # any specified queue groups results in an sidekiq-cluster refusing to start.
+            "\"*\""
+          else
+            "--negate ${lib.concatStringsSep " " (builtins.attrValues cfg.sidekiq.queueGroups)}";
+        in
+        "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster -e production -r ${cfg.packages.gitlab}/share/gitlab ${queueGroups}";
+      };
+    };
+
+    systemd.services.gitlab-sidekiq-cluster-filtered = lib.mkIf (cfg.sidekiq.queueGroups != {}) {
+      after = [
+        "network.target"
+        "redis-gitlab.service"
+        "postgresql.service"
+        "gitlab-config.service"
+        "gitlab-db-config.service"
+      ];
+      bindsTo = [
+        "redis-gitlab.service"
+        "gitlab-config.service"
+        "gitlab-db-config.service"
+      ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      wantedBy = [ "gitlab.target" ];
+      partOf = [ "gitlab.target" ];
+      environment = gitlabEnv // (optionalAttrs cfg.sidekiq.memoryKiller.enable {
+        SIDEKIQ_MEMORY_KILLER_MAX_RSS = cfg.sidekiq.memoryKiller.maxMemory;
+        SIDEKIQ_MEMORY_KILLER_GRACE_TIME = cfg.sidekiq.memoryKiller.graceTime;
+        SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT = cfg.sidekiq.memoryKiller.shutdownWait;
+      });
+      path = with pkgs; [
+        postgresqlPackage
+        git
+        ruby
+        openssh
+        nodejs
+        gnupg
+
+        # Needed for GitLab project imports
+        gnutar
+        gzip
+
+        procps # Sidekiq MemoryKiller
+      ];
+      serviceConfig = {
+        Type = "simple";
+        User = cfg.user;
+        Group = cfg.group;
+        TimeoutSec = "infinity";
+        Restart = "always";
+        WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        ExecStart=
+        let
+          queueGroups = "${lib.concatStringsSep " " (builtins.attrValues cfg.sidekiq.queueGroups)}";
+        in
+        "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster -e production -r ${cfg.packages.gitlab}/share/gitlab ${queueGroups}";
       };
     };
 
