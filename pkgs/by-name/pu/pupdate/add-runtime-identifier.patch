@@ -1,19 +1,19 @@
-From c9ca58262045b82537bd8284d426c91582cc7ed7 Mon Sep 17 00:00:00 2001
+From f56083d95304752c45cc569fe42c3b0d7a2430bd Mon Sep 17 00:00:00 2001
 From: Philipp Rintz <git@rintz.net>
-Date: Thu, 28 Sep 2023 21:22:18 +0200
+Date: Wed, 24 Jan 2024 22:11:50 +0100
 Subject: [PATCH] uncommited
 
 ---
- pocket_updater.csproj | 1 +
+ pupdate.csproj | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/pocket_updater.csproj b/pocket_updater.csproj
-index 30f77d5..ad6bf69 100644
---- a/pocket_updater.csproj
-+++ b/pocket_updater.csproj
+diff --git a/pupdate.csproj b/pupdate.csproj
+index a6f59a8..0563137 100644
+--- a/pupdate.csproj
++++ b/pupdate.csproj
 @@ -12,6 +12,7 @@
      <Authors>Matt Pannella</Authors>
-     <Product>Analogue Pocket Updater Utility</Product>
+     <Product>Pupdate</Product>
      <RepositoryUrl>https://github.com/mattpannella/pocket-updater-utility</RepositoryUrl>
 +    <RuntimeIdentifier>@RuntimeIdentifier@</RuntimeIdentifier>
    </PropertyGroup>

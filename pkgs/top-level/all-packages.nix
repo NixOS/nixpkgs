@@ -2014,8 +2014,6 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd { };
 
-  pocket-updater-utility = callPackage ../tools/games/pocket-updater-utility { };
-
   polygon-cli = callPackage ../tools/networking/polygon-cli { };
 
   pricehist = python3Packages.callPackage ../tools/misc/pricehist { };
@@ -19742,14 +19740,7 @@ with pkgs;
 
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
-  patchelf = if with stdenv.buildPlatform; isAarch64 && isMusl then
-    patchelf_0_13
-  else
-    patchelfStable;
-  patchelf_0_13 = callPackage ../development/tools/misc/patchelf/0.13.nix {
-    patchelf = patchelfStable;
-  };
-  patchelfStable = callPackage ../development/tools/misc/patchelf { };
+  patchelf = callPackage ../development/tools/misc/patchelf { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
@@ -20050,10 +20041,6 @@ with pkgs;
   shncpd = callPackage ../tools/networking/shncpd { };
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
-
-  silicon = callPackage ../tools/misc/silicon {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreText Security;
-  };
 
   simpleTpmPk11 = callPackage ../tools/security/simple-tpm-pk11 { };
 

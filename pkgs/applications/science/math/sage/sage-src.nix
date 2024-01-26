@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
+    # https://github.com/sagemath/sage/pull/37123, to land in 10.3.beta7
+    (fetchpatch {
+      name = "scipy-1.12-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/54eec464e9fdf18b411d9148aecb918178e95909.diff";
+      sha256 = "sha256-9wyNrcSfF6mYFTIV4ev2OdD7igb0AeyZZYWSc/+JrIU=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

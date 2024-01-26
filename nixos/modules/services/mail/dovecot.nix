@@ -4,13 +4,67 @@ let
   inherit (lib) any attrValues concatMapStringsSep concatStrings
     concatStringsSep flatten imap1 isList literalExpression mapAttrsToList
     mkEnableOption mkIf mkOption mkRemovedOptionModule optional optionalAttrs
-    optionalString singleton types;
+    optionalString singleton types mkRenamedOptionModule nameValuePair
+    mapAttrs' listToAttrs filter;
+  inherit (lib.strings) match;
 
   cfg = config.services.dovecot2;
   dovecotPkg = pkgs.dovecot;
 
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
+
+  sieveScriptSettings = mapAttrs' (to: from: nameValuePair "sieve_${to}" "${stateDir}/sieve/${from}") cfg.sieve.scripts;
+  imapSieveMailboxSettings = listToAttrs (flatten (imap1 (idx: el:
+    singleton {
+      name = "imapsieve_mailbox${toString idx}_name";
+      value = el.name;
+    } ++ optional (el.from != null) {
+      name = "imapsieve_mailbox${toString idx}_from";
+      value = el.from;
+    } ++ optional (el.causes != []) {
+      name = "imapsieve_mailbox${toString idx}_causes";
+      value = concatStringsSep "," el.causes;
+    } ++ optional (el.before != null) {
+      name = "imapsieve_mailbox${toString idx}_before";
+      value = "file:${stateDir}/imapsieve/before/${baseNameOf el.before}";
+    } ++ optional (el.after != null) {
+      name = "imapsieve_mailbox${toString idx}_after";
+      value = "file:${stateDir}/imapsieve/after/${baseNameOf el.after}";
+    }
+  ) cfg.imapsieve.mailbox));
+
+  mkExtraConfigCollisionWarning = term: ''
+    You referred to ${term} in `services.dovecot2.extraConfig`.
+
+    Due to gradual transition to structured configuration for plugin configuration, it is possible
+    this will cause your plugin configuration to be ignored.
+
+    Consider setting `services.dovecot2.pluginSettings.${term}` instead.
+  '';
+
+  # Those settings are automatically set based on other parts
+  # of this module.
+  automaticallySetPluginSettings = [
+    "sieve_plugins"
+    "sieve_extensions"
+    "sieve_global_extensions"
+    "sieve_pipe_bin_dir"
+  ]
+  ++ (builtins.attrNames sieveScriptSettings)
+  ++ (builtins.attrNames imapSieveMailboxSettings);
+
+  # The idea is to match everything that looks like `$term =`
+  # but not `# $term something something`
+  # or `# $term = some value` because those are comments.
+  configContainsSetting = lines: term: (match "^[^#]*\b${term}\b.*=" lines) != null;
+
+  warnAboutExtraConfigCollisions = map mkExtraConfigCollisionWarning (filter (configContainsSetting cfg.extraConfig) automaticallySetPluginSettings);
+
+  sievePipeBinScriptDirectory = pkgs.linkFarm "sieve-pipe-bins" (map (el: {
+      name = builtins.unsafeDiscardStringContext (baseNameOf el);
+      path = el;
+  }) cfg.sieve.pipeBins);
 
   dovecotConf = concatStrings [
     ''
@@ -78,14 +132,6 @@ let
     )
 
     (
-      optionalString (cfg.sieveScripts != {}) ''
-        plugin {
-          ${concatStringsSep "\n" (mapAttrsToList (to: from: "sieve_${to} = ${stateDir}/sieve/${to}") cfg.sieveScripts)}
-        }
-      ''
-    )
-
-    (
       optionalString (cfg.mailboxes != {}) ''
         namespace inbox {
           inbox=yes
@@ -116,33 +162,12 @@ let
       ''
     )
 
+    # General plugin settings:
+    # - sieve is mostly generated here, refer to `pluginSettings` to follow
+    # the control flow.
     ''
       plugin {
-        sieve_plugins = ${concatStringsSep " " cfg.sieve.plugins}
-        sieve_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions)}
-        sieve_global_extensions = ${concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions)}
-    ''
-    (optionalString (cfg.imapsieve.mailbox != []) ''
-      ${
-        concatStringsSep "\n" (flatten (imap1 (
-            idx: el:
-              singleton "imapsieve_mailbox${toString idx}_name = ${el.name}"
-              ++ optional (el.from != null) "imapsieve_mailbox${toString idx}_from = ${el.from}"
-              ++ optional (el.causes != null) "imapsieve_mailbox${toString idx}_causes = ${el.causes}"
-              ++ optional (el.before != null) "imapsieve_mailbox${toString idx}_before = file:${stateDir}/imapsieve/before/${baseNameOf el.before}"
-              ++ optional (el.after != null) "imapsieve_mailbox${toString idx}_after = file:${stateDir}/imapsieve/after/${baseNameOf el.after}"
-          )
-          cfg.imapsieve.mailbox))
-      }
-    '')
-    (optionalString (cfg.sieve.pipeBins != []) ''
-        sieve_pipe_bin_dir = ${pkgs.linkFarm "sieve-pipe-bins" (map (el: {
-          name = builtins.unsafeDiscardStringContext (baseNameOf el);
-          path = el;
-        })
-        cfg.sieve.pipeBins)}
-    '')
-    ''
+        ${concatStringsSep "\n" (mapAttrsToList (key: value: "  ${key} = ${value}") cfg.pluginSettings)}
       }
     ''
 
@@ -199,6 +224,7 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkRenamedOptionModule [ "services" "dovecot2" "sieveScripts" ] [ "services" "dovecot2" "sieve" "scripts" ])
   ];
 
   options.services.dovecot2 = {
@@ -337,12 +363,6 @@ in
 
     enableDHE = mkEnableOption (lib.mdDoc "ssl_dh and generation of primes for the key exchange") // { default = true; };
 
-    sieveScripts = mkOption {
-      type = types.attrsOf types.path;
-      default = {};
-      description = lib.mdDoc "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
-    };
-
     showPAMFailure = mkEnableOption (lib.mdDoc "showing the PAM failure message on authentication error (useful for OTPW)");
 
     mailboxes = mkOption {
@@ -376,6 +396,26 @@ in
       description = lib.mdDoc "Quota limit for the user in bytes. Supports suffixes b, k, M, G, T and %.";
     };
 
+
+    pluginSettings = mkOption {
+      # types.str does not coerce from packages, like `sievePipeBinScriptDirectory`.
+      type = types.attrsOf (types.oneOf [ types.str types.package ]);
+      default = {};
+      example = literalExpression ''
+        {
+          sieve = "file:~/sieve;active=~/.dovecot.sieve";
+        }
+      '';
+      description = ''
+        Plugin settings for dovecot in general, e.g. `sieve`, `sieve_default`, etc.
+
+        Some of the other knobs of this module will influence by default the plugin settings, but you
+        can still override any plugin settings.
+
+        If you override a plugin setting, its value is cleared and you have to copy over the defaults.
+      '';
+    };
+
     imapsieve.mailbox = mkOption {
       default = [];
       description = "Configure Sieve filtering rules on IMAP actions";
@@ -405,14 +445,14 @@ in
           };
 
           causes = mkOption {
-            default = null;
+            default = [ ];
             description = ''
               Only execute the administrator Sieve scripts for the mailbox configured with services.dovecot2.imapsieve.mailbox.<name>.name when one of the listed IMAPSIEVE causes apply.
 
               This has no effect on the user script, which is always executed no matter the cause.
             '';
-            example = "COPY";
-            type = types.nullOr (types.enum [ "APPEND" "COPY" "FLAG" ]);
+            example = [ "COPY" "APPEND" ];
+            type = types.listOf (types.enum [ "APPEND" "COPY" "FLAG" ]);
           };
 
           before = mkOption {
@@ -462,6 +502,12 @@ in
         type = types.listOf types.str;
       };
 
+      scripts = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = lib.mdDoc "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
+      };
+
       pipeBins = mkOption {
         default = [];
         example = literalExpression ''
@@ -475,7 +521,6 @@ in
       };
     };
   };
-
 
   config = mkIf cfg.enable {
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
@@ -501,6 +546,13 @@ in
         ++ optional (cfg.sieve.pipeBins != []) "sieve_extprograms";
 
       sieve.globalExtensions = optional (cfg.sieve.pipeBins != []) "vnd.dovecot.pipe";
+
+      pluginSettings = lib.mapAttrs (n: lib.mkDefault) ({
+        sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
+        sieve_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions);
+        sieve_global_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions);
+        sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
+      } // sieveScriptSettings // imapSieveMailboxSettings);
     };
 
     users.users = {
@@ -556,7 +608,7 @@ in
       # the source file and Dovecot won't try to compile it.
       preStart = ''
         rm -rf ${stateDir}/sieve ${stateDir}/imapsieve
-      '' + optionalString (cfg.sieveScripts != {}) ''
+      '' + optionalString (cfg.sieve.scripts != {}) ''
         mkdir -p ${stateDir}/sieve
         ${concatStringsSep "\n" (
         mapAttrsToList (
@@ -569,7 +621,7 @@ in
             fi
             ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
           ''
-        ) cfg.sieveScripts
+        ) cfg.sieve.scripts
       )}
         chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
       ''
@@ -600,9 +652,7 @@ in
 
     environment.systemPackages = [ dovecotPkg ];
 
-    warnings = mkIf (any isList options.services.dovecot2.mailboxes.definitions) [
-      "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.05! See the release notes for more info for migration."
-    ];
+    warnings = warnAboutExtraConfigCollisions;
 
     assertions = [
       {
@@ -615,8 +665,8 @@ in
         message = "dovecot is configured with showPAMFailure while enablePAM is disabled";
       }
       {
-        assertion = cfg.sieveScripts != {} -> (cfg.mailUser != null && cfg.mailGroup != null);
-        message = "dovecot requires mailUser and mailGroup to be set when sieveScripts is set";
+        assertion = cfg.sieve.scripts != {} -> (cfg.mailUser != null && cfg.mailGroup != null);
+        message = "dovecot requires mailUser and mailGroup to be set when `sieve.scripts` is set";
       }
     ];
 

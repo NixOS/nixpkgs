@@ -5296,6 +5296,8 @@ self: super: with self; {
 
   http-parser = callPackage ../development/python-modules/http-parser { };
 
+  http-sf = callPackage ../development/python-modules/http-sf { };
+
   http-sfv = callPackage ../development/python-modules/http-sfv { };
 
   httpretty = callPackage ../development/python-modules/httpretty { };
@@ -9994,6 +9996,8 @@ self: super: with self; {
 
   pweave = callPackage ../development/python-modules/pweave { };
 
+  pwlf = callPackage ../development/python-modules/pwlf { };
+
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
   };
@@ -10347,6 +10351,8 @@ self: super: with self; {
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
 
   pydoods = callPackage ../development/python-modules/pydoods { };
+
+  pydoe = callPackage ../development/python-modules/pydoe { };
 
   pydot = callPackage ../development/python-modules/pydot {
     inherit (pkgs) graphviz;
