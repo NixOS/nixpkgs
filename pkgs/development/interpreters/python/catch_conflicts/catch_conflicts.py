@@ -2,20 +2,34 @@ from importlib.metadata import PathDistribution
 from pathlib import Path
 import collections
 import sys
+import os
 
 
 do_abort = False
 packages = collections.defaultdict(list)
+out_path = Path(os.getenv("out"))
+version = sys.version_info
+site_packages_path = f'lib/python{version[0]}.{version[1]}/site-packages'
 
 
-for path in sys.path:
-    for dist_info in Path(path).glob("*.dist-info"):
-        dist = PathDistribution(dist_info)
+def find_packages(store_path, site_packages_path):
+    site_packages = (store_path / site_packages_path)
+    propagated_build_inputs = (store_path / "nix-support/propagated-build-inputs")
+    if site_packages.exists():
+        for dist_info in site_packages.glob("*.dist-info"):
+            dist = PathDistribution(dist_info)
+            packages[dist._normalized_name].append(
+                f"{dist._normalized_name} {dist.version} ({dist._path})"
+            )
 
-        packages[dist._normalized_name].append(
-            f"{dist._normalized_name} {dist.version} ({dist._path})"
-        )
+    if propagated_build_inputs.exists():
+        with open(propagated_build_inputs, "r") as f:
+            build_inputs = f.read().strip().split(" ")
+            for build_input in build_inputs:
+                find_packages(Path(build_input), site_packages_path)
 
+
+find_packages(out_path, site_packages_path)
 
 for name, duplicates in packages.items():
     if len(duplicates) > 1:
