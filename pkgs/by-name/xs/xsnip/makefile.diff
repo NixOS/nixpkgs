@@ -1,0 +1,38 @@
+Various makefile improvements, notably the removal of the usage
+of pkg-config and the -g compiler flag. Swapped out -g for -O2.
+--- a/Makefile
++++ b/Makefile
+@@ -1,18 +1,14 @@
+-X11_CFLAGS != pkg-config --cflags x11
+-X11_LIBS != pkg-config --libs x11
+-
+-LIBPNG_CFLAGS != pkg-config --cflags libpng
+-LIBPNG_LIBS != pkg-config --libs libpng
+-
+-CC?=gcc
+-CFLAGS=-g ${X11_CFLAGS} ${LIBPNG_CFLAGS}
+-LIBS=${X11_LIBS} ${LIBPNG_LIBS}
+-DEPS=config.h 
++CC=cc
++CFLAGS=-O2
++LIBS=-lpng -lX11
++DEPS=config.h
+ OBJ=xsnip.o
+ 
+-prefix=/usr/local
+-exec_prefix=${prefix}
+-bindir=${exec_prefix}/bin
++ifeq (${OPAQUE},)
++	CFLAGS += -DOPAQUE=false
++else
++	CFLAGS += -DOPAQUE=true
++endif
+ 
+ %.o: %.c $(DEPS)
+ 	$(CC) -c -o $@ $< $(CFLAGS)
+@@ -21,4 +15,4 @@ xsnip: $(OBJ)
+ 	$(CC) -o $@ $^ $(LIBS)
+ 
+ install:
+-	cp xsnip $(bindir)
++	install -Dm755 xsnip ${DESTDIR}/bin/xsnip
