@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-unSnySEhaaLIW/6R+vmNONb5xMSgQLtSsOLGcfuW0RY=";
+    hash = "sha256-unSnySEhaaLIW/6R+vmNONb5xMSgQLtSsOLGcfuW0RY=";
   };
 
   buildInputs = [ python3 mpv ];
