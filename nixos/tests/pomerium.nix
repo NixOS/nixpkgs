@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "pomerium";
   meta = with lib.maintainers; {
-    maintainers = [ lukegb ];
+    maintainers = [ lukegb devusb ];
   };
 
   nodes = let base = myIP: { pkgs, lib, ... }: {
