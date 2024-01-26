@@ -2,7 +2,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
-  version = "8.1.0";
+  version = "9.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-PxyXlmEZ9cqZgDWcdeNznEC4F1J4NFMiwy0D7g+YZUs=";
+    hash = "sha256-I2aeqzBC+xKK9/eizhQKZ3QbRhK9/Lw+9Z0L6G1/rds=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
