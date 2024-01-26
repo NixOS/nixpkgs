@@ -133,7 +133,9 @@ let
       # We already patched
       dontPatchShebangs = true;
 
-      inherit (core) meta;
+      meta = core.meta // {
+        mainProgram = name;
+      };
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;
