@@ -52,6 +52,7 @@ let
     "keylight"
     "klipper"
     "knot"
+    "libvirt"
     "lnd"
     "mail"
     "mikrotik"
