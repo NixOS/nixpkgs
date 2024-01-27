@@ -7,7 +7,6 @@
 , django-configurations
 , pytest
 , pytestCheckHook
-, pytest-xdist
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     django-configurations
     pytestCheckHook
-    pytest-xdist
   ];
 
   preCheck = ''
