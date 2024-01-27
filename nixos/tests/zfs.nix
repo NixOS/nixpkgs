@@ -8,12 +8,9 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
 
   makeZfsTest = name:
-    { kernelPackages ? if enableUnstable
-                       then pkgs.zfsUnstable.latestCompatibleLinuxPackages
-                       else pkgs.linuxPackages
-    , enableUnstable ? false
+    { kernelPackages
     , enableSystemdStage1 ? false
-    , zfsPackage ? if enableUnstable then pkgs.zfsUnstable else pkgs.zfs
+    , zfsPackage
     , extraTest ? ""
     }:
     makeTest {
@@ -197,16 +194,22 @@ in {
   # maintainer: @raitobezarius
   series_2_1 = makeZfsTest "2.1-series" {
     zfsPackage = pkgs.zfs_2_1;
+    kernelPackages = pkgs.linuxPackages;
   };
 
-  stable = makeZfsTest "stable" { };
-
-  unstable = makeZfsTest "unstable" {
-    enableUnstable = true;
+  stable = makeZfsTest "stable" {
+    zfsPackage = pkgs.zfsStable;
+    kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest "unstable" {
-    enableUnstable = true;
+  unstable = makeZfsTest "unstable" rec {
+    zfsPackage = pkgs.zfsUnstable;
+    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
+  };
+
+  unstableWithSystemdStage1 = makeZfsTest "unstable" rec {
+    zfsPackage = pkgs.zfsUnstable;
+    kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
     enableSystemdStage1 = true;
   };
 
