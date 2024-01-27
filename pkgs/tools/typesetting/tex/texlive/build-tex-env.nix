@@ -266,6 +266,9 @@ let
         target="$(readlink "$link")"
       fi
 
+      # skip non-executable files (such as context.lua)
+      if [[ ! -x "$target" ]] ; then continue ; fi
+
       rm "$link"
       makeWrapper "$target" "$link" \
         --inherit-argv0 \
@@ -371,7 +374,16 @@ let
   ''
     texlinks --quiet "$out/bin"
   '' +
+    # temporarily patch mtxrun.lua to generate uuid's deterministically from SOURCE_DATE_EPOCH
+  ''
+    if [[ -e "$out/bin/mtxrun" ]]; then
+      mv "$out"/bin/mtxrun.lua{,.orig}
+      substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua "$out"/bin/mtxrun.lua \
+        --replace 'randomseed(math.initialseed)' "randomseed($SOURCE_DATE_EPOCH)"
+    fi
+  '' +
   # texlive postactions (see TeXLive::TLUtils::_do_postaction_script)
+  # this step includes generating the ConTeXt file databases since TL 2023
   (lib.concatMapStrings (pkg: ''
     postaction='${pkg.postactionScript}'
     case "$postaction" in
@@ -380,9 +392,16 @@ let
       *) postInterp= ;;
     esac
     echo "postaction install script for ${pkg.pname}: ''${postInterp:+$postInterp }$postaction install $TEXMFROOT"
-    $postInterp "$TEXMFROOT/$postaction" install "$TEXMFROOT"
+    FORCE_SOURCE_DATE=1 TZ= $postInterp "$TEXMFROOT"/$postaction install "$TEXMFROOT"
   '') (lib.filter (pkg: pkg ? postactionScript) pkgList.tlpkg)) +
+  # restore the original mtxrun.lua
+  ''
+    if [[ -e "$out/bin/mtxrun" ]]; then
+      mv "$out"/bin/mtxrun.lua{.orig,}
+    fi
+  '' +
     # generate formats
+    # TODO generate ConTeXt formats (based on fmtutil.cnf?)
   ''
     # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
     # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
@@ -407,21 +426,6 @@ let
     # remove *-sys scripts since /nix/store is readonly
   ''
     rm "$out"/bin/*-sys
-  '' +
-  # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
-    # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29
-
-  # MkIV uses its own lookup mechanism and we need to initialize
-  # caches for it.
-  # We use faketime to fix the embedded timestamps and patch the uuids
-  # with some random but constant values.
-  ''
-    if [[ -e "$out/bin/mtxrun" ]]; then
-      substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua mtxrun.lua \
-        --replace 'cache_uuid=osuuid()' 'cache_uuid="e2402e51-133d-4c73-a278-006ea4ed734f"' \
-        --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
-      FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
-    fi
   '' +
   # Get rid of all log files. They are not needed, but take up space
   # and render the build unreproducible by their embedded timestamps
