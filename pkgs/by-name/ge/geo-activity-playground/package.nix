@@ -4,14 +4,20 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "geo-activity-playground";
-  version = "0.17.5";
+  version = "0.18.0";
   format = "pyproject";
   src = fetchFromGitHub {
     repo = "geo-activity-playground";
     owner = "martin-ueding";
     rev = version;
-    hash = "sha256-zyiW54UDUDmQfphztuTGW1i1r0dsgE7Lcr24dKMJMmM=";
+    hash = "sha256-zYs+Y+n3T3pcC0xo1fTE6/1ueePdTToxM75VkE907KU=";
   };
+  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    "Pillow"
+    "flask"
+    "pyarrow"
+  ];
   propagatedBuildInputs = with python3.pkgs; [
     poetry-core
     coloredlogs
@@ -31,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     vegafusion
     vl-convert-python
     xmltodict
+    appdirs
   ];
 
   meta = {
