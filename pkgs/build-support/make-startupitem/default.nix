@@ -8,6 +8,7 @@
 , after ? null
 , condition ? null
 , phase ? "2"
+, extraArgs ? []
 }:
 
 # the builder requires that
@@ -22,6 +23,9 @@ stdenv.mkDerivation {
     mkdir -p $out/etc/xdg/autostart
     target=${name}.desktop
     cp ${package}/share/applications/${srcPrefix}${name}.desktop $target
+    ${lib.optionalString (extraArgs != []) ''
+      sed -i '/Exec=.*/ s/$/ ${lib.escapeRegex (lib.escapeShellArgs extraArgs)}/' $target
+    ''}
     chmod +rw $target
     echo "X-KDE-autostart-phase=${phase}" >> $target
     ${lib.optionalString (after != null) ''echo "${after}" >> $target''}
