@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "md4c";
-  version = "0.4.8";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mity";
     repo = "md4c";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-+LObAD5JB8Vb4Rt4hTo1Z4ispxzfFkkXA2sw6TKB7Yo=";
+    hash = "sha256-YPM1jdKy3i81hc66wMlGweiSzqBgaHwzkQP/o2RvDnI=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       - Compliance: Generally, MD4C aims to be compliant to the latest version
         of CommonMark specification. Currently, we are fully compliant to
-        CommonMark 0.29.
+        CommonMark 0.30.
       - Extensions: MD4C supports some commonly requested and accepted
         extensions. See below.
       - Performance: MD4C is very fast.
