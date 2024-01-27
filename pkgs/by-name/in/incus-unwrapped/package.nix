@@ -16,16 +16,16 @@
 
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    rev = "refs/tags/incus-${version}";
-    hash = "sha256-WhprzGzTeB8sEMMTYN5j1Zrwg0GiGLlXTqCkcPq0XVo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
   };
 
-  vendorHash = "sha256-4fxQHtvRULTyKJTGdo42qwWQUSIWqbqOO1Wf8daBP/s=";
+  vendorHash = "sha256-YfUvkN1qUS3FFKb1wysg40WcJA8fT9SGDChSdT+xnkc=";
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
@@ -36,6 +36,7 @@ buildGoModule rec {
     "cmd/incus-agent"
     "cmd/incus-migrate"
     "cmd/lxd-to-incus"
+    "test/mini-oidc"
   ];
 
   nativeBuildInputs = [
@@ -84,7 +85,7 @@ buildGoModule rec {
 
     updateScript = nix-update-script {
        extraArgs = [
-        "-vr" "incus-\(.*\)"
+        "-vr" "v\(.*\)"
        ];
      };
   };
@@ -94,7 +95,7 @@ buildGoModule rec {
     homepage = "https://linuxcontainers.org/incus";
     changelog = "https://github.com/lxc/incus/releases/tag/incus-${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
   };
 }
