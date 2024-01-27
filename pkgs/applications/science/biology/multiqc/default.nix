@@ -17,12 +17,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    python3.pkgs.importlib-metadata
     python3.pkgs.setuptools
     python3.pkgs.wheel
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    importlib-metadata
     matplotlib
     networkx
     numpy
