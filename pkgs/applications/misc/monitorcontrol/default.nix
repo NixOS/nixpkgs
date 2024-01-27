@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     longDescription = "Controls your external display brightness and volume and shows native OSD. Use menulet sliders or the keyboard, including native Apple keys!";
     homepage = "https://github.com/MonitorControl/MonitorControl#readme";
     license = licenses.mit;
-    maintainers = with maintainers; [ cbleslie ];
+    maintainers = with maintainers; [ cbleslie cottand ];
     platforms = platforms.darwin;
   };
 }
