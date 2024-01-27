@@ -1,6 +1,4 @@
 { lib
-, stdenv
-, fetchurl
 , autoPatchelfHook
 , bash
 , copyDesktopItems
@@ -9,6 +7,7 @@
 , dosfstools
 , e2fsprogs
 , exfat
+, fetchurl
 , gawk
 , gnugrep
 , gnused
@@ -19,6 +18,7 @@
 , ntfs3g
 , parted
 , procps
+, stdenv
 , util-linux
 , which
 , xfsprogs
@@ -38,7 +38,7 @@ assert defaultGuiType == "gtk3" -> withGtk3;
 assert defaultGuiType == "qt5" -> withQt5;
 
 let
-  inherit (lib) optional optionalString;
+  inherit (lib) optionals optionalString;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   arch = {
     x86_64-linux = "x86_64";
@@ -46,20 +46,16 @@ let
     aarch64-linux = "aarch64";
     mipsel-linux = "mips64el";
   }.${stdenv.hostPlatform.system}
-    or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+    or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.96";
+  version = "1.0.97";
 
-  src =
-    let
-      inherit (finalAttrs) version;
-    in
-    fetchurl {
-      url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-      hash = "sha256-eUpxfJQ0u3bpAXTUCKlMO/ViwKcBI59YFKJ3xGzSdcg=";
-    };
+  src = fetchurl {
+    url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
+    hash = "sha256-E2ipCCydsllY5UB+9JhDItkNO7AJBTN9S9QWeOBsEVA=";
+  };
 
   patches = [
     ./000-nixos-sanitization.patch
@@ -78,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     makeWrapper
   ]
-  ++ optional (withQt5 || withGtk3) copyDesktopItems
-  ++ optional withQt5 wrapQtAppsHook;
+  ++ optionals (withQt5 || withGtk3) [ copyDesktopItems ]
+  ++ optionals withQt5 [ wrapQtAppsHook ];
 
   buildInputs = [
     bash
@@ -96,12 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     which
     xz
   ]
-  ++ optional withCryptsetup cryptsetup
-  ++ optional withExt4 e2fsprogs
-  ++ optional withGtk3 gtk3
-  ++ optional withNtfs ntfs3g
-  ++ optional withXfs xfsprogs
-  ++ optional withQt5 qtbase;
+  ++ optionals withCryptsetup [ cryptsetup ]
+  ++ optionals withExt4 [ e2fsprogs ]
+  ++ optionals withGtk3 [ gtk3 ]
+  ++ optionals withNtfs [ ntfs3g ]
+  ++ optionals withXfs [ xfsprogs ]
+  ++ optionals withQt5 [ qtbase ];
+
+  strictDeps = true;
 
   desktopItems = [
     (makeDesktopItem {
@@ -203,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "ventoy";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

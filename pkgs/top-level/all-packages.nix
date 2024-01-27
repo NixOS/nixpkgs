@@ -2128,7 +2128,6 @@ with pkgs;
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
-  ventoy = callPackage ../tools/cd-dvd/ventoy { };
   ventoy-full = ventoy.override {
     withCryptsetup = true;
     withXfs = true;
