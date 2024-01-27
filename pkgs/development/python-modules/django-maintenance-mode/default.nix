@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "django-maintenance-mode";
-  version = "0.19.0";
+  version = "0.21.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = "django-maintenance-mode";
     rev = "refs/tags/${version}";
-    hash = "sha256-NAm3xMcHePTYxysihYj48bk7r9ykEtPcxPjSEju/zMM=";
+    hash = "sha256-rZo0yru+y5TkdULBQDMGAVb494PSLtbnNX/7cuphKNk=";
   };
 
   nativeBuildInputs = [
