@@ -12666,6 +12666,8 @@ self: super: with self; {
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
 
+  pytest-workflow = callPackage ../development/python-modules/pytest-workflow { };
+
   pytest-xdist = callPackage ../development/python-modules/pytest-xdist { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
