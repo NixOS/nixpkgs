@@ -122,6 +122,21 @@ let
         };
       };
 
+      albymor.increment-selection = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "increment-selection";
+          publisher = "albymor";
+          version = "0.2.0";
+          sha256 = "sha256-iP4c0xLPiTsgD8Q8Kq9jP54HpdnBveKRY31Ro97ROJ8=";
+        };
+        meta = {
+          description = "Increment, decrement or reverse selection with multiple cursors";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=albymor.increment-selection";
+          homepage = "https://github.com/albymor/Increment-Selection";
+          license = lib.licenses.mit;
+        };
+      };
+
       alefragnani.bookmarks = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "bookmarks";
@@ -469,6 +484,21 @@ let
           homepage = "https://github.com/vscode-django/vscode-django";
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ azd325 ];
+        };
+      };
+
+      bazelbuild.vscode-bazel = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-bazel";
+          publisher = "bazelbuild";
+          version = "0.7.0";
+          sha256 = "05wvih09184bsp4rv2m55z0sasra2qrvch5m3bkbrjq7rcqgibgx";
+        };
+        meta = {
+          description = "Bazel support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=BazelBuild.vscode-bazel";
+          homepage = "https://github.com/bazelbuild/vscode-bazel";
+          license = lib.licenses.asl20;
         };
       };
 
@@ -1881,6 +1911,21 @@ let
         };
       };
 
+      iliazeus.vscode-ansi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-ansi";
+          publisher = "iliazeus";
+          version = "1.1.6";
+          sha256 = "sha256-ZPV8zd/GkXOGf6s8fz9ZPmC3i1jO0wFAqV0E67lW0do=";
+        };
+        meta = {
+          description = "ANSI color styling for text documents";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=iliazeus.vscode-ansi";
+          homepage = "https://github.com/iliazeus/vscode-ansi";
+          license = lib.licenses.mit;
+        };
+      };
+
       influxdata.flux = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "influxdata";
@@ -1960,6 +2005,21 @@ let
           homepage = "https://github.com/James-Yu/LaTeX-Workshop";
           license = lib.licenses.mit;
           maintainers = [ ];
+        };
+      };
+
+      jamesyang999.vscode-emacs-minimum = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-emacs-minimum";
+          publisher = "jamesyang999";
+          version = "1.1.1";
+          sha256 = "sha256-qxnAhT2UGTQmPw9XmdBdx0F0NNLAaU1/ES9jiqiRrGI=";
+        };
+        meta = {
+          description = "Minimal emacs key bindings for VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jamesyang999.vscode-emacs-minimum";
+          homepage = "https://github.com/futurist/vscode-emacs-minimum";
+          license = lib.licenses.unfree;
         };
       };
 
@@ -2941,6 +3001,21 @@ let
         };
       };
 
+      quicktype.quicktype = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "quicktype";
+          publisher = "quicktype";
+          version = "12.0.46";
+          sha256 = "sha256-NTZ0BujnA+COg5txOLXSZSp8TPD1kZNfZPjnvZUL9lc=";
+        };
+        meta = {
+          description = "Infer types from sample JSON data";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=quicktype.quicktype";
+          homepage = "https://github.com/glideapps/quicktype";
+          license = lib.licenses.asl20;
+        };
+      };
+
       rebornix.ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ruby";
@@ -3538,6 +3613,21 @@ let
         };
       };
 
+      tim-koehler.helm-intellisense = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "helm-intellisense";
+          publisher = "Tim-Koehler";
+          version = "0.14.3";
+          sha256 = "sha256-TcXn8n6mKEFpnP8dyv+nXBjsyfUfJNgdL9iSZwA5eo0=";
+        };
+        meta = {
+          description = "Extension to help writing Helm-Templates by providing intellisense";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Tim-Koehler.helm-intellisense";
+          homepage = "https://github.com/tim-koehler/Helm-Intellisense";
+          license = lib.licenses.mit;
+        };
+      };
+
       timonwong.shellcheck = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "shellcheck";
@@ -3608,6 +3698,21 @@ let
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
           description = "Awesome Emacs Keymap - VSCode emacs keybinding with multi cursor support";
           homepage = "https://github.com/whitphx/vscode-emacs-mcx";
+          license = lib.licenses.mit;
+        };
+      };
+
+      twpayne.vscode-testscript = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-testscript";
+          publisher = "twpayne";
+          version = "0.0.4";
+          sha256 = "sha256-KOmcJlmmdUkC+q0AQ/Q/CQAeRgQPr6nVO0uccUxHmsY=";
+        };
+        meta = {
+          description = "Syntax highlighting support for testscript";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=twpayne.vscode-testscript";
+          homepage = "https://github.com/twpayne/vscode-testscript";
           license = lib.licenses.mit;
         };
       };

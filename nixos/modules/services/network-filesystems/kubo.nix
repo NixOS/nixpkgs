@@ -312,12 +312,13 @@ in
       ipfs.gid = config.ids.gids.ipfs;
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-    ] ++ optionals cfg.autoMount [
-      "d '${cfg.settings.Mounts.IPFS}' - ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.settings.Mounts.IPNS}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-kubo" = let
+      defaultConfig = { inherit (cfg) user group; };
+    in {
+      ${cfg.dataDir}.d = defaultConfig;
+      ${cfg.settings.Mounts.IPFS}.d = mkIf (cfg.autoMount) defaultConfig;
+      ${cfg.settings.Mounts.IPNS}.d = mkIf (cfg.autoMount) defaultConfig;
+    };
 
     # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
     systemd.packages = if cfg.autoMount

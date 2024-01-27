@@ -6,6 +6,7 @@
 , platformio
 , esptool
 , git
+, iputils
 }:
 
 let
@@ -74,10 +75,11 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    # platformio is used in esphomeyaml/platformio_api.py
-    # esptool is used in esphomeyaml/__main__.py
-    # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    # platformio is used in esphome/platformio_api.py
+    # esptool is used in esphome/__main__.py
+    # git is used in esphome/writer.py
+    # iputils is used in esphome/dashboard/status/ping.py
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git iputils ]}"
     "--prefix PYTHONPATH : $PYTHONPATH" # will show better error messages
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];

@@ -2440,6 +2440,8 @@ self: super: with self; {
 
   cronsim = callPackage ../development/python-modules/cronsim { };
 
+  crontab = callPackage ../development/python-modules/crontab { };
+
   crossplane = callPackage ../development/python-modules/crossplane { };
 
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
@@ -2902,6 +2904,8 @@ self: super: with self; {
 
   dissect = callPackage ../development/python-modules/dissect { };
 
+  dissect-btrfs = callPackage ../development/python-modules/dissect-btrfs { };
+
   dissect-cim = callPackage ../development/python-modules/dissect-cim { };
 
   dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
@@ -2927,6 +2931,8 @@ self: super: with self; {
   dissect-extfs = callPackage ../development/python-modules/dissect-extfs { };
 
   dissect-hypervisor = callPackage ../development/python-modules/dissect-hypervisor { };
+
+  dissect-jffs = callPackage ../development/python-modules/dissect-jffs { };
 
   dissect-ntfs = callPackage ../development/python-modules/dissect-ntfs { };
 
@@ -15961,6 +15967,8 @@ self: super: with self; {
   vsure = callPackage ../development/python-modules/vsure { };
 
   vt-py = callPackage ../development/python-modules/vt-py { };
+
+  vtjp = callPackage ../development/python-modules/vtjp { };
 
   vtk = toPythonModule (pkgs.vtk_9.override {
     inherit python;

@@ -41,11 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
       configDir = if stdenv.isDarwin then "config_mac" else "config_linux";
     in
     ''
+      runHook preInstall
+
       install -Dm444 -t $out/share/java/jdtls/plugins/ plugins/*
       install -Dm444 -t $out/share/java/jdtls/features/ features/*
       install -Dm444 -t $out/share/java/jdtls/${configDir} ${configDir}/*
       install -Dm555 -t $out/bin bin/jdtls
       install -Dm444 -t $out/bin bin/jdtls.py
+
+      runHook postInstall
     '';
 
   passthru.updateScript = ./update.sh;

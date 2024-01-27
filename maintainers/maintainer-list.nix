@@ -11970,6 +11970,12 @@
     githubId = 4641445;
     name = "Carlo Nucera";
   };
+  medv = {
+    email = "mikhail.advent@gmail.com";
+    github = "medv";
+    githubId = 1631737;
+    name = "Mikhail Medvedev";
+  };
   megheaiulian = {
     email = "iulian.meghea@gmail.com";
     github = "megheaiulian";
@@ -15379,7 +15385,7 @@
     name = "Jonathan Wright";
   };
   quantenzitrone = {
-    email = "quantenzitrone@protonmail.com";
+    email = "nix@dev.quantenzitrone.eu";
     github = "quantenzitrone";
     githubId = 74491719;
     matrix = "@quantenzitrone:matrix.org";
