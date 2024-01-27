@@ -32564,6 +32564,10 @@ with pkgs;
 
   spot = callPackage ../applications/audio/spot { };
 
+  spotify-cli = callPackage ../applications/audio/spotify-cli {
+    inherit (python3Packages) buildPythonPackage;
+  };
+
   spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
 
   spotifyd = callPackage ../applications/audio/spotifyd {
