@@ -1912,8 +1912,6 @@ with pkgs;
 
   hyperpotamus = callPackage ../tools/misc/hyperpotamus { };
 
-  igir = callPackage ../tools/games/igir { };
-
   immich-cli = callPackage ../tools/misc/immich-cli { };
 
   inherit (callPackages ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
