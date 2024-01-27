@@ -48,11 +48,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Material Based Cursor Theme";
     homepage = "https://github.com/ful1e5/Bibata_Cursor";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rawkode AdsonCicilioti ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ rawkode AdsonCicilioti ];
   };
 }
