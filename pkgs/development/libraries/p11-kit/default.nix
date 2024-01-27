@@ -73,6 +73,13 @@ stdenv.mkDerivation rec {
       --replace 'install_dir: prefix / p11_system_config' "install_dir: '$out/etc/pkcs11'"
   '';
 
+  preCheck = ''
+    # Tests run in fakeroot for non-root users (with Nix single-user install)
+    if [ "$(id -u)" != "0" ]; then
+      export FAKED_MODE=1
+    fi
+  '';
+
   meta = with lib; {
     description = "Library for loading and sharing PKCS#11 modules";
     longDescription = ''
