@@ -676,6 +676,7 @@ If our package sets `includeStorePaths` to `false`, we'll end up with only the f
 dockerTools.streamLayeredImage {
   name = "hello";
   contents = [ hello ];
+  includeStorePaths = false;
 }
 ```
 
@@ -714,56 +715,168 @@ dockerTools.streamLayeredImage {
 ```
 :::
 
-## pullImage {#ssec-pkgs-dockerTools-fetchFromRegistry}
+[]{#ssec-pkgs-dockerTools-fetchFromRegistry}
+## pullImage {#ssec-pkgs-dockerTools-pullImage}
 
-This function is analogous to the `docker pull` command, in that it can be used to pull a Docker image from a Docker registry. By default [Docker Hub](https://hub.docker.com/) is used to pull images.
+This function is similar to the `docker pull` command, which means it can be used to pull a Docker image from a registry that implements the [Docker Registry HTTP API V2](https://distribution.github.io/distribution/spec/api/).
+By default, the `docker.io` registry is used.
 
-Its parameters are described in the example below:
+The image will be downloaded as an uncompressed Docker-compatible repository tarball, which is suitable for use with other `dockerTools` functions such as [`buildImage`](#ssec-pkgs-dockerTools-buildImage), [`buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage), and [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage).
+
+This function requires two different types of hashes/digests to be specified:
+
+- One of them is used to identify a unique image within the registry (see the documentation for the `imageDigest` attribute).
+- The other is used by Nix to ensure the contents of the output haven't changed (see the documentation for the `sha256` attribute).
+
+Both hashes are required because they must uniquely identify some content in two completely different systems (the Docker registry and the Nix store), but their values will not be the same.
+See [](#ex-dockerTools-pullImage-nixprefetchdocker) for a tool that can help gather these values.
+
+### Inputs {#ssec-pkgs-dockerTools-pullImage-inputs}
+
+`pullImage` expects a single argument with the following attributes:
+
+`imageName` (String)
+
+: Specifies the name of the image to be downloaded, as well as the registry endpoint.
+  By default, the `docker.io` registry is used.
+  To specify a different registry, prepend the endpoint to `imageName`, separated by a slash (`/`).
+  See [](#ex-dockerTools-pullImage-differentregistry) for how to do that.
+
+`imageDigest` (String)
+
+: Specifies the digest of the image to be downloaded.
+
+  :::{.tip}
+  **Why can't I specify a tag to pull from, and have to use a digest instead?**
+
+  Tags are often updated to point to different image contents.
+  The most common example is the `latest` tag, which is usually updated whenever a newer image version is available.
+
+  An image tag isn't enough to guarantee the contents of an image won't change, but a digest guarantees this.
+  Providing a digest helps ensure that you will still be able to build the same Nix code and get the same output even if newer versions of an image are released.
+  :::
+
+`sha256` (String)
+
+: The hash of the image after it is downloaded.
+  Internally, this is passed to the [`outputHash`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-outputHash) attribute of the resulting derivation.
+  This is needed to provide a guarantee to Nix that the contents of the image haven't changed, because Nix doesn't support the value in `imageDigest`.
+
+`finalImageName` (String; _optional_)
+
+: Specifies the name that will be used for the image after it has been downloaded.
+  This only applies after the image is downloaded, and is not used to identify the image to be downloaded in the registry.
+  Use `imageName` for that instead.
+
+  _Default value:_ the same value specified in `imageName`.
+
+`finalImageTag` (String; _optional_)
+
+: Specifies the tag that will be used for the image after it has been downloaded.
+  This only applies after the image is downloaded, and is not used to identify the image to be downloaded in the registry.
+
+  _Default value:_ `"latest"`.
+
+`os` (String; _optional_)
+
+: Specifies the operating system of the image to pull.
+  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties), which should still be compatible with Docker.
+  According to the linked specification, all possible values for `$GOOS` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `darwin` or `linux`.
+
+  _Default value:_ `"linux"`.
+
+`arch` (String; _optional_)
+
+: Specifies the architecture of the image to pull.
+  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties), which should still be compatible with Docker.
+  According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
+
+  _Default value:_ the same value from `pkgs.go.GOARCH`.
+
+`tlsVerify` (Boolean; _optional_)
+
+: Used to enable or disable HTTPS and TLS certificate verification when communicating with the chosen Docker registry.
+  Setting this to `false` will make `pullImage` connect to the registry through HTTP.
+
+  _Default value:_ `true`.
+
+`name` (String; _optional_)
+
+: The name used for the output in the Nix store path.
+
+  _Default value:_ a value derived from `finalImageName` and `finalImageTag`, with some symbols replaced.
+  It is recommended to treat the default as an opaque value.
+
+### Examples {#ssec-pkgs-dockerTools-pullImage-examples}
+
+::: {.example #ex-dockerTools-pullImage-niximage}
+# Pulling the nixos/nix Docker image from the default registry
+
+This example pulls the [`nixos/nix` image](https://hub.docker.com/r/nixos/nix) and saves it in the Nix store.
 
 ```nix
-pullImage {
+{ dockerTools }:
+dockerTools.pullImage {
   imageName = "nixos/nix";
-  imageDigest =
-    "sha256:473a2b527958665554806aea24d0131bacec46d23af09fef4598eeab331850fa";
+  imageDigest = "sha256:b8ea88f763f33dfda2317b55eeda3b1a4006692ee29e60ee54ccf6d07348c598";
   finalImageName = "nix";
-  finalImageTag = "2.11.1";
-  sha256 = "sha256-qvhj+Hlmviz+KEBVmsyPIzTB3QlVAFzwAY1zDPIBGxc=";
-  os = "linux";
-  arch = "x86_64";
+  finalImageTag = "2.19.3";
+  sha256 = "zRwlQs1FiKrvHPaf8vWOR/Tlp1C5eLn1d9pE4BZg3oA=";
+}
+```
+:::
+
+::: {.example #ex-dockerTools-pullImage-differentregistry}
+# Pulling the nixos/nix Docker image from a specific registry
+
+This example pulls the [`coreos/etcd` image](https://quay.io/repository/coreos/etcd) from the `quay.io` registry.
+
+```nix
+{ dockerTools }:
+dockerTools.pullImage {
+  imageName = "quay.io/coreos/etcd";
+  imageDigest = "sha256:24a23053f29266fb2731ebea27f915bb0fb2ae1ea87d42d890fe4e44f2e27c5d";
+  finalImageName = "etcd";
+  finalImageTag = "v3.5.11";
+  sha256 = "Myw+85f2/EVRyMB3axECdmQ5eh9p1q77FWYKy8YpRWU=";
+}
+```
+:::
+
+::: {.example #ex-dockerTools-pullImage-nixprefetchdocker}
+# Finding the digest and hash values to use for `dockerTools.pullImage`
+
+Since [`dockerTools.pullImage`](#ssec-pkgs-dockerTools-pullImage) requires two different hashes, one can run the `nix-prefetch-docker` tool to find out the values for the hashes.
+The tool outputs some text for an attribute set which you can pass directly to `pullImage`.
+
+```shell
+$ nix run nixpkgs#nix-prefetch-docker -- --image-name nixos/nix --image-tag 2.19.3 --arch amd64 --os linux
+(some output removed for clarity)
+Writing manifest to image destination
+-> ImageName: nixos/nix
+-> ImageDigest: sha256:498fa2d7f2b5cb3891a4edf20f3a8f8496e70865099ba72540494cd3e2942634
+-> FinalImageName: nixos/nix
+-> FinalImageTag: latest
+-> ImagePath: /nix/store/4mxy9mn6978zkvlc670g5703nijsqc95-docker-image-nixos-nix-latest.tar
+-> ImageHash: 1q6cf2pdrasa34zz0jw7pbs6lvv52rq2aibgxccbwcagwkg2qj1q
+{
+  imageName = "nixos/nix";
+  imageDigest = "sha256:498fa2d7f2b5cb3891a4edf20f3a8f8496e70865099ba72540494cd3e2942634";
+  sha256 = "1q6cf2pdrasa34zz0jw7pbs6lvv52rq2aibgxccbwcagwkg2qj1q";
+  finalImageName = "nixos/nix";
+  finalImageTag = "latest";
 }
 ```
 
-- `imageName` specifies the name of the image to be downloaded, which can also include the registry namespace (e.g. `nixos`). This argument is required.
+It is important to supply the `--arch` and `--os` arguments to `nix-prefetch-docker` to filter to a single image, in case there are multiple architectures and/or operating systems supported by the image name and tags specified.
+By default, `nix-prefetch-docker` will set `os` to `linux` and `arch` to `amd64`.
 
-- `imageDigest` specifies the digest of the image to be downloaded. This argument is required.
-
-- `finalImageName`, if specified, this is the name of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it's equal to `imageName`.
-
-- `finalImageTag`, if specified, this is the tag of the image to be created. Note it is never used to fetch the image since we prefer to rely on the immutable digest ID. By default it's `latest`.
-
-- `sha256` is the checksum of the whole fetched image. This argument is required.
-
-- `os`, if specified, is the operating system of the fetched image. By default it's `linux`.
-
-- `arch`, if specified, is the cpu architecture of the fetched image. By default it's `x86_64`.
-
-`nix-prefetch-docker` command can be used to get required image parameters:
-
-```ShellSession
-$ nix run nixpkgs#nix-prefetch-docker -- --image-name mysql --image-tag 5
+Run `nix-prefetch-docker --help` for a list of all supported arguments:
+```shell
+$ nix run nixpkgs#nix-prefetch-docker -- --help
+(output removed for clarity)
 ```
-
-Since a given `imageName` may transparently refer to a manifest list of images which support multiple architectures and/or operating systems, you can supply the `--os` and `--arch` arguments to specify exactly which image you want. By default it will match the OS and architecture of the host the command is run on.
-
-```ShellSession
-$ nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
-```
-
-Desired image name and tag can be set using `--final-image-name` and `--final-image-tag` arguments:
-
-```ShellSession
-$ nix-prefetch-docker --image-name mysql --image-tag 5 --final-image-name eu.gcr.io/my-project/mysql --final-image-tag prod
-```
+:::
 
 ## exportImage {#ssec-pkgs-dockerTools-exportImage}
 
@@ -844,6 +957,18 @@ buildImage {
 ```
 
 Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
+
+When using `buildLayeredImage`, you can put this in `fakeRootCommands` if you `enableFakechroot`:
+```nix
+buildLayeredImage {
+  name = "shadow-layered";
+
+  fakeRootCommands = ''
+    ${pkgs.dockerTools.shadowSetup}
+  '';
+  enableFakechroot = true;
+}
+```
 
 ## fakeNss {#ssec-pkgs-dockerTools-fakeNss}
 

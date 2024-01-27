@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , pythonOlder
 , awkward
+, hatch-vcs
 , hatchling
 , numpy
 , fsspec
 , packaging
+, pandas
 , pytestCheckHook
 , lz4
 , pytest-timeout
@@ -18,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.2.1";
+  version = "5.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,10 +29,11 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3BGGtA99MoagFtGcCeGiDyvzqixf+lbEu9Dn/62RQto=";
+    hash = "sha256-7X8oIMvOSC1JXQrZTPXLiqsUnfSc2Rx3KCvxKbhvPzM=";
   };
 
   nativeBuildInputs = [
+    hatch-vcs
     hatchling
   ];
 
@@ -42,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pandas
     pytestCheckHook
     lz4
     pytest-timeout
