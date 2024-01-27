@@ -4456,6 +4456,12 @@
     githubId = 4951663;
     name = "Morgan Helton";
   };
+  devzero = {
+    email = "nixos@logon.pw";
+    github = "devzero";
+    githubId = 315166;
+    name = "Chris Connelly";
+  };
   dezgeg = {
     email = "tuomas.tynkkynen@iki.fi";
     github = "dezgeg";
