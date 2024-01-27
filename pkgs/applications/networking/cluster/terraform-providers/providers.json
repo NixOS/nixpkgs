@@ -390,11 +390,11 @@
     "vendorHash": "sha256-c40HqNBU0dXsidddgXuke8cSo/frAUKlxWMbsimiYMc="
   },
   "exoscale": {
-    "hash": "sha256-HVNGzcX0l7E4jB6TiWSPG9XRmpKL6HIt2gaYiDLFOb4=",
+    "hash": "sha256-SDvW6VC8MwrAWhFGNFMNXA55FbMwSBs9BjX9gnqesZ8=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.54.1",
+    "rev": "v0.55.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
