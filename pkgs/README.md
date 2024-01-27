@@ -348,7 +348,7 @@ There are a few naming guidelines:
 
 - The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
 
-- The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
+- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"`.
 
 - If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
 

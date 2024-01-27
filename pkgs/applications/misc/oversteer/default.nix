@@ -14,7 +14,7 @@ let
       pygobject3
     ]);
 
-  version = "0.8.0";
+  version = "0.8.1";
 in stdenv.mkDerivation {
   inherit version;
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     owner = "berarma";
     repo = "oversteer";
     rev = version;
-    sha256 = "sha256-fkf6sa4yYbxGOehyLzuFj5nZiPK3B1D/VVvobhKB4Uo=";
+    sha256 = "sha256-J23fgEDkfZMjVEYHaSPbU9zh5CQFjPmqMsm09VybBv8=";
   };
 
   buildInputs = [ bash gtk3 ];

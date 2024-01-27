@@ -2,6 +2,7 @@
 , less
 , buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkg-config, qt5
+, copyDesktopItems, makeDesktopItem
 }:
 
 let
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
                 ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
                 ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
-  nativeBuildInputs = [ flex bison ]
+  nativeBuildInputs = [ flex bison copyDesktopItems ]
                       ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
                            pkg-config mkfontdir qt5.qtbase.dev
@@ -144,11 +145,26 @@ in stdenv.mkDerivation rec {
     ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "NetHack";
+      exec =
+         if x11Mode then "nethack-x11"
+         else if qtMode then "nethack-qt"
+         else "nethack";
+      icon = "nethack";
+      desktopName = "NetHack";
+      comment = "NetHack is a single player dungeon exploration game";
+      categories = [ "Game" "ActionGame" ];
+    })
+  ];
+
   meta = with lib; {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
     license = "nethack";
     platforms = if x11Mode then platforms.linux else platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "nethack";
   };
 }
