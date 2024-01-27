@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Library to detect and configure devices";
     homepage = "https://gitlab.com/ubports/development/core/deviceinfo";
+    changelog = "https://gitlab.com/ubports/development/core/deviceinfo/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
