@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "rich-rst";
-  version = "1.1.7";
+  version = "1.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "wasi-master";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-s48hdJo1LIRXTf+PeSBa6y/AH1NLmnyAafFydJ+exDk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jFPboZ5/T2I6EuyVM+45lrLWen8Kqf94gWXS1WDf1qU=";
   };
 
   nativeBuildInputs = [
