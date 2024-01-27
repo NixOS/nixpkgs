@@ -337,6 +337,11 @@ in mkLicense lset) ({
     fullName = "Creative Commons Attribution 1.0";
   };
 
+  cc-by-20 = {
+    spdxId = "CC-BY-2.0";
+    fullName = "Creative Commons Attribution 2.0";
+  };
+
   cc-by-30 = {
     spdxId = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
