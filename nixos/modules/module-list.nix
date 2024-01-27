@@ -139,6 +139,7 @@
   ./programs/_1password-gui.nix
   ./programs/_1password.nix
   ./programs/adb.nix
+  ./programs/alvr.nix
   ./programs/appgate-sdp.nix
   ./programs/atop.nix
   ./programs/ausweisapp.nix
