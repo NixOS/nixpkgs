@@ -14,7 +14,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.5.1";
+  version = "2.5.2";
 
   pyproject = true;
 
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-bmpofyW5IBRmVlzHP9YRlI/JNnnamKfF9jCG85G0wBc=";
+    hash = "sha256-r9ppuWYY3e2thsfFh4ooOgfqNvmCVw7fS0SpJCJcysQ=";
   };
 
   patches = [
