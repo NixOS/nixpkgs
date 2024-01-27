@@ -1,33 +1,81 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, boost, eigen
-, freeimage, freetype, libGLU, libGL, rapidjson, SDL2, alsa-lib
-, vlc }:
+{ lib
+, SDL2
+, alsa-lib
+, boost
+, cmake
+, curl
+, fetchFromGitHub
+, freeimage
+, freetype
+, libGL
+, libGLU
+, libvlc
+, pkg-config
+, rapidjson
+, stdenv
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emulationstation";
   version = "2.11.2";
 
   src = fetchFromGitHub {
-    fetchSubmodules = true;
     owner = "RetroPie";
     repo = "EmulationStation";
-    rev = "cda7de687924c4c1ab83d6b0ceb88aa734fe6cfe";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = true;
     hash = "sha256-J5h/578FVe4DXJx/AvpRnCIUpqBeFtmvFhUDYH5SErQ=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ alsa-lib boost curl eigen freeimage freetype libGLU libGL rapidjson SDL2 vlc ];
+  nativeBuildInputs = [
+    SDL2
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    SDL2
+    alsa-lib
+    boost
+    curl
+    freeimage
+    freetype
+    libGL
+    libGLU
+    libvlc
+    rapidjson
+  ];
+
+  strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "GL" true)
+  ];
 
   installPhase = ''
-    install -D ../emulationstation $out/bin/emulationstation
-    cp -r ../resources/ $out/bin/resources/
+    runHook preInstall
+
+    install -Dm755 ../emulationstation $out/bin/emulationstation
+    mkdir -p $out/share/emulationstation/
+    cp -r ../resources $out/share/emulationstation/
+
+    runHook preInstall
+  '';
+
+  # es-core/src/resources/ResourceManager.cpp: resources are searched at the
+  # same place of binaries.
+  postFixup = ''
+    pushd $out
+    ln -s $out/share/emulationstation/resources $out/bin/
+    popd
   '';
 
   meta = {
-    description = "A flexible emulator front-end supporting keyboardless navigation and custom system themes";
-    homepage = "https://emulationstation.org";
-    maintainers = [ lib.maintainers.edwtjo ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    homepage = "https://github.com/RetroPie/EmulationStation";
+    description = "A flexible emulator front-end supporting keyboardless navigation and custom system themes (forked by RetroPie)";
+    license = with lib.licenses; [ mit ];
     mainProgram = "emulationstation";
+    maintainers = with lib.maintainers; [ AndersonTorres edwtjo ];
+    platforms = lib.platforms.linux;
   };
-}
+})
