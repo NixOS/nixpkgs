@@ -614,6 +614,43 @@ rec {
       nestedTypes.elemType = elemType;
     };
 
+    attrTag = tags: attrTagWith { inherit tags; };
+
+    attrTagWith = { tags }:
+      let
+        choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
+      in
+      mkOptionType {
+        name = "attrTag";
+        description = "attribute-tagged union of ${choicesStr}";
+        getSubModules = null;
+        substSubModules = m: attrTagWith { tags = mapAttrs (n: v: v.substSubModules m) tags; };
+        check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
+        merge = loc: defs:
+          let
+            choice = head (attrNames (head defs).value);
+            checkedValueDefs = map
+              (def:
+                assert (length (attrNames def.value)) == 1;
+                if (head (attrNames def.value)) != choice
+                then throw "The option `${showOption loc}` is defined both as `${choice}` and `${head (attrNames def.value)}`, in ${showFiles (getFiles defs)}."
+                else { inherit (def) file; value = def.value.${choice}; })
+              defs;
+          in
+            if tags?${choice}
+            then
+              { ${choice} =
+                  (mergeDefinitions
+                    (loc ++ [choice])
+                    tags.${choice}
+                    checkedValueDefs
+                  ).mergedValue;
+              }
+            else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
+        nestedTypes = tags;
+        functor = (defaultFunctor "attrTagWith") // { payload = { inherit tags; }; binOp = a: b: { tags = a.tags // b.tags; }; };
+      };
+
     uniq = unique { message = ""; };
 
     unique = { message }: type: mkOptionType rec {
