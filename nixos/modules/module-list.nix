@@ -831,6 +831,7 @@
   ./services/monitoring/metricbeat.nix
   ./services/monitoring/mimir.nix
   ./services/monitoring/monit.nix
+  ./services/monitoring/mqtt2prometheus.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix

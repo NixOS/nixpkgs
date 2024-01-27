@@ -553,6 +553,7 @@ in {
   moosefs = handleTest ./moosefs.nix {};
   mpd = handleTest ./mpd.nix {};
   mpv = handleTest ./mpv.nix {};
+  mqtt2prometheus = handleTest ./mqtt2prometheus.nix {};
   mtp = handleTest ./mtp.nix {};
   multipass = handleTest ./multipass.nix {};
   mumble = handleTest ./mumble.nix {};

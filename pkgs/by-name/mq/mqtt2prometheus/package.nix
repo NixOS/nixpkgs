@@ -3,6 +3,7 @@
 , lib
 , testers
 , mqtt2prometheus
+, nixosTests
 }:
 buildGoModule rec {
   pname = "mqtt2prometheus";
@@ -28,7 +29,10 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion { package = mqtt2prometheus; };
+    tests = {
+      version = testers.testVersion { package = mqtt2prometheus; };
+      inherit (nixosTests) mqtt2prometheus;
+    };
   };
 
   meta = {
