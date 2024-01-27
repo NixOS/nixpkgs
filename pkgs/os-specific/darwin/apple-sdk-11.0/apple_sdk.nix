@@ -215,7 +215,10 @@ in rec {
     # Overrides for framework derivations.
     overrides = super: {
       CoreFoundation = lib.overrideDerivation super.CoreFoundation (drv: {
-        setupHook = ./cf-setup-hook.sh;
+        setupHooks = [
+          ../../../build-support/setup-hooks/role.bash
+          ./cf-setup-hook.sh
+        ];
       });
 
       # This framework doesn't exist in newer SDKs (somewhere around 10.13), but

@@ -277,7 +277,10 @@ in rec {
     });
 
     CoreFoundation = lib.overrideDerivation super.CoreFoundation (drv: {
-      setupHook = ./cf-setup-hook.sh;
+      setupHooks = [
+        ../../../build-support/setup-hooks/role.bash
+        ./cf-setup-hook.sh
+      ];
     });
 
     CoreMedia = lib.overrideDerivation super.CoreMedia (drv: {
