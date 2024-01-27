@@ -21,11 +21,16 @@ let
   oldDependency = writeShellScriptBin "dependency" ''
     echo "got old dependency"
   '';
+  oldDependency-ca = oldDependency.overrideAttrs { __contentAddressed = true; };
   newDependency = writeShellScriptBin "dependency" ''
     echo "got new dependency"
   '';
+  newDependency-ca = newDependency.overrideAttrs { __contentAddressed = true; };
   basic = writeShellScriptBin "test" ''
     ${oldDependency}/bin/dependency
+  '';
+  basic-ca = writeShellScriptBin "test" ''
+    ${oldDependency-ca}/bin/dependency
   '';
   transitive = writeShellScriptBin "test" ''
     ${basic}/bin/test
@@ -56,6 +61,18 @@ in
   replacedependency-basic = mkCheckOutput "replacedependency-basic" (replaceDependency {
     drv = basic;
     inherit oldDependency newDependency;
+  }) "got new dependency";
+
+  replacedependency-basic-old-ca = mkCheckOutput "replacedependency-basic" (replaceDependency {
+    drv = basic-ca;
+    oldDependency = oldDependency-ca;
+    inherit newDependency;
+  }) "got new dependency";
+
+  replacedependency-basic-new-ca = mkCheckOutput "replacedependency-basic" (replaceDependency {
+    drv = basic;
+    inherit oldDependency;
+    newDependency = newDependency-ca;
   }) "got new dependency";
 
   replacedependency-transitive = mkCheckOutput "replacedependency-transitive" (replaceDependency {

@@ -43,14 +43,14 @@ let
   inherit (builtins) unsafeDiscardStringContext appendContext;
   inherit (lib)
     trace
-    stringLength
     listToAttrs
+    isStorePath
+    readFile
     attrValues
     mapAttrs
     filter
     hasAttr
     mapAttrsToList
-    all
     ;
   inherit (lib.attrsets) mergeAttrsList;
 
@@ -89,17 +89,38 @@ let
         ''
       ).outPath;
 
-  knownDerivations = [ drv ] ++ map ({ newDependency, ... }: newDependency) replacements;
+  targetDerivations = [ drv ] ++ map ({ newDependency, ... }: newDependency) replacements;
+  realisation =
+    drv:
+    if isStorePath drv then
+      # Input-addressed and fixed-output derivations have their realisation as outPath.
+      toContextlessString drv
+    else
+      # Floating and deferred derivations have a placeholder outPath.
+      # The realisation can only be obtained by performing an actual build.
+      unsafeDiscardStringContext (
+        readFile (
+          runCommandLocal "realisation"
+            {
+              env = {
+                inherit drv;
+              };
+            }
+            ''
+              echo -n "$drv" > $out
+            ''
+        )
+      );
   referencesMemo = listToAttrs (
     map (drv: {
-      name = toContextlessString drv;
+      name = realisation drv;
       value = referencesOf drv;
-    }) knownDerivations
+    }) targetDerivations
   );
   relevantReferences = mergeAttrsList (attrValues referencesMemo);
   # Make sure a derivation is returned even when no replacements are actually applied.
   # Yes, even in the stupid edge case where the root derivation itself is replaced.
-  storePathOrKnownDerivationMemo =
+  storePathOrKnownTargetDerivationMemo =
     mapAttrs (
       drv: _references:
       # builtins.storePath does not work in pure evaluation mode, even though it is not impure.
@@ -109,9 +130,9 @@ let
     ) relevantReferences
     // listToAttrs (
       map (drv: {
-        name = toContextlessString drv;
+        name = realisation drv;
         value = drv;
-      }) knownDerivations
+      }) targetDerivations
     );
 
   relevantReplacements = filter (
@@ -121,7 +142,7 @@ let
         # Attempting to replace a dependency by itself is completely useless, and would only lead to infinite recursion.
         # Hence it must not be attempted to apply this replacement in any case.
         false
-    else if !hasAttr (toContextlessString oldDependency) referencesMemo.${toContextlessString drv} then
+    else if !hasAttr (realisation oldDependency) referencesMemo.${realisation drv} then
       warn "replaceDependencies: ${drv} does not depend on ${oldDependency}"
         # Handle the corner case where one of the other replacements introduces the dependency.
         # It would be more correct to not show the warning in this case, but the added complexity is probably not worth it.
@@ -146,7 +167,7 @@ let
         );
       in
       replaceDirectDependencies {
-        drv = storePathOrKnownDerivationMemo.${drv};
+        drv = storePathOrKnownTargetDerivationMemo.${drv};
         replacements = mapAttrsToList (name: value: {
           oldDependency = name;
           newDependency = value;
@@ -155,21 +176,18 @@ let
     ) relevantReferences
     // listToAttrs (
       map (drv: {
-        name = toContextlessString drv;
-        value = storePathOrKnownDerivationMemo.${toContextlessString drv};
+        name = realisation drv;
+        value = storePathOrKnownTargetDerivationMemo.${realisation drv};
       }) cutoffPackages
     )
     // listToAttrs (
       map (
         { oldDependency, newDependency }:
         {
-          name = toContextlessString oldDependency;
-          value = rewriteMemo.${toContextlessString newDependency};
+          name = realisation oldDependency;
+          value = rewriteMemo.${realisation newDependency};
         }
       ) relevantReplacements
     );
 in
-assert all (
-  { oldDependency, newDependency }: stringLength oldDependency == stringLength newDependency
-) replacements;
-rewriteMemo.${toContextlessString drv}
+rewriteMemo.${realisation drv}
