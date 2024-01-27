@@ -11,13 +11,13 @@
 buildPythonPackage rec {
   pname = "atom";
   version = "0.10.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nucleic";
-    repo = pname;
+    repo = "atom";
     rev = "refs/tags/${version}";
     hash = "sha256-HoUKU6z+6PPBUsvI4earZG9UXN0PrugAxu/F7WUfUe8=";
   };
