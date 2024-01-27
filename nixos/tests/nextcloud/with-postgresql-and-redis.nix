@@ -41,7 +41,7 @@ in {
         extraApps = {
           inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push;
         };
-        extraOptions.trusted_proxies = [ "::1" ];
+        settings.trusted_proxies = [ "::1" ];
       };
 
       services.redis.servers."nextcloud".enable = true;
