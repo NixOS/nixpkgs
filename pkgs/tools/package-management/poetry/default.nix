@@ -1,8 +1,8 @@
-{ python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: rec {
+  newPackageOverrides =
+    self: super: {
       poetry = self.callPackage ./unwrapped.nix { };
 
       # The versions of Poetry and poetry-core need to match exactly,
@@ -21,7 +21,10 @@ let
         };
       });
     } // (plugins self);
-  };
+  python = python3.override (old: {
+    packageOverrides = lib.composeManyExtensions
+      ((if old ? packageOverrides then [ old.packageOverrides ] else [ ]) ++ [ newPackageOverrides ]);
+  });
 
   plugins = ps: with ps; {
     poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };

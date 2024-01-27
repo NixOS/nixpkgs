@@ -10,39 +10,44 @@
 , sevVariant ? false
 }:
 
-assert sevVariant -> stdenv.isx86_64;
 stdenv.mkDerivation rec {
   pname = "libkrunfw";
-  version = "3.11.0";
+  version = "4.0.0";
 
-  src = if stdenv.isLinux then fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-p5z3Dc7o/Ja3K0VlOWIPc0qOIU5p+JSxWe7QiVQNkjs=";
-  } else fetchurl {
-    url = "https://github.com/containers/libkrunfw/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-XcdsK8L5NwMgelSMhE2YKYxaAin/3p/+GrljGGZpK5Y=";
+    repo = "libkrunfw";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9oVl4mlJE7QHeehG86pbh7KdShZNUGwlnO75k/F/PQ0=";
   };
 
   kernelSrc = fetchurl {
-    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.2.9.tar.xz";
-    hash = "sha256-kDRJwWTAPw50KqzJIOGFY1heB6KMbLeeD9bDZpX9Q/U=";
+    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.7.tar.xz";
+    hash = "sha256-3hQ8th3Kp1bAX1b/NRRDFtgQYVgZUYoz40dU8GTEp9g=";
   };
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace Makefile \
-      --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)' \
-      --replace 'gcc' '$(CC)'
+      --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)'
   '';
 
-  nativeBuildInputs = [ flex bison bc python3 python3.pkgs.pyelftools ];
-  buildInputs = lib.optionals stdenv.isLinux [ elfutils ];
+  nativeBuildInputs = [
+    flex
+    bison
+    bc
+    python3
+    python3.pkgs.pyelftools
+  ];
+
+  buildInputs = [
+    elfutils
+  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "SONAME_Darwin=-Wl,-install_name,${placeholder "out"}/lib/libkrunfw.dylib"
-  ] ++ lib.optional sevVariant "SEV=1";
+  ] ++ lib.optionals sevVariant [
+    "SEV=1"
+  ];
 
   enableParallelBuilding = true;
 
@@ -51,7 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/libkrunfw";
     license = with licenses; [ lgpl2Only lgpl21Only ];
     maintainers = with maintainers; [ nickcao ];
-    platforms = [ "x86_64-linux" "aarch64-darwin" ];
-    sourceProvenance = with sourceTypes; lib.optionals stdenv.isDarwin [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
   };
 }

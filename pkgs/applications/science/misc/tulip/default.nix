@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tulip";
-  version = "5.7.2";
+  version = "5.7.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/auber/tulip-${version}_src.tar.gz";
-    hash = "sha256-b+XFCS6Ks+EpwxgYFzWdRomfCpHXmZHXnrQM+ZSLN/0=";
+    hash = "sha256-arpC+FsDYGMf47phtSzyjjvDg/UYZS+akOe5CYfajdU=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ]
@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ ''--prefix PATH : ${lib.makeBinPath [ python3 ]}'' ];
 
-  # error: format string is not a string literal (potentially insecure)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-format-security";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+    # fatal error: 'Python.h' file not found
+    "-I${python3}/include/${python3.libPrefix}"
+    # error: format string is not a string literal (potentially insecure)
+    "-Wno-format-security"
+  ]);
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;

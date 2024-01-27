@@ -76,6 +76,15 @@ buildPythonPackage rec {
   ]
   ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
+  disabledTests = [
+    # Failed: External connections not allowed during tests.
+    "test_has_expired"
+    "test_has_not_expired"
+    "test_memory_cache_timeout"
+    "test_bytes_like_password_digest"
+    "test_password_digest"
+  ];
+
   preCheck = ''
     export HOME=$TMPDIR
   '';

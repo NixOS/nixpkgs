@@ -5,18 +5,25 @@
 
 buildGoModule rec {
   pname = "katana";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "katana";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wpGRpgRJtywkTJ3YBk5TzXc2taPPWjOhj+Kg8hAgm7M=";
+    hash = "sha256-phxJhrZaJ+gw7gZWwQK0pvWWxkS4UDi77s+qgTvS/fo=";
   };
 
-  vendorHash = "sha256-qqivaKipe7lfUq3Neod8JMvtMVQN4O03JpDMSMHf8YY=";
+  vendorHash = "sha256-go+6NOQOnmds7EuA5k076Qdib2CqGthH9BHOm0YYKaA=";
 
-  subPackages = [ "cmd/katana" ];
+  subPackages = [
+    "cmd/katana"
+  ];
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   meta = with lib; {
     description = "A next-generation crawling and spidering framework";

@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "traefik";
-  version = "2.10.6";
+  version = "2.10.7";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    hash = "sha256-9pv4x11GVkdNjs1IFESeB7k3qJisXcoK+QLp8LpbhDw=";
+    hash = "sha256-I+jmMtqWadWfT7nk2D9im6C2BGpPLts/7cdJ3NHsIks=";
     stripRoot = false;
   };
 
@@ -16,7 +16,7 @@ buildGoModule rec {
   subPackages = [ "cmd/traefik" ];
 
   preBuild = ''
-    go generate
+    GOOS= GOARCH= CGO_ENABLED=0 go generate
 
     CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
 

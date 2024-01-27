@@ -5,13 +5,13 @@
 
 buildNpmPackage rec {
   pname = "light-entity-card";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "ljmerza";
     repo = "light-entity-card";
     rev = "refs/tags/${version}";
-    hash = "sha256-CJpRvgPf7+v9m/8/O2R+nut3PnyDPC8OTipyE+Brp9U=";
+    hash = "sha256-LoZt65oAw52NxVFgV9kVDr65CX5G6Xek2zDafDIxXmw=";
   };
 
   npmDepsHash = "sha256-EZDTWtn3joikwiC5Kfn94+tXRDpBhMDHqHozfIkfbJ0=";

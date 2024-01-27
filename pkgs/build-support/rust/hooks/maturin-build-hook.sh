@@ -25,7 +25,7 @@ maturinBuildHook() {
 
     # Move the wheel to dist/ so that regular Python tooling can find it.
     mkdir -p dist
-    mv target/wheels/*.whl dist/
+    mv ${cargoRoot:+$cargoRoot/}target/wheels/*.whl dist/
 
     # These are python build hooks and may depend on ./dist
     runHook postBuild

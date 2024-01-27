@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "sbctl";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = pname;
     rev = version;
-    hash = "sha256-1dA+a8GS4teaLmclatJNKt+OjhabLO4j/+p4Q95yG/s=";
+    hash = "sha256-vxPYWoBU4k2fKWXGaMzIkUdj+EmPWTtCvMwAVmsgKaE=";
   };
 
   vendorHash = "sha256-kVXzHTONPCE1UeAnUiULjubJeZFD0DAxIk+w8/Dqs6c=";

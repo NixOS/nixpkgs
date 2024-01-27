@@ -1,84 +1,76 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
-, jdk
-/*
- * jPSXdec needs to be built with no later than JDK8, but
- * should be run with the latest to get HiDPI fixes, etc.
- */
-, jre ? jdk
 , ant
-, unoconv
+, jdk8 # the build script wants JAVA 8 for compilation
+, jre # version can be >= 8 (latest version by default)
 , makeWrapper
 , makeDesktopItem
+, copyDesktopItems
+, canonicalize-jars-hook
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "jpsxdec";
-  version = "1.06";
-
-  description = "Cross-platform PlayStation 1 audio and video converter";
-
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = description;
-    desktopName = "jPSXdec";
-    categories = [ "AudioVideo" "Utility" ];
-  };
-in
-stdenv.mkDerivation rec {
-  inherit pname version;
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "m35";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-6PLEvK4NP0/ipdygyDFFcWTIfch5y0Hren40+8iqYJs=";
+    repo = "jpsxdec";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PZOc5mpnUiUyydWyfZjWuPG4w+tRd6WLJ6YQMqu/95I=";
   };
 
-  nativeBuildInputs = [ ant jdk unoconv makeWrapper ];
-  buildInputs = [ jre ];
+  sourceRoot = "${finalAttrs.src.name}/jpsxdec";
 
-  patches = [
-    ./0001-jpsxdec-hackfix-build-with-newer-JDKs.patch
+  nativeBuildInputs = [
+    ant
+    jdk8
+    makeWrapper
+    copyDesktopItems
+    canonicalize-jars-hook
   ];
 
   buildPhase = ''
     runHook preBuild
-
-    cd jpsxdec
-    mkdir -p _ant/release/doc/
-    unoconv -d document -f pdf -o _ant/release/doc/jPSXdec-manual.pdf doc/jPSXdec-manual.odt
-
     ant release
-
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/pixmaps}
-    mv _ant/release $out/jpsxdec
+    mkdir -p $out/share/jpsxdec
+    mv _ant/release/{doc,*.jar} $out/share/jpsxdec
+    install -Dm644 src/jpsxdec/gui/icon48.png $out/share/pixmaps/jpsxdec.png
 
     makeWrapper ${jre}/bin/java $out/bin/jpsxdec \
-      --add-flags "-jar $out/jpsxdec/jpsxdec.jar"
-
-    cp ${src}/jpsxdec/src/jpsxdec/gui/icon48.png $out/share/pixmaps/${pname}.png
-    ln -s ${desktopItem}/share/applications $out/share
+        --add-flags "-jar $out/share/jpsxdec/jpsxdec.jar"
 
     runHook postInstall
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jpsxdec";
+      exec = "jpsxdec";
+      icon = "jpsxdec";
+      desktopName = "jPSXdec";
+      comment = finalAttrs.meta.description;
+      categories = [ "AudioVideo" "Utility" ];
+    })
+  ];
+
   meta = with lib; {
-    inherit description;
+    changelog = "https://github.com/m35/jpsxdec/blob/${finalAttrs.src.rev}/jpsxdec/doc/CHANGES.txt";
+    description = "Cross-platform PlayStation 1 audio and video converter";
     homepage = "https://jpsxdec.blogspot.com/";
-    platforms = platforms.all;
     license = {
-      url = "https://raw.githubusercontent.com/m35/jpsxdec/readme/.github/LICENSE.md";
+      url = "https://raw.githubusercontent.com/m35/jpsxdec/${finalAttrs.src.rev}/.github/LICENSE.md";
       free = true;
     };
+    mainProgram = "jpsxdec";
     maintainers = with maintainers; [ zane ];
+    platforms = platforms.all;
   };
-}
+})

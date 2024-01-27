@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , astroid
 , dill
@@ -19,40 +18,24 @@
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.17.5";
-  format = "pyproject";
+  version = "3.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pylint-dev";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cmH6Q6/XJXx8EXDIsik1Aheu9hYGvvlNvWBUCdmC3P8=";
+    repo = "pylint";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JwSzit4oDxAqrQFlvTNF7lrirhaHbJ15MRKbl7c7bEg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "update-setuptools.patch";
-      url = "https://github.com/pylint-dev/pylint/commit/1d029b594aa258fa01570632d001e801f9257d60.patch";
-      hash = "sha256-brQwelZVkSX9h0POH8OJeapZuWZ8p7BY/ZzhYzGbiHY=";
-    })
-    # https://github.com/pylint-dev/pylint/pull/8961
-    (fetchpatch {
-      name = "unpin-setuptools.patch";
-      url = "https://github.com/pylint-dev/pylint/commit/a0ac282d6f8df381cc04adc0a753bec66fc4db63.patch";
-      hash = "sha256-15O72LE2WQK590htNc3jghdbVoGLHUIngERDpqT8pK8=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -123,6 +106,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pylint.readthedocs.io/en/stable/";
     description = "A bug and style checker for Python";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple

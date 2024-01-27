@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
 , setuptools
 , glfw
 , moderngl
@@ -32,7 +33,12 @@ buildPythonPackage rec {
     hash = "sha256-OfvIxezeZyuv5LLbe+4o1X2UCGnXT2DNvAF7t2Isw6Y=";
   };
 
+  pythonRelaxDeps = [
+    "pillow"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -9,29 +9,29 @@
 let
   esbuild' = buildPackages.esbuild.override {
     buildGoModule = args: buildPackages.buildGoModule (args // rec {
-      version = "0.18.20";
+      version = "0.19.11";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+        hash = "sha256-NUwjzOpHA0Ijuh0E69KXx8YVS5GTnKmob9HepqugbIU=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 in buildNpmPackage rec {
   pname = "kaufkauflist";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
-    hash = "sha256-gIwJtfausORMfmZONhSOZ1DRW5CSH+cLDCNy3j+u6d0=";
+    hash = "sha256-kqDNA+BALVMrPZleyPxxCyls4VKBzY2MttzO51+Ixo8=";
   };
 
-  npmDepsHash = "sha256-d1mvC72ugmKLNStoemUr8ISCUYjyo9EDWdWUCD1FMiM=";
+  npmDepsHash = "sha256-O2fcmC7Hj9JLStMukyt12aMgntjXT7Lv3vYJp3GqO24=";
 
   ESBUILD_BINARY_PATH = lib.getExe esbuild';
 

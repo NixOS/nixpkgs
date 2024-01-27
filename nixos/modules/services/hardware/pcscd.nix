@@ -16,9 +16,6 @@ let
 
 in
 {
-
-  ###### interface
-
   options.services.pcscd = {
     enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
 
@@ -46,13 +43,10 @@ in
     };
   };
 
-  ###### implementation
-
   config = mkIf config.services.pcscd.enable {
-
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ package.out ];
     systemd.packages = [ (getBin package) ];
 
     services.pcscd.plugins = [ pkgs.ccid ];
@@ -61,7 +55,6 @@ in
 
     systemd.services.pcscd = {
       environment.PCSCLITE_HP_DROPDIR = pluginEnv;
-      restartTriggers = [ "/etc/reader.conf" ];
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the

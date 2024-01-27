@@ -13,7 +13,7 @@
 }:
 let
   pname = "polars";
-  version = "0.20.0";
+  version = "0.19.12";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
@@ -38,7 +38,6 @@ buildPythonPackage {
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
   preBuild = ''
-    cd py-polars
     #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
   '';
 
@@ -49,7 +48,7 @@ buildPythonPackage {
     };
   };
 
-  cargoRoot = "py-polars";
+  sourceRoot = "source/py-polars";
 
   # Revisit this whenever package or Rust is upgraded
   RUSTC_BOOTSTRAP = 1;

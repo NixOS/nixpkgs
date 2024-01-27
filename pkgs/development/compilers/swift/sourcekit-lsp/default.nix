@@ -40,6 +40,9 @@ stdenv.mkDerivation {
     swiftpmMakeMutable indexstore-db
     patch -p1 -d .build/checkouts/indexstore-db -i ${./patches/indexstore-db-macos-target.patch}
 
+    swiftpmMakeMutable swift-tools-support-core
+    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${./patches/force-unwrap-file-handles.patch}
+
     # This toggles a section specific to Xcode XCTest, which doesn't work on
     # Darwin, where we also use swift-corelibs-xctest.
     substituteInPlace Sources/LSPTestSupport/PerfTestCase.swift \

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
 , testers
+
+# for passthru.tests
+, gtk3
+, gtk4
+, sassc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,13 +27,24 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-26592.CVE-2022-43357.CVE-2022-43358.patch";
+      url = "https://github.com/sass/libsass/pull/3184/commits/5bb0ea0c4b2ebebe542933f788ffacba459a717a.patch";
+      hash = "sha256-DR6pKFWL70uJt//drzq34LeTzT8rUqgUTpgfUHpD2s4=";
+    })
+  ];
+
   preConfigure = ''
     export LIBSASS_VERSION=${finalAttrs.version}
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    inherit gtk3 gtk4 sassc;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "A C/C++ implementation of a Sass compiler";

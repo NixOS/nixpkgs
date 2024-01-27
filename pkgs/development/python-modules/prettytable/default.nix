@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.8.0";
+  version = "3.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,10 +20,8 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "prettytable";
     rev = "refs/tags/${version}";
-    hash= "sha256-JnxUjUosQJgprIbA9szSfw1Fi21Qc4WljoRAQv4x5YM=";
+    hash= "sha256-yIO4eO2VdOnUt9qoNQOeq/c0os2LQ3mqAkCOIuoGpyg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatch-vcs

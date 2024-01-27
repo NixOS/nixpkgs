@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "successor of GNU Wget, a file and recursive website downloader.";
+    description = "Successor of GNU Wget, a file and recursive website downloader";
     longDescription = ''
       Designed and written from scratch it wraps around libwget, that provides the basic
       functions needed by a web client.

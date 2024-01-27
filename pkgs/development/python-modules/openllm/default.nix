@@ -143,7 +143,10 @@ buildPythonPackage rec {
       # vllm
     ];
     full = with passthru.optional-dependencies; (
-      agents ++ awq ++ baichuan ++ chatglm ++ ctranslate ++ falcon ++ fine-tune ++ ggml ++ gptq ++ mpt ++ openai ++ playground ++ starcoder ++ vllm
+      agents ++ awq ++ baichuan ++ chatglm ++ ctranslate ++ falcon ++ fine-tune ++ ggml ++ gptq ++ mpt
+      # disambiguate between derivation input and passthru field
+      ++ passthru.optional-dependencies.openai
+      ++ playground ++ starcoder ++ vllm
     );
     all = passthru.optional-dependencies.full;
   };

@@ -253,7 +253,7 @@ checksum = "6184e33543162437515c2e2b48714794e37845ec9851711914eec9d308f6ebe8"
 
 [[package]]
 name = "difftastic"
-version = "0.53.1"
+version = "0.54.0"
 dependencies = [
  "aho-corasick",
  "assert_cmd",
@@ -266,7 +266,6 @@ dependencies = [
  "hashbrown 0.12.3",
  "humansize",
  "ignore",
- "is-terminal",
  "itertools 0.11.0",
  "lazy_static",
  "libc",

@@ -5,7 +5,7 @@
 , cmake
 , comic-neue
 , boost
-, catch2
+, catch2_3
 , inchi
 , cairo
 , eigen
@@ -42,8 +42,8 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2023.09.1";
-  format = "other";
+  version = "2023.09.3";
+  pyproject = false;
 
   src =
     let
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-qaYD/46oCTnso1FbD08zr2JuatKmSSqNBhOYlfeIiAA=";
+      hash = "sha256-bewOdmpnm6cArD5iaMKNqT8z4GUIpih+JzJ+wdo/lrI=";
     };
 
   unpackPhase = ''
@@ -84,6 +84,7 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     cairo
+    catch2_3
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
     memorymappingHook
   ];
@@ -109,7 +110,6 @@ buildPythonPackage rec {
   '';
 
   cmakeFlags = [
-    "-DCATCH_DIR=${catch2}/include/catch2"
     "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
     "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
     "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"

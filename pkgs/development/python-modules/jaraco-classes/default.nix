@@ -20,8 +20,6 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "jaraco" ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ more-itertools ];

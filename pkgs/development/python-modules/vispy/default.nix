@@ -3,22 +3,25 @@
 , buildPythonPackage
 , substituteAll
 , fetchPypi
-, cython
+, cython_3
 , fontconfig
 , freetype-py
 , hsluv
 , kiwisolver
 , libGL
 , numpy
+, oldest-supported-numpy
+, packaging
 , pythonOlder
+, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "vispy";
   version = "0.14.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -36,9 +39,11 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython
+    cython_3
+    oldest-supported-numpy
+    setuptools
     setuptools-scm
-    setuptools-scm-git-archive
+    wheel
   ];
 
   buildInputs = [
@@ -46,11 +51,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    fontconfig
     freetype-py
     hsluv
     kiwisolver
     numpy
+    packaging
   ];
 
   doCheck = false;  # otherwise runs OSX code on linux.

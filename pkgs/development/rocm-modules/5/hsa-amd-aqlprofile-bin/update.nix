@@ -37,6 +37,12 @@ let
 
     extVersion="$(echo $deb | grep -o -P "(?<=\.....).*(?=\..*-)")"
     version="$(echo $extVersion | sed "s/0/./1" | sed "s/0/./1")"
+    IFS='.' read -a version_arr <<< "$version"
+
+    if (( ''${version_arr[0]} > 5 )); then
+      echo "'rocmPackages_5.${prefix}-bin' is already at it's maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${prefix}-bin'." 1>&2
+      exit 1
+    fi
 
     if (( ''${#extVersion} == 5 )); then
       repoVersion="$version"

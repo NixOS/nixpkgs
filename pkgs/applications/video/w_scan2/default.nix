@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "w_scan2";
-  version = "1.0.14";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
     owner = "stefantalpalaru";
     repo = "w_scan2";
     rev = version;
-    hash = "sha256-fDFAJ4EMwu4X1Go3jkRjwA66xDY4tJ5wCKlEdZUT4qQ=";
+    hash = "sha256-ToD02W9H9HqddhpZsQm2Uzy/cVtv4KnfYmpCl2KEGSY=";
   };
 
   meta = {

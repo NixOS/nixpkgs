@@ -1,37 +1,48 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, bluepy
+, fetchPypi
 , pythonOlder
+, pythonRelaxDepsHook
+
+# build-system
+, setuptools
+
+# dependencies
+, bluepy
 , cryptography
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "miauth";
-  version = "0.9.1";
+  version = "0.9.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchFromGitHub {
-    owner = "dnandha";
-    repo = "miauth";
-    # Release is not tagged properly, https://github.com/dnandha/miauth/issues/15
-    # rev = "refs/tags/${version}";
-    rev = "refs/tags/release";
-    hash = "sha256-+aoY0Eyd9y7xQTA3uSC6YIZisViilsHlFaOXmhPMcBY=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-2/4nFInpdY8fb/b+sXhgT6ZPtEgBV+KHMyLnxIp6y/U=";
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "cryptography"
   ];
 
   propagatedBuildInputs = [
     bluepy
     cryptography
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

@@ -153,7 +153,7 @@ in let
       patches =
         [
           # FIXME: do we need this? ./procfs.patch
-          ./lldb/gnu-install-dirs.patch
+          ../common/lldb/gnu-install-dirs.patch
         ]
         # This is a stopgap solution if/until the macOS SDK used for x86_64 is
         # updated.

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, fetchzip, perl, ncurses
+{ lib, stdenv, fetchurl, fetchzip, perl, ncurses
 
   # for tests
 , aspell, glibc, runCommand
@@ -20,21 +20,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aspell";
-  version = "0.60.8";
+  version = "0.60.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
-    sha256 = "1wi60ankalmh8ds7nplz434jd7j94gdvbahdwsr539rlad8pxdzr";
+    hash = "sha256-1toSs01C1Ff6YE5DWtSEp0su/80SD/QKzWuz+yiH0hs=";
   };
 
-  patches = [
-    (fetchpatch {
-      #  objstack: assert that the alloc size will fit within a chunk
-      name = "CVE-2019-25051.patch";
-      url = "https://github.com/gnuaspell/aspell/commit/0718b375425aad8e54e1150313b862e4c6fd324a.patch";
-      sha256 = "03z259xrk41x3j190gaprf3mqysyfgh3a04rjmch3h625vj95x39";
-    })
-  ] ++ lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
+  patches = lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
 
   postPatch = ''
     patch interfaces/cc/aspell.h < ${./clang.patch}

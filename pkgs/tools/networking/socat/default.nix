@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
+  enableParallelBuilding = true;
+
   nativeCheckInputs = [ which nettools ];
   doCheck = false; # fails a bunch, hangs
 

@@ -1,7 +1,7 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, zope_interface
+, zope-interface
 , mock
 , pythonOlder
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    zope_interface
+    zope-interface
     mock
   ];
 

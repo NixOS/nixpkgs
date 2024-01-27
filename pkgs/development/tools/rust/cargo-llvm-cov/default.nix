@@ -26,7 +26,7 @@
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.5.37";
+  version = "0.6.2";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -37,7 +37,7 @@ let
   cargoLock = fetchurl {
     name = "Cargo.lock";
     url = "https://crates.io/api/v1/crates/${pname}/${version}/download";
-    sha256 = "sha256-UJXZ7FhbkIcVAv4PymO4sCqhJ0KFORCCO3w0w9W46qQ=";
+    sha256 = "sha256-iML16yjSJsyDsr9F3gyp4XTu5Z9petSUQ0jXotU5tmw=";
     downloadToTemp = true;
     postFetch = ''
       tar xzf $downloadedFile ${pname}-${version}/Cargo.lock
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aJIMG2gaotu1XdNxcE2xJS78qAqlNzF3p2RMvqBraTk=";
+    sha256 = "sha256-1VfWs8f4i3YjH69A7X3/1WPxSIwPRF5osQ/1eqOUB8U=";
     leaveDotGit = true;
   };
 
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoSha256 = "sha256-dbC8OcH/Ae98SUx9d4rsBdhYQfzsWZpiGqJoIGPDSbY=";
+  cargoSha256 = "sha256-9pOfhGnktEgyTbfK4roFU7t3qcgx2yRp17hJVKsvNqw=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests

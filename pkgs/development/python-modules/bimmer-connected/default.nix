@@ -60,6 +60,11 @@ buildPythonPackage rec {
     time-machine
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  disabledTests = [
+    # presumably regressed in pytest-asyncio 0.23.0
+    "test_get_remote_position_too_old"
+  ];
+
   preCheck = ''
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
   '';

@@ -180,10 +180,17 @@ backendStdenv.mkDerivation rec {
     # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
     # - do we even want to use nvidia-shipped libssl?
     "libcom_err.so.2"
+  ] ++ lib.optionals (lib.versionOlder version "10.1") [
+    # For Cuda 10.0, nVidia also shipped a jre implementation which needed
+    # two old versions of ffmpeg which are not available in nixpkgs
+    "libavcodec.so.54"
+    "libavcodec.so.53"
+    "libavformat.so.54"
+    "libavformat.so.53"
   ];
 
   preFixup =
-    if lib.versionOlder version "11" then
+    if (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") then
       ''
         ${lib.getExe' patchelf "patchelf"} $out/targets/*/lib/libnvrtc.so --add-needed libnvrtc-builtins.so
       ''

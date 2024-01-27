@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "tank-utility";
   version = "1.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,11 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-h9y3X+FSzSFt+bd/chz+x0nocHaKZ8DvreMxAYMs8/E=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     requests
     urllib3
-    setuptools
-  ] ++ urllib3.optional-dependencies.secure;
+  ];
 
   nativeCheckInputs = [
     mock

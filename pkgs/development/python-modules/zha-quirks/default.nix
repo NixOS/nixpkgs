@@ -2,7 +2,6 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.107";
+  version = "0.0.109";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,17 +20,8 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-JHf6PZDK7yjyHjjUhkNpqEINCaY916wX5rXaw1Fx1ro=";
+    hash = "sha256-fkE44j+wXdIJekJJNoO67YzsghalTUpyNx9R/B2Vn1Y=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/zigpy/zha-device-handlers/pull/2787
-      name = "zigpy-0.60-compat.patch";
-      url = "https://github.com/zigpy/zha-device-handlers/commit/f497ccd2437ae9a24b9afdb84f11fc27a30df211.patch";
-      hash = "sha256-ICatiA0QRmfJ4Vf4LWyUJI5TLeWoikII49HSBir5WNI=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

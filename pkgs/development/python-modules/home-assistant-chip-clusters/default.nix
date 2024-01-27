@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-clusters";
-  version = "2023.10.2";
+  version = "2023.12.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     pname = "home_assistant_chip_clusters";
     dist = "py3";
     python = "py3";
-    hash = "sha256-wAXxz0BryZ6i0yaqNp74PfApwMHYQuSLz5prJEiG1YE=";
+    hash = "sha256-4yAfbQBqHMEXWMwJ0kSDs0We/AsHweJ+Tc8aZiWi90w=";
   };
 
   propagatedBuildInputs = [

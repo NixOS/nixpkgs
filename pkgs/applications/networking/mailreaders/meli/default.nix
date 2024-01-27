@@ -22,15 +22,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchgit {
-    url = "https://git.meli.delivery/meli/meli.git";
+    url = "https://git.meli-email.org/meli/meli.git";
     rev = "v${version}";
-    hash = "sha256-iEHTFofga/HV/1jSAqTsqV55zC22tqI7UW7m4PZgz0M=";
+    hash = "sha256-wmIlYgXB17/i9Q+6C7pbcEjVlEuvhmqrSH+cDmaBKLs=";
   };
 
-  cargoHash = "sha256-ijlivyBezLECBSaWBYVy9tVcSO8U+yGDQyU4dIATR6k=";
+  cargoHash = "sha256-gYS/dxNMz/HkCmRXH5AdHPXJ2giqpAHc4eVXJGOpMDM=";
+
+  # Needed to get openssl-sys to use pkg-config
+  OPENSSL_NO_VENDOR=1;
 
   nativeBuildInputs = [
     pkg-config

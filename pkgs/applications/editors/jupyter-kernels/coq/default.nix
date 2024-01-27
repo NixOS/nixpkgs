@@ -18,7 +18,7 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.coq = coq-kernel.definition; }'
 
 let
-  python = python3.withPackages (ps: [ ps.traitlets ps.jupyter_core ps.ipykernel (callPackage ./kernel.nix {}) ]);
+  python = python3.withPackages (ps: [ ps.traitlets ps.jupyter-core ps.ipykernel (callPackage ./kernel.nix {}) ]);
 
   logos = runCommand "coq-logos" { buildInputs = [ imagemagick ]; } ''
     mkdir -p $out

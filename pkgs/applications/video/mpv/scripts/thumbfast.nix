@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildLua, mpv-unwrapped }:
+{ lib, fetchFromGitHub, unstableGitUpdater, buildLua, mpv-unwrapped }:
 
 buildLua {
   pname = "mpv-thumbfast";
@@ -10,6 +10,7 @@ buildLua {
     rev = "03e93feee5a85bf7c65db953ada41b4826e9f905";
     hash = "sha256-5u5WBvWOEydJrnr/vilEgW4+fxkxM6wNjb9Fyyxx/1c=";
   };
+  passthru.updateScript = unstableGitUpdater {};
 
   passthru.extraWrapperArgs = [
     "--prefix" "PATH" ":" "${lib.getBin mpv-unwrapped}/bin"

@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , glib
+, glib-networking
 , gtk3
 , libsoup
 , keybinder3
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    # for libsoup TLS support
+    glib-networking
     gtk3
     libsoup
     keybinder3

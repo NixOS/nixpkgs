@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "enlighten";
-  version = "1.12.3";
+  version = "1.12.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0lf4lQi0ICwj+uxBRfDMe1dVgkgBfpF/Z0sYKE8J6qM=";
+    hash = "sha256-dfPZK0ng715FT8Gg853Aq49tmUbL5TTbPe0wECF9W18=";
   };
 
   propagatedBuildInputs = [

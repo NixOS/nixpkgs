@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "revanced-cli";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://github.com/revanced/revanced-cli/releases/download/v${version}/revanced-cli-${version}-all.jar";
-    hash = "sha256-D/4zR5PvcZqv8yyNIzbnYnGoHDrPQAeHyrN/G4QsTB0=";
+    hash = "sha256-ydP9iPClWNKlbBhsNC1bzqfJYRyit1WsxIgwbQQbgi8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

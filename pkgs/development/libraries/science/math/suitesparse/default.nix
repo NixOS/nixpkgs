@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart.dev
     cudaPackages.cuda_cudart.lib
+    cudaPackages.cuda_cccl.dev
     cudaPackages.libcublas.dev
     cudaPackages.libcublas.lib
   ];

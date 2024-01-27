@@ -21,13 +21,13 @@
 }:
 
 let
-  version = "2.1.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jD0dRgU/9gtNZUuTV+zkjqWb8gBnvD/AOTPucdaVKwE=";
+    hash = "sha256-bIiUG5yLpKOoxByef2Wm7MmSoL5zAYE9x6/zZywG9aE=";
   };
 
   python = python3;
@@ -52,7 +52,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-K7wTYGGwEhPoXdRD+4swhSlMH0iem6YkF0tjnVHh7K8=";
+    npmDepsHash = "sha256-4PIslsmbcET/kKLZ/gijwEyBB9zgZR6vMU9h9enzScE=";
 
     nativeBuildInputs = [
       pkg-config
@@ -211,7 +211,7 @@ python.pkgs.buildPythonApplication rec {
     whitenoise
     whoosh
     zipp
-    zope_interface
+    zope-interface
     zxing-cpp
   ]
   ++ redis.optional-dependencies.hiredis

@@ -5,7 +5,6 @@
 , cmake
 , expat
 , yaml-cpp
-, ilmbase
 , pystring
 , imath
 , minizip-ng
@@ -60,7 +59,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat
     yaml-cpp
-    ilmbase
     pystring
     imath
     minizip-ng

@@ -28,8 +28,6 @@ buildPythonPackage rec {
     pytest
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION=version;
-
   propagatedBuildInputs = [
     jinja2
     matplotlib

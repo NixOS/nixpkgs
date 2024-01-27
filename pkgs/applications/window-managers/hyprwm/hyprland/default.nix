@@ -20,6 +20,7 @@
 , pango
 , pciutils
 , systemd
+, tomlplusplus
 , udis86
 , wayland
 , wayland-protocols
@@ -42,13 +43,13 @@ assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` ha
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.33.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-p7el5oQZPy9l1zyIrlHu6nA4BAu59eLoSqBjhkw2jaw=";
+    hash = "sha256-WSrjBI3k2dM/kGF20At0E6NlrJSB4+pE+WGJ6dFzWEs=";
   };
 
   patches = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "@HASH@" '${finalAttrs.src.rev}' \
       --replace "@BRANCH@" "" \
       --replace "@MESSAGE@" "" \
+      --replace "@DATE@" "2024-01-01" \
       --replace "@TAG@" "" \
       --replace "@DIRTY@" ""
   '';
@@ -100,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       pango
       pciutils
+      tomlplusplus
       wlroots
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]

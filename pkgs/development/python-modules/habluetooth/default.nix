@@ -1,32 +1,31 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, poetry-core
-, setuptools
-, wheel
 , bleak
-, pytestCheckHook
 , bleak-retry-connector
 , bluetooth-adapters
 , bluetooth-auto-recovery
 , bluetooth-data-tools
-, home-assistant-bluetooth
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "1.0.0";
+  version = "2.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bk6UU+QGrkHio5j0/rOup7EQV12F/lb4m4b7JiJ7LFw=";
+    hash = "sha256-oPdKmaj2wKgOQw7QYwOQc8efcNtQiGryZgNJ+bbB6L8=";
   };
 
   postPatch = ''
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     bluetooth-adapters
     bluetooth-auto-recovery
     bluetooth-data-tools
-    home-assistant-bluetooth
   ];
 
   nativeCheckInputs = [

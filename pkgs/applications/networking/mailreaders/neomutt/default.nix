@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, makeWrapper, tcl, which
+{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
 , ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn2, libxml2, notmuch, openssl
 , lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
 , pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
@@ -6,26 +6,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20231103";
+  version = "20231221";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "sha256-9/XYgQjOdIwDpoJz5kNmiRBdoSod9l7Yl0u4e20KDPw=";
+    sha256 = "sha256-IXly2N/DD2+XBXVIXJw1sE/0eJwbUaONDNRMi7n1T44=";
   };
-
-  patches = [
-    # https://github.com/neomutt/neomutt/issues/3773#issuecomment-1493295144
-    ./fix-open-very-large-mailbox.patch
-    # https://github.com/neomutt/neomutt/issues/4128
-    (fetchpatch {
-      name = "fix-attr-color-copy.patch";
-      url = "https://github.com/neomutt/neomutt/commit/24f8644c28e602206a63fae53c4eb3d32426ce0c.patch";
-      hash = "sha256-8qcW9hb6yxEZICRYgl6ZhPQDrI6nZN9NH+40GhTgR0o=";
-    })
-  ];
 
   buildInputs = [
     cyrus_sasl gss gpgme libkrb5 libidn2 ncurses

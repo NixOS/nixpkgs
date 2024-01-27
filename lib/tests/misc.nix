@@ -1959,6 +1959,18 @@ runTests {
     expr = (with types; int).description;
     expected = "signed integer";
   };
+  testTypeDescriptionIntsPositive = {
+    expr = (with types; ints.positive).description;
+    expected = "positive integer, meaning >0";
+  };
+  testTypeDescriptionIntsPositiveOrEnumAuto = {
+    expr = (with types; either ints.positive (enum ["auto"])).description;
+    expected = ''positive integer, meaning >0, or value "auto" (singular enum)'';
+  };
+  testTypeDescriptionListOfPositive = {
+    expr = (with types; listOf ints.positive).description;
+    expected = "list of (positive integer, meaning >0)";
+  };
   testTypeDescriptionListOfInt = {
     expr = (with types; listOf int).description;
     expected = "list of signed integer";

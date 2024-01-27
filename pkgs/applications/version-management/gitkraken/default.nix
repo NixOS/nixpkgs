@@ -3,31 +3,32 @@
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon
+, e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon, git
+, libGL, zlib, cacert
 }:
 
 with lib;
 
 let
   pname = "gitkraken";
-  version = "9.10.0";
+  version = "9.11.1";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-JVeJY0VUNyIeR/IQcfoLBN0I1WQNFy7PpCjzk5bPv/Q=";
+      hash = "sha256-DTnVsVWOPAcG2O87dS6PwAB+VU0ijulELHe9CnOLYPU=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-npc+dwHH0tlVKkAZxmGwpoiHXeDn0VHkivqbwoJsI7M=";
+      hash = "sha256-JkmQYk+t4ACkK3V0IxrrIcheBWJEkxQzf9ZYRWs769c=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-fszsGdNKcVgKdv97gBBf+fSODzjKbOBB4MyCvWzm3CA=";
+      hash = "sha256-jWXvDSyM7A3+cer/yPvom9f0w2nGJmwOJ22qoQzRWGQ=";
     };
   };
 
@@ -91,12 +92,14 @@ let
       mesa
       libxshmfence
       libxkbcommon
+      libGL
+      zlib
     ];
 
     desktopItems = [ (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "GitKraken";
+      exec = "gitkraken";
+      icon = "gitkraken";
       desktopName = "GitKraken";
       genericName = "Git Client";
       categories = [ "Development" ];
@@ -112,25 +115,37 @@ let
       mkdir -p $out/share/${pname}/
       cp -R $src/* $out/share/${pname}
 
-      mkdir -p $out/bin
-      ln -s $out/share/${pname}/${pname} $out/bin/
-
       mkdir -p $out/share/pixmaps
-      cp ${pname}.png $out/share/pixmaps/${pname}.png
+      cp gitkraken.png $out/share/pixmaps/
 
       runHook postInstall
     '';
 
     postFixup = ''
       pushd $out/share/${pname}
-      for file in ${pname} chrome-sandbox chrome_crashpad_handler; do
+      for file in gitkraken chrome-sandbox chrome_crashpad_handler; do
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file
       done
 
-      for file in $(find . -type f \( -name \*.node -o -name ${pname} -o -name \*.so\* \) ); do
+      for file in $(find . -type f \( -name \*.node -o -name gitkraken -o -name git -o -name git-\* -o -name scalar -o -name \*.so\* \) ); do
         patchelf --set-rpath ${libPath}:$out/share/${pname} $file || true
       done
       popd
+
+      # SSL and permissions fix for bundled nodegit
+      pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
+      mv nodegit-ubuntu-18.node nodegit-ubuntu-18-ssl-1.1.1.node
+      mv nodegit-ubuntu-18-ssl-static.node nodegit-ubuntu-18.node
+      chmod 755 nodegit-ubuntu-18.node
+      popd
+
+      # Devendor bundled git
+      rm -rf $out/share/${pname}/resources/app.asar.unpacked/git
+      ln -s ${git} $out/share/${pname}/resources/app.asar.unpacked/git
+
+      # GitKraken expects the CA bundle to be located in the bundled git directory. Since we replace it with
+      # the one from nixpkgs, which doesn't provide a CA bundle, we need to explicitly set its location at runtime
+      makeWrapper $out/share/${pname}/gitkraken $out/bin/gitkraken --set GIT_SSL_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
   };
 

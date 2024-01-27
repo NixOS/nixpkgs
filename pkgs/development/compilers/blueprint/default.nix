@@ -45,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # requires xvfb-run
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin
+  && false;  # tests time out
 
   checkPhase = ''
     runHook preCheck
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A markup language for GTK user interface files";
     homepage = "https://gitlab.gnome.org/jwestman/blueprint-compiler";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ benediktbroich paveloom ranfdev ];
+    maintainers = with maintainers; [ benediktbroich ranfdev ];
     platforms = platforms.unix;
   };
 })

@@ -131,39 +131,29 @@ let
   # `linux-aarch64` redist (which is for Jetson devices) if we're building any Jetson devices.
   # Since both are based on aarch64, we can only have one or the other, otherwise there's an
   # ambiguity as to which should be used.
+  # NOTE: This function *will* be called by unsupported systems because `cudaPackages` is part of
+  # `all-packages.nix`, which is evaluated on all systems. As such, we need to handle unsupported
+  # systems gracefully.
   # getRedistArch :: String -> String
-  getRedistArch =
-    nixSystem:
-    if nixSystem == "aarch64-linux" then
-      if jetsonTargets != [] then "linux-aarch64" else "linux-sbsa"
-    else if nixSystem == "x86_64-linux" then
-      "linux-x86_64"
-    else if nixSystem == "ppc64le-linux" then
-      "linux-ppc64le"
-    else if nixSystem == "x86_64-windows" then
-      "windows-x86_64"
-    else
-      builtins.throw "Unsupported Nix system: ${nixSystem}";
+  getRedistArch = nixSystem: attrsets.attrByPath [ nixSystem ] "unsupported" {
+    aarch64-linux = if jetsonTargets != [] then "linux-aarch64" else "linux-sbsa";
+    x86_64-linux = "linux-x86_64";
+    ppc64le-linux = "linux-ppc64le";
+    x86_64-windows = "windows-x86_64";
+  };
 
   # Maps NVIDIA redist arch to Nix system.
-  # It is imperative that we include the boolean condition based on jetsonTargets to ensure
-  # we don't advertise availability of packages only available on server-grade ARM
-  # as being available for the Jetson, since both `linux-sbsa` and `linux-aarch64` are
-  # mapped to the Nix system `aarch64-linux`.
-  getNixSystem =
-    redistArch:
-    if redistArch == "linux-sbsa" && jetsonTargets == [] then
-      "aarch64-linux"
-    else if redistArch == "linux-aarch64" && jetsonTargets != [] then
-      "aarch64-linux"
-    else if redistArch == "linux-x86_64" then
-      "x86_64-linux"
-    else if redistArch == "linux-ppc64le" then
-      "ppc64le-linux"
-    else if redistArch == "windows-x86_64" then
-      "x86_64-windows"
-    else
-      builtins.throw "Unsupported NVIDIA redist arch: ${redistArch}";
+  # NOTE: This function *will* be called by unsupported systems because `cudaPackages` is part of
+  # `all-packages.nix`, which is evaluated on all systems. As such, we need to handle unsupported
+  # systems gracefully.
+  # getNixSystem :: String -> String
+  getNixSystem = redistArch: attrsets.attrByPath [ redistArch ] "unsupported-${redistArch}" {
+    linux-sbsa = "aarch64-linux";
+    linux-aarch64 = "aarch64-linux";
+    linux-x86_64 = "x86_64-linux";
+    linux-ppc64le = "ppc64le-linux";
+    windows-x86_64 = "x86_64-windows";
+  };
 
   formatCapabilities =
     {
@@ -175,9 +165,10 @@ let
 
       # archNames :: List String
       # E.g. [ "Turing" "Ampere" ]
+      #
+      # Unknown architectures are rendered as sm_XX gencode flags.
       archNames = lists.unique (
-        lists.map (cap: cudaComputeCapabilityToName.${cap} or (throw "missing cuda compute capability"))
-          cudaCapabilities
+        lists.map (cap: cudaComputeCapabilityToName.${cap} or "sm_${dropDot cap}") cudaCapabilities
       );
 
       # realArches :: List String
@@ -219,7 +210,7 @@ let
       isJetsonBuild =
         let
           requestedJetsonDevices =
-            lists.filter (cap: cudaComputeCapabilityToIsJetson.${cap})
+            lists.filter (cap: cudaComputeCapabilityToIsJetson.${cap} or false)
               cudaCapabilities;
           requestedNonJetsonDevices =
             lists.filter (cap: !(builtins.elem cap requestedJetsonDevices))

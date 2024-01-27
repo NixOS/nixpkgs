@@ -51,8 +51,6 @@ python3Packages.buildPythonApplication rec {
   pname = "portmod";
   format = "pyproject";
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   # build the rust library independantly
   prePatch = ''
     substituteInPlace setup.py \

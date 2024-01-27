@@ -84,7 +84,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocBLAS";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-3wKnwvAra8u9xqlC05wUD+gSoBILTVJFU2cIV6xv3Lk=";
@@ -200,10 +200,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "BLAS implementation for ROCm platform";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocBLAS";
+    homepage = "https://github.com/ROCm/rocBLAS";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

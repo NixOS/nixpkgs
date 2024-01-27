@@ -15,17 +15,16 @@
 
 buildPythonPackage rec {
   pname = "textual-dev";
-  version = "1.2.1";
+  version = "1.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual-dev";
-    # we use rev instead of tag since upstream doesn't use tags
-    rev = "6afa9013a42cb18e9105e49d6a56874097f7c812";
-    hash = "sha256-ef35389ZMU/zih7Se3KkMGECf5o2i5y6up64/1AECas=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-l8InIStQD7rAHYr2/eA1+Z0goNZoO4t78eODYmwSOrA=";
   };
 
   nativeBuildInputs = [

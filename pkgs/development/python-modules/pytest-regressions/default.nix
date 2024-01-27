@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 , matplotlib
 , numpy
@@ -25,8 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-gYx4hMHP87q/ie67AsvCezB4VrGYVCfCTVLLgSoQb9k=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -45,6 +44,15 @@ buildPythonPackage rec {
     matplotlib
     pandas
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
+  disabledTestPathss = lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: partially initialized module 'pandas' has no attribute '_pandas_datetime_CAPI' (most likely due to a circular import)
+    "tests/test_num_regression.py"
   ];
 
   pythonImportsCheck = [

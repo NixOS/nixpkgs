@@ -6,20 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "presenterm";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8oLqZfpkSbGg85vj5V54D052vmmoMRzQmiQzOwCOSxg=";
+    hash = "sha256-OHp/qbuaZ7uVydKGnSiBR5KQGdf8rWQQWRHrka+PI1M=";
   };
 
   buildInputs = [
     libsixel
   ];
 
-  cargoHash = "sha256-SJpmQMUm5+0mUmYq2pv4JLV6PxZs2g3TrWqTlHElS3Q=";
+  cargoHash = "sha256-ymSTloz7sPAtMZN1uDgLs89gMcU+UTsMVc6y5UHt7no=";
 
   buildFeatures = [ "sixel" ];
 
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A terminal based slideshow tool";
+    changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${version}";
     homepage = "https://github.com/mfontanini/presenterm";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mikaelfangel ];

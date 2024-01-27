@@ -6,8 +6,6 @@ let
 
   cfg = config.security.sudo-rs;
 
-  inherit (config.security.pam) enableSSHAgentAuth;
-
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
 

@@ -277,9 +277,7 @@ in
 
       # The systemd service will fail to execute the preStart hook
       # if the WorkingDirectory does not exist
-      systemd.tmpfiles.rules = [
-        ''d "${cfg.statePath}" -''
-      ];
+      systemd.tmpfiles.settings."10-mattermost".${cfg.statePath}.d = { };
 
       systemd.services.mattermost = {
         description = "Mattermost chat service";

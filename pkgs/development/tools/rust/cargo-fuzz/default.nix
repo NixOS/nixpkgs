@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fuzz";
-  version = "0.11.2";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "rust-fuzz";
     repo = "cargo-fuzz";
     rev = version;
-    sha256 = "sha256-qbeNQM3ODkstXQTbrCv8bbkwYDBU/HB+L1k66vY4494=";
+    hash = "sha256-+k1kHiHRQER/8JTOeQdxcbsfMvS6eC74Wkd9IlLldok=";
   };
 
-  cargoSha256 = "sha256-1CTwVHOG8DOObfaGK1eGn9HDM755hf7NlqheBTJcCig=";
+  cargoHash = "sha256-N3niTnSSIfOVOGhcHHgTbLnpYNmM4bow7qX539P+kHQ=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

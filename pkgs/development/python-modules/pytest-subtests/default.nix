@@ -1,10 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , pythonOlder
+
+# build-system
 , setuptools
 , setuptools-scm
+
+# dependencies
+, attrs
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,6 +29,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    attrs
   ];
 
   nativeCheckInputs = [

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.13";
+  version = "0.6.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NrilXB1NFcqNCGrwshhuLdhQoeHJ12PSp4MBScT9kYc=";
+    hash = "sha256-mdFoSTUS4QhY05rY0fqKTpRQTR9oLvOMTVr4kWJbiUQ=";
   };
 
   propagatedBuildInputs = [

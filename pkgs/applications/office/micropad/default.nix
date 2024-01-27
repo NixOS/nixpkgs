@@ -15,25 +15,25 @@ let
 in
   mkYarnPackage rec {
     pname = "micropad";
-    version = "4.4.0";
+    version = "4.5.1";
 
     src = fetchFromGitHub {
       owner = "MicroPad";
       repo = "Micropad-Electron";
       rev = "v${version}";
-      hash = "sha256-VK3sSXYW/Dev7jCdkgrU9PXFbJ6+R2hy6QMRjj6bJ5M=";
+      hash = "sha256-z+g+FwmoX4Qqf+v4BVLCtfrXwGiAUFlPLQQhp2CMhLU=";
     };
 
     micropad-core = fetchzip {
       url = "https://github.com/MicroPad/MicroPad-Core/releases/download/v${version}/micropad.tar.xz";
-      hash = "sha256-KfS13p+mjIh7VShVCT6vFuQY0e/EO/sENOx4GPAORHU=";
+      hash = "sha256-y13PVA/AKKsc5q7NDwZFasb7fOo+56IW8qbTbsm2WWc=";
     };
 
     packageJSON = ./package.json;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-8M0VZI5I4fLoLLmXkIVeCqouww+CyiXbd+vJc8+2tIs=";
+      hash = "sha256-ESYSHuHLNsn3EYKIe2p0kg142jyC0USB+Ef//oGeF08=";
     };
 
     nativeBuildInputs = [ copyDesktopItems makeWrapper ]

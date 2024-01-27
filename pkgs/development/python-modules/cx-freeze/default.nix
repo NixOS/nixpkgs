@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "6.15.11";
-  format = "pyproject";
+  version = "6.15.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "cx_Freeze";
     inherit version;
-    hash = "sha256-xf5Ez5eC+qXAaMoc1d6RPv4PmY1ry82oQ9aGod+W7lY=";
+    hash = "sha256-Ak4OC94xD21daVdsbYSvFxO1YKJcccJ8xoCBk50cWww=";
   };
 
   nativeBuildInputs = [
@@ -35,11 +35,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
-    substituteInPlace cx_Freeze/freezer.py --replace "st.st_mtime" "time.time()"
+    substituteInPlace cx_Freeze/freezer.py \
+      --replace "st.st_mtime" "time.time()"
 
     sed -i /patchelf/d pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace 'setuptools>=61.2,<67' setuptools
   '';
 
   makeWrapperArgs = [

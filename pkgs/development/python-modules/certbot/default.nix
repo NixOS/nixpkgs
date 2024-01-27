@@ -10,13 +10,13 @@
 , distro
 , josepy
 , parsedatetime
-, pyRFC3339
+, pyrfc3339
 , pyopenssl
 , pytz
 , requests
 , six
 , zope-component
-, zope_interface
+, zope-interface
 , setuptools
 , dialog
 , gnureadline
@@ -47,13 +47,13 @@ buildPythonPackage rec {
     distro
     josepy
     parsedatetime
-    pyRFC3339
+    pyrfc3339
     pyopenssl
     pytz
     requests
     six
     zope-component
-    zope_interface
+    zope-interface
     setuptools # for pkg_resources
   ];
 

@@ -1,33 +1,33 @@
 diff --git a/src/pikepdf/_methods.py b/src/pikepdf/_methods.py
-index 2a170c6..5ee3ba1 100644
+index da40043f..4f566f01 100644
 --- a/src/pikepdf/_methods.py
 +++ b/src/pikepdf/_methods.py
-@@ -80,7 +80,7 @@ def _mudraw(buffer, fmt) -> bytes:
+@@ -74,7 +74,7 @@ def _mudraw(buffer, fmt) -> bytes:
          tmp_in.flush()
  
          proc = run(
--            ['mudraw', '-F', fmt, '-o', '-', tmp_in.name],
-+            ['@mudraw@', '-F', fmt, '-o', '-', tmp_in.name],
+-            ['mutool', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
++            ['@mutool@', 'draw', '-F', fmt, '-o', '-', tmp_in.name],
              capture_output=True,
              check=True,
          )
 diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
-index 28c596b..aff3565 100644
+index f89b4f90..f187ebdf 100644
 --- a/src/pikepdf/jbig2.py
 +++ b/src/pikepdf/jbig2.py
-@@ -28,7 +28,7 @@ def _extract_jbig2_bytes(jbig2: bytes, jbig2_globals: bytes) -> bytes:
-         output_path = Path(tmpdir) / "outfile"
-
-         args = [
--            "jbig2dec",
-+            "@jbig2dec@",
-             "--embedded",
-             "--format",
-             "png",
-@@ -88,7 +88,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+@@ -63,7 +63,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+             output_path = Path(tmpdir) / "outfile"
+ 
+             args = [
+-                "jbig2dec",
++                "@jbig2dec@",
+                 "--embedded",
+                 "--format",
+                 "png",
+@@ -90,7 +90,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
      def _version(self) -> Version:
          try:
-             proc = run(
+             proc = self._run(
 -                ['jbig2dec', '--version'], stdout=PIPE, check=True, encoding='ascii'
 +                ['@jbig2dec@', '--version'], stdout=PIPE, check=True, encoding='ascii'
              )

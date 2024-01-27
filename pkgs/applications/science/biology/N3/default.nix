@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper,
   perlPackages,
-  libminc, EBTKS }:
+  libminc, ebtks }:
 
 stdenv.mkDerivation rec {
   pname = "N3";
@@ -13,11 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "06hci7gzhy8p34ggvx7gah2k9yxpwhgmq1cgw8pcd1r82g4rg6kd";
   };
 
+  postPatch = ''
+    substituteInPlace src/VolumeHist/DHistogram.cc \
+      --replace "register " ""
+  '';
+
   nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ libminc EBTKS ];
+  buildInputs = [ libminc ebtks ];
   propagatedBuildInputs = with perlPackages; [ perl MNI-Perllib GetoptTabular ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${EBTKS}/lib/" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${ebtks}/lib/" ];
 
   postFixup = ''
     for p in $out/bin/*; do

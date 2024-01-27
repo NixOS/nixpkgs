@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, doxygen,
+{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, cmake, pkg-config, doxygen,
   libX11, libXinerama, libXrandr, libGLU, libGL,
-  glib, ilmbase, libxml2, pcre, zlib,
+  glib, libxml2, pcre, zlib,
   AGL, Accelerate, Carbon, Cocoa, Foundation,
   boost,
   jpegSupport ? true, libjpeg,
-  exrSupport ? false, openexr,
+  exrSupport ? false, openexr_3,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
   tiffSupport ? true, libtiff,
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.isDarwin) [
     libX11 libXinerama libXrandr libGLU libGL
   ] ++ [
-    glib ilmbase libxml2 pcre zlib
+    glib libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional exrSupport openexr
+    ++ lib.optional exrSupport openexr_3
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
     ++ lib.optional tiffSupport libtiff
@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
       name = "opencascade-api-patch";
       url = "https://github.com/openscenegraph/OpenSceneGraph/commit/bc2daf9b3239c42d7e51ecd7947d31a92a7dc82b.patch";
       hash = "sha256-VR8YKOV/YihB5eEGZOGaIfJNrig1EPS/PJmpKsK284c=";
+    })
+    # OpenEXR 3 support: https://github.com/openscenegraph/OpenSceneGraph/issues/1075
+    (fetchurl {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-games/openscenegraph/files/openscenegraph-3.6.5-openexr3.patch?id=0f642d8f09b589166f0e0c0fc84df7673990bf3f";
+      hash = "sha256-fdNbkg6Vp7DeDBTe5Zso8qJ5v9uPSXHpQ5XlGkvputk=";
     })
   ];
 

@@ -235,7 +235,6 @@ dont-distribute-packages:
  - IORefCAS
  - IndexedList
  - InfixApplicative
- - InternedData
  - JSON-Combinator
  - JSON-Combinator-Examples
  - Javasf
@@ -292,8 +291,8 @@ dont-distribute-packages:
  - NGLess
  - NTRU
  - NXT
+ - NaCl
  - NaperianNetCDF
- - NaturalLanguageAlphabets
  - NearContextAlgebra
  - Ninjas
  - NoSlow
@@ -522,6 +521,7 @@ dont-distribute-packages:
  - apiary-redis
  - apiary-session
  - apiary-websockets
+ - apigen
  - apis
  - apotiki
  - approx-rand-test
@@ -661,7 +661,6 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -807,6 +806,7 @@ dont-distribute-packages:
  - chart-svg
  - chart-svg-various
  - chart-unit
+ - chassis
  - cheapskate-highlight
  - cheapskate-lucid
  - cheapskate-terminal
@@ -912,9 +912,20 @@ dont-distribute-packages:
  - comonad-random
  - compaREST
  - compact-mutable
- - compact-mutable-vector
- - compact-socket
+ - compdoc
+ - compdoc-dhall-decoder
  - complexity
+ - composite-aeson
+ - composite-aeson-cofree-list
+ - composite-aeson-throw
+ - composite-aeson-writeonly
+ - composite-binary
+ - composite-hashable
+ - composite-ix
+ - composite-lens-extra
+ - composite-tuple
+ - composite-xml
+ - composite-xstep
  - comprehensions-ghc
  - computational-algebra
  - concraft
@@ -972,7 +983,7 @@ dont-distribute-packages:
  - couch-simple
  - couchdb-enumerator
  - country
- - country_0_2_4_0
+ - country_0_2_4_1
  - cpkg
  - cprng-aes-effect
  - cql-io-tinylog
@@ -998,6 +1009,7 @@ dont-distribute-packages:
  - crypto-classical
  - crypto-conduit
  - crypto-pubkey
+ - crypto-sodium
  - cryptocipher
  - cryptoids
  - cryptoids-class
@@ -1073,6 +1085,7 @@ dont-distribute-packages:
  - definitive-parser
  - definitive-reactive
  - definitive-sound
+ - defun
  - deka-tests
  - delaunay
  - delicious
@@ -1161,6 +1174,7 @@ dont-distribute-packages:
  - dobutokO4
  - doc-review
  - doi
+ - dojang
  - domaindriven
  - dormouse-client
  - dotparse
@@ -1480,7 +1494,7 @@ dont-distribute-packages:
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
- - ghc-lib_9_8_1_20231009
+ - ghc-lib_9_8_1_20231121
  - ghc-mod
  - ghc-plugs-out
  - ghc-session
@@ -1931,6 +1945,8 @@ dont-distribute-packages:
  - hasklepias
  - haskoin-bitcoind
  - haskoin-crypto
+ - haskoin-node
+ - haskoin-node_1_0_1
  - haskoin-protocol
  - haskoin-script
  - haskoon
@@ -1982,7 +1998,6 @@ dont-distribute-packages:
  - hcg-minus-cairo
  - hcheat
  - hcheckers
- - hcount
  - hcube
  - hdbi
  - hdbi-conduit
@@ -2160,6 +2175,7 @@ dont-distribute-packages:
  - hslogstash
  - hsparql
  - hspec-expectations-pretty
+ - hspec-formatter-github
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
@@ -2241,6 +2257,7 @@ dont-distribute-packages:
  - hyena
  - hylotab
  - hyloutils
+ - hyperbole
  - hyperpublic
  - i
  - iException
@@ -2528,7 +2545,6 @@ dont-distribute-packages:
  - linearscan-hoopl
  - linkchk
  - linkcore
- - linnet
  - linnet-aeson
  - linnet-conduit
  - linux-ptrace
@@ -2714,6 +2730,8 @@ dont-distribute-packages:
  - modular-prelude-classy
  - modularity
  - modulo
+ - moffy-samples-gtk4
+ - moffy-samples-gtk4-run
  - mole
  - monad-exception
  - monad-http
@@ -2744,7 +2762,6 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp
  - mptcp-pm
  - mptcpanalyzer
  - msgpack-aeson
@@ -2946,7 +2963,6 @@ dont-distribute-packages:
  - overload
  - package-o-tron
  - padKONTROL
- - pagerduty
  - pairing
  - panda
  - pandoc-highlighting-extensions
@@ -3113,7 +3129,6 @@ dont-distribute-packages:
  - postgresql-tx-query
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
- - postgrest
  - postmark
  - potoki
  - potoki-cereal
@@ -3229,7 +3244,6 @@ dont-distribute-packages:
  - quiver-interleave
  - quiver-sort
  - qux
- - rabocsv2qif
  - rail-compiler-editor
  - rails-session
  - rainbow-tests
@@ -3281,7 +3295,6 @@ dont-distribute-packages:
  - redHandlers
  - reddit
  - redis-io
- - redis-resp
  - rediscaching-haxl
  - reduce-equations
  - refh
@@ -3453,7 +3466,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
- - sandwich_0_2_0_0
+ - sandwich_0_2_1_0
  - sarsi
  - sasha
  - sasl
@@ -3507,9 +3520,6 @@ dont-distribute-packages:
  - secrm
  - sednaDBXML
  - seitz-symbol
- - selda-json
- - selda-postgresql
- - selda-sqlite
  - selenium-server
  - semantic-source
  - semantic-version
@@ -3527,6 +3537,7 @@ dont-distribute-packages:
  - serpentine
  - serv
  - serv-wai
+ - servant-aeson-generics-typescript
  - servant-auth-hmac
  - servant-auth-token
  - servant-auth-token-acid
@@ -3543,7 +3554,6 @@ dont-distribute-packages:
  - servant-haxl-client
  - servant-http2-client
  - servant-matrix-param
- - servant-mock
  - servant-oauth2
  - servant-oauth2-examples
  - servant-openapi3
@@ -3840,7 +3850,6 @@ dont-distribute-packages:
  - tagged-list
  - tagged-th
  - tagsoup-navigate
- - tagstew
  - tahoe-directory
  - tahoe-great-black-swamp
  - tahoe-ssk
@@ -4129,7 +4138,6 @@ dont-distribute-packages:
  - wai-middleware-route
  - wai-middleware-validation
  - wai-middleware-verbs
- - wai-predicates
  - wai-route
  - wai-routing
  - wai-session-alt
@@ -4140,6 +4148,8 @@ dont-distribute-packages:
  - warp-grpc
  - warp-quic
  - warped
+ - waterfall-cad
+ - waterfall-cad-examples
  - wavesurfer
  - wavy
  - weatherhs
@@ -4157,7 +4167,6 @@ dont-distribute-packages:
  - webcrank-wai
  - webdriver-w3c
  - webgear-openapi
- - webgear-server
  - webify
  - webserver
  - websockets-rpc

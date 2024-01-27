@@ -6,6 +6,8 @@
 
   govee-lan = callPackage ./govee-lan {};
 
+  gpio = callPackage ./gpio {};
+
   miele = callPackage ./miele {};
 
   prometheus_sensor = callPackage ./prometheus_sensor {};

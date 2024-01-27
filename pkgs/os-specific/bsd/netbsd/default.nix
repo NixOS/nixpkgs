@@ -766,11 +766,11 @@ in makeScopeWithSplicing' {
     version = "9.2";
     sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
     buildInputs = with self; [ libterminfo ];
-    env.NIX_CFLAGS_COMPILE = toString [
+    env.NIX_CFLAGS_COMPILE = toString ([
       "-D__scanflike(a,b)="
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
-    ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=";
+    ] ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)=");
     propagatedBuildInputs = with self; compatIfNeeded;
     MKDOC = "no"; # missing vfontedpr
     makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];

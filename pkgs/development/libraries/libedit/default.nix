@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   # There is a DR to fix this issue with Clang which is not merged
   # yet.
   # https://reviews.llvm.org/D137043
-  NIX_CFLAGS_COMPILE = lib.optional
-    (stdenv.targetPlatform.isMusl && stdenv.cc.isClang)
-    "-D__STDC_ISO_10646__=201103L";
+  env.NIX_CFLAGS_COMPILE =
+    lib.optionalString (stdenv.targetPlatform.isMusl && stdenv.cc.isClang)
+      "-D__STDC_ISO_10646__=201103L";
 
   patches = [ ./01-cygwin.patch ];
 

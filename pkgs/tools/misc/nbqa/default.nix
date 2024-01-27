@@ -7,14 +7,19 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
-  version = "1.7.0";
+  version = "1.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbQA-dev";
     repo = "nbQA";
-    rev = version;
-    hash = "sha256-CTF5HisBS44Ta18cVT04UrMIF30WmEBwZBGW7fkKXwk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-a/FuhJyf8BmZekUibzEiGgkHL51A+75R4a6S+h5i28s=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   passthru.optional-dependencies = {
     black = [ black ];
@@ -76,9 +81,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_running_in_different_dir_works"
     "test_unable_to_reconstruct_message_pythonpath"
     "test_with_subcommand"
-    # Broken since ruff was updated to 0.1.2
-    # A PR was opened upstream: https://github.com/nbQA-dev/nbQA/issues/834
-    "test_ruff_works"
   ];
 
   disabledTestPaths = [

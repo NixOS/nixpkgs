@@ -32,7 +32,6 @@ in {
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
           '');
-          trustedProxies = [ "::1" ];
         };
         notify_push = {
           enable = true;
@@ -42,6 +41,7 @@ in {
         extraApps = {
           inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push;
         };
+        extraOptions.trusted_proxies = [ "::1" ];
       };
 
       services.redis.servers."nextcloud".enable = true;

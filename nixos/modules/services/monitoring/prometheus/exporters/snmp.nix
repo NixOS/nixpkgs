@@ -4,6 +4,25 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters.snmp;
+
+  # This ensures that we can deal with string paths, path types and
+  # store-path strings with context.
+  coerceConfigFile = file:
+    if (builtins.isPath file) || (lib.isStorePath file) then
+      file
+    else
+      (lib.warn ''
+        ${logPrefix}: configuration file "${file}" is being copied to the nix-store.
+        If you would like to avoid that, please set enableConfigCheck to false.
+        '' /. + file);
+
+  checkConfig = file:
+    pkgs.runCommandLocal "checked-snmp-exporter-config.yml" {
+      nativeBuildInputs = [ pkgs.buildPackages.prometheus-snmp-exporter ];
+    } ''
+      ln -s ${coerceConfigFile file} $out
+      snmp_exporter --dry-run --config.file $out
+    '';
 in
 {
   port = 9116;
@@ -24,13 +43,21 @@ in
         Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
       '';
       example = {
-        "default" = {
-          "version" = 2;
-          "auth" = {
-            "community" = "public";
-          };
+        auths.public_v2 = {
+          community = "public";
+          version = 2;
         };
       };
+    };
+
+    enableConfigCheck = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        Whether to run a correctness check for the configuration file. This depends
+        on the configuration file residing in the nix-store. Paths passed as string will
+        be copied to the store.
+      '';
     };
 
     logFormat = mkOption {
@@ -50,9 +77,13 @@ in
     };
   };
   serviceOpts = let
-    configFile = if cfg.configurationPath != null
-                 then cfg.configurationPath
-                 else "${pkgs.writeText "snmp-exporter-conf.yml" (builtins.toJSON cfg.configuration)}";
+    uncheckedConfigFile = if cfg.configurationPath != null
+                          then cfg.configurationPath
+                          else "${pkgs.writeText "snmp-exporter-conf.yml" (builtins.toJSON cfg.configuration)}";
+    configFile = if cfg.enableConfigCheck then
+      checkConfig uncheckedConfigFile
+    else
+      uncheckedConfigFile;
     in {
     serviceConfig = {
       ExecStart = ''

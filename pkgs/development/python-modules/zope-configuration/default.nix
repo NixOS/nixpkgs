@@ -4,11 +4,11 @@
 , pythonOlder
 , setuptools
 , zope-i18nmessageid
-, zope_interface
-, zope_schema
+, zope-interface
+, zope-schema
 , pytestCheckHook
 , zope-testing
-, zope_testrunner
+, zope-testrunner
 , manuel
 }:
 
@@ -33,13 +33,13 @@ buildPythonPackage rec {
     manuel
     pytestCheckHook
     zope-testing
-    zope_testrunner
+    zope-testrunner
   ];
 
   propagatedBuildInputs = [
     zope-i18nmessageid
-    zope_interface
-    zope_schema
+    zope-interface
+    zope-schema
   ];
 
   # Need to investigate how to run the tests with zope-testrunner

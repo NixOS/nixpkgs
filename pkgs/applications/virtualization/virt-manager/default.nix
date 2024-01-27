@@ -17,6 +17,14 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-UgZ58WLXq0U3EDt4311kv0kayVU17In4kwnQ+QN1E7A=";
   };
 
+  patches = [
+    # refresh Fedora tree URLs in virt-install-osinfo* expected XMLs
+    (fetchpatch {
+      url = "https://github.com/virt-manager/virt-manager/commit/6e5c1db6b4a0af96afeb09a09fb2fc2b73308f01.patch";
+      hash = "sha256-zivVo6nHvfB7aHadOouQZCBXn5rY12nxFjQ4FFwjgZI=";
+    })
+  ];
+
   nativeBuildInputs = [
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
@@ -77,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   preCheck = ''
-    export HOME=.
+    export HOME=$(mktemp -d)
   ''; # <- Required for "tests/test_urldetect.py".
 
   postCheck = ''

@@ -1,18 +1,26 @@
 { lib
-, brotlicffi
 , buildPythonPackage
-, decorator
 , fetchPypi
-, flask
-, flask-limiter
-, flasgger
-, itsdangerous
-, markupsafe
-, raven
-, six
-, pytestCheckHook
+, pythonRelaxDepsHook
+
+# build-system
 , setuptools
+
+# dependencies
+, brotlicffi
+, decorator
+, flasgger
+, flask
+, greenlet
+, six
 , werkzeug
+
+# optional-dependencies
+, gunicorn
+, gevent
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -27,20 +35,29 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "greenlet"
   ];
 
   propagatedBuildInputs = [
     brotlicffi
     decorator
     flask
-    flask-limiter
     flasgger
-    itsdangerous
-    markupsafe
-    raven
+    greenlet
     six
     werkzeug
-  ] ++ raven.optional-dependencies.flask;
+  ];
+
+  passthru.optional-dependencies = {
+    mainapp = [
+      gunicorn
+      gevent
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

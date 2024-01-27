@@ -61,6 +61,8 @@ let tests = {
 
       konsole.pkg = p: p.plasma5Packages.konsole;
 
+      lomiri-terminal-app.pkg = p: p.lomiri.lomiri-terminal-app;
+
       lxterminal.pkg = p: p.lxterminal;
 
       mate-terminal.pkg = p: p.mate.mate-terminal;

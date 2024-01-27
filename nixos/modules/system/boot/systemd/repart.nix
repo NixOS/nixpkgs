@@ -83,6 +83,9 @@ in
       }
     ];
 
+    # systemd-repart uses loopback devices for partition creation
+    boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";
+
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"

@@ -60,6 +60,7 @@
 , mesa
 , enableProprietaryCodecs ? true
   # darwin
+, autoSignDarwinBinariesHook
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -104,6 +105,8 @@ qtModule {
     which
     gn
     nodejs
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ] ++ lib.optionals stdenv.isDarwin [
     bootstrap_cmds
     cctools
@@ -131,6 +134,10 @@ qtModule {
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
+
+    # Cherry-pick libxml 2.12 build fix
+    # FIXME: remove for 6.7
+    ../patches/qtwebengine-libxml-2.12.patch
   ];
 
   postPatch = ''
@@ -181,16 +188,19 @@ qtModule {
     "-DQT_FEATURE_pdf_xfa_gif=ON"
     "-DQT_FEATURE_pdf_xfa_png=ON"
     "-DQT_FEATURE_pdf_xfa_tiff=ON"
-    "-DQT_FEATURE_webengine_system_icu=ON"
     "-DQT_FEATURE_webengine_system_libevent=ON"
-    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
   ] ++ lib.optionals stdenv.isLinux [
+    "-DQT_FEATURE_webengine_system_libxml=ON"
     "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+
+    # Appears not to work on some platforms
+    # https://github.com/Homebrew/homebrew-core/issues/104008
+    "-DQT_FEATURE_webengine_system_icu=ON"
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -218,11 +228,9 @@ qtModule {
 
     # Text rendering
     harfbuzz
-    icu
 
     openssl
     glib
-    libxml2
     libxslt
     lcms2
 
@@ -236,6 +244,9 @@ qtModule {
     nss
     protobuf
     jsoncpp
+
+    icu
+    libxml2
 
     # Audio formats
     alsa-lib

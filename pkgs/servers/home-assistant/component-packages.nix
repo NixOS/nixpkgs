@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.12.3";
+  version = "2024.1.5";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -37,6 +37,10 @@
     "aemet" = ps: with ps; [
       aemet-opendata
     ];
+    "aep_ohio" = ps: with ps; [
+    ];
+    "aep_texas" = ps: with ps; [
+    ];
     "aftership" = ps: with ps; [
       pyaftership
     ];
@@ -66,6 +70,7 @@
       aioshelly
       airthings-ble
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -74,6 +79,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -176,16 +182,19 @@
     ];
     "anwb_energie" = ps: with ps; [
     ];
+    "aosmith" = ps: with ps; [
+    ]; # missing inputs: py-aosmith
     "apache_kafka" = ps: with ps; [
       aiokafka
     ];
     "apcupsd" = ps: with ps; [
-      apcaccess
-    ];
+    ]; # missing inputs: aioapcaccess
     "api" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
+    ];
+    "appalachianpower" = ps: with ps; [
     ];
     "apple_tv" = ps: with ps; [
       aiohttp-cors
@@ -227,6 +236,7 @@
       aioshelly
       aranet4
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -235,6 +245,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -405,6 +416,8 @@
     ]; # missing inputs: python-blockchain-api
     "bloomsky" = ps: with ps; [
     ];
+    "blue_current" = ps: with ps; [
+    ]; # missing inputs: bluecurrent-api
     "bluemaestro" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -413,6 +426,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluemaestro-ble
       bluetooth-adapters
@@ -422,6 +436,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -449,6 +464,7 @@
       bluetooth-data-tools
       dbus-fast
       fnv-hash-fast
+      habluetooth
       psutil-home-assistant
       pyserial
       pyudev
@@ -462,6 +478,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -470,6 +487,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -489,6 +507,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -497,6 +516,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -559,7 +579,7 @@
     "bt_home_hub_5" = ps: with ps; [
     ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [
-      btsmarthub_devicelist
+      btsmarthub-devicelist
     ];
     "bthome" = ps: with ps; [
       aioesphomeapi
@@ -569,6 +589,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -578,6 +599,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -638,6 +660,8 @@
       webrtc-noise-gain
       zeroconf
     ];
+    "ccm15" = ps: with ps; [
+    ]; # missing inputs: py-ccm15
     "cert_expiry" = ps: with ps; [
     ];
     "channels" = ps: with ps; [
@@ -805,10 +829,12 @@
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
+      cached-ipaddress
       dbus-fast
       fnv-hash-fast
       ha-av
       ha-ffmpeg
+      habluetooth
       hass-nabucasa
       hassil
       home-assistant-frontend
@@ -892,6 +918,7 @@
     ];
     "dhcp" = ps: with ps; [
       aiodiscover
+      cached-ipaddress
       scapy
     ];
     "diagnostics" = ps: with ps; [
@@ -982,6 +1009,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -990,6 +1018,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -1008,6 +1037,14 @@
     ];
     "dremel_3d_printer" = ps: with ps; [
       dremel3dpy
+    ];
+    "drop_connect" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      dropmqttapi
+      janus
+      paho-mqtt
     ];
     "dsmr" = ps: with ps; [
       dsmr-parser
@@ -1041,13 +1078,14 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       dynalite-devices
+      dynalite-panel
       fnv-hash-fast
       home-assistant-frontend
       janus
       pillow
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: dynalite-panel
+    ];
     "eafm" = ps: with ps; [
       aioeafm
     ];
@@ -1212,6 +1250,7 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -1220,6 +1259,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -1244,6 +1284,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -1253,6 +1294,7 @@
       eufylife-ble-client
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -1365,6 +1407,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -1374,6 +1417,7 @@
       fjaraskupan
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -1391,6 +1435,8 @@
     "flexit" = ps: with ps; [
       pymodbus
     ];
+    "flexit_bacnet" = ps: with ps; [
+    ]; # missing inputs: flexit_bacnet
     "flexom" = ps: with ps; [
     ];
     "flic" = ps: with ps; [
@@ -1500,6 +1546,8 @@
     "frontier_silicon" = ps: with ps; [
       afsapi
     ];
+    "fujitsu_anywair" = ps: with ps; [
+    ];
     "fully_kiosk" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -1524,6 +1572,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -1531,7 +1580,9 @@
       dbus-fast
       esphome-dashboard-api
       fnv-hash-fast
+      gardena-bluetooth
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -1542,7 +1593,7 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
-    ]; # missing inputs: gardena-bluetooth
+    ];
     "gaviota" = ps: with ps; [
     ];
     "gc100" = ps: with ps; [
@@ -1709,6 +1760,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -1718,6 +1770,7 @@
       fnv-hash-fast
       govee-ble
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -1842,6 +1895,10 @@
     ];
     "hlk_sw16" = ps: with ps; [
       hlk-sw16
+    ];
+    "holiday" = ps: with ps; [
+      babel
+      holidays
     ];
     "home_connect" = ps: with ps; [
       aiohttp-cors
@@ -1974,6 +2031,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -1982,6 +2040,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2071,6 +2130,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2079,6 +2139,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ibeacon-ble
@@ -2102,6 +2163,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2110,6 +2172,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2168,6 +2231,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2176,6 +2240,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2190,6 +2255,8 @@
     "incomfort" = ps: with ps; [
       incomfort-client
     ];
+    "indianamichiganpower" = ps: with ps; [
+    ];
     "influxdb" = ps: with ps; [
       influxdb
       influxdb-client
@@ -2202,6 +2269,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2210,6 +2278,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2350,6 +2419,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2358,6 +2428,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2369,6 +2440,8 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
+    ];
+    "kentuckypower" = ps: with ps; [
     ];
     "keyboard" = ps: with ps; [
     ]; # missing inputs: pyuserinput
@@ -2384,6 +2457,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2392,6 +2466,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2506,6 +2581,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2514,6 +2590,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2534,6 +2611,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2542,6 +2620,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2781,6 +2860,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2789,6 +2869,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2832,6 +2913,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2840,6 +2922,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -2926,6 +3009,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -2934,6 +3018,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -3001,6 +3086,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -3009,6 +3095,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -3037,6 +3124,8 @@
       aiohttp-zlib-ng
       motioneye-client
     ];
+    "motionmount" = ps: with ps; [
+    ]; # missing inputs: python-MotionMount
     "mpd" = ps: with ps; [
       mpd2
     ];
@@ -3411,6 +3500,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -3419,6 +3509,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -3438,6 +3529,8 @@
     "orvibo" = ps: with ps; [
       orvibo
     ];
+    "osoenergy" = ps: with ps; [
+    ]; # missing inputs: pyosoenergyapi
     "osramlightify" = ps: with ps; [
     ]; # missing inputs: lightify
     "otbr" = ps: with ps; [
@@ -3639,6 +3732,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -3647,6 +3741,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -3693,6 +3788,8 @@
     ]; # missing inputs: pyps4-2ndscreen
     "pse" = ps: with ps; [
     ];
+    "psoklahoma" = ps: with ps; [
+    ];
     "pulseaudio_loopback" = ps: with ps; [
       pulsectl
     ];
@@ -3736,6 +3833,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -3744,6 +3842,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -3829,6 +3928,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -3837,6 +3937,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -3894,6 +3995,8 @@
     "reddit" = ps: with ps; [
       praw
     ];
+    "refoss" = ps: with ps; [
+    ]; # missing inputs: refoss-ha
     "rejseplanen" = ps: with ps; [
       rjpl
     ];
@@ -3964,7 +4067,8 @@
     ];
     "roborock" = ps: with ps; [
       python-roborock
-    ]; # missing inputs: vacuum-map-parser-roborock
+      vacuum-map-parser-roborock
+    ];
     "rocketchat" = ps: with ps; [
     ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [
@@ -4020,6 +4124,7 @@
       bluetooth-data-tools
       dbus-fast
       fnv-hash-fast
+      habluetooth
       psutil-home-assistant
       pyserial
       pyudev
@@ -4033,6 +4138,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4041,6 +4147,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4090,6 +4197,8 @@
     ];
     "schluter" = ps: with ps; [
     ]; # missing inputs: py-schluter
+    "scl" = ps: with ps; [
+    ];
     "scrape" = ps: with ps; [
       beautifulsoup4
       jsonpath
@@ -4135,6 +4244,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4143,6 +4253,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4170,6 +4281,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4178,6 +4290,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4198,6 +4311,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4206,6 +4320,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4264,6 +4379,7 @@
       bluetooth-data-tools
       dbus-fast
       fnv-hash-fast
+      habluetooth
       psutil-home-assistant
       pyserial
       pyudev
@@ -4391,7 +4507,7 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-      pysnmplib
+      pysnmp-lextudio
     ];
     "snooz" = ps: with ps; [
       aioesphomeapi
@@ -4401,6 +4517,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4409,6 +4526,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4497,6 +4615,7 @@
     ];
     "sql" = ps: with ps; [
       sqlalchemy
+      sqlparse
     ];
     "squeezebox" = ps: with ps; [
       pysqueezebox
@@ -4579,12 +4698,17 @@
     ];
     "sun" = ps: with ps; [
     ];
+    "sunweg" = ps: with ps; [
+      sunweg
+    ];
     "supervisord" = ps: with ps; [
     ];
     "supla" = ps: with ps; [
     ]; # missing inputs: asyncpysupla
     "surepetcare" = ps: with ps; [
       surepy
+    ];
+    "swepco" = ps: with ps; [
     ];
     "swiss_hydrological_data" = ps: with ps; [
       swisshydrodata
@@ -4609,6 +4733,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4617,6 +4742,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4630,7 +4756,8 @@
       zeroconf
     ];
     "switchbot_cloud" = ps: with ps; [
-    ]; # missing inputs: switchbot-api
+      switchbot-api
+    ];
     "switcher_kis" = ps: with ps; [
       aioswitcher
     ];
@@ -4684,6 +4811,9 @@
     ];
     "tailscale" = ps: with ps; [
       tailscale
+    ];
+    "tailwind" = ps: with ps; [
+      gotailwind
     ];
     "tami4" = ps: with ps; [
     ]; # missing inputs: Tami4EdgeAPI
@@ -4746,6 +4876,8 @@
     "tesla_wall_connector" = ps: with ps; [
       tesla-wall-connector
     ];
+    "tessie" = ps: with ps; [
+    ]; # missing inputs: tessie-api
     "text" = ps: with ps; [
     ];
     "tfiac" = ps: with ps; [
@@ -4758,6 +4890,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4766,6 +4899,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4788,6 +4922,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4796,6 +4931,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4852,6 +4988,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -4860,6 +4997,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -4935,7 +5073,8 @@
       psutil-home-assistant
       python-kasa
       sqlalchemy
-    ]; # missing inputs: python-kasa.optional-dependencies.speedups
+    ]
+    ++ python-kasa.optional-dependencies.speedups;
     "tplink_lte" = ps: with ps; [
     ]; # missing inputs: tp-connected
     "tplink_omada" = ps: with ps; [
@@ -5045,8 +5184,7 @@
       aiounifi
     ];
     "unifi_direct" = ps: with ps; [
-      pexpect
-    ];
+    ]; # missing inputs: unifi_ap
     "unifiled" = ps: with ps; [
       unifiled
     ];
@@ -5116,8 +5254,11 @@
     "vallox" = ps: with ps; [
       vallox-websocket-api
     ];
+    "valve" = ps: with ps; [
+    ];
     "vasttrafik" = ps: with ps; [
-    ]; # missing inputs: vtjp
+      vtjp
+    ];
     "velbus" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -5356,6 +5497,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -5364,6 +5506,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -5403,6 +5546,7 @@
       aioruuvigateway
       aioshelly
       bleak
+      bleak-esphome
       bleak-retry-connector
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -5411,6 +5555,7 @@
       esphome-dashboard-api
       fnv-hash-fast
       ha-ffmpeg
+      habluetooth
       hassil
       home-assistant-intents
       ifaddr
@@ -5602,9 +5747,9 @@
     "android_ip_webcam"
     "androidtv"
     "androidtv_remote"
+    "anova"
     "anthemav"
     "apache_kafka"
-    "apcupsd"
     "api"
     "apple_tv"
     "application_credentials"
@@ -5707,6 +5852,7 @@
     "doorbird"
     "dormakaba_dkey"
     "dremel_3d_printer"
+    "drop_connect"
     "dsmr"
     "dsmr_reader"
     "dte_energy_bridge"
@@ -5714,6 +5860,7 @@
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
+    "dynalite"
     "eafm"
     "easyenergy"
     "ecobee"
@@ -5756,6 +5903,7 @@
     "file_upload"
     "filesize"
     "filter"
+    "fints"
     "fireservicerota"
     "firmata"
     "fitbit"
@@ -5784,6 +5932,7 @@
     "frontier_silicon"
     "fully_kiosk"
     "garages_amsterdam"
+    "gardena_bluetooth"
     "gdacs"
     "generic"
     "generic_hygrostat"
@@ -5835,6 +5984,7 @@
     "history_stats"
     "hive"
     "hlk_sw16"
+    "holiday"
     "home_connect"
     "home_plus_control"
     "homeassistant"
@@ -5997,6 +6147,7 @@
     "nest"
     "netatmo"
     "netgear"
+    "netgear_lte"
     "network"
     "nexia"
     "nextbus"
@@ -6114,6 +6265,7 @@
     "risco"
     "rituals_perfume_genie"
     "rmvtransport"
+    "roborock"
     "roku"
     "roomba"
     "roon"
@@ -6197,23 +6349,30 @@
     "steamist"
     "stookalert"
     "stream"
+    "streamlabswater"
     "stt"
     "subaru"
+    "suez_water"
     "sun"
+    "sunweg"
     "surepetcare"
+    "swiss_public_transport"
     "switch"
     "switch_as_x"
     "switchbee"
     "switchbot"
+    "switchbot_cloud"
     "switcher_kis"
     "syncthing"
     "syncthru"
     "synology_dsm"
     "system_health"
     "system_log"
+    "systemmonitor"
     "tado"
     "tag"
     "tailscale"
+    "tailwind"
     "tankerkoenig"
     "tasmota"
     "tautulli"
@@ -6243,6 +6402,7 @@
     "tomorrowio"
     "toon"
     "totalconnect"
+    "tplink"
     "tplink_omada"
     "traccar"
     "trace"
@@ -6264,7 +6424,6 @@
     "uk_transport"
     "ukraine_alarm"
     "unifi"
-    "unifi_direct"
     "unifiprotect"
     "universal"
     "upb"
@@ -6280,6 +6439,7 @@
     "v2c"
     "vacuum"
     "vallox"
+    "valve"
     "velbus"
     "venstar"
     "vera"

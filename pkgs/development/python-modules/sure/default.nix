@@ -30,6 +30,8 @@ buildPythonPackage rec {
     six
   ];
 
+  doCheck = pythonOlder "3.12"; # nose requires imp module
+
   nativeCheckInputs = [
     nose
   ];

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "rich-pixels";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "rich-pixels";
     rev = version;
-    hash = "sha256-zI6jtEdmBAEGxyASo/6fiHdzwzoSwXN7A5x1CmYS5qc=";
+    hash = "sha256-fbpnHEfBPWLSYhgETqKbdmmzt7Lu/4oKgetjgNvv04c=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,7 @@ buildPythonPackage rec {
     description = "A Rich-compatible library for writing pixel images and ASCII art to the terminal";
     homepage = "https://github.com/darrenburns/rich-pixels";
     changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${src.rev}";
-    # upstream has no license specified
-    # https://github.com/darrenburns/rich-pixels/issues/11
-    license = licenses.unfree;
+    license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };
 }

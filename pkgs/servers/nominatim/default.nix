@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
       jinja2
       pyicu
       datrie
+      pyosmium
     ]))
     # python3Packages.pylint  # We don't want to run pylint because the package could break on pylint bumps which is really annoying.
     # python3Packages.pytest  # disabled since I can't get it to run tests anyway

@@ -104,7 +104,17 @@ stdenv.mkDerivation rec {
   patches = [
     ./option-debugging.patch
     # ffmpeg 6 fix https://github.com/cmus/cmus/pull/1254/
-    (fetchpatch { url = "https://github.com/cmus/cmus/commit/07b368ff1500e1d2957cad61ced982fa10243fbc.patch"; hash = "sha256-5gsz3q8R9FPobHoLj8BQPsa9s4ULEA9w2VQR+gmpmgA="; })
+    (fetchpatch {
+      name = "ffmpeg-6-compat.patch";
+      url = "https://github.com/cmus/cmus/commit/07b368ff1500e1d2957cad61ced982fa10243fbc.patch";
+      hash = "sha256-5gsz3q8R9FPobHoLj8BQPsa9s4ULEA9w2VQR+gmpmgA=";
+    })
+    # function detection breaks with clang 16
+    (fetchpatch {
+      name = "clang-16-function-detection.patch";
+      url = "https://github.com/cmus/cmus/commit/4123b54bad3d8874205aad7f1885191c8e93343c.patch";
+      hash = "sha256-YKqroibgMZFxWQnbmLIHSHR5sMJduyEv6swnKZQ33Fg=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ];

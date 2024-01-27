@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.26.2";
+  version = "1.26.3";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ylCoFYZlXPU6j5Z2a5zpCk0H7Q/hYr1eFdra3QBgx/Y=";
+    sha256 = "XmzSRBiEfLRazxfaW0NacTHLTsKs/2joKPNCob8T70o=";
   };
 
   strictDeps = true;

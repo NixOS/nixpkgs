@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-gssapi"
     "--with-gsasl"
     "--with-mysql"

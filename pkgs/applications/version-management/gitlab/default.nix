@@ -101,7 +101,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gettext:compile RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production

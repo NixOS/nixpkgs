@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
-, spark_parser
+, spark-parser
 , xdis
 , nose
 , pytest
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ nose pytest hypothesis six ];
-  propagatedBuildInputs = [ spark_parser xdis ];
+  propagatedBuildInputs = [ spark-parser xdis ];
 
   # six import errors (yet it is supplied...)
   checkPhase = ''

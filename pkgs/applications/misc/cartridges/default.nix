@@ -6,29 +6,32 @@
 , libadwaita
 , meson
 , ninja
-, python3
+, python3Packages
 , stdenv
 , wrapGAppsHook4
+, nix-update-script
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartridges";
-  version = "2.3";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d0c0043kssPvGxs6FygDkTKZoYtFge2cH4MIhz2vVYk=";
+    hash = "sha256-+18TWtxKT87CZ8vTtYac9aQ0wIbhJEXbXFZrSj5BmjI=";
   };
+
+  pythonPath = with python3Packages; [
+    pillow
+    pygobject3
+    pyyaml
+    requests
+  ];
 
   buildInputs = [
     libadwaita
-    (python3.withPackages (p: with p; [
-      pillow
-      pygobject3
-      pyyaml
-      requests
-    ]))
+    (python3Packages.python.withPackages (_: finalAttrs.pythonPath))
   ];
 
   nativeBuildInputs = [
@@ -37,8 +40,20 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     meson
     ninja
+    python3Packages.wrapPython
     wrapGAppsHook4
   ];
+
+  dontWrapGApps = true;
+
+  postFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    wrapPythonPrograms "$out/bin" "$out" "$pythonPath"
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A GTK4 + Libadwaita game launcher";

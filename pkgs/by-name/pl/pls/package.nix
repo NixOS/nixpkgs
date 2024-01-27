@@ -7,29 +7,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pls";
-  version = "0.0.1-beta.2";
+  version = "0.0.1-beta.4";
 
   src = fetchFromGitHub {
     owner = "dhruvkb";
     repo = "pls";
     rev = "v${version}";
-    hash = "sha256-yMZygYrLi3V9MA+6vgqG+RHme5jtHMnork8aALbFVXc=";
+    hash = "sha256-YndQx7FImtbAfcbOpIGOdHQA1V7mbQiYBbpik2I+FCE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "users-0.11.0" = "sha256-xBds73h68oWjKivEw92jEx0dVh08H2EIlBWnGx9DhyE=";
-    };
-  };
+  cargoHash = "sha256-HzkN856GHhY2sQ0jmQCCQva/yB4zzh+ccrQvibLFhxQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = {
+    changelog = "https://github.com/pls-rs/pls/releases/tag/${src.rev}";
     description = "Prettier and powerful ls";
-    homepage = "https://pls-rs.github.io/pls/";
+    homepage = "http://pls.cli.rs";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pls";
     maintainers = with lib.maintainers; [ tomasajt ];

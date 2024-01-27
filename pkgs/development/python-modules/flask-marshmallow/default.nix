@@ -2,9 +2,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, flit-core
 , flask
 , marshmallow
-, packaging
 , pytestCheckHook
 , flask-sqlalchemy
 , marshmallow-sqlalchemy
@@ -12,22 +12,25 @@
 
 buildPythonPackage rec {
   pname = "flask-marshmallow";
-  version = "0.15.0";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "flask-marshmallow";
     rev = "refs/tags/${version}";
-    hash = "sha256-N21M/MzcvOaDh5BgbbZtNcpRAULtWGLTMberCfOUoEM=";
+    hash = "sha256-+5L4OfBRMkS6WRXT7dI/uuqloc/PZgu+DFvOCinByh8=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     flask
     marshmallow
-    packaging
   ];
 
   nativeCheckInputs = [

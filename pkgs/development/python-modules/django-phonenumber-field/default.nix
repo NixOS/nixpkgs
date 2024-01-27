@@ -3,7 +3,7 @@
 , buildPythonPackage
 , django
 , djangorestframework
-, fetchFromGitHub
+, fetchPypi
 , phonenumbers
 , python
 , pythonOlder
@@ -12,19 +12,15 @@
 
 buildPythonPackage rec {
   pname = "django-phonenumber-field";
-  version = "7.2.0";
+  version = "7.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "stefanfoulis";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-QEmwCdSiaae7mhmCPcV5F01f1GRxmIur3tyhv0XK7I4=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-+c2z3ghfmcJJMoKTo7k9Tl+kQMDI47mesND1R0hil5c=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

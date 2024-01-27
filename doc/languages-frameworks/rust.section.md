@@ -44,20 +44,21 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
-`buildRustPackage` requires either the `cargoSha256` or the
-`cargoHash` attribute which is computed over all crate sources of this
-package. `cargoHash256` is used for traditional Nix SHA-256 hashes,
-such as the one in the example above. `cargoHash` should instead be
-used for [SRI](https://www.w3.org/TR/SRI/) hashes. For example:
-
-Exception: If the application has cargo `git` dependencies, the `cargoHash`/`cargoSha256`
-approach will not work, and you will need to copy the `Cargo.lock` file of the application
-to nixpkgs and continue with the next section for specifying the options of the`cargoLock`
-section.
+`buildRustPackage` requires either the `cargoHash` or the `cargoSha256`
+attribute which is computed over all crate sources of this package.
+`cargoSha256` is used for traditional Nix SHA-256 hashes. `cargoHash` should
+instead be used for [SRI](https://www.w3.org/TR/SRI/) hashes and should be
+preferred. For example:
 
 ```nix
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
 ```
+
+Exception: If the application has cargo `git` dependencies, the `cargoHash`/`cargoSha256`
+approach will not work, and you will need to copy the `Cargo.lock` file of the application
+to nixpkgs and continue with the next section for specifying the options of the `cargoLock`
+section.
+
 
 Both types of hashes are permitted when contributing to nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
@@ -700,7 +701,7 @@ with import <nixpkgs> {};
     hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
       postPatch = ''
         substituteInPlace lib/zoneinfo.rs \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+          --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
       '';
     };
   };

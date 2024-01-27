@@ -565,7 +565,10 @@ in
       wantedBy = [ "network-online.target" ];
     };
 
-    systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+    systemd.services.ModemManager = {
+      aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+      path = lib.optionals (cfg.fccUnlockScripts != []) [ pkgs.libqmi pkgs.libmbim ];
+    };
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];

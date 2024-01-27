@@ -1,10 +1,11 @@
-{ callPackage
+{ stdenv
+, callPackage
 , rocmUpdateScript
 , llvm
 }:
 
 callPackage ../base.nix rec {
-  inherit rocmUpdateScript;
+  inherit stdenv rocmUpdateScript;
   buildMan = false; # No man pages to build
   targetName = "lld";
   targetDir = targetName;

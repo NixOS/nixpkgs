@@ -84,6 +84,10 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-bitbake" = {
+      orga = "amaanq";
+      repo = "tree-sitter-bitbake";
+    };
     "tree-sitter-beancount" = {
       orga = "polarmutex";
       repo = "tree-sitter-beancount";
@@ -103,6 +107,10 @@ let
     "tree-sitter-elisp" = {
       orga = "wilfred";
       repo = "tree-sitter-elisp";
+    };
+    "tree-sitter-just" = {
+      orga = "IndianBoy42";
+      repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
       orga = "cstrahan";
@@ -396,6 +404,10 @@ let
     "tree-sitter-wgsl" = {
       orga = "szebniok";
       repo = "tree-sitter-wgsl";
+    };
+    "tree-sitter-templ" = {
+      orga = "vrischmann";
+      repo = "tree-sitter-templ";
     };
   };
 

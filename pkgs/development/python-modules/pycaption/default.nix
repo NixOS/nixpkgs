@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , beautifulsoup4
 , lxml
 , cssutils
@@ -12,16 +13,22 @@
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.2.0";
+  version = "2.2.1";
 
   disabled = pythonOlder "3.6";
 
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-W/sD/Nh2k1z7YvFVnQB9dGa1bXoCTb4QrPk/1mi4Hdk=";
+  src = fetchFromGitHub {
+    owner = "pbs";
+    repo = "pycaption";
+    rev = version;
+    hash = "sha256-IPCU9MsBY+Vsk6SrR9+3j4Izfhw5LeUrK0KUa3seSs4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -37,8 +44,6 @@ buildPythonPackage rec {
     pytest-lazy-fixture
     pytestCheckHook
   ];
-
-  doCheck = false;
 
   meta = with lib; {
     changelog = "https://github.com/pbs/pycaption/blob/${version}/docs/changelog.rst";

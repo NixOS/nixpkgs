@@ -10,8 +10,8 @@
 , importlib-metadata
 , setuptools
 , wheel
-, zope_event
-, zope_interface
+, zope-event
+, zope-interface
 , pythonOlder
 
 # for passthru.tests
@@ -47,8 +47,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     importlib-metadata
-    zope_event
-    zope_interface
+    zope-event
+    zope-interface
   ] ++ lib.optionals (!isPyPy) [
     greenlet
   ];

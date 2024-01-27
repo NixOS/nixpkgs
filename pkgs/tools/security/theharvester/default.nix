@@ -10,10 +10,15 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "laramies";
-    repo = pname;
+    repo = "theharvester";
     rev = "refs/tags/${version}";
     hash = "sha256-tnCiI4bte2RSWSkEL2rwFz6WFjfRMMFiEBOvv3QMyos=";
   };
+
+  postPatch = ''
+    # Requirements are pinned
+    sed -i 's/==.*//' requirements/base.txt
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
@@ -32,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     fastapi
     lxml
     netaddr
-    orjson
+    ujson
     plotly
     pyppeteer
     python-dateutil
@@ -68,7 +73,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/laramies/theHarvester";
     changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
-    maintainers = with maintainers; [ c0bw3b fab treemo ];
     license = licenses.gpl2Only;
+    maintainers = with maintainers; [ c0bw3b fab treemo ];
+    mainProgram = "theHarvester";
   };
 }

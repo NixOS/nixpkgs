@@ -1,0 +1,11 @@
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/sbom/SoftwareBillOfMaterialsImpl.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/sbom/SoftwareBillOfMaterialsImpl.kt
+@@ -162,6 +162,8 @@
+   }
+ 
+   override suspend fun generate() {
++    Span.current().addEvent("SBOM generation are unavaliable due to requiring internet, skipping")
++    return
+     val skipReason = when {
+       !context.shouldBuildDistributions() -> "No distribution was built"
+       documentNamespace == null -> "Document namespace isn't specified"

@@ -41,6 +41,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "starline" ];
 
+  # https://github.com/Anonym-tsk/starline/issues/4
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Unofficial python library for StarLine API";
     homepage = "https://github.com/Anonym-tsk/starline";

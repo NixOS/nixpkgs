@@ -232,13 +232,13 @@ let
 
   prompter = build-asdf-system rec {
     pname = "prompter";
-    version = "0.1.1";
+    version = "20240108-git";
 
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "prompter";
-      rev = version;
-      sha256 = "sha256-A9gIUBj0oUDFGR5aqHz+tdNR6t03LPMrx0n9qM3ACwE=";
+      rev = "7890ed5d02e70aba01ceb964c6ee4f40776e7dc0";
+      hash = "sha256-rRKtpSKAqfzvnlC3NQ4840RrlbBUpI4V6uX6p5hRJWQ=";
     };
 
     lispLibs = [
@@ -362,7 +362,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.10.0";
+    version = "3.11.1";
 
     lispLibs = (with super; [
       alexandria
@@ -470,8 +470,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.10.0";
-      sha256 = "sha256-yEa5Lx1egkg9Jh3EQfvaBQicm31uxIq/3s2NOQUC4uc=";
+      rev = "3.11.1";
+      hash = "sha256-7qnelRTZBJ+1CbZv5Bpzd3uOjcSr/VLkcyo2yK/U/4A=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -507,7 +507,7 @@ let
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
-      rm -v $out/nyxt
+      rm -fv $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \

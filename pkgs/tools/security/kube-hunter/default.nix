@@ -14,8 +14,6 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
   ];

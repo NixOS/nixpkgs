@@ -9,7 +9,7 @@ elfHasDynamicSection() {
 autoAddOpenGLRunpathPhase() (
   local outputPaths
   mapfile -t outputPaths < <(for o in $(getAllOutputNames); do echo "${!o}"; done)
-  find "${outputPaths[@]}" -type f -executable -print0  | while IFS= read -rd "" f; do
+  find "${outputPaths[@]}" -type f -print0  | while IFS= read -rd "" f; do
     if isELF "$f"; then
       # patchelf returns an error on statically linked ELF files
       if elfHasDynamicSection "$f" ; then

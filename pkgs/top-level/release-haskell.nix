@@ -49,8 +49,7 @@ let
   # ```
   # {
   #   ghc810 = "ghc810";
-  #   ghc8102Binary = "ghc8102Binary";
-  #   ghc8102BinaryMinimal = "ghc8102BinaryMinimal";
+  #   ghc8107Binary = "ghc8107Binary";
   #   ghc8107 = "ghc8107";
   #   ghc924 = "ghc924";
   #   ...
@@ -62,7 +61,6 @@ let
   released = with compilerNames; [
     ghc8107
     ghc902
-    ghc924
     ghc925
     ghc926
     ghc927
@@ -70,8 +68,9 @@ let
     ghc945
     ghc946
     ghc947
-    ghc962
+    ghc948
     ghc963
+    ghc964
     ghc981
   ];
 
@@ -334,6 +333,7 @@ let
         nota
         nvfetcher
         ormolu
+        pakcs
         pandoc
         petrinizer
         place-cursor-at
@@ -384,7 +384,6 @@ let
         {
           # remove musl ghc865Binary since it is known to be broken and
           # causes an evaluation error on darwin.
-          # TODO: remove ghc865Binary altogether and use ghc8102Binary
           ghc865Binary = {};
 
           ghcjs = {};
@@ -415,7 +414,7 @@ let
 
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
-      # Use integer-simple to avoid GMP linking problems (LGPL)
+      # Use native-bignum to avoid GMP linking problems (LGPL)
       pkgsStatic =
         removePlatforms
           [
@@ -437,8 +436,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc928 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc928)
+            haskell.packages.native-bignum.ghc948 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc948)
                 hello
                 lens
                 random
@@ -447,6 +446,15 @@ let
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
               ;
+            };
+
+            haskell.packages.native-bignum.ghc981 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc981)
+                hello
+                random
+                QuickCheck
+                terminfo # isn't bundled for cross
+                ;
             };
           };
 
@@ -498,16 +506,14 @@ let
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107
-        # Not yet supported
-        compilerNames.ghc981
+        # Support ceased as of 2.5.0.0
+        compilerNames.ghc902
       ] released;
       hoogle = lib.subtractLists [
-        compilerNames.ghc962
         compilerNames.ghc963
         compilerNames.ghc981
       ] released;
       hlint = lib.subtractLists [
-        compilerNames.ghc962
         compilerNames.ghc963
         compilerNames.ghc981
       ] released;
@@ -559,7 +565,6 @@ let
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
-        compilerNames.ghc924
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
@@ -567,7 +572,7 @@ let
         compilerNames.ghc945
         compilerNames.ghc946
         compilerNames.ghc947
-        compilerNames.ghc962
+        compilerNames.ghc948
         compilerNames.ghc963
       ];
     })
@@ -640,11 +645,9 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc924
           jobs.pkgsMusl.haskell.compiler.ghc925
           jobs.pkgsMusl.haskell.compiler.ghc926
           jobs.pkgsMusl.haskell.compiler.ghc927
@@ -652,7 +655,6 @@ let
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
@@ -671,8 +673,9 @@ let
           ];
         };
         constituents = accumulateDerivations [
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc928
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc981
         ];
       };
     }

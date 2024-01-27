@@ -6,7 +6,6 @@
 , pythonOlder
 , dnspython
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,7 +24,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [

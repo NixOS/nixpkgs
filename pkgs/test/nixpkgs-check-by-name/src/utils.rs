@@ -10,10 +10,10 @@ pub const PACKAGE_NIX_FILENAME: &str = "package.nix";
 pub fn read_dir_sorted(base_dir: &Path) -> anyhow::Result<Vec<fs::DirEntry>> {
     let listing = base_dir
         .read_dir()
-        .context(format!("Could not list directory {}", base_dir.display()))?;
+        .with_context(|| format!("Could not list directory {}", base_dir.display()))?;
     let mut shard_entries = listing
         .collect::<io::Result<Vec<_>>>()
-        .context(format!("Could not list directory {}", base_dir.display()))?;
+        .with_context(|| format!("Could not list directory {}", base_dir.display()))?;
     shard_entries.sort_by_key(|entry| entry.file_name());
     Ok(shard_entries)
 }

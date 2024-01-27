@@ -205,6 +205,7 @@ in {
     systemd.services.code-server = {
       description = "Code server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;
       environment = {

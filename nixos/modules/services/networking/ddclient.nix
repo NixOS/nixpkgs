@@ -217,7 +217,7 @@ with lib;
         inherit RuntimeDirectory;
         inherit StateDirectory;
         Type = "oneshot";
-        ExecStartPre = "!${pkgs.writeShellScript "ddclient-prestart" preStart}";
+        ExecStartPre = [ "!${pkgs.writeShellScript "ddclient-prestart" preStart}" ];
         ExecStart = "${lib.getExe cfg.package} -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };
