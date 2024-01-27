@@ -5,7 +5,7 @@
 , pbr
 , setuptools
 , testscenarios
-, stestr
+, stestrCheckHook
 }:
 
 buildPythonPackage rec {
@@ -32,20 +32,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run -e <(echo "
-    # test counts warnings which no longer matches in python 3.11
-    oslo_i18n.tests.test_message.MessageTestCase.test_translate_message_bad_translation
-    ")
-
-    runHook postCheck
-  '';
+  disabledTests = [
+    "oslo_i18n.tests.test_message.MessageTestCase.test_translate_message_bad_translation"
+  ];
 
   pythonImportsCheck = [ "oslo_i18n" ];
 

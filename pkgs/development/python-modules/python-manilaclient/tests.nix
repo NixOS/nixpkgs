@@ -1,6 +1,6 @@
 { buildPythonPackage
 , python-manilaclient
-, stestr
+, stestrCheckHook
 , ddt
 , tempest
 , mock
@@ -17,14 +17,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     python-manilaclient
-    stestr
+    stestrCheckHook
     ddt
     tempest
     mock
     python-openstackclient
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

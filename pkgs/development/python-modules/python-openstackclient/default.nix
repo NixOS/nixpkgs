@@ -11,7 +11,7 @@
 , python-novaclient
 , requests-mock
 , sphinx
-, stestr
+, stestrCheckHook
 }:
 
 buildPythonPackage rec {
@@ -45,13 +45,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     ddt
-    stestr
+    stestrCheckHook
     requests-mock
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 
   pythonImportsCheck = [ "openstackclient" ];
 

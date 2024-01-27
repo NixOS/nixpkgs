@@ -8,7 +8,7 @@
 , pbr
 , pythonOlder
 , requests-mock
-, stestr
+, stestrCheckHook
 , testresources
 , testscenarios
 }:
@@ -35,14 +35,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     openssl
     requests-mock
-    stestr
+    stestrCheckHook
     testresources
     testscenarios
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 
   pythonImportsCheck = [
     "keystoneclient"

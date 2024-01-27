@@ -6,7 +6,7 @@
 , oslotest
 , pbr
 , pytz
-, stestr
+, stestrCheckHook
 }:
 
 buildPythonPackage rec {
@@ -30,11 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ msgpack oslo-utils pytz ];
 
-  nativeCheckInputs = [ oslotest stestr ];
-
-  checkPhase = ''
-    stestr run
-  '';
+  nativeCheckInputs = [ oslotest stestrCheckHook ];
 
   pythonImportsCheck = [ "oslo_serialization" ];
 

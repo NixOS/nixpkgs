@@ -5,7 +5,7 @@
 , oslotest
 , requests-mock
 , sphinx
-, stestr
+, stestrCheckHook
 , testscenarios
 }:
 
@@ -30,11 +30,7 @@ pname = "oslo-config-tests";
     oslotest
     requests-mock
     sphinx
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

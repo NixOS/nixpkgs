@@ -11,7 +11,7 @@
 , prettytable
 , requests-mock
 , simplejson
-, stestr
+, stestrCheckHook
 , stevedore
 }:
 
@@ -40,12 +40,8 @@ buildPythonPackage rec {
     ddt
     oslo-serialization
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 
   pythonImportsCheck = [ "cinderclient" ];
 

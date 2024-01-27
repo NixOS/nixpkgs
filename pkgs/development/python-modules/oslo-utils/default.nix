@@ -15,7 +15,7 @@
 , pyparsing
 , pytz
 , setuptools
-, stestr
+, stestrCheckHook
 , testscenarios
 , tzdata
 , pyyaml
@@ -62,17 +62,15 @@ buildPythonPackage rec {
     eventlet
     fixtures
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
     pyyaml
   ];
 
-  checkPhase = ''
+  preCheck = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
     export LD_PRELOAD=${libredirect}/lib/libredirect.so
-
-    stestr run
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];

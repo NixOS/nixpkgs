@@ -15,7 +15,7 @@
 , pyyaml
 , requests
 , requests-mock
-, stestr
+, stestrCheckHook
 , testscenarios
 }:
 
@@ -47,17 +47,15 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     testscenarios
     requests-mock
   ];
 
-  checkPhase = ''
-    stestr run -e <(echo "
-      heatclient.tests.unit.test_common_http.HttpClientTest.test_get_system_ca_file
-      heatclient.tests.unit.test_deployment_utils.TempURLSignalTest.test_create_temp_url
-    ")
-  '';
+  disabledTests = [
+    "heatclient.tests.unit.test_common_http.HttpClientTest.test_get_system_ca_file"
+    "heatclient.tests.unit.test_deployment_utils.TempURLSignalTest.test_create_temp_url"
+  ];
 
   pythonImportsCheck = [
     "heatclient"
