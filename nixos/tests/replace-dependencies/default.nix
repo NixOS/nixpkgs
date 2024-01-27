@@ -7,6 +7,7 @@ import ../make-test-python.nix (
     nodes.machine =
       { ... }:
       {
+        nix.settings.experimental-features = [ "ca-derivations" ];
         system.extraDependencies = [ pkgs.stdenvNoCC ];
       };
 
