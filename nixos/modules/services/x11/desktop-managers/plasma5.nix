@@ -480,7 +480,7 @@ in
           pkgs.maliit-framework
           pkgs.maliit-keyboard
         ]
-        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with pkgs.plasma5Packages.plasmaMobileGear; [
           # Additional software made for Plasma Mobile.
           alligator
           angelfish
