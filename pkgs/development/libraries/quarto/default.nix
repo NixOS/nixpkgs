@@ -18,32 +18,29 @@
 
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.3.450";
+  version = "1.4.549";
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    sha256 = "sha256-bcj7SzEGfQxsw9P8WkcLrKurPupzwpgIGtxoE3KVwAU=";
+    sha256 = "sha256-YeA9QKdaSzKtgjybVz22IopYICqblflNE8nN8j3Xr3g=";
   };
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  patches = [
-    ./fix-deno-path.patch
-  ];
-
   postPatch = ''
     # Compat for Deno >=1.26
     substituteInPlace bin/quarto.js \
       --replace 'Deno.setRaw(stdin.rid, ' 'Deno.stdin.setRaw(' \
-      --replace 'Deno.setRaw(Deno.stdin.rid, ' 'Deno.stdin.setRaw('
+      --replace 'Deno.setRaw(Deno.stdin.rid, ' 'Deno.stdin.setRaw(' \
+      --replace ']))?.trim();' ']))?.trim().split(" ")[0];'
   '';
 
   dontStrip = true;
 
   preFixup = ''
     wrapProgram $out/bin/quarto \
-      --prefix PATH : ${lib.makeBinPath [ deno ]} \
+      --prefix QUARTO_DENO : ${deno}/bin/deno \
       --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
       --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
       --prefix QUARTO_DART_SASS : ${dart-sass}/bin/dart-sass \
