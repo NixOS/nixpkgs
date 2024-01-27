@@ -65,6 +65,8 @@ mkDerivation rec {
     "MUPARSER_DIR=${muparser}"
     "INSTALLROOT=$(out)"
     "BOOST_DIR=${boost.dev}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "QMAKE_CXXFLAGS+=-std=c++14"
   ];
 
   qtWrapperArgs =
