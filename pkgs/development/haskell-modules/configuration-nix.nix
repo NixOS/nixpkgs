@@ -492,9 +492,6 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
-
   # llvm-ffi needs a specific version of LLVM which we hard code here. Since we
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
   # `dev` and `lib` output in, or Cabal will have trouble finding the library.
