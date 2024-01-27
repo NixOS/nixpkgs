@@ -1,7 +1,7 @@
 # This module provides configuration for the PAM (Pluggable
 # Authentication Modules) system.
 
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -500,14 +500,17 @@ let
         '';
       };
 
-      gnomeKeyringComponents = lib.genAttrs ["ssh" "secrets" "pkcs11"] (name: mkOption {
+      gnomeKeyringComponents = lib.genAttrs ["ssh" "secrets" "pkcs11"] (name: mkOption ({
         default = true;
         type = types.bool;
         description = lib.mdDoc ''
           If enabled, the ${name} component will be enabled in the gnome-keyring-daemon
           started by pam_gnome_keyring.
         '';
-      });
+      } // (lib.optionalAttrs (name == "ssh") {
+        default = !config.programs.gnupg.agent.enableSSHSupport;
+        defaultText = lib.literalExpression "!config.programs.gnupg.agent.enableSSHSupport";
+      })));
 
       failDelay = {
         enable = mkOption {
