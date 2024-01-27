@@ -1,0 +1,6 @@
+{
+  "with_alsa": [
+    "alsaSupport",
+    "withAlsa"
+  ]
+}

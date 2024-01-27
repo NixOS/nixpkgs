@@ -1,14 +1,10 @@
 { lib }:
 let
   inherit (lib) functionArgs isAttrs getAttr hasAttr mapAttrsToList warn;
-  # TODO: Automate it.
-  BACKWARD = {
-    with_alsa = [ "alsaSupport" "withAlsa" ];
-  };
-  FORWARD = {
-    alsaSupport = "with_alsa";
-    withAlsa = "with_alsa";
-  };
+
+  BACKWARD = builtins.fromJSON (builtins.readFile ./rfc0169.json);
+  FORWARD = builtins.listToAttrs (builtins.concatLists (mapAttrsToList (n: map (x: { name = x; value = n; })) BACKWARD));
+
   # Since we don't know what was the original deprecated name used by the
   # package (if any, really), we have to extend original signature with all
   # known deprecated names.
