@@ -11374,6 +11374,12 @@
     githubId = 346094;
     name = "Michael Alyn Miller";
   };
+  mandos = {
+    email = "marek.maksimczyk@mandos.net.pl";
+    github = "mandos";
+    githubId = 115060;
+    name = "Marek Maksimczyk";
+  };
   mangoiv = {
     email = "contact@mangoiv.com";
     github = "mangoiv";
@@ -15817,6 +15823,11 @@
     github = "rgnns";
     githubId = 811827;
     name = "Gabriel Lievano";
+  };
+  rgri = {
+    name = "shortcut";
+    github = "rgri";
+    githubId = 45253749;
   };
   rgrinberg = {
     name = "Rudi Grinberg";
