@@ -152,6 +152,7 @@ package-maintainers:
   danielrolls:
     - byte-count-reader
     - shellify
+    - specup
   domenkozar:
     - cachix
     - cachix-api
