@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "yx";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     owner = "tomalok";
     repo = "yx";
     rev = version;
-    sha256 = "sha256-oY61V9xP0DwRooabzi0XtaFsQa2GwYbuvxfERXQtYcA=";
+    hash = "sha256-uuso+hsmdsB7VpIRKob8rfMaWvRMCBHvCFnYrHPC6iw=";
   };
 
   makeFlags = [
