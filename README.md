@@ -29,15 +29,19 @@
 
 ## Operational Modes
 
-The Botnix OS will be available in five different variants:
+The Botnix OS will be available in seven different operational modes or flavours:
 
 * Agent
 * Orchestrator
+* Knowledgebase
 * Monitor
 * Simulator (via [AutonomySim](https://github.com/nervosys/AutonomySim))
+* Trainer
 * Developer
 
-At present, we are focusing on the `Agent` mode. Each of the modes reflects different use cases within the realm of autonomous systems.
+Each of the modes involves specialized configurations that reflect their use cases within the realm of autonomous systems.
+
+At present, we are focusing on the `Agent` mode.
 
 ## Getting Started
 
@@ -135,7 +139,7 @@ A manuscript on the design and implementation of `Botnix` is forthcoming.
 
 - [x] Remove bloat not application to intelligent robotic systems, focus on a single desktop environment (Gnome)
 - [ ] Create `Botpkgs` reduced to domain-specific security-audited packages
-- [ ] Create OS flavours with sane defaults: Agent, Orchestrator, Simulator
+- [ ] Create OS flavours with sane defaults: Agent, Orchestrator, Knowledgebase, Monitor, Simulator, Trainer, Developer
 - [ ] Add pinned libraries, APIs, tools for artificial intelligence (AI) in robotics
   - [ ] C++ (C++20: gcc-12, clang-17)
   - [ ] Rust 1.73.0, Ferrocene
