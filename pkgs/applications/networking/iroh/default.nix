@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoLock = {
-    lockFile = "${src}/Cargo.lock";
+    lockFile = ./Cargo.lock;
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (
