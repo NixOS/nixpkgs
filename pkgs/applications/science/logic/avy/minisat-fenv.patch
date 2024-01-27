@@ -1,0 +1,57 @@
+diff --git a/core/Main.cc b/core/Main.cc
+index 2b0d97b..9ba985d 100644
+--- a/core/Main.cc
++++ b/core/Main.cc
+@@ -77,9 +77,13 @@ int main(int argc, char** argv)
+         setUsageHelp("USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         // printf("This is MiniSat 2.0 beta\n");
+         
+-#if defined(__linux__)
+-        fpu_control_t oldcw, newcw;
+-        _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
++#if defined(__linux__) && defined(__x86_64__)
++        fenv_t fenv;
++
++        fegetenv(&fenv);
++        fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
++        fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
++        fesetenv(&fenv);
+         printf("WARNING: for repeatability, setting FPU to use double precision\n");
+ #endif
+         // Extra options:
+diff --git a/simp/Main.cc b/simp/Main.cc
+index 2804d7f..7fbdb33 100644
+--- a/simp/Main.cc
++++ b/simp/Main.cc
+@@ -78,9 +78,13 @@ int main(int argc, char** argv)
+         setUsageHelp("USAGE: %s [options] <input-file> <result-output-file>\n\n  where input may be either in plain or gzipped DIMACS.\n");
+         // printf("This is MiniSat 2.0 beta\n");
+         
+-#if defined(__linux__)
+-        fpu_control_t oldcw, newcw;
+-        _FPU_GETCW(oldcw); newcw = (oldcw & ~_FPU_EXTENDED) | _FPU_DOUBLE; _FPU_SETCW(newcw);
++#if defined(__linux__) && defined(__x86_64__)
++        fenv_t fenv;
++
++        fegetenv(&fenv);
++        fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
++        fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
++        fesetenv(&fenv);
+         printf("WARNING: for repeatability, setting FPU to use double precision\n");
+ #endif
+         // Extra options:
+diff --git a/utils/System.h b/utils/System.h
+index 1758192..840bee5 100644
+--- a/utils/System.h
++++ b/utils/System.h
+@@ -21,8 +21,8 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
+ #ifndef Minisat_System_h
+ #define Minisat_System_h
+ 
+-#if defined(__linux__)
+-#include <fpu_control.h>
++#if defined(__linux__) && defined(__x86_64__)
++#include <fenv.h>
+ #endif
+ 
+ #include "mtl/IntTypes.h"

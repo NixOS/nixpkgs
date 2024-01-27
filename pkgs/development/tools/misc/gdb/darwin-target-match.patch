@@ -1,0 +1,11 @@
+--- a/configure	2017-06-05 00:51:26.000000000 +0900
++++ b/configure	2018-03-06 23:12:58.000000000 +0900
+@@ -3644,7 +3644,7 @@
+     noconfigdirs="$noconfigdirs ld gprof"
+     noconfigdirs="$noconfigdirs sim target-rda"
+     ;;
+-  x86_64-*-darwin[912]*)
++  x86_64-*-darwin*)
+     noconfigdirs="$noconfigdirs ld gas gprof"
+     noconfigdirs="$noconfigdirs sim target-rda"
+     ;;

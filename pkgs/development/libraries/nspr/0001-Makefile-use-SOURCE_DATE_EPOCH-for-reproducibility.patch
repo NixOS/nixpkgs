@@ -1,0 +1,84 @@
+From e5cc8f7c387e3238ebb8239e2555c933a41502c0 Mon Sep 17 00:00:00 2001
+From: Graham Christensen <graham@grahamc.com>
+Date: Thu, 7 Mar 2019 08:11:32 -0500
+Subject: [PATCH] Makefile: use SOURCE_DATE_EPOCH for reproducibility
+
+---
+ nspr/lib/ds/Makefile.in        | 4 ++--
+ nspr/lib/libc/src/Makefile.in  | 4 ++--
+ nspr/lib/prstreams/Makefile.in | 4 ++--
+ nspr/pr/src/Makefile.in        | 6 +++---
+ 4 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/nspr/lib/ds/Makefile.in b/nspr/lib/ds/Makefile.in
+index e737791..d56b0a7 100644
+--- a/nspr/lib/ds/Makefile.in
++++ b/nspr/lib/ds/Makefile.in
+@@ -101,8 +101,8 @@ ECHO = echo
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date "+%Y-%m-%d %T" --date $(SOURCE_DATE_EPOCH))
++SH_NOW = $(SOURCE_DATE_EPOCH)000000
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+diff --git a/nspr/lib/libc/src/Makefile.in b/nspr/lib/libc/src/Makefile.in
+index e8a6d9f..0485737 100644
+--- a/nspr/lib/libc/src/Makefile.in
++++ b/nspr/lib/libc/src/Makefile.in
+@@ -103,8 +103,8 @@ ECHO = echo
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date "+%Y-%m-%d %T" --date $(SOURCE_DATE_EPOCH))
++SH_NOW = $(SOURCE_DATE_EPOCH)000000
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+diff --git a/nspr/lib/prstreams/Makefile.in b/nspr/lib/prstreams/Makefile.in
+index aeb2944..83ae423 100644
+--- a/nspr/lib/prstreams/Makefile.in
++++ b/nspr/lib/prstreams/Makefile.in
+@@ -105,8 +105,8 @@ ECHO = echo
+ TINC = $(OBJDIR)/_pl_bld.h
+ PROD = $(notdir $(SHARED_LIBRARY))
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date "+%Y-%m-%d %T" --date $(SOURCE_DATE_EPOCH))
++SH_NOW = $(SOURCE_DATE_EPOCH)000000
+ 
+ ifeq ($(OS_ARCH), WINNT)
+ 	SUF = i64
+diff --git a/nspr/pr/src/Makefile.in b/nspr/pr/src/Makefile.in
+index 19c5a69..989cc8c 100644
+--- a/nspr/pr/src/Makefile.in
++++ b/nspr/pr/src/Makefile.in
+@@ -46,7 +46,7 @@ MKSHLIB += -M $(MAPFILE)
+ endif
+ #
+ # In Solaris 2.6 or earlier, -lrt is called -lposix4.
+-# 
++#
+ LIBRT_TEST=$(firstword $(sort 5.7 $(OS_RELEASE)))
+ ifeq (5.7, $(LIBRT_TEST))
+ LIBRT=-lrt
+@@ -311,8 +311,8 @@ PROD = $(notdir $(SHARED_LIBRARY))
+ endif
+ 
+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
+-SH_DATE = $(shell date "+%Y-%m-%d %T")
+-SH_NOW = $(shell $(NOW))
++SH_DATE = $(shell date "+%Y-%m-%d %T" --date $(SOURCE_DATE_EPOCH))
++SH_NOW = $(SOURCE_DATE_EPOCH)000000
+ 
+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
+ 	SUF = i64
+-- 
+2.19.2
+

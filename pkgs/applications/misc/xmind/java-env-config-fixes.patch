@@ -1,0 +1,40 @@
+diff --git a/XMind_amd64/XMind.ini b/XMind_amd64/XMind.ini
+index bdd8a37..5f35daf 100644
+--- a/XMind_amd64/XMind.ini
++++ b/XMind_amd64/XMind.ini
+@@ -1,11 +1,11 @@
+ -configuration
+-./configuration
++@user.home/.xmind/configuration-cathy_linux_64
+ -data
+-../workspace
++@user.home/.xmind/workspace-cathy
+ -startup
+-../plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar
++plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar
+ --launcher.library
+-../plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.1.400.v20160518-1444
++plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.1.400.v20160518-1444
+ --launcher.defaultAction
+ openFile
+ --launcher.GTK_version
+diff --git a/XMind_i386/XMind.ini b/XMind_i386/XMind.ini
+index 4ed3225..1d74258 100644
+--- a/XMind_i386/XMind.ini
++++ b/XMind_i386/XMind.ini
+@@ -1,11 +1,11 @@
+ -configuration
+-./configuration
++@user.home/.xmind/configuration-cathy_linux_64
+ -data
+-../workspace
++@user.home/.xmind/workspace-cathy
+ -startup
+-../plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar
++plugins/org.eclipse.equinox.launcher_1.3.200.v20160318-1642.jar
+ --launcher.library
+-../plugins/org.eclipse.equinox.launcher.gtk.linux.x86_1.1.400.v20160518-1444
++plugins/org.eclipse.equinox.launcher.gtk.linux.x86_1.1.400.v20160518-1444
+ --launcher.defaultAction
+ openFile
+ --launcher.GTK_version

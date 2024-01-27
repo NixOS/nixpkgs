@@ -1,0 +1,22 @@
+diff --git a/utils/novnc_proxy b/utils/novnc_proxy
+index 0900f7e..a931763 100755
+--- a/utils/novnc_proxy
++++ b/utils/novnc_proxy
+@@ -22,7 +22,7 @@ usage() {
+     echo "                          Default: self.pem"
+     echo "    --key KEY             Path to key file, when not combined with cert"
+     echo "    --web WEB             Path to web files (e.g. vnc.html)"
+-    echo "                          Default: ./"
++    echo "                          Default: @out@/share/webapps/novnc"
+     echo "    --ssl-only            Disable non-https connections."
+     echo "                                    "
+     echo "    --record FILE         Record traffic to FILE.session.js"
+@@ -44,7 +44,7 @@ PORT="6080"
+ VNC_DEST="localhost:5900"
+ CERT=""
+ KEY=""
+-WEB=""
++WEB="@out@/share/webapps/novnc"
+ proxy_pid=""
+ SSLONLY=""
+ RECORD_ARG=""

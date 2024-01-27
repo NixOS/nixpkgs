@@ -1,0 +1,74 @@
+diff --git a/meson.build b/meson.build
+index 35c3b95..f27e472 100644
+--- a/meson.build
++++ b/meson.build
+@@ -16,7 +16,7 @@ config_h.set_quoted('PACKAGE', meson.project_name())
+ config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
+ 
+ cc_args = []
+-if host_machine.system() != 'freebsd'
++if host_machine.system() not in ['darwin', 'freebsd']
+ 	cc_args += ['-D_POSIX_C_SOURCE=200809L']
+ endif
+ add_project_arguments(cc_args, language: 'c')
+@@ -52,7 +52,7 @@ foreach f: have_funcs
+ endforeach
+ config_h.set10('HAVE_XUCRED_CR_PID', cc.has_member('struct xucred', 'cr_pid', prefix : '#include <sys/ucred.h>'))
+ have_broken_msg_cmsg_cloexec = false
+-if host_machine.system() == 'freebsd'
++if host_machine.system() in ['darwin', 'freebsd']
+ 	have_broken_msg_cmsg_cloexec = not cc.compiles('''
+ #include <sys/param.h> /* To get __FreeBSD_version. */
+ #if __FreeBSD_version < 1300502 || \
+@@ -69,7 +69,7 @@ endif
+ config_h.set10('HAVE_BROKEN_MSG_CMSG_CLOEXEC', have_broken_msg_cmsg_cloexec)
+ 
+ if get_option('libraries')
+-	if host_machine.system() == 'freebsd'
++	if host_machine.system() in ['darwin', 'freebsd']
+ 		# When building for FreeBSD, epoll(7) is provided by a userspace
+ 		# wrapper around kqueue(2).
+ 		epoll_dep = dependency('epoll-shim')
+diff --git a/src/event-loop.c b/src/event-loop.c
+index 37cf95d..49a38cb 100644
+--- a/src/event-loop.c
++++ b/src/event-loop.c
+@@ -48,6 +48,13 @@
+ 
+ #define TIMER_REMOVED -2
+ 
++#ifdef __APPLE__
++struct itimerspec {
++	struct timespec it_interval;
++	struct timespec it_value;
++};
++#endif
++
+ struct wl_event_loop;
+ struct wl_event_source_interface;
+ struct wl_event_source_timer;
+diff --git a/src/wayland-os.c b/src/wayland-os.c
+index a9066ca..483fe64 100644
+--- a/src/wayland-os.c
++++ b/src/wayland-os.c
+@@ -69,17 +69,19 @@ wl_os_socket_cloexec(int domain, int type, int protocol)
+ {
+ 	int fd;
+ 
++#ifdef SOCK_CLOEXEC
+ 	fd = socket(domain, type | SOCK_CLOEXEC, protocol);
+ 	if (fd >= 0)
+ 		return fd;
+ 	if (errno != EINVAL)
+ 		return -1;
++#endif
+ 
+ 	fd = socket(domain, type, protocol);
+ 	return set_cloexec_or_close(fd);
+ }
+ 
+-#if defined(__FreeBSD__)
++#if defined(__APPLE__) || defined(__FreeBSD__)
+ int
+ wl_os_socket_peercred(int sockfd, uid_t *uid, gid_t *gid, pid_t *pid)
+ {

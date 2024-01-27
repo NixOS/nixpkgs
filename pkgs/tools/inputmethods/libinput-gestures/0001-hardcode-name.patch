@@ -1,0 +1,13 @@
+diff --git a/libinput-gestures b/libinput-gestures
+index 78c7c28..da04007 100755
+--- a/libinput-gestures
++++ b/libinput-gestures
+@@ -27,7 +27,7 @@ except ImportError:
+
+ session_locked = False
+
+-PROGPATH = Path(sys.argv[0])
++PROGPATH = Path("libinput-gestures")
+ PROGNAME = PROGPATH.stem
+
+ # Conf file containing gesture commands.

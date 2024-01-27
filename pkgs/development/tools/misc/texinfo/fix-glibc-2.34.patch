@@ -1,0 +1,186 @@
+
+Patch by Vitezslav Crhonek <vcrhonek@redhat.com>
+Source: https://src.fedoraproject.org/rpms/texinfo/c/9b2cca4817fa4bd8d520fed05e9560fc7183dcdf?branch=rawhide
+
+diff -up texinfo-6.8/gnulib/lib/cdefs.h.orig texinfo-6.8/gnulib/lib/cdefs.h
+--- texinfo-6.8/gnulib/lib/cdefs.h.orig	2021-03-11 19:57:53.000000000 +0100
++++ texinfo-6.8/gnulib/lib/cdefs.h	2021-07-19 12:26:46.985176475 +0200
+@@ -321,15 +321,15 @@
+ 
+ /* The nonnull function attribute marks pointer parameters that
+    must not be NULL.  */
+-#ifndef __attribute_nonnull__
++#ifndef __nonnull
+ # if __GNUC_PREREQ (3,3) || __glibc_has_attribute (__nonnull__)
+-#  define __attribute_nonnull__(params) __attribute__ ((__nonnull__ params))
++#  define __nonnull(params) __attribute__ ((__nonnull__ params))
+ # else
+-#  define __attribute_nonnull__(params)
++#  define __nonnull(params)
+ # endif
+-#endif
+-#ifndef __nonnull
+-# define __nonnull(params) __attribute_nonnull__ (params)
++#elif !defined __GLIBC__
++# undef __nonnull
++# define __nonnull(params) _GL_ATTRIBUTE_NONNULL (params)
+ #endif
+ 
+ /* If fortification mode, we warn about unused results of certain
+diff -up texinfo-6.8/gnulib/lib/libc-config.h.orig texinfo-6.8/gnulib/lib/libc-config.h
+--- texinfo-6.8/gnulib/lib/libc-config.h.orig	2021-03-11 19:57:54.000000000 +0100
++++ texinfo-6.8/gnulib/lib/libc-config.h	2021-07-19 12:27:58.810590975 +0200
+@@ -33,9 +33,9 @@
+ #include <config.h>
+ 
+ /* On glibc this includes <features.h> and <sys/cdefs.h> and #defines
+-   _FEATURES_H, __WORDSIZE, and __set_errno.  On FreeBSD 11 and
+-   DragonFlyBSD 5.9 it includes <sys/cdefs.h> which defines __nonnull.
+-   Elsewhere it is harmless.  */
++   _FEATURES_H, __WORDSIZE, and __set_errno.  On FreeBSD 11 it
++   includes <sys/cdefs.h> which defines __nonnull.  Elsewhere it
++   is harmless.  */
+ #include <errno.h>
+ 
+ /* From glibc <errno.h>.  */
+diff -up texinfo-6.8/gnulib/lib/malloc/dynarray-skeleton.c.orig texinfo-6.8/gnulib/lib/malloc/dynarray-skeleton.c
+--- texinfo-6.8/gnulib/lib/malloc/dynarray-skeleton.c.orig	2021-03-11 19:57:54.000000000 +0100
++++ texinfo-6.8/gnulib/lib/malloc/dynarray-skeleton.c	2021-07-19 12:24:46.878419397 +0200
+@@ -192,7 +192,7 @@ DYNARRAY_NAME (free__array__) (struct DY
+ 
+ /* Initialize a dynamic array object.  This must be called before any
+    use of the object.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static void
+ DYNARRAY_NAME (init) (struct DYNARRAY_STRUCT *list)
+ {
+@@ -202,7 +202,7 @@ DYNARRAY_NAME (init) (struct DYNARRAY_ST
+ }
+ 
+ /* Deallocate the dynamic array and its elements.  */
+-__attribute_maybe_unused__ __attribute_nonnull__ ((1))
++__attribute_maybe_unused__ __nonnull ((1))
+ static void
+ DYNARRAY_FREE (struct DYNARRAY_STRUCT *list)
+ {
+@@ -213,7 +213,7 @@ DYNARRAY_FREE (struct DYNARRAY_STRUCT *l
+ }
+ 
+ /* Return true if the dynamic array is in an error state.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static inline bool
+ DYNARRAY_NAME (has_failed) (const struct DYNARRAY_STRUCT *list)
+ {
+@@ -222,7 +222,7 @@ DYNARRAY_NAME (has_failed) (const struct
+ 
+ /* Mark the dynamic array as failed.  All elements are deallocated as
+    a side effect.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static void
+ DYNARRAY_NAME (mark_failed) (struct DYNARRAY_STRUCT *list)
+ {
+@@ -236,7 +236,7 @@ DYNARRAY_NAME (mark_failed) (struct DYNA
+ 
+ /* Return the number of elements which have been added to the dynamic
+    array.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static inline size_t
+ DYNARRAY_NAME (size) (const struct DYNARRAY_STRUCT *list)
+ {
+@@ -245,7 +245,7 @@ DYNARRAY_NAME (size) (const struct DYNAR
+ 
+ /* Return a pointer to the array element at INDEX.  Terminate the
+    process if INDEX is out of bounds.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static inline DYNARRAY_ELEMENT *
+ DYNARRAY_NAME (at) (struct DYNARRAY_STRUCT *list, size_t index)
+ {
+@@ -257,7 +257,7 @@ DYNARRAY_NAME (at) (struct DYNARRAY_STRU
+ /* Return a pointer to the first array element, if any.  For a
+    zero-length array, the pointer can be NULL even though the dynamic
+    array has not entered the failure state.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static inline DYNARRAY_ELEMENT *
+ DYNARRAY_NAME (begin) (struct DYNARRAY_STRUCT *list)
+ {
+@@ -267,7 +267,7 @@ DYNARRAY_NAME (begin) (struct DYNARRAY_S
+ /* Return a pointer one element past the last array element.  For a
+    zero-length array, the pointer can be NULL even though the dynamic
+    array has not entered the failure state.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static inline DYNARRAY_ELEMENT *
+ DYNARRAY_NAME (end) (struct DYNARRAY_STRUCT *list)
+ {
+@@ -294,7 +294,7 @@ DYNARRAY_NAME (add__) (struct DYNARRAY_S
+ /* Add ITEM at the end of the array, enlarging it by one element.
+    Mark *LIST as failed if the dynamic array allocation size cannot be
+    increased.  */
+-__attribute_nonnull__ ((1))
++__nonnull ((1))
+ static inline void
+ DYNARRAY_NAME (add) (struct DYNARRAY_STRUCT *list, DYNARRAY_ELEMENT item)
+ {
+@@ -348,8 +348,7 @@ DYNARRAY_NAME (emplace__) (struct DYNARR
+ /* Allocate a place for a new element in *LIST and return a pointer to
+    it.  The pointer can be NULL if the dynamic array cannot be
+    enlarged due to a memory allocation failure.  */
+-__attribute_maybe_unused__ __attribute_warn_unused_result__
+-__attribute_nonnull__ ((1))
++__attribute_maybe_unused__ __attribute_warn_unused_result__ __nonnull ((1))
+ static
+ /* Avoid inlining with the larger initialization code.  */
+ #if !(defined (DYNARRAY_ELEMENT_INIT) || defined (DYNARRAY_ELEMENT_FREE))
+@@ -373,7 +372,7 @@ DYNARRAY_NAME (emplace) (struct DYNARRAY
+    existing size, new elements are added (which can be initialized).
+    Otherwise, the list is truncated, and elements are freed.  Return
+    false on memory allocation failure (and mark *LIST as failed).  */
+-__attribute_maybe_unused__ __attribute_nonnull__ ((1))
++__attribute_maybe_unused__ __nonnull ((1))
+ static bool
+ DYNARRAY_NAME (resize) (struct DYNARRAY_STRUCT *list, size_t size)
+ {
+@@ -418,7 +417,7 @@ DYNARRAY_NAME (resize) (struct DYNARRAY_
+ }
+ 
+ /* Remove the last element of LIST if it is present.  */
+-__attribute_maybe_unused__ __attribute_nonnull__ ((1))
++__attribute_maybe_unused__ __nonnull ((1))
+ static void
+ DYNARRAY_NAME (remove_last) (struct DYNARRAY_STRUCT *list)
+ {
+@@ -435,7 +434,7 @@ DYNARRAY_NAME (remove_last) (struct DYNA
+ 
+ /* Remove all elements from the list.  The elements are freed, but the
+    list itself is not.  */
+-__attribute_maybe_unused__ __attribute_nonnull__ ((1))
++__attribute_maybe_unused__ __nonnull ((1))
+ static void
+ DYNARRAY_NAME (clear) (struct DYNARRAY_STRUCT *list)
+ {
+@@ -453,8 +452,7 @@ DYNARRAY_NAME (clear) (struct DYNARRAY_S
+    stored in *RESULT if LIST refers to an empty list.  On success, the
+    pointer in *RESULT is heap-allocated and must be deallocated using
+    free.  */
+-__attribute_maybe_unused__ __attribute_warn_unused_result__
+-__attribute_nonnull__ ((1, 2))
++__attribute_maybe_unused__ __attribute_warn_unused_result__ __nonnull ((1, 2))
+ static bool
+ DYNARRAY_NAME (finalize) (struct DYNARRAY_STRUCT *list,
+                           DYNARRAY_FINAL_TYPE *result)
+@@ -485,8 +483,7 @@ DYNARRAY_NAME (finalize) (struct DYNARRA
+    have a sentinel at the end).  If LENGTHP is not NULL, the array
+    length is written to *LENGTHP.  *LIST is re-initialized and can be
+    reused.  */
+-__attribute_maybe_unused__ __attribute_warn_unused_result__
+-__attribute_nonnull__ ((1))
++__attribute_maybe_unused__ __attribute_warn_unused_result__ __nonnull ((1))
+ static DYNARRAY_ELEMENT *
+ DYNARRAY_NAME (finalize) (struct DYNARRAY_STRUCT *list, size_t *lengthp)
+ {

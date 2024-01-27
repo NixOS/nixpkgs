@@ -1,0 +1,43 @@
+From a2d5d973f53efb11bdcaecbd0099df9714bc287f Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Tue, 8 Feb 2022 19:35:35 +0100
+Subject: [PATCH] Set `base` to an empty value
+
+`DESTDIR` ensures that everything lands in the correct location (i.e.
+the target store-path on Nix), within this path, everything should be
+moved into `/lib` and `/share`.
+---
+ setup.py | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 1f0a58b..f7baa41 100644
+--- a/setup.py
++++ b/setup.py
+@@ -8,21 +8,8 @@ from pathlib import Path
+ 
+ from setuptools import setup
+ 
+-share = Path(sys.prefix, 'share')
+-base = '/usr'
+-if os.uname().sysname == 'Darwin':
+-    base = '/usr/local'
+-lib = Path(base, 'lib', 'password-store', 'extensions')
+-
+-if '--user' in sys.argv:
+-    if 'PASSWORD_STORE_EXTENSIONS_DIR' in os.environ:
+-        lib = Path(os.environ['PASSWORD_STORE_EXTENSIONS_DIR'])
+-    else:
+-        lib = Path.home() / '.password-store' / '.extensions'
+-    if 'XDG_DATA_HOME' in os.environ:
+-        share = Path(os.environ['XDG_DATA_HOME'])
+-    else:
+-        share = Path.home() / '.local' / 'share'
++share = Path('share')
++lib = Path('lib', 'password-store', 'extensions')
+ 
+ setup(
+     data_files=[
+-- 
+2.33.1
+

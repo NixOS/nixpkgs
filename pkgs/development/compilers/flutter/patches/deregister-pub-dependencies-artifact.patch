@@ -1,0 +1,19 @@
+diff --git a/packages/flutter_tools/lib/src/flutter_cache.dart b/packages/flutter_tools/lib/src/flutter_cache.dart
+index 252021cf78..e50ef0885d 100644
+--- a/packages/flutter_tools/lib/src/flutter_cache.dart
++++ b/packages/flutter_tools/lib/src/flutter_cache.dart
+@@ -51,14 +51,6 @@ class FlutterCache extends Cache {
+       registerArtifact(IosUsbArtifacts(artifactName, this, platform: platform));
+     }
+     registerArtifact(FontSubsetArtifacts(this, platform: platform));
+-    registerArtifact(PubDependencies(
+-      logger: logger,
+-      // flutter root and pub must be lazily initialized to avoid accessing
+-      // before the version is determined.
+-      flutterRoot: () => Cache.flutterRoot!,
+-      pub: () => pub,
+-      projectFactory: projectFactory,
+-    ));
+   }
+ }
+ 

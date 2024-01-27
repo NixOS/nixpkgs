@@ -1,0 +1,39 @@
+Author: Nanley Chery <nanleychery@gmail.com>
+From: Jean Delvare <khali@linux-fr.org>
+Subject: Remove declared, but unused variables
+Bug-Debian: http://bugs.debian.org/625435
+---
+--- a/src/gui.c
++++ b/src/gui.c
+@@ -257,10 +257,9 @@
+ 
+ /* Start the sensor info update timer. */
+ gint start_timer( GtkWidget *widget, gpointer data ) {
+-    gint timer;
+ 
+     /* Setup timer for updates. */
+-    timer = g_timeout_add( update_time * 1000, 
++    g_timeout_add( update_time * 1000,
+                              (GtkFunction) update_sensor_data, 
+ 			     (gpointer) data );
+ 
+@@ -287,7 +286,7 @@
+ 
+     /* feature data */
+     updates *head = NULL;
+-    updates *current = NULL, *prev = NULL;
++    updates *current = NULL;
+ 
+     const sensors_feature *feature;
+ 
+@@ -347,10 +346,8 @@
+             new_node->pbar = featpbar;
+ 
+             if ( head == NULL ) {
+-                prev = head;
+                 head = current = new_node;
+             } else {
+-                prev = current;
+                 current = current->next = new_node;
+             }
+ 

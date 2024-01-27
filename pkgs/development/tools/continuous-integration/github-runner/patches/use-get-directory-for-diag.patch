@@ -1,0 +1,25 @@
+diff --git a/src/Runner.Common/HostContext.cs b/src/Runner.Common/HostContext.cs
+index 9e43464..a953694 100644
+--- a/src/Runner.Common/HostContext.cs
++++ b/src/Runner.Common/HostContext.cs
+@@ -119,7 +119,7 @@ namespace GitHub.Runner.Common
+                 }
+ 
+                 // this should give us _diag folder under runner root directory
+-                string diagLogDirectory = Path.Combine(new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).Parent.FullName, Constants.Path.DiagDirectory);
++                string diagLogDirectory = GetDirectory(WellKnownDirectory.Diag);
+                 _traceManager = new TraceManager(new HostTraceListener(diagLogDirectory, hostType, logPageSize, logRetentionDays), stdoutTraceListener, this.SecretMasker);
+             }
+             else
+@@ -297,7 +297,10 @@ namespace GitHub.Runner.Common
+                     throw new NotSupportedException($"Unexpected well known directory: '{directory}'");
+             }
+ 
+-            _trace.Info($"Well known directory '{directory}': '{path}'");
++            if (_trace != null)
++            {
++                _trace.Info($"Well known directory '{directory}': '{path}'");
++            }
+             return path;
+         }
+ 

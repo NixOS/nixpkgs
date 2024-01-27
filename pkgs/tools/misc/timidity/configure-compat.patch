@@ -1,0 +1,33 @@
+--- a/configure	2018-08-28 19:33:39.000000000 -0400
++++ b/configure	2023-09-05 19:44:27.311279263 -0400
+@@ -6874,6 +6874,7 @@
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ #include <ctype.h>
++#include <stdlib.h>
+ #if ((' ' & 0x0FF) == 0x020)
+ # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
+ # define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+@@ -7731,6 +7732,7 @@
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ #include <ctype.h>
++#include <stdlib.h>
+ #if ((' ' & 0x0FF) == 0x020)
+ # define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
+ # define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+@@ -10311,8 +10313,13 @@
+   if test "$cross_compiling" = yes; then
+   ac_cv_func_fork_works=cross
+ else
+-  cat >conftest.$ac_ext <<_ACEOF
++   cat >conftest.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++   cat confdefs.h >>conftest.$ac_ext
++   cat >>conftest.$ac_ext <<_ACEOF
+ /* By Ruediger Kuhlmann. */
++      #include <stdlib.h>
+       #include <sys/types.h>
+       #if HAVE_UNISTD_H
+       # include <unistd.h>

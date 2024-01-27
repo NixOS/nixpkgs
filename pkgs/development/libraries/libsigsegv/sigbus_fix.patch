@@ -1,0 +1,8 @@
+--- a/src/signals.h	2017-08-23 14:07:05.000000000 +0100
++++ b/src/signals.h	2017-08-23 14:06:53.000000000 +0100
+@@ -18,4 +18,4 @@
+ /* List of signals that are sent when an invalid virtual memory address
+    is accessed, or when the stack overflows.  */
+ #define SIGSEGV_FOR_ALL_SIGNALS(var,body) \
+-  { int var; var = SIGSEGV; { body } }
++  { int var; var = SIGSEGV; { body } var = SIGBUS; { body } }

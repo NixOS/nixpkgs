@@ -1,0 +1,80 @@
+From de330efaf02ed66d6641ab3bb55eed4bcfad430b Mon Sep 17 00:00:00 2001
+From: Ilan Joselevich <personal@ilanjoselevich.com>
+Date: Sun, 14 Jan 2024 23:53:12 +0200
+Subject: [PATCH] fix warnings for rust v1.75
+
+---
+ server/lib/src/idm/authsession.rs       | 4 ++--
+ server/testkit/tests/integration.rs     | 5 ++---
+ server/web_ui/login_flows/src/oauth2.rs | 3 +--
+ unix_integration/nss_kanidm/src/lib.rs  | 3 +--
+ 4 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/server/lib/src/idm/authsession.rs b/server/lib/src/idm/authsession.rs
+index 734864f0d..c65b88494 100644
+--- a/server/lib/src/idm/authsession.rs
++++ b/server/lib/src/idm/authsession.rs
+@@ -3,7 +3,7 @@
+ //! factor to assert that the user is legitimate. This also contains some
+ //! support code for asynchronous task execution.
+ use std::collections::BTreeMap;
+-pub use std::collections::BTreeSet as Set;
++
+ use std::convert::TryFrom;
+ use std::fmt;
+ use std::time::Duration;
+@@ -1237,7 +1237,7 @@ impl AuthSession {
+ 
+ #[cfg(test)]
+ mod tests {
+-    pub use std::collections::BTreeSet as Set;
++    
+     use std::str::FromStr;
+     use std::time::Duration;
+ 
+diff --git a/server/testkit/tests/integration.rs b/server/testkit/tests/integration.rs
+index e6879b44b..472022892 100644
+--- a/server/testkit/tests/integration.rs
++++ b/server/testkit/tests/integration.rs
+@@ -2,12 +2,11 @@
+ 
+ use std::process::Output;
+ 
+-use tempfile::tempdir;
++
+ 
+ use kanidm_client::KanidmClient;
+ use kanidmd_testkit::{
+-    login_put_admin_idm_admins, ADMIN_TEST_PASSWORD, IDM_ADMIN_TEST_PASSWORD, IDM_ADMIN_TEST_USER,
+-    NOT_ADMIN_TEST_USERNAME,
++    login_put_admin_idm_admins, ADMIN_TEST_PASSWORD, IDM_ADMIN_TEST_PASSWORD,
+ };
+ use testkit_macros::cli_kanidm;
+ 
+diff --git a/server/web_ui/login_flows/src/oauth2.rs b/server/web_ui/login_flows/src/oauth2.rs
+index a41e3083f..d735a7b4d 100644
+--- a/server/web_ui/login_flows/src/oauth2.rs
++++ b/server/web_ui/login_flows/src/oauth2.rs
+@@ -2,8 +2,7 @@ use gloo::console;
+ use kanidm_proto::constants::uri::{OAUTH2_AUTHORISE, OAUTH2_AUTHORISE_PERMIT};
+ use kanidm_proto::constants::{APPLICATION_JSON, KOPID};
+ pub use kanidm_proto::oauth2::{
+-    AccessTokenRequest, AccessTokenResponse, AuthorisationRequest, AuthorisationResponse,
+-    CodeChallengeMethod, ErrorResponse,
++    AuthorisationRequest, AuthorisationResponse,
+ };
+ use kanidmd_web_ui_shared::constants::{CONTENT_TYPE, CSS_ALERT_DANGER, URL_OAUTH2};
+ use kanidmd_web_ui_shared::utils::{do_alert_error, do_footer, window};
+diff --git a/unix_integration/nss_kanidm/src/lib.rs b/unix_integration/nss_kanidm/src/lib.rs
+index ef13192b9..27e3321a8 100644
+--- a/unix_integration/nss_kanidm/src/lib.rs
++++ b/unix_integration/nss_kanidm/src/lib.rs
+@@ -20,5 +20,4 @@ extern crate lazy_static;
+ #[cfg(target_family = "unix")]
+ mod implementation;
+ 
+-#[cfg(target_family = "unix")]
+-pub use implementation::*;
++
+-- 
+2.42.0

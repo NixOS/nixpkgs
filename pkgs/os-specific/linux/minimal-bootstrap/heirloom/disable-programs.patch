@@ -1,0 +1,43 @@
+--- makefile
++++ makefile
+@@ -1,21 +1,24 @@
+-SHELL = /bin/sh
++SHELL = sh
+ 
+-SUBDIRS = build libwchar libcommon libuxre _install \
+-	banner basename bc bdiff bfs \
+-	cal calendar cat chmod chown \
+-	cksum cmp col comm copy cp cpio csplit cut \
+-	date dc dd deroff diff diff3 dircmp dirname df du \
++SUBDIRS = libwchar libcommon libuxre _install \
++	banner basename bdiff bfs \
++	cat chmod chown \
++	cksum cmp col comm copy cp csplit cut \
++	dc dirname \
+ 	echo ed env expand expr \
+-	factor file find fmt fmtmsg fold \
+-	getconf getopt grep groups hd head hostname id join \
+-	kill line listusers ln logins logname ls \
+-	mail man mesg mkdir mkfifo mknod more mvdir \
+-	nawk news nice nl nohup oawk od \
+-	paste pathchk pg pgrep pr printenv printf priocntl ps psrinfo pwd \
+-	random renice rm rmdir \
+-	sdiff sed setpgrp shl sleep sort spell split stty su sum sync \
+-	tabs tail tapecntl tar tcopy tee test time touch tr true tsort tty \
+-	ul uname uniq units users wc what who whoami whodo xargs yes
++	file fmt fold \
++	getopt grep hd head join \
++	kill line ln logname ls \
++	mesg mkdir mknod \
++	nl nohup od \
++	paste pathchk pgrep pr printenv printf pwd \
++	random rm rmdir \
++	sed sleep sort split sum \
++	tee test touch tr true tsort tty \
++	uniq units wc what whoami xargs yes
++
++# These depend on some coreutils that we need to build first
++SUBDIRS += bc nawk build
+ 
+ dummy: makefiles all
+ 

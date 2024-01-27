@@ -1,0 +1,21 @@
+The `%code` causes Color definition to be added in both parser.h and parser.c
+causing duplicate definitions error. This ensures that once it has been included
+as part of parser.h, it wont be redefined in parser.c
+
+--- xsw-0.1.2-src/src/parser.y	1969-12-31 16:00:01.000000000 -0800
++++ xsw-0.1.2-src/src/parser.y	2016-06-28 13:21:35.707027770 -0700
+@@ -38,7 +38,13 @@
+ 
+ %}
+ 
+-%code requires { typedef struct { unsigned char c; } Color; }
++%code requires
++{
++#ifndef COLORDEF
++#define COLORDEF
++typedef struct { unsigned char c; } Color;
++#endif
++}
+ 
+ %token SLIDE COLON HIFEN TEXT X Y W H IMAGE SIZE SCALE TEMPLATE BACKGROUND FONT
+ %token STYLE ALIGN EXPAND PLUS IMAGE_PATH

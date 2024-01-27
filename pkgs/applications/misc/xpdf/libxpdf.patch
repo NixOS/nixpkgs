@@ -1,0 +1,45 @@
+diff -rc xpdf-3.02/xpdf/Makefile.in xpdf-3.02-new/xpdf/Makefile.in
+*** xpdf-3.02/xpdf/Makefile.in	2007-02-27 23:05:52.000000000 +0100
+--- xpdf-3.02-new/xpdf/Makefile.in	2010-08-25 14:54:14.000000000 +0200
+***************
+*** 110,116 ****
+  	pdffonts$(EXE) pdftoppm$(EXE) pdfimages$(EXE)
+  
+  all-no-x: pdftops$(EXE) pdftotext$(EXE) pdfinfo$(EXE) pdffonts$(EXE) \
+! 	pdfimages$(EXE)
+  
+  #------------------------------------------------------------------------
+  
+--- 110,116 ----
+  	pdffonts$(EXE) pdftoppm$(EXE) pdfimages$(EXE)
+  
+  all-no-x: pdftops$(EXE) pdftotext$(EXE) pdfinfo$(EXE) pdffonts$(EXE) \
+! 	pdfimages$(EXE) libxpdf.a
+  
+  #------------------------------------------------------------------------
+  
+***************
+*** 248,253 ****
+--- 248,269 ----
+  
+  #------------------------------------------------------------------------
+  
++ PDFTOEPDF_OBJS = \
++         Array.o BuiltinFont.o BuiltinFontTables.o CMap.o \
++         Catalog.o CharCodeToUnicode.o Decrypt.o Dict.o Error.o \
++         FontEncodingTables.o Gfx.o GfxFont.o GfxState.o \
++         GlobalParams.o JArithmeticDecoder.o JBIG2Stream.o JPXStream.o Lexer.o Link.o \
++         NameToCharCode.o Object.o OutputDev.o Outline.o PDFDoc.o Page.o \
++         Parser.o PDFDocEncoding.o Stream.o UnicodeMap.o XRef.o Function.o \
++         PSTokenizer.o UnicodeTypeTable.o
++ 
++ libxpdf.a: $(PDFTOEPDF_OBJS)
++ 	rm -f $@
++ 	$(AR) $(ARFLAGS) $@ *.o
++ 	ranlib $@
++ 
++ #------------------------------------------------------------------------
++ 
+  depend:
+  	$(CXX) $(CXXFLAGS) -MM $(CXX_SRC) >Makefile.dep
+  

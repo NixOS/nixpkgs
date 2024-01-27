@@ -1,0 +1,14 @@
+diff --git a/src/llvm/cmake/modules/AddLLVM.cmake b/src/llvm/cmake/modules/AddLLVM.cmake
+index a53016eb0..b65e608a4 100644
+--- a/cmake/modules/AddLLVM.cmake
++++ b/cmake/modules/AddLLVM.cmake
+@@ -1683,8 +1683,7 @@ function(llvm_setup_rpath name)
+   endif()
+ 
+   if (APPLE)
+-    set(_install_name_dir INSTALL_NAME_DIR "@rpath")
+-    set(_install_rpath "@loader_path/../lib" ${extra_libdir})
++    set(_install_name_dir)
+   elseif(UNIX)
+     set(_install_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
+     if(${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|DragonFly)")

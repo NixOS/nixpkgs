@@ -1,0 +1,18 @@
+--- runit-2.1.2/src/print-ar.sh
++++ runit-2.1.2/src/print-ar.sh
+@@ -1,7 +1,7 @@
+ cat warn-auto.sh
+ echo 'main="$1"; shift'
+ echo 'rm -f "$main"'
+-echo 'ar cr "$main" ${1+"$@"}'
++echo '$AR cr "$main" ${1+"$@"}'
+ case "`cat systype`" in
+   sunos-5.*) ;;
+   unix_sv*) ;;
+@@ -10,5 +10,5 @@ case "`cat systype`" in
+   dgux-*) ;;
+   hp-ux-*) ;;
+   sco*) ;;
+-  *) echo 'ranlib "$main"' ;;
++  *) echo '$RANLIB "$main"' ;;
+ esac
