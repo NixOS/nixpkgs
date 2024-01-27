@@ -10,6 +10,8 @@
 , python3
 , udisks2
 , wrapGAppsHook
+, testers
+, udiskie
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -77,6 +79,10 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = udiskie;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/coldfix/udiskie";
