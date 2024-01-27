@@ -5,7 +5,6 @@
 , pkg-config
 , libdaemon
 , dbus
-, perlPackages
 , libpcap
 , expat
 , gettext
@@ -105,10 +104,7 @@ stdenv.mkDerivation rec {
     expat
     libiconv
     libevent
-  ] ++ (with perlPackages; [
-    perl
-    XMLParser
-  ]) ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.isFreeBSD [
     libpcap
   ] ++ lib.optionals gtk3Support [
     gtk3
