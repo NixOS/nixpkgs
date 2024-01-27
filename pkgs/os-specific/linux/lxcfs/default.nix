@@ -2,7 +2,6 @@
 , util-linux, makeWrapper
 , enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "lxcfs";
   version = "4.0.12";
@@ -48,8 +47,8 @@ stdenv.mkDerivation rec {
     description = "FUSE filesystem for LXC";
     homepage = "https://linuxcontainers.org/lxcfs";
     changelog = "https://linuxcontainers.org/lxcfs/news/";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.lxc.members;
   };
 }
