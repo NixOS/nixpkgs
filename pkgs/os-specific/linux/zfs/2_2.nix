@@ -12,7 +12,7 @@ in
 callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.
-  kernelModuleAttribute = "zfs";
+  kernelModuleAttribute = "zfs_2_2";
   # check the release notes for compatible kernels
   kernelCompatible = kernel.kernelOlder "6.8";
 
@@ -23,7 +23,7 @@ callPackage ./generic.nix args {
 
   tests = [
     nixosTests.zfs.installer
-    nixosTests.zfs.stable
+    nixosTests.zfs.series_2_2
   ];
 
   hash = "sha256-Bzkow15OitUUQ+mTYhCXgTrQl+ao/B4feleHY/rSSjg=";

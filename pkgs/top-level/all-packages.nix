@@ -28729,13 +28729,13 @@ with pkgs;
   zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
     configFile = "user";
   };
-  zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
+  zfs_2_2 = callPackage ../os-specific/linux/zfs/2_2.nix {
     configFile = "user";
   };
   zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
     configFile = "user";
   };
-  zfs = zfsStable;
+  zfs = zfs_2_2;
 
   ### DATA
 

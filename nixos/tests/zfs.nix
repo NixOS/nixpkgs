@@ -192,22 +192,22 @@ let
 in {
 
   # maintainer: @raitobezarius
-  series_2_1 = makeZfsTest "2.1-series" {
+  series_2_1 = makeZfsTest "zfs_2_1" {
     zfsPackage = pkgs.zfs_2_1;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  stable = makeZfsTest "stable" {
-    zfsPackage = pkgs.zfsStable;
+  series_2_2 = makeZfsTest "zfs_2_2" {
+    zfsPackage = pkgs.zfs_2_2;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstable = makeZfsTest "unstable" rec {
+  unstable = makeZfsTest "zfsUnstable" rec {
     zfsPackage = pkgs.zfsUnstable;
     kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest "unstable" rec {
+  unstableWithSystemdStage1 = makeZfsTest "zfsUnstable" rec {
     zfsPackage = pkgs.zfsUnstable;
     kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
     enableSystemdStage1 = true;
