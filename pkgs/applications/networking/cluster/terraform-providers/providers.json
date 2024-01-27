@@ -118,13 +118,13 @@
     "vendorHash": null
   },
   "aws": {
-    "hash": "sha256-wEbpTOlIZjewEepvqTjQRZAY4BtpetMF+HzvmdFEHGw=",
+    "hash": "sha256-UI1ECQ1bHxwjxtBzpgwbyZLexRH+7L6rjrEcyxSed0g=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v5.31.0",
+    "rev": "v5.34.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-SVrPxBzcykecphwpHvcAhUbmf77eXC9VDdabGzg2bn8="
+    "vendorHash": "sha256-sccfJ5EUY9XTjDYah9/0R9L53Zzdfi06kWi5QaFp+og="
   },
   "azuread": {
     "hash": "sha256-lumXl3orK5Jq5+qnRfiIA94NjK2bCjd3LhRzHmW1h8I=",
