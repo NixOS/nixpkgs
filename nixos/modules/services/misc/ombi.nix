@@ -31,6 +31,12 @@ in {
         description = lib.mdDoc "Open ports in the firewall for the Ombi web interface.";
       };
 
+      baseUrl = mkOption {
+        type = types.str;
+        default = "/";
+        description = lib.mdDoc "The base URL for the Ombi web interface.";
+      };
+
       user = mkOption {
         type = types.str;
         default = "ombi";
@@ -59,7 +65,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
+        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}' --baseurl ${cfg.baseUrl}";
         Restart = "on-failure";
       };
     };
