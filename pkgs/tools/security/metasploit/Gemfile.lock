@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 261eca342915db81d67cdfe7f2ef7b3788fd508f
-  ref: refs/tags/6.3.48
+  revision: 45efd21e748da75cc37d999dbfa3ec6c4fc4d0e9
+  ref: refs/tags/6.3.53
   specs:
-    metasploit-framework (6.3.48)
+    metasploit-framework (6.3.53)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -35,7 +35,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.161)
+      metasploit-payloads (= 2.0.165)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.26)
       mqtt
@@ -62,6 +62,7 @@ GIT
       rb-readline
       recog
       redcarpet
+      reline
       rex-arch
       rex-bin_tools
       rex-core
@@ -253,7 +254,7 @@ GEM
       activemodel (~> 7.0)
       activesupport (~> 7.0)
       railties (~> 7.0)
-    metasploit-payloads (2.0.161)
+    metasploit-payloads (2.0.165)
     metasploit_data_models (6.0.3)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -463,4 +464,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.13
+   2.5.3
