@@ -15824,6 +15824,11 @@
     githubId = 811827;
     name = "Gabriel Lievano";
   };
+  rgri = {
+    name = "shortcut";
+    github = "rgri";
+    githubId = 45253749;
+  };
   rgrinberg = {
     name = "Rudi Grinberg";
     email = "me@rgrinberg.com";
