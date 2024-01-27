@@ -125,6 +125,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   rc = callPackage ./rc.nix {};
   rcorder = callPackage ./rcorder.nix {};
   reboot = callPackage ./reboot.nix {};
+  route = callPackage ./route.nix {};
   rpcgen = callPackage ./rpcgen.nix {};
   services_mkdb = callPackage ./services_mkdb.nix {};
   shutdown = callPackage ./shutdown.nix {};
