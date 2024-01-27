@@ -132,6 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+    (fetchpatch {
+      name = "CVE-2023-6693.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/2220e8189fb94068dbad333228659fbac819abb0.patch";
+      sha256 = "sha256-uoFFFsVZ8XnsI2GD7xsRFNWghWL7/PSYTc1yhXI6nv4=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
