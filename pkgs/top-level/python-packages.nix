@@ -617,6 +617,8 @@ self: super: with self; {
 
   aocd = callPackage ../development/python-modules/aocd { };
 
+  aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
+
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
