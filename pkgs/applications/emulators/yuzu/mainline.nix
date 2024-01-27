@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , wrapQtAppsHook
 , alsa-lib
@@ -154,7 +155,7 @@ stdenv.mkDerivation(finalAttrs: {
 
     # provide pre-downloaded tz data
     mkdir -p build/externals/nx_tzdb
-    ln -sf ${nx_tzdb} build/externals/nx_tzdb/${nx_tzdb.version}.zip
+    ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
   '';
 
   # This must be done after cmake finishes as it overwrites the file
