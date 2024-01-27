@@ -13,7 +13,7 @@ let
                       else pkgs.linuxPackages
     , enableUnstable ? false
     , enableSystemdStage1 ? false
-    , zfsPackage ? if enableUnstable then pkgs.zfs else pkgs.zfsUnstable
+    , zfsPackage ? if enableUnstable then pkgs.zfsUnstable else pkgs.zfs
     , extraTest ? ""
     }:
     makeTest {
