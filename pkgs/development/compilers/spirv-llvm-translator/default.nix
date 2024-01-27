@@ -48,7 +48,7 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
     inherit (branch) rev hash;
   };
 
-  patches = [
+  patches = lib.optionals (lib.versionAtLeast llvmMajor "15") [
     # Fixes build after spirv-headers breaking change
     (fetchpatch {
       url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";
