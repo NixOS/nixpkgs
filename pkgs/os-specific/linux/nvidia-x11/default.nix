@@ -45,6 +45,8 @@ rec {
 
     patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [];
+
+    brokenOpen = kernel.kernelAtLeast "6.7";
   });
 
   beta = selectHighestVersion latest (generic {
@@ -68,7 +70,7 @@ rec {
     persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
 
-    broken = kernel.kernelAtLeast "6.7";
+    brokenOpen = kernel.kernelAtLeast "6.7";
   };
 
   # data center driver compatible with current default cudaPackages

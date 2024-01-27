@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/skolemlabs/type_eq/releases/download/${version}/${pname}-${version}.tbz";
-    hash = "sha256-eFVZJJfU6hfb8vKNXOZLZ1cHcsDdzFUerbh2RZBt0Zk=";
+    hash = "sha256-4u/HF92Hbf9Rcv+JTAMPhYZjoKZ1cS0mBMkzU/hxx38=";
   };
 
   checkInputs = [
