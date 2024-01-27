@@ -236,13 +236,14 @@
     "vendorHash": "sha256-F+6bk+Lc0ziRJ/LBhrb5bS8oMN9zT7WqzPZKVUReNU4="
   },
   "cloudfoundry": {
-    "hash": "sha256-yEqsdgTSlwppt6ILRZQ6Epyh5WVN6Il3xsBOa/NfIdo=",
+    "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
     "homepage": "https://registry.terraform.io/providers/cloudfoundry-community/cloudfoundry",
     "owner": "cloudfoundry-community",
+    "proxyVendor": true,
     "repo": "terraform-provider-cloudfoundry",
-    "rev": "v0.51.3",
+    "rev": "v0.52.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-0hq4dR1KqnE2IXMwif2/NVKQKRO/QplW/A6sB4pJ+FM="
+    "vendorHash": "sha256-g1T6kH8Rv9bpvb6Q3YHCseEi1ayydJIxlplH3k12s8c="
   },
   "cloudinit": {
     "hash": "sha256-etZeCGtYhO0szRGxnj1c3/WOelxScWiHEA9w1Jb7bEE=",
