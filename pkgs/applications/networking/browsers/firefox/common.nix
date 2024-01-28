@@ -320,11 +320,9 @@ buildStdenv.mkDerivation {
           unset 'configureFlagsArray[i]'
         fi
       done
-      configureFlagsArray+=(
-        "--enable-profile-use=cross"
-        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-        "--with-pgo-jarlog="$TMPDIR/jarlog""
-      )
+      appendToVar configureFlags --enable-profile-use=cross
+      appendToVar configureFlags --with-pgo-profile-path=$TMPDIR/merged.profdata
+      appendToVar configureFlags --with-pgo-jarlog=$TMPDIR/jarlog
       ${lib.optionalString stdenv.hostPlatform.isMusl ''
         LDFLAGS="$OLD_LDFLAGS"
         unset OLD_LDFLAGS
