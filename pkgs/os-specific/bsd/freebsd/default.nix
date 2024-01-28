@@ -29,7 +29,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
 
   makeSource = callPackage ./source.nix {};
   compatIfNeeded = lib.optional compatIsNeeded compat;
-  source = makeSource hostVersion;
+  inherit (makeSource hostVersion) source version;
   filterSource = callPackage ./filter-src.nix {};
   mkDerivation = callPackage ./make-derivation.nix {};
 
