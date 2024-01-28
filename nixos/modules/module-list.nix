@@ -214,6 +214,7 @@
   ./programs/minipro.nix
   ./programs/miriway.nix
   ./programs/mosh.nix
+  ./programs/mouse-actions.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
@@ -1235,6 +1236,7 @@
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
   ./services/system/systembus-notify.nix
+  ./services/system/systemd-lock-handler.nix
   ./services/system/uptimed.nix
   ./services/system/zram-generator.nix
   ./services/torrent/deluge.nix
