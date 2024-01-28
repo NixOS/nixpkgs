@@ -398,7 +398,7 @@ rec {
 
   # Some information about which phases should be run.
   controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+                  { doCheck ? !isCross
                   , doBenchmark ? false
                   , ...
                   }: { inherit doCheck doBenchmark; };
