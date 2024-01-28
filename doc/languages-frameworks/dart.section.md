@@ -103,7 +103,7 @@ See the [Dart documentation](#ssec-dart-applications) for more details on requir
 
 flutter.buildFlutterApplication {
   pname = "firmware-updater";
-  version = "unstable-2023-04-30";
+  version = "0-unstable-2023-04-30";
 
   # To build for the Web, use the targetFlutterPlatform argument.
   # targetFlutterPlatform = "web";
