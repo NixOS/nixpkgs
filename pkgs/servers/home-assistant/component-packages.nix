@@ -226,7 +226,8 @@
       aqualogic
     ];
     "aquostv" = ps: with ps; [
-    ]; # missing inputs: sharp_aquos_rc
+      sharp-aquos-rc
+    ];
     "aranet" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
