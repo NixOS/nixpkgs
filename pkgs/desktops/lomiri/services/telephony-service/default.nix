@@ -42,51 +42,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telephony-service";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/telephony-service";
     rev = finalAttrs.version;
-    hash = "sha256-9KxM8UWTIBpMMPosar2ZV9W35WmCLIWXD1ulWtqCKxM=";
+    hash = "sha256-eLGwAJmBDDvSODQUNr/zcPA/0DdXtVBiS7vg+iIYPDo=";
   };
 
   patches = [
-    # Remove when version > 0.5.2
-    (fetchpatch {
-      name = "0001-telephony-service-CMakeLists-Fix-Cross-conditional-for-QT_INSTALL_QML-determining.patch";
-      url = "https://gitlab.com/ubports/development/core/telephony-service/-/commit/c19463444af257c263f35127284d9787f3522f1f.patch";
-      hash = "sha256-Dr/uev/z4pEiV4/QRmQ15+6wrD8rh+8vRcfWIi8FBCU=";
-    })
-
-    # Remove when version > 0.5.2
-    (fetchpatch {
-      name = "0002-telephony-service-tests-libtelephonyservice-CMakeLists-Fix-ProtocolTest-build.patch";
-      url = "https://gitlab.com/ubports/development/core/telephony-service/-/commit/d8f0f38f8b723569c03d601ac803b079ed51d09e.patch";
-      hash = "sha256-asDEzh8Yg6LXl6fdwan6IhwLEuzmDfmHI+pjpxJRbeE=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/telephony-service/-/merge_requests/89 merged & in release
-    (fetchpatch2 {
-      name = "0003-telephony-service-Add-more-better-GNUInstallDirs-variables-usage.patch";
-      url = "https://gitlab.com/ubports/development/core/telephony-service/-/commit/9a35a50c587ebfdfb1e08b54ffec0d2e6fef1950.patch";
-      hash = "sha256-jGeJlwbyVr0WkyGKY7Lw5dY/V9yN43DpZmuli6oRho0=";
-    })
-
     # Remove when https://gitlab.com/ubports/development/core/telephony-service/-/merge_requests/90 merged & in release
     (fetchpatch {
-      name = "0004-telephony-service-CMakeLists-Make-tests-optional.patch";
+      name = "0001-telephony-service-CMakeLists-Make-tests-optional.patch";
       url = "https://gitlab.com/ubports/development/core/telephony-service/-/commit/9a8297bcf9b34d77ffdae3dfe4ad2636022976fb.patch";
       hash = "sha256-Za4ZGKnw9iz2RP1LzLhKrEJ1vLUufWk8J07LmWDW40E=";
-    })
-
-    # libphonenumber -> protobuf -> abseil-cpp demands C++14
-    # But uses std::string_view which is C++17?
-    # Remove when version > 0.5.2
-    (fetchpatch {
-      name = "0005-telephony-service-Upgrade-C++-standard-to-C++17.patch";
-      url = "https://gitlab.com/ubports/development/core/telephony-service/-/commit/b77349acb4ab3f857a55481eeaf2af1dcecfb775.patch";
-      hash = "sha256-vNtelYu/I9lv8EkNn8gB6zNgLJ24Znp9HYmLG9olFe8=";
     })
   ];
 
