@@ -288,6 +288,16 @@ A union of types is a type such that a value is valid when it is valid for at le
 
 If some values are instances of more than one of the types, it is not possible to distinguish which type they are meant to be instances of. If that's needed, consider using a [sum type](#sec-option-types-sums).
 
+`types.either` *`t1 t2`*
+
+:   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
+    Multiple definitions cannot be merged.
+
+`types.oneOf` \[ *`t1 t2`* ... \]
+
+:   Type *`t1`* or type *`t2`* and so forth, e.g.
+    `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
+    merged.
 
 
 ## Sum types {#sec-option-types-sums}
@@ -364,17 +374,6 @@ Composed types are types that take a type as parameter. `listOf
     This is one possible representation of what may be called a _tagged union_ or _sum type_.
     `attrTag` can be thought of as an extension of *`enum`* where the permissible items
     are attribute names, and each item is paired with a value of a specific type.
-
-`types.either` *`t1 t2`*
-
-:   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
-    Multiple definitions cannot be merged.
-
-`types.oneOf` \[ *`t1 t2`* ... \]
-
-:   Type *`t1`* or type *`t2`* and so forth, e.g.
-    `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
-    merged.
 
 `types.coercedTo` *`from f to`*
 
