@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Magic Another Game Engine";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ matthiasbeyer abueide ];
     homepage = "http://xmage.de/";
   };
 
