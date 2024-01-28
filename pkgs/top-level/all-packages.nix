@@ -21229,7 +21229,7 @@ with pkgs;
 
   filtron = callPackage ../servers/filtron { };
 
-  fizz = callPackage ../development/libraries/fizz { };
+  fizz = darwin.apple_sdk_11_0.callPackage ../development/libraries/fizz { };
 
   flann = callPackage ../development/libraries/flann { };
 
