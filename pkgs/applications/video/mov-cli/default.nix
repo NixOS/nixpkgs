@@ -1,40 +1,64 @@
 { lib
-, python3
 , fetchFromGitHub
+, ffmpeg
+, fzf
 , mpv
+, python3
 }:
 
-python3.pkgs.buildPythonPackage rec {
+let
   pname = "mov-cli";
   version = "1.5.4";
-  format = "pyproject";
+in
+python3.pkgs.buildPythonPackage {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mov-cli";
     repo = "mov-cli";
     rev = version;
-    sha256 = "sha256-WhoP4FcoO9+O9rfpC3oDQkVIpVOqxfdLRygHgf1O01g=";
+    hash = "sha256-WhoP4FcoO9+O9rfpC3oDQkVIpVOqxfdLRygHgf1O01g=";
   };
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.getBin mpv}/bin"
-  ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    poetry-core
+    beautifulsoup4
+    click
+    colorama
+    httpx
     krfzf-py
+    lxml
+    poetry-core
     pycrypto
     setuptools
-    httpx
-    click
-    beautifulsoup4
-    colorama
+    six
+    tldextract
+  ];
+
+  nativeBuildInputs = [
+    python3.pkgs.pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "httpx"
+    "tldextract"
+  ];
+
+  makeWrapperArgs = let
+    binPath = lib.makeBinPath [
+      ffmpeg
+      fzf
+      mpv
+    ];
+  in [
+    "--prefix PATH : ${binPath}"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/mov-cli/mov-cli";
     description = "A cli tool to browse and watch movies";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ baitinq ];
+    license = with lib.licenses; [ gpl3Only ];
     mainProgram = "mov-cli";
+    maintainers = with lib.maintainers; [ baitinq ];
   };
 }
