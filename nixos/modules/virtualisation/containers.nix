@@ -28,29 +28,39 @@ in
       description = lib.mdDoc "Enable the OCI seccomp BPF hook";
     };
 
-    cdi = mkOption {
-      type = types.attrs;
-      default = { };
-      description = lib.mdDoc ''
-        Declarative CDI specification. Each key of the attribute set
-        will be mapped to a file in /etc/cdi. It is required for every
-        key to be provided in JSON format.
-      '';
-      example = {
-        some-vendor = builtins.fromJSON ''
-            {
-              "cdiVersion": "0.5.0",
-              "kind": "some-vendor.com/foo",
-              "devices": [],
-              "containerEdits": []
-            }
-          '';
+    cdi = {
+      dynamic.nvidia.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enable dynamic CDI configuration for NVidia devices by running nvidia-container-toolkit on boot.
+        '';
+      };
 
-        some-other-vendor = {
-          cdiVersion = "0.5.0";
-          kind = "some-other-vendor.com/bar";
-          devices = [];
-          containerEdits = [];
+      static = mkOption {
+        type = types.attrs;
+        default = { };
+        description = lib.mdDoc ''
+          Declarative CDI specification. Each key of the attribute set
+          will be mapped to a file in /etc/cdi. It is required for every
+          key to be provided in JSON format.
+        '';
+        example = {
+          some-vendor = builtins.fromJSON ''
+              {
+                "cdiVersion": "0.5.0",
+                "kind": "some-vendor.com/foo",
+                "devices": [],
+                "containerEdits": []
+              }
+            '';
+
+          some-other-vendor = {
+            cdiVersion = "0.5.0";
+            kind = "some-other-vendor.com/bar";
+            devices = [];
+            containerEdits = [];
+          };
         };
       };
     };
@@ -140,6 +150,8 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    hardware.nvidia-container-toolkit-cdi-generator.enable = lib.mkIf cfg.cdi.dynamic.nvidia.enable true;
+
     virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
 
     virtualisation.containers.containersConf.settings = {
@@ -152,11 +164,11 @@ in
     };
 
     environment.etc = let
-      cdiConfigurationFiles = (lib.attrsets.mapAttrs'
+      cdiStaticConfigurationFiles = (lib.attrsets.mapAttrs'
         (name: value:
           lib.attrsets.nameValuePair "cdi/${name}.json"
             { text = builtins.toJSON value; })
-        cfg.cdi);
+        cfg.cdi.static);
     in {
       "containers/containers.conf".source =
         toml.generate "containers.conf" cfg.containersConf.settings;
@@ -171,7 +183,7 @@ in
       "containers/policy.json".source =
         if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
         else "${pkgs.skopeo.policy}/default-policy.json";
-    } // cdiConfigurationFiles;
+    } // cdiStaticConfigurationFiles;
 
   };
 

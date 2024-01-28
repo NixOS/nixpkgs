@@ -82,6 +82,8 @@ in
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
+        **Deprecated**, please use virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+
         Enable use of NVidia GPUs from within podman containers.
       '';
     };
@@ -166,6 +168,12 @@ in
       inherit (networkConfig) dns_enabled network_interface;
     in
     lib.mkIf cfg.enable {
+      warnings = lib.optionals cfg.enableNvidia [
+        ''
+          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+        ''
+      ];
+
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 

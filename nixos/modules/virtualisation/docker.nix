@@ -72,6 +72,8 @@ in
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
+          **Deprecated**, please use virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+
           Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
         '';
       };
@@ -184,6 +186,16 @@ in
         ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
+
+      # Docker 25.0.0 supports CDI by default
+      # (https://docs.docker.com/engine/release-notes/25.0/#new). Encourage
+      # moving to CDI as opposed to having deprecated runtime
+      # wrappers.
+      warnings = lib.optionals (cfg.enableNvidia && (lib.strings.versionAtLeast cfg.package.version "25")) [
+        ''
+          You have set virtualisation.docker.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+        ''
+      ];
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
