@@ -7,6 +7,7 @@
 , esptool
 , git
 , inetutils
+, stdenv
 }:
 
 let
@@ -81,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
     # inetutils is used in esphome/dashboard/status/ping.py
     "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
     "--prefix PYTHONPATH : $PYTHONPATH" # will show better error messages
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
