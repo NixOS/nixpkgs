@@ -13483,6 +13483,10 @@ with pkgs;
 
   spotdl = callPackage ../tools/audio/spotdl { };
 
+  spotify-cli = callPackage ../by-name/sp/spotify-cli/package.nix {
+    inherit (python3Packages) buildPythonPackage;
+  };
+
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   squashfs-tools-ng = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/squashfs-tools-ng { };
@@ -32563,10 +32567,6 @@ with pkgs;
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
   spot = callPackage ../applications/audio/spot { };
-
-  spotify-cli = callPackage ../applications/audio/spotify-cli {
-    inherit (python3Packages) buildPythonPackage;
-  };
 
   spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
 
