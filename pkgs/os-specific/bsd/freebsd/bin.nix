@@ -21,8 +21,10 @@ mkDerivation {
     sed -E -i -e 's/mktemp -t ka/mktemp -t kaXXXXXX/' $BSDSRCDIR/bin/sh/mkbuiltins $BSDSRCDIR/bin/sh/mktokens
   '';
 
+  clangFixup = true;
   preBuild = ''
-    export NIX_CFLAGS_COMPILE="-I$BSDSRCDIR/sys $NIX_CFLAGS_COMPILE -D_WCHAR_T -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T"
+    export NIX_CFLAGS_COMPILE="-I$BSDSRCDIR/sys $NIX_CFLAGS_COMPILE"
+
     make -C $BSDSRCDIR/lib/libsm $makeFlags
 
     make -C $BSDSRCDIR/bin/sh $makeFlags "CC=${pkgsBuildBuild.stdenv.cc}/bin/cc" CFLAGS="-D__unused= -D__printf0like\(a,b\)= -D__dead2=" ${lib.optionalString (!stdenv.buildPlatform.isFreeBSD) "MK_PIE=no "}mkbuiltins mksyntax mktokens mknodes

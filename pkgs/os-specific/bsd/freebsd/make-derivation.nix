@@ -53,4 +53,8 @@ in stdenv'.mkDerivation (rec {
 } // lib.optionalAttrs (attrs.headersOnly or false) {
   installPhase = "includesPhase";
   dontBuild = true;
-} // attrs))
+} // attrs // lib.optionalAttrs (stdenv'.cc.isClang or false && attrs.clangFixup or false) {
+  preBuild = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
+  '' + (attrs.preBuild or "");
+}))

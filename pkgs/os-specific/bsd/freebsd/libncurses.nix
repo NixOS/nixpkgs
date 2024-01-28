@@ -5,9 +5,8 @@ mkDerivation {
   #patches = /${patchesRoot}/tinfo-host-cc.patch;
   #CC_HOST = "${pkgsBuildBuild.stdenv.cc}/bin/cc";
   MK_TESTS = "no";
-  preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T -D_WCHAR_T"
-  '' + lib.optionalString (hostVersion != "freebsd13") ''
+  clangFixup = true;
+  preBuild = lib.optionalString (hostVersion != "freebsd13") ''
     make -C ../tinfo $makeFlags curses.h ncurses_dll.h ncurses_def.h
   '';
   buildInputs = lib.optionals (hostVersion != "freebsd13") [libncurses-tinfo];
