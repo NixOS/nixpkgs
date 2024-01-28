@@ -132,6 +132,9 @@ buildGoModule rec {
     yarn config set enableTelemetry 0
     yarn config set cacheFolder $offlineCache
     yarn --immutable-cache
+
+    # The build OOMs on memory constrained aarch64 without this
+    export NODE_OPTIONS=--max_old_space_size=4096
   '';
 
   postBuild = ''
