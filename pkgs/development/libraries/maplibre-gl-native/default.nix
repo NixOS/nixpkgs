@@ -60,6 +60,7 @@ mkDerivation rec {
     # Needed with GCC 12 but problematic with some old GCCs
     "-Wno-error=use-after-free"
   ]);
+  env.CXXFLAGS = "-include cstdint";
 
   meta = with lib; {
     description = "Open-source alternative to Mapbox GL Native";
