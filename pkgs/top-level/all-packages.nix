@@ -25525,7 +25525,7 @@ with pkgs;
   wally-cli = callPackage ../development/tools/wally-cli { };
   zsa-udev-rules = callPackage ../os-specific/linux/zsa-udev-rules { };
 
-  wangle = callPackage ../development/libraries/wangle { };
+  wangle = darwin.apple_sdk_11_0.callPackage ../development/libraries/wangle { };
 
   wapp = callPackage ../development/libraries/wapp { };
 
