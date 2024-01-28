@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfd-service";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/hfd-service";
     rev = finalAttrs.version;
-    hash = "sha256-KcHwLTSdo86YCteUsPndoxmLf23SOEhROc5cJQ8GS1Q=";
+    hash = "sha256-OpT1vNjnyq66v54EoGOZOUb4HECD4WRJRh9hYMB0GI0=";
   };
 
   postPatch = ''
