@@ -54,17 +54,18 @@ let
   checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
     nativeBuildInputs = [ pkgs.mypy ];
   } ''
-    install -m755 ${systemdBootBuilder} $out
+    mkdir -p $out/bin
+    install -m755 ${systemdBootBuilder} $out/bin/systemd-boot-builder
     mypy \
       --no-implicit-optional \
       --disallow-untyped-calls \
       --disallow-untyped-defs \
-      $out
+      $out/bin/systemd-boot-builder
   '';
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder} "$@"
+    ${checkedSystemdBootBuilder}/bin/systemd-boot-builder "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
