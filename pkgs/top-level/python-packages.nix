@@ -11209,6 +11209,8 @@ self: super: with self; {
 
   pyserial = callPackage ../development/python-modules/pyserial { };
 
+  pyserini = callPackage ../development/python-modules/pyserini { };
+
   pysftp = callPackage ../development/python-modules/pysftp { };
 
   pyshp = callPackage ../development/python-modules/pyshp { };
