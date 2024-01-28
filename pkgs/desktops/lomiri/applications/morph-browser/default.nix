@@ -12,6 +12,7 @@
 , lomiri-ui-toolkit
 , pkg-config
 , python3
+, qqc2-suru-style
 , qtbase
 , qtdeclarative
 , qtquickcontrols2
@@ -26,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
     rev = finalAttrs.version;
-    hash = "sha256-gzrNIIRTnIiL5T1HYy2x9mGawZwW6vhCt3b5k3NhpKI=";
+    hash = "sha256-C5iXv8VS8Mm1ryxK7Vi5tVmiM01OSIFiTyH0vP9B/xA=";
   };
 
   patches = [
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-action-api
     lomiri-ui-extras
     lomiri-ui-toolkit
+    qqc2-suru-style
     qtquickcontrols2
     qtsystems
   ];
