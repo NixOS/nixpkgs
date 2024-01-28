@@ -94,6 +94,29 @@ in
       '';
     };
 
+    services.resolved.dnsovertls = mkOption {
+      default = "false";
+      example = "true";
+      type = types.enum [ "true" "opportunistic" "false" ];
+      description = lib.mdDoc ''
+        If set to
+        - `"true"`:
+            all DNS lookups will be encrypted. This requires
+            that the DNS server supports DNS-over-TLS and
+            has a valid certificate. If the hostname was specified
+            via the `address#hostname` format in {option}`services.resolved.domains`
+            then the specified hostname is used to validate its certificate.
+        - `"opportunistic"`:
+            all DNS lookups will attempt to be encrypted, but will fallback
+            to unecrypted requests if the server does not support DNS-over-TLS.
+            Note that this mode does allow for a malicious party to conduct a
+            downgrade attack by immitating the DNS server and pretending to not
+            support encryption.
+        - `"false"`:
+            all DNS lookups are done unencrypted.
+      '';
+    };
+
     services.resolved.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -140,6 +163,7 @@ in
           "Domains=${concatStringsSep " " cfg.domains}"}
         LLMNR=${cfg.llmnr}
         DNSSEC=${cfg.dnssec}
+        DNSOverTLS=${cfg.dnsovertls}
         ${config.services.resolved.extraConfig}
       '';
 
