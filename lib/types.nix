@@ -629,7 +629,7 @@ rec {
     unique = { message }: type: mkOptionType rec {
       name = "unique";
       inherit (type) description descriptionClass check;
-      merge = mergeUniqueOption { inherit message; };
+      merge = mergeUniqueOption { inherit message; inherit (type) merge; };
       emptyValue = type.emptyValue;
       getSubOptions = type.getSubOptions;
       getSubModules = type.getSubModules;

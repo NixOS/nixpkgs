@@ -254,13 +254,36 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
+  /*
+    Require a single definition.
+
+    WARNING: Does not perform nested checks, as this does not run the merge function!
+    */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
-  mergeUniqueOption = { message }: loc: defs:
-    if length defs == 1
-    then (head defs).value
-    else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
+  /*
+    Require a single definition.
+
+    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+   */
+  mergeUniqueOption = args@{ message, merge ? null }:
+    let
+      notUnique = loc: defs:
+        assert length defs > 1;
+        throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
+    in
+    if merge == null
+    # The inner conditional could be factored out, but this way we take advantage of partial application.
+    then
+      loc: defs:
+        if length defs == 1
+        then (head defs).value
+        else notUnique loc defs
+    else
+      loc: defs:
+        if length defs == 1
+        then merge loc defs
+        else notUnique loc defs;
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
