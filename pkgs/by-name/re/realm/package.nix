@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , stdenv
 , darwin
+, nix-update-script
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,6 +25,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env.RUSTC_BOOTSTRAP = 1;
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) realm; };
+  };
+
 
   meta = with lib; {
     description = "A simple, high performance relay server written in rust";
