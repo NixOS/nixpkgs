@@ -1,6 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildNpmPackage rec {
@@ -15,6 +16,8 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-XmDnvq+ni5TOf3UQFc4JvGI3LiGpjbrLAocRvrW8qgk=";
+
+  passthru.tests.flood = nixosTests.flood;
 
   meta = with lib; {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
