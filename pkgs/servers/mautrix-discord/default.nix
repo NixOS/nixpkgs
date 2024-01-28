@@ -39,7 +39,7 @@ buildGoModule rec {
     homepage = "https://github.com/mautrix/discord";
     changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ MoritzBoehme ];
+    maintainers = with maintainers; [ MoritzBoehme robin ];
     mainProgram = "mautrix-discord";
   };
 }
