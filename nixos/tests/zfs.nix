@@ -8,9 +8,9 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
 
   makeZfsTest = name:
-    { kernelPackage ? if enableUnstable
-                      then pkgs.zfsUnstable.latestCompatibleLinuxPackages
-                      else pkgs.linuxPackages
+    { kernelPackages ? if enableUnstable
+                       then pkgs.zfsUnstable.latestCompatibleLinuxPackages
+                       else pkgs.linuxPackages
     , enableUnstable ? false
     , enableSystemdStage1 ? false
     , zfsPackage ? if enableUnstable then pkgs.zfsUnstable else pkgs.zfs
@@ -35,7 +35,7 @@ let
         boot.loader.timeout = 0;
         boot.loader.efi.canTouchEfiVariables = true;
         networking.hostId = "deadbeef";
-        boot.kernelPackages = kernelPackage;
+        boot.kernelPackages = kernelPackages;
         boot.zfs.package = zfsPackage;
         boot.supportedFilesystems = [ "zfs" ];
         boot.initrd.systemd.enable = enableSystemdStage1;
