@@ -42,6 +42,9 @@ merging is handled.
 :   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
     Multiple definitions cannot be merged.
 
+    If you want to pair these values with more information, possibly of
+    distinct types, consider using a [sum type](#sec-option-types-sums).
+
 `types.anything`
 
 :   A type that accepts any value and recursively merges attribute sets
@@ -278,6 +281,24 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     user to affect all submodules in an `attrsOf submodule` at once. This is
     more convenient and discoverable than expecting the module user to
     type-merge with the `attrsOf submodule` option.
+
+## Union types {#sec-option-types-unions}
+
+A union of types is a type such that a value is valid when it is valid for at least one of those types.
+
+If some values are instances of more than one of the types, it is not possible to distinguish which type they are meant to be instances of. If that's needed, consider using a [sum type](#sec-option-types-sums).
+
+
+
+## Sum types {#sec-option-types-sums}
+
+A sum type can be thought of, conceptually, as a *`types.enum`* where each valid item is paired with a type, through some value syntax.
+Nix does not have a built-in syntax for this pairing of a label and a type or value, so sum types may be represented in multiple ways.
+
+If the built-in Nix value types provide enough distinction, you simplify your syntax with a [union type](#sec-option-types-unions) instead.
+
+
+
 
 ## Composed types {#sec-option-types-composed}
 
