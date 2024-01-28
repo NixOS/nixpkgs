@@ -8,7 +8,7 @@
 
 let
   pname = "mov-cli";
-  version = "1.5.6";
+  version = "1.5.7";
 in
 python3.pkgs.buildPythonPackage {
   inherit pname version;
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonPackage {
     owner = "mov-cli";
     repo = "mov-cli";
     rev = version;
-    hash = "sha256-1+R3T4gH/biWti7F4744SEUNXvhOWqc0rknvOj2Ezfk=";
+    hash = "sha256-OJhZtrSB5rjPY80GkTSU82hkcBgFYpW7Rc24BlBH7CE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
