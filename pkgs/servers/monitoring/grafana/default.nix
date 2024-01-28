@@ -1,6 +1,6 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
 , tzdata, wire
-, yarn, nodejs, cacert
+, yarn, nodejs, python3, cacert
 , jq, moreutils
 , nix-update-script, nixosTests
 }:
@@ -74,7 +74,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Gf2A22d7/8xU/ld7kveqGonVKGFCArGNansPRGhfyXM=";
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo ];
+  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ];
 
   postPatch = ''
     ${patchAwayGrafanaE2E}
@@ -121,9 +121,20 @@ buildGoModule rec {
 
     # Setup node_modules
     export HOME="$(mktemp -d)"
+
+    # Help node-gyp find Node.js headers
+    # (see https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls)
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+
     yarn config set enableTelemetry 0
     yarn config set cacheFolder $offlineCache
     yarn --immutable-cache
+
+    # The build OOMs on memory constrained aarch64 without this
+    export NODE_OPTIONS=--max_old_space_size=4096
   '';
 
   postBuild = ''

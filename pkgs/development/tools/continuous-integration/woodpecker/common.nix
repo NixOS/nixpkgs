@@ -1,18 +1,17 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchzip }:
 let
-  version = "1.0.5";
-  srcHash = "sha256-tkgkhYuLHfmT42P+UMZ7uNB2wBKo0YGiw0a5RoMAu6M=";
-  vendorHash = "sha256-QTTnTPOgP+FlbqXNCGJc9VuBzQcMujpvFB3+DykYTPY=";
-  yarnHash = "sha256-TrcTc5svLLSedRC8gCwIBW7/mtHo+uSNZGImtRiVJ0w=";
+  version = "2.2.2";
+  srcHash = "sha256-Ld75U7ItpBgoLKPLNQF0Kb5PFg2O5vdm26aNs/HYfcw=";
+  # The tarball contains vendored dependencies
+  vendorHash = null;
 in
 {
-  inherit version yarnHash vendorHash;
+  inherit version vendorHash;
 
-  src = fetchFromGitHub {
-    owner = "woodpecker-ci";
-    repo = "woodpecker";
-    rev = "v${version}";
+  src = fetchzip {
+    url = "https://github.com/woodpecker-ci/woodpecker/releases/download/v${version}/woodpecker-src.tar.gz";
     hash = srcHash;
+    stripRoot = false;
   };
 
   postInstall = ''
@@ -26,7 +25,7 @@ in
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/woodpecker-ci/woodpecker/version.Version=${version}"
+    "-X go.woodpecker-ci.org/woodpecker/v2/version.Version=${version}"
   ];
 
   meta = with lib; {
