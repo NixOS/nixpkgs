@@ -307,7 +307,11 @@ Nix does not have a built-in syntax for this pairing of a label and a type or va
 
 If the built-in Nix value types provide enough distinction, you simplify your syntax with a [union type](#sec-option-types-unions) instead.
 
+`types.attrTag` *`{ attr1 = t1; attr2 = t2; ... }`*
 
+:   An attribute set containing one attribute, whose name must be picked from
+    the attribute set (`attr1`, etc) and whose value must be of the accompanying
+    type.
 
 
 ## Composed types {#sec-option-types-composed}
@@ -364,16 +368,6 @@ Composed types are types that take a type as parameter. `listOf
 :   Ensures that type *`t`* cannot be merged. Prints the message *`m`*, after
     the line `The option <option path> is defined multiple times.` and before
     a list of definition locations.
-
-`types.attrTag` *`{ attr1 = t1; attr2 = t2; ... }`*
-
-:   An attribute set containing one attribute, whose name must be picked from
-    the attribute set (`attr1`, etc) and whose value must be of the accompanying
-    type.
-
-    This is one possible representation of what may be called a _tagged union_ or _sum type_.
-    `attrTag` can be thought of as an extension of *`enum`* where the permissible items
-    are attribute names, and each item is paired with a value of a specific type.
 
 `types.coercedTo` *`from f to`*
 
