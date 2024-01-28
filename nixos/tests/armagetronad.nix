@@ -61,6 +61,23 @@ in {
               ];
             };
           };
+          trunk = {
+            enable = true;
+            name = "Smoke Test trunk Server";
+            package = pkgs.armagetronad."0.4".dedicated;
+            port = 4536;
+            settings = {
+              SERVER_OPTIONS = "0.4 server made to run smoke tests.";
+              CYCLE_RUBBER = 20;
+              SIZE_FACTOR = 0.5;
+            };
+            roundSettings = {
+              SAY = [
+                "NixOS Smoke Test 0.4 Server"
+                "https://nixos.org"
+              ];
+            };
+          };
         };
       };
 
@@ -98,7 +115,8 @@ in {
       # Server configs.
       servers = (
         Server(server, 'high-rubber', 'server', 4534, 'NixOS Smoke Test Server', 'SmOoThIcE', 'Arduino', 8),
-        Server(server, 'sty', 'server', 4535, 'NixOS Smoke Test sty+ct+ap Server', 'Arduino', 'SmOoThIcE', 8)
+        Server(server, 'sty', 'server', 4535, 'NixOS Smoke Test sty+ct+ap Server', 'Arduino', 'SmOoThIcE', 8),
+        Server(server, 'trunk', 'server', 4536, 'NixOS Smoke Test 0.4 Server', 'Arduino', 'SmOoThIcE', 8)
       )
 
       """
