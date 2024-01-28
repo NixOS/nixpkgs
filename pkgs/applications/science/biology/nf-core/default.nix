@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, pre-commit
 }:
 
 python3.pkgs.buildPythonApplication rec {
