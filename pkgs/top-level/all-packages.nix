@@ -31564,7 +31564,11 @@ with pkgs;
   fvwm2 = callPackage ../applications/window-managers/fvwm/2.6.nix { };
   fvwm3 = callPackage ../applications/window-managers/fvwm/3.nix { };
 
-  ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
+  ganttproject-bin = callPackage ../applications/misc/ganttproject-bin {
+    jre = openjdk17.override {
+      enableJavaFX = true;
+    };
+  };
 
   gaucheBootstrap = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche/boot.nix { };
 
