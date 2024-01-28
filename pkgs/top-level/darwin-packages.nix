@@ -192,26 +192,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     inherit (apple_sdk) darwin-stubs;
   };
 
-  # TODO: Remove the CF hook if a solution to the crashes is not found.
-  CF =
-    # CF used to refer to the open source version of CoreFoundation from the Swift
-    # project. As of macOS 14, the rpath-based approach allowing packages to choose
-    # which version to use no longer seems to work reliably. Sometimes they works,
-    # but sometimes they crash with the error (in the system crash logs):
-    # CF objects must have a non-zero isa.
-    # See https://developer.apple.com/forums/thread/739355 for more on that error.
-    #
-    # In this branch, we only have a single "CoreFoundation" to choose from.
-    # To be compatible with the existing convention, we define
-    # CoreFoundation with the setup hook, and CF as the same package but
-    # with the setup hook removed.
-    #
-    # This may seem unimportant, but without it packages (e.g., bacula) will
-    # fail with linker errors referring ___CFConstantStringClassReference.
-    # It's not clear to me why some packages need this extra setup.
-    lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (drv: {
-      setupHook = null;
-    });
+  # TODO: Move stdenv to use apple_sdk.frameworks.CoreFoundation and deprecate darwin.CF.
+  CF = apple_sdk.frameworks.CoreFoundation;
 
   # Formerly the CF attribute. Use this is you need the open source release.
   swift-corelibs-foundation = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
