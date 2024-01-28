@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation {
   name = "pubspec-lock";
-  src = @flutter_src@;
+  src = /. + "@flutter_src@"; # a store path
 
   nativeBuildInputs = [ dart ];
 
