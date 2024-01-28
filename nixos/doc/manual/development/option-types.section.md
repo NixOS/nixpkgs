@@ -299,6 +299,11 @@ If some values are instances of more than one of the types, it is not possible t
     `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
     merged.
 
+`types.nullOr` *`t`*
+
+:   `null` or type *`t`*. Multiple definitions are merged according to
+    type *`t`*.
+
 
 ## Sum types {#sec-option-types-sums}
 
@@ -352,11 +357,6 @@ Composed types are types that take a type as parameter. `listOf
     type of `foo.attr` was `lazyAttrsOf (nullOr int)`, `null` would be
     returned instead for the same `mkIf false` definition.
     :::
-
-`types.nullOr` *`t`*
-
-:   `null` or type *`t`*. Multiple definitions are merged according to
-    type *`t`*.
 
 `types.uniq` *`t`*
 
