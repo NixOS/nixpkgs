@@ -19,10 +19,12 @@
 , useFabricmanager ? false
 , ibtSupport ? false
 
-, prePatch ? ""
+, prePatch ? null
 , postPatch ? null
 , patchFlags ? null
-, patches ? []
+, patches ? [ ]
+, preInstall ? null
+, postInstall ? null
 , broken ? false
 , brokenOpen ? broken
 }@args:
@@ -121,6 +123,7 @@ let
 
     patches = if libsOnly then null else patches;
     inherit prePatch postPatch patchFlags;
+    inherit preInstall postInstall;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
