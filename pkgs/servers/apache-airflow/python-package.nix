@@ -87,7 +87,7 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.7.1";
+  version = "2.7.3";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -96,7 +96,7 @@ let
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
-    hash = "sha256-TxlOdazdaEKt9U+t/zjRChUABLhVTqXvH8nUbYrRrQs=";
+    hash = "sha256-+YbiKFZLigSDbHPaUKIl97kpezW1rIt/j09MMa6lwhQ=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -110,7 +110,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-ZUvjSA6BKj27xTNieVBBXm6oCTAWIvxk2menQMt91uE=";
+      hash = "sha256-WQKuQgNp35fU6z7owequXOSwoUGJDJYcUgkjPDMOops=";
     };
 
     distPhase = "true";
