@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srt";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Haivision";
     repo = "srt";
     rev = "v${version}";
-    sha256 = "sha256-HW5l26k9w4F6IJrtiahU/8/CPY6M/cKn8AgESsntC6A=";
+    sha256 = "sha256-HmfbBPyR+z5d9/XBvNhosk8pSSPToNtM+V0hEyb2G2w=";
   };
 
   nativeBuildInputs = [ cmake ];

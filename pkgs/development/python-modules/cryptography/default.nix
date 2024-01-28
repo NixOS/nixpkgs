@@ -4,6 +4,7 @@
 , callPackage
 , cargo
 , cffi
+, cryptography-vectors ? (callPackage ./vectors.nix { })
 , fetchPypi
 , hypothesis
 , iso8601
@@ -24,9 +25,6 @@
 , setuptoolsRustBuildHook
 }:
 
-let
-  cryptography-vectors = callPackage ./vectors.nix { };
-in
 buildPythonPackage rec {
   pname = "cryptography";
   version = "41.0.7"; # Also update the hash in vectors.nix

@@ -957,7 +957,7 @@ let
     linol-lwt = callPackage ../development/ocaml-modules/linol/lwt.nix { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      libllvm = pkgs.llvmPackages_10.libllvm;
+      libllvm = pkgs.llvmPackages.libllvm;
     };
 
     lo = callPackage ../development/ocaml-modules/lo { };
@@ -1067,6 +1067,8 @@ let
     mew_vi = callPackage ../development/ocaml-modules/mew_vi { };
 
     mezzo = callPackage ../development/compilers/mezzo { };
+
+    middleware = callPackage ../development/ocaml-modules/middleware { };
 
     mimic = callPackage ../development/ocaml-modules/mimic { };
 
@@ -1755,6 +1757,10 @@ let
 
     timed = callPackage ../development/ocaml-modules/timed { };
 
+    timedesc = callPackage ../development/ocaml-modules/timedesc { };
+    timedesc-tzdb = callPackage ../development/ocaml-modules/timedesc/tzdb.nix { };
+    timedesc-tzlocal = callPackage ../development/ocaml-modules/timedesc/tzlocal.nix { };
+
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 
     tls = callPackage ../development/ocaml-modules/tls { };
@@ -1796,6 +1802,8 @@ let
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
+
+    type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 

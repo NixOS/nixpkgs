@@ -1,6 +1,5 @@
 { lib
 , buildGoModule
-, buildGo120Module
 , buildGo121Module
 , fetchFromGitHub
 , nixosTests
@@ -52,22 +51,15 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_6;
+  nomad = nomad_1_7;
 
-  nomad_1_4 = generic {
-    buildGoModule = buildGo120Module;
-    version = "1.4.12";
-    sha256 = "sha256-dO98FOaO5MB5pWzeF705s/aBDTaF0OyWnVxWGB91suI=";
-    vendorHash = "sha256-D5TcTZa64Jr47u4mrTXK4lUIC5gfBQNVgL6QKh1CaQM=";
-    license = lib.licenses.mpl20;
-    passthru.tests.nomad = nixosTests.nomad;
-  };
+  nomad_1_4 = throw "nomad_1_4 is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade";
 
   nomad_1_5 = generic {
     buildGoModule = buildGo121Module;
-    version = "1.5.12";
-    sha256 = "sha256-BhKetWtwysWTYI0ruEp/Ixh4eoGxDX0Geup2PCXfsZY=";
-    vendorHash = "sha256-X4pBxKWr5QFRxh9tw5QDpytyuVNXQvV1LHm5IbPELY0=";
+    version = "1.5.13";
+    sha256 = "sha256-SFPjcr3W6Sj1n+1ooi1HDMQEapgGapVy4HtqxSIVi9U=";
+    vendorHash = "sha256-F9lzO3jMVbDq8sA4rBo81vmIoOhK2N8d4HXX58HOw18=";
     license = lib.licenses.mpl20;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
@@ -77,9 +69,9 @@ rec {
 
   nomad_1_6 = generic {
     buildGoModule = buildGo121Module;
-    version = "1.6.5";
-    sha256 = "sha256-10s/yRWGoYTRbMytWShuTgYc1b388IID5doAvWXpyCU=";
-    vendorHash = "sha256-gd6a/CBJ+OOTNHEaRLoDky2f2cDCyW9wSZzD6K22voQ=";
+    version = "1.6.6";
+    sha256 = "sha256-E7HLBABOtDO/BUc2+4mD4yJ/sfy85gy67ZylRTZI3Cg=";
+    vendorHash = "sha256-6jq00RsukuP8OSkXhqYqQxpXtp/jm/GChEwEJTVyO10=";
     license = lib.licenses.mpl20;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
@@ -89,9 +81,9 @@ rec {
 
   nomad_1_7 = generic {
     buildGoModule = buildGo121Module;
-    version = "1.7.2";
-    sha256 = "sha256-tFmsX9C++nuUBqLjjpMMyVCwQHn4nlB3OywIPMYE32Q=";
-    vendorHash = "sha256-iMEEBDxK7ALa19GMIabofzq557aXcYpt0H3/jAKnBBM=";
+    version = "1.7.3";
+    sha256 = "sha256-Rl/bDglO87kbtxFCy0eiTQVJCAwPobQI4GJQOflvXhk=";
+    vendorHash = "sha256-M8lGzUvPY8hNhN9ExHasfnLhe+DYBb86RXr1wdrRbgw=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''

@@ -48,11 +48,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.34";
+  version = "8.0.36";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-ub/D6HRtXOvX+lai71t1UjMmMzBsz5ljCrJCuf9aq7U=";
+    hash = "sha256-Y02KZrbCd3SRBYpgq6gYfpR+TEmg566D3zEvpwcUY3w=";
   };
 
   patches = [

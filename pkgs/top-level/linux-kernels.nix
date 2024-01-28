@@ -190,6 +190,8 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.rust_1_74
+        kernelPatches.rust_1_75
       ];
     };
 
@@ -201,6 +203,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.rust_1_75
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -457,6 +460,8 @@ in {
     opensnitch-ebpf = if lib.versionAtLeast kernel.version "5.10" then callPackage ../os-specific/linux/opensnitch-ebpf { } else null;
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
+
+    rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
 
     tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
 

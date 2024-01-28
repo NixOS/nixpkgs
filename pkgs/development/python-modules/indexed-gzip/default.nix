@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "indexed_gzip";
-  version = "1.8.5";
+  version = "1.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h9JgYq9KxmknaRuMgq+5YWA8tUaFk+lclkqdNAnr/cI=";
+    hash = "sha256-dryq1LLC+lVHj/i+m60ubGGItlX5/clCnwNGrexI92I=";
   };
 
   nativeBuildInputs = [ cython ];

@@ -1,5 +1,4 @@
 { lib
-, writeText
 , flutter
 , python3
 , fetchFromGitHub
@@ -14,13 +13,13 @@
 
 flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.2.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    hash = "sha256-NgzijuvyWNl9sFQzq1Jzk1povF8c/rKuVyVKeve+Vic=";
+    hash = "sha256-XgRIX2Iv5niJw2NSBPwM0K4uF5sPj9c+Xj4oHtAQSbU=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
@@ -29,9 +28,6 @@ flutter.buildFlutterApplication rec {
 
   postPatch = ''
     rm -f pubspec.lock
-    ln -s "${writeText "${pname}-overrides.yaml" (builtins.toJSON {
-      dependency_overrides.intl = "^0.18.1";
-    })}" pubspec_overrides.yaml
 
     substituteInPlace linux/CMakeLists.txt \
       --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
@@ -60,14 +56,15 @@ flutter.buildFlutterApplication rec {
     # Symlink binary.
     ln -sf "$out/app/authenticator" "$out/bin/yubioath-flutter"
 
-    # Needed for QR scanning to work.
-    wrapProgram "$out/bin/yubioath-flutter" \
-      --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
-
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
+  '';
+
+  # Needed for QR scanning to work
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
   '';
 
   nativeBuildInputs = [

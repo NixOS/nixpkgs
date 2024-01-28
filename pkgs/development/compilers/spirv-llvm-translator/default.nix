@@ -48,7 +48,14 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
     inherit (branch) rev hash;
   };
 
-  patches = lib.optionals (llvmMajor == "16") [
+  patches = [
+    # Fixes build after spirv-headers breaking change
+    (fetchpatch {
+      url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/0166a0fb86dc6c0e8903436bbc3a89bc3273ebc0.patch";
+      excludes = ["spirv-headers-tag.conf"];
+      hash = "sha256-17JJG8eCFVphElY5fVT/79hj0bByWxo8mVp1ZNjQk/M=";
+    })
+  ] ++ lib.optionals (llvmMajor == "16") [
     # Fixes builds that link against external LLVM dynamic library
     (fetchpatch {
       url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/f3b9b604d7eda18d0d1029d94a6eebd33aa3a3fe.patch";

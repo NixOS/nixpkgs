@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     description = "Package management made easy";
     homepage = "https://pixi.sh/";
     license = licenses.bsd3;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [ aaronjheng edmundmiller ];
     mainProgram = "pixi";
   };
 }

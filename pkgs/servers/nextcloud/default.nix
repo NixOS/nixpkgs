@@ -36,21 +36,21 @@ let
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
-      platforms = with platforms; unix;
+      platforms = platforms.linux;
       knownVulnerabilities = extraVulnerabilities
         ++ (optional eol "Nextcloud version ${version} is EOL");
     };
   };
 in {
   nextcloud26 = generic {
-    version = "26.0.10";
-    hash = "sha256-yArkYMxOmvfQsJd6TJJX+t22a/V5OW9nwHfgLZsmlIw=";
+    version = "26.0.11";
+    hash = "sha256-Vc0QCCy495oYeRnpWaYwc4Nf4D/ko4VsODoKcS7YADA=";
     packages = nextcloud26Packages;
   };
 
   nextcloud27 = generic {
-    version = "27.1.5";
-    hash = "sha256-O1NMmOdrf+2Mo5NMrUGbEK9YViWfMTvsIs06e/pu+WE=";
+    version = "27.1.6";
+    hash = "sha256-rntyt/xSWsSXmMLeaml6TP8ls0ly1p1GmVmIXTNRvvo=";
     packages = nextcloud27Packages;
   };
 

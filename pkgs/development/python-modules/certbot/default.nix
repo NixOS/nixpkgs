@@ -10,7 +10,7 @@
 , distro
 , josepy
 , parsedatetime
-, pyRFC3339
+, pyrfc3339
 , pyopenssl
 , pytz
 , requests
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     distro
     josepy
     parsedatetime
-    pyRFC3339
+    pyrfc3339
     pyopenssl
     pytz
     requests

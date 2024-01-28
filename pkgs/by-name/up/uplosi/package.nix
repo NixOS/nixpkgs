@@ -16,7 +16,7 @@ buildGoModule rec {
   vendorHash = "sha256-RsjUPLe8omoN+XGyNhHDxzNfZR7VVTkh/f/On1oCRqM=";
 
   CGO_ENABLED = "0";
-  ldflags = [ "-s" "-w" "-buildid=" "-X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
   flags = [ "-trimpath" ];
 
   meta = with lib; {

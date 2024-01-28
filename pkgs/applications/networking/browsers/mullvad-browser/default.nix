@@ -90,7 +90,7 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.0.7";
+  version = "13.0.9";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -102,7 +102,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-8x0Qa+NasMq1JdrVnCWlCyPb+5UpJXK1VLFoY9lx+8Q=";
+      hash = "sha256-TAtBlSkfpqsROq3bV9kwDYIJQAXSVkwxQwj3wIYEI7k=";
     };
   };
 
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   allowSubstitutes = false;
 
   desktopItems = [(makeDesktopItem {
-    name = "mullvadbrowser";
+    name = "mullvad-browser";
     exec = "mullvad-browser %U";
     icon = "mullvad-browser";
     desktopName = "Mullvad Browser";

@@ -195,7 +195,6 @@
   ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
-  ./programs/hyprland.nix
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/i3lock.nix
@@ -215,6 +214,7 @@
   ./programs/minipro.nix
   ./programs/miriway.nix
   ./programs/mosh.nix
+  ./programs/mouse-actions.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
@@ -273,6 +273,7 @@
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/labwc.nix
+  ./programs/wayland/hyprland.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/waybar.nix
@@ -446,6 +447,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/surrealdb.nix
+  ./services/databases/tigerbeetle.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/ayatana-indicators.nix
@@ -633,6 +635,7 @@
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
+  ./services/matrix/hebbot.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
@@ -1234,6 +1237,7 @@
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
   ./services/system/systembus-notify.nix
+  ./services/system/systemd-lock-handler.nix
   ./services/system/uptimed.nix
   ./services/system/zram-generator.nix
   ./services/torrent/deluge.nix
@@ -1519,6 +1523,7 @@
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
+  ./tasks/filesystems/sshfs.nix
   ./tasks/filesystems/squashfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vboxsf.nix
