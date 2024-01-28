@@ -26,7 +26,9 @@ python3.pkgs.buildPythonApplication rec {
     plotly
     prettytable
     prompt-toolkit
+    r2pipe
     rzpipe
+    setuptools
     tqdm
   ];
 
