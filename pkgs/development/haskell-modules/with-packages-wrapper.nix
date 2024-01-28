@@ -47,8 +47,6 @@ let
 
   isGhcjs       = ghc.isGhcjs or false;
   isHaLVM       = ghc.isHaLVM or false;
-  ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
-  packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
   ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand    = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
@@ -122,7 +120,7 @@ symlinkJoin {
     for prg in ${ghcCommand}-pkg ${ghcCommand}-pkg-${ghc.version}; do
       if [[ -x "${ghc}/bin/$prg" ]]; then
         rm -f $out/bin/$prg
-        makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
+        makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "--global-package-db=${packageCfgDir}"
       fi
     done
 
