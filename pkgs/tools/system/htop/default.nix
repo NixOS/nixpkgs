@@ -3,6 +3,7 @@
 , IOKit
 , libcap
 , libnl
+, freebsd
 , sensorsSupport ? stdenv.isLinux, lm_sensors
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ]
     ++ lib.optional stdenv.isDarwin IOKit
+    ++ lib.optionals stdenv.isFreeBSD [ freebsd.libkvm freebsd.libdevstat ]
     ++ lib.optionals stdenv.isLinux [ libcap libnl ]
     ++ lib.optional sensorsSupport lm_sensors
     ++ lib.optional systemdSupport systemd
