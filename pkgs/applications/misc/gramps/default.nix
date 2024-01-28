@@ -34,12 +34,14 @@ buildPythonApplication rec {
     gettext
     gobject-introspection
     pythonPackages.setuptools
+  ];
+
+  nativeCheckInputs = [
+    glibcLocales
     pythonPackages.jsonschema
     pythonPackages.mock
     pythonPackages.lxml
   ];
-
-  nativeCheckInputs = [ glibcLocales ];
 
   buildInputs = [ gtk3 pango gexiv2 ]
     # Map support
