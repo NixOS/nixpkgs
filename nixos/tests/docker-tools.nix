@@ -214,6 +214,25 @@ in {
             + "| ${pkgs.jq}/bin/jq -r .[].Created"
         )
 
+    with subtest("Ensure Stream Layered Docker layers use a stable date"):
+        docker.succeed(
+            "${examples.unstableDateStreamLayered} | docker load"
+        )
+        assert unix_time_second1 not in docker.succeed(
+            "docker inspect ${examples.unstableDateStreamLayered.imageName}:${examples.unstableDateStreamLayered.imageTag} "
+            + "| ${pkgs.jq}/bin/jq -r .[].Created"
+        )
+        docker.succeed(
+            "${examples.bashNoTagStreamLayered} | docker load"
+        )
+        docker.succeed(
+            "DUPLICATE_LAYERS=$(docker inspect "
+            + "${examples.unstableDateStreamLayered.imageName}:${examples.unstableDateStreamLayered.imageTag} "
+            + "${examples.bashNoTagStreamLayered.imageName}:${examples.bashNoTagStreamLayered.imageTag} "
+            + " | ${pkgs.jq}/bin/jq -r '.[].RootFS.Layers.[]' | sort | uniq -c | grep '2 sha256' | wc -l)"
+            + " && test $DUPLICATE_LAYERS -gt 6"
+        )
+
     with subtest("Ensure Layered Docker images work"):
         docker.succeed(
             "docker load --input='${examples.layered-image}'",

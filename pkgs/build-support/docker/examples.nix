@@ -499,6 +499,13 @@ rec {
     contents = pkgs.bashInteractive;
   };
 
+  # streamLayeredImage with unstable date
+  unstableDateStreamLayered = pkgs.dockerTools.streamLayeredImage {
+    name = "bash-no-tag-stream-layered-unstable-date";
+    contents = pkgs.bashInteractive;
+    created = "now";
+  };
+
   # buildLayeredImage with non-root user
   bashLayeredWithUser =
   let
