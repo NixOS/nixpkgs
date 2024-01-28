@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cctools-port
 , perl
 , CoreServices
 , ApplicationServices
@@ -27,12 +26,8 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/arch' "$(type -P true)" \
       --replace '/usr/' '/nope/'
     substituteInPlace 3rdparty/dyncall/configure \
-      --replace '`sw_vers -productVersion`' '"$MACOSX_DEPLOYMENT_TARGET"'
+      --replace '`sw_vers -productVersion`' '"11.0"'
   '';
-
-  nativeBuildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    cctools-port
-  ];
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
   doCheck = false; # MoarVM does not come with its own test suite
