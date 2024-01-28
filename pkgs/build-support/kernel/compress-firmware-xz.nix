@@ -21,4 +21,7 @@ runCommand "${firmware.name}-xz" args ''
         ln -vs -- "''${target/^${firmware}/$out}" "$out/$link"
       fi
   done
+
+  echo "Checking for broken symlinks:"
+  find -L $out -type l -print -execdir false -- '{}' '+'
 ''
