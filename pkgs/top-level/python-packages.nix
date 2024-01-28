@@ -1012,6 +1012,8 @@ self: super: with self; {
 
   awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
 
+  awsipranges = callPackage ../development/python-modules/awsipranges { };
+
   awslambdaric = callPackage ../development/python-modules/awslambdaric { };
 
   awswrangler = callPackage ../development/python-modules/awswrangler { };
