@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+, memcached
 , mock
 , pytestCheckHook
 }:
@@ -23,12 +24,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    memcached
     mock
     pytestCheckHook
   ];
 
-  # all tests fail
-  doCheck = false;
+  preCheck = ''
+    memcached &
+  '';
+
+  postCheck = ''
+    kill %%
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "memcache" ];
 
