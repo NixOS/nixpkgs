@@ -6,7 +6,7 @@
 , platformio
 , esptool
 , git
-, iputils
+, inetutils
 }:
 
 let
@@ -78,11 +78,14 @@ python.pkgs.buildPythonApplication rec {
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
     # git is used in esphome/writer.py
-    # iputils is used in esphome/dashboard/status/ping.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git iputils ]}"
+    # inetutils is used in esphome/dashboard/status/ping.py
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
     "--prefix PYTHONPATH : $PYTHONPATH" # will show better error messages
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
+
+  # Needed for tests
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3Packages; [
     hypothesis
