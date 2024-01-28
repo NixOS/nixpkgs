@@ -7,6 +7,8 @@
 , electron_27
 , git
 , nix-update-script
+# allow a way to add permanent command line arguments to this package using overlays. e.g "--enable-features=UseOzonePlatform"
+, commandLineArgs ? ""
 }:
 
 stdenv.mkDerivation (finalAttrs: let
@@ -61,6 +63,7 @@ in {
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
   '';
 
