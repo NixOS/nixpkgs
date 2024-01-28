@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Your journal app if you live in a terminl";
+    description = "Your journal app if you live in a terminal";
     homepage = "https://github.com/AmmarAbouZor/tui-journal";
     changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${src.rev}/CHANGELOG.ron";
     license = licenses.mit;
