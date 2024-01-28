@@ -12706,6 +12706,8 @@ self: super: with self; {
 
   rmrl = callPackage ../development/python-modules/rmrl { };
 
+  rmscene = callPackage ../development/python-modules/rmscene { };
+
   rmsd = callPackage ../development/python-modules/rmsd { };
 
   rnc2rng = callPackage ../development/python-modules/rnc2rng { };
