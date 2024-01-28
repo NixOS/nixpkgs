@@ -3,7 +3,9 @@
 firmware:
 
 let
-  args = lib.optionalAttrs (firmware ? meta) { inherit (firmware) meta; };
+  args = {
+    allowedRequisites = [];
+  } // lib.optionalAttrs (firmware ? meta) { inherit (firmware) meta; };
 in
 
 runCommand "${firmware.name}-xz" args ''
