@@ -56,6 +56,7 @@ mkDerivation rec {
     "-DMBGL_WITH_QT_HEADLESS=OFF"
   ];
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
+  env.CXXFLAGS = "-include cstdint";
 
   meta = with lib; {
     description = "Interactive, thoroughly customizable maps in native Android, iOS, macOS, Node.js, and Qt applications, powered by vector tiles and OpenGL";
