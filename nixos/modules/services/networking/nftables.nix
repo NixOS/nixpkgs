@@ -252,8 +252,10 @@ in
     networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
     systemd.services.nftables = {
       description = "nftables firewall";
-      before = [ "network-pre.target" ];
-      wants = [ "network-pre.target" ];
+      after = [ "sysinit.target" ];
+      before = [ "network-pre.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      wants = [ "network-pre.target" "sysinit.target" ];
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
@@ -315,6 +317,7 @@ in
         ExecStop = [ deletionsScriptVar cleanupDeletionsScript ];
         StateDirectory = "nftables";
       };
+      unitConfig.DefaultDependencies = false;
     };
   };
 }
