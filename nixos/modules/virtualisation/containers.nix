@@ -28,6 +28,33 @@ in
       description = lib.mdDoc "Enable the OCI seccomp BPF hook";
     };
 
+    cdi = mkOption {
+      type = types.attrs;
+      default = { };
+      description = lib.mdDoc ''
+        Declarative CDI specification. Each key of the attribute set
+        will be mapped to a file in /etc/cdi. It is required for every
+        key to be provided in JSON format.
+      '';
+      example = {
+        some-vendor = builtins.fromJSON ''
+            {
+              "cdiVersion": "0.5.0",
+              "kind": "some-vendor.com/foo",
+              "devices": [],
+              "containerEdits": []
+            }
+          '';
+
+        some-other-vendor = {
+          cdiVersion = "0.5.0";
+          kind = "some-other-vendor.com/bar";
+          devices = [];
+          containerEdits = [];
+        };
+      };
+    };
+
     containersConf.settings = mkOption {
       type = toml.type;
       default = { };
@@ -124,19 +151,28 @@ in
       };
     };
 
-    environment.etc."containers/containers.conf".source =
-      toml.generate "containers.conf" cfg.containersConf.settings;
+    environment.etc = let
+      cdiConfigurationFiles = (lib.attrsets.mapAttrs'
+        (name: value:
+          lib.attrsets.nameValuePair "cdi/${name}.json"
+            { text = builtins.toJSON value; })
+        cfg.cdi);
+    in {
+      "containers/containers.conf".source =
+        toml.generate "containers.conf" cfg.containersConf.settings;
 
-    environment.etc."containers/storage.conf".source =
-      toml.generate "storage.conf" cfg.storage.settings;
+      "containers/storage.conf".source =
+        toml.generate "storage.conf" cfg.storage.settings;
 
-    environment.etc."containers/registries.conf".source = toml.generate "registries.conf" {
-      registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
-    };
+      "containers/registries.conf".source = toml.generate "registries.conf" {
+        registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
+      };
 
-    environment.etc."containers/policy.json".source =
-      if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-      else "${pkgs.skopeo.policy}/default-policy.json";
+      "containers/policy.json".source =
+        if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
+        else "${pkgs.skopeo.policy}/default-policy.json";
+    } // cdiConfigurationFiles;
+
   };
 
 }
