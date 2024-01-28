@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "alive-progress";
-  version = "3.1.4";
+  version = "3.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "rsalmei";
     repo = "alive-progress";
     rev = "refs/tags/v${version}";
-    hash = "sha256-27PgxQ9nw8p5hfaSf/jPYG7419o3i8B8R09o93szSOk=";
+    hash = "sha256-yJhl0QrMHET9ISDc/D5AEQ7dTJkmcV2SWqy/xmG18uY=";
   };
 
   nativeBuildInputs = [
