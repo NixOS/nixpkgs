@@ -7,8 +7,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ledesmablt";
     repo = pname;
-    rev = "8e0ad476079a722a39dd2072195c6b4562d18a4d";
-    sha256 = "sha256-KSlv+O1XQPFrRyxx8/+lCzWryp+9aXpB5CvhEM9w1wA=";
+    rev = "v${version}";
+    sha256 = "sha256-25eMM63a/axgDXCXah+zxwgXyrFHEciGE97ya49r43c=";
   };
 
   propagatedBuildInputs = with python3Packages; [
