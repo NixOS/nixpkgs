@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ texinfo zip ];
 
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-include sstream";
+
   nativeCheckInputs = [ octave libxml2 ];
   doCheck = true;
 
