@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "0lz1sly8p2lhr425ggj3dacz0i28xg32041zdg3nl916yayvqj2p",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.3/calendar-v4.6.3.tar.gz",
-    "version": "4.6.3",
+    "sha256": "06blkrgc9jq8zizgchn8az2cj0s3yy8s05kyhiwj1nb1rx32682j",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.4/calendar-v4.6.4.tar.gz",
+    "version": "4.6.4",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -50,9 +50,9 @@
     ]
   },
   "deck": {
-    "sha256": "0dkw59pv3yj21fs87sw2y4z1qplsgbfnr0nk9cjsb8vb3xjzd0rx",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.12.0/deck-v1.12.0.tar.gz",
-    "version": "1.12.0",
+    "sha256": "08yxwrf5dx8fh70hcpr54ca5h6f2p2ck2hmjnxz5jymd6pnadsr6",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.12.1/deck-v1.12.1.tar.gz",
+    "version": "1.12.1",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "024qll51hdsky6iad0acf3c00ny9k9mc303r2v4g4h53qx2gksys",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.1/groupfolders-v16.0.1.tar.gz",
-    "version": "16.0.1",
+    "sha256": "17v57z7fsbp2m3918x78zrm3ywnbm7vsrcb48x44v5pakdhca3gy",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.3/groupfolders-v16.0.3.tar.gz",
+    "version": "16.0.3",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "mail": {
-    "sha256": "1r4vqxmzfzv9g29smqj14a3k97hwxb9dswg7z501wgq901959bx2",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.2/mail-v3.5.2.tar.gz",
-    "version": "3.5.2",
+    "sha256": "15268xavb4wpkc12anz6wiry87hvy55nf141lc660wr22iivy79r",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.5/mail-v3.5.5.tar.gz",
+    "version": "3.5.5",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -150,9 +150,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1by9qw9bsf48cyczhfxpz9ifrg2dayvcn26m309dicqgjqkz91hd",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.6/notify_push-v0.6.6.tar.gz",
-    "version": "0.6.6",
+    "sha256": "07snlkvs5fxdgcwhhcdp3282y1nvfhk610pbd941gp0rsnhssmpv",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.8/notify_push-v0.6.8.tar.gz",
+    "version": "0.6.8",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -270,9 +270,9 @@
     ]
   },
   "user_saml": {
-    "sha256": "0y5l66ig38202mg5zhy6yi72fz8fbsr7410q6qclxivna3gvyzrc",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.0.1/user_saml-v6.0.1.tar.gz",
-    "version": "6.0.1",
+    "sha256": "130zp1c3bf0whgsx2jc3yi21qi74phwv4sdlv8bn4s5bfp4pf8yg",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.1.0/user_saml-v6.1.0.tar.gz",
+    "version": "6.1.0",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [

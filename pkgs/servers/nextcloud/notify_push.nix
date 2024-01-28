@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9wVH+msUh0t0PKz+5044PhT9lGsbfp4u44gX0O70Pbo=";
+    hash = "sha256-kcdrKrad5kHYOg/1+L72c9Y3GwFA4wS2C9xQ0JOqcOQ=";
   };
 
-  cargoHash = "sha256-Q4KA+mc48OfmxYY7vDJ2ZU/Wd+101kbimwAw6ag3d+w=";
+  cargoHash = "sha256-jMSPBoLVUe4I+CI8nKOjgTxUUarUa4/KLl+LmehKOzg=";
 
   passthru = rec {
     test_client = rustPlatform.buildRustPackage {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-XiaeCVgVjre7NmH/B+dNw0u2HV0vJwlgDjhLXXgJS+Y=";
+      cargoHash = "sha256-0Vs05DToSeKWQJlTwtETedJV2GQ3LYJYIsxM/xZ6dt4=";
     };
     tests = {
       inherit (nixosTests.nextcloud)
