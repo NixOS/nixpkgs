@@ -1132,6 +1132,13 @@
     githubId = 24651767;
     name = "Felix Andreas";
   };
+  andreivolt = {
+    email = "andrei@avolt.net";
+    github = "andreivolt";
+    githubId = 65222;
+    name = "Andrei Volt";
+    keys = [{ fingerprint = "FD5C 5856 405F 4AF1 F2C1  CA3C 36D6 CB53 36F6 8AC5"; }];
+  };
   andres = {
     email = "ksnixos@andres-loeh.de";
     github = "kosmikus";

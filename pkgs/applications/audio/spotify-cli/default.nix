@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Control Spotify playback on any device through the command line.";
     homepage = "https://github.com/ledesmablt/spotify-cli";
     license = licenses.mit;
+    maintainers = with maintainers; [ andreivolt ];
   };
 }
