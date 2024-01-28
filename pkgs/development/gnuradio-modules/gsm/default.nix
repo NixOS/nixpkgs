@@ -10,18 +10,26 @@
 , python
 , libosmocore
 , osmosdr
+, thrift
+, gmp
+, fftwFloat
+, gnuradio
 }:
 
 mkDerivation {
   pname = "gr-gsm";
-  version = "2016-08-25";
+  version = "2021-05-05";
   src = fetchFromGitHub {
     owner = "ptrkrysik";
     repo = "gr-gsm";
-    rev = "3ca05e6914ef29eb536da5dbec323701fbc2050d";
-    sha256 = "13nnq927kpf91iqccr8db9ripy5czjl5jiyivizn6bia0bam2pvx";
+    rev = "2de47e28ce1fb9a518337bfc0add36c8e3cff5eb";
+    sha256 = "sha256-OD3sVBBG+OoJ2f5CJ6KcdpVCgJWNdDjA9kiIuTklyPc=";
   };
-  disabledForGRafter = "3.8";
+  disabledForGRafter = "3.9";
+
+  # grcc complains about grgsm_livemon being an invalid block
+  # so just don't try to compile it
+  cmakeFlags = [ "-DENABLE_GRCC=OFF" ];
 
   nativeBuildInputs = [
     cmake
@@ -36,6 +44,11 @@ mkDerivation {
     boost
     libosmocore
     osmosdr
+    gmp
+    fftwFloat
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+    thrift
+    python.pkgs.thrift
   ];
 
   meta = with lib; {
