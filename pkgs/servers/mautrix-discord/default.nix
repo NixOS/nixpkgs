@@ -4,6 +4,7 @@
 , olm
 , nix-update-script
 , testers
+, nixosTests
 , mautrix-discord
 }:
 
@@ -29,8 +30,11 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = mautrix-discord;
+    tests = {
+      mautrix-discord = nixosTests.mautrix-discord;
+      version = testers.testVersion {
+        package = mautrix-discord;
+      };
     };
   };
 
