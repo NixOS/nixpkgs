@@ -517,6 +517,7 @@ in {
   matrix-synapse = handleTest ./matrix/synapse.nix {};
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix {};
   mattermost = handleTest ./mattermost.nix {};
+  mautrix-discord = handleTest ./matrix/mautrix-discord.nix {};
   mealie = handleTest ./mealie.nix {};
   mediamtx = handleTest ./mediamtx.nix {};
   mediatomb = handleTest ./mediatomb.nix {};
