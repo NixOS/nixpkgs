@@ -1536,7 +1536,7 @@ default-package-overrides:
   - http-directory ==0.1.10
   - http-download ==0.2.1.0
   - httpd-shed ==0.4.1.1
-  - http-io-streams ==0.1.6.3
+  - http-io-streams ==0.1.6.4
   - http-link-header ==1.2.1
   - http-media ==0.8.1.1
   - http-query ==0.1.3
