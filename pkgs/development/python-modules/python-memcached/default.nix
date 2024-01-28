@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-memcached";
-  version = "1.61";
+  version = "1.62";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linsomniac";
     repo = "python-memcached";
     rev = version;
-    hash = "sha256-7bUCVAmOJ6znVmTZg9AJokOuym07NHL12gZgQ2uhfNo=";
+    hash = "sha256-Qko4Qr9WofeklU0uRRrSPrT8YaBYMCy0GP+TF7YZHLI=";
   };
 
   nativeBuildInputs = [
