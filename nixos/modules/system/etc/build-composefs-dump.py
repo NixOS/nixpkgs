@@ -83,8 +83,8 @@ class ComposefsPath:
         return " ".join(line_list)
 
 
-def eprint(*args, **kwargs) -> None:
-    print(args, **kwargs, file=sys.stderr)
+def eprint(*args: Any, **kwargs: Any) -> None:
+    print(*args, **kwargs, file=sys.stderr)
 
 
 def leading_directories(path: str) -> list[str]:
