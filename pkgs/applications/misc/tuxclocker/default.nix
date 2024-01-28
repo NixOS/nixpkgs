@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxclocker";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Lurkki14";
     repo = "tuxclocker";
     fetchSubmodules = true;
     rev = "${finalAttrs.version}";
-    hash = "sha256-8dtuZXBWftXNQpqYgNQOayPGfvEIu9QfbqDShfkt1qA=";
+    hash = "sha256-VJchgImSGykenss4/TyLATljYMMXNmgLSMT8ixSnReA=";
   };
 
   # Meson doesn't find boost without these
