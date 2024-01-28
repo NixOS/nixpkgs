@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-b+hh3pAP1ijcLi3aME6dzwkbXo8lTBm5xyijKhquy8g=";
+    hash = "sha256-f+k7ONX9bDrkyIhFxxaJvZYH2WBxYwCssbfM2fBPtRk=";
   };
 
-  cargoHash = "sha256-Z1JqVs9Q18x0+BNtrZNAJVRMeOrluk96KUrI36WogMk=";
+  cargoHash = "sha256-Omxd0ZgvtEiciFnKWkYupyts2QT9LUTXxaTdfu0Jnx8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,6 +37,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=bind_ipv4_ipv6::case_2"
     "--skip=qrcode_hidden_in_tty_when_disabled"
     "--skip=qrcode_shown_in_tty_when_enabled"
+    "--skip=show_root_readme_contents"
+    "--skip=validate_printed_urls"
   ];
 
   postInstall = ''
