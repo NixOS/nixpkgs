@@ -30,14 +30,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.32.0";
+  version = "0.32.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-untfXvBAn39C+s1BxVjXoLpPvnw7TM/uPFB+zZHH8w8=";
+    hash = "sha256-d+Xwn+po/pclAy4UZ4pR4KWmriHCLPeMhXxoHp6wHT8=";
   };
 
   goModules = (buildGoModule {
@@ -240,7 +240,10 @@ buildPythonApplication rec {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;
-    changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
+    changelog = [
+      "https://sw.kovidgoyal.net/kitty/changelog/"
+      "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
+    ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
     maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];

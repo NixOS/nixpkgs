@@ -24053,10 +24053,6 @@ with pkgs;
 
   mujoco = callPackage ../applications/science/robotics/mujoco { };
 
-  muparser = callPackage ../development/libraries/muparser {
-    inherit (darwin.stubs) setfile;
-  };
-
   muparserx = callPackage ../development/libraries/muparserx { };
 
   mutest = callPackage ../development/libraries/mutest { };
