@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , boost
 , cmake
 , discord-rpc
@@ -34,6 +35,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-j3OVhcTGUXPC0+AqvAJ7+mc+IFqJeBITU99pvfXIunQ=";
   };
+
+  patches = [
+    # Fix bad concatenation of CMake GNUInstallDirs variables, causing broken asset lookup paths
+    # Remove when version > 0.5.7
+    (fetchpatch {
+      name = "0001-rmg-Fix-GNUInstallDirs-usage.patch";
+      url = "https://github.com/Rosalie241/RMG/commit/685aa597c7ee7ad7cfd4dd782f40d21863b75899.patch";
+      hash = "sha256-HnaxUAX+3Z/VTtYYuhoXOtsDtV61nskgyzEcp8fdBsU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
