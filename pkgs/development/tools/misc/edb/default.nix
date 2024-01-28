@@ -3,14 +3,14 @@
 
 mkDerivation rec {
   pname = "edb";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "eteran";
     repo = "edb-debugger";
-    rev = "1.3.0";
+    rev = version;
     fetchSubmodules = true;
-    sha256 = "fFUau8XnsRFjC83HEsqyhrwCCBOfDmV6oACf3txm7O8=";
+    hash = "sha256-1Q0eZS05L4sxzcPvEFdEaobO7JYHRu98Yf+n3ZnBi+E=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -26,12 +26,10 @@ mkDerivation rec {
     # The build script checks for the presence of .git to determine whether
     # submodules were fetched and will throw an error if it's not there.
     # Avoid using leaveDotGit in the fetchFromGitHub options as it is non-deterministic.
-    mkdir -p src/qhexview/.git
+    mkdir -p src/qhexview/.git lib/gdtoa-desktop/.git
 
     # Change default optional terminal program path to one that is more likely to work on NixOS.
     substituteInPlace ./src/Configuration.cpp --replace "/usr/bin/xterm" "xterm";
-
-    sed '1i#include <memory>' -i include/{RegisterViewModelBase,State,IState}.h # gcc12
   '';
 
   meta = with lib; {
