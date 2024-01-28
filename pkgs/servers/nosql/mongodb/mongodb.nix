@@ -97,14 +97,15 @@ in stdenv.mkDerivation rec {
     libpcap
     yaml-cpp
     openssl
-    net-snmp
     openldap
     pcre-cpp
     variants.python
     sasl
     snappy
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ];
+  ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ]
+  ++ lib.optionals stdenv.isLinux [ net-snmp ];
+
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
