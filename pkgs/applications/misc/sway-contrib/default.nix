@@ -31,7 +31,7 @@ let
 in
 {
 
-grimshot = stdenv.mkDerivation rec {
+grimshot = stdenv.mkDerivation (finalAttrs: {
   inherit version src;
 
   pname = "grimshot";
@@ -70,12 +70,12 @@ grimshot = stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = with lib; meta // {
     description = "A helper for screenshots within sway";
     maintainers = with maintainers; [ evils ];
     mainProgram = "grimshot";
   };
-};
+});
 
 
 inactive-windows-transparency = python3Packages.buildPythonApplication rec {

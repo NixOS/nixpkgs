@@ -114,6 +114,7 @@ rec {
       zipAttrsWithLast = lib.attrsets.zipAttrsWith (name: lib.lists.last);
 
       # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
+      # TODO rework
       externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 
       externalDepsDirs = map
