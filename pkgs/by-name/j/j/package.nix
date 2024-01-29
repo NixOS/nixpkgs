@@ -1,8 +1,12 @@
 { lib
-, stdenv
+, bc
 , fetchFromGitHub
-, which
 , gmp
+, libedit
+, readline
+, stdenv
+, which
+, xcbuild
 , avx2Support ? stdenv.hostPlatform.avx2Support
 }:
 
@@ -23,10 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     which
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    xcbuild.xcrun
   ];
 
   buildInputs = [
+    bc
     gmp
+    libedit
+    readline
   ];
 
   enableParallelBuilding = true;
