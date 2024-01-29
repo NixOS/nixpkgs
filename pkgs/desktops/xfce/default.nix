@@ -32,6 +32,8 @@ makeScopeWithSplicing' {
 
       libxfce4util = callPackage ./core/libxfce4util { };
 
+      libxfce4windowing = callPackage ./core/libxfce4windowing { };
+
       thunar = callPackage ./core/thunar {
         thunarPlugins = [ ];
       };
