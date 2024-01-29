@@ -922,7 +922,9 @@ let
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
-    lambdapi = callPackage ../development/ocaml-modules/lambdapi { };
+    lambdapi = callPackage ../development/ocaml-modules/lambdapi {
+      why3 = pkgs.why3.override { ocamlPackages = self; };
+    };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 

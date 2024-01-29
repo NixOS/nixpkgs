@@ -5197,7 +5197,9 @@ with pkgs;
 
   easyabc = callPackage ../applications/audio/easyabc { };
 
-  easycrypt = callPackage ../applications/science/logic/easycrypt { };
+  easycrypt = callPackage ../applications/science/logic/easycrypt {
+    why3 = pkgs.why3.override { ideSupport = false; };
+  };
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
 
@@ -11670,8 +11672,7 @@ with pkgs;
 
   opentsdb = callPackage ../tools/misc/opentsdb { };
 
-  inherit (callPackages ../tools/networking/openvpn {})
-    openvpn;
+  openvpn = callPackage ../tools/networking/openvpn {};
 
   openvpn3 = callPackage ../tools/networking/openvpn3 { };
 
@@ -17634,9 +17635,7 @@ with pkgs;
 
   ivy = callPackage ../development/interpreters/ivy { };
 
-  j = callPackage ../development/interpreters/j {
-    stdenv = clangStdenv;
-  };
+  j = callPackage ../development/interpreters/j { };
 
   jacinda = haskell.lib.compose.justStaticExecutables haskellPackages.jacinda;
 
@@ -20643,8 +20642,6 @@ with pkgs;
     then pkgs."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
-
-  bobcat = pin-to-gcc12-if-gcc13 (callPackage ../development/libraries/bobcat { });
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
@@ -28105,6 +28102,8 @@ with pkgs;
   linux_6_5_hardened = linuxKernel.kernels.linux_6_5_hardened;
   linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
   linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
+  linuxPackages_6_7_hardened = linuxKernel.packages.linux_6_7_hardened;
+  linux_6_7_hardened = linuxKernel.kernels.linux_6_7_hardened;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
