@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 URL_BASE="${1-http://localhost:8000}"
 OUT_DIR="${2-.}"
