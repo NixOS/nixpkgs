@@ -13,6 +13,8 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || any (i: i.useDHCP == true) interfaces);
 
+  useResolvConf = config.networking.resolvconf.enable;
+
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
@@ -87,21 +89,6 @@ let
       ''}
 
       ${cfg.extraConfig}
-    '';
-
-  exitHook = pkgs.writeText "dhcpcd.exit-hook"
-    ''
-      if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-          # Restart ntpd.  We need to restart it to make sure that it
-          # will actually do something: if ntpd cannot resolve the
-          # server hostnames in its config file, then it will never do
-          # anything ever again ("couldn't resolve ..., giving up on
-          # it"), so we silently lose time synchronisation. This also
-          # applies to openntpd.
-          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service ntpd-rs.service || true
-      fi
-
-      ${cfg.runHook}
     '';
 
 in
@@ -205,20 +192,6 @@ in
 
   config = mkIf enableDHCP {
 
-    assertions = [ {
-      # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
-      # see https://github.com/NixOS/nixpkgs/issues/151696
-      assertion =
-        dhcpcd.enablePrivSep
-          -> elem config.environment.memoryAllocator.provider [ "libc" "scudo" ];
-      message = ''
-        dhcpcd with privilege separation is incompatible with chosen system malloc.
-          Currently only the `libc` and `scudo` allocators are known to work.
-          To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
-          to set `enablePrivSep = false`.
-      '';
-    } ];
-
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
@@ -229,8 +202,6 @@ in
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
         wants = [ "network.target" ];
         before = [ "network-online.target" ];
-
-        restartTriggers = [ exitHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -244,22 +215,59 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd/pid";
+            DynamicUser = true;
+            SupplementaryGroups = optional useResolvConf "resolvconf";
+            User = "dhcpcd";
+            Group = "dhcpcd";
+            StateDirectory = "dhcpcd";
             RuntimeDirectory = "dhcpcd";
+
+            ExecStartPre = "+${pkgs.writeShellScript "migrate-dhcpcd" ''
+              # migrate from old database directory
+              if test -d /var/db/dhcpcd; then
+                mv /var/db/dhcpcd/* -t /var/lib/dhcpcd
+                rmdir /var/db/dhcpcd
+                chown -R dhcpcd:dhcpcd /var/lib/dhcpcd
+              fi
+            ''}";
+
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
+            AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            ReadWritePaths = [ "/proc/sys/net/ipv6" ]
+              ++ optionals useResolvConf [ "/etc/resolv.conf" "/run/resolvconf" ];
+            DeviceAllow = "";
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateMounts = true;
+            PrivateTmp = true;
+            PrivateUsers = false;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectSystem = "strict";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_PACKET" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallFilter = [
+              "@system-service"
+              "~@aio" "~@chown" "~@keyring" "~@memlock"
+              "~@resources" "~@setuid" "~@timer"
+            ];
+            SystemCallArchitectures = "native";
           };
       };
 
-    users.users.dhcpcd = {
-      isSystemUser = true;
-      group = "dhcpcd";
-    };
-    users.groups.dhcpcd = {};
-
     environment.systemPackages = [ dhcpcd ];
-
-    environment.etc."dhcpcd.exit-hook".source = exitHook;
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''

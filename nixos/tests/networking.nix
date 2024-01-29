@@ -44,7 +44,10 @@ let
               id = n;
               subnet = "192.168.${toString n}.0/24";
               pools = [{ pool = "192.168.${toString n}.3 - 192.168.${toString n}.254"; }];
-              option-data = [{ name = "routers"; data = "192.168.${toString n}.1"; }];
+              option-data = [
+                { name = "routers"; data = "192.168.${toString n}.1"; }
+                { name = "domain-name-servers"; data = "192.0.2.1"; }
+              ];
 
               reservations = [{
                 hw-address = qemu-common.qemuNicMac n 1;
@@ -80,6 +83,7 @@ let
             AdvSendAdvert on;
             AdvManagedFlag on;
             AdvOtherConfigFlag on;
+            RDNSS 2001:db8::1 {};
 
             prefix fd00:1234:5678:${toString n}::/64 {
               AdvAutonomous off;
@@ -231,6 +235,10 @@ let
               client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q 'fd00:1234:5678:1:'")
               client.wait_until_succeeds("ip addr show dev enp2s0 | grep -q '192.168.2'")
               client.wait_until_succeeds("ip addr show dev enp2s0 | grep -q 'fd00:1234:5678:2:'")
+
+          with subtest("Wait until we have received the nameservers"):
+              client.wait_until_succeeds("grep -q 2001:db8::1 /etc/resolv.conf")
+              client.wait_until_succeeds("grep -q 192.0.2.1 /etc/resolv.conf")
 
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")

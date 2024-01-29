@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
+    mainProgram = "resolvconf";
   };
 }
