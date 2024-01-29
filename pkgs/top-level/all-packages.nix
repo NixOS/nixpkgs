@@ -358,6 +358,8 @@ with pkgs;
 
   bearer = callPackage ../development/tools/bearer { };
 
+  benchexec = callPackage ../tools/misc/benchexec { };
+
   benthos = callPackage ../development/tools/benthos { };
 
   beyond-identity = callPackage ../tools/security/beyond-identity { };
@@ -583,6 +585,8 @@ with pkgs;
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
 
+  cpu-energy-meter = callPackage ../tools/misc/cpu-energy-meter { };
+
   crackle = callPackage ../tools/networking/crackle { };
 
   crackql = callPackage ../tools/security/crackql { };
@@ -740,6 +744,8 @@ with pkgs;
   inspec = callPackage ../tools/misc/inspec { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
+
+  pqos-wrapper = callPackage ../tools/misc/pqos-wrapper { };
 
   probe-rs = callPackage ../development/tools/rust/probe-rs {
     inherit (darwin.apple_sdk.frameworks) AppKit;
