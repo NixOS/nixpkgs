@@ -152,19 +152,21 @@ rec {
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
+    , derivationArgs ? { } # Extra arguments to pass to `stdenv.mkDerivation`
     }:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
-      {
+      ({
         inherit text executable checkPhase allowSubstitutes preferLocalBuild;
-        passAsFile = [ "text" ];
+        passAsFile = [ "text" ]
+          ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
           {
             mainProgram = lib.head matches;
-          } // meta;
-      }
+          } // meta // derivationArgs.meta or {};
+      } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
@@ -274,9 +276,10 @@ rec {
     , checkPhase ? null
     , excludeShellChecks ? [ ]
     , bashOptions ? [ "errexit" "nounset" "pipefail" ]
+    , derivationArgs ? { } # Extra arguments to pass to `stdenv.mkDerivation`
     }:
     writeTextFile {
-      inherit name meta;
+      inherit name meta derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
