@@ -1,17 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, pytest-cov, pytest-xdist
-, six, numpy, scipy, pyyaml, h5py
-, keras-applications, keras-preprocessing
+{ lib
+, absl-py
+, buildPythonPackage
+, dm-tree
+, fetchPypi
+, h5py
+, numpy
+, pytest
+, pytest-cov
+, pytest-xdist
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.0.0";
+  version = "3.0.4";
   format = "wheel";
 
   src = fetchPypi {
     inherit format pname version;
-    hash = "sha256-/z8++iqlzBNLHYuFaTqrMlWLHZyGBjChP1iTTm0ckI0=";
+    hash = "sha256-V5E45mfZxl1eMN9HAXXyxtOfldwwjJ2CWVeodUWZOfk=";
     python = "py3";
     dist = "py3";
   };
@@ -23,12 +30,15 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six pyyaml numpy scipy h5py
-    keras-applications keras-preprocessing
+    absl-py
+    dm-tree
+    h5py
+    numpy
+    rich
   ];
 
   # Couldn't get tests working
-  doCheck = false;
+  #doCheck = false;
 
   meta = with lib; {
     description = "Deep Learning library for Theano and TensorFlow";
