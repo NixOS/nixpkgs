@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.fceux.com/";
     description = "A Nintendo Entertainment System (NES) Emulator";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sbruder scubed2 ];
+    maintainers = with maintainers; [ sbruder ];
     platforms = platforms.linux;
   };
 })

@@ -1,7 +1,7 @@
 { lib
 , aiohttp
 , aioresponses
-, pydantic
+, pydantic_1
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.4.6";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,12 +21,11 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6lgjblCyc4NSnw+nlCH0SKV7f9aa4qcfa7v9pgzusKo=";
+    hash = "sha256-BfmXHcAPYPBkHlR5tp8w8Za1mb8GgjvyWIhfrVk38pY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'pydantic = "^1.9"' 'pydantic = "*"' \
       --replace " --cov=aioopenexchangerates --cov-report=term-missing:skip-covered" ""
   '';
 
@@ -36,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [
