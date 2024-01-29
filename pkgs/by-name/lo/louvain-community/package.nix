@@ -2,20 +2,23 @@
 , fetchFromGitHub
 , cmake
 , lib
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "louvain-community";
-  version = "unstable-2021-03-18";
+  version = "unstable-2024-01-30";
 
   src = fetchFromGitHub {
     owner = "meelgroup";
     repo = "louvain-community";
-    rev = "8cc5382d4844af127b1c1257373740d7e6b76f1e";
-    hash = "sha256-0i3wrDdOyleOPv5iVO1YzPfTPnIdljLabCvl3SYEQOs=";
+    rev = "681a711a530ded0b25af72ee4881d453a80ac8ac";
+    hash = "sha256-mp2gneTtm/PaCqz4JNOZgdKmFoV5ZRVwNYjHc4s2KuY=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
     description = "Louvain Community Detection Library";
