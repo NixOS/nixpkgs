@@ -1031,6 +1031,7 @@
   ./services/networking/nebula.nix
   ./services/networking/netbird.nix
   ./services/networking/netclient.nix
+  ./services/networking/netmaker/netmaker.nix
   ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nextdns.nix
