@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ViZkmuLFV5DN1nqWKGl+yaqhYUEOztZ1zGpxjr1U/dw=";
+    hash = "sha256-YmredtZZKMjzJW/kxiTUmdgO/1iPIKzJsuJz8DeEdGM=";
   };
 
   strictDeps = true;
