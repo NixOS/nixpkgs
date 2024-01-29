@@ -17634,9 +17634,7 @@ with pkgs;
 
   ivy = callPackage ../development/interpreters/ivy { };
 
-  j = callPackage ../development/interpreters/j {
-    stdenv = clangStdenv;
-  };
+  j = callPackage ../development/interpreters/j { };
 
   jacinda = haskell.lib.compose.justStaticExecutables haskellPackages.jacinda;
 
