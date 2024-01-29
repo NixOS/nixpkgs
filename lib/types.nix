@@ -628,7 +628,16 @@ rec {
             (n: opt:
               builtins.addErrorContext "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix args.tags n}" (
                 assert opt._type == "option";
-                opt
+                opt // {
+                  declarations = opt.declarations or (
+                    let pos = builtins.unsafeGetAttrPos n args.tags;
+                    in if pos == null then [] else [ pos.file ]
+                  );
+                  declarationPositions = opt.declarationPositions or (
+                    let pos = builtins.unsafeGetAttrPos n args.tags;
+                    in if pos == null then [] else [ pos ]
+                  );
+                }
               ))
             args.tags;
         choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
@@ -640,7 +649,10 @@ rec {
           mapAttrs
             (tagName: tagOption: {
               "${lib.showOption prefix}" =
-                tagOption // { loc = prefix ++ [ tagName ]; };
+                tagOption // {
+                  loc = prefix ++ [ tagName ];
+                  definitions = [];
+                };
             })
             tags;
         substSubModules = m: attrTagWith { tags = mapAttrs (n: opt: opt // { type = (opt.type or types.unspecified).substSubModules m; }) tags; };
@@ -685,6 +697,11 @@ rec {
                       #        It is also returned though, but use of the attribute seems rare?
                       [tagName]
                       [ (wrapOptionDecl a.tags.${tagName}) (wrapOptionDecl bOpt) ]
+                    // {
+                      # mergeOptionDecls is not idempotent in these attrs:
+                      declarations = a.tags.${tagName}.declarations ++ bOpt.declarations;
+                      declarationPositions = a.tags.${tagName}.declarations ++ bOpt.declarations;
+                    }
                   )
                   (builtins.intersectAttrs a.tags b.tags);
           };
