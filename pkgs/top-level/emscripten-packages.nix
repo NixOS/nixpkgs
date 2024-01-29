@@ -14,6 +14,31 @@ rec {
       doCheck = false;
     });
 
+  freetype = (pkgs.freetype.override {
+    stdenv = pkgs.emscriptenStdenv;
+  }).overrideAttrs
+    (old: {
+      pname = "freetype";
+
+      propagatedBuildInputs = [ zlib bzip2 libpng ];
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
+
+      configurePhase = ''
+        HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+
+        emconfigure ./configure \
+          --prefix=$out \
+          --bindir=$dev/bin \
+          --enable-freetype-config \
+          --build=${stdenv.hostPlatform.system} \
+          --host=wasm32 \
+          PKG_CONFIG_PATH="${libpng.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+      '';
+      doCheck = false;
+    });
+
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideAttrs
