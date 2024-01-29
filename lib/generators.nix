@@ -902,8 +902,46 @@ rec {
     _type = "lua-inline";
     inherit expr;
   };
-}
-// {
+
+  ## -- SHELL ARGUMENT GENERATORS --
+
+  mkShellArgument = {prefix ? "--", sep ? " ", enablePrefix? "", disablePrefix ? null, ...}: k: v:
+    let
+      err = t: v: abort
+        ("generators.mkShellArguments: " +
+         "${t} not supported: ${toPretty {} v}");
+    in if isInt v then "${prefix}${k}${sep}${toString v}"
+    else if lib.isDerivation v then "${prefix}${k}${sep}${toString v}"
+    else if lib.isString v then "${prefix}${k}${sep}${v}"
+    else if lib.isBool v then (
+      if disablePrefix == null then "${prefix}${k}${sep}${if v then "true" else "false"}"
+      else "${prefix}${if v then enablePrefix else disablePrefix}${k}"
+    )
+    else if null == v then ""
+    else if isAttrs v then err "attrsets" v
+    else if isFunction v then err "functions" v
+    else if isFloat v then floatToString v
+    else err "this value is" (toString v);
+
+  /* Generate a bash arguments line, where every argument is prefixed with prefix,
+   * arguments will be delimited by argSep, and every argument consists of key k and value v, separated
+   * by sep.
+   *
+   * If disablePrefix is null, then boolean values will be passed literally:
+   * mkShellArguments {} { arg = true; }
+   * > --arg true
+   *
+   * If not, then true argument will be passed literally, and false will be prefixed:
+   * mkShellArguments {} { a = true; b = false, disablePrefix = "disable-" }
+   * > --a --disable-b
+   */
+  mkShellArguments = {argSep ? " ", ...} @ opts:
+  let mkArgument' = k: v:
+    if lib.isList v then (map (mkShellArgument opts k) v)
+    else [(mkShellArgument opts k v)];
+  in attrs:
+    concatStringsSep argSep (lib.concatLists (mapAttrsToList (mkArgument') attrs));
+} // {
   /**
     Generates JSON from an arbitrary (non-function) value.
     For more information see the documentation of the builtin.

@@ -1110,4 +1110,22 @@ optionalAttrs allowAliases aliases
       generate = name: value: jsonFormat.generate name (mapAttrs (_: transform) value);
     };
 
+  # It doesn't require any of pkgs, but still uses nix module type system.
+  shellArgs = opts: {
+    type = let
+      singleValue = [
+        bool
+        float
+        int
+        path
+        str
+      ];
+      valueType = oneOf (singleValue ++ [
+        (listOf (oneOf singleValue))
+      ]) // {
+        description = "Shell argument value";
+      };
+    in attrsOf valueType;
+    generateSystemd = attrs: lib.generators.mkShellArguments (opts // {argSep = "\\\n";}) attrs;
+  };
 }
