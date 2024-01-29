@@ -1307,7 +1307,6 @@ let
       inherit
         applyModuleArgsIfFunction
         dischargeProperties
-        evalOptionValue
         mergeModules
         mergeModules'
         pushDownProperties
@@ -1328,6 +1327,7 @@ private //
     defaultPriority
     doRename
     evalModules
+    evalOptionValue  # for use by lib.types
     filterOverrides
     filterOverrides'
     fixMergeModules
