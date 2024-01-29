@@ -156,6 +156,16 @@ in lib.makeExtensible (self: ({
     hash = "sha256-EK0pgHDekJFqr0oMj+8ANIjq96WPjICe2s0m4xkUdH4=";
     patches = [
       patch-monitorfdhup
+
+      (fetchpatch2 {
+        # Backport the fix for race between:
+        # - tests/check.sh: write 'dummy'
+        # - tests/add.sh: reads 'dummy'
+        # TODO: drop on next nix-2.3 release.
+        name = "fix-check-test-race.patch";
+        url = "https://github.com/NixOS/nix/commit/0776aa11c9e5864e8666dc9dfa670b55e9d6764f.patch";
+        hash = "sha256-nOFyRtkTNgSt6vmHDAuAvm6aCfqRQBLhX/WGY8bQttU=";
+      })
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; };
