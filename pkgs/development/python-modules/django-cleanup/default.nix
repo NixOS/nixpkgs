@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "django-cleanup";
-  version = "8.0.0";
+  version = "8.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xzmgVUTh5I3ISIcchw2/FZX4Uz0kUjvGc2DkNWLtrw0=";
+    hash = "sha256-cN+QUHakTnoRGzEZgZmvYz3uCIduGZ5tzjbKjda4sQ8=";
   };
 
   nativeCheckInputs = [

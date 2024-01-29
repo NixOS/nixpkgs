@@ -31762,8 +31762,6 @@ with pkgs;
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  gtimelog = with python3Packages; toPythonApplication gtimelog;
-
   inherit (gnome) gucharmap;
 
   guitarix = callPackage ../applications/audio/guitarix {
