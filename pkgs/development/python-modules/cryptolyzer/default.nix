@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "CryptoLyzer";
     inherit version;
-    hash = "sha256-1Ec57A5lCjy9FsA3vDmCyfOeHZaQz01FNiKyNV3eJfc=";
+    hash = "sha256-UffFdQ+MiB8kPzqnmWdnGRwAAM9wJwpUDK2bPvPvH0c=";
   };
 
   postPatch = ''
