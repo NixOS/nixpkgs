@@ -65,6 +65,11 @@ let
     fixupOptionType
     mergeOptionDecls
     ;
+
+  inAttrPosSuffix = v: name:
+    let pos = builtins.unsafeGetAttrPos name v; in
+    if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+
   outer_types =
 rec {
   __attrsFailEvaluation = true;
@@ -616,8 +621,16 @@ rec {
 
     attrTag = tags: attrTagWith { inherit tags; };
 
-    attrTagWith = { tags }:
+    attrTagWith = args@{ tags }:
       let
+        tags =
+          mapAttrs
+            (n: opt:
+              builtins.addErrorContext "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix args.tags n}" (
+                assert opt._type == "option";
+                opt
+              ))
+            args.tags;
         choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
       in
       mkOptionType {
@@ -625,10 +638,12 @@ rec {
         description = "attribute-tagged union of ${choicesStr}";
         getSubOptions = prefix:
           mapAttrs
-            (tagName: tagType:
-              tagType.getSubOptions (prefix ++ [ tagName ]))
+            (tagName: tagOption: {
+              "${lib.showOption prefix}" =
+                tagOption // { loc = prefix ++ [ tagName ]; };
+            })
             tags;
-        substSubModules = m: attrTagWith { tags = mapAttrs (n: v: v.substSubModules m) tags; };
+        substSubModules = m: attrTagWith { tags = mapAttrs (n: opt: opt // { type = (opt.type or types.unspecified).substSubModules m; }) tags; };
         check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
         merge = loc: defs:
           let
@@ -644,11 +659,11 @@ rec {
             if tags?${choice}
             then
               { ${choice} =
-                  (mergeDefinitions
+                  (lib.modules.evalOptionValue
                     (loc ++ [choice])
                     tags.${choice}
                     checkedValueDefs
-                  ).mergedValue;
+                  ).value;
               }
             else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
         nestedTypes = tags;
