@@ -623,7 +623,11 @@ rec {
       mkOptionType {
         name = "attrTag";
         description = "attribute-tagged union of ${choicesStr}";
-        getSubModules = null;
+        getSubOptions = prefix:
+          mapAttrs
+            (tagName: tagType:
+              tagType.getSubOptions (prefix ++ [ tagName ]))
+            tags;
         substSubModules = m: attrTagWith { tags = mapAttrs (n: v: v.substSubModules m) tags; };
         check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
         merge = loc: defs:
