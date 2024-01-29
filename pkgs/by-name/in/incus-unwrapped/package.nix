@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GpCKfr07/JJz5YS/MuqRkanGfMgV9r+cCEDIuHTISKE=";
+    hash = "sha256-3eWkQT2P69ZfN62H9B4WLnmlUOGkpzRR0rctgchP+6A=";
   };
 
   vendorHash = "sha256-2ZJU7WshN4UIbJv55bFeo9qiAQ/wxu182mnz7pE60xA=";
