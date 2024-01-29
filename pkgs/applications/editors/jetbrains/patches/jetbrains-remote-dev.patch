@@ -1,6 +1,42 @@
 --- a/plugins/remote-dev-server/bin/launcher.sh
 +++ b/plugins/remote-dev-server/bin/launcher.sh
-@@ -327,6 +327,8 @@
+@@ -213,35 +213,6 @@
+   exit 1
+ fi
+
+-# ---------------------------------------------------------------------
+-# Configure fonts and fontconfig
+-# ---------------------------------------------------------------------
+-if [ $IS_DARWIN -ne 1 ]; then
+-  FONTS_CONFIGURATION_SOURCE_PATH="$REMOTE_DEV_SERVER_DIR/selfcontained/fontconfig"
+-  if [ ! -d "$FONTS_CONFIGURATION_SOURCE_PATH" ]; then
+-    echo "ERROR! Unable to locate font configuration source directory in self-contained distribution: '$FONTS_CONFIGURATION_SOURCE_PATH'." 1>&2
+-    exit 1
+-  fi
+-
+-  export INTELLIJ_ORIGINAL_ENV_FONTCONFIG_PATH="${FONTCONFIG_PATH:-}"
+-  if [ -z "${FONTCONFIG_PATH:-}" ]; then
+-    export FONTCONFIG_PATH="$FONTS_CONFIGURATION_SOURCE_PATH"
+-  else
+-    export FONTCONFIG_PATH="$FONTCONFIG_PATH:$FONTS_CONFIGURATION_SOURCE_PATH"
+-  fi
+-
+-  export INTELLIJ_ORIGINAL_ENV_XDG_DATA_DIRS="${XDG_DATA_DIRS:-}"
+-  # fontconfig checks default fonts in "$XDG_DATA_HOME/fonts" path.
+-  # Set this variable to use self-contained default fonts in case no others exist.
+-  # Note: XDG_DATA_HOME specify a single path entry that could be re-used in IDEs.
+-  #       Use XDG_DATA_DIRS variable to combine with existing paths.
+-  if [ -z "${XDG_DATA_DIRS:-}" ]; then
+-    export XDG_DATA_DIRS="$FONTS_CONFIGURATION_SOURCE_PATH"
+-  else
+-    export XDG_DATA_DIRS="$XDG_DATA_DIRS:$FONTS_CONFIGURATION_SOURCE_PATH"
+-  fi
+-fi
+-
+ # Handle old names of these vars
+ REMOTE_DEV_NON_INTERACTIVE="${REMOTE_DEV_NON_INTERACTIVE:-${CWM_NON_INTERACTIVE:-}}"
+ REMOTE_DEV_TRUST_PROJECTS="${REMOTE_DEV_TRUST_PROJECTS:-${CWM_TRUST_PROJECTS:-}}"
+@@ -339,6 +339,8 @@
    REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=1
  fi
  
@@ -9,7 +45,19 @@
  if [ $REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS -eq 1 ]; then
    SELFCONTAINED_LIBS="$REMOTE_DEV_SERVER_DIR/selfcontained/lib"
    if [ ! -d "$SELFCONTAINED_LIBS" ]; then
-@@ -568,3 +570,5 @@
+@@ -573,11 +544,6 @@
+ # Run the IDE.
+ # ---------------------------------------------------------------------
+
+-if [ $IS_DARWIN -ne 1 ]; then
+-  # will get a crash otherwise due to fontconfig paths being relative
+-  cd "$FONTS_CONFIGURATION_SOURCE_PATH" || exit 1
+-fi
+-
+ if [ $IS_DARWIN -eq 1 ]; then
+   LAUNCHER="$IDE_BIN_DIR/../MacOS/$IDE_SCRIPT_NAME"
+ else
+@@ -596,3 +570,5 @@
      "$LAUNCHER" "$STARTER_COMMAND" "$PROJECT_PATH" "$@"
      ;;
  esac
