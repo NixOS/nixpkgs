@@ -1,8 +1,8 @@
-{ options, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  inherit (lib) any attrValues concatMapStringsSep concatStrings
-    concatStringsSep flatten imap1 isList literalExpression mapAttrsToList
+  inherit (lib) attrValues concatMapStringsSep concatStrings
+    concatStringsSep flatten imap1 literalExpression mapAttrsToList
     mkEnableOption mkIf mkOption mkRemovedOptionModule optional optionalAttrs
     optionalString singleton types mkRenamedOptionModule nameValuePair
     mapAttrs' listToAttrs filter;
