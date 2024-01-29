@@ -21,7 +21,7 @@ buildPythonApplication rec {
     export RELEASE_VERSION=${version}
   '';
 
-  doCheck = false;
+  doCheck = false; # no tests included
 
   meta = with lib; {
     description = "Control Spotify playback on any device through the command line.";
