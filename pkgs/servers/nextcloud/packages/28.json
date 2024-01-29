@@ -99,16 +99,6 @@
       "agpl"
     ]
   },
-  "keeweb": {
-    "sha256": "0n60369g1vs90rhn8i5nmra7jxrz3m02y9k9pv4gylb3cdjcff8x",
-    "url": "https://github.com/jhass/nextcloud-keeweb/releases/download/v0.6.17/keeweb-0.6.17.tar.gz",
-    "version": "0.6.17",
-    "description": "Open Keepass stores inside Nextcloud with Keeweb just by clicking on an *.kdbx file in your Nextcloud.\n        \n💀 KeeWeb itself not actively maintained since 2021 and may contain security issues 💀 Please move to an actively maintained developed app like Passman or Passwords.",
-    "homepage": "https://github.com/jhass/nextcloud-keeweb",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "mail": {
     "sha256": "15268xavb4wpkc12anz6wiry87hvy55nf141lc660wr22iivy79r",
     "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.5/mail-v3.5.5.tar.gz",
