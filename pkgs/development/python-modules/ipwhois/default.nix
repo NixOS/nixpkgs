@@ -35,6 +35,8 @@ buildPythonPackage rec {
     })
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonRelaxDeps = [
     "dnspython"
   ];
