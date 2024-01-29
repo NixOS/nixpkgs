@@ -14282,6 +14282,8 @@ self: super: with self; {
 
   tern = callPackage ../development/python-modules/tern { };
 
+  tesla-fleet-api = callPackage ../development/python-modules/tesla-fleet-api { };
+
   tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
 
   tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
