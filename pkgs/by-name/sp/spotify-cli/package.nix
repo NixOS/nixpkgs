@@ -1,6 +1,6 @@
-{ lib, python3Packages, fetchFromGitHub, buildPythonApplication }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "spotify-cli";
   version = "0.3.12";
 

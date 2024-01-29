@@ -13483,10 +13483,6 @@ with pkgs;
 
   spotdl = callPackage ../tools/audio/spotdl { };
 
-  spotify-cli = callPackage ../by-name/sp/spotify-cli/package.nix {
-    inherit (python3Packages) buildPythonApplication;
-  };
-
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   squashfs-tools-ng = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/squashfs-tools-ng { };
