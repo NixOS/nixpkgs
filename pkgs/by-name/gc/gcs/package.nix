@@ -13,21 +13,28 @@
 , mupdf
 , fontconfig
 , freetype
+, stdenv
+, darwin
 , nix-update-script
 }:
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.20.3";
+  version = "5.20.4";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
     rev = "v${version}";
-    hash = "sha256-BdoKyK+V/lMp27CorUWjilZDZzFiv9z7kyq3wWVehzk=";
+    hash = "sha256-aoU2wRz2XB6+3e6am/dLjRbcDmWTjtDtTBwc6c4n3DE=";
   };
 
-  vendorHash = "sha256-Y5iyOMOtfGnJjxv2qLIOAMJmv6eqBsIFe870SyX/jtA=";
+  modPostBuild = ''
+    chmod +w vendor/github.com/richardwilkes/pdf
+    sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
+  '';
+
+  vendorHash = "sha256-ee6qvwnUXtsBcovPOORfVpdndICtIUYe4GrP52V/P3k=";
 
   nativeBuildInputs = [ pkg-config moreutils ];
 
@@ -42,16 +49,20 @@ buildGoModule rec {
     mupdf
     fontconfig
     freetype
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Carbon
+    darwin.apple_sdk_11_0.frameworks.Cocoa
+    darwin.apple_sdk_11_0.frameworks.Kernel
   ];
-
-  preBuild = ''
-    chmod +w vendor/github.com/richardwilkes/pdf
-    sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
-  '';
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
   flags = [ "-a -trimpath" ];
   ldflags = [ "-s" "-w" "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}" ];
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
+  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -69,5 +80,7 @@ buildGoModule rec {
     mainProgram = "gcs";
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # incompatible vendor/github.com/richardwilkes/unison/internal/skia/libskia_linux.a
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
