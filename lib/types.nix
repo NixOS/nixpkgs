@@ -157,7 +157,7 @@ rec {
       # If it doesn't, this should be {}
       # This may be used when a value is required for `mkIf false`. This allows the extra laziness in e.g. `lazyAttrsOf`.
       emptyValue ? {}
-    , # Return a flat list of sub-options.  Used to generate
+    , # Return a flat attrset of sub-options.  Used to generate
       # documentation.
       getSubOptions ? prefix: {}
     , # List of modules if any, or null if none.
