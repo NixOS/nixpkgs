@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fuse, fuse3, bzip2, zlib, attr, cmake }:
 
 stdenv.mkDerivation {
-  pname = "apfs-fuse-unstable";
-  version = "2023-01-04";
+  pname = "apfs-fuse";
+  version = "unstable-2023-01-04";
 
   src = fetchFromGitHub {
     owner  = "sgan81";
@@ -37,8 +37,8 @@ stdenv.mkDerivation {
     homepage    = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";
     license     = licenses.gpl2Plus;
+    mainProgram = "apfs-fuse";
     maintainers = with maintainers; [ ealasu ];
     platforms   = platforms.unix;
   };
-
 }
