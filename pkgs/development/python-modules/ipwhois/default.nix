@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "secynic";
-    repo = pname;
+    repo = "ipwhois";
     rev = "refs/tags/v${version}";
     hash = "sha256-2CfRRHlIIaycUtzKeMBKi6pVPeBCb1nW3/1hoxQU1YM=";
   };
@@ -65,6 +65,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "ipwhois/tests/online/"
+    # Stress test
+    "ipwhois/tests/stress/test_experimental.py"
   ];
 
   disabledTests = [
