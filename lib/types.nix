@@ -644,7 +644,8 @@ rec {
       in
       mkOptionType {
         name = "attrTag";
-        description = "attribute-tagged union of ${choicesStr}";
+        description = "attribute-tagged union";
+        descriptionClass = "noun";
         getSubOptions = prefix:
           mapAttrs
             (tagName: tagOption: {
