@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-qk4OSws/6SevN/Q0lsyxw+fZkm2uy1WwOYYL7CB7QUk=";  # Replace with the correct sha256
   };
 
-  vendorHash = null; 
+  vendorHash = null;
 
   meta = with lib; {
     homepage = "https://github.com/mgmeyers/pdfannots2json";
