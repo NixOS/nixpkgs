@@ -39,6 +39,9 @@ in
           yay = mkOption {
             type = types.int;
           };
+          extensible = mkOption {
+            type = types.enum [ "foo" ];
+          };
         }
       );
     };
@@ -71,6 +74,9 @@ in
             nay = mkOption {
               type = types.bool;
             };
+            extensible = mkOption {
+              type = types.enum [ "bar" ];
+            };
           }
         );
       };
@@ -89,11 +95,15 @@ in
     nested.right.left = "not a number";
     merged.negative.nay = false;
     merged.positive.yay = 100;
+    merged.extensi-foo.extensible = "foo";
+    merged.extensi-bar.extensible = "bar";
     okChecks =
       assert config.intStrings.hello.right == "hello world";
       assert config.intStrings.numberOne.left == 1;
       assert config.merged.negative.nay == false;
       assert config.merged.positive.yay == 100;
+      assert config.merged.extensi-foo.extensible == "foo";
+      assert config.merged.extensi-bar.extensible == "bar";
       # assert lib.foldl' (a: b: builtins.trace b a) true (lib.attrNames config.docs);
       assert config.docs."submodules.<name>.foo.bar".type == "signed integer";
       assert config.docs."submodules.<name>.qux".type == "string";
