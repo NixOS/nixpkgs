@@ -667,7 +667,28 @@ rec {
               }
             else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
         nestedTypes = tags;
-        functor = (defaultFunctor "attrTagWith") // { payload = { inherit tags; }; binOp = a: b: { tags = a.tags // b.tags; }; };
+        functor = (defaultFunctor "attrTagWith") // {
+          payload = { inherit tags; };
+          binOp =
+            let
+              # Add metadata in the format that submodules work with
+              wrapOptionDecl =
+                option: { options = option; _file = "<attrTag {...}>"; pos = null; };
+            in
+            a: b: {
+              tags = a.tags // b.tags //
+                mapAttrs
+                  (tagName: bOpt:
+                    lib.mergeOptionDecls
+                      # FIXME: loc is not accurate; should include prefix
+                      #        Fortunately, it's only used for error messages, where a "relative" location is kinda ok.
+                      #        It is also returned though, but use of the attribute seems rare?
+                      [tagName]
+                      [ (wrapOptionDecl a.tags.${tagName}) (wrapOptionDecl bOpt) ]
+                  )
+                  (builtins.intersectAttrs a.tags b.tags);
+          };
+        };
       };
 
     uniq = unique { message = ""; };
