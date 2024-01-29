@@ -7,6 +7,7 @@
 let
   cfg = config.programs.regreet;
   settingsFormat = pkgs.formats.toml { };
+  user = config.services.greetd.settings.default_session.user;
 in
 {
   options.programs.regreet = {
@@ -25,7 +26,10 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs [ "greetd" "regreet" ] { };
+    package = lib.mkPackageOption pkgs [
+      "greetd"
+      "regreet"
+    ] { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
@@ -157,14 +161,19 @@ in
       "greetd/regreet.css" =
         if lib.isPath cfg.extraCss then { source = cfg.extraCss; } else { text = cfg.extraCss; };
 
-      "greetd/regreet.toml".source = settingsFormat.generate "regreet.toml" cfg.settings;
+      "greetd/regreet.toml".source =
+        if lib.isPath cfg.settings then
+          cfg.settings
+        else
+          settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
     systemd.tmpfiles.settings."10-regreet" =
       let
         defaultConfig = {
-          user = "greeter";
-          group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
+          inherit user;
+          group =
+            if config.users.users.${user}.group != "" then config.users.users.${user}.group else "greeter";
           mode = "0755";
         };
         dataDir =
@@ -177,5 +186,12 @@ in
         "/var/log/regreet".d = defaultConfig;
       }
       // dataDir;
+
+    assertions = [
+      {
+        assertion = (config.users.users.${user} or { }) != { };
+        message = "regreet: user ${user} does not exist. Please create it before referencing it.";
+      }
+    ];
   };
 }
