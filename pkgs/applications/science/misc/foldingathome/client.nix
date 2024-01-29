@@ -45,7 +45,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/{bin,share/feh-client}
+      mkdir -p $out/{bin,share/applications}
 
       cp fah-client $out/bin/fah-client
 
