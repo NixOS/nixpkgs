@@ -107,6 +107,7 @@ in
       # assert lib.foldl' (a: b: builtins.trace b a) true (lib.attrNames config.docs);
       assert config.docs."submodules.<name>.foo.bar".type == "signed integer";
       assert config.docs."submodules.<name>.qux".type == "string";
+      assert lib.length config.docs."merged.<name>.extensible".declarations == 2;
       true;
   };
 }
