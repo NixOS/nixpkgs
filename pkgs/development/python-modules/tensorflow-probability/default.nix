@@ -54,7 +54,7 @@ let
     LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-1iO/eXz1wvSIRTmGuGZDF9VeDVTiWYnjw0Cby4n/6HM=";
+      sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";
     };
 
     buildAttrs = {
@@ -75,7 +75,8 @@ let
       '';
     };
   };
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit version pname;
   format = "wheel";
 
