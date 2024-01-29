@@ -6,6 +6,9 @@
 , joblib
 , llvmlite
 , numba
+, scikit-learn
+, scipy
+, setuptools
 , pytestCheckHook
 , pythonOlder
 , scikit-learn
@@ -15,7 +18,7 @@
 buildPythonPackage rec {
   pname = "pynndescent";
   version = "0.5.11";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -23,6 +26,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-b0TO2dWp2iyH2bL/8wu1MIVAwGV2BeTVzeftMnW7rVA=";
   };
+
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     joblib
@@ -36,16 +44,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # numpy.core._exceptions._UFuncNoLoopError
-    "test_sparse_nn_descent_query_accuracy_angular"
-    "test_nn_descent_query_accuracy_angular"
-    "test_alternative_distances"
-    # scipy: ValueError: Unknown Distance Metric: wminkowski
-    # https://github.com/scikit-learn/scikit-learn/pull/21741
-    "test_weighted_minkowski"
   ];
 
   pythonImportsCheck = [
