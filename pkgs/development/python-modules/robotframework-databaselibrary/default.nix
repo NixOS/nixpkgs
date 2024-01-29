@@ -3,6 +3,7 @@
 , fetchPypi
 , setuptools
 , robotframework
+, robotframework-excellib
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     robotframework
+    robotframework-excellib
   ];
 
   # unit tests are impure
