@@ -20443,6 +20443,12 @@
     githubId = 13489144;
     name = "Calle Rosenquist";
   };
+  xbz = {
+    email = "renatochavez7@gmail.com";
+    github = "Xbz-24";
+    githubId = 68678258;
+    name = "Renato German Chavez Chicoma";
+  };
   xddxdd = {
     email = "b980120@hotmail.com";
     github = "xddxdd";
