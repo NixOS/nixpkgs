@@ -148,6 +148,12 @@ rec {
       env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
       dontStrip = true;
       outputs = [ "out" ];
+      configurePhase = ''
+        HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+        emconfigure ./configure --prefix=$out --static
+      '';
       buildPhase = ''
         emmake make
       '';
