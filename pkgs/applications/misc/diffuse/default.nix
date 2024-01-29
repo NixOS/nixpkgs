@@ -10,6 +10,7 @@
 , python3
 , atk
 , gtk3
+, hicolor-icon-theme
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -56,6 +57,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # to avoid running gtk-update-icon-cache, update-desktop-database and glib-compile-schemas
   DESTDIR = "/";
+
+  makeWrapperArgs = [
+      "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
+  ];
 
   passthru = {
     updateScript = gitUpdater {
