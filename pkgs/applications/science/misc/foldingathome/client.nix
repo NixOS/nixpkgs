@@ -49,7 +49,6 @@ let
 
       cp fah-client $out/bin/fah-client
 
-      mkdir -p $out/share/applications
       cp install/lin/fah-client.desktop.in $out/share/applications/fah-client.desktop
       sed \
         -e "s|Icon=.*|Icon=$out/share/feh-client/images/fahlogo.png|g" \
