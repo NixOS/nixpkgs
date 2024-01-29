@@ -21147,7 +21147,7 @@ with pkgs;
 
   fbthrift = darwin.apple_sdk_11_0.callPackage ../development/libraries/fbthrift { };
 
-  fb303 = callPackage ../development/libraries/fb303 { };
+  fb303 = darwin.apple_sdk_11_0.callPackage ../development/libraries/fb303 { };
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
