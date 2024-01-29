@@ -4,8 +4,6 @@
 , fetchFromGitHub
 , gpgme
 , libgpg-error
-, libxcb
-, libxkbcommon
 , pkg-config
 , python3
 , AppKit
@@ -13,6 +11,7 @@
 , libiconv
 , libobjc
 , libresolv
+, x11Support ? true, libxcb, libxkbcommon
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,6 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     gpgme
     libgpg-error
+  ] ++ lib.optionals x11Support [
     libxcb
     libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin [
