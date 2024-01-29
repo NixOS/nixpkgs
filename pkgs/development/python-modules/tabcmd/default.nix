@@ -1,39 +1,69 @@
 { lib
+, appdirs
+, argparse
 , buildPythonPackage
-, python3
-, pythonOlder
+, doit
 , fetchPypi
 , ftfy
-, appdirs
+, mock
+, pyinstaller-versionfile
+, pytestCheckHook
+, python3
+, pythonOlder
 , requests
+, pythonRelaxDepsHook
+, setuptools
 , setuptools-scm
-, types-mock
+, tableauserverclient
 , types-appdirs
+, types-mock
 , types-requests
 , types-setuptools
-, argparse
-, doit
-, pyinstaller-versionfile
-, tableauserverclient
-, pytestCheckHook
-, mock
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "tabcmd";
   version = "2.0.12";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nsQJWDzSzSc1WRk5TBl/E7Mpfk8wGD1CsETAWILKxCM=";
+    hash = "sha256-nsQJWDzSzSc1WRk5TBl/E7Mpfk8wGD1CsETAWILKxCM=";
   };
 
-  propagatedBuildInputs = [ ftfy appdirs requests setuptools-scm types-mock types-appdirs argparse doit pyinstaller-versionfile types-requests types-setuptools tableauserverclient ];
+  pythonRelaxDeps = [
+    "tableauserverclient"
+    "urllib3"
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook mock ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    appdirs
+    argparse
+    doit
+    ftfy
+    pyinstaller-versionfile
+    requests
+    setuptools-scm
+    tableauserverclient
+    types-appdirs
+    types-mock
+    types-requests
+    types-setuptools
+    urllib3
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   # Remove an unneeded dependency that can't be resolved
   prePatch = ''
@@ -58,10 +88,11 @@ buildPythonPackage rec {
   '';
 
 
-  meta = {
+  meta = with lib; {
     description = "A command line client for working with Tableau Server.";
-    homepage = "https://pypi.org/project/tabcmd/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    homepage = "https://github.com/tableau/tabcmd";
+    changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

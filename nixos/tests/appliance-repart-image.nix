@@ -10,10 +10,6 @@ let
 
   imageId = "nixos-appliance";
   imageVersion = "1-rc1";
-
-  bootLoaderConfigPath = "/loader/entries/nixos.conf";
-  kernelPath = "/EFI/nixos/kernel.efi";
-  initrdPath = "/EFI/nixos/initrd.efi";
 in
 {
   name = "appliance-gpt-image";
@@ -54,19 +50,8 @@ in
               "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
                 "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
 
-              # TODO: create an abstraction for Boot Loader Specification (BLS) entries.
-              "${bootLoaderConfigPath}".source = pkgs.writeText "nixos.conf" ''
-                title NixOS
-                linux ${kernelPath}
-                initrd ${initrdPath}
-                options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-              '';
-
-              "${kernelPath}".source =
-                "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
-
-              "${initrdPath}".source =
-                "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+              "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
+                "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
             };
           repartConfig = {
             Type = "esp";
@@ -119,8 +104,6 @@ in
     assert 'IMAGE_VERSION="${imageVersion}"' in os_release
 
     bootctl_status = machine.succeed("bootctl status")
-    assert "${bootLoaderConfigPath}" in bootctl_status
-    assert "${kernelPath}" in bootctl_status
-    assert "${initrdPath}" in bootctl_status
+    assert "Boot Loader Specification Type #2 (.efi)" in bootctl_status
   '';
 }

@@ -195,7 +195,6 @@
   ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
-  ./programs/hyprland.nix
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/i3lock.nix
@@ -215,6 +214,7 @@
   ./programs/minipro.nix
   ./programs/miriway.nix
   ./programs/mosh.nix
+  ./programs/mouse-actions.nix
   ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
@@ -274,6 +274,7 @@
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/labwc.nix
+  ./programs/wayland/hyprland.nix
   ./programs/wayland/river.nix
   ./programs/wayland/sway.nix
   ./programs/wayland/waybar.nix
@@ -447,6 +448,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/surrealdb.nix
+  ./services/databases/tigerbeetle.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/ayatana-indicators.nix
@@ -507,7 +509,7 @@
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
   ./services/finance/odoo.nix
-  ./services/games/asf.nix
+  ./services/games/archisteamfarm.nix
   ./services/games/crossfire-server.nix
   ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
@@ -634,6 +636,7 @@
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
+  ./services/matrix/hebbot.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
@@ -833,6 +836,7 @@
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
   ./services/monitoring/riemann.nix
+  ./services/monitoring/rustdesk-server.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/snmpd.nix
@@ -1233,6 +1237,7 @@
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
   ./services/system/systembus-notify.nix
+  ./services/system/systemd-lock-handler.nix
   ./services/system/uptimed.nix
   ./services/system/zram-generator.nix
   ./services/torrent/deluge.nix
@@ -1469,6 +1474,7 @@
   ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
+  ./system/boot/uki.nix
   ./system/boot/unl0kr.nix
   ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
@@ -1489,6 +1495,7 @@
   ./system/boot/systemd/repart.nix
   ./system/boot/systemd/shutdown.nix
   ./system/boot/systemd/sysupdate.nix
+  ./system/boot/systemd/sysusers.nix
   ./system/boot/systemd/tmpfiles.nix
   ./system/boot/systemd/user.nix
   ./system/boot/systemd/userdbd.nix
@@ -1516,6 +1523,7 @@
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
+  ./tasks/filesystems/sshfs.nix
   ./tasks/filesystems/squashfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vboxsf.nix

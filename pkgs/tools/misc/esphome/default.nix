@@ -6,6 +6,8 @@
 , platformio
 , esptool
 , git
+, inetutils
+, stdenv
 }:
 
 let
@@ -17,14 +19,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.12.5";
+  version = "2023.12.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ajpYwquVyznIngZKcWxI9Pyiqf4VYcWtGFRZSpi6+3I=";
+    hash = "sha256-8SHf6cbPYPZctjJgIuEb7eOJVi5hWNONyRnMXK0iBXc=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -74,13 +76,18 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    # platformio is used in esphomeyaml/platformio_api.py
-    # esptool is used in esphomeyaml/__main__.py
-    # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    # platformio is used in esphome/platformio_api.py
+    # esptool is used in esphome/__main__.py
+    # git is used in esphome/writer.py
+    # inetutils is used in esphome/dashboard/status/ping.py
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
     "--prefix PYTHONPATH : $PYTHONPATH" # will show better error messages
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
+
+  # Needed for tests
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3Packages; [
     hypothesis

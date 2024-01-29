@@ -159,8 +159,8 @@ pub fn check_values(
                     let uses_by_name = match attribute_info {
                         // In these cases the package doesn't qualify for being in pkgs/by-name,
                         // so the UsesByName ratchet is already as tight as it can be
-                        NonAttributeSet => Success(Tight),
-                        NonCallPackage => Success(Tight),
+                        NonAttributeSet => Success(NonApplicable),
+                        NonCallPackage => Success(NonApplicable),
                         // This is the case when the `pkgs/by-name`-internal _internalCallByNamePackageFile
                         // is used for a package outside `pkgs/by-name`
                         CallPackage(CallPackageInfo {
@@ -176,14 +176,14 @@ pub fn check_values(
                             // In the future we could kind of abuse this behavior to have better
                             // enforcement of conditional aliases, but for now we just need to not
                             // give an error.
-                            Success(Tight)
+                            Success(NonApplicable)
                         }
                         // Only derivations can be in pkgs/by-name,
                         // so this attribute doesn't qualify
                         CallPackage(CallPackageInfo {
                             is_derivation: false,
                             ..
-                        }) => Success(Tight),
+                        }) => Success(NonApplicable),
 
                         // The case of an attribute that qualifies:
                         // - Uses callPackage
@@ -191,30 +191,35 @@ pub fn check_values(
                         CallPackage(CallPackageInfo {
                             is_derivation: true,
                             call_package_variant: Manual { path, empty_arg },
-                        }) => Success(Loose(ratchet::UsesByName {
+                        }) => Success(Loose(ratchet::CouldUseByName {
                             call_package_path: path,
                             empty_arg,
                         })),
                     };
                     uses_by_name.map(|x| ratchet::Package {
-                        empty_non_auto_called: Tight,
+                        manual_definition: Tight,
                         uses_by_name: x,
                     })
                 }
                 NonByName(EvalFailure) => {
-                    // This is a bit of an odd case: We don't even _know_ whether this attribute
-                    // would qualify for using pkgs/by-name. We can either:
-                    // - Assume it's not using pkgs/by-name, which has the problem that if a
-                    //   package evaluation gets broken temporarily, the fix can remove it from
-                    //   pkgs/by-name again
-                    // - Assume it's using pkgs/by-name already, which has the problem that if a
-                    //   package evaluation gets broken temporarily, fixing it requires a move to
-                    //   pkgs/by-name
-                    // We choose the latter, since we want to move towards pkgs/by-name, not away
-                    // from it
+                    // We don't know anything about this attribute really
                     Success(ratchet::Package {
-                        empty_non_auto_called: Tight,
-                        uses_by_name: Tight,
+                        // We'll assume that we can't remove any manual definitions, which has the
+                        // minimal drawback that if there was a manual definition that could've
+                        // been removed, fixing the package requires removing the definition, no
+                        // big deal, that's a minor edit.
+                        manual_definition: Tight,
+
+                        // Regarding whether this attribute could `pkgs/by-name`, we don't really
+                        // know, so return NonApplicable, which has the effect that if a
+                        // package evaluation gets broken temporarily, the fix can remove it from
+                        // pkgs/by-name again. For now this isn't our problem, but in the future we
+                        // might have another check to enforce that evaluation must not be broken.
+                        // The alternative of assuming that it's using `pkgs/by-name` already
+                        // has the problem that if a package evaluation gets broken temporarily,
+                        // fixing it requires a move to pkgs/by-name, which could happen more
+                        // often and isn't really justified.
+                        uses_by_name: NonApplicable,
                     })
                 }
                 ByName(Missing) => NixpkgsProblem::UndefinedAttr {
@@ -248,7 +253,7 @@ pub fn check_values(
 
                     check_result.and(match &call_package_variant {
                         Auto => Success(ratchet::Package {
-                            empty_non_auto_called: Tight,
+                            manual_definition: Tight,
                             uses_by_name: Tight,
                         }),
                         Manual { path, empty_arg } => {
@@ -261,11 +266,7 @@ pub fn check_values(
                             if correct_file {
                                 Success(ratchet::Package {
                                     // Empty arguments for non-auto-called packages are not allowed anymore.
-                                    empty_non_auto_called: if *empty_arg {
-                                        Loose(ratchet::EmptyNonAutoCalled)
-                                    } else {
-                                        Tight
-                                    },
+                                    manual_definition: if *empty_arg { Loose(()) } else { Tight },
                                     uses_by_name: Tight,
                                 })
                             } else {

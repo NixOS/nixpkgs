@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-JFd9Ka/96Y4nu2HnL/Waf5EBKb06+7rZdI72F8G472I=";
+    hash = "sha256-kMhmnIwdVix9DgijTcNf5fsm4jiqygxjOvgGNOGN4O8=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    speedup = [
+    speedups = [
       kasa-crypt
       orjson
     ];

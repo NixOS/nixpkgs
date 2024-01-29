@@ -9,6 +9,13 @@ in {
       enable = lib.mkEnableOption (
         lib.mdDoc "Server for local large language models"
       );
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
+        default = "127.0.0.1:11434";
+        description = lib.mdDoc ''
+          Specifies the bind address on which the ollama server HTTP interface listens.
+        '';
+      };
       package = lib.mkPackageOption pkgs "ollama" { };
     };
   };
@@ -23,6 +30,7 @@ in {
         environment = {
           HOME = "%S/ollama";
           OLLAMA_MODELS = "%S/ollama/models";
+          OLLAMA_HOST = cfg.listenAddress;
         };
         serviceConfig = {
           ExecStart = "${lib.getExe cfg.package} serve";

@@ -11,9 +11,10 @@
 }:
 
 let
+  tableVer = "20240108";
   table = fetchurl {
-    url = "https://download.fcitx-im.org/data/table.tar.gz";
-    sha256 = "1dw7mgbaidv3vqy0sh8dbfv8631d2zwv5mlb7npf69a1f8y0b5k1";
+    url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.gz";
+    hash = "sha256-cpxZbYaQfecnx00Pw/0kHEBsXevStMt07v4CI4funa4=";
   };
   arpaVer = "20230712";
   arpa = fetchurl {
@@ -28,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-cjlclemt4xsQcpmZ8CflN79QkOE4m07O4hLOQcLF1nA=";
+    hash = "sha256-AvlQOpjrHSifUtWSTft2bywlWhwka26VcqqReqAlcv8=";
     fetchSubmodules = true;
   };
 

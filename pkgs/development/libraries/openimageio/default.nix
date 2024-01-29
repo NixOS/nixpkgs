@@ -3,7 +3,6 @@
 , boost
 , cmake
 , giflib
-, ilmbase
 , libjpeg
 , libpng
 , libtiff
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     giflib
-    ilmbase
     libjpeg
     libpng
     libtiff

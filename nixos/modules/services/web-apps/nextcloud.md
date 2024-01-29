@@ -51,7 +51,7 @@ to ensure that changes can be applied by changing the module's options.
 In case the application serves multiple domains (those are checked with
 [`$_SERVER['HTTP_HOST']`](https://www.php.net/manual/en/reserved.variables.server.php))
 it's needed to add them to
-[`services.nextcloud.extraOptions.trusted_domains`](#opt-services.nextcloud.extraOptions.trusted_domains).
+[`services.nextcloud.settings.trusted_domains`](#opt-services.nextcloud.settings.trusted_domains).
 
 Auto updates for Nextcloud apps can be enabled using
 [`services.nextcloud.autoUpdateApps`](#opt-services.nextcloud.autoUpdateApps.enable).

@@ -345,7 +345,7 @@ let
     };
 
     video = {
-      DRM_LEGACY = no;
+      DRM_LEGACY = whenOlder "6.8" no;
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
@@ -379,6 +379,16 @@ let
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
+    };
+
+    # Enables Rust support in the Linux kernel. This is currently not enabled by default, because it occasionally requires
+    # patching the Linux kernel for the specific Rust toolchain in nixpkgs. These patches usually take a bit
+    # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
+    #
+    # Once Rust in the kernel has more users, we can reconsider enabling it by default.
+    rust = optionalAttrs ((features.rust or false) && versionAtLeast version "6.7") {
+      RUST = yes;
+      GCC_PLUGINS = no;
     };
 
     sound = {

@@ -30,6 +30,7 @@ runCommand testName {
         }
         package.meta;
   } ''
+    touch "$out"
     for moduleName in $moduleNames; do
       echo "checking pkg-config module $moduleName in $buildInputs"
       set +e

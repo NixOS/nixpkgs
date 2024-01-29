@@ -192,6 +192,7 @@ mapAliases ({
   grappelli_safe = grappelli-safe; # added 2023-10-08
   groestlcoin_hash = groestlcoin-hash; # added 2024-01-06
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
+  inherit (pkgs) gtimelog;
   guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
@@ -356,6 +357,7 @@ mapAliases ({
   pyramid_multiauth = pyramid-multiauth; # added 2023-08-24
   pyreadability = readability-lxml; # added 2022-05-24
   pyres = throw "pyres has been removed, since it is abandoned and broken"; # added 2023-06-20
+  pyRFC3339 = pyrfc3339; # added 2024-01-07
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ipdb = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
@@ -387,6 +389,7 @@ mapAliases ({
   pytestrunner = pytest-runner; # added 2021-01-04
   python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
+  python_openzwave = python-openzwave; # added 2024-01-07
   python-openzwave-mqtt = throw "python-openzwave was removed, as it was packaged as a dependency of home-assistant, which it is no longer."; # added 2024-01-05
   python_docs_theme = python-docs-theme; # added 2023-11-04
   python_fedora = python-fedora; # added 2023-11-15
@@ -421,17 +424,21 @@ mapAliases ({
   radio_beam = radio-beam; # added 2023-11-04
   ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
+  readme_renderer = readme-renderer; # added 2024-01-07
   recaptcha_client = throw "recaptcha_client has been removed since it is no longer maintained"; # added 2023-10-20
+  recursivePthLoader = recursive-pth-loader; # added 2024-01-07
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
-  retry_decorator = retry-decorator; # added 2024-01-07
-  retworkx = rustworkx; # added 2023-05-14
   repeated_test = repeated-test; # added 2022-11-15
   repoze_lru = repoze-lru; # added 2023-11-11
   repoze_sphinx_autointerface = repoze-sphinx-autointerface; # added 2023-11-11
   repoze_who = repoze-who; # added 2023-11-11
+  requests_download = requests-download; # added 2024-01-07
+  requests_ntlm = requests-ntlm; # added 2024-01-07
   requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
   restructuredtext_lint = restructuredtext-lint; # added 2023-11-04
+  retry_decorator = retry-decorator; # added 2024-01-07
+  retworkx = rustworkx; # added 2023-05-14
   rig = throw "rig has been removed because it was pinned to python 2.7 and 3.5, failed to build and is otherwise unmaintained"; # added 2022-11-28
   rl-coach = "rl-coach was removed because the project is discontinued and was archived by upstream"; # added 2023-05-03
   roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15

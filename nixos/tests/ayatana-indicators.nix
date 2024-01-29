@@ -27,9 +27,11 @@ in {
     services.ayatana-indicators = {
       enable = true;
       packages = with pkgs; [
+        ayatana-indicator-datetime
         ayatana-indicator-messages
       ] ++ (with pkgs.lomiri; [
         lomiri-indicator-network
+        telephony-service
       ]);
     };
 
@@ -42,6 +44,25 @@ in {
 
     networking.networkmanager.enable = true; # lomiri-network-indicator
     # TODO potentially urfkill for lomiri-network-indicator?
+
+    services.dbus.packages = with pkgs.lomiri; [
+      libusermetrics
+    ];
+
+    environment.systemPackages = with pkgs.lomiri; [
+      lomiri-schemas
+    ];
+
+    services.telepathy.enable = true;
+
+    users.users.usermetrics = {
+      group = "usermetrics";
+      home = "/var/lib/usermetrics";
+      createHome = true;
+      isSystemUser = true;
+    };
+
+    users.groups.usermetrics = { };
   };
 
   # TODO session indicator starts up in a semi-broken state, but works fine after a restart. maybe being started before graphical session is truly up & ready?
@@ -69,7 +90,7 @@ in {
 
     # Now check if all indicators were brought up successfully, and kill them for later
   '' + (runCommandOverAyatanaIndicators (service: let serviceExec = builtins.replaceStrings [ "." ] [ "-" ] service; in ''
-    machine.succeed("pgrep -f ${serviceExec}")
+    machine.succeed("pgrep -u ${user} -f ${serviceExec}")
     machine.succeed("pkill -f ${serviceExec}")
   '')) + ''
 

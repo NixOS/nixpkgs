@@ -320,9 +320,15 @@ in
       rustPlatform.cargoSetupHook
       rustPlatform.bindgenHook
     ];
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
     preBuild = ''
       cat ../.cargo/config > ext/fast_mmaped_file_rs/.cargo/config.toml
       sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+    '';
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
     '';
   };
 

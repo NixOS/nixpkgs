@@ -112,7 +112,6 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         useCcForLibs = true;
         gccForLibs = ccForLibs-wrapper.cc;
       };
-      cxxStdlibDir = ccForLibs-wrapper.cxxStdlib.solib or (throw "necessary to fix CI");
     in
     {
 
@@ -149,7 +148,6 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
 
           # Fix a compatible backend compiler
           PATH += ${lib.getBin cc}/bin:
-          LIBRARIES += "-L${cxxStdlibDir}/lib"
 
           # Expose the split-out nvvm
           LIBRARIES =+ -L''${!outputBin}/nvvm/lib

@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.2.1";
+  version = "10.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-BO7oQ4TVuZ4dCtROq2M24V6HVo0jzyBdQfb67dYA07U=";
+    hash = "sha256-oxhpaFW++on3eRXm0anXZDRo6g/X5IflTcZkFF8Kcps=";
   };
 
   nativeBuildInputs = [

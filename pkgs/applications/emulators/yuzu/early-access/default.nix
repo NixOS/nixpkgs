@@ -23,6 +23,7 @@ let
   '';
 
   rehydratedSrc = fetchgit {
+    name = "yuzu-ea-rehydrated";
     url = gitSrc;
     fetchSubmodules = true;
     hash = sources.fullHash;

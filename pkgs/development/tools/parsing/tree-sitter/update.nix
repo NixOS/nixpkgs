@@ -405,6 +405,10 @@ let
       orga = "szebniok";
       repo = "tree-sitter-wgsl";
     };
+    "tree-sitter-templ" = {
+      orga = "vrischmann";
+      repo = "tree-sitter-templ";
+    };
   };
 
   allGrammars =

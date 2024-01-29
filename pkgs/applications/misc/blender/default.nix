@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, libepoxy, libXi, libX11, libXext, libXrender
+, libepoxy, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ]
     ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
-    [ boost ffmpeg gettext glew ilmbase
+    [ boost ffmpeg gettext glew
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
       opencolorio openexr openimageio openjpeg python zlib zstd fftw fftwFloat jemalloc
       alembic
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       "-DOPTIX_ROOT_DIR=${optix}"
     ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}";
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.

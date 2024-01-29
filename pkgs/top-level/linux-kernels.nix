@@ -190,6 +190,8 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.rust_1_74
+        kernelPatches.rust_1_75
       ];
     };
 
@@ -201,6 +203,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.rust_1_75
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -257,6 +260,7 @@ in {
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_5_hardened = hardenedKernelFor kernels.linux_6_5 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
+    linux_6_7_hardened = hardenedKernelFor kernels.linux_6_7 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -458,6 +462,8 @@ in {
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
+    rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
+
     tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
@@ -630,6 +636,7 @@ in {
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_5_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_5_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
+    linux_6_7_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_7_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

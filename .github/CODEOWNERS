@@ -20,7 +20,7 @@
 
 # Libraries
 /lib                        @infinisil
-/lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
+/lib/systems                @alyssais @ericson2314
 /lib/generators.nix         @infinisil @Profpatsch
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
@@ -41,17 +41,17 @@
 /pkgs/top-level/stage.nix                        @Ericson2314
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
-/pkgs/stdenv/generic                             @Ericson2314 @amjoseph-nixpkgs
+/pkgs/stdenv/generic                             @Ericson2314
 /pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @piegamesde
-/pkgs/stdenv/cross                               @Ericson2314 @amjoseph-nixpkgs
-/pkgs/build-support/cc-wrapper                   @Ericson2314 @amjoseph-nixpkgs
+/pkgs/stdenv/cross                               @Ericson2314
+/pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
-/pkgs/pkgs-lib/formats/libconfig                 @ckiee
+/pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
@@ -84,7 +84,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /nixos/README.md @infinisil
 /pkgs/README.md @infinisil
 /maintainers/README.md @infinisil
-/maintainers/* @piegamesde @Janik-Haag
 
 # User-facing development documentation
 /doc/development.md @infinisil
@@ -158,7 +157,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # C compilers
-/pkgs/development/compilers/gcc @amjoseph-nixpkgs
+/pkgs/development/compilers/gcc
 /pkgs/development/compilers/llvm @RaitoBezarius
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
@@ -340,9 +339,6 @@ nixos/tests/zfs.nix                       @raitobezarius
 # Zig
 /pkgs/development/compilers/zig @figsoda
 /doc/hooks/zig.section.md       @figsoda
-
-# Linux Kernel
-pkgs/os-specific/linux/kernel/manual-config.nix   @amjoseph-nixpkgs
 
 # Buildbot
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
