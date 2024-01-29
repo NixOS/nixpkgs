@@ -617,6 +617,8 @@ self: super: with self; {
 
   aocd = callPackage ../development/python-modules/aocd { };
 
+  aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
+
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
@@ -12486,6 +12488,8 @@ self: super: with self; {
 
   recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
 
+  recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
@@ -12705,6 +12709,8 @@ self: super: with self; {
   rmcl = callPackage ../development/python-modules/rmcl { };
 
   rmrl = callPackage ../development/python-modules/rmrl { };
+
+  rmscene = callPackage ../development/python-modules/rmscene { };
 
   rmsd = callPackage ../development/python-modules/rmsd { };
 
@@ -13182,6 +13188,8 @@ self: super: with self; {
 
   sharkiq = callPackage ../development/python-modules/sharkiq { };
 
+  sharp-aquos-rc = callPackage ../development/python-modules/sharp-aquos-rc { };
+
   shazamio = callPackage ../development/python-modules/shazamio { };
 
   sh = callPackage ../development/python-modules/sh { };
@@ -13271,6 +13279,10 @@ self: super: with self; {
   simplepush = callPackage ../development/python-modules/simplepush { };
 
   simplesat = callPackage ../development/python-modules/simplesat { };
+
+  simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3/python.nix {
+    inherit (pkgs) simple-dftd3;
+  };
 
   simple-di = callPackage ../development/python-modules/simple-di { };
 

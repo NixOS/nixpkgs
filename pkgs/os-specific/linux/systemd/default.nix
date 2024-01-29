@@ -217,32 +217,33 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-eb8a86fee9eeae787cc0a58ef2ed087fd48d93eb.tar.gz";
-        sha256 = "tE2KpXLvOknIpEZFdOnNxvBmDvZrra3kvQp9tKxa51c=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-6fdf03bd950e55ef7881041606f6e76141033716.tar.gz";
+        sha256 = "/+9aJdOxBY8Y4vJPftOCxmyK8L2nvR82KmJxil1a2aY=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
-      (musl-patches + "/0001-Adjust-for-musl-headers.patch")
-      (musl-patches + "/0005-pass-correct-parameters-to-getdents64.patch")
-      (musl-patches + "/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
-      (musl-patches + "/0009-missing_type.h-add-comparison_fn_t.patch")
-      (musl-patches + "/0010-add-fallback-parse_printf_format-implementation.patch")
-      (musl-patches + "/0011-src-basic-missing.h-check-for-missing-strndupa.patch")
-      (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
-      (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
-      (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
-      (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
-      (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
-      (musl-patches + "/0019-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-      (musl-patches + "/0020-avoid-redefinition-of-prctl_mm_map-structure.patch")
-      (musl-patches + "/0021-do-not-disable-buffer-in-writing-files.patch")
-      (musl-patches + "/0022-Handle-__cpu_mask-usage.patch")
-      (musl-patches + "/0023-Handle-missing-gshadow.patch")
-      (musl-patches + "/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0028-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
-      (musl-patches + "/0029-shared-Do-not-use-malloc_info-on-musl.patch")
+      (musl-patches + "/0017-Adjust-for-musl-headers.patch")
+      (musl-patches + "/0016-pass-correct-parameters-to-getdents64.patch")
+      (musl-patches + "/0018-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0001-missing_type.h-add-comparison_fn_t.patch")
+      (musl-patches + "/0002-add-fallback-parse_printf_format-implementation.patch")
+      (musl-patches + "/0003-src-basic-missing.h-check-for-missing-strndupa.patch")
+      (musl-patches + "/0004-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
+      (musl-patches + "/0005-add-missing-FTW_-macros-for-musl.patch")
+      (musl-patches + "/0006-Use-uintmax_t-for-handling-rlim_t.patch")
+      (musl-patches + "/0007-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
+      (musl-patches + "/0008-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
+      (musl-patches + "/0009-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
+      (musl-patches + "/0010-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
+      (musl-patches + "/0011-avoid-redefinition-of-prctl_mm_map-structure.patch")
+      (musl-patches + "/0012-do-not-disable-buffer-in-writing-files.patch")
+      (musl-patches + "/0013-Handle-__cpu_mask-usage.patch")
+      (musl-patches + "/0014-Handle-missing-gshadow.patch")
+      (musl-patches + "/0015-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
+      (musl-patches + "/0020-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
+      (musl-patches + "/0021-shared-Do-not-use-malloc_info-on-musl.patch")
+      (musl-patches + "/0022-avoid-missing-LOCK_EX-declaration.patch")
     ]
   );
 

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "23.9.1";
+  version = "23.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-E9efhgMGN9lvMlFeZqo6xco75TtQsXULOzKX00pjqMM=";
+    sha256 = "sha256-NeJGkqGpg2uOsz10gEYz/nzh21DhXSU4RgQtI1brASQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -26,7 +26,9 @@ python3.pkgs.buildPythonApplication rec {
     plotly
     prettytable
     prompt-toolkit
+    r2pipe
     rzpipe
+    setuptools
     tqdm
   ];
 

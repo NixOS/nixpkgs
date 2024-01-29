@@ -13,6 +13,7 @@
 , pyyaml
 , rich
 , typer
+, tomli-w
 }:
 
 buildPythonPackage rec {
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     pyyaml
     rich
     typer
+    tomli-w
   ];
 
   pythonImportsCheck = [
