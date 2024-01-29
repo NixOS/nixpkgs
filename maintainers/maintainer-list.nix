@@ -1904,6 +1904,12 @@
     githubId = 1217745;
     name = "Aldwin Vlasblom";
   };
+  averagebit = {
+    email = "averagebit@pm.me";
+    github = "averagebit";
+    githubId = 97070581;
+    name = "averagebit";
+  };
   averelld = {
     email = "averell+nixos@rxd4.com";
     github = "averelld";
