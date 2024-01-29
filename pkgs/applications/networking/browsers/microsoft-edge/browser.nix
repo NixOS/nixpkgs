@@ -143,6 +143,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/doc
     rm -rf $out/opt/microsoft/${shortName}/cron
 
+    chmod 4755 $out/opt/microsoft/msedge/msedge-sandbox
+
     for icon in '16' '24' '32' '48' '64' '128' '256'
     do
       ${ "icon_source=$out/opt/microsoft/${shortName}/product_logo_\${icon}${iconSuffix}.png" }
