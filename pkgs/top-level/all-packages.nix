@@ -14522,7 +14522,7 @@ with pkgs;
 
   watchlog = callPackage ../tools/misc/watchlog { };
 
-  watchman = callPackage ../development/tools/watchman {
+  watchman = darwin.apple_sdk_11_0.callPackage ../development/tools/watchman {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
   };
 
