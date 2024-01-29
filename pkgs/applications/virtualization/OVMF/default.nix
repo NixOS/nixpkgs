@@ -1,7 +1,7 @@
 { stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
 , csmSupport ? false, seabios
 , fdSize2MB ? csmSupport
-, fdSize4MB ? false
+, fdSize4MB ? secureBoot
 , secureBoot ? false
 , systemManagementModeRequired ? secureBoot && stdenv.hostPlatform.isx86
 , httpSupport ? false
