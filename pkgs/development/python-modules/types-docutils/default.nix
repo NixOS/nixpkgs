@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-docutils";
-  version = "0.20.0.20240125";
+  version = "0.20.0.20240126";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-r3YOMR2Jrz+PtiVD6FCZ1v2dwDttGjva9mlXNnXVitg=";
+    hash = "sha256-zFp+7UY6CZH44K/7/een2JoxopbmhzLLOzHPLLRO6o0=";
   };
 
   nativeBuildInputs = [
