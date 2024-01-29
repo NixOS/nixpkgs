@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "frigidaire";
-  version = "0.18.13";
+  version = "0.18.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bm1549";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FikBV4KjutQfupGPXcVT1h+BfQ099WRrmbrEJOaVCQI=";
+    hash = "sha256-5+epdQyeTGJp8iTrX6vyp4JgM45Fl5cb67Z8trNBe+8=";
   };
 
   postPatch = ''
