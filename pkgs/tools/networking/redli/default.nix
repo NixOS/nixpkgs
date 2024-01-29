@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "redli";
-  version = "0.7.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "IBM-Cloud";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AeIGlRsUWK6q0GJJFmvJwpuGy312VPsMhkxMqDDzay4=";
+    hash = "sha256-Tux4GsYG3DlJoV10Ahb+X+8mpkchLchbh+PCgRD0kUA=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "A humane alternative to the Redis-cli and TLS";

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "fasttext-predict";
-  version = "0.9.2.1";
+  version = "0.9.2.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iSCt54tqBmNfrcntDFRXb550607Zr1mMCO2PC1ZbVQw=";
+    hash = "sha256-rMbf09pCHvVYI9g/aq74+PcsuU2LezpmDz4b/w9vRyc=";
   };
 
   nativeBuildInputs = [

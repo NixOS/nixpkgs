@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchFromGitHub
 , substituteAll
-, rust
 , stdenv
 }:
 
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     # patch the binary path so tests can find the binary when `--target` is present
     (substituteAll {
       src = ./fix-test-binary-path.patch;
-      shortTarget = rust.toRustTarget stdenv.hostPlatform;
+      shortTarget = stdenv.hostPlatform.rust.rustcTarget;
     })
   ];
 

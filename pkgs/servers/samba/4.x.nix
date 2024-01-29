@@ -27,6 +27,7 @@
 , tdb
 , tevent
 , libxcrypt
+, libxcrypt-legacy
 , cmocka
 , rpcsvc-proto
 , bash
@@ -49,13 +50,22 @@
 
 with lib;
 
+let
+  # samba-tool requires libxcrypt-legacy algorithms
+  python = python3Packages.python.override {
+    libxcrypt = libxcrypt-legacy;
+  };
+  wrapPython = python3Packages.wrapPython.override {
+    inherit python;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.17.7";
+  version = "4.19.4";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-lcnBa2VKiM+u/ZWAUt1XPi+F7N8RTk7Owxh1N6CU2Rk=";
+    hash = "sha256-QCbZO4ZtsZjIyhaFsPXVJ5P2XG5jyzZBY69mH9/wlow=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -93,8 +103,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash
-    python3Packages.wrapPython
-    python3Packages.python
+    wrapPython
+    python
     readline
     popt
     dbus
@@ -165,7 +175,7 @@ stdenv.mkDerivation rec {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  pythonPath = [ python3Packages.dnspython tdb ];
+  pythonPath = [ python3Packages.dnspython python3Packages.markdown tdb ];
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -208,7 +218,7 @@ stdenv.mkDerivation rec {
     # Samba does its own shebang patching, but uses build Python
     find $out/bin -type f -executable | while read file; do
       isScript "$file" || continue
-      sed -i 's^${lib.getBin buildPackages.python3Packages.python}/bin^${lib.getBin python3Packages.python}/bin^' "$file"
+      sed -i 's^${lib.getBin buildPackages.python3Packages.python}^${lib.getBin python}^' "$file"
     done
   '';
 

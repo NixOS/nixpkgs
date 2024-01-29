@@ -7,15 +7,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "django_celery_results";
-  version = "2.4.0";
+  pname = "django-celery-results";
+  version = "2.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dapRlw21aRy/JCxqD/UMjN9BniZc0Om3cjNdBkNsS5k=";
+    pname = "django_celery_results";
+    inherit version;
+    hash = "sha256-PstxR/dz800DgbrGJGM3zkz4ii6nuCd07UjlGLZ7uP0=";
   };
 
   postPatch = ''
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Celery result back end with django";
     homepage = "https://github.com/celery/django-celery-results";
+    changelog = "https://github.com/celery/django-celery-results/blob/v{version}/Changelog";
     license = licenses.bsd3;
     maintainers = with maintainers; [ babariviere ];
   };

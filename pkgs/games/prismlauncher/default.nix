@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, canonicalize-jars-hook
 , cmake
 , cmark
+, Cocoa
 , ninja
 , jdk17
 , zlib
@@ -13,41 +15,52 @@
 , ghc_filesystem
 , gamemode
 , msaClientID ? null
-, gamemodeSupport ? true
+, gamemodeSupport ? stdenv.isLinux
+,
 }:
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
-    rev = "2203af7eeb48c45398139b583615134efd8d407f";
-    sha256 = "sha256-TvVOjkUobYJD9itQYueELJX3wmecvEdCbJ0FinW2mL4=";
+    rev = "a5e8fd52b8bf4ab5d5bcc042b2a247867589985f";
+    hash = "sha256-A5kTgICnx+Qdq3Fir/bKTfdTt/T1NQP2SC+nhN1ENug=";
   };
 in
-stdenv.mkDerivation rec {
+
+assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is only available on Linux";
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "7.1";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
-    rev = version;
-    sha256 = "sha256-ri4oaeJKmvjJapUASPX10nl4JcLPjA3SgTp2EyaEPWg=";
+    rev = finalAttrs.version;
+    hash = "sha256-WBajtfj3qAMq8zd2S53CQyHiyqtvffLOHOjmOpdALAA=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja ];
-  buildInputs = [
-    qtbase
-    zlib
-    quazip
-    ghc_filesystem
-    tomlplusplus
-    cmark
-  ] ++ lib.optional gamemodeSupport gamemode;
+  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja canonicalize-jars-hook ];
+  buildInputs =
+    [
+      qtbase
+      zlib
+      quazip
+      ghc_filesystem
+      tomlplusplus
+      cmark
+    ]
+    ++ lib.optional gamemodeSupport gamemode
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = lib.optionals stdenv.isLinux [ "pie" ];
 
-  cmakeFlags = lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
-    ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ];
+  cmakeFlags = [
+    # downstream branding
+    "-DLauncher_BUILD_PLATFORM=nixpkgs"
+  ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
+  ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
+  ++ lib.optionals stdenv.isDarwin [ "-DINSTALL_BUNDLE=nodeps" "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''" ];
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
@@ -56,7 +69,8 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
+    mainProgram = "prismlauncher";
     homepage = "https://prismlauncher.org/";
     description = "A free, open source launcher for Minecraft";
     longDescription = ''
@@ -64,9 +78,9 @@ stdenv.mkDerivation rec {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = platforms.linux;
-    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minion3665 Scrumplex getchoo ];
+    platforms = with lib.platforms; linux ++ darwin;
+    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ minion3665 Scrumplex getchoo ];
   };
-}
+})

@@ -1,14 +1,14 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "autocorrect";
-  version = "2.6.2";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "huacnlee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QHQQrUQCfDAlAtDcfrAkOwRhQkO+HcwnPfJ5+jb1290=";
+    sha256 = "sha256-NCDJoKOH4ZaXtGXZ7bgOXrjgrY8Edui+EOOI8/yfW08=";
   };
 
   cargoLock = {
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     cp ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   cargoBuildFlags = [ "-p" "autocorrect-cli" ];
   cargoTestFlags = [ "-p" "autocorrect-cli" ];

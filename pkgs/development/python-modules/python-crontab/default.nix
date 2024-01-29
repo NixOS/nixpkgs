@@ -4,19 +4,24 @@
 , python-dateutil
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "2.7.1";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-shr0ZHx7u4SP7y8CBhbGsCidy5+UtPmRpVMQ/5vsV0k=";
+    hash = "sha256-eft0ZQOd39T7k9By1u4NRcGsi/FZfwaG6hT9Q2Hbo3k=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-dateutil
@@ -30,6 +35,9 @@ buildPythonPackage rec {
     "test_07_non_posix_shell"
     # doctest that assumes /tmp is writeable, awkward to patch
     "test_03_usage"
+    # Test is assuming $CURRENT_YEAR is not a leap year
+    "test_19_frequency_at_month"
+    "test_20_frequency_at_year"
   ];
 
   pythonImportsCheck = [

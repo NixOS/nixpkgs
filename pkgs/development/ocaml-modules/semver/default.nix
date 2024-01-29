@@ -1,29 +1,19 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild }:
+{ lib, fetchurl, buildDunePackage, ocaml, alcotest }:
 
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
-  "semver is not available on OCaml older than 4.02"
-
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-semver";
-  version = "0.1.0";
-  src = fetchzip {
-    url = "https://github.com/rgrinberg/ocaml-semver/archive/v${version}.tar.gz";
-    sha256 = "sha256-0BzeuVTpuRIQjadGg08hTvMzZtKCl2utW2YK269oETk=";
+buildDunePackage rec {
+  pname = "semver";
+  version = "0.2.1";
+  src = fetchurl {
+    url = "https://github.com/rgrinberg/ocaml-semver/releases/download/${version}/semver-${version}.tbz";
+    hash = "sha256-CjzDUtoe5Hvt6zImb+EqVIulRUUUQd9MmuJ4BH/2mLg=";
   };
 
-  nativeBuildInputs = [
-    ocaml
-    findlib
-    ocamlbuild
-  ];
-
-  strictDeps = true;
-  createFindlibDestdir = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ alcotest ];
 
   meta = {
     homepage = "https://github.com/rgrinberg/ocaml-semver";
     description = "Semantic versioning module";
-    platforms = ocaml.meta.platforms;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

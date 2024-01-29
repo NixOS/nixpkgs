@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "agent-py";
   version = "0.0.23";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

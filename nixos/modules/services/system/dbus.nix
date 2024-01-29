@@ -22,7 +22,7 @@ in
   options = {
 
     boot.initrd.systemd.dbus = {
-      enable = mkEnableOption (lib.mdDoc "dbus in stage 1") // { visible = false; };
+      enable = mkEnableOption (lib.mdDoc "dbus in stage 1");
     };
 
     services.dbus = {
@@ -95,6 +95,7 @@ in
         uid = config.ids.uids.messagebus;
         description = "D-Bus system message bus daemon user";
         home = homeDir;
+        homeMode = "0755";
         group = "messagebus";
       };
 
@@ -184,6 +185,11 @@ in
         aliases = [
           "dbus.service"
         ];
+        unitConfig = {
+          # We get errors when reloading the dbus-broker service
+          # if /tmp got remounted after this service started
+          RequiresMountsFor = [ "/tmp" ];
+        };
         # Don't restart dbus. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [

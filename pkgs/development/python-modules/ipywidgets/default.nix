@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "8.0.6";
+  version = "8.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3n13nyBF1g3p9sJfZT/a4tuleJjmoShElLO6ILaJO7g=";
+    hash = "sha256-QCEe+1Vq3sb6RQzMKnfVnKRKBg9PnxNoM99ZyfU45ug=";
   };
 
   propagatedBuildInputs = [

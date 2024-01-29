@@ -8,16 +8,19 @@
 , stdenv
 , mono
 }:
+let
+  mainProgram = "EventStore.ClusterNode";
+in
 
 buildDotnetModule rec {
   pname = "EventStore";
-  version = "22.10.2";
+  version = "23.6.0";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "sha256-CYI1VE+6bR3UFx98IquS8rgucKmQqcHh74Jf/9CGE0k=";
+    sha256 = "sha256-+Wxm6yusaCoqXIbsi0ZoALAviKUyNMQwbzsQtBK/PCo=";
     leaveDotGit = true;
   };
 
@@ -31,7 +34,7 @@ buildDotnetModule rec {
 
   runtimeDeps = [ mono ];
 
-  executables = [ "EventStore.ClusterNode" ];
+  executables = [ mainProgram ];
 
   # This test has a problem running on macOS
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -76,5 +79,6 @@ buildDotnetModule rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ puffnfresh mdarocha ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    inherit mainProgram;
   };
 }

@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     itstool
     wrapGAppsHook
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -72,7 +73,6 @@ stdenv.mkDerivation rec {
     brasero
     grilo
 
-    gobject-introspection
     python3.pkgs.pygobject3
 
     gst_all_1.gstreamer
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "${python3.pkgs.pygobject3}/${python3.sitePackages}:$out/lib/rhythmbox/plugins/"
+      --prefix PYTHONPATH : "$out/lib/rhythmbox/plugins/"
     )
   '';
 

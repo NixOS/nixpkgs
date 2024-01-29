@@ -16,14 +16,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "2023-05-30";
+  version = "unstable-2024-01-23";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "54a9d6456eaa6195998a0f37bdbafee9953ca0fb";
-    hash = "sha256-pkk3J9gX745LEkkeTGhSRJqPJkmCPQzwI/q7a720XaY=";
+    rev = "3df2a80f3f85f91ea06e5e91071fa74ba92e5084";
+    hash = "sha256-J7Bs9LHdZubgNHZ6+eE/7C18lZ1P6S5/zdJSdXFItI4=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       }" \
       --subst-var-by HOME_MANAGER_LIB '${placeholder "out"}/share/bash/home-manager.sh' \
-      --subst-var-by HOME_MANAGER_PATH "" \
+      --subst-var-by HOME_MANAGER_PATH "${finalAttrs.src}" \
       --subst-var-by OUT '${placeholder "out"}'
 
     installShellCompletion --bash --name home-manager.bash home-manager/completion.bash
@@ -85,8 +85,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       found in Nixpkgs. It allows declarative configuration of user specific
       (non global) packages and dotfiles.
     '';
-    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
+    mainProgram = "home-manager";
   };
 })

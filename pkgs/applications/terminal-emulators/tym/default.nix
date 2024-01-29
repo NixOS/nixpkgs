@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tym";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "endaaman";
     repo = "${pname}";
-    rev = "${version}";
-    sha256 = "sha256-5pXNOuMT2/G+m6XoTrwNTCGNfISLLy0wQpVPhQJzs4s=";
+    rev = version;
+    sha256 = "sha256-aXV3TNjHxg/9Lb2o+ci5/cCAPbkWhxqOka3wv21ajSA=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     description = "Lua-configurable terminal emulator";
     homepage = "https://github.com/endaaman/tym";
     license = licenses.mit;
-    maintainers = [ maintainers.wesleyjrz ];
+    maintainers = with maintainers; [ wesleyjrz kashw2 ];
     platforms = platforms.linux;
+    mainProgram = "tym";
   };
 }

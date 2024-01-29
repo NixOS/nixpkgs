@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "django-health-check";
   version = "3.17.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";

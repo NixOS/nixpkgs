@@ -52,13 +52,13 @@
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    sha256 = "sha256-NAp7RoYSI6BRw7C0ejW4pCJJYx9BG8D+BGVCVTDrggQ=";
+    hash = "sha256-VdgCsd/7vMFUleOU0ESoZDQ8yhQSsLZADVi4XI76Ouw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

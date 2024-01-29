@@ -24,20 +24,15 @@
 
 mkDerivation rec {
   pname = "tellico";
-  version = "3.5";
+  version = "3.5.3";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uMq/iqPAbjR85wkgqUS1pk2BL/eatNFpyKcagjN5rJ4=";
+    hash = "sha256-hg2sfBEh3jjVwMFmkgu9nXuXARsPqvlxzxX7kjSI/JU=";
   };
-
-  postPatch = ''
-    substituteInPlace src/gui/imagewidget.h \
-      --replace ksane_version.h KF5/ksane_version.h
-  '';
 
   nativeBuildInputs = [
     cmake

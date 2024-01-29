@@ -14,6 +14,7 @@
 , gnugrep
 , gnused
 , gsl
+, gtest
 , lapack
 , libX11
 , libXpm
@@ -23,7 +24,7 @@
 , libGL
 , libxcrypt
 , libxml2
-, llvm_9
+, llvm_13
 , lsof
 , lz4
 , xz
@@ -55,23 +56,9 @@
 , noSplash ? false
 }:
 
-let
-
-  _llvm_9 = llvm_9.overrideAttrs (prev: {
-    patches = (prev.patches or [ ]) ++ [
-      (fetchpatch {
-        url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
-        stripLen = 3;
-        hash = "sha256-LH2RipJICEDWOr7JzX5s0QiUhEwXNMFEJihYKy9qWpo=";
-      })
-    ];
-  });
-
-in
-
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.10";
+  version = "6.30.02";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -79,7 +66,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-jla+w5cQQBeqVPnrVU3noaE0R0/gs7sPQ6cPxPq9Yl8=";
+    hash = "sha256-eWWkVtGtHuDV/kdpv1qP7Cka9oTtk9sPMICpw2JDUYM=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -97,10 +84,11 @@ stdenv.mkDerivation rec {
     lapack
     libxcrypt
     libxml2
-    _llvm_9
+    llvm_13
     lz4
     xz
     gsl
+    gtest
     openblas
     openssl
     xxHash
@@ -122,26 +110,26 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
-  ] ++ lib.optionals (python.pkgs.pythonAtLeast "3.11") [
-    # Fix build against Python 3.11
+
+    # Fix for builtin_llvm=OFF
+    # https://github.com/root-project/root/pull/14238
     (fetchpatch {
-      url = "https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc.patch";
-      hash = "sha256-4qur2e3SxMIPgOg4IjlvuULR2BObuP7xdvs+LmNT2/s=";
+      url = "https://github.com/root-project/root/commit/1477d3adebf27a19f3a8b85f21c27a0a5649c7ff.diff";
+      hash = "sha256-g+FqXBTWXA7t7F/rMarnmOK2014oCNnNJbHhjH+Tvjw=";
     })
   ];
 
-  # Fix build against vanilla LLVM 9
-  postPatch = ''
-    sed \
-      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/i#define private protected' \
-      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/a#undef private' \
-      -i interpreter/cling/lib/Interpreter/IncrementalJIT.h
-  '';
-
   preConfigure = ''
-    rm -rf builtins/*
+    for path in builtins/*; do
+      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
+        rm -rf "$path"
+      fi
+    done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
+
+    substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
+      --replace 'add_clang_symlink(''${link} clang)' ""
 
     # Don't require textutil on macOS
     : > cmake/modules/RootCPack.cmake
@@ -155,8 +143,8 @@ stdenv.mkDerivation rec {
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '' + lib.optionalString stdenv.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
-    substituteInPlace core/CMakeLists.txt \
-      --replace "-F/System/Library/PrivateFrameworks" ""
+    substituteInPlace core/macosx/CMakeLists.txt \
+      --replace "-F/System/Library/PrivateFrameworks " ""
   '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
@@ -167,8 +155,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"
+    "-Dbuiltin_freetype=OFF"
+    "-Dbuiltin_gtest=OFF"
     "-Dbuiltin_nlohmannjson=OFF"
-    "-Dbuiltin_openui5=OFF"
+    "-Dbuiltin_openui5=ON"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
     "-Dcastor=OFF"
@@ -197,12 +187,13 @@ stdenv.mkDerivation rec {
     "-Dpythia6=OFF"
     "-Dpythia8=OFF"
     "-Drfio=OFF"
-    "-Droot7=OFF"
+    "-Droot7=ON"
     "-Dsqlite=OFF"
     "-Dssl=ON"
     "-Dtmva=ON"
+    "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
-    "-Dwebgui=OFF"
+    "-Dwebgui=ON"
     "-Dxml=ON"
     "-Dxrootd=ON"
   ]
@@ -215,6 +206,9 @@ stdenv.mkDerivation rec {
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
   ];
+
+  # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
 
   # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
   # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.
@@ -240,23 +234,20 @@ stdenv.mkDerivation rec {
     # but it also need to support Bash-less POSIX shell like dash,
     # as they are mentioned in `thisroot.sh`.
 
-    # `thisroot.sh` would include commands `lsof` and `procps` since ROOT 6.28.
-    # See https://github.com/root-project/root/pull/10332
-
     patchRcPathPosix "$out/bin/thisroot.sh" "${lib.makeBinPath [
       coreutils # dirname tail
       gnugrep # grep
       gnused # sed
-      lsof # lsof # for ROOT (>=6.28)
+      lsof # lsof
       man # manpath
-      procps # ps # for ROOT (>=6.28)
+      procps # ps
       which # which
     ]}"
     patchRcPathCsh "$out/bin/thisroot.csh" "${lib.makeBinPath [
       coreutils
       gnugrep
       gnused
-      lsof # lsof # for ROOT (>=6.28)
+      lsof # lsof
       man
       which
     ]}"

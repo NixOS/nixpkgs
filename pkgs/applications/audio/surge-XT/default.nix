@@ -17,7 +17,7 @@
 let
   juce-lv2 = stdenv.mkDerivation {
     pname = "juce-lv2";
-    version = "unstable-2022-03-30";
+    version = "unstable-2023-03-04";
 
     # lv2 branch
     src = fetchFromGitHub {
@@ -37,14 +37,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "surge-XT";
-  version = "1.2.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = "surge";
     rev = "release_xt_${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-LRYKkzeEuuRbMmvU3E0pHAnotOd4DyIJ7rTb+fpW0H4=";
+    sha256 = "sha256-DGzdzoCjMGEDltEwlPvLk2tyMVRH1Ql2Iq1ypogw/m0=";
   };
 
   nativeBuildInputs = [
@@ -64,9 +64,16 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
+  enableParallelBuilding = true;
+
   cmakeFlags = [
     "-DJUCE_SUPPORTS_LV2=ON"
     "-DSURGE_JUCE_PATH=${juce-lv2}"
+  ];
+
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' has not been declared
+    "-include cstdint"
   ];
 
   # JUCE dlopen's these at runtime, crashes without them

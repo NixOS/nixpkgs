@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cloudflare";
-  version = "2.11.6";
+  version = "2.14.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZTHUyvFguvME0Jl0JRzwWmJOaWPUz4RFeMEVTvupb14=";
+    hash = "sha256-HeSaiJKI2C3FwPKip0ZVKWe5nZYGP13zpXpwNkLiQLQ=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cloudflare/python-cloudflare";
     changelog = "https://github.com/cloudflare/python-cloudflare/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

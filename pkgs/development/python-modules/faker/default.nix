@@ -5,6 +5,7 @@
 , pillow
 , pytestCheckHook
 , python-dateutil
+, setuptools
 , text-unidecode
 , ukpostcodeparser
 , validators
@@ -12,13 +13,18 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "17.3.0";
+  version = "20.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Faker";
     inherit version;
-    hash = "sha256-JrKGSlMyCU8sfzlo3uurzmm+Oe1dtNvyK0+guj0aza4=";
+    hash = "sha256-Vio6CcPtOhp7IOE9efkE39/F50D3KBPs+V5M9x5aL1I=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-dateutil

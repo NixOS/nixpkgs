@@ -19,6 +19,7 @@
 let doit = buildPythonPackage rec {
   pname = "doit";
   version = "0.36.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

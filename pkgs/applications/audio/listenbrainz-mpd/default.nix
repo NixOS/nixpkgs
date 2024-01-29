@@ -6,25 +6,52 @@
 , openssl
 , libiconv
 , sqlite
-, Security }:
+, Security
+, SystemConfiguration
+, CoreFoundation
+, installShellFiles
+, asciidoctor }:
 
 rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
-  version = "2.1.0";
+  version = "2.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${version}";
-    hash = "sha256-AalZTlizaw93KlVffFDjGNoKkCHUFQTiElZgJo64shs=";
+    hash = "sha256-DqxE+wEHDmOmh+iJa312uAWQcg/1ApOTZNLrhGq5KmY=";
   };
 
-  cargoHash = "sha256-n24P56ZrF8qEpM45uIFr7bJhlzuAexNr6siEsF219uA=";
+  cargoHash = "sha256-/fd3XIBHwJ95bwirUbMldw2cAfdF2Sv8CPxrbM4WWBI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
 
-  buildInputs = [ sqlite ] ++ (if stdenv.isDarwin then [ libiconv Security ] else [ openssl ]);
+  buildInputs = [ sqlite ] ++ (if stdenv.isDarwin then [
+    libiconv
+    Security
+    SystemConfiguration
+    CoreFoundation
+  ] else [
+    openssl
+  ]);
+
+  buildFeatures = [
+    "shell_completion"
+  ] ++ lib.optionals stdenv.isLinux [
+    "systemd"
+  ];
+
+  postInstall = ''
+    installShellCompletion \
+      --bash generated_completions/listenbrainz-mpd.bash \
+      --fish generated_completions/listenbrainz-mpd.fish \
+      --zsh generated_completions/_listenbrainz-mpd
+
+    asciidoctor --backend=manpage listenbrainz-mpd.adoc -o listenbrainz-mpd.1
+    installManPage listenbrainz-mpd.1
+  '';
 
   meta = with lib; {
     homepage = "https://codeberg.org/elomatreb/listenbrainz-mpd";

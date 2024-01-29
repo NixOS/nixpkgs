@@ -7,12 +7,10 @@
 , ninja
 , perl
 , gettext
-, cairo
 , gtk-doc
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_412
-, fetchurl
 , glib
 , gusb
 , dbus

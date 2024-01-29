@@ -17,7 +17,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     fdk-aac-encoder
-    gobject-introspection
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -28,11 +27,12 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     intltool
     wrapGAppsHook
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     python3Packages.gst-python
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     python3Packages.setuptools
     python3Packages.pygobject3
   ];

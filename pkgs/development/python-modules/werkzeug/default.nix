@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, flit-core
 , watchdog
 , ephemeral-port-reserve
 , pytest-timeout
@@ -15,30 +16,37 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.2.3";
-  format = "setuptools";
+  version = "2.3.8";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Werkzeug";
-    inherit version;
-    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+    inherit pname version;
+    hash = "sha256-VUslfHS763oNJUFgpPj/4YUkP1KlIDUGC3Ycpi2XfwM=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     markupsafe
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # watchdog requires macos-sdk 10.13+
-    watchdog
   ];
+
+  passthru.optional-dependencies = {
+    watchdog = lib.optionals (!stdenv.isDarwin) [
+      # watchdog requires macos-sdk 10.13[
+      watchdog
+    ];
+  };
 
   nativeCheckInputs = [
     ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_get_machine_id"
@@ -69,6 +77,6 @@ buildPythonPackage rec {
       utility libraries.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

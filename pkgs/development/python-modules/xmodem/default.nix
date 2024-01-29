@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "xmodem";
   version = "0.4.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tehmaze";

@@ -55,18 +55,34 @@ let
     ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
 
-  commit = "2798322b03e7f446f59c5142215c11711ed7a427";
+  # Comment from @code-asher, the code-server maintainer
+  # See https://github.com/NixOS/nixpkgs/pull/240001#discussion_r1244303617
+  #
+  # If the commit is missing it will break display languages (Japanese, Spanish,
+  # etc). For some reason VS Code has a hard dependency on the commit being set
+  # for that functionality.
+  # The commit is also used in cache busting. Without the commit you could run
+  # into issues where the browser is loading old versions of assets from the
+  # cache.
+  # Lastly, it can be helpful for the commit to be accurate in bug reports
+  # especially when they are built outside of our CI as sometimes the version
+  # numbers can be unreliable (since they are arbitrarily provided).
+  #
+  # To compute the commit when upgrading this derivation, do:
+  # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
+  # Example: `$ git rev-parse v4.16.1`
+  commit = "0c98611e6b43803a9d5dba222d7023b569abfb49";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.14.0";
+  version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-MJ/FCYAdWNG0joTAdvIWYqAplOoRiDRWvE9bM/V3QHo=";
+    hash = "sha256-J+6zuqVf1YKQjiRiqO4867DEwYzZsgQYgbsRXPo2hwY=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -76,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     nativeBuildInputs = [ yarn' git cacert ];
 
     buildPhase = ''
+      runHook preBuild
+
       export HOME=$PWD
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
 
@@ -90,11 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
       find ./lib/vscode -name "yarn.lock" -printf "%h\n" | \
         xargs -I {} yarn --cwd {} \
           --ignore-scripts --ignore-engines
+
+      runHook postBuild
     '';
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-J5ME9Nc7GWVoKeV908BR9ib9yH5KNmBOtltRvJcpZIY=";
+    outputHash = "sha256-g2rwB+PuWuYgrzIuW0ngia7cdPMC8s7ffBEkbmPPzB4=";
   };
 
   nativeBuildInputs = [
@@ -302,5 +322,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ offline henkery code-asher ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    mainProgram = "code-server";
   };
 })

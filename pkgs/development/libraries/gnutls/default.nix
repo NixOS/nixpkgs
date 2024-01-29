@@ -1,5 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autoconf, automake, libidn2, libiconv
+, texinfo
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
 , tpmSupport ? false, trousers, which, nettools, libunistring
@@ -18,6 +19,7 @@
 , python3Packages
 , qemu
 , rsyslog
+, openconnect
 , samba
 }:
 
@@ -33,11 +35,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.8.0";
+  version = "3.8.3";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "sha256-DqDRGhZgoeY/lg8Vexl6vm0MjLMlW+JOH7OBWTC5vcU=";
+    hash = "sha256-90/FlUsn1Oxt+7Ed6ph4iLWxJCiaNwOvytoO5SD0Fz4=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -45,7 +47,9 @@ stdenv.mkDerivation rec {
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ];
+  patches = [
+    ./nix-ssl-cert-file.patch
+  ];
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -80,7 +84,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
-  nativeBuildInputs = [ perl pkg-config ]
+  nativeBuildInputs = [ perl pkg-config texinfo ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
@@ -106,7 +110,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver;
+    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver samba openconnect;
     inherit (ocamlPackages) ocamlnet;
     haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;

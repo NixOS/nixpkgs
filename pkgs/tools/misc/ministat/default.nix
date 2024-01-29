@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.beerware;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.all;
+    mainProgram = "ministat";
   };
 }

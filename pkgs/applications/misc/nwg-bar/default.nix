@@ -1,14 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, gtk3, gtk-layer-shell }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, librsvg
+, pkg-config
+, gtk3
+, gtk-layer-shell
+, wrapGAppsHook }:
 
 buildGoModule rec {
   pname = "nwg-bar";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/GkusNhHprXwGMNDruEEuFC2ULVIHBN5F00GNex/uq4=";
+    sha256 = "sha256-e64qCthZfGeFIe/g4Bu342d/C46qzJRBdxzzP6rM408=";
   };
 
   patches = [ ./fix-paths.patch ];
@@ -17,11 +24,11 @@ buildGoModule rec {
     substituteInPlace tools.go --subst-var out
   '';
 
-  vendorHash = "sha256-mqcXhnja8ed7vXIqOKBsNrcbrcaycTQXG1jqdc6zcyI=";
+  vendorHash = "sha256-YMpq9pgA3KjQMcw7JDwEDbHZ5h3N7ziFVIGvQ+xA3Ds=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 gtk-layer-shell ];
+  buildInputs = [ gtk3 gtk-layer-shell librsvg ];
 
   preInstall = ''
     mkdir -p $out/share/nwg-bar

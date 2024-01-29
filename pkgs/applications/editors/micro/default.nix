@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "micro";
-  version = "2.0.11";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3Rppi8UcAc4zdXOd81Y+sb5Psezx2TQsNw73WdPVMgE=";
+    hash = "sha256-fe+7RkUwCveBk14bYzg5uLGOqTVVJsrqixBQhCS79hY=";
   };
+
+  vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/micro" ];
-
-  vendorSha256 = "sha256-/bWIn5joZOTOtuAbljOc0NgBfjrFkbFZih+cPNHnS9w=";
 
   ldflags = let t = "github.com/zyedidia/micro/v2/internal"; in [
     "-s"
@@ -25,21 +25,22 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    go generate ./runtime
+    GOOS= GOARCH= go generate ./runtime
   '';
 
   postInstall = ''
     installManPage assets/packaging/micro.1
-    install -Dt $out/share/applications assets/packaging/micro.desktop
+    install -Dm444 -t $out/share/applications assets/packaging/micro.desktop
     install -Dm644 assets/micro-logo-mark.svg $out/share/icons/hicolor/scalable/apps/micro.svg
   '';
 
-  passthru.tests.expect = callPackage ./test-with-expect.nix {};
+  passthru.tests.expect = callPackage ./test-with-expect.nix { };
 
   meta = with lib; {
     homepage = "https://micro-editor.github.io";
     description = "Modern and intuitive terminal-based text editor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "micro";
   };
 }

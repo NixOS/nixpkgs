@@ -3,6 +3,7 @@
 , async-timeout
 , asyncio-dgram
 , buildPythonPackage
+, certifi
 , docutils
 , fetchFromGitHub
 , poetry-core
@@ -15,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2022.10.0";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aioguardian";
     rev = "refs/tags/${version}";
-    hash = "sha256-plgO+pyKmG0mYnFZxDcrENcuEg5AG2Og2xWipzuzyHo=";
+    hash = "sha256-7fY8+aAxlDtOBLu8SadY5qiH6+RvxnFpOw1RXTonP2o=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     asyncio-dgram
+    certifi
     docutils
     voluptuous
   ];

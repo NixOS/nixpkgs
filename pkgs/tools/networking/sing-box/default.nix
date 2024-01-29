@@ -4,28 +4,29 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
+, coreutils
 , nix-update-script
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.2.7";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+pRG5nq0Be58at61qqu5QciHC2DMvw+wj7u8tZx8+eY=";
+    hash = "sha256-Zn2akHyStq014k4ze3zsqASFnn6VTQ6fu1HdYMBDI1Y=";
   };
 
-  vendorHash = "sha256-gHPMJ4/W2ZisG/jAtHSLH/NlHgBitg7Bwe95wGJAsOY=";
+  vendorHash = "sha256-L5TFMwhxit4Bm6h6KSEygKxGHbflNa0UQ9lzNqsvuGA=";
 
   tags = [
     "with_quic"
     "with_grpc"
     "with_dhcp"
     "with_wireguard"
-    "with_shadowsocksr"
     "with_ech"
     "with_utls"
     "with_reality_server"
@@ -50,14 +51,23 @@ buildGoModule rec {
       --bash <(${emulator} $out/bin/sing-box completion bash) \
       --fish <(${emulator} $out/bin/sing-box completion fish) \
       --zsh  <(${emulator} $out/bin/sing-box completion zsh )
+
+    substituteInPlace release/config/sing-box{,@}.service \
+      --replace "/usr/bin/sing-box" "$out/bin/sing-box" \
+      --replace "/bin/kill" "${coreutils}/bin/kill"
+    install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) sing-box; };
+  };
 
   meta = with lib;{
     homepage = "https://sing-box.sagernet.org";
     description = "The universal proxy platform";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "sing-box";
   };
 }

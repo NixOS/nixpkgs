@@ -10,6 +10,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
   # For tests
 , testers
 , runCommand
@@ -135,6 +136,11 @@ let
       "${src}/contrib/ffmpeg/A28-avcodec-amfenc-HDR-metadata.patch"
       # This patch is not applying since ffmpeg 5.1.1, probably it was backported by upstream
       # "${src}/contrib/ffmpeg/A30-svt-av1-backports.patch"
+      (fetchpatch {
+        name = "vulkan-remove-extensions.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/commitdiff_plain/eb0455d64690";
+        hash = "sha256-qvLrb7b+9/bel8A2lZuSmBiJtHXsABw0Lvgn1ggnmCU=";
+      })
     ];
   });
 

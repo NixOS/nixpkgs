@@ -51,11 +51,10 @@ let
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
       ../../common/clang/add-nostdlibinc-flag.patch
-      # FIMXE: do we need this patch?
-      # (substituteAll {
-      #   src = ../../clang-11-12-LLVMgold-path.patch;
-      #  libllvmLibdir = "${libllvm.lib}/lib";
-      # })
+      (substituteAll {
+        src = ../../clang-at-least-16-LLVMgold-path.patch;
+       libllvmLibdir = "${libllvm.lib}/lib";
+      })
     ];
 
     postPatch = ''

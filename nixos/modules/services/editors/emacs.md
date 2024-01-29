@@ -172,9 +172,9 @@ nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 :::
 
 If you are on NixOS, you can install this particular Emacs for all users by
-adding it to the list of system packages (see
-[](#sec-declarative-package-mgmt)). Simply modify your file
-{file}`configuration.nix` to make it contain:
+putting the `emacs.nix` file in `/etc/nixos` and adding it to the list of
+system packages (see [](#sec-declarative-package-mgmt)). Simply modify your
+file {file}`configuration.nix` to make it contain:
 ::: {.example #module-services-emacs-configuration-nix}
 ### Custom Emacs in `configuration.nix`
 
@@ -182,7 +182,7 @@ adding it to the list of system packages (see
 {
  environment.systemPackages = [
    # [...]
-   (import /path/to/emacs.nix { inherit pkgs; })
+   (import ./emacs.nix { inherit pkgs; })
   ];
 }
 ```
@@ -197,8 +197,8 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
 -->
 
 If you are not on NixOS or want to install this particular Emacs only for
-yourself, you can do so by adding it to your
-{file}`~/.config/nixpkgs/config.nix` (see
+yourself, you can do so by putting `emacs.nix` in `~/.config/nixpkgs` and
+adding it to your {file}`~/.config/nixpkgs/config.nix` (see
 [Nixpkgs manual](https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides)):
 ::: {.example #module-services-emacs-config-nix}
 ### Custom Emacs in `~/.config/nixpkgs/config.nix`
@@ -206,7 +206,7 @@ yourself, you can do so by adding it to your
 ```
 {
   packageOverrides = super: let self = super.pkgs; in {
-    myemacs = import /path/to/emacs.nix { pkgs = self; };
+    myemacs = import ./emacs.nix { pkgs = self; };
   };
 }
 ```
@@ -264,7 +264,6 @@ To install and enable the {command}`systemd` user service for Emacs
 daemon, add the following to your {file}`configuration.nix`:
 ```
 services.emacs.enable = true;
-services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
 ```
 
 The {var}`services.emacs.package` option allows a custom
@@ -286,11 +285,11 @@ The server should now be ready to serve Emacs clients.
 
 ### Starting the client {#module-services-emacs-starting-client}
 
-Ensure that the emacs server is enabled, either by customizing the
+Ensure that the Emacs server is enabled, either by customizing the
 {var}`server-mode` variable, or by adding
 `(server-start)` to {file}`~/.emacs`.
 
-To connect to the emacs daemon, run one of the following:
+To connect to the Emacs daemon, run one of the following:
 ```
 emacsclient FILENAME
 emacsclient --create-frame  # opens a new frame (window)
@@ -339,24 +338,10 @@ This will add the symlink
 
 ## Configuring Emacs {#module-services-emacs-configuring}
 
-The Emacs init file should be changed to load the extension packages at
-startup:
+If you want to only use extension packages from Nixpkgs, you can add
+`(setq package-archives nil)` to your init file.
 
-::: {.example #module-services-emacs-package-initialisation}
-### Package initialization in `.emacs`
-
-```
-(require 'package)
-
-;; optional. makes unpure packages archives unavailable
-(setq package-archives nil)
-
-(setq package-enable-at-startup nil)
-(package-initialize)
-```
-:::
-
-After the declarative emacs package configuration has been tested,
+After the declarative Emacs package configuration has been tested,
 previously downloaded packages can be cleaned up by removing
 {file}`~/.emacs.d/elpa` (do make a backup first, in case you
 forgot a package).

@@ -1,39 +1,77 @@
-{ appimageTools, lib, fetchurl }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, appimageTools
+, electron
+, makeWrapper
+, asar
+, autoPatchelfHook
+, libusb1
+}:
+
 let
   pname = "uhk-agent";
-  version = "2.1.2";
+  version = "3.3.0";
+
   src = fetchurl {
     url = "https://github.com/UltimateHackingKeyboard/agent/releases/download/v${version}/UHK.Agent-${version}-linux-x86_64.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-G/UT1ec7rWl8xONZnT+dpHAFOQh6/s0Vq7MTqAcmJSA=";
+    sha256 = "sha256-jkIuXKTm8imq1U7kbQhK7LkEeI2qz0Gu7rWuDn6Ex+c=";
   };
 
   appimageContents = appimageTools.extract {
     name = "${pname}-${version}";
     inherit src;
   };
-in appimageTools.wrapType2 {
+in
+stdenvNoCC.mkDerivation {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [ polkit udev ];
+  dontUnpack = true;
 
-  extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
+  nativeBuildInputs = [
+    asar
+    makeWrapper
+    autoPatchelfHook
+  ];
 
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    install -m 644 -D ${appimageContents}/resources/rules/50-uhk60.rules $out/rules/50-uhk60.rules
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+  buildInputs = [
+    libusb1
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.musl-x86_64.so.1"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out"/{opt,share/applications}
+
+    cp -r --no-preserve=mode "${appimageContents}/resources"        "$out/opt/${pname}"
+    cp -r --no-preserve=mode "${appimageContents}/usr/share/icons"  "$out/share/icons"
+    cp -r --no-preserve=mode "${appimageContents}/${pname}.desktop" "$out/share/applications/${pname}.desktop"
+
+    substituteInPlace "$out/share/applications/${pname}.desktop" \
+      --replace "Exec=AppRun" "Exec=${pname}"
+
+    asar extract "$out/opt/${pname}/app.asar" "$out/opt/${pname}/app.asar.unpacked"
+    rm           "$out/opt/${pname}/app.asar"
+
+    makeWrapper "${electron}/bin/electron" "$out/bin/${pname}" \
+      --add-flags "$out/opt/${pname}/app.asar.unpacked" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
+
+    runHook postInstall
   '';
-  # wrapType2 does not passthru pname+version
-  passthru.version = version;
 
   meta = with lib; {
     description = "Agent is the configuration application of the Ultimate Hacking Keyboard";
     homepage = "https://github.com/UltimateHackingKeyboard/agent";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ ngiger ];
+    maintainers = with maintainers; [ ngiger nickcao ];
     platforms = [ "x86_64-linux" ];
   };
 }

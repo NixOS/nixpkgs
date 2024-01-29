@@ -34,6 +34,9 @@ mkDerivation rec {
     })
   ];
 
+  # HACK `propagatedSandboxProfile` does not appear to actually propagate the sandbox profile from `qt5.qtbase`
+  sandboxProfile = toString qtbase.__propagatedSandboxProfile;
+
   qmakeFlags = [
     # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:
     "QMAKE_LUPDATE=${qttools.dev}/bin/lupdate"

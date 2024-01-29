@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ figsoda lumi novenary ];
     platforms = platforms.linux;
+    mainProgram = "shotgun";
   };
 }

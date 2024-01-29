@@ -2,51 +2,38 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, isPyPy
-, lazy-object-proxy
 , setuptools
 , typing-extensions
-, typed-ast
+, pip
 , pylint
 , pytestCheckHook
-, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.14.2"; # Check whether the version is compatible with pylint
-  format = "pyproject";
+  version = "3.0.1"; # Check whether the version is compatible with pylint
+  pyproject = true;
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
+    repo = "astroid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SIBzn57UNn/sLuDWt391M/kcCyjCocHmL5qi2cSX2iA=";
+    hash = "sha256-z6FmB3I3VmiIx0MSsrkvHmDVv2h3CaaeXlDG3DewGXw=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    lazy-object-proxy
-    wrapt
-  ] ++ lib.optionals (pythonOlder "3.11") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
     typing-extensions
-  ] ++ lib.optionals (!isPyPy && pythonOlder "3.8") [
-    typed-ast
   ];
 
   nativeCheckInputs = [
+    pip
     pytestCheckHook
-    typing-extensions
-  ];
-
-  disabledTests = [
-    # DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('tests.testdata.python3.data.path_pkg_resources_1.package')`.
-    "test_identify_old_namespace_package_protocol"
   ];
 
   passthru.tests = {
@@ -58,6 +45,6 @@ buildPythonPackage rec {
     description = "An abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

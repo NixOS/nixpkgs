@@ -1,51 +1,58 @@
 { lib
 , stdenv
-, arrow-cpp
-, bokeh
 , buildPythonPackage
+, fetchFromGitHub
+
+# build-system
+, setuptools
+, wheel
+
+# dependencies
 , click
 , cloudpickle
-, distributed
-, fastparquet
-, fetchFromGitHub
-, fetchpatch
 , fsspec
 , importlib-metadata
-, jinja2
-, numpy
 , packaging
-, pandas
 , partd
+, pyyaml
+, toolz
+
+# optional-dependencies
+, numpy
 , pyarrow
+, lz4
+, pandas
+, distributed
+, bokeh
+, jinja2
+
+# tests
+, arrow-cpp
+, hypothesis
+, pytest-asyncio
 , pytest-rerunfailures
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
-, pyyaml
-, scipy
-, setuptools
-, toolz
-, versioneer
-, zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.4.1";
-  format = "setuptools";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
+    repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-PkEFXF6OFZU+EMFBUopv84WniQghr5Q6757Qx6D5MyE=";
+    hash = "sha256-LMd55s8LT4m6Ym+LmXb4TKPnZ0jMkNBfcPJxmgruMDM=";
   };
 
   nativeBuildInputs = [
     setuptools
-    versioneer
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -59,13 +66,18 @@ buildPythonPackage rec {
     toolz
   ];
 
-  passthru.optional-dependencies = {
+  passthru.optional-dependencies = lib.fix (self: {
     array = [
       numpy
     ];
     complete = [
-      distributed
-    ];
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
       numpy
       pandas
@@ -77,16 +89,16 @@ buildPythonPackage rec {
       bokeh
       jinja2
     ];
-  };
+  });
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
-    scipy
-    zarr
+    # from panda[test]
+    hypothesis
+    pytest-asyncio
   ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
-    fastparquet
     pyarrow
   ];
 
@@ -97,13 +109,15 @@ buildPythonPackage rec {
     echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
     substituteInPlace setup.py \
+      --replace "import versioneer" "" \
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
     substituteInPlace pyproject.toml \
+      --replace ', "versioneer[toml]==0.29"' "" \
       --replace " --durations=10" "" \
       --replace " --cov-config=pyproject.toml" "" \
-      --replace " -v" ""
+      --replace "\"-v" "\" "
   '';
 
   pytestFlagsArray = [
@@ -119,13 +133,23 @@ buildPythonPackage rec {
     "test_auto_blocksize_csv"
     # AttributeError: 'str' object has no attribute 'decode'
     "test_read_dir_nometa"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # concurrent.futures.process.BrokenProcessPool: A process in the process pool terminated abpruptly...
+    "test_foldby_tree_reduction"
+    "test_to_bag"
   ] ++ [
-    "test_chunksize_files"
-    # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
-    "test_set_index_string"
-    # numpy 1.24
-    # RuntimeWarning: invalid value encountered in cast
-    "test_setitem_extended_API_2d_mask"
+    # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
+    "test_concat_categorical"
+    # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
+    "test_dot"
+    "test_dot_nan"
+    "test_merge_column_with_nulls"
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/tmp301jryv_/createme/0.part'
+    "test_to_csv_nodir"
+    "test_to_json_results"
+    # FutureWarning: Those tests should be working fine when pandas will have been upgraded to 2.1.1
+    "test_apply"
+    "test_apply_infer_columns"
   ];
 
   __darwinAllowLocalNetworking = true;

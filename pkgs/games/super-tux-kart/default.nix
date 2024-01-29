@@ -23,6 +23,7 @@
 , sqlite
 , Cocoa
 , IOKit
+, IOBluetooth
 , libsamplerate
 , shaderc
 }:
@@ -111,7 +112,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
   ++ lib.optional stdenv.hostPlatform.isLinux openal
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa libsamplerate ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa IOBluetooth libsamplerate ];
 
   cmakeFlags = [
     "-DBUILD_RECORDER=${if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) then "ON" else "OFF"}"
@@ -119,6 +120,13 @@ stdenv.mkDerivation rec {
     "-DCHECK_ASSETS=OFF"
     "-DUSE_SYSTEM_WIIUSE=ON"
     "-DOpenGL_GL_PREFERENCE=GLVND"
+  ];
+
+  CXXFLAGS = [
+    # GCC 13: error: 'snprintf' was not declared in this scope
+    "-include cstdio"
+    # GCC 13: error: 'runtime_error' is not a member of 'std'
+    "-include stdexcept"
   ];
 
   # Extract binary from built app bundle

@@ -14,19 +14,19 @@
 , python3
 , lua
 , opencc
-, libsoup
+, libsoup_3
 , json-glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.13.1";
+  version = "1.15.6";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
     rev = version;
-    sha256 = "sha256-uIK/G3Yk2xdPDnLtnx8sGShNY2gY0TmaEx5zyraawz0=";
+    hash = "sha256-cfV/VBCVtwI4qDwuU2563jMjxQqDs7VXGxkFn4w8IqM=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     db
     lua
     opencc
-    libsoup
+    libsoup_3
     json-glib
   ];
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ linsui ericsagnes ];
     platforms = platforms.linux;
   };
 }

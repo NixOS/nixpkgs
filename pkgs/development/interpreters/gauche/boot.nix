@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gauche-bootstrap";
-  version = "0.9.9";
+  version = "0.9.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gauche/Gauche-${version}.tgz";
-    sha256 = "1yzpszhw52vkpr65r5d4khf3489mnnvnw58dd2wsvvx7499k5aac";
+    url = "https://github.com/shirok/Gauche/releases/download/release${lib.replaceStrings ["."] ["_"] version}/Gauche-${version}.tgz";
+    hash = "sha256-tK5kkhsHqWZhaV69WqwN7IE9GmjlRqYWCRE9eEP1thc=";
   };
 
   nativeBuildInputs = [ pkg-config texinfo ];

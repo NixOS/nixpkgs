@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "panoply";
-  version = "5.2.7";
+  version = "5.3.1";
 
   src = fetchurl {
     url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
-    sha256 = "sha256-9mqamvUOMaCPnQQ9dhOawjp+GVFZfc59gb/Mx2XifW4=";
+    sha256 = "sha256-Fz1IFZwr7Eqqypt50n3qaoRjwfvSoS3kbMhbgzbc1J4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,5 +33,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
     license = licenses.unfree;  # Package does not state a license
+    mainProgram = "panoply";
   };
 }

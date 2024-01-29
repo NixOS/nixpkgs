@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-credential-keepassxc";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "git-credential-keepassxc";
     rev = "v${version}";
-    hash = "sha256-eu4Ff+7670gCO+j3WSRnvQ1aFXIx0nw1jAZXNuni2bU=";
+    hash = "sha256-AvnnzLiDQEdfAHPns8ufhdiPPn9d23AnI8Aq2DQS+To=";
   };
 
-  cargoHash = "sha256-DVMQLsiiaxMZtDqzqnMJQl91NCuMRSPEb8B6AttB4lE=";
+  cargoHash = "sha256-c2YucWs0UzyWDKWS5KebT3ps+XvWzlI0+ziJ8JX6oiQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
 
@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Frederick888/git-credential-keepassxc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "git-credential-keepassxc";
   };
 }

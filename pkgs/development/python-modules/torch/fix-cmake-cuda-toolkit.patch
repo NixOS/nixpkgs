@@ -1,0 +1,65 @@
+From aa7e7cfd5a5fe0c839406c1b197b81ef955a7ef5 Mon Sep 17 00:00:00 2001
+From: Gaetan Lepage <gaetan@glepage.com>
+Date: Thu, 23 Nov 2023 00:39:26 +0100
+Subject: [PATCH] fix-cmake-cuda-toolkit
+
+---
+ CMakeLists.txt               |  4 ----
+ cmake/public/cuda.cmake      | 12 +++++++++---
+ tools/setup_helpers/cmake.py |  2 ++
+ 3 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3a48eaf4e29..3aaeef2593a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1152,10 +1152,6 @@ if(BUILD_SHARED_LIBS)
+       ${PROJECT_SOURCE_DIR}/cmake/Modules_CUDA_fix
+       DESTINATION share/cmake/Caffe2/
+       COMPONENT dev)
+-  install(FILES
+-      ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUDAToolkit.cmake
+-      DESTINATION share/cmake/Caffe2/
+-      COMPONENT dev)
+   install(FILES
+       ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUSPARSELT.cmake
+       DESTINATION share/cmake/Caffe2/
+diff --git a/cmake/public/cuda.cmake b/cmake/public/cuda.cmake
+index 32f3ba375b5..c8b666e4c78 100644
+--- a/cmake/public/cuda.cmake
++++ b/cmake/public/cuda.cmake
+@@ -62,9 +62,15 @@ cmake_policy(POP)
+ 
+ if(NOT CMAKE_CUDA_COMPILER_VERSION STREQUAL CUDAToolkit_VERSION OR
+     NOT CUDA_INCLUDE_DIRS STREQUAL CUDAToolkit_INCLUDE_DIR)
+-  message(FATAL_ERROR "Found two conflicting CUDA installs:\n"
+-                      "V${CMAKE_CUDA_COMPILER_VERSION} in '${CUDA_INCLUDE_DIRS}' and\n"
+-                      "V${CUDAToolkit_VERSION} in '${CUDAToolkit_INCLUDE_DIR}'")
++  if(CUDA_INCLUDE_DIRS IN_LIST CUDAToolkit_INCLUDE_DIR)
++    message(STATUS "CUDA_INCLUDE_DIRS is a substring of CUDAToolkit_INCLUDE_DIR. "
++                   "Setting CUDA_INCLUDE_DIRS to CUDAToolkit_INCLUDE_DIR.")
++    set(CUDA_INCLUDE_DIRS "${CUDAToolkit_INCLUDE_DIR}")
++  else()
++    message(FATAL_ERROR "Found two conflicting CUDA installs:\n"
++                        "V${CMAKE_CUDA_COMPILER_VERSION} in '${CUDA_INCLUDE_DIRS}' and\n"
++                        "V${CUDAToolkit_VERSION} in '${CUDAToolkit_INCLUDE_DIR}'")
++  endif()
+ endif()
+ 
+ if(NOT TARGET CUDA::nvToolsExt)
+diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
+index fb19b66dfba..3f83bef32fe 100644
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -207,6 +207,8 @@ class CMake:
+                     "BUILDING_WITH_TORCH_LIBS",
+                     "CUDA_HOST_COMPILER",
+                     "CUDA_NVCC_EXECUTABLE",
++                    "CUDAToolkit_ROOT",
++                    "CUDAToolkit_INCLUDE_DIR",
+                     "CUDA_SEPARABLE_COMPILATION",
+                     "CUDNN_LIBRARY",
+                     "CUDNN_INCLUDE_DIR",
+-- 
+2.42.0
+

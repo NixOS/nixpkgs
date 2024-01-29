@@ -6,13 +6,14 @@
 
 buildPythonPackage rec {
   pname = "brotli";
-  version = "1.0.9";
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-tFnXSXv8t3l3HX6GwWLhEtgpqz0c7Yom5U3k47pWM7o=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MvceRcle2dSkkucC2PlsCizsIf8iv95d8Xjqew266wc=";
     # .gitattributes is not correct or GitHub does not parse it correct and the archive is missing the test data
     forceFetchGit = true;
   };
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -7,7 +7,7 @@
 , openvpn
 , obfs4
 , iproute2
-, dnscrypt-proxy2
+, dnscrypt-proxy
 , iptables
 , gawk
 , util-linux
@@ -74,7 +74,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
         --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
         'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
         --replace 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
-        'dnscryptproxyBinPath = "${dnscrypt-proxy2}/bin/dnscrypt-proxy"'
+        'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"'
     '';
 
     postFixup = ''

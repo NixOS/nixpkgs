@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, graylog-5_0 }:
+{ lib, stdenv, fetchurl, unzip, graylog-5_1 }:
 
 with lib;
 
@@ -17,7 +17,7 @@ let
       dontUnpack = true;
       nativeBuildInputs = [ unzip ];
       meta = a.meta // {
-        platforms = graylog-5_0.meta.platforms;
+        platforms = graylog-5_1.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
       };
@@ -226,7 +226,7 @@ in {
     };
     meta = {
       homepage = "https://bitbucket.org/proximus/smseagle-graylog/";
-      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog.";
+      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -253,7 +253,21 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-spaceweather";
-      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
+      description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate";
+    };
+  };
+  splunk = glPlugin rec {
+    name = "graylog-splunk-${version}";
+    pluginName = "graylog-plugin-splunk";
+    version = "0.5.0-rc.1";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/graylog-plugin-splunk/releases/download/0.5.0-rc.1/graylog-plugin-splunk-0.5.0-rc.1.jar";
+      sha256 = "sha256-EwF/Dc8GmMJBTxH9xGZizUIMTGSPedT4bprorN6X9Os=";
+    };
+    meta = {
+      homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
+      description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP";
+      license = lib.licenses.gpl3Only;
     };
   };
   twiliosms = glPlugin rec {

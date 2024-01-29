@@ -78,7 +78,7 @@ If third-party customizations (e.g. new themes) are supposed to be added to
 
   - Completion scripts are supposed to be stored at
     `$out/share/zsh/site-functions`. This directory is part of the
-    [`fpath`](http://zsh.sourceforge.net/Doc/Release/Functions.html)
+    [`fpath`](https://zsh.sourceforge.io/Doc/Release/Functions.html)
     and the package should be compatible with pure `ZSH`
     setups. The module will automatically link the contents of
     `site-functions` to completions directory in the proper

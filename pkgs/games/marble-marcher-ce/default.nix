@@ -54,8 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A fractal physics game.";
-    longDescription = "A community-developed version of the original Marble Marcher - a fractal physics game.";
+    description = "A community-developed version of the original Marble Marcher - a fractal physics game";
     homepage = "https://michaelmoroz.itch.io/mmce";
     license = with licenses; [
       gpl2Plus # Code

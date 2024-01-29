@@ -1,38 +1,68 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, wrapGAppsHook, alsa-lib, gtk3, libpulseaudio }:
+{
+  alsa-lib
+, fetchFromGitHub
+, gtk3
+, lib
+, libpulseaudio
+, pkg-config
+, stdenv
+, wrapGAppsHook
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.3.10";
+  version = "6.4.03";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
-    rev = "v${version}";
-    sha256 = "sha256-wnw8GKMukiraZgMMzd3S2NldC/cnRSILNo+D1Rqhr4k=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eiZBe/tBX5ax23jsj1AY9O2BBLvEyiDQ6WS1ZtOBQNU=";
   };
 
-  configurePhase = ''
-    cp makefiles/makefile.defs.linux.pulse makefile.defs
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    alsa-lib
+    gtk3
+    libpulseaudio
+  ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  installPhase = ''
-    install -Dt $out/bin praat
+  configurePhase = ''
+    runHook preConfigure
+
+    cp makefiles/makefile.defs.linux.pulse makefile.defs
+
+    runHook postConfigure
   '';
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
-  buildInputs = [ alsa-lib gtk3 libpulseaudio ];
+  installPhase = ''
+    runHook preInstall
+
+    install -Dt $out/bin praat
+    install -Dm444 main/praat.desktop -t $out/share/applications
+    install -Dm444 main/praat-32.ico $out/share/icons/hicolor/32x32/apps/praat.ico
+    install -Dm444 main/praat-256.ico $out/share/icons/hicolor/256x256/apps/praat.ico
+    install -Dm444 main/praat-480.png $out/share/icons/hicolor/480x480/apps/praat.png
+    install -Dm444 main/praat-480.svg $out/share/icons/hicolor/scalable/apps/praat.svg
+
+    runHook postInstall
+  '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Doing phonetics by computer";
     homepage = "https://www.fon.hum.uva.nl/praat/";
-    license = licenses.gpl2Plus; # Has some 3rd-party code in it though
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
-}
+})

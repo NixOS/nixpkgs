@@ -15,16 +15,16 @@ rec {
       (when (eq nixpkgs--buffer-count 0)
         (make-variable-buffer-local 'nixpkgs--is-nixpkgs-buffer)
         ; When generating a new temporary buffer (one whose name starts with a space), do inherit-local inheritance and make it a nixpkgs buffer
-        (defun nixpkgs--around-generate (orig name)
+        (defun nixpkgs--around-generate (orig name &optional ibh)
           (if (and nixpkgs--is-nixpkgs-buffer (eq (aref name 0) ?\s))
-              (let ((buf (funcall orig name)))
+              (let ((buf (funcall orig name ibh)))
                 (progn
                   (inherit-local-inherit-child buf)
                   (with-current-buffer buf
                     (setq nixpkgs--buffer-count (1+ nixpkgs--buffer-count))
                     (add-hook 'kill-buffer-hook 'nixpkgs--decrement-buffer-count nil t)))
                 buf)
-            (funcall orig name)))
+            (funcall orig name ibh)))
         (advice-add 'generate-new-buffer :around #'nixpkgs--around-generate)
         ; When we have no more nixpkgs buffers, tear down the buffer handling
         (defun nixpkgs--decrement-buffer-count ()
@@ -45,7 +45,7 @@ rec {
       (setenv "PATH" (concat "${lib.makeSearchPath "bin" pkgs}:" (getenv "PATH")))
       (inherit-local-permanent exec-path (append '(${builtins.concatStringsSep " " (map (p: "\"${p}/bin\"") pkgs)}) exec-path))
 
-      (inherit-local-permanent eshell-path-env (concat "${lib.makeSearchPath "bin" pkgs}:" eshell-path-env))
+      (inherit-local-permanent eshell-path-env (concat "${lib.makeSearchPath "bin" pkgs}:" (if (boundp 'eshell-path-env) eshell-path-env (getenv "PATH"))))
 
       (setq nixpkgs--is-nixpkgs-buffer t)
       (inherit-local 'nixpkgs--is-nixpkgs-buffer)

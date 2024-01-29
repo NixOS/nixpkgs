@@ -7,13 +7,13 @@
 
 buildDunePackage rec {
   pname = "thread-table";
-  version = "0.1.0";
+  version = "1.0.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "d84BwC9W5udWJgYuaQwmA1e2d6uk0v210M7nK72VjXs=";
+    sha256 = "pIzYhGNZfflELEuqaczAYJHKd7px5DjTYJ+64PO4Hd0=";
   };
 
   doCheck = true;

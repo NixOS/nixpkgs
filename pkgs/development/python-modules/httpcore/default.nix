@@ -3,6 +3,8 @@
 , buildPythonPackage
 , certifi
 , fetchFromGitHub
+, hatchling
+, hatch-fancy-pypi-readme
 , h11
 , h2
 , pproxy
@@ -11,37 +13,49 @@
 , pytest-trio
 , pytestCheckHook
 , pythonOlder
-, sniffio
 , socksio
+, trio
+# for passthru.tests
+, httpx
+, httpx-socks
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.16.3";
-  format = "setuptools";
+  version = "1.0.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "httpcore";
     rev = "refs/tags/${version}";
-    hash = "sha256-3bC97CTZi6An+owjoJF7Irtr7ONbP8RtNdTIGJRy0Ng=";
+    hash = "sha256-gjAScRBzAuNiTSxspX6vzwTAdBIwVQbaSLEUFV1QP+E=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
+
   propagatedBuildInputs = [
-    anyio
     certifi
     h11
-    sniffio
   ];
 
   passthru.optional-dependencies = {
+    asyncio = [
+      anyio
+    ];
     http2 = [
       h2
     ];
     socks = [
       socksio
+    ];
+    trio = [
+      trio
     ];
   };
 
@@ -51,26 +65,20 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.socks;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "httpcore"
   ];
 
-  preCheck = ''
-    # remove upstreams pytest flags which cause:
-    # httpcore.ConnectError: TLS/SSL connection has been closed (EOF) (_ssl.c:997)
-    rm setup.cfg
-  '';
-
-  pytestFlagsArray = [
-    "--asyncio-mode=strict"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit httpx httpx-socks;
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Mozilla's Universal Charset Detector C/C++ API";
     homepage = "https://www.freedesktop.org/wiki/Software/uchardet/";
     license = licenses.mpl11;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

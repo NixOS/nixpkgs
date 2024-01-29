@@ -1,8 +1,6 @@
-{ fetchFromGitHub
+{ lib
 , python3Packages
-, stdenv
-, writeText
-, lib
+, fetchFromGitHub
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   meta = with lib; {
-    description = "A program that allows to copy/paste from a terminal using osc-52 control sequences.";
+    description = "A program that allows to copy/paste from a terminal using osc-52 control sequences";
     longDescription = ''
       oscclip provides two commands: osc-copy and osc-paste. These commands allow to interact with the clipboard through the terminal directly.
       This means that they work through ssh sessions for example (given that the terminal supports osc-52 sequences).

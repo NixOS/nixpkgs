@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "smarthab";
   version = "0.21";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "SmartHab";

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "py-ecc";
   version = "6.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -38,6 +39,6 @@ buildPythonPackage rec {
     description = "ECC pairing and bn_128 and bls12_381 curve operations";
     homepage = "https://github.com/ethereum/py_ecc";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -10,7 +10,7 @@
 
 let
   pname = "rustus";
-  version = "0.7.4";
+  version = "0.7.6";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "s3rius";
     repo = pname;
     rev = version;
-    hash = "sha256-RmtkGemFGqvDYd+om/2o4Ki3NWKjJ4/cJ0z40J+L+SY=";
+    hash = "sha256-osxdqwNUONCScFarpQV48C7CR1DVR/mCttaglqiAKPo=";
   };
 
-  cargoHash = "sha256-Ayki+hJTyaITOZhiyY8X6d5tR3+CLHZe94zJ9d/Kn4I=";
+  cargoHash = "sha256-M0mJ+9VznzHDmdKAsT3YamyG/P0JF8oPeVHaX44NWM4=";
 
   env.OPENSSL_NO_VENDOR = 1;
 

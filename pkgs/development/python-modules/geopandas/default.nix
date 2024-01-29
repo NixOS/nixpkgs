@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.13.2";
+  version = "0.14.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8H0IO+Oabl1ZOHHvMFHnPEyW0xH/G4wuUtkZrsP6K3k=";
+    hash = "sha256-E4J6VBKPwyQ4IVVClLzNoI//oxlymY+KE6ALaENWwOg=";
   };
 
   propagatedBuildInputs = [

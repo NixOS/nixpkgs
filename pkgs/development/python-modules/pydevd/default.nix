@@ -1,9 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , numpy
 , psutil
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , trio
 , untangle
@@ -11,8 +14,8 @@
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "2.9.6";
-  format = "setuptools";
+  version = "2.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,8 +23,14 @@ buildPythonPackage rec {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-TDU/V7kY7zVxiP4OVjGqpsRVYplpkgCly2qAOqhZONo=";
+    hash = "sha256-1tWiPj30x/ZXIBu2qzUCpyF1bLsJ0wW1QaxklD3h3A8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     numpy
@@ -48,6 +57,14 @@ buildPythonPackage rec {
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
     "test_tracing_other_threads"
     "test_tracing_basic"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    "test_case_handled_and_unhandled_exception_generator"
+    "test_case_stop_async_iteration_exception"
+    "test_case_unhandled_exception_generator"
+    "test_function_breakpoints_async"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_multiprocessing_simple"
+    "test_evaluate_exception_trace"
   ];
 
   pythonImportsCheck = [

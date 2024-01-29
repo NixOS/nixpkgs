@@ -1,0 +1,27 @@
+From 86dcc9f308d2ca65704953f1ff9fe043d743e536 Mon Sep 17 00:00:00 2001
+From: Flakebi <flakebi@t-online.de>
+Date: Sat, 2 Dec 2023 16:33:45 +0100
+Subject: [PATCH 6/6] Register modules before starting
+
+Fixes flask 2.3: 'Blueprint' object has no attribute 'before_app_first_request'
+---
+ run.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/run.py b/run.py
+index 5ffcde3..52e719d 100755
+--- a/run.py
++++ b/run.py
+@@ -1,6 +1,9 @@
+ #!/usr/bin/env python3
+ from powerdnsadmin import create_app
++from .powerdnsadmin.routes.index import register_modules
+ 
+ if __name__ == '__main__':
+     app = create_app()
++    with app.app_context():
++        register_modules()
+     app.run(debug=True, host=app.config.get('BIND_ADDRESS', '127.0.0.1'), port=app.config.get('PORT', '9191'))
+-- 
+2.42.0
+

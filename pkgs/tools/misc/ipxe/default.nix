@@ -11,6 +11,7 @@ let
     "bin-x86_64-efi/ipxe.efi" = null;
     "bin-x86_64-efi/ipxe.efirom" = null;
     "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-x86_64-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.hostPlatform.isx86 {
     "bin/ipxe.dsk" = null;
     "bin/ipxe.usb" = null;
@@ -21,16 +22,18 @@ let
     "bin-arm32-efi/ipxe.efi" = null;
     "bin-arm32-efi/ipxe.efirom" = null;
     "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm32-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.isAarch64 {
     "bin-arm64-efi/ipxe.efi" = null;
     "bin-arm64-efi/ipxe.efirom" = null;
     "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm64-efi/snp.efi" = null;
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "unstable-2023-03-30";
+  version = "unstable-2024-01-19";
 
   nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -40,8 +43,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "1d1cf74a5e58811822bee4b3da3cff7282fcdfca";
-    sha256 = "8pwoPrmkpL6jIM+Y/C0xSvyrBM/Uv0D1GuBwNm+0DHU=";
+    rev = "de8a0821c7bc737e724fa3dfb6d89dc36f591d7a";
+    hash = "sha256-bVFr1fTulww6swWPKupWRGfQOAiXp2oP1/VC5GpzLnY=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''

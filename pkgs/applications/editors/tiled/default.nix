@@ -20,13 +20,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tiled";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "mapeditor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zrDka6yXJ++UuGFepn8glQ1r7ufBcjsnNZuH+jnkJw0=";
+    sha256 = "sha256-4Ykr60u2t5cyIZdpFHiRirXg2FqSLCzJzsdvw6r/LK8=";
   };
 
   nativeBuildInputs = [ pkg-config qbs wrapQtAppsHook ];

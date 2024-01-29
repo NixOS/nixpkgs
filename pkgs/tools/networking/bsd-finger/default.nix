@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
       else "Remote user information server";
     platforms = platforms.linux;
     license = licenses.bsdOriginal;
+    mainProgram = "finger";
   };
 }
 # TODO: multiple outputs (manpage)

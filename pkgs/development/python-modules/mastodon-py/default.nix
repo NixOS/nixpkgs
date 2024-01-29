@@ -7,20 +7,19 @@
 , http-ece
 , python-dateutil
 , python-magic
-, pytz
 , requests
 , six
 , pytestCheckHook
 , pytest-mock
 , pytest-vcr
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mastodon-py";
   version = "1.8.1";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
@@ -30,26 +29,45 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
+    sed -i '/addopts/d' setup.cfg
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     blurhash
-    cryptography
     decorator
-    http-ece
     python-dateutil
     python-magic
-    pytz
     requests
     six
   ];
+
+  passthru.optional-dependencies = {
+    blurhash = [
+      blurhash
+    ];
+    webpush = [
+      http-ece
+      cryptography
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-vcr
     requests-mock
+    setuptools
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    "test_notifications_dismiss_pre_2_9_2"
+    "test_status_card_pre_2_9_2"
+    "test_stream_user_direct"
+    "test_stream_user_local"
   ];
 
   pythonImportsCheck = [ "mastodon" ];

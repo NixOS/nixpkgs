@@ -1,5 +1,6 @@
-{ lib, stdenv
-, fetchFromGitHub
+{ lib
+, stdenv
+, fetchurl
 , pkg-config
 , cmake
 , extra-cmake-modules
@@ -13,13 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.0.16";
+  version = "5.1.4";
 
-  src = fetchFromGitHub {
-    owner = "fcitx";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-YAunuxdMlv1KOj2/xXstb/Uhm97G9D9rxb35AbNgMaE=";
+  src = fetchurl {
+    url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-tbCIWenH5brJUVIsmOiw/E/uIXAWwK1yangIVlkeOAs=";
   };
 
   cmakeFlags = [

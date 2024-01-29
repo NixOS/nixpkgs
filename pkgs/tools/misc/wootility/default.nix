@@ -34,5 +34,6 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
     license = "unknown";
     maintainers = with maintainers; [ davidtwco ];
+    mainProgram = "wootility";
   };
 }

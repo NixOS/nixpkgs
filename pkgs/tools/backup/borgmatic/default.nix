@@ -13,11 +13,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.14";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rABJfdrV+D2v6yHpAbzj/0MSGc9bo49pwXEC45Mmmlk=";
+    sha256 = "sha256-XbihTQJtoiRRfwjMCP+XEPmbt7//zFPx1fIWOvn92Nc=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     borgbackup
     colorama
     jsonschema
+    packaging
     ruamel-yaml
     requests
     setuptools
@@ -56,11 +57,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = borgmatic; };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ imlonghao ];
   };
 }

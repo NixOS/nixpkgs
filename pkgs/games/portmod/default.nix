@@ -1,16 +1,10 @@
 { lib
 , bubblewrap
 , cacert
-, callPackage
 , fetchFromGitLab
-, fetchurl
-, fetchzip
 , git
 , imagemagick
-, jre
-, makeWrapper
 , openmw
-, perlPackages
 , python3Packages
 , rustPlatform
 , tes3cmd
@@ -18,20 +12,20 @@
 }:
 
 let
-  version = "2.1.0";
+  version = "2.6.2";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    hash = "sha256-b/ENApFovMPNUMbJhwY+TZCnSzpr1e/IKJ/5XAGTQjE=";
+    hash = "sha256-ufr2guaPdCvI5JOicL/lTrT3t6UlaY1hEB2xbwzhw6A=";
   };
 
   portmod-rust = rustPlatform.buildRustPackage rec {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-3EfMMpSWSYsB3nXaoGGDuKQ9duyCKzbrT6oeATnzqLE=";
+    cargoHash = "sha256-sAjgGVVjgXaWbmN/eGEvatYjkHeFTZNX1GXFcJqs3GI=";
 
     nativeBuildInputs = [
       python3Packages.python
@@ -55,15 +49,22 @@ python3Packages.buildPythonApplication rec {
   inherit src version;
 
   pname = "portmod";
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  format = "pyproject";
 
   # build the rust library independantly
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "from setuptools_rust import Binding, RustExtension" "" \
-      --replace "RustExtension(\"portmodlib.portmod\", binding=Binding.PyO3, strip=True)" ""
+      --replace "from setuptools_rust import Binding, RustExtension, Strip" "" \
+      --replace "RustExtension(\"portmodlib.portmod\", binding=Binding.PyO3, strip=Strip.Debug)" ""
+
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools-rust"' ""
   '';
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     setuptools-scm
@@ -71,6 +72,7 @@ python3Packages.buildPythonApplication rec {
     requests
     chardet
     colorama
+    deprecated
     restrictedpython
     appdirs
     gitpython
@@ -101,6 +103,9 @@ python3Packages.buildPythonApplication rec {
     "test_sync"
     "test_manifest"
     "test_add_repo"
+    "test_init_prefix_interactive"
+    "test_scan_sources"
+    "test_unpack"
   ];
 
   # for some reason, installPhase doesn't copy the compiled binary

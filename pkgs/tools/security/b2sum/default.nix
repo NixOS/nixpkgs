@@ -18,11 +18,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "FILES=b2sum.c ../sse/" "#FILES=b2sum.c ../sse/"
   '';
 
-  sourceRoot = "source/b2sum";
+  sourceRoot = "${finalAttrs.src.name}/b2sum";
 
   buildInputs = [ openmp ];
 
   buildFlags = [ (lib.optional (openmp == null) "NO_OPENMP=1") ];
+
+  # clang builds require at least C99 or the build fails with:
+  # error: unknown type name 'inline'
+  env.NIX_CFLAGS_COMPILE = "-std=c99";
+
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {

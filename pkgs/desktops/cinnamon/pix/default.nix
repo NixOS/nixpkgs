@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchurl
 , fetchFromGitHub
 , pkg-config
 , meson
@@ -34,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.0.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-sKmdJOuT4Ioy5DmWN9ly+9bqSn4frcVPD5qMTKtxtiQ=";
+    sha256 = "sha256-tRndJjUw/k5mJPFTBMfW88Mvp2wZtC3RUzyS8bBO1jc=";
   };
 
   nativeBuildInputs = [

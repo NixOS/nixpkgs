@@ -1,6 +1,8 @@
 { config, lib, pkgs, options, ... }:
 with lib;
 let
+
+
   cfg = config.security.acme;
   opt = options.security.acme;
   user = if cfg.useRoot then "root" else "acme";
@@ -13,6 +15,36 @@ let
   mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
   mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
   accountDirRoot = "/var/lib/acme/.lego/accounts/";
+
+  lockdir = "/run/acme/";
+  concurrencyLockfiles = map (n: "${toString n}.lock") (lib.range 1 cfg.maxConcurrentRenewals);
+  # Assign elements of `baseList` to each element of `needAssignmentList`, until the latter is exhausted.
+  # returns: [{fst = "element of baseList"; snd = "element of needAssignmentList"}]
+  roundRobinAssign = baseList: needAssignmentList:
+    if baseList == [] then []
+    else _rrCycler baseList baseList needAssignmentList;
+  _rrCycler = with builtins; origBaseList: workingBaseList: needAssignmentList:
+    if (workingBaseList == [] || needAssignmentList == [])
+    then []
+    else
+      [{ fst = head workingBaseList; snd = head needAssignmentList;}] ++
+      _rrCycler origBaseList (if (tail workingBaseList == []) then origBaseList else tail workingBaseList) (tail needAssignmentList);
+  attrsToList = mapAttrsToList (attrname: attrval: {name = attrname; value = attrval;});
+  # for an AttrSet `funcsAttrs` having functions as values, apply single arguments from
+  # `argsList` to them in a round-robin manner.
+  # Returns an attribute set with the applied functions as values.
+  roundRobinApplyAttrs = funcsAttrs: argsList: lib.listToAttrs (map (x: {inherit (x.snd) name; value = x.snd.value x.fst;}) (roundRobinAssign argsList (attrsToList funcsAttrs)));
+  wrapInFlock = lockfilePath: script:
+    # explainer: https://stackoverflow.com/a/60896531
+    ''
+      exec {LOCKFD}> ${lockfilePath}
+      echo "Waiting to acquire lock ${lockfilePath}"
+      ${pkgs.flock}/bin/flock ''${LOCKFD} || exit 1
+      echo "Acquired lock ${lockfilePath}"
+    ''
+    + script + "\n"
+    + ''echo "Releasing lock ${lockfilePath}"  # only released after process exit'';
+
 
   # There are many services required to make cert renewals work.
   # They all follow a common structure:
@@ -31,6 +63,7 @@ let
     ProtectSystem = "strict";
     ReadWritePaths = [
       "/var/lib/acme"
+      lockdir
     ];
     PrivateTmp = true;
 
@@ -118,7 +151,8 @@ let
       # We don't want this to run every time a renewal happens
       RemainAfterExit = true;
 
-      # These StateDirectory entries negate the need for tmpfiles
+      # StateDirectory entries are a cleaner, service-level mechanism
+      # for dealing with persistent service data
       StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
       StateDirectoryMode = 755;
       WorkingDirectory = "/var/lib/acme";
@@ -127,10 +161,30 @@ let
       ExecStart = "+" + (pkgs.writeShellScript "acme-fixperms" script);
     };
   };
+  lockfilePrepareService = {
+    description = "Manage lock files for acme services";
+
+    # ensure all required lock files exist, but none more
+    script = ''
+      GLOBIGNORE="${concatStringsSep ":" concurrencyLockfiles}"
+      rm -f *
+      unset GLOBIGNORE
+
+      xargs touch <<< "${toString concurrencyLockfiles}"
+    '';
+
+    serviceConfig = commonServiceConfig // {
+      # We don't want this to run every time a renewal happens
+      RemainAfterExit = true;
+      WorkingDirectory = lockdir;
+    };
+  };
+
 
   certToConfig = cert: data: let
     acmeServer = data.server;
     useDns = data.dnsProvider != null;
+    useDnsOrS3 = useDns || data.s3Bucket != null;
     destPath = "/var/lib/acme/${cert}";
     selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
@@ -166,7 +220,8 @@ let
       [ "--dns" data.dnsProvider ]
       ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
       ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
-    ) else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
+    ) else if data.s3Bucket != null then [ "--http" "--http.s3-bucket" data.s3Bucket ]
+    else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
     else [ "--http" "--http.webroot" data.webroot ];
 
     commonOpts = [
@@ -229,10 +284,10 @@ let
       };
     };
 
-    selfsignService = {
+    selfsignService = lockfileName: {
       description = "Generate self-signed certificate for ${cert}";
-      after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
-      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
+      after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
 
       path = with pkgs; [ minica ];
 
@@ -256,7 +311,7 @@ let
       # Working directory will be /tmp
       # minica will output to a folder sharing the name of the first domain
       # in the list, which will be ${data.domain}
-      script = ''
+      script = (if (lockfileName == null) then lib.id else wrapInFlock "${lockdir}${lockfileName}") ''
         minica \
           --ca-key ca/key.pem \
           --ca-cert ca/cert.pem \
@@ -277,10 +332,10 @@ let
       '';
     };
 
-    renewService = {
+    renewService = lockfileName: {
       description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps;
-      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
       wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
@@ -289,6 +344,10 @@ let
 
       serviceConfig = commonServiceConfig // {
         Group = data.group;
+
+        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
+        # This avoids eating them all up if something is misconfigured upon the first try.
+        RestartSec = 15 * 60;
 
         # Keep in mind that these directories will be deleted if the user runs
         # systemctl clean --what=state
@@ -309,8 +368,13 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        # Only try loading the credentialsFile if the dns challenge is enabled
-        EnvironmentFile = mkIf useDns data.credentialsFile;
+        EnvironmentFile = mkIf useDnsOrS3 data.environmentFile;
+
+        Environment = mkIf useDnsOrS3
+          (mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
+
+        LoadCredential = mkIf useDnsOrS3
+          (mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
 
         # Run as root (Prefixed with +)
         ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
@@ -329,7 +393,7 @@ let
       };
 
       # Working directory will be /tmp
-      script = ''
+      script = (if (lockfileName == null) then lib.id else wrapInFlock "${lockdir}${lockfileName}") ''
         ${optionalString data.enableDebugLogs "set -x"}
         set -euo pipefail
 
@@ -443,6 +507,10 @@ let
       defaultText = if isDefaults then default else literalExpression "config.security.acme.defaults.${name}";
     };
   in {
+    imports = [
+      (mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
+    ];
+
     options = {
       validMinDays = mkOption {
         type = types.int;
@@ -529,7 +597,7 @@ let
         description = lib.mdDoc ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
-          at <https://go-acme.github.io/lego/usage/cli/#usage>.
+          at <https://go-acme.github.io/lego/usage/cli/options/>.
         '';
       };
 
@@ -554,9 +622,9 @@ let
         '';
       };
 
-      credentialsFile = mkOption {
+      environmentFile = mkOption {
         type = types.nullOr types.path;
-        inherit (defaultAndText "credentialsFile" null) default defaultText;
+        inherit (defaultAndText "environmentFile" null) default defaultText;
         description = lib.mdDoc ''
           Path to an EnvironmentFile for the cert's service containing any required and
           optional environment variables for your selected dnsProvider.
@@ -564,6 +632,24 @@ let
           <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider.
         '';
         example = "/var/src/secrets/example.org-route53-api-token";
+      };
+
+      credentialFiles = mkOption {
+        type = types.attrsOf (types.path);
+        inherit (defaultAndText "credentialFiles" {}) default defaultText;
+        description = lib.mdDoc ''
+          Environment variables suffixed by "_FILE" to set for the cert's service
+          for your selected dnsProvider.
+          To find out what values you need to set, consult the documentation at
+          <https://go-acme.github.io/lego/dns/> for the corresponding dnsProvider.
+          This allows to securely pass credential files to lego by leveraging systemd
+          credentials.
+        '';
+        example = literalExpression ''
+          {
+            "RFC2136_TSIG_SECRET_FILE" = "/run/secrets/tsig-secret-example.org";
+          }
+        '';
       };
 
       dnsPropagationCheck = mkOption {
@@ -674,6 +760,15 @@ let
         '';
       };
 
+      s3Bucket = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "acme";
+        description = lib.mdDoc ''
+          S3 bucket name to use for HTTP-01 based challenges. Challenges will be written to the S3 bucket.
+        '';
+      };
+
       inheritDefaults = mkOption {
         default = true;
         example = true;
@@ -755,6 +850,17 @@ in {
           }
         '';
       };
+      maxConcurrentRenewals = mkOption {
+        default = 5;
+        type = types.int;
+        description = lib.mdDoc ''
+          Maximum number of concurrent certificate generation or renewal jobs. All other
+          jobs will queue and wait running jobs to finish. Reduces the system load of
+          certificate generation.
+
+          Set to `0` to allow unlimited number of concurrent job runs."
+          '';
+      };
     };
   };
 
@@ -791,10 +897,10 @@ in {
         certs = attrValues cfg.certs;
       in [
         {
-          assertion = cfg.email != null || all (certOpts: certOpts.email != null) certs;
+          assertion = cfg.defaults.email != null || all (certOpts: certOpts.email != null) certs;
           message = ''
             You must define `security.acme.certs.<name>.email` or
-            `security.acme.email` to register with the CA. Note that using
+            `security.acme.defaults.email` to register with the CA. Note that using
             many different addresses for certs may trigger account rate limits.
           '';
         }
@@ -836,33 +942,25 @@ in {
             and remove the wildcard from the path.
           '';
         }
-        {
-          assertion = data.dnsProvider == null || data.webroot == null;
+        (let exclusiveAttrs = {
+          inherit (data) dnsProvider webroot listenHTTP s3Bucket;
+        }; in {
+          assertion = lib.length (lib.filter (x: x != null) (builtins.attrValues exclusiveAttrs)) == 1;
           message = ''
-            Options `security.acme.certs.${cert}.dnsProvider` and
-            `security.acme.certs.${cert}.webroot` are mutually exclusive.
+            Exactly one of the options
+            `security.acme.certs.${cert}.dnsProvider`,
+            `security.acme.certs.${cert}.webroot`,
+            `security.acme.certs.${cert}.listenHTTP` and
+            `security.acme.certs.${cert}.s3Bucket`
+            is required.
+            Current values: ${(lib.generators.toPretty {} exclusiveAttrs)}.
           '';
-        }
+        })
         {
-          assertion = data.webroot == null || data.listenHTTP == null;
+          assertion = all (hasSuffix "_FILE") (attrNames data.credentialFiles);
           message = ''
-            Options `security.acme.certs.${cert}.webroot` and
-            `security.acme.certs.${cert}.listenHTTP` are mutually exclusive.
-          '';
-        }
-        {
-          assertion = data.listenHTTP == null || data.dnsProvider == null;
-          message = ''
-            Options `security.acme.certs.${cert}.listenHTTP` and
-            `security.acme.certs.${cert}.dnsProvider` are mutually exclusive.
-          '';
-        }
-        {
-          assertion = data.dnsProvider != null || data.webroot != null || data.listenHTTP != null;
-          message = ''
-            One of `security.acme.certs.${cert}.dnsProvider`,
-            `security.acme.certs.${cert}.webroot`, or
-            `security.acme.certs.${cert}.listenHTTP` must be provided.
+            Option `security.acme.certs.${cert}.credentialFiles` can only be
+            used for variables suffixed by "_FILE".
           '';
         }
       ]) cfg.certs));
@@ -875,12 +973,28 @@ in {
 
       users.groups.acme = {};
 
-      systemd.services = {
-        "acme-fixperms" = userMigrationService;
-      } // (mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewService) certConfigs)
+      # for lock files, still use tmpfiles as they should better reside in /run
+      systemd.tmpfiles.rules = [
+        "d ${lockdir} 0700 ${user} - - -"
+        "Z ${lockdir} 0700 ${user} - - -"
+      ];
+
+      systemd.services = let
+        renewServiceFunctions = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewService) certConfigs;
+        renewServices =  if cfg.maxConcurrentRenewals > 0
+          then roundRobinApplyAttrs renewServiceFunctions concurrencyLockfiles
+          else mapAttrs (_: f: f null) renewServiceFunctions;
+        selfsignServiceFunctions = mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs;
+        selfsignServices = if cfg.maxConcurrentRenewals > 0
+          then roundRobinApplyAttrs selfsignServiceFunctions concurrencyLockfiles
+          else mapAttrs (_: f: f null) selfsignServiceFunctions;
+        in
+        { "acme-fixperms" = userMigrationService; }
+        // (optionalAttrs (cfg.maxConcurrentRenewals > 0) {"acme-lockfiles" = lockfilePrepareService; })
+        // renewServices
         // (optionalAttrs (cfg.preliminarySelfsigned) ({
         "acme-selfsigned-ca" = selfsignCAService;
-      } // (mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs)));
+      } // selfsignServices));
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
 

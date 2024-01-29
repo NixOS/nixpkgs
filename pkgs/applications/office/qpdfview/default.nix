@@ -3,6 +3,7 @@
 , fetchurl
 , qmake
 , qtbase
+, qttools
 , qtsvg
 , pkg-config
 , poppler
@@ -24,6 +25,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
+    qttools
     pkg-config
   ];
 
@@ -39,6 +41,7 @@ mkDerivation rec {
   ];
 
   preConfigure = ''
+    lrelease qpdfview.pro
     qmakeFlags+=(*.pro)
   '';
 
@@ -51,6 +54,11 @@ mkDerivation rec {
     "LAUNCHER_INSTALL_PATH=${placeholder "out"}/share/applications"
     "APPDATA_INSTALL_PATH=${placeholder "out"}/share/appdata"
   ];
+
+  env = {
+    # Fix build due to missing `std::option`.
+    NIX_CFLAGS_COMPILE = "-std=c++17";
+  };
 
   meta = with lib; {
     description = "A tabbed document viewer";

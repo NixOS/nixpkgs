@@ -15,22 +15,22 @@
 , pytestCheckHook
 , pytest-asyncio
 , aiosqlite
-, sqlalchemy
 , asyncpg
+, ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.19.16";
+  version = "0.20.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aZlc4+J5Q+N9qEzGUMhsYguPdUy+E5I06wrjVyqvVDk=";
+    hash = "sha256-A9d/r4Caeo4tO82/MMXgU5xKvXRDnK0iQUm8AFhDPLM=";
   };
 
   propagatedBuildInputs = [
@@ -52,21 +52,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  checkInputs = [
     pytest-asyncio
     aiosqlite
-    sqlalchemy
     asyncpg
+    ruamel-yaml
   ] ++ passthru.optional-dependencies.encryption;
-
-  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
-
-  disabledTestPaths = [
-    # sqlalchemy 2 unsupported
-    "mautrix/client/state_store/tests/store_test.py"
-  ];
 
   pythonImportsCheck = [
     "mautrix"

@@ -78,11 +78,12 @@ in
       clientOptions = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = literalExpression ''{
-          fontSize = "16";
-          fontFamily = "Fira Code";
-
-        }'';
+        example = literalExpression ''
+          {
+            fontSize = "16";
+            fontFamily = "Fira Code";
+          }
+        '';
         description = lib.mdDoc ''
           Attribute set of client options for xtermjs.
           <https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/>
@@ -179,10 +180,11 @@ in
         # Runs login which needs to be run as root
         # login: Cannot possibly work without effective root
         User = "root";
+        LoadCredential = lib.optionalString (cfg.passwordFile != null) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
       };
 
       script = if cfg.passwordFile != null then ''
-        PASSWORD=$(cat ${escapeShellArg cfg.passwordFile})
+        PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
         ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
           --credential ${escapeShellArg cfg.username}:"$PASSWORD" \
           ${pkgs.shadow}/bin/login

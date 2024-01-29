@@ -3,10 +3,8 @@
 , fetchpatch
 , stdenv
 , rustPlatform
-, darwin
 , pkg-config
 , openssl
-, libiconv
 , CoreServices
 }:
 

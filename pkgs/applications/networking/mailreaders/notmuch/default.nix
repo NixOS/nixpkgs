@@ -1,24 +1,26 @@
-{ fetchurl, lib, stdenv
+{ fetchurl, lib, stdenv, makeWrapper
 , pkg-config, gnupg
-, xapian, gmime3, talloc, zlib
+, xapian, gmime3, sfsexp, talloc, zlib
 , doxygen, perl, texinfo
 , notmuch
 , pythonPackages
 , emacs
 , ruby
 , testers
-, which, dtach, openssl, bash, gdb, man
+, gitUpdater
+, which, dtach, openssl, bash, gdb, man, git
 , withEmacs ? true
 , withRuby ? true
+, withSfsexp ? true # also installs notmuch-git, which requires sexp-support
 }:
 
 stdenv.mkDerivation rec {
   pname = "notmuch";
-  version = "0.37";
+  version = "0.38.2";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
-    sha256 = "sha256-DnZt8ot4v064I1Ymqx9S8E8eNmZJMlqM6NPJCGAnhvY=";
+    hash = "sha256-UoLr5HQrA+4A/Dq4NZaflNIpJ523IyESvcUAnYYelH4=";
   };
 
   nativeBuildInputs = [
@@ -28,14 +30,16 @@ stdenv.mkDerivation rec {
     texinfo                   # (optional) documentation -> doc/INSTALL
     pythonPackages.cffi
   ] ++ lib.optional withEmacs emacs
-    ++ lib.optional withRuby ruby;
+    ++ lib.optional withRuby ruby
+    ++ lib.optional withSfsexp makeWrapper;
 
   buildInputs = [
     gnupg                     # undefined dependencies
     xapian gmime3 talloc zlib  # dependencies described in INSTALL
     perl
     pythonPackages.python
-  ] ++ lib.optional withRuby ruby;
+  ] ++ lib.optional withRuby ruby
+    ++ lib.optional withSfsexp sfsexp;
 
   postPatch = ''
     patchShebangs configure test/
@@ -75,26 +79,43 @@ stdenv.mkDerivation rec {
     ++ lib.optional withEmacs "emacs"
     ++ lib.optional withRuby "ruby";
 
-  preCheck = let
-    test-database = fetchurl {
-      url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
-      sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
-    };
-  in ''
-    mkdir -p test/test-databases
-    ln -s ${test-database} test/test-databases/database-v1.tar.xz
-  ''
-  # Issues since gnupg: 2.4.0 -> 2.4.1
-  + ''
-    rm test/{T350-crypto,T357-index-decryption}.sh
+  # if notmuch is built with s-expression support, the testsuite (T-850.sh) only
+  # passes if notmuch-git can be executed, so we need to patch its shebang.
+  postBuild = lib.optionalString withSfsexp ''
+    patchShebangs notmuch-git
   '';
+
+  preCheck =
+    let
+      test-database = fetchurl {
+        url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
+        sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
+      };
+    in
+    ''
+      mkdir -p test/test-databases
+      ln -s ${test-database} test/test-databases/database-v1.tar.xz
+    ''
+    + ''
+      # Issues since gnupg: 2.4.0 -> 2.4.1
+      rm test/{T350-crypto,T357-index-decryption}.sh
+      # Issues since pbr 6.0.0 bump (ModuleNotFoundError: No module named 'notmuch2')
+      rm test/T055-path-config.sh
+      # Flaky, seems to get its paths wrong sometimes (?)
+      # *ERROR*: Opening output file: Permission denied, /nix/store/bzy21v2cd5sq1djzwa9b19q08wpp9mm0-emacs-29.1/bin/OUTPUT
+      rm test/T460-emacs-tree.sh
+    '';
 
   doCheck = !stdenv.hostPlatform.isDarwin && (lib.versionAtLeast gmime3.version "3.0.3");
   checkTarget = "test";
   nativeCheckInputs = [
     which dtach openssl bash
-    gdb man emacs
-  ];
+    gdb man
+  ]
+  # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
+  # built without sexp-support
+  ++ lib.optional withEmacs emacs
+  ++ lib.optional withSfsexp git;
 
   installTargets = [ "install" "install-man" "install-info" ];
 
@@ -106,19 +127,32 @@ stdenv.mkDerivation rec {
       SHELL=$SHELL \
       $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
+  ''
+  # notmuch-git (https://notmuchmail.org/doc/latest/man1/notmuch-git.html) does not work without
+  # sexp-support, so there is no point in installing if we're building without it.
+  + lib.optionalString withSfsexp ''
+    cp notmuch-git $out/bin/notmuch-git
+    wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
   '';
 
   passthru = {
     pythonSourceRoot = "notmuch-${version}/bindings/python";
     tests.version = testers.testVersion { package = notmuch; };
     inherit version;
+
+    updateScript = gitUpdater {
+      url = "https://git.notmuchmail.org/git/notmuch";
+      ignoredVersions = "_(rc|pre).*";
+    };
   };
 
   meta = with lib; {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
+    changelog   = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
+    mainProgram = "notmuch";
   };
 }

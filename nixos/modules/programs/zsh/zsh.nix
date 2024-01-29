@@ -159,6 +159,14 @@ in
         type = types.bool;
       };
 
+      enableLsColors = mkOption {
+        default = true;
+        description = lib.mdDoc ''
+          Enable extra colors in directory listings (used by `ls` and `tree`).
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -262,6 +270,11 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${optionalString cfg.enableLsColors ''
+          # Extra colors for directory listings.
+          eval "$(${pkgs.coreutils}/bin/dircolors -b)"
+        ''}
 
         # Setup aliases.
         ${zshAliases}

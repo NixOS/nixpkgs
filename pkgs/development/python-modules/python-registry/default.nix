@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "python-registry";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "williballenthin";

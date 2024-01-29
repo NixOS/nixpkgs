@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ postgresql ];
 
   installPhase = ''
-    install -D tsearch_extras.so -t $out/lib/
+    install -D tsearch_extras${postgresql.dlSuffix} -t $out/lib/
     install -D ./{tsearch_extras--1.0.sql,tsearch_extras.control} -t $out/share/postgresql/extension
   '';
 

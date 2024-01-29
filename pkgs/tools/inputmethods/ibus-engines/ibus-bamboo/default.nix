@@ -5,20 +5,19 @@
 , xorg
 , pkg-config
 , wrapGAppsHook
-, ibus
 , gtk3
 , go
 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-bamboo";
-  version = "0.7.8";
+  version = "0.8.2-rc18";
 
   src = fetchFromGitHub {
     owner = "BambooEngine";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-H7me34KfhDD7BNEEKkhYXo9DLeclO7N19e961BOh1Ho=";
+    rev = "v" + lib.toUpper version;
+    sha256 = "sha256-5FSGPUJtUdYyeqJenvKaMIJcvon91I//62fnTCXcdig=";
   };
 
   nativeBuildInputs = [

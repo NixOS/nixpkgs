@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyodbc";
-  version = "4.0.35";
+  version = "5.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7" || isPyPy; # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-krmvSOi5KEVbyLlL89oFdR+uwJMqEe7iN8GJxtQ55cg=";
+    hash = "sha256-A9fQsE1akVYJnOjQPpLzlWeDdG+pI0629bXPwStkUBE=";
   };
 
   nativeBuildInputs = [

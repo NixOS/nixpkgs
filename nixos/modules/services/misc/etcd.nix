@@ -15,7 +15,7 @@ in {
       type = types.bool;
     };
 
-    package = mkPackageOptionMD pkgs "etcd" { };
+    package = mkPackageOption pkgs "etcd" { };
 
     name = mkOption {
       description = lib.mdDoc "Etcd unique node name.";
@@ -152,9 +152,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 etcd - - -"
-    ];
+    systemd.tmpfiles.settings."10-etcd".${cfg.dataDir}.d = {
+      user = "etcd";
+      mode = "0700";
+    };
 
     systemd.services.etcd = {
       description = "etcd key-value store";

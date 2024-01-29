@@ -12,6 +12,7 @@
 , glib
 , gtk4
 , gtk3
+, libhandy
 , gsettings-desktop-schemas
 , vte
 , gettext
@@ -29,14 +30,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.48.1";
+  version = "3.50.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-terminal";
     rev = version;
-    sha256 = "sha256-1t48JRESjAQubOmyK+QOhlp57iE5Ml0cqgy/2wjrLjE=";
+    sha256 = "sha256-lJAzmz8tvEbr371VtYjlV4+z3cSy4QrmP0vmD5WiJD4=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     gtk3
+    libhandy
     gsettings-desktop-schemas
     vte
     libuuid

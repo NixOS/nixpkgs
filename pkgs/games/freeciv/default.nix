@@ -10,19 +10,22 @@
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "3.0.4";
+  version = "3.0.9";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-hhX+aM/NHdqOM0qSKSJyW2FAWTsyAHrjaNhxtP2vbVA=";
+    hash = "sha256-vtkGV97FG43HIKPJ/of7jXWSrwHWgHUjwtq0XJPeKws=";
   };
 
   postPatch = ''
     for f in {common,utility}/*.py; do
       substituteInPlace $f \
         --replace '/usr/bin/env python3' ${python3.interpreter}
+    done
+    for f in bootstrap/*.sh; do
+      patchShebangs $f
     done
   '';
 

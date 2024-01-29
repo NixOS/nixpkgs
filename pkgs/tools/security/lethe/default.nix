@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kostassoid/lethe";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "lethe";
   };
 }

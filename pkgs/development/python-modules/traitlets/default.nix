@@ -1,38 +1,48 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
-, pytest
-, mock
-, ipython_genutils
-, decorator
 , pythonOlder
-, six
+
+# build-system
 , hatchling
+
+# tests
+, argcomplete
+, pytest-mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.9.0";
+  version = "5.14.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9s3iGpxoz3Vq8CA19y1acjv2B+hi574z7OUFq/Sjutk=";
+    hash = "sha256-/NqorEnATfoO0+4zhO9t/bXW83QVAr4kcnlAdnkpZ3I=";
   };
 
-  nativeBuildInputs = [ hatchling ];
-  nativeCheckInputs = [ glibcLocales pytest mock ];
-  propagatedBuildInputs = [ ipython_genutils decorator six ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test
-  '';
+  nativeCheckInputs = [
+    argcomplete
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires mypy-testing
+    "tests/test_typing.py"
+  ];
 
   meta = {
+    changelog = "https://github.com/ipython/traitlets/blob/v${version}/CHANGELOG.md";
     description = "Traitlets Python config system";
-    homepage = "https://ipython.org/";
+    homepage = "https://github.com/ipython/traitlets";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/gdraheim/zziplib/commit/e47b1e1da952a92f917db6fb19485b8a0b1a42f3.diff";
       sha256 = "0d032hkmi3s3db12z2zbppl2swa3gdpbj0c6w13ylv2g2ixglrwg";
     })
+    # Fixes invalid pointer conversions that cause compilation to fail with clang 15+
+    (fetchpatch {
+      url = "https://github.com/gdraheim/zziplib/commit/38e4d5f561318fa825e6544c2ef55ac5899c81b0.diff";
+      sha256 = "sha256-VJuFyiPhuAZlDxmNHBty+JbYwG85ea5u2sv7HZRHMwo=";
+    })
   ];
 
   nativeBuildInputs = [

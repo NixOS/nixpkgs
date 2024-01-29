@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "3.2.1";
+  version = "3.5.0";
   disabled = pythonOlder "3.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GEm9mNiyQrlI5HLbdHjgkL8zYZEqj+2HmS7ZQIX1Ryc=";
+    hash = "sha256-y7NvPWfgxHi6pX+k7ciEOIfg9s/ELWd1MKNtdHKzLYo=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,8 @@ buildPythonPackage rec {
     "test_rsyncignore"
     # flakey
     "test_internal_errors_propagate_to_controller"
+    # https://github.com/pytest-dev/pytest-xdist/issues/985
+    "test_workqueue_ordered_by_size"
   ];
 
   setupHook = ./setup-hook.sh;

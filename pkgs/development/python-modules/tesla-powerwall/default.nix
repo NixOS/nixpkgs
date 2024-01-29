@@ -5,12 +5,13 @@
 , pythonOlder
 , requests
 , responses
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tesla-powerwall";
-  version = "0.3.19";
-  format = "setuptools";
+  version = "0.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     owner = "jrester";
     repo = "tesla_powerwall";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ClrMgPAMBtDMfD6hCJIN1u4mp75QW+c3re28v3FreQg=";
+    hash = "sha256-IqUxWwEvrSEbLAEnHG84oCV75qO0L5LmgpHOfaM6G8o=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

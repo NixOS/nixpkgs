@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.9";
+  version = "1.6.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = "roombapy";
     rev = "refs/tags/${version}";
-    hash = "sha256-Bu8wl5Qtys1sy5FnB+2NCGnXnuq9u+TUUR9zNdlOFTU=";
+    hash = "sha256-aGNSySSKCx/8GYUdDWMSAhMBex738UACqnqj/Qx1m38=";
   };
 
   postPatch = ''

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyeverlights";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joncar";

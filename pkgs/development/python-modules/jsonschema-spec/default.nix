@@ -2,44 +2,62 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
+
+# build
 , poetry-core
-, jsonschema
+
+# propagates
 , pathable
 , pyyaml
-, typing-extensions
+, referencing
+, requests
+
+# tests
 , pytestCheckHook
+, responses
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-spec";
-  version = "0.1.4";
+  version = "0.2.4";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kLCV9WPWGrVgpbueafMVqtGmj3ifrBzTChE2kyxpyZk=";
+    hash = "sha256-1Flb3XQCGhrAYzTvriSVhHDb/Z/uvCyZdbav2u7f3sg=";
   };
 
   postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
+    sed -i "/^--cov/d" pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace 'referencing = ">=0.28.0,<0.30.0"' 'referencing = ">=0.28.0"'
   '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "referencing"
   ];
 
   propagatedBuildInputs = [
-    jsonschema
     pathable
     pyyaml
-    typing-extensions
+    referencing
+    requests
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    responses
   ];
 
   meta = with lib; {

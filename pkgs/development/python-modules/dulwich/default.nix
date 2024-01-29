@@ -11,21 +11,22 @@
 , gnupg
 , gpgme
 , paramiko
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , urllib3
 }:
 
 buildPythonPackage rec {
-  version = "0.21.5";
+  version = "0.21.7";
   pname = "dulwich";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cJVeTiSd3abjSkY2uQ906THlWPmTsXxSVw+mFEuZMQM=";
+    hash = "sha256-qenGaDPOpYDDrBKSfkuXEZhddq/KmNqXFAXUFN5g6Wg=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     geventhttpclient
     git
     glibcLocales
+    pytest-xdist
     pytestCheckHook
   ] ++ passthru.optional-dependencies.fastimport
   ++ passthru.optional-dependencies.pgp
@@ -85,7 +87,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
     license = with licenses; [ asl20 gpl2Plus ];
     maintainers = with maintainers; [ koral ];
   };

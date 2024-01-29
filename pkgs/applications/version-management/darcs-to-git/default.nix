@@ -77,5 +77,6 @@ stdenv.mkDerivation {
     homepage = "http://www.sanityinc.com/articles/converting-darcs-repositories-to-git";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    mainProgram = "darcs-to-git";
   };
 }

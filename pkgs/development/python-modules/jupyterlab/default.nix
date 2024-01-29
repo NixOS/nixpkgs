@@ -1,54 +1,49 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, ipython
+, hatch-jupyter-builder
+, hatchling
+, async-lru
 , packaging
 , tornado
+, ipykernel
 , jupyter-core
-, jupyterlab_server
+, jupyter-lsp
+, jupyterlab-server
 , jupyter-server
-, jupyter-server-ydoc
-, notebook
+, notebook-shim
 , jinja2
 , tomli
 , pythonOlder
-, jupyter-packaging
-, pythonRelaxDepsHook
-, nbclassic
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "3.6.3";
-  format = "setuptools";
+  version = "4.0.11";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nz6c+4py7dKUvhTxZmJWOiIM7PD7Jt56qxr5optom4I=";
+    hash = "sha256-0a7CRxJWa8JaNiKXiCQneOSYykCIAo4vmqFWuLf9yPw=";
   };
 
   nativeBuildInputs = [
-    jupyter-packaging
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "jupyter-ydoc"
-    "jupyter-server-ydoc"
+    hatch-jupyter-builder
+    hatchling
   ];
 
   propagatedBuildInputs = [
-    ipython
+    async-lru
     packaging
     tornado
+    ipykernel
     jupyter-core
-    jupyterlab_server
+    jupyter-lsp
+    jupyterlab-server
     jupyter-server
-    jupyter-server-ydoc
-    nbclassic
-    notebook
+    notebook-shim
     jinja2
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
@@ -68,10 +63,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/jupyterlab/jupyterlab/releases/tag/v${version}";
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = with maintainers; [ zimbatm costrouc ];
+    maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupyter-lab";
   };
 }

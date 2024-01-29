@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pathlib2";
   version = "2.3.7.post1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,6 +32,6 @@ buildPythonPackage rec {
     description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems.";
     homepage = "https://pypi.org/project/pathlib2/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,40 +1,59 @@
 { lib, newScope, fetchurl }:
-let
-  callPackage = newScope self;
 
-  self = with lib; {
-    inherit callPackage;
+lib.makeScope newScope (self: {
 
-    fetchegg = { pname, version, sha256, ... }:
-      fetchurl {
-        inherit sha256;
-        url =
-          "https://code.call-cc.org/egg-tarballs/5/${pname}/${pname}-${version}.tar.gz";
-      };
-
-    eggDerivation = callPackage ./eggDerivation.nix { };
-
-    chicken = callPackage ./chicken.nix {
-      bootstrap-chicken = self.chicken.override { bootstrap-chicken = null; };
+  fetchegg = { pname, version, sha256, ... }:
+    fetchurl {
+      inherit sha256;
+      url =
+        "https://code.call-cc.org/egg-tarballs/5/${pname}/${pname}-${version}.tar.gz";
     };
 
-    chickenEggs = recurseIntoAttrs (mapAttrs (pname:
-      eggData@{ version, synopsis, dependencies, license, ... }:
-      self.eggDerivation {
-        name = "${pname}-${version}";
-        src = self.fetchegg (eggData // { inherit pname; });
-        buildInputs = map (x: self.chickenEggs.${x}) dependencies;
-        meta.homepage =
-          "https://code.call-cc.org/cgi-bin/gitweb.cgi?p=eggs-5-latest.git;a=tree;f=${pname}/${version}";
-        meta.description = synopsis;
-        meta.license = (licenses // {
-          "bsd-2-clause" = licenses.bsd2;
-          "bsd-3-clause" = licenses.bsd3;
-          "public-domain" = licenses.publicDomain;
-        }).${license} or license;
-      }) (importTOML ./deps.toml));
+  eggDerivation = self.callPackage ./eggDerivation.nix { };
 
-    egg2nix = callPackage ./egg2nix.nix { };
+  chicken = self.callPackage ./chicken.nix {
+    bootstrap-chicken = self.chicken.override { bootstrap-chicken = null; };
   };
 
-in lib.recurseIntoAttrs self
+  chickenEggs = lib.recurseIntoAttrs (lib.makeScope self.newScope (eggself:
+    (lib.mapAttrs
+      (pname:
+        eggData@{ version, synopsis, dependencies, license, ... }:
+        self.eggDerivation {
+          name = "${pname}-${version}";
+          src = self.fetchegg (eggData // { inherit pname; });
+          buildInputs = map (x: eggself.${x}) dependencies;
+          meta.homepage =
+            "https://code.call-cc.org/cgi-bin/gitweb.cgi?p=eggs-5-latest.git;a=tree;f=${pname}/${version}";
+          meta.description = synopsis;
+          meta.license = (lib.licenses // {
+            "agpl" = lib.licenses.agpl3Only;
+            "artistic" = lib.licenses.artistic2;
+            "bsd" = lib.licenses.bsd3;
+            "bsd-1-clause" = lib.licenses.bsd1;
+            "bsd-2-clause" = lib.licenses.bsd2;
+            "bsd-3-clause" = lib.licenses.bsd3;
+            "gpl" = lib.licenses.gpl3Only;
+            "gpl-2" = lib.licenses.gpl2Only;
+            "gplv2" = lib.licenses.gpl2Only;
+            "gpl-3" = lib.licenses.gpl3Only;
+            "gpl-3.0" = lib.licenses.gpl3Only;
+            "gplv3" = lib.licenses.gpl3Only;
+            "lgpl" = lib.licenses.lgpl3Only;
+            "lgpl-2" = lib.licenses.lgpl2Only;
+            "lgpl-2.0+" = lib.licenses.lgpl2Plus;
+            "lgpl-2.1" = lib.licenses.lgpl21Only;
+            "lgpl-2.1-or-later" = lib.licenses.lgpl21Plus;
+            "lgpl-3" = lib.licenses.lgpl3Only;
+            "lgplv3" = lib.licenses.lgpl3Only;
+            "public-domain" = lib.licenses.publicDomain;
+            "srfi" = lib.licenses.bsd3;
+            "unicode" = lib.licenses.ucd;
+            "zlib-acknowledgement" = lib.licenses.zlib;
+          }).${license} or license;
+        })
+      (lib.importTOML ./deps.toml))));
+
+  egg2nix = self.callPackage ./egg2nix.nix { };
+
+})

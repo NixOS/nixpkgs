@@ -1,39 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, substituteAll
+}:
 
-buildGoModule {
+buildGoModule rec {
   pname = "govulncheck";
-  version = "unstable-2023-03-22";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "f2d9b5a6e023e7cd80347eb7ebca02ae19b28903";
-    sha256 = "sha256-zaeCEgFlv3Oxm4dIT/Evevww05JYEecekXO9UtIKLkU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1x2hj4HD3KAo9w1QXh5qsWtcAM0Kly5u/DRd13Mqa5w=";
   };
 
-  vendorSha256 = "sha256-RxdiZ3NN+EWVCiBPI0VIDuRI1/h4rnU4KCNn2WwZL7Q=";
+  patches = [
+    # patch in version information
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
 
-  subPackages = [ "cmd/govulncheck" ];
+  vendorHash = "sha256-Jg2Nx63Xak149111jbBP6SgK3hze21Dx5qcDKXCqa48=";
 
-  preCheck = ''
-    # test all paths
-    unset subPackages
+  subPackages = [
+    "cmd/govulncheck"
+  ];
 
-    # remove test that calls checks.bash
-    # the header check and misspell gets upset at the vendor dir
-    rm all_test.go
+  # Vendoring breaks tests
+  doCheck = false;
 
-    # remove tests that generally have "inconsistent vendoring" issues
-    # - tries to builds govulncheck again
-    rm cmd/govulncheck/main_command_118_test.go
-    # - does go builds of example go files
-    rm internal/vulncheck/binary_test.go
-    # - just have resolution issues
-    rm internal/vulncheck/{source,vulncheck}_test.go
-    rm internal/govulncheck/callstacks_test.go
-  '';
-
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";

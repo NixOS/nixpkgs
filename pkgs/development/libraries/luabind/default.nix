@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
+  patches = [./0.9.1-discover-luajit.patch];
+
   meta = {
-    homepage = "https://github.com/luabind/luabind";
+    homepage = "https://github.com/Oberon00/luabind";
     description = "A library that helps you create bindings between C++ and Lua";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

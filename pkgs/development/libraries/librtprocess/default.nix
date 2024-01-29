@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages }:
 
 stdenv.mkDerivation rec {
   pname = "librtprocess";
@@ -6,18 +6,20 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "CarVac";
-    repo = pname;
+    repo = "librtprocess";
     rev = version;
-    sha256 = "sha256-/1o6SWUor+ZBQ6RsK2PoDRu03jcVRG58PNYFttriH2w=";
+    hash = "sha256-/1o6SWUor+ZBQ6RsK2PoDRu03jcVRG58PNYFttriH2w=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+
   meta = with lib; {
-    homepage = "https://github.com/CarVac/librtprocess";
     description = "Highly optimized library for processing RAW images";
-    license = licenses.gpl3;
+    homepage = "https://github.com/CarVac/librtprocess";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hjones2199 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }

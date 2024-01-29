@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Python RADIUS Implementation";
     homepage = "https://github.com/pyradius/pyrad";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }

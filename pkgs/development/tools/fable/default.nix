@@ -2,9 +2,10 @@
 
 buildDotnetGlobalTool {
   pname = "fable";
-  version = "4.1.4";
+  version = "4.10.0";
 
-  nugetSha256 = "sha256-9wMQj4+xmAprt80slet2wUW93fRyEhOhhNVGYbWGS3Y=";
+  nugetSha256 = "sha256-qSnPb+qjF10gzP8LSvvqnAXa0tedvOMHCrVd8zTtZl0=";
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Fable is an F# to JavaScript compiler";

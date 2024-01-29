@@ -11,7 +11,6 @@
 , dbus
 , cryptsetup
 , util-linux
-, udev
 , lvm2
 , systemd
 , xfsprogs
@@ -28,20 +27,17 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.5.7";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JkGDik2RL+JnUJloV5597UlSnF5PncP3F6nzghJpGBg=";
+    rev = "refs/tags/stratisd-v${version}";
+    hash = "sha256-0zSMFjAzTtTmpSCqlIq5GXk3/AhlhtECFZXmo6xcjWA=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "loopdev-0.4.0" = "sha256-nV52zjsg5u6++J8CdN2phii8AwjHg1uap2lt+U8obDQ=";
-    };
   };
 
   postPatch = ''
@@ -53,7 +49,7 @@ stdenv.mkDerivation rec {
       --replace stratis-min           "$out/bin/stratis-min" \
       --replace systemd-ask-password  "${systemd}/bin/systemd-ask-password" \
       --replace sleep                 "${coreutils}/bin/sleep" \
-      --replace udevadm               "${udev}/bin/udevadm"
+      --replace udevadm               "${systemd}/bin/udevadm"
   '';
 
   nativeBuildInputs = [
@@ -72,13 +68,13 @@ stdenv.mkDerivation rec {
     dbus
     cryptsetup
     util-linux
-    udev
+    systemd
     lvm2
   ];
 
-  outputs = ["out" "initrd"];
+  outputs = [ "out" "initrd" ];
 
-  EXECUTABLES_PATHS = lib.makeBinPath ([
+  env.EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
   ] ++ lib.optionals clevisSupport [
@@ -100,10 +96,10 @@ stdenv.mkDerivation rec {
   # remove files for supporting dracut
   postInstall = ''
     mkdir -p "$initrd/bin"
-    cp "dracut/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    cp "$out/lib/dracut/modules.d/90stratis/stratis-rootfs-setup" "$initrd/bin"
     mkdir -p "$initrd/lib/systemd/system"
-    substitute "dracut/90stratis/stratisd-min.service" "$initrd/lib/systemd/system/stratisd-min.service" \
-      --replace /usr "$out" \
+    substitute "$out/lib/dracut/modules.d/90stratis/stratisd-min.service" \
+      "$initrd/lib/systemd/system/stratisd-min.service" \
       --replace mkdir "${coreutils}/bin/mkdir"
     mkdir -p "$initrd/lib/udev/rules.d"
     cp udev/61-stratisd.rules "$initrd/lib/udev/rules.d"
@@ -111,7 +107,9 @@ stdenv.mkDerivation rec {
     rm -r "$out/lib/systemd/system-generators"
   '';
 
-  passthru.tests = nixosTests.stratis;
+  passthru.tests = nixosTests.stratis // {
+    inherit (nixosTests.installer-systemd-stage-1) stratisRoot;
+  };
 
   meta = with lib; {
     description = "Easy to use local storage management for Linux";

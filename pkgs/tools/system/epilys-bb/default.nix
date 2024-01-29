@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk ];
     platforms = platforms.linux;
+    mainProgram = "bb";
   };
 }

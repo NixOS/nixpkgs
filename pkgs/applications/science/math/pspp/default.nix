@@ -1,23 +1,28 @@
 { lib, stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
-, pkg-config, gtksourceview, pango, gettext, dconf
+, pkg-config, gtksourceview4, pango, gettext, dconf
 , makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
-, texinfo, ssw, python3
+, texinfo, ssw, python3, iconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "pspp";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/${pname}-${version}.tar.gz";
-    sha256 = "0lqrash677b09zxdlxp89z6k02y4i23mbqg83956dwl69wc53dan";
+    sha256 = "sha256-qPbLiGr1sIOENXm81vsZHAVKzOKMxotY58XwmZai2N8=";
   };
 
   nativeBuildInputs = [ pkg-config texinfo python3 makeWrapper ];
   buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
-    gtksourceview pango gettext
-    gsettings-desktop-schemas hicolor-icon-theme ssw
-  ];
+                  gtksourceview4 pango gettext
+                  gsettings-desktop-schemas hicolor-icon-theme ssw iconv
+                ];
+
+  C_INCLUDE_PATH =
+    "${libxml2.dev}/include/libxml2/:" +
+    lib.makeSearchPathOutput "dev" "include" buildInputs;
+  LIBRARY_PATH = lib.makeLibraryPath buildInputs;
 
   doCheck = false;
 

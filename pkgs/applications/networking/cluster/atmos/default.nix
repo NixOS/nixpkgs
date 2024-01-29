@@ -2,22 +2,25 @@
 
 buildGoModule rec {
   pname = "atmos";
-  version = "1.16.0";
+  version = "1.55.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6NUuKU8KQBfHE6fcN3a9lBcUk7p5I9SuY9g+qJxGXmU=";
+    sha256 = "sha256-JRvPRlq4H9PcELozlvIE065LSNIxrh/Ej+2GXO8s2x4=";
   };
 
-  vendorSha256 = "sha256-vZwADD7fi9ZvJby9Ijdeueid8jRfUyyj6Nu4kgkO5Wo=";
+  vendorHash = "sha256-YBcVsuBL5n5ycaY1a0uxlDKX7YyrtF16gi17wCK1Jio=";
 
   ldflags = [ "-s" "-w" "-X github.com/cloudposse/atmos/cmd.Version=v${version}" ];
 
   preCheck = ''
     # Remove tests that depend on a network connection.
-    rm -f pkg/vender/component_vendor_test.go
+    rm -f \
+      pkg/vender/component_vendor_test.go \
+      pkg/atlantis/atlantis_generate_repo_config_test.go \
+      pkg/describe/describe_affected_test.go
   '';
 
   doCheck = true;
@@ -37,4 +40,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ rb ];
   };
 }
-

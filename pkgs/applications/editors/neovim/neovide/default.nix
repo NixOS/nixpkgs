@@ -6,6 +6,7 @@
 , fetchgit
 , runCommand
 , gn
+, neovim
 , ninja
 , makeWrapper
 , pkg-config
@@ -25,23 +26,16 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
-  version = "0.10.4";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     rev = version;
-    sha256 = "sha256-0vIq8vJPvcmA7hRyGY4qQRxwmgQAKHVU+452iMohGCA=";
+    sha256 = "sha256-lmhTTBlhyEepUNHrm2hq42G1kA7siAsJUcYjBfajaHA=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "glutin-0.26.0" = "sha256-Ie4Jb3wCMZSmF1MUzkLG2TqsLrXXzzi6ATjzCjevZBc=";
-      "winit-0.24.0" = "sha256-p/eAaDVmTHzfZ+0DiBA/9v06Z5o1dXVNoCgWRqC1ed0=";
-      "xkbcommon-dl-0.1.0" = "sha256-ojokJF7ivN8JpXo+JAfX3kUOeXneNek7pzIy8D1n4oU=";
-    };
-  };
+  cargoSha256 = "sha256-1R1JrNhcgC16anr5Gl1b9rHgfRLPJElef5D65joHxj0=";
 
   SKIA_SOURCE_DIR =
     let
@@ -49,8 +43,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m103-0.51.1";
-        sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
+        rev = "m119-0.67.3";
+        sha256 = "sha256-U75NuJnQa5+SNlOrsBmdlvflGdjo3el63EeIsbnE7ms=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = linkFarm "skia-externals" (lib.mapAttrsToList
@@ -74,11 +68,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     removeReferencesTo
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  # All tests passes but at the end cargo prints for unknown reason:
-  #   error: test failed, to rerun pass '--bin neovide'
-  # Increasing the loglevel did not help. In a nix-shell environment
-  # the failure do not occure.
-  doCheck = false;
+  nativeCheckInputs = [ neovim ];
 
   buildInputs = [
     SDL2
@@ -87,6 +77,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
@@ -122,6 +117,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d ];
+    maintainers = with maintainers; [ ck3d multisn8 ];
+    platforms = platforms.all;
   };
 }

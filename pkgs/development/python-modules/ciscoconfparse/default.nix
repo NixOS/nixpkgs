@@ -31,6 +31,14 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    # The line below is in the [build-system] section, which is invalid and
+    # rejected by PyPA's build tool. It belongs in [project] but upstream has
+    # had problems with putting that there (see comment in pyproject.toml).
+    sed -i '/requires-python/d' pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace '"poetry>=1.3.2",' ""
+
     patchShebangs tests
   '';
 

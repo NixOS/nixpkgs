@@ -6,7 +6,7 @@
 , python3
 , python3Packages
 , wafHook
-, boost
+, boost179
 , openssl
 , sqlite
 }:
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
 
-  buildInputs = [ boost openssl sqlite ];
+  buildInputs = [ boost179 openssl sqlite ];
 
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
-    "--boost-includes=${boost.dev}/include"
-    "--boost-libs=${boost.out}/lib"
+    "--boost-includes=${boost179.dev}/include"
+    "--boost-libs=${boost179.out}/lib"
     "--with-tests"
   ];
 

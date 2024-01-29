@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "IPy";
   version = "1.01";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

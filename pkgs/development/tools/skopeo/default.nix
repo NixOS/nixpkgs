@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.12.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    hash = "sha256-a4uM2WjDhjz4zTiM2HWoDHQQ9aT38HV9GNUJAJmZR+w=";
+    hash = "sha256-PYPlhlliqd6j3KbMgelg+spqXOl1ZnA0qd1Xyf8F4wY=";
   };
 
   outputs = [ "out" "man" ];
@@ -36,7 +36,7 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]
-  ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+    ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
     runHook preBuild

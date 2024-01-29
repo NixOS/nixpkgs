@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dump1090";
-  version = "8.2";
+  version = "9.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SUvK9XTXIDimEMEnORnp/Af/F030TZTxLI43Jzz31Js=";
+    sha256 = "sha256-rc4mg+Px+0p2r38wxIah/rHqWjHSU0+KCPgqj/Gl3oo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux limesuite;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-implicit-function-declaration -Wno-int-conversion";
+    "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
 
-  buildFlags = [ "dump1090" "view1090" ];
+  buildFlags = [ "DUMP1090_VERSION=${version}" "dump1090" "view1090" ];
 
   doCheck = true;
 

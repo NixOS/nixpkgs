@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-9OWsITbC7YO51QzsRwDWvojU54DiuGJhkSGwmesEj9w=";
   };
 
-  vendorSha256 = "sha256-wou5inOX8vadEBCIBccwSRjtzf0GH1abwNdUu4JBvyM=";
+  vendorHash = "sha256-wou5inOX8vadEBCIBccwSRjtzf0GH1abwNdUu4JBvyM=";
 
   meta = with lib; {
     description = "An interactive kubernetes client featuring auto-complete";

@@ -69,5 +69,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor orivej anthonyroussel ];
+    mainProgram = "solfege";
   };
 }

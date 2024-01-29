@@ -15,13 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.12";
+  version = "0.4.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cLlPUPzYyOpqk4qHsn22s3Xr/VkGjnHL4JVw2qy2iTc=";
+    hash = "sha256-+olp+zphcHMvcGKHt0JhxXza1wd7UiydwVFnSQ310Vg=";
   };
 
   nativeCheckInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];

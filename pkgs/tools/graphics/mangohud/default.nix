@@ -15,6 +15,7 @@
 , mangohud32
 , addOpenGLRunpath
 , appstream
+, git
 , glslang
 , mako
 , meson
@@ -30,13 +31,13 @@
 , glfw
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
-, lowerBitnessSupport ? stdenv.hostPlatform.is64bit # Support 32 bit on 64bit
+, lowerBitnessSupport ? stdenv.hostPlatform.isx86_64 # Support 32 bit on 64bit
 , nix-update-script
 }:
 
 let
   # Derived from subprojects/cmocka.wrap
-  cmocka = rec {
+  cmocka = {
     version = "1.81";
     src = fetchFromGitLab {
       owner = "cmocka";
@@ -78,14 +79,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.6.9-1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AX4m1XZ+yXp74E3slFGyI3CGu2eYU+eXNN2EY+ivdfk=";
+    hash = "sha256-KkMN7A3AcS/v+b9GCs0pI6MBBk3WwOMciaoiBzL5xOQ=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -93,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
-    ${lib.optionalString finalAttrs.doCheck ''
+    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
       cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
     ''}
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
@@ -132,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       ] ++ lib.optionals lowerBitnessSupport [
         mangohud32
       ])} \
+      --subst-var-by version "${finalAttrs.version}" \
       --subst-var-by dataDir ${placeholder "out"}/share
 
     (
@@ -144,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dwith_wayland=enabled"
     "-Duse_system_spdlog=enabled"
-    "-Dtests=${if finalAttrs.doCheck then "enabled" else "disabled"}"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
   ] ++ lib.optionals gamescopeSupport [
     "-Dmangoapp=true"
     "-Dmangoapp_layer=true"
@@ -153,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     addOpenGLRunpath
+    git
     glslang
     mako
     meson
@@ -212,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
   '' + lib.optionalString gamescopeSupport ''
     addOpenGLRunpath "$out/bin/mangoapp"
-  '' + lib.optionalString finalAttrs.doCheck ''
+  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
     # libcmocka.so is only used for tests
     rm "$out/lib/libcmocka.so"
   '';

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "07aayck82w5xcp3si35d7ghybmrbqw91fqqvmbpjrjcixc6m42z7";
   };
 
-  sourceRoot = "source/ctrtool";
+  sourceRoot = "${src.name}/ctrtool";
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++"];
   enableParallelBuilding = true;
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     description = "A tool to extract data from a 3ds rom";
     platforms = platforms.linux;
     maintainers = [ maintainers.marius851000 ];
+    mainProgram = "ctrtool";
   };
 
 }

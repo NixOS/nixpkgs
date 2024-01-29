@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "imgsize";
   version = "2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ojii";

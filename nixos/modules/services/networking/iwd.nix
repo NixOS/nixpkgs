@@ -2,7 +2,7 @@
 
 let
   inherit (lib)
-    mkEnableOption mkIf mkOption types
+    mkEnableOption mkPackageOption mkIf mkOption types
     recursiveUpdate;
 
   cfg = config.networking.wireless.iwd;
@@ -19,14 +19,7 @@ in
   options.networking.wireless.iwd = {
     enable = mkEnableOption (lib.mdDoc "iwd");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.iwd;
-      defaultText = lib.literalExpression "pkgs.iwd";
-      description = lib.mdDoc ''
-        The iwd package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "iwd" { };
 
     settings = mkOption {
       type = ini.type;
@@ -71,8 +64,10 @@ in
     };
 
     systemd.services.iwd = {
+      path = [ config.networking.resolvconf.package ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      serviceConfig.ReadWritePaths = "-/etc/resolv.conf";
     };
   };
 

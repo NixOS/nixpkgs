@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubeconform";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "yannh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TPT+zO5WHW/D04dLMJLJ7uAYoDLky75kWqaN7PsyzEo=";
+    sha256 = "sha256-PUZ3zwgOQ362ikoX1D7SLThiaFpXJh9TKOdjZqZDtSg=";
   };
 
   vendorHash = null;

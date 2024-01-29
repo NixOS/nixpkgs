@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gparted.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "gparted";
   };
 }

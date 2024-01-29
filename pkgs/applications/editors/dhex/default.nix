@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [qknight];
     platforms = with lib.platforms; linux;
+    mainProgram = "dhex";
   };
 }

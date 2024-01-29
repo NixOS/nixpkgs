@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "units";
   version = "0.07";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,6 +17,6 @@ buildPythonPackage rec {
     description = "Python support for quantities with units";
     homepage = "https://bitbucket.org/adonohue/units/";
     license = licenses.psfl;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

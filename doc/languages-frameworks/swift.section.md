@@ -32,7 +32,7 @@ look for the following directories:
   (If not targeting macOS, replace `macosx` with the Xcode platform name.)
 - On other platforms: `lib/swift/linux/x86_64`
   (Where `linux` and `x86_64` are from lowercase `uname -sm`.)
-- For convenience, Nixpkgs also adds simply `lib/swift` to the search path.
+- For convenience, Nixpkgs also adds `lib/swift` to the search path.
   This can save a bit of work packaging Swift modules, because many Nix builds
   will produce output for just one target any way.
 
@@ -123,7 +123,7 @@ swiftpmFlags = [ "--disable-dead-strip" ];
 
 The default `buildPhase` already passes `-j` for parallel building.
 
-If these two customization options are insufficient, simply provide your own
+If these two customization options are insufficient, provide your own
 `buildPhase` that invokes `swift build`.
 
 ### Running tests {#ssec-swiftpm-running-tests}

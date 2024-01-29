@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "flannel";
-  version = "0.21.5";
+  version = "0.24.0";
   rev = "v${version}";
 
-  vendorHash = "sha256-JtDFwkYRAxpa4OBV5Tzr70DcOsp2oA3XB0PM5kGaY6Q=";
+  vendorHash = "sha256-vxzcFVFbbXeBb9kAJaAkvk26ptGo8CdnPJdcuC9qdF0=";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "flannel-io";
     repo = "flannel";
-    sha256 = "sha256-X8NVAaKJrJF1OCfzwcydvDPFUOhwdgGy/wfMWdhUqQ0=";
+    sha256 = "sha256-Tog1H5/7B2Dke3vFqOyqKxYo0UzMzA80Da0LFscto2A=";
   };
 
-  ldflags = [ "-X github.com/flannel-io/flannel/version.Version=${rev}" ];
+  ldflags = [ "-X github.com/flannel-io/flannel/pkg/version.Version=${rev}" ];
 
   # TestRouteCache/TestV6RouteCache fail with "Failed to create newns: operation not permitted"
   doCheck = false;

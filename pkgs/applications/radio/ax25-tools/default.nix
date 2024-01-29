@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kqnLi1iobcufVWMPxUyaRsWKIPyTvtUkuMERGQs2qgY=";
   };
 
-  configureFlags = [ "--sysconfdir=/etc" ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var/lib"
+  ];
 
   meta = with lib; {
     description = "Non-GUI tools used to configure an AX.25 enabled computer";

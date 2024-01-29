@@ -1,19 +1,31 @@
 { lib
 , fetchFromGitHub
 , python3
+, runtimeShell
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "7.25.3";
+  version = "8.3.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KrstajTocVX5Tw7aiPoJ9vxJ0nKF+jqJcYJKrJvBt0Q=";
+    hash = "sha256-urC8IVfliVzyWu7zqZN5EI6d3vXz80vHPhQaKBzTEVA=";
+    # https://github.com/python-versioneer/python-versioneer/issues/217
+    postFetch = ''
+      sed -i "$out"/snakemake/_version.py -e 's#git_refnames = ".*"#git_refnames = " (tag: v${version})"#'
+    '';
   };
+
+  postPatch = ''
+    patchShebangs --build tests/
+    patchShebangs --host snakemake/executors/jobscript.sh
+    substituteInPlace snakemake/shell.py \
+      --replace "/bin/sh" "${runtimeShell}"
+  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     appdirs
@@ -23,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     docutils
     gitpython
     humanfriendly
+    immutables
     jinja2
     jsonschema
     nbformat
@@ -32,6 +45,9 @@ python3.pkgs.buildPythonApplication rec {
     requests
     reretry
     smart-open
+    snakemake-interface-executor-plugins
+    snakemake-interface-common
+    snakemake-interface-storage-plugins
     stopit
     tabulate
     throttler
@@ -46,27 +62,28 @@ python3.pkgs.buildPythonApplication rec {
   # setup.
 
   nativeCheckInputs = with python3.pkgs; [
+    numpy
     pandas
     pytestCheckHook
     requests-mock
+    snakemake-executor-plugin-cluster-generic
   ];
 
   disabledTestPaths = [
-    "tests/test_slurm.py"
-    "tests/test_tes.py"
-    "tests/test_tibanna.py"
-    "tests/test_linting.py"
+    "tests/test_conda_python_3_7_script/test_script.py"
   ];
 
   disabledTests = [
-    # Tests require network access
-    "test_github_issue1396"
-    "test_github_issue1460"
+    "test_deploy_sources"
   ];
 
   pythonImportsCheck = [
     "snakemake"
   ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   meta = with lib; {
     homepage = "https://snakemake.github.io";

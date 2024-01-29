@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "nbsmoke";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -41,6 +42,6 @@ buildPythonPackage rec {
     description = "Basic notebook checks and linting";
     homepage = "https://github.com/pyviz/nbsmoke";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

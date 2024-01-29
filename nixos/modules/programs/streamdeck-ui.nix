@@ -15,7 +15,7 @@ in
       description = lib.mdDoc "Whether streamdeck-ui should be started automatically.";
     };
 
-    package = mkPackageOptionMD pkgs "streamdeck-ui" {
+    package = mkPackageOption pkgs "streamdeck-ui" {
       default = [ "streamdeck-ui" ];
     };
 
@@ -24,7 +24,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       cfg.package
-      (mkIf cfg.autoStart (makeAutostartItem { name = "streamdeck-ui"; package = cfg.package; }))
+      (mkIf cfg.autoStart (makeAutostartItem { name = "streamdeck-ui-noui"; package = cfg.package; }))
     ];
 
     services.udev.packages = [ cfg.package ];

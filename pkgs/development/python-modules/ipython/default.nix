@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 
 # Build dependencies
@@ -12,6 +11,7 @@
 , appnope
 , backcall
 , decorator
+, exceptiongroup
 , jedi
 , matplotlib-inline
 , pexpect
@@ -20,6 +20,7 @@
 , pygments
 , stack-data
 , traitlets
+, typing-extensions
 
 # Test dependencies
 , pytestCheckHook
@@ -28,13 +29,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.11.0";
+  version = "8.18.1";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "735cede4099dbc903ee540307b9171fbfef4aa75cfcacc5a273b2cda2f02be04";
+    sha256 = "sha256-ym8Hm7M0V8ZuIz5FgOv8QSiFW0z2Nw3d1zhCqVY+iic=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,10 @@ buildPythonPackage rec {
     pygments
     stack-data
     traitlets
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
   ] ++ lib.optionals stdenv.isDarwin [
     appnope
   ];
@@ -64,8 +69,8 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
 
     # doctests try to fetch an image from the internet
-    substituteInPlace pytest.ini \
-      --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
+    substituteInPlace pyproject.toml \
+      --replace '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
   '';
 
   nativeCheckInputs = [
@@ -83,6 +88,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
+    downloadPage = "https://github.com/ipython/ipython/";
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;

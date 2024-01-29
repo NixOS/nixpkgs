@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-MJybc2yAchU6qMqkoRz45QdhR7bj/UFk2nyxcBivsHI=";
   };
+
+  patches = [
+    # Add support for AppStream 1.0
+    # https://github.com/elementary/switchboard-plug-about/pull/275
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-about/commit/72d7da13da2824812908276751fd3024db2dd0f8.patch";
+      hash = "sha256-R7oW3mL77/JNqxuMiqxtdMlHWMJgGRQBBzVeRiqx8PY=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

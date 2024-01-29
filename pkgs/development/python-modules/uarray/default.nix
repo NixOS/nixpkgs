@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "uarray";
   version = "0.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
@@ -44,6 +45,6 @@ buildPythonPackage rec {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

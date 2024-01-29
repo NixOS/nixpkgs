@@ -11,15 +11,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nostr-rs-relay";
-  version = "0.8.9";
+  version = "0.8.13";
   src = fetchFromGitHub {
     owner = "scsibug";
     repo = "nostr-rs-relay";
     rev = version;
-    hash = "sha256-x5y/d76Qel8FMIlUn8NdwihWebJsNIt2it2vs/Xlk0Q=";
+    hash = "sha256-YgYi387b1qlGpjupqgGuLx8muHJ1iMx1sH82UW3TsQg=";
   };
 
-  cargoHash = "sha256-1wgBABgcogHCk183AaTwbbSGk8d8FvlZYvw1//5y93I=";
+  cargoHash = "sha256-CwyX8VlzH/y5LZtaMDd/4yWGCZLczc9bW4AqUzQFFKU=";
 
   buildInputs = [ openssl.dev ]
     ++ lib.optionals stdenv.isDarwin [

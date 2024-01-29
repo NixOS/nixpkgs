@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpp-fcl";
-  version = "2.3.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "humanoid-path-planner";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-tX8AvlR/Az8fFs4ylqFijw3hXiNRoEWffmYbTcaqO90=";
+    hash = "sha256-Suow6dvDZI0uS/CkzfkWIxYjn+i4Fbyd2EnqlxM2gMY=";
   };
 
   strictDeps = true;

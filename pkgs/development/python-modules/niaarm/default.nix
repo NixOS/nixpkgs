@@ -3,24 +3,26 @@
 , fetchFromGitHub
 , niapy
 , nltk
+, numpy
 , pandas
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.3.2";
+  version = "0.3.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
-    rev = version;
-    hash = "sha256-9/VGr/Ci9f8SiuofX1vWVF/E4eoeQ0ESj9raQk53Zp4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DOTeo5ZPZQR56E78pAKQ3DXarIUHhxXoZu0fISDr6fw=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +32,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     niapy
     nltk
+    numpy
     pandas
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   disabledTests = [

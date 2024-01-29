@@ -22,5 +22,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     description = "Utility to interact with a MicroPython board over a serial connection";
     maintainers = with maintainers; [ ];
+    mainProgram = "ampy";
   };
 }

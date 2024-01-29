@@ -8,7 +8,7 @@ makePythonHook {
       propagatedBuildInputs = [ makeWrapper ];
       substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;
-      substitutions.python = python.pythonForBuild;
+      substitutions.python = python.pythonOnBuildForHost;
       substitutions.pythonHost = python;
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.

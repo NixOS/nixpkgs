@@ -78,5 +78,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/ets-labs/python-dependency-injector/blob/${version}/docs/main/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
+    # https://github.com/ets-labs/python-dependency-injector/issues/726
+    broken = versionAtLeast pydantic.version "2";
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config
+, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, soxr
 , IOKit, AudioToolbox
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dlK1xQQqst4VQjioC7MZzqXwMC+JfqtvnD5lrOqGhYI=";
   };
 
+  patches = [
+    # Can be removed with next release after 0.27.0
+    (fetchpatch {
+      name = "include-cstdint.patch";
+      url = "https://github.com/badaix/snapcast/commit/481f08199ca31c60c9a3475f1064e6b06a503d12.patch";
+      hash = "sha256-klpvmBpBAlBMtcgnNfW6X6vDbJFnOuOsPUDXcNf5tGc=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    boost17x
+    boost179
     asio avahi flac libogg libvorbis
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio

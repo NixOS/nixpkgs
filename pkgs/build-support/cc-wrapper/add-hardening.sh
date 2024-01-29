@@ -1,4 +1,5 @@
-declare -a hardeningCFlags=()
+declare -a hardeningCFlagsAfter=()
+declare -a hardeningCFlagsBefore=()
 
 declare -A hardeningEnableMap=()
 
@@ -9,6 +10,13 @@ for flag in ${NIX_HARDENING_ENABLE_@suffixSalt@-}; do
   hardeningEnableMap["$flag"]=1
 done
 
+# fortify3 implies fortify enablement - make explicit before
+# we filter unsupported flags because unsupporting fortify3
+# doesn't mean we should unsupport fortify too
+if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
+  hardeningEnableMap["fortify"]=1
+fi
+
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
   unset -v "hardeningEnableMap[$flag]"
@@ -18,13 +26,13 @@ for flag in @hardening_unsupported_flags@; do
   fi
 done
 
-# make fortify and fortify3 mutually exclusive
+# now make fortify and fortify3 mutually exclusive
 if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
   unset -v "hardeningEnableMap['fortify']"
 fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
+  declare -a allHardeningFlags=(fortify fortify3 stackprotector pie pic strictoverflow format)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -48,15 +56,19 @@ for flag in "${!hardeningEnableMap[@]}"; do
     fortify | fortify3)
       # Use -U_FORTIFY_SOURCE to avoid warnings on toolchains that explicitly
       # set -D_FORTIFY_SOURCE=0 (like 'clang -fsanitize=address').
-      hardeningCFlags+=('-O2' '-U_FORTIFY_SOURCE')
+      hardeningCFlagsBefore+=('-O2' '-U_FORTIFY_SOURCE')
+      # Unset any _FORTIFY_SOURCE values the command-line may have set before
+      # enforcing our own value, avoiding (potentially fatal) redefinition
+      # warnings
+      hardeningCFlagsAfter+=('-U_FORTIFY_SOURCE')
       case $flag in
         fortify)
           if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
-          hardeningCFlags+=('-D_FORTIFY_SOURCE=2')
+          hardeningCFlagsAfter+=('-D_FORTIFY_SOURCE=2')
         ;;
         fortify3)
           if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify3 >&2; fi
-          hardeningCFlags+=('-D_FORTIFY_SOURCE=3')
+          hardeningCFlagsAfter+=('-D_FORTIFY_SOURCE=3')
         ;;
         *)
           # Ignore unsupported.
@@ -65,28 +77,38 @@ for flag in "${!hardeningEnableMap[@]}"; do
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
-      hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
+      hardeningCFlagsBefore+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
       ;;
     pie)
       # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
-      hardeningCFlags=('-fPIE' "${hardeningCFlags[@]}")
-      if [[ ! (" $* " =~ " -shared " || " $* " =~ " -static ") ]]; then
+      hardeningCFlagsBefore=('-fPIE' "${hardeningCFlagsBefore[@]}")
+      if [[ ! (" ${params[*]} " =~ " -shared " || " ${params[*]} " =~ " -static ") ]]; then
         if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-        hardeningCFlags=('-pie' "${hardeningCFlags[@]}")
+        hardeningCFlagsBefore=('-pie' "${hardeningCFlagsBefore[@]}")
       fi
       ;;
     pic)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
-      hardeningCFlags+=('-fPIC')
+      hardeningCFlagsBefore+=('-fPIC')
       ;;
     strictoverflow)
-       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
-      hardeningCFlags+=('-fno-strict-overflow')
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
+      if (( @isClang@ )); then
+        # In Clang, -fno-strict-overflow only serves to set -fwrapv and is
+        # reported as an unused CLI argument if -fwrapv or -fno-wrapv is set
+        # explicitly, so we side step that by doing the conversion here.
+        #
+        # See: https://github.com/llvm/llvm-project/blob/llvmorg-16.0.6/clang/lib/Driver/ToolChains/Clang.cpp#L6315
+        #
+        hardeningCFlagsBefore+=('-fwrapv')
+      else
+        hardeningCFlagsBefore+=('-fno-strict-overflow')
+      fi
       ;;
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
-      hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+      hardeningCFlagsBefore+=('-Wformat' '-Wformat-security' '-Werror=format-security')
       ;;
     *)
       # Ignore unsupported. Checked in Nix that at least *some*

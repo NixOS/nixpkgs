@@ -7,13 +7,13 @@
 , enableSqlite ? true
 }: python3.pkgs.buildPythonApplication rec {
   pname = "mautrix-googlechat";
-  version = "unstable-2023-01-25";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "googlechat";
-    rev = "e2eb528745466468f059c506c22e500e0cd832aa";
-    sha256 = "sha256-FNlEHzuy89RuFUwZPmVA+4AmpQHGD+18BguGC6qBdBM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-a/EWz/aCkBE6XdDpmZcx2Q7/xKNwGCiZUhZc9YIIDhU=";
   };
 
   patches = [
@@ -54,7 +54,7 @@
     ruamel-yaml
     commonmark
     python-magic
-    protobuf3
+    protobuf
     mautrix
   ] ++ lib.optionals enableE2be passthru.optional-dependencies.e2be
   ++ lib.optionals enableMetrics passthru.optional-dependencies.metrics
@@ -68,5 +68,6 @@
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arcnmx ];
+    mainProgram = "mautrix-googlechat";
   };
 }

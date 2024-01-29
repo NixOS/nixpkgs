@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchurl
 , cmake
+, flatbuffers
 , gettext
 , pkg-config
 , libdigidocpp
@@ -10,18 +11,18 @@
 , openssl
 , pcsclite
 , qtbase
-, qttranslations
 , qtsvg
+, qttools
 }:
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.12";
+  version = "4.4.0";
 
   src = fetchurl {
     url =
       "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-6bso1qvhVhbBfrcTq4S+aHtHli7X2A926N4r45ztq4E=";
+    hash = "sha256-5zo0yoY0wufm9DWRIccxJ5g4DXn75nT4fd2h+5QP4oQ=";
   };
 
   tsl = fetchurl {
@@ -29,7 +30,7 @@ mkDerivation rec {
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
-  nativeBuildInputs = [ cmake gettext pkg-config ];
+  nativeBuildInputs = [ cmake gettext pkg-config qttools ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -37,6 +38,7 @@ mkDerivation rec {
   '';
 
   buildInputs = [
+    flatbuffers
     libdigidocpp
     opensc
     openldap
@@ -44,7 +46,6 @@ mkDerivation rec {
     pcsclite
     qtbase
     qtsvg
-    qttranslations
   ];
 
   # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,

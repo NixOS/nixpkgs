@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "gtimelog";
   version = "unstable-2020-05-16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -15,9 +16,9 @@ buildPythonPackage rec {
     sha256 = "0qv2kv7vc3qqlzxsisgg31cmrkkqgnmxspbj10c5fhdmwzzwi0i9";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper gobject-introspection ];
   buildInputs = [
-    glibcLocales gobject-introspection gtk3 libsoup libsecret
+    glibcLocales gtk3 libsoup libsecret
   ];
 
   propagatedBuildInputs = [

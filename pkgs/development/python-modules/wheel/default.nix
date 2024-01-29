@@ -1,21 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, bootstrapped-pip
-, setuptools
+, flit-core
 }:
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.38.4";
-  format = "other";
+  version = "0.42.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
-    rev = version;
-    hash = "sha256-yZLU0t/nz6kfnnoLL15bybOxN4+SJUaTJsCpGffl1QU=";
-    name = "${pname}-${version}-source";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WML3/gAK1R9DEeRVZWeO0VRFuNVKP52i5I5mYV6vQcI=";
     postFetch = ''
       cd $out
       mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
@@ -25,16 +23,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    bootstrapped-pip
-    setuptools
+    flit-core
   ];
 
   # No tests in archive
   doCheck = false;
-  pythonImportsCheck = [ "wheel" ];
 
-  # We add this flag to ignore the copy installed by bootstrapped-pip
-  pipInstallFlags = [ "--ignore-installed" ];
+  pythonImportsCheck = [ "wheel" ];
 
   meta = with lib; {
     homepage = "https://github.com/pypa/wheel";

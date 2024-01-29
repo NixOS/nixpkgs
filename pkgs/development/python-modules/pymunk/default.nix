@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.4.0";
+  version = "6.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-YNzZ/wQz5s5J5ctXekNo0FksRoX03rZE1wXIghYcck4=";
+    hash = "sha256-AV6upaZcnbKmQm9tTItRB6LpckappjdHvMH/awn/KeE=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext --inplace
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
   nativeCheckInputs = [

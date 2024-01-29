@@ -2,15 +2,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "codebraid";
-  version = "0.5.0-unstable-2020-08-14";
+  version = "0.11.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "gpoore";
     repo = pname;
-    rev = "526a223c4fc32c37d6c5c9133524dfa0e1811ca4";
-    sha256 = "0qkqaj49k584qzgx9jlsf5vlv4lq7x403s1kig8v87i0kgh55p56";
+    rev = "v${version}";
+    hash = "sha256-E9vzGK9ZEVwF+UBpSkdM+hm6vINen/A+LgnnPpc77QQ=";
   };
 
+  nativeBuildInputs = with python3Packages; [ setuptools ];
   propagatedBuildInputs = with python3Packages; [ bespon ];
   # unfortunately upstream doesn't contain tests
   checkPhase = ''
@@ -35,5 +37,6 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];
+    mainProgram = "codebraid";
   };
 }

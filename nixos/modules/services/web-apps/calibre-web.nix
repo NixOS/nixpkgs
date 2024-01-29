@@ -10,6 +10,8 @@ in
     services.calibre-web = {
       enable = mkEnableOption (lib.mdDoc "Calibre-Web");
 
+      package = lib.mkPackageOption pkgs "calibre-web" { };
+
       listen = {
         ip = mkOption {
           type = types.str;
@@ -73,6 +75,8 @@ in
           '';
         };
 
+        enableKepubify = mkEnableOption (lib.mdDoc "kebup conversion support");
+
         enableBookUploading = mkOption {
           type = types.bool;
           default = false;
@@ -106,7 +110,7 @@ in
     systemd.services.calibre-web = let
       appDb = "/var/lib/${cfg.dataDir}/app.db";
       gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
-      calibreWebCmd = "${pkgs.calibre-web}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+      calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
       settings = concatStringsSep ", " (
         [
@@ -117,6 +121,7 @@ in
         ]
         ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
         ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
+        ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
       );
     in
       {

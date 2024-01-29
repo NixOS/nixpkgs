@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config
 , libvorbis, libtheora, speex }:
 
 # need pkg-config so that libshout installs ${out}/lib/pkgconfig/shout.pc
@@ -11,6 +11,19 @@ stdenv.mkDerivation rec {
     url = "https://downloads.xiph.org/releases/libshout/${pname}-${version}.tar.gz";
     sha256 = "sha256-OcvU8O/f3cl1XYghfkf48tcQj6dn+dWKK6JqFtj3yRA=";
   };
+
+  patches = [
+    # Fixes building libshout with clang. Can be dropped once the following MR is merged:
+    # https://gitlab.xiph.org/xiph/icecast-libshout/-/merge_requests/4.
+    (fetchpatch {
+      url = "https://gitlab.xiph.org/xiph/icecast-libshout/-/commit/600fa105a799986efcccddfedfdfd3e9a1988cd0.patch";
+      hash = "sha256-XjogfcQJBPZX9MPAbNJyXaFZNekL1pabvtTT7N+cz+s=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.xiph.org/xiph/icecast-libshout/-/commit/8ab2de318d55c9d0987ffae7d9b94b365af732c1.patch";
+      hash = "sha256-0+Wp2Xu59ESCJfoDcwAJHuAJyzMsaBe7f8Js3/ren2g=";
+    })
+  ];
 
   outputs = [ "out" "dev" "doc" ];
 

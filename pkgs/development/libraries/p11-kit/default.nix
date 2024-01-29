@@ -1,89 +1,76 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
-, docbook-xsl-nons
-, gtk-doc
-, installShellFiles
-, libxslt # for xsltproc
+, meson
+, ninja
 , pkg-config
-, which
-, libffi
-, libiconv
-, libintl
 , libtasn1
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gettext
+, mesonEmulatorHook
+, libffi
+, libintl
 }:
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.24.1";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    hash = "sha256-1QIMEGBZsqLYU3v5ZswD5K9VcIGLBovJlC10lBHhH7c=";
+    hash = "sha256-zIbkw0pwt4TdyjncnSDeTN6Gsx7cc+x7Un4rnagZxQk=";
+    fetchSubmodules = true;
   };
 
-  outputs = [ "out" "bin" "dev"];
+  outputs = [ "out" "bin" "dev" ];
 
-  # For cross platform builds of p11-kit, libtasn1 in nativeBuildInputs
-  # provides the asn1Parser binary on the hostPlatform needed for building.
-  # at the same time, libtasn1 in buildInputs provides the libasn1 library
-  # to link against for the target platform.
-  # Hence, libtasn1 is required in both native and build inputs.
+  strictDeps = true;
+
   nativeBuildInputs = [
-    autoreconfHook
-    docbook-xsl-nons
-    gtk-doc
-    installShellFiles
-    libtasn1
-    libxslt.bin
+    meson
+    ninja
     pkg-config
-    which
+    libtasn1 # asn1Parser
+    libxslt # xsltproc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    gettext
+  ] ++ lib.optionals
+    (!stdenv.buildPlatform.canExecute stdenv.hostPlatform
+      && !stdenv.hostPlatform.isMinGW) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
     libffi
-    libiconv
-    libintl
     libtasn1
+    libintl
   ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
-
-  configureFlags = [
-    "--enable-doc"
+  mesonFlags = [
     "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-trust-paths=${lib.concatStringsSep ":" [
-      "/etc/ssl/trust-source"                  # p11-kit trust source
-      "/etc/ssl/certs/ca-certificates.crt"     # NixOS + Debian/Ubuntu/Arch/Gentoo...
-      "/etc/pki/tls/certs/ca-bundle.crt"       # Fedora/CentOS
+    (lib.mesonBool "man" true)
+    (lib.mesonEnable "systemd" false)
+    (lib.mesonOption "bashcompdir" "${placeholder "bin"}/share/bash-completion/completions")
+    (lib.mesonOption "trust_paths" (lib.concatStringsSep ":" [
+      "/etc/ssl/trust-source" # p11-kit trust source
+      "/etc/ssl/certs/ca-certificates.crt" # NixOS + Debian/Ubuntu/Arch/Gentoo...
+      "/etc/pki/tls/certs/ca-bundle.crt" # Fedora/CentOS
       "/var/lib/ca-certificates/ca-bundle.pem" # openSUSE
-      "/etc/ssl/cert.pem"                      # Darwin/macOS
-    ]}"
+      "/etc/ssl/cert.pem" # Darwin/macOS
+    ]))
   ];
 
-  enableParallelBuilding = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  # Tests run in fakeroot for non-root users
-  preCheck = ''
-    if [ "$(id -u)" != "0" ]; then
-      export FAKED_MODE=1
-    fi
-  '';
-
-  doCheck = !stdenv.isDarwin;
-
-  installFlags = [
-    "exampledir=${placeholder "out"}/etc/pkcs11"
-  ];
-
-  postInstall = ''
-    installShellCompletion --bash bash-completion/{p11-kit,trust}
+  postPatch = ''
+    # Install sample config files to $out/etc even though they will be loaded from /etc.
+    substituteInPlace p11-kit/meson.build \
+      --replace 'install_dir: prefix / p11_system_config' "install_dir: '$out/etc/pkcs11'"
   '';
 
   meta = with lib; {

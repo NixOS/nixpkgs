@@ -1,8 +1,9 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
 , curl
+, pkg-config
+, libgit2
 , openssl
 , zlib
 , stdenv
@@ -11,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-local-registry";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "dhovart";
     repo = "cargo-local-registry";
     rev = version;
-    hash = "sha256-nxLqWtZl3ZF/iodYsQCYQ/prjp80QMzJLLp31q7d2vs=";
+    hash = "sha256-2tSO82XRCUekEBrd9wDzxeg2r2C+F9wgz3ffYFG7+q8=";
   };
 
-  cargoHash = "sha256-k94jzMdZDWpxSHVEZh1Qsv8OuUKuqU2YNBN1Mqj8HJA=";
+  cargoHash = "sha256-vxdQLfr4G73MpPrrcbcQRZGbTHJztUP3FwShj6zFhEY=";
 
   nativeBuildInputs = [
     curl
@@ -29,10 +30,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     curl
+    libgit2
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # tests require internet access

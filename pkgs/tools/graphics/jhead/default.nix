@@ -15,6 +15,19 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CPPFLAGS=" "CFLAGS=-O3" "LDFLAGS=" ];
 
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    (
+      cd tests
+      patchShebangs runtests pretend-editor
+      ./runtests
+    )
+
+    runHook postCheck
+  '';
+
   installPhase = ''
     mkdir -p \
       $out/bin \
@@ -32,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;
+    mainProgram = "jhead";
   };
 }

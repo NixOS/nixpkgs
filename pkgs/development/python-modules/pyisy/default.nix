@@ -23,8 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-OvWdKr8RlXRnAUMHSPhJDacvKeRa8QGPmGPQWLG2ouk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'version_format="{tag}"' 'version="${version}"'

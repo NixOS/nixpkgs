@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libuuid, libselinux
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libuuid, libselinux
 , e2fsprogs }:
 
 stdenv.mkDerivation rec {

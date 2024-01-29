@@ -71,9 +71,9 @@ let
     if ! keyValid; then
       echo "certificate soon to become invalid; backing up old cert"
       mkdir -p oldkeys
-      mv -v ${cfg.providerName}.key oldkeys/${cfg.providerName}-$(date +%F-%T).key
-      mv -v ${cfg.providerName}.crt oldkeys/${cfg.providerName}-$(date +%F-%T).crt
-      systemctl restart dnscrypt-wrapper
+      mv -v "${cfg.providerName}.key" "oldkeys/${cfg.providerName}-$(date +%F-%T).key"
+      mv -v "${cfg.providerName}.crt" "oldkeys/${cfg.providerName}-$(date +%F-%T).crt"
+      kill "$(pidof -s dnscrypt-wrapper)"
     fi
   '';
 
@@ -222,17 +222,6 @@ in {
     };
     users.groups.dnscrypt-wrapper = { };
 
-    security.polkit.extraConfig = ''
-      // Allow dnscrypt-wrapper user to restart dnscrypt-wrapper.service
-      polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.systemd1.manage-units" &&
-              action.lookup("unit") == "dnscrypt-wrapper.service" &&
-              subject.user == "dnscrypt-wrapper") {
-              return polkit.Result.YES;
-          }
-        });
-    '';
-
     systemd.services.dnscrypt-wrapper = {
       description = "dnscrypt-wrapper daemon";
       after    = [ "network.target" ];
@@ -242,7 +231,7 @@ in {
       serviceConfig = {
         User = "dnscrypt-wrapper";
         WorkingDirectory = dataDir;
-        Restart   = "on-failure";
+        Restart   = "always";
         ExecStart = "${pkgs.dnscrypt-wrapper}/bin/dnscrypt-wrapper ${toString daemonArgs}";
       };
 
@@ -255,7 +244,7 @@ in {
       requires = [ "dnscrypt-wrapper.service" ];
       description = "Rotates DNSCrypt wrapper keys if soon to expire";
 
-      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk ];
+      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk procps ];
       script = rotateKeys;
       serviceConfig.User = "dnscrypt-wrapper";
     };

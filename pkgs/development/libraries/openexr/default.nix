@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "2.5.8";
+  version = "2.5.10";
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    sha256 = "sha256-N7XdDaDsYdx4TXvHplQDTvhHNUmW5rntdaTKua4C0es=";
+    hash = "sha256-xdC+T79ZQBx/XhuIXtP93Roj0N9lF+E65ReEKQ4kIsg=";
   };
 
   patches = [
@@ -36,19 +36,22 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-DrpldpNgN5pWKzIuuPIrynGX3EpP8YhJlu+lLfNFGxQ=";
     })
 
-    # Backport gcc-13 fix:
-    #   https://github.com/AcademySoftwareFoundation/openexr/pull/1264
+    # GCC 13 fixes
     ./gcc-13.patch
   ];
 
-  # tests are determined to use /var/tmp on unix
   postPatch = ''
+    # tests are determined to use /var/tmp on unix
     find . -name tmpDir.h | while read -r f ; do
       substituteInPlace $f --replace '/var/tmp' "$TMPDIR"
     done
+    # On slower machines this test can take more than the default 1500 seconds
+    echo 'set_tests_properties(OpenEXR.IlmImf PROPERTIES TIMEOUT 3000)' >> OpenEXR/IlmImfTest/CMakeLists.txt
   '';
 
-  cmakeFlags = lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
+  cmakeFlags = [
+    "-DCMAKE_CTEST_ARGUMENTS=--timeout;3600"
+  ] ++ lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];

@@ -19,15 +19,17 @@
 , ffmpeg
 , libvorbis
 , libmad
+, testers
+, vkdt
 }:
 
 stdenv.mkDerivation rec {
   pname = "vkdt";
-  version = "0.5.4";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-lyljfJ4RZETEED4bofC/Rq88PMNhoHO1kgHmmaXPuhM=";
+    hash = "sha256-Sk/K+EWvJBkwwD5R1gH9ZQHetojrJTTJrKW9Dvr+lHA=";
   };
 
   strictDeps = true;
@@ -60,6 +62,10 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   makeFlags = [ "DESTDIR=$(out)" "prefix=" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = vkdt;
+  };
 
   meta = with lib; {
     description = "A vulkan-powered raw image processor";

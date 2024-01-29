@@ -24,6 +24,8 @@ buildPythonPackage rec {
     pycryptodomex
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
   ];

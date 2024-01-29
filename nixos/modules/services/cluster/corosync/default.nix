@@ -9,12 +9,7 @@ in
   options.services.corosync = {
     enable = mkEnableOption (lib.mdDoc "corosync");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.corosync;
-      defaultText = literalExpression "pkgs.corosync";
-      description = lib.mdDoc "Package that should be used for corosync.";
-    };
+    package = mkPackageOption pkgs "corosync" { };
 
     clusterName = mkOption {
       type = types.str;

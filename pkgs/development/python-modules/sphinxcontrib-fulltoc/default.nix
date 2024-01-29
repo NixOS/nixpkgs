@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-fulltoc";
   version = "1.2.0";
+  format = "setuptools";
 
   # pkgutil namespaces are broken in nixpkgs (because they can't scan multiple
   # directories). But python2 is EOL, so not supporting it, should be ok.
@@ -20,6 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
   # Ensure package importing works
   pythonImportsCheck = [ "sphinxcontrib.fulltoc" ];
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     description = "Include a full table of contents in your Sphinx HTML sidebar";

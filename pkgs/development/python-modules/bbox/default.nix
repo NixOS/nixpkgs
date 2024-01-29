@@ -1,25 +1,55 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
-, pyquaternion
+, matplotlib
 , numpy
+, pendulum
+, pillow
+, poetry-core
+, pyquaternion
 }:
 
 buildPythonPackage rec {
   pname = "bbox";
-  version = "0.9.2";
+  version = "0.9.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ucR7mg9eubEefjC7ratEgrb9h++a26z8KV38n3N2kcw=";
+  src = fetchFromGitHub {
+    owner = "varunagrawal";
+    repo = pname;
+    # matches 0.9.4 on PyPi + tests
+    rev = "d3f07ed0e38b6015cf4181e3b3edae6a263f8565";
+    hash = "sha256-FrJ8FhlqwmnEB/QvPlkDfqZncNGPhwY9aagM9yv1LGs=";
   };
 
-  propagatedBuildInputs = [ pyquaternion numpy ];
+  nativebuildInputs = [
+    poetry-core
+  ];
 
-  pythonImportsCheck = [ "bbox" ];
+  propagatedBuildInputs = [
+    pyquaternion
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    matplotlib
+    pendulum
+    pillow
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # performance test, racy on busy machines
+    "test_multi_jaccard_index_2d_performance"
+  ];
+
+  pythonImportsCheck = [
+    "bbox"
+  ];
 
   meta = with lib; {
     description = "Python library for 2D/3D bounding boxes";

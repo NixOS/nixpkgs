@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "tokenlib";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";

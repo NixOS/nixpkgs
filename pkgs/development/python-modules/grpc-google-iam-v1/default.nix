@@ -1,20 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , grpcio
 , googleapis-common-protos
 }:
 
 buildPythonPackage rec {
   pname = "grpc-google-iam-v1";
-  version = "0.12.6";
+  version = "0.12.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K8S4/fIhFaZddRyTFzKTImAsObfIaiicm3LSKNlg718=";
+    hash = "sha256-AJGXp/HqqiIUnJbl4FSsWTS6ckGXTpJmPY01KKISA9E=";
   };
 
-  propagatedBuildInputs = [ grpcio googleapis-common-protos ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    grpcio
+    googleapis-common-protos
+  ];
 
   # no tests run
   doCheck = false;
@@ -28,6 +37,6 @@ buildPythonPackage rec {
     description = "GRPC library for the google-iam-v1 service";
     homepage = "https://github.com/googleapis/googleapis";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

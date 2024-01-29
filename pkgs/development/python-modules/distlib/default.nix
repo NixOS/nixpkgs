@@ -7,19 +7,19 @@
 
 buildPythonPackage rec {
   pname = "distlib";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FLrS2bBNOjYSesl/MLEqGSaPIRBj2PjuT0cQiJbhG0Y=";
+    hash = "sha256-na/lSzSgKOr9lQOdXl1IUaE3NFQPEzEGDTHJkW5xR6g=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  postFixup = lib.optionalString (!stdenv.targetPlatform.isWindows) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     find $out -name '*.exe' -delete
   '';
 

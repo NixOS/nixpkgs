@@ -1,23 +1,25 @@
 { lib
 , config
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , cairo
 , cmake
 , opencv
 , pcre
 , pkg-config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
-  version = "1.8.0";
+  version = "2.3.1";
 
-  src = fetchurl {
-    url = "https://files.dyne.org/frei0r/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-RaKGVcrwVyJ7RCuADKOJnpNJBRXIHiEtIZ/fSnYT9cQ=";
+  src = fetchFromGitHub {
+    owner = "dyne";
+    repo = "frei0r";
+    rev = "v${version}";
+    hash = "sha256-5itlZfnloQXV/aCiNgOOZzEeO1d+NLY4qSk8uMVAOmA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

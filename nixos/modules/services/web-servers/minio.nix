@@ -30,8 +30,8 @@ in
 
     dataDir = mkOption {
       default = [ "/var/lib/minio/data" ];
-      type = types.listOf types.path;
-      description = lib.mdDoc "The list of data directories for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
+      type = types.listOf (types.either types.path types.str);
+      description = lib.mdDoc "The list of data directories or nodes for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
     };
 
     configDir = mkOption {
@@ -85,12 +85,7 @@ in
       description = lib.mdDoc "Enable or disable access to web UI.";
     };
 
-    package = mkOption {
-      default = pkgs.minio;
-      defaultText = literalExpression "pkgs.minio";
-      type = types.package;
-      description = lib.mdDoc "Minio package to use.";
-    };
+    package = mkPackageOption pkgs "minio" { };
   };
 
   config = mkIf cfg.enable {
@@ -99,10 +94,11 @@ in
     systemd = lib.mkMerge [{
       tmpfiles.rules = [
         "d '${cfg.configDir}' - minio minio - -"
-      ] ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
+      ] ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
 
       services.minio = {
         description = "Minio Object Storage";
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {

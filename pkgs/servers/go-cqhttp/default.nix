@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "go-cqhttp";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Mrs4s";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Vc/k4mb1JramT2l+zu9zZQa65gP5XvgqUEQgle1vX8w=";
+    hash = "sha256-mKenmsGdVg60zjVMTfbEtqtPcJdJo60Nz6IUQ9RB7j0=";
   };
 
-  vendorSha256 = "sha256-tAvo96hIWxkt3rrrPH5fDKwfwuc76Ze0r55R/ZssU4s=";
+  vendorHash = "sha256-YNARh25xrcPGvhhXzYmg3CsWwzvXq44uWt0S1PjRVdM=";
 
   meta = with lib; {
     description = "The Golang implementation of OneBot based on Mirai and MiraiGo";

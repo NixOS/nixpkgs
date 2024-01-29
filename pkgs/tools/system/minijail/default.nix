@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
     patchShebangs platform2_preinstall.sh
   '';
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   installPhase = ''
     ./platform2_preinstall.sh ${version} $out/include/chromeos
 
@@ -40,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ pcarrier qyliss ];
     platforms = platforms.linux;
+    mainProgram = "minijail0";
   };
 }

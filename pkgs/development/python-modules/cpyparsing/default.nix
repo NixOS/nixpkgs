@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cpyparsing";
-  version = "2.4.7.1.2.1";
+  version = "2.4.7.2.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "evhub";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HJ0I5DKZ2WV+1pXZCvJHA7Wih3Gkn7vL/ojXnTssKxw=";
+    hash = "sha256-vnzZdJ7pZz1QxlTqw5UKjxB4GVcXuCfKWX4lu3ORWas=";
   };
 
   nativeBuildInputs = [

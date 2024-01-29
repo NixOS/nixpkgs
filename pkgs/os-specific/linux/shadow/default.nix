@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
-, runtimeShell, nixosTests, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, runtimeShell, nixosTests
 , autoreconfHook, bison, flex
 , docbook_xml_dtd_45, docbook_xsl
-, itstool , libxml2, libxslt
-, libxcrypt
+, itstool, libbsd, libxml2, libxslt
+, libxcrypt, pkg-config
 , glibcCross ? null
 , pam ? null
 , withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb, tcb
@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.13";
+  version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-L54DhdBYthfB9436t/XWXiqKhW7rfd0GLS7pYGB32rA=";
+    hash = "sha256-8sFXxP4MPFzKfBHzlKlsibj0lVQKJbC/Z7pWCy3WEuc=";
   };
 
   outputs = [ "out" "su" "dev" "man" ];
@@ -34,9 +34,10 @@ stdenv.mkDerivation rec {
     autoreconfHook bison flex
     docbook_xml_dtd_45 docbook_xsl
     itstool libxml2 libxslt
+    pkg-config
   ];
 
-  buildInputs = [ libxcrypt ]
+  buildInputs = [ libbsd libxcrypt ]
     ++ lib.optional (pam != null && stdenv.isLinux) pam
     ++ lib.optional withTcb tcb;
 
@@ -46,10 +47,12 @@ stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     ./runtime-shell.patch
     ./fix-install-with-tcb.patch
-    # Fix HAVE_SHADOWGRP configure check
+    # Fix build against `clang-16` and upcoming `gcc-14`:
+    #   https://github.com/shadow-maint/shadow/pull/857
     (fetchpatch {
-      url = "https://github.com/shadow-maint/shadow/commit/a281f241b592aec636d1b93a99e764499d68c7ef.patch";
-      sha256 = "sha256-GJWg/8ggTnrbIgjI+HYa26DdVbjTHTk/IHhy7GU9G5w=";
+      name = "fix-implicit-getdef_bool.patch";
+      url = "https://github.com/shadow-maint/shadow/commit/5abe0811b880208600f646356549b7e5cad89060.patch";
+      hash = "sha256-XqvVv8mYY58uXJBKRwncHQRSI45PUkp3dQNn44gzezU=";
     })
   ];
 

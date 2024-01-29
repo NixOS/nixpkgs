@@ -199,6 +199,10 @@ let
     name = "swift-tools-support-core";
     src = generated.sources.swift-tools-support-core;
 
+    patches = [
+      ./patches/force-unwrap-file-handles.patch
+    ];
+
     buildInputs = [
       swift-system
       sqlite
@@ -385,6 +389,7 @@ in stdenv.mkDerivation (commonAttrs // {
     swiftpmMakeMutable swift-tools-support-core
     substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
       --replace 'canImport(Darwin)' 'false'
+    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${./patches/force-unwrap-file-handles.patch}
 
     # Prevent a warning about SDK directories we don't have.
     swiftpmMakeMutable swift-driver

@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.free; # custom license. See COPYING in the source repo.
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ Flakebi ];
+    mainProgram = "piglit";
   };
 }

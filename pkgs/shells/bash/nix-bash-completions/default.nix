@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Nix 2.4+ provides its own completion for the nix command, see https://github.com/hedning/nix-bash-completions/issues/20
-    substituteInPlace _nix --replace 'nix nixos-option' 'nixos-option'
+    # NixOS provides its own completions for nixos-rebuild now.
+    substituteInPlace _nix \
+      --replace 'nix nixos-option' 'nixos-option' \
+      --replace 'nixos-rebuild nixos-install' 'nixos-install'
   '';
 
   strictDeps = true;

@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo  = pname;
     rev = version;
-    hash = "sha256-cFmsdQXfGxgpKe32dw1lgoANU9Drhu5Mecyz37BVP4g=";
+    hash = "sha256-GPDbFlwiGT/B2paX33d3mUCV77q+fPM0LMaKFsQQjjQ=";
   };
 
   format = "other";

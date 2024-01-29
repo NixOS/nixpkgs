@@ -2,16 +2,21 @@
 
 buildGoModule rec {
   pname = "senpai";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
-    owner = "~taiite";
+    owner = "~delthas";
     repo = "senpai";
     rev = "v${version}";
-    sha256 = "sha256-q167og8S8YbLcREZ7DVbJhjMzx4iO0WgIFkOV2IpieM=";
+    sha256 = "sha256-A5kBrJJi+RcSpB0bi2heKzNl5LjdeT9h2Pc9kKXDg1A=";
   };
 
-  vendorSha256 = "sha256-PkoEHQEGKCiNbJsm7ieL65MtEult/wubLreJKA1gGpg=";
+  vendorHash = "sha256-kKYee1QJX7N101MTikHUbX+AqZ2NhM4soE4JAAOdAPI=";
+
+  patches = [
+    # fix build failures, submitted upstream https://lists.sr.ht/~delthas/senpai-dev/patches/48581
+    ./bump-go-version.patch
+  ];
 
   subPackages = [
     "cmd/senpai"
@@ -31,6 +36,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Your everyday IRC student";
     homepage = "https://sr.ht/~taiite/senpai/";
+    changelog = "https://git.sr.ht/~delthas/senpai/refs/v${version}";
     license = licenses.isc;
     maintainers = with maintainers; [ malte-v ];
   };

@@ -15,14 +15,14 @@
 
 let
   mod = kernel != null;
-  dpdkVersion = "22.11.1";
-in stdenv.mkDerivation rec {
+  dpdkVersion = "23.07";
+in stdenv.mkDerivation {
   pname = "dpdk";
   version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${dpdkVersion}.tar.xz";
-    sha256 = "sha256-3gdkZfcXSg1ScUuQcuSDenJrqsgtj+fcZEytXIz3TUw=";
+    sha256 = "sha256-4IYU6K65KUB9c9cWmZKJpE70A0NSJx8JOX7vkysjs9Y=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
   ]
   # kni kernel driver is currently not compatble with 5.11
   ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
-  ++ lib.optional (!shared) "-Ddefault_library=static"
+  ++ [(if shared then "-Ddefault_library=shared" else "-Ddefault_library=static")]
   ++ lib.optional (machine != null) "-Dmachine=${machine}"
   ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";

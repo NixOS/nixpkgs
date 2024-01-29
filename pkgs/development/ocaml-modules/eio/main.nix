@@ -3,7 +3,7 @@
 , buildDunePackage
 , eio
 , eio_posix
-, uring
+, eio_linux
 }:
 
 buildDunePackage {
@@ -11,13 +11,12 @@ buildDunePackage {
   inherit (eio) meta src version;
 
   minimalOCamlVersion = "5.0";
-  duneVersion = "3";
 
   dontStrip = true;
 
   propagatedBuildInputs = [
     eio_posix
   ] ++ lib.optionals stdenv.isLinux [
-    uring
+    eio_linux
   ];
 }

@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-aVnXCrTh+0Ip+FgYWN7hLw8N3iQCmXSywhReD5RTUfI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     sed -i '/pytest-cov/d' setup.py
   '';
@@ -61,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-lz4/python-lz4";
     changelog = "https://github.com/python-lz4/python-lz4/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

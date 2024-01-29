@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pytest-mypy";
   version = "0.10.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,6 +31,6 @@ buildPythonPackage rec {
     description = "Mypy static type checker plugin for Pytest";
     homepage = "https://github.com/dbader/pytest-mypy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

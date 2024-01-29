@@ -6,7 +6,6 @@
 , qtbase
 , qttools
 , qtmultimedia
-, qtquick1
 , qtquickcontrols
 , openssl
 , protobuf
@@ -38,7 +37,6 @@ mkDerivation rec {
     qtbase
     qttools
     qtmultimedia
-    qtquick1
     qtquickcontrols
     openssl
     protobuf

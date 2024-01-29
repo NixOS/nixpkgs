@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # This is required for wrapProgram.
   allowGoReference = true;

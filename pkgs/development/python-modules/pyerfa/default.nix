@@ -1,37 +1,61 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, jinja2
+, oldest-supported-numpy
 , setuptools-scm
+, wheel
 , liberfa
 , packaging
 , numpy
+, pytestCheckHook
+, pytest-doctestplus
 }:
 
 buildPythonPackage rec {
   pname = "pyerfa";
   format = "pyproject";
-  version = "2.0.0.1";
-
-  doCheck = false;
+  version = "2.0.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2fd4637ffe2c1e6ede7482c13f583ba7c73119d78bef90175448ce506a0ede30";
+    hash = "sha256-26x07409Ow8i7wrTu72zCyqeEFcLH6Wpi+NMe+Nsmms=";
   };
 
   nativeBuildInputs = [
+    jinja2
+    oldest-supported-numpy
     packaging
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
-    liberfa
     numpy
+  ];
+  buildInputs = [
+    liberfa
   ];
 
   preBuild = ''
     export PYERFA_USE_SYSTEM_LIBERFA=1
   '';
+
+  # See https://github.com/liberfa/pyerfa/issues/112#issuecomment-1721197483
+  NIX_CFLAGS_COMPILE = "-O2";
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-doctestplus
+  ];
+  # Getting circular import errors without this, not clear yet why. This was mentioned to
+  # upstream at: https://github.com/liberfa/pyerfa/issues/112 and downstream at
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    cd $out
+  '';
+  pythonImportsCheck = [
+    "erfa"
+  ];
 
   meta = with lib; {
     description = "Python bindings for ERFA routines";

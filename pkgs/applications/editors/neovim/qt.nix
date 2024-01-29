@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     # link .desktop file
     mkdir -p $out/share/pixmaps
     ln -s ${unwrapped}/share/applications $out/share/applications
-    ln -s ${unwrapped}/share/pixmaps/nvim-qt.png $out/share/pixmaps/nvim-qt.png
+    ln -s ${unwrapped}/share/icons $out/share/icons
   '';
 
   preferLocalBuild = true;

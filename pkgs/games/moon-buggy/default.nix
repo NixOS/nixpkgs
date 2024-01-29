@@ -1,5 +1,8 @@
-{lib, stdenv, fetchurl, ncurses}:
-
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+}:
 stdenv.mkDerivation rec {
   pname = "moon-buggy";
   version = "1.0.51";
@@ -16,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A simple character graphics game where you drive some kind of car across the moon's surface";
     license = lib.licenses.gpl2;
-    maintainers = [lib.maintainers.rybern];
-    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rybern ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "https://www.seehuhn.de/pages/moon-buggy";
   };
 }

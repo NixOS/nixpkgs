@@ -13,7 +13,7 @@ let
   compareTest = { emulator, pkgFun, hostPkgs, crossPkgs, exec, args ? [] }: let
     pkgName = (pkgFun hostPkgs).name;
     args' = lib.concatStringsSep " " args;
-  in crossPkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
+  in crossPkgs.runCommand "test-${pkgName}-${crossPkgs.stdenv.hostPlatform.config}" {
     nativeBuildInputs = [ pkgs.dos2unix ];
   } ''
     # Just in case we are using wine, get rid of that annoying extra
@@ -59,12 +59,12 @@ let
       crossSystem = crossSystemFun system;
     };
 
-    emulator = crossPkgs.hostPlatform.emulator pkgs;
+    emulator = crossPkgs.stdenv.hostPlatform.emulator pkgs;
 
     # Apply some transformation on windows to get dlls in the right
     # place. Unfortunately mingw doesn’t seem to be able to do linking
     # properly.
-    platformFun = pkg: if crossPkgs.hostPlatform.isWindows then
+    platformFun = pkg: if crossPkgs.stdenv.hostPlatform.isWindows then
       pkgs.buildEnv {
         name = "${pkg.name}-winlinks";
         paths = [pkg] ++ pkg.buildInputs;
@@ -92,7 +92,7 @@ let
     };
 
     pkg-config = {platformFun, crossPkgs, emulator}: crossPkgs.runCommand
-      "test-pkg-config-${crossPkgs.hostPlatform.config}"
+      "test-pkg-config-${crossPkgs.stdenv.hostPlatform.config}"
     {
       depsBuildBuild = [ crossPkgs.pkgsBuildBuild.pkg-config ];
       nativeBuildInputs = [ crossPkgs.pkgsBuildHost.pkg-config crossPkgs.buildPackages.zlib ];
@@ -107,7 +107,63 @@ let
     '';
   };
 
+  # see https://github.com/NixOS/nixpkgs/issues/213453
+  # this is a good test of a lot of tricky glibc/libgcc corner cases
+  mbuffer = let
+    mbuffer = pkgs.pkgsCross.aarch64-multiplatform.mbuffer;
+    emulator = with lib.systems; (elaborate examples.aarch64-multiplatform).emulator pkgs;
+  in
+    pkgs.runCommand "test-mbuffer" {} ''
+      echo hello | ${emulator} ${mbuffer}/bin/mbuffer
+      touch $out
+    '';
+
+  # This is meant to be a carefully curated list of builds/packages
+  # that tend to break when refactoring our cross-compilation
+  # infrastructure.
+  #
+  # It should strike a balance between being small enough to fit in
+  # a single eval (i.e. not so large that hydra-eval-jobs is needed)
+  # so we can ask @ofborg to check it, yet should have good examples
+  # of things that often break.  So, no buckshot `mapTestOnCross`
+  # calls here.
+  sanity = [
+    mbuffer
+    #pkgs.pkgsCross.gnu64.bash # https://github.com/NixOS/nixpkgs/issues/243164
+    pkgs.gcc_multi.cc
+    pkgs.pkgsMusl.stdenv
+    pkgs.pkgsLLVM.stdenv
+    pkgs.pkgsStatic.bash
+    #pkgs.pkgsCross.gnu64_simplekernel.bash   # https://github.com/NixOS/nixpkgs/issues/264989
+    pkgs.pkgsCross.arm-embedded.stdenv
+    pkgs.pkgsCross.sheevaplug.stdenv  # for armv5tel
+    pkgs.pkgsCross.raspberryPi.stdenv  # for armv6l
+    pkgs.pkgsCross.armv7l-hf-multiplatform.stdenv
+    pkgs.pkgsCross.m68k.stdenv
+    pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
+    pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc
+    pkgs.pkgsCross.s390.stdenv
+    pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
+    pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
+    pkgs.pkgsCross.mingwW64.stdenv
+
+  ] ++ lib.optionals (with pkgs.stdenv.buildPlatform; isx86_64 && isLinux) [
+    # Musl-to-glibc cross on the same architecture tends to turn up
+    # lots of interesting corner cases.  Only expected to work for
+    # x86_64-linux buildPlatform.
+    pkgs.pkgsMusl.pkgsCross.gnu64.hello
+
+    # Two web browsers -- exercises almost the entire packageset
+    pkgs.pkgsCross.aarch64-multiplatform.qutebrowser-qt5
+    pkgs.pkgsCross.aarch64-multiplatform.firefox
+
+    # Uses pkgsCross.riscv64-embedded; see https://github.com/NixOS/nixpkgs/issues/267859
+    pkgs.spike
+  ];
+
 in {
   gcc = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = false;})) tests);
   llvm = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = true;})) tests);
+
+  inherit mbuffer sanity;
 }

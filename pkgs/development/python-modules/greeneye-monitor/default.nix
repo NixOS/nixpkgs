@@ -4,28 +4,27 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , siobrultech-protocols
 }:
 
 buildPythonPackage rec {
   pname = "greeneye-monitor";
-  version = "4.0";
+  version = "5.0.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.10";
-
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "greeneye-monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kMyFerb6T5316cr4T5hSo4HcpO5Hl5l+bMor5jon9yY=";
+    hash = "sha256-zNGizNOuZuPRdz82y8IaVvwrTos4lZSqTP5FwOlnRao=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "siobrultech_protocols==" "siobrultech_protocols>="
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

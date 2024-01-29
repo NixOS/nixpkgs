@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
   version = "2021.3.14";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

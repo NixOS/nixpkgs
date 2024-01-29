@@ -36,5 +36,6 @@ buildGoModule rec {
     license = licenses.mit;
     # It depends on the inputs, i guess? not sure about solaris, for instance. go supports it though
     # I hope nix can figure this out?! ¯\\_(ツ)_/¯
+    mainProgram = "systrayhelper";
   };
 }

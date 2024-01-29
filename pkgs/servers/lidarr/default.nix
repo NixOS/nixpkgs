@@ -8,13 +8,13 @@ let
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-JGv4SXONVncRdWqtqvKnBWJXnp16AWLyFvULTWPmAgc=";
-    arm64-linux_hash = "sha256-irZLQfeGAkM6mb6EXC2tuslyw7QYBZg/aRb0Lx7CJFA=";
-    x64-osx_hash = "sha256-UcPZXf0BzoqlTmOSn1gDEvSZHijyB2nAb6HBj9R1D9Q=";
+    x64-linux_hash = "sha256-TqwVWV3kfBTqGYf6PT9H0E9YiG/AfLWEViKocVrhZuU=";
+    arm64-linux_hash = "sha256-aCaUZgnk4rnhEV3hDVZx1Bfz+PteefGeGvEdoKXGxxg=";
+    x64-osx_hash = "sha256-4O3H2gsH2Q3V9xY1fIMzkaU0qSEg3CF89chnrMdCmdk=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "lidarr";
-  version = "1.1.4.3027";
+  version = "2.0.7.3849";
 
   src = fetchurl {
     url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://lidarr.audio/";
     license = licenses.gpl3;
     maintainers = [ maintainers.etu ];
+    mainProgram = "Lidarr";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }

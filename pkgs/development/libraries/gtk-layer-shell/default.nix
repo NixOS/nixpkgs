@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -15,9 +14,9 @@
 , vala
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-layer-shell";
-  version = "0.8.0";
+  version = "0.8.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # for demo
@@ -25,24 +24,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wmww";
     repo = "gtk-layer-shell";
-    rev = "v${version}";
-    sha256 = "sha256-Z7jPYLKgkwMNXu80aaZ2vNj57LbN+X2XqlTTq6l0wTE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8wpfoZcgusJdEbKGZ02UtOOcSogMTNP9Lm+ujo/eKdA=";
   };
-
-  patches = [
-    # https://github.com/wmww/gtk-layer-shell/pull/146
-    # Mark wayland-scanner as a build-time dependency
-    (fetchpatch {
-      url = "https://github.com/wmww/gtk-layer-shell/commit/6fd16352e5b35fefc91aa44e73671addaaa95dfc.patch";
-      hash = "sha256-U/mxmcRcZnsF0fvWW0axo6ajqW40NuOzNIAzoLCboRM=";
-    })
-    # https://github.com/wmww/gtk-layer-shell/pull/147
-    # Remove redundant dependency check for gtk-doc
-    (fetchpatch {
-      url = "https://github.com/wmww/gtk-layer-shell/commit/124ccc2772d5ecbb40b54872c22e594c74bd39bc.patch";
-      hash = "sha256-WfrWe9UJCp1RvVJhURAxGw4jzqPjoaP6182jVdoEAQs=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -74,8 +58,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library to create panels and other desktop components for Wayland using the Layer Shell protocol";
+    homepage = "https://github.com/wmww/gtk-layer-shell";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ eonpatapon ];
+    maintainers = with maintainers; [ eonpatapon donovanglover ];
     platforms = platforms.linux;
   };
-}
+})

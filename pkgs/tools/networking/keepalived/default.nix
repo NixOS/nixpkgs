@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     description = "Routing software written in C";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    maintainers = [ maintainers.raitobezarius ];
   };
 }

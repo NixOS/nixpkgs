@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-advisor";
   version = "9.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , autoreconfHook
 , wrapGAppsHook
@@ -39,7 +40,7 @@ let
     pname = "ETL";
     inherit version src;
 
-    sourceRoot = "source/ETL";
+    sourceRoot = "${src.name}/ETL";
 
     nativeBuildInputs = [
       pkg-config
@@ -54,7 +55,18 @@ let
     pname = "synfig";
     inherit version src;
 
-    sourceRoot = "source/synfig-core";
+    patches = [
+      # Pull upstream fix for autoconf-2.72 support:
+      #   https://github.com/synfig/synfig/pull/2930
+      (fetchpatch {
+        name = "autoconf-2.72.patch";
+        url = "https://github.com/synfig/synfig/commit/80a3386c701049f597cf3642bb924d2ff832ae05.patch";
+        stripLen = 1;
+        hash = "sha256-7gX8tJCR81gw8ZDyNYa8UaeZFNOx4o1Lnq0cAcaKb2I=";
+      })
+    ];
+
+    sourceRoot = "${src.name}/synfig-core";
 
     configureFlags = [
       "--with-boost=${boost.dev}"
@@ -89,7 +101,7 @@ stdenv.mkDerivation {
   pname = "synfigstudio";
   inherit version src;
 
-  sourceRoot = "source/synfig-studio";
+  sourceRoot = "${src.name}/synfig-studio";
 
   postPatch = ''
     patchShebangs images/splash_screen_development.sh

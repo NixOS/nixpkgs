@@ -139,5 +139,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ offline RaghavSood ];
     license = licenses.isc;
     platforms = platforms.linux;
+    mainProgram = "rippled";
   };
 }

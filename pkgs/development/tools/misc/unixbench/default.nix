@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p2" ];
 
-  sourceRoot = "source/UnixBench";
+  sourceRoot = "${src.name}/UnixBench";
 
   postPatch = ''
     substituteInPlace Makefile \

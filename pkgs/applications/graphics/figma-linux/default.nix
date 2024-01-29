@@ -4,19 +4,20 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
+, wrapGAppsHook
 , ...
 }:
 with lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
-  version = "0.10.0";
+  version = "0.11.3";
 
   src = fetchurl {
-    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${version}/figma-linux_${version}_linux_amd64.deb";
-    sha256 = "sha256-+xiXEwSSxpt1/Eu9g57/L+Il/Av+a/mgGBQl/4LKR74=";
+    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
+    hash = "sha256-9UfyCqgsg9XAFyZ7V7TogkQou4x+ixFUfjXZ1/qlDmA=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
 
   buildInputs = with pkgs;[
     alsa-lib
@@ -64,14 +65,15 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/applications/figma-linux.desktop \
-          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${pname}"
+          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${finalAttrs.pname}"
   '';
 
   meta = {
-    description = "unofficial Electron-based Figma desktop app for Linux";
+    description = "Unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ercao ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ercao kashw2 ];
+    mainProgram = "figma-linux";
   };
-}
+})

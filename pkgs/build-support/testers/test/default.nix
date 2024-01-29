@@ -12,7 +12,7 @@ let
 
 in
 lib.recurseIntoAttrs {
-  hasPkgConfigModule = pkgs.callPackage ../hasPkgConfigModule/tests.nix { };
+  hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
 
   runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {
     name = "runNixOSTest-test";

@@ -6,29 +6,17 @@
 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
-        version = "0.25.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-uc/fgDetSYaCRzff0SzfbRhs3TaKrfE2h6roWkkj8yQ=";
-        };
-      });
-    };
-  };
+  python = python3;
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.1.10";
-
-  format = "pyproject";
+  version = "4.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SmyUoMOlBJZTJH19NwTKbz/vo7Oh4tGHCQrW5DVZQWQ=";
+    hash = "sha256-U0UA94t7WdCeU9Y86rcnT8BzXVx8ryhD3MTJxmNBYcc=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -56,6 +44,8 @@ in python.pkgs.buildPythonApplication rec {
     pykakasi
     syncedlyrics
     typing-extensions
+    soundcloud-v2
+    bandcamp-api
     setuptools # for pkg_resources
   ] ++ python-slugify.optional-dependencies.unidecode;
 
@@ -75,6 +65,9 @@ in python.pkgs.buildPythonApplication rec {
     # require networking
     "tests/test_init.py"
     "tests/test_matching.py"
+    "tests/providers/lyrics"
+    "tests/types"
+    "tests/utils/test_github.py"
     "tests/utils/test_m3u.py"
     "tests/utils/test_metadata.py"
     "tests/utils/test_search.py"
@@ -82,20 +75,14 @@ in python.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # require networking
-    "test_album_from_string"
-    "test_album_from_url"
-    "test_album_length"
-    "test_artist_from_url"
-    "test_artist_from_string"
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
-    "test_playlist_from_string"
-    "test_playlist_from_url"
-    "test_playlist_length"
     "test_preload_song"
-    "test_song_from_search_term"
-    "test_song_from_url"
+    "test_yt_get_results"
+    "test_yt_search"
+    "test_ytm_search"
+    "test_ytm_get_results"
   ];
 
   makeWrapperArgs = [

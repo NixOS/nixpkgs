@@ -1,10 +1,10 @@
-{ pkgs, lib, fetchurl, fetchpatch, perl, perlPackages, rsync, which, installShellFiles, ... }:
+{ pkgs, lib, fetchurl, fetchpatch, perlPackages, rsync, which, installShellFiles, ... }:
 perlPackages.buildPerlPackage rec {
   pname = "Rex";
-  version = "1.14.0";
+  version = "1.14.3";
   src = fetchurl {
     url = "mirror://cpan/authors/id/F/FE/FERKI/Rex-${version}.tar.gz";
-    hash = "sha256-RHxJbkaEjKF9lkl6JYFp2pvcKQurRGUU7FfM/m5lSz8=";
+    hash = "sha256-An0wQu+UC2dZDlmJ6W8irh5nunRIlcXdPbVpwFE3Alw=";
   };
 
   buildInputs = with perlPackages; [
@@ -72,6 +72,10 @@ perlPackages.buildPerlPackage rec {
   ];
 
   outputs = [ "out" ];
+
+  postPatch = ''
+    patchShebangs bin
+  '';
 
   fixupPhase = ''
     for sh in bash zsh; do

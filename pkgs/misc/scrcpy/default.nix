@@ -16,10 +16,12 @@
 }:
 
 let
-  version = "2.1";
+  version = "2.3.1";
   prebuilt_server = fetchurl {
+    name = "scrcpy-server";
+    inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-W4vxlAJkuTDHGhxhTFfaIkf1Ky1CQLyoZcxtNm3/Zog=";
+    hash = "sha256-9oFIIvwwinpTLyU0hckDgYPGKWpsXfRwqeODtPjnYFs=";
   };
 in
 stdenv.mkDerivation rec {
@@ -28,9 +30,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Genymobile";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-M5zOKwqQ0y70gsI+c0Or7hUzz4fH/8DqcOeKq4Vryc4=";
+    repo = "scrcpy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RM29WjzsYnn26x/Xr2RKp0p87/v+Jl8skEcAwxhZEtU=";
   };
 
   #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
@@ -64,12 +66,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
+    changelog = "https://github.com/Genymobile/scrcpy/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # server
     ];
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
+    maintainers = with maintainers; [ deltaevo msfjarvis ];
+    mainProgram = "scrcpy";
   };
 }

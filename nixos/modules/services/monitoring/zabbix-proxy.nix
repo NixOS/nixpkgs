@@ -203,7 +203,7 @@ in
       { assertion = !config.services.zabbixServer.enable;
         message = "Please choose one of services.zabbixServer or services.zabbixProxy.";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.name == cfg.database.user;
         message = "services.zabbixProxy.database.user must be set to ${user} if services.zabbixProxy.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -252,7 +252,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -299,10 +299,7 @@ in
         fi
       '' + optionalString (cfg.database.passwordFile != null) ''
         # create a copy of the supplied password file in a format zabbix can consume
-        touch ${passwordFile}
-        chmod 0600 ${passwordFile}
-        echo -n "DBPassword = " > ${passwordFile}
-        cat ${cfg.database.passwordFile} >> ${passwordFile}
+        install -m 0600 <(echo "DBPassword = $(cat ${cfg.database.passwordFile})") ${passwordFile}
       '';
 
       serviceConfig = {

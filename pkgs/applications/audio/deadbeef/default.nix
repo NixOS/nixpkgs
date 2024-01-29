@@ -41,7 +41,7 @@ assert gtk2Support || gtk3Support;
 let
   inherit (lib) optionals;
 
-  version = "1.9.5";
+  version = "1.9.6";
 in clangStdenv.mkDerivation {
   pname = "deadbeef";
   inherit version;
@@ -51,7 +51,7 @@ in clangStdenv.mkDerivation {
     repo = "deadbeef";
     fetchSubmodules = true;
     rev = version;
-    hash = "sha256-dSSIaJxHYUVOmuJN2t5UZSC3ZP5732/qVXSZAuWYr0Q=";
+    hash = "sha256-Q6hL4fOFPHn26ZqvrebgTMTgQZrhbXCEhM4ZFzNeyJE=";
   };
 
   buildInputs = [
@@ -119,6 +119,13 @@ in clangStdenv.mkDerivation {
 
   preConfigure = ''
     ./autogen.sh
+  '';
+
+  postPatch = ''
+    # Fix the build on c++17 compiler:
+    #   https://github.com/DeaDBeeF-Player/deadbeef/issues/3012
+    # TODO: remove after 1.9.5 release.
+    substituteInPlace plugins/adplug/Makefile.am --replace 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
   '';
 
   meta = with lib; {

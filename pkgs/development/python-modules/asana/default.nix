@@ -6,11 +6,12 @@
 , requests
 , requests-oauthlib
 , responses
+, six
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "3.2.1";
+  version = "5.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,12 +20,13 @@ buildPythonPackage rec {
     owner = "asana";
     repo = "python-asana";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hvAyKGoNkX3bs7Mz2h7SnOa5T6J88c0YiTR/L8fgfi8=";
+    hash = "sha256-9F63DvwMh9NwlTqFuhiXfgRRRxAFjjRYmYzsuOhlQJ0=";
   };
 
   propagatedBuildInputs = [
     requests
     requests-oauthlib
+    six
   ];
 
   nativeCheckInputs = [

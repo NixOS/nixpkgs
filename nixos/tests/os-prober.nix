@@ -76,6 +76,7 @@ in {
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
         [
+          bintools
           brotli
           brotli.dev
           brotli.lib
@@ -94,7 +95,7 @@ in {
           ntp
           perlPackages.ListCompare
           perlPackages.XMLLibXML
-          python3Minimal
+          python3
           shared-mime-info
           stdenv
           sudo

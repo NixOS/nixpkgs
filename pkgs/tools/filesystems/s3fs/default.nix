@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "s3fs-fuse";
-  version = "1.92";
+  version = "1.93";
 
   src = fetchFromGitHub {
     owner  = "s3fs-fuse";
     repo   = "s3fs-fuse";
     rev    = "v${version}";
-    sha256 = "sha256-CS6lxDIBwhcnEG6XehbyAI4vb72PmwQ7p+gC1bbJEzM=";
+    sha256 = "sha256-7rLHnQlyJDOn/RikOrrEAQ7O+4T+26vNGiTkOgNH75Q=";
   };
 
   buildInputs = [ curl openssl libxml2 fuse ];
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mount an S3 bucket as filesystem through FUSE";
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
+    homepage = "https://github.com/s3fs-fuse/s3fs-fuse";
+    changelog = "https://github.com/s3fs-fuse/s3fs-fuse/raw/v${version}/ChangeLog";
+    maintainers = [ ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
   };
 }

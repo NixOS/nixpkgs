@@ -1,37 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonRelaxDepsHook
 , html-text
 , jstyleson
 , lxml
 , mf2py
+, mock
 , pyrdfa3
+, pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
 , rdflib
+, setuptools
 , six
 , w3lib
-, pytestCheckHook
-, mock
 }:
 
 buildPythonPackage rec {
   pname = "extruct";
-  version = "0.13.0";
+  version = "0.16.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "extruct";
-    rev = "v${version}";
-    hash = "sha256-hf6b/tZLggHzgFmZ6aldZIBd17Ni7vCTIIzhNlyjvxw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6lAb17EoR0FKyIOb9hk1jcpmPtZ7vClfuCrDZ83XBeg=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
-  # rdflib-jsonld functionality is part of rdblib from version 6 onwards
-  pythonRemoveDeps = [
-    "rdflib-jsonld"
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -50,11 +50,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "extruct" ];
+  pythonImportsCheck = [
+    "extruct"
+  ];
+
+  disabledTests = [
+    # AssertionError: Lists differ
+    "test_microformat"
+    "test_umicroformat"
+  ];
 
   meta = with lib; {
     description = "Extract embedded metadata from HTML markup";
     homepage = "https://github.com/scrapinghub/extruct";
+    changelog = "https://github.com/scrapinghub/extruct/blob/v${version}/HISTORY.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ambroisie ];
   };

@@ -123,16 +123,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-06-25";
+  version = "2023-12-24";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "526e8bd7441d1beb271ff89bbca3604077ecffdb";
-    sha256 = "sha256-VRNI3H/WUTi7VTNLwO/I0gMnJ6ZMYRbBfgdsAj+TmP4=";
+    rev = "02e453fc8c39751843220eaecdeaf7d539b7e765";
+    hash = "sha256-hIXRgu2MGqFYCALDKAiP+8lE859zftRe4OVIgGOTkvc=";
   };
 
   buildInputs = [
+    unzip
     libpqxx
     top-git
     mercurial
@@ -179,7 +180,6 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     mdbook
-    unzip
     nukeReferences
   ];
 
@@ -245,8 +245,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nix-based continuous build system";
+    homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann mindavi das_j ];
+    maintainers = with maintainers; [ lheckemann mindavi ] ++ teams.helsinki-systems.members;
   };
 }

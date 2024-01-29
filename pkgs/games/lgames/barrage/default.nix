@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "barrage";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
-    hash = "sha256-nFkkzT5AjcPfXsdxwvEsk4+RX9Py1mVqADvuoxE4Ha4=";
+    hash = "sha256-cGYrG7A4Ffh51KyR+UpeWu7A40eqxI8g4LefBIs18kg=";
   };
 
   buildInputs = [
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
+    broken = stdenv.isDarwin;
   };
 }

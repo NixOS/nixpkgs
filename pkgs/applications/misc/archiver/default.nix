@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "mholt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1py186hfy4p69wghqmbsyi1r3xvw1nyl55pz8f97a5qhmwxb3mwp";
+    hash = "sha256-l9exOq8QF3WSQ/+WQr0NfPeRQ/R6VQwfT+YS76BBwd8=";
   };
 
-  vendorSha256 = "1y4v95z1ga111g3kdv5wvyikwifl25f36firf1i916rxli6f6g5i";
+  vendorHash = "sha256-sTzjTKQ9m5BicDk6M1wR1EU+o9+87DbHCyGoF35Jm/g=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" "-X main.date=unknown" ];
 

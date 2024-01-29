@@ -5,13 +5,14 @@
 
 buildPythonPackage rec {
   pname = "pcpp";
-  version = "1.21";
+  version = "1.30";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ned14";
     repo = "pcpp";
-    rev = "v${version}";
-    sha256 = "0k52qyxzdngdhyn4sya2qn1w1a4ll0mcla4h4gb1v91fk4lw25dm";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Fs+CMV4eRKcB+KdV93ncgcqaMnO5etnMY/ivmSJh3Wc=";
     fetchSubmodules = true;
   };
 

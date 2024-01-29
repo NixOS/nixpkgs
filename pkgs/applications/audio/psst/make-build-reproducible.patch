@@ -13,7 +13,7 @@ index 1057827..0000000
 -    let mut fh = fs::File::create(outfile).unwrap();
 -    write!(fh, r#""{}""#, chrono::Local::now()).ok();
 -
--    let git_config = gix_config::File::from_git_dir("../.git/").expect("Git Config not found!");
+-    let git_config = gix_config::File::from_git_dir("../.git/".into()).expect("Git Config not found!");
 -    // Get Git's 'Origin' URL
 -    let mut remote_url = git_config
 -        .raw_value("remote", Some("origin".as_ref()), "url")
@@ -51,7 +51,7 @@ index fcbd491..2d71ee3 100644
 -pub const GIT_VERSION: &str = git_version!();
 -pub const BUILD_TIME: &str = include!(concat!(env!("OUT_DIR"), "/build-time.txt"));
 -pub const REMOTE_URL: &str = include!(concat!(env!("OUT_DIR"), "/remote-url.txt"));
-+pub const GIT_VERSION: &str = "f94af14aa9fdd3d59cd92849fa7f076103b37a70";
++pub const GIT_VERSION: &str = "c70ace50e8c50c38dc6c4ea1156de2b50e6e76b5";
 +pub const BUILD_TIME: &str = "1970-01-01 00:00:00";
 +pub const REMOTE_URL: &str = "https://github.com/jpochyla/psst";
  

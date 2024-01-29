@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "3.0.1";
+  format = "setuptools";
   pname = "robotstatuschecker";
 
   # no tests included in PyPI tarball

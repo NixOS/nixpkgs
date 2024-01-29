@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , substituteAll
 , cmake
@@ -44,13 +45,14 @@
 
 let
   inherit (python3.pkgs) paramiko pycairo pyodbc;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.33";
+  version = "8.0.36";
 
   src = fetchurl {
-    url = "https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "a6c9b05ee6f8accd45203d8234a43415da65ddc8118d427dd1a2ef2a209261bc";
+    url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-Y02KZrbCd3SRBYpgq6gYfpR+TEmg566D3zEvpwcUY3w=";
   };
 
   patches = [
@@ -75,6 +77,9 @@ in stdenv.mkDerivation rec {
       src = ./fix-swig-build.patch;
       cairoDev = "${cairo.dev}";
     })
+
+    # a newer libxml2 version has changed some interfaces
+    ./fix-xml2.patch
   ];
 
   # 1. have it look for 4.12.0 instead of 4.11.1
@@ -138,6 +143,10 @@ in stdenv.mkDerivation rec {
     patchShebangs tools/get_wb_version.sh
   '';
 
+  # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
+  # when updating the version make sure this is still needed
+  env.CXXFLAGS = "-include cstdint";
+
   env.NIX_CFLAGS_COMPILE = toString ([
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
     "-Wno-error=deprecated-declarations"
@@ -183,7 +192,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
@@ -191,10 +200,10 @@ in stdenv.mkDerivation rec {
       and query development modules where you can manage MySQL server instances
       and execute SQL queries.
     '';
-
     homepage = "http://wb.mysql.com/";
-    license = licenses.gpl2;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "mysql-workbench";
+    maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.linux;
   };
-}
+})

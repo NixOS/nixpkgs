@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   patches = [
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ../../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./gnu-install-dirs.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
     # Fix build on armv6l
@@ -115,6 +115,9 @@ stdenv.mkDerivation {
     # "All of the code in the compiler-rt project is dual licensed under the MIT
     # license and the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.system == "aarch64-darwin"
+      # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
+      # https://reviews.llvm.org/D43106#1019077
+      || (stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang);
   };
 }

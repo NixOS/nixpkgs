@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.15.0";
+  version = "0.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "radish";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SEW10ka0aQAXtW2UNCVJHMVhhZ9JTTj4IbskL87/Dn4=";
+    hash = "sha256-9Wt+W7PWUVijzAeZMvcOl/Na60OCCGJJqxh2UaAxAcM=";
   };
 
   propagatedBuildInputs = [
@@ -60,7 +60,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Behaviour-Driven-Development tool for python";
-    homepage = "http://radish-bdd.io";
+    homepage = "https://radish-bdd.github.io/";
+    changelog = "https://github.com/radish-bdd/radish/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
   };

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "bbc";
     repo = "audiowaveform";
     rev = version;
-    sha256 = "sha256-3Fpc0HvtuAYIkyuFrZ+sHkHRHaP4vo0Q4IoGqTksyqE=";
+    sha256 = "sha256-I9reh4ktBOvhtjh5L1LzpkZSjDb0adIYJFtjGfBBvA8=";
   };
 
   nativeBuildInputs = [ cmake gtest ];
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ edbentley ];
+    mainProgram = "audiowaveform";
   };
 }

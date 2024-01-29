@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, javaPackages, rsync, ffmpeg, batik, gsettings-desktop-schemas, xorg, wrapGAppsHook }:
 let
-  buildNumber = "1289";
+  buildNumber = "1293";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -37,29 +37,32 @@ let
     sha256 = "sha256-N4U04znm5tULFzb7Ort28cFdG+P0wTzsbVNkEuI9pgM=";
   };
 
+  arch = {
+    x86_64 = "amd64";
+  }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.1.1";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-OjTqANxzcW/RrAdqmVYAegrlLPu6w2pjzSyZyvUYIt4=";
+    sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
   };
 
   nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
-  buildInputs = [ jdk javaPackages.jogl_2_3_2 ant rsync ffmpeg batik ];
+  buildInputs = [ jdk javaPackages.jogl_2_4_0 ant rsync ffmpeg batik ];
 
   dontWrapGApps = true;
 
   buildPhase = ''
     echo "tarring jdk"
-    tar --checkpoint=10000 -czf build/linux/jdk-17.0.5-amd64.tgz ${jdk}
+    tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
     mkdir -p core/library
-    ln -s ${javaPackages.jogl_2_3_2}/share/java/* core/library/
+    ln -s ${javaPackages.jogl_2_4_0}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
     ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
@@ -79,6 +82,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/
+    mkdir -p $out/share/applications/
+    cp -dp build/linux/${pname}.desktop $out/share/applications/
     cp -dpr build/linux/work $out/share/${pname}
     rmdir $out/share/${pname}/java
     ln -s ${jdk} $out/share/${pname}/java

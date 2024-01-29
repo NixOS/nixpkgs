@@ -14,24 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pyvo";
-  version = "1.4";
+  version = "1.5";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R2ttLoFd6Ic0KZl49dzN5NtWAqPpXRaeki6X8CRGsCw=";
+    hash = "sha256-heTWWyxmRaDlI9NHzZab5OLOBIbVdb45v67Rq5ckzc8=";
   };
-
-  patches = [
-    # Backport Python 3.11 support.
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/astropy/pyvo/pull/385.patch";
-      sha256 = "IHf3W9fIT8XFvyM41PUiJkt1j+B3RkX3TS4FOnRUMDk=";
-    })
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

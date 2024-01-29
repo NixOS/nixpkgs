@@ -1,15 +1,23 @@
-{ stdenv, fetchurl, lib
+{ stdenv, fetchurl, lib, fetchpatch
 , pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss, libuuid
 , abrmdSupport ? true, tpm2-abrmd ? null }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";
-  version = "5.5";
+  version = "5.6";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-H9tJxzBTe/2u0IiISIGmHjv9Eh6VfsC9zu7AJhI2wSM=";
+    sha256 = "sha256-Usi8uq3KCCq/5et+5JZ9LWMthLFndnXy8HG20uwizsM=";
   };
+
+  patches = [
+    # https://github.com/tpm2-software/tpm2-tools/pull/3271
+    (fetchpatch {
+      url = "https://github.com/tpm2-software/tpm2-tools/commit/b98be08f6f88b0cca9e0667760c4e1e5eb417fbd.patch";
+      sha256 = "sha256-2sEam9i4gwscJhLwraX2EAjVM8Dh1vmNnG3zYsOF0fc=";
+    })
+  ];
 
   nativeBuildInputs = [ pandoc pkg-config makeWrapper ];
   buildInputs = [

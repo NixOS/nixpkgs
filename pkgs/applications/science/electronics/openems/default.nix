@@ -18,15 +18,15 @@
 , hyp2mat
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openems";
-  version = "unstable-2020-02-15";
+  version = "0.0.36";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "openEMS";
-    rev = "ba793ac84e2f78f254d6d690bb5a4c626326bbfd";
-    sha256 = "1dca6b6ccy771irxzsj075zvpa3dlzv4mjb8xyg9d889dqlgyl45";
+    rev = "v${version}";
+    sha256 = "sha256-wdH+Zw7G2ZigzBMX8p3GKdFVx/AhbTNL+P3w+YjI/dc=";
   };
 
   nativeBuildInputs = [

@@ -4,24 +4,23 @@
 , gitUpdater
 , cmake
 , python3
-, withDynarec ? stdenv.hostPlatform.isAarch64
+, withDynarec ? (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64)
 , runCommand
 , hello-x86_64
-, box64
 }:
 
-# Currently only supported on ARM
-assert withDynarec -> stdenv.hostPlatform.isAarch64;
+# Currently only supported on ARM & RISC-V
+assert withDynarec -> (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.2.2";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-aIvL0H0k0/lz2lCLxB17RxNm0cxVozYthy0z85/FuUE=";
+    repo = "box64";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eKYnBuaEWRb6kDGFvuG+xM70LbUAcJ6Zcr6hPHqi9Do=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +30,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DNOGIT=ON"
-    "-DARM_DYNAREC=${if withDynarec then "ON" else "OFF"}"
-    "-DRV64=${if stdenv.hostPlatform.isRiscV64 then "ON" else "OFF"}"
-    "-DPPC64LE=${if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then "ON" else "OFF"}"
+
+    # Arch mega-option
+    "-DARM64=${lib.boolToString stdenv.hostPlatform.isAarch64}"
+    "-DRV64=${lib.boolToString stdenv.hostPlatform.isRiscV64}"
+    "-DPPC64LE=${lib.boolToString (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian)}"
+    "-DLARCH64=${lib.boolToString stdenv.hostPlatform.isLoongArch64}"
   ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
     "-DLD80BITS=ON"
     "-DNOALIGN=ON"
+  ] ++ [
+    # Arch dynarec
+    "-DARM_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isAarch64)}"
+    "-DRV64_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isRiscV64)}"
   ];
 
   installPhase = ''
@@ -47,9 +54,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  doInstallCheck = true;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
       rev-prefix = "v";
     };
     tests.hello = runCommand "box64-test-hello" {
-      nativeBuildInputs = [ box64 hello-x86_64 ];
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
     } ''
       # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
       # tell what problems the emulator has run into.
@@ -81,6 +88,7 @@ stdenv.mkDerivation rec {
     description = "Lets you run x86_64 Linux programs on non-x86_64 Linux systems";
     license = licenses.mit;
     maintainers = with maintainers; [ gador OPNA2608 ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" "powerpc64le-linux" ];
+    mainProgram = "box64";
+    platforms = [ "x86_64-linux" "aarch64-linux" "riscv64-linux" "powerpc64le-linux" "loongarch64-linux" "mips64el-linux" ];
   };
-}
+})

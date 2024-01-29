@@ -2,35 +2,41 @@
 , boost
 , fetchFromGitHub
 , libsodium
-, nix
+, nixVersions
 , pkg-config
 , rustPlatform
+, stdenv
 , nix-update-script
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "harmonia";
-  version = "0.6.7";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-3tf2lFMrZowRL3v4bkkhyPdULKUZ5w7zJLXlWyMJg3k=";
+    hash = "sha256-72JMrXmxw/FuGjqXXxMIGiAbUUOqXEERdQwch+s3iwU=";
   };
 
-  cargoHash = "sha256-g/f0+sj3XBjDFfSCLNlyqFehODsmf87hwbmobo6Tehg=";
+  cargoHash = "sha256-Q5Y5v7mmJpfZFGRgurTcRBRtbApFRrwqOBHdZTJbyzc=";
 
   nativeBuildInputs = [
-    pkg-config nix
+    pkg-config nixVersions.nix_2_19
   ];
 
   buildInputs = [
     boost
     libsodium
-    nix
+    nixVersions.nix_2_19
   ];
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   passthru = {
     updateScript = nix-update-script {
@@ -44,5 +50,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/harmonia";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
+    mainProgram = "harmonia";
   };
 }

@@ -14,8 +14,8 @@ buildGoModule rec {
     sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };
 
-  sourceRoot = "source/src";
-  vendorSha256 = "sha256-JqDDG53khtDdMLVOscwqi0oGviF+3DMkv5tkHvp1gJc=";
+  sourceRoot = "${src.name}/src";
+  vendorHash = "sha256-JqDDG53khtDdMLVOscwqi0oGviF+3DMkv5tkHvp1gJc=";
 
   ldflags = [
     "-s"
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/SR-G/sleep-on-lan";
-    description = "Multi-platform process allowing to sleep on LAN a linux or windows computer, through wake-on-lan (reversed) magic packets or through HTTP REST requests.";
+    description = "Multi-platform process allowing to sleep on LAN a Linux or Windows computer, through wake-on-lan (reversed) magic packets or through HTTP REST requests";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ devusb ];

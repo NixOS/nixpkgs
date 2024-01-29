@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.3.0";
+  version = "6.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bLCNks5z/ws79Gyy6lwA1XKJsPJ5+wJWo99GgYK6U0Q=";
+    hash = "sha256-QrimgzzxVMnb0i0Aa1a/nEnJctMtJP5xb9c04Pa3Obg=";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "A pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "termcolor";
-  version = "2.2.0";
+  version = "2.4.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-38isPzUHiPI7KUez5s+lpTtjC2EubNiWWgFad2AguZo=";
+    hash = "sha256-qrnlYEfIrEHteY+jbYkqN6yms+kVnz4MJLxkqbOse3o=";
   };
 
   nativeBuildInputs = [

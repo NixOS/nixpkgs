@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build-system
-, cython
+, cython_3
 , poetry-core
 , setuptools
 
@@ -17,12 +17,12 @@
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.2.5";
+  version = "0.12.0";
 in
 
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,11 +30,11 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-T5mmHUMNbdvexeSaIDZIm/3yQcDKnWdor9IK63FE0no=";
+    hash = "sha256-g1sLmYy5SClkdBSjFFYtikh2nuxfTIoaCyktqoFl+Ho=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
     poetry-core
     setuptools
   ];

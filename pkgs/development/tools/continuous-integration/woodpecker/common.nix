@@ -1,21 +1,21 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchzip }:
 let
-  version = "0.15.8";
-  srcSha256 = "sha256-7CTRx7I47VEKfPvkWhmpyHV3hkeLyHymFMrkyYQ1wl8=";
-  yarnSha256 = "sha256-PY0BIBbjyi2DG+n5x/IPc0AwrFSwII4huMDU+FeZ/Sc=";
+  version = "2.2.2";
+  srcHash = "sha256-Ld75U7ItpBgoLKPLNQF0Kb5PFg2O5vdm26aNs/HYfcw=";
+  # The tarball contains vendored dependencies
+  vendorHash = null;
 in
 {
-  inherit version yarnSha256;
+  inherit version vendorHash;
 
-  src = fetchFromGitHub {
-    owner = "woodpecker-ci";
-    repo = "woodpecker";
-    rev = "v${version}";
-    sha256 = srcSha256;
+  src = fetchzip {
+    url = "https://github.com/woodpecker-ci/woodpecker/releases/download/v${version}/woodpecker-src.tar.gz";
+    hash = srcHash;
+    stripRoot = false;
   };
 
-  postBuild = ''
-    cd $GOPATH/bin
+  postInstall = ''
+    cd $out/bin
     for f in *; do
       mv -- "$f" "woodpecker-$f"
     done
@@ -25,12 +25,13 @@ in
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/woodpecker-ci/woodpecker/version.Version=${version}"
+    "-X go.woodpecker-ci.org/woodpecker/v2/version.Version=${version}"
   ];
 
   meta = with lib; {
     homepage = "https://woodpecker-ci.org/";
+    changelog = "https://github.com/woodpecker-ci/woodpecker/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie techknowlogick ];
+    maintainers = with maintainers; [ ambroisie techknowlogick adamcstephens ];
   };
 }

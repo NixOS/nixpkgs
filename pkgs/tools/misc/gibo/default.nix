@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.publicDomain;
     description = "A shell script for easily accessing gitignore boilerplates";
     platforms = lib.platforms.unix;
+    mainProgram = "gibo";
   };
 }

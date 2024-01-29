@@ -5,7 +5,6 @@
 , dvc-objects
 , fetchFromGitHub
 , funcy
-, nanotime
 , pygtrie
 , pythonOlder
 , setuptools-scm
@@ -15,19 +14,17 @@
 
 buildPythonPackage rec {
   pname = "dvc-data";
-  version = "2.3.0";
-  format = "pyproject";
+  version = "3.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvc-data";
     rev = "refs/tags/${version}";
-    hash = "sha256-iMFZLsXChfQfkkrbZycYjP53r8zQBHEEncVpOlVkcyc=";
+    hash = "sha256-rgqSgNsqAGATzu3ZX8LWRiFJt0xTTLaF8bUNOgA3s2w=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -38,7 +35,6 @@ buildPythonPackage rec {
     diskcache
     dvc-objects
     funcy
-    nanotime
     pygtrie
     shortuuid
     sqltrie
@@ -46,11 +42,6 @@ buildPythonPackage rec {
 
   # Tests depend on upath which is unmaintained and only available as wheel
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "dvc-objects==" "dvc-objects>="
-  '';
 
   pythonImportsCheck = [
     "dvc_data"

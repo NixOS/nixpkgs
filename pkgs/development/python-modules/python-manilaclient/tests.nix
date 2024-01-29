@@ -7,11 +7,10 @@
 , python-openstackclient
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-manilaclient-tests";
-  inherit (python-manilaclient) version;
-
-  src = python-manilaclient.src;
+  inherit (python-manilaclient) version src;
+  format = "other";
 
   dontBuild = true;
   dontInstall = true;

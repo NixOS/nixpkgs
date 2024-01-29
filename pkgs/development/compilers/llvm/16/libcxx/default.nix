@@ -1,8 +1,8 @@
 { lib, stdenv, llvm_meta
-, monorepoSrc, runCommand
+, monorepoSrc, runCommand, fetchpatch
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt
+, libcxxabi, libcxxrt, libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -47,8 +47,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
+    # fix for https://github.com/NixOS/nixpkgs/issues/269548
+    # https://github.com/llvm/llvm-project/pull/77218
+    (fetchpatch {
+      name = "darwin-system-libcxxabi-link-flags.patch";
+      url = "https://github.com/llvm/llvm-project/commit/c5b89b29ee6e3c444a355fd1cf733ce7ab2e316a.patch";
+      hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
+      relative = "libcxx";
+    })
   ];
 
   postPatch = ''
@@ -62,7 +68,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
+  buildInputs =
+    lib.optionals (!headersOnly) [ cxxabi ]
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false && !stdenv.hostPlatform.isWasm) [ libunwind ];
 
   cmakeFlags = let
     # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
@@ -75,11 +83,19 @@ stdenv.mkDerivation rec {
     "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
   ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optionals stdenv.hostPlatform.isWasm [
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+      "-DLIBCXX_USE_COMPILER_RT=ON"
+      # There's precedent for this in llvm-project/libcxx/cmake/caches.
+      # In a monorepo build you might do the following in the libcxxabi build:
+      #   -DLLVM_ENABLE_PROJECTS=libcxxabi;libunwinder
+      #   -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=On
+      # libcxx appears to require unwind and doesn't pull it in via other means.
+      "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
+    ] ++ lib.optionals stdenv.hostPlatform.isWasm [
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+      "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
     # If we're only building the headers we don't actually *need* a functioning
     # C/C++ compiler:

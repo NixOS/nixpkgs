@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud27` which is also the latest
+The current default by NixOS is `nextcloud28` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -49,9 +49,9 @@ used by the imperative installer and all values are written to an additional fil
 to ensure that changes can be applied by changing the module's options.
 
 In case the application serves multiple domains (those are checked with
-[`$_SERVER['HTTP_HOST']`](http://php.net/manual/en/reserved.variables.server.php))
+[`$_SERVER['HTTP_HOST']`](https://www.php.net/manual/en/reserved.variables.server.php))
 it's needed to add them to
-[`services.nextcloud.config.extraTrustedDomains`](#opt-services.nextcloud.config.extraTrustedDomains).
+[`services.nextcloud.settings.trusted_domains`](#opt-services.nextcloud.settings.trusted_domains).
 
 Auto updates for Nextcloud apps can be enabled using
 [`services.nextcloud.autoUpdateApps`](#opt-services.nextcloud.autoUpdateApps.enable).
@@ -119,13 +119,7 @@ Auto updates for Nextcloud apps can be enabled using
   - **Server-side encryption.**
     Nextcloud supports [server-side encryption (SSE)](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html).
     This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
-    to external storage such as S3. Please note that this won't work anymore when using OpenSSL 3
-    for PHP's openssl extension and **Nextcloud 25 or older** because this is implemented using the
-    legacy cipher RC4. For Nextcloud26 this isn't relevant anymore, because Nextcloud has an RC4 implementation
-    written in native PHP and thus doesn't need `ext-openssl` for that anymore.
-    If [](#opt-system.stateVersion) is *above* `22.05`,
-    this is disabled by default. To turn it on again and for further information please refer to
-    [](#opt-services.nextcloud.enableBrokenCiphersForSSE).
+    to external storage such as S3.
 
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 

@@ -1,21 +1,19 @@
 { fetchFromGitHub
-, gcc
 , lib
 , libnl
 , libpcap
 , pkg-config
 , stdenv
-, writeShellScriptBin
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
-  version = "0.9.20";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner  = "jclehner";
     repo   = "nmrpflash";
     rev    = "v${version}";
-    sha256 = "sha256-xfKZXaKzSTnCOC8qt6Zc/eidc1bnrKZOJPw/wwMoCaM=";
+    sha256 = "sha256-gr/7tZYnuXFvfIUh2MmtgSbFoELTomQ4h05y/WFDhjo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl libpcap ];
 
   PREFIX = "${placeholder "out"}";
-  STANDALONE_VERSION = "${version}";
+  STANDALONE_VERSION = version;
 
   preInstall = ''
     mkdir -p $out/bin

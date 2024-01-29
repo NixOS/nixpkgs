@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "modeled";
   version = "0.1.8";
+  format = "setuptools";
 
   src = fetchPypi {
     extension = "zip";
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "Universal data modeling for Python";
     homepage = "https://github.com/modeled/modeled";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

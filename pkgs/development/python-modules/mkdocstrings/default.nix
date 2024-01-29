@@ -1,39 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, importlib-metadata
 , jinja2
 , markdown
 , markupsafe
 , mkdocs
 , mkdocs-autorefs
+, pdm-backend
 , pymdown-extensions
 , pytestCheckHook
-, pdm-pep517
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.21.2";
-  format = "pyproject";
+  version = "0.24.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "mkdocstrings";
     rev = "refs/tags/${version}";
-    hash = "sha256-pi0BEe/zhG/V9wh2CO91Cc7Mze93+2tbVo6/2LGQ6Nw=";
+    hash = "sha256-UqX2jNNYwDNhb71qGdjHNoo2MmSxjf/bZiUoSxlE2XQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace 'license = "ISC"' 'license = {text = "ISC"}'
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
@@ -43,6 +44,9 @@ buildPythonPackage rec {
     mkdocs
     mkdocs-autorefs
     pymdown-extensions
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -61,6 +65,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Not all requirements are available
     "test_disabling_plugin"
+    # Circular dependency on mkdocstrings-python
+    "test_extended_templates"
   ];
 
   meta = with lib; {

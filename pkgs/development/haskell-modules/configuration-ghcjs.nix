@@ -26,7 +26,7 @@ self: super:
 
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
-  stm = doJailbreak self.stm_2_5_1_0;
+  stm = doJailbreak self.stm_2_5_3_0;
   exceptions = dontCheck self.exceptions_0_10_7;
 
 ## OTHER PACKAGES

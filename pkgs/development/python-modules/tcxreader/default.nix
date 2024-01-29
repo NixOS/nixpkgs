@@ -1,23 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tcxreader";
-  version = "0.4.4";
-  format = "setuptools";
+  version = "0.4.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "alenrajsp";
     repo = "tcxreader";
-    rev = "v${version}";
-    hash = "sha256-UJ6F+GcdF0b2gALQWepLyCnWm+6RKBRnBt1eJNoRRzo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-J7yzJfJr2EK/0hZLVgk+Poqr/vY/9bsgA6cePTQ45U0=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

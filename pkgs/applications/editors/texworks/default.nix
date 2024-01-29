@@ -8,6 +8,7 @@
 , poppler
 , qt5compat
 , qttools
+, qtwayland
 , withLua ? true, lua
 , withPython ? true, python3 }:
 
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
     qt5compat
     qttools
   ] ++ lib.optional withLua lua
-    ++ lib.optional withPython python3;
+    ++ lib.optional withPython python3
+    ++ lib.optional stdenv.isLinux qtwayland;
 
   cmakeFlags = [
     "-DQT_DEFAULT_MAJOR_VERSION=6"
@@ -50,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = with platforms; linux;
+    mainProgram = "texworks";
   };
 }

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "dcmstack";
   version = "0.9";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

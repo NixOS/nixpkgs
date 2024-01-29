@@ -123,7 +123,7 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnetPackFlags` can be used to pass flags to `dotnet pack`. Used only if `packNupkg` is set to `true`.
 * `dotnetFlags` can be used to pass flags to all of the above phases.
 
-When packaging a new application, you need to fetch its dependencies. You can run `nix-build -A package.fetch-deps` to generate a script that will build a lockfile for you. After running the script you should have the location of the generated lockfile printed to the console, which can be copied to a stable directory. Then set `nugetDeps = ./deps.nix` and you're ready to build the derivation.
+When packaging a new application, you need to fetch its dependencies. Create an empty `deps.nix`, set `nugetDeps = ./deps.nix`, then run `nix-build -A package.fetch-deps` to generate a script that will build the lockfile for you.
 
 Here is an example `default.nix`, using some of the previously discussed arguments:
 ```nix
@@ -138,11 +138,13 @@ in buildDotnetModule rec {
   src = ./.;
 
   projectFile = "src/project.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # File generated with `nix-build -A package.passthru.fetch-deps`.
+  # To run fetch-deps when this file does not yet exist, set nugetDeps to null
+  nugetDeps = ./deps.nix;
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
-  dotnet-sdk = dotnetCorePackages.sdk_6.0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
@@ -161,7 +163,7 @@ in buildDotnetModule rec {
 They can be installed either as a global tool for the entire system, or as a local tool specific to project.
 
 The local installation is the easiest and works on NixOS in the same way as on other Linux distributions.
-[See dotnet documention](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) to learn more.
+[See dotnet documentation](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) to learn more.
 
 [The global installation method](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-global-tool)
 should also work most of the time. You have to remember to update the `PATH`
@@ -210,3 +212,5 @@ buildDotnetGlobalTool {
   };
 }
 ```
+
+When packaging a new .NET application in nixpkgs, you can tag the [`@NixOS/dotnet`](https://github.com/orgs/nixos/teams/dotnet) team for help and code review.

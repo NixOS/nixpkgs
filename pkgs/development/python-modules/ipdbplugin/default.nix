@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "ipdbplugin";
   version = "1.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/flavioamieiro/nose-ipdb/tree/master";
     description = "Nose plugin to use iPdb instead of Pdb when tests fail";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 
 }

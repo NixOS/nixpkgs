@@ -2,7 +2,6 @@
 , cups
 , dpkg
 , fetchurl
-, gjs
 , glib
 , gtk3
 , lib
@@ -10,7 +9,9 @@
 , libdrm
 , libgcrypt
 , libkrb5
+, libnotify
 , mesa # for libgbm
+, libGL
 , nss
 , xorg
 , systemd
@@ -22,23 +23,23 @@
 }:
 
 let
-  version = "3.1.2-13107";
-  _hash = "ad5b5393";
+  sources = import ./sources.nix;
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_amd64.deb";
-      hash = "sha256-mBfeexWEYpGybFFianUFvlzMv0HoFR4EeFcwlGVXIRA=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_amd64.deb";
+      hash = sources.amd64_hash;
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_arm64.deb";
-      hash = "sha256-V6kR2lb63nnNIEhn64Yg0BYYlz7W0Cw60TwnKaJuLgs=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_arm64.deb";
+      hash = sources.arm64_hash;
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation {
   pname = "qq";
-  inherit version src;
+  version = sources.version;
+  inherit src;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -74,21 +75,27 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/qq.desktop \
       --replace "/opt/QQ/qq" "$out/bin/qq" \
       --replace "/usr/share" "$out/share"
-    ln -s $out/opt/QQ/qq $out/bin/qq
+    makeWrapper $out/opt/QQ/qq $out/bin/qq \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
+
+    # https://aur.archlinux.org/cgit/aur.git/commit/?h=linuxqq&id=f7644776ee62fa20e5eb30d0b1ba832513c77793
+    rm -r $out/opt/QQ/resources/app/libssh2.so.1
 
     # https://github.com/microcai/gentoo-zh/commit/06ad5e702327adfe5604c276635ae8a373f7d29e
     ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
       $out/opt/QQ/libappindicator3.so
 
+    ln -s ${libnotify}/lib/libnotify.so \
+      $out/opt/QQ/libnotify.so
+
     runHook postInstall
   '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ gjs ]}")
-  '';
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://im.qq.com/linuxqq/";

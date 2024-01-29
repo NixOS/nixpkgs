@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cherrytree";
-  version = "0.99.55";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
-    rev = version;
-    hash = "sha256-1ytph2HTwIqVTD6+a5P1gvFG+2xsfZWRkmn7RpwuwKY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SMx3a0pzhNahRzmenZwPQPCBgqoBGo9n3RcNcimNGBE=";
   };
 
   nativeBuildInputs = [

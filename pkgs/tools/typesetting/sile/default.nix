@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , darwin
 , fetchurl
 , makeWrapper
@@ -43,13 +44,13 @@ let
   ]);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.9";
+  version = "0.14.16";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0528835iir2ws14fwb7w4dqs3wlzzcv5arjxs8v13drb194rlwcs";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-z5dYW33Pd9meMo9s3OcaQHAyT+AB94dvcw+gTGySOFc=";
   };
 
   configureFlags = [
@@ -76,14 +77,14 @@ stdenv.mkDerivation rec {
     inherit luaEnv;
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
-      runCommand "${pname}-test"
+      runCommand "sile-test"
         {
           nativeBuildInputs = [ poppler_utils sile ];
-          inherit FONTCONFIG_FILE;
+          inherit (finalAttrs) FONTCONFIG_FILE;
         } ''
         output=$(mktemp -t selfcheck-XXXXXX.pdf)
         echo "<sile>foo</sile>" | sile -o $output -
-        pdfinfo $output | grep "SILE v${version}" > $out
+        pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
       '');
   };
 
@@ -108,8 +109,14 @@ stdenv.mkDerivation rec {
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
+  '';
 
   outputs = [ "out" "doc" "man" "dev" ];
 
@@ -126,9 +133,10 @@ stdenv.mkDerivation rec {
       such as InDesign.
     '';
     homepage = "https://sile-typesetter.org";
-    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sile-typesetter/sile/raw/v${finalAttrs.version}/CHANGELOG.md";
     platforms = platforms.unix;
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
+    mainProgram = "sile";
   };
-}
+})

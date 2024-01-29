@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, fuse
+, withFuse ? stdenv.isLinux, fuse
 , shared ? !stdenv.hostPlatform.isStatic
 , e2fsprogs, runCommand
 }:
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   # fuse2fs adds 14mb of dependencies
   outputs = [ "bin" "dev" "out" "man" "info" ]
-    ++ lib.optionals stdenv.isLinux [ "fuse2fs" ];
+    ++ lib.optionals withFuse [ "fuse2fs" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [ libuuid gettext ]
-    ++ lib.optionals stdenv.isLinux [ fuse ];
+    ++ lib.optionals withFuse [ fuse ];
 
   patches = [
     (fetchpatch { # avoid using missing __GNUC_PREREQ(X,Y)
@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
       sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
       excludes = [ "lib/ext2fs/hashmap.h" ];
       extraPrefix = "";
+    })
+    # Avoid trouble with older systems like NixOS 23.05.
+    # TODO: most likely drop this at some point, e.g. when 23.05 loses support.
+    (fetchurl {
+      name = "mke2fs-avoid-incompatible-features.patch";
+      url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/plain/debian/patches/disable-metadata_csum_seed-and-orphan_file-by-default?h=debian/master&id=3fb3d18baba90e5d48d94f4c0b79b2d271b0c913";
+      hash = "sha256-YD11K4s2bqv0rvzrxtaiodzLp3ztULlOlPUf1XcpxRY=";
     })
   ];
 
@@ -56,7 +63,7 @@ stdenv.mkDerivation rec {
     if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
       mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
     fi
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString withFuse ''
     mkdir -p $fuse2fs/bin
     mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
   '';

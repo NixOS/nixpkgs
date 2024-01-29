@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "itsdangerous";
   version = "2.1.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

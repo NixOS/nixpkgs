@@ -18,14 +18,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "SoftEther VPN services");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.softether;
-        defaultText = literalExpression "pkgs.softether";
-        description = lib.mdDoc ''
-          softether derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "softether" { };
 
       vpnserver.enable = mkEnableOption (lib.mdDoc "SoftEther VPN Server");
 

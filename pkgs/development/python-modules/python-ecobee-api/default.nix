@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "python-ecobee-api";
   version = "0.2.17";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

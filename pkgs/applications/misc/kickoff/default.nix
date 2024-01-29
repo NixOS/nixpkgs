@@ -10,23 +10,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kickoff";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "j0ru";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AolJXFolMEwoK3AtC93naphZetytzRl1yI10SP9Rnzo=";
+    hash = "sha256-WUDbb/GLABhqE93O6bm19Y+r0kSMEJrvduw68Igub44=";
   };
 
-  cargoHash = "sha256-Twg2C29OwXfCK/rYXnyjbhmCClnsFHz8le9h4AmzXfA=";
+  cargoHash = "sha256-nhUC9PSKAbNEK5e4WRx3dgYI0rJP5XSWcW6M5E0Ihv4=";
 
   libPath = lib.makeLibraryPath [
     wayland
     libxkbcommon
   ];
 
-  buildInputs = [ fontconfig ];
+  buildInputs = [ fontconfig libxkbcommon ];
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
   postInstall = ''

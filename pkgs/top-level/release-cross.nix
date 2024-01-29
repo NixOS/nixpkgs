@@ -66,7 +66,6 @@ let
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
-    windows.wxMSW = nativePlatforms;
     windows.mingw_w64_pthreads = nativePlatforms;
   };
 

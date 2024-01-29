@@ -14,44 +14,22 @@
 , libXrandr
 , spirv-headers
 , vulkan-headers
+, vulkan-utility-libraries
 , wayland
 }:
 
 let
   robin-hood-hashing = callPackage ./robin-hood-hashing.nix {};
-
-  # Current VVL version requires a newer spirv-headers than the latest release tag.
-  # This should hopefully not be too common and the override should be removed after
-  # the next SPIRV headers release.
-  # FIXME: if this ever becomes common, figure out a way to pull revisions directly
-  # from upstream known-good.json
-  spirv-headers' = spirv-headers.overrideAttrs(_: {
-    version = "unstable-2023-04-27";
-
-    src = fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "SPIRV-Headers";
-      rev = "7f1d2f4158704337aff1f739c8e494afc5716e7e";
-      hash = "sha256-DHOYIZQqP5uWDYdb+vePpMBaQDOCB5Pcg8wPBMF8itk=";
-    };
-
-    postPatch = "";
-  });
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.249";
-
-  # If we were to use "dev" here instead of headers, the setupHook would be
-  # placed in that output instead of "out".
-  outputs = ["out" "headers"];
-  outputInclude = "headers";
+  version = "1.3.275.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "v${version}";
-    hash = "sha256-+Vjy3hzzpC+bFNSEHLsfUaaHMSrMv2G+B8lGjui0fJs=";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-hJx8gn0zCN3+DhO6niylZJXPHgQ+VhQV5tL8qAeRaUg=";
   };
 
   nativeBuildInputs = [
@@ -68,12 +46,13 @@ stdenv.mkDerivation rec {
     libffi
     libxcb
     vulkan-headers
+    vulkan-utility-libraries
     wayland
   ];
 
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${glslang}"
-    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers'}"
+    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
     "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
     "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
@@ -84,6 +63,8 @@ stdenv.mkDerivation rec {
   # Tests require access to vulkan-compatible GPU, which isn't
   # available in Nix sandbox. Fails with VK_ERROR_INCOMPATIBLE_DRIVER.
   doCheck = false;
+
+  separateDebugInfo = true;
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.

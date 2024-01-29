@@ -21,7 +21,7 @@ with lib;
   services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" "modesetting" ];
 
   powerManagement.enable = false;
-  system.stateVersion = mkDefault "18.03";
+  system.stateVersion = lib.mkDefault lib.trivial.release;
 
   installer.cloneConfigExtra = ''
   # Let demo build as a trusted user.

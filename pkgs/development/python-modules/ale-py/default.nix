@@ -2,7 +2,7 @@
 , SDL2
 , cmake
 , fetchFromGitHub
-, git
+, fetchpatch
 , gym
 , importlib-metadata
 , importlib-resources
@@ -11,7 +11,6 @@
 , numpy
 , pybind11
 , pytestCheckHook
-, python
 , pythonOlder
 , setuptools
 , stdenv
@@ -23,10 +22,10 @@
 buildPythonPackage rec {
   pname = "ale-py";
   version = "0.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mgbellemare";
+    owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
     hash = "sha256-B2AxhlzvBy1lJ3JttJjImgTjMtEUyZBv+xHU2IC7BVE=";
@@ -35,10 +34,25 @@ buildPythonPackage rec {
   patches = [
     # don't download pybind11, use local pybind11
     ./cmake-pybind11.patch
+    ./patch-sha-check-in-setup.patch
+
+    # The following two patches add the required `include <cstdint>` for compilation to work with GCC 13.
+    # See https://github.com/Farama-Foundation/Arcade-Learning-Environment/pull/503
+    (fetchpatch {
+      name = "fix-gcc13-compilation-1";
+      url = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/commit/ebd64c03cdaa3d8df7da7c62ec3ae5795105e27a.patch";
+      hash = "sha256-NMz0hw8USOj88WryHRkMQNWznnP6+5aWovEYNuocQ2c=";
+    })
+    (fetchpatch {
+      name = "fix-gcc13-compilation-2";
+      url = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/commit/4c99c7034f17810f3ff6c27436bfc3b40d08da21.patch";
+      hash = "sha256-66/bDCyMr1RsKk63T9GnFZGloLlkdr/bf5WHtWbX6VY=";
+    })
   ];
 
   nativeBuildInputs = [
     cmake
+    ninja
     setuptools
     wheel
     pybind11
@@ -66,7 +80,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace 'dynamic = ["version"]' 'version = "${version}"'
     substituteInPlace setup.py \
-      --replace 'subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=here)' 'b"${src.rev}"'
+      --replace '@sha@' '"${version}"'
   '';
 
   dontUseCmakeConfigure = true;

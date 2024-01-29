@@ -41,12 +41,11 @@ stdenv.mkDerivation {
     "LIBRARY_TYPE=relocatable"
   ];
 
-  # Fixes gprbuild being linked statically always
-  patches = lib.optional (!stdenv.hostPlatform.isStatic) (fetchpatch {
-    name = "gprbuild-relocatable-build.patch";
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/relocatable-build.patch?h=gprbuild&id=1d4e8a5cb982e79135a0aaa3ef87654bed1fe4f0";
-    sha256 = "1r3xsp1pk9h666mm8mdravkybmd5gv2f751x2ffb1kxnwq1rwiyn";
-  });
+  # Fixes gprbuild being linked statically always. Based on the AUR's patch:
+  # https://aur.archlinux.org/cgit/aur.git/plain/0001-Makefile-build-relocatable-instead-of-static-binary.patch?h=gprbuild&id=bac524c76cd59c68fb91ef4dfcbe427357b9f850
+  patches = lib.optionals (!stdenv.hostPlatform.isStatic) [
+    ./gprbuild-relocatable-build.patch
+  ];
 
   buildFlags = [ "all" "libgpr.build" ];
 

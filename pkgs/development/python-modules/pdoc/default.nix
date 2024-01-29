@@ -1,10 +1,10 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , setuptools
 , jinja2
+, pdoc-pyo3-sample-library
 , pygments
 , markupsafe
 , astunparse
@@ -14,17 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "13.0.0";
-  disabled = pythonOlder "3.7";
+  version = "14.2.0";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
-  # the Pypi version does not include tests
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-UzUAprvBimk2POi0QZdFuRWEeGDp+MLmdUYR0UiIubs=";
+    hash = "sha256-Mmmq4jqRQow+1jn5ZDVMtP1uxrYgHJK/IQrwFWNw8ag=";
   };
 
   nativeBuildInputs = [
@@ -40,15 +39,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
+    pdoc-pyo3-sample-library
   ];
   disabledTestPaths = [
-    # "test_snapshots" tries to match generated output against stored snapshots.
-    # They are highly sensitive dep versions, which we unlike upstream do not pin.
+    # "test_snapshots" tries to match generated output against stored snapshots,
+    # which are highly sensitive to dep versions.
     "test/test_snapshot.py"
   ];
 
   pytestFlagsArray = [
-    ''-m "not slow"'' # skip tests marked slow
+    ''-m "not slow"'' # skip slow tests
   ];
 
   __darwinAllowLocalNetworking = true;

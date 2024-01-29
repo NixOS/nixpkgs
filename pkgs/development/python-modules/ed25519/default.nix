@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ed25519";
   version = "1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

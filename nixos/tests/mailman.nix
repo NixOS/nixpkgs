@@ -63,5 +63,11 @@ import ./make-test-python.nix {
         wait_for_api()
         machine.succeed("curl --fail-with-body -sLSu restadmin:secretpassword http://localhost:8001/3.1/domains")
         machine.succeed("curl --fail-with-body -sILS http://localhost/")
+
+    with subtest("service locking"):
+        machine.fail("su -s /bin/sh -c 'mailman start' mailman")
+        machine.execute("systemctl kill --signal=SIGKILL mailman")
+        machine.succeed("systemctl restart mailman")
+        wait_for_api()
   '';
 }

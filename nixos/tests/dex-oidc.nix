@@ -49,7 +49,7 @@ import ./make-test-python.nix ({ lib, ... }: {
       ensureUsers = [
         {
           name = "dex";
-          ensurePermissions = { "DATABASE dex" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

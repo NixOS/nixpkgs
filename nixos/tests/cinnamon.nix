@@ -7,6 +7,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.desktopManager.cinnamon.enable = true;
+
+    # For the sessionPath subtest.
+    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gnome.gpaste ];
   };
 
   enableOCR = true;
@@ -14,27 +17,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   testScript = { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
-      uid = toString user.uid;
-      bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
-      display = "DISPLAY=:0.0";
-      env = "${bus} ${display}";
-      gdbus = "${env} gdbus";
+      env = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus DISPLAY=:0";
       su = command: "su - ${user.name} -c '${env} ${command}'";
 
       # Call javascript in cinnamon (the shell), returns a tuple (success, output),
       # where `success` is true if the dbus call was successful and `output` is what
       # the javascript evaluates to.
-      eval = "call --session -d org.Cinnamon -o /org/Cinnamon -m org.Cinnamon.Eval";
-
-      # Should be 2 (RunState.RUNNING) when startup is done.
-      # https://github.com/linuxmint/cinnamon/blob/5.4.0/js/ui/main.js#L183-L187
-      getRunState = su "${gdbus} ${eval} Main.runState";
-
-      # Start gnome-terminal.
-      gnomeTerminalCommand = su "gnome-terminal";
-
-      # Hopefully gnome-terminal's wm class.
-      wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
+      eval = name: su "gdbus call --session -d org.Cinnamon -o /org/Cinnamon -m org.Cinnamon.Eval ${name}";
     in
     ''
       machine.wait_for_unit("display-manager.service")
@@ -54,13 +43,46 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       with subtest("Wait for the Cinnamon shell"):
           # Correct output should be (true, '2')
-          machine.wait_until_succeeds("${getRunState} | grep -q 'true,..2'")
+          # https://github.com/linuxmint/cinnamon/blob/5.4.0/js/ui/main.js#L183-L187
+          machine.wait_until_succeeds("${eval "Main.runState"} | grep -q 'true,..2'")
+
+      with subtest("Check if Cinnamon components actually start"):
+          for i in ["csd-media-keys", "cinnamon-killer-daemon", "xapp-sn-watcher", "nemo-desktop"]:
+            machine.wait_until_succeeds(f"pgrep -f {i}")
+          machine.wait_until_succeeds("journalctl -b --grep 'Loaded applet menu@cinnamon.org'")
+          machine.wait_until_succeeds("journalctl -b --grep 'calendar@cinnamon.org: Calendar events supported'")
+
+      with subtest("Check if sessionPath option actually works"):
+          machine.succeed("${eval "imports.gi.GIRepository.Repository.get_search_path\\(\\)"} | grep gpaste")
+
+      with subtest("Open Cinnamon Settings"):
+          machine.succeed("${su "cinnamon-settings themes >&2 &"}")
+          machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'cinnamon-settings'")
+          machine.wait_for_text('(Style|Appearance|Color)')
+          machine.sleep(2)
+          machine.screenshot("cinnamon_settings")
+
+      with subtest("Lock the screen"):
+          machine.succeed("${su "cinnamon-screensaver-command -l >&2 &"}")
+          machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is active'")
+          machine.sleep(2)
+          machine.screenshot("cinnamon_screensaver")
+          machine.send_chars("${user.password}\n", delay=0.2)
+          machine.wait_until_succeeds("${su "cinnamon-screensaver-command -q"} | grep 'The screensaver is inactive'")
+          machine.sleep(2)
 
       with subtest("Open GNOME Terminal"):
-          machine.succeed("${gnomeTerminalCommand}")
-          # Correct output should be (true, '"Gnome-terminal"')
-          machine.wait_until_succeeds("${wmClass} | grep -q 'true,...Gnome-terminal'")
-          machine.sleep(20)
-          machine.screenshot("screen")
+          machine.succeed("${su "gnome-terminal"}")
+          machine.wait_until_succeeds("${eval "global.display.focus_window.wm_class"} | grep -i 'gnome-terminal'")
+          machine.sleep(2)
+
+      with subtest("Open virtual keyboard"):
+          machine.succeed("${su "dbus-send --print-reply --dest=org.Cinnamon /org/Cinnamon org.Cinnamon.ToggleKeyboard"}")
+          machine.wait_for_text('(Ctrl|Alt)')
+          machine.sleep(2)
+          machine.screenshot("cinnamon_virtual_keyboard")
+
+      with subtest("Check if Cinnamon has ever coredumped"):
+          machine.fail("coredumpctl --json=short | grep -E 'cinnamon|nemo'")
     '';
 })

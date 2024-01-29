@@ -14,6 +14,8 @@ in
     server =
       { ... }:
       {
+        services.postgresql.enable = true;
+
         services.atuin = {
           enable = true;
           port = testPort;

@@ -17,18 +17,21 @@
 buildPythonPackage rec {
   pname = "webdav4";
   version = "0.9.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "skshetry";
-    repo = pname;
+    repo = "webdav4";
     rev = "refs/tags/v${version}";
     hash = "sha256-Le/gABaUxMmSW2SjgucsBKqjxOq1h9UCAWl5YyUsCPk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
 
   nativeBuildInputs = [
     hatch-vcs
@@ -61,11 +64,6 @@ buildPythonPackage rec {
     ];
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
   pythonImportsCheck = [
     "webdav4"
   ];
@@ -80,12 +78,14 @@ buildPythonPackage rec {
     "test_cp_cli"
     "test_mv_cli"
     "test_sync_remote_to_local"
+
   ];
 
   disabledTestPaths = [
     # Tests requires network access
     "tests/test_client.py"
     "tests/test_fsspec.py"
+    "tests/test_cli.py"
   ];
 
   meta = with lib; {

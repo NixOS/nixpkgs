@@ -142,7 +142,7 @@ in {
 
       user = mkOption {
         default = "maddy";
-        type = with types; uniq string;
+        type = with types; uniq str;
         description = lib.mdDoc ''
           User account under which maddy runs.
 
@@ -156,7 +156,7 @@ in {
 
       group = mkOption {
         default = "maddy";
-        type = with types; uniq string;
+        type = with types; uniq str;
         description = lib.mdDoc ''
           Group account under which maddy runs.
 
@@ -170,7 +170,7 @@ in {
 
       hostname = mkOption {
         default = "localhost";
-        type = with types; uniq string;
+        type = with types; uniq str;
         example = ''example.com'';
         description = lib.mdDoc ''
           Hostname to use. It should be FQDN.
@@ -179,7 +179,7 @@ in {
 
       primaryDomain = mkOption {
         default = "localhost";
-        type = with types; uniq string;
+        type = with types; uniq str;
         example = ''mail.example.com'';
         description = lib.mdDoc ''
           Primary MX domain to use. It should be FQDN.

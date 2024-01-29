@@ -4,6 +4,12 @@ self: super: {
 
     apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
 
+    citus = super.callPackage ./ext/citus.nix { };
+
+    h3-pg = super.callPackage ./ext/h3-pg.nix { };
+
+    hypopg = super.callPackage ./ext/hypopg.nix { };
+
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
@@ -15,6 +21,8 @@ self: super: {
     pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
 
     pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
+
+    pg_embedding = super.callPackage ./ext/pg_embedding.nix { };
 
     pg_hint_plan = super.callPackage ./ext/pg_hint_plan.nix { };
 
@@ -29,6 +37,8 @@ self: super: {
     pgaudit = super.callPackage ./ext/pgaudit.nix { };
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
+
+    pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
 
     pgvector = super.callPackage ./ext/pgvector.nix { };
 
@@ -48,9 +58,9 @@ self: super: {
 
     pg_topn = super.callPackage ./ext/pg_topn.nix { };
 
-    pgtap = super.callPackage ./ext/pgtap.nix { };
+    pg_net = super.callPackage ./ext/pg_net.nix { };
 
-    pipelinedb = super.callPackage ./ext/pipelinedb.nix { };
+    pgtap = super.callPackage ./ext/pgtap.nix { };
 
     smlar = super.callPackage ./ext/smlar.nix { };
 
@@ -73,11 +83,15 @@ self: super: {
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 
+    pg_uuidv7 = super.callPackage ./ext/pg_uuidv7.nix { };
+
     promscale_extension = super.callPackage ./ext/promscale_extension.nix { };
 
     repmgr = super.callPackage ./ext/repmgr.nix { };
 
     rum = super.callPackage ./ext/rum.nix { };
+
+    tsja = super.callPackage ./ext/tsja.nix { };
 
     wal2json = super.callPackage ./ext/wal2json.nix { };
 }

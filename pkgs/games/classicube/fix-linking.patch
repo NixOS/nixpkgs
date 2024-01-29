@@ -1,7 +1,7 @@
-diff --git a/src/Makefile b/src/Makefile
+diff --git a/Makefile b/Makefile
 index 83188ce..3439cdb 100644
---- a/src/Makefile
-+++ b/src/Makefile
+--- a/Makefile
++++ b/Makefile
 @@ -40,7 +40,7 @@ LIBS=-mwindows -lws2_32 -lwininet -lwinmm -limagehlp -lcrypt32 -ld3d9
  endif
  

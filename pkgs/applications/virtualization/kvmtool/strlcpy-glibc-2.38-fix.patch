@@ -1,0 +1,25 @@
+Manually tell the compiler that strlcpy exists. The `try-build` function seems
+somewhat broken, i.e. any code that I try to pass to it doesn't link because of an
+"undefined reference to main" error (and some more quoting issues with newlines being
+swalloed).
+
+Because both musl and glibc seemt o support strlcpy nowadays, I decided to just skip the
+possibly broken feature-check and hardcode that it exists.
+
+diff --git a/Makefile b/Makefile
+index ed2414b..37be9cd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -239,10 +239,8 @@ endif
+ # On a given system, some libs may link statically, some may not; so, check
+ # both and only build those that link!
+ 
+-ifeq ($(call try-build,$(SOURCE_STRLCPY),$(CFLAGS),$(LDFLAGS)),y)
+-	CFLAGS_DYNOPT	+= -DHAVE_STRLCPY
+-	CFLAGS_STATOPT	+= -DHAVE_STRLCPY
+-endif
++CFLAGS_DYNOPT	+= -DHAVE_STRLCPY
++CFLAGS_STATOPT	+= -DHAVE_STRLCPY
+ 
+ ifeq ($(call try-build,$(SOURCE_BFD),$(CFLAGS),$(LDFLAGS) -lbfd -static),y)
+ 	CFLAGS_STATOPT	+= -DCONFIG_HAS_BFD

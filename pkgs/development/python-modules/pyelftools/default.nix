@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyelftools";
-  version = "0.29";
+  version = "0.30";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "eliben";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tPY0C5CoA9hGHeEA/KWQ1RAVT5kqMlAwuWpOSH+KJ9Y=";
+    hash = "sha256-A9etnN7G24/Gu8YlV/YDpxZV+TG2eVXGx2ZjVnA9ZD4=";
   };
 
   doCheck = stdenv.hostPlatform.system == "x86_64-linux" && stdenv.hostPlatform.isGnu;

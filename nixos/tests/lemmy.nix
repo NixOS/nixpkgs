@@ -22,13 +22,15 @@ in
           # Without setup, the /feeds/* and /nodeinfo/* API endpoints won't return 200
           setup = {
             admin_username = "mightyiam";
-            admin_password = "ThisIsWhatIUseEverywhereTryIt";
             site_name = "Lemmy FTW";
             admin_email = "mightyiam@example.com";
           };
         };
+        adminPasswordFile = /etc/lemmy-admin-password.txt;
         caddy.enable = true;
       };
+
+      environment.etc."lemmy-admin-password.txt".text = "ThisIsWhatIUseEverywhereTryIt";
 
       networking.firewall.allowedTCPPorts = [ 80 ];
 
@@ -40,8 +42,14 @@ in
   testScript = ''
     server = ${lemmyNodeName}
 
-    with subtest("the backend starts and responds"):
+    with subtest("the merged config is secure"):
         server.wait_for_unit("lemmy.service")
+        config_permissions = server.succeed("stat --format %A /run/lemmy/config.hjson").rstrip()
+        assert config_permissions == "-rw-------", f"merged config permissions {config_permissions} are insecure"
+        directory_permissions = server.succeed("stat --format %A /run/lemmy").rstrip()
+        assert directory_permissions[5] == directory_permissions[8] == "-", "merged config can be replaced"
+
+    with subtest("the backend starts and responds"):
         server.wait_for_open_port(${toString backendPort})
         server.succeed("curl --fail localhost:${toString backendPort}/api/v3/site")
 
@@ -51,6 +59,7 @@ in
         server.succeed("curl --fail localhost:${toString uiPort}")
 
     with subtest("Lemmy-UI responds through the caddy reverse proxy"):
+        server.systemctl("start network-online.target")
         server.wait_for_unit("network-online.target")
         server.wait_for_unit("caddy.service")
         server.wait_for_open_port(80)
@@ -58,6 +67,7 @@ in
         assert "Lemmy" in body, f"String Lemmy not found in response for ${lemmyNodeName}: \n{body}"
 
     with subtest("the server is exposed externally"):
+        client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
         client.succeed("curl -v --fail ${lemmyNodeName}")
 

@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nrempel/sleek";
     license = licenses.mit;
     maintainers = with maintainers; [ xrelkd ];
+    mainProgram = "sleek";
   };
 }

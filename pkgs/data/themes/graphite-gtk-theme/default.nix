@@ -22,18 +22,18 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dark" "rimless" "normal" ] tweaks
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "darker" "rimless" "normal" "float" "colorful" ] tweaks
 lib.checkListOfEnum "${pname}: grub screens" [ "1080p" "2k" "4k" ] grubScreens
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-09-02";
+  version = "2023-12-31";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "PaqEkl0E3pUEJDEv1WwUqcjzAcQniN8rUGhVgbOxuhA=";
+    hash = "sha256-tAby1nLRBdkVQy448BXloBw8oeYqN2aFEs0jahNI3jg=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation rec {
 
     ${lib.optionalString wallpapers ''
       mkdir -p $out/share/backgrounds
-      cp -a wallpaper/Graphite-normal/*.png $out/share/backgrounds/
+      cp -a wallpaper/Graphite/*.png $out/share/backgrounds/
       ${lib.optionalString (builtins.elem "nord" tweaks) ''
         cp -a wallpaper/Graphite-nord/*.png $out/share/backgrounds/
       ''}

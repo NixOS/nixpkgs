@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "6.17.1";
+  version = "6.22.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-804zPzVVyZ/zTHePYdRw0eOh623HYJDQ3XuVsslHRcI=";
+    hash = "sha256-L0Cf6Y762mHan4q3zfNKW2feQ+EzjO4GGfXVH0+LFd0=";
   };
 
   postPatch = ''
@@ -23,6 +23,11 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "ruamel.yaml"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

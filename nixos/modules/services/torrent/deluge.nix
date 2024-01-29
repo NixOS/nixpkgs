@@ -147,13 +147,7 @@ in {
           '';
         };
 
-        package = mkOption {
-          type = types.package;
-          example = literalExpression "pkgs.deluge-2_x";
-          description = lib.mdDoc ''
-            Deluge package to use.
-          '';
-        };
+        package = mkPackageOption pkgs "deluge-2_x" { };
       };
 
       deluge.web = {
@@ -197,17 +191,25 @@ in {
     # Provide a default set of `extraPackages`.
     services.deluge.extraPackages = with pkgs; [ unzip gnutar xz bzip2 ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config/deluge' 0770 ${cfg.user} ${cfg.group}"
-    ]
-    ++ optional (cfg.config ? download_location)
-      "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? torrentfiles_location)
-      "d '${cfg.config.torrentfiles_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? move_completed_path)
-      "d '${cfg.config.move_completed_path}' 0770 ${cfg.user} ${cfg.group}";
+    systemd.tmpfiles.settings."10-deluged" = let
+      defaultConfig = {
+        inherit (cfg) user group;
+        mode = "0770";
+      };
+    in {
+      "${cfg.dataDir}".d = defaultConfig;
+      "${cfg.dataDir}/.config".d = defaultConfig;
+      "${cfg.dataDir}/.config/deluge".d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? download_location) {
+      ${cfg.config.download_location}.d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? torrentfiles_location) {
+      ${cfg.config.torrentfiles_location}.d = defaultConfig;
+    }
+    // optionalAttrs (cfg.config ? move_completed_path) {
+      ${cfg.config.move_completed_path}.d = defaultConfig;
+    };
 
     systemd.services.deluged = {
       after = [ "network.target" ];

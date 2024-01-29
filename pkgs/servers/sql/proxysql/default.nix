@@ -26,20 +26,19 @@
 , perl
 , python3
 , prometheus-cpp
-, re2
 , zlib
 , texinfo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
-  version = "2.5.2";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "sysown";
-    repo = pname;
-    rev = version;
-    hash = "sha256-KPTvFbEreWQBAs5ofcdVzlVqL0t5pM/mMLv4+E4lJ5M=";
+    repo = "proxysql";
+    rev = finalAttrs.version;
+    hash = "sha256-+3cOEM5b5HBQhuI+92meupvQnrUj8jgbedzPJqMoXc8=";
   };
 
   patches = [
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  GIT_VERSION = version;
+  GIT_VERSION = finalAttrs.version;
 
   dontConfigure = true;
 
@@ -117,7 +116,6 @@ stdenv.mkDerivation rec {
           { f = "lz4"; p = lz4; }
           { f = "pcre"; p = pcre; }
           { f = "prometheus-cpp"; p = prometheus-cpp; }
-          { f = "re2"; p = re2; }
         ]
       )}
 
@@ -166,10 +164,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://proxysql.com/";
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
+    homepage = "https://proxysql.com/";
     license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = teams.helsinki-systems.members;
+    platforms = platforms.unix;
   };
-}
+})

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "logical-unification";
   version = "0.4.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pythological";

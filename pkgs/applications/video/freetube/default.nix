@@ -1,13 +1,15 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron }:
+{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "sha256-7IxmlkExM8Q1yyq44ajZ6on4EMPyGt23QmzmBZmofts=";
+    sha256 = "add96ad3509d4d5c6d8658b005dfd046963cd6bb0a4e1f3e88f726a86c05810f";
   };
+
+  passthru.tests = nixosTests.freetube;
 
   appimageContents = appimageTools.extractType2 {
     name = "${pname}-${version}";
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ ryneeverett alyaeanyx ];
-    platforms = [ "x86_64-linux" ];
+    inherit (electron.meta) platforms;
+    mainProgram = "freetube";
   };
 }

@@ -1,21 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
+, setuptools
+
+# tests
 , pytestCheckHook
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "asn1crypto";
-  version = "1.5.1";
-  format = "setuptools";
+  version = "1.5.1-unstable-2023-11-03";
+  pyproject = true;
 
   # Pulling from Github to run tests
   src = fetchFromGitHub {
     owner = "wbond";
     repo = "asn1crypto";
-    rev = version;
-    hash = "sha256-M8vASxhaJPgkiTrAckxz7gk/QHkrFlNz7fFbnLEBT+M=";
+    # https://github.com/wbond/asn1crypto/issues/269
+    rev = "b763a757bb2bef2ab63620611ddd8006d5e9e4a2";
+    hash = "sha256-11WajEDtisiJsKQjZMSd5sDog3DuuBzf1PcgSY+uuXY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

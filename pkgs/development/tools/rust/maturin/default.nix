@@ -3,29 +3,24 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, dbus
 , libiconv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "1.0.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-iVN6LpikU+TP4P9ZJUVQR/ZNkRHjYLgdDA0aQeWMZfA=";
+    hash = "sha256-mD/7wWeclV5Xqii9hcZMustvR6tf7MoyTZ3WsvEc61U=";
   };
 
-  cargoHash = "sha256-iX4cbZ0PV0/o42f1QKNlAkwHEif2fu+RvhdzH7tWOZE=";
+  cargoHash = "sha256-w8XpCJ8GS2VszW/9/O2suy82zVO1UpWTrU1lFGYwhvw=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
-
-  buildInputs = lib.optionals stdenv.isLinux [ dbus ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   # Requires network access, fails in sandbox.
   doCheck = false;

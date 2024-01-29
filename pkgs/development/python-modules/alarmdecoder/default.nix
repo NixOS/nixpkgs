@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "alarmdecoder";
   version = "1.13.11";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

@@ -5,7 +5,7 @@ with import ./lib.nix { inherit config lib pkgs; };
 
 let
   inherit (lib) concatStringsSep literalExpression mkIf mkOption mkEnableOption
-  optionalString types;
+  mkPackageOption optionalString types;
 
   bosConfig = pkgs.writeText "BosConfig" (''
     restrictmode 1
@@ -101,12 +101,7 @@ in {
         description = lib.mdDoc "Definition of all cell-local database server machines.";
       };
 
-      package = mkOption {
-        default = pkgs.openafs;
-        defaultText = literalExpression "pkgs.openafs";
-        type = types.package;
-        description = lib.mdDoc "OpenAFS package for the server binaries";
-      };
+      package = mkPackageOption pkgs "openafs" { };
 
       roles = {
         fileserver = {
@@ -177,13 +172,13 @@ in {
 
         backup = {
           enable = mkEnableOption (lib.mdDoc ''
-            Backup server role. When using OpenAFS built-in buserver, use in conjunction with the
+            the backup server role. When using OpenAFS built-in buserver, use in conjunction with the
             `database` role to maintain the Backup
             Database. Normally only used in conjunction with tape storage
             or IBM's Tivoli Storage Manager.
 
             For a modern backup server, enable this role and see
-            {option}`enableFabs`.
+            {option}`enableFabs`
           '');
 
           enableFabs = mkEnableOption (lib.mdDoc ''

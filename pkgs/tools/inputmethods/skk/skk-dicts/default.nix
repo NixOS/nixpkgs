@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages, iconv, skktools }:
+{ lib, stdenv, fetchurl, iconv, skktools }:
 
 let
   # kana to kanji

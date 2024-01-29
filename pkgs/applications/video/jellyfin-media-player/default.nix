@@ -72,7 +72,6 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DQTROOT=${qtbase}"
     "-GNinja"
   ] ++ lib.optionals (!withDbus) [

@@ -2,12 +2,12 @@
 
 grafanaPlugin rec {
   pname = "grafana-clickhouse-datasource";
-  version = "3.1.0";
+  version = "3.3.0";
   zipHash = {
-    x86_64-linux = "sha256-x/Uruhk7mhPbsfAcST6tLnxJDd4vlqIkOUI4nAOZN50=";
-    aarch64-linux = "sha256-nNAIKoXYyhT1fwSB/a+uD1XUe5RxE9MYrbtHHx6T1fI=";
-    x86_64-darwin = "sha256-u9KRR7k/ktMu1KO5tpN/A+x48yDyXXPEnSNEx0hkT8Y=";
-    aarch64-darwin = "sha256-ME/LkVXoN1Sp4L3e9qFXgBfa7mCLRyKfEGHiBbaN8iY=";
+    x86_64-linux = "sha256-FkOX/2vPmLtxe/oOISldlVhayy7AwfFxLeiwJ5TNgYY=";
+    aarch64-linux = "sha256-4rCj+NaKPZbuVohlKmSf1M6n5ng9HZMrwzBCgLPdiok=";
+    x86_64-darwin = "sha256-bpey6EwwAqXgxjvjJ6ou4rinidHCpUr+Z89YpAZK7z8=";
+    aarch64-darwin = "sha256-u/U2lu4szf9JFt/zfhGmWKH2OUqpJDNaSI69EDdi1+w=";
   };
   meta = with lib; {
     description = "Connects Grafana to ClickHouse";

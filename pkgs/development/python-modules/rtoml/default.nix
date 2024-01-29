@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "rtoml";
   version = "0.8";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

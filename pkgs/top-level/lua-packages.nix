@@ -19,7 +19,7 @@ let
 
   buildLuaApplication = args: buildLuarocksPackage ({ namePrefix = ""; } // args);
 
-  buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-lua-package.nix { });
+  buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-luarocks-package.nix { });
 
   luaLib = callPackage ../development/lua-modules/lib.nix { };
 
@@ -54,10 +54,49 @@ rec {
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
-  luarocks = callPackage ../development/tools/misc/luarocks/default.nix { };
+  luarocks = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
-  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
+  luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
+
+ lua-pam = callPackage({fetchFromGitHub, linux-pam, openpam}: buildLuaPackage rec {
+    pname = "lua-pam";
+    version = "unstable-2015-07-03";
+    # Needed for `disabled`, overridden in buildLuaPackage
+    name = "${pname}-${version}";
+
+    src = fetchFromGitHub {
+      owner = "devurandom";
+      repo = "lua-pam";
+      rev = "3818ee6346a976669d74a5cbc2a83ad2585c5953";
+      hash = "sha256-YlMZ5mM9Ij/9yRmgA0X1ahYVZMUx8Igj5OBvAMskqTg=";
+      fetchSubmodules = true;
+    };
+
+    # The makefile tries to link to `-llua<luaversion>`
+    LUA_LIBS = "-llua";
+
+    buildInputs = lib.optionals stdenv.isLinux [linux-pam]
+      ++ lib.optionals stdenv.isDarwin [openpam];
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 pam.so $out/lib/lua/${lua.luaversion}/pam.so
+
+      runHook postInstall
+    '';
+
+    # The package does not build with lua 5.4 or luaJIT
+    disabled = luaAtLeast "5.4" || isLuaJIT;
+
+    meta = with lib; {
+      description = "Lua module for PAM authentication";
+      homepage = "https://github.com/devurandom/lua-pam";
+      license = licenses.mit;
+      maintainers = with maintainers; [ traxys ];
+    };
+ }) {};
 
  lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-core";
@@ -76,7 +115,7 @@ rec {
       description = "New FFI-based API for lua-nginx-module";
       homepage = "https://github.com/openresty/lua-resty-core";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ ];
     };
   }) {};
 
@@ -95,7 +134,7 @@ rec {
       description = "Lua-land LRU Cache based on LuaJIT FFI";
       homepage = "https://github.com/openresty/lua-resty-lrucache";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ ];
     };
   }) {};
 

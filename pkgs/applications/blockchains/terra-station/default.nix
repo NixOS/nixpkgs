@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = [ maintainers.peterwilli ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "terra-station";
   };
 }

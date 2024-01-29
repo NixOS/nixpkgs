@@ -28,6 +28,8 @@ let
     DOCUMENTATION_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/learn.html";
     SUPPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/community.html";
     BUG_REPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://github.com/NixOS/nixpkgs/issues";
+    IMAGE_ID = lib.optionalString (config.system.image.id != null) config.system.image.id;
+    IMAGE_VERSION = lib.optionalString (config.system.image.version != null) config.system.image.version;
   } // lib.optionalAttrs (cfg.variant_id != null) {
     VARIANT_ID = cfg.variant_id;
   };
@@ -110,6 +112,38 @@ in
       example = "installer";
     };
 
+    image = {
+
+      id = lib.mkOption {
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        default = null;
+        description = lib.mdDoc ''
+          Image identifier.
+
+          This corresponds to the IMAGE_ID field in os-release. See the
+          upstream docs for more details on valid characters for this field:
+          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=
+
+          You would only want to set this option if you're build NixOS appliance images.
+        '';
+      };
+
+      version = lib.mkOption {
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        default = null;
+        description = lib.mdDoc ''
+          Image version.
+
+          This corresponds to the IMAGE_VERSION field in os-release. See the
+          upstream docs for more details on valid characters for this field:
+          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=
+
+          You would only want to set this option if you're build NixOS appliance images.
+        '';
+      };
+
+    };
+
     stateVersion = mkOption {
       type = types.str;
       # TODO Remove this and drop the default of the option so people are forced to set it.
@@ -121,30 +155,33 @@ in
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
       description = lib.mdDoc ''
-        Every once in a while, a new NixOS release may change
-        configuration defaults in a way incompatible with stateful
-        data. For instance, if the default version of PostgreSQL
-        changes, the new version will probably be unable to read your
-        existing databases. To prevent such breakage, you should set the
-        value of this option to the NixOS release with which you want
-        to be compatible. The effect is that NixOS will use
-        defaults corresponding to the specified release (such as using
-        an older version of PostgreSQL).
-        It’s perfectly fine and recommended to leave this value at the
-        release version of the first install of this system.
-        Changing this option will not upgrade your system. In fact it
-        is meant to stay constant exactly when you upgrade your system.
-        You should only bump this option, if you are sure that you can
-        or have migrated all state on your system which is affected
-        by this option.
-      '';
-    };
+        This option defines the first version of NixOS you have installed on this particular machine,
+        and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
 
-    defaultChannel = mkOption {
-      internal = true;
-      type = types.str;
-      default = "https://nixos.org/channels/nixos-unstable";
-      description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
+        For example, if NixOS version XX.YY ships with AwesomeDB version N by default, and is then
+        upgraded to version XX.YY+1, which ships AwesomeDB version N+1, the existing databases
+        may no longer be compatible, causing applications to fail, or even leading to data loss.
+
+        The `stateVersion` mechanism avoids this situation by making the default version of such packages
+        conditional on the first version of NixOS you've installed (encoded in `stateVersion`), instead of
+        simply always using the latest one.
+
+        Note that this generally only affects applications that can't upgrade their data automatically -
+        applications and services supporting automatic migrations will remain on latest versions when
+        you upgrade.
+
+        Most users should **never** change this value after the initial install, for any reason,
+        even if you've upgraded your system to a new NixOS release.
+
+        This value does **not** affect the Nixpkgs version your packages and OS are pulled from,
+        so changing it will **not** upgrade your system.
+
+        This value being lower than the current NixOS release does **not** mean your system is
+        out of date, out of support, or vulnerable.
+
+        Do **not** change this value unless you have manually inspected all the changes it would
+        make to your configuration, and migrated your data accordingly.
+      '';
     };
 
     configurationRevision = mkOption {

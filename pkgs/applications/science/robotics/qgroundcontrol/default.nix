@@ -4,9 +4,9 @@
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.2.6";
+  version = "4.3.0";
 
-  qtInputs = [
+  propagatedBuildInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
     qtgraphicaleffects qtspeech qtx11extras
   ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
+  buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
   nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mMeKDfylVEqLo1i2ucUBu287Og4472Ecp7Cge9Cw3kE=";
+    sha256 = "sha256-a0+cpT413qi88PvaWQPxKABHfK7vbPE7B42n84n/SAk=";
     fetchSubmodules = true;
   };
 

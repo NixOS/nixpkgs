@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clblast";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "CNugteren";
     repo = "CLBlast";
     rev = version;
-    hash = "sha256-eRwSfP6p0+9yql7TiXZsExRMcnnBLXXW2hh1JliYU2I=";
+    hash = "sha256-1ddjmoLhFoLi/z2cae0HZidUTySsZQDk1T8MVPTbfi4=";
   };
 
   nativeBuildInputs = [

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "3.0.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
     rev = version;
-    hash = "sha256-Rh8HBUR3IXYs/0NZJAKk4mHOjliRIAgEsgR402i7FX4=";
+    hash = "sha256-77RGS4B5Jwb/J5eOG2A7sdfAU7PnRaxqz5nogpOnj70=";
   };
 
-  cargoHash = "sha256-9AXusLvkZQ3g4u7z03dy8eXzQ59aRSHFR+uyt3MwKhg=";
+  cargoHash = "sha256-3D8jyHFrhb3y4yeYtO1GqSyb5wlqUydf/4clsbLjJVE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,10 +42,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Command line tool that performs HTTP requests defined in a simple plain text format.";
+    description = "Command line tool that performs HTTP requests defined in a simple plain text format";
     homepage = "https://hurl.dev/";
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ eonpatapon figsoda ];
     license = licenses.asl20;
+    mainProgram = "hurl";
   };
 }

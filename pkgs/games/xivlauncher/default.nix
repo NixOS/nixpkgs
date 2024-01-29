@@ -1,9 +1,9 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam-run, gst_all_1
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
 , copyDesktopItems, makeDesktopItem, makeWrapper
 , useSteamRun ? true }:
 
 let
-  rev = "1.0.3";
+  rev = "1.0.7";
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
@@ -13,7 +13,7 @@ in
       owner = "goatcorp";
       repo = "XIVLauncher.Core";
       inherit rev;
-      hash = "sha256-aQVfW6Ef8X6L6hBEOCY/Py5tEyorXqtOO3v70mD7efA=";
+      hash = "sha256-bWrFGaNkcKo5vUhhrpzEMuX1Ws6ud57sJ0tM4CUuUEk=";
       fetchSubmodules = true;
     };
 
@@ -39,10 +39,14 @@ in
       cp src/XIVLauncher.Core/Resources/logo.png $out/share/pixmaps/xivlauncher.png
     '';
 
-    postFixup = lib.optionalString useSteamRun ''
+    postFixup = lib.optionalString useSteamRun (let
+      steam-run = (steam.override {
+        extraPkgs = pkgs: [ pkgs.libunwind ];
+      }).run;
+    in ''
       substituteInPlace $out/bin/XIVLauncher.Core \
         --replace 'exec' 'exec ${steam-run}/bin/steam-run'
-    '' + ''
+    '') + ''
       wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
       # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065
       mkdir -p $out/nix-support
@@ -67,7 +71,7 @@ in
 
     meta = with lib; {
       description = "Custom launcher for FFXIV";
-      homepage = "https://github.com/goatcorp/FFXIVQuickLauncher";
+      homepage = "https://github.com/goatcorp/XIVLauncher.Core";
       license = licenses.gpl3;
       maintainers = with maintainers; [ sersorrel witchof0x20 ];
       platforms = [ "x86_64-linux" ];

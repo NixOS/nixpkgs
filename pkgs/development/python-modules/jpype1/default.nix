@@ -10,13 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jpype1";
-  version = "1.4.1";
+  version = "1.5.0";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     pname = "JPype1";
     inherit version;
-    hash = "sha256-3I7oVAc0dK15rhaNkML2iThU9Yk2z6GPNYfK2uDTaW0=";
+    hash = "sha256-QlpuGWav3VhItgwmiLyut+QLpQSmhvERRYlmjgYx6Hg=";
   };
 
   propagatedBuildInputs = [

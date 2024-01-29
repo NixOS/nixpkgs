@@ -14,19 +14,17 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.3.3";
+  version = "0.4.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-pytest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2xdRW8Q10x6mtNs/EdAsgrOtVmvLAOdbIGXfyeB8ZAg=";
+    hash = "sha256-5qjfZGDM1OqXXNyj81O49ClKKGiAPdgyZZu6TgpskGs=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

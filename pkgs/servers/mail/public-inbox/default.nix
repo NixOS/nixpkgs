@@ -55,6 +55,9 @@ let
     #        got: 'makefile'
     #   expected: 'make'
     "hl_mod"
+    # Hangs on "inbox unlocked on initial fetch, waiting for IDLE".
+    # Fixed in HEAD: 7234e671 ("t/imapd: workaround a Perl 5.36.0 readline regression")
+    "imapd"
     # Failed test 'clone + index v1 synced ->created_at'
     # at t/lei-mirror.t line 175.
     #        got: '1638378723'

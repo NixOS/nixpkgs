@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "crypto++";
-  version = "8.7.0";
+  version = "8.9.0";
   underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
     repo = "cryptopp";
     rev = "CRYPTOPP_${underscoredVersion}";
-    hash = "sha256-KtZXW7+J9a4uKHnK8sqj5WVaIjG3d6tzBBDxa7Wv4AE=";
+    hash = "sha256-HV+afSFkiXdy840JbHBTR8lLL0GMwsN3QdwaoQmicpQ=";
   };
 
   outputs = [ "out" "dev" ];

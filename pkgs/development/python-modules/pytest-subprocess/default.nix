@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , pytest
 , pytestCheckHook
 , docutils
@@ -14,6 +15,7 @@
 buildPythonPackage rec {
   pname = "pytest-subprocess";
   version = "1.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -23,6 +25,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-u9d9RhbikOyknMWs18j2efYJb9YdHsQrp31LfcbudoA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     pytest
@@ -35,6 +41,10 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-asyncio
     anyio
+  ];
+
+  pytestFlagsArray = [
+    "-W ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

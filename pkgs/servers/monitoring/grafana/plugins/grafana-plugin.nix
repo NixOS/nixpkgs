@@ -1,7 +1,7 @@
 { stdenvNoCC, fetchurl, unzip, lib }:
 
 { pname, version, zipHash, meta ? {}, passthru ? {}, ... }@args:
-let plat = stdenvNoCC.targetPlatform.system; in stdenvNoCC.mkDerivation ({
+let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
   inherit pname version;
 
   src = if lib.isAttrs zipHash then

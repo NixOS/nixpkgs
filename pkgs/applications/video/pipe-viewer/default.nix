@@ -6,6 +6,7 @@
 , wrapGAppsHook
 , withGtk3 ? false
 , ffmpeg
+, mpv
 , wget
 , xdg-utils
 , youtube-dl
@@ -37,13 +38,13 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.3.0";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-2Kzo7NYxARPFuOijwf2a3WQxnNumtKRiRhMhjrWA4GY=";
+    hash = "sha256-7l8exCC9robe1hKnQAaIVfnn8L+FuwTOkxaxlwJmpe0=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -67,13 +68,18 @@ buildPerlModule rec {
   ];
 
   dontWrapGApps = true;
+
+  postInstall = ''
+    cp -r share/* $out/share
+  '';
+
   postFixup = ''
     wrapProgram "$out/bin/pipe-viewer" \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg mpv wget youtube-dl yt-dlp ]}"
   '' + lib.optionalString withGtk3 ''
     # make xdg-open overrideable at runtime
     wrapProgram "$out/bin/gtk-pipe-viewer" ''${gappsWrapperArgs[@]} \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}" \
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg mpv wget youtube-dl yt-dlp ]}" \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
@@ -83,5 +89,6 @@ buildPerlModule rec {
     license = licenses.artistic2;
     maintainers = with maintainers; [ julm ];
     platforms = platforms.all;
+    mainProgram = "pipe-viewer";
   };
 }

@@ -2,21 +2,14 @@
 
 crystal.buildCrystalPackage rec {
   pname = "ameba";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "crystal-ameba";
     repo = "ameba";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pc9mtVR/PBhM5l1PnDkm+y+McxbrfAmQzxmLi761VF4=";
+    hash = "sha256-TdyEnTloaciSpkPmnm+OM75sz9jaCaQ3VoDEepfescU=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/crystal-ameba/ameba/commit/c7f2cba409787a1928fbb54494b4645ec11005cc.patch";
-      hash = "sha256-tYEPke6omMdCGG2llJGXDZ3jTO4YAqpknzTPi2576UI=";
-    })
-  ];
 
   format = "make";
 

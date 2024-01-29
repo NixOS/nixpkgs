@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "hsaudiotag3k";
   version = "1.1.3.post1";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
 
   cfg = config.services.zabbixWeb;
@@ -42,12 +42,7 @@ in
     zabbixWeb = {
       enable = mkEnableOption (lib.mdDoc "the Zabbix web interface");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.zabbix.web;
-        defaultText = literalExpression "zabbix.web";
-        description = lib.mdDoc "Which Zabbix package to use.";
-      };
+      package = mkPackageOption pkgs [ "zabbix" "web" ] { };
 
       server = {
         port = mkOption {

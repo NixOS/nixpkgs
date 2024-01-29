@@ -27,14 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.2.1";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
-    fetchSubmodules = true;
-    hash = "sha256-F1g3ric23jKetl5aBG5NRpT4LnGXhBKZmGp2hg6Io9s=";
+    hash = "sha256-nyYzG0O7tZwo77r7QwenVgaTffZ3ELEyUrkZmdvwm/w=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +65,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_ERM:BOOL=ON"
     "-DENABLE_GITVERSION:BOOL=OFF"
     "-DENABLE_PCH:BOOL=OFF"
-    "-DENABLE_TEST:BOOL=OFF"
+    "-DENABLE_TEST:BOOL=OFF" # Tests require HOMM3 data files.
     "-DFORCE_BUNDLED_MINIZIP:BOOL=OFF"
     "-DFORCE_BUNDLED_FL:BOOL=OFF"
     "-DCMAKE_INSTALL_RPATH:STRING=$out/lib/vcmi"
@@ -80,12 +79,10 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ innoextract ffmpeg unshield ]}"
   '';
 
-  doCheck = true;
-
   passthru.tests.version = testers.testVersion {
     package = vcmi;
     command = ''
-      XDG_DATA_HOME=$PWD XDG_CACHE_HOME=$PWD XDG_CONFIG_HOME=$PWD \
+      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
         vcmiclient --version
     '';
   };
@@ -93,8 +90,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An open-source engine for Heroes of Might and Magic III";
     homepage = "https://vcmi.eu";
-    changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog";
-    license = with licenses; [ gpl2Only cc-by-sa-40 ];
+    changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog.md";
+    license = with licenses; [ gpl2Plus cc-by-sa-40 ];
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;
     mainProgram = "vcmilauncher";

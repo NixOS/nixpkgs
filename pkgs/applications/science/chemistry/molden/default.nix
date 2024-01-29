@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
      mkdir -p $out/bin
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = with lib; {
      description = "Display and manipulate molecular structures";

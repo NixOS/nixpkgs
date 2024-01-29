@@ -93,7 +93,7 @@ with lib;
     };
 
     return = mkOption {
-      type = types.nullOr types.str;
+      type = with types; nullOr (oneOf [ str int ]);
       default = null;
       example = "301 http://example.com$request_uri";
       description = lib.mdDoc ''

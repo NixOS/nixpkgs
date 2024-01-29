@@ -1,28 +1,21 @@
 { config, lib, ... }:
 
-with lib;
-
 let
   cfg = config.nix.optimise;
 in
 
 {
-
-  ###### interface
-
   options = {
-
     nix.optimise = {
-
-      automatic = mkOption {
+      automatic = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = lib.mdDoc "Automatically run the nix store optimiser at a specific time.";
       };
 
-      dates = mkOption {
+      dates = lib.mkOption {
         default = ["03:45"];
-        type = types.listOf types.str;
+        type = with lib.types; listOf str;
         description = lib.mdDoc ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at
@@ -32,9 +25,6 @@ in
     };
   };
 
-
-  ###### implementation
-
   config = {
     assertions = [
       {
@@ -43,14 +33,19 @@ in
       }
     ];
 
-    systemd.services.nix-optimise = lib.mkIf config.nix.enable
-      { description = "Nix Store Optimiser";
+    systemd = lib.mkIf config.nix.enable {
+      services.nix-optimise = {
+        description = "Nix Store Optimiser";
         # No point this if the nix daemon (and thus the nix store) is outside
         unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
-        startAt = optionals cfg.automatic cfg.dates;
+        startAt = lib.optionals cfg.automatic cfg.dates;
       };
 
+      timers.nix-optimise.timerConfig = {
+        Persistent = true;
+        RandomizedDelaySec = 1800;
+      };
+    };
   };
-
 }

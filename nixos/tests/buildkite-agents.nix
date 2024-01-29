@@ -1,10 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "buildkite-agent";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ flokli ];
-  };
+  meta.maintainers = with lib.maintainers; [ flokli ];
 
   nodes.machine = { pkgs, ... }: {
     services.buildkite-agents = {

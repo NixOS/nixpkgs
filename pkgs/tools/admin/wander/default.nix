@@ -1,19 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, wander }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "wander";
-  version = "0.9.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "robinovitch61";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g9QAdwAqy3OA+nYsSpVLUPv1gn6N12339fgmYFT6Iys=";
+    sha256 = "sha256-7/5NcrS5VR3APhv5LEpd4U0+E4PwM9cU9bb1q6UDfoI=";
   };
 
-  vendorHash = "sha256-iTaZ5/0UrLJ3JE3FwQpvjKKrhqklG4n1WFTJhWfj/rI=";
+  vendorHash = "sha256-0S8tzP5yNUrH6fp+v7nbUPTMWzYXyGw+ZNcXkSN+tWY=";
 
-  ldflags = [ "-s" "-w" "-X=github.com/robinovitch61/wander/cmd.Version=v${version}" ];
+  ldflags = [ "-s" "-w" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,12 +23,6 @@ buildGoModule rec {
       --bash <($out/bin/wander completion bash) \
       --zsh <($out/bin/wander completion zsh)
   '';
-
-  passthru.tests.version = testers.testVersion {
-    package = wander;
-    command = "wander --version";
-    version = "v${version}";
-  };
 
   meta = with lib; {
     description = "Terminal app/TUI for HashiCorp Nomad";

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "jwcrypto";
-  version = "1.5.0";
+  version = "1.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LB3FHPjjjd8yR5Xf6UJt7p3UbK9H9TXMvBh4H7qBC40=";
+    hash = "sha256-SLub9DN3cTYlNXnlK3X/4PmkpyHRM9AfRaC5HtX08a4=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/latchset/jwcrypto";
     changelog = "https://github.com/latchset/jwcrypto/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

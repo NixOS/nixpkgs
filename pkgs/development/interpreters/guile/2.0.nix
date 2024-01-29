@@ -133,6 +133,12 @@ builder rec {
 
   setupHook = ./setup-hook-2.0.sh;
 
+  passthru = rec {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${effectiveVersion}";
+  };
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";

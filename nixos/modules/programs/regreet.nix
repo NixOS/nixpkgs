@@ -24,7 +24,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOptionMD pkgs [ "greetd" "regreet" ] { };
+    package = lib.mkPackageOption pkgs [ "greetd" "regreet" ] { };
 
     settings = lib.mkOption {
       type = lib.types.either lib.types.path settingsFormat.type;
@@ -33,6 +33,19 @@ in
         ReGreet configuration file. Refer
         <https://github.com/rharish101/ReGreet/blob/main/regreet.sample.toml>
         for options.
+      '';
+    };
+
+    cageArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ "-s" ];
+      example = lib.literalExpression
+        ''
+          [ "-s" "-m" "last" ]
+        '';
+      description = lib.mdDoc ''
+        Additional arguments to be passed to
+        [cage](https://github.com/cage-kiosk/cage).
       '';
     };
 
@@ -50,7 +63,7 @@ in
   config = lib.mkIf cfg.enable {
     services.greetd = {
       enable = lib.mkDefault true;
-      settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.cage} -s -- ${lib.getExe cfg.package}";
+      settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.cage} ${lib.escapeShellArgs cfg.cageArgs} -- ${lib.getExe cfg.package}";
     };
 
     environment.etc = {
@@ -65,11 +78,15 @@ in
         else settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
-    systemd.tmpfiles.rules = let
-      user = config.services.greetd.settings.default_session.user;
-    in [
-      "d /var/log/regreet 0755 greeter ${user} - -"
-      "d /var/cache/regreet 0755 greeter ${user} - -"
-    ];
+    systemd.tmpfiles.settings."10-regreet" = let
+      defaultConfig = {
+        user = "greeter";
+        group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
+        mode = "0755";
+      };
+    in {
+      "/var/log/regreet".d = defaultConfig;
+      "/var/cache/regreet".d = defaultConfig;
+    };
   };
 }

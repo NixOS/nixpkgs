@@ -1,11 +1,12 @@
-from pathlib import Path
 import argparse
-import ptpython.repl
 import os
 import time
+from pathlib import Path
 
-from test_driver.logger import rootlog
+import ptpython.repl
+
 from test_driver.driver import Driver
+from test_driver.logger import rootlog
 
 
 class EnvDefault(argparse.Action):
@@ -25,9 +26,7 @@ class EnvDefault(argparse.Action):
                 )
         if required and default:
             required = False
-        super(EnvDefault, self).__init__(
-            default=default, required=required, nargs=nargs, **kwargs
-        )
+        super().__init__(default=default, required=required, nargs=nargs, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
         setattr(namespace, self.dest, values)
@@ -78,6 +77,14 @@ def main() -> None:
         help="vlans to span by the driver",
     )
     arg_parser.add_argument(
+        "--global-timeout",
+        type=int,
+        metavar="GLOBAL_TIMEOUT",
+        action=EnvDefault,
+        envvar="globalTimeout",
+        help="Timeout in seconds for the whole test",
+    )
+    arg_parser.add_argument(
         "-o",
         "--output_directory",
         help="""The path to the directory where outputs copied from the VM will be placed.
@@ -104,9 +111,16 @@ def main() -> None:
         args.testscript.read_text(),
         args.output_directory.resolve(),
         args.keep_vm_state,
+        args.global_timeout,
     ) as driver:
         if args.interactive:
-            ptpython.repl.embed(driver.test_symbols(), {})
+            history_dir = os.getcwd()
+            history_path = os.path.join(history_dir, ".nixos-test-history")
+            ptpython.repl.embed(
+                driver.test_symbols(),
+                {},
+                history_filename=history_path,
+            )
         else:
             tic = time.time()
             driver.run_tests()

@@ -12,7 +12,7 @@
 , gdbm
 , gnutls
 , gss
-, guile
+, guile_2_2
 , libmysqlclient
 , mailcap
 , nettools
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libxcrypt
   ] ++ lib.optionals stdenv.isLinux [ nettools ]
   ++ lib.optionals pythonSupport [ python3 ]
-  ++ lib.optionals guileSupport [ guile ];
+  ++ lib.optionals guileSupport [ guile_2_2 ];
 
   patches = [
     ./fix-build-mb-len-max.patch
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-gssapi"
     "--with-gsasl"
     "--with-mysql"
