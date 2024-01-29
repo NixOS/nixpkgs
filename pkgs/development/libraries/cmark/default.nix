@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cmark";
-  version = "0.30.3";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "commonmark";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/7TzaZYP8lndkfRPgCpBbazUBytVLXxqWHYktIsGox0=";
+    sha256 = "sha256-GBesKTp9DqoFAmCc0RB+XePvzV9g+w+oyrD1nCgyklI=";
   };
 
   nativeBuildInputs = [ cmake ];
