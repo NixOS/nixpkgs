@@ -99,6 +99,8 @@ stdenv.mkDerivation rec {
       ];
     };
   in ''
+    chmod 4755 opt/microsoft/msedge/msedge-sandbox
+
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath.msedge}" \
@@ -142,8 +144,6 @@ stdenv.mkDerivation rec {
 
     rm -rf $out/share/doc
     rm -rf $out/opt/microsoft/${shortName}/cron
-
-    chmod 4755 $out/opt/microsoft/msedge/msedge-sandbox
 
     for icon in '16' '24' '32' '48' '64' '128' '256'
     do
