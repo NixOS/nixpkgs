@@ -24,7 +24,7 @@ buildPythonApplication rec {
   doCheck = false; # no tests included
 
   meta = with lib; {
-    description = "Control Spotify playback on any device through the command line.";
+    description = "Control Spotify playback on any device through the command line";
     homepage = "https://github.com/ledesmablt/spotify-cli";
     mainProgram = "spotify-cli";
     license = licenses.mit;
