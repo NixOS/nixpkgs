@@ -7,14 +7,16 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, pythonRelaxDepsHook
 , pytz
+, setuptools
 , tailer
 }:
 
 buildPythonPackage rec {
   pname = "dsmr-parser";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "1.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,8 +24,17 @@ buildPythonPackage rec {
     owner = "ndokter";
     repo = "dsmr_parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PULrKRHrCuDFZcR+5ha0PjkN438QFgf2CrpYhKIqYTs=";
+    hash = "sha256-LR4fm6bnpWKMHyJj7L/gmnBX8M5ldc6lEpfgpYgqUQ4=";
   };
+
+  pythonRelaxDeps = [
+    "dlms-cosem"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     dlms-cosem
