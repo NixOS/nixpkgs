@@ -52,6 +52,26 @@ rec {
       '';
     });
 
+  libpng = (pkgs.libpng.override {
+    stdenv = pkgs.emscriptenStdenv;
+  }).overrideDerivation
+    (old: {
+      propagatedBuildInputs = [ zlib ];
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
+
+      configurePhase = ''
+        HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+
+        export CPPFLAGS=`pkg-config --cflags zlib`
+        export LDFLAGS=`pkg-config --libs zlib`
+
+        emconfigure ./configure --prefix=$out --disable-shared --enable-static
+      '';
+      doCheck = false;
+    });
+
   libxml2 = (pkgs.libxml2.override {
     stdenv = emscriptenStdenv;
     pythonSupport = false;
