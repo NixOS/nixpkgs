@@ -34870,8 +34870,6 @@ with pkgs;
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
-  qtractor = libsForQt5.callPackage ../applications/audio/qtractor { };
-
   quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
