@@ -31,12 +31,17 @@ let inherit (localSystem) system;
       bootstrapFiles = {
         url = "https://f005.backblazeb2.com/file/artemist-share/m4l21n60lki6bfc34yz87dqh3w9narys-x86_64-freebsd14-bootstrap-files.tar.xz";
         hash = "sha256-+uhPNV6p5awRSFG3IoJNi1A1jxKkoscYcQmmBwEwZb4=";
+        name = "bootstrap-files.tar.xz";
+        executable = false;
       };
     };
   };
   fetchurlBoot = import <nix/fetchurl.nix>;
   all-bootstrap-urls = all-bootstrap-urls-table.${localSystem.system};
-  all-bootstrap-files = lib.mapAttrs (a: v: fetchurlBoot (v // { executable = a != "bootstrapFiles"; })) all-bootstrap-urls;
+  all-bootstrap-files = lib.mapAttrs (a: v: fetchurlBoot (v // {
+    executable = v.executable or true;
+    name = v.name or a;
+  })) all-bootstrap-urls;
 in
 [
   ({}: let
