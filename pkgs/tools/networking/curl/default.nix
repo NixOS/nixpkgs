@@ -120,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.withFeature rtmpSupport "librtmp")
       (lib.withFeature rustlsSupport "rustls")
       (lib.withFeature zstdSupport "zstd")
+      (lib.withFeature pslSupport "libpsl")
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
       (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
       (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
