@@ -33989,6 +33989,7 @@ with pkgs;
   nerd-font-patcher = callPackage ../applications/misc/nerd-font-patcher { };
 
   netmaker-full = callPackage ../by-name/ne/netmaker/package.nix { withServer = true; withCLI = true; };
+  netmaker-pro = netmaker.override { isPro = true; };
 
   newsflash = callPackage ../applications/networking/feedreaders/newsflash {
     webkitgtk = webkitgtk_6_0;
