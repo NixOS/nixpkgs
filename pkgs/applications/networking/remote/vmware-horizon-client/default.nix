@@ -11,7 +11,7 @@
 , configText ? ""
 }:
 let
-  version = "2309.1";
+  version = "2312";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -36,8 +36,8 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART24FQ4_LIN_2309.1_TARBALL/VMware-Horizon-Client-Linux-2309.1-8.11.1-22775487.tar.gz";
-      sha256 = "3f66d21c0e97324d1cb85ac75132a69768e8e7ff57da33841e4e8bd37089d245";
+      url = "https://download3.vmware.com/software/CART24FQ4_LIN_2312_TARBALL/VMware-Horizon-Client-Linux-2312-8.12.0-23149323.tar.gz";
+      sha256 = "15ca1d6028b9ca88e23fa363a2942fd76456c19e95ced4734595c3dc44db38d8";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
