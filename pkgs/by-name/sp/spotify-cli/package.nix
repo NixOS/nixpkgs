@@ -8,7 +8,7 @@ buildPythonApplication rec {
     owner = "ledesmablt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-25eMM63a/axgDXCXah+zxwgXyrFHEciGE97ya49r43c=";
+    hash = "sha256-25eMM63a/axgDXCXah+zxwgXyrFHEciGE97ya49r43c=";
   };
 
   propagatedBuildInputs = with python3Packages; [
