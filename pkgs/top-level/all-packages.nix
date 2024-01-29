@@ -20448,7 +20448,7 @@ with pkgs;
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
-  abseil-cpp = abseil-cpp_202301;
+  abseil-cpp = abseil-cpp_202401;
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
