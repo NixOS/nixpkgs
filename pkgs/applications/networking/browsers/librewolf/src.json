@@ -1,12 +1,12 @@
 {
-  "packageVersion": "122.0-1",
+  "packageVersion": "122.0-2",
   "source": {
-    "rev": "122.0-1",
-    "sha256": "18b2pfh61cxkl7ww0fi5wjv580ca7i5sshviqym8w0w38lhp7rsv"
+    "rev": "122.0-2",
+    "sha256": "139vqa0czhbsg8naz75pcf5d8dql30slwrn4l8hkr4r1s1mslyq1"
   },
   "settings": {
-    "rev": "41623492f2b6970972014f6ce196015d3d7f1b59",
-    "sha256": "0ayyyw44q0gh668bzlv6cfl7baa0818bnz83g53l5j2f10xd52by"
+    "rev": "fe568fa26d52fa917c89d735468a17b990a23e2c",
+    "sha256": "1gska84ib386a1021r1n54mb1a47bqn459v5n26g4wqx3xrma48n"
   },
   "firefox": {
     "version": "122.0",
