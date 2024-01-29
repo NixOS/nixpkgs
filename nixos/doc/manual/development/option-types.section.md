@@ -318,6 +318,30 @@ If the built-in Nix value types provide enough distinction, you simplify your sy
     the attribute set (`attr1`, etc) and whose value must be of the accompanying
     type.
 
+    This type appears in the documentation as _attribute-tagged union_.
+
+    Example:
+
+    ```nix
+    types.attrTag {
+      bounce = mkOption {
+        description = "Send back a packet explaining why it wasn't forwarded.";
+        type = submodule {
+          options.errorMessage = mkOption { … };
+        };
+      };
+      forward = mkOption {
+        description = "Forward the packet.";
+        type = submodule {
+          options.destination = mkOption { … };
+        };
+      };
+      ignore = mkOption {
+        description = "Drop the packet without sending anything back.";
+        type = submodule {};
+      };
+    }
+    ```
 
 ## Composed types {#sec-option-types-composed}
 
