@@ -16806,12 +16806,6 @@
       fingerprint = "E173 237A C782 296D 98F5  ADAC E13D FD4B 4712 7951";
     }];
   };
-  scubed2 = {
-    email = "scubed2@gmail.com";
-    github = "scubed2";
-    githubId = 7401858;
-    name = "Sterling Stein";
-  };
   sdier = {
     email = "scott@dier.name";
     matrix = "@sdier:matrix.org";
