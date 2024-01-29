@@ -14,7 +14,7 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  sieveScriptSettings = mapAttrs' (to: from: nameValuePair "sieve_${to}" "${stateDir}/sieve/${from}") cfg.sieve.scripts;
+  sieveScriptSettings = mapAttrs' (to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}") cfg.sieve.scripts;
   imapSieveMailboxSettings = listToAttrs (flatten (imap1 (idx: el:
     singleton {
       name = "imapsieve_mailbox${toString idx}_name";
