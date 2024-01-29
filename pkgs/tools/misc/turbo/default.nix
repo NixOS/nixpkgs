@@ -4,6 +4,7 @@
 , buildGo120Module
 , git
 , nodejs
+, capnproto
 , protobuf
 , protoc-gen-go
 , protoc-gen-go-grpc
@@ -25,12 +26,12 @@
 , CoreFoundation
 }:
 let
-  version = "1.10.16";
+  version = "1.11.3";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    sha256 = "sha256-7bEHE/bHRVOXMP7+oo+4k8yn6d+LkXBi8JcDeR0ajww";
+    hash = "sha256-hjJXbGct9ZmriKdVjB7gwfmFsV1Tv57V7DfUMFZ8Xv0=";
   };
 
   ffi = rustPlatform.buildRustPackage {
@@ -38,7 +39,7 @@ let
     inherit src version;
     cargoBuildFlags = [ "--package" "turborepo-ffi" ];
 
-    cargoHash = "sha256-Mj46yNOYTqt732d7SJ3sAeXbgDkoh7o7S23lKVgpvKY=";
+    cargoHash = "sha256-3eN8/nBARuaezlzPjAL0YPEPvNqm6jNQAREth8PgcSQ=";
 
     RUSTC_BOOTSTRAP = 1;
     nativeBuildInputs = [
@@ -64,7 +65,8 @@ let
     pname = "go-turbo";
     modRoot = "cli";
 
-    vendorHash = "sha256-8quDuT8VwT3B56jykkbX8ov+DNFZwxPf31+NLdfX1p0=";
+    proxyVendor = true;
+    vendorHash = "sha256-JHTg9Gcc0DVdltTGCUaOPSVxL0XVkwPJQm/LoKffU/o=";
 
     nativeBuildInputs = [
       git
@@ -110,22 +112,6 @@ let
       # expected: env.DetailedMap{All:env.EnvironmentVariableMap(nil), BySource:env.BySource{Explicit:env.EnvironmentVariableMap{}, Matching:env.EnvironmentVariableMap{}}}
       #  actual  : env.DetailedMap{All:env.EnvironmentVariableMap{}, BySource:env.BySource{Explicit:env.EnvironmentVariableMap{}, Matching:env.EnvironmentVariableMap{}}}
       rm ./internal/run/global_hash_test.go
-    '' + lib.optionalString stdenv.isLinux ''
-      #  filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/test-1689172679812 1}
-      # filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/parent/test-1689172679812 1}
-      # filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/parent/child/test-1689172679812 1}
-      # filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/parent/sibling/test-1689172679812 1}
-      # filewatcher_test.go:127: got event {/build/TestFileWatching1921149570/001/parent/child/foo 1}
-      # filewatcher_test.go:137: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep 1}
-      # filewatcher_test.go:141: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/path 1}
-      # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep 1}
-      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/test-1689172679812
-      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/parent/test-1689172679812
-      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/parent/child/test-1689172679812
-      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/parent/sibling/test-1689172679812
-      # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/path/test-1689172679812 1}
-      # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/test-1689172679812 1}
-      rm ./internal/filewatcher/filewatcher_test.go
     '';
 
   };
@@ -139,13 +125,14 @@ rustPlatform.buildRustPackage {
   ];
   RELEASE_TURBO_CLI = "true";
 
-  cargoHash = "sha256-F+mEDkP7GismosXj+ICJCE4SHhCpWK7FiSyqjJM6LJ4=";
+  cargoHash = "sha256-bAXO4Lqv4ibo+fz3679MjNgP2MMY8TbxhG0+DRy0xcA=";
 
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [
     pkg-config
     extra-cmake-modules
     protobuf
+    capnproto
   ];
   buildInputs = [
     openssl

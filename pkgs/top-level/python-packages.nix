@@ -12482,6 +12482,8 @@ self: super: with self; {
 
   recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
 
+  recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
@@ -13180,6 +13182,8 @@ self: super: with self; {
 
   sharkiq = callPackage ../development/python-modules/sharkiq { };
 
+  sharp-aquos-rc = callPackage ../development/python-modules/sharp-aquos-rc { };
+
   shazamio = callPackage ../development/python-modules/shazamio { };
 
   sh = callPackage ../development/python-modules/sh { };
@@ -13269,6 +13273,10 @@ self: super: with self; {
   simplepush = callPackage ../development/python-modules/simplepush { };
 
   simplesat = callPackage ../development/python-modules/simplesat { };
+
+  simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3/python.nix {
+    inherit (pkgs) simple-dftd3;
+  };
 
   simple-di = callPackage ../development/python-modules/simple-di { };
 
