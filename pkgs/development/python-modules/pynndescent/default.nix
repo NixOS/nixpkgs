@@ -6,10 +6,10 @@
 , joblib
 , llvmlite
 , numba
-, scikit-learn
-, scipy
 , pytestCheckHook
 , pythonOlder
+, scikit-learn
+, scipy
 }:
 
 buildPythonPackage rec {
@@ -23,14 +23,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-b0TO2dWp2iyH2bL/8wu1MIVAwGV2BeTVzeftMnW7rVA=";
   };
-
-  patches = [
-    # https://github.com/lmcinnes/pynndescent/pull/224
-    (fetchpatch {
-      url = "https://github.com/lmcinnes/pynndescent/commit/86e0d716a3a4d5f4e6a0a3c2952f6fe339524e96.patch";
-      hash = "sha256-dfnT5P9Qsn/nSAr4Ysqo/olbLLfoZXvBRz33yzhN3J4=";
-    })
-  ];
 
   propagatedBuildInputs = [
     joblib
@@ -64,6 +56,6 @@ buildPythonPackage rec {
     description = "Nearest Neighbor Descent";
     homepage = "https://github.com/lmcinnes/pynndescent";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ mic92 derdennisop ];
   };
 }
