@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "23.43.27642.18";
+  version = "23.48.27912.11";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    hash = "sha256-AXHNIWCezPYTzc+SXp1B4BzhfSfM2GUCpWLtCT1SE7I=";
+    hash = "sha256-9VKmD7FxvBrDVqT1TzKommjrTvalfR4diReaDRy+Lk0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
