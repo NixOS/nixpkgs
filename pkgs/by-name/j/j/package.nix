@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jsoftware.com/";
     description = "J programming language, an ASCII-based APL successor";
     longDescription = ''
@@ -78,10 +78,9 @@ stdenv.mkDerivation rec {
       of data. It is a powerful tool for developing algorithms and exploring
       problems that are not already well understood.
     '';
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
-    broken = stdenv.isDarwin;
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl3Only ];
     mainProgram = "jconsole";
+    maintainers = with lib.maintainers; [ raskin synthetica AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 }
