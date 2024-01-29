@@ -19,7 +19,7 @@
 , vips
 , at-spi2-core
 , autoPatchelfHook
-, wrapGAppsHook
+, makeWrapper
 }:
 
 let
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    makeWrapper
     dpkg
   ];
 
