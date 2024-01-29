@@ -24062,6 +24062,8 @@ with pkgs;
 
   mvapich = callPackage ../development/libraries/mvapich { };
 
+  mvfst = darwin.apple_sdk_11_0.callPackage ../development/libraries/mvfst { };
+
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
