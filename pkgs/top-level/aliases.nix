@@ -711,6 +711,9 @@ mapAliases ({
   ''; # Added 2023-10-13
   nextcloud25Packages = throw "Nextcloud25 is EOL!"; # Added 2023-10-13
   nagiosPluginsOfficial = monitoring-plugins;
+  netmaker-full = throw ''
+    netmaker-full was removed. Use the individual packages netmaker, nmctl, netclient, netmaker-ui instead.
+  '';
   neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
   nitrokey-udev-rules = libnitrokey; # Added 2023-03-25
   nix-direnv-flakes = nix-direnv;
