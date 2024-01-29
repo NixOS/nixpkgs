@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "cryptodatahub";
-  version = "0.10.1";
+  version = "0.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "coroner";
     repo = "cryptodatahub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eLdK5gFrLnbIBB1NTeQzpdCLPdATVjzPn5LhhUsDuwo=";
+    hash = "sha256-zVHHBQYcl26zTtXPAs/AgKOojKQORu08rpkfY0l1zjM=";
   };
 
   postPatch = ''
@@ -60,6 +60,8 @@ buildPythonPackage rec {
   preCheck = ''
     # failing tests
     rm test/updaters/test_common.py
+    # Tests require network access
+    rm test/common/test_utils.py
   '';
 
   meta = with lib; {
