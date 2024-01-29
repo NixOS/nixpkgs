@@ -8,37 +8,55 @@ in
     intStrings = mkOption {
       type = types.attrsOf
         (types.attrTag {
-          left = types.int;
-          right = types.str;
+          left = mkOption {
+            type = types.int;
+          };
+          right = mkOption {
+            type = types.str;
+          };
         });
     };
     nested = mkOption {
       type = types.attrTag {
-        left = types.int;
-        right = types.attrTag {
-          left = types.int;
-          right = types.str;
+        left = mkOption {
+          type = types.int;
+        };
+        right = mkOption {
+          type = types.attrTag {
+            left = mkOption {
+              type = types.int;
+            };
+            right = mkOption {
+              type = types.str;
+            };
+          };
         };
       };
     };
     merged = mkOption {
       type = types.attrsOf (
         types.attrTag {
-          yay = types.int;
+          yay = mkOption {
+            type = types.int;
+          };
         }
       );
     };
     submodules = mkOption {
       type = types.attrsOf (
         types.attrTag {
-          foo = types.submodule {
-            options = {
-              bar = mkOption {
-                type = types.int;
+          foo = mkOption {
+            type = types.submodule {
+              options = {
+                bar = mkOption {
+                  type = types.int;
+                };
               };
             };
           };
-          qux = types.str;
+          qux = mkOption {
+            type = types.str;
+          };
         }
       );
     };
@@ -50,7 +68,9 @@ in
       options.merged = mkOption {
         type = types.attrsOf (
           types.attrTag {
-            nay = types.bool;
+            nay = mkOption {
+              type = types.bool;
+            };
           }
         );
       };
@@ -76,8 +96,7 @@ in
       assert config.merged.positive.yay == 100;
       # assert lib.foldl' (a: b: builtins.trace b a) true (lib.attrNames config.docs);
       assert config.docs."submodules.<name>.foo.bar".type == "signed integer";
-      # It's not an option, so we can't render it as such. Something would be nice though.
-      assert ! (config.docs?"submodules.<name>.qux");
+      assert config.docs."submodules.<name>.qux".type == "string";
       true;
   };
 }
