@@ -99,7 +99,7 @@ buildGoModule rec {
   meta = {
     description = "Powerful system container and virtual machine manager";
     homepage = "https://linuxcontainers.org/incus";
-    changelog = "https://github.com/lxc/incus/releases/tag/incus-${version}";
+    changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
