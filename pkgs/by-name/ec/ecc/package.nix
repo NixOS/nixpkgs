@@ -53,18 +53,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ecc";
-  version = "1.0.12";
+  version = "1.0.21";
 
   src = fetchFromGitHub {
     owner = "eunomia-bpf";
     repo = "eunomia-bpf";
     rev = "v${version}";
-    hash = "sha256-EK/SZ9LNAk88JpHJEoxw12NHje6QdCqO/vT2TfkWlb0=";
+    hash = "sha256-D0isUK1OW7wvFtG38uSOwFnXxSCDqu4WRyO4Nh08f+Q=";
   };
 
   sourceRoot = "${src.name}/compiler/cmd";
 
-  cargoHash = "sha256-ymBEzFsMTxKSdJRYoDY3AC0QpgtcMlU0fQV03emCxQc=";
+  cargoHash = "sha256-qMuURRSbeHiH8YujFK20bMp6kPgGvYmEn5I026kywJc=";
 
   nativeBuildInputs = [
     pkg-config
