@@ -9,6 +9,7 @@
 , qtbase
 , qtwebengine
 , qtx11extras
+, qtquickcontrols2
 , getconf
 , glibc
 , libXrandr
@@ -50,7 +51,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ qtbase qtwebengine qtx11extras icu63 ];
+  buildInputs = [ qtbase qtwebengine qtx11extras qtquickcontrols2 icu63 ];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
