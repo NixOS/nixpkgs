@@ -266,10 +266,10 @@ in
     name = "standard-8";
     mainProgram = "Pianoteq 8";
     startupWMClass = "Pianoteq";
-    version = "8.1.1";
+    version = "8.2.0";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_linux_v${versionForFile version}.7z";
-      hash = "sha256-vWvo+ctJ0yN6XeJZZVhA3Ul9eWJWAh7Qo54w0TpOiVw=";
+      hash = "sha256-ME0urUc1jwUKpg+5BdawYo9WhvMsrztYTVOrJTVxtkY=";
     };
   };
   # TODO other paid binaries, I don't own that so I don't know their hash.
