@@ -17,11 +17,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-QRQhE8138+zaGQOdq9xUOrifkVIprzbJWbmMK+WhEOU=";
   };
 
-  nativeBuildInputs = [ which ];
-  buildInputs = [ gmp ];
-
   patches = [
     ./0000-fix-install-path.patch
+  ];
+
+  nativeBuildInputs = [
+    which
+  ];
+
+  buildInputs = [
+    gmp
   ];
 
   enableParallelBuilding = true;
@@ -59,14 +64,6 @@ stdenv.mkDerivation rec {
     cp -r jlibrary/{addons,system} $out/share/j/
     cp -r jlibrary/bin $out/
     runHook postInstall
-  '';
-
-  doInstallCheck = false; # The "gregex" test fails due to not finding PCRE2
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-    HOME="$TMPDIR" $out/bin/jconsole -lib $out/bin/libj* script/testga.ijs
-    runHook postInstallCheck
   '';
 
   meta = {
