@@ -28,9 +28,24 @@ in
         }
       );
     };
+    submodules = mkOption {
+      type = types.attrsOf (
+        types.attrTag {
+          foo = types.submodule {
+            options = {
+              bar = mkOption {
+                type = types.int;
+              };
+            };
+          };
+          qux = types.str;
+        }
+      );
+    };
     okChecks = mkOption {};
   };
   imports = [
+    ./docs.nix
     {
       options.merged = mkOption {
         type = types.attrsOf (
@@ -59,6 +74,10 @@ in
       assert config.intStrings.numberOne.left == 1;
       assert config.merged.negative.nay == false;
       assert config.merged.positive.yay == 100;
+      # assert lib.foldl' (a: b: builtins.trace b a) true (lib.attrNames config.docs);
+      assert config.docs."submodules.<name>.foo.bar".type == "signed integer";
+      # It's not an option, so we can't render it as such. Something would be nice though.
+      assert ! (config.docs?"submodules.<name>.qux");
       true;
   };
 }
