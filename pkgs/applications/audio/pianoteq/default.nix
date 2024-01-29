@@ -235,10 +235,10 @@ in
     name = "standard-trial";
     mainProgram = "Pianoteq 8";
     startupWMClass = "Pianoteq Trial";
-    version = "8.1.1";
+    version = "8.2.0";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
-      hash = "sha256-pL4tJMV8OTVLT4fwABcImWO+iaVe9gCdDN3rbkL+noc=";
+      hash = "sha256-IFFQMn8EFo5X8sUZV2/vtQOA83NHEFrUsU++CvYbN1c=";
     };
   };
   stage-6 = mkPianoteq rec {
