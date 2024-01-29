@@ -21145,7 +21145,7 @@ with pkgs;
 
   fastcdr = callPackage ../development/libraries/fastcdr { };
 
-  fbthrift = callPackage ../development/libraries/fbthrift { };
+  fbthrift = darwin.apple_sdk_11_0.callPackage ../development/libraries/fbthrift { };
 
   fb303 = callPackage ../development/libraries/fb303 { };
 

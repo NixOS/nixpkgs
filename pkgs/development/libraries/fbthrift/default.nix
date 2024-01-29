@@ -13,6 +13,7 @@
 , glog
 , gflags
 , libiberty
+, mvfst
 , openssl
 , lib
 , wangle
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fbthrift";
-  version = "2023.03.20.00";
+  version = "2024.01.22.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fbthrift";
     rev = "v${version}";
-    sha256 = "sha256-jCgdo7jE5QlRK5f2S6XEVM4+TPWI//4DKG/fDMFzgzg=";
+    sha256 = "sha256-vIYXX4NOs2JdhrAJKmIhf4+hQEXHue2Ok7e4cw6yups=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     gflags
     libevent
     libiberty
+    mvfst
     openssl
     wangle
     zlib
