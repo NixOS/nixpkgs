@@ -1,4 +1,5 @@
-{ alsa-lib
+{ lib
+, alsa-lib
 , aubio
 , cmake
 , dssi
@@ -15,33 +16,32 @@
 , libvorbis
 , lilv
 , lv2
-, mkDerivation
 , opusfile
 , pkg-config
-, qttools
-, qtbase
+, qt6
 , rubberband
 , serd
+, stdenv
 , sord
 , sratom
-, lib
 , suil
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qtractor";
-  version = "0.9.25";
+  version = "0.9.38";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-cKXHH7rugTJ5D7MDJmr/fX6p209wyGMQvSLbv5T0KXU=";
+    url = "mirror://sourceforge/qtractor/qtractor-${version}.tar.gz";
+    hash = "sha256-aAUOz9gztk9ynQYRq+mniUk++rM6Rdne9U1QM7jKPcU=";
   };
 
   nativeBuildInputs = [
     cmake
     libtool
     pkg-config
-    qttools
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -61,7 +61,8 @@ mkDerivation rec {
     lilv
     lv2
     opusfile
-    qtbase
+    qt6.qtbase
+    qt6.qtsvg
     rubberband
     serd
     sord
@@ -73,6 +74,7 @@ mkDerivation rec {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
     license = licenses.gpl2Plus;
+    mainProgram = "qtractor";
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;
   };
