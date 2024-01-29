@@ -8,7 +8,7 @@
 # updater
 , python3, writeScript
 # Apple dependencies
-, cctools, libcxx, CoreFoundation, CoreServices, Foundation
+, cctools, libcxx, CoreFoundation, CoreServices, Foundation, sigtool
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , runtimeShell
@@ -424,7 +424,10 @@ stdenv.mkDerivation rec {
       export NIX_CFLAGS_COMPILE+=" -Wno-deprecated-builtins -Wno-gnu-offsetof-extensions"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
-      sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
+      sed -i -E \
+        -e "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
+        -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${sigtool}/bin/codesign;" \
+        -e "s;env -i codesign;env -i CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${sigtool}/bin/codesign;" \
         scripts/bootstrap/compile.sh \
         tools/osx/BUILD
 
@@ -578,7 +581,7 @@ stdenv.mkDerivation rec {
     which
     zip
     python3.pkgs.absl-py   # Needed to build fish completion
-  ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx sigtool CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
