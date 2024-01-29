@@ -552,6 +552,7 @@
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
+  ./services/databases/neondb.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
   ./services/databases/pgbouncer.nix
