@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, makeWrapper, openjdk21, openjfx21, }:
+{ lib, stdenv, fetchzip, makeWrapper, openjdk21, openjfx21, jvmFlags ? [ ] }:
 let jdk = openjdk21.override { enableJavaFX = true; };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "moneydance";
@@ -27,7 +27,7 @@ in stdenv.mkDerivation (finalAttrs: {
       "javafx.swing,javafx.controls,javafx.graphics"
       "-classpath"
       "${placeholder "out"}/libexec/*"
-    ] ++ [ "Moneydance" ];
+    ] ++ jvmFlags ++ [ "Moneydance" ];
   in ''
     runHook preInstall
 
