@@ -213,7 +213,7 @@ mirror://xorg/individual/proto/xcb-proto-1.16.0.tar.xz
 mirror://xorg/individual/proto/xorgproto-2023.2.tar.xz
 mirror://xorg/individual/util/bdftopcf-1.1.1.tar.xz
 mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2
-mirror://xorg/individual/util/imake-1.0.9.tar.xz
+mirror://xorg/individual/util/imake-1.0.10.tar.xz
 mirror://xorg/individual/util/lndir-1.0.4.tar.xz
 mirror://xorg/individual/util/makedepend-1.0.8.tar.xz
 mirror://xorg/individual/util/util-macros-1.20.0.tar.xz
