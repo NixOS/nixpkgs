@@ -54,6 +54,14 @@ stdenv.mkDerivation rec {
       hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
       relative = "libcxx";
     })
+  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+    # https://github.com/llvm/llvm-project/issues/64226
+    (fetchpatch {
+      name = "0042-mbstate_t-not-defined.patch";
+      url = "https://github.com/macports/macports-ports/raw/acd8acb171f1658596ed1cf25da48d5b932e2d19/lang/llvm-17/files/0042-mbstate_t-not-defined.patch";
+      relative = "libcxx";
+      hash = "sha256-fVbX99W1gQrSaMFeBkzsJmNWNy0xVSw+oFvDe4AYXL0=";
+    })
   ];
 
   postPatch = ''
