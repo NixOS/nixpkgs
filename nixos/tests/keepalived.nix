@@ -39,5 +39,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     node2.wait_until_succeeds("ip addr show dev eth1 | grep -q 192.168.1.200")
     node1.fail("ip addr show dev eth1 | grep -q 192.168.1.200")
     node1.succeed("ping -c1 192.168.1.200")
+
+    with subtest("failover"):
+      node2.block()
+      node1.wait_until_succeeds("ip addr show dev eth1 | grep -q 192.168.1.200")
+      node2.unblock()
+      node1.wait_until_fails("ip addr show dev eth1 | grep -q 192.168.1.200")
   '';
 })
