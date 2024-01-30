@@ -22,13 +22,13 @@ let
 in
 mkDerivation rec {
   pname = "sayonara";
-  version = "1.7.0-stable3";
+  version = "1.9.0-stable1";
 
   src = fetchFromGitLab {
     owner = "luciocarreras";
     repo = "sayonara-player";
     rev = version;
-    sha256 = "sha256-tJ/8tGNkmTwWRCpPy/h85SP/6QDAgcaKWJdM5MSAXJw=";
+    sha256 = "sha256-SQMJWxwJoSWopuwC1o9T/SOQRtnBV3PzuMVpBCEdgw4=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config qttools ];
