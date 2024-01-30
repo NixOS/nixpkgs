@@ -42,9 +42,11 @@ in
         startAt = lib.optionals cfg.automatic cfg.dates;
       };
 
-      timers.nix-optimise.timerConfig = {
-        Persistent = true;
-        RandomizedDelaySec = 1800;
+      timers.nix-optimise = lib.mkIf cfg.automatic {
+        timerConfig = {
+          Persistent = true;
+          RandomizedDelaySec = 1800;
+        };
       };
     };
   };
