@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2023-05-04";
+  version = "${kernel.version}-unstable-2024-01-20";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "a478095a45d8aa957b45be4f9173c414efcacc6f";
-    hash = "sha256-xqVxylKhL7vbC7m5Av6ven5i7OBkS2RHxrKzLOVBlgE=";
+    rev = "66983b69120a13699acf40a12979317f29012111";
+    hash = "sha256-Zxb9cOgP67QdCeTNEme0tAsBqd9j/2k+gcE1QKkUQU4=";
   };
 
   hardeningDisable = [ "pic" ];
