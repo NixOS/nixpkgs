@@ -24,6 +24,15 @@ in
     services.udev.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
+    environment.sessionVariables = {
+      # This is a `configfs` mount-point for interacting with `hrtimer`.  On
+      # immutable Linuxes, it's `/var/trig_sysfs_config`.  On mutable ones, it's
+      # `/config`.
+      #
+      # See also https://docs.kernel.org/iio/iio_configfs.html
+      HHD_MOUNT_TRIG_SYSFS = "$STATE_DIRECTORY/trig_sysfs_config";
+    };
+
     systemd.services.handheld-daemon = {
       description = "Handheld Daemon";
 
