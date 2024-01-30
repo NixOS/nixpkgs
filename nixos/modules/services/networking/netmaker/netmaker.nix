@@ -420,22 +420,38 @@ in
       '';
     };
 
+    coredns.defaults.bind = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      apply = value: lib.throwIf (config.services.resolved.enable && value == [ ])
+        "You must either set `services.netmaker.coredns.defaults.bind` to non-empty value or disable `services.resolved`."
+        value;
+      description = lib.mdDoc ''
+        Defines list of IP addresses or interface names that CoreDNS listens on.
+        When empty CoreDNS listens on all ports and addresses possibly interfering with systemd-resolved.
+      '';
+    };
+
     coredns.defaults.config = lib.mkOption {
       type = with lib.types; str;
       default = ''
         .:${builtins.toString config.services.netmaker.coredns.internal.port} {
+          ${lib.optionalString (config.services.netmaker.coredns.defaults.bind != [])
+            "bind ${builtins.concatStringsSep " " config.services.netmaker.coredns.defaults.bind}"}
           import netmaker
           ${lib.optionalString (config.services.netmaker.coredns.defaults.forwards != [])
-              "forward . ${builtins.concatStringsSep " " config.services.netmaker.coredns.defaults.forwards}"}
+            "forward . ${builtins.concatStringsSep " " config.services.netmaker.coredns.defaults.forwards}"}
           ${lib.optionalString config.services.netmaker.coredns.debug "log"}
         }
       '';
       defaultText = lib.literalExpression ''
         '''
           .:''${builtins.toString config.services.netmaker.coredns.internal.port} {
+            ''${lib.optionalString (config.services.netmaker.coredns.defaults.bind != [])
+              "bind ''${builtins.concatStringsSep " " config.services.netmaker.coredns.defaults.bind}"}
             import netmaker
             ''${lib.optionalString (config.services.netmaker.coredns.defaults.forwards != [])
-                "forward . ''${builtins.concatStringsSep " " config.services.netmaker.coredns.defaults.forwards}"}
+              "forward . ''${builtins.concatStringsSep " " config.services.netmaker.coredns.defaults.forwards}"}
             ''${lib.optionalString config.services.netmaker.coredns.debug "log"}
           }
         '''
