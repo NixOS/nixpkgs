@@ -437,6 +437,8 @@ self: super: with self; {
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
+  airium = callPackage ../development/python-modules/airium { };
+
   airly = callPackage ../development/python-modules/airly { };
 
   airthings-ble = callPackage ../development/python-modules/airthings-ble { };
