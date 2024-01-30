@@ -21,6 +21,7 @@
 , utf8proc
 , allowPgo ? !stdenv.hostPlatform.isMusl
 , python3  # for PGO
+, cage     # for PGO
 # for clang stdenv check
 , foot
 , llvmPackages
@@ -28,40 +29,6 @@
 
 let
   version = "1.16.2";
-
-  # build stimuli file for PGO build and the script to generate it
-  # independently of the foot's build, so we can cache the result
-  # and avoid unnecessary rebuilds as it can take relatively long
-  # to generate
-  #
-  # For every bump, make sure that the hash is still accurate.
-  stimulusGenerator = stdenv.mkDerivation {
-    name = "foot-generate-alt-random-writes";
-
-    src = fetchurl {
-      url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      hash = "sha256-NvkKJ75n/OzgEd2WHX1NQIXPn9R0Z+YI1rpFmNxaDhk=";
-    };
-
-    dontUnpack = true;
-
-    buildInputs = [ python3 ];
-
-    installPhase = ''
-      install -Dm755 $src $out
-    '';
-  };
-
-  stimuliFile = runCommand "pgo-stimulus-file" { } ''
-    ${stimulusGenerator} \
-      --rows=67 --cols=135 \
-      --scroll --scroll-region \
-      --colors-regular --colors-bright --colors-256 --colors-rgb \
-      --attr-bold --attr-italic --attr-underline \
-      --sixel \
-      --seed=2305843009213693951 \
-      $out
-  '';
 
   compilerName =
     if stdenv.cc.isClang
@@ -117,6 +84,9 @@ stdenv.mkDerivation {
     pkg-config
   ] ++ lib.optionals (compilerName == "clang") [
     stdenv.cc.cc.libllvm.out
+  ] ++ lib.optionals doPgo [
+    cage
+    python3
   ];
 
   buildInputs = [
@@ -138,9 +108,15 @@ stdenv.mkDerivation {
     then "-O3 -fno-plt"
     else pgoCflags;
 
-  # ar with gcc plugins for lto objects
   preConfigure = ''
+    patchShebangs --build ./pgo ./scripts
+
+    # ar with gcc plugins for lto objects
     export AR="${ar}"
+    # foot needs an UTF-8 locale when executed for PGO
+    export LANG=C.UTF-8
+    # Eliminate randomness of PGO input data
+    echo 'script_options="$script_options --seed=2305843009213693951"' >> ./pgo/options
   '';
 
   mesonBuildType = "release";
@@ -159,18 +135,16 @@ stdenv.mkDerivation {
     "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
   ];
 
-  # build and run binary generating PGO profiles,
-  # then reconfigure to build the normal foot binary utilizing PGO
+
+  doCheck = true;
+
+  # build and run all binaries (including tests) generating PGO profiles,
+  # then reconfigure to build the normal foot binaries utilizing PGO.
   preBuild = lib.optionalString doPgo ''
     meson configure -Db_pgo=generate
     ninja
-    # make sure there is _some_ profiling data on all binaries
-    ./footclient --version
-    ./foot --version
-    ./utils/xtgettcap
-    ./tests/test-config
-    # generate pgo data of wayland independent code
-    ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
+    ninja test
+    "$NIX_BUILD_TOP/$sourceRoot/pgo/full-headless-cage.sh" "$NIX_BUILD_TOP/$sourceRoot" .
     meson configure -Db_pgo=use
   '' + lib.optionalString (doPgo && compilerName == "clang") ''
     llvm-profdata merge default_*profraw --output=default.profdata
@@ -192,13 +166,6 @@ stdenv.mkDerivation {
     noPgo = foot.override {
       allowPgo = false;
     };
-
-    # By changing name, this will get rebuilt everytime we change version,
-    # even if the hash stays the same. Consequently it'll fail if we introduce
-    # a hash mismatch when updating.
-    stimulus-script-is-current = stimulusGenerator.src.overrideAttrs (_: {
-      name = "generate-alt-random-writes-${version}.py";
-    });
   };
 
   meta = with lib; {
