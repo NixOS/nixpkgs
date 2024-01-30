@@ -78,6 +78,8 @@
 
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 
+  obs-webkitgtk = callPackage ./obs-webkitgtk.nix { };
+
   wlrobs = callPackage ./wlrobs.nix { };
 
   waveform = callPackage ./waveform { };
