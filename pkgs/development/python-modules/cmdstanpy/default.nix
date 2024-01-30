@@ -11,6 +11,7 @@
 , stanio
 , xarray
 , pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -75,6 +76,8 @@ buildPythonPackage rec {
     # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
     "test_multi_proc_threads"
     "test_compile_force"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_init_types" # CmdStan error: error during processing Operation not permitted
   ];
 
   pythonImportsCheck = [ "cmdstanpy" ];
@@ -84,7 +87,6 @@ buildPythonPackage rec {
     description = "A lightweight interface to Stan for Python users";
     changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
