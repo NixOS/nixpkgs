@@ -2760,6 +2760,8 @@ self: super: with self; {
 
   decopatch = callPackage ../development/python-modules/decopatch { };
 
+  deebot-client = callPackage ../development/python-modules/deebot-client { };
+
   deemix = callPackage ../development/python-modules/deemix { };
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
@@ -14017,6 +14019,8 @@ self: super: with self; {
   svglib = callPackage ../development/python-modules/svglib { };
 
   svg-path = callPackage ../development/python-modules/svg-path { };
+
+  svg-py = callPackage ../development/python-modules/svg-py { };
 
   svgelements = callPackage ../development/python-modules/svgelements { };
 
