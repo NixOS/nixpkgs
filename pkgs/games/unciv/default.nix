@@ -5,6 +5,7 @@
 , makeDesktopItem
 , makeWrapper
 , jre
+, libGL
 , libpulseaudio
 , libXxf86vm
 }:
@@ -18,6 +19,7 @@ let
   };
 
   envLibPath = lib.makeLibraryPath [
+    libGL
     libpulseaudio
     libXxf86vm
   ];
