@@ -77,6 +77,7 @@ let
       inherit license;
       maintainers = [ lib.maintainers.edwtjo ];
       platforms = lib.platforms.linux;
+      mainProgram = exec;
     };
 
   };
