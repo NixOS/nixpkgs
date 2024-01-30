@@ -12732,6 +12732,8 @@ self: super: with self; {
 
   robotframework-databaselibrary = callPackage ../development/python-modules/robotframework-databaselibrary { };
 
+  robotframework-excellib = callPackage ../development/python-modules/robotframework-excellib { };
+
   robotframework-pythonlibcore = callPackage ../development/python-modules/robotframework-pythonlibcore { };
 
   robotframework-requests = callPackage ../development/python-modules/robotframework-requests { };
