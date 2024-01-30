@@ -20484,6 +20484,19 @@ with pkgs;
 
   alass = callPackage ../applications/video/alass { };
 
+  alice-vision = callPackage ../by-name/al/alice-vision/package.nix {
+    inherit (llvmPackages) openmp;
+  };
+
+  alice-vision_3_0_0 = pkgs.alice-vision.overrideAttrs (old: rec {
+    version = "3.0.0";
+    src = old.src // {
+      rev = "v${version}";
+      hash = "sha256-rFd2AFtvC1RugKGv4tI2k3rtDqXHjdDC3pgOrqDqIT0=";
+    };
+    buildInputs = lib.remove pkgs.onnxruntime old.buildInputs;
+  });
+
   allegro = allegro4;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
