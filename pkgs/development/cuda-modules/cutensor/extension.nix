@@ -13,9 +13,9 @@
 # - Instead of providing different releases for each version of CUDA, CuTensor has multiple subdirectories in `lib`
 #   -- one for each version of CUDA.
 {
+  backendStdenv,
   cudaVersion,
   flags,
-  targetPlatform,
   lib,
   mkVersionedPackageName,
 }:
@@ -93,7 +93,7 @@ let
   # LibPath are not constant across the same release -- one platform may support fewer
   # CUDA versions than another.
   # redistArch :: String
-  redistArch = flags.getRedistArch targetPlatform.system;
+  redistArch = flags.getRedistArch backendStdenv.hostPlatform.system;
   # platformIsSupported :: Manifests -> Boolean
   platformIsSupported =
     {feature, ...}:

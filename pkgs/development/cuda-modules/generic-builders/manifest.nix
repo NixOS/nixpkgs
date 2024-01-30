@@ -10,7 +10,6 @@
   markForCudatoolkitRootHook,
   flags,
   stdenv,
-  targetPlatform,
   # Builder-specific arguments
   # Short package name (e.g., "cuda_cccl")
   # pname : String
@@ -32,7 +31,6 @@ let
   inherit (lib)
     attrsets
     lists
-    meta
     strings
     trivial
     licenses
@@ -45,10 +43,10 @@ let
   supportedRedistArchs = builtins.attrNames featureRelease;
   # redistArch :: String
   # The redistArch is the name of the architecture for which the redistributable is built.
-  # It is `"unsupported"` if the redistributable is not supported on the target platform.
-  redistArch = flags.getRedistArch targetPlatform.system;
+  # It is `"unsupported"` if the redistributable is not supported on the hostPlatform.
+  redistArch = flags.getRedistArch backendStdenv.hostPlatform.system;
 
-  sourceMatchesHost = flags.getNixSystem redistArch == stdenv.hostPlatform.system;
+  sourceMatchesHost = flags.getNixSystem redistArch == backendStdenv.hostPlatform.system;
 in
 backendStdenv.mkDerivation (
   finalAttrs: {
