@@ -18,11 +18,11 @@ let
     categories = [ "Game" ];
   };
 
-  envLibPath = lib.makeLibraryPath [
+  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
     libGL
     libpulseaudio
     libXxf86vm
-  ];
+  ]);
 
 in
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     makeWrapper ${jre}/bin/java $out/bin/unciv \
-      --prefix LD_LIBRARY_PATH : ${envLibPath} \
+      --prefix LD_LIBRARY_PATH : "${envLibPath}" \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --add-flags "-jar ${src}"
 
