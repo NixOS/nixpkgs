@@ -19914,7 +19914,7 @@ with pkgs;
 
   strace-analyzer = callPackage ../development/tools/misc/strace-analyzer { };
 
-  stylelint = callPackage ../development/tools/analysis/stylelint { };
+  stylelintExtensions = stylelint.extensions;
 
   stylua = callPackage ../development/tools/stylua { };
 
