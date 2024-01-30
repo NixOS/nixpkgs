@@ -83,7 +83,7 @@
 let
   inherit (darwin.apple_sdk_11_0.frameworks)
     AVFoundation Accelerate Cocoa CoreAudio CoreFoundation CoreMedia
-    MediaPlayer;
+    MediaPlayer VideoToolbox;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 
   overrideSDK = platform: version:
@@ -140,6 +140,9 @@ in stdenv'.mkDerivation (finalAttrs: {
     # Disable whilst Swift isn't supported
     (lib.mesonEnable "swift-build" swiftSupport)
     (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Toggle explicitly because it fails on darwin
+    (lib.mesonEnable "videotoolbox-pl" vulkanSupport)
   ];
 
   mesonAutoFeatures = "auto";
@@ -160,6 +163,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ffmpeg
     freetype
     libass
+    libplacebo
     libpthreadstubs
     libuchardet
     luaEnv
@@ -188,7 +192,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals vaapiSupport       [ libva ]
     ++ lib.optionals vapoursynthSupport [ vapoursynth ]
     ++ lib.optionals vdpauSupport       [ libvdpau ]
-    ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
+    ++ lib.optionals vulkanSupport      [ shaderc vulkan-headers vulkan-loader ]
     ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
     ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr libXpresent ]
     ++ lib.optionals xineramaSupport    [ libXinerama ]
@@ -196,7 +200,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals zimgSupport        [ zimg ]
     ++ lib.optionals stdenv.isLinux     [ nv-codec-headers-11 ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer Accelerate ]
+    ++ lib.optionals stdenv.isDarwin    [ Accelerate CoreFoundation Cocoa CoreAudio MediaPlayer VideoToolbox ]
     ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
 
   postBuild = lib.optionalString stdenv.isDarwin ''
