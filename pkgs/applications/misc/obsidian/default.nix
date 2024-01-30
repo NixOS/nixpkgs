@@ -11,7 +11,6 @@
 , libglvnd
 }:
 let
-  inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
   version = "1.5.3";
   appname = "Obsidian";
