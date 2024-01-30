@@ -26,6 +26,7 @@
 , pkgs
 , stdenv
 , fetchpatch
+, fetchurl
 , patchelf
 
 # build time
@@ -245,6 +246,14 @@ buildStdenv.mkDerivation {
       hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
     })
   ]
+  ++ lib.optionals (lib.versionAtLeast version "120" && stdenv.hostPlatform.isMusl) [
+    (fetchurl {
+      # Starting from Firefox 120.0, the 'elfhack' is (even more) broken on musl libc. Use a patch from alpine to disable it.
+      name = "force-can-use-pack-relative-relocs.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox/force-can-use-pack-relative-relocs.patch?id=94611aa509413ddc5d3aec59a8c56a268f36af71";
+      hash = "sha256-57Cx9W+AkcTzGLz46RoqpefRJ+Qw/J/asq/fiKLdtQ0=";
+    })
+  ]
   ++ extraPatches;
 
   postPatch = ''
@@ -323,7 +332,7 @@ buildStdenv.mkDerivation {
       appendToVar configureFlags --enable-profile-use=cross
       appendToVar configureFlags --with-pgo-profile-path=$TMPDIR/merged.profdata
       appendToVar configureFlags --with-pgo-jarlog=$TMPDIR/jarlog
-      ${lib.optionalString stdenv.hostPlatform.isMusl ''
+      ${lib.optionalString (lib.versionOlder version "120" && stdenv.hostPlatform.isMusl) ''
         LDFLAGS="$OLD_LDFLAGS"
         unset OLD_LDFLAGS
       ''}
@@ -332,7 +341,7 @@ buildStdenv.mkDerivation {
       configureFlagsArray+=(
         "--enable-profile-generate=cross"
       )
-      ${lib.optionalString stdenv.hostPlatform.isMusl
+      ${lib.optionalString (lib.versionOlder version "120" && stdenv.hostPlatform.isMusl)
       # Set the rpath appropriately for the profiling run
       # During the profiling run, loading libraries from $out would fail,
       # since the profiling build has not been installed to $out
@@ -505,7 +514,7 @@ buildStdenv.mkDerivation {
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
-  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  env = lib.optionalAttrs (lib.versionOlder version "120" && stdenv.hostPlatform.isMusl) {
     # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
     # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
     # On musl we have to explicity set the rpath to include these libraries.
