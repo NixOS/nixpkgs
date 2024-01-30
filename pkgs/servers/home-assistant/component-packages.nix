@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.1.5";
+  version = "2024.1.6";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -1676,6 +1676,7 @@
       aiohttp-zlib-ng
       fnv-hash-fast
       gcal-sync
+      ical
       oauth2client
       psutil-home-assistant
       sqlalchemy
