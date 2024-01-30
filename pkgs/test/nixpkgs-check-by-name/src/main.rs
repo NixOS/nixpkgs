@@ -136,7 +136,7 @@ pub fn check_nixpkgs<W: io::Write>(
             )?;
             Success(ratchet::Nixpkgs::default())
         } else {
-            check_structure(&nixpkgs_path)?.result_map(|package_names|
+            check_structure(&nixpkgs_path, &mut nix_file_cache)?.result_map(|package_names|
                 // Only if we could successfully parse the structure, we do the evaluation checks
                 eval::check_values(&nixpkgs_path, &mut nix_file_cache, package_names, keep_nix_path))?
         }
