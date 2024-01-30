@@ -1,9 +1,23 @@
 { stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
+, fetchurl, python3, pexpect, xorriso, qemu, dosfstools, mtools
 , csmSupport ? false, seabios
 , fdSize2MB ? csmSupport
 , fdSize4MB ? secureBoot
 , secureBoot ? false
 , systemManagementModeRequired ? secureBoot && stdenv.hostPlatform.isx86
+# Whether to create an nvram variables template
+# which includes the MSFT secure boot keys
+, msVarsTemplate ? false
+# When creating the nvram variables template with
+# the MSFT keys, we also must provide a certificate
+# to use as the PK and first KEK for the keystore.
+#
+# By default, we use Debian's cert. This default
+# should chnage to a NixOS cert once we have our
+# own secure boot signing infrastructure.
+#
+# Ignored if msVarsTemplate is false.
+, vendorPkKek ? "$NIX_BUILD_TOP/debian/PkKek-1-Debian.pem"
 , httpSupport ? false
 , tpmSupport ? false
 , tlsSupport ? false
@@ -35,9 +49,25 @@ let
     riscv64 = "FV/RISCV_VIRT";
   };
 
+  OvmfPkKek1AppPrefix = "4e32566d-8e9e-4f52-81d3-5bb9715f9727";
+
+  debian-edk-src = fetchurl {
+    url = "http://deb.debian.org/debian/pool/main/e/edk2/edk2_2023.11-5.debian.tar.xz";
+    sha256 = "1yxlab4md30pxvjadr6b4xn6cyfw0c292q63pyfv4vylvhsb24g4";
+  };
+
+  buildPrefix = "Build/*/*";
+
 in
 
 assert systemManagementModeRequired -> stdenv.hostPlatform.isx86;
+assert msVarsTemplate -> fdSize4MB;
+# TODO: Support other platforms.
+#
+# Need to set the --flavor flag to edk2-vars-generator
+# (currently supports AAVMF, but not RISCV_VIRT), and
+# need to adjust the locations passed to edk2-vars-generator.
+assert msVarsTemplate -> stdenv.isx86_64;
 
 edk2.mkDerivation projectDscPath (finalAttrs: {
   pname = "OVMF";
@@ -46,7 +76,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   outputs = [ "out" "fd" ];
 
   nativeBuildInputs = [ util-linux nasm acpica-tools ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.bintools llvmPackages.llvm ];
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.bintools llvmPackages.llvm ]
+    ++ lib.optionals msVarsTemplate [ python3 pexpect xorriso qemu dosfstools mtools ];
   strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
@@ -70,8 +101,36 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
 
   env.PYTHON_COMMAND = "python3";
 
+  postUnpack = lib.optionalDrvAttr msVarsTemplate ''
+    unpackFile ${debian-edk-src}
+  '';
+
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/share/seabios/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
+  '';
+
+  postConfigure = lib.optionalDrvAttr msVarsTemplate ''
+    tr -d '\n' < ${vendorPkKek} | sed \
+      -e 's/.*-----BEGIN CERTIFICATE-----/${OvmfPkKek1AppPrefix}:/' \
+      -e 's/-----END CERTIFICATE-----//' > vendor-cert-string
+    export PYTHONPATH=$NIX_BUILD_TOP/debian/python:$PYTHONPATH
+  '';
+
+  postBuild = lib.optionalDrvAttr msVarsTemplate ''
+    python3 $NIX_BUILD_TOP/debian/edk2-vars-generator.py \
+      --flavor OVMF_4M \
+      --enrolldefaultkeys ${buildPrefix}/X64/EnrollDefaultKeys.efi \
+      --shell ${buildPrefix}/X64/Shell.efi \
+      --code ${buildPrefix}/FV/OVMF_CODE.fd \
+      --vars-template ${buildPrefix}/FV/OVMF_VARS.fd \
+      --certificate `< vendor-cert-string` \
+      --out-file OVMF_VARS.ms.fd
+  '';
+
+  postInstall = lib.optionalDrvAttr msVarsTemplate ''
+    mkdir -vp $fd/FV
+    install -v -m644 OVMF_VARS.ms.fd $fd/FV
+    ln -sv $fd/FV/OVMF_CODE{,.ms}.fd
   '';
 
   postFixup = (
