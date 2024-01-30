@@ -1,7 +1,9 @@
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::ratchet;
 use crate::structure;
+use crate::validation::ResultIteratorExt;
 use crate::validation::{self, Validation::Success};
+use crate::NixFileCache;
 use std::path::Path;
 
 use anyhow::Context;
@@ -48,6 +50,15 @@ struct CallPackageInfo {
     call_package_variant: CallPackageVariant,
     /// Whether the attribute is a derivation (`lib.isDerivation`)
     is_derivation: bool,
+    location: Option<Location>,
+}
+
+/// The structure returned by `builtins.unsafeGetAttrPos`
+#[derive(Deserialize, Clone, Debug)]
+struct Location {
+    pub file: PathBuf,
+    pub line: usize,
+    pub column: usize,
 }
 
 #[derive(Deserialize)]
@@ -70,6 +81,7 @@ enum CallPackageVariant {
 /// See the `eval.nix` file for how this is achieved on the Nix side
 pub fn check_values(
     nixpkgs_path: &Path,
+    nix_file_cache: &mut NixFileCache,
     package_names: Vec<String>,
     keep_nix_path: bool,
 ) -> validation::Result<ratchet::Nixpkgs> {
@@ -184,17 +196,36 @@ pub fn check_values(
                             is_derivation: false,
                             ..
                         }) => Success(NonApplicable),
-
+                        // A location of None indicates something weird, we can't really know where
+                        // this attribute is defined, probably an alias
+                        CallPackage(CallPackageInfo { location: None, .. }) => Success(Tight),
                         // The case of an attribute that qualifies:
                         // - Uses callPackage
                         // - Is a derivation
                         CallPackage(CallPackageInfo {
                             is_derivation: true,
-                            call_package_variant: Manual { path, empty_arg },
-                        }) => Success(Loose(ratchet::CouldUseByName {
-                            call_package_path: path,
-                            empty_arg,
-                        })),
+                            call_package_variant: Manual { .. },
+                            location: Some(location),
+                        }) =>
+                        // We'll use the attribute's location to parse the file that defines it
+                        match nix_file_cache.get(&location.file)? {
+                            Err(error) =>
+                                // This is a bad sign for rnix, because it means cpp Nix could parse
+                                // something that rnix couldn't
+                                anyhow::bail!(
+                                    "Could not parse file {} with rnix, even though it parsed with cpp Nix: {error}",
+                                    location.file.display()
+                                ),
+                            Ok(nix_file) =>
+                                match nix_file.call_package_argument_info_at(
+                                    location.line,
+                                    location.column,
+                                    nixpkgs_path,
+                                )? {
+                                    None => Success(NonApplicable),
+                                    Some(call_package_argument_info) => Success(Loose(call_package_argument_info))
+                                },
+                        },
                     };
                     uses_by_name.map(|x| ratchet::Package {
                         manual_definition: Tight,
@@ -240,6 +271,7 @@ pub fn check_values(
                 ByName(Existing(CallPackage(CallPackageInfo {
                     is_derivation,
                     call_package_variant,
+                    ..
                 }))) => {
                     let check_result = if !is_derivation {
                         NixpkgsProblem::NonDerivation {
@@ -256,6 +288,8 @@ pub fn check_values(
                             manual_definition: Tight,
                             uses_by_name: Tight,
                         }),
+                        // TODO: Use the call_package_argument_info_at instead/additionally and
+                        // simplify the eval.nix code
                         Manual { path, empty_arg } => {
                             let correct_file = if let Some(call_package_path) = path {
                                 relative_package_file == *call_package_path
@@ -280,9 +314,10 @@ pub fn check_values(
                     })
                 }
             };
-            check_result.map(|value| (attribute_name.clone(), value))
-        },
-    ));
+            Ok::<_, anyhow::Error>(check_result.map(|value| (attribute_name.clone(), value)))
+        })
+        .collect_vec()?,
+    );
 
     Ok(check_result.map(|elems| ratchet::Nixpkgs {
         package_names: elems.iter().map(|(name, _)| name.to_owned()).collect(),

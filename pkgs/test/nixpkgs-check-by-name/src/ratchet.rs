@@ -2,11 +2,11 @@
 //!
 //! Each type has a `compare` method that validates the ratchet checks for that item.
 
+use crate::nix_file::CallPackageArgumentInfo;
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::structure;
 use crate::validation::{self, Validation, Validation::Success};
 use std::collections::HashMap;
-use std::path::PathBuf;
 
 /// The ratchet value for the entirety of Nixpkgs.
 #[derive(Default)]
@@ -148,16 +148,8 @@ impl ToNixpkgsProblem for ManualDefinition {
 /// It also checks that once a package uses pkgs/by-name, it can't switch back to all-packages.nix
 pub enum UsesByName {}
 
-#[derive(Clone)]
-pub struct CouldUseByName {
-    /// The first callPackage argument, used for better errors
-    pub call_package_path: Option<PathBuf>,
-    /// Whether the second callPackage argument is empty, used for better errors
-    pub empty_arg: bool,
-}
-
 impl ToNixpkgsProblem for UsesByName {
-    type ToContext = CouldUseByName;
+    type ToContext = CallPackageArgumentInfo;
 
     fn to_nixpkgs_problem(
         name: &str,
@@ -167,13 +159,13 @@ impl ToNixpkgsProblem for UsesByName {
         if let Some(()) = optional_from {
             NixpkgsProblem::MovedOutOfByName {
                 package_name: name.to_owned(),
-                call_package_path: to.call_package_path.clone(),
+                call_package_path: to.relative_path.clone(),
                 empty_arg: to.empty_arg,
             }
         } else {
             NixpkgsProblem::NewPackageNotUsingByName {
                 package_name: name.to_owned(),
-                call_package_path: to.call_package_path.clone(),
+                call_package_path: to.relative_path.clone(),
                 empty_arg: to.empty_arg,
             }
         }
