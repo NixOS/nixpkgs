@@ -22465,6 +22465,8 @@ with pkgs;
 
   libcamera = callPackage ../development/libraries/libcamera { };
 
+  libcamera-qcam = callPackage ../development/libraries/libcamera { withQcam = true; };
+
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices AppKit;
   };

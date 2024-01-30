@@ -1,6 +1,7 @@
 { stdenv
 , fetchgit
 , lib
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -17,6 +18,9 @@
 , python3
 , python3Packages
 , systemd # for libudev
+, withQcam ? false
+, qt5 # withQcam
+, libtiff # withQcam
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +63,7 @@ stdenv.mkDerivation rec {
     libyaml
 
     gtest
-  ];
+  ] ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
 
   nativeBuildInputs = [
     meson
@@ -73,22 +77,22 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ];
+  ] ++ lib.optional withQcam qt5.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"
-    "-Dqcam=disabled"
+    "-Dqcam=${if withQcam then "enabled" else "disabled"}"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     "-Dwerror=false"
-    ];
+  ];
 
   # Fixes error on a deprecated declaration
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   # libcamera signs the IPA module libraries at install time, but they are then
   # modified by stripping and RPATH fixup. Therefore, we need to generate the
