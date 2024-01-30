@@ -10,7 +10,6 @@
 , gtk3
 , qtbase
 , qtwayland
-, pantheon
 , substituteAll
 , gsettings-desktop-schemas
 , useQt6 ? false
