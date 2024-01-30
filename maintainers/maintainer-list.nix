@@ -9526,6 +9526,16 @@
     githubId = 5802758;
     name = "Joshua Trees";
   };
+  juancmuller = {
+    email = "nix@juancmuller.com";
+    githubId = 208500;
+    github = "jcmuller";
+    matrix = "@jcmuller@beeper.com";
+    name = "Juan C. Müller";
+    keys = [{
+      fingerprint = "D78D 25D8 A1B8 2596 267F  35B8 F44E A51A 28F9 B4A7";
+    }];
+  };
   juaningan = {
     email = "juaningan@gmail.com";
     github = "oneingan";
