@@ -1,11 +1,11 @@
 //! This is a utility module for interacting with the syntax of Nix files
 
-use rnix::SyntaxKind;
 use crate::utils::LineIndex;
 use anyhow::Context;
 use rnix::ast;
 use rnix::ast::Expr;
 use rnix::ast::HasEntry;
+use rnix::SyntaxKind;
 use rowan::ast::AstNode;
 use rowan::TextSize;
 use rowan::TokenAtOffset;
@@ -66,12 +66,14 @@ impl NixFile {
             .with_context(|| format!("Could not read file {}", path.as_ref().display()))?;
         let line_index = LineIndex::new(&contents);
 
-        Ok(rnix::Root::parse(&contents).ok().map(|syntax_root| NixFile {
-            parent_dir: parent_dir.to_path_buf(),
-            path: path.as_ref().to_owned(),
-            syntax_root,
-            line_index,
-        }))
+        Ok(rnix::Root::parse(&contents)
+            .ok()
+            .map(|syntax_root| NixFile {
+                parent_dir: parent_dir.to_path_buf(),
+                path: path.as_ref().to_owned(),
+                syntax_root,
+                line_index,
+            }))
     }
 }
 
@@ -110,18 +112,30 @@ impl NixFile {
     ///
     /// Note that this also returns the same for `pythonPackages.callPackage`. It doesn't make an
     /// attempt at distinguishing this.
-    pub fn call_package_argument_info_at(&self, line: usize, column: usize, relative_to: &Path) -> anyhow::Result<Option<CallPackageArgumentInfo>> {
+    pub fn call_package_argument_info_at(
+        &self,
+        line: usize,
+        column: usize,
+        relative_to: &Path,
+    ) -> anyhow::Result<Option<CallPackageArgumentInfo>> {
         let Some(attrpath_value) = self.attrpath_value_at(line, column)? else {
-            return Ok(None)
+            return Ok(None);
         };
         self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)
     }
 
     // Internal function mainly to make it independently testable
-    fn attrpath_value_at(&self, line: usize, column: usize) -> anyhow::Result<Option<ast::AttrpathValue>> {
+    fn attrpath_value_at(
+        &self,
+        line: usize,
+        column: usize,
+    ) -> anyhow::Result<Option<ast::AttrpathValue>> {
         let index = self.line_index.fromlinecolumn(line, column);
 
-        let token_at_offset = self.syntax_root.syntax().token_at_offset(TextSize::from(index as u32));
+        let token_at_offset = self
+            .syntax_root
+            .syntax()
+            .token_at_offset(TextSize::from(index as u32));
 
         // The token_at_offset function takes indices to mean a location _between_ characters,
         // which in this case is some spacing followed by the attribute name:
@@ -136,24 +150,36 @@ impl NixFile {
 
         // token looks like "foo"
         let Some(node) = token.parent() else {
-            anyhow::bail!("Token on line {line} column {column} in {} does not have a parent node: {token:?}", self.path.display())
+            anyhow::bail!(
+                "Token on line {line} column {column} in {} does not have a parent node: {token:?}",
+                self.path.display()
+            )
         };
 
         // node looks like "foo"
         let Some(attrpath_node) = node.parent() else {
-            anyhow::bail!("Node in {} does not have a parent node: {node:?}", self.path.display())
+            anyhow::bail!(
+                "Node in {} does not have a parent node: {node:?}",
+                self.path.display()
+            )
         };
 
         if attrpath_node.kind() != SyntaxKind::NODE_ATTRPATH {
-            return Ok(None)
+            return Ok(None);
         }
         // attrpath_node looks like "foo.bar"
         let Some(attrpath_value_node) = attrpath_node.parent() else {
-            anyhow::bail!("Attribute path node in {} does not have a parent node: {attrpath_node:?}", self.path.display())
+            anyhow::bail!(
+                "Attribute path node in {} does not have a parent node: {attrpath_node:?}",
+                self.path.display()
+            )
         };
 
-        if ! ast::AttrpathValue::can_cast(attrpath_value_node.kind()) {
-            anyhow::bail!("Node in {} is not an attribute path value node: {attrpath_value_node:?}", self.path.display())
+        if !ast::AttrpathValue::can_cast(attrpath_value_node.kind()) {
+            anyhow::bail!(
+                "Node in {} is not an attribute path value node: {attrpath_value_node:?}",
+                self.path.display()
+            )
         }
         // attrpath_value_node looks like "foo.bar = 10;"
 
@@ -247,8 +273,10 @@ impl NixFile {
         // Check that <fun2> is an identifier, or an attribute path with an identifier at the end
         let ident = match function2 {
             Expr::Ident(ident) =>
-                // This means it's something like `foo = callPackage <arg2> <arg1>`
-                ident,
+            // This means it's something like `foo = callPackage <arg2> <arg1>`
+            {
+                ident
+            }
             Expr::Select(select) => {
                 // This means it's something like `foo = self.callPackage <arg2> <arg1>`.
                 // We also end up here for e.g. `pythonPackages.callPackage`, but the
@@ -257,7 +285,7 @@ impl NixFile {
                 if select.default_expr().is_some() {
                     // Very odd case, but this would be `foo = self.callPackage or true ./test.nix {}
                     // (yes this is valid Nix code)
-                    return Ok(None)
+                    return Ok(None);
                 }
                 let Some(attrpath) = select.attrpath() else {
                     anyhow::bail!("select node doesn't have an attrpath: {select:?}")
@@ -272,9 +300,9 @@ impl NixFile {
                 } else {
                     // Here it's something like `foo = self."callPackage" /test.nix {}`
                     // which we're not gonna bother with
-                    return Ok(None)
+                    return Ok(None);
                 }
-            },
+            }
             // Any other expression we're not gonna treat as callPackage
             _ => return Ok(None),
         };
@@ -284,7 +312,10 @@ impl NixFile {
         };
 
         if token.text() == "callPackage" {
-            Ok(Some(CallPackageArgumentInfo { relative_path: path, empty_arg }))
+            Ok(Some(CallPackageArgumentInfo {
+                relative_path: path,
+                empty_arg,
+            }))
         } else {
             Ok(None)
         }
@@ -334,19 +365,21 @@ impl NixFile {
         match self.parent_dir.join(Path::new(&text)).canonicalize() {
             Err(resolution_error) => ResolvedPath::Unresolvable(resolution_error),
             Ok(resolved) =>
-                // Check if it's within relative_to
+            // Check if it's within relative_to
+            {
                 match resolved.strip_prefix(relative_to) {
                     Err(_prefix_error) => ResolvedPath::Outside,
                     Ok(suffix) => ResolvedPath::Within(suffix.to_path_buf()),
                 }
+            }
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::tests;
     use super::*;
+    use crate::tests;
     use indoc::indoc;
 
     #[test]
@@ -392,7 +425,9 @@ mod tests {
         ];
 
         for (line, column, expected_result) in cases {
-            let actual_result = nix_file.attrpath_value_at(line, column)?.map(|node| node.to_string());
+            let actual_result = nix_file
+                .attrpath_value_at(line, column)?
+                .map(|node| node.to_string());
             assert_eq!(actual_result.as_deref(), expected_result);
         }
 
@@ -426,11 +461,41 @@ mod tests {
             (3, None),
             (4, None),
             (5, None),
-            (6, Some(CallPackageArgumentInfo { relative_path: Some(PathBuf::from("file.nix")), empty_arg: true })),
-            (7, Some(CallPackageArgumentInfo { relative_path: Some(PathBuf::from("file.nix")), empty_arg: true })),
-            (8, Some(CallPackageArgumentInfo { relative_path: None, empty_arg: true })),
-            (9, Some(CallPackageArgumentInfo { relative_path: Some(PathBuf::from("file.nix")), empty_arg: false })),
-            (10, Some(CallPackageArgumentInfo { relative_path: None, empty_arg: false })),
+            (
+                6,
+                Some(CallPackageArgumentInfo {
+                    relative_path: Some(PathBuf::from("file.nix")),
+                    empty_arg: true,
+                }),
+            ),
+            (
+                7,
+                Some(CallPackageArgumentInfo {
+                    relative_path: Some(PathBuf::from("file.nix")),
+                    empty_arg: true,
+                }),
+            ),
+            (
+                8,
+                Some(CallPackageArgumentInfo {
+                    relative_path: None,
+                    empty_arg: true,
+                }),
+            ),
+            (
+                9,
+                Some(CallPackageArgumentInfo {
+                    relative_path: Some(PathBuf::from("file.nix")),
+                    empty_arg: false,
+                }),
+            ),
+            (
+                10,
+                Some(CallPackageArgumentInfo {
+                    relative_path: None,
+                    empty_arg: false,
+                }),
+            ),
         ];
 
         for (line, expected_result) in cases {

@@ -35,7 +35,10 @@ pub fn relative_file_for_package(package_name: &str) -> PathBuf {
 
 /// Check the structure of Nixpkgs, returning the attribute names that are defined in
 /// `pkgs/by-name`
-pub fn check_structure(path: &Path, nix_file_cache: &mut NixFileCache) -> validation::Result<Vec<String>> {
+pub fn check_structure(
+    path: &Path,
+    nix_file_cache: &mut NixFileCache,
+) -> validation::Result<Vec<String>> {
     let base_dir = path.join(BASE_SUBPATH);
 
     let shard_results = utils::read_dir_sorted(&base_dir)?
@@ -89,7 +92,13 @@ pub fn check_structure(path: &Path, nix_file_cache: &mut NixFileCache) -> valida
                 let package_results = entries
                     .into_iter()
                     .map(|package_entry| {
-                        check_package(nix_file_cache, path, &shard_name, shard_name_valid, package_entry)
+                        check_package(
+                            nix_file_cache,
+                            path,
+                            &shard_name,
+                            shard_name_valid,
+                            package_entry,
+                        )
                     })
                     .collect_vec()?;
 
