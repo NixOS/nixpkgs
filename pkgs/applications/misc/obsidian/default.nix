@@ -8,6 +8,7 @@
 , writeScript
 , undmg
 , unzip
+, libglvnd
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -27,6 +28,10 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash = if stdenv.isDarwin then "sha256-AXjzQwZxyRaI8mMU2EsNK0fRcXS7UNNBWPXeJzgomlY=" else "sha256-F7nqWOeBGGSmSVNTpcx3lHRejSjNeM2BBqS9tsasTvg=";
   };
+
+  runtimeLibs = lib.makeLibraryPath [
+    libglvnd
+  ];
 
   icon = fetchurl {
     url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
@@ -52,7 +57,8 @@ let
       mkdir -p $out/bin
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
+        --prefix LD_LIBRARY_PATH : ${runtimeLibs}
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
       install -m 444 -D "${desktopItem}/share/applications/"* \
