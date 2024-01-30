@@ -99,6 +99,11 @@ stdenv.mkDerivation rec {
 
     # skip flaky tests
     rm -f tests/scripts/test063-delta-multiprovider
+
+    # https://bugs.openldap.org/show_bug.cgi?id=10009
+    # can probably be re-added once https://github.com/cyrusimap/cyrus-sasl/pull/772
+    # has made it to a release
+    rm -f tests/scripts/test076-authid-rewrite
   '';
 
   doCheck = true;
