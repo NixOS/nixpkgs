@@ -16,6 +16,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-bIe006I1ryvIJ4hC94Ux2YVdlmDIM4oZaK/qXafYYe0=";
 
+  # based on https://github.com/wader/jq-lsp/blob/master/.goreleaser.yml
+  CGO_ENABLED = 0;
+  GOFLAGS = [ "-trimpath" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
+    "-X main.builtBy=Nix"
+  ];
+
   meta = with lib; {
     description = "jq language server";
     homepage = "https://github.com/wader/jq-lsp";
