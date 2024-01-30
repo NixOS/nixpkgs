@@ -111,6 +111,51 @@ in
     '';
   };
 
+  smm = makeTest {
+    name = "systemd-boot";
+    meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius baloo ];
+
+    nodes.machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      specialisation.something.configuration = {
+        environment.etc."something".text = "foobar";
+      };
+
+      virtualisation.efi.systemManagementModeEnforcement = true;
+    };
+
+    testScript = ''
+      machine.start(allow_reboot = True)
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+
+      # Ensure we actually booted using systemd-boot
+      # Magic number is the vendor UUID used by systemd-boot.
+      machine.succeed(
+          "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+      )
+
+      machine.succeed("test ! -e /etc/something")
+      machine.succeed("bootctl set-oneshot nixos-generation-1-specialisation-something.conf")
+
+      # Give a second for systemd to set it all up
+      import time
+      time.sleep(1)
+
+      # Systemd asked systemd-boot to boot in the specialisation next boot
+      machine.succeed("test -e /sys/firmware/efi/efivars/LoaderEntryOneShot-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+
+      machine.reboot()
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("grep foobar /etc/something")
+
+      # This was a one-shot boot
+      machine.succeed("test ! -e /sys/firmware/efi/efivars/LoaderEntryOneShot-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f")
+    '';
+  };
+
   memtest86 = makeTest {
     name = "systemd-boot-memtest86";
     meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
