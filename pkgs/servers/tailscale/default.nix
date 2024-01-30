@@ -1,4 +1,15 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, getent
+, iproute2
+, iptables
+, shadow
+, procps
+, nixosTests
+}:
 
 let
   version = "1.58.2";
@@ -37,6 +48,10 @@ buildGoModule {
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) headscale;
+  };
 
   meta = with lib; {
     homepage = "https://tailscale.com";
