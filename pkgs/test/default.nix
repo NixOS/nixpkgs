@@ -16,6 +16,7 @@ with pkgs;
         (filter (n: n != "llvmPackages_6"))
         (filter (n: n != "llvmPackages_7"))
         (filter (n: n != "llvmPackages_8"))
+        (filter (n: n != "llvmPackages_10"))
       ];
       tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
         clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
@@ -68,7 +69,6 @@ with pkgs;
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
             (filterAttrs (n: _: n != "llvmPackages_9"))
-            (filterAttrs (n: _: n != "llvmPackages_10"))
           ]);
         in
         toJSON sets;

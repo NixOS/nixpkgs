@@ -15601,7 +15601,6 @@ with pkgs;
 
   clang = llvmPackages.clang;
   clang_9  = llvmPackages_9.clang;
-  clang_10 = llvmPackages_10.clang;
   clang_11 = llvmPackages_11.clang;
   clang_12 = llvmPackages_12.clang;
   clang_13 = llvmPackages_13.clang;
@@ -15614,10 +15613,6 @@ with pkgs;
 
   clang-tools_9 = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_9;
-  };
-
-  clang-tools_10 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_10;
   };
 
   clang-tools_11 = callPackage ../development/tools/clang-tools {
@@ -16570,7 +16565,6 @@ with pkgs;
 
   lld = llvmPackages.lld;
   lld_9 = llvmPackages_9.lld;
-  lld_10 = llvmPackages_10.lld;
   lld_11 = llvmPackages_11.lld;
   lld_12 = llvmPackages_12.lld;
   lld_13 = llvmPackages_13.lld;
@@ -16581,7 +16575,6 @@ with pkgs;
 
   lldb = llvmPackages.lldb;
   lldb_9 = llvmPackages_9.lldb;
-  lldb_10 = llvmPackages_10.lldb;
   lldb_11 = llvmPackages_11.lldb;
   lldb_12 = llvmPackages_12.lldb;
   lldb_13 = llvmPackages_13.lldb;
@@ -16592,7 +16585,6 @@ with pkgs;
 
   llvm = llvmPackages.llvm;
   llvm_9  = llvmPackages_9.llvm;
-  llvm_10 = llvmPackages_10.llvm;
   llvm_11 = llvmPackages_11.llvm;
   llvm_12 = llvmPackages_12.llvm;
   llvm_13 = llvmPackages_13.llvm;
@@ -16627,14 +16619,6 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_9.tools;
     targetLlvm = targetPackages.llvmPackages_9.llvm or llvmPackages_9.llvm;
     targetLlvmLibraries = targetPackages.llvmPackages_9.libraries or llvmPackages_9.libraries;
-    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
-  });
-
-  llvmPackages_10 = recurseIntoAttrs (callPackage ../development/compilers/llvm/10 {
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_10.tools;
-    targetLlvm = targetPackages.llvmPackages_10.llvm or llvmPackages_10.llvm;
-    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries or llvmPackages_10.libraries;
     stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   });
 
