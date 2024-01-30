@@ -185,6 +185,8 @@ in
         };
       };
 
+      qt.enable = true;
+
       environment.systemPackages =
         with pkgs.plasma5Packages;
         let
