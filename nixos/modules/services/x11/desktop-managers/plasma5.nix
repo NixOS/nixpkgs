@@ -253,6 +253,9 @@ in
             plasma-integration
             polkit-kde-agent
 
+            qqc2-breeze-style
+            qqc2-desktop-style
+
             plasma-desktop
             plasma-workspace
             plasma-workspace-wallpapers
