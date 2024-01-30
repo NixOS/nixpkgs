@@ -1,26 +1,28 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , cmake
+, fetchFromGitHub
 , pkg-config
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "md4c";
-  version = "0.4.8";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mity";
-    repo = pname;
-    rev = "release-${version}";
-    hash = "sha256-+LObAD5JB8Vb4Rt4hTo1Z4ispxzfFkkXA2sw6TKB7Yo=";
+    repo = "md4c";
+    rev = "release-${finalAttrs.version}";
+    hash = "sha256-BWmzNV3iC2g8MHoYtqIcUtLQz3oaQwH+Pyy4fN3N7/k=";
   };
 
+  outputs = [ "out" "lib" "dev" "man" ];
+
   patches = [
-    # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so
-    # prefix and exec_prefix cannot be $out, too
+    # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so prefix and
+    # exec_prefix cannot be $out, too
     # Use CMake's _FULL_ variables instead of `prefix` concatenation.
-    ./fix-pkgconfig.patch
+    ./0001-fix-pkgconfig.patch
   ];
 
   nativeBuildInputs = [
@@ -28,14 +30,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
+    homepage = "https://github.com/mity/md4c";
     description = "Markdown parser made in C";
     longDescription = ''
       MD4C is Markdown parser implementation in C, with the following features:
 
       - Compliance: Generally, MD4C aims to be compliant to the latest version
         of CommonMark specification. Currently, we are fully compliant to
-        CommonMark 0.29.
+        CommonMark 0.30.
       - Extensions: MD4C supports some commonly requested and accepted
         extensions. See below.
       - Performance: MD4C is very fast.
@@ -57,11 +62,11 @@ stdenv.mkDerivation rec {
         "Unicode"). See more details below.
       - Permissive license: MD4C is available under the MIT license.
     '';
-    homepage = "https://github.com/mity/md4c";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    changelog = "https://github.com/mity/md4c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "md2html";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})
 # TODO: enable tests (needs Python)
