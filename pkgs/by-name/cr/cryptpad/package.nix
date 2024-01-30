@@ -74,7 +74,7 @@ buildNpmPackage {
   meta = {
     description = "Collaborative office suite, end-to-end encrypted and open-source.";
     homepage = "https://cryptpad.org/";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "cryptpad";
     maintainers = with lib.maintainers; [ martinetd ];
   };
