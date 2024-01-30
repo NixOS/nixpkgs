@@ -101,6 +101,7 @@ checkConfigError 'It seems as if you.re trying to declare an option by placing i
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.nest.wrong2 ./error-mkOption-in-config.nix
 checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' config.sub ./error-mkOption-in-submodule-config.nix
 checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
+checkConfigError '.*A definition for option .bad. is not of type .non-empty .list of .submodule...\.' config.bad ./error-nonEmptyListOf-submodule.nix
 
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
