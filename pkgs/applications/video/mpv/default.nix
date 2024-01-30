@@ -113,6 +113,8 @@ in stdenv'.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
+  patches = [ ./darwin-sigtool-no-deep.patch ];
+
   # A trick to patchShebang everything except mpv_identify.sh
   postPatch = ''
     pushd TOOLS
@@ -206,12 +208,6 @@ in stdenv'.mkDerivation (finalAttrs: {
   postBuild = lib.optionalString stdenv.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
-    # Swap binary and bundle symlink to sign bundle executable as symlinks
-    # cannot be signed
-    rm build/mpv.app/Contents/MacOS/mpv-bundle
-    mv build/mpv.app/Contents/MacOS/mpv build/mpv.app/Contents/MacOS/mpv-bundle
-    ln -s mpv-bundle build/mpv.app/Contents/MacOS/mpv
-    codesign --force --sign - build/mpv.app/Contents/MacOS/mpv-bundle
     popd
   '';
 
