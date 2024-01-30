@@ -6,7 +6,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "gruvbox-gtk-theme";
-  version = "unstable-2023-05-26";
+  version = "unstable-2023-05-28";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
