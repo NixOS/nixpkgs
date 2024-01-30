@@ -7,7 +7,6 @@
 , mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
-, openssl_legacy
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
@@ -87,10 +86,6 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 with lib;
 
 let
-  # some python packages need legacy ciphers, so we're using openssl 3, but with that config
-  # null check for Minimal
-  openssl' = if openssl != null then openssl_legacy else null;
-
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
@@ -137,7 +132,7 @@ let
     ++ optional withGdbm gdbm
     ++ [ sqlite ]
     ++ optional withReadline readline
-    ++ [ ncurses openssl' ]
+    ++ [ ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
@@ -360,8 +355,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
-  ] ++ optionals (openssl' != null) [
-    "--with-openssl=${openssl'.dev}"
+  ] ++ optionals (openssl != null) [
+    "--with-openssl=${openssl.dev}"
   ] ++ optionals (libxcrypt != null) [
     "CFLAGS=-I${libxcrypt}/include"
     "LIBS=-L${libxcrypt}/lib"
@@ -557,7 +552,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    lib.optionals (openssl' != null && !static && !enableFramework) [ openssl'.dev ]
+    lib.optionals (openssl != null && !static && !enableFramework) [ openssl.dev ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
