@@ -38811,7 +38811,7 @@ with pkgs;
     python3 = python311;
   };
 
-  deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
+  deeptools = callPackage ../applications/science/biology/deeptools { };
 
   deep-translator = with python3Packages; toPythonApplication deep-translator;
 
