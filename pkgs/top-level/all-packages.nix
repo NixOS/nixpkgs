@@ -37699,8 +37699,6 @@ with pkgs;
 
   gav = callPackage ../games/gav { };
 
-  gcs = callPackage ../games/gcs { };
-
   gcompris = libsForQt5.callPackage ../games/gcompris { };
 
   gemrb = callPackage ../games/gemrb { };
