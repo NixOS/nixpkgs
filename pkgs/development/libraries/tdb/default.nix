@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.9";
+  version = "1.4.10";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-CsImBz46LbhkjaevdEy5X1B2alL+6wAdVYsrMht0p2U=";
+    hash = "sha256-AjOOM8FsIcnilXHO9SPnaytwhjYlT28wxs8ZXUjGLa8=";
   };
 
   nativeBuildInputs = [
