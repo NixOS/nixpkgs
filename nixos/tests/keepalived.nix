@@ -14,6 +14,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         virtualRouterId = 1;
       };
       environment.systemPackages = [ pkgs.tcpdump ];
+      specialisation.config-reload.configuration = {
+        services.keepalived.vrrpInstances.test.virtualIps = [{ addr = "192.168.1.201"; }];
+      };
     };
     node2 = { pkgs, ... }: {
       networking.firewall.extraCommands = "iptables -A INPUT -p vrrp -j ACCEPT";
@@ -29,7 +32,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
   };
 
-  testScript = ''
+  testScript = { nodes, ... }:
+    let
+      reloadSystem = "${nodes.node1.system.build.toplevel}/specialisation/config-reload";
+    in
+    ''
     # wait for boot time delay to pass
     for node in [node1, node2]:
         node.wait_until_succeeds(
@@ -45,5 +52,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       node1.wait_until_succeeds("ip addr show dev eth1 | grep -q 192.168.1.200")
       node2.unblock()
       node1.wait_until_fails("ip addr show dev eth1 | grep -q 192.168.1.200")
+
+    with subtest("reload config"):
+      node1.fail("ip addr show dev eth1 | grep -q 192.168.1.201")
+      node1.succeed("${reloadSystem}/bin/switch-to-configuration test >&2")
+      node1.fail("journalctl -u keepalived | grep -q -i stopped")
+      node1.succeed("journalctl -u keepalived | grep -q -i reloaded")
+      node1.wait_until_succeeds("ip addr show dev eth1 | grep -q 192.168.1.201")
   '';
 })
