@@ -13,12 +13,8 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    systemd.user.services.waybar = {
-      description = "Waybar as systemd service";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      script = "${cfg.package}/bin/waybar";
-    };
+    systemd.packages = [ cfg.package ];
+    systemd.user.services.waybar.wantedBy = [ "graphical-session.target" ];
   };
 
   meta.maintainers = [ maintainers.FlorianFranzen ];
