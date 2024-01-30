@@ -34,11 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     x264
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.fceux.com/";
     description = "A Nintendo Entertainment System (NES) Emulator";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sbruder ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/TASEmulators/blob/fceux/${finalAttrs.src.rev}/changelog.txt";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres sbruder ];
+    platforms = lib.platforms.linux;
   };
 })
