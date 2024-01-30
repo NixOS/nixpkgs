@@ -14,7 +14,9 @@
 , python3
 , python3Packages
 , libffi
-, enableGoldPlugin ? (lib.versions.major release_version != "16" && libbfd.hasPluginAPI)
+  # TODO: Can this memory corruption bug still occur?
+  # <https://github.com/llvm/llvm-project/issues/61350>
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libpfm
 , libxml2
