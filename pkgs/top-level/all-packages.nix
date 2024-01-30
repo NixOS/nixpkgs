@@ -35929,8 +35929,6 @@ with pkgs;
 
   toipe = callPackage ../applications/misc/toipe { };
 
-  tootle = callPackage ../applications/misc/tootle { };
-
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
   toxiproxy = callPackage ../development/tools/toxiproxy { };
