@@ -1,6 +1,7 @@
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::ratchet;
 use crate::structure;
+use crate::utils;
 use crate::validation::ResultIteratorExt;
 use crate::validation::{self, Validation::Success};
 use crate::NixFileCache;
@@ -223,7 +224,27 @@ pub fn check_values(
                                     nixpkgs_path,
                                 )? {
                                     None => Success(NonApplicable),
-                                    Some(call_package_argument_info) => Success(Loose(call_package_argument_info))
+                                    Some(call_package_argument_info) => {
+                                        if let Some(ref rel_path) = call_package_argument_info.relative_path {
+                                            if rel_path.starts_with(utils::BASE_SUBPATH) {
+                                                // Package variants of by-name packages are explicitly allowed according to RFC 140
+                                                // https://github.com/NixOS/rfcs/blob/master/rfcs/0140-simple-package-paths.md#package-variants:
+                                                //
+                                                // foo-variant = callPackage ../by-name/fo/foo/package.nix {
+                                                //   someFlag = true;
+                                                // }
+                                                //
+                                                // While such definitions could be moved to `pkgs/by-name` by using
+                                                // `.override { someFlag = true; }` instead, this changes the semantics in
+                                                // relation with overlays.
+                                                Success(NonApplicable)
+                                            } else {
+                                                Success(Loose(call_package_argument_info))
+                                            }
+                                        } else {
+                                            Success(Loose(call_package_argument_info))
+                                        }
+                                    },
                                 },
                         },
                     };
