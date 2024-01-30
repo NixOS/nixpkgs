@@ -40463,7 +40463,7 @@ with pkgs;
   loop = callPackage ../tools/misc/loop { };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 {
-    icu = icu58;
+    icu = icu71;
   };
 
   mamba = callPackage ../applications/audio/mamba { };
