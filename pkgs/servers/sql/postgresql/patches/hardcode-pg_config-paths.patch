@@ -1,0 +1,70 @@
+diff --git a/src/bin/pg_config/pg_config.c b/src/bin/pg_config/pg_config.c
+index 62b97af..e5b71e5 100644
+--- a/src/bin/pg_config/pg_config.c
++++ b/src/bin/pg_config/pg_config.c
+@@ -112,6 +112,11 @@ advice(void)
+ 	fprintf(stderr, _("Try \"%s --help\" for more information.\n"), progname);
+ }
+ 
++static char*
++get_config_val(ConfigData configdata) {
++	return strcmp(configdata.name, "PGXS") == 0 ? "@dev@/lib/pgxs/src/makefiles/pgxs.mk" : configdata.setting;
++}
++
+ static void
+ show_item(const char *configname,
+ 		  ConfigData *configdata,
+@@ -122,7 +127,7 @@ show_item(const char *configname,
+ 	for (i = 0; i < configdata_len; i++)
+ 	{
+ 		if (strcmp(configname, configdata[i].name) == 0)
+-			printf("%s\n", configdata[i].setting);
++			printf("%s\n", get_config_val(configdata[i]));
+ 	}
+ }
+ 
+@@ -160,7 +165,7 @@ main(int argc, char **argv)
+ 	if (argc < 2)
+ 	{
+ 		for (i = 0; i < configdata_len; i++)
+-			printf("%s = %s\n", configdata[i].name, configdata[i].setting);
++			printf("%s = %s\n", configdata[i].name, get_config_val(configdata[i]));
+ 		exit(0);
+ 	}
+ 
+diff --git a/src/common/config_info.c b/src/common/config_info.c
+index aa643b6..3750c14 100644
+--- a/src/common/config_info.c
++++ b/src/common/config_info.c
+@@ -42,11 +42,7 @@ get_configdata(const char *my_exec_path, size_t *configdata_len)
+ 	configdata = (ConfigData *) palloc(*configdata_len * sizeof(ConfigData));
+ 
+ 	configdata[i].name = pstrdup("BINDIR");
+-	strlcpy(path, my_exec_path, sizeof(path));
+-	lastsep = strrchr(path, '/');
+-	if (lastsep)
+-		*lastsep = '\0';
+-	cleanup_path(path);
++	strlcpy(path, "@out@/bin", sizeof(path));
+ 	configdata[i].setting = pstrdup(path);
+ 	i++;
+ 
+@@ -105,8 +101,7 @@ get_configdata(const char *my_exec_path, size_t *configdata_len)
+ 	i++;
+ 
+ 	configdata[i].name = pstrdup("SHAREDIR");
+-	get_share_path(my_exec_path, path);
+-	cleanup_path(path);
++	strlcpy(path, "@out@/share", sizeof(path));
+ 	configdata[i].setting = pstrdup(path);
+ 	i++;
+ 
+@@ -117,7 +112,7 @@ get_configdata(const char *my_exec_path, size_t *configdata_len)
+ 	i++;
+ 
+ 	configdata[i].name = pstrdup("PGXS");
+-	get_pkglib_path(my_exec_path, path);
++	strlcpy(path, "/dev/null", sizeof(path));
+ 	strlcat(path, "/pgxs/src/makefiles/pgxs.mk", sizeof(path));
+ 	cleanup_path(path);
+ 	configdata[i].setting = pstrdup(path);

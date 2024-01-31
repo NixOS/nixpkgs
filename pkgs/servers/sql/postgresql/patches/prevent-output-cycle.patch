@@ -1,0 +1,17 @@
+diff --git a/src/port/Makefile b/src/port/Makefile
+index bfe1feb..1f9f0d3 100644
+--- a/src/port/Makefile
++++ b/src/port/Makefile
+@@ -152,9 +152,9 @@ pg_config_paths.h: $(top_builddir)/src/Makefile.global
+ 	echo "#define PGBINDIR \"$(bindir)\"" >$@
+ 	echo "#define PGSHAREDIR \"$(datadir)\"" >>$@
+ 	echo "#define SYSCONFDIR \"$(sysconfdir)\"" >>$@
+-	echo "#define INCLUDEDIR \"$(includedir)\"" >>$@
+-	echo "#define PKGINCLUDEDIR \"$(pkgincludedir)\"" >>$@
+-	echo "#define INCLUDEDIRSERVER \"$(includedir_server)\"" >>$@
++	echo "#define INCLUDEDIR \"/dev/null/include\"" >>$@
++	echo "#define PKGINCLUDEDIR \"/dev/null/include\"" >>$@
++	echo "#define INCLUDEDIRSERVER \"/dev/null/include/server\"" >>$@
+ 	echo "#define LIBDIR \"$(libdir)\"" >>$@
+ 	echo "#define PKGLIBDIR \"$(pkglibdir)\"" >>$@
+ 	echo "#define LOCALEDIR \"$(localedir)\"" >>$@
