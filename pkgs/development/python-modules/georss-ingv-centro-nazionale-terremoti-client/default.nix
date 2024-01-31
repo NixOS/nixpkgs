@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "georss-ingv-centro-nazionale-terremoti-client";
-  version = "0.6";
+  version = "0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-georss-ingv-centro-nazionale-terremoti-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zqjo70NzpUt5zNEar0P1sl/gMb+ZcS+7GX7QGuFjMYY=";
+    hash = "sha256-J72yd1D4mKCOsBRLMUXKnxmjr6g0IQApTTrWjklczN8=";
   };
 
   nativeBuildInputs = [
