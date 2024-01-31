@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "georss-client";
-  version = "0.15";
+  version = "0.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D1ggfEDU+vlFmi1USwdHj1due0PrCQCpKF4zaarHCFs=";
+    hash = "sha256-DvQifO/jirpacWZccK4WPxnm/iYs1qT5nAYQUDoleO4=";
   };
 
   nativeBuildInputs = [
