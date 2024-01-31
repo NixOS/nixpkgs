@@ -182,6 +182,8 @@ stdenv.mkDerivation {
     moveToOutput share/foot/themes "$themes"
   '';
 
+  strictDeps = true;
+
   outputs = [ "out" "terminfo" "themes" ];
 
   passthru.tests = {
