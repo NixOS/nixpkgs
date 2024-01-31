@@ -58,6 +58,9 @@
          nix-build lib/tests/maintainers.nix
 
     See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
+
+    When creating a commit:
+      * When you add a maintainer: Use `maintainers: handle` as commit message.
 */
 {
   _0qq = {
