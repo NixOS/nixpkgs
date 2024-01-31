@@ -87,6 +87,7 @@ in stdenv.mkDerivation (rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    ./clear-got-offset-map.patch
 
     # Fix musl build.
     (fetchpatch {

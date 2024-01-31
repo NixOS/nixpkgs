@@ -1,0 +1,28 @@
+From 2e1b838a889f9793d4bcd5dbfe10db9796b77143 Mon Sep 17 00:00:00 2001
+From: Graham Markall <gmarkall@nvidia.com>
+Date: Mon, 3 Apr 2023 11:15:36 -0700
+Subject: [PATCH] [RuntimeDyld] RuntimeDyldELF: Clear GOTOffsetMap when
+ resetting GOT section.
+
+When the GOT section ID is reset, the GOTOffsetMap must also be cleared,
+otherwise spurious matches can be located when handling GOT relocations
+in subsequently-linked objects.
+
+Fixes Issue #61402 - see https://github.com/llvm/llvm-project/issues/61402.
+
+Reviewed By: lhames
+
+Differential Revision: https://reviews.llvm.org/D146938
+---
+ llvm/lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+--- /lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp	2024-01-31 16:02:37.006152749 +0000
++++ /lib/ExecutionEngine/RuntimeDyld/RuntimeDyldELF.cpp	2024-01-31 16:02:59.924392986 +0000
+@@ -2345,6 +2345,7 @@
+     }
+   }
+ 
++  GOTOffsetMap.clear();
+   GOTSectionID = 0;
+   CurrentGOTIndex = 0;
