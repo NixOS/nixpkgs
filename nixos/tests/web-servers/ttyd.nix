@@ -5,8 +5,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
   nodes.readonly = { pkgs, ... }: {
     services.ttyd = {
       enable = true;
-      username = "foo";
-      passwordFile = pkgs.writeText "password" "bar";
+      entrypoint = [ (lib.getExe pkgs.htop) ];
       writeable = false;
     };
   };

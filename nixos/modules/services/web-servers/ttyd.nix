@@ -62,7 +62,7 @@ in
       username = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Username for basic authentication.";
+        description = "Username for basic http authentication.";
       };
 
       passwordFile = mkOption {
@@ -70,7 +70,7 @@ in
         default = null;
         apply = value: if value == null then null else toString value;
         description = ''
-          File containing the password to use for basic authentication.
+          File containing the password to use for basic http authentication.
           For insecurely putting the password in the globally readable store use
           `pkgs.writeText "ttydpw" "MyPassword"`.
         '';
@@ -80,6 +80,26 @@ in
         type = types.ints.u8;
         default = 1;
         description = "Signal to send to the command on session close.";
+      };
+
+      entrypoint = mkOption {
+        type = types.listOf types.str;
+        default = [ "${pkgs.shadow}/bin/login" ];
+        defaultText = lib.literalExpression ''
+          [ "''${pkgs.shadow}/bin/login" ]
+        '';
+        example = lib.literalExpression ''
+          [ (lib.getExe pkgs.htop) ]
+        '';
+        description = "Which command ttyd runs.";
+        apply = lib.escapeShellArgs;
+      };
+
+      user = mkOption {
+        type = types.str;
+        # `login` needs to be run as root
+        default = "root";
+        description = "Which unix user ttyd should run as.";
       };
 
       writeable = mkOption {
@@ -193,9 +213,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        # Runs login which needs to be run as root
-        # login: Cannot possibly work without effective root
-        User = "root";
+        User = cfg.user;
         LoadCredential = lib.optionalString (cfg.passwordFile != null) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
       };
 
@@ -203,11 +221,11 @@ in
         PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
         ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
           --credential ${lib.escapeShellArg cfg.username}:"$PASSWORD" \
-          ${pkgs.shadow}/bin/login
+          ${cfg.entrypoint}
       ''
       else ''
         ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          ${pkgs.shadow}/bin/login
+          ${cfg.entrypoint}
       '';
     };
   };
