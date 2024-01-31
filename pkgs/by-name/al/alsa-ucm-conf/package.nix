@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-ucm-conf";
-  version = "1.2.10";
+  version = "1.2.11";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    hash = "sha256-nCHj8B/wC6p1jfF+hnzTbiTrtBpr7ElzfpkQXhbyrpc=";
+    hash = "sha256-OHwBzzDioWdte49ysmgc8hmrynDdHsKp4zrdW/P+roE=";
   };
 
   dontBuild = true;
