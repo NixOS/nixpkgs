@@ -2,7 +2,11 @@
 , libsForQt5
 , symlinkJoin
 , unwrapped ? libsForQt5.callPackage ./. { }
-, binaryPlugins ? [ ]
+, krita-plugin-gmic
+, binaryPlugins ? [
+    # Default plugins provided by upstream appimage
+    krita-plugin-gmic
+  ]
 }:
 
 symlinkJoin {
