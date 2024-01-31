@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.7.4";
+  version = "2.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BZ7JqAciwbmkpbzR/qZHAraLJWWXNRN3Er4XvfU5kYs=";
+    hash = "sha256-b9YDK//DD66cyvfZzFVIJHxdwvK6/h8ef9mVSQ1diCY=";
   };
 
   sourceRoot = "${src.name}/${pname}";
