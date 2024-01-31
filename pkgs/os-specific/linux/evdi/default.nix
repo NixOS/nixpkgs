@@ -34,8 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" "pic" "fortify" ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
