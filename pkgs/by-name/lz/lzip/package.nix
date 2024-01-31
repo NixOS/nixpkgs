@@ -7,12 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lzip";
-  version = "1.23";
+  version = "1.24";
   outputs = [ "out" "man" "info" ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-R5LAR93xXvKdVbqOaKGiHgy3aS2H7N9yBEGYZFgvKA0=";
+    sha256 = "d42659229b10e066eeb6e81eb673cdd893b672e512d26719c2d95975556ca56c";
+    # hash from release announcement
   };
 
   configureFlags = [
@@ -27,11 +28,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/lzip/lzip.html";
     description = "A lossless data compressor based on the LZMA algorithm";
     license = lib.licenses.gpl2Plus;
-    maintainers = with maintainers; [ vlaci ];
+    maintainers = with lib.maintainers; [ vlaci ehmry ];
     platforms = lib.platforms.all;
     mainProgram = "lzip";
   };
