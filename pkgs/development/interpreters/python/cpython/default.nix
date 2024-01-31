@@ -237,10 +237,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
 
   prePatch = optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+    substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
   '' + optionalString (pythonOlder "3.9" && stdenv.isDarwin && x11Support) ''
     # Broken on >= 3.9; replaced with ./3.9/darwin-tcl-tk.patch
-    substituteInPlace setup.py --replace /Library/Frameworks /no-such-path
+    substituteInPlace setup.py --replace-fail /Library/Frameworks /no-such-path
   '';
 
   patches = optionals (version == "3.10.9") [
@@ -318,12 +318,12 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
-      --replace "'/bin/sh'" "'${bash}/bin/sh'"
+      --replace-fail "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
-      --replace "@mime-types@" "${mailcap}"
+      --replace-fail "@mime-types@" "${mailcap}"
   '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
-    substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    substituteInPlace "Lib/tkinter/tix.py" --replace-fail "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
   env = {
@@ -394,8 +394,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ++ optional (execSuffix != "") "--with-suffix=${execSuffix}";
 
   preConfigure = optionalString (pythonOlder "3.12") ''
-    for i in /usr /sw /opt /pkg; do	# improve purity
-      substituteInPlace ./setup.py --replace $i /no-such-path
+    # Improve purity
+    for path in /usr /sw /opt /pkg; do
+      substituteInPlace ./setup.py --replace-warn $path /no-such-path
     done
   '' + optionalString stdenv.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
