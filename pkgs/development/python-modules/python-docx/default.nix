@@ -52,6 +52,11 @@ buildPythonPackage rec {
     "it_accepts_unicode_providing_there_is_no_encoding_declaration"
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = with lib; {
     description = "Create and update Microsoft Word .docx files";
     homepage = "https://python-docx.readthedocs.io/";
