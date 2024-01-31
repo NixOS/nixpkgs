@@ -12,7 +12,6 @@
 , python-dateutil
 , pytz
 , xxhash
-, freebsd
 }:
 
 buildPythonPackage rec {
@@ -44,8 +43,6 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    freebsd.libexecinfo freebsd.libkvm freebsd.libmemstat freebsd.libprocstat freebsd.libdevstat
   ];
 
   nativeCheckInputs = [

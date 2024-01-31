@@ -6,7 +6,6 @@
 , libiconv
 , which, libffi
 , libcxx
-, freebsd
 , withBundledLLVM ? false
 , enableRustcDev ? true
 , version
@@ -239,7 +238,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ openssl ]
     ++ optionals stdenv.isDarwin [ libiconv Security ]
-    ++ optionals stdenv.isFreeBSD (with freebsd; [ libexecinfo libkvm libmemstat libprocstat libdevstat libcxx ])
+    ++ optionals stdenv.isFreeBSD [ libcxx ]
     ++ optional (!withBundledLLVM) llvmShared;
 
   outputs = [ "out" "man" "doc" ];

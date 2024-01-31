@@ -8,7 +8,6 @@
 , rustc
 , rustPlatform
 , libiconv
-, freebsd
 }:
 
 buildPythonPackage rec {
@@ -39,9 +38,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD (with freebsd; [
-    libexecinfo libkvm libmemstat libprocstat libdevstat
-  ]);
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

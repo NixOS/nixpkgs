@@ -59,6 +59,26 @@ mkDerivation rec {
     "lib/Makefile.inc"
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_32) [
     "lib/libssp_nonshared"
+  ] ++ [
+    "lib/libexecinfo"
+    "contrib/libexecinfo"
+
+    "lib/libkvm"
+    "sys"   # ummmmmmmmmm libkvm wants arch-specific headers from the kernel tree
+
+    "lib/libmemstat"
+
+    "lib/libprocstat"
+    "sys/contrib/openzfs"
+    "sys/contrib/pcg-c"
+    "sys/opencrypto"
+    "sys/contrib/ck"
+    "sys/crypto"
+
+    "lib/libdevstat"
+
+    "lib/libelf"
+    "contrib/elftoolchain"
   ];
 
   patches = [
@@ -172,6 +192,24 @@ mkDerivation rec {
 
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libelf $makeFlags
+    make -C $BSDSRCDIR/lib/libelf $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libexecinfo $makeFlags
+    make -C $BSDSRCDIR/lib/libexecinfo $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libkvm $makeFlags
+    make -C $BSDSRCDIR/lib/libkvm $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libmemstat $makeFlags
+    make -C $BSDSRCDIR/lib/libmemstat $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libprocstat $makeFlags
+    make -C $BSDSRCDIR/lib/libprocstat $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libdevstat $makeFlags
+    make -C $BSDSRCDIR/lib/libdevstat $makeFlags install
 
   '' + lib.optionalString stdenv.hostPlatform.isx86_32 ''
     $CC -c $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.c -o $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.o

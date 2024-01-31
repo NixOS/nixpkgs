@@ -57,6 +57,14 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libcxx = callPackage ./libcxx.nix {};
   libcxxrt = callPackage ./libcxxrt.nix {};
 
+  # soft-deprecated (folded into libc but necessary in isolation for bootstrap)
+  libelf = callPackage ./libelf.nix {};
+  libexecinfo = callPackage ./libexecinfo.nix {};
+  libdevstat = callPackage ./libdevstat.nix {};
+  libmemstat = callPackage ./libmemstat.nix {};
+  libprocstat = callPackage ./libprocstat.nix {};
+  libkvm = callPackage ./libkvm.nix {};
+
   # libs and bins
   bin = callPackage ./bin.nix {};
   bintrans = callPackage ./bintrans.nix {};
@@ -82,22 +90,16 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libcapsicum = callPackage ./libcapsicum.nix {};
   libcasper = callPackage ./libcasper.nix {};
   libcrypt = callPackage ./libcrypt.nix {};
-  libdevstat = callPackage ./libdevstat.nix {};
   libdl = callPackage ./libdl.nix {};
   libedit = callPackage ./libedit.nix {};
-  libelf = callPackage ./libelf.nix {};
-  libexecinfo = callPackage ./libexecinfo.nix {};
   libifconfig = callPackage ./libifconfig.nix {};
   libjail = callPackage ./libjail.nix {};
-  libkvm = callPackage ./libkvm.nix {};
   libkiconv = callPackage ./libkiconv.nix {};
-  libmemstat = callPackage ./libmemstat.nix {};
   libncurses-tinfo = if hostVersion == "freebsd13" then libncurses else callPackage ./libncurses-tinfo.nix {};
   libncurses = callPackage ./libncurses.nix {};
   libnetbsd = callPackage ./libnetbsd.nix {};
   libnv = callPackage ./libnv.nix {};
   libpam = callPackage ./libpam.nix {};
-  libprocstat = callPackage ./libprocstat.nix {};
   libradius = callPackage ./libradius.nix {};
   librt = callPackage ./librt.nix {};
   libsbuf = callPackage ./libsbuf.nix {};

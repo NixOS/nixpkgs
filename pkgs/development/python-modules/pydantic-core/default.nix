@@ -12,7 +12,6 @@
 , pytest-timeout
 , pytest-mock
 , dirty-equals
-, freebsd
 }:
 
 let
@@ -48,9 +47,7 @@ let
 
     buildInputs = lib.optionals stdenv.isDarwin [
       libiconv
-    ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD (with freebsd; [
-      libexecinfo libkvm libmemstat libprocstat libdevstat
-    ]);
+    ];
 
     propagatedBuildInputs = [
       typing-extensions

@@ -5,7 +5,6 @@
 , cmake
 , double-conversion
 , fmt_8
-, freebsd
 , gflags
 , glog
 , libevent
@@ -52,8 +51,7 @@ stdenv.mkDerivation rec {
     libunwind
     fmt_8
     zstd
-  ] ++ lib.optional stdenv.isLinux jemalloc
-  ++ lib.optional stdenv.hostPlatform.isFreeBSD freebsd.libexecinfo;
+  ] ++ lib.optional stdenv.isLinux jemalloc;
 
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;

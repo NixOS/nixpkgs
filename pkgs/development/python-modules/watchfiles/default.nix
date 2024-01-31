@@ -13,7 +13,6 @@
 , pytestCheckHook
 , CoreServices
 , libiconv
-, freebsd
 }:
 
 buildPythonPackage rec {
@@ -39,8 +38,6 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
     libiconv
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    freebsd.libexecinfo freebsd.libkvm freebsd.libmemstat freebsd.libprocstat freebsd.libdevstat
   ];
 
   nativeBuildInputs = [

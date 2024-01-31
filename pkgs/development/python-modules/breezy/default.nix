@@ -9,7 +9,6 @@
 , dulwich
 , fastbencode
 , fastimport
-, freebsd
 , pygithub
 , libiconv
 , merge3
@@ -66,10 +65,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ]
-  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    freebsd.libexecinfo freebsd.libkvm freebsd.libmemstat freebsd.libprocstat freebsd.libdevstat
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   propagatedBuildInputs = [
     configobj

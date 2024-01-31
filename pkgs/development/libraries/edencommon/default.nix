@@ -1,4 +1,4 @@
-{ stdenv, lib, cmake, fetchFromGitHub, glog, folly, fmt_8, boost, gtest, freebsd }:
+{ stdenv, lib, cmake, fetchFromGitHub, glog, folly, fmt_8, boost, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "edencommon";
@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
     fmt_8
     boost
     gtest
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    freebsd.libexecinfo
   ];
 
   meta = with lib; {
