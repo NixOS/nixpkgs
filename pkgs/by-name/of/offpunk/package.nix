@@ -9,7 +9,6 @@
 , timg
 , xdg-utils
 , xsel
-,
 }:
 
 let
@@ -31,10 +30,10 @@ let
     xsel
   ];
 in
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "offpunk";
   version = "2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.7";
 
@@ -55,7 +54,7 @@ python3Packages.buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = offpunk; };
 
   meta = with lib; {
-    description = "An Offline-First browser for the smolnet ";
+    description = "A command-line and offline-first smolnet browser/feed reader";
     homepage = src.meta.homepage;
     maintainers = with maintainers; [ DamienCassou ];
     platforms = platforms.linux;
