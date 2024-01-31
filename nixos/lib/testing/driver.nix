@@ -4,13 +4,13 @@ let
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
-  testDriver = hostPkgs.callPackage ../test-driver {
+  initialTestDriver = hostPkgs.callPackage ../test-driver {
     inherit (config) enableOCR extraPythonPackages;
     qemu_pkg = config.qemu.package;
     imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };
     tesseract4 = hostPkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
   };
-
+  testDriver = config.makeTestDriver initialTestDriver;
 
   vlans = map (m: (
     m.virtualisation.vlans ++
@@ -109,6 +109,13 @@ in
       defaultText = literalMD "set by the test framework";
     };
 
+    makeTestDriver = mkOption {
+      description = mdDoc "Function that returns the package containing the test driver that will perform the testing instrumentation";
+      type = types.functionTo types.package;
+      defaultText = literalMD "set by the test framework";
+      internal = true;
+    };
+
     hostPkgs = mkOption {
       description = mdDoc "Nixpkgs attrset used outside the nodes.";
       type = types.raw;
@@ -196,6 +203,7 @@ in
     };
 
     driver = withChecks driver;
+    makeTestDriver = lib.id;
 
     # make available on the test runner
     passthru.driver = config.driver;

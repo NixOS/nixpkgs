@@ -8,6 +8,7 @@ from test_driver.logger import Logger
 from typing import Callable, Iterator, ContextManager, Optional, List, Dict, Any, Union
 from typing_extensions import Protocol
 from pathlib import Path
+import os
 
 
 class RetryProtocol(Protocol):
@@ -25,6 +26,13 @@ class PollingConditionProtocol(Protocol):
     ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
         raise Exception("This is just type information for the Nix test driver")
 
+class MustRaiseProtocol(Protocol):
+    def __call__(
+        self,
+        message: str,
+        exception: type[BaseException] = Exception
+    ) -> ContextManager[None]:
+        raise Exception("This is just type information for the Nix test driver")
 
 start_all: Callable[[], None]
 subtest: Callable[[str], ContextManager[None]]
@@ -39,4 +47,5 @@ run_tests: Callable[[], None]
 join_all: Callable[[], None]
 serial_stdout_off: Callable[[], None]
 serial_stdout_on: Callable[[], None]
+must_raise: MustRaiseProtocol
 polling_condition: PollingConditionProtocol

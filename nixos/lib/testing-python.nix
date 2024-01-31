@@ -49,6 +49,7 @@ rec {
     , skipLint ? false
     , passthru ? {}
     , meta ? {}
+    , makeTestDriver ? (x: x)
     , # For meta.position
       pos ? # position used in error messages and for meta.position
         (if meta.description or null != null

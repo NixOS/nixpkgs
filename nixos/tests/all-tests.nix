@@ -98,6 +98,7 @@ in {
       [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
       touch $out
     '';
+    driver = handleTest ./nixos-test-driver {};
   };
 
   # NixOS vm tests and non-vm unit tests

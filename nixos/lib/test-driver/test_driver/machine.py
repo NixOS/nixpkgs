@@ -84,6 +84,8 @@ CHAR_TO_KEY = {
     ")": "shift-0x0B",
 }
 
+DEFAULT_TIMEOUT = 900
+
 
 def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
@@ -120,7 +122,7 @@ def _perform_ocr_on_screenshot(
     return model_results
 
 
-def retry(fn: Callable, timeout: int = 900) -> None:
+def retry(fn: Callable, timeout: int = DEFAULT_TIMEOUT) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
@@ -575,7 +577,7 @@ class Machine:
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: Optional[int] = 900,
+        timeout: Optional[int] = DEFAULT_TIMEOUT,
     ) -> Tuple[int, str]:
         """
         Execute a shell command, returning a list `(status, stdout)`.
@@ -721,7 +723,7 @@ class Machine:
                 output += out
         return output
 
-    def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
+    def wait_until_succeeds(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """
         Repeat a shell command with 1-second intervals until it succeeds.
         Has a default timeout of 900 seconds which can be modified, e.g.
@@ -740,7 +742,7 @@ class Machine:
             retry(check_success, timeout)
             return output
 
-    def wait_until_fails(self, command: str, timeout: int = 900) -> str:
+    def wait_until_fails(self, command: str, timeout: int = DEFAULT_TIMEOUT) -> str:
         """
         Like `wait_until_succeeds`, but repeating the command until it fails.
         """
@@ -801,7 +803,9 @@ class Machine:
         )
         return output
 
-    def wait_until_tty_matches(self, tty: str, regexp: str, timeout: int = 900) -> None:
+    def wait_until_tty_matches(
+        self, tty: str, regexp: str, timeout: int = DEFAULT_TIMEOUT
+    ) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
         """
@@ -829,7 +833,7 @@ class Machine:
             for char in chars:
                 self.send_key(char, delay, log=False)
 
-    def wait_for_file(self, filename: str, timeout: int = 900) -> None:
+    def wait_for_file(self, filename: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """
         Waits until the file exists in the machine's file system.
         """
@@ -842,7 +846,7 @@ class Machine:
             retry(check_file, timeout)
 
     def wait_for_open_port(
-        self, port: int, addr: str = "localhost", timeout: int = 900
+        self, port: int, addr: str = "localhost", timeout: int = DEFAULT_TIMEOUT
     ) -> None:
         """
         Wait until a process is listening on the given TCP port and IP address
@@ -1068,7 +1072,7 @@ class Machine:
         """
         return self._get_screen_text_variants([2])[0]
 
-    def wait_for_text(self, regex: str, timeout: int = 900) -> None:
+    def wait_for_text(self, regex: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """
         Wait until the supplied regular expressions matches the textual
         contents of the screen by using optical character recognition (see
@@ -1268,7 +1272,7 @@ class Machine:
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
 
-    def wait_for_window(self, regexp: str, timeout: int = 900) -> None:
+    def wait_for_window(self, regexp: str, timeout: int = DEFAULT_TIMEOUT) -> None:
         """
         Wait until an X11 window has appeared whose name matches the given
         regular expression, e.g., `wait_for_window("Terminal")`.

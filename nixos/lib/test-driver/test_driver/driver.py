@@ -3,9 +3,10 @@ import re
 import signal
 import tempfile
 import threading
-from contextlib import contextmanager
+from collections.abc import Callable, Iterator
+from contextlib import AbstractContextManager, contextmanager
 from pathlib import Path
-from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
+from typing import Any
 
 from test_driver.logger import rootlog
 from test_driver.machine import Machine, NixStartScript, retry
@@ -35,21 +36,47 @@ def pythonize_name(name: str) -> str:
     return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
 
 
+@contextmanager
+def must_raise(
+    regex: str,
+    exception: type[BaseException] = Exception,
+) -> Iterator[None]:
+    """Context manager that enforces that an exception is raised.
+    If no exception is raised, or the wrong kind of exception is raised,
+    or the exception string does not match the regex, an exception is raised.
+    """
+    short_desc = f"{exception.__name__} {regex!r}"
+    msg = f"Expected {short_desc}"
+
+    with rootlog.nested(f"Waiting for {short_desc}"):
+        try:
+            yield
+        except exception as e:
+            if re.search(regex, str(e)):
+                return
+            raise Exception(f"{msg}, but string {str(e)!r} did not match") from e
+        except Exception as e:
+            raise Exception(
+                f"{msg}, but {e!r} is not an instance of {exception!r}"
+            ) from e
+        raise Exception(f"{msg}, but no exception was raised")
+
+
 class Driver:
     """A handle to the driver that sets up the environment
     and runs the tests"""
 
     tests: str
-    vlans: List[VLan]
-    machines: List[Machine]
-    polling_conditions: List[PollingCondition]
+    vlans: list[VLan]
+    machines: list[Machine]
+    polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
 
     def __init__(
         self,
-        start_scripts: List[str],
-        vlans: List[int],
+        start_scripts: list[str],
+        vlans: list[int],
         tests: str,
         out_dir: Path,
         keep_vm_state: bool = False,
@@ -66,7 +93,7 @@ class Driver:
             vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
 
-        def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
+        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
             for s in scripts:
                 yield NixStartScript(s)
 
@@ -103,7 +130,7 @@ class Driver:
                 rootlog.error(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
-    def test_symbols(self) -> Dict[str, Any]:
+    def test_symbols(self) -> dict[str, Any]:
         @contextmanager
         def subtest(name: str) -> Iterator[None]:
             return self.subtest(name)
@@ -125,6 +152,7 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
+            must_raise=must_raise,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -187,7 +215,7 @@ class Driver:
             # to swallow them and prevent itself from terminating.
             os.kill(os.getpid(), signal.SIGTERM)
 
-    def create_machine(self, args: Dict[str, Any]) -> Machine:
+    def create_machine(self, args: dict[str, Any]) -> Machine:
         tmp_dir = get_tmp_dir()
 
         if args.get("startCommand"):
@@ -218,11 +246,11 @@ class Driver:
 
     def polling_condition(
         self,
-        fun_: Optional[Callable] = None,
+        fun_: Callable | None = None,
         *,
         seconds_interval: float = 2.0,
-        description: Optional[str] = None,
-    ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
+        description: str | None = None,
+    ) -> Callable[[Callable], AbstractContextManager] | AbstractContextManager:
         driver = self
 
         class Poll:
