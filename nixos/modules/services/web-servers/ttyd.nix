@@ -1,10 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.ttyd;
+
+  inherit (lib)
+    optionals
+    types
+    concatLists
+    mapAttrsToList
+    mkOption
+    ;
 
   # Command line arguments for the ttyd daemon
   args = [ "--port" (toString cfg.port) ]
@@ -31,39 +37,39 @@ in
 
   options = {
     services.ttyd = {
-      enable = mkEnableOption (lib.mdDoc "ttyd daemon");
+      enable = lib.mkEnableOption ("ttyd daemon");
 
       port = mkOption {
         type = types.port;
         default = 7681;
-        description = lib.mdDoc "Port to listen on (use 0 for random port)";
+        description = "Port to listen on (use 0 for random port)";
       };
 
       socket = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/var/run/ttyd.sock";
-        description = lib.mdDoc "UNIX domain socket path to bind.";
+        description = "UNIX domain socket path to bind.";
       };
 
       interface = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "eth0";
-        description = lib.mdDoc "Network interface to bind.";
+        description = "Network interface to bind.";
       };
 
       username = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "Username for basic authentication.";
+        description = "Username for basic authentication.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         apply = value: if value == null then null else toString value;
-        description = lib.mdDoc ''
+        description = ''
           File containing the password to use for basic authentication.
           For insecurely putting the password in the globally readable store use
           `pkgs.writeText "ttydpw" "MyPassword"`.
@@ -73,26 +79,26 @@ in
       signal = mkOption {
         type = types.ints.u8;
         default = 1;
-        description = lib.mdDoc "Signal to send to the command on session close.";
+        description = "Signal to send to the command on session close.";
       };
 
       writeable = mkOption {
         type = types.nullOr types.bool;
         default = null; # null causes an eval error, forcing the user to consider attack surface
         example = true;
-        description = lib.mdDoc "Allow clients to write to the TTY.";
+        description = "Allow clients to write to the TTY.";
       };
 
       clientOptions = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             fontSize = "16";
             fontFamily = "Fira Code";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of client options for xtermjs.
           <https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/>
         '';
@@ -101,50 +107,50 @@ in
       terminalType = mkOption {
         type = types.str;
         default = "xterm-256color";
-        description = lib.mdDoc "Terminal type to report.";
+        description = "Terminal type to report.";
       };
 
       checkOrigin = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to allow a websocket connection from a different origin.";
+        description = "Whether to allow a websocket connection from a different origin.";
       };
 
       maxClients = mkOption {
         type = types.int;
         default = 0;
-        description = lib.mdDoc "Maximum clients to support (0, no limit)";
+        description = "Maximum clients to support (0, no limit)";
       };
 
       indexFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "Custom index.html path";
+        description = "Custom index.html path";
       };
 
       enableIPv6 = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether or not to enable IPv6 support.";
+        description = "Whether or not to enable IPv6 support.";
       };
 
       enableSSL = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether or not to enable SSL (https) support.";
+        description = "Whether or not to enable SSL (https) support.";
       };
 
       certFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "SSL certificate file path.";
+        description = "SSL certificate file path.";
       };
 
       keyFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         apply = value: if value == null then null else toString value;
-        description = lib.mdDoc ''
+        description = ''
           SSL key file path.
           For insecurely putting the keyFile in the globally readable store use
           `pkgs.writeText "ttydKeyFile" "SSLKEY"`.
@@ -154,20 +160,20 @@ in
       caFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "SSL CA file path for client certificate verification.";
+        description = "SSL CA file path for client certificate verification.";
       };
 
       logLevel = mkOption {
         type = types.int;
         default = 7;
-        description = lib.mdDoc "Set log level.";
+        description = "Set log level.";
       };
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions =
       [ { assertion = cfg.enableSSL
@@ -196,7 +202,7 @@ in
       script = if cfg.passwordFile != null then ''
         PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
         ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          --credential ${escapeShellArg cfg.username}:"$PASSWORD" \
+          --credential ${lib.escapeShellArg cfg.username}:"$PASSWORD" \
           ${pkgs.shadow}/bin/login
       ''
       else ''
