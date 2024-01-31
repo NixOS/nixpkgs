@@ -8685,6 +8685,8 @@ self: super: with self; {
 
   onnxruntime-tools = callPackage ../development/python-modules/onnxruntime-tools { };
 
+  onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
+
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
 
   oocsi = callPackage ../development/python-modules/oocsi { };
