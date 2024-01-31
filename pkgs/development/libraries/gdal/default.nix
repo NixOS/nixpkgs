@@ -198,8 +198,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ darwinDeps
     ++ nonDarwinDeps;
 
+  pythonPath = [ python3.pkgs.numpy ];
   postInstall = ''
-    wrapPythonPrograms
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   '' + lib.optionalString useJava ''
     cd $out/lib
     ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
