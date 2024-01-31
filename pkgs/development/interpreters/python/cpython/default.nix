@@ -16,6 +16,7 @@
 , expat
 , libffi
 , libxcrypt
+, mpdecimal
 , ncurses
 , openssl
 , sqlite
@@ -165,6 +166,7 @@ let
     expat
     libffi
     libxcrypt
+    mpdecimal
     ncurses
     openssl
     sqlite
@@ -384,6 +386,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--without-ensurepip"
     "--with-system-expat"
+    "--with-system-libmpdec"
   ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
   ] ++ optionals tzdataSupport [
