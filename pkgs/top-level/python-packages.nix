@@ -7278,6 +7278,8 @@ self: super: with self; {
 
   mortgage = callPackage ../development/python-modules/mortgage { };
 
+  motmetrics = callPackage ../development/python-modules/motmetrics { };
+
   motionblinds = callPackage ../development/python-modules/motionblinds { };
 
   motioneye-client = callPackage ../development/python-modules/motioneye-client { };
