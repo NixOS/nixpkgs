@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
       the background using reverse DNS on a best effort basis.
     '';
     homepage = "https://github.com/imsnif/bandwhich";
+    changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne figsoda ];
     platforms = platforms.unix;
