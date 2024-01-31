@@ -43,6 +43,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
         # Minio requires at least 1GiB of free disk space to run.
         virtualisation.diskSize = 4 * 1024;
+        # Minio requires pre allocates 2GiB or memory, reserve some more
+        virtualisation.memorySize = 3072;
       };
     };
 
