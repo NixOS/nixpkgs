@@ -135,7 +135,7 @@ stdenv.mkDerivation {
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
   CFLAGS =
     if !doPgo
-    then "-O3 -fno-plt"
+    then "-O3"
     else pgoCflags;
 
   # ar with gcc plugins for lto objects
