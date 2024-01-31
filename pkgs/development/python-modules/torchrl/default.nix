@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , ninja
 , setuptools
 , wheel
@@ -32,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,16 +40,8 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "rl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Y3WbSMGXS6fb4RyXk2SAKHT6RencGTZXM3tc65AQx74=";
+    hash = "sha256-ngl/gbNm+62W6UFNo8GOhSaIuK9FERDxGBCr++7B4gw=";
   };
-
-  patches = [
-    (fetchpatch {  # https://github.com/pytorch/rl/pull/1828
-      name = "pyproject.toml-remove-unknown-properties";
-      url = "https://github.com/pytorch/rl/commit/c390cf602fc79cb37d5f7bda6e44b5e9546ecda0.patch";
-      hash = "sha256-cUBBvKJ8vIHprcGzMojkUxcOrrmNPIoIBfLwHXWkjOc=";
-    })
-  ];
 
   nativeBuildInputs = [
     ninja
@@ -103,11 +94,6 @@ buildPythonPackage rec {
     rm -rf torchrl
 
     export XDG_RUNTIME_DIR=$(mktemp -d)
-  ''
-  # Otherwise, tochrl will try to use unpackaged torchsnapshot.
-  # TODO: This should be the default from next release so remove when updating from 0.2.1
-  + ''
-    export CKPT_BACKEND="torch"
   '';
 
   nativeCheckInputs = [
