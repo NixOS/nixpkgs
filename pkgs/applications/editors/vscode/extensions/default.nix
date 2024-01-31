@@ -3891,8 +3891,8 @@ let
         mktplcRef = {
           name = "vscode-java-test";
           publisher = "vscjava";
-          version = "0.38.2023032402";
-          sha256 = "sha256-4WKsw+iuONaGQRMNN2TGd3zIYonHgOzvNleVhCyYFes=";
+          version = "0.40.2024011806";
+          sha256 = "sha256-ynl+94g34UdVFpl+q1XOFOLfNsz/HMOWeudL8VNG2bo=";
         };
         meta = {
           license = lib.licenses.mit;
