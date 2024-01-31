@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "gentools";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "ariebovenberg";
     repo = "gentools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RBUIji3FOIRjfp4t7zBAVSeiWaYufz4ID8nTWmhDkf8=";
+    hash = "sha256-+6KTFxOpwvGOCqy6JU87gOZmDa6MvjR10qES5wIfrjI=";
   };
 
   nativeBuildInputs = [
