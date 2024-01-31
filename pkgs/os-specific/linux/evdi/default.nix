@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = kernel.kernelOlder "4.19";
     changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${version}";
     description = "Extensible Virtual Display Interface";
+    homepage = "https://www.displaylink.com/";
+    license = with licenses; [ lgpl21Only gpl2Only ];
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    license = with licenses; [ lgpl21Only gpl2Only ];
-    homepage = "https://www.displaylink.com/";
-    broken = kernel.kernelOlder "4.19";
   };
 })
