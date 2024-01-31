@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "tsfresh";
-  version = "0.20.1";
+  version = "0.20.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blue-yonder";
     repo = "tsfresh";
-    rev = "v${version}";
-    hash = "sha256-JmdP/6aTnuYsBRiRq9zZng3xNYhOdr9V8bp1trAv508=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UTra+RAQnrv61NQ86xGYrUVYiycUAWhN/45F6/0ZvPI=";
   };
 
   patches = [
