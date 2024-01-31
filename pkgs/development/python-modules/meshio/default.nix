@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "meshio";
-  version = "5.3.4";
+  version = "5.3.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4kBpLX/yecErE8bl17QDYpqGrStE6SMJWLPwDB7DafA=";
+    hash = "sha256-8h8Bq9nym6BuoRkwSz055hBCHP6Tud0jNig0kZ+HWG0=";
   };
 
   nativeBuildInputs = [
