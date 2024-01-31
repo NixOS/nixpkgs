@@ -4,7 +4,7 @@
 , util-linux
 , libusb1
 , evdi
-, makeWrapper
+, makeBinaryWrapper
 , requireFile
 }:
 
@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    unzip
+  ];
 
   unpackPhase = ''
     runHook preUnpack
