@@ -4,10 +4,8 @@
 , util-linux
 , libusb1
 , evdi
-, systemd
 , makeWrapper
 , requireFile
-, substituteAll
 }:
 
 let
@@ -17,9 +15,8 @@ let
     else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64-linux-gnu"
     else throw "Unsupported architecture";
   libPath = lib.makeLibraryPath [ stdenv.cc.cc util-linux libusb1 evdi ];
-
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "displaylink";
   version = "5.8.0-63.33";
 
@@ -45,8 +42,8 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     unzip $src
-    chmod +x displaylink-driver-${version}.run
-    ./displaylink-driver-${version}.run --target . --noexec --nodiskspace
+    chmod +x displaylink-driver-${finalAttrs.version}.run
+    ./displaylink-driver-${finalAttrs.version}.run --target . --noexec --nodiskspace
   '';
 
   installPhase = ''
@@ -77,4 +74,4 @@ stdenv.mkDerivation rec {
     hydraPlatforms = [];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})
