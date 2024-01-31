@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "froodo_alexis";
     repo = "antu-icons";
     rev = version;
-    sha256 = "sha256-CLcr+X/b0moVEBV0O/dzCDq4w5G2+KRLUBdqKm0eAKA=";
+    hash = "sha256-CLcr+X/b0moVEBV0O/dzCDq4w5G2+KRLUBdqKm0eAKA=";
   };
 
   nativeBuildInputs = [ gtk3 ];
