@@ -243,19 +243,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     substituteInPlace setup.py --replace-fail /Library/Frameworks /no-such-path
   '';
 
-  patches = optionals (version == "3.10.9") [
-    # https://github.com/python/cpython/issues/100160
-    ./3.10/asyncio-deprecation.patch
-  ] ++ optionals (version == "3.11.1") [
-    # https://github.com/python/cpython/issues/100160
-    (fetchpatch {
-      name = "asyncio-deprecation-3.11.patch";
-      url = "https://github.com/python/cpython/commit/3fae04b10e2655a20a3aadb5e0d63e87206d0c67.diff";
-      revert = true;
-      excludes = [ "Misc/NEWS.d/*" ];
-      hash = "sha256-PmkXf2D9trtW1gXZilRIWgdg2Y47JfELq1z4DuG3wJY=";
-    })
-  ] ++ [
+  patches = [
     # Disable the use of ldconfig in ctypes.util.find_library (since
     # ldconfig doesn't work on NixOS), and don't use
     # ctypes.util.find_library during the loading of the uuid module
@@ -341,7 +329,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--without-ensurepip"
     "--with-system-expat"
-    "--with-system-ffi"
   ] ++ optionals (!static && !enableFramework) [
     "--enable-shared"
   ] ++ optionals enableFramework [
@@ -350,9 +337,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "--enable-optimizations"
   ] ++ optionals enableLTO [
     "--with-lto"
-  ] ++ optionals (pythonOlder "3.7") [
-    # This is unconditionally true starting in CPython 3.7.
-    "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl != null) [
@@ -404,10 +388,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
-  '' + optionalString (isPy3k && pythonOlder "3.7") ''
-    # Determinism: The interpreter is patched to write null timestamps when compiling Python files
-    #   so Python doesn't try to update the bytecode when seeing frozen timestamps in Nix's store.
-    export DETERMINISTIC_BUILD=1;
   '' + optionalString stdenv.hostPlatform.isMusl ''
     export NIX_CFLAGS_COMPILE+=" -DTHREAD_STACK_SIZE=0x100000"
   '' +
@@ -478,9 +458,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
-    '' + lib.optionalString (pythonOlder "3.8") ''
-    # This is gone in Python >= 3.8
-    ln -s "$out/include/${executable}m" "$out/include/${executable}"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
