@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   preConfigure = ''
     # app bundle for macos
-    substituteInPlace src/diffuse/meson.build data/icons/meson.build --replace "/Applications" "$out/Applications";
+    substituteInPlace src/diffuse/meson.build data/icons/meson.build src/diffuse/mac-os-app/diffuse-mac.in --replace-fail "/Applications" "$out/Applications";
   '';
 
   mesonFlags = [
