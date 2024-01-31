@@ -32833,7 +32833,7 @@ with pkgs;
 
   krane = callPackage ../applications/networking/cluster/krane { };
 
-  krita = libsForQt5.callPackage ../applications/graphics/krita { };
+  krita = callPackage ../applications/graphics/krita/wrapper.nix { };
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
