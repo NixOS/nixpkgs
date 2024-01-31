@@ -4271,6 +4271,18 @@ final: prev:
     meta.homepage = "https://github.com/morhetz/gruvbox/";
   };
 
+  gruvbox-baby = buildVimPlugin {
+    pname = "gruvbox-baby";
+    version = "2024-01-25";
+    src = fetchFromGitHub {
+      owner = "luisiacc";
+      repo = "gruvbox-baby";
+      rev = "bd52e62d8134647090108189e69c8b3cd18bdbbf";
+      sha256 = "17wnc3zpxki0fy8fbkinj0jvf6hnkz139x6yrg7hmj97aa8rh4sj";
+    };
+    meta.homepage = "https://github.com/luisiacc/gruvbox-baby/";
+  };
+
   gruvbox-flat-nvim = buildVimPlugin {
     pname = "gruvbox-flat.nvim";
     version = "2023-05-27";
