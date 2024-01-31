@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
   '';
 
