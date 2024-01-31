@@ -8,6 +8,8 @@
 , stdenv
 , vala
 , wrapGAppsHook4
+# Clairvoyant shows a non-dismissable banner recommending the use of the Flatpak version
+, hideUnsupportedVersionBanner ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
   ];
+
+  preFixup = lib.optionalString hideUnsupportedVersionBanner ''
+    gappsWrapperArgs+=(
+      --set container true
+    )
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${finalAttrs.version}";
