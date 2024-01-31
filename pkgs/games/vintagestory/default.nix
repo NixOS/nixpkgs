@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.19.1";
+  version = "1.19.3";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-PrsClGSXTah5kkhww7slfkwpo0gJryf6pm61LsCYbiE=";
+    hash = "sha256-ULxwNdQLQCWJqCTiGtT1X/Y32f406FT/UPAJNBYrV/s=";
   };
 
 
