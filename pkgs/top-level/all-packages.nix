@@ -10707,8 +10707,6 @@ with pkgs;
 
   lzham = callPackage ../tools/compression/lzham { };
 
-  lzip = callPackage ../tools/compression/lzip { };
-
   plzip = callPackage ../tools/compression/plzip { };
 
   lziprecover = callPackage ../tools/compression/lziprecover { };
