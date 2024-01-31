@@ -15,14 +15,8 @@ let
   atLeast210 = lib.versionAtLeast version "2.10pre";
   atLeast213 = lib.versionAtLeast version "2.13pre";
   atLeast214 = lib.versionAtLeast version "2.14pre";
+  atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
-  # Major.minor versions unaffected by CVE-2024-27297
-  unaffectedByFodSandboxEscape = [
-    "2.3"
-    "2.18"
-    "2.19"
-    "2.20"
-  ];
 in
 { stdenv
 , autoconf-archive
@@ -48,6 +42,7 @@ in
 , lib
 , libarchive
 , libcpuid
+, libgit2
 , libsodium
 , libxml2
 , libxslt
@@ -126,6 +121,8 @@ self = stdenv.mkDerivation {
     gtest
     libarchive
     lowdown
+  ] ++ lib.optionals atLeast220 [
+    libgit2
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.isx86_64) [
@@ -257,7 +254,6 @@ self = stdenv.mkDerivation {
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";
-    knownVulnerabilities = lib.optional (!builtins.elem (lib.versions.majorMinor version) unaffectedByFodSandboxEscape && !atLeast221) "CVE-2024-27297";
   };
 };
 in self
