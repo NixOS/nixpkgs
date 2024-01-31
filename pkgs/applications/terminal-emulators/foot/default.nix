@@ -212,19 +212,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann maintainers.abbe ];
     platforms = platforms.linux;
-    # From (presumably) ncurses version 6.3, it will ship a foot
-    # terminfo file. This however won't include some non-standard
-    # capabilities foot's bundled terminfo file contains. Unless we
-    # want to have some features in e. g. vim or tmux stop working,
-    # we need to make sure that the foot terminfo overwrites ncurses'
-    # one. Due to <nixpkgs/nixos/modules/config/system-path.nix>
-    # ncurses is always added to environment.systemPackages on
-    # NixOS with its priority increased by 3, so we need to go
-    # one bigger.
-    # This doesn't matter a lot for local use since foot sets
-    # TERMINFO to a store path, but allows installing foot.terminfo
-    # on remote systems for proper foot terminfo support.
-    priority = (ncurses.meta.priority or 5) + 3 + 1;
     mainProgram = "foot";
   };
 }
