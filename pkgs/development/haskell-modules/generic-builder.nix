@@ -227,7 +227,6 @@ let
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature false "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (optionalString (enableExecutableProfiling || enableLibraryProfiling) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling "profiling")
@@ -439,9 +438,9 @@ stdenv.mkDerivation ({
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
-    if [[ -d "$p/Library/Frameworks" ]]; then
-      configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
-    fi
+      if [[ -d "$p/Library/Frameworks" ]]; then
+        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+      fi
   '' + ''
     done
   ''
@@ -613,7 +612,6 @@ stdenv.mkDerivation ({
       done
     ''}
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
-
 
     ${optionalString enableSeparateDocOutput ''
     for x in ${docdir "$doc"}"/html/src/"*.html; do
