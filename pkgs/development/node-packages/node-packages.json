@@ -180,7 +180,6 @@
 , "npm-merge-driver"
 , "nrm"
 , "orval"
-, "parcel"
 , "parsoid"
 , "patch-package"
 , "peerflix"
