@@ -32,7 +32,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreServices;
+  inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   inherit (libsForQt5) qtbase wrapQtAppsHook;
   cursesUI = lib.elem "ncurses" uiToolkits;
   qt5UI = lib.elem "qt5" uiToolkits;
@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.28.1";
+  version = "3.28.2";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-FelPg+ZH99YgoUCnpdp2NJ/Eehv+1m0PXN7o5zRAea0=";
+    hash = "sha256-FGb4ctwcIm83PPj7pCMO0hao8Qi9VLR3tczf2eotEko=";
   };
 
   patches = [
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional useOpenSSL openssl
   ++ lib.optional cursesUI ncurses
   ++ lib.optional qt5UI qtbase
-  ++ lib.optional (stdenv.isDarwin) CoreServices
+  ++ lib.optional stdenv.isDarwin CoreServices
   ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;

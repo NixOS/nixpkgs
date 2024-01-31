@@ -1,6 +1,6 @@
-diff -Naur cmake-3.28.1/Utilities/cmcurl/CMakeLists.txt cmake-3.28.1-new/Utilities/cmcurl/CMakeLists.txt
---- cmake-3.28.1/Utilities/cmcurl/CMakeLists.txt	2023-12-14 10:47:27.000000000 -0500
-+++ cmake-3.28.1-new/Utilities/cmcurl/CMakeLists.txt	2024-01-08 14:45:45.000000000 -0500
+diff -ru cmake-3.28.2/Utilities/cmcurl/CMakeLists.txt cmake-3.28.2-patched/Utilities/cmcurl/CMakeLists.txt
+--- cmake-3.28.2/Utilities/cmcurl/CMakeLists.txt	2024-01-29 21:01:32
++++ cmake-3.28.2-patched/Utilities/cmcurl/CMakeLists.txt	2024-01-31 21:20:02
 @@ -470,13 +470,6 @@
  
    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND NOT ENABLE_ARES)
@@ -15,15 +15,15 @@ diff -Naur cmake-3.28.1/Utilities/cmcurl/CMakeLists.txt cmake-3.28.1-new/Utiliti
    endif()
  endif()
  
-diff -Naur cmake-3.28.1/Utilities/cmcurl/lib/curl_setup.h cmake-3.28.1-new/Utilities/cmcurl/lib/curl_setup.h
---- cmake-3.28.1/Utilities/cmcurl/lib/curl_setup.h	2023-12-14 10:47:27.000000000 -0500
-+++ cmake-3.28.1-new/Utilities/cmcurl/lib/curl_setup.h	2024-01-08 14:45:08.000000000 -0500
-@@ -255,12 +255,6 @@
+diff -ru cmake-3.28.2/Utilities/cmcurl/lib/curl_setup.h cmake-3.28.2-patched/Utilities/cmcurl/lib/curl_setup.h
+--- cmake-3.28.2/Utilities/cmcurl/lib/curl_setup.h	2024-01-29 21:01:32
++++ cmake-3.28.2-patched/Utilities/cmcurl/lib/curl_setup.h	2024-01-31 21:20:50
+@@ -255,12 +255,7 @@
   * performing this task will result in a synthesized IPv6 address.
   */
  #if defined(__APPLE__) && !defined(USE_ARES)
 -#include <TargetConditionals.h>
--#define USE_RESOLVE_ON_IPS 1
+- #define USE_RESOLVE_ON_IPS 1
 -#  if TARGET_OS_MAC && !(defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE) && \
 -     defined(ENABLE_IPV6)
 -#    define CURL_MACOS_CALL_COPYPROXIES 1
