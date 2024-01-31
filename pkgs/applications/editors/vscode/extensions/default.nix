@@ -3903,8 +3903,8 @@ let
         mktplcRef = {
           name = "vscode-maven";
           publisher = "vscjava";
-          version = "0.41.2023032403";
-          sha256 = "sha256-VeN4q6pEaLPQVYleLCDkDCv2Gr8QdHVPjpwSuo3mBuE=";
+          version = "0.43.2024011905";
+          sha256 = "sha256-75pttt0nCuZNP+1e9lmsAqLSDHdca3o+K1E5h0Y9u0I=";
         };
         meta = {
           license = lib.licenses.mit;
