@@ -2,16 +2,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "antu-icon-theme";
-  version = "ff16444b";
+  version = "0-unstable-2024-01-23";
 
   src = fetchFromGitLab {
     owner = "froodo_alexis";
     repo = "antu-icons";
-    rev = version;
+    rev = "279be277";
     hash = "sha256-CLcr+X/b0moVEBV0O/dzCDq4w5G2+KRLUBdqKm0eAKA=";
   };
-
-  nativeBuildInputs = [ gtk3 ];
 
   dontDropIconThemeCache = true;
 
