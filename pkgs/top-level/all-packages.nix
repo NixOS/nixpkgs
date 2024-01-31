@@ -23400,6 +23400,8 @@ with pkgs;
 
   pico-sdk = callPackage ../development/libraries/pico-sdk { };
 
+  pingvin-share =  callPackage ../servers/pingvin-share { };
+
   pinocchio = callPackage ../development/libraries/pinocchio { };
 
   pipelight = callPackage ../tools/misc/pipelight {
