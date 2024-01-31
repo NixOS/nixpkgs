@@ -60,12 +60,6 @@
     See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
 */
 {
-  willbou1 = {
-    name = "William Boulanger";
-    github = "willbou1";
-    email = "willbou2@gmail.com";
-    githubId = 6372967;
-  };
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
@@ -20236,6 +20230,12 @@
     keys = [{
       fingerprint = "DA03 D6C6 3F58 E796 AD26  E99B 366A 2940 479A 06FC";
     }];
+  };
+  willbou1 = {
+    name = "William Boulanger";
+    github = "willbou1";
+    email = "willbou2@gmail.com";
+    githubId = 6372967;
   };
   willcohen = {
     github = "willcohen";
