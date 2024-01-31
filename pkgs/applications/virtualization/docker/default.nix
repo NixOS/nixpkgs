@@ -106,6 +106,17 @@ rec {
           url = "https://github.com/moby/moby/pull/43136.patch";
           hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
         })
+      ] ++ lib.optionals (lib.versions.major version == "24") [
+        # docker_24 has LimitNOFILE set to "infinity", which causes a wide variety of issues in containers.
+        # Issues range from higher-than-usual ressource usage, to containers not starting at all.
+        # This patch (part of the release candidates for docker_25) simply removes this unit option
+        # making systemd use its default "1024:524288", which is sane. See commit message and/or the PR for
+        # more details: https://github.com/moby/moby/pull/45534
+        (fetchpatch {
+          name = "LimitNOFILE-systemd-default.patch";
+          url = "https://github.com/moby/moby/pull/45534/commits/c8930105bc9fc3c1a8a90886c23535cc6c41e130.patch";
+          hash = "sha256-nyGLxFrJaD0TrDqsAwOD6Iph0aHcFH9sABj1Fy74sec=";
+        })
       ];
 
       postPatch = ''
