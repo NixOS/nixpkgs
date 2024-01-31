@@ -14,6 +14,7 @@ let
          ++ (concatLists (mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
          ++ [ "--terminal-type" cfg.terminalType ]
          ++ optionals cfg.checkOrigin [ "--check-origin" ]
+         ++ optionals cfg.writeable [ "--writable" ] # the typo is correct
          ++ [ "--max-clients" (toString cfg.maxClients) ]
          ++ optionals (cfg.indexFile != null) [ "--index" cfg.indexFile ]
          ++ optionals cfg.enableIPv6 [ "--ipv6" ]
@@ -73,6 +74,13 @@ in
         type = types.ints.u8;
         default = 1;
         description = lib.mdDoc "Signal to send to the command on session close.";
+      };
+
+      writeable = mkOption {
+        type = types.nullOr types.bool;
+        default = null; # null causes an eval error, forcing the user to consider attack surface
+        example = true;
+        description = lib.mdDoc "Allow clients to write to the TTY.";
       };
 
       clientOptions = mkOption {
@@ -165,6 +173,8 @@ in
       [ { assertion = cfg.enableSSL
             -> cfg.certFile != null && cfg.keyFile != null && cfg.caFile != null;
           message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specified."; }
+        { assertion = cfg.writeable != null;
+          message = "services.ttyd.writeable must be set"; }
         { assertion = ! (cfg.interface != null && cfg.socket != null);
           message = "Cannot set both interface and socket for ttyd."; }
         { assertion = (cfg.username != null) == (cfg.passwordFile != null);
