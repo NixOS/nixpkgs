@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "flow.record~=" "flow.record>="
+      --replace-warn "flow.record~=" "flow.record>="
   '';
 
   nativeBuildInputs = [
@@ -110,12 +110,13 @@ buildPythonPackage rec {
     # Test requires rdump
     "test_exec_target_command"
     # Issue with tar file
-    "test_tar_sensitive_drive_letter"
     "test_dpapi_decrypt_blob"
-    "test_notifications_appdb"
     "test_md"
-    "test_notifications_wpndatabase"
     "test_nested_md_lvm"
+    "test_notifications_appdb"
+    "test_notifications_wpndatabase"
+    "test_tar_anonymous_filesystems"
+    "test_tar_sensitive_drive_letter"
     # Tests compare dates and times
     "yum"
     # Filesystem access, windows defender tests

@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+    "BCACHEFS_FUSE=${toString fuseSupport}"
   ];
 
   preCheck = lib.optionalString (!fuseSupport) ''

@@ -534,6 +534,7 @@
   ./services/hardware/fancontrol.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
+  ./services/hardware/handheld-daemon.nix
   ./services/hardware/hddfancontrol.nix
   ./services/hardware/illum.nix
   ./services/hardware/interception-tools.nix
@@ -1061,6 +1062,7 @@
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
+  ./services/networking/pyload.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
