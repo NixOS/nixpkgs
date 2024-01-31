@@ -238,16 +238,9 @@ let
       })
     ] ++ lib.optionals (chromiumVersionAtLeast "121") [
       # M121 is the first version to require the new rust toolchain.
-      # But we don't have that ready yet.
-      # So we have to revert the singular commit that requires rust toolchain.
-      # This works, because the code in question, the QR code generator, is present in
-      # two variants: c++ and rust. This workaround will not last.
-      # The c++ variant in question is deemed to be removed in a month (give or take).
-      (githubPatch {
-        revert = true;
-        commit = "bcf739b95713071687ff25010683248de0092f6a";
-        hash = "sha256-1ZPe45cc2bjnErcF3prbLMlYpU7kpuwDVcjewINQr+Q=";
-      })
+      # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
+      # allowing us to use our rustc and our clang.
+      ./patches/chromium-121-rust.patch
     ];
 
     postPatch = ''
@@ -412,11 +405,15 @@ let
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
-      # We do intentionally not set rustc_version as nixpkgs will never do incremental
-      # rebuilds, thus leaving this empty is fine.
       rust_sysroot_absolute = "${buildPackages.rustc}";
-      # Building with rust is disabled for now - this matches the flags in other major distributions.
+      # Rust is enabled for M121+, see next section:
       enable_rust = false;
+    } // lib.optionalAttrs (chromiumVersionAtLeast "121") {
+      # M121 the first version to actually require a functioning rust toolchain
+      enable_rust = true;
+      # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
+      # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
+      rustc_version = buildPackages.rustc.version;
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
       # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
       arm_control_flow_integrity = "none";
@@ -430,6 +427,13 @@ let
       link_pulseaudio = true;
     } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
     // (extraAttrs.gnFlags or {}));
+
+    # We cannot use chromiumVersionAtLeast in mkDerivation's env attrset due
+    # to infinite recursion when chromium.override is used (e.g. electron).
+    # To work aroud this, we use export in the preConfigure phase.
+    preConfigure = lib.optionalString (chromiumVersionAtLeast "121") ''
+      export RUSTC_BOOTSTRAP=1
+    '';
 
     configurePhase = ''
       runHook preConfigure
