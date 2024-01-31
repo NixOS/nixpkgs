@@ -165,10 +165,10 @@ stdenv.mkDerivation {
     meson configure -Db_pgo=generate
     ninja
     # make sure there is _some_ profiling data on all binaries
+    meson test
     ./footclient --version
     ./foot --version
     ./utils/xtgettcap
-    ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
@@ -181,6 +181,8 @@ stdenv.mkDerivation {
   postInstall = ''
     moveToOutput share/foot/themes "$themes"
   '';
+
+  doCheck = true;
 
   strictDeps = true;
 
