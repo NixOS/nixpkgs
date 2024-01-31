@@ -56,8 +56,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     with subtest("reload config"):
       node1.fail("ip addr show dev eth1 | grep -q 192.168.1.201")
       node1.succeed("${reloadSystem}/bin/switch-to-configuration test >&2")
-      node1.fail("journalctl -u keepalived | grep -q -i stopped")
-      node1.succeed("journalctl -u keepalived | grep -q -i reloaded")
       node1.wait_until_succeeds("ip addr show dev eth1 | grep -q 192.168.1.201")
+      node1.fail("journalctl -u keepalived | grep -q Stopped")
+      node1.succeed("journalctl -u keepalived | grep -q Reloaded")
   '';
 })
