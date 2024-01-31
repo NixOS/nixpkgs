@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "biomejs";
     repo = "biome";
     rev = "cli/v${version}";
-    hash = "sha256-0xLpZIqBaM4hTWsJzkVZMuDySFSXCLpQm/maCaXDJQo=";
+    hash = "sha256-70LHsmS01ssD4yCbHfBouV+NyhMIlBbX0jcHFu8aLMw=";
   };
 
   cargoHash = "sha256-wf6X6aY1O9EABQ6sDNAb3XsVrC0lgUtpgoieiPZ7r3k=";
