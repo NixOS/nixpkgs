@@ -16,16 +16,6 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    python310 = {
-      sourceVersion = {
-        major = "3";
-        minor = "10";
-        patch = "13";
-        suffix = "";
-      };
-      hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
-    };
-
     python311 = {
       sourceVersion = {
         major = "3";
@@ -78,11 +68,18 @@ in {
     inherit passthruFun;
   };
 
-  python310 = callPackage ./cpython ({
+  python310 = callPackage ./cpython {
     self = __splicedPackages.python310;
+    sourceVersion = {
+      major = "3";
+      minor = "10";
+      patch = "13";
+      suffix = "";
+    };
+    hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python310);
+  };
 
   python311 = callPackage ./cpython ({
     self = __splicedPackages.python311;
@@ -125,8 +122,8 @@ in {
     readline = null;
     ncurses = null;
     gdbm = null;
-    sqlite = null;
     configd = null;
+    sqlite = null;
     tzdata = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;
