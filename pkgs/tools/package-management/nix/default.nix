@@ -282,7 +282,7 @@ in lib.makeExtensible (self: ({
 
   stable = addFallbackPathsCheck self.nix_2_18;
 
-  unstable = self.nix_2_19;
+  unstable = self.nix_2_20;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
