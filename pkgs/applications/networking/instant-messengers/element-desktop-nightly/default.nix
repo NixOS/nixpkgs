@@ -116,7 +116,7 @@ in stdenv.mkDerivation {
         description = "A feature-rich client for Matrix.org (nightly unstable build)";
         homepage = "https://element.io";
         license = licenses.asl20;
-        maintainers = teams.matrix.members;
+        maintainers = maintainers.willbou1;
         mainProgram = "element-desktop-nightly";
     };
 }

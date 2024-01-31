@@ -60,6 +60,12 @@
     See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
 */
 {
+  willbou1 = {
+    name = "William Boulanger";
+    github = "willbou1";
+    email = "willbou2@gmail.com";
+    githubId = 6372967;
+  };
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
