@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, libdrm, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, libdrm
+, python3
+}:
 
 let
   python3WithLibs = python3.withPackages (ps: with ps; [
@@ -24,7 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildInputs = [ kernel libdrm python3WithLibs ];
+  buildInputs = [
+    kernel
+    libdrm
+    python3WithLibs
+  ];
 
   makeFlags = kernel.makeFlags ++ [
     "KVER=${kernel.modDirVersion}"
