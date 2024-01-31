@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , fetchpatch
 , gitUpdater
+, substituteAll
 , testers
 , dbus-test-runner
 , dpkg
@@ -74,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./2001-Mark-problematic-tests.patch
+    (substituteAll {
+      src = ./2002-Nixpkgs-versioned-QML-path.patch.in;
+      name = "2002-Nixpkgs-versioned-QML-path.patch";
+      qtVersion = lib.versions.major qtbase.version;
+    })
   ];
 
   postPatch = ''
