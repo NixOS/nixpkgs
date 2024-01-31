@@ -7,16 +7,17 @@
 , pkg-config
 , stdenv
 , vala
+, wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clairvoyant";
   version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
-    repo = pname;
-    rev = version;
+    repo = "clairvoyant";
+    rev = finalAttrs.version;
     hash = "sha256-eAcd8JJmcsz8dm049g5xsF6gPpNQ6ZvGGIhKAoMlPTU=";
   };
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -33,11 +35,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${finalAttrs.version}";
     description = "Ask questions and get psychic answers";
     homepage = "https://github.com/cassidyjames/clairvoyant";
-    changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ michaelgrahamevans ];
     mainProgram = "com.github.cassidyjames.clairvoyant";
+    maintainers = with maintainers; [ michaelgrahamevans ];
   };
-}
+})
