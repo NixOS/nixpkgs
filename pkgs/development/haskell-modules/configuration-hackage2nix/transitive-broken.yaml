@@ -324,7 +324,6 @@ dont-distribute-packages:
  - Pup-Events
  - Pup-Events-Demo
  - Quelea
- - QuickPlot
  - RESTng
  - RJson
  - RMP
@@ -480,11 +479,9 @@ dont-distribute-packages:
  - alsa-pcm-tests
  - alsa-seq-tests
  - alto
- - amazon-emailer-client-snap
  - amby
  - ampersand
  - amqp-streamly
- - analyze-client
  - anatomy
  - animate-example
  - animate-frames
@@ -721,6 +718,7 @@ dont-distribute-packages:
  - bytelog
  - bytestring-builder-varword
  - bytestring-read
+ - bytetrie
  - ca
  - cabal-bounds
  - cabal-cache
@@ -982,7 +980,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_5
+ - crackNum_3_6
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1010,6 +1008,7 @@ dont-distribute-packages:
  - curryer-rpc
  - cv-combinators
  - cypher
+ - dahdit-midi
  - dahdit-network
  - dahdit-test
  - daino
@@ -1098,13 +1097,13 @@ dont-distribute-packages:
  - dfinity-radix-tree
  - dhall-secret
  - dia-functions
+ - diagrams-reflex
  - diagrams-wx
  - dialog
  - diff
  - difference-monoid
  - differential
  - digestive-foundation-lucid
- - digestive-functors-heist
  - digestive-functors-hsp
  - dimensional-tf
  - dimensions
@@ -1361,7 +1360,6 @@ dont-distribute-packages:
  - fluent-logger
  - fluent-logger-conduit
  - fmt-for-rio
- - fn-extra
  - foldable1
  - foldl-transduce-attoparsec
  - follower
@@ -1795,7 +1793,6 @@ dont-distribute-packages:
  - hack2-handler-happstack-server
  - hack2-handler-mongrel2-http
  - hack2-handler-snap-server
- - hackage-cli
  - hackage2twitter
  - hackmanager
  - haddock
@@ -1832,7 +1829,6 @@ dont-distribute-packages:
  - happstack-fay
  - happstack-fay-ajax
  - happstack-foundation
- - happstack-heist
  - happstack-helpers
  - happstack-ixset
  - happstack-plugins
@@ -1986,9 +1982,6 @@ dont-distribute-packages:
  - hedis-pile
  - heftia
  - heftia-effects
- - heist-aeson
- - heist-async
- - heist-extra
  - helic
  - helics
  - helics-wai
@@ -2139,7 +2132,6 @@ dont-distribute-packages:
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
- - hspec-snap
  - hspecVariant
  - hsprocess
  - hsql-mysql
@@ -2168,7 +2160,6 @@ dont-distribute-packages:
  - http-enumerator
  - http-exchange
  - http-exchange-instantiations
- - http-io-streams
  - http-response-decoder
  - http2-client-exe
  - http2-client-grpc
@@ -2775,8 +2766,6 @@ dont-distribute-packages:
  - mxnet-examples
  - mxnet-nn
  - myTestlll
- - mysnapsession
- - mysnapsession-example
  - mysql-haskell-nem
  - mysql-haskell-openssl
  - mysql-simple-typed
@@ -3244,12 +3233,14 @@ dont-distribute-packages:
  - refh
  - reflex-animation
  - reflex-backend-wai
+ - reflex-dom-colonnade
  - reflex-dynamic-containers
  - reflex-gadt-api
  - reflex-ghci
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
+ - reflex-localize-dom
  - reflex-monad-auth
  - reflex-potatoes
  - reflex-process
@@ -3494,7 +3485,6 @@ dont-distribute-packages:
  - servant-reason
  - servant-serialization
  - servant-server-namedargs
- - servant-snap
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
@@ -3504,8 +3494,6 @@ dont-distribute-packages:
  - servant-zeppelin-client
  - servant-zeppelin-server
  - servant-zeppelin-swagger
- - serversession-frontend-snap
- - ses-html-snaplet
  - sessiontypes-distributed
  - sgf
  - sgrep
@@ -3570,56 +3558,24 @@ dont-distribute-packages:
  - smtlib2-quickcheck
  - smtlib2-timing
  - smtp2mta
- - snap
- - snap-auth-cli
  - snap-elm
- - snap-error-collector
  - snap-extras
- - snap-routes
- - snap-testing
- - snap-utils
- - snap-web-routes
- - snaplet-acid-state
  - snaplet-actionlog
- - snaplet-amqp
- - snaplet-auth-acid
- - snaplet-coffee
- - snaplet-css-min
  - snaplet-customauth
- - snaplet-environments
  - snaplet-fay
- - snaplet-ghcjs
  - snaplet-hasql
  - snaplet-haxl
  - snaplet-hdbc
- - snaplet-hslogger
- - snaplet-i18n
- - snaplet-influxdb
  - snaplet-lss
- - snaplet-mandrill
  - snaplet-mongoDB
- - snaplet-mongodb-minimalistic
- - snaplet-mysql-simple
  - snaplet-oauth
- - snaplet-persistent
- - snaplet-postgresql-simple
  - snaplet-postmark
- - snaplet-purescript
- - snaplet-recaptcha
- - snaplet-redis
  - snaplet-redson
  - snaplet-rest
  - snaplet-riak
- - snaplet-sass
- - snaplet-scoped-session
  - snaplet-sedna
- - snaplet-ses-html
- - snaplet-sqlite-simple
- - snaplet-sqlite-simple-jwt-auth
  - snaplet-stripe
  - snaplet-tasks
- - snaplet-typed-sessions
- - snaplet-wordpress
  - snappy-iteratee
  - sndfile-enumerators
  - sneakyterm
@@ -3879,6 +3835,7 @@ dont-distribute-packages:
  - trasa-client
  - trasa-extra
  - trasa-form
+ - trasa-reflex
  - trasa-server
  - trasa-th
  - traversal-template
@@ -4071,7 +4028,6 @@ dont-distribute-packages:
  - wavesurfer
  - wavy
  - weatherhs
- - web-fpco
  - web-mongrel2
  - web-routes-regular
  - web-routing
