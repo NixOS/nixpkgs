@@ -25,11 +25,11 @@ buildPythonPackage rec {
   configurePhase = "";
 
   installPhase = ''
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    mkdir -p "$out/${python.sitePackages}"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/lib/${python.libPrefix}/site-packages \
+      --install-lib=$out/${python.sitePackages} \
       --prefix="$out"
 
     # --install-lib:

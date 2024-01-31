@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     # fixes [WARNING] [openpaperwork_core.resources.setuptools] Failed to find
     # resource file paperwork_gtk.icon.out/paperwork_128.png, tried at path
     # /nix/store/3n5lz6y8k9yks76f0nar3smc8djan3xr-paperwork-2.0.2/lib/python3.8/site-packages/paperwork_gtk/icon/out/paperwork_128.png.
-    site=$out/lib/${python3Packages.python.libPrefix}/site-packages/paperwork_gtk
+    site=$out/${python3Packages.python.sitePackages}/paperwork_gtk
     for i in $site/data/paperwork_*.png; do
       ln -s $i $site/icon/out;
     done

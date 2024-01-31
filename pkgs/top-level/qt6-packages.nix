@@ -70,6 +70,10 @@ makeScopeWithSplicing' {
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
+  qwlroots = callPackage ../development/libraries/qwlroots {
+    wlroots = pkgs.wlroots_0_17;
+  };
+
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
   qzxing = callPackage ../development/libraries/qzxing { };
