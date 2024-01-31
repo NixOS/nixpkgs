@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , nasm
 , openjdk
@@ -41,8 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xHjd0WHN50b75wdWPHUwfmJGsiWKmj+zA59UwakIo74=";
   };
 
-  # This is needed by freeimage
   patches = [
+    (fetchpatch {
+      name = "CMAKE_CROSSCOMPILING_EMULATOR=env-fix.patch";
+      url = "https://github.com/libjpeg-turbo/libjpeg-turbo/compare/36c51dd3eb60ebde3ca77d3cfa7df3422f1aaaf1..b6ee1016abbc55116304ad396cf88aa19391e10a.patch";
+      hash = "sha256-dNwXicvZEsG02TBaM5nYMlZ+VczT/Dfx6ZM/6huZpwE=";
+    })
+
+    # This is needed by freeimage
     ./0001-Compile-transupp.c-as-part-of-the-library.patch
   ] ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
     ./0002-Make-exported-symbols-in-transupp.c-weak.patch
