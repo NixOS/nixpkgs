@@ -31,6 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Issue tracking and project management tool for developers";
     maintainers = lib.teams.serokell.members ++ [ lib.maintainers.leona ];
