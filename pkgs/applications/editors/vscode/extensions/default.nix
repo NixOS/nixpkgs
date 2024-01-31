@@ -3235,11 +3235,12 @@ let
         mktplcRef = {
           name = "crates";
           publisher = "serayuzgur";
-          version = "0.6.5";
-          sha256 = "sha256-HgqM4PKGk3R5MLY4cVjKxv79p5KlOkVDeDbv7/6FmpM=";
+          version = "0.6.6";
+          sha256 = "sha256-HXoH1IgMLniq0kxHs2snym4rerScu9qCqUaqwEC+O/E=";
         };
         meta = {
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
         };
       };
 
