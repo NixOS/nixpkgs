@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "secynic";
-    repo = pname;
+    repo = "ipwhois";
     rev = "refs/tags/v${version}";
     hash = "sha256-2CfRRHlIIaycUtzKeMBKi6pVPeBCb1nW3/1hoxQU1YM=";
   };
@@ -34,6 +34,8 @@ buildPythonPackage rec {
       hash = "sha256-7Ic4xWTAmklk6MvnZ/WsH9SW/4D9EG/jFKt5Wi89Xtc=";
     })
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonRelaxDeps = [
     "dnspython"
@@ -65,6 +67,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "ipwhois/tests/online/"
+    # Stress test
+    "ipwhois/tests/stress/test_experimental.py"
   ];
 
   disabledTests = [

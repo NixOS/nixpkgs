@@ -13,13 +13,13 @@ let
   boostPython = boost.override { python = python3; enablePython = true; };
 
   pname = "nextpnr";
-  version = "0.6";
+  version = "0.7";
 
   main_src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "nextpnr";
     rev   = "${pname}-${version}";
-    hash  = "sha256-S6qvTzvkS2tBMvuTpmuCx6h0OcKP5NBbmgRgOpAVtnA=";
+    hash  = "sha256-YIAQcCg9RjvCys1bQ3x+sTgTmnmEeXVbt9Lr6wtg1pA=";
     name  = "nextpnr";
   };
 
@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/nextpnr-ecp5
     wrapQtApp $out/bin/nextpnr-gowin
   '';
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Place and route tool for FPGAs";

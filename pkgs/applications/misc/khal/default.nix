@@ -24,9 +24,7 @@ let
     };
   };
 in
-with py.pkgs;
-
-buildPythonApplication rec {
+py.pkgs.buildPythonApplication rec {
   pname = "khal";
   version = "0.11.2";
   pyproject = true;
@@ -41,8 +39,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
-  ] ++ (with python3.pkgs; [
-    setuptools
+  ] ++ (with py.pkgs; [
     setuptools-scm
     sphinx
     sphinxcontrib-newsfeed
@@ -66,7 +63,7 @@ buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python3.pkgs;[
+  nativeCheckInputs = with py.pkgs;[
     freezegun
     hypothesis
     packaging
