@@ -65,12 +65,12 @@ let
     src = if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
             url = "https://packages.element.io/debian/pool/main/e/element-nightly/element-nightly_${version}_amd64.deb";
-           sha256 = "1biv7w4dn6ymin8mwwzkkq01lzjmzf2qjip4k84ng14hmd1ss3lj"; 
+            sha256 = "1biv7w4dn6ymin8mwwzkkq01lzjmzf2qjip4k84ng14hmd1ss3lj";
         }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
             url = "https://packages.element.io/debian/pool/main/e/element-nightly/element-nightly_${version}_arm64.deb";
-           sha256 = "1lb331kqrya5hsss505wv0iy2a0h24n3nji491w56k6c6ymwzim6"; 
+            sha256 = "1lb331kqrya5hsss505wv0iy2a0h24n3nji491w56k6c6ymwzim6";
         }
     else
         throw "element-desktop-nightly is not supported on ${stdenv.hostPlatform.system}";
@@ -89,14 +89,14 @@ in stdenv.mkDerivation {
         glib
         xdg-utils
     ];
-    
+
     installPhase = ''
         mkdir -p $out
         dpkg -x $src $out
 
         cp -av $out/usr/* $out
         rm -rf $out/usr
-        
+
         mkdir -p $out/bin
         ln -s $out/opt/Element-Nightly/element-desktop-nightly $out/bin/element-desktop-nightly
     '';
