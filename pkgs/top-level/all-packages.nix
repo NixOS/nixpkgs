@@ -1114,7 +1114,6 @@ with pkgs;
     inherit (darwin) cctools DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     antlr = antlr4_10;
-    boost = boost177; # Configure checks for specific version.
     icu =  icu69;
     protobuf = protobuf_21;
   };
