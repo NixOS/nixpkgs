@@ -1,4 +1,6 @@
 {
+  lts ? false,
+
   lib,
   callPackage,
   linkFarm,
@@ -38,7 +40,7 @@
   xz,
 }:
 let
-  incus-unwrapped = callPackage ./unwrapped.nix { };
+  unwrapped = callPackage ./unwrapped.nix { inherit lts; };
 
   binPath = lib.makeBinPath [
     acl
@@ -147,9 +149,9 @@ let
   ];
 in
 symlinkJoin {
-  name = "incus-${incus-unwrapped.version}";
+  name = "incus-${unwrapped.version}";
 
-  paths = [ incus-unwrapped ];
+  paths = [ unwrapped ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -160,9 +162,10 @@ symlinkJoin {
   '';
 
   passthru = {
-    inherit (incus-unwrapped) tests;
-    unwrapped = incus-unwrapped;
+    inherit (unwrapped) tests;
+
+    unwrapped = unwrapped;
   };
 
-  inherit (incus-unwrapped) meta pname version;
+  inherit (unwrapped) meta pname version;
 }

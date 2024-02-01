@@ -1,4 +1,6 @@
 {
+  lts ? false,
+
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -15,18 +17,22 @@
   nixosTests,
 }:
 
+let
+  releaseFile = if lts then ./lts.nix else ./latest.nix;
+  inherit (import releaseFile) version hash vendorHash;
+in
+
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.5.1";
+
+  inherit vendorHash version;
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3eWkQT2P69ZfN62H9B4WLnmlUOGkpzRR0rctgchP+6A=";
+    inherit hash;
   };
-
-  vendorHash = "sha256-2ZJU7WshN4UIbJv55bFeo9qiAQ/wxu182mnz7pE60xA=";
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
@@ -34,9 +40,11 @@ buildGoModule rec {
   '';
 
   excludedPackages = [
+    # statically compile these
     "cmd/incus-agent"
     "cmd/incus-migrate"
-    "cmd/lxd-to-incus"
+
+    # oidc test requires network
     "test/mini-oidc"
   ];
 
