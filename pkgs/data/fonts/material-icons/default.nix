@@ -11,6 +11,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-wX7UejIYUxXOnrH2WZYku9ljv4ZAlvgk8EEJJHOCCjE=";
   };
 
+  dontConfigure = true;
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
 
