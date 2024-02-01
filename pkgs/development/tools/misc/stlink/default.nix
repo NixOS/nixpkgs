@@ -19,13 +19,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "stlink";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "stlink-org";
     repo = "stlink";
     rev = "v${version}";
-    sha256 = "03xypffpbp4imrczbxmq69vgkr7mbp0ps9dk815br5wwlz6vgygl";
+    sha256 = "sha256-hlFI2xpZ4ldMcxZbg/T5/4JuFFdO9THLcU0DQKSFqrw=";
   };
 
   patches = [
@@ -55,7 +55,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    # upstream says windows, linux/unix but dropped support for macOS in 1.8.0
+    platforms = platforms.linux; # not sure how to express unix without darwin
     maintainers = [ maintainers.bjornfor maintainers.rongcuid ];
   };
 }
