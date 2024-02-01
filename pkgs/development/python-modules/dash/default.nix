@@ -19,7 +19,6 @@
 , typing-extensions
 , requests
 , retrying
-, ansi2html
 , nest-asyncio
 
 , celery
@@ -90,7 +89,6 @@ buildPythonPackage rec {
     typing-extensions
     requests
     retrying
-    ansi2html
     nest-asyncio
   ];
 
