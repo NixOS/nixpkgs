@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aPz1ROUeAKDmMjEtAaL2AguF54/CbIYWpL4Qovv2ftQ=";
   };
 
+  outputs = [ "out" "man" ];
+
   preConfigure = ''
     makeFlagsArray+=(${systemFlags})
   '';

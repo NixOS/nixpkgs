@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace "CC := gcc" "CC ?= $CC"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   makeFlags = [
     "PREFIX=$(out)"

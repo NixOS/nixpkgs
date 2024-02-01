@@ -38,12 +38,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
+  outputs = [ "out" "man" ];
+
   dontBuild = true;
   dontConfigure = true;
 
   installPhase = ''
     install -D speedtest $out/bin/speedtest
-    install -D speedtest.5 $out/share/man/man5/speedtest.5
+    install -D speedtest.5 $man/share/man/man5/speedtest.5
   '';
 
   meta = with lib; {

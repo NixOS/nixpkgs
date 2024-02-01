@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6kfL0ZjXzcyZl3remLi25RMLWCpg+a8EHC1M5LJE4a4=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ glib libcap libseccomp libslirp ];

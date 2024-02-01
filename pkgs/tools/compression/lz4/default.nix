@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO(@Ericson2314): Separate binaries and libraries
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [ "bin" "out" "dev" "man" ];
 
   buildInputs = lib.optional doCheck valgrind;
 

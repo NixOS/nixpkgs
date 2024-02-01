@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
+  outputs = [ "out" "man" ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ nukeReferences perl which ];
   buildInputs = [ ncurses ];

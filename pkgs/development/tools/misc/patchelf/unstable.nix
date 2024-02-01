@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
       --replace "set-rpath-library.sh" ""
   '';
 
+  outputs = [ "out" "man" ];
+
   setupHook = [ ./setup-hook.sh ];
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     substituteInPlace unix/Makefile --replace 'CC = cc' ""
   '';
 
+  outputs = [ "out" "man" ];
+
   hardeningDisable = [ "format" ];
 
   makefile = "unix/Makefile";

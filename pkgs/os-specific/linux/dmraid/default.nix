@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE"
   '';
 
+  outputs = [ "out" "man" ];
+
   preConfigure = "cd */";
 
   buildInputs = [ lvm2 ];

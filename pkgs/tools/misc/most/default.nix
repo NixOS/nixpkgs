@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-lFWuuPgm+oOFyFDcIr8PIs+QabPDQj+6S/LG9iJtmQM=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "man" ];
 
   makeFlags = [
     "DOC_DIR=${placeholder "doc"}/share/doc/most"

@@ -116,7 +116,7 @@ let
       (lib.withFeature withPython "python")
     ];
 
-    outputs = [ "out" ] ++ lib.optional withPython "python";
+    outputs = [ "out" "man" ] ++ lib.optional withPython "python";
 
     postInstall = lib.optionalString withPython ''
       mkdir -p $python/lib
@@ -134,6 +134,8 @@ let
     format = "other";
 
     src = apparmor-sources;
+
+    outputs = [ "out" "man" ];
 
     strictDeps = true;
 
@@ -192,6 +194,8 @@ let
 
     src = apparmor-sources;
 
+    outputs = [ "out" "man" ];
+
     nativeBuildInputs = [
       pkg-config
       libapparmor
@@ -219,6 +223,8 @@ let
     version = apparmor-version;
 
     src = apparmor-sources;
+
+    outputs = [ "out" "man" ];
 
     nativeBuildInputs = [ bison flex which ];
 

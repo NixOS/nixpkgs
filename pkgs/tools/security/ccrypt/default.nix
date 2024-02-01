@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kx4a5mhmp73ljknl2lcccmw9z3f5y8lqw0ghaymzvln1984g75i";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ perl ];
 
   hardeningDisable = [ "format" ];

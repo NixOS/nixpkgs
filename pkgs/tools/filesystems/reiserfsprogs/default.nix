@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-DpW2f6d0ajwtWRRem5wv60pr5ShT6DtJexgurlCOYuM=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid e2fsprogs acl ];
 

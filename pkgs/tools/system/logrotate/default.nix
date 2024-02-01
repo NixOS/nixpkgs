@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "--with-uncompress-command=${gzip}/bin/gunzip"
   ];
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
 

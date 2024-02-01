@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-De+quFvT6kb/xFq0H7DQrVTQWuLPqn5QPehtTxK8gWE=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook docutils pkg-config ];
 
   buildInputs = [ libkrb5 keyutils pam talloc python3 ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-d88BwbovhbAn72y5pVd4No+hVydXbtZYHZpdtpo4RGY=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ which ];
 

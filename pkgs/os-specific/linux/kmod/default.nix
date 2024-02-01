@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     hash = "sha256-FNR015/AoYBbi7Eb1M2TXH3yxUuddKICCu+ot10CdeQ=";
   };
 
-  outputs = [ "out" "dev" "lib" ] ++ lib.optional withDevdoc "devdoc";
+  outputs = [ "out" "dev" "lib" "man" ] ++ lib.optional withDevdoc "devdoc";
 
   strictDeps = true;
   nativeBuildInputs = [

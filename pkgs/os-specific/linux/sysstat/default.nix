@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-ELmSzWnJ8vGwGPwY/5MFp/2gQhMXMjNG4bHtCplfQSc=";
   };
 
+  outputs = [ "out" "man" ];
+
   buildInputs = [ gettext ];
 
   preConfigure = ''

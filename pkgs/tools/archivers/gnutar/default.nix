@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/system.c --replace '_(' 'N_('
   '';
 
-  outputs = [ "out" "info" ];
+  outputs = [ "out" "info" "man" ];
 
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
   # Add libintl on Darwin specifically as it fails to link (or skip)

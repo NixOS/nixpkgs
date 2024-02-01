@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Xuou8XswSXe6PsuHr61DGfoEQPgl5Pb7puj6L/64h4U=";
   };
 
+  outputs = [ "out" "man" ];
+
   installPhase = ''
     runHook preInstall
 
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
 
     install -D -m0644 nginx-mime.types $out/etc/nginx/mime.types
     install -D -m0644 -t $out/etc mailcap mime.types
-    install -D -m0644 -t $out/share/man/man5 mailcap.5
+    install -D -m0644 -t $man/share/man/man5 mailcap.5
 
     runHook postInstall
   '';

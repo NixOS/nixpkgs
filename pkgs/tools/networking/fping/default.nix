@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HuUmjAY9dmRq8rRCYFLn2BpCtlfmp32OfT0uYP10Cf4=";
   };
 
+  outputs = [ "out" "man" ];
+
   configureFlags = [ "--enable-ipv6" "--enable-ipv4" ];
 
   meta = with lib; {

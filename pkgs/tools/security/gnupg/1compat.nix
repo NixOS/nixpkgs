@@ -4,6 +4,8 @@ stdenv.mkDerivation {
   pname = "gnupg1compat";
   version = gnupg.version;
 
+  outputs = [ "out" "man" ];
+
   builder = writeScript "gnupg1compat-builder" ''
     PATH=${coreutils}/bin
     # First symlink all top-level dirs

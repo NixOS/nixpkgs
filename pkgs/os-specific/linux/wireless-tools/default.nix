@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qscyd44jmhs4k32ggp107hlym1pcyjzihiai48xs7xzib4wbndb";
   };
 
+  outputs = [ "out" "man" ];
+
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "CC:=$(CC)"

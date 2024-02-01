@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     && (stdenv.hostPlatform.libc != "musl")
     && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  outputs = [ "out" "info" "locate"];
+  outputs = [ "out" "info" "locate" "man" ];
 
   configureFlags = [
     # "sort" need not be on the PATH as a run-time dep, so we need to tell

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   # TODO: Remove with next release, see https://sourceforge.net/p/ms-sys/patches/8/
   patches = [ ./manpages-without-build-timestamps.patch ];
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ gettext ];
 
   enableParallelBuilding = true;

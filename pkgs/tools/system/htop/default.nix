@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-qDhQkzY2zj2yxbgFUXwE0MGEgAFOsAhnapUuetO9WTw=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ]
     ++ lib.optional stdenv.isLinux pkg-config
   ;

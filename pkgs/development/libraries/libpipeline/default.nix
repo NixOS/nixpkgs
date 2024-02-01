@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uLRRlJiQIqeewTF/ZKKnWxVRsqVb6gb2dwTLKi5GkLA=";
   };
 
+  outputs = [ "out" "man" ];
+
   patches = lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
 
   meta = with lib; {

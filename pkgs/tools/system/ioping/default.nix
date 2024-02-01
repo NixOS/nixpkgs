@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "man" ];
+
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {

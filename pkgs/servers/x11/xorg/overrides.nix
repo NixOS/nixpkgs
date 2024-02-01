@@ -172,7 +172,7 @@ self: super:
   });
 
   libXau = super.libXau.overrideAttrs (attrs: {
-    outputs = [ "out" "dev" ];
+    outputs = [ "out" "dev" "man" ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.xorgproto ];
   });
 
@@ -184,6 +184,7 @@ self: super:
   });
 
   libXtst = super.libXtst.overrideAttrs (attrs: {
+    outputs = [ "out" "man" ];
     meta = attrs.meta // {
       pkgConfigModules = [ "xtst" ];
     };
@@ -197,19 +198,22 @@ self: super:
   });
 
   libXxf86vm = super.libXxf86vm.overrideAttrs (attrs: {
-    outputs = [ "out" "dev" ];
+    outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
   libXxf86dga = super.libXxf86dga.overrideAttrs (attrs: {
+    outputs = [ "out" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
   libXxf86misc = super.libXxf86misc.overrideAttrs (attrs: {
+    outputs = [ "out" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
   libdmx = super.libdmx.overrideAttrs (attrs: {
+    outputs = [ "out" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -225,6 +229,7 @@ self: super:
   listres = addMainProgram super.listres { };
 
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
+    outputs = [ "out" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     preConfigure = attrs.preConfigure or ""
@@ -277,7 +282,7 @@ self: super:
   });
 
   libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
-    outputs = [ "out" "dev" ];
+    outputs = [ "out" "dev" "man" ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libXfixes ];
   });
 
@@ -329,7 +334,7 @@ self: super:
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
-    outputs = [ "out" "dev" ];
+    outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -922,6 +927,7 @@ self: super:
   });
 
   xauth = super.xauth.overrideAttrs (attrs: {
+    outputs = [ "out" "man" ];
     doCheck = false; # fails
     preConfigure = attrs.preConfigure or ""
     # missing transitive dependencies
@@ -1056,6 +1062,7 @@ self: super:
   });
 
   xpr = addMainProgram super.xpr { };
+
   xprop = addMainProgram super.xprop { };
 
   xrdb = super.xrdb.overrideAttrs (attrs: {

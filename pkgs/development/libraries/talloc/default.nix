@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hez55GXiD5j5lQpS6aQR4UMgvFVfolfYdpe356mx2KY=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [
     pkg-config
     python3

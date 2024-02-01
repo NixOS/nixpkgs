@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!withGtk) "--without-gtk";
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ ncurses jansson ]

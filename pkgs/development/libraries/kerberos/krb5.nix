@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-lWCUGp2EPAJDpxsXp6xv4xx867W845g9t55Srn6FBJE=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   configureFlags = [ "--localstatedir=/var/lib" ]
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
@@ -92,8 +92,9 @@ stdenv.mkDerivation rec {
   installPhase = lib.optionalString libOnly ''
     runHook preInstall
 
-    mkdir -p "$out"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}} \
-      "$dev"/include/{gssapi,gssrpc,kadm5,krb5}
+    mkdir -p "$out"/{bin,sbin,lib/pkgconfig,share/et} \
+      "$dev"/include/{gssapi,gssrpc,kadm5,krb5} \
+      "$man"/share/man/man1
     for folder in $libFolders; do
       $MAKE -C $folder install
     done
@@ -104,6 +105,8 @@ stdenv.mkDerivation rec {
   # not via outputBin, due to reference from libkrb5.so
   postInstall = ''
     moveToOutput bin/krb5-config "$dev"
+  '' + lib.optionalString (!libOnly) ''
+    rmdir "$man"/share/man/cat{1,5,7,8}
   '';
 
   enableParallelBuilding = true;

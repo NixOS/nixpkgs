@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "05da6c2v3acc18ndvmkrag6x5lf914b7s0xkkr6wkvrbvd621sqs";
   };
 
+  outputs = [ "out" "man" ];
+
   meta = with lib; {
     description = "Linux Kernel Stream Control Transmission Protocol Tools";
     homepage = "https://lksctp.sourceforge.net/";

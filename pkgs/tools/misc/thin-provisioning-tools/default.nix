@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1iwg04rhmdhijmlk5hfl8wvv83115lzb65if6cc1glkkfva8jfjp";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ expat libaio boost ];

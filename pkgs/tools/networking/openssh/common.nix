@@ -55,6 +55,8 @@ stdenv.mkDerivation {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
+  outputs = [ "out" "man" ];
+
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ]
     # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
@@ -158,7 +160,7 @@ stdenv.mkDerivation {
     # Install ssh-copy-id, it's very useful.
     cp contrib/ssh-copy-id $out/bin/
     chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $out/share/man/man1/
+    cp contrib/ssh-copy-id.1 $man/share/man/man1/
   '';
 
   installTargets = [ "install-nokeys" ];

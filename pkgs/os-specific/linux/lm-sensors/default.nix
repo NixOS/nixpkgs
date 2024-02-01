@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     substituteInPlace prog/sensors/Module.mk --replace 'lib/$(LIBSHBASENAME)' ""
   '';
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ bison flex which ];
   # bash is required for correctly replacing the shebangs in all tools for cross-compilation.
   buildInputs = [ bash perl ]

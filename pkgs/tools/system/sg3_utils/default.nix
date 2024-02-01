@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1itsPPIDkPpzVwRDkAhBZtJfHZMqETXEULaf5cKD13M=";
   };
 
+  outputs = [ "out" "man" ];
+
   meta = with lib; {
     homepage = "https://sg.danny.cz/sg/";
     description = "Utilities that send SCSI commands to devices";

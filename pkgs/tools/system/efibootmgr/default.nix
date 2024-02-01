@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-DYYQGALEn2+mRHgqCJsA7OQCF7xirIgQlWexZ9uoKcg=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ efivar popt ];

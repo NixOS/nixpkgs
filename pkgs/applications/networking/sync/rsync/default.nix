@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Tn2dP27RCHjFjF+3JKZ9rPS2qsc0CxPkiPstxBNG8rs=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ perl ];
 
   patches = [

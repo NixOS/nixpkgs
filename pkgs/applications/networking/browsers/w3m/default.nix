@@ -53,6 +53,8 @@ in stdenv.mkDerivation rec {
     sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
   '';
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ pkg-config gettext ];
   buildInputs = [ ncurses boehmgc zlib ]
     ++ lib.optional sslSupport openssl

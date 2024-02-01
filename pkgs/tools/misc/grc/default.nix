@@ -27,6 +27,8 @@ buildPythonApplication rec {
       --replace "^([/\w\.]+\/)" "^([/\w\.\-]+\/)"
   '';
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''

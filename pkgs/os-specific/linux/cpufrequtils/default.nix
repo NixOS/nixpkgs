@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       -i Makefile
   '';
 
+  outputs = [ "out" "man" ];
+
   buildInputs = [ stdenv.cc.libc.linuxHeaders libtool gettext ];
 
   meta = with lib; {

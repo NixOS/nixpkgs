@@ -29,11 +29,13 @@ in stdenv.mkDerivation rec {
     sha256 = "04l8aqr474pb115nagn9f6y48jw92n1qfszgw7dbhgl4mpn95lcr";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -Dm 0755 screenfetch-dev $out/bin/screenfetch
-    install -Dm 0644 screenfetch.1 $out/share/man/man1/screenfetch.1
+    install -Dm 0644 screenfetch.1 $man/share/man/man1/screenfetch.1
     install -Dm 0644 -t $out/share/doc/screenfetch CHANGELOG COPYING README.mkdn TODO
 
     # Fix all of the dependencies of screenfetch

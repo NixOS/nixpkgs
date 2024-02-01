@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-sERY8ZKuXiY85cXdNWOm4byiNU7mOVIeA55dgQJHdoE=";
   };
 
-  outputs = [ "out" "apparmor" ];
+  outputs = [ "out" "apparmor" "man" ];
 
   # We don't have the required permissions inside the build sandbox:
   # /build/source/build/ping/ping: socket: Operation not permitted

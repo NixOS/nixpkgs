@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-7AjUEaXasOzJV9ErZK2a4HMTaqhcBbLKd8M+A5SbKrc=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib openssl libuuid ]
     ++ lib.optionals stdenv.isDarwin [ bzip2 ];

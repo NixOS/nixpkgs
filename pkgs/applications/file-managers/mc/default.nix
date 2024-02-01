@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JBkc+GZ2dbjjH8Sp0YoKZb3AWYwsXE6gkklM0Tq0qxo=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ pkg-config unzip ]
     # The preFixup hook rewrites the binary, which invaliates the code
     # signature. Add the fixup hook to sign the output.

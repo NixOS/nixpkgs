@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
       "/usr/local/Cellar/ncurses/6.2/lib/libncurses.dylib" "${ncurses.out}/lib/libncurses.dylib"
   '';
 
+  outputs = [ "out" "man" ];
+
   buildPhase = lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
   buildInputs = [ libuuid popt icu ncurses ];
 

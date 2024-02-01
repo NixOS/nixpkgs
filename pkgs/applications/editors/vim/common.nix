@@ -2,7 +2,7 @@
 rec {
   version = "9.1.0075";
 
-  outputs = [ "out" "xxd" ];
+  outputs = [ "out" "xxd" "man" ];
 
   src = fetchFromGitHub {
     owner = "vim";

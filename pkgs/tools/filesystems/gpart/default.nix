@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     owner = "baruch";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;

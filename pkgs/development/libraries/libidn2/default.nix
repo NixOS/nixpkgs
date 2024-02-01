@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   # Beware: non-bootstrap libidn2 is overridden by ./hack.nix
-  outputs = [ "bin" "dev" "out" "info" "devdoc" ];
+  outputs = [ "bin" "dev" "out" "info" "devdoc" "man" ];
 
   enableParallelBuilding = true;
 

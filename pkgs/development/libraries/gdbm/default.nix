@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dLEIHSH/8TrkvXwW5dblBKTCb3zeHcoNljpIQXS7ys0=";
   };
 
+  outputs = [ "out" "man" ];
+
   doCheck = true; # not cross;
 
   # Linking static stubs on cygwin requires correct ordering.

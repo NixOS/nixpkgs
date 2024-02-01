@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "man" ];
+
   hardeningDisable = [ "format" "pic" "relro" "pie" ];
 
   # Prevent kexec-tools from using uname to detect target, which is wrong in

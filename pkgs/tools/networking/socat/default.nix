@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
+  outputs = [ "out" "man" ];
+
   buildInputs = [ openssl readline ];
 
   hardeningEnable = [ "pie" ];

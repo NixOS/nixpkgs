@@ -42,6 +42,8 @@ let
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
+    outputs = [ "out" "man" ];
+
     propagatedBuildInputs = lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;

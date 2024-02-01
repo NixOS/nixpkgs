@@ -15,10 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5eH0yu4KAd4q7ibjE4gH1tPKK45nKHlm0f79ZeH9iUM=";
   };
 
-  outputs = [
-    "out"
-    "man"
-  ];
+  outputs = [ "out" "man" ];
 
   configureFlags = [
     "--enable-hashes=${enableHashes}"

@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-o8MEzZugYSOe4EdPmvuTipu5nYm5YCRvZvDDoKheFM0=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config bison flex

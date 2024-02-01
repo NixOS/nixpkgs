@@ -12,11 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-G9aqQidTE68xQcfPLluWTosf1IgCXK8vlx9DsAd2szI=";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     homepage = "https://www.hadrons.org/software/libmd/";

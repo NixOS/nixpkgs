@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-JNx7l08KV7oOyoD5dEC4QN+oWw8cssAb39l2WaSAsgA=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [
     pkg-config
   ] ++ [

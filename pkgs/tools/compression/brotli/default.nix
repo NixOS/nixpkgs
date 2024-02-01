@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [ "out" "dev" "lib" "man" ];
 
   doCheck = true;
 

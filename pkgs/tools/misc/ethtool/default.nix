@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [
     pkg-config
   ];

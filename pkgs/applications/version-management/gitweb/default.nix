@@ -23,5 +23,6 @@ in buildEnv {
 
   meta = git.meta // {
     maintainers = with lib.maintainers; [ ];
+    outputsToInstall = [ "out" ];
   };
 }

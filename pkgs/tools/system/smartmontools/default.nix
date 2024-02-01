@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     "--without-update-smart-drivedb"
   ];
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
   enableParallelBuilding = true;

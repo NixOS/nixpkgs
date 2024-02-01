@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     inherit hash;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   cmakeFlags = [
     "-DMARIADB_UNIX_ADDR=/run/mysqld/mysqld.sock"

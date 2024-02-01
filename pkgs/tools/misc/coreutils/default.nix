@@ -81,7 +81,8 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
   '');
 
-  outputs = [ "out" "info" ];
+  outputs = [ "out" "info" ] ++ optional (!minimal) "man";
+
   separateDebugInfo = true;
 
   nativeBuildInputs = [

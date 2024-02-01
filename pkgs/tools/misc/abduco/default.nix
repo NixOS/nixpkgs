@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     hash = "sha256-o7SPK/G31cW/rrLwV3UJOTq6EBHl6AEE/GdeKGlHdyg=";
   };
 
+  outputs = [ "out" "man" ];
+
   preBuild = lib.optionalString (conf != null)
     "cp ${writeText "config.def.h" conf} config.def.h";
 

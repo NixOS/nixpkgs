@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-yosEmjwtOyIloejRXWE3mOvHSOOVA4jtomlN5Qe6YCA=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.cracklib;
   buildInputs = [ zlib gettext ];
 

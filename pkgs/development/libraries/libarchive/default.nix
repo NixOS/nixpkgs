@@ -46,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  outputs = [ "out" "lib" "dev" ];
-
   postPatch = let
     skipTestPaths = [
       # test won't work in nix sandbox
@@ -69,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.concatStringsSep "\n" (map removeTest skipTestPaths)}
   '';
+
+  outputs = [ "out" "lib" "dev" "man" ];
 
   nativeBuildInputs = [
     autoreconfHook

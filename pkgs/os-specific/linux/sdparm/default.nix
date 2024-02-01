@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xMnvr9vrZi4vlxJwfsSQkyvU0BC7ESmueplSZUburb4=";
   };
 
+  outputs = [ "out" "man" ];
+
   meta = with lib; {
     homepage = "http://sg.danny.cz/sg/sdparm.html";
     description = "A utility to access SCSI device parameters";

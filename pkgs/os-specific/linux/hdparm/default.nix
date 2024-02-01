@@ -9,6 +9,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-0Ukp+RDQYJMucX6TgkJdR8LnFEI1pTcT1VqU995TWks=";
   };
 
+  outputs = [ "out" "man" ];
+
   makeFlags = [
     "sbindir=${placeholder "out"}/sbin"
     "manprefix=${placeholder "out"}"

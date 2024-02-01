@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-self-references.patch ];
 
+  outputs = [ "out" "man" ];
+
   makeFlags = [
     "NIXOS=1" "INSTALL=install" "BINDIR=$(out)/sbin"
     "SYSTEMD_DIR=$(out)/lib/systemd/system"

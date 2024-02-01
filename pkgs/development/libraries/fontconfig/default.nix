@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   pname = "fontconfig";
   version = "2.15.0";
 
-  outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
-
   src = fetchurl {
     url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
     hash = "sha256-Y6BljQ4G4PqIYQZFK1jvBPIfWCAuoCqUw53g0zNdfA4=";
   };
+
+  outputs = [ "bin" "dev" "lib" "out" "man" ]; # $out contains all the config
 
   nativeBuildInputs = [
     autoreconfHook
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
     # We don't keep section 3 of the manpages, as they are quite large and
     # probably not so useful.
-    rm -r $bin/share/man/man3
+    rm -r $man/share/man/man3
   '';
 
   meta = with lib; {

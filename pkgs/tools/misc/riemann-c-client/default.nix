@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-FIhTT57g2uZBaH3EPNxNUNJn9n+0ZOhI6WMyF+xIr/Q=";
   };
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [ "bin" "dev" "out" "man" ];
 
   nativeBuildInputs = [ autoreconfHook check pkg-config ];
   buildInputs = [ file protobufc ]

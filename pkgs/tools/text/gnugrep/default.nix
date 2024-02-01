@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '' else null;
 
   nativeCheckInputs = [ perl glibcLocales ];
-  outputs = [ "out" "info" ]; # the man pages are rather small
+  outputs = [ "out" "info" "man" ]; # the man pages are rather small
 
   buildInputs = [ pcre2 libiconv ];
 

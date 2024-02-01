@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-smJDWlJB6Jv6UcPKvVEzdTlS96e3uT8y4Iy52W9YDWk=";
   };
 
+  outputs = [ "out" "man" ];
+
   preBuild =
     ''
       cp ${./config.h} config.h

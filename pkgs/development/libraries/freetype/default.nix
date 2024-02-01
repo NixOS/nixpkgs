@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./enable-table-validation.patch
   ] ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   configureFlags = [ "--bindir=$(dev)/bin" "--enable-freetype-config" ];
 

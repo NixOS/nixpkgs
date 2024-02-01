@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "man" ];
+
   doCheck = false; # fails
 
   meta = with lib; {

@@ -31,6 +31,8 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-/EutIHQGLiRcRD/r8LJYG7oJBb7EAhR5cn6QiC7zMOc=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
 

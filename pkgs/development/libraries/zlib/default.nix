@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-  outputs = [ "out" "dev" ]
+  outputs = [ "out" "dev" "man" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page

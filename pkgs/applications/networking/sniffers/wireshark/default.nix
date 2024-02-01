@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
   version = "4.2.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchFromGitLab {
     repo = "wireshark";

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZibAenyhzB0DytCVhSLFJ5sVYiLTLDQugRF8/vrrEME=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ lzip ];
 
   doCheck = true; # not cross;

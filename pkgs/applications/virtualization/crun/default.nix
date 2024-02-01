@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
   buildInputs = [ criu libcap libseccomp systemd yajl ];

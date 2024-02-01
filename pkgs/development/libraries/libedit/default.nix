@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TugYK25WkpDn0fRPD3jayHFrNfZWt2Uo9pnGnJiBTa0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   # NROFF = "${groff}/bin/nroff";

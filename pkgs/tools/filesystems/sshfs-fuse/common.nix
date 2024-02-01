@@ -22,6 +22,8 @@ in stdenv.mkDerivation rec {
 
   inherit patches;
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ meson pkg-config ninja docutils makeWrapper ];
   buildInputs = [ fuse glib ];
   nativeCheckInputs = [ which python3Packages.pytest ];

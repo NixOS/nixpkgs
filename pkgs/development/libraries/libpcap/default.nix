@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   pname = "libpcap";
   version = "1.10.4";
 
+  outputs = [ "out" "man" ];
+
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
     hash = "sha256-7RmgOD+tcuOtQ1/SOdfNgNZJFrhyaVUBWdIORxYOvl8=";

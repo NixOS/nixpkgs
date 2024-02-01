@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-wxhoQYv79Jo6nEf8cM3/3p2W9P8AUb0EoIgeZlRkgQQ=";
   };
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = [ "bin" "dev" "out" "doc" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [

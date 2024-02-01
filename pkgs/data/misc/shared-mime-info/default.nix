@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   pname = "shared-mime-info";
   version = "2.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
       sha256 = "67ab260ae6adf8e7c5eda2d1d7846929b43562943ec4aff629bd7018954058b1";
     });
 
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ bzip2 ];
   buildInputs = [ bzip2 ] ++ lib.optional enableNLS libnatspec;

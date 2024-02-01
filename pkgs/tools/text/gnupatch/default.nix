@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     ./CVE-2019-13638-and-CVE-2018-20969.patch
   ];
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

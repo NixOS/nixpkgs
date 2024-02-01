@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ ncurses ];
   buildInputs = [ ncurses ];
 

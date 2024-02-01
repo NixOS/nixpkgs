@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zNG1F//+BTBzlEc6qNVixyuCB6PMZD5Kf8pVK0ePYiA=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libselinux libuuid ];
 

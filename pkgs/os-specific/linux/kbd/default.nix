@@ -24,10 +24,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UZ+NCHrsyn4KM80IS++SwGbrGXMWZmU9zHDJ1xqkCSY=";
   };
 
-  # vlock is moved into its own output, since it depends on pam. This
-  # reduces closure size for most use cases.
-  outputs = [ "out" "vlock" "dev" ];
-
   configureFlags = [
     "--enable-optional-progs"
     "--enable-libkeymap"
@@ -72,6 +68,10 @@ stdenv.mkDerivation rec {
         --replace /usr/bin/tty ${coreutils}/bin/tty
     done
   '';
+
+  # vlock is moved into its own output, since it depends on pam. This
+  # reduces closure size for most use cases.
+  outputs = [ "out" "vlock" "dev" "man" ];
 
   buildInputs = [ check pam ];
   NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";

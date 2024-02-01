@@ -196,7 +196,9 @@ let
       done
     '';
 
-    outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
+    outputs = [ "out" ]
+      ++ optional buildUser "dev"
+      ++ optional (!buildKernel) "man";
 
     passthru = {
       inherit enableMail latestCompatibleLinuxPackages kernelModuleAttribute;

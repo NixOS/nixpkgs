@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KHijT4BBKfDvTpHpwognN+3ZXoC6JabBTFSYFyOUT9o=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "doc" "man" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   nativeBuildInputs = [

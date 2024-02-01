@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-LVwmbrq78mZcAEuAqjXTqLE5we83H9mcMPtxQx2Tn/c=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoconf ];
 
   buildInputs = [ ncurses pcre ];

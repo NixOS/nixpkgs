@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rpfzAIzuiO+QTFhN+tHND+OQOyX/GUPvLLX3CSSwqA4=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   configurePhase =

@@ -80,6 +80,8 @@ stdenv.mkDerivation {
     touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [
     nasm
     perl

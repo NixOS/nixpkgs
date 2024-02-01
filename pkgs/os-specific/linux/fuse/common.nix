@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     then [ meson ninja pkg-config ]
     else [ autoreconfHook gettext ];
 
-  outputs = [ "out" ] ++ lib.optional isFuse3 "common";
+  outputs = [ "out" "man" ] ++ lib.optional isFuse3 "common";
 
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
@@ -65,8 +65,8 @@ in stdenv.mkDerivation rec {
     '' + (if isFuse3 then ''
       # The configure phase will delete these files (temporary workaround for
       # ./fuse3-install_man.patch)
-      install -D -m444 doc/fusermount3.1 $out/share/man/man1/fusermount3.1
-      install -D -m444 doc/mount.fuse3.8 $out/share/man/man8/mount.fuse3.8
+      install -D -m444 doc/fusermount3.1 $man/share/man/man1/fusermount3.1
+      install -D -m444 doc/mount.fuse3.8 $man/share/man/man8/mount.fuse3.8
     '' else ''
       substituteInPlace util/mount.fuse.c --replace '"su"' '"${shadow.su}/bin/su"'
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
