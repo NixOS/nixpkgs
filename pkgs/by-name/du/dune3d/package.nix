@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dune3d";
-  version = "0.9.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "dune3d";
     repo = "dune3d";
     rev = "v${version}";
-    hash = "sha256-9eH5fM0zdI6BrWTujpqTuBE2pkgAEooKYiWl692HV48=";
+    hash = "sha256-y7jlqH1p2vCFTM14rFURxTkrWUT5hNkCseC3xB6bFFo=";
   };
 
   nativeBuildInputs = [
