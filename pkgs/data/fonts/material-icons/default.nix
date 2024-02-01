@@ -1,6 +1,6 @@
 { lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "material-icons";
   version = "4.0.0";
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ mpcsh ];
   };
-}
+})
