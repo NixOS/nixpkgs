@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n98-magerun2";
-  version = "7.2.0";
+  version = "7.3.1";
 
   src = fetchurl {
     url = "https://github.com/netz98/n98-magerun2/releases/download/${finalAttrs.version}/n98-magerun2.phar";
-    hash = "sha256-w+58TTyoS44Ouaz6KFIJLhSl/UeF1I7cSznlZH6fLXw=";
+    hash = "sha256-5G3sfyw8C3BwRqnK2o3upJTI/pENyaFCiMC4XGOkJT4=";
   };
 
   dontUnpack = true;
