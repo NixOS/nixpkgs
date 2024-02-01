@@ -69,12 +69,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
-  disabledTests = lib.lists.optional (stdenv.system == "x86_64-linux") [
-    # `test/test_scs_rand.py` hang on "x86_64-linux" (https://github.com/NixOS/nixpkgs/pull/244532#pullrequestreview-1598095858)
-    "test_feasible"
-    "test_infeasibl"
-    "test_unbounded"
-  ];
 
   meta = with lib; {
     description = "Python interface for SCS: Splitting Conic Solver";
