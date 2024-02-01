@@ -9,6 +9,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+6zwyB5iQp3z4zvaTO44dWYE8Y4B2XczjiMwaj47Uh4=";
   };
 
+  outputs = [ "out" "info" ];
+
   meta = {
     description = "Tool that runs programs and summarizes the system resources they use";
     longDescription = ''

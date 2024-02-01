@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-9KJFuUEks3fYtJZGv0IfkVXTaqdhS26/g3BdP/x26q0=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   strictDeps = true;
   enableParallelBuilding = true;

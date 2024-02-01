@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "--enable-rxvt_osc"
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   nativeBuildInputs = [
     autoreconfHook

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Z+vgFsqQ+naIzmejh+vYLGJh6ViX23sj3yT/M1voW8Y=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   # fails to find X on darwin
   configureFlags = lib.optional stdenv.isDarwin "--without-x";

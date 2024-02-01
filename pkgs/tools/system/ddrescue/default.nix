@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZibAenyhzB0DytCVhSLFJ5sVYiLTLDQugRF8/vrrEME=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   nativeBuildInputs = [ lzip ];
 

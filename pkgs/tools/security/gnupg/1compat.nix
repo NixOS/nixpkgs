@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   pname = "gnupg1compat";
   version = gnupg.version;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   builder = writeScript "gnupg1compat-builder" ''
     PATH=${coreutils}/bin

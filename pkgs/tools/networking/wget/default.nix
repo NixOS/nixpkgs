@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./remove-runtime-dep-on-openssl-headers.patch
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   preConfigure = ''
     patchShebangs doc

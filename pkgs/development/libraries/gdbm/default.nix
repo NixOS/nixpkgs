@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dLEIHSH/8TrkvXwW5dblBKTCb3zeHcoNljpIQXS7ys0=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   doCheck = true; # not cross;
 
