@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-shared-static-fix.patch
   ];
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;

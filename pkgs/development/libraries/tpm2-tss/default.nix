@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-75yiKVZrR1vcCwKp4tDO4A9JB0KDM0MXPJ1N85kAaRk=";
   };
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [
     autoreconfHook autoconf-archive pkg-config doxygen perl

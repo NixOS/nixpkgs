@@ -116,7 +116,7 @@ let
       (lib.withFeature withPython "python")
     ];
 
-    outputs = [ "out" "man" ] ++ lib.optional withPython "python";
+    outputs = [ "out" "dev" "man" ] ++ lib.optional withPython "python";
 
     postInstall = lib.optionalString withPython ''
       mkdir -p $python/lib

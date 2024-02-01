@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
   preConfigure = "cd */";
 

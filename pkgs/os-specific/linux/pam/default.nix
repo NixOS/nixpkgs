@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     touch ChangeLog
   '' else null;
 
-  outputs = [ "out" "doc" "man" /* "modules" */ ];
+  outputs = [ "out" "dev" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # autoreconfHook269 is needed for `suid-wrapper-path.patch` above.

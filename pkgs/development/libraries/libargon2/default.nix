@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];

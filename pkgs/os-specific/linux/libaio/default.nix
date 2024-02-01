@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
+  outputs = [ "out" "dev" ];
+
   makeFlags = [
     "prefix=${placeholder "out"}"
   ] ++ lib.optional stdenv.hostPlatform.isStatic "ENABLE_SHARED=0";

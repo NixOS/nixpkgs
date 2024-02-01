@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
   doCheck = false; # fails
 

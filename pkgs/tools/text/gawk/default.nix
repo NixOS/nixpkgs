@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pie" ];
 
   # When we do build separate interactive version, it makes sense to always include man.
-  outputs = [ "out" "info" ]
+  outputs = [ "out" "dev" "info" ]
     ++ lib.optional (!interactive) "man";
 
   # no-pma fix

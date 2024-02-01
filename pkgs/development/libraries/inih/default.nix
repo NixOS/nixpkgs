@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-b2f6hQvkmWgni/zdfv3I1b9ypd7zSyEBv/JVBA6K7/w=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ meson ninja ];
 
   meta = with lib; {

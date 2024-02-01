@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xn3rcrzxr6g82kfxzs9bqn2zvl2kf2yda30drwb9vr6sk1wfr5h";
   };
 
+  outputs = [ "out" "dev" ];
+
   meta = {
     description = "Low-level library for netfilter related kernel/userspace communication";
     longDescription = ''

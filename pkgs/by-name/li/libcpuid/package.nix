@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Zs5GKvSasdfLqo8oErDQNAuXRG27Bm9vNwyooqbol0Q=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {

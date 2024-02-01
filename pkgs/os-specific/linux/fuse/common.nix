@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     then [ meson ninja pkg-config ]
     else [ autoreconfHook gettext ];
 
-  outputs = [ "out" "man" ] ++ lib.optional isFuse3 "common";
+  outputs = [ "out" "dev" "man" ] ++ lib.optional isFuse3 "common";
 
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"

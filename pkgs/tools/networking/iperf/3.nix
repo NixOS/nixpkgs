@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {

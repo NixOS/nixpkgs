@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-pmqZYFREPgSrWPekymTglhtAv6gQR1gP3dOl3hqjYig=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ protobuf zlib ];

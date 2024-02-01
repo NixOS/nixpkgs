@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-4tSZ+eaLZAkSmFsGnIrRXNvn3xA/4sTKyYZ3hPUMcd0=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl popt xmlto ];
 

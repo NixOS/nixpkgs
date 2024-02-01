@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-I4ouJxZnMOU6F/4Hv60ingf6ObYYEX5ZRLbX7an7sOk=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ which zlib ]

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "CROSS_COMPILE=${stdenv.hostPlatform.config}-"
   ]);
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "man" ];
 
   preBuild = ''
     # No idea why but configure scripts break otherwise.

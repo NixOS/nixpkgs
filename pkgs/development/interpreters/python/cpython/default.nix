@@ -407,7 +407,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (libxcrypt != null) [
-    "CFLAGS=-I${libxcrypt}/include"
+    "CFLAGS=-I${libxcrypt.dev}/include"
     "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"

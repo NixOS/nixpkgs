@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     "--without-compile-date"
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "dev" "man" ];
 
   enableParallelBuilding = true;
 

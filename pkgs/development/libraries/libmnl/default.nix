@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "09851ns07399rbz0y8slrlmnw3fn1nakr8d37pxjn5gkks8rnjr7";
   };
 
+  outputs = [ "out" "dev" ];
+
   meta = {
     description = "Minimalistic user-space library oriented to Netlink developers";
     longDescription = ''

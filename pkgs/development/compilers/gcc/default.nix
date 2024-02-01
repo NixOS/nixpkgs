@@ -318,7 +318,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   inherit (callFile ./common/dependencies.nix { }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
   preConfigure = (callFile ./common/pre-configure.nix { }) + lib.optionalString atLeast10 ''
-    ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+    ln -sf ${libxcrypt.dev}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
   '';
 
   dontDisableStatic = true;

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "138gvgdwk6h4ljrjsr09pxk1nrki4b155hqdzyr8mlk3bwsfmw31";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "dev" "doc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config ];

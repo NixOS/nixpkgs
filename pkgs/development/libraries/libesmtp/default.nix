@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bhh8hlsl9597x0bnfl563k2c09b61qnkb9mfyqcmzlq63m1zw5y";
   };
 
+  outputs = [ "out" "dev" ];
+
   meta = with lib; {
     description = "A Library for Posting Electronic Mail";
     longDescription = ''

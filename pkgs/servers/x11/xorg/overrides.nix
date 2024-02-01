@@ -184,7 +184,7 @@ self: super:
   });
 
   libXtst = super.libXtst.overrideAttrs (attrs: {
-    outputs = [ "out" "doc" "man" ];
+    outputs = [ "out" "dev" "doc" "man" ];
     meta = attrs.meta // {
       pkgConfigModules = [ "xtst" ];
     };
@@ -203,7 +203,7 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
   });
   libXxf86dga = super.libXxf86dga.overrideAttrs (attrs: {
-    outputs = [ "out" "man" ];
+    outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -213,7 +213,7 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
   });
   libdmx = super.libdmx.overrideAttrs (attrs: {
-    outputs = [ "out" "man" ];
+    outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });

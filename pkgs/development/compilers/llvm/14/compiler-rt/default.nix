@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.isGnu) [
-    "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
+    "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt.dev}/include"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"

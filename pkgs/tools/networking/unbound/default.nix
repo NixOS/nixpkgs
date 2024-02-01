@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qXUyRohUxhwt5IykFw3oVP07yVyAQ7sM+w/iZgWWZiQ=";
   };
 
-  outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
+  outputs = [ "out" "lib" "dev" "man" ];
 
   nativeBuildInputs =
     lib.optionals withMakeWrapper [ makeWrapper ]

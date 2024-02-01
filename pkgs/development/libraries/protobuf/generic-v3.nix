@@ -30,6 +30,8 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc buildProtobuf ];
 
   buildInputs = [ zlib ];

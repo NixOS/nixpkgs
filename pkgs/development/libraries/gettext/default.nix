@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
   ];
 
-  outputs = [ "out" "man" "doc" "info" ];
+  outputs = [ "out" "dev" "man" "doc" "info" ];
 
   hardeningDisable = [ "format" ];
 
