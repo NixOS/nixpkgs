@@ -4162,6 +4162,18 @@ final: prev:
     meta.homepage = "https://github.com/kiyoon/haskell-scope-highlighting.nvim/";
   };
 
+  haskell-snippets-nvim = buildVimPlugin {
+    pname = "haskell-snippets.nvim";
+    version = "2024-01-15";
+    src = fetchFromGitHub {
+      owner = "mrcjkb";
+      repo = "haskell-snippets.nvim";
+      rev = "c26279d568452f5474f26470aff6549f94ff7cd3";
+      sha256 = "1rl9g25afaqiw16i582hbnnag0v6xcn28f09cy8vfddj696ygzg6";
+    };
+    meta.homepage = "https://github.com/mrcjkb/haskell-snippets.nvim/";
+  };
+
   haskell-tools-nvim = buildNeovimPlugin {
     pname = "haskell-tools.nvim";
     version = "2024-01-21";
