@@ -42,9 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # This is needed by freeimage
-  patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
-    ++ lib.optional stdenv.hostPlatform.isMinGW
-    ./mingw-boolean.patch;
+  patches = [
+    ./0001-Compile-transupp.c-as-part-of-the-library.patch
+  ] ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    ./0002-Make-exported-symbols-in-transupp.c-weak.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    ./mingw-boolean.patch
+  ];
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
