@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsa-lib, libjack2, pkg-config, libpulseaudio, xorg }:
+{ lib, stdenv, fetchurl, alsa-lib, libjack2, pkg-config, libpulseaudio, xorg, copyDesktopItems, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "bristol";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config copyDesktopItems ];
   buildInputs = [
     alsa-lib
     libjack2
@@ -33,6 +33,22 @@ stdenv.mkDerivation rec {
     sed -e "s@\`which bristol\`@$out/bin/bristol@g" -i bin/startBristol
     sed -e "s@\`which brighton\`@$out/bin/brighton@g" -i bin/startBristol
   '';
+
+  postInstall = ''
+    mkdir -p $out/share/icons/hicolor/scalable/apps/
+    ln -s $out/share/bristol/bitmaps/bicon.svg $out/share/icons/hicolor/scalable/apps/
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Bristol";
+      exec = "bristol";
+      icon = "bicon";
+      desktopName = "Bristol";
+      comment = "Graphical user interface for the Bristol synthesizer emulator";
+      categories = [ "AudioVideo" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A range of synthesiser, electric piano and organ emulations";
