@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "adjusttext";
-  version = "0.8.1";
+  version = "1.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Phlya";
     repo = "adjusttext";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Lhl6ykx5ynf+pBub5tBUaALm1w/88jbuSXPigE216NY=";
   };
 
