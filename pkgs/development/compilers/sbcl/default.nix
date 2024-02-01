@@ -187,7 +187,6 @@ stdenv.mkDerivation (self: rec {
 
     INSTALL_ROOT=$out sh install.sh
 
-    runHook postInstall
   ''
   + lib.optionalString (!purgeNixReferences) ''
     cp -r src $out/lib/sbcl
@@ -197,6 +196,8 @@ stdenv.mkDerivation (self: rec {
        '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
          ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
     EOF
+  '' + ''
+    runHook postInstall
   '';
 
   setupHook = lib.optional purgeNixReferences (writeText "setupHook.sh" ''
