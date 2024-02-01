@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y6BljQ4G4PqIYQZFK1jvBPIfWCAuoCqUw53g0zNdfA4=";
   };
 
-  outputs = [ "bin" "dev" "lib" "out" "man" ]; # $out contains all the config
+  outputs = [ "bin" "dev" "lib" "out" "doc" "man" ]; # $out contains all the config
 
   nativeBuildInputs = [
     autoreconfHook

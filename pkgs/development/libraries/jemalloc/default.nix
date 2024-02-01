@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   configureFlags =
     # see the comment on stripPrefix

@@ -402,7 +402,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
-  outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
+  outputs = [ "out" "dev" ]
+    ++ (lib.optional (!buildLibsOnly) "man")
+    ++ (lib.optional withDocumentation "doc");
 
   nativeBuildInputs =
     [

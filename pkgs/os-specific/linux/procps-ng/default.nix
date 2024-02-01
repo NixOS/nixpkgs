@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   buildInputs = [ ncurses ]
     ++ lib.optional withSystemd systemd;

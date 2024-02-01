@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   # the greater util-linux toolset.
   # Compatibility is maintained by symlinking the binaries from the
   # smaller outputs in the bin output.
-  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.isLinux [ "swap" ];
+  outputs = [ "bin" "dev" "out" "lib" "doc" "man" ] ++ lib.optionals stdenv.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.isLinux [ "swap" ];
+
   separateDebugInfo = true;
 
   postPatch = ''

@@ -184,7 +184,7 @@ self: super:
   });
 
   libXtst = super.libXtst.overrideAttrs (attrs: {
-    outputs = [ "out" "man" ];
+    outputs = [ "out" "doc" "man" ];
     meta = attrs.meta // {
       pkgConfigModules = [ "xtst" ];
     };

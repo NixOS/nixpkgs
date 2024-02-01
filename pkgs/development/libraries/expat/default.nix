@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  outputs = [ "out" "dev" ]; # TODO: fix referrers
+  outputs = [ "out" "dev" "doc" ]; # TODO: fix referrers
   outputBin = "dev";
 
   enableParallelBuilding = true;

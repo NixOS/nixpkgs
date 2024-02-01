@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     sha256 = "04l8aqr474pb115nagn9f6y48jw92n1qfszgw7dbhgl4mpn95lcr";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ makeWrapper ];
 

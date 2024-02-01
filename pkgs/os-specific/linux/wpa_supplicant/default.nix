@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
       ${optionalString withPcsclite "-I${lib.getDev pcsclite}/include/PCSC/"}"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   buildInputs = [ openssl libnl ]
     ++ optional dbusSupport dbus

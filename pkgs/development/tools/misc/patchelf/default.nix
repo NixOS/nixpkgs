@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9ANtPuTY4ijewb7/8PbkbYpA6eVw4AaOOdd+YuLIvcI=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   strictDeps = true;
 

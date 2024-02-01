@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
   buildInputs = [ ncurses ] ++ lib.optional (!enableTiny) file;
 
-  outputs = [ "out" "info" "man" ];
+  outputs = [ "out" "doc" "info" "man" ];
 
   configureFlags = [
     "--sysconfdir=/etc"

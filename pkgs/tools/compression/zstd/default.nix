@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     ''
   );
 
-  outputs = [ "bin" "dev" ]
+  outputs = [ "bin" "dev" "doc" ]
     ++ lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
 

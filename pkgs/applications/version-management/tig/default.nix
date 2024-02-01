@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VuuqR5fj0YvqIfVPH7N3rpAfIbcTwOx9W3H60saCToQ=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkg-config ];
 

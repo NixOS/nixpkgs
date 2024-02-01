@@ -33,7 +33,7 @@ assert enableQt -> qwt != null;
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   buildInputs = [
     ncurses

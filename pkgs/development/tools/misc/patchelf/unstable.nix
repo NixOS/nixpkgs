@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace "set-rpath-library.sh" ""
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   setupHook = [ ./setup-hook.sh ];
 

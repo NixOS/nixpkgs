@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-P3LaDMMNPyEnA8nO1Bm7H0mW/hVBr0cFdg+p2JmWcGI=";
   };
 
+  outputs = [ "out" "doc" ];
+
   nativeBuildInputs = [
     autoconf
     automake

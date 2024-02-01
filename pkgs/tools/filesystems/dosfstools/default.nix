@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]
     ++ lib.optional stdenv.isDarwin libiconv;

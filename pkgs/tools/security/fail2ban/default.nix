@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Zd8zLkFlvXTbeInEkNFyHgcAiOsX4WwF6hf5juSQvbY=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "man" "doc" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

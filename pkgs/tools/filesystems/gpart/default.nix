@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "baruch";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
