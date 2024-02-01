@@ -59,6 +59,15 @@ python.pkgs.buildPythonApplication rec {
       url = "https://github.com/blakeblackshear/frigate/commit/cb73d0cd392990448811c7212bc5f09be411fc69.patch";
       hash = "sha256-Spt7eRosmTN8zyJ2uVme5HPVy2TKgBtvbQ6tp6PaNac=";
     })
+
+    # https://github.com/blakeblackshear/frigate/security/advisories/GHSA-xq49-hv88-jr6h
+    ./CVE-2023-45670.patch
+
+    # https://github.com/blakeblackshear/frigate/security/advisories/GHSA-jjxc-m35j-p56f
+    ./CVE-2023-45671.patch
+
+    # https://github.com/blakeblackshear/frigate/security/advisories/GHSA-qp3h-4q62-p428
+    ./CVE-2023-45672.patch
   ];
 
   postPatch = ''
