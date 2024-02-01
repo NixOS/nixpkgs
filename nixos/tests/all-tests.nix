@@ -627,6 +627,7 @@ in {
   ntfy-sh = handleTest ./ntfy-sh.nix {};
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix {};
   ntpd-rs = handleTest ./ntpd-rs.nix {};
+  nvmetcfg = handleTest ./nvmetcfg.nix {};
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
