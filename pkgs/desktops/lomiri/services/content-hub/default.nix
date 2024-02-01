@@ -67,6 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/3c5ca4a8ec125e003aca78c14521b70140856c25.patch";
       hash = "sha256-kYN0eLwMyM/9yK+zboyEsoPKZMZ4SCXodVYsvkQr2F8=";
     })
+
+    # Remove when https://gitlab.com/ubports/development/core/content-hub/-/merge_requests/37 merged & in release
+    (fetchpatch {
+      name = "0004-content-hub-Fix-generation-of-transfer_files.patch";
+      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/7ab3a4421356f83515f0deffb5f97a5b38601c13.patch";
+      hash = "sha256-MJZm3ny5t0/GX0bd5hGQbPM2k7M4KUvKqce/0cYYgvM=";
+    })
+    (fetchpatch {
+      name = "0005-content-hub-Fix-generation-of-moc_test_harness.patch";
+      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/6e30f4f10ef90e817ca01d32959b6c782de48955.patch";
+      hash = "sha256-TAbYn265RpHpulaRVaHy9XqNF+qoDE7YQIfFMPfqEhw=";
+    })
   ];
 
   postPatch = ''
