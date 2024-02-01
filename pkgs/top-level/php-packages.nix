@@ -370,7 +370,8 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--enable-dom"
           ];
-          patches = lib.optionals (lib.versionOlder php.version "8.2.14") [
+          # Add a PHP lower version bound constraint to avoid applying the patch on older PHP versions.
+          patches = lib.optionals (lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.1") [
             # Fix tests with libxml 2.12
             # Part of 8.3.1RC1+, 8.2.14RC1+
             (fetchpatch {
