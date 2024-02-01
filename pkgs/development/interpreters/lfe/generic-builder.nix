@@ -5,7 +5,7 @@
 , maximumOTPVersion
 , sha256 ? null
 , rev ? version
-, src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
+, src ? fetchFromGitHub { inherit rev sha256; owner = "lfe"; repo = "lfe"; }
 , patches ? []
 }:
 
