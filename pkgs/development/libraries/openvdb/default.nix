@@ -20,6 +20,11 @@ stdenv.mkDerivation rec
 
   cmakeFlags = [ "-DOPENVDB_CORE_STATIC=OFF" ];
 
+  # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
+  env = lib.optionalAttrs (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13" && lib.versionAtLeast tbb.version "2021.8.0") {
+    NIX_CFLAGS_COMPILE = "-faligned-allocation";
+  };
+
   postFixup = ''
     substituteInPlace $dev/lib/cmake/OpenVDB/FindOpenVDB.cmake \
       --replace \''${OPENVDB_LIBRARYDIR} $out/lib \

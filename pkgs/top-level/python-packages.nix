@@ -3050,6 +3050,8 @@ self: super: with self; {
 
   django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
 
+  django-crispy-bootstrap5 = callPackage ../development/python-modules/django-crispy-bootstrap5 { };
+
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
   django-crontab = callPackage ../development/python-modules/django-crontab { };
