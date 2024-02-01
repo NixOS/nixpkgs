@@ -49,6 +49,15 @@ stdenv.mkDerivation rec {
     # and applies some patches to the in-repo git submodules. This patch removes
     # the parts that download things, since we can't do that inside the sandbox.
     ./disable-downloads.patch
+
+    # This patch disable mtime in bundled zip file for reproducible builds.
+    #
+    # Context: The `aesm_service` binary depends on a vendored library called
+    # `CppMicroServices`. At build time, this lib creates and then bundles
+    # service resources into a zip file and then embeds this zip into the
+    # binary. Without changes, the `aesm_service` will be different after every
+    # build because the embedded zip file contents have different modified times.
+    ./cppmicroservices-no-mtime.patch
   ];
 
   postPatch = ''

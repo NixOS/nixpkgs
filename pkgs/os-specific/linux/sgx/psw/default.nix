@@ -14,7 +14,7 @@
 , debug ? false
 }:
 stdenv.mkDerivation rec {
-  inherit (sgx-sdk) version versionTag src;
+  inherit (sgx-sdk) patches src version versionTag;
   pname = "sgx-psw";
 
   postUnpack =
