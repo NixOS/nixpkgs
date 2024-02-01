@@ -3747,6 +3747,8 @@ self: super: with self; {
 
   essentials = callPackage ../development/python-modules/essentials { };
 
+  essentials-openapi = callPackage ../development/python-modules/essentials-openapi { };
+
   etcd = callPackage ../development/python-modules/etcd { };
 
   etcd3 = callPackage ../development/python-modules/etcd3 {
