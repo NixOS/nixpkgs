@@ -10,7 +10,7 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 
-# for passthru.tests
+  # for passthru.tests
 , dvgrab
 , epeg
 , freeimage
@@ -42,9 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # This is needed by freeimage
-  patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
-    ++ lib.optional stdenv.hostPlatform.isMinGW
-    ./mingw-boolean.patch;
+  patches =
+    lib.optionals (!stdenv.hostPlatform.isMinGW) [
+      ./0001-Compile-transupp.c-as-part-of-the-library.patch
+    ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      ./mingw-boolean.patch
+      ./transup-as-part-without-attribute-weak.patch
+    ];
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
