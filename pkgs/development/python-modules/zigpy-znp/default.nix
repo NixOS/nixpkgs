@@ -8,6 +8,7 @@
 , pytest-mock
 , pytest-rerunfailures
 , pytest-timeout
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-rerunfailures
     pytest-timeout
+    pytest-xdist
     pytestCheckHook
   ];
 
