@@ -7,7 +7,7 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2024.114.0";
+  version = "2024.131.0";
 
   src = {
     aarch64-darwin = fetchzip {
