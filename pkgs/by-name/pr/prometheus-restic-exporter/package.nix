@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python3
 , restic
+, nixosTests
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -31,6 +32,10 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    restic-exporter = nixosTests.prometheus-exporters.restic;
+  };
 
   meta = with lib; {
     description = "Prometheus exporter for the Restic backup system";
