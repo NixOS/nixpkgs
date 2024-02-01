@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, clisp, fetchurl, writeText, zstd
+{ lib, stdenv, callPackage, clisp, fetchurl, strace, texinfo, which, writeText, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
@@ -8,7 +8,6 @@
 , purgeNixReferences ? false
 , coreCompression ? lib.versionAtLeast version "2.2.6"
 , markRegionGC ? lib.versionAtLeast version "2.4.0"
-, texinfo
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for
   # SBCL. Leave as null to use the default. This is useful for local development
@@ -86,7 +85,15 @@ stdenv.mkDerivation (self: rec {
     inherit (versionMap.${version}) sha256;
   };
 
-  nativeBuildInputs = [ texinfo ];
+  nativeBuildInputs = [
+    texinfo
+  ] ++ lib.optionals self.doCheck (
+    [
+      which
+    ] ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
+      strace
+    ]
+  );
   buildInputs = lib.optionals coreCompression [ zstd ];
 
   patches = lib.optionals (version == "2.4.0") [
