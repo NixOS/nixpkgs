@@ -18,6 +18,7 @@
 , xcbuild
 , pango
 , pkg-config
+, nltk-data
 }:
 
 let
@@ -293,6 +294,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python path frontend;
+    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 
