@@ -1,5 +1,5 @@
 { lib
-, incus-unwrapped
+, callPackage
 , linkFarm
 , makeWrapper
 , stdenv
@@ -37,6 +37,8 @@
 , xz
 }:
 let
+  incus-unwrapped = callPackage ./unwrapped.nix {};
+
   binPath = lib.makeBinPath [
     acl
     attr
@@ -127,6 +129,7 @@ symlinkJoin {
 
   passthru = {
     inherit (incus-unwrapped) tests;
+    unwrapped = incus-unwrapped;
   };
 
   inherit (incus-unwrapped) meta pname version;
