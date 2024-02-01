@@ -6695,6 +6695,8 @@ self: super: with self; {
 
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
+  lttng = callPackage ../development/python-modules/lttng { };
+
   luddite = callPackage ../development/python-modules/luddite { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
