@@ -16412,6 +16412,8 @@ self: super: with self; {
 
   xpybutil = callPackage ../development/python-modules/xpybutil { };
 
+  xrootd = callPackage ../development/python-modules/xrootd { };
+
   xsdata = callPackage ../development/python-modules/xsdata { };
 
   xstatic-asciinema-player = callPackage ../development/python-modules/xstatic-asciinema-player { };
