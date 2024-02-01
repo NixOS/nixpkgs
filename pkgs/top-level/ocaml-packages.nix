@@ -156,6 +156,8 @@ let
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
+    capnp = callPackage ../development/ocaml-modules/capnp { };
+
     caqti = callPackage ../development/ocaml-modules/caqti { };
 
     caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
