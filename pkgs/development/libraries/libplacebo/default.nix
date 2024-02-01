@@ -14,6 +14,7 @@
 , libunwind
 , libdovi
 , xxHash
+, fast-float
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
     libunwind
     libdovi
     xxHash
+  ] ++ lib.optionals (!stdenv.cc.isGNU) [
+    fast-float
   ];
 
   mesonFlags = with lib; [

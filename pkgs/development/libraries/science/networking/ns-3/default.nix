@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     "-DPython3_EXECUTABLE=${pythonEnv}/bin/python"
     "-DNS3_PYTHON_BINDINGS=ON"
     "-DNS3_DES_METRICS=ON"
-    "-DNS3_BINDINGS_INSTALL_DIR=lib/${pythonEnv.libPrefix}/site-packages"
+    "-DNS3_BINDINGS_INSTALL_DIR=${pythonEnv.sitePackages}"
     "-DNS3_LOG=ON"
     "-DNS3_ASSERT=ON"
     "-DNS3_GTK3=ON"

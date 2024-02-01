@@ -1062,6 +1062,7 @@
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
+  ./services/networking/pyload.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
@@ -1342,6 +1343,7 @@
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/powerdns-admin.nix
+  ./services/web-apps/pretalx.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/rimgo.nix

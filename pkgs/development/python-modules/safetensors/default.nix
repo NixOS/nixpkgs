@@ -16,22 +16,22 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.3.3";
-  format = "pyproject";
+  version = "0.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "safetensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U+indMoLFN6vMZkJTWFG08lsdXuK5gOfgaHmUVl6DPk=";
+    hash = "sha256-hdPUI8k7CCQwt2C/AsjUHRmAL6ob+yCN97KkWtqOQL8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-MhRs9tFCmVZI5O0EVRUbo4ZnUVRQ0EfQTU+E1K+qKZI=";
+    hash = "sha256-7n9aYlha6IaPsZ2zMfD5EIkrk8ENwMBwj41s6QU7ml0=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
@@ -41,6 +41,7 @@ buildPythonPackage rec {
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];

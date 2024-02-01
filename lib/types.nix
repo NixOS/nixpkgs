@@ -557,6 +557,7 @@ rec {
       in list // {
         description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
         emptyValue = { }; # no .value attr, meaning unset
+        substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
       };
 
     attrsOf = elemType: mkOptionType rec {

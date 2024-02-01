@@ -15,6 +15,8 @@ with pkgs;
         (filter (n: n != "llvmPackages_git"))
         (filter (n: n != "llvmPackages_6"))
         (filter (n: n != "llvmPackages_7"))
+        (filter (n: n != "llvmPackages_8"))
+        (filter (n: n != "llvmPackages_10"))
       ];
       tests = lib.genAttrs pkgSets (name: recurseIntoAttrs {
         clang = callPackage ./cc-wrapper { stdenv = pkgs.${name}.stdenv; };
@@ -66,9 +68,7 @@ with pkgs;
             # libcxxStdenv broken
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            (filterAttrs (n: _: n != "llvmPackages_8"))
             (filterAttrs (n: _: n != "llvmPackages_9"))
-            (filterAttrs (n: _: n != "llvmPackages_10"))
           ]);
         in
         toJSON sets;
@@ -168,6 +168,8 @@ with pkgs;
   };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+
+  buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
   nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
 

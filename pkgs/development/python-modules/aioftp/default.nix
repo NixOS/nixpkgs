@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.22.2";
+  version = "0.22.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YcHNpxpldxW0GZRCt9t0XcW+rgWGW43w3QFMBSQK3LA=";
+    hash = "sha256-uqKxMYaqAWIuS4LyfC9I9Nr7SORXprGPzamakl4NwnA=";
   };
 
   postPatch = ''

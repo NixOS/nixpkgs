@@ -113,7 +113,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     # Generate a python test script
     cat > test.py << EOF

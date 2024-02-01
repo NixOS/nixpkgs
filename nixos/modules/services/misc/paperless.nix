@@ -141,12 +141,12 @@ in
         `''${dataDir}/paperless-manage createsuperuser`.
 
         The default superuser name is `admin`. To change it, set
-        option {option}`extraConfig.PAPERLESS_ADMIN_USER`.
+        option {option}`settings.PAPERLESS_ADMIN_USER`.
         WARNING: When changing the superuser name after the initial setup, the old superuser
         will continue to exist.
 
         To disable login for the web interface, set the following:
-        `extraConfig.PAPERLESS_AUTO_LOGIN_USERNAME = "admin";`.
+        `settings.PAPERLESS_AUTO_LOGIN_USERNAME = "admin";`.
         WARNING: Only use this on a trusted system without internet access to Paperless.
       '';
     };
