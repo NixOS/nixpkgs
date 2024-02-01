@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jdk11, wrapGAppsHook }:
+{ lib, stdenv, fetchzip, jdk17, testers, wrapGAppsHook, igv }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     cp -Rv * $out/share/
 
     sed -i "s#prefix=.*#prefix=$out/share#g" $out/share/igv.sh
-    sed -i 's#java#${jdk11}/bin/java#g' $out/share/igv.sh
+    sed -i 's#java#${jdk17}/bin/java#g' $out/share/igv.sh
 
     sed -i "s#prefix=.*#prefix=$out/share#g" $out/share/igvtools
-    sed -i 's#java#${jdk11}/bin/java#g' $out/share/igvtools
+    sed -i 's#java#${jdk17}/bin/java#g' $out/share/igvtools
 
     ln -s $out/share/igv.sh $out/bin/igv
     ln -s $out/share/igvtools $out/bin/igvtools
@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/igvtools
   '';
   nativeBuildInputs = [ wrapGAppsHook ];
+
+  passthru.tests.version = testers.testVersion {
+    package = igv;
+  };
+
 
   meta = with lib; {
     homepage = "https://www.broadinstitute.org/igv/";
