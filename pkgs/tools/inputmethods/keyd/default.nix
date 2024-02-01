@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "keyd";
     rev = "v" + version;
-    hash = "sha256-QWr+xog16MmybhQlEWbskYa/dypb9Ld54MOdobTbyMo=";
+    hash = "sha256-NhZnFIdK0yHgFR+rJm4cW+uEhuQkOpCSLwlXNQy6jas=";
   };
 
   pypkgs = python3.pkgs;
@@ -47,12 +47,13 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace DESTDIR= DESTDIR=${placeholder "out"} \
       --replace /usr ""
 
     substituteInPlace keyd.service \
       --replace /usr/bin $out/bin
   '';
+
+  installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   buildInputs = [ systemd ];
 
