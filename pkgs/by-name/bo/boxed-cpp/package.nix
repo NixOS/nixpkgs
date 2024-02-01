@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (final: {
   pname = "boxed-cpp";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "boxed-cpp";
     rev = "v${final.version}";
-    hash = "sha256-Su0FdDi1JVoXd7rJ1SG4cQg2G/+mW5iU1892ee6mRl8=";
+    hash = "sha256-/zC9DV2nFY1ipqsM1p/WMdSf/nZkhlqJ2Ce/FzGWGGI=";
   };
 
   nativeBuildInputs = [ cmake ];
