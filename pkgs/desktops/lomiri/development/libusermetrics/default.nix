@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  patches = [
+    # Not submitted yet, waiting for decision on how CMake testing should be handled
+    ./2001-Remove-custom-check-target.patch
+  ];
+
   postPatch = ''
     # Tries to query QMake for QT_INSTALL_QML variable, would return broken paths into /build/qtbase-<commit> even if qmake was available
     substituteInPlace src/modules/UserMetrics/CMakeLists.txt \
@@ -87,6 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
+      # Exclude tests
+      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
+        # Flaky, randomly failing in UserMetricsImplTest.AddTranslatedData (data not ready when signal is emitted?)
+        "^usermetricsoutput-unit-tests"
+      ]})")
+    ]))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
