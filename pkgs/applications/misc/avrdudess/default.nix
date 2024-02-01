@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "avrdudess";
-  version = "2.15";
+  version = "2.16";
 
   src = fetchurl {
-    url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v2.15/AVRDUDESS-2.15-portable.zip";
-    sha256 = "sha256-TILveSFlZOzkd7XpW6haWZzrWTb7f/GMoj+fHNEJYLA=";
+    url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v2.16/AVRDUDESS-2.16-portable.zip";
+    sha256 = "sha256-Ow6WYdQfEDldI9q9CTpd13wtLZGTEkcHxz0Zg7QIZIs=";
   };
 
   nativeBuildInputs = [ unzip ];
