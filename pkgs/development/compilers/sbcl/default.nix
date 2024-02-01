@@ -106,6 +106,10 @@ stdenv.mkDerivation (self: rec {
     "aarch64-linux"
   ]) ''
     rm -f tests/foreign-stack-alignment.impure.lisp
+    # Floating point tests are fragile
+    # https://sourceforge.net/p/sbcl/mailman/message/58728554/
+    rm -f tests/compiler.pure.lisp \
+          tests/float.pure.lisp
   '') + (if purgeNixReferences
     then
       # This is the default location to look for the core; by default in $out/lib/sbcl
