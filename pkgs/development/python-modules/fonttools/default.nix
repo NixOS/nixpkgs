@@ -4,6 +4,7 @@
 , pythonOlder
 , isPyPy
 , fetchFromGitHub
+, fetchpatch
 , setuptools-scm
 , fs
 , lxml
@@ -35,6 +36,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-fcFFJi9Hr0m74LwFIhhhm/bMfxepAvg4/ymU53MmsPg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-45139.patch";
+      url = "https://github.com/fonttools/fonttools/commit/9f61271dc1ca82ed91f529b130fe5dc5c9bf1f4c.patch";
+      hash = "sha256-29OB21B8S4hGZlvNJnOTYTFAmEii+z5oK6tycoK3PXc=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
