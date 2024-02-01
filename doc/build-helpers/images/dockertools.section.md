@@ -880,25 +880,211 @@ $ nix run nixpkgs#nix-prefetch-docker -- --help
 
 ## exportImage {#ssec-pkgs-dockerTools-exportImage}
 
-This function is analogous to the `docker export` command, in that it can be used to flatten a Docker image that contains multiple layers. It is in fact the result of the merge of all the layers of the image. As such, the result is suitable for being imported in Docker with `docker import`.
+This function is similar to the `docker container export` command, which means it can be used to export an image's filesystem as an uncompressed tarball archive.
+The difference is that `docker container export` is applied to containers, but `dockerTools.exportImage` applies to Docker images.
+The resulting archive will not contain any image metadata (such as command to run with `docker container run`), only the filesystem contents.
 
-> **_NOTE:_** Using this function requires the `kvm` device to be available.
+You can use this function to import an archive in Docker with `docker image import`.
+See [](#ex-dockerTools-exportImage-importingDocker) to understand how to do that.
 
-The parameters of `exportImage` are the following:
+:::{.caution}
+`exportImage` works by unpacking the given image inside a VM.
+Because of this, using this function requires the `kvm` device to be available, see [`system-features`](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-system-features).
+:::
+
+### Inputs {#ssec-pkgs-dockerTools-exportImage-inputs}
+
+`exportImage` expects an argument with the following attributes:
+
+`fromImage` (Attribute Set or String)
+
+: The repository tarball of the image whose filesystem will be exported.
+  It must be a valid Docker image, such as one exported by `docker image save`, or another image built with the `dockerTools` utility functions.
+
+  If `name` is not specified, `fromImage` must be an Attribute Set corresponding to a derivation, i.e. it can't be a path to a tarball.
+  If `name` is specified, `fromImage` can be either an Attribute Set corresponding to a derivation or simply a path to a tarball.
+
+  See [](#ex-dockerTools-exportImage-naming) and [](#ex-dockerTools-exportImage-fromImagePath) to understand the connection between `fromImage`, `name`, and the name used for the output of `exportImage`.
+
+`fromImageName` (String or Null; _optional_)
+
+: Used to specify the image within the repository tarball in case it contains multiple images.
+  A value of `null` means that `exportImage` will use the first image available in the repository.
+
+  :::{.note}
+  This must be used with `fromImageTag`. Using only `fromImageName` without `fromImageTag` will make `exportImage` use the first image available in the repository.
+  :::
+
+  _Default value:_ `null`.
+
+`fromImageTag` (String or Null; _optional_)
+
+: Used to specify the image within the repository tarball in case it contains multiple images.
+  A value of `null` means that `exportImage` will use the first image available in the repository.
+
+  :::{.note}
+  This must be used with `fromImageName`. Using only `fromImageTag` without `fromImageName` will make `exportImage` use the first image available in the repository
+  :::
+
+  _Default value:_ `null`.
+
+`diskSize` (Number; _optional_)
+
+: Controls the disk size (in megabytes) of the VM used to unpack the image.
+
+  _Default value:_ 1024.
+
+`name` (String; _optional_)
+
+: The name used for the output in the Nix store path.
+
+  _Default value:_ the value of `fromImage.name`.
+
+### Examples {#ssec-pkgs-dockerTools-exportImage-examples}
+
+:::{.example #ex-dockerTools-exportImage-hello}
+# Exporting a Docker image with `dockerTools.exportImage`
+
+This example first builds a layered image with [`dockerTools.buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage), and then exports its filesystem with `dockerTools.exportImage`.
 
 ```nix
-exportImage {
-  fromImage = someLayeredImage;
-  fromImageName = null;
-  fromImageTag = null;
-
-  name = someLayeredImage.name;
+{ dockerTools, hello }:
+dockerTools.exportImage {
+  name = "hello";
+  fromImage = dockerTools.buildLayeredImage {
+    name = "hello";
+    contents = [ hello ];
+  };
 }
 ```
 
-The parameters relative to the base image have the same synopsis as described in [buildImage](#ssec-pkgs-dockerTools-buildImage), except that `fromImage` is the only required argument in this case.
+When building the package above, we can see the layers of the Docker image being unpacked to produce the final output:
 
-The `name` argument is the name of the derivation output, which defaults to `fromImage.name`.
+```shell
+$ nix-build
+(some output removed for clarity)
+Unpacking base image...
+From-image name or tag wasn't set. Reading the first ID.
+Unpacking layer 5731199219418f175d1580dbca05677e69144425b2d9ecb60f416cd57ca3ca42/layer.tar
+tar: Removing leading `/' from member names
+Unpacking layer e2897bf34bb78c4a65736510204282d9f7ca258ba048c183d665bd0f3d24c5ec/layer.tar
+tar: Removing leading `/' from member names
+Unpacking layer 420aa5876dca4128cd5256da7dea0948e30ef5971712f82601718cdb0a6b4cda/layer.tar
+tar: Removing leading `/' from member names
+Unpacking layer ea5f4e620e7906c8ecbc506b5e6f46420e68d4b842c3303260d5eb621b5942e5/layer.tar
+tar: Removing leading `/' from member names
+Unpacking layer 65807b9abe8ab753fa97da8fb74a21fcd4725cc51e1b679c7973c97acd47ebcf/layer.tar
+tar: Removing leading `/' from member names
+Unpacking layer b7da2076b60ebc0ea6824ef641978332b8ac908d47b2d07ff31b9cc362245605/layer.tar
+Executing post-mount steps...
+Packing raw image...
+[    1.660036] reboot: Power down
+/nix/store/x6a5m7c6zdpqz1d8j7cnzpx9glzzvd2h-hello
+```
+
+The following command lists some of the contents of the output to verify that the structure of the archive is as expected:
+
+```shell
+$ tar --exclude '*/share/*' --exclude 'nix/store/*/*' -tvf /nix/store/x6a5m7c6zdpqz1d8j7cnzpx9glzzvd2h-hello
+drwxr-xr-x root/0            0 1979-12-31 16:00 ./
+drwxr-xr-x root/0            0 1979-12-31 16:00 ./bin/
+lrwxrwxrwx root/0            0 1979-12-31 16:00 ./bin/hello -> /nix/store/h92a9jd0lhhniv2q417hpwszd4jhys7q-hello-2.12.1/bin/hello
+dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/
+dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/
+dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/05zbwhz8a7i2v79r9j21pl6m6cj0xi8k-libunistring-1.1/
+dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/ayg5rhjhi9ic73hqw33mjqjxwv59ndym-xgcc-13.2.0-libgcc/
+dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/h92a9jd0lhhniv2q417hpwszd4jhys7q-hello-2.12.1/
+dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/m59xdgkgnjbk8kk6k6vbxmqnf82mk9s0-libidn2-2.3.4/
+dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/p3jshbwxiwifm1py0yq544fmdyy98j8a-glibc-2.38-27/
+drwxr-xr-x root/0            0 1979-12-31 16:00 ./share/
+```
+:::
+
+:::{.example #ex-dockerTools-exportImage-importingDocker}
+# Importing an archive built with `dockerTools.exportImage` in Docker
+
+We will use the same package from [](#ex-dockerTools-exportImage-hello) and import it into Docker.
+
+```nix
+{ dockerTools, hello }:
+dockerTools.exportImage {
+  name = "hello";
+  fromImage = dockerTools.buildLayeredImage {
+    name = "hello";
+    contents = [ hello ];
+  };
+}
+```
+
+Building and importing it into Docker:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/x6a5m7c6zdpqz1d8j7cnzpx9glzzvd2h-hello
+$ docker image import /nix/store/x6a5m7c6zdpqz1d8j7cnzpx9glzzvd2h-hello
+sha256:1d42dba415e9b298ea0decf6497fbce954de9b4fcb2984f91e307c8fedc1f52f
+$ docker image ls
+REPOSITORY                              TAG                IMAGE ID       CREATED         SIZE
+<none>                                  <none>             1d42dba415e9   4 seconds ago   32.6MB
+```
+:::
+
+:::{.example #ex-dockerTools-exportImage-naming}
+# Exploring output naming with `dockerTools.exportImage`
+
+`exportImage` does not require a `name` attribute if `fromImage` is a derivation, which means that the following works:
+
+```nix
+{ dockerTools, hello }:
+dockerTools.exportImage {
+  fromImage = dockerTools.buildLayeredImage {
+    name = "hello";
+    contents = [ hello ];
+  };
+}
+```
+
+However, since [`dockerTools.buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage)'s output ends with `.tar.gz`, the output of `exportImage` will also end with `.tar.gz`, even though the archive created with `exportImage` is uncompressed:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/by3f40xvc4l6bkis74l0fj4zsy0djgkn-hello.tar.gz
+$ file /nix/store/by3f40xvc4l6bkis74l0fj4zsy0djgkn-hello.tar.gz
+/nix/store/by3f40xvc4l6bkis74l0fj4zsy0djgkn-hello.tar.gz: POSIX tar archive (GNU)
+```
+
+If the archive was actually compressed, the output of file would've mentioned that fact.
+Because of this, it may be important to set a proper `name` attribute when using `exportImage` with other functions from `dockerTools`.
+:::
+
+:::{.example #ex-dockerTools-exportImage-fromImagePath}
+# Using `dockerTools.exportImage` with a path as `fromImage`
+
+It is possible to use a path as the value of the `fromImage` attribute when calling `dockerTools.exportImage`.
+However, when doing so, a `name` attribute **MUST** be specified, or you'll encounter an error when evaluating the Nix code.
+
+For this example, we'll assume a Docker tarball image named `image.tar.gz` exists in the same directory where our package is defined:
+
+```nix
+{ dockerTools }:
+dockerTools.exportImage {
+  name = "filesystem.tar";
+  fromImage = ./image.tar.gz;
+}
+```
+
+Building this will give us the expected output:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/w13l8h3nlkg0zv56k7rj0ai0l2zlf7ss-filesystem.tar
+```
+
+If you don't specify a `name` attribute, you'll encounter an evaluation error and the package won't build.
+:::
 
 ## Environment Helpers {#ssec-pkgs-dockerTools-helpers}
 

@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, makeWrapper, jdk17, gawk }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "youtrack";
   version = "2022.3.65371";
 
   jar = fetchurl {
-    url = "https://download.jetbrains.com/charisma/${pname}-${version}.jar";
+    url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.jar";
     sha256 = "sha256-NQKWmKEq5ljUXd64zY27Nj8TU+uLdA37chbFVdmwjNs=";
   };
 
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Issue tracking and project management tool for developers";
-    maintainers = teams.serokell.members;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = lib.teams.serokell.members ++ [ lib.maintainers.leona ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     # https://www.jetbrains.com/youtrack/buy/license.html
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
   };
-}
+})
