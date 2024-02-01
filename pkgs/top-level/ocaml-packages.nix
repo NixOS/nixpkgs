@@ -1608,6 +1608,8 @@ let
 
     repr = callPackage ../development/ocaml-modules/repr { };
 
+    res = callPackage ../development/ocaml-modules/res { };
+
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
     resto = callPackage ../development/ocaml-modules/resto { };
