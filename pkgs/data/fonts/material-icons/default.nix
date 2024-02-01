@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub, nix-update-script }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "material-icons";
@@ -7,7 +7,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "google";
     repo = "material-design-icons";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wX7UejIYUxXOnrH2WZYku9ljv4ZAlvgk8EEJJHOCCjE=";
   };
 
@@ -25,6 +25,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "System status icons by Google, featuring material design";
