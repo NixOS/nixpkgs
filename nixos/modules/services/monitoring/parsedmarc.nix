@@ -5,7 +5,7 @@ let
   opt = options.services.parsedmarc;
   isSecret = v: isAttrs v && v ? _secret && isString v._secret;
   ini = pkgs.formats.ini {
-    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
       mkValueString = v:
         if isInt           v then toString v
         else if isString   v then v
@@ -15,9 +15,13 @@ let
         else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
     };
   };
-  inherit (builtins) elem isAttrs isString isInt isList typeOf hashString;
+  inherit (builtins) elem isAttrs isString isInt typeOf hashString;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "parsedmarc" "provision" "elasticsearch" ] "Provisioning Elasticsearch is no longer supported. Use `services.parsedmarc.provision.opensearch' instead or manage Elasticsearch manually.")
+  ];
+
   options.services.parsedmarc = {
 
     enable = lib.mkEnableOption (lib.mdDoc ''
@@ -79,27 +83,27 @@ in
         '';
       };
 
-      elasticsearch = lib.mkOption {
+      opensearch = lib.mkOption {
         type = lib.types.bool;
         default = true;
         description = lib.mdDoc ''
-          Whether to set up and use a local instance of Elasticsearch.
+          Whether to set up and use a local instance of OpenSearch.
         '';
       };
 
       grafana = {
         datasource = lib.mkOption {
           type = lib.types.bool;
-          default = cfg.provision.elasticsearch && config.services.grafana.enable;
+          default = cfg.provision.opensearch && config.services.grafana.enable;
           defaultText = lib.literalExpression ''
-            config.${opt.provision.elasticsearch} && config.${options.services.grafana.enable}
+            config.${opt.provision.opensearch} && config.${options.services.grafana.enable}
           '';
-          apply = x: x && cfg.provision.elasticsearch;
+          apply = x: x && cfg.provision.opensearch;
           description = lib.mdDoc ''
-            Whether the automatically provisioned Elasticsearch
+            Whether the automatically provisioned OpenSearch
             instance should be added as a grafana datasource. Has no
             effect unless
-            [](#opt-services.parsedmarc.provision.elasticsearch)
+            [](#opt-services.parsedmarc.provision.opensearch)
             is also enabled.
           '';
         };
@@ -160,7 +164,7 @@ in
               type = lib.types.bool;
               default = true;
               description = lib.mdDoc ''
-                Save aggregate report data to Elasticsearch and/or Splunk.
+                Save aggregate report data to OpenSearch/Elasticsearch and/or Splunk.
               '';
             };
 
@@ -168,7 +172,7 @@ in
               type = lib.types.bool;
               default = true;
               description = lib.mdDoc ''
-                Save forensic report data to Elasticsearch and/or Splunk.
+                Save forensic report data to OpenSearch/Elasticsearch and/or Splunk.
               '';
             };
           };
@@ -311,8 +315,8 @@ in
               type = with lib.types; listOf str;
               apply = x: if x == [] then null else lib.concatStringsSep "," x;
               description = lib.mdDoc ''
-                A list of Elasticsearch hosts to push parsed reports
-                to.
+                A list of OpenSearch/Elasticsearch hosts to push
+                parsed reports to.
               '';
             };
 
@@ -320,8 +324,8 @@ in
               type = with lib.types; nullOr str;
               default = null;
               description = lib.mdDoc ''
-                Username to use when connecting to Elasticsearch, if
-                required.
+                Username to use when connecting to
+                OpenSearch/Elasticsearch, if required.
               '';
             };
 
@@ -329,8 +333,8 @@ in
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
               description = lib.mdDoc ''
-                The password to use when connecting to Elasticsearch,
-                if required.
+                The password to use when connecting to
+                OpenSearch/Elasticsearch, if required.
 
                 Always handled as a secret whether the value is
                 wrapped in a `{ _secret = ...; }`
@@ -373,7 +377,7 @@ in
       movedOptions = [ "reports_folder" "archive_folder" "watch" "delete" "test" "batch_size" ];
     in builtins.map deprecationWarning (builtins.filter hasImapOpt movedOptions);
 
-    services.elasticsearch.enable = lib.mkDefault cfg.provision.elasticsearch;
+    services.opensearch.enable = lib.mkDefault cfg.provision.opensearch;
 
     services.geoipupdate = lib.mkIf cfg.provision.geoIp {
       enable = true;
@@ -412,29 +416,19 @@ in
         enable = cfg.provision.grafana.datasource || cfg.provision.grafana.dashboard;
         datasources.settings.datasources =
           let
-            esVersion = lib.getVersion config.services.elasticsearch.package;
+            mkSource = name: {
+              inherit name;
+              type = "elasticsearch";
+              access = "proxy";
+              url = "http://localhost:9200";
+              jsonData = {
+                timeField = "date_range";
+              };
+            };
           in
             lib.mkIf cfg.provision.grafana.datasource [
-              {
-                name = "dmarc-ag";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "http://localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
-              {
-                name = "dmarc-fo";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "http://localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
+              (mkSource "dmarc-ag")
+              (mkSource "dmarc-fo")
             ];
         dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [{
           name = "parsedmarc";
@@ -444,7 +438,7 @@ in
     };
 
     services.parsedmarc.settings = lib.mkMerge [
-      (lib.mkIf cfg.provision.elasticsearch {
+      (lib.mkIf cfg.provision.opensearch {
         elasticsearch = {
           hosts = [ "localhost:9200" ];
           ssl = false;
@@ -484,7 +478,7 @@ in
       in
         {
           wantedBy = [ "multi-user.target" ];
-          after = [ "postfix.service" "dovecot2.service" "elasticsearch.service" ];
+          after = [ "postfix.service" "dovecot2.service" "opensearch.service" ];
           path = with pkgs; [ replace-secret openssl shadow ];
           serviceConfig = {
             ExecStartPre = let
