@@ -125,6 +125,7 @@ let
       vcfloat = callPackage ../development/coq-modules/vcfloat {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
+      vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server {};
       VST = callPackage ../development/coq-modules/VST ((lib.optionalAttrs
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
