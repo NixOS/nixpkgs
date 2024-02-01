@@ -19,6 +19,7 @@
 , xorg
 , directoryListingUpdater
 , nixosTests
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.phosh = nixosTests.phosh;
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
     updateScript = directoryListingUpdater { };
   };
 
