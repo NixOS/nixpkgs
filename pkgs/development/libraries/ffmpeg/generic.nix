@@ -42,7 +42,7 @@
 , withFdkAac ? withFullDeps && withUnfree # Fraunhofer FDK AAC de/encoder
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
-, withFrei0r ? withFullDeps # frei0r video filtering
+, withFrei0r ? withFullDeps && withGPL # frei0r video filtering
 , withFribidi ? withFullDeps # Needed for drawtext filter
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
@@ -61,7 +61,7 @@
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
-, withOpencoreAmrnb ? withFullDeps # AMR-NB de/encoder & AMR-WB decoder
+, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder & AMR-WB decoder
 , withOpengl ? false # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
@@ -70,7 +70,7 @@
 , withPulse ? withSmallDeps && !stdenv.isDarwin # Pulseaudio input support
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? false # RTMP[E] support
-, withSamba ? withFullDeps && !stdenv.isDarwin # Samba protocol
+, withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
 , withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
 , withSoxr ? withHeadlessDeps # Resampling via soxr
@@ -85,23 +85,23 @@
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps # Vdpau hardware acceleration
-, withVidStab ? withFullDeps # Video stabilization
-, withVmaf ? withFullDeps && withGPLv3 && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
-, withVoAmrwbenc ? withFullDeps # AMR-WB encoder
+, withVidStab ? withFullDeps && withGPL # Video stabilization
+, withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
+, withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
 , withVulkan ? withFullDeps && !stdenv.isDarwin
 , withWebp ? withFullDeps # WebP encoder
-, withX264 ? withHeadlessDeps # H.264/AVC encoder
-, withX265 ? withHeadlessDeps # H.265/HEVC encoder
-, withXavs ? withFullDeps # AVS encoder
+, withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
+, withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
+, withXavs ? withFullDeps && withGPL # AVS encoder
 , withXcb ? withXcbShm || withXcbxfixes || withXcbShape # X11 grabbing using XCB
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
 , withXlib ? withFullDeps # Xlib support
 , withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
-, withXvid ? withHeadlessDeps # Xvid encoder, native encoder exists
+, withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
 , withZimg ? withHeadlessDeps
 , withZlib ? withHeadlessDeps
 , withZmq ? withFullDeps # Message passing
@@ -110,7 +110,8 @@
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
 , withGPL ? true
-, withGPLv3 ? true
+, withVersion3 ? true # When withGPL is set this implies GPLv3 otherwise it is LGPLv3
+, withGPLv3 ? withGPL && withVersion3
 , withUnfree ? false
 
 /*
@@ -125,6 +126,11 @@
 , withMultithread ? true # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
 , withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
+, withStatic ? stdenv.hostPlatform.isStatic
+, withShared ? !stdenv.hostPlatform.isStatic
+, withPic ? true
+, withThumb ? false # On some ARM platforms
+
 /*
  *  Program options
  */
@@ -301,8 +307,8 @@ assert lib.elem ffmpegVariant [ "headless" "small" "full" ];
 /*
  *  Licensing dependencies
  */
-assert withGPLv3 -> withGPL;
-assert withUnfree -> withGPL && withGPLv3;
+assert withGPLv3 -> withGPL && withVersion3;
+
 /*
  *  Build dependencies
  */
@@ -376,14 +382,15 @@ stdenv.mkDerivation (finalAttrs: {
      *  Licensing flags
      */
     (enableFeature withGPL "gpl")
-    (enableFeature withGPLv3 "version3")
+    (enableFeature withVersion3 "version3")
     (enableFeature withUnfree "nonfree")
     /*
      *  Build flags
      */
-    # On some ARM platforms --enable-thumb
-    "--enable-shared"
-    "--enable-pic"
+    (enableFeature withStatic "static")
+    (enableFeature withShared "shared")
+    (enableFeature withPic "pic")
+    (enableFeature withThumb "thumb")
 
     (enableFeature withSmallBuild "small")
     (enableFeature withRuntimeCPUDetection "runtime-cpudetect")
@@ -558,10 +565,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
   ++ optionals withCudaLLVM [ clang ];
 
-  # TODO This was always in buildInputs before, why?
-  buildInputs = optionals withFullDeps [ libdc1394 ]
-  ++ optionals (withFullDeps && !stdenv.isDarwin) [ libraw1394 ] # TODO where does this belong to
-  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
+  buildInputs = optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withAlsa [ alsa-lib ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAribcaption [ libaribcaption ]
@@ -572,6 +576,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCaca [ libcaca ]
   ++ optionals withCelt [ celt ]
   ++ optionals withDav1d [ dav1d ]
+  ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
   ++ optionals withFdkAac [ fdk_aac ]
   ++ optionals withFontconfig [ fontconfig ]
@@ -703,8 +708,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with licenses; [ lgpl21Plus ]
       ++ optional withGPL gpl2Plus
+      ++ optional withVersion3 lgpl3Plus
       ++ optional withGPLv3 gpl3Plus
-      ++ optional withUnfree unfreeRedistributable;
+      ++ optional withUnfree unfreeRedistributable
+      ++ optional (withGPL && withUnfree) unfree;
     pkgConfigModules = [ "libavutil" ];
     platforms = platforms.all;
     maintainers = with maintainers; [ atemu arthsmn ];
