@@ -381,6 +381,14 @@ lib.makeScope pkgs.newScope (self: with self; {
               ];
             })
           ];
+          NIX_CFLAGS_COMPILE = if
+            lib.versionOlder php.version "8.2"
+            && lib.versionAtLeast php.version "8.1"
+            && pkgs.stdenv.cc.isClang
+            then
+              " -Wno-compare-distinct-pointer-types -Wno-incompatible-function-pointer-types -Wno-incompatible-pointer-types-discards-qualifiers"
+            else
+              "";
         }
         {
           name = "enchant";
