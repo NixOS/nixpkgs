@@ -41,6 +41,7 @@
 }:
 let
   unwrapped = callPackage ./unwrapped.nix { inherit lts; };
+  client = callPackage ./client.nix { inherit lts; };
 
   binPath = lib.makeBinPath [
     acl
@@ -163,6 +164,8 @@ symlinkJoin {
 
   passthru = {
     inherit (unwrapped) tests;
+
+    client = client;
 
     unwrapped = unwrapped;
   };
