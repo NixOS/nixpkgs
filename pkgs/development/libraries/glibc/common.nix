@@ -160,7 +160,7 @@ stdenv.mkDerivation ({
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
-    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       # Enable Intel Control-flow Enforcement Technology (CET) support
       "--enable-cet"
     ] ++ lib.optionals withLinuxHeaders [
