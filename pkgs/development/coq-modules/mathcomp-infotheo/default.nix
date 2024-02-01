@@ -10,6 +10,7 @@ mkCoqDerivation {
     { cases = [ "8.17"                (range "0.6.0" "0.7.0") ]; out = "0.5.2"; }
     { cases = [ (range "8.15" "8.16") (range "0.5.4" "0.6.5") ]; out = "0.5.1"; }
   ] null;
+  release."0.6.0".sha256 = "sha256-Uad9lmr4SSp7fYKJ+LEXU0C88mnu5aBLrUw05MPBl8g=";
   release."0.5.1".sha256 = "sha256-yBBl5l+V+dggsg5KM59Yo9CULKog/xxE8vrW+ZRnX7Y=";
   release."0.5.2".sha256 = "sha256-8WAnAV53c0pMTdwj8XcUDUkLZbpUgIQbEOgOb63uHQA=";
 
