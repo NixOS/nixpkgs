@@ -322,6 +322,16 @@ let
         };
       });
 
+      python-kasa = super.python-kasa.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.4";
+        src = fetchFromGitHub {
+          owner = "python-kasa";
+          repo = "python-kasa";
+          rev = "refs/tags/${version}";
+          hash = "sha256-wGPMrYaTtKkkNW88eyiiciFcBSTRqqChYi6e15WUCHo=";
+        };
+      });
+
       python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
         version = "0.38.0";
         src = fetchFromGitHub {

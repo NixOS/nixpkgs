@@ -36,6 +36,7 @@ let
       $out/bin/bb '(+ 1 2)' | fgrep '3'
       $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | fgrep '[1 2]'
       $out/bin/bb '(prn "bépo àê")' | fgrep 'bépo àê'
+      $out/bin/bb '(:out (babashka.process/sh "echo" "ä"))' | fgrep 'ä'
     '';
 
     postInstall = ''

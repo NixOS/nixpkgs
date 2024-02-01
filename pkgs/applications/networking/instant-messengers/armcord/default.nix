@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, makeWrapper
+, makeBinaryWrapper
 , wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeBinaryWrapper wrapGAppsHook ];
 
   dontWrapGApps = true;
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     chmod -R g-w "$out"
 
     # Wrap the startup command
-    makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+    makeBinaryWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \

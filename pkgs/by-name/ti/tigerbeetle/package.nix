@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tigerbeetle";
-  version = "0.14.175";
+  version = "0.14.177";
 
   src = fetchFromGitHub {
     owner = "tigerbeetle";
     repo = "tigerbeetle";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-MabY6kfK/SZ2ps8RZkI6cDhMdHasc1fk6+PKBfVMRm0=";
+    hash = "sha256-oMsDHz/yOWtS1XhJcXR74pA3YvPzANUdRAy7tjNO5lc=";
   };
 
   nativeBuildInputs = [ custom_zig_hook ];

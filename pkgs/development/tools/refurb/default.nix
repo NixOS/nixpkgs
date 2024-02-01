@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "refurb";
-  version = "1.27.0";
+  version = "1.28.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dosisod";
     repo = "refurb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v9zeip7dyEGbn4FVXkd713ybVyf9tvvflCeiS4H7lO0=";
+    hash = "sha256-b7Id2Oyjw3NZno56IMDIq7fn5u9+jn42nuae8ix90fM=";
   };
 
   postPatch = ''

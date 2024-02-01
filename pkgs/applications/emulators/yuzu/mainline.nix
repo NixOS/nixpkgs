@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , wrapQtAppsHook
 , alsa-lib
@@ -47,13 +48,13 @@
 }:
 stdenv.mkDerivation(finalAttrs: {
   pname = "yuzu";
-  version = "1689";
+  version = "1696";
 
   src = fetchFromGitHub {
     owner = "yuzu-emu";
     repo = "yuzu-mainline";
     rev = "mainline-0-${finalAttrs.version}";
-    hash = "sha256-5ITGFWS0OJLXyNoAleZrJob2jz1He1LEOvQzjIlMmPQ=";
+    hash = "sha256-9xIhOA8hA7rsjtO0sgg1ucqghSzaOtkuTAHyQvmT+y4=";
     fetchSubmodules = true;
   };
 
@@ -154,7 +155,7 @@ stdenv.mkDerivation(finalAttrs: {
 
     # provide pre-downloaded tz data
     mkdir -p build/externals/nx_tzdb
-    ln -sf ${nx_tzdb} build/externals/nx_tzdb/${nx_tzdb.version}.zip
+    ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
   '';
 
   # This must be done after cmake finishes as it overwrites the file

@@ -36,7 +36,7 @@ let
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
-      platforms = with platforms; unix;
+      platforms = platforms.linux;
       knownVulnerabilities = extraVulnerabilities
         ++ (optional eol "Nextcloud version ${version} is EOL");
     };

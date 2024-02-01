@@ -922,7 +922,9 @@ let
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
-    lambdapi = callPackage ../development/ocaml-modules/lambdapi { };
+    lambdapi = callPackage ../development/ocaml-modules/lambdapi {
+      why3 = pkgs.why3.override { ocamlPackages = self; };
+    };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
@@ -1757,6 +1759,10 @@ let
 
     timed = callPackage ../development/ocaml-modules/timed { };
 
+    timedesc = callPackage ../development/ocaml-modules/timedesc { };
+    timedesc-tzdb = callPackage ../development/ocaml-modules/timedesc/tzdb.nix { };
+    timedesc-tzlocal = callPackage ../development/ocaml-modules/timedesc/tzlocal.nix { };
+
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 
     tls = callPackage ../development/ocaml-modules/tls { };
@@ -1798,6 +1804,8 @@ let
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
+
+    type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 

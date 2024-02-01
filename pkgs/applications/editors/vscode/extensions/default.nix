@@ -952,8 +952,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.53.0";
-          sha256 = "sha256-ApCX636M51zN9obFqrUHmaJB3YoFmJPQfjKEWf9bosk=";
+          version = "0.54.0";
+          sha256 = "sha256-BrPFFRspJIz1U08hPbLziCmRUeZv2NhRrTCx6qvhOJw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -985,8 +985,8 @@ let
         mktplcRef = {
           name = "vscode-eslint";
           publisher = "dbaeumer";
-          version = "2.4.2";
-          sha256 = "sha256-eIjaiVQ7PNJUtOiZlM+lw6VmW07FbMWPtY7UoedWtbw=";
+          version = "2.4.4";
+          sha256 = "sha256-NJGsMme/+4bvED/93SGojYTH03EZbtKe5LyvocywILA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dbaeumer.vscode-eslint/changelog";
@@ -3001,6 +3001,21 @@ let
         };
       };
 
+      quicktype.quicktype = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "quicktype";
+          publisher = "quicktype";
+          version = "12.0.46";
+          sha256 = "sha256-NTZ0BujnA+COg5txOLXSZSp8TPD1kZNfZPjnvZUL9lc=";
+        };
+        meta = {
+          description = "Infer types from sample JSON data";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=quicktype.quicktype";
+          homepage = "https://github.com/glideapps/quicktype";
+          license = lib.licenses.asl20;
+        };
+      };
+
       rebornix.ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ruby";
@@ -3220,11 +3235,12 @@ let
         mktplcRef = {
           name = "crates";
           publisher = "serayuzgur";
-          version = "0.6.5";
-          sha256 = "sha256-HgqM4PKGk3R5MLY4cVjKxv79p5KlOkVDeDbv7/6FmpM=";
+          version = "0.6.6";
+          sha256 = "sha256-HXoH1IgMLniq0kxHs2snym4rerScu9qCqUaqwEC+O/E=";
         };
         meta = {
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
         };
       };
 

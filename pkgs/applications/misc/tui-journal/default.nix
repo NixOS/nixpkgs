@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tui-journal";
-  version = "0.6.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
     rev = "v${version}";
-    hash = "sha256-0qedRXjuISJst6cZ7rwz/4a935XsBMSzGN8JrzBKjeQ=";
+    hash = "sha256-1cCtWhWOzCezi29oQsa0L1LTIb87ITaJk0teDP2xV78=";
   };
 
-  cargoHash = "sha256-d79NTaW0zs8g62EKqiphWEdgYEnLeRk4NFog0rivr3s=";
+  cargoHash = "sha256-uWxzJONzRDeZVuilpEj4KprF3PtjRhJk8C9zjs5yCvg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Your journal app if you live in a terminl";
+    description = "Your journal app if you live in a terminal";
     homepage = "https://github.com/AmmarAbouZor/tui-journal";
     changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${src.rev}/CHANGELOG.ron";
     license = licenses.mit;

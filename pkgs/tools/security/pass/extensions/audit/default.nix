@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
   postInstall = ''
     wrapProgram $out/lib/password-store/extensions/audit.bash \
-      --prefix PYTHONPATH : "$out/lib/${pythonEnv.libPrefix}/site-packages" \
+      --prefix PYTHONPATH : "$out/${pythonEnv.sitePackages}" \
       --run "export COMMAND"
   '';
 

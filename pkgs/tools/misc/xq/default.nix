@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xq";
-  version = "0.2.45";
+  version = "0.3.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-wSvVmKqucvg7Gs4H1o9i/d8f2I1g52Vq2Z8F7FwaOR0=";
+    sha256 = "sha256-mgvs3/gseLnFtAciW5txtYqo+8DyyQC7y/tN1kDqcb4=";
   };
 
-  cargoHash = "sha256-Gje7Sqe51IMzblydU0s1qXqfIIIQvt0EYMChVbK295s=";
+  cargoHash = "sha256-lSyJqGWlk3ldgAkyebuyUDLp8mJdwnw8ee6ZHQXU2Y4=";
 
   meta = with lib; {
     description = "Pure rust implementation of jq";

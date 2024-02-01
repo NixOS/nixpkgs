@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wakapi";
-  version = "2.10.3";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "muety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-laJdH2C+lyvM82/r3jgV2CI0xJV39Y04tP1/YCXsGzo=";
+    sha256 = "sha256-xUFYwV9fuTMDEqp4FEyPRDQCB6I/3sqcmEX8pm6BDfw=";
   };
 
-  vendorHash = "sha256-/zDlKW00XCI+TyI4RlCIcehQwkken1+SBpieZhfhpwc=";
+  vendorHash = "sha256-TeKVhG1V9inyDWfILwtpU9QknJ9bt3Dja5GVHrK9PkA=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];

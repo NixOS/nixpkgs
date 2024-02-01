@@ -45,6 +45,8 @@ rec {
 
     patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [];
+
+    brokenOpen = kernel.kernelAtLeast "6.7";
   });
 
   beta = selectHighestVersion latest (generic {
@@ -59,14 +61,16 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "535.43.22";
+    version = "535.43.23";
     persistencedVersion = "535.98";
     settingsVersion = "535.98";
-    sha256_64bit = "sha256-emam5bfYJeFi1+Z0Z1//luaY1JTKcQNYUP8GmG9480Q=";
-    openSha256 = "sha256-8Nz6LfEdAsm7d6Leqs+ikN0BpOPkLCcd7bckK0MOIFU=";
+    sha256_64bit = "sha256-lnCiXkkRpKBVjvRSnJ5W8k4Mix6qMw1Lo2S0VjdexzI=";
+    openSha256 = "sha256-i74x94a4HCkqIqwInFgqZEFagVlMNZ1/OIztcTR1ReA=";
     settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
     persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
+
+    brokenOpen = kernel.kernelAtLeast "6.7";
   };
 
   # data center driver compatible with current default cudaPackages

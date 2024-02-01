@@ -60,7 +60,6 @@ let
     "node"
     "nut"
     "openldap"
-    "openvpn"
     "pgbouncer"
     "php-fpm"
     "pihole"

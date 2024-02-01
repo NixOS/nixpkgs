@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "autofaiss";
-  version = "2.16.0";
+  version = "2.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "criteo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-NpehDx67VyIkcqno2DB2NmUKKZhK1Owwd9BNh3nqOLY=";
+    hash = "sha256-pey3wrW7CDLMiPPKnmYrcSJqGuy6ecA2SE9m3Jtt6DU=";
   };
 
   nativeBuildInputs = [

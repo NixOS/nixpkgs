@@ -257,21 +257,6 @@ let
       '';
     };
 
-    exportarr-sonarr = {
-      nodeName = "exportarr_sonarr";
-      exporterConfig = {
-        enable = true;
-        url = "http://127.0.0.1:8989";
-        # testing for real data is tricky, because the api key can not be preconfigured
-        apiKeyFile = pkgs.writeText "dummy-api-key" "eccff6a992bc2e4b88e46d064b26bb4e";
-      };
-      exporterTest = ''
-        wait_for_unit("prometheus-exportarr-sonarr-exporter.service")
-        wait_for_open_port(9707)
-        succeed("curl -sSf 'http://localhost:9707/metrics")
-      '';
-    };
-
     fastly = {
       exporterConfig = {
         enable = true;
@@ -954,31 +939,6 @@ let
         wait_until_succeeds(
             "curl -sSf http://localhost:9330/metrics | grep 'openldap_scrape{result=\"ok\"} 1'"
         )
-      '';
-    };
-
-    openvpn = {
-      exporterConfig = {
-        enable = true;
-        group = "openvpn";
-        statusPaths = [ "/run/openvpn-test" ];
-      };
-      metricProvider = {
-        users.groups.openvpn = { };
-        services.openvpn.servers.test = {
-          config = ''
-            dev tun
-            status /run/openvpn-test
-            status-version 3
-          '';
-          up = "chmod g+r /run/openvpn-test";
-        };
-        systemd.services."openvpn-test".serviceConfig.Group = "openvpn";
-      };
-      exporterTest = ''
-        wait_for_unit("openvpn-test.service")
-        wait_for_unit("prometheus-openvpn-exporter.service")
-        succeed("curl -sSf http://localhost:9176/metrics | grep 'openvpn_up{.*} 1'")
       '';
     };
 

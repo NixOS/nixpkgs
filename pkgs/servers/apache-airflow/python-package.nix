@@ -265,7 +265,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    cp -rv ${airflow-frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
     # Needed for pythonImportsCheck below
     export HOME=$(mktemp -d)
   '';

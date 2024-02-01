@@ -18,16 +18,17 @@
 , xcbuild
 , pango
 , pkg-config
+, nltk-data
 }:
 
 let
-  version = "2.4.0";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bIiUG5yLpKOoxByef2Wm7MmSoL5zAYE9x6/zZywG9aE=";
+    hash = "sha256-uFaywZF1e1ELU6EcRxzMqGu3uiFK8MMfrTxb01Drd7k=";
   };
 
   python = python3;
@@ -293,6 +294,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python path frontend;
+    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 

@@ -617,6 +617,8 @@ self: super: with self; {
 
   aocd = callPackage ../development/python-modules/aocd { };
 
+  aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
+
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
@@ -1013,6 +1015,8 @@ self: super: with self; {
   };
 
   awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
+
+  awsipranges = callPackage ../development/python-modules/awsipranges { };
 
   awslambdaric = callPackage ../development/python-modules/awslambdaric { };
 
@@ -2440,6 +2444,8 @@ self: super: with self; {
 
   cronsim = callPackage ../development/python-modules/cronsim { };
 
+  crontab = callPackage ../development/python-modules/crontab { };
+
   crossplane = callPackage ../development/python-modules/crossplane { };
 
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
@@ -2754,6 +2760,8 @@ self: super: with self; {
 
   decopatch = callPackage ../development/python-modules/decopatch { };
 
+  deebot-client = callPackage ../development/python-modules/deebot-client { };
+
   deemix = callPackage ../development/python-modules/deemix { };
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
@@ -2902,6 +2910,8 @@ self: super: with self; {
 
   dissect = callPackage ../development/python-modules/dissect { };
 
+  dissect-btrfs = callPackage ../development/python-modules/dissect-btrfs { };
+
   dissect-cim = callPackage ../development/python-modules/dissect-cim { };
 
   dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
@@ -2927,6 +2937,8 @@ self: super: with self; {
   dissect-extfs = callPackage ../development/python-modules/dissect-extfs { };
 
   dissect-hypervisor = callPackage ../development/python-modules/dissect-hypervisor { };
+
+  dissect-jffs = callPackage ../development/python-modules/dissect-jffs { };
 
   dissect-ntfs = callPackage ../development/python-modules/dissect-ntfs { };
 
@@ -3037,6 +3049,8 @@ self: super: with self; {
   django-countries = callPackage ../development/python-modules/django-countries { };
 
   django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
+
+  django-crispy-bootstrap5 = callPackage ../development/python-modules/django-crispy-bootstrap5 { };
 
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
@@ -3387,6 +3401,8 @@ self: super: with self; {
   dpcontracts = callPackage ../development/python-modules/dpcontracts { };
 
   dpkt = callPackage ../development/python-modules/dpkt { };
+
+  dploot = callPackage ../development/python-modules/dploot { };
 
   draftjs-exporter = callPackage ../development/python-modules/draftjs-exporter { };
 
@@ -4984,8 +5000,6 @@ self: super: with self; {
 
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
-  gtimelog = callPackage ../development/python-modules/gtimelog { };
-
   gto = callPackage ../development/python-modules/gto { };
 
   gtts = callPackage ../development/python-modules/gtts { };
@@ -6114,6 +6128,8 @@ self: super: with self; {
   keyboard = callPackage ../development/python-modules/keyboard { };
 
   keyring = callPackage ../development/python-modules/keyring { };
+
+  keyring-pass = callPackage ../development/python-modules/keyring-pass { };
 
   keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
 
@@ -12480,6 +12496,8 @@ self: super: with self; {
 
   recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
 
+  recursive-pth-loader = toPythonModule (callPackage ../development/python-modules/recursive-pth-loader { });
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
@@ -12700,6 +12718,8 @@ self: super: with self; {
 
   rmrl = callPackage ../development/python-modules/rmrl { };
 
+  rmscene = callPackage ../development/python-modules/rmscene { };
+
   rmsd = callPackage ../development/python-modules/rmsd { };
 
   rnc2rng = callPackage ../development/python-modules/rnc2rng { };
@@ -12715,6 +12735,8 @@ self: super: with self; {
   robotframework = callPackage ../development/python-modules/robotframework { };
 
   robotframework-databaselibrary = callPackage ../development/python-modules/robotframework-databaselibrary { };
+
+  robotframework-excellib = callPackage ../development/python-modules/robotframework-excellib { };
 
   robotframework-pythonlibcore = callPackage ../development/python-modules/robotframework-pythonlibcore { };
 
@@ -13176,6 +13198,8 @@ self: super: with self; {
 
   sharkiq = callPackage ../development/python-modules/sharkiq { };
 
+  sharp-aquos-rc = callPackage ../development/python-modules/sharp-aquos-rc { };
+
   shazamio = callPackage ../development/python-modules/shazamio { };
 
   sh = callPackage ../development/python-modules/sh { };
@@ -13265,6 +13289,10 @@ self: super: with self; {
   simplepush = callPackage ../development/python-modules/simplepush { };
 
   simplesat = callPackage ../development/python-modules/simplesat { };
+
+  simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3/python.nix {
+    inherit (pkgs) simple-dftd3;
+  };
 
   simple-di = callPackage ../development/python-modules/simple-di { };
 
@@ -13994,6 +14022,8 @@ self: super: with self; {
 
   svg-path = callPackage ../development/python-modules/svg-path { };
 
+  svg-py = callPackage ../development/python-modules/svg-py { };
+
   svgelements = callPackage ../development/python-modules/svgelements { };
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
@@ -14096,8 +14126,7 @@ self: super: with self; {
   tblib = callPackage ../development/python-modules/tblib { };
 
   tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
-    tblite = pkgs.tblite;
-    meson = pkgs.meson;
+    inherit (pkgs) tblite meson simple-dftd3;
   };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
@@ -14261,6 +14290,8 @@ self: super: with self; {
   termstyle = callPackage ../development/python-modules/termstyle { };
 
   tern = callPackage ../development/python-modules/tern { };
+
+  tesla-fleet-api = callPackage ../development/python-modules/tesla-fleet-api { };
 
   tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
 
@@ -15961,6 +15992,8 @@ self: super: with self; {
   vsure = callPackage ../development/python-modules/vsure { };
 
   vt-py = callPackage ../development/python-modules/vt-py { };
+
+  vtjp = callPackage ../development/python-modules/vtjp { };
 
   vtk = toPythonModule (pkgs.vtk_9.override {
     inherit python;

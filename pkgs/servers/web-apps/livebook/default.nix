@@ -22,15 +22,11 @@ beamPackages.mixRelease rec {
     hash = "sha256-dyKhrbb7vazBV6LFERtGHLQXEx29vTgn074mY4fsHy4=";
   };
 
-  installPhase = ''
-    mix escript.build
-    mkdir -p $out/bin
-    mv ./livebook $out/bin
-
+  postInstall = ''
     wrapProgram $out/bin/livebook \
-      --prefix PATH : ${lib.makeBinPath [ elixir ]} \
+      --prefix PATH : ${lib.makeBinPath [ elixir erlang ]} \
       --set MIX_REBAR3 ${rebar3}/bin/rebar3
-  '';
+    '';
 
   passthru.tests = {
     livebook-service = nixosTests.livebook-service;
