@@ -10107,6 +10107,12 @@
     githubId = 264372;
     name = "Jan van den Berg";
   };
+  koppor = {
+    email = "kopp.dev@gmail.com";
+    github = "koppor";
+    githubId = 1366654;
+    name = "Oliver Kopp";
+  };
   koral = {
     email = "koral@mailoo.org";
     github = "k0ral";

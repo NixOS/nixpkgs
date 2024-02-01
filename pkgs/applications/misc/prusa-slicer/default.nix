@@ -9,6 +9,7 @@
 , cereal
 , cgal
 , curl
+, darwin
 , dbus
 , eigen
 , expat
@@ -111,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     catch2
   ] ++ lib.optionals withSystemd [
     systemd
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreWLAN
   ];
 
   separateDebugInfo = true;
@@ -190,6 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3;
     maintainers = with maintainers; [ moredread tweber tmarkus ];
+    platforms = platforms.unix;
   } // lib.optionalAttrs (stdenv.isDarwin) {
     mainProgram = "PrusaSlicer";
   };

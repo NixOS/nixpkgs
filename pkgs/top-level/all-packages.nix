@@ -3363,6 +3363,8 @@ with pkgs;
 
   authelia = callPackage ../servers/authelia { };
 
+  authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
+
   autoflake = with python3.pkgs; toPythonApplication autoflake;
 
   autospotting = callPackage ../applications/misc/autospotting { };
@@ -35318,7 +35320,9 @@ with pkgs;
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  prusa-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer { };
+  prusa-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer {
+    stdenv = if stdenv.isDarwin then overrideLibcxx darwin.apple_sdk_11_0.llvmPackages_14.stdenv else stdenv;
+  };
 
   super-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
