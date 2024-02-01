@@ -817,7 +817,7 @@ Because of this, using this function requires the `kvm` device to be available, 
 
 `diskSize` (Number; _optional_)
 
-: Controls the disk size (in megabytes) of the VM used to merge the layers of `fromImage`.
+: Controls the disk size (in megabytes) of the VM used to unpack the image.
 
   _Default value:_ 1024.
 
@@ -964,7 +964,6 @@ dockerTools.exportImage {
 
 Building this will give us the expected output:
 
-(you can't build this unless you also have an image named `image.tar.gz` in the same directory as your package!)
 ```shell
 $ nix-build
 (output removed for clarity)
