@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, acl
-, cowsql
-, hwdata
-, libcap
-, lxc
-, pkg-config
-, sqlite
-, udev
-, installShellFiles
-, nix-update-script
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  acl,
+  cowsql,
+  hwdata,
+  libcap,
+  lxc,
+  pkg-config,
+  sqlite,
+  udev,
+  installShellFiles,
+  nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -53,7 +54,10 @@ buildGoModule rec {
     udev.dev
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
   tags = [ "libsqlite3" ];
 
   # required for go-cowsql.
@@ -64,13 +68,15 @@ buildGoModule rec {
   '';
 
   preCheck =
-    let skippedTests = [
-      "TestValidateConfig"
-      "TestConvertNetworkConfig"
-      "TestConvertStorageConfig"
-      "TestSnapshotCommon"
-      "TestContainerTestSuite"
-    ]; in
+    let
+      skippedTests = [
+        "TestValidateConfig"
+        "TestConvertNetworkConfig"
+        "TestConvertStorageConfig"
+        "TestSnapshotCommon"
+        "TestContainerTestSuite"
+      ];
+    in
     ''
       # Disable tests requiring local operations
       buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
@@ -85,15 +91,15 @@ buildGoModule rec {
       --zsh <($out/bin/incus completion zsh)
   '';
 
-
   passthru = {
     tests.incus = nixosTests.incus;
 
     updateScript = nix-update-script {
-       extraArgs = [
-        "-vr" "v\(.*\)"
-       ];
-     };
+      extraArgs = [
+        "-vr"
+        "v(.*)"
+      ];
+    };
   };
 
   meta = {
