@@ -17,8 +17,19 @@ let
   boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
 
   boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
-    # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-    patches = (drv.patches or [ ]) ++ [ ./patches/boehmgc-coroutine-sp-fallback.patch ];
+    patches = (drv.patches or [ ]) ++ [
+      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+      ./patches/boehmgc-coroutine-sp-fallback.patch
+
+      # Required since 2.20, and has always been a valid change
+      # Awaiting 8.2 patch release of https://github.com/ivmai/bdwgc/commit/d1d4194c010bff2dc9237223319792cae834501c
+      # or master release of https://github.com/ivmai/bdwgc/commit/86b3bf0c95b66f718c3cb3d35fd7387736c2a4d7
+      (fetchpatch {
+        name = "boehmgc-traceable_allocator-public.diff";
+        url = "https://github.com/NixOS/nix/raw/2.20.0/dep-patches/boehmgc-traceable_allocator-public.diff";
+        hash = "sha256-FLsHY/JS46neiSyyQkVpbHZEFvWSCzWrFQu1CC71sh4=";
+      })
+    ];
   });
 
   # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply
