@@ -116,9 +116,10 @@ let
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing makeScopeWithSplicing';
-    inherit (self.derivations) lazyDerivation;
+    inherit (self.derivations) lazyDerivation defaultOutput
+      outputsFor setOutputsToInstall;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
-      appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
+      appendToName mapDerivationAttrset setPrio setPrioRecursively lowPrio lowPrioSet hiPrio
       hiPrioSet getLicenseFromSpdxId getExe getExe';
     inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile
       packagesFromDirectoryRecursive;

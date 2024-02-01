@@ -54,6 +54,11 @@ rec {
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
 
+  # Set the nix-env priority of a package recursively, including all its outputs
+  setPrioRecursively = priority: drv: setPrio priority drv // (lib.listToAttrs (
+    map (output: lib.nameValuePair output (setPrioRecursively priority drv.${output})) drv.outputs
+  ));
+
   /* Decrease the nix-env priority of the package, i.e., other
      versions/variants of the package will be preferred.
   */
