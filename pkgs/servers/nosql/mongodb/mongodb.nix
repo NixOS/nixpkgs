@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, scons
+, buildPackages
 , boost
 , gperftools
 , pcre-cpp
@@ -32,6 +32,7 @@ with lib;
 }:
 
 let
+  scons = buildPackages.scons;
   python = scons.python.withPackages (ps: with ps; [
     pyyaml
     cheetah3
@@ -67,8 +68,10 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ scons ]
-                      ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+  nativeBuildInputs = [
+    scons
+    python
+  ] ++ lib.optional stdenv.isLinux net-snmp;
 
   buildInputs = [
     boost
@@ -79,13 +82,12 @@ in stdenv.mkDerivation rec {
     openssl
     openldap
     pcre-cpp
-    python
     sasl
     snappy
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ Security CoreFoundation cctools ]
-  ++ lib.optionals stdenv.isLinux [ net-snmp ];
-
+  ++ lib.optional stdenv.isLinux net-snmp
+  ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
 
   # MongoDB keeps track of its build parameters, which tricks nix into
   # keeping dependencies to build inputs in the final output.
@@ -142,6 +144,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
+    sconsFlags+=" AR=$AR"
   '' + optionalString stdenv.isAarch64 ''
     sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
