@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3 python3Packages.gitpython git nix
+#!nix-shell -i python3 -p python3 python3Packages.gitpython python3Packages.packaging git nix
 
 import git
 import json
@@ -29,10 +29,13 @@ def query_version(repo: git.Repo):
             continue
         fields[m[1].lower()] = m[2]
 
+    fields["major"] = packaging.version.parse(fields["revision"]).major
     return fields
 
 
-def handle_commit(repo: git.Repo, rev: git.objects.commit.Commit, ref_name: str):
+def handle_commit(
+    repo: git.Repo, rev: git.objects.commit.Commit, ref_name: str, ref_type: str
+):
     repo.git.checkout(rev)
     print(f"{ref_name}: checked out {rev.hexsha}")
 
@@ -49,6 +52,7 @@ def handle_commit(repo: git.Repo, rev: git.objects.commit.Commit, ref_name: str)
         "rev": rev.hexsha,
         "hash": full_hash,
         "ref": ref_name,
+        "ref_type": ref_type,
         "version": query_version(repo),
     }
 
@@ -103,7 +107,7 @@ for tag in repo.tags:
 
     print(f"Trying tag {tag.name} ({version})")
 
-    result = handle_commit(repo, tag.commit, tag.name)
+    result = handle_commit(repo, tag.commit, tag.name, "tag")
     versions[tag.name] = result
 
 for branch in repo.remote("origin").refs:
@@ -117,11 +121,11 @@ for branch in repo.remote("origin").refs:
         print(f"Trying branch {fullname} ({version})")
     elif branch.name == f"{REMOTE}/{MAIN_BRANCH}":
         fullname = MAIN_BRANCH
-        print("Trying main branch {branch_fullname}")
+        print(f"Trying development branch {fullname}")
     else:
         continue
 
-    result = handle_commit(repo, branch.commit, fullname)
+    result = handle_commit(repo, branch.commit, fullname, "branch")
     versions[fullname] = result
 
 
