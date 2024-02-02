@@ -108,8 +108,8 @@ in
         toRcloneVal = v: if lib.isBool v then lib.boolToString v else v;
       in
       {
-        RESTIC_REPO_URL = cfg.repository;
-        RESTIC_REPO_PASSWORD_FILE = cfg.passwordFile;
+        RESTIC_REPOSITORY = cfg.repository;
+        RESTIC_PASSWORD_FILE = cfg.passwordFile;
         LISTEN_ADDRESS = cfg.listenAddress;
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
