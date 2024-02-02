@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, pkg-config, makeWrapper, allegro5, libGL }:
+{ stdenv, lib, fetchFromGitHub, fetchurl, pkg-config, allegro5, libGL, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "liberation-circuit";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-zIwjh4CBSmKz7pF7GM5af+VslWho5jHOLsulbW4C8TY=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ allegro5 libGL ];
+
+  dontWrapGApps = true;
 
   installPhase = ''
     runHook preInstall
@@ -20,13 +22,17 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt
     cp -r bin $out/opt/liberation-circuit
     chmod +x $out/opt/liberation-circuit/launcher.sh
-    makeWrapper $out/opt/liberation-circuit/launcher.sh $out/bin/liberation-circuit
 
     install -D linux-packaging/liberation-circuit.desktop $out/share/applications/liberation-circuit.desktop
     install -D linux-packaging/liberation-circuit.appdata.xml $out/share/metainfo/liberation-circuit.appdata.xml
     install -D linux-packaging/icon-256px.png $out/share/pixmaps/liberation-circuit.png
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    makeWrapper $out/opt/liberation-circuit/launcher.sh $out/bin/liberation-circuit \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   meta = {
