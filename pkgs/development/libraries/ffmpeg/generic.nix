@@ -454,13 +454,19 @@ stdenv.mkDerivation (finalAttrs: {
      *  External libraries
      */
     (enableFeature withAlsa "alsa")
+    (enableFeature withAom "libaom")
     # FIXME: see if jellyfin-ffmpeg is already on a version >= 6.1 to use enableFeature
     (optionalString (withAribcaption && lib.versionAtLeast finalAttrs.version "6.1") "--enable-libaribcaption")
+    (enableFeature withAss "libass")
+    (enableFeature withBluray "libbluray")
+    (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCelt "libcelt")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
     (enableFeature withDav1d "libdav1d")
+    (enableFeature withDc1394 "libdc1394")
+    (enableFeature withDrm "libdrm")
     (enableFeature withFdkAac "libfdk-aac")
     "--disable-libflite" # Force disable until a solution is found
     (enableFeature withFontconfig "fontconfig")
@@ -470,41 +476,15 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withGme "libgme")
     (enableFeature withGnutls "gnutls")
     (enableFeature withGsm "libgsm")
-    (enableFeature withLadspa "ladspa")
-    (enableFeature withMp3lame "libmp3lame")
-    (enableFeature withAom "libaom")
-    (enableFeature withAss "libass")
-    (enableFeature withBluray "libbluray")
-    (enableFeature withBs2b "libbs2b")
-    (enableFeature withDc1394 "libdc1394")
-    (enableFeature withDrm "libdrm")
     (enableFeature withIconv "iconv")
     (enableFeature withJack "libjack")
+    (enableFeature withLadspa "ladspa")
+    (optionalString (versionAtLeast finalAttrs.version "5.0" && withLibplacebo) "--enable-libplacebo")
+    (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
     (enableFeature withModplug "libmodplug")
+    (enableFeature withMp3lame "libmp3lame")
     (enableFeature withMysofa "libmysofa")
-    (enableFeature withOpus "libopus")
-    (optionalString (versionAtLeast finalAttrs.version "5.0" && withLibplacebo) "--enable-libplacebo")
-    (enableFeature withSvg "librsvg")
-    (enableFeature withSrt "libsrt")
-    (enableFeature withSsh "libssh")
-    (enableFeature withTensorflow "libtensorflow")
-    (enableFeature withTheora "libtheora")
-    (enableFeature withV4l2 "libv4l2")
-    (enableFeature withV4l2M2m "v4l2-m2m")
-    (enableFeature withVaapi "vaapi")
-    (enableFeature withVdpau "vdpau")
-    (enableFeature withVorbis "libvorbis")
-    (enableFeature withVmaf "libvmaf")
-    (enableFeature withVpx "libvpx")
-    (enableFeature withWebp "libwebp")
-    (enableFeature withXlib "xlib")
-    (enableFeature withXcb "libxcb")
-    (enableFeature withXcbShm "libxcb-shm")
-    (enableFeature withXcbxfixes "libxcb-xfixes")
-    (enableFeature withXcbShape "libxcb-shape")
-    (enableFeature withXml2 "libxml2")
-    (enableFeature withLzma "lzma")
     (enableFeature withNvdec "cuvid")
     (enableFeature withNvdec "nvdec")
     (enableFeature withNvenc "nvenc")
@@ -515,25 +495,45 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenh264 "libopenh264")
     (enableFeature withOpenjpeg "libopenjpeg")
     (enableFeature withOpenmpt "libopenmpt")
+    (enableFeature withOpus "libopus")
     (enableFeature withPulse "libpulse")
     (enableFeature withRav1e "librav1e")
-    (enableFeature withSvtav1 "libsvtav1")
     (enableFeature withRtmp "librtmp")
+    (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
+    (optionalString (lib.versionAtLeast finalAttrs.version "5") (enableFeature withShaderc "libshaderc"))
     (enableFeature withSoxr "libsoxr")
     (enableFeature withSpeex "libspeex")
+    (enableFeature withSrt "libsrt")
+    (enableFeature withSsh "libssh")
+    (enableFeature withSvg "librsvg")
+    (enableFeature withSvtav1 "libsvtav1")
+    (enableFeature withTensorflow "libtensorflow")
+    (enableFeature withTheora "libtheora")
+    (enableFeature withV4l2 "libv4l2")
+    (enableFeature withV4l2M2m "v4l2-m2m")
+    (enableFeature withVaapi "vaapi")
+    (enableFeature withVdpau "vdpau")
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
+    (enableFeature withVmaf "libvmaf")
     (enableFeature withVoAmrwbenc "libvo-amrwbenc")
+    (enableFeature withVorbis "libvorbis")
+    (enableFeature withVpx "libvpx")
+    (enableFeature withVulkan "vulkan")
+    (enableFeature withWebp "libwebp")
     (enableFeature withX264 "libx264")
     (enableFeature withX265 "libx265")
     (enableFeature withXavs "libxavs")
+    (enableFeature withXcb "libxcb")
+    (enableFeature withXcbShape "libxcb-shape")
+    (enableFeature withXcbShm "libxcb-shm")
+    (enableFeature withXcbxfixes "libxcb-xfixes")
+    (enableFeature withXlib "xlib")
+    (enableFeature withXml2 "libxml2")
     (enableFeature withXvid "libxvid")
-    (enableFeature withZmq "libzmq")
     (enableFeature withZimg "libzimg")
     (enableFeature withZlib "zlib")
-    (enableFeature withVulkan "vulkan")
-    (optionalString (lib.versionAtLeast finalAttrs.version "5") (enableFeature withShaderc "libshaderc"))
-    (enableFeature withSamba "libsmbclient")
+    (enableFeature withZmq "libzmq")
     /*
      * Developer flags
      */
@@ -618,6 +618,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSvtav1 [ svt-av1 ]
   ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTheora [ libtheora ]
+  ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
   ++ optionals withVidStab [ vid-stab ]
@@ -625,7 +626,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withVoAmrwbenc [ vo-amrwbenc ]
   ++ optionals withVorbis [ libvorbis ]
   ++ optionals withVpx [ libvpx ]
-  ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVulkan [ vulkan-headers vulkan-loader ]
   ++ optionals withWebp [ libwebp ]
   ++ optionals withX264 [ x264 ]
