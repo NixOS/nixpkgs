@@ -23,12 +23,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.31.0";
+  version = "0.35.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-P7Bs9JMv6KNKo4d2ID0/Ba4+Nel6DMn8o4I7EDvY4vY=";
+    hash = "sha256-q2wyM0R7Mi/XuckNb6ZDkStaV9yJH1BgJ4cjqQc6EI4=";
   };
 
   nativeBuildInputs = [
@@ -69,11 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ];
   });
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
 
   passthru = {
     tests.phosh = nixosTests.phosh;
