@@ -2460,6 +2460,12 @@
     githubId = 9730330;
     name = "Benoit de Chezelles";
   };
+  b-eyselein = {
+    email = "b.eyselein@gmail.com";
+    github = "b-eyselein";
+    githubId = 7056902;
+    name = "Björn Eyselein";
+  };
   bezmuth = {
     email = "benkel97@protonmail.com";
     name = "Ben Kelly";
