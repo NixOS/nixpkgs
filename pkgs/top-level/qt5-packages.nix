@@ -255,6 +255,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qzxing = callPackage ../development/libraries/qzxing { };
 
+  rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
+
   soqt = callPackage ../development/libraries/soqt { };
 
   telepathy = callPackage ../development/libraries/telepathy/qt { };
