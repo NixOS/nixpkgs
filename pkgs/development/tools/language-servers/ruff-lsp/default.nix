@@ -69,5 +69,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda kalekseev ];
+    mainProgram = "ruff-lsp";
   };
 }
