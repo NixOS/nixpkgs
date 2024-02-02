@@ -39095,7 +39095,9 @@ with pkgs;
 
   notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
-  openblas = callPackage ../development/libraries/science/math/openblas { };
+  openblas = callPackage ../development/libraries/science/math/openblas {
+    inherit (llvmPackages) openmp;
+  };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
@@ -39213,7 +39215,9 @@ with pkgs;
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix { };
-  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse { };
+  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
+    inherit (llvmPackages) openmp;
+  };
   suitesparse = suitesparse_5_3;
 
   suitesparse-graphblas = callPackage ../development/libraries/science/math/suitesparse-graphblas { };
