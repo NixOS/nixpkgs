@@ -19,6 +19,7 @@
 , dasht
 , deno
 , direnv
+, duckdb
 , fish
 , fzf
 , gawk
@@ -977,8 +978,55 @@
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
 
+  nvim-dbee = super.nvim-dbee.overrideAttrs (oa: let
+        dbee-go = buildGoModule {
+          name = "nvim-dbee";
+          src = src + "/dbee";
+          vendorHash = "sha256-0TIKX0OL5V3sk9V7e56YmNIzsUZku6Y8S22lVUGrsCY=";
+
+          buildInputs = [ duckdb ];
+        };
+    # to work around the *DefaultLayout* bug
+    src = fetchFromGitHub {
+      owner = "teto";
+      repo = "nvim-dbee";
+      rev = "fix/docs-remove-duplicate-tags";
+      hash = "sha256-wKtUcPs8XnoY20H+i6YT7SDioMyIaTOtNDtaBDKDYzY=";
+    };
+
+      in
+
+  {
+
+    inherit src;
+    dependencies = with self; [ nui-nvim ];
+
+    # nvim-dbee looks for the go binary in paths returned bu M.dir() and M.bin() defined in
+    # lua/dbee/install/init.lua
+    # If we patch this path then it should be ok
+
+    # return vim.fn.stdpath("data") .. "/dbee/bin"
+    #   vim.fn["remote#host#Register"]("nvim_dbee", "x", function()
+
+
+    # dbee generates a manifest and then adds 'dbee' in path
+    # vim.env.PATH = install.dir() .. ":" .. vim.env.PATH
+    #
+    postPatch = ''
+      substituteInPlace lua/dbee/install/init.lua --replace 'return vim.fn.stdpath("data") .. "/dbee/bin"' 'return "${dbee-go}/bin"'
+    '';
+
+
+    preFixup =
+      ''
+        mkdir $target/bin
+        ln -s ${dbee-go}/bin/dbee $target/bin/dbee
+      '';
+
+  });
+
   nvim-navic = super.nvim-navic.overrideAttrs {
-    dependencies = with self; [ nvim-lspconfig ];
+    dependencies =  [ self.nvim-lspconfig ];
   };
 
   nvim-spectre = super.nvim-spectre.overrideAttrs (old:

@@ -7115,6 +7115,18 @@ final: prev:
     meta.homepage = "https://github.com/theHamsta/nvim-dap-virtual-text/";
   };
 
+  nvim-dbee = buildVimPlugin {
+    pname = "nvim-dbee";
+    version = "2024-01-13";
+    src = fetchFromGitHub {
+      owner = "kndndrj";
+      repo = "nvim-dbee";
+      rev = "2f8e14e8dcd397f5da45fcd73d9576692906a4e3";
+      sha256 = "003qsp181xniw2qva5chy8khi1296z4rh12nvggl26jz7iqwd55f";
+    };
+    meta.homepage = "https://github.com/kndndrj/nvim-dbee/";
+  };
+
   nvim-docs-view = buildVimPlugin {
     pname = "nvim-docs-view";
     version = "2024-01-20";
