@@ -19,6 +19,14 @@ python3Packages.buildPythonPackage rec {
       url = "https://github.com/opsdroid/opsdroid/pull/2018/commits/802e7f3500b935bae21ee915c17efa6f512ad4f0.patch";
       hash = "sha256-ahE0FVgwxIM3HmF2WFChmBeyuPbhUyYyD/YPfcMmu9k=";
     })
+    #
+    # This patch makes opsdroid functional on spec compliant homeservers.
+    # https://github.com/opsdroid/opsdroid/pull/2017
+    (fetchpatch {
+      name = "matrix-connector-spec-compliance.patch";
+      url = "https://github.com/opsdroid/opsdroid/pull/2017/commits/d2aae1f6648daf6fbd7b33370506f57df1be6f06.patch";
+      hash = "sha256-QgoQdYx1vjYW+LW0nrPKTimb0wQdjrT9WUsQtKPypkA=";
+    })
   ];
 
   disabled = !python3Packages.isPy3k;
