@@ -231,7 +231,7 @@ in
     users.groups.youtrack = {};
 
     services.nginx = lib.mkIf (cfg.virtualHost != null) {
-      upstreams.youtrack.servers."${cfg.address}:${toString cfg.port}" = {};
+      upstreams.youtrack.servers."${cfg.address}:${toString cfg.environmentalParameters.listen-port}" = {};
       virtualHosts.${cfg.virtualHost}.locations = {
         "/" = {
           proxyPass = "http://youtrack";
