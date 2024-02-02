@@ -179,7 +179,11 @@ stdenv.mkDerivation (self: rec {
 
   # From the INSTALL docs
   checkPhase = ''
+    runHook preCheck
+
     (cd tests && sh run-tests.sh)
+
+    runHook postCheck
   '';
 
   installPhase = ''
