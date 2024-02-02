@@ -11,6 +11,7 @@
 , pytest-rerunfailures
 , pytest-xdist
 , pytestCheckHook
+, python3
 , pythonOlder
 , setuptools
 , tomli
@@ -96,6 +97,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "build"
+  ];
+
+  # Add the wheel dependency via a wrapper.
+  # DO NOT use propagatedBuildInputs to prevent leakage into the build env.
+  makeWrapperArgs = [
+    ''--suffix PYTHONPATH : "${wheel}/${python3.sitePackages}"''
   ];
 
   meta = with lib; {
