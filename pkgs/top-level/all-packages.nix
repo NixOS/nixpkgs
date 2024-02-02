@@ -18449,6 +18449,8 @@ with pkgs;
 
   babeltrace = callPackage ../development/tools/misc/babeltrace/v1.nix { };
 
+  babeltrace2 = callPackage ../development/tools/misc/babeltrace/v2.nix { };
+
   bam = callPackage ../development/tools/build-managers/bam { };
 
   bandit = with python3Packages; toPythonApplication bandit;
