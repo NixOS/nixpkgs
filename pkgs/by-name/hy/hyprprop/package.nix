@@ -4,13 +4,13 @@
 , lib
 , makeWrapper
 , slurp
-, stdenv
+, stdenvNoCC
 , hyprland
 , hyprevents
 , bash
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   # pkill is a dependency here.. but its in PATH and its hyprevents (not hyprprop) that needs to access it...
   pname = "hyprprop";
   version = "unstable-2024-01-15";
@@ -27,18 +27,14 @@ stdenv.mkDerivation {
   buildInputs = [ bash ];
 
   dontBuild = true;
-  installPhase = ''
-    runHook preInstall
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
 
-    export PREFIX="$out"
-    make install
-
+  postInstall = ''
     wrapProgram "$out/bin/hyprprop" \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ socat jq slurp hyprland hyprevents ]}"
-
-    runHook postInstall
   '';
-  passthru.scriptName = "hyprprop";
 
   meta = with lib; {
     description = "xprop for Hyprland";

@@ -1,12 +1,12 @@
 { fetchFromGitHub
 , lib
 , makeWrapper
-, stdenv
+, stdenvNoCC
 , hyprland
 , bash
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "hyprevents";
   version = "unstable-2024-01-15";
 
@@ -22,18 +22,14 @@ stdenv.mkDerivation {
   buildInputs = [ bash ];
 
   dontBuild = true;
-  installPhase = ''
-    runHook preInstall
-
-    export PREFIX="$out"
-    make install
-
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
+  
+  postInstall = ''
     wrapProgram "$out/bin/hyprevents" \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ hyprland ]}"
-
-    runHook postInstall
   '';
-  passthru.scriptName = "hyprevents";
 
   meta = with lib; {
     description = "Invoke shell functions in response to Hyprland socket2 events. Forked from hyprwm";
