@@ -20,7 +20,7 @@
 , libuchardet
 , libiconv
 , xcbuild
-, sigtool
+, rcodesign
 
 , waylandSupport ? stdenv.isLinux
   , wayland
@@ -156,7 +156,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ninja
     pkg-config
   ]
-  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun rcodesign ]
   ++ lib.optionals swiftSupport [ swift ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 

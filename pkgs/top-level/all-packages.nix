@@ -33765,7 +33765,6 @@ with pkgs;
   mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
     stdenv = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
     inherit lua;
-    inherit (darwin) sigtool; # otherwise it breaks splicing...
   };
 
   shaka-packager = callPackage ../applications/video/shaka-packager { };
