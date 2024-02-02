@@ -455,8 +455,9 @@ stdenv.mkDerivation (finalAttrs: {
      */
     (enableFeature withAlsa "alsa")
     (enableFeature withAom "libaom")
-    # FIXME: see if jellyfin-ffmpeg is already on a version >= 6.1 to use enableFeature
-    (optionalString (withAribcaption && lib.versionAtLeast finalAttrs.version "6.1") "--enable-libaribcaption")
+  ] ++ optionals (versionAtLeast finalAttrs.version "6.1") [
+    (enableFeature withAribcaption "libaribcaption")
+  ] ++ [
     (enableFeature withAss "libass")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
@@ -495,13 +496,17 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenjpeg "libopenjpeg")
     (enableFeature withOpenmpt "libopenmpt")
     (enableFeature withOpus "libopus")
-    (optionalString (versionAtLeast finalAttrs.version "5.0" && withPlacebo) "--enable-libplacebo")
+  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+    (enableFeature withPlacebo "libplacebo")
+  ] ++ [
     (enableFeature withPulse "libpulse")
     (enableFeature withRav1e "librav1e")
     (enableFeature withRtmp "librtmp")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
-    (optionalString (lib.versionAtLeast finalAttrs.version "5") (enableFeature withShaderc "libshaderc"))
+  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+    (enableFeature withShaderc "libshaderc")
+  ] ++ [
     (enableFeature withSoxr "libsoxr")
     (enableFeature withSpeex "libspeex")
     (enableFeature withSrt "libsrt")
