@@ -27457,8 +27457,6 @@ with pkgs;
 
   yaws = callPackage ../servers/http/yaws { };
 
-  youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
-
   zabbixFor = version: rec {
     agent = (callPackages ../servers/monitoring/zabbix/agent.nix {}).${version};
     proxy-mysql = (callPackages ../servers/monitoring/zabbix/proxy.nix { mysqlSupport = true; }).${version};
@@ -34327,9 +34325,9 @@ with pkgs;
 
   openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
-  opencpn = darwin.apple_sdk_11_0.callPackage ../applications/misc/opencpn {
+  opencpn = callPackage ../applications/misc/opencpn {
     inherit (darwin) DarwinTools;
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
+    inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
   openfx = callPackage ../development/libraries/openfx { };

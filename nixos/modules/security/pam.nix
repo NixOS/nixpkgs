@@ -867,9 +867,6 @@ let
           { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
             no-autostart = cfg.gnupg.noAutostart;
           }; }
-          { name = "cgfs"; enable = config.virtualisation.lxc.lxcfs.enable; control = "optional"; modulePath = "${pkgs.lxc}/lib/security/pam_cgfs.so"; args = [
-            "-c" "all"
-          ]; }
         ];
       };
     };

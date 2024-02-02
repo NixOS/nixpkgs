@@ -12,7 +12,6 @@
   nix-update-script,
   nixosTests,
   openssl,
-  pam,
   pkg-config,
   systemd,
 }:
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     libseccomp
     libselinux
     openssl
-    pam
     systemd
   ];
 
