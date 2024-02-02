@@ -1,33 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, nasm, windows }:
+{ lib
+, fetchFromGitHub
+, nasm
+, stdenv
+, windows
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openh264";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
-    repo = pname;
-    rev = "v${version}";
+    repo = "openh264";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vPVHXATsSWmqKOAj09WRR5jCi2NU2lq0j4K15KBzARY=";
   };
 
-  nativeBuildInputs = [ nasm ];
+  outputs = [ "out" "dev" ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isWindows windows.pthreads;
+  nativeBuildInputs = [
+    nasm
+  ];
 
+  buildInputs = lib.optionals stdenv.hostPlatform.isWindows [
+    windows.pthreads
+  ];
+
+  # TODO: refine ARCH and OS
   makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
     "PREFIX=${placeholder "out"}"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optional stdenv.hostPlatform.isWindows "OS=mingw_nt";
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ "OS=mingw_nt" ];
 
   enableParallelBuilding = true;
 
-  hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "stackprotector";
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isWindows [
+    "stackprotector"
+  ];
 
-  meta = with lib; {
-    description = "A codec library which supports H.264 encoding and decoding";
+  meta = {
     homepage = "https://www.openh264.org";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    description = "A codec library which supports H.264 encoding and decoding";
+    changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})
