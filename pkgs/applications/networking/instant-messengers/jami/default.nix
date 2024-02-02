@@ -51,6 +51,7 @@
 , qtsvg
 , qtwebengine
 , qtwebchannel
+, wrapGAppsHook
 , withWebengine ? true
 
   # for pjsip
@@ -163,7 +164,10 @@ stdenv.mkDerivation rec {
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
   '';
 
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
+    wrapGAppsHook
     wrapQtAppsHook
     pkg-config
     cmake
@@ -204,6 +208,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Make the jamid d-bus services available
     ln -s ${daemon}/share/dbus-1 $out/share
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru.updateScript = gitUpdater {
