@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , aiohttp
 , ciso8601
 , async-timeout
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "sense-energy";
   version = "0.12.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,8 +29,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "{{VERSION_PLACEHOLDER}}" "${version}"
+      --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
