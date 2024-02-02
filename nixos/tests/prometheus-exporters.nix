@@ -1177,6 +1177,39 @@ let
       '';
     };
 
+    restic =
+      let
+        repository = "rest:http://127.0.0.1:8000";
+        passwordFile = pkgs.writeText "restic-test-password" "test-password";
+      in
+      {
+        exporterConfig = {
+          enable = true;
+          inherit repository passwordFile;
+        };
+        metricProvider = {
+          services.restic.server = {
+            enable = true;
+            extraFlags = [ "--no-auth" ];
+          };
+          environment.systemPackages = [ pkgs.restic ];
+        };
+        exporterTest = ''
+          # prometheus-restic-exporter.service fails without initialised repository
+          systemctl("stop prometheus-restic-exporter.service")
+
+          # Initialise the repository
+          wait_for_unit("restic-rest-server.service")
+          wait_for_open_port(8000)
+          succeed("restic init --repo ${repository} --password-file ${passwordFile}")
+
+          systemctl("start prometheus-restic-exporter.service")
+          wait_for_unit("prometheus-restic-exporter.service")
+          wait_for_open_port(9753)
+          wait_until_succeeds("curl -sSf localhost:9753/metrics | grep 'restic_check_success 1.0'")
+        '';
+      };
+
     rspamd = {
       exporterConfig = {
         enable = true;
@@ -1684,7 +1717,12 @@ mapAttrs
       testScript = ''
         ${nodeName}.start()
         ${concatStringsSep "\n" (map (line:
-          if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
+          if builtins.any (b: b) [
+            (builtins.match "^[[:space:]]*$" line != null)
+            (builtins.substring 0 1 line == "#")
+            (builtins.substring 0 1 line == " ")
+            (builtins.substring 0 1 line == ")")
+          ]
           then line
           else "${nodeName}.${line}"
         ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
