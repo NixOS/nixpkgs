@@ -1,16 +1,47 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3 python3Packages.gitpython python3Packages.packaging git nix
+#!nix-shell -i python3 -p git "python3.withPackages (ps: with ps; [ gitpython packaging beautifulsoup4 pandas lxml ])"
 
+import bs4
 import git
+import io
 import json
 import os
 import packaging.version
+import pandas
 import re
 import subprocess
 import sys
 import tempfile
+import typing
+import urllib.request
 
 _QUERY_VERSION_PATTERN = re.compile('^([A-Z]+)="(.+)"$')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MIN_VERSION = packaging.version.Version("13.0.0")
+MAIN_BRANCH = "main"
+TAG_PATTERN = re.compile(
+    f"^release/({packaging.version.VERSION_PATTERN})$", re.IGNORECASE | re.VERBOSE
+)
+REMOTE = "origin"
+BRANCH_PATTERN = re.compile(
+    f"^{REMOTE}/((stable|releng)/({packaging.version.VERSION_PATTERN}))$",
+    re.IGNORECASE | re.VERBOSE,
+)
+
+
+def request_supported_refs() -> typing.List[str]:
+    # Looks pretty shady but I think this should work with every version of the page in the last 20 years
+    r = re.compile("^h\d$", re.IGNORECASE)
+    soup = bs4.BeautifulSoup(
+        urllib.request.urlopen("https://www.freebsd.org/security"), features="lxml"
+    )
+    header = soup.find(
+        lambda tag: r.match(tag.name) is not None
+        and tag.text.lower() == "supported freebsd releases"
+    )
+    table = header.find_next("table")
+    df = pandas.read_html(io.StringIO(table.prettify()))[0]
+    return list(df["Branch"])
 
 
 def query_version(repo: git.Repo):
@@ -34,7 +65,11 @@ def query_version(repo: git.Repo):
 
 
 def handle_commit(
-    repo: git.Repo, rev: git.objects.commit.Commit, ref_name: str, ref_type: str
+    repo: git.Repo,
+    rev: git.objects.commit.Commit,
+    ref_name: str,
+    ref_type: str,
+    supported_refs: typing.List[str],
 ):
     repo.git.checkout(rev)
     print(f"{ref_name}: checked out {rev.hexsha}")
@@ -47,27 +82,17 @@ def handle_commit(
     print(f"{ref_name}: hash is {full_hash}")
 
     version = query_version(repo)
-    print(f"{ref_name}: {version['version']}")
+    print(f"{ref_name}: version is {version['version']}")
+
     return {
         "rev": rev.hexsha,
         "hash": full_hash,
         "ref": ref_name,
-        "ref_type": ref_type,
+        "refType": ref_type,
+        "supported": ref_name in supported_refs,
         "version": query_version(repo),
     }
 
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MIN_VERSION = packaging.version.Version("13.0.0")
-MAIN_BRANCH = "main"
-TAG_PATTERN = re.compile(
-    f"^release/({packaging.version.VERSION_PATTERN})$", re.IGNORECASE | re.VERBOSE
-)
-REMOTE = "origin"
-BRANCH_PATTERN = re.compile(
-    f"^{REMOTE}/((stable|releng)/({packaging.version.VERSION_PATTERN}))$",
-    re.IGNORECASE | re.VERBOSE,
-)
 
 # Normally uses /run/user/*, which is on a tmpfs and too small
 temp_dir = tempfile.TemporaryDirectory(dir="/tmp")
@@ -75,6 +100,7 @@ print(f"Selected temporary directory {temp_dir.name}")
 
 if len(sys.argv) >= 2:
     orig_repo = git.Repo(sys.argv[1])
+    print(f"Fetching updates on {orig_repo.git_dir}")
     orig_repo.remote("origin").fetch()
 else:
     print("Cloning source repo")
@@ -82,8 +108,10 @@ else:
         "https://git.FreeBSD.org/src.git", to_path=os.path.join(temp_dir.name, "orig")
     )
 
+supported_refs = request_supported_refs()
+print(f"Supported refs are: {' '.join(supported_refs)}")
 
-print("doing git crimes, do not run `git worktree prune` until after script finishes!")
+print("Doing git crimes, do not run `git worktree prune` until after script finishes!")
 workdir = os.path.join(temp_dir.name, "work")
 git.cmd.Git(orig_repo.git_dir).worktree("add", "--orphan", workdir)
 
@@ -107,7 +135,7 @@ for tag in repo.tags:
 
     print(f"Trying tag {tag.name} ({version})")
 
-    result = handle_commit(repo, tag.commit, tag.name, "tag")
+    result = handle_commit(repo, tag.commit, tag.name, "tag", supported_refs)
     versions[tag.name] = result
 
 for branch in repo.remote("origin").refs:
@@ -125,7 +153,7 @@ for branch in repo.remote("origin").refs:
     else:
         continue
 
-    result = handle_commit(repo, branch.commit, fullname, "branch")
+    result = handle_commit(repo, branch.commit, fullname, "branch", supported_refs)
     versions[fullname] = result
 
 
