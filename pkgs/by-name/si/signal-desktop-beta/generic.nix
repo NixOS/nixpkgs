@@ -1,0 +1,1 @@
+../signal-desktop/generic.nix

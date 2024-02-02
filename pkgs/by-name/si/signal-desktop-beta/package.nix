@@ -1,5 +1,5 @@
 { callPackage }:
-callPackage ./generic.nix {} rec {
+callPackage ./generic.nix { } rec {
   pname = "signal-desktop-beta";
   dir = "Signal Beta";
   version = "6.44.0-beta.1";
