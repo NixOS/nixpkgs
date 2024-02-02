@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchgit, cargo, pkg-config, rustPlatform
-, aemu, gfxstream, libcap, libdrm, minijail
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, cargo
+, pkg-config
+, rustPlatform
+, aemu
+, gfxstream
+, libdrm
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,9 +21,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0RJDKzeU7U6hc6CLKks8QcRs3fxN+/LYUbB0t6W790M=";
   };
 
+  patches = [
+    # Make gfxstream optional
+    # https://chromium-review.googlesource.com/c/crosvm/crosvm/+/4860836
+    (fetchpatch {
+      url = "https://chromium.googlesource.com/crosvm/crosvm/+/c3ad0e43eb12cbf737a6049e0134d483e337363f%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-Ji1bK7jnRlg0OpDfCLcTHfPSiz3zYcdgsWL4n3EoIYI=";
+    })
+  ];
+
   nativeBuildInputs = [ cargo pkg-config rustPlatform.cargoSetupHook ];
-  buildInputs = [ aemu gfxstream ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform libdrm) libdrm;
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform gfxstream) ([
+    aemu
+    gfxstream
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
+    libdrm
+  ]);
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;

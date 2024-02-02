@@ -57,12 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-2/6EYBh71S4dzqWEde+3dLOGp015fN6IifAj1bI1XAI=";
     })
 
-    # Enable linking based on stdenv (static or dynamic)
+    # Enable linking based on stdenv (static or dynamic), only propagate leveldb link requirement when linked statically
     # Remove when https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/merge_requests/16 merged & in release
     (fetchpatch {
       name = "0004-persistent-cache-cpp-Un-hardcode-static-linking.patch";
       url = "https://gitlab.com/OPNA2608/persistent-cache-cpp/-/commit/45cd84fe76e3a0e1da41a662df695009a6f4f07e.patch";
       hash = "sha256-1UjdhzrjnIUO1ySaZTm0vkdNgok0RNlGtNOWUoAUlzU=";
+    })
+    (fetchpatch {
+      name = "0005-persistent-cache-cpp-Propagate-leveldb-dependency-only-when-needed.patch";
+      url = "https://gitlab.com/OPNA2608/persistent-cache-cpp/-/commit/6204b65df32360a7e358558041219a867652c429.patch";
+      hash = "sha256-cIewdtF0OdQuLz94KNY2HL8XZp1IaKlZz2hNlMvKLw4=";
     })
   ];
 
@@ -87,9 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     lomiri.cmake-extras
-  ];
-
-  propagatedBuildInputs = [
     leveldb
   ];
 

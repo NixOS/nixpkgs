@@ -39,6 +39,17 @@
 +    return Path.of("MAVEN_PATH_HERE")
    }
  }
+--- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
++++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/BuildDependenciesDownloader.kt
+@@ -70,7 +70,7 @@
+                              version: String,
+                              classifier: String?,
+                              packaging: String): URI {
+-    val base = mavenRepository.trim('/')
++    val base = mavenRepository.trimEnd('/')
+     val groupStr = groupId.replace('.', '/')
+     val classifierStr = if (classifier != null) "-${classifier}" else ""
+     return URI.create("${base}/${groupStr}/${artifactId}/${version}/${artifactId}-${version}${classifierStr}.${packaging}")
 --- a/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
 +++ b/platform/build-scripts/downloader/src/org/jetbrains/intellij/build/dependencies/JdkDownloader.kt
 @@ -25,11 +25,7 @@
@@ -56,21 +67,35 @@
        jdkExtracted.resolve("Contents").resolve("Home")
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/LinuxDistributionCustomizer.kt
-@@ -43,12 +43,12 @@
+@@ -46,7 +46,7 @@
    /**
-    * If `true` a separate *-no-jbr.tar.gz artifact without runtime will be produced.
+    * If `true`, a separate *[org.jetbrains.intellij.build.impl.LinuxDistributionBuilder.NO_RUNTIME_SUFFIX].tar.gz artifact without a runtime will be produced.
     */
--  var buildTarGzWithoutBundledRuntime = false
-+  var buildTarGzWithoutBundledRuntime = true
- 
-   /**
-    * If `true`, the only *-no-jbr.tar.gz will be produced, no other binaries for Linux will be built.
-    */
--  var buildOnlyBareTarGz = false
-+  var buildOnlyBareTarGz = true
+-  var buildArtifactWithoutRuntime = false
++  var buildArtifactWithoutRuntime = true
  
    /**
     * Set both properties if a .snap package should be produced.
+--- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
++++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt
+@@ -45,7 +45,7 @@
+       withContext(Dispatchers.IO) {
+         val distBinDir = targetPath.resolve("bin")
+         val sourceBinDir = context.paths.communityHomeDir.resolve("bin/linux")
+-        copyFileToDir(NativeBinaryDownloader.downloadRestarter(context = context, os = OsFamily.LINUX, arch = arch), distBinDir)
++        copyFileToDir(sourceBinDir.resolve("${arch.dirName}/restarter"), distBinDir)
+         copyFileToDir(sourceBinDir.resolve("${arch.dirName}/fsnotifier"), distBinDir)
+         copyFileToDir(sourceBinDir.resolve("${arch.dirName}/libdbm.so"), distBinDir)
+         generateBuildTxt(context, targetPath)
+@@ -85,6 +85,8 @@
+         }
+       }
+ 
++      return@executeStep
++
+       val runtimeDir = context.bundledRuntime.extract(os = OsFamily.LINUX, arch = arch)
+       updateExecutablePermissions(runtimeDir, executableFileMatchers)
+       val tarGzPath = buildTarGz(arch = arch, runtimeDir = runtimeDir, unixDistPath = osAndArchSpecificDistPath, suffix = suffix(arch))
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt
 @@ -11,6 +11,7 @@

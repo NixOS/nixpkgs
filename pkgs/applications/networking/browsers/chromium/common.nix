@@ -236,6 +236,18 @@ let
         commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
         hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
       })
+    ] ++ lib.optionals (chromiumVersionAtLeast "121") [
+      # M121 is the first version to require the new rust toolchain.
+      # But we don't have that ready yet.
+      # So we have to revert the singular commit that requires rust toolchain.
+      # This works, because the code in question, the QR code generator, is present in
+      # two variants: c++ and rust. This workaround will not last.
+      # The c++ variant in question is deemed to be removed in a month (give or take).
+      (githubPatch {
+        revert = true;
+        commit = "bcf739b95713071687ff25010683248de0092f6a";
+        hash = "sha256-1ZPe45cc2bjnErcF3prbLMlYpU7kpuwDVcjewINQr+Q=";
+      })
     ];
 
     postPatch = ''

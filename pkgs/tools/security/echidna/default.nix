@@ -7,63 +7,34 @@
 , slither-analyzer
 }:
 
-let haskellPackagesOverride = haskellPackages.override {
-      overrides = self: super: {
-        # following the revision specified in echidna/stack.yaml
-        # TODO: 0.51.3 is not in haskellPackages yet
-        hevm = haskell.lib.overrideCabal super.hevm (oa: {
-          version = "0.51.3";
-          src = fetchFromGitHub {
-            owner = "ethereum";
-            repo = "hevm";
-            rev = "release/0.51.3";
-            hash = "sha256-H6oURBGoQWSOuPhBB+UKg2UarVzXgv1tmfDBLnOtdhU=";
-          };
-          libraryHaskellDepends = oa.libraryHaskellDepends
-                                  ++ (with haskellPackages;[githash witch tuple]);
-        });
-      };
-    };
-in mkDerivation rec {
+mkDerivation rec {
   pname = "echidna";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-5d9ttPR3rRHywBeLM85EGCEZLNZNZzOAhIN6AJToJyI=";
+    sha256 = "sha256-l1ILdO+xb0zx/TFM6Am9j5hq1RnIMNf2HU6YvslAj0w=";
   };
-
-  # Note: pending PR https://github.com/crytic/echidna/pull/1096
-  patches = [
-     (fetchpatch {
-       name = "brick-1.9-update";
-       url = "https://github.com/crytic/echidna/pull/1096/commits/36657d54943727e569691a6b3d85b83130480a2e.patch";
-       sha256 = "sha256-AOmB/fAZCF7ruXW1HusRe7wWWsLyMCWw+j3qIPARIAc=";
-     })
-  ];
 
   isLibrary = true;
   isExecutable = true;
 
-  libraryToolDepends = with haskellPackagesOverride; [
+  libraryToolDepends = with haskellPackages; [
     haskellPackages.hpack
   ];
 
-  # Note: This can be extracted from package.yaml of echidna, the list is shorter because some are transitive.
-  executableHaskellDepends = with haskellPackagesOverride;
-    [aeson base base16-bytestring binary brick bytestring code-page containers data-dword data-has directory exceptions extra
-     filepath hashable hevm html-conduit html-entities http-conduit lens ListLike MonadRandom mtl optics optparse-applicative
-     process random semver text transformers unix unliftio unordered-containers vector vector-instances vty with-utf8
-     xml-conduit yaml];
+  executableHaskellDepends = with haskellPackages; [ aeson base base16-bytestring binary bytestring code-page
+  containers data-bword data-dword deepseq directory exceptions extra filepath hashable hevm html-conduit html-entities
+  http-conduit ListLike MonadRandom mtl optics optics-core optparse-applicative process random rosezipper semver split
+  strip-ansi-escape text time transformers unliftio utf8-string vector wai-extra warp with-utf8 word-wrap xml-conduit
+  yaml ];
 
   # Note: there is also a runtime dependency of slither-analyzer, let's include it also.
   executableSystemDepends = [ slither-analyzer ];
 
-  testHaskellDepends = with haskellPackagesOverride; [
-    tasty tasty-hunit tasty-quickcheck
-  ];
+  testHaskellDepends = with haskellPackages; [ tasty tasty-hunit tasty-quickcheck ];
 
   preConfigure = ''
     hpack

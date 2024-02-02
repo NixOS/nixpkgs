@@ -28,6 +28,7 @@ let
    requests
    rx
    gtk3
+   reactivex
  ]);
 in stdenv.mkDerivation rec {
   pname = "gwe";

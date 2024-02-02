@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svdtools";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-daATz1bd5fwfYnfVbweJd/I6SsQyg2CC+MEZ5WLyZBw=";
+    hash = "sha256-agIr2jM0BqLSXod5V+p//bxcnrXe2+wW5RMq8GAAwnI=";
   };
 
-  cargoHash = "sha256-TSLUBkPRab6cwlXJw8tHpqYjhLtVa+QJZq13Qj/0UzU=";
+  cargoHash = "sha256-z9GmFjABgvh2xf4nujnZUgHvKvChfP4Guox89PuuxV8=";
 
   meta = with lib; {
     description = "Tools to handle vendor-supplied, often buggy SVD files";

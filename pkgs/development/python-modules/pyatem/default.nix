@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pyatem";
-  version = "0.9.0"; # check latest version in setup.py
+  version = "0.10.0"; # check latest version in setup.py
   pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
     rev = version;
-    hash = "sha256-ntwUhgC8Cgrim+kU3B3ckgPDmPe+aEHDP4wsB45KbJg=";
+    hash = "sha256-O+f1vVwfGJjLem25hsYE1Q1V4vzjrc0HxTBUCANCEwE=";
   };
 
   nativeBuildInputs = [
@@ -48,15 +48,6 @@ buildPythonPackage rec {
     cp -r pyatem/{test_*.py,fixtures} $TESTDIR/
     pushd $TESTDIR
   '';
-
-  disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # colorspace mapping has weird, but constant offsets on aarch64-linux
-    "test_blueramp"
-    "test_greenramp"
-    "test_hues"
-    "test_primaries"
-    "test_redramp"
-  ];
 
   postCheck = ''
     popd

@@ -915,7 +915,7 @@ rec {
 
             mkdir $out
             ${if enableFakechroot then ''
-              proot -r $PWD/old_out ${bind-paths} --pwd=/ --root-id bash -c '
+              proot -r $PWD/old_out ${bind-paths} --pwd=/ fakeroot bash -c '
                 source $stdenv/setup
                 eval "$fakeRootCommands"
                 tar \

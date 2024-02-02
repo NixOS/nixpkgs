@@ -29,6 +29,6 @@ stdenv.mkDerivation {
     description = "Graphics Streaming Kit";
     license = licenses.free; # https://android.googlesource.com/platform/hardware/google/gfxstream/+/refs/heads/main/LICENSE
     maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = aemu.meta.platforms;
   };
 }

@@ -14,6 +14,7 @@
 , libXi
 , libXrandr
 , libXrender
+, libgit2
 , libglvnd
 , libuuid
 , libxcb
@@ -91,7 +92,8 @@ preFixup = let
 
     ln -s $out/lib/libcrypto.so $out/lib/libcrypto.so.1.1
     ln -s $out/lib/libcairo.so $out/lib/libcairo.so.2
-    ln -s $out/lib/libgit2.so $out/lib/libgit2.so.1.1
+    rm $out/lib/libgit2.so
+    ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
   '';
 
   meta = {

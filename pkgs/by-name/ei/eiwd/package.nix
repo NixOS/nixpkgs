@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eiwd";
-  version = "2.8-1";
+  version = "2.10-1";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "eiwd";
     rev = finalAttrs.version;
-    hash = "sha256-SD/RJFuGBwFT4G73f93VrWO/6mGKQxjVhmNrpKRA/WY=";
+    hash = "sha256-AB4NBwfELy0yjzxS0rCcF641CGEdyM9tTB+ZWaM+erg=";
     fetchSubmodules = true;
   };
 

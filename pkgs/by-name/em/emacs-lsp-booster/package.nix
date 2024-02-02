@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "emacs-lsp-booster";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "blahgeek";
     repo = "emacs-lsp-booster";
     rev = "v${version}";
-    hash = "sha256-0roQxzQrxcmS2RHQPguBRL76xSErf2hVjuJEyFr5MeM=";
+    hash = "sha256-DmEnuAR/OtTdKApEWCdOPAJplT29kuM6ZSHeOnQVo/c=";
   };
 
-  cargoHash = "sha256-quqhAMKsZorYKFByy2bojGgYR2Ps959Rg/TP8SnwbqM=";
+  cargoHash = "sha256-2wXsPkBl4InjbdYUiiQ+5fZFanLA88t5ApGZ4psfDqk=";
 
   nativeCheckInputs = [emacs]; # tests/bytecode_test
 

@@ -70,14 +70,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.10.1";
+    version = "3.11.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-/J4jWoIZEObSZKw04Ib6h4AvJtfNwzwozRu+gFek1Dk=";
+      hash = "sha256-0TW14K0Cp3Ylk+JDNV9x7a8Ul7EC5FTTVvSGccXv6JU=";
     };
 
     propagatedBuildInputs = [

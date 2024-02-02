@@ -323,7 +323,7 @@ All the review template samples provided in this section are generic and meant a
 
 To get more information about how to review specific parts of Nixpkgs, refer to the documents linked to in the [overview section][overview].
 
-If a pull request contains documentation changes that might require feedback from the documentation team, ping @NixOS/documentation-team on the pull request.
+If a pull request contains documentation changes that might require feedback from the documentation team, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on the pull request.
 
 If you consider having enough knowledge and experience in a topic and would like to be a long-term reviewer for related submissions, please contact the current reviewers for that topic. They will give you information about the reviewing process. The main reviewers for a topic can be hard to find as there is no list, but checking past pull requests to see who reviewed or git-blaming the code to see who committed to that topic can give some hints.
 
@@ -378,7 +378,7 @@ The staging workflow exists to batch Hydra builds of many packages together.
 It works by directing commits that cause [mass rebuilds][mass-rebuild] to a separate `staging` branch that isn't directly built by Hydra.
 Regularly, the `staging` branch is _manually_ merged into a `staging-next` branch to be built by Hydra using the [`nixpkgs:staging-next` jobset](https://hydra.nixos.org/jobset/nixpkgs/staging-next).
 The `staging-next` branch should then only receive direct commits in order to fix Hydra builds.
-Once it is verified that there are no major regressions, it is merged into `master` using [a pull requests](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
+Once it is verified that there are no major regressions, it is merged into `master` using [a pull request](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
 This is done manually in order to ensure it's a good use of Hydra's computing resources.
 By keeping the `staging-next` branch separate from `staging`, this batching does not block developers from merging changes into `staging`.
 

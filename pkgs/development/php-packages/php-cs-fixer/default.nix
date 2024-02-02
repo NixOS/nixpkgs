@@ -2,14 +2,14 @@
 
 let
   pname = "php-cs-fixer";
-  version = "3.45.0";
+  version = "3.48.0";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-    sha256 = "sha256-0i5ES1BfekNAOJuGQ4q9lqle/RS3YxgLt+CJa/Ow5/k=";
+    sha256 = "sha256-JPFZ297l83PqJv+yyzTN6DIKsk82MJuo9IEdMPPAPGM=";
   };
 
   dontUnpack = true;

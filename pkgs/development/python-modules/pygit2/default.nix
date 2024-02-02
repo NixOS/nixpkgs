@@ -10,23 +10,28 @@
 , pycparser
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.13.3";
-  format = "setuptools";
+  version = "1.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AlfGJgEeSvuZvbIIdUQ/cG+EIB1MkmN/AiFbmOrBPe0=";
+    hash = "sha256-9SntlmDtv5tiXMrn5RCY73NmLmFJZgkAl3LUYnqCaqg=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     libgit2
@@ -65,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A set of Python bindings to the libgit2 shared library";
     homepage = "https://github.com/libgit2/pygit2";
+    changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];
   };

@@ -28,6 +28,8 @@ let
     DOCUMENTATION_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/learn.html";
     SUPPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/community.html";
     BUG_REPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://github.com/NixOS/nixpkgs/issues";
+    IMAGE_ID = lib.optionalString (config.system.image.id != null) config.system.image.id;
+    IMAGE_VERSION = lib.optionalString (config.system.image.version != null) config.system.image.version;
   } // lib.optionalAttrs (cfg.variant_id != null) {
     VARIANT_ID = cfg.variant_id;
   };
@@ -108,6 +110,38 @@ in
       default = null;
       description = lib.mdDoc "A lower-case string identifying a specific variant or edition of the operating system";
       example = "installer";
+    };
+
+    image = {
+
+      id = lib.mkOption {
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        default = null;
+        description = lib.mdDoc ''
+          Image identifier.
+
+          This corresponds to the IMAGE_ID field in os-release. See the
+          upstream docs for more details on valid characters for this field:
+          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=
+
+          You would only want to set this option if you're build NixOS appliance images.
+        '';
+      };
+
+      version = lib.mkOption {
+        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        default = null;
+        description = lib.mdDoc ''
+          Image version.
+
+          This corresponds to the IMAGE_VERSION field in os-release. See the
+          upstream docs for more details on valid characters for this field:
+          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=
+
+          You would only want to set this option if you're build NixOS appliance images.
+        '';
+      };
+
     };
 
     stateVersion = mkOption {

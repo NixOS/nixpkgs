@@ -71,7 +71,7 @@ in
       type = with lib.types; attrsOf format.type;
       default = { };
       example = {
-        "10-uki.conf" = {
+        "10-uki" = {
           Transfer = {
             ProtectVersion = "%A";
           };

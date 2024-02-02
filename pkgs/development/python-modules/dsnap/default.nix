@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "dsnap";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,6 +27,12 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-yKch+tKjFhvZfzloazMH378dkERF8gnZEX1Som+d670=";
   };
+
+  postPatch = ''
+    # Is no direct dependency
+    substituteInPlace pyproject.toml \
+      --replace 'urllib3 = "^1.26.4"' 'urllib3 = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core

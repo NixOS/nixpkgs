@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "types-requests";
-  version = "2.31.0.20240106";
+  version = "2.31.0.20240125";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DhxzHBfzNhjsWOAithShouzCX33IaACzbvNBOAQCxhI=";
+    hash = "sha256-A6KM4dfNVBmRSOBDsgec3e0i1nldGaLCpnkaSyteLrU=";
   };
 
   nativeBuildInputs = [

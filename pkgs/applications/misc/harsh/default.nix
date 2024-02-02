@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "harsh";
-  version = "0.8.30";
+  version = "0.8.31";
 
   src = fetchFromGitHub {
     owner = "wakatara";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-X9YCxDgxIuJyTUurDQ574nKBAUsdKHNx1T6DkcygYS4=";
+    hash = "sha256-q2kQAQu1rewCDk+UPuEHS4AJlhuC8azHk5MWP6uQ4fI=";
   };
 
-  vendorHash = "sha256-zkz7X/qj8FwtQZXGuq4Oaoe5G9a4AJE1kv3j7wwQEp4=";
+  vendorHash = "sha256-zjLXq64uC5iRm9uxUGDW5127z25gNSVV2qhVVXuYqY0=";
 
   meta = with lib; {
     description = "CLI habit tracking for geeks";

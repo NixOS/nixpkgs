@@ -10,9 +10,9 @@ in
 rec {
 
   /*
-    Run the shell command `buildCommand' to produce a store path named `name'.
+    Run the shell command `buildCommand` to produce a store path named `name`.
 
-    The attributes in `env' are added to the environment prior to running the command.
+    The attributes in `env` are added to the environment prior to running the command.
     Environment variables set by `stdenv.mkDerivation` take precedence.
 
     By default `runCommand` runs in a stdenv with no compiler environment.
@@ -182,101 +182,32 @@ rec {
         eval "$checkPhase"
       '';
 
-  /*
-     Writes a text file to nix store with no optional parameters available.
-
-     Example:
-
-
-     # Writes contents of file to /nix/store/<store path>
-     writeText "my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeText = name: text: writeTextFile { inherit name text; };
 
-  /*
-    Writes a text file to nix store in a specific directory with no
-    optional parameters available.
-
-    Example:
-
-
-    # Writes contents of file to /nix/store/<store path>/share/my-file
-    writeTextDir "share/my-file"
-     ''
-     Contents of File
-     '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeTextDir = path: text: writeTextFile {
     inherit text;
     name = builtins.baseNameOf path;
     destination = "/${path}";
   };
 
-  /*
-    Writes a text file to /nix/store/<store path> and marks the file as
-    executable.
-
-    If passed as a build input, will be used as a setup hook. This makes setup
-    hooks more efficient to create: you don't need a derivation that copies
-    them to $out/nix-support/setup-hook, instead you can use the file as is.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable
-    writeScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScript = name: text: writeTextFile { inherit name text; executable = true; };
 
-  /*
-    Writes a text file to /nix/store/<store path>/bin/<name> and
-    marks the file as executable.
-
-    Example:
-
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScriptBin = name: text: writeTextFile {
     inherit name text;
     executable = true;
     destination = "/bin/${name}";
   };
 
-  /*
-    Similar to writeScript. Writes a Shell script and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path> and makes executable.
-    writeShellScript "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScript = name: text:
     writeTextFile {
       inherit name;
@@ -290,22 +221,8 @@ rec {
       '';
     };
 
-  /*
-    Similar to writeShellScript and writeScriptBin.
-    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and checks its syntax.
-    Automatically includes interpreter above the contents passed.
-
-    Example:
-
-
-    # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-    writeShellScriptBin "my-file"
-      ''
-      Contents of File
-      '';
-
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScriptBin = name: text:
     writeTextFile {
       inherit name;
@@ -492,7 +409,7 @@ rec {
 
 
   /*
-    Create a forest of symlinks to the files in `paths'.
+    Create a forest of symlinks to the files in `paths`.
 
     This creates a single derivation that replicates the directory structure
     of all the input paths.
@@ -705,7 +622,7 @@ rec {
       '');
 
 
-  # Write the references (i.e. the runtime dependencies in the Nix store) of `path' to a file.
+  # Write the references (i.e. the runtime dependencies in the Nix store) of `path` to a file.
 
   writeReferencesToFile = path: runCommand "runtime-deps"
     {
@@ -763,13 +680,13 @@ rec {
   writeStringReferencesToFile = string:
     /*
        The basic operation this performs is to copy the string context
-       from `string' to a second string and wrap that string in a
+       from `string` to a second string and wrap that string in a
        derivation. However, that alone is not enough, since nothing in the
        string refers to the output paths of the derivations/paths in its
        context, meaning they'll be considered build-time dependencies and
        removed from the wrapper derivation's closure. Putting the
        necessary output paths in the new string is however not very
-       straightforward - the attrset returned by `getContext' contains
+       straightforward - the attrset returned by `getContext` contains
        only references to derivations' .drv-paths, not their output
        paths. In order to "convert" them, we try to extract the
        corresponding paths from the original string using regex.

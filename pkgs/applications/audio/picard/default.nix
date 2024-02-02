@@ -14,7 +14,7 @@ let
   pythonPackages = python3Packages;
   pyqt5 =
     if enablePlayback then
-      pythonPackages.pyqt5_with_qtmultimedia
+      pythonPackages.pyqt5-multimedia
     else
       pythonPackages.pyqt5;
 in
@@ -77,7 +77,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
     description = "The official MusicBrainz tagger";
-    maintainers = with maintainers; [ ehmry paveloom ];
+    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

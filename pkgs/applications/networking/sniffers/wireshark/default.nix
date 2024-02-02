@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
     changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz paveloom ];
+    maintainers = with maintainers; [ bjornfor fpletz ];
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }
