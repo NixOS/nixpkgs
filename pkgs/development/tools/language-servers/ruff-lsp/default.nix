@@ -64,10 +64,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     description = "A Language Server Protocol implementation for Ruff";
     homepage = "https://github.com/astral-sh/ruff-lsp";
-    changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "ruff-lsp";
     maintainers = with maintainers; [ figsoda kalekseev ];
   };
 }
