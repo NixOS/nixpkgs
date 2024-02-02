@@ -32,9 +32,9 @@ def query_version(repo: git.Repo):
     return fields
 
 
-def handle_commit(repo: git.Repo, commit: git.objects.commit.Commit, ref_name: str):
-    repo.git.checkout(commit)
-    print(f"{ref_name}: checked out {commit.hexsha}")
+def handle_commit(repo: git.Repo, rev: git.objects.commit.Commit, ref_name: str):
+    repo.git.checkout(rev)
+    print(f"{ref_name}: checked out {rev.hexsha}")
 
     full_hash = (
         subprocess.check_output(["nix", "hash", "path", "--sri", repo.working_dir])
@@ -46,7 +46,7 @@ def handle_commit(repo: git.Repo, commit: git.objects.commit.Commit, ref_name: s
     version = query_version(repo)
     print(f"{ref_name}: {version['version']}")
     return {
-        "commit": commit.hexsha,
+        "rev": rev.hexsha,
         "hash": full_hash,
         "ref": ref_name,
         "version": query_version(repo),
@@ -59,6 +59,12 @@ MAIN_BRANCH = "main"
 TAG_PATTERN = re.compile(
     f"^release/({packaging.version.VERSION_PATTERN})$", re.IGNORECASE | re.VERBOSE
 )
+REMOTE = "origin"
+BRANCH_PATTERN = re.compile(
+    f"^{REMOTE}/((stable|releng)/({packaging.version.VERSION_PATTERN}))$",
+    re.IGNORECASE | re.VERBOSE,
+)
+
 # Normally uses /run/user/*, which is on a tmpfs and too small
 temp_dir = tempfile.TemporaryDirectory(dir="/tmp")
 print(f"Selected temporary directory {temp_dir.name}")
@@ -85,10 +91,7 @@ os.remove(os.path.join(workdir, ".git"))
 
 print(f"Working in directory {repo.working_dir} with git directory {repo.git_dir}")
 
-
 versions = dict()
-
-
 for tag in repo.tags:
     m = TAG_PATTERN.match(tag.name)
     if m is None:
@@ -101,7 +104,25 @@ for tag in repo.tags:
     print(f"Trying tag {tag.name} ({version})")
 
     result = handle_commit(repo, tag.commit, tag.name)
-    versions[result["ref"]] = result
+    versions[tag.name] = result
+
+for branch in repo.remote("origin").refs:
+    m = BRANCH_PATTERN.match(branch.name)
+    if m is not None:
+        fullname = m[1]
+        version = packaging.version.parse(m[3])
+        if version < MIN_VERSION:
+            print(f"Skipping old branch {fullname} ({version})")
+            continue
+        print(f"Trying branch {fullname} ({version})")
+    elif branch.name == f"{REMOTE}/{MAIN_BRANCH}":
+        fullname = MAIN_BRANCH
+        print("Trying main branch {branch_fullname}")
+    else:
+        continue
+
+    result = handle_commit(repo, branch.commit, fullname)
+    versions[fullname] = result
 
 
 with open(os.path.join(BASE_DIR, "versions.json"), "w") as out:
