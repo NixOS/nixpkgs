@@ -655,7 +655,7 @@
   };
 
   gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
+    dependencies = with self; [ git plenary-nvim ];
   };
 
   guard-nvim = super.guard-nvim.overrideAttrs {
