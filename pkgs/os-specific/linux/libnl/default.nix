@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnl";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
     rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-zVpoRlB5xDfo6wJkCJGGptuCXkNkriudtZF2Job9YD4=";
+    hash = "sha256-dwHIu4kL9PPy7+r1mIdcWiib+ZyEX60MIbOGsE+x+08=";
   };
 
   outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional pythonSupport "py";
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional pythonSupport swig;
 
   postBuild = lib.optionalString (pythonSupport) ''
-      cd python
-      ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
-      cd -
+    pushd python
+    ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
+    popd
   '';
 
   postFixup = lib.optionalString pythonSupport ''
