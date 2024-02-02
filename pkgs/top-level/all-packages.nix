@@ -24265,8 +24265,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa IOKit Kernel;
   };
 
-  openh264 = callPackage ../development/libraries/openh264 { };
-
   openjpeg = callPackage ../development/libraries/openjpeg { };
 
   openpa = callPackage ../development/libraries/openpa { };
