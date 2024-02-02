@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, scons_3_1_2
+, scons
 , boost
 , gperftools
 , pcre-cpp
@@ -44,8 +44,6 @@ let
         pymongo
       ]);
 
-      scons = scons_3_1_2;
-
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
@@ -57,8 +55,6 @@ let
         psutil
         setuptools
       ]);
-
-      scons = scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
@@ -87,7 +83,7 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ variants.scons ]
+  nativeBuildInputs = [ scons ]
                       ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
 
   buildInputs = [
