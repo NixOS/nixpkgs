@@ -5,6 +5,9 @@ with (import ./param-lib.nix lib);
 
 let
   cfg = config.services.strongswan-swanctl;
+  configFile = pkgs.writeText "swanctl.conf"
+      ( (paramsToConf cfg.swanctl swanctlParams)
+      + (concatMapStrings (i: "\ninclude ${i}") cfg.includes));
   swanctlParams = import ./swanctl-params.nix lib;
 in  {
   options.services.strongswan-swanctl = {
@@ -28,6 +31,13 @@ in  {
     };
 
     swanctl = paramsToOptions swanctlParams;
+    includes = mkOption {
+      type = types.listOf types.path;
+      default = [];
+      description = ''
+        Extra configuration files to include in the swanctl configuration. This can be used to provide secret values from outside the nix store.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -38,8 +48,7 @@ in  {
       }
     ];
 
-    environment.etc."swanctl/swanctl.conf".text =
-      paramsToConf cfg.swanctl swanctlParams;
+    environment.etc."swanctl/swanctl.conf".source = configFile;
 
     # The swanctl command complains when the following directories don't exist:
     # See: https://wiki.strongswan.org/projects/strongswan/wiki/Swanctldirectory
