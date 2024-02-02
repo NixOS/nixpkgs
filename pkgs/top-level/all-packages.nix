@@ -4703,8 +4703,19 @@ with pkgs;
   cloudbrute = callPackage ../tools/security/cloudbrute { };
 
   cloudflared = callPackage ../applications/networking/cloudflared {
-    # https://github.com/cloudflare/cloudflared/issues/1054
-    buildGoModule = buildGo120Module;
+    # https://github.com/cloudflare/cloudflared/issues/1151#issuecomment-1888819250
+    buildGoModule = buildGoModule.override {
+      go = go.overrideAttrs {
+        pname = "cloudflare-go";
+        version = "0-unstable-2023-12-06";
+        src = fetchFromGitHub {
+          owner = "cloudflare";
+          repo = "go";
+          rev = "34129e47042e214121b6bbff0ded4712debed18e";
+          sha256 = "sha256-RA9KTY4cSxIt7dyJgAFQPemc6YBgcSwc/hqB4JHPxng=";
+        };
+      };
+    };
   };
 
   cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
