@@ -27,28 +27,28 @@ let
     owner = "HowardHinnant";
     repo = "date";
     rev = "v2.4.1";
-    sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
+    hash = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
   };
 
   eigen = fetchFromGitLab {
     owner = "libeigen";
     repo = "eigen";
-    rev = "d10b27fe37736d2944630ecd7557cefa95cf87c9";
-    sha256 = "sha256-Lmco0s9gIm9sIw7lCr5Iewye3RmrHEE4HLfyzRkQCm0=";
+    rev = "e7248b26a1ed53fa030c5c459f7ea095dfd276ac";
+    hash = "sha256-uQ1YYV3ojbMVfHdqjXRyUymRPjJZV3WHT36PTxPRius=";
   };
 
   mp11 = fetchFromGitHub {
     owner = "boostorg";
     repo = "mp11";
     rev = "boost-1.79.0";
-    sha256 = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
+    hash = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
   };
 
   safeint = fetchFromGitHub {
     owner = "dcleblanc";
     repo = "safeint";
     rev = "ff15c6ada150a5018c5ef2172401cb4529eac9c0";
-    sha256 = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
+    hash = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
   };
 
   pytorch_cpuinfo = fetchFromGitHub {
@@ -56,35 +56,38 @@ let
     repo = "cpuinfo";
     # There are no tags in the repository
     rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
-    sha256 = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
+    hash = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
   };
 
   flatbuffers = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v1.12.0";
-    sha256 = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
+    hash = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
   };
 
   gtest' = gtest.overrideAttrs (oldAttrs: rec {
+    # TODO According to https://github.com/microsoft/onnxruntime/blob/v1.16.3/cmake/deps.txt#L20,
+    # we should be using revision 519beb0e52c842729b4b53731d27c0e0c32ab4a2 but v1.13.0 is the more recent
+    # that I (@GaetanLepage) managed to build using a simple override.
     version = "1.13.0";
     src = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "v${version}";
+      rev = "refs/tags/v${version}";
       hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
     };
     });
 in
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.15.1";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
-    rev = "v${version}";
-    sha256 = "sha256-SnHo2sVACc++fog7Tg6f2LK/Sv/EskFzN7RZS7D113s=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bTW9Pc3rvH+c8VIlDDEtAXyA3sajVyY5Aqr6+SxaMF4=";
     fetchSubmodules = true;
   };
 
