@@ -12,6 +12,7 @@
 , gmp
 , libGL
 , libGLU
+, libSM
 , mpfr
 , proj
 , python3
@@ -58,6 +59,7 @@ in mkDerivation rec {
     gmp
     libGL
     libGLU
+    libSM
     mpfr
     proj
     python

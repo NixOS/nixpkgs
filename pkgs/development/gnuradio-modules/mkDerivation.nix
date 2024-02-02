@@ -15,7 +15,7 @@ else
 if builtins.hasAttr "disabledForGRafter" args then
 throw ''
   `disabledForGRafter` is superseded by `disabled`.
-  Use `disabled = gnuradioAtLeast "${unwrapped.versionAttr.major}";` instead.
+  Use `disabled = gnuradioAtLeast "${args.disabledForGRafter}";` instead.
 ''
 else
 

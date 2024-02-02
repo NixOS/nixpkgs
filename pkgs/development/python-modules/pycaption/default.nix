@@ -13,17 +13,17 @@
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.2.1";
+  version = "2.2.2";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pbs";
     repo = "pycaption";
-    rev = version;
-    hash = "sha256-IPCU9MsBY+Vsk6SrR9+3j4Izfhw5LeUrK0KUa3seSs4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6c16S77K1UC7+rz8tF0tLlBspienhDbgSXhdJzkQZII=";
   };
 
   nativeBuildInputs = [

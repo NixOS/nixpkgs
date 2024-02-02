@@ -189,7 +189,7 @@ in {
      they take effect as soon as the oldest release reaches end of life. */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2305;
+    2311;
 
   /* Whether a feature is supported in all supported releases (at the time of
      release branch-off, if applicable). See `oldestSupportedRelease`. */

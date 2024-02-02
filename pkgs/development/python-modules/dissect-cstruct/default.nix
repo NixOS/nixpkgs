@@ -10,9 +10,9 @@
 buildPythonPackage rec {
   pname = "dissect-cstruct";
   version = "3.12";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";

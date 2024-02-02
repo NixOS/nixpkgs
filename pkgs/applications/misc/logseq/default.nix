@@ -71,6 +71,7 @@ in {
     homepage = "https://github.com/logseq/logseq";
     changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = lib.licenses.agpl3Plus;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };

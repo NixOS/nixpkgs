@@ -101511,48 +101511,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "@withgraphite/graphite-cli" = nodeEnv.buildNodePackage {
-    name = "_at_withgraphite_slash_graphite-cli";
-    packageName = "@withgraphite/graphite-cli";
-    version = "1.0.14";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-1.0.14.tgz";
-      sha512 = "VXgUM5RSYXMVc9i3E1A6j0CYNS5ScQjUXaKO9l3epOws5rxiyDa7QOl7tiSXTQw1eQKtzXxiwve+iWDZsPSDQw==";
-    };
-    dependencies = [
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."bufferutil-4.0.8"
-      sources."chalk-4.1.2"
-      sources."cliui-8.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."emoji-regex-8.0.0"
-      sources."escalade-3.1.1"
-      sources."get-caller-file-2.0.5"
-      sources."has-flag-4.0.0"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."node-gyp-build-4.8.0"
-      sources."require-directory-2.1.1"
-      sources."string-width-4.2.3"
-      sources."strip-ansi-6.0.1"
-      sources."supports-color-7.2.0"
-      sources."utf-8-validate-6.0.3"
-      sources."wrap-ansi-7.0.0"
-      sources."ws-8.16.0"
-      sources."y18n-5.0.8"
-      sources."yargs-17.7.2"
-      sources."yargs-parser-21.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      homepage = "https://github.com/withgraphite/graphite-cli";
-      license = "None";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   wrangler = nodeEnv.buildNodePackage {
     name = "wrangler";
     packageName = "wrangler";

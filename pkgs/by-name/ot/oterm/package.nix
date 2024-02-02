@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.1.21";
+  version = "0.1.22";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     rev = "refs/tags/${version}";
-    hash = "sha256-S6v7VDIGPu6UDbDe0H3LWF6IN0Z6ENmiCDxz+GuCibI=";
+    hash = "sha256-hRbPlRuwM3NspTNd3mPhVxPJl8zA9qyFwDGNKH3Slag=";
   };
 
   pythonRelaxDeps = [

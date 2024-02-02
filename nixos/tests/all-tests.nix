@@ -390,6 +390,7 @@ in {
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
   livebook-service = handleTest ./livebook-service.nix {};
+  pyload = handleTest ./pyload.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
   odoo = handleTest ./odoo.nix {};
   odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
@@ -451,7 +452,7 @@ in {
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-generic = handleTest ./kernel-generic.nix {};
   kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix {};
-  kernel-rust = runTestOn ["x86_64-linux"] ./kernel-rust.nix;
+  kernel-rust = handleTestOn ["x86_64-linux"] ./kernel-rust.nix {};
   keter = handleTest ./keter.nix {};
   kexec = handleTest ./kexec.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
@@ -712,6 +713,7 @@ in {
   power-profiles-daemon = handleTest ./power-profiles-daemon.nix {};
   pppd = handleTest ./pppd.nix {};
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
+  pretalx = runTest ./web-apps/pretalx.nix;
   printing-socket = handleTest ./printing.nix { socket = true; };
   printing-service = handleTest ./printing.nix { socket = false; };
   privoxy = handleTest ./privoxy.nix {};
@@ -762,6 +764,7 @@ in {
   sabnzbd = handleTest ./sabnzbd.nix {};
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
+  sane = handleTest ./sane.nix {};
   sanoid = handleTest ./sanoid.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};

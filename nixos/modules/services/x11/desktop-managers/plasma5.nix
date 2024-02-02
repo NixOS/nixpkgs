@@ -185,6 +185,8 @@ in
         };
       };
 
+      qt.enable = true;
+
       environment.systemPackages =
         with pkgs.plasma5Packages;
         let
@@ -252,6 +254,9 @@ in
             milou
             plasma-integration
             polkit-kde-agent
+
+            qqc2-breeze-style
+            qqc2-desktop-style
 
             plasma-desktop
             plasma-workspace

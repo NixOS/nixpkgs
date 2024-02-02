@@ -111,5 +111,6 @@ buildGoModule rec {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [ misuzu ];
+    mainProgram = "netbird";
   };
 }

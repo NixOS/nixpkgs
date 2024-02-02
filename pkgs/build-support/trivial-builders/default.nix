@@ -152,19 +152,21 @@ rec {
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
+    , derivationArgs ? { } # Extra arguments to pass to `stdenv.mkDerivation`
     }:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
-      {
+      ({
         inherit text executable checkPhase allowSubstitutes preferLocalBuild;
-        passAsFile = [ "text" ];
+        passAsFile = [ "text" ]
+          ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
           {
             mainProgram = lib.head matches;
-          } // meta;
-      }
+          } // meta // derivationArgs.meta or {};
+      } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
@@ -238,53 +240,94 @@ rec {
       meta.mainProgram = name;
     };
 
-  /*
-    Similar to writeShellScriptBin and writeScriptBin.
-    Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
-    checks its syntax with shellcheck and the shell's -n option.
-    Individual checks can be foregone by putting them in the excludeShellChecks
-    list, e.g. [ "SC2016" ].
-    Automatically includes sane set of shellopts (errexit, nounset, pipefail)
-    and handles creation of PATH based on runtimeInputs
-
-    Note that the checkPhase uses stdenv.shell for the test run of the script,
-    while the generated shebang uses runtimeShell. If, for whatever reason,
-    those were to mismatch you might lose fidelity in the default checks.
-
-    Example:
-
-    Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
-
-
-    writeShellApplication {
-      name = "my-file";
-      runtimeInputs = [ curl w3m ];
-      text = ''
-        curl -s 'https://nixos.org' | w3m -dump -T text/html
-       '';
-    }
-
-  */
+  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellApplication =
-    { name
-    , text
-    , runtimeInputs ? [ ]
-    , meta ? { }
-    , checkPhase ? null
-    , excludeShellChecks ? [ ]
+    {
+      /*
+         The name of the script to write.
+
+         Type: String
+       */
+      name,
+      /*
+         The shell script's text, not including a shebang.
+
+         Type: String
+       */
+      text,
+      /*
+         Inputs to add to the shell script's `$PATH` at runtime.
+
+         Type: [String|Derivation]
+       */
+      runtimeInputs ? [ ],
+      /*
+         Extra environment variables to set at runtime.
+
+         Type: AttrSet
+       */
+      runtimeEnv ? null,
+      /*
+         `stdenv.mkDerivation`'s `meta` argument.
+
+         Type: AttrSet
+       */
+      meta ? { },
+      /*
+         The `checkPhase` to run. Defaults to `shellcheck` on supported
+         platforms and `bash -n`.
+
+         The script path will be given as `$target` in the `checkPhase`.
+
+         Type: String
+       */
+      checkPhase ? null,
+      /*
+         Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
+
+         See <https://www.shellcheck.net/wiki/> for a list of checks.
+
+         Type: [String]
+       */
+      excludeShellChecks ? [ ],
+      /*
+         Bash options to activate with `set -o` at the start of the script.
+
+         Defaults to `[ "errexit" "nounset" "pipefail" ]`.
+
+         Type: [String]
+       */
+      bashOptions ? [ "errexit" "nounset" "pipefail" ],
+      /* Extra arguments to pass to `stdenv.mkDerivation`.
+
+         :::{.caution}
+         Certain derivation attributes are used internally,
+         overriding those could cause problems.
+         :::
+
+         Type: AttrSet
+       */
+      derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta;
+      inherit name meta derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
-        set -o errexit
-        set -o nounset
-        set -o pipefail
-      '' + lib.optionalString (runtimeInputs != [ ]) ''
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+      '' + lib.optionalString (runtimeEnv != null)
+        (lib.concatStrings
+          (lib.mapAttrsToList
+            (name: value: ''
+              ${lib.toShellVar name value}
+              export ${name}
+            '')
+            runtimeEnv))
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
         export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
       '' + ''

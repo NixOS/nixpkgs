@@ -2760,6 +2760,8 @@ self: super: with self; {
 
   decopatch = callPackage ../development/python-modules/decopatch { };
 
+  deebot-client = callPackage ../development/python-modules/deebot-client { };
+
   deemix = callPackage ../development/python-modules/deemix { };
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
@@ -3047,6 +3049,8 @@ self: super: with self; {
   django-countries = callPackage ../development/python-modules/django-countries { };
 
   django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
+
+  django-crispy-bootstrap5 = callPackage ../development/python-modules/django-crispy-bootstrap5 { };
 
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
@@ -6125,6 +6129,8 @@ self: super: with self; {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
+  keyring-pass = callPackage ../development/python-modules/keyring-pass { };
+
   keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
 
   keyrings-google-artifactregistry-auth = callPackage ../development/python-modules/keyrings-google-artifactregistry-auth { };
@@ -8367,6 +8373,8 @@ self: super: with self; {
 
   ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 
+  nipreps-versions = callPackage ../development/python-modules/nipreps-versions { };
+
   nipy = callPackage ../development/python-modules/nipy { };
 
   nipype = callPackage ../development/python-modules/nipype {
@@ -8378,6 +8386,8 @@ self: super: with self; {
   nitpick = callPackage ../applications/version-management/nitpick { };
 
   nitransforms = callPackage ../development/python-modules/nitransforms { };
+
+  niworkflows = callPackage ../development/python-modules/niworkflows { };
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel {
     inherit (pkgs) nix;
@@ -10413,6 +10423,8 @@ self: super: with self; {
   pyemby = callPackage ../development/python-modules/pyemby { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };
+
+  pyemvue = callPackage ../development/python-modules/pyemvue { };
 
   pyenchant = callPackage ../development/python-modules/pyenchant {
     inherit (pkgs) enchant2;
@@ -12730,6 +12742,8 @@ self: super: with self; {
 
   robotframework-databaselibrary = callPackage ../development/python-modules/robotframework-databaselibrary { };
 
+  robotframework-excellib = callPackage ../development/python-modules/robotframework-excellib { };
+
   robotframework-pythonlibcore = callPackage ../development/python-modules/robotframework-pythonlibcore { };
 
   robotframework-requests = callPackage ../development/python-modules/robotframework-requests { };
@@ -14014,7 +14028,11 @@ self: super: with self; {
 
   svg-path = callPackage ../development/python-modules/svg-path { };
 
+  svg-py = callPackage ../development/python-modules/svg-py { };
+
   svgelements = callPackage ../development/python-modules/svgelements { };
+
+  svgutils = callPackage ../development/python-modules/svgutils { };
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
@@ -14116,8 +14134,7 @@ self: super: with self; {
   tblib = callPackage ../development/python-modules/tblib { };
 
   tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
-    tblite = pkgs.tblite;
-    meson = pkgs.meson;
+    inherit (pkgs) tblite meson simple-dftd3;
   };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
@@ -14155,6 +14172,8 @@ self: super: with self; {
   tempest = callPackage ../development/python-modules/tempest { };
 
   tempita = callPackage ../development/python-modules/tempita { };
+
+  templateflow = callPackage ../development/python-modules/templateflow { };
 
   tempora = callPackage ../development/python-modules/tempora { };
 
@@ -14281,6 +14300,8 @@ self: super: with self; {
   termstyle = callPackage ../development/python-modules/termstyle { };
 
   tern = callPackage ../development/python-modules/tern { };
+
+  tesla-fleet-api = callPackage ../development/python-modules/tesla-fleet-api { };
 
   tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
 

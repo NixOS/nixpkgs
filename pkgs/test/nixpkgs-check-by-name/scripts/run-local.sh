@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq -I nixpkgs=../../../..
+#!nix-shell -i bash -p jq
 
 set -o pipefail -o errexit -o nounset
 

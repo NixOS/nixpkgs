@@ -179,9 +179,9 @@ mapAliases ({
   # these are for convenience, not for backward compat and shouldn't expire
   clang6Stdenv = throw "clang6Stdenv has been removed from nixpkgs"; # Added 2024-01-08
   clang7Stdenv = throw "clang7Stdenv has been removed from nixpkgs"; # Added 2023-11-19
-  clang8Stdenv = lowPrio llvmPackages_8.stdenv;
+  clang8Stdenv = throw "clang8Stdenv has been removed from nixpkgs"; # Added 2024-01-24
   clang9Stdenv = lowPrio llvmPackages_9.stdenv;
-  clang10Stdenv = lowPrio llvmPackages_10.stdenv;
+  clang10Stdenv = throw "clang10Stdenv has been removed from nixpkgs"; # Added 2024-01-26
   clang11Stdenv = lowPrio llvmPackages_11.stdenv;
   clang12Stdenv = lowPrio llvmPackages_12.stdenv;
   clang13Stdenv = lowPrio llvmPackages_13.stdenv;
@@ -192,8 +192,11 @@ mapAliases ({
 
   clang-tools_6 = throw "clang-tools_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang-tools_7 = throw "clang-tools_7 has been removed from nixpkgs"; # Added 2023-11-19
+  clang-tools_8  = throw "clang-tools_8 has been removed from nixpkgs"; # Added 2024-01-24
   clang_6 = throw "clang_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang_7 = throw "clang_7 has been removed from nixpkgs"; # Added 2023-11-19
+  clang_8  = throw "clang_8 has been removed from nixpkgs"; # Added 2024-01-24
+  clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
 
   ### D ###
 
@@ -622,12 +625,20 @@ mapAliases ({
 
   lld_6 = throw "lld_6 has been removed from nixpkgs"; # Added 2024-01-08
   lld_7 = throw "lld_7 has been removed from nixpkgs"; # Added 2023-11-19
+  lld_8 = throw "lld_8 has been removed from nixpkgs"; # Added 2024-01-24
+  lld_10 = throw "lld_10 has been removed from nixpkgs"; # Added 2024-01-26
   lldb_6 = throw "lldb_6 has been removed from nixpkgs"; # Added 2024-01-08
   lldb_7 = throw "lldb_7 has been removed from nixpkgs"; # Added 2023-11-19
+  lldb_8 = throw "lldb_8 has been removed from nixpkgs"; # Added 2024-01-24
+  lldb_10 = throw "lldb_10 has been removed from nixpkgs"; # Added 2024-01-26
   llvmPackages_6 = throw "llvmPackages_6 has been removed from nixpkgs"; # Added 2024-01-09
   llvmPackages_7 = throw "llvmPackages_7 has been removed from nixpkgs"; # Added 2023-11-19
+  llvmPackages_8 = throw "llvmPackages_8 has been removed from nixpkgs"; # Added 2024-01-24
+  llvmPackages_10 = throw "llvmPackages_10 has been removed from nixpkgs"; # Added 2024-01-26
   llvm_6 = throw "llvm_6 has been removed from nixpkgs"; # Added 2024-01-08
   llvm_7 = throw "llvm_7 has been removed from nixpkgs"; # Added 2023-11-19
+  llvm_8 = throw "llvm_8 has been removed from nixpkgs"; # Added 2024-01-24
+  llvm_10 = throw "llvm_10 has been removed from nixpkgs"; # Added 2024-01-26
 
   lobster-two = google-fonts; # Added 2021-07-22
   luxcorerender = throw "'luxcorerender' has been removed as it's unmaintained and broken in nixpkgs since a while ago"; # Added 2023-06-07
@@ -849,6 +860,7 @@ mapAliases ({
   probe-rs-cli = throw "probe-rs-cli is now part of the probe-rs package"; # Added 2023-07-03
   processing3 = throw "'processing3' has been renamed to/replaced by 'processing'"; # Converted to throw 2023-09-10
   prometheus-dmarc-exporter = dmarc-metrics-exporter; # added 2022-05-31
+  prometheus-openvpn-exporter = throw "'prometheus-openvpn-exporter' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-12-23
   prometheus-speedtest-exporter = throw "prometheus-speedtest-exporter was removed as unmaintained"; # Added 2023-07-31
   protobuf3_17 = throw "protobuf3_17 does not receive updates anymore and has been removed"; # Added 2023-05-21
   protobuf3_19 = throw "protobuf3_19 does not receive updates anymore and has been removed"; # Added 2023-10-01
