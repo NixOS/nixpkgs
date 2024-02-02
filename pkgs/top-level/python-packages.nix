@@ -2389,7 +2389,9 @@ self: super: with self; {
 
   cose = callPackage ../development/python-modules/cose { };
 
-  cot = callPackage ../development/python-modules/cot { };
+  cot = callPackage ../development/python-modules/cot {
+    qemu = pkgs.qemu;
+  };
 
   cov-core = callPackage ../development/python-modules/cov-core { };
 
@@ -5008,7 +5010,9 @@ self: super: with self; {
 
   guessit = callPackage ../development/python-modules/guessit { };
 
-  guestfs = callPackage ../development/python-modules/guestfs { };
+  guestfs = callPackage ../development/python-modules/guestfs {
+    qemu = pkgs.qemu;
+  };
 
   gudhi = callPackage ../development/python-modules/gudhi { };
 
@@ -12280,7 +12284,9 @@ self: super: with self; {
 
   qgrid = callPackage ../development/python-modules/qgrid { };
 
-  qemu = callPackage ../development/python-modules/qemu { };
+  qemu = callPackage ../development/python-modules/qemu {
+    qemu = pkgs.qemu;
+  };
 
   qiling = callPackage ../development/python-modules/qiling { };
 

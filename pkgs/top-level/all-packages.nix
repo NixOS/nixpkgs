@@ -34760,7 +34760,12 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  qemu-python-utils = python3Packages.toPythonApplication python3Packages.qemu;
+  qemu-python-utils = python3Packages.toPythonApplication (
+    python3Packages.qemu.override {
+      fuseSupport = true;
+      tuiSupport = true;
+    }
+  );
 
   qemu-utils = qemu.override {
     toolsOnly = true;
