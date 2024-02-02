@@ -7,13 +7,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "1.14.1";
+  version = "1.14.1-unstable-2024-01-30";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-em3Y56saB7K3Wr31Y0boc38xGb57gdveN0Cstgy8y20=";
+    rev = "d21a6ea3c69ba180457966a04b6545d321cf46ca";
+    hash = "sha256-Txa9yX9h3GfmHRRNvhrfrsUoQhqRWbBt4gJYAZTNe0w=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
-    broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "6.6";
+    broken = kernel.kernelOlder "4.19";
   };
 }

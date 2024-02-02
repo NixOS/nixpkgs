@@ -20,6 +20,7 @@
 , python3
 , systemd
 , ubports-click
+, validatePkgConfig
 , zeitgeist
 , withDocumentation ? true
 , doxygen
@@ -29,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
-  version = "0.1.8";
+  version = "0.1.9";
 
   outputs = [
     "out"
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ubports";
     repo = "development/core/lomiri-app-launch";
     rev = finalAttrs.version;
-    hash = "sha256-NIBZk5H0bPwAwkI0Qiq2S9dZvchAFPBCHKi2inUVZmI=";
+    hash = "sha256-vuu6tZ5eDJN2rraOpmrDddSl1cIFFBSrILKMJqcUDVc=";
   };
 
   postPatch = ''
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # used pkg_get_variable, cannot replace prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'DESTINATION "''${SYSTEMD_USER_UNIT_DIR}"' 'DESTINATION "${placeholder "out"}/lib/systemd/user"'
+      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
 
     substituteInPlace tests/jobs-systemd.cpp \
       --replace '^(/usr)?' '^(/nix/store/\\w+-bash-.+)?'
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
     gobject-introspection
     pkg-config
+    validatePkgConfig
   ] ++ lib.optionals withDocumentation [
     doxygen
     python3Packages.breathe
@@ -96,8 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_MIRCLIENT=OFF"
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.doCheck}"
+    (lib.cmakeBool "ENABLE_MIRCLIENT" false)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   postBuild = lib.optionalString withDocumentation ''
@@ -119,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "System and associated utilities to launch applications in a standard and confined way";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-app-launch";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
