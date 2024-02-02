@@ -1330,6 +1330,11 @@ self: super: with self; {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  babeltrace = toPythonModule (pkgs.babeltrace.override {
+    pythonPackages = self;
+    enablePython = true;
+  });
+
   bambi = callPackage ../development/python-modules/bambi { };
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
