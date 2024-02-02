@@ -1,7 +1,7 @@
 { lib
 , stdenv
-, fetchFromGitLab
-, gitUpdater
+, fetchurl
+, directoryListingUpdater
 , meson
 , ninja
 , pkg-config
@@ -18,14 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.23.1";
+  version = "0.31.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "guidog";
-    repo = "phosh-mobile-settings";
-    rev = "v${version}";
-    sha256 = "sha256-D605efn25Dl3Bj92DZiagcx+MMcRz0GRaWxplBRcZhA=";
+  src = fetchurl {
+    # This tarball includes the meson wrapped subproject 'gmobile'.
+    url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-5Qa6LSOLvZL0sFh2co9AqyS5ZTQQ+JRnPiHuMl1UgDI=";
   };
 
   nativeBuildInputs = [
@@ -57,9 +55,7 @@ stdenv.mkDerivation rec {
       --replace 'Exec=phosh-mobile-settings' "Exec=$out/bin/phosh-mobile-settings"
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "A settings app for mobile specific things";
