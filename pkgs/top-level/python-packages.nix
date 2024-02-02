@@ -1284,6 +1284,8 @@ self: super: with self; {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  babeltrace = callPackage ../development/python-modules/babeltrace { inherit (pkgs) babeltrace; };
+
   babeltrace2 = callPackage ../development/python-modules/babeltrace2 { inherit (pkgs) babeltrace2; };
 
   bambi = callPackage ../development/python-modules/bambi { };
