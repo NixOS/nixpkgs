@@ -8,29 +8,20 @@ in lib.makeScope newScope (self: with self; { inherit stdenv;
   # build a self which is parameterized with whatever the targeted version is
   # so e.g. pkgsCross.x86_64-freebsd14.freebsd.buildFreebsd will get you freebsd.packages14
   buildFreebsd = buildPackages.freebsd.overrideScope (_: _: { inherit hostBranch; });
+  branches = lib.flip lib.mapAttrs versions (branch: _: self.overrideScope (_: _: { hostBranch = branch; }));
+
   packages13 = self.overrideScope (_: _: { hostBranch = "release/13.2.0"; });
   packages14 = self.overrideScope (_: _: { hostBranch = "release/14.0.0"; });
   packages15 = self.overrideScope (_: _: { hostBranch = "main"; });
 
   hostBranch = let
     allBranches = builtins.attrNames versions;
-    fallbackBranch = if self.stdenv.hostPlatform.isFreeBSD then
-      let
-        hostMajor = builtins.toString self.stdenv.hostPlatform.parsed.kernel.version;
-        branchRegex = "release/${hostMajor}\..*";
+    fallbackBranch = let
+        branchRegex = "release/.*";
         candidateBranches = builtins.filter (name: builtins.match branchRegex name != null) allBranches;
         selectedBranch = lib.last (lib.naturalSort candidateBranches);
       in
-        if candidateBranches == [] then
-          throw "Unknown FreeBSD version ${hostMajor}"
-        else
-          lib.warn "Didn't know exact FreeBSD branch, falling back to ${selectedBranch}" selectedBranch
-     else
-      throw ''
-        No FreeBSD branch selected.
-        The freebsd packages need to be given a specific source branch when not targeting FreeBSD.
-        Set one with the `NIXPKGS_FREEBSD_BRANCH` environment variable or by setting `nixpkgs.config.freebsdBranch`.
-      '';
+        lib.warn "Didn't know exact FreeBSD branch, falling back to ${selectedBranch}" selectedBranch;
     envBranch = builtins.getEnv "NIXPKGS_FREEBSD_BRANCH";
     selectedBranch = config.freebsdBranch or (if envBranch != "" then envBranch else null);
     chosenBranch = if selectedBranch != null then selectedBranch else fallbackBranch;
