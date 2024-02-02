@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, nasm, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, nasm
+, pkg-config
 , xxHash
 , withTools ? false # "dav1d" binary
-, withExamples ? false, SDL2 # "dav1dplay" binary
-, useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
+, withExamples ? false
+, SDL2 # "dav1dplay" binary
+, useVulkan ? false
+, libplacebo
+, vulkan-loader
+, vulkan-headers
 
-# for passthru.tests
+  # for passthru.tests
 , ffmpeg
 , gdal
 , handbrake
@@ -34,7 +43,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withExamples SDL2
     ++ lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
 
-  mesonFlags= [
+  mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"
     "-Denable_examples=${lib.boolToString withExamples}"
   ];
