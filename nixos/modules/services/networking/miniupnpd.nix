@@ -14,8 +14,8 @@ let
     '') cfg.internalIPs}
 
     ${lib.optionalString (firewall == "nftables") ''
-      upnp_table_name=miniupnpd
-      upnp_nat_table_name=miniupnpd
+      upnp_table_name=${cfg.upnpTableName}
+      upnp_nat_table_name=${cfg.upnpNatTableName}
     ''}
 
     ${cfg.appendConfig}
@@ -52,6 +52,22 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether to enable UPNP support.
+        '';
+      };
+
+      upnpTableName = mkOption {
+        default = "miniupnpd";
+        type = types.str;
+        description = lib.mdDoc ''
+          upnp_table_name for nftables.
+        '';
+      };
+
+      upnpNatTableName = mkOption {
+        default = "miniupnpd";
+        type = types.str;
+        description = lib.mdDoc ''
+          upnp_nat_table_name for nftables.
         '';
       };
 
