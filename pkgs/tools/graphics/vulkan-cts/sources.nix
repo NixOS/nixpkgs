@@ -11,15 +11,15 @@ rec {
   amber = fetchFromGitHub {
     owner = "google";
     repo = "amber";
-    rev = "933ecb4d6288675a92eb1650e0f52b1d7afe8273";
-    hash = "sha256-v9z4gv/mTjaCkByZn6uDpMteQuIf0FzZXeKyoXfFjXo=";
+    rev = "8e90b2d2f532bcd4a80069e3f37a9698209a21bc";
+    hash = "sha256-LuNCND/NXoNbbTWv7RYQUkq2QXL1qXR27uHwFIz0DXg=";
   };
 
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "c5117b328afc86e16edff6ed6afe0fe7872a7cf3";
-    hash = "sha256-4SoET76fCfutttK00JGCKVQUn0ivGdTw6GhndvxbIDU=";
+    rev = "f6f9840eabd8c5b31e218c8c61b4716e5981f713";
+    hash = "sha256-RPeYWxsQixB1v89+LqMRthvri232GeuInlLma5p1mXI=";
   };
 
   jsoncpp = fetchFromGitHub {
@@ -32,29 +32,29 @@ rec {
   nvidia-video-samples = fetchFromGitHub {
     owner = "Igalia";
     repo = "vk_video_samples";
-    rev = "138bbe048221d315962ddf8413aa6a08cc62a381";
-    hash = "sha256-ftHhb5u3l7WbgEu6hHynBnvNbVOn5TFne915M17jiAQ=";
+    rev = "b907158533534585d9182cb0becdaec055aa7e12";
+    hash = "sha256-HiO+fIcV5prAu2jJxRRRbrspHqx79pkdFurfQ17/nE8=";
   };
 
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "b8b9eb8640c8c0107ba580fbcb10f969022ca32c";
-    hash = "sha256-gcKwML5ItccAhX+QtR9G86h0JnaiVQEmOQzQpL005dg=";
+    rev = "ae6a8b39717523d96683bc0d20b541944e28072f";
+    hash = "sha256-r+EE9+vSNxP7w+Mx9S0YxStks2vJcliSf3MIa1H2xQU=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "bfc94f63a7adbcf8ae166f5f108ac9f69079efc0";
-    hash = "sha256-gju6hJSIWOswGnRxKeJZsU1jgp3HSZAf7wFRxswY+Js=";
+    rev = "69197ba90b2bf1358e49e0f77ffbc33b4dc44c5d";
+    hash = "sha256-ctC6RPYFNl+Bj6br4+j7/kIuAr8jdMsT1PQ66FMKsXE=";
   };
 
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "b9aad705f0d9e5e6734ac2ad671d5d1de57b05e0";
-    hash = "sha256-bJ2C1+zjvLiYp5A5AHTevFPU9Yka99imqLwH+uApuoY=";
+    rev = "bf11e6d4ca4b71ae311bb925ae68d215fbe09a86";
+    hash = "sha256-UztssV1Ep7F3JyRqRbBc8GsZmGpdvddWG1ToyEwfI3g=";
   };
 
 
