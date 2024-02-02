@@ -1,6 +1,6 @@
 { lib, stdenvNoCC, fetchFromGitLab }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "kuyen-icon-theme";
   version = "0-unstable-2024-01-27";
 
