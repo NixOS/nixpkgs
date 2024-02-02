@@ -10813,7 +10813,7 @@ with pkgs;
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
-  mbutil = python3Packages.callPackage ../applications/misc/mbutil { };
+  mbutil = python310Packages.callPackage ../applications/misc/mbutil { };
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
 
