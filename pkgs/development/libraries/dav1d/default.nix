@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     changelog = "https://code.videolan.org/videolan/dav1d/-/tags/${version}";
     # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
     license = licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ primeos ];
   };
 }
