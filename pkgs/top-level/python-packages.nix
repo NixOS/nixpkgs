@@ -10543,6 +10543,8 @@ self: super: with self; {
 
   pygls = callPackage ../development/python-modules/pygls { };
 
+  pygltflib = callPackage ../development/python-modules/pygltflib { };
+
   pygmars = callPackage ../development/python-modules/pygmars { };
 
   pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
