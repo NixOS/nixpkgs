@@ -24,7 +24,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-bufFiyqRsn4eG57bKn42p5cyX+Z7oiz/USZvg9YOvHA=";
 
-  buildFeatures = [ "sixel" ];
+  # Crashes at runtime on darwin with:
+  # Library not loaded: .../out/lib/libsixel.1.dylib
+  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "sixel" ];
 
   # Skip test that currently doesn't work
   checkFlags = [ "--skip=execute::test::shell_code_execution" ];
@@ -41,8 +43,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ mikaelfangel ];
     mainProgram = "presenterm";
-    # Crashes at runtime on darwin with:
-    # Library not loaded: .../out/lib/libsixel.1.dylib
-    broken = stdenv.isDarwin;
   };
 }
