@@ -5,7 +5,8 @@
 , cmake
 , zlib
 , ncurses
-, swig
+, swig3
+, swig4
 , which
 , libedit
 , libxml2
@@ -34,6 +35,11 @@ let
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/lldb "$out"
       '' else src;
+  vscodeExt = {
+    name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
+    version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
+  };
+  swig = if lib.versionAtLeast release_version "18" then swig4 else swig3;
 in
 
 stdenv.mkDerivation (rec {
@@ -154,14 +160,14 @@ stdenv.mkDerivation (rec {
 
     # Editor support
     # vscode:
-    install -D ../tools/lldb-vscode/package.json $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/package.json
-    mkdir -p $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
-    ln -s $out/bin/*-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
+    install -D ../tools/${vscodeExt.name}/package.json $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/package.json
+    mkdir -p $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
+    ln -s $out/bin/*${if lib.versionAtLeast release_version "18" then vscodeExt.name else "-vscode"} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
   '';
 
-  passthru.vscodeExtName = "lldb-vscode";
+  passthru.vscodeExtName = vscodeExt.name;
   passthru.vscodeExtPublisher = "llvm";
-  passthru.vscodeExtUniqueId = "llvm-org.lldb-vscode-0.1.0";
+  passthru.vscodeExtUniqueId = "llvm-org.${vscodeExt.name}-${vscodeExt.version}";
 
   meta = llvm_meta // {
     homepage = "https://lldb.llvm.org/";
