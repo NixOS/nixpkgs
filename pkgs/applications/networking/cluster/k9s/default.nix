@@ -42,6 +42,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
+    # k9s requires a writeable log directory
+    # Otherwise an error message is printed
+    # into the completion scripts
+    export K9S_LOGS_DIR=$(mktemp -d)
+
     installShellCompletion --cmd k9s \
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \
