@@ -21,6 +21,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A smooth icon theme designed for Plasma Desktop";
     homepage = "https://gitlab.com/froodo_alexis/Antu-icons";
+    changelog = "https://gitlab.com/froodo_alexis/Antu-icons/-/releases";
     license = licenses.cc-by-nc-sa-30;
     platforms = platforms.linux;
     maintainers = with maintainers; [ iamanaws ];
