@@ -21,6 +21,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A colourful flat theme designed for Plasma Desktop";
     homepage = "https://gitlab.com/froodo_alexis/kuyen-icons";
+    changelog = "https://gitlab.com/froodo_alexis/kuyen-icons/-/releases";
     license = licenses.cc-by-nc-sa-30;
     platforms = platforms.linux;
     maintainers = with maintainers; [ iamanaws ];
