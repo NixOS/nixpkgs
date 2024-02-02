@@ -17,7 +17,7 @@
 , libxkbcommon
 , wlroots
 , xorg
-, gitUpdater
+, directoryListingUpdater
 , nixosTests
 }:
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
-    url = "https://storage.puri.sm/releases/phoc/phoc-${version}.tar.xz";
+    url = "https://sources.phosh.mobi/releases/phoc/phoc-${version}.tar.xz";
     hash = "sha256-P7Bs9JMv6KNKo4d2ID0/Ba4+Nel6DMn8o4I7EDvY4vY=";
   };
 
@@ -74,10 +74,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     tests.phosh = nixosTests.phosh;
-    updateScript = gitUpdater {
-      url = "https://gitlab.gnome.org/World/Phosh/phoc";
-      rev-prefix = "v";
-    };
+    updateScript = directoryListingUpdater { };
   };
 
   meta = with lib; {
