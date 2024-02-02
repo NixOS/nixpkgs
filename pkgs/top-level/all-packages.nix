@@ -18447,7 +18447,7 @@ with pkgs;
 
   b4 = callPackage ../development/tools/b4 { };
 
-  babeltrace = callPackage ../development/tools/misc/babeltrace { };
+  babeltrace = callPackage ../development/tools/misc/babeltrace/v1.nix { };
 
   bam = callPackage ../development/tools/build-managers/bam { };
 
