@@ -3,22 +3,19 @@
 , buildPythonPackage
 , callPackage
 , cargo
+, certifi
 , cffi
 , cryptography-vectors ? (callPackage ./vectors.nix { })
 , fetchPypi
-, hypothesis
-, iso8601
 , isPyPy
 , libiconv
 , libxcrypt
 , openssl
 , pkg-config
 , pretend
-, py
-, pytest-subtests
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
-, pytz
 , rustc
 , rustPlatform
 , Security
@@ -27,26 +24,26 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "41.0.7"; # Also update the hash in vectors.nix
+  version = "42.0.2"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E/k86b6oAWwlOzSvxr1qdZk+XEBnLtVAWpyDLw1KALw=";
+    hash = "sha256-4OxSujx/G32BPNUmSaWz7x/A1DMhncjJOCfFfqts+Ig=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-VeZhKisCPDRvmSjGNwCgJJeVj65BZ0Ge+yvXbZw86Rw=";
+    hash = "sha256-jw/FC5rQO77h6omtBp0Nc2oitkVbNElbkBUduyprTIc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--benchmark-disable" ""
+      --replace-fail "--benchmark-disable" ""
   '';
 
   cargoRoot = "src/rust";
@@ -75,14 +72,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    certifi
     cryptography-vectors
-    hypothesis
-    iso8601
     pretend
-    py
     pytestCheckHook
-    pytest-subtests
-    pytz
+    pytest-xdist
   ];
 
   pytestFlagsArray = [
