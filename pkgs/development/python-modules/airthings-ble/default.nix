@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "vincegio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-T+KtB6kPrLahI73W/Bb3A9ws91v4n1EtURgm3RcLzW8=";
+    hash = "sha256-A7Nrg0O+WVoHP+m8pz6idnNcxulwPYmMt9DfhKTHG24=";
   };
 
   postPatch = ''
