@@ -7,7 +7,6 @@
 | Package    | Aliases         | Interpreter |
 |------------|-----------------|-------------|
 | python27   | python2, python | CPython 2.7 |
-| python38   |                 | CPython 3.8 |
 | python39   |                 | CPython 3.9 |
 | python310  |                 | CPython 3.10 |
 | python311  | python3         | CPython 3.11 |
@@ -60,7 +59,6 @@ sets are
 
 * `pkgs.python27Packages`
 * `pkgs.python3Packages`
-* `pkgs.python38Packages`
 * `pkgs.python39Packages`
 * `pkgs.python310Packages`
 * `pkgs.python311Packages`
