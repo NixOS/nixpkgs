@@ -156,8 +156,6 @@ let
         # the bundled version of qt does not support wayland
       )
     '';
-
-    passthru.updateScript = ./update.sh;
   };
 
 in
@@ -184,6 +182,8 @@ buildFHSEnv {
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
         --replace "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
