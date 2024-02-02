@@ -1,0 +1,56 @@
+--- a/nist-feed	2024-01-28 19:03:44.721621784 +0530
++++ b/nist-feed	2024-01-29 18:58:25.981732803 +0530
+@@ -1,7 +1,5 @@
+ #!/bin/sh
+ 
+-pkill -f "/usr/bin/gjs /usr/share/gnome-shell/org.gnome.Shell.Notifications"
+-
+ ############################################################
+ # Colors                                                   #
+ ############################################################
+@@ -67,7 +65,7 @@
+    echo "-i                        Filter by integrity metric (NONE='I:N', LOW='I:L' or HIGH='I:H')."
+    echo "-l                        Retrieve the latest CVE according to the filters."
+    echo "-m                        Filter by the specified CVSSv3 metric codes. It is used mainly for managing all filters selected by the user when the notification popup must be created."
+-   echo "-n                        Enable desktop notification for the latest CVE according the applied filters by crontab."
++   echo "-n                        Notification option has been removed for nix, to enable notifications use programs.nist-feed.enable = true; "
+    echo "-P                        Filter by privileges required metric (NONE='PR:N', LOW='PR:L' or HIGH='PR:H')."
+    echo "-r                        Specify the maximum number of results that are returned based on the request parameters. The default value is 20. For network considerations, maximum allowable limit is 2,000."
+    echo "-S                        Filter by scope metric (UNCHANGED='S:U' or CHANGED='S:C')."
+@@ -237,7 +235,6 @@
+ 
+ if [ "$end" ]; then
+    echo "Disabling NIST NVD feed popup notification..."
+-   crontab -l | sed '/nist-feed/d' | crontab
+    rm -rf $last_cve_file
+    rm -rf $cve_json_file
+    exit 0
+@@ -336,27 +333,13 @@
+    fi
+ fi
+ 
+-if [[ "$id" != "$LAST_CVE" ]] || [ $(crontab -l | wc -c) -eq 0 ];then #if the previous CVE is different from the current one, OR the crontab is empty, popup notification
++if [[ "$id" != "$LAST_CVE" ]];then #if the previous CVE is different from the current one, OR the crontab is empty, popup notification
+    if [[ ! "$notify" ]]; then #LAST_CVE must be set only if the user does not set the notification parameters, otherwise when crontab will call the 1st time nist-feed, $id is already = to $LAST_CVE
+       echo "$id" > $last_cve_file
+       #Generate the popup notification
+       killall dunst;notify-send -u normal "$id" "$description\n\n<b>$nvdURL</b>"
+    fi
+    
+-   if [[ "$notify" -eq 1 ]] && [ ! "$severity" ] && [ ! "$metric" ]; then
+-      crontab -l | sed '/nist-feed/d' | crontab
+-      (crontab -l 2>/dev/null; echo "*/30 * * * * ( killall dunst ; XDG_RUNTIME_DIR=/run/user/$(id -u) /usr/local/bin/nist-feed -l)") | crontab -
+-   elif [[ "$notify" -eq 1 ]] && [ "$severity" ] && [ ! "$metric" ]; then
+-      crontab -l | sed '/nist-feed/d' | crontab
+-      (crontab -l 2>/dev/null; echo "*/30 * * * * ( killall dunst ; XDG_RUNTIME_DIR=/run/user/$(id -u) /usr/local/bin/nist-feed -l -s $severity)") | crontab -
+-   elif [[ "$notify" -eq 1 ]] && [ ! "$severity" ] && [ "$metric" ]; then
+-      crontab -l | sed '/nist-feed/d' | crontab
+-      (crontab -l 2>/dev/null; echo "*/30 * * * * ( killall dunst ; XDG_RUNTIME_DIR=/run/user/$(id -u) /usr/local/bin/nist-feed -l -m $metric)") | crontab -
+-   elif [[ "$notify" -eq 1 ]] && [ "$severity" ] && [ "$metric" ]; then
+-      crontab -l | sed '/nist-feed/d' | crontab
+-      (crontab -l 2>/dev/null; echo "*/30 * * * * ( killall dunst ; XDG_RUNTIME_DIR=/run/user/$(id -u) /usr/local/bin/nist-feed -l -s $severity -m $metric)") | crontab -
+-   fi
+-   
+ fi
+ 
+ rm -rf $cve_json_file
