@@ -1282,141 +1282,288 @@ dockerTools.buildLayeredImage {
 ```
 :::
 
+[]{#ssec-pkgs-dockerTools-buildNixShellImage-arguments}
 ## buildNixShellImage {#ssec-pkgs-dockerTools-buildNixShellImage}
 
-Create a Docker image that sets up an environment similar to that of running `nix-shell` on a derivation.
-When run in Docker, this environment somewhat resembles the Nix sandbox typically used by `nix-build`, with a major difference being that access to the internet is allowed.
-It additionally also behaves like an interactive `nix-shell`, running things like `shellHook` and setting an interactive prompt.
-If the derivation is fully buildable (i.e. `nix-build` can be used on it), running `buildDerivation` inside such a Docker image will build the derivation, with all its outputs being available in the correct `/nix/store` paths, pointed to by the respective environment variables like `$out`, etc.
+`buildNixShellImage` uses [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) underneath to build a compressed Docker-compatible repository tarball of an image that sets up an environment similar to that of running `nix-shell` on a derivation.
+Basically, `buildNixShellImage` runs the script created by `streamNixShellImage` to save the compressed image in the Nix store.
 
-::: {.warning}
-The behavior doesn't match `nix-shell` or `nix-build` exactly and this function is known not to work correctly for e.g. fixed-output derivations, content-addressed derivations, impure derivations and other special types of derivations.
-:::
+`buildNixShellImage` supports the same options as `streamNixShellImage`, see [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) for details.
 
-### Arguments {#ssec-pkgs-dockerTools-buildNixShellImage-arguments}
+[]{#ssec-pkgs-dockerTools-buildNixShellImage-example}
+### Examples {#ssec-pkgs-dockerTools-buildNixShellImage-examples}
 
-`drv`
+:::{.example #ex-dockerTools-buildNixShellImage-hello}
+# Building a Docker image with `buildNixShellImage` with the build environment for the `hello` package
 
-: The derivation on which to base the Docker image.
-
-    Adding packages to the Docker image is possible by e.g. extending the list of `nativeBuildInputs` of this derivation like
-
-    ```nix
-    buildNixShellImage {
-      drv = someDrv.overrideAttrs (old: {
-        nativeBuildInputs = old.nativeBuildInputs or [] ++ [
-          somethingExtra
-        ];
-      });
-      # ...
-    }
-    ```
-
-    Similarly, you can extend the image initialization script by extending `shellHook`
-
-`name` _optional_
-
-: The name of the resulting image.
-
-    *Default:* `drv.name + "-env"`
-
-`tag` _optional_
-
-: Tag of the generated image.
-
-    *Default:* the resulting image derivation output path's hash
-
-`uid`/`gid` _optional_
-
-: The user/group ID to run the container as. This is like a `nixbld` build user.
-
-    *Default:* 1000/1000
-
-`homeDirectory` _optional_
-
-: The home directory of the user the container is running as
-
-    *Default:* `/build`
-
-`shell` _optional_
-
-: The path to the `bash` binary to use as the shell. This shell is started when running the image.
-
-    *Default:* `pkgs.bashInteractive + "/bin/bash"`
-
-`command` _optional_
-
-: Run this command in the environment of the derivation, in an interactive shell. See the `--command` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
-
-    *Default:* (none)
-
-`run` _optional_
-
-: Same as `command`, but runs the command in a non-interactive shell instead. See the `--run` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
-
-    *Default:* (none)
-
-### Example {#ssec-pkgs-dockerTools-buildNixShellImage-example}
-
-The following shows how to build the `pkgs.hello` package inside a Docker container built with `buildNixShellImage`.
+This example shows how to build the `hello` package inside a Docker container built with `buildNixShellImage`.
+The Docker image generated will have a name like `hello-<version>-env` and tag `latest`.
+This example is the `buildNixShellImage` equivalent of [](#ex-dockerTools-streamNixShellImage-hello).
 
 ```nix
-with import <nixpkgs> {};
+{ dockerTools, hello }:
 dockerTools.buildNixShellImage {
   drv = hello;
+  tag = "latest";
 }
 ```
 
-Build the derivation:
+The result of building this package is a `.tar.gz` file that can be loaded into Docker:
 
-```console
-nix-build hello.nix
+```shell
+$ nix-build
+(some output removed for clarity)
+/nix/store/pkj1sgzaz31wl0pbvbg3yp5b3kxndqms-hello-2.12.1-env.tar.gz
+
+$ docker load -i /nix/store/pkj1sgzaz31wl0pbvbg3yp5b3kxndqms-hello-2.12.1-env.tar.gz
+(some output removed for clarity)
+Loaded image: hello-2.12.1-env:latest
 ```
 
-    these 8 derivations will be built:
-      /nix/store/xmw3a5ln29rdalavcxk1w3m4zb2n7kk6-nix-shell-rc.drv
-    ...
-    Creating layer 56 from paths: ['/nix/store/crpnj8ssz0va2q0p5ibv9i6k6n52gcya-stdenv-linux']
-    Creating layer 57 with customisation...
-    Adding manifests...
-    Done.
-    /nix/store/cpyn1lc897ghx0rhr2xy49jvyn52bazv-hello-2.12-env.tar.gz
+After starting an interactive container, the derivation can be built by running `buildDerivation`, and the output can be executed as expected:
 
-Load the image:
+```shell
+$ docker run -it hello-2.12.1-env:latest
+[nix-shell:~]$ buildDerivation
+Running phase: unpackPhase
+unpacking source archive /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
+source root is hello-2.12.1
+(some output removed for clarity)
+Running phase: fixupPhase
+shrinking RPATHs of ELF executables and libraries in /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1
+shrinking /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1/bin/hello
+checking for references to /build/ in /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1...
+gzipping man pages under /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1/share/man/
+patching script interpreter paths in /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1
+stripping (with command strip and flags -S -p) in  /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1/bin
 
-```console
-docker load -i result
+[nix-shell:~]$ $out/bin/hello
+Hello, world!
+```
+:::
+
+## streamNixShellImage {#ssec-pkgs-dockerTools-streamNixShellImage}
+
+`streamNixShellImage` builds a **script** which, when run, will stream to stdout a Docker-compatible repository tarball of an image that sets up an environment similar to that of running `nix-shell` on a derivation.
+This means that `streamNixShellImage` does not output an image into the Nix store, but only a script that builds the image, saving on IO and disk/cache space, particularly with large images.
+See [](#ex-dockerTools-streamNixShellImage-hello) to understand how to load in Docker the image generated by this script.
+
+The environment set up by `streamNixShellImage` somewhat resembles the Nix sandbox typically used by `nix-build`, with a major difference being that access to the internet is allowed.
+It also behaves like an interactive `nix-shell`, running things like `shellHook` (see [](#ex-dockerTools-streamNixShellImage-addingShellHook)) and setting an interactive prompt.
+If the derivation is buildable (i.e. `nix-build` can be used on it), running `buildDerivation` in the container will build the derivation, with all its outputs being available in the correct `/nix/store` paths, pointed to by the respective environment variables (e.g. `$out`).
+
+::: {.caution}
+The environment in the image doesn't match `nix-shell` or `nix-build` exactly, and this function is known not to work correctly for fixed-output derivations, content-addressed derivations, impure derivations and other special types of derivations.
+:::
+
+### Inputs {#ssec-pkgs-dockerTools-streamNixShellImage-inputs}
+
+`streamNixShellImage` expects one argument with the following attributes:
+
+`drv` (Attribute Set)
+
+: The derivation for which the environment in the image will be set up.
+  Adding packages to the Docker image is possible by extending the list of `nativeBuildInputs` of this derivation.
+  See [](#ex-dockerTools-streamNixShellImage-extendingBuildInputs) for how to do that.
+  Similarly, you can extend the image initialization script by extending `shellHook`.
+  [](#ex-dockerTools-streamNixShellImage-addingShellHook) shows how to do that.
+
+`name` (String; _optional_)
+
+: The name of the generated image.
+
+  _Default value:_ the value of `drv.name + "-env"`.
+
+`tag` (String or Null; _optional_)
+
+: Tag of the generated image.
+  If `null`, the hash of the nix derivation that builds the Docker image will be used as the tag.
+
+  _Default value:_ `null`.
+
+`uid` (Number; _optional_)
+
+: The user ID to run the container as.
+  This can be seen as a `nixbld` build user.
+
+  _Default value:_ 1000.
+
+`gid` (Number; _optional_)
+
+: The group ID to run the container as.
+  This can be seen as a `nixbld` build group.
+
+  _Default value:_ 1000.
+
+`homeDirectory` (String; _optional_)
+
+: The home directory of the user the container is running as.
+
+  _Default value:_ `/build`.
+
+`shell` (String; _optional_)
+
+: The path to the `bash` binary to use as the shell.
+  This shell is started when running the image.
+  This can be seen as an equivalent of the `NIX_BUILD_SHELL` [environment variable](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html#environment-variables) for {manpage}`nix-shell(1)`.
+
+  _Default value:_ the `bash` binary from the `bashInteractive` package.
+
+`command` (String or Null; _optional_)
+
+: If specified, this command will be run in the environment of the derivation in an interactive shell.
+  A call to `exit` will be added after the command if it is specified, so the shell will exit after it's finished running.
+  This can be seen as an equivalent of the `--command` option in {manpage}`nix-shell(1)`.
+
+  _Default value:_ `null`.
+
+`run` (String or Null; _optional_)
+
+: Similar to the `command` attribute, but runs the command in a non-interactive shell instead.
+  A call to `exit` will be added after the command if it is specified, so the shell will exit after it's finished running.
+  This can be seen as an equivalent of the `--run` option in {manpage}`nix-shell(1)`.
+
+  _Default value:_ `null`.
+
+### Examples {#ssec-pkgs-dockerTools-streamNixShellImage-examples}
+
+:::{.example #ex-dockerTools-streamNixShellImage-hello}
+# Building a Docker image with `streamNixShellImage` with the build environment for the `hello` package
+
+This example shows how to build the `hello` package inside a Docker container built with `streamNixShellImage`.
+The Docker image generated will have a name like `hello-<version>-env` and tag `latest`.
+This example is the `streamNixShellImage` equivalent of [](#ex-dockerTools-buildNixShellImage-hello).
+
+```nix
+{ dockerTools, hello }:
+dockerTools.streamNixShellImage {
+  drv = hello;
+  tag = "latest";
+}
 ```
 
-    0d9f4c4cd109: Loading layer [==================================================>]   2.56MB/2.56MB
-    ...
-    ab1d897c0697: Loading layer [==================================================>]  10.24kB/10.24kB
-    Loaded image: hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+The result of building this package is a script.
+Running this script and piping it into `docker load` gives you the same image that was built in [](#ex-dockerTools-buildNixShellImage-hello).
 
-Run the container:
+```shell
+$ nix-build
+(some output removed for clarity)
+/nix/store/8vhznpz2frqazxnd8pgdvf38jscdypax-stream-hello-2.12.1-env
 
-```console
-docker run -it hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+$ /nix/store/8vhznpz2frqazxnd8pgdvf38jscdypax-stream-hello-2.12.1-env | docker load
+(some output removed for clarity)
+Loaded image: hello-2.12.1-env:latest
 ```
 
-    [nix-shell:/build]$
+After starting an interactive container, the derivation can be built by running `buildDerivation`, and the output can be executed as expected:
 
-In the running container, run the build:
+```shell
+$ docker run -it hello-2.12.1-env:latest
+[nix-shell:~]$ buildDerivation
+Running phase: unpackPhase
+unpacking source archive /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
+source root is hello-2.12.1
+(some output removed for clarity)
+Running phase: fixupPhase
+shrinking RPATHs of ELF executables and libraries in /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1
+shrinking /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1/bin/hello
+checking for references to /build/ in /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1...
+gzipping man pages under /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1/share/man/
+patching script interpreter paths in /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1
+stripping (with command strip and flags -S -p) in  /nix/store/f2vs29jibd7lwxyj35r9h87h6brgdysz-hello-2.12.1/bin
 
-```console
-buildDerivation
+[nix-shell:~]$ $out/bin/hello
+Hello, world!
+```
+:::
+
+:::{.example #ex-dockerTools-streamNixShellImage-extendingBuildInputs}
+# Adding extra packages to a Docker image built with `streamNixShellImage`
+
+This example shows how to add extra packages to an image built with `streamNixShellImage`.
+In this case, we'll add the `cowsay` package.
+The Docker image generated will have a name like `hello-<version>-env` and tag `latest`.
+This example uses [](#ex-dockerTools-streamNixShellImage-hello) as a starting point.
+
+```nix
+{ dockerTools, cowsay, hello }:
+dockerTools.streamNixShellImage {
+  tag = "latest";
+  drv = hello.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs or [] ++ [
+      cowsay
+    ];
+  });
+}
 ```
 
-    unpacking sources
-    unpacking source archive /nix/store/8nqv6kshb3vs5q5bs2k600xpj5bkavkc-hello-2.12.tar.gz
-    ...
-    patching script interpreter paths in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12
-    checking for references to /build/ in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12...
+The result of building this package is a script which can be run and piped into `docker load` to load the generated image.
 
-Check the build result:
+```shell
+$ nix-build
+(some output removed for clarity)
+/nix/store/h5abh0vljgzg381lna922gqknx6yc0v7-stream-hello-2.12.1-env
 
-```console
-$out/bin/hello
+$ /nix/store/h5abh0vljgzg381lna922gqknx6yc0v7-stream-hello-2.12.1-env | docker load
+(some output removed for clarity)
+Loaded image: hello-2.12.1-env:latest
 ```
 
-    Hello, world!
+After starting an interactive container, we can verify the extra package is available by running `cowsay`:
+
+```shell
+$ docker run -it hello-2.12.1-env:latest
+[nix-shell:~]$ cowsay "Hello, world!"
+ _______________
+< Hello, world! >
+ ---------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+```
+:::
+
+:::{.example #ex-dockerTools-streamNixShellImage-addingShellHook}
+# Adding a `shellHook` to a Docker image built with `streamNixShellImage`
+
+This example shows how to add a `shellHook` command to an image built with `streamNixShellImage`.
+In this case, we'll simply output the string `Hello, world!`.
+The Docker image generated will have a name like `hello-<version>-env` and tag `latest`.
+This example uses [](#ex-dockerTools-streamNixShellImage-hello) as a starting point.
+
+```nix
+{ dockerTools, hello }:
+dockerTools.streamNixShellImage {
+  tag = "latest";
+  drv = hello.overrideAttrs (old: {
+    shellHook = ''
+      ${old.shellHook or ""}
+      echo "Hello, world!"
+    '';
+  });
+}
+```
+
+The result of building this package is a script which can be run and piped into `docker load` to load the generated image.
+
+```shell
+$ nix-build
+(some output removed for clarity)
+/nix/store/iz4dhdvgzazl5vrgyz719iwjzjy6xlx1-stream-hello-2.12.1-env
+
+$ /nix/store/iz4dhdvgzazl5vrgyz719iwjzjy6xlx1-stream-hello-2.12.1-env | docker load
+(some output removed for clarity)
+Loaded image: hello-2.12.1-env:latest
+```
+
+After starting an interactive container, we can see the result of the `shellHook`:
+
+```shell
+$ docker run -it hello-2.12.1-env:latest
+Hello, world!
+
+[nix-shell:~]$
+```
+:::
