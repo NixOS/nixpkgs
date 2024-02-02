@@ -29028,8 +29028,6 @@ with pkgs;
 
   ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
 
-  antu-icon-theme = callPackage ../data/icons/antu-icon-theme { };
-
   arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
 
   arc-kde-theme = callPackage ../data/themes/arc-kde { };
@@ -29465,8 +29463,6 @@ with pkgs;
   koreader = callPackage ../applications/misc/koreader { };
 
   kreative-square-fonts = callPackage ../data/fonts/kreative-square-fonts { };
-
-  kuyen-icon-theme = callPackage ../data/icons/kuyen-icon-theme { };
 
   la-capitaine-icon-theme = callPackage ../data/icons/la-capitaine-icon-theme {
     inherit (plasma5Packages) breeze-icons;
