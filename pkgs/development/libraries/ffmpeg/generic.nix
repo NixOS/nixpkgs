@@ -50,7 +50,6 @@
 , withIconv ? withHeadlessDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
-, withLibplacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
@@ -67,6 +66,7 @@
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
 , withOpenmpt ? withFullDeps # Tracked music files decoder
 , withOpus ? withHeadlessDeps # Opus de/encoder
+, withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && !stdenv.isDarwin # Pulseaudio input support
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? false # RTMP[E] support
@@ -479,7 +479,6 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withIconv "iconv")
     (enableFeature withJack "libjack")
     (enableFeature withLadspa "ladspa")
-    (optionalString (versionAtLeast finalAttrs.version "5.0" && withLibplacebo) "--enable-libplacebo")
     (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
     (enableFeature withModplug "libmodplug")
@@ -496,6 +495,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenjpeg "libopenjpeg")
     (enableFeature withOpenmpt "libopenmpt")
     (enableFeature withOpus "libopus")
+    (optionalString (versionAtLeast finalAttrs.version "5.0" && withPlacebo) "--enable-libplacebo")
     (enableFeature withPulse "libpulse")
     (enableFeature withRav1e "librav1e")
     (enableFeature withRtmp "librtmp")
@@ -589,7 +589,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]
-  ++ optionals withLibplacebo [ (if (lib.versionAtLeast finalAttrs.version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
@@ -604,6 +603,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpenjpeg [ openjpeg ]
   ++ optionals withOpenmpt [ libopenmpt ]
   ++ optionals withOpus [ libopus ]
+  ++ optionals withPlacebo [ (if (lib.versionAtLeast finalAttrs.version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withPulse [ libpulseaudio ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
