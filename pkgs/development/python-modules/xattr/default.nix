@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "xattr";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-osfLLvRBv2eeJAtl4gXwij7jFeGQ/qVnPmD9aBLmNKU=";
+    hash = "sha256-/svzsFBD7TSHooGQ3sPkxNh5svzsDjC6/Y7F1LYENjA=";
   };
 
   propagatedBuildInputs = [
