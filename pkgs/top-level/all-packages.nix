@@ -28746,6 +28746,7 @@ with pkgs;
   inherit (callPackage ../misc/uboot {})
     buildUBoot
     ubootTools
+    ubootRockchipTools
     ubootA20OlinuxinoLime
     ubootA20OlinuxinoLime2EMMC
     ubootBananaPi
@@ -28762,6 +28763,7 @@ with pkgs;
     ubootOdroidC2
     ubootOdroidXU3
     ubootOlimexA64Olinuxino
+    ubootOrangePiR1PlusLts
     ubootOrangePi3
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
