@@ -34,6 +34,7 @@
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
+, withChromaprint ? withFullDeps # Audio fingerprinting
 , withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
@@ -188,6 +189,7 @@
 , alsa-lib
 , bzip2
 , celt
+, chromaprint
 , clang
 , dav1d
 , fdk_aac
@@ -465,6 +467,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCelt "libcelt")
+    (enableFeature withChromaprint "chromaprint")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
     (enableFeature withDav1d "libdav1d")
@@ -582,6 +585,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
   ++ optionals withCelt [ celt ]
+  ++ optionals withChromaprint [ chromaprint ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
