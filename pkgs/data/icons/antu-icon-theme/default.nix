@@ -14,8 +14,12 @@ stdenvNoCC.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   installPhase = ''
+    runHook preInstall
+    
     mkdir -p $out/share/icons/antu-icons
     cp -r * $out/share/icons/antu-icons
+    
+    runHook postInstall
   '';
 
   meta = with lib; {
