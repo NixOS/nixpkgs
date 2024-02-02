@@ -15,10 +15,8 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-  
     mkdir -p $out/share/icons/kuyen-icons
     cp -r * $out/share/icons/kuyen-icons
-    
     runHook postInstall
   '';
 
