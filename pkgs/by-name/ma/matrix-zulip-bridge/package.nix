@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , python3
 , fetchFromGitHub
 }:
@@ -14,6 +15,13 @@ python3.pkgs.buildPythonApplication rec {
     rev = "v${version}";
     hash = "sha256-sGXu9juhW8AMULznAJwtPstgoaqt5aYYcOf8BJJaE9g=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/GearKite/MatrixZulipBridge/pull/2/commits/d1a8a277cad16520d26a6dd8159d988ea4d58aa6.patch";
+      hash = "sha256-e7+irftBqL02zst9aCqBcOdavqKT3/usLlZQUonpjHU=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
