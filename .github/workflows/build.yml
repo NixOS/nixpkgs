@@ -53,7 +53,7 @@ jobs:
       run: |
            brew update
            # Temporary fix, see https://github.com/orgs/Homebrew/discussions/3895
-           brew install --overwrite python@3.11
+           brew install --overwrite python@3.12
            brew install llvm
            brew install macfuse
            echo "LDFLAGS=-L/usr/local/opt/llvm/lib" >> $GITHUB_ENV
