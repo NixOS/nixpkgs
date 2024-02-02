@@ -64,7 +64,10 @@ stdenv.mkDerivation (rec {
     lua5_3
   ] ++ lib.optionals enableManpages [
     python3.pkgs.sphinx
+  ] ++ lib.optionals (lib.versionOlder release_version "18" && enableManpages) [
     python3.pkgs.recommonmark
+  ] ++ lib.optionals (lib.versionAtLeast release_version "18" && enableManpages) [
+    python3.pkgs.myst-parser
   ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
     ninja
   ];

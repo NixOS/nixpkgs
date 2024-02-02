@@ -21,6 +21,7 @@ let
     sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake ninja python3 ]
+      ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
