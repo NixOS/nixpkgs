@@ -116,7 +116,7 @@ You can just open the wfs-tools directory with Visual Studio and build the proje
 
 ### Linux
 ```
-sudo apt-get install git g++ cmake ninja-build pkg-config libfuse-dev
+sudo apt-get install git g++ cmake ninja-build pkg-config libfuse-dev zip
 ```
 
 ### Mac OS X
