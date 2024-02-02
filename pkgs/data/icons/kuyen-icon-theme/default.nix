@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://gitlab.com/froodo_alexis/kuyen-icons";
     changelog = "https://gitlab.com/froodo_alexis/kuyen-icons/-/releases";
     license = licenses.cc-by-nc-sa-30;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ iamanaws ];
   };
 }
