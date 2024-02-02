@@ -31,6 +31,9 @@ python3.pkgs.buildPythonApplication rec {
     typer
   ];
 
+  # Project has no tests
+  doCheck = false;
+
   pythonImportsCheck = [
     "pysqlrecon"
   ];
