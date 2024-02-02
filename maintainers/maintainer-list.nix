@@ -6127,6 +6127,13 @@
       fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672";
     }];
   };
+  flandweber = {
+    email = "finn@landweber.xyz";
+    github = "flandweber";
+    githubId = 110117466;
+    matrix = "@flandweber:envs.net";
+    name = "Finn Landweber";
+  };
   fleaz = {
     email = "mail@felixbreidenstein.de";
     matrix = "@fleaz:rainbownerds.de";
