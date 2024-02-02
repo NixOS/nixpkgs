@@ -14,16 +14,18 @@
 , phoc
 , phosh
 , wayland-protocols
+, json-glib
+, gsound
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.31.0";
+  version = "0.35.1";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-5Qa6LSOLvZL0sFh2co9AqyS5ZTQQ+JRnPiHuMl1UgDI=";
+    hash = "sha256-Kg3efPs0knbJ9b0buIkgqIL1XplcZpGIi0hxJptG6UI=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +44,15 @@ stdenv.mkDerivation rec {
     lm_sensors
     phoc
     wayland-protocols
+    json-glib
+    gsound
   ];
+
+  postPatch = ''
+    # There are no schemas to compile.
+    substituteInPlace meson.build \
+      --replace 'glib_compile_schemas: true' 'glib_compile_schemas: false'
+  '';
 
   postInstall = ''
     # this is optional, but without it phosh-mobile-settings won't know about lock screen plugins
@@ -50,7 +60,7 @@ stdenv.mkDerivation rec {
 
     # .desktop files marked `OnlyShowIn=Phosh;` aren't displayed even in our phosh, so remove that.
     # also make the Exec path absolute.
-    substituteInPlace "$out/share/applications/org.sigxcpu.MobileSettings.desktop" \
+    substituteInPlace "$out/share/applications/mobi.phosh.MobileSettings.desktop" \
       --replace 'OnlyShowIn=Phosh;' "" \
       --replace 'Exec=phosh-mobile-settings' "Exec=$out/bin/phosh-mobile-settings"
   '';
