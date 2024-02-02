@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "http://www.qemu.org/";
     description = "Python tooling used by the QEMU project to build, configure, and test QEMU";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ devplayer0 ];
+    maintainers = with maintainers; [ devplayer0 davhau ];
   };
 }
