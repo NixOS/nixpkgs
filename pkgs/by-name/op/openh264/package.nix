@@ -1,6 +1,10 @@
 { lib
 , fetchFromGitHub
+, gtest
+, meson
 , nasm
+, ninja
+, pkg-config
 , stdenv
 , windows
 }:
@@ -19,26 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
+    meson
     nasm
+    ninja
+    pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isWindows [
+  buildInputs = [
+    gtest
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
     windows.pthreads
   ];
 
-  # TODO: refine ARCH and OS
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "CXX=${stdenv.cc.targetPrefix}c++"
-    "PREFIX=${placeholder "out"}"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [ "OS=mingw_nt" ];
-
-  enableParallelBuilding = true;
-
-  hardeningDisable = lib.optionals stdenv.hostPlatform.isWindows [
-    "stackprotector"
-  ];
+  strictDeps = true;
 
   meta = {
     homepage = "https://www.openh264.org";
