@@ -611,7 +611,7 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.listenPort;
 
   };
 
