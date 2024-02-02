@@ -40,6 +40,7 @@
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
 , withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
 , withFdkAac ? withFullDeps && withUnfree # Fraunhofer FDK AAC de/encoder
+, withFlite ? withFullDeps # Voice Synthesis
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
 , withFrei0r ? withFullDeps && withGPL # frei0r video filtering
@@ -190,6 +191,7 @@
 , clang
 , dav1d
 , fdk_aac
+, flite
 , fontconfig
 , freetype
 , frei0r
@@ -469,7 +471,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withDc1394 "libdc1394")
     (enableFeature withDrm "libdrm")
     (enableFeature withFdkAac "libfdk-aac")
-    "--disable-libflite" # Force disable until a solution is found
+    (enableFeature withFlite "libflite")
     (enableFeature withFontconfig "fontconfig")
     (enableFeature withFreetype "libfreetype")
     (enableFeature withFrei0r "frei0r")
@@ -584,6 +586,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
   ++ optionals withFdkAac [ fdk_aac ]
+  ++ optionals withFlite [ flite ]
   ++ optionals withFontconfig [ fontconfig ]
   ++ optionals withFreetype [ freetype ]
   ++ optionals withFrei0r [ frei0r ]
