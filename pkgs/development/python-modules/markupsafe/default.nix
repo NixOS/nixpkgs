@@ -8,6 +8,12 @@
 
 # tests
 , pytestCheckHook
+
+# reverse dependencies
+, jinja2
+, mkdocs
+, quart
+, werkzeug
 }:
 
 buildPythonPackage rec {
@@ -34,6 +40,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "markupsafe"
   ];
+
+  passthru.tests = {
+    inherit
+      jinja2
+      mkdocs
+      quart
+      werkzeug
+    ;
+  };
 
   meta = with lib; {
     changelog = "https://markupsafe.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
