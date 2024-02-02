@@ -15142,8 +15142,6 @@ with pkgs;
     haskellPackages = haskell.packages.ghc810;
   };
 
-  yj = callPackage ../development/tools/yj { };
-
   yaydl = callPackage ../tools/video/yaydl {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
