@@ -93,12 +93,14 @@ in
   };
 
   serviceOpts = {
+    script = ''
+      export RESTIC_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/RESTIC_PASSWORD_FILE
+      ${pkgs.prometheus-restic-exporter}/bin/restic-exporter.py \
+        ${concatStringsSep " \\\n  " cfg.extraFlags}
+    '';
     serviceConfig = {
-      ExecStart = ''
-        ${pkgs.prometheus-restic-exporter}/bin/restic-exporter.py \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
-      '';
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+      LoadCredential = [ "RESTIC_PASSWORD_FILE:${cfg.passwordFile}" ];
     };
     environment =
       let
@@ -109,7 +111,6 @@ in
       in
       {
         RESTIC_REPOSITORY = cfg.repository;
-        RESTIC_PASSWORD_FILE = cfg.passwordFile;
         LISTEN_ADDRESS = cfg.listenAddress;
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
