@@ -1,6 +1,7 @@
 { lib
 , buildLua
 , fetchFromGitHub
+, gitUpdater
 , oscSupport ? false
 }:
 
@@ -13,6 +14,9 @@ buildLua rec {
     repo = "mpv-quality-menu";
     rev = "v${version}";
     hash = "sha256-yrcTxqpLnOI1Tq3khhflO3wzhyeTPuvKifyH5/P57Ns=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   extraScripts = lib.optional oscSupport "quality-menu-osc.lua";

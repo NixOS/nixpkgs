@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.lxml
     python3.pkgs.inkex
     python3.pkgs.matplotlib
-    python3.pkgs.wxPython_4_2
+    python3.pkgs.wxpython
     python3.pkgs.xmltodict
   ];
 

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.15.0";
+  version = "2.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d4Y+1U94/NLhlMoRPJzF5+QLhzBszsG6MH5G3PgfBzc=";
+    hash = "sha256-flG/fsyx8DH/w49EF5ddckPZoVDvkPsz/SFI16CVWR8=";
   };
 
   propagatedBuildInputs = [

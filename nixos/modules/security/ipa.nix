@@ -117,8 +117,8 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = !config.krb5.enable;
-        message = "krb5 must be disabled through `krb5.enable` for FreeIPA integration to work.";
+        assertion = !config.security.krb5.enable;
+        message = "krb5 must be disabled through `security.krb5.enable` for FreeIPA integration to work.";
       }
       {
         assertion = !config.users.ldap.enable;

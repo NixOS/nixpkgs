@@ -210,7 +210,7 @@ def _determine_latest_version(current_version, target, versions):
     return (max(sorted(versions))).raw_version
 
 
-def _get_latest_version_pypi(package, extension, current_version, target):
+def _get_latest_version_pypi(attr_path, package, extension, current_version, target):
     """Get latest version and hash from PyPI."""
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
@@ -234,7 +234,7 @@ def _get_latest_version_pypi(package, extension, current_version, target):
     return version, sha256, None
 
 
-def _get_latest_version_github(package, extension, current_version, target):
+def _get_latest_version_github(attr_path, package, extension, current_version, target):
     def strip_prefix(tag):
         return re.sub("^[^0-9]*", "", tag)
 
@@ -242,9 +242,6 @@ def _get_latest_version_github(package, extension, current_version, target):
         matches = re.findall(r"^([^0-9]*)", string)
         return next(iter(matches), "")
 
-    # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
-    # this allows us to work with packages which live outside of python-modules
-    attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{package}")
     try:
         homepage = subprocess.check_output(
             [
@@ -421,13 +418,17 @@ def _update_package(path, target):
     # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
     successful_fetch = False
     for pname in pnames:
-        if BULK_UPDATE and _skip_bulk_update(f"python3Packages.{pname}"):
+        # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
+        # this allows us to work with packages which live outside of python-modules
+        attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{pname}")
+
+        if BULK_UPDATE and _skip_bulk_update(attr_path):
             raise ValueError(f"Bulk update skipped for {pname}")
-        elif _get_attr_value(f"python3Packages.{pname}.cargoDeps") is not None:
+        elif _get_attr_value(f"{attr_path}.cargoDeps") is not None:
             raise ValueError(f"Cargo dependencies are unsupported, skipping {pname}")
         try:
             new_version, new_sha256, prefix = FETCHERS[fetcher](
-                pname, extension, version, target
+                attr_path, pname, extension, version, target
             )
             successful_fetch = True
             break
@@ -452,7 +453,7 @@ def _update_package(path, target):
     sri_hash = _hash_to_sri("sha256", new_sha256)
 
     # retrieve the old output hash for a more precise match
-    if old_hash := _get_attr_value(f"python3Packages.{pname}.src.outputHash"):
+    if old_hash := _get_attr_value(f"{attr_path}.src.outputHash"):
         # fetchers can specify a sha256, or a sri hash
         try:
             text = _replace_value("hash", sri_hash, text, old_hash)

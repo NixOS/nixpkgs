@@ -117,6 +117,7 @@ in
     boot.kernelModules = [ "nbd" ];
 
     systemd.services.nbd-server = {
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       before = [ "multi-user.target" ];
       wantedBy = [ "multi-user.target" ];

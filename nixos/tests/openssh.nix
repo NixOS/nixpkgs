@@ -34,6 +34,19 @@ in {
         ];
       };
 
+    server-lazy-socket = {
+      virtualisation.vlans = [ 1 2 ];
+      services.openssh = {
+        enable = true;
+        startWhenNeeded = true;
+        ports = [ 2222 ];
+        listenAddresses = [ { addr = "0.0.0.0"; } ];
+      };
+      users.users.root.openssh.authorizedKeys.keys = [
+        snakeOilPublicKey
+      ];
+    };
+
     server-localhost-only =
       { ... }:
 
@@ -96,7 +109,9 @@ in {
       };
 
     client =
-      { ... }: { };
+      { ... }: {
+        virtualisation.vlans = [ 1 2 ];
+      };
 
   };
 
@@ -109,6 +124,7 @@ in {
 
     server_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
+    server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
 
     with subtest("manual-authkey"):
         client.succeed("mkdir -m 700 /root/.ssh")
@@ -142,6 +158,16 @@ in {
         )
         client.succeed(
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'ulimit -l' | grep 1024",
+            timeout=30
+        )
+
+    with subtest("socket activation on a non-standard port"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.4 true",
             timeout=30
         )
 

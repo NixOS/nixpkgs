@@ -61,6 +61,12 @@ stdenv.mkDerivation rec {
       src = ./osinfo-db-data-dir.patch;
       osinfo_db_data_dir = "${osinfo-db}/share";
     })
+
+    # Fix build with libxml 2.12
+    (fetchpatch {
+      url = "https://gitlab.com/libosinfo/libosinfo/-/commit/5bbdd06503456784c5ffa22409e8bab50470d673.patch";
+      hash = "sha256-KqgHXI+lD5VYp2wtA58Drp15TgNK1O3xCaYBy4/B9wc=";
+    })
   ];
 
   mesonFlags = [

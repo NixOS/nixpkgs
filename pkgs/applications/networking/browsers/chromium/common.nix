@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, fetchzip, zstd
+, recompressTarball
 , buildPackages
 , pkgsBuildBuild
 , pkgsBuildTarget
@@ -148,33 +148,6 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
-  recompressTarball = { version, hash ? "" }: fetchzip {
-    name = "chromium-${version}.tar.zstd";
-    url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-    inherit hash;
-
-    nativeBuildInputs = [ zstd ];
-
-    postFetch = ''
-      echo removing unused code from tarball to stay under hydra limit
-      rm -r $out/third_party/{rust-src,llvm}
-
-      echo moving remains out of \$out
-      mv $out source
-
-      echo recompressing final contents into new tarball
-      # try to make a deterministic tarball
-      tar \
-        --use-compress-program "zstd -T$NIX_BUILD_CORES" \
-        --sort name \
-        --mtime 1970-01-01 \
-        --owner=root --group=root \
-        --numeric-owner --mode=go=rX,u+rw,a-s \
-        -cf $out source
-    '';
-  };
-
-
   base = rec {
     pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
     inherit (upstream-info) version;
@@ -262,6 +235,18 @@ let
       (githubPatch {
         commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
         hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
+      })
+    ] ++ lib.optionals (chromiumVersionAtLeast "121") [
+      # M121 is the first version to require the new rust toolchain.
+      # But we don't have that ready yet.
+      # So we have to revert the singular commit that requires rust toolchain.
+      # This works, because the code in question, the QR code generator, is present in
+      # two variants: c++ and rust. This workaround will not last.
+      # The c++ variant in question is deemed to be removed in a month (give or take).
+      (githubPatch {
+        revert = true;
+        commit = "bcf739b95713071687ff25010683248de0092f6a";
+        hash = "sha256-1ZPe45cc2bjnErcF3prbLMlYpU7kpuwDVcjewINQr+Q=";
       })
     ];
 

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    hash = "sha256-DXodgpa/oWDBlJYTXcJb8cBkG1DCjFv8vKEzLhu0pN4=";
+    hash = "sha256-Ndy7B0T2RgdkBA+nTYvAJ2RnIH48bUu9MdUDAVQUa6s=";
   };
 
   vendorHash = null;

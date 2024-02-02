@@ -31,8 +31,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   passthru.updateScript = nix-update-script { };
 
   pythonImportsCheck = [ "oca_port" ];

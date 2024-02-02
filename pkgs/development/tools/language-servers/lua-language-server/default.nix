@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation, ditto }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
-    rev = version;
-    hash = "sha256-iAxRGG7/zaUbJ/PWgmjxGS0UTq9/OXc8RWzlpUTUftc=";
+    rev = finalAttrs.version;
+    hash = "sha256-wJOOzKM2pgxfRqx5WZjOcCyRapz0Sub3AYm51LRYpFU=";
     fetchSubmodules = true;
   };
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     mainProgram = "lua-language-server";
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

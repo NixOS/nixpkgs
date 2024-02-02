@@ -46,8 +46,6 @@ in python.pkgs.buildPythonApplication rec {
     npmHooks.npmConfigHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = with python.pkgs; [
     babel
     click

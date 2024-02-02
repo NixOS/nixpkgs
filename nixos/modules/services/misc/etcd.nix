@@ -152,9 +152,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 etcd - - -"
-    ];
+    systemd.tmpfiles.settings."10-etcd".${cfg.dataDir}.d = {
+      user = "etcd";
+      mode = "0700";
+    };
 
     systemd.services.etcd = {
       description = "etcd key-value store";

@@ -2,34 +2,45 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, mako
-, python-dateutil
-, sqlalchemy
+
+# build-system
+, setuptools
+
+# dependencies
 , importlib-metadata
 , importlib-resources
-, pytest-xdist
+, mako
+, sqlalchemy
+, typing-extensions
+
+# tests
 , pytestCheckHook
+, pytest-xdist
+, python-dateutil
 }:
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.12.0";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jnZFwy5PIAZ15p8HRUFTNetZo2Y/X+tIer+gswxFiIs=";
+    hash = "sha256-q0s7lNLh5fgeNL6Km3t1dfyd1TmPzLC+81HsmxSHJiM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     mako
-    python-dateutil
     sqlalchemy
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
-  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
@@ -40,6 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+    python-dateutil
   ];
 
   meta = with lib; {

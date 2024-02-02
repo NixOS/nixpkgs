@@ -13,21 +13,20 @@
 , semver
 , rich
 , tomlkit
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.9.1";
-  format = "pyproject";
+  version = "24.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "pontos";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HRIGS2B6tc4qaOMTud5/uhEr1k7puqJUugDj1WuacqU=";
+    hash = "sha256-t8mfAi5EG/k5dXsEjC5IpBn/adpSOhqCIkpZ2IMzMkQ=";
   };
 
   nativeBuildInputs = [
@@ -42,10 +41,7 @@ buildPythonPackage rec {
     python-dateutil
     semver
     rich
-    typing-extensions
     tomlkit
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ] ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
@@ -70,6 +66,9 @@ buildPythonPackage rec {
     # Tests require git executable
     "test_github_action_output"
     "test_initial_release"
+    # Tests are out-dated
+    "test_getting_version_without_version_config"
+    "test_verify_version_does_not_match"
   ];
 
   pythonImportsCheck = [

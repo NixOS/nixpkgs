@@ -6,7 +6,7 @@
 , pyparsing
 , service-identity
 , six
-, zope_interface
+, zope-interface
 , pythonOlder
 , python
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pyparsing
     six
     twisted
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [

@@ -16,16 +16,16 @@
 
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-crWepf5j3Gd1lhya2DGIh/to7l+AnjKJPR+qUd9WOzw=";
+    hash = "sha256-3eWkQT2P69ZfN62H9B4WLnmlUOGkpzRR0rctgchP+6A=";
   };
 
-  vendorHash = "sha256-YfUvkN1qUS3FFKb1wysg40WcJA8fT9SGDChSdT+xnkc=";
+  vendorHash = "sha256-2ZJU7WshN4UIbJv55bFeo9qiAQ/wxu182mnz7pE60xA=";
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
@@ -77,8 +77,14 @@ buildGoModule rec {
     '';
 
   postInstall = ''
+    # use custom bash completion as it has extra logic for e.g. instance names
     installShellCompletion --bash --name incus ./scripts/bash/incus
+
+    installShellCompletion --cmd incus \
+      --fish <($out/bin/incus completion fish) \
+      --zsh <($out/bin/incus completion zsh)
   '';
+
 
   passthru = {
     tests.incus = nixosTests.incus;
@@ -93,7 +99,7 @@ buildGoModule rec {
   meta = {
     description = "Powerful system container and virtual machine manager";
     homepage = "https://linuxcontainers.org/incus";
-    changelog = "https://github.com/lxc/incus/releases/tag/incus-${version}";
+    changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;

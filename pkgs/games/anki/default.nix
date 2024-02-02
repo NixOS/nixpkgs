@@ -292,7 +292,7 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ euank oxij paveloom ];
+    maintainers = with maintainers; [ euank oxij ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.isDarwin;
   };

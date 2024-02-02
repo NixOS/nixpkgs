@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/DigitalDevices/dddvb";
     description = "ddbridge linux driver";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     broken = lib.versionAtLeast kernel.version "6.2";
   };

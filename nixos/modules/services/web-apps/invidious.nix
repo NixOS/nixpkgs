@@ -155,8 +155,9 @@ let
           to  work, the username used to connect to PostgreSQL must match the database name, that is
           services.invidious.settings.db.user must match services.invidious.settings.db.dbname.
           This is the default since NixOS 24.05. For older systems, it is normally safe to manually set
-          services.invidious.database.user to "invidious" as the new user will be created with permissions
-          for the existing database. `REASSIGN OWNED BY kemal TO invidious;` may also be needed.
+          the user to "invidious" as the new user will be created with permissions
+          for the existing database. `REASSIGN OWNED BY kemal TO invidious;` may also be needed, it can be
+          run as `sudo -u postgres env psql --user=postgres --dbname=invidious -c 'reassign OWNED BY kemal to invidious;'`.
         '';
       }
     ];

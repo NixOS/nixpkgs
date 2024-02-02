@@ -11,12 +11,17 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "djlint";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-p9RIzX9zoZxBrhiNaIeCX9OgfQm/lXNwYsh6IcsnIVk=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pathspec"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

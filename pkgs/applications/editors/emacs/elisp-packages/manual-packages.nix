@@ -23,6 +23,8 @@ in
 
   control-lock = callPackage ./manual-packages/control-lock { };
 
+  copilot = callPackage ./manual-packages/copilot { };
+
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
   el-easydraw = callPackage ./manual-packages/el-easydraw { };
@@ -37,7 +39,7 @@ in
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
+  ghc-mod = callPackage ./manual-packages/ghc-mod { };
 
   git-undo = callPackage ./manual-packages/git-undo { };
 

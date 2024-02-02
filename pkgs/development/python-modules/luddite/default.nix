@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , packaging
 , pytestCheckHook
 , pytest-mock
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jumptrading";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-JXIM7/5LO95oabM16GwAt3v3a8uldGpGXDWmVic8Ins=";
   };
 
@@ -24,10 +25,22 @@ buildPythonPackage rec {
       --replace "--disable-socket" ""
   '';
 
-  propagatedBuildInputs = [ packaging ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-mock ];
-  pythonImportsCheck = [ "luddite" ];
+  propagatedBuildInputs = [
+    packaging
+  ];
+
+  pythonImportsCheck = [
+    "luddite"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
 
   meta = with lib; {
     description = "Checks for out-of-date package versions";

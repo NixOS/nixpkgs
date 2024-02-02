@@ -6,18 +6,7 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.50";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-O5fd9Qn8IeELCUA7UhmwbFtViyf8JFMVAnT6TnBwfb8=";
-        };
-        disabledTestPaths = [
-           "test/aaa_profiling"
-           "test/ext/mypy"
-        ];
-      });
+      sqlalchemy = super.sqlalchemy_1_4;
       moto = super.moto.overridePythonAttrs (oldAttrs: rec {
         # a lot of tests -> very slow, we already build them when building python packages
         doCheck = false;

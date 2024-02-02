@@ -1,0 +1,53 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "duncan.hopkins" <duncan.hopkins@foundry.com>
+Date: Wed, 1 Nov 2023 11:31:13 +0000
+Subject: [PATCH] glx: fix automatic zink fallback loading between hw and sw
+ drivers on MacOS
+
+The combination of defines used when compile the code on MacOS is hiding variables.
+Patch allows basic MacOS build to compile and run.
+
+Reviewed-by: Adam Jackson <ajax@redhat.com>
+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/25992>
+---
+ src/glx/glxext.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/src/glx/glxext.c b/src/glx/glxext.c
+index 7712e54c1d6..454f2c36a77 100644
+--- a/src/glx/glxext.c
++++ b/src/glx/glxext.c
+@@ -878,12 +878,16 @@ __glXInitialize(Display * dpy)
+ 
+    dpyPriv->glXDrawHash = __glxHashCreate();
+ 
++   Bool zink = False;
++   Bool try_zink = False;
++
+ #if defined(GLX_DIRECT_RENDERING) && !defined(GLX_USE_APPLEGL)
+    Bool glx_direct = !debug_get_bool_option("LIBGL_ALWAYS_INDIRECT", false);
+    Bool glx_accel = !debug_get_bool_option("LIBGL_ALWAYS_SOFTWARE", false);
+    const char *env = getenv("MESA_LOADER_DRIVER_OVERRIDE");
+-   Bool zink = env && !strcmp(env, "zink");
+-   Bool try_zink = False;
++
++   zink = env && !strcmp(env, "zink");
++   try_zink = False;
+ 
+    dpyPriv->drawHash = __glxHashCreate();
+ 
+@@ -928,12 +932,14 @@ __glXInitialize(Display * dpy)
+ 
+    if (!AllocAndFetchScreenConfigs(dpy, dpyPriv, zink | try_zink)) {
+       Bool fail = True;
++#if defined(GLX_DIRECT_RENDERING) && !defined(GLX_USE_APPLEGL)
+       if (try_zink) {
+          free(dpyPriv->screens);
+          dpyPriv->driswDisplay->destroyDisplay(dpyPriv->driswDisplay);
+          dpyPriv->driswDisplay = driswCreateDisplay(dpy, false);
+          fail = !AllocAndFetchScreenConfigs(dpy, dpyPriv, False);
+       }
++#endif
+       if (fail) {
+          free(dpyPriv);
+          return NULL;

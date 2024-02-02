@@ -1,9 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build-system
 , setuptools
+
+# dependencies
+, importlib-metadata
 
 # tests
 , pytestCheckHook
@@ -13,24 +17,33 @@
 
 buildPythonPackage rec {
   pname = "segno";
-  version = "1.5.3";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "heuer";
     repo = "segno";
-    rev = version;
-    hash = "sha256-j7DUCeMoYziu19WfJu/9YiIMa2ysOPYfqW8AMcE5LaU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lgitNnVHvvPLKtDqJvc/zsVlFu9Gw0D3S4lt/20TlhE=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pypng
     pyzbar
+  ];
+
+  disabledTests = [
+    # https://github.com/heuer/segno/issues/132
+    "test_plugin"
   ];
 
   pythonImportsCheck = [

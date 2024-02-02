@@ -106,6 +106,6 @@ buildPythonPackage rec {
     description = "Template Text Parser";
     homepage = "https://github.com/dmulyalin/ttp";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

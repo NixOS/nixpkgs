@@ -19,6 +19,7 @@
 , pythonOutputDistHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, pythonRuntimeDepsCheckHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -229,6 +230,13 @@ let
         }
       else
         pypaBuildHook
+    ) (
+      if isBootstrapPackage then
+        pythonRuntimeDepsCheckHook.override {
+          inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+        }
+      else
+        pythonRuntimeDepsCheckHook
     )] ++ lib.optionals (format' == "wheel") [
       wheelUnpackHook
     ] ++ lib.optionals (format' == "egg") [

@@ -5,7 +5,6 @@
 , gnatcoll-core
 , gprbuild
 , python3
-, ocaml
 , ocamlPackages
 , makeWrapper
 }:
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     gnat12
     gprbuild
     python3
-    ocaml
+    ocamlPackages.ocaml
     makeWrapper
   ];
 

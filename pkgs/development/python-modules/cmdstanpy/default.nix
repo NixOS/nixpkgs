@@ -2,22 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , substituteAll
-
 , cmdstan
-
+, pythonRelaxDepsHook
+, setuptools
 , pandas
 , numpy
 , tqdm
 , stanio
 , xarray
-
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
@@ -38,6 +37,11 @@ buildPythonPackage rec {
     rm test/conftest.py
   '';
 
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = [
     pandas
     numpy
@@ -48,6 +52,8 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     all = [ xarray ];
   };
+
+  pythonRelaxDeps = [ "stanio" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

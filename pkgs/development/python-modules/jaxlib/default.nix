@@ -64,7 +64,8 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    broken = stdenv.isDarwin;
+    # NOTE: We always build with NCCL; if it is unsupported, then our build is broken.
+    broken = stdenv.isDarwin || nccl.meta.unsupported;
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -281,7 +282,6 @@ let
       #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
       # 2) Patch python path in the compiler driver.
       preBuild = lib.optionalString cudaSupport ''
-        export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
         patchShebangs ../output/external/xla/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook

@@ -50,8 +50,6 @@ mkDerivationWith buildPythonPackage rec {
     hash = "sha256-xF0DYK+226MZpB050IukNvTg2iHMQAIZW0serKRJd/0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "scikit-image>=0.19.1" "scikit-image" \

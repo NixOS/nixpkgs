@@ -1,3 +1,4 @@
+use crate::structure;
 use crate::utils::PACKAGE_NIX_FILENAME;
 use rnix::parser::ParseError;
 use std::ffi::OsString;
@@ -86,6 +87,16 @@ pub enum NixpkgsProblem {
         line: usize,
         text: String,
         io_error: io::Error,
+    },
+    MovedOutOfByName {
+        package_name: String,
+        call_package_path: Option<PathBuf>,
+        empty_arg: bool,
+    },
+    NewPackageNotUsingByName {
+        package_name: String,
+        call_package_path: Option<PathBuf>,
+        empty_arg: bool,
     },
 }
 
@@ -213,6 +224,48 @@ impl fmt::Display for NixpkgsProblem {
                     subpath.display(),
                     text,
                 ),
+            NixpkgsProblem::MovedOutOfByName { package_name, call_package_path, empty_arg } => {
+                let call_package_arg =
+                    if let Some(path) = &call_package_path {
+                        format!("./{}", path.display())
+                    } else {
+                        "...".into()
+                    };
+                if *empty_arg {
+                    write!(
+                        f,
+                        "pkgs.{package_name}: This top-level package was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ }}` (e.g. in `pkgs/top-level/all-packages.nix`). Please move the package back and remove the manual `callPackage`.",
+                        structure::relative_file_for_package(package_name).display(),
+                        )
+                } else {
+                    // This can happen if users mistakenly assume that for custom arguments,
+                    // pkgs/by-name can't be used.
+                    write!(
+                        f,
+                        "pkgs.{package_name}: This top-level package was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ ... }}` (e.g. in `pkgs/top-level/all-packages.nix`). While the manual `callPackage` is still needed, it's not necessary to move the package files.",
+                        structure::relative_file_for_package(package_name).display(),
+                        )
+                }
+            },
+            NixpkgsProblem::NewPackageNotUsingByName { package_name, call_package_path, empty_arg } => {
+                let call_package_arg =
+                    if let Some(path) = &call_package_path {
+                        format!("./{}", path.display())
+                    } else {
+                        "...".into()
+                    };
+                let extra =
+                    if *empty_arg {
+                        "Since the second `callPackage` argument is `{ }`, no manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is needed anymore."
+                    } else {
+                        "Since the second `callPackage` argument is not `{ }`, the manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is still needed."
+                    };
+                write!(
+                    f,
+                    "pkgs.{package_name}: This is a new top-level package of the form `callPackage {call_package_arg} {{ }}`. Please define it in {} instead. See `pkgs/by-name/README.md` for more details. {extra}",
+                    structure::relative_file_for_package(package_name).display(),
+                )
+            },
         }
     }
 }

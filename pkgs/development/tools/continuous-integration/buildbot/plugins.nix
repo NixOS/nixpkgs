@@ -8,7 +8,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-W0NRRS0z02/31eyqVRGJUZlUaI77I9WuAI3d3FlWHOQ=";
+      hash = "sha256-bu22WXJ2yBGe89GL3RBxkUN/yPu2GEYURk6C+2LIpns=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -24,7 +24,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot UI";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
@@ -35,7 +35,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-NfpgTZ0+sP2U8rkf+C4WTpXKVBvO8T+ijs8xIPe49tA=";
+      hash = "sha256-WDtw4wSAPsmIRcoZS1PIRzQR4OJnHVyc19Q7MnU5VSs=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -51,7 +51,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot UI (React)";
-      maintainers = with maintainers; [ mic92 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2Only;
     };
   };
@@ -62,7 +62,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-ykzzvsxP8e0TIHnZJPSnFJoZNNZDvbZ7vZ6hCZyd0iA=";
+      hash = "sha256-HGlKu9ptej35GJYBBWted/YtsH/uigckAoFAjYTh3gY=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -73,7 +73,29 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
+  react-console-view = buildPythonPackage rec {
+    pname = "buildbot-react-console-view";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-oFbR4NvI/6oPXY8TospkHS1j/5KzXd1fguazFtDPIko=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Console View Plugin (React)";
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
@@ -84,7 +106,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-cu0+66DHf8Hfvfx/IvVyexwl3I0MmLjJrNDBPLxo7Bg=";
+      hash = "sha256-O4scYAKpoEOXsPIodkKUrfwCGNYHlOGfvDnguaM12U0=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -95,7 +117,29 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
+  react-waterfall-view = buildPythonPackage rec {
+    pname = "buildbot-react-waterfall-view";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-DlYqK32lVdZ8qby/1+JCo6m81/0dsxqiAfWMIZ1OAPQ=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Waterfall View Plugin (React)";
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
@@ -106,7 +150,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Fd8r2+jV4YSuYu6zUl0fDjEdUGkzuHckR+PTSEyoXio=";
+      hash = "sha256-cK+uZU7rG423IT8xvwrpMPiUXfu1oPpGB5onmWNK4fs=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -117,7 +161,29 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin";
-      maintainers = with maintainers; [ lopsided98 ];
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
+  react-grid-view = buildPythonPackage rec {
+    pname = "buildbot-react-grid-view";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-Gbc0T1fsmke1pO/LiXCzQYrjWzYG1WhHZgypLyzhfok=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Grid View Plugin (React)";
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
@@ -128,7 +194,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-LzsdHTABtHJzEfkyJ6LbmLE0QmKA3DVjY8VP90O3jT4=";
+      hash = "sha256-eFfOYhKw575VWlwD5dKRnqjSUV6kdPrv3UXBs/3AREo=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -139,7 +205,29 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin";
-      maintainers = with maintainers; [ lopsided98 ];
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
+  react-wsgi-dashboards = buildPythonPackage rec {
+    pname = "buildbot-react-wsgi-dashboards";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-0CCD1Zrj1xodUITvLzTDrLgLGaEVqt8y26f+exsP4N8=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot WSGI dashboards Plugin (React)";
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2;
     };
   };
@@ -150,7 +238,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-tVMXGYTZlkchfeEcHh3B/wGEZb8xUemtnbFzX65tvb8=";
+      hash = "sha256-FNMspluhQlGgQ4X7gJisakHTTmn/5PtQ+obK26PrXdg=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -162,7 +250,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Badges Plugin";
-      maintainers = with maintainers; [ julienmalka ];
+      maintainers = teams.buildbot.members ++ [ maintainers.julienmalka ];
       license = licenses.gpl2;
     };
   };

@@ -1,40 +1,24 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch
-, cmake, extra-cmake-modules, pkg-config, qttools
-, libxcb, libXau, pam, qtbase, qtdeclarative, qtquickcontrols2, systemd, xkeyboardconfig
+{ stdenv, lib, fetchFromGitHub
+, cmake, pkg-config, qttools
+, libxcb, libXau, pam, qtbase, wrapQtAppsHook, qtdeclarative
+, qtquickcontrols2 ? null, systemd, xkeyboardconfig
 }:
-mkDerivation rec {
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+in stdenv.mkDerivation {
   pname = "sddm";
-  version = "0.20.0";
+  version = "0.20.0-unstable-2023-12-29";
 
   src = fetchFromGitHub {
     owner = "sddm";
     repo = "sddm";
-    rev = "v${version}";
-    hash = "sha256-ctZln1yQov+p/outkQhcWZp46IKITC04e22RfePwEM4=";
+    rev = "501129294be1487f753482c29949fc1c19ef340e";
+    hash = "sha256-mLm987Ah0X9s0tBK2a45iERwYoh5JzWb3TFlSoxi8CA=";
   };
 
   patches = [
     ./sddm-ignore-config-mtime.patch
     ./sddm-default-session.patch
-
-    # FIXME: all of the following are Wayland related backports, drop in next release
-    # Don't use Qt virtual keyboard on Wayland
-    (fetchpatch {
-      url = "https://github.com/sddm/sddm/commit/07631f2ef00a52d883d0fd47ff7d1e1a6bc6358f.patch";
-      hash = "sha256-HTSw3YeT4z9ldr4sLmsnrPQ+LA8/a6XxrF+KUFqXUlM=";
-    })
-
-    # Fix running sddm-greeter manually in Wayland sessions
-    (fetchpatch {
-      url = "https://github.com/sddm/sddm/commit/e27b70957505dc7b986ab2fa68219af546c63344.patch";
-      hash = "sha256-6hzrFeS2epL9vzLOA29ZA/dD3Jd4rPMBHhNp+FBq1bA=";
-    })
-
-    # Prefer GreeterEnvironment over PAM environment
-    (fetchpatch {
-      url = "https://github.com/sddm/sddm/commit/9e7791d5fb375933d20f590daba9947195515b26.patch";
-      hash = "sha256-JNsVTJNZV6T+SPqPkaFf3wg8NDqXGx8NZ4qQfZWOli4=";
-    })
   ];
 
   postPatch = ''
@@ -42,7 +26,7 @@ mkDerivation rec {
       --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config qttools ];
+  nativeBuildInputs = [ wrapQtAppsHook cmake pkg-config qttools ];
 
   buildInputs = [
     libxcb
@@ -55,6 +39,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_WITH_QT6" isQt6)
     "-DCONFIG_FILE=/etc/sddm.conf"
     "-DCONFIG_DIR=/etc/sddm.conf.d"
 

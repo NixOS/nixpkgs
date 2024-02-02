@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     # Test vectors require git submodule
     fetchSubmodules = true;
-    hash = "sha256-0/+bX02qTbOydWDxex4OWL7woP7dW1yJZBmDZAivE7U=";
+    hash = "sha256-wA24ASd6+rTAqHNQ9ZGMnCK9ykJjogCtEWfrXY1B87o=";
   };
 
   postPatch = ''

@@ -35,13 +35,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustdesk";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     rev = version;
-    hash = "sha256-fgdhPBrC8HuuEKorzG9hY4K3KVwB8hENtE3RM5agGWk=";
+    hash = "sha256-6TdirqEnWvuPgKOLzNIAm66EgKNdGVjD7vf2maqlxI8=";
   };
 
   cargoLock = {
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
       "mouce-0.2.1" = "sha256-3PtNEmVMXgqKV4r3KiKTkk4oyCt4BKynniJREE+RyFk=";
       "pam-0.7.0" = "sha256-qe2GH6sfGEUnqLiQucYLB5rD/GyAaVtm9pAxWRb1H3Q=";
       "parity-tokio-ipc-0.7.3-2" = "sha256-WXDKcDBaJuq4K9gjzOKMozePOFiVX0EqYAFamAz/Yvw=";
-      "rdev-0.5.0-2" = "sha256-Agxx/hoV45/NGsrUZLYdm1Y9088Z9urUcDnjVjY/odk=";
+      "rdev-0.5.0-2" = "sha256-MJ4Uqp0yz1CcFvoZYyUYwNojUcfW1AyVowKShihhhbY=";
       "reqwest-0.11.18" = "sha256-3k2wcVD+DzJEdP/+8BqP9qz3tgEWcbWZj5/CjrZz5LY=";
       "rust-pulsectl-0.2.12" = "sha256-8jXTspWvjONFcvw9/Z8C43g4BuGZ3rsG32tvLMQbtbM=";
       "sciter-rs-0.5.57" = "sha256-NQPDlMQ0sGY8c9lBMlplT82sNjbgJy2m/+REnF3fz8M=";

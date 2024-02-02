@@ -35,7 +35,9 @@ with lib;
       # dep of graphviz, libXpm is optional for Xpm support
       gd = super.gd.override { withXorg = false; };
       ghostscript = super.ghostscript.override { cupsSupport = false; x11Support = false; };
+      gjs = super.gjs.overrideAttrs { doCheck = false; installTests = false; }; # avoid test dependency on gtk3
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      gpg-tui = super.gpg-tui.override { x11Support = false; };
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {

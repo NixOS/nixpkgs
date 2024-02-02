@@ -2,6 +2,11 @@
 { stdenv
 , cargo
 , cmake
+
+# plenary utilities
+, which
+, findutils
+, coreutils
 , curl
 , cyrus_sasl
 , dbus
@@ -27,6 +32,7 @@
 , libuv
 , libxcrypt
 , libyaml
+, luajitPackages
 , mariadb
 , magic-enum
 , mpfr
@@ -148,6 +154,13 @@ with prev;
       nativeBuildInputs = [ pandoc ];
       makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
+  });
+
+  image-nvim = prev.image-nvim.overrideAttrs (oa: {
+    propagatedBuildInputs = [
+      lua
+      luajitPackages.magick
+    ];
   });
 
   ldbus = prev.ldbus.overrideAttrs (oa: {
@@ -448,6 +461,32 @@ with prev;
     };
   });
 
+
+  plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
+    postPatch = ''
+      sed -Ei lua/plenary/curl.lua \
+          -e 's@(command\s*=\s*")curl(")@\1${curl}/bin/curl\2@'
+    '';
+
+    # disabled for now because too flaky
+    doCheck = false;
+    # for env/find/ls
+    checkInputs = [
+      which
+      neovim-unwrapped
+      coreutils
+      findutils
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+      # remove failing tests, need internet access for instance
+      rm tests/plenary/job_spec.lua tests/plenary/scandir_spec.lua tests/plenary/curl_spec.lua
+      export HOME="$TMPDIR"
+      make test
+      runHook postCheck
+    '';
+  });
 
   # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
   # we shouldn't use luarocks machinery to build complex cmake components

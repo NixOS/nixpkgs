@@ -49,8 +49,7 @@ let
   # ```
   # {
   #   ghc810 = "ghc810";
-  #   ghc8102Binary = "ghc8102Binary";
-  #   ghc8102BinaryMinimal = "ghc8102BinaryMinimal";
+  #   ghc8107Binary = "ghc8107Binary";
   #   ghc8107 = "ghc8107";
   #   ghc924 = "ghc924";
   #   ...
@@ -71,6 +70,7 @@ let
     ghc947
     ghc948
     ghc963
+    ghc964
     ghc981
   ];
 
@@ -333,6 +333,7 @@ let
         nota
         nvfetcher
         ormolu
+        pakcs
         pandoc
         petrinizer
         place-cursor-at
@@ -383,7 +384,6 @@ let
         {
           # remove musl ghc865Binary since it is known to be broken and
           # causes an evaluation error on darwin.
-          # TODO: remove ghc865Binary altogether and use ghc8102Binary
           ghc865Binary = {};
 
           ghcjs = {};
@@ -506,6 +506,8 @@ let
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 2.3.0.0
         compilerNames.ghc8107
+        # Support ceased as of 2.5.0.0
+        compilerNames.ghc902
       ] released;
       hoogle = lib.subtractLists [
         compilerNames.ghc963
@@ -643,7 +645,6 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsMusl.haskell.compiler.ghc8102Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107Binary
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902

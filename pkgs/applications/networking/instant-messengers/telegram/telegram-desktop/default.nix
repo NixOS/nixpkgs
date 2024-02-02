@@ -36,23 +36,7 @@
 , rnnoise
 , protobuf
 , abseil-cpp
-  # Transitive dependencies:
-, util-linuxMinimal
-, pcre
-, libpthreadstubs
-, libXdamage
-, libXdmcp
-, libselinux
-, libsepol
-, libepoxy
-, at-spi2-core
-, libXtst
-, libthai
-, libdatrie
 , xdg-utils
-, libsysprof-capture
-, libpsl
-, brotli
 , microsoft-gsl
 , rlottie
 , stdenv
@@ -80,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.14.1";
+  version = "4.14.9";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Ff8pI4wzM3Lltpnh2v9kc4eoLJfOjHLR58Ayxd4xP4c=";
+    hash = "sha256-VqLCkGav6qtam9qk2MsjCdyVSj3630FGQg50Mv0OBNE=";
   };
 
   patches = [
@@ -160,22 +144,6 @@ stdenv.mkDerivation rec {
     glibmm_2_68
     webkitgtk_6_0
     jemalloc
-    # Transitive dependencies:
-    util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
-    pcre
-    libpthreadstubs
-    libXdamage
-    libXdmcp
-    libselinux
-    libsepol
-    libepoxy
-    at-spi2-core
-    libXtst
-    libthai
-    libdatrie
-    libsysprof-capture
-    libpsl
-    brotli
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
     CoreFoundation

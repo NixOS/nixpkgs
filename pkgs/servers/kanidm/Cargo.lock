@@ -452,7 +452,7 @@ checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 [[package]]
 name = "base64urlsafedata"
 version = "0.1.3"
-source = "git+https://github.com/kanidm/webauthn-rs.git?rev=2218d2055c0c900ef57b398423eee5e8d5521f4c#2218d2055c0c900ef57b398423eee5e8d5521f4c"
+source = "git+https://github.com/kanidm/webauthn-rs.git?rev=ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3#ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3"
 dependencies = [
  "base64 0.21.5",
  "paste 1.0.14",
@@ -1106,7 +1106,7 @@ dependencies = [
 
 [[package]]
 name = "daemon"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "clap",
  "clap_complete",
@@ -2889,7 +2889,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm-ipa-sync"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "base64urlsafedata",
  "chrono",
@@ -2914,7 +2914,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm-ldap-sync"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "base64urlsafedata",
  "chrono",
@@ -2940,7 +2940,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm_build_profiles"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "base64 0.21.5",
  "gix",
@@ -2950,7 +2950,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm_client"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "hyper",
  "kanidm_lib_file_permissions",
@@ -2988,7 +2988,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm_lib_file_permissions"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "kanidm_utils_users",
  "whoami",
@@ -2996,7 +2996,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm_proto"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "base32",
  "base64urlsafedata",
@@ -3016,7 +3016,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm_tools"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "async-recursion",
  "clap",
@@ -3049,7 +3049,7 @@ dependencies = [
 
 [[package]]
 name = "kanidm_unix_int"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "async-trait",
  "base64urlsafedata",
@@ -3088,14 +3088,14 @@ dependencies = [
 
 [[package]]
 name = "kanidm_utils_users"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "libc",
 ]
 
 [[package]]
 name = "kanidmd_core"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "async-trait",
  "axum",
@@ -3148,7 +3148,7 @@ dependencies = [
 
 [[package]]
 name = "kanidmd_lib"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "base64 0.21.5",
  "base64urlsafedata",
@@ -3215,7 +3215,7 @@ dependencies = [
 
 [[package]]
 name = "kanidmd_testkit"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "assert_cmd",
  "compact_jwt",
@@ -3252,7 +3252,7 @@ dependencies = [
 
 [[package]]
 name = "kanidmd_web_ui_admin"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "gloo",
  "gloo-utils 0.2.0",
@@ -3275,7 +3275,7 @@ dependencies = [
 
 [[package]]
 name = "kanidmd_web_ui_login_flows"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "gloo",
  "gloo-utils 0.2.0",
@@ -3298,7 +3298,7 @@ dependencies = [
 
 [[package]]
 name = "kanidmd_web_ui_shared"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "gloo",
  "js-sys",
@@ -3318,7 +3318,7 @@ dependencies = [
 
 [[package]]
 name = "kanidmd_web_ui_user"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "gloo",
  "gloo-timers 0.3.0",
@@ -3739,7 +3739,7 @@ dependencies = [
 
 [[package]]
 name = "nss_kanidm"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "kanidm_unix_int",
  "lazy_static",
@@ -4015,7 +4015,7 @@ dependencies = [
 
 [[package]]
 name = "orca"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "clap",
  "crossbeam",
@@ -4059,7 +4059,7 @@ dependencies = [
 
 [[package]]
 name = "pam_kanidm"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "kanidm_unix_int",
  "libc",
@@ -5191,7 +5191,7 @@ dependencies = [
 
 [[package]]
 name = "sketching"
-version = "1.1.0-rc.15-dev"
+version = "1.1.0-rc.15"
 dependencies = [
  "num_enum",
  "tracing",
@@ -5273,7 +5273,7 @@ checksum = "3b9b39299b249ad65f3b7e96443bad61c02ca5cd3589f46cb6d610a0fd6c0d6a"
 [[package]]
 name = "sshkey-attest"
 version = "0.5.0-dev"
-source = "git+https://github.com/kanidm/webauthn-rs.git?rev=2218d2055c0c900ef57b398423eee5e8d5521f4c#2218d2055c0c900ef57b398423eee5e8d5521f4c"
+source = "git+https://github.com/kanidm/webauthn-rs.git?rev=ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3#ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3"
 dependencies = [
  "base64urlsafedata",
  "nom",
@@ -6128,7 +6128,7 @@ dependencies = [
 [[package]]
 name = "webauthn-attestation-ca"
 version = "0.1.0"
-source = "git+https://github.com/kanidm/webauthn-rs.git?rev=2218d2055c0c900ef57b398423eee5e8d5521f4c#2218d2055c0c900ef57b398423eee5e8d5521f4c"
+source = "git+https://github.com/kanidm/webauthn-rs.git?rev=ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3#ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3"
 dependencies = [
  "base64urlsafedata",
  "openssl",
@@ -6140,7 +6140,7 @@ dependencies = [
 [[package]]
 name = "webauthn-authenticator-rs"
 version = "0.5.0-dev"
-source = "git+https://github.com/kanidm/webauthn-rs.git?rev=2218d2055c0c900ef57b398423eee5e8d5521f4c#2218d2055c0c900ef57b398423eee5e8d5521f4c"
+source = "git+https://github.com/kanidm/webauthn-rs.git?rev=ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3#ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -6172,7 +6172,7 @@ dependencies = [
 [[package]]
 name = "webauthn-rs"
 version = "0.5.0-dev"
-source = "git+https://github.com/kanidm/webauthn-rs.git?rev=2218d2055c0c900ef57b398423eee5e8d5521f4c#2218d2055c0c900ef57b398423eee5e8d5521f4c"
+source = "git+https://github.com/kanidm/webauthn-rs.git?rev=ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3#ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3"
 dependencies = [
  "base64urlsafedata",
  "serde",
@@ -6185,7 +6185,7 @@ dependencies = [
 [[package]]
 name = "webauthn-rs-core"
 version = "0.5.0-dev"
-source = "git+https://github.com/kanidm/webauthn-rs.git?rev=2218d2055c0c900ef57b398423eee5e8d5521f4c#2218d2055c0c900ef57b398423eee5e8d5521f4c"
+source = "git+https://github.com/kanidm/webauthn-rs.git?rev=ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3#ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3"
 dependencies = [
  "base64 0.21.5",
  "base64urlsafedata",
@@ -6209,7 +6209,7 @@ dependencies = [
 [[package]]
 name = "webauthn-rs-proto"
 version = "0.5.0-dev"
-source = "git+https://github.com/kanidm/webauthn-rs.git?rev=2218d2055c0c900ef57b398423eee5e8d5521f4c#2218d2055c0c900ef57b398423eee5e8d5521f4c"
+source = "git+https://github.com/kanidm/webauthn-rs.git?rev=ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3#ebd6ff03532fdc72c553bcd8d10b5dad334dcfc3"
 dependencies = [
  "base64urlsafedata",
  "js-sys",

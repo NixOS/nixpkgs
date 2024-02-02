@@ -3,20 +3,22 @@
 , fetchPypi
 , pytestCheckHook
 , python-json-logger
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "daiquiri";
-  version = "3.2.1";
-  format = "setuptools";
+  version = "3.2.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QIxNKOyPDqI+llN0R5gpvSI2TQwI15HL63u6JFlj4P0=";
+    hash = "sha256-Xy6G1vyovDjR6a36YFGE32/eo3AuB8oC0Wqj0AQ7Luw=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 

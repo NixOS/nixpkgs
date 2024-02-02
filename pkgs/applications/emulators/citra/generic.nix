@@ -15,6 +15,7 @@
 , enet
 , ffmpeg
 , fmt
+, gamemode
 , glslang
 , httplib
 , inih
@@ -108,6 +109,9 @@ stdenv.mkDerivation {
 
     # Add versions
     echo 'set(BUILD_FULLNAME "${branchCaptialized} ${version}")' >> CMakeModules/GenerateBuildInfo.cmake
+
+    # Add gamemode
+    substituteInPlace externals/gamemode/include/gamemode_client.h --replace "libgamemode.so.0" "${lib.getLib gamemode}/lib/libgamemode.so.0"
   '';
 
   postInstall = let
@@ -124,7 +128,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://citra-emu.org";
-    description = "The ${branch} branch of an open-source emulator for the Ninteno 3DS";
+    description = "The ${branch} branch of an open-source emulator for the Nintendo 3DS";
     longDescription = ''
       A Nintendo 3DS Emulator written in C++
       Using the nightly branch is recommended for general usage.

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcsc-tools";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pcsc-tools";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-tTeSlS1ncpdIaoJsSVgm3zSCogP6S8zlA9hRFocZ/R4=";
+    hash = "sha256-+cvgSNlSYSJ2Zr2iWk96AacyQ38ru9/RK8yeK3ceqCo=";
   };
 
   configureFlags = [

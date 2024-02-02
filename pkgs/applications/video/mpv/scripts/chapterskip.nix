@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, unstableGitUpdater
 , buildLua }:
 
 buildLua {
@@ -12,6 +13,7 @@ buildLua {
     rev   = "b26825316e3329882206ae78dc903ebc4613f039";
     hash  = "sha256-OTrLQE3rYvPQamEX23D6HttNjx3vafWdTMxTiWpDy90=";
   };
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = {
     description = "Automatically skips chapters based on title";

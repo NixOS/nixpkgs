@@ -44,6 +44,7 @@ let
         ++ [ (sec_list_fa "id" nix_def "template") ]
         ++ [ (sec_list_fa "domain" nix_def "zone") ]
         ++ [ (sec_plain nix_def "include") ]
+        ++ [ (sec_plain nix_def "clear") ]
       );
 
     # A plain section contains directly attributes (we don't really check that ATM).

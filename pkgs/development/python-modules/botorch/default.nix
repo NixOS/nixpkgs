@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , gpytorch
-, linear_operator
+, linear-operator
 , multipledispatch
 , pyro-ppl
 , setuptools
@@ -33,14 +33,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     gpytorch
-    linear_operator
+    linear-operator
     multipledispatch
     pyro-ppl
     scipy
     torch
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   checkInputs = [
     pytestCheckHook

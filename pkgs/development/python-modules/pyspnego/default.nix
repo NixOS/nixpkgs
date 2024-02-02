@@ -8,13 +8,14 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.10.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,14 +23,29 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-A0vVpEI8TKelZ96dIqSc01SX1gU3pDUVSOV6jap2WtU=";
+    hash = "sha256-60aIRrhRynbuuFZzzBhJTlmU74CWuao8jWhr126cPrc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography
-    gssapi
-    krb5
-    ruamel-yaml
+  ];
+
+  passthru.optional-dependencies = {
+    kerberos = [
+      gssapi
+      krb5
+    ];
+    yaml = [
+      ruamel-yaml
+    ];
+  };
+
+  pythonImportsCheck = [
+    "spnego"
   ];
 
   nativeCheckInputs = [
@@ -38,16 +54,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # struct.error: unpack requires a buffer of 1 bytes
-    "test_credssp_invalid_client_authentication"
-  ];
-
-  LC_ALL = "en_US.UTF-8";
-
-  pythonImportsCheck = [ "spnego" ];
+  env.LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
+    changelog = "https://github.com/jborean93/pyspnego/blob/v${version}/CHANGELOG.md";
     description = "Python SPNEGO authentication library";
     homepage = "https://github.com/jborean93/pyspnego";
     license = with licenses; [ mit ];

@@ -2,23 +2,27 @@
 , nix-update-script
 , fetchPypi
 , buildPythonPackage
+, deprecated
 , regex
 , pip
 }:
 
 buildPythonPackage rec {
   pname = "oelint-parser";
-  version = "2.13.3";
+  version = "3.0.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "oelint_parser";
-    hash = "sha256-pjonw0VZlDK3xf8cfgn+qT4jZSYD8wRSDLz1Go9Y5so=";
+    hash = "sha256-8Gagk3ijAlmIp0MQwuJ2REIUcoTlvdNcCK9k2RY8DOA=";
   };
 
   buildInputs = [ pip ];
-  propagatedBuildInputs = [ regex ];
+  propagatedBuildInputs = [
+    deprecated
+    regex
+  ];
   pythonImportsCheck = [ "oelint_parser" ];
 
   # Fail to run inside the code the build.

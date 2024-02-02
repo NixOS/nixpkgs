@@ -5,6 +5,7 @@
 , pymorphy3
 , pymorphy3-dicts-uk
 , sentencepiece
+, setuptools
 , spacy
 , spacy-pkuseg
 , spacy-transformers
@@ -23,6 +24,7 @@ let
     in
     buildPythonPackage {
       inherit pname version;
+      pyproject = true;
 
       src = fetchurl {
         url = "https://github.com/explosion/spacy-models/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
@@ -41,7 +43,9 @@ let
           --replace "protobuf<3.21.0" "protobuf"
       '';
 
-      nativeBuildInputs = lib.optionals requires-protobuf [
+      nativeBuildInputs = [
+        setuptools
+      ] ++ lib.optionals requires-protobuf [
         protobuf
       ];
 

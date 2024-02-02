@@ -1,0 +1,25 @@
+diff --git a/src/config/loading/mod.rs b/src/config/loading/mod.rs
+index 58c464a58..40656fd29 100644
+--- a/src/config/loading/mod.rs
++++ b/src/config/loading/mod.rs
+@@ -13,7 +13,6 @@ use std::{
+ };
+ 
+ use config_builder::ConfigBuilderLoader;
+-pub use config_builder::*;
+ use glob::glob;
+ use loader::process::Process;
+ pub use loader::*;
+diff --git a/src/sinks/prometheus/remote_write/mod.rs b/src/sinks/prometheus/remote_write/mod.rs
+index 3ebda7df8..cf5b37a70 100644
+--- a/src/sinks/prometheus/remote_write/mod.rs
++++ b/src/sinks/prometheus/remote_write/mod.rs
+@@ -24,8 +24,6 @@ mod tests;
+ #[cfg(all(test, feature = "prometheus-integration-tests"))]
+ mod integration_tests;
+ 
+-pub use config::RemoteWriteConfig;
+-
+ #[derive(Debug, Snafu)]
+ enum Errors {
+     #[cfg(feature = "aws-core")]

@@ -109,6 +109,7 @@ rec {
       recurse = prefix: item:
         if item ? ${attr} then
           nameValuePair prefix item.${attr}
+        else if isDerivation item then []
         else if isAttrs item then
           map (name:
             let

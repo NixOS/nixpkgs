@@ -7,7 +7,8 @@
   magma,
   magma-hip,
   magma-cuda-static,
-  useSystemNccl ? true,
+  # Use the system NCCL as long as we're targeting CUDA on a supported platform.
+  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported),
   MPISupport ? false, mpi,
   buildDocs ? false,
 
@@ -273,9 +274,11 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_NCCL = setBool (cudaSupport && cudaPackages ? nccl);
-  USE_SYSTEM_NCCL = setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
-  USE_STATIC_NCCL = setBool useSystemNccl;
+  # In-tree builds of NCCL are not supported.
+  # Use NCCL when cudaSupport is enabled and nccl is available.
+  USE_NCCL = setBool useSystemNccl;
+  USE_SYSTEM_NCCL = USE_NCCL;
+  USE_STATIC_NCCL = USE_NCCL;
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -363,7 +366,7 @@ in buildPythonPackage rec {
     ] ++ lists.optionals (cudaPackages ? cudnn) [
       cudnn.dev
       cudnn.lib
-    ] ++ lists.optionals (useSystemNccl && cudaPackages ? nccl) [
+    ] ++ lists.optionals useSystemNccl [
       # Some platforms do not support NCCL (i.e., Jetson)
       nccl.dev # Provides nccl.h AND a static copy of NCCL!
     ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [

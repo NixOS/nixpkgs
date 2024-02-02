@@ -7,6 +7,7 @@
 , pythonOlder
 
 # python dependencies
+, extras
 , fixtures
 , hypothesis
 , pytestCheckHook
@@ -32,7 +33,11 @@ buildPythonPackage {
   ];
 
   buildInputs = [ check cppunit ];
-  propagatedBuildInputs = [ testtools ];
+
+  propagatedBuildInputs = [
+    extras
+    testtools
+  ];
 
   nativeCheckInputs = [
     testscenarios

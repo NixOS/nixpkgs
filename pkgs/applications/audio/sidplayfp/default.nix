@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sidplayfp";
-  version = "2.5.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oV7ZPWgMEsNlsF2OoOvf7Ah5ZLcVkIDyC+PrPIJGyzQ=";
+    hash = "sha256-bAd4fq5tlBYfYuIG/02MCbEwjjVBZFJbZJNT13voInw=";
   };
 
   strictDeps = true;

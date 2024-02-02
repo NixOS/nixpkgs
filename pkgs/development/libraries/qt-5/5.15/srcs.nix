@@ -1,7 +1,7 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.11";
+  version = "5.15.12";
 
   mk = name: args:
     {
@@ -70,24 +70,24 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
   };
 
   qtscript = rec {
-    version = "5.15.15";
+    version = "5.15.16";
 
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtscript";
       rev = "v${version}-lts";
-      hash = "sha256-o2YG1m3LuG9Kq9Bqi1wRa6ceHsivK+hJR7w08NE/kBo=";
+      hash = "sha256-4Jqsmk5EBQ2Biv69yYCNx7l7AWFikRMBfl0fbZcsSaA=";
     };
   };
 
   qtwebengine = rec {
-    version = "5.15.15";
+    version = "5.15.16";
 
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtwebengine";
       rev = "v${version}-lts";
-      hash = "sha256-AmW3u8D9Y8lXZu0aiuxYXNPzZ5GCXeBQGfAcgFuXAh4=";
+      hash = "sha256-Arg/tfJcx9+CSV1VXBieHNoCSwmWNTnyBdgSkthOdfA=";
       fetchSubmodules = true;
     };
   };

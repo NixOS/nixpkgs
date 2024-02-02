@@ -44,8 +44,6 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatchling
     hatch-vcs

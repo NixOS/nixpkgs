@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , wrapQtAppsHook
 , alsa-lib
@@ -47,13 +48,13 @@
 }:
 stdenv.mkDerivation(finalAttrs: {
   pname = "yuzu";
-  version = "1665";
+  version = "1696";
 
   src = fetchFromGitHub {
     owner = "yuzu-emu";
     repo = "yuzu-mainline";
     rev = "mainline-0-${finalAttrs.version}";
-    hash = "sha256-xzSup1oz83GPpOGh9aJJ5YjoFX/cBI8RV6SvDYNH/zA=";
+    hash = "sha256-9xIhOA8hA7rsjtO0sgg1ucqghSzaOtkuTAHyQvmT+y4=";
     fetchSubmodules = true;
   };
 
@@ -154,12 +155,16 @@ stdenv.mkDerivation(finalAttrs: {
 
     # provide pre-downloaded tz data
     mkdir -p build/externals/nx_tzdb
-    ln -sf ${nx_tzdb} build/externals/nx_tzdb/${nx_tzdb.version}.zip
+    ln -s ${nx_tzdb} build/externals/nx_tzdb/nx_tzdb
   '';
 
   # This must be done after cmake finishes as it overwrites the file
   postConfigure = ''
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
+  '';
+
+  postInstall = ''
+    install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
   '';
 
   passthru.updateScript = nix-update-script {

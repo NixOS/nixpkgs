@@ -49,6 +49,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.cachix-agent = {
       description = "Cachix Deploy Agent";
+      wants = [ "network-online.target" ];
       after = ["network-online.target"];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];

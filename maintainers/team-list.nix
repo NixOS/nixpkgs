@@ -96,6 +96,16 @@ with lib.maintainers; {
     shortName = "Blockchains";
   };
 
+  buildbot = {
+    members = [
+      lopsided98
+      mic92
+      zowoq
+    ];
+    scope = "Maintain Buildbot CI framework";
+    shortName = "Buildbot";
+  };
+
   c = {
     members = [
       matthewbauer
@@ -295,6 +305,20 @@ with lib.maintainers; {
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
+  };
+
+  formatter = {
+    members = [
+      piegames
+      infinisil
+      das_j
+      tomberek
+      _0x4A6F
+      # Not in the maintainer list
+      # Sereja313
+    ];
+    scope = "Tentative Nix formatter team to be established in https://github.com/NixOS/rfcs/pull/166";
+    shortName = "Nix formatter team";
   };
 
   freedesktop = {

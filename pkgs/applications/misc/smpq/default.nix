@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, StormLib }:
+{ lib, stdenv, fetchurl, cmake, stormlib }:
 
 stdenv.mkDerivation rec {
   pname = "smpq";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ StormLib ];
+  buildInputs = [ stormlib ];
 
   meta = with lib; {
     description = "StormLib MPQ archiving utility";

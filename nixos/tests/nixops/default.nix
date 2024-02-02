@@ -1,6 +1,4 @@
-{ pkgs
-, testers
-, ... }:
+{ pkgs, ... }:
 let
   inherit (pkgs) lib;
 
@@ -21,7 +19,7 @@ let
     passthru.override = args': testsForPackage (args // args');
   };
 
-  testLegacyNetwork = { nixopsPkg, ... }: testers.nixosTest ({
+  testLegacyNetwork = { nixopsPkg, ... }: pkgs.testers.nixosTest ({
     name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {

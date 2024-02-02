@@ -10,6 +10,7 @@
 , anyio
 , distro
 , sniffio
+, cached-property
 , tqdm
 # optional
 , numpy
@@ -25,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.6.0";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bRnsUpHhi+CAzUQSqMFmVWItn6KIKaXMjggxNixaY6Q=";
+    hash = "sha256-VffgHJLsfnT3xqELV7Ze1o1rqohKxscC3SDthP8TwzI=";
   };
 
   nativeBuildInputs = [
@@ -44,12 +45,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     httpx
     pydantic
+    typing-extensions
     anyio
     distro
     sniffio
     tqdm
   ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+    cached-property
   ];
 
   passthru.optional-dependencies = {
@@ -72,11 +74,13 @@ buildPythonPackage rec {
     dirty-equals
   ];
 
-  OPENAI_API_KEY = "sk-foo";
+  disabledTests = [
+    # makes network requests
+    "test_streaming_response"
+  ];
 
   disabledTestPaths = [
     # makes network requests
-    "tests/test_client.py"
     "tests/api_resources"
   ];
 

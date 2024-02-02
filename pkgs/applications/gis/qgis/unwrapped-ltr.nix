@@ -1,4 +1,5 @@
 { lib
+, callPackage
 , fetchFromGitHub
 , fetchpatch
 , makeWrapper
@@ -24,7 +25,7 @@
 , netcdf
 , ninja
 , openssl
-, pdal
+# , pdal
 , postgresql
 , proj
 , protobuf
@@ -46,6 +47,10 @@
 }:
 
 let
+
+  # replace with global pdal version once
+  # https://github.com/qgis/QGIS/pull/54940 is backported
+  pdal = callPackage ./pdal-2_5.nix { };
 
   py = python3.override {
     packageOverrides = self: super: {

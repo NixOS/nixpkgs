@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jq";
-  version = "1.7";
+  version = "1.7.1";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
     url = "https://github.com/jqlang/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    hash = "sha256-QCoNaXXZRub05ITRqEMgQUoP+Ots9J0sEdFE1NNE22I=";
+    hash = "sha256-R4ycoSn9LjRD/icxS0VeIR4NjGC8j/ffcDhz3u7lgMI=";
   };
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];

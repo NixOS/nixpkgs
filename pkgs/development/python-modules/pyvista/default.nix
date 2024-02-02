@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.43.1";
+  version = "0.43.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-H7WkRK9lP92L47nFNDT1WusWfU0bLgXBA+KQqTyedL4=";
+    hash = "sha256-2gh5qpiHda611bWWZzRXu+tkiRk9x4qNehFP8MARtk0=";
   };
 
   propagatedBuildInputs = [

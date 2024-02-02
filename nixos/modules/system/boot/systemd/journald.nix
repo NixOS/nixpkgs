@@ -5,6 +5,10 @@ with lib;
 let
   cfg = config.services.journald;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "journald" "enableHttpGateway" ] [ "services" "journald" "gateway" "enable" ])
+  ];
+
   options = {
     services.journald.console = mkOption {
       default = "";
@@ -71,14 +75,6 @@ in {
       '';
     };
 
-    services.journald.enableHttpGateway = mkOption {
-      default = false;
-      type = types.bool;
-      description = lib.mdDoc ''
-        Whether to enable the HTTP gateway to the journal.
-      '';
-    };
-
     services.journald.forwardToSyslog = mkOption {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
       defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
@@ -101,9 +97,6 @@ in {
       ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
-      ] ++ optionals cfg.enableHttpGateway [
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
       ];
 
     environment.etc = {
@@ -124,12 +117,6 @@ in {
     };
 
     users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
-    users.users.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
-    users.users.systemd-journal-gateway.group = "systemd-journal-gateway";
-    users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
-
-    systemd.sockets.systemd-journal-gatewayd.wantedBy =
-      optional cfg.enableHttpGateway "sockets.target";
 
     systemd.services.systemd-journal-flush.restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];

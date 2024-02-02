@@ -334,8 +334,8 @@ let
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
           + optionalString (extraParameters != []) (concatStringsSep " "
-            (let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
-                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            (let inCompatibleParameters = [ "accept_filter" "backlog" "deferred" "fastopen" "http2" "proxy_protocol" "so_keepalive" "ssl" ];
+                isCompatibleParameter = param: !(any (p: lib.hasPrefix p param) inCompatibleParameters);
             in filter isCompatibleParameter extraParameters))
           + ";"))
           + "
@@ -408,12 +408,6 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.quic && vhost.http3)
-            # Advertise that HTTP/3 is available
-          ''
-            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
-          ''}
-
           ${mkBasicAuth vhostName vhost}
 
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
@@ -475,7 +469,7 @@ let
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 
-  oldHTTP2 = versionOlder cfg.package.version "1.25.1";
+  oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic"));
 in
 
 {

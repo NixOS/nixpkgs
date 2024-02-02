@@ -27,8 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-PwgbUZAuk2woEmLYDdWF5hTs19DASxxUv3Ga844ai7g=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
     "aiohttp"
     "oss2"

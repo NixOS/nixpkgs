@@ -27,12 +27,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "535.146.02";
-    sha256_64bit = "sha256-Sf0cyeRFyYspP3xm82vs/hLMwd6WDf/z8dyWujqcv3A=";
-    sha256_aarch64 = "sha256-8G0oNdaVWxIGwVaQSw/cojy4TIAuiUBF3B98BI4hEec=";
-    openSha256 = "sha256-Oyllcy3uYYK912CIusMwjKKHtMgoyOxpZWQQ8hIycuk=";
-    settingsSha256 = "sha256-IrN2NaPrZSN0sCZqYNJ43iCicX3ziwUgyLLSRzp9sHQ=";
-    persistencedSha256 = "sha256-trIddaTgKXszEJunK+t6D+e3HbLDTfAsitdEYRgwRNQ=";
+    version = "535.154.05";
+    sha256_64bit = "sha256-fpUGXKprgt6SYRDxSCemGXLrEsIA6GOinp+0eGbqqJg=";
+    sha256_aarch64 = "sha256-G0/GiObf/BZMkzzET8HQjdIcvCSqB1uhsinro2HLK9k=";
+    openSha256 = "sha256-wvRdHguGLxS0mR06P5Qi++pDJBCF8pJ8hr4T8O6TJIo=";
+    settingsSha256 = "sha256-9wqoDEWY4I7weWW05F4igj1Gj9wjHsREFMztfEmqm10=";
+    persistencedSha256 = "sha256-d0Q3Lk80JqkS1B54Mahu2yY/WocOqFFbZVBh+ToGhaE=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -45,25 +45,27 @@ rec {
 
     patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [];
+
+    brokenOpen = kernel.kernelAtLeast "6.7";
   });
 
   beta = selectHighestVersion latest (generic {
-    version = "545.23.06";
-    sha256_64bit = "sha256-QTnTKAGfcvKvKHik0BgAemV3PrRqRlM3B9jjZeupCC8=";
-    sha256_aarch64 = "sha256-qkVP6AiXNoRTqgqPvs/AfErEq8BTQw25rtJ6GS06JTM=";
-    openSha256 = "sha256-m7D5LZdhFCZYAIbhrgZ0pN2z19LsU3I3Q7qsKX7Z6mM=";
-    settingsSha256 = "sha256-+X6gDeU8Qlvprb05aB2quM55y0zEcBXtb65e3Rq9gKg=";
-    persistencedSha256 = "sha256-RQJAIwPqOUI5FB3uf0/Y4K/iwFfoLpU1/+BOK/KF5VA=";
+    version = "550.40.07";
+    sha256_64bit = "sha256-KYk2xye37v7ZW7h+uNJM/u8fNf7KyGTZjiaU03dJpK0=";
+    sha256_aarch64 = "sha256-AV7KgRXYaQGBFl7zuRcfnTGr8rS5n13nGUIe3mJTXb4=";
+    openSha256 = "sha256-mRUTEWVsbjq+psVe+kAT6MjyZuLkG2yRDxCMvDJRL1I=";
+    settingsSha256 = "sha256-c30AQa4g4a1EHmaEu1yc05oqY01y+IusbBuq+P6rMCs=";
+    persistencedSha256 = "sha256-11tLSY8uUIl4X/roNnxf5yS2PQvHvoNjnd2CB67e870=";
   });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "535.43.22";
+    version = "535.43.24";
     persistencedVersion = "535.98";
     settingsVersion = "535.98";
-    sha256_64bit = "sha256-emam5bfYJeFi1+Z0Z1//luaY1JTKcQNYUP8GmG9480Q=";
-    openSha256 = "sha256-8Nz6LfEdAsm7d6Leqs+ikN0BpOPkLCcd7bckK0MOIFU=";
+    sha256_64bit = "sha256-UbheqrPzSMPFjM3URN/Jr8rpuY12BCFtCvBlxMqXFbo=";
+    openSha256 = "sha256-01UOzUZTCf7pHUc61/qlh98qAiXsYp8Iankev9+wVdI=";
     settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
     persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
@@ -117,15 +119,23 @@ rec {
     persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
 
     broken = kernel.kernelAtLeast "6.2";
+
+    # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+    # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+    # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+    postInstall = ''
+      mv $out/lib/tls/* $out/lib
+      rmdir $out/lib/tls
+    '';
   };
 
   legacy_340 = let
-    # Source cooresponding to https://aur.archlinux.org/packages/nvidia-340xx-dkms
+    # Source corresponding to https://aur.archlinux.org/packages/nvidia-340xx-dkms
     aurPatches = fetchFromGitHub {
       owner = "archlinux-jerry";
       repo = "nvidia-340xx";
-      rev = "fa434fb5da47e9423db2b19577817eb8c65d2f4e";
-      hash = "sha256-KeMTYHGuZSAPGnYaERZSMu/4lWyB25ZCIv4nJhXxABY=";
+      rev = "7616dfed253aa93ca7d2e05caf6f7f332c439c90";
+      hash = "sha256-1qlYc17aEbLD4W8XXn1qKryBk2ltT6cVIv5zAs0jXZo=";
     };
     patchset = [
       "0001-kernel-5.7.patch"
@@ -142,6 +152,7 @@ rec {
       "0012-kernel-6.2.patch"
       "0013-kernel-6.3.patch"
       "0014-kernel-6.5.patch"
+      "0015-kernel-6.6.patch"
     ];
   in generic {
     version = "340.108";
@@ -151,7 +162,15 @@ rec {
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
 
-    broken = kernel.kernelAtLeast "6.6";
+    broken = kernel.kernelAtLeast "6.7";
     patches = map (patch: "${aurPatches}/${patch}") patchset;
+
+    # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+    # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+    # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+    postInstall = ''
+      mv $out/lib/tls/* $out/lib
+      rmdir $out/lib/tls
+    '';
   };
 }

@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , makeFontsConf
 , pkg-config
@@ -23,6 +24,18 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-Dw2RnLLyhykikHps1in+euHksO+ERbATbfmbUFOJklg=";
   };
+
+  patches = [
+    # Pull fixes for gcc-13 compatibility:
+    #   https://github.com/NilsBrause/waylandpp/pull/71
+    # Without the change `kodi` fails to find `uint32_t` in `waylandpp`
+    # headers.
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/NilsBrause/waylandpp/commit/3c441910aa25f57df2a4db55f75f5d99cea86620.patch";
+      hash = "sha256-bxHMP09zCwUKD0M63C1FqQySAN9hr+7t/DyFDRwdtCo=";
+    })
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}"

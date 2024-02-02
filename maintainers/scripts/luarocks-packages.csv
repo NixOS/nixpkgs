@@ -7,7 +7,7 @@ binaryheap,,,,,,vcunat
 busted,,,,,,
 cassowary,,,,,,marsam alerque
 cldr,,,,,,alerque
-compat53,,,,0.7-1,,vcunat
+compat53,,,,,,vcunat
 cosmo,,,,,,marsam
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
@@ -15,6 +15,7 @@ cyan,,,,,,
 digestif,https://github.com/astoff/digestif.git,,,,5.3,
 dkjson,,,,,,
 fennel,,,,,,misterio77
+fidget.nvim,,,,,,mrcjkb
 fifo,,,,,,
 fluent,,,,,,alerque
 fzy,,,,,,mrcjkb
@@ -55,7 +56,7 @@ lua-subprocess,https://github.com/0x0ade/lua-subprocess,,,,5.1,scoder12
 lua-term,,,,,,
 lua-toml,,,,,,
 lua-zlib,,,,,,koral
-lua_cliargs,https://github.com/amireh/lua_cliargs.git,,,,,
+lua_cliargs,,,,,,
 luabitop,https://github.com/teto/luabitop.git,,,,,
 luacheck,,,,,,
 luacov,,,,,,
@@ -86,7 +87,7 @@ luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
 lua-iconv,,,,7.0.0,,
-luuid,,,,,,
+luuid,,,,20120509-2,,
 luv,,,,1.44.2-1,,
 lush.nvim,https://github.com/rktjmp/lush.nvim,,,,,teto
 lyaml,,,,,,lblasc

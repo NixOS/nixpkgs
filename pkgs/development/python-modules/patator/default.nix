@@ -1,7 +1,7 @@
 { lib
 , ajpy
 , buildPythonPackage
-, cx_oracle
+, cx-oracle
 , dnspython
 , fetchPypi
 , impacket
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ajpy
-    cx_oracle
+    cx-oracle
     dnspython
     impacket
     ipy

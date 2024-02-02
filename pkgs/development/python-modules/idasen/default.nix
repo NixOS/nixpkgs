@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "idasen";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "newAM";
     repo = "idasen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ybM3dQhTogjhtIO5daWMXpnxUM7uWYnKONMOEx3u+58=";
+    hash = "sha256-nduag5ubgwhOcprdZppLIPQPDE06dk9OzniIIJpM12s=";
   };
 
   nativeBuildInputs = [

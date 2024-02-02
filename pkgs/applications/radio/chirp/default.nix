@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     pyserial
     requests
     six
-    wxPython_4_2
+    wxpython
     yattag
   ];
 

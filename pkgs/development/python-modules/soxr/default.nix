@@ -30,8 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-H2sueQq32o/9EHENANKVoiWlFoSF88P0LZ7DfEh/Esg=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     cython_3
     gnutar

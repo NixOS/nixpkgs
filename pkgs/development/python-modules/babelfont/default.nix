@@ -10,7 +10,7 @@
 , orjson
 , poetry-core
 , pytestCheckHook
-, ufoLib2
+, ufolib2
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     glyphslib
     openstep-plist
     orjson
-    ufoLib2
+    ufolib2
   ];
   nativeBuildInputs = [
     poetry-core

@@ -142,6 +142,20 @@ rec {
 
   };
 
+  # As defined by systemd.syntax(7)
+  #
+  # null does not set any value, which allows for RFC42 modules to specify
+  # optional config options.
+  systemd = let
+    mkValueString = lib.generators.mkValueStringDefault {};
+    mkKeyValue = k: v:
+      if v == null then "# ${k} is unset"
+      else "${k} = ${mkValueString v}";
+  in ini {
+    listsAsDuplicateKeys = true;
+    inherit mkKeyValue;
+  };
+
   keyValue = {
     # Represents lists as duplicate keys
     listsAsDuplicateKeys ? false,

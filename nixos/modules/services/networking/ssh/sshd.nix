@@ -600,7 +600,11 @@ in
           { description = "SSH Socket";
             wantedBy = [ "sockets.target" ];
             socketConfig.ListenStream = if cfg.listenAddresses != [] then
-              map (l: "${l.addr}:${toString (if l.port != null then l.port else 22)}") cfg.listenAddresses
+              concatMap
+                ({ addr, port }:
+                  if port != null then [ "${addr}:${toString port}" ]
+                  else map (p: "${addr}:${toString p}") cfg.ports)
+                cfg.listenAddresses
             else
               cfg.ports;
             socketConfig.Accept = true;
@@ -674,7 +678,11 @@ in
           (lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null")
           cfg.ports}
         ${concatMapStringsSep "\n"
-          (la: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString la.port}"} -f ${sshconf} > /dev/null")
+          (la:
+            concatMapStringsSep "\n"
+              (port: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString port}"} -f ${sshconf} > /dev/null")
+              (if la.port != null then [ la.port ] else cfg.ports)
+          )
           cfg.listenAddresses}
         touch $out
       '')
