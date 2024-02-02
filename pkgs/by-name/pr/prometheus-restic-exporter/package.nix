@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "prometheus-restic-exporter";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ngosang";
     repo = "restic-exporter";
     rev = version;
-    hash = "sha256-Qwhlecginl5+V+iddN/vIHfJA1kQOZtscECsoD4LJPE=";
+    hash = "sha256-SC2ZCIQ33RaFI9+l/WI6edNzGEtsxJ2bBdeGNMHuyqY=";
   };
 
   buildInputs = [
