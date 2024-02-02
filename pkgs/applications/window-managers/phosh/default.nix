@@ -1,7 +1,7 @@
 { lib
 , stdenv
-, fetchFromGitLab
-, gitUpdater
+, fetchurl
+, directoryListingUpdater
 , meson
 , ninja
 , pkg-config
@@ -36,16 +36,12 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.33.0";
+  version = "0.34.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    group = "World";
-    owner = "Phosh";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-t+1MYfsz7KqsMvN8TyLIUrTLTQPWQQpOSk/ysxgE7kg=";
+  src = fetchurl {
+    # Release tarball which includes subprojects gvc and libcall-ui
+    url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-nuPFhfnpLIHn1z3nQE7Lg3j75uIogWJatL4oGuoy1PE=";
   };
 
   nativeBuildInputs = [
@@ -126,9 +122,7 @@ stdenv.mkDerivation rec {
 
     tests.phosh = nixosTests.phosh;
 
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = directoryListingUpdater { };
   };
 
   meta = with lib; {
