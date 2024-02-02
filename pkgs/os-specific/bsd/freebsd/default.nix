@@ -1,18 +1,55 @@
-{ stdenv, lib, newScope, buildPackages, pkgsHostHost, makeSetupHook, substituteAll, runtimeShell, ... }:
-lib.makeScope newScope (self: with self; { inherit stdenv;
+{ stdenv, lib, config, newScope, buildPackages, pkgsHostHost, makeSetupHook, substituteAll, runtimeShell, ... }:
+let
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+in lib.makeScope newScope (self: with self; { inherit stdenv;
   #stdenv = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
   # build a self which is parameterized with whatever the targeted version is
   # so e.g. pkgsCross.x86_64-freebsd14.freebsd.buildFreebsd will get you freebsd.packages14
-  buildFreebsd = buildPackages.freebsd.overrideScope (_: _: { inherit hostVersion; });
-  packages13 = self.overrideScope (_: _: { hostVersion = "freebsd13"; });
-  packages14 = self.overrideScope (_: _: { hostVersion = "freebsd14"; });
-  packages15 = self.overrideScope (_: _: { hostVersion = "freebsd15"; });
+  buildFreebsd = buildPackages.freebsd.overrideScope (_: _: { inherit hostBranch; });
+  packages13 = self.overrideScope (_: _: { hostBranch = "release/13.2.0"; });
+  packages14 = self.overrideScope (_: _: { hostBranch = "release/14.0.0"; });
+  packages15 = self.overrideScope (_: _: { hostBranch = "main"; });
 
-  hostVersion = if self.stdenv.hostPlatform.isFreeBSD
-    then ''${self.stdenv.hostPlatform.parsed.kernel.name}${builtins.toString (self.stdenv.hostPlatform.parsed.kernel.version or "")}''
-    else throw "The freebsd packages must be parameterized by a specific FreeBSD version when not building for FreeBSD. Do you want freebsd.packages14 or perhaps pkgsCross.x86_64-freebsd14.freebsd?";
+  hostBranch = let
+    allBranches = builtins.attrNames versions;
+    fallbackBranch = if self.stdenv.hostPlatform.isFreeBSD then
+      let
+        hostMajor = builtins.toString self.stdenv.hostPlatform.parsed.kernel.version;
+        branchRegex = "release/${hostMajor}\..*";
+        candidateBranches = builtins.filter (name: builtins.match branchRegex name != null) allBranches;
+        selectedBranch = lib.last (lib.naturalSort candidateBranches);
+      in
+        if candidateBranches == [] then
+          throw "Unknown FreeBSD version ${hostMajor}"
+        else
+          lib.warn "Didn't know exact FreeBSD branch, falling back to ${selectedBranch}" selectedBranch
+     else
+      throw ''
+        No FreeBSD branch selected.
+        The freebsd packages need to be given a specific source branch when not targeting FreeBSD.
+        Set one with the `NIXPKGS_FREEBSD_BRANCH` environment variable or by setting `nixpkgs.config.freebsdBranch`.
+      '';
+    envBranch = builtins.getEnv "NIXPKGS_FREEBSD_BRANCH";
+    selectedBranch = config.freebsdBranch or (if envBranch != "" then envBranch else null);
+    chosenBranch = if selectedBranch != null then selectedBranch else fallbackBranch;
+  in
+    if versions ? ${chosenBranch} then chosenBranch else throw ''
+      Unknown FreeBSD branch ${chosenBranch}!
+      FreeBSD branches normally look like one of:
+      * `release/<major>.<minor>.0` for tagged releases without security updates
+      * `releng/<major>.<minor>` for release update branches with security updates
+      * `stable/<major>` for stable versions working towards the next minor release
+      * `main` for the latest development version
+
+      Set one with the NIXPKGS_FREEBSD_BRANCH environment variable or by setting `nixpkgs.config.freebsdBranch`.
+    '';
+
+  sourceData = versions.${hostBranch};
+  versionData = sourceData.version;
+  hostVersion = "freebsd${toString versionData.major}";
+
   hostArchBsd = {
     x86_64 = "amd64";
     aarch64 = "arm64";
@@ -27,9 +64,8 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
     name = "freebsd-setup-hook";
   } ./setup-hook.sh;
 
-  makeSource = callPackage ./source.nix {};
+  source = callPackage ./source.nix {};
   compatIfNeeded = lib.optional compatIsNeeded compat;
-  inherit (makeSource hostVersion) source version;
   filterSource = callPackage ./filter-src.nix {};
   mkDerivation = callPackage ./make-derivation.nix {};
 
