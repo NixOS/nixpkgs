@@ -3,13 +3,14 @@
 , fetchPypi
 , python
 , cffi
+, setuptools
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "xattr";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,12 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-/svzsFBD7TSHooGQ3sPkxNh5svzsDjC6/Y7F1LYENjA=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     cffi
+    setuptools
   ];
 
   # https://github.com/xattr/xattr/issues/43
   doCheck = false;
+
+  propagatedBuildInputs = [
+    cffi
+  ];
 
   postBuild = ''
     ${python.pythonOnBuildForHost.interpreter} -m compileall -f xattr
