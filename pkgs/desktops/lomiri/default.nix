@@ -31,6 +31,7 @@ let
     #### QML / QML-related
     lomiri-action-api = callPackage ./qml/lomiri-action-api { };
     lomiri-notifications = callPackage ./qml/lomiri-notifications { };
+    lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
     lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
     lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
