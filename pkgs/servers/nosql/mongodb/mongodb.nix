@@ -32,34 +32,18 @@ with lib;
 }:
 
 let
-  variants =
-    if versionAtLeast version "6.0"
-    then rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        cheetah3
-        psutil
-        setuptools
-        packaging
-        pymongo
-      ]);
+  python = scons.python.withPackages (ps: with ps; [
+    pyyaml
+    cheetah3
+    psutil
+    setuptools
+  ] ++ lib.optionals (versionAtLeast version "6.0") [
+    packaging
+    pymongo
+  ]);
 
-      mozjsVersion = "60";
-      mozjsReplace = "defined(HAVE___SINCOS)";
-
-    }
-    else rec {
-      python = scons.python.withPackages (ps: with ps; [
-        pyyaml
-        cheetah3
-        psutil
-        setuptools
-      ]);
-
-      mozjsVersion = "60";
-      mozjsReplace = "defined(HAVE___SINCOS)";
-
-    };
+  mozjsVersion = "60";
+  mozjsReplace = "defined(HAVE___SINCOS)";
 
   system-libraries = [
     "boost"
@@ -95,7 +79,7 @@ in stdenv.mkDerivation rec {
     openssl
     openldap
     pcre-cpp
-    variants.python
+    python
     sasl
     snappy
     zlib
@@ -123,7 +107,7 @@ in stdenv.mkDerivation rec {
     # remove -march overriding, we know better.
     sed -i 's/env.Append.*-march=.*$/pass/' SConstruct
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "6.0") ''
-    substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
+    substituteInPlace src/third_party/mozjs-${mozjsVersion}/extract/js/src/jsmath.cpp --replace '${mozjsReplace}' 0
   '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
