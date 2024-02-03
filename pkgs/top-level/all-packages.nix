@@ -9106,7 +9106,9 @@ with pkgs;
 
   hatch = python3Packages.callPackage ../development/tools/hatch { };
 
-  hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
+  hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   half = callPackage ../development/libraries/half { };
 
