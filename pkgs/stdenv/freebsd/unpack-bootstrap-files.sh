@@ -5,6 +5,9 @@ $chmod +w -R $out
 for f in $out/bin/* $out/bin/.*; do
     patchelf --set-rpath $out/lib --set-interpreter $out/libexec/ld-elf.so.? $f
 done
+for f in $out/lib/* $out/lib/.*; do
+    patchelf --set-rpath $out/lib $f
+done
 for f in $($out/bin/find $out/lib -type f); do
     patchelf --set-rpath $out/lib $f
 done

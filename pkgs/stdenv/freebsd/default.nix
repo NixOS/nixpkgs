@@ -141,7 +141,7 @@ in
       initialPath = [coreutils gnutar findutils gnumake gnused patchelf gnugrep gawk diffutils patch bash xz gzip bzip2 bsdcp];
       shell = "${bash}/bin/bash";
       fetchurlBoot = fetchurl;
-      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       cc = import ../../build-support/cc-wrapper ({
         inherit lib;
         name = "freebsd-boot-0-cc";
@@ -210,7 +210,7 @@ in
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
-      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;
@@ -281,7 +281,7 @@ in
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
-      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;
