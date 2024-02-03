@@ -609,6 +609,7 @@ in {
   netbox-upgrade = handleTest ./web-apps/netbox-upgrade.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
+  networkingMachineid = handleTest ./networking-machineid.nix {};
   nextcloud = handleTest ./nextcloud {};
   nexus = handleTest ./nexus.nix {};
   # TODO: Test nfsv3 + Kerberos
