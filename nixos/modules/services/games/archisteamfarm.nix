@@ -130,7 +130,10 @@ in
           passwordFile = lib.mkOption {
             type = with lib.types; nullOr path;
             default = null;
-            description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.";
+            description = lib.mdDoc ''
+              Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.
+              Omit or set to null to provide the password a different way, such as through the web-ui.
+            '';
           };
           enabled = lib.mkOption {
             type = lib.types.bool;
