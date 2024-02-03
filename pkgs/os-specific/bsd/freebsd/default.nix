@@ -108,6 +108,8 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libtacplus = callPackage ./libtacplus.nix {};
   libutil = callPackage ./libutil.nix {};
   libxo = callPackage ./libxo.nix {};
+  libstdthreads = callPackage ./libstdthreads.nix {};
+  liblzma = callPackage ./liblzma.nix {};
   libypclnt = callPackage ./libypclnt.nix {};
   limits = callPackage ./limits.nix {};
   locale = callPackage ./locale.nix {};
@@ -141,7 +143,6 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   sed = callPackage ./sed.nix {};
   ldd = callPackage ./ldd.nix {};
   sockstat = callPackage ./sockstat.nix {};
-  libstdthreads = callPackage ./libstdthreads.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};

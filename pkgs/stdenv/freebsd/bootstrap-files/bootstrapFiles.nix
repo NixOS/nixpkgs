@@ -50,9 +50,10 @@ in
     freebsd.libcasper
     freebsd.libnv
     freebsd.libcapsicum
+    freebsd.liblzma
     libcxxrt
     zlib
-    pcre2
+    pcre2.out
     libffi
     ncurses
     readline
@@ -73,6 +74,7 @@ in
     (lib.getLib libidn2)
     (lib.getLib zstd)
     (lib.getLib openssl)
+    (lib.getLib gettext)
 
     # headers
     (lib.getDev curl)
