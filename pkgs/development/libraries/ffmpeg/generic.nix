@@ -479,6 +479,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withFdkAac "libfdk-aac")
     (enableFeature withFlite "libflite")
     (enableFeature withFontconfig "fontconfig")
+    (enableFeature withFontconfig "libfontconfig")
     (enableFeature withFreetype "libfreetype")
     (enableFeature withFrei0r "frei0r")
     (enableFeature withFribidi "libfribidi")
