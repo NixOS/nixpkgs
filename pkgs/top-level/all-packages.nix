@@ -31742,6 +31742,8 @@ with pkgs;
 
   welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
 
+  wfview = libsForQt5.callPackage ../applications/radio/wfview { };
+
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
     libpcap = libpcap.override { withBluez = stdenv.isLinux; };
@@ -34746,6 +34748,8 @@ with pkgs;
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
+
+  qcustomplot = libsForQt5.callPackage ../applications/graphics/qcustomplot { };
 
   qelectrotech = libsForQt5.callPackage ../applications/misc/qelectrotech { };
 

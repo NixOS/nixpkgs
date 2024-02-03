@@ -1,0 +1,146 @@
+Borrowed with love from Debian: https://salsa.debian.org/science-team/qcustomplot/-/blob/master/debian/patches/01_add_CMake_config_material.patch
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,134 @@
++cmake_minimum_required(VERSION 3.18.4)
++
++SET(QCustomPlot_MAJOR_VERSION "2")
++SET(QCustomPlot_MINOR_VERSION "1")
++SET(QCustomPlot_PATCH_VERSION "0")
++
++set(QCustomPlot_VERSION "${QCustomPlot_MAJOR_VERSION}.${QCustomPlot_MINOR_VERSION}.${QCustomPlot_PATCH_VERSION}")
++set(QCustomPlot_SOVERSION "${QCustomPlot_MAJOR_VERSION}.${QCustomPlot_MINOR_VERSION}")
++
++PROJECT(QCustomPlot LANGUAGES CXX VERSION ${QCustomPlot_VERSION})
++
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
++
++include(GNUInstallDirs)
++include(FeatureSummary)
++
++#-----------------------------------------------------------#
++# Dependencies
++#-----------------------------------------------------------#
++
++set(REQUIRED_QT_COMPONENTS Core Widgets PrintSupport)
++
++set(MIN_REQUIRED_QT5_VERSION "5.12")
++set(MIN_REQUIRED_QT6_VERSION "6.2.0")
++
++if (NOT USE_QT_VERSION)
++  # FIXME: find_package(QT NAMES Qt6 Qt5 ...) seems to prefer Qt5 on my system
++  find_package(Qt6 ${MIN_REQUIRED_QT6_VERSION} COMPONENTS ${REQUIRED_QT_COMPONENTS} REQUIRED)
++  if (NOT Qt6_FOUND)
++    find_package(Qt5 ${MIN_REQUIRED_QT5_VERSION} COMPONENTS ${REQUIRED_QT_COMPONENTS} REQUIRED)
++    set(QT_VERSION_MAJOR 5)
++  else()
++    set(QT_VERSION_MAJOR 6)
++  endif()
++else()
++  find_package(Qt${USE_QT_VERSION} ${MIN_REQUIRED_QT${USE_QT_VERSION}_VERSION}
++    COMPONENTS ${REQUIRED_QT_COMPONENTS} REQUIRED)
++  set(QT_VERSION_MAJOR ${USE_QT_VERSION})
++endif()
++
++# Determine the names of the output library depending on the version of Qt:
++
++if(${QT_VERSION_MAJOR} EQUAL "5")
++
++  message("The Qt version to build against is 5")
++
++  set(LIB_NAME QCustomPlot)
++  set(CMAKE_CONFIG_FILE_NAME ${LIB_NAME}Config.cmake)
++  set(CMAKE_CONFIG_LIB_NAMES QCustomPlot libQCustomPlot)
++
++endif()
++
++if(${QT_VERSION_MAJOR} EQUAL "6")
++
++  message("The Qt version to build against is 6")
++
++  set(LIB_NAME QCustomPlotQt6)
++  set(CMAKE_CONFIG_FILE_NAME ${LIB_NAME}Config.cmake)
++  set(CMAKE_CONFIG_LIB_NAMES QCustomPlotQt6 libQCustomPlotQt6)
++
++endif()
++
++#-----------------------------------------------------------#
++# Definitions
++#-----------------------------------------------------------#
++
++set(QCUSTOMPLOT_TARGET_PREFIX "${LIB_NAME}")
++set(QCUSTOMPLOT_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/${LIB_NAME}")
++
++#-----------------------------------------------------------#
++# Compiler Settings
++#-----------------------------------------------------------#
++
++#set(CMAKE_CXX_STANDARD 17)
++
++set(CMAKE_AUTOMOC ON)
++set(CMAKE_AUTORCC ON)
++set(CMAKE_AUTOUIC ON)
++
++# Only enable strict warnings in debug mode
++set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Werror -pedantic")
++
++# As per the author of the library, we should export the symbols under
++# MS-Windows.
++add_definitions(-DQCUSTOMPLOT_COMPILE_LIBRARY)
++
++#-----------------------------------------------------------#
++# Sources
++#-----------------------------------------------------------#
++
++add_library(${LIB_NAME} SHARED qcustomplot.cpp)
++
++set_target_properties(${LIB_NAME} PROPERTIES
++  VERSION ${QCustomPlot_VERSION}
++  SOVERSION ${QCustomPlot_SOVERSION})
++
++target_link_libraries(${LIB_NAME}
++  Qt${QT_VERSION_MAJOR}::Widgets
++  Qt${QT_VERSION_MAJOR}::PrintSupport)
++
++#-----------------------------------------------------------#
++# Installation
++#-----------------------------------------------------------#
++
++install(TARGETS ${LIB_NAME}
++  EXPORT ${LIB_NAME}Targets
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++
++install(FILES qcustomplot.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
++
++install(EXPORT ${LIB_NAME}Targets
++  FILE ${LIB_NAME}Targets.cmake
++  NAMESPACE ${LIB_NAME}::
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIB_NAME})
++
++include(CMakePackageConfigHelpers)
++
++configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
++  "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake"
++  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIB_NAME})
++
++install(FILES
++  "${CMAKE_CURRENT_BINARY_DIR}/${LIB_NAME}Config.cmake"
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIB_NAME})
++
++#-----------------------------------------------------------#
++# Summary
++#-----------------------------------------------------------#
++
++feature_summary(FATAL_ON_MISSING_REQUIRED_PACKAGES WHAT ALL)
++
+--- /dev/null
++++ b/cmake/Config.cmake.in
+@@ -0,0 +1,5 @@
++@PACKAGE_INIT@
++
++include("${CMAKE_CURRENT_LIST_DIR}/@LIB_NAME@Targets.cmake")
++
++check_required_components(@LIB_NAME@)
