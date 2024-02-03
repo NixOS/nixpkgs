@@ -11592,6 +11592,12 @@
     githubId = 65531;
     name = "Mario Rodas";
   };
+  marshmallow = {
+    github = "mrshmllow";
+    githubId = 40532058;
+    matrix = "@mrshmllow:matrix.org";
+    name = "marshmallow";
+  };
   marsupialgutz = {
     email = "mars@possums.xyz";
     github = "pupbrained";
