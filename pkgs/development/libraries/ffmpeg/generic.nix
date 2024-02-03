@@ -63,7 +63,8 @@
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
-, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder & AMR-WB decoder
+, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
+, withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
 , withOpengl ? false # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
@@ -503,6 +504,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenal "openal")
     (enableFeature withOpencl "opencl")
     (enableFeature withOpencoreAmrnb "libopencore-amrnb")
+    (enableFeature withOpencoreAmrwb "libopencore-amrwb")
     (enableFeature withOpengl "opengl")
     (enableFeature withOpenh264 "libopenh264")
     (enableFeature withOpenjpeg "libopenjpeg")
@@ -617,7 +619,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
-  ++ optionals withOpencoreAmrnb [ opencore-amr ]
+  ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
   ++ optionals withOpengl [ libGL libGLU ]
   ++ optionals withOpenh264 [ openh264 ]
   ++ optionals withOpenjpeg [ openjpeg ]
