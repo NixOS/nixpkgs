@@ -97,6 +97,7 @@
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support
+, withTesseract ? false # Tesseract ocr filter ~1GB
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withHeadlessDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
@@ -290,6 +291,7 @@
 , speex
 , srt
 , svt-av1
+, tesseract
 , vid-stab
 , vo-amrwbenc
 , vulkan-headers
@@ -573,6 +575,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withSvg "librsvg")
     (enableFeature withSvtav1 "libsvtav1")
     (enableFeature withTensorflow "libtensorflow")
+    (enableFeature withTesseract "libtesseract")
     (enableFeature withTheora "libtheora")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
@@ -697,6 +700,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSvg [ librsvg ]
   ++ optionals withSvtav1 [ svt-av1 ]
   ++ optionals withTensorflow [ libtensorflow ]
+  ++ optionals withTesseract [ tesseract ]
   ++ optionals withTheora [ libtheora ]
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
