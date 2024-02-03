@@ -16296,6 +16296,8 @@ self: super: with self; {
 
   xarray = callPackage ../development/python-modules/xarray { };
 
+  xarray-dataclasses = callPackage ../development/python-modules/xarray-dataclasses { };
+
   xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
   xattr = callPackage ../development/python-modules/xattr { };
