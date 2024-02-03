@@ -31115,6 +31115,8 @@ with pkgs;
 
   dsf2flac = callPackage ../applications/audio/dsf2flac { };
 
+  dungeondraft = callPackage ../applications/graphics/dungeondraft {  };
+
   dunst = callPackage ../applications/misc/dunst { };
 
   du-dust = callPackage ../tools/misc/dust {
