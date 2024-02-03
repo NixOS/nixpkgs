@@ -2,6 +2,7 @@
 , lib
 , docbook-xsl-nons
 , fetchurl
+, fetchpatch
 , glib
 , gobject-introspection
 , gtk-doc
@@ -41,6 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./substitute-udevadm.patch;
       udevadm = "${systemdMinimal}/bin/udevadm";
+    })
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/martinpitt/umockdev/commit/d4efe24be59bd859b87473ea3d7efe8100bedc74.patch";
+      hash = "sha256-whf3p2e7FWN1xk5+HF9KsbMW74DPOQ0R0+FxBfCZTX0=";
     })
   ];
 
