@@ -352,5 +352,7 @@ in rec {
 
   inherit darwin-stubs;
 
+  inherit (pkgs.darwin) Libsystem;
+
   inherit sdk;
 }
