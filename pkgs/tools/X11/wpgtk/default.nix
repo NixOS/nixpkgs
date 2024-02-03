@@ -50,5 +50,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.melkor333 maintainers.cafkafk ];
+    mainProgram = "wpg";
   };
 }
