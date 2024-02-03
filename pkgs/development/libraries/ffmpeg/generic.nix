@@ -53,6 +53,7 @@
 , withGsm ? withFullDeps # GSM de/encoder
 , withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
+, withIec61883 ? withFullDeps # Iec61883
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
@@ -213,6 +214,7 @@
 , libaom
 , libaribcaption
 , libass
+, libavc1394
 , libbluray
 , libbs2b
 , libcaca
@@ -223,6 +225,7 @@
 , libGL
 , libGLU
 , libiconv
+, libiec61883
 , libjack2
 , libmodplug
 , libmysofa
@@ -498,6 +501,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withHarfbuzz "libharfbuzz")
   ] ++ [
     (enableFeature withIconv "iconv")
+    (enableFeature withIec61883 "libiec61883")
     (enableFeature withJack "libjack")
     (enableFeature withLadspa "ladspa")
     (enableFeature withLzma "lzma")
@@ -618,6 +622,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withGsm [ gsm ]
   ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
+  ++ optionals withIec61883 [ libiec61883 libavc1394 ]
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLzma [ xz ]
