@@ -11,6 +11,7 @@ let
     "default" = teleport;
     "12" = teleport_12;
     "13" = teleport_13;
+    "14" = teleport_14;
   };
 
   minimal = package: {
