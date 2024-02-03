@@ -55,6 +55,7 @@
 , withIconv ? withHeadlessDeps
 , withIec61883 ? withFullDeps # Iec61883
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
+, withJxl ? withFullDeps && lib.versionAtLeast version "6.1" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
@@ -227,6 +228,7 @@
 , libiconv
 , libiec61883
 , libjack2
+, libjxl
 , libmodplug
 , libmysofa
 , libogg
@@ -503,6 +505,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withIconv "iconv")
     (enableFeature withIec61883 "libiec61883")
     (enableFeature withJack "libjack")
+  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+    (enableFeature (withJxl && versionAtLeast finalAttrs.version "6.1") "libjxl")
+  ] ++ [
     (enableFeature withLadspa "ladspa")
     (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
@@ -624,6 +629,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withIec61883 [ libiec61883 libavc1394 ]
   ++ optionals withJack [ libjack2 ]
+  ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
