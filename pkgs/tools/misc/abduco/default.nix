@@ -32,6 +32,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/martanne/abduco/commit/972ca8ab949ee342569dbd66b47cc4a17b28247b.patch";
       sha256 = "sha256-8hios0iKYDOmt6Bi5NNM9elTflGudnG2xgPF1pSkHI0=";
     })
+
+    # “report pixel sizes to child processes that use ioctl(0, TIOCGWINSZ, ...)”
+    # used for kitty & other terminals that display images
+    # https://github.com/martanne/abduco/pull/62
+    (fetchpatch {
+      name = "report-pixel-sizes-to-child-processes";
+      url = "https://github.com/martanne/abduco/commit/a1e222308119b3251f00b42e1ddff74a385d4249.patch";
+      sha256 = "sha256-eiF0A4IqJrrvXxjBYtltuVNpxQDv/iQPO+K7Y8hWBGg=";
+    })
   ];
 
   meta = with lib; {
