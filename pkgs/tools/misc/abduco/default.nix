@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/martanne/abduco/commit/0e9a00312ac9777edcb169122144762e3611287b.patch";
       sha256 = "sha256-4NkIflbRkUpS5XTM/fxBaELpvlZ4S5lecRa8jk0XC9g=";
     })
+
+    # “fix bug where attaching to dead session won't give underlying exit code”
+    # https://github.com/martanne/abduco/pull/45
+    (fetchpatch {
+      name = "exit-code-when-attaching-to-dead-session";
+      url = "https://github.com/martanne/abduco/commit/972ca8ab949ee342569dbd66b47cc4a17b28247b.patch";
+      sha256 = "sha256-8hios0iKYDOmt6Bi5NNM9elTflGudnG2xgPF1pSkHI0=";
+    })
   ];
 
   meta = with lib; {
