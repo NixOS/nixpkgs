@@ -30742,8 +30742,6 @@ with pkgs;
 
   cava = callPackage ../applications/audio/cava { };
 
-  cavalier = callPackage ../applications/audio/cavalier { };
-
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
