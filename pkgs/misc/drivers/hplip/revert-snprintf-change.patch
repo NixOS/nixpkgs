@@ -1,0 +1,61 @@
+commit f103a260215016fc035bc1399c8accabf83b0264
+Author: Claudio Bley <claudio.bley@gmail.com>
+Date:   Fri Jul 1 22:29:05 2022 +0200
+
+    Revert change to hp_ipp.c from 3.22.{4 -> 6}
+    
+    This fails compilation:
+    ```
+    protocol/hp_ipp.c: In function ‘addCupsPrinter’:
+    protocol/hp_ipp.c:113:9: error: format not a string literal and no format arguments [-Werror=format-security]
+      113 |         snprintf( info,sizeof(info), name );
+          |         ^~~~~~~~
+    ```
+
+diff --git a/protocol/hp_ipp.c b/protocol/hp_ipp.c
+index 97d827d..af7013b 100644
+--- a/protocol/hp_ipp.c
++++ b/protocol/hp_ipp.c
+@@ -110,7 +110,7 @@ int addCupsPrinter(char *name, char *device_uri, char *location, char *ppd_file,
+      }
+ 
+      if ( info == NULL )
+-        snprintf( info,sizeof(info), name );
++        strcpy( info, name );
+ 
+      sprintf( printer_uri, "ipp://localhost/printers/%s", name );
+ 
+@@ -511,27 +511,27 @@ int __parsePrinterAttributes(ipp_t *response, printer_t **printer_list)
+ 
+              if ( strcmp(attr_name, "printer-name") == 0 &&
+                                         val_tag == IPP_TAG_NAME ) {
+-                  snprintf(t_printer->name, sizeof(t_printer->name),ippGetString(attr, 0, NULL) );
++                  strcpy(t_printer->name, ippGetString(attr, 0, NULL) );
+              }
+              else if ( strcmp(attr_name, "device-uri") == 0 &&
+                                          val_tag == IPP_TAG_URI ) {
+-                  snprintf(t_printer->device_uri,sizeof(t_printer->device_uri), ippGetString(attr, 0, NULL) );
++                  strcpy(t_printer->device_uri, ippGetString(attr, 0, NULL) );
+              }
+              else if ( strcmp(attr_name, "printer-uri-supported") == 0 &&
+                                                  val_tag == IPP_TAG_URI ) {
+-                  snprintf(t_printer->printer_uri,sizeof(t_printer->printer_uri), ippGetString(attr, 0, NULL) );
++                  strcpy(t_printer->printer_uri, ippGetString(attr, 0, NULL) );
+              }
+              else if ( strcmp(attr_name, "printer-info") == 0 &&
+                                         val_tag == IPP_TAG_TEXT ) {
+-                  snprintf(t_printer->info,sizeof(t_printer->info), ippGetString(attr, 0, NULL) );
++                  strcpy(t_printer->info, ippGetString(attr, 0, NULL) );
+              }
+              else if ( strcmp(attr_name, "printer-location") == 0 &&
+                                            val_tag == IPP_TAG_TEXT ) {
+-                  snprintf(t_printer->location,sizeof(t_printer->location),ippGetString(attr, 0, NULL) );
++                  strcpy(t_printer->location, ippGetString(attr, 0, NULL) );
+              }
+              else if ( strcmp(attr_name, "printer-make-and-model") == 0 &&
+                                                   val_tag == IPP_TAG_TEXT ) {
+-                  snprintf(t_printer->make_model,sizeof(t_printer->make_model),ippGetString(attr, 0, NULL) );
++                  strcpy(t_printer->make_model, ippGetString(attr, 0, NULL) );
+              } 
+              else if ( strcmp(attr_name, "printer-state") == 0 &&
+                                              val_tag == IPP_TAG_ENUM ) {

@@ -1,0 +1,25 @@
+From d7f7ae55a54437616174f80fb8faa80ae4ffcda4 Mon Sep 17 00:00:00 2001
+From: Adam Stephens <adam@valkor.net>
+Date: Fri, 27 Oct 2023 13:26:11 -0400
+Subject: [PATCH] lxd-to-incus: query systemd instead of assuming service file
+ path
+
+Signed-off-by: Adam Stephens <adam@valkor.net>
+---
+ cmd/lxd-to-incus/targets.go | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/cmd/lxd-to-incus/targets.go b/cmd/lxd-to-incus/targets.go
+index f2b405e0e4..ed84d3ebce 100644
+--- a/cmd/lxd-to-incus/targets.go
++++ b/cmd/lxd-to-incus/targets.go
+@@ -25,7 +25,8 @@ func (s *targetSystemd) Present() bool {
+ 		return false
+ 	}
+ 
+-	if !util.PathExists("/lib/systemd/system/incus.service") {
++	_, err := subprocess.RunCommand("systemctl", "list-unit-files", "incus.service")
++	if err != nil {
+ 		return false
+ 	}
+ 

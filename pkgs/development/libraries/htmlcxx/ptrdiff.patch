@@ -1,0 +1,13 @@
+diff -rc htmlcxx-orig-0.85/html/tree.h htmlcxx-0.85/html/tree.h
+*** htmlcxx-orig-0.85/html/tree.h	2015-09-02 13:57:17.988688798 +0200
+--- htmlcxx-0.85/html/tree.h	2015-09-02 13:57:52.737768811 +0200
+***************
+*** 45,50 ****
+--- 45,51 ----
+  #ifndef tree_hh_
+  #define tree_hh_
+  
++ #include <cstddef>
+  #include <cassert>
+  #include <memory>
+  #include <stdexcept>

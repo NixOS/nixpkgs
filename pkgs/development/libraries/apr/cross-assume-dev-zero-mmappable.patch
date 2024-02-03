@@ -1,0 +1,14 @@
+based onhttps://830833.bugs.gentoo.org/attachment.cgi?id=761676,
+adjusted for 1.7.2
+
+--- a/configure.in	2022-01-09 00:31:05.552582255 -0800
++++ b/configure.in	2022-01-09 00:31:19.824582533 -0800
+@@ -1329,7 +1329,7 @@
+             return 3;
+         }
+         return 0;
+-    }], [], [ac_cv_file__dev_zero=no], [ac_cv_file__dev_zero=no])])
++    }], [], [ac_cv_file__dev_zero=no], [:])])
+ fi
+ 
+ # Now we determine which one is our anonymous shmem preference.

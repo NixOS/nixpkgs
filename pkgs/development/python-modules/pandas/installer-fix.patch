@@ -1,0 +1,25 @@
+diff --git a/pandas/_libs/meson.build b/pandas/_libs/meson.build
+index f302c649bc..ddce9ea2d6 100644
+--- a/pandas/_libs/meson.build
++++ b/pandas/_libs/meson.build
+@@ -113,8 +113,4 @@ foreach ext_name, ext_dict : libs_sources
+     )
+ endforeach
+ 
+-py.install_sources('__init__.py',
+-                    pure: false,
+-                    subdir: 'pandas/_libs')
+-
+ subdir('window')
+diff --git a/pandas/_libs/tslibs/meson.build b/pandas/_libs/tslibs/meson.build
+index 14d2eef46d..a862345c3a 100644
+--- a/pandas/_libs/tslibs/meson.build
++++ b/pandas/_libs/tslibs/meson.build
+@@ -30,7 +30,3 @@ foreach ext_name, ext_dict : tslibs_sources
+         install: true
+     )
+ endforeach
+-
+-py.install_sources('__init__.py',
+-                    pure: false,
+-                    subdir: 'pandas/_libs/tslibs')

@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: vtk
+Version: @VTK_VER@
+Summary: VTK is an open-source toolkit for 3D computer graphics, image processing, and visualization
+Platform: UNKNOWN

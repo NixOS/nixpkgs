@@ -1,0 +1,12 @@
+diff -uw -r a/make/Docs.gmk b/make/Docs.gmk
+--- a/make/Docs.gmk	2019-10-09 08:05:43.107349180 -0400
++++ b/make/Docs.gmk	2019-10-09 08:09:29.330118790 -0400
+@@ -277,7 +277,7 @@
+   $1_ALL_MODULES := $$(sort $$($1_MODULES) $$($1_INDIRECT_EXPORTS))
+ 
+   $1_JAVA_ARGS := -Dextlink.spec.version=$$(VERSION_SPECIFICATION) \
+-	-Djspec.version=$$(VERSION_SPECIFICATION)
++	-Djspec.version=$$(VERSION_SPECIFICATION) -Xmx1G
+ 
+   ifeq ($$(ENABLE_FULL_DOCS), true)
+     # Tell the ModuleGraph taglet to generate html links to soon-to-be-created

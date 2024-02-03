@@ -1,0 +1,8 @@
+--- a/make_linux.mak
++++ b/make_linux.mak
+@@ -63,4 +63,4 @@
+
+ AWT_LFLAGS = -shared ${SWT_LFLAGS}
+-AWT_LIBS = -L$(AWT_LIB_PATH) -ljawt
++AWT_LIBS = `pkg-config --libs x11` -L$(AWT_LIB_PATH) -ljawt
+
