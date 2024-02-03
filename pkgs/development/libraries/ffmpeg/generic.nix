@@ -468,6 +468,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
+    (enableFeature withCaca "libcaca")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCuda "cuda")
