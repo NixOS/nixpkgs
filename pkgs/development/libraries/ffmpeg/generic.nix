@@ -103,6 +103,7 @@
 , withV4l2 ? withHeadlessDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
+, withVapoursynth ? withFullDeps # VapourSynth demuxer
 , withVdpau ? withSmallDeps # Vdpau hardware acceleration
 , withVidStab ? withFullDeps && withGPL # Video stabilization
 , withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
@@ -294,6 +295,7 @@
 , svt-av1
 , tesseract
 , twolame
+, vapoursynth
 , vid-stab
 , vo-amrwbenc
 , vulkan-headers
@@ -583,6 +585,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
     (enableFeature withVaapi "vaapi")
+    (enableFeature withVapoursynth "vapoursynth")
     (enableFeature withVdpau "vdpau")
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
     (enableFeature withVmaf "libvmaf")
@@ -708,6 +711,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withTwolame [ twolame ]
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
+  ++ optionals withVapoursynth [ vapoursynth ]
   ++ optionals withVdpau [ libvdpau ]
   ++ optionals withVidStab [ vid-stab ]
   ++ optionals withVmaf [ libvmaf ]
