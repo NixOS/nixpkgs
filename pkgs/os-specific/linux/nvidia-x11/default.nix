@@ -94,6 +94,8 @@ rec {
     useFabricmanager = true;
 
     patches = [ rcu_patch ];
+
+    broken = kernel.kernelAtLeast "6.5";
   };
 
   dc_535 = generic rec {
