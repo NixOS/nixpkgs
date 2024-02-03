@@ -1,12 +1,12 @@
 { lib
-, ansiwrap
 , azure-datalake-store
+, azure-identity
 , azure-storage-blob
 , boto3
 , buildPythonPackage
 , click
 , entrypoints
-, fetchPypi
+, fetchFromGitHub
 , gcsfs
 , nbclient
 , nbformat
@@ -17,6 +17,7 @@
 , pythonOlder
 , pyyaml
 , requests
+, setuptools
 , tenacity
 , tqdm
 }:
@@ -24,17 +25,22 @@
 buildPythonPackage rec {
   pname = "papermill";
   version = "2.5.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6ntwwFU/Vv6RsPqcxeFwEs1pkyCosBU3PnhwxeYIbHI=";
+  src = fetchFromGitHub {
+    owner = "nteract";
+    repo = "papermill";
+    rev = "refs/tags/${version}";
+    hash = "sha256-x6f5hhTdOPDVFiBvRhfrXq1wd5keYiuUshXnT0IkjX0=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    ansiwrap
     click
     pyyaml
     nbformat
@@ -48,6 +54,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     azure = [
       azure-datalake-store
+      azure-identity
       azure-storage-blob
     ];
     gcs = [
