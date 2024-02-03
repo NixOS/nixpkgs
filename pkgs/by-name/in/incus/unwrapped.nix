@@ -4,6 +4,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writeShellScript,
   acl,
   cowsql,
   hwdata,
@@ -13,24 +14,24 @@
   sqlite,
   udev,
   installShellFiles,
-  nix-update-script,
   nixosTests,
 }:
 
 let
   releaseFile = if lts then ./lts.nix else ./latest.nix;
   inherit (import releaseFile) version hash vendorHash;
+  name = "incus${lib.optionalString lts "-lts"}";
 in
 
 buildGoModule rec {
-  pname = "incus-unwrapped";
+  pname = "${name}-unwrapped";
 
   inherit vendorHash version;
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     inherit hash;
   };
 
@@ -102,12 +103,11 @@ buildGoModule rec {
   passthru = {
     tests.incus = nixosTests.incus;
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "-vr"
-        "v(.*)"
-      ];
-    };
+    updateScript = writeShellScript "update-incus" ''
+      nix-update ${name}.unwrapped -vr 'v(.*)' --override-filename pkgs/by-name/in/incus/${
+        if lts then "lts" else "latest"
+      }.nix
+    '';
   };
 
   meta = {

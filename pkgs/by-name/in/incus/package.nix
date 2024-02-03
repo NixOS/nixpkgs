@@ -42,6 +42,7 @@
 let
   unwrapped = callPackage ./unwrapped.nix { inherit lts; };
   client = callPackage ./client.nix { inherit lts; };
+  name = "incus${lib.optionalString lts "-lts"}";
 
   binPath = lib.makeBinPath [
     acl
@@ -150,7 +151,7 @@ let
   ];
 in
 symlinkJoin {
-  name = "incus-${unwrapped.version}";
+  name = "${name}-${unwrapped.version}";
 
   paths = [ unwrapped ];
 
@@ -163,11 +164,9 @@ symlinkJoin {
   '';
 
   passthru = {
+    inherit client unwrapped;
+
     inherit (unwrapped) tests;
-
-    client = client;
-
-    unwrapped = unwrapped;
   };
 
   inherit (unwrapped) meta pname version;
