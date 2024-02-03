@@ -453,6 +453,7 @@ mapAliases ({
   ipfs-migrator-unwrapped = kubo-migrator-unwrapped; # Added 2022-09-27
   ipfs-migrator = kubo-migrator; # Added 2022-09-27
   iproute = iproute2; # moved from top-level 2021-03-14
+  itm-tools = throw "'itm-tools' is deprecated and archived, use 'itm' instead"; # Added 2023-02-03
 
   ### J ###
 

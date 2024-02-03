@@ -9528,8 +9528,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  itm-tools = callPackage ../development/tools/misc/itm-tools { };
-
   ite-backlight = callPackage ../misc/ite-backlight { };
 
   iwgtk = callPackage ../tools/networking/iwgtk { };
