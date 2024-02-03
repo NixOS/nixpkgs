@@ -161,6 +161,9 @@ stdenv.mkDerivation rec {
     sed -i '/qemufirmwaretest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
+  '' + lib.optionalString isLinux ''
+    substituteInPlace src/util/virpci.c \
+      --replace '/lib/modules' '/run/current-system/kernel-modules/lib/modules'
   '';
 
   strictDeps = true;
