@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.noneucat ];
+    maintainers = [ ];
   };
 
 }
