@@ -81,6 +81,7 @@
 , withPulse ? withSmallDeps && !stdenv.isDarwin # Pulseaudio input support
 , withRabbitmq ? withFullDeps # RabbitMQ support
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
+, withRist ? withFullDeps # RIST support
 , withRtmp ? false # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
@@ -243,6 +244,7 @@
 , libplacebo_5
 , libpulseaudio
 , libraw1394
+, librist
 , librsvg
 , libssh
 , libtensorflow
@@ -545,6 +547,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withPulse "libpulse")
     (enableFeature withRabbitmq "librabbitmq")
     (enableFeature withRav1e "librav1e")
+    (enableFeature withRist "librist")
     (enableFeature withRtmp "librtmp")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
@@ -666,6 +669,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withPulse [ libpulseaudio ]
   ++ optionals withRabbitmq [ rabbitmq-c ]
   ++ optionals withRav1e [ rav1e ]
+  ++ optionals withRist [ librist ]
   ++ optionals withRtmp [ rtmpdump ]
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
