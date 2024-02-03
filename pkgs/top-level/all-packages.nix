@@ -33542,6 +33542,8 @@ with pkgs;
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
+  meshtastic = with python3Packages; toPythonApplication meshtastic;
+
   metadata-cleaner = callPackage ../applications/misc/metadata-cleaner { };
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };

@@ -73,6 +73,15 @@ buildPythonPackage rec {
     "meshtastic"
   ];
 
+  patches = [
+    ./version.patch
+  ];
+
+  postPatch = ''
+    echo v${version}
+    substituteInPlace meshtastic/__main__.py meshtastic/util.py --replace %VERSION% ${version}
+  '';
+
   disabledTests = [
     # AttributeError: 'HardwareMessage'...
     "test_handleFromRadio_with_my_info"
