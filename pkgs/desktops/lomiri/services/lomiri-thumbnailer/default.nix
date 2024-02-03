@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     rev = finalAttrs.version;
-    hash = "sha256-AZoXTE4ix/NDBSwPJcod+cMNnfrCxFj5IzxCWxh6uq0=";
+    hash = "sha256-BE/U4CT4z4WzEJXrVhX8ME/x9q7w8wNnJKTbfVku2VQ=";
   };
 
   outputs = [
@@ -47,64 +47,43 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when version > 3.0.2
-    (fetchpatch {
-      name = "0001-lomiri-thumbnailer-Stop-using-qt5_use_modules.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/a0d81863f3f48717507cfa181030a8ffb0c4e881.patch";
-      hash = "sha256-B0935Hve5zYA3aUqr0RUtJsOAsfDAF/L7/20F4I+5s0=";
-    })
-
     # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/19 merged & in release
     (fetchpatch {
-      name = "0002-lomiri-thumbnailer-Add-more-better-GNUInstallDirs-variables-usage.patch";
+      name = "0001-lomiri-thumbnailer-Add-more-better-GNUInstallDirs-variables-usage.patch";
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/0b9795a6313fd025d5646f2628a2cbb3104b0ebc.patch";
       hash = "sha256-br99n2nDLjUfnjbjhOsWlvP62VmVjYeZ6yPs1dhPN/s=";
     })
 
-    # Remove when version > 3.0.2
-    (fetchpatch {
-      name = "0003-lomiri-thumbnailer-Fix-check-for-No-such-file-or-directory-error.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/de8f9175830581e9180ed789b92dffbb08dfe436.patch";
-      hash = "sha256-JHoYTATbR8NTsVU2+8+R2sCSU6ZDLyKgmdbt4VZPv3Q=";
-    })
-
-    # Remove when version > 3.0.2
-    (fetchpatch {
-      name = "0004-lomiri-thumbnailer-tests-headers-CMakelists.txt-Remove-extra-slash-in-include-paths.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/3598fdc84ded8241f273c89c95371d4675690e38.patch";
-      hash = "sha256-Sonjc/a6hfuXhaus2scfmPfgIYWxsRD/1/IIACLqsBA=";
-    })
-
     # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/22 merged & in release
     (fetchpatch {
-      name = "0005-lomiri-thumbnailer-Make-tests-optional.patch";
+      name = "0002-lomiri-thumbnailer-Make-tests-optional.patch";
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/df7a3d1689f875d207a90067b957e888160491b9.patch";
       hash = "sha256-gVxigpSL/3fXNdJBjh8Ex3/TYmQUiwRji/NmLW/uhE4=";
     })
 
     # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/23 merged & in release
     (fetchpatch {
-      name = "0006-lomiri-thumbnailer-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DOCDIR.patch";
+      name = "0003-lomiri-thumbnailer-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DOCDIR.patch";
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/930a3b57e899f6eb65a96d096edaea6a6f6b242a.patch";
       hash = "sha256-klYycUoQqA+Dfk/4fRQgdS4/G4o0sC1k98mbtl0iHkE=";
     })
     (fetchpatch {
-      name = "0007-lomiri-thumbnailer-Re-enable-documentation.patch";
+      name = "0004-lomiri-thumbnailer-Re-enable-documentation.patch";
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/2f9186f71fdd25e8a0852073f1da59ba6169cf3f.patch";
       hash = "sha256-youaJfCeYVpLmruHMupuUdl0c/bSDPWqKPLgu5plBrw=";
     })
     (fetchpatch {
-      name = "0008-lomiri-thumbnailer-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_modules-usage.patch";
+      name = "0005-lomiri-thumbnailer-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_modules-usage.patch";
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/9e5cf09de626e73e6b8f180cbc1160ebd2f169e7.patch";
       hash = "sha256-vfNCN7tqq6ngzNmb3qqHDHaDx/kI8/UXyyv7LqUWya0=";
     })
     (fetchpatch {
-      name = "0009-lomiri-thumbnailer-Re-enable-coverge-reporting.patch";
+      name = "0006-lomiri-thumbnailer-Re-enable-coverge-reporting.patch";
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/6a48831f042cd3ad34200f32800393d4eec2f84b.patch";
       hash = "sha256-HZd4K0R1W6adOjKy7tODfQAD+9IKPcK0DnH1uKNd/Ak=";
     })
     (fetchpatch {
-      name = "0010-lomiri-thumbnailer-Make-GTest-available-to-example-test.patch";
+      name = "0007-lomiri-thumbnailer-Make-GTest-available-to-example-test.patch";
       url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/657be3bd1aeb227edc04e26b597b2fe97b2dc51a.patch";
       hash = "sha256-XEvdWV3JJujG16+87iewYor0jFK7NTeE5459iT96SkU=";
     })

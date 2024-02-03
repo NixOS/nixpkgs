@@ -8373,6 +8373,8 @@ self: super: with self; {
 
   ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 
+  nipreps-versions = callPackage ../development/python-modules/nipreps-versions { };
+
   nipy = callPackage ../development/python-modules/nipy { };
 
   nipype = callPackage ../development/python-modules/nipype {
@@ -8384,6 +8386,8 @@ self: super: with self; {
   nitpick = callPackage ../applications/version-management/nitpick { };
 
   nitransforms = callPackage ../development/python-modules/nitransforms { };
+
+  niworkflows = callPackage ../development/python-modules/niworkflows { };
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel {
     inherit (pkgs) nix;
@@ -10419,6 +10423,8 @@ self: super: with self; {
   pyemby = callPackage ../development/python-modules/pyemby { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };
+
+  pyemvue = callPackage ../development/python-modules/pyemvue { };
 
   pyenchant = callPackage ../development/python-modules/pyenchant {
     inherit (pkgs) enchant2;
@@ -14026,6 +14032,8 @@ self: super: with self; {
 
   svgelements = callPackage ../development/python-modules/svgelements { };
 
+  svgutils = callPackage ../development/python-modules/svgutils { };
+
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
   sv-ttk = callPackage ../development/python-modules/sv-ttk { };
@@ -14164,6 +14172,8 @@ self: super: with self; {
   tempest = callPackage ../development/python-modules/tempest { };
 
   tempita = callPackage ../development/python-modules/tempita { };
+
+  templateflow = callPackage ../development/python-modules/templateflow { };
 
   tempora = callPackage ../development/python-modules/tempora { };
 

@@ -5608,9 +5608,7 @@ with pkgs;
 
   gscan2pdf = callPackage ../applications/graphics/gscan2pdf { };
 
-  gsctl = callPackage ../applications/misc/gsctl {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  gsctl = callPackage ../applications/misc/gsctl { };
 
   gsocket = callPackage ../tools/networking/gsocket { };
 
@@ -7059,10 +7057,7 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
-      stdenv = clangStdenv;
-      protobuf = pkgs.protobuf_21.overrideDerivation (_: { stdenv = clangStdenv; });
-    };
+    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { };
 
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
 
@@ -7798,7 +7793,11 @@ with pkgs;
 
   stratis-cli = callPackage ../tools/filesystems/stratis-cli { };
 
-  strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
+  strawberry-qt5 = libsForQt5.callPackage ../applications/audio/strawberry { };
+
+  strawberry-qt6 = qt6Packages.callPackage ../applications/audio/strawberry { };
+
+  strawberry = strawberry-qt5;
 
   schleuder = callPackage ../tools/security/schleuder { };
 
@@ -15141,8 +15140,6 @@ with pkgs;
     haskellPackages = haskell.packages.ghc810;
   };
 
-  yj = callPackage ../development/tools/yj { };
-
   yaydl = callPackage ../tools/video/yaydl {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -20883,7 +20880,7 @@ with pkgs;
 
   crocoddyl = callPackage ../development/libraries/crocoddyl { };
 
-  crossguid = pin-to-gcc12-if-gcc13 (callPackage ../development/libraries/crossguid { });
+  crossguid = callPackage ../development/libraries/crossguid { };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
@@ -30808,7 +30805,7 @@ with pkgs;
 
   clapper = callPackage ../applications/video/clapper { };
 
-  claws-mail = disable-warnings-if-gcc13 (callPackage ../applications/networking/mailreaders/claws-mail { });
+  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail { };
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh { };
 
@@ -41993,9 +41990,7 @@ with pkgs;
 
   yazi = callPackage ../applications/file-managers/yazi { inherit (darwin.apple_sdk.frameworks) Foundation; };
 
-  ssl-proxy = callPackage ../tools/networking/ssl-proxy {
-    buildGoModule = buildGo119Module; # build fails with 1.20
-  };
+  ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
 
   code-maat = callPackage ../development/tools/code-maat {};
 
