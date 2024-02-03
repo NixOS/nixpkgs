@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
+, undmg
 , wrapGAppsHook
 , makeWrapper
 , nixosTests
@@ -72,13 +73,13 @@ in stdenv.mkDerivation rec {
     inherit url hash;
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
     dpkg
     (wrapGAppsHook.override { inherit makeWrapper; })
-  ];
+  ] ++ lib.optional stdenv.isDarwin undmg;
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
     at-spi2-atk
     at-spi2-core
@@ -115,7 +116,7 @@ in stdenv.mkDerivation rec {
     xorg.libxshmfence
   ];
 
-  runtimeDependencies = [
+  runtimeDependencies = lib.optionals stdenv.isLinux [
     (lib.getLib systemd)
     libappindicator-gtk3
     libnotify
@@ -124,7 +125,8 @@ in stdenv.mkDerivation rec {
     wayland
   ];
 
-  unpackPhase = "dpkg-deb -x $src .";
+  unpackPhase = if stdenv.isLinux then "dpkg-deb -x $src ."
+    else "undmg $src";
 
   dontBuild = true;
   dontConfigure = true;
@@ -133,7 +135,7 @@ in stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
   dontAutoPatchelf = true;
 
-  installPhase = ''
+  installPhase = if stdenv.isLinux then ''
     runHook preInstall
 
     mkdir -p $out/lib
@@ -154,9 +156,17 @@ in stdenv.mkDerivation rec {
     ln -s libGLESv2.so "$out/lib/${dir}/libGLESv2.so.2"
 
     runHook postInstall
+  ''
+  else ''
+    runHook preInstall
+
+    mkdir -p $out/Applications
+    mv Signal.app $out/Applications
+
+    runHook postInstall
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -189,7 +199,7 @@ in stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ eclairevoyant mic92 equirosa urandom bkchr ];
     mainProgram = pname;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
