@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, writeText, conf ? null }:
+{ lib, stdenv, fetchpatch, fetchzip, writeText, conf ? null }:
 
-stdenv.mkDerivation rec {
+let
+  rev = "8c32909a159aaa9484c82b71f05b7a73321eb491";
+in
+stdenv.mkDerivation {
   pname = "abduco";
-  version = "2020-04-30";
+  version = "unstable-2020-04-30";
 
-  src = fetchFromGitHub {
-    owner = "martanne";
-    repo = "abduco";
-    rev = "8c32909a159aaa9484c82b71f05b7a73321eb491";
-    sha256 = "0a3p8xljhpk7zh203s75248blfir15smgw5jmszwbmdpy4mqzd53";
+  src = fetchzip {
+    urls = [
+      "https://github.com/martanne/abduco/archive/${rev}.tar.gz"
+      "https://git.sr.ht/~martanne/abduco/archive/${rev}.tar.gz"
+    ];
+    hash = "sha256-o7SPK/G31cW/rrLwV3UJOTq6EBHl6AEE/GdeKGlHdyg=";
   };
 
   preBuild = lib.optionalString (conf != null)
