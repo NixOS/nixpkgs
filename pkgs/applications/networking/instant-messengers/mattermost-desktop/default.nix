@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, electron_28
+, electron_27
 , makeWrapper
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/Mattermost.desktop \
       --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
-    makeWrapper ${electron_28}/bin/electron $out/bin/${pname} \
+    makeWrapper '${lib.getExe electron_27}' $out/bin/${pname} \
       --add-flags $out/share/${pname}/app.asar
 
     runHook postInstall
