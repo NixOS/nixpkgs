@@ -103,5 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    mainProgram = "papermill";
   };
 }
