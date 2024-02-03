@@ -744,9 +744,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  mix2nix = callPackage ../development/tools/mix2nix {
-    elixir = elixir_1_14;
-  };
+  mix2nix = callPackage ../development/tools/mix2nix { };
 
   n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
 
@@ -11604,6 +11602,8 @@ with pkgs;
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openresolv = callPackage ../tools/networking/openresolv { };
+
+  openrefine = callPackage ../applications/science/misc/openrefine { jdk = jdk17; };
 
   openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
 
