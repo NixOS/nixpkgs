@@ -1,0 +1,26 @@
+diff --git a/gogol-core.cabal b/gogol-core.cabal
+index 4c47988..caa4796 100644
+--- a/gogol-core.cabal
++++ b/gogol-core.cabal
+@@ -62,7 +62,7 @@ library
+         , lens                 >= 4.4
+         , resourcet            >= 1.1
+         , scientific           >= 0.3
+-        , servant              >= 0.4.4
++        , servant              >= 0.14.1
+         , text                 >= 1.1
+         , unordered-containers >= 0.2.5
+ 
+diff --git a/src/Network/Google/Prelude.hs b/src/Network/Google/Prelude.hs
+index a4ad9de..795c690 100644
+--- a/src/Network/Google/Prelude.hs
++++ b/src/Network/Google/Prelude.hs
+@@ -28,7 +28,7 @@ import Network.HTTP.Client as Export (RequestBody)
+ import Numeric.Natural     as Export (Natural)
+ import Prelude             as Export hiding (product, span, any, Word)
+ import Servant.API         as Export hiding (Headers, Link, getResponse, Stream, ResponseHeader, Header, header)
+-import Servant.Utils.Links as Export hiding (Link)
++import Servant.Links       as Export hiding (Link)
+ import Web.HttpApiData     as Export (FromHttpApiData (..), ToHttpApiData (..))
+ 
+ import Network.Google.Data.Bytes   as Export

@@ -1,0 +1,22 @@
+diff --git a/dlls/winemac.drv/cocoa_display.m b/dlls/winemac.drv/cocoa_display.m
+--- a/dlls/winemac.drv/cocoa_display.m
++++ b/dlls/winemac.drv/cocoa_display.m
+@@ -289,7 +289,7 @@ static int macdrv_get_gpus_from_metal(struct macdrv_gpu** new_gpus, int* count)
+      * the primary GPU because we need to hide the integrated GPU for an automatic graphic switching pair to avoid apps
+      * using the integrated GPU. This is the behavior of Windows on a Mac. */
+     primary_device = [MTLCreateSystemDefaultDevice() autorelease];
+-    if (macdrv_get_gpu_info_from_registry_id(&primary_gpu, primary_device.registryID))
++    if (macdrv_get_gpu_info_from_registry_id(&primary_gpu, [primary_device registryID]))
+         goto done;
+
+     /* Hide the integrated GPU if the system default device is a dedicated GPU */
+@@ -301,7 +301,7 @@ static int macdrv_get_gpus_from_metal(struct macdrv_gpu** new_gpus, int* count)
+
+     for (i = 0; i < devices.count; i++)
+     {
+-        if (macdrv_get_gpu_info_from_registry_id(&gpus[gpu_count], devices[i].registryID))
++        if (macdrv_get_gpu_info_from_registry_id(&gpus[gpu_count], [devices[i] registryID]))
+             goto done;
+
+         if (hide_integrated && devices[i].isLowPower)
+

@@ -1,0 +1,14 @@
+diff -ru -x '*~' unionfs-fuse-0.26-orig/src/unionfs.c unionfs-fuse-0.26/src/unionfs.c
+--- unionfs-fuse-0.26-orig/src/unionfs.c	2012-09-11 00:06:32.000000000 +0200
++++ unionfs-fuse-0.26/src/unionfs.c	2014-05-21 14:22:03.597861805 +0200
+@@ -831,6 +831,10 @@
+ 	}
+ #endif
+ 
++	/* Prevent systemd's shutdown from killing us. */
++	if (access("/etc/initrd-release", F_OK) >= 0)
++		argv[0][0] = '@';
++
+ 	umask(0);
+ 	int res = fuse_main(args.argc, args.argv, &unionfs_oper, NULL);
+ 	RETURN(uopt.doexit ? uopt.retval : res);

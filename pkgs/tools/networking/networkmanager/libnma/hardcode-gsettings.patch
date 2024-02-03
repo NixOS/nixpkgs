@@ -1,0 +1,24 @@
+diff --git a/src/nma-ws/nma-eap.c b/src/nma-ws/nma-eap.c
+index fa36907..81df821 100644
+--- a/src/nma-ws/nma-eap.c
++++ b/src/nma-ws/nma-eap.c
+@@ -252,7 +252,18 @@ _get_ca_ignore_settings (NMConnection *connection)
+ 	g_return_val_if_fail (uuid && *uuid, NULL);
+ 
+ 	path = g_strdup_printf ("/org/gnome/nm-applet/eap/%s/", uuid);
+-	settings = g_settings_new_with_path ("org.gnome.nm-applet.eap", path);
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@NM_APPLET_GSETTINGS@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.nm-applet.eap",
++							 FALSE);
++		settings = g_settings_new_full(schema, NULL, path);
++	}
+ 	g_free (path);
+ 
+ 	return settings;

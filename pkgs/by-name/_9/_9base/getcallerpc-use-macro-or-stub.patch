@@ -1,0 +1,115 @@
+diff --git a/lib9/Makefile b/lib9/Makefile
+index b83ab2b..2836b38 100644
+--- a/lib9/Makefile
++++ b/lib9/Makefile
+@@ -145,7 +145,7 @@ LIB9OFILES=\
+ 	exitcode.o\
+ 	fcallfmt.o\
+ 	get9root.o\
+-	getcallerpc-$(OBJTYPE).o\
++	getcallerpc.o\
+ 	getenv.o\
+ 	getfields.o\
+ 	getnetconn.o\
+diff --git a/lib9/getcallerpc-386.c b/lib9/getcallerpc-386.c
+deleted file mode 100644
+index 1367370..0000000
+--- a/lib9/getcallerpc-386.c
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#include <lib9.h>
+-
+-ulong
+-getcallerpc(void *x)
+-{
+-	return (((ulong*)(x))[-1]);
+-}
+diff --git a/lib9/getcallerpc-PowerMacintosh.c b/lib9/getcallerpc-PowerMacintosh.c
+deleted file mode 100644
+index 679a72c..0000000
+--- a/lib9/getcallerpc-PowerMacintosh.c
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#include <lib9.h>
+-
+-ulong
+-getcallerpc(void *x)
+-{
+-	return (((ulong*)(x))[-4]);
+-}
+diff --git a/lib9/getcallerpc-arm.c b/lib9/getcallerpc-arm.c
+deleted file mode 100644
+index 9bb4a95..0000000
+--- a/lib9/getcallerpc-arm.c
++++ /dev/null
+@@ -1,8 +0,0 @@
+-#include <lib9.h>
+-
+-ulong
+-getcallerpc(void *x)
+-{
+-	return ((ulong*)x)[-2];
+-}
+-
+diff --git a/lib9/getcallerpc-power.c b/lib9/getcallerpc-power.c
+deleted file mode 100644
+index b4bf698..0000000
+--- a/lib9/getcallerpc-power.c
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#include <lib9.h>
+-
+-ulong
+-getcallerpc(void *x)
+-{
+-	ulong *lp;
+-
+-	lp = x;
+-
+-	return lp[-1];
+-}
+diff --git a/lib9/getcallerpc-ppc.c b/lib9/getcallerpc-ppc.c
+deleted file mode 100644
+index 679a72c..0000000
+--- a/lib9/getcallerpc-ppc.c
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#include <lib9.h>
+-
+-ulong
+-getcallerpc(void *x)
+-{
+-	return (((ulong*)(x))[-4]);
+-}
+diff --git a/lib9/getcallerpc-x86_64.c b/lib9/getcallerpc-x86_64.c
+deleted file mode 100644
+index 1367370..0000000
+--- a/lib9/getcallerpc-x86_64.c
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#include <lib9.h>
+-
+-ulong
+-getcallerpc(void *x)
+-{
+-	return (((ulong*)(x))[-1]);
+-}
+diff --git a/lib9/getcallerpc.c b/lib9/getcallerpc.c
+new file mode 100644
+index 0000000..7d2cdd7
+--- /dev/null
++++ b/lib9/getcallerpc.c
+@@ -0,0 +1,12 @@
++#include <lib9.h>
++
++/*
++ * On gcc and clang, getcallerpc is a macro invoking a compiler builtin.
++ * If the macro in libc.h did not trigger, there's no implementation.
++ */
++#undef getcallerpc
++ulong
++getcallerpc(void *v)
++{
++	return 1;
++}
+\ No newline at end of file

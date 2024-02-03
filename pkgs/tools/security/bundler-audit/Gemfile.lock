@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bundler-audit (0.9.1)
+      bundler (>= 1.2.0, < 3)
+      thor (~> 1.0)
+    thor (1.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler-audit
+
+BUNDLED WITH
+   2.3.9
