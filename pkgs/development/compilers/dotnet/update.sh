@@ -339,7 +339,6 @@ Examples:
     major_minor=$(sed 's/^\([0-9]*\.[0-9]*\).*$/\1/' <<< "$sem_version")
     content=$(curl -sL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
     major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-sdk"' <<< "$content")
-    major_minor_underscore=${major_minor/./_}
 
     sdk_version=$major_minor_patch
     release_content=$(release "$content" "$sdk_version")
@@ -353,7 +352,7 @@ Examples:
             buildAspNetCore = { ... }: {}; \
             buildNetRuntime = { ... }: {}; \
             buildNetSdk = { version, ... }: version; \
-            }).sdk_${major_minor_underscore}" | jq -r)
+            }).sdk" | jq -r)
 
         if [[ "$current_version" == "$sdk_version" ]]; then
             echo "Nothing to update."
@@ -382,17 +381,17 @@ Examples:
 
 # v$channel_version ($support_phase)
 {
-  aspnetcore_$major_minor_underscore = buildAspNetCore {
+  aspnetcore = buildAspNetCore {
     version = \"${aspnetcore_version}\";
     $aspnetcore_sources
   };
 
-  runtime_$major_minor_underscore = buildNetRuntime {
+  runtime = buildNetRuntime {
     version = \"${runtime_version}\";
     $runtime_sources
   };
 
-  sdk_$major_minor_underscore = buildNetSdk {
+  sdk = buildNetSdk {
     version = \"${sdk_version}\";
     $sdk_sources
     packages = { fetchNuGet }: [

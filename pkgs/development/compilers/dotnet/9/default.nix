@@ -5,5 +5,5 @@
   releaseInfoFile = ./release-info.json;
   allowPrerelease = true;
   depsFile = ./deps.nix;
-  bootstrapSdk = dotnetCorePackages.sdk_9_0;
+  bootstrapSdk = dotnetCorePackages.dotnet_9-bin.sdk;
 }
