@@ -18,13 +18,25 @@ signal-desktop)
   echo "Updating signal-desktop for x86_64-linux"
   nix-update --version "$latestVersion" \
     --system x86_64-linux \
-    --override-filename "$SCRIPT_DIR/signal-desktop.nix" \
-  signal-desktop
+    --override-filename "$SCRIPT_DIR/signal-desktop-x86_64-linux.nix" \
+    signal-desktop
 
   echo "Updating signal-desktop for aarch64-linux"
   nix-update --version "$latestVersionAarch64" \
     --system aarch64-linux \
-    --override-filename "$SCRIPT_DIR/signal-desktop-aarch64.nix" \
+    --override-filename "$SCRIPT_DIR/signal-desktop-aarch64-linux.nix" \
+    signal-desktop
+
+  echo "Updating signal-desktop for x86_64-darwin"
+  nix-update --version "$latestVersion" \
+    --system x86_64-darwin \
+    --override-filename "$SCRIPT_DIR/signal-desktop-x86_64-darwin.nix" \
+    signal-desktop
+
+  echo "Updating signal-desktop for aarch64-darwin"
+  nix-update --version "$latestVersion" \
+    --system aarch64-darwin \
+    --override-filename "$SCRIPT_DIR/signal-desktop-aarch64-darwin.nix" \
     signal-desktop
   ;;
 signal-desktop-beta)
