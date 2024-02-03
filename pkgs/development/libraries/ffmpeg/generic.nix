@@ -99,6 +99,7 @@
 , withTensorflow ? false # Tensorflow dnn backend support
 , withTesseract ? false # Tesseract ocr filter ~1GB
 , withTheora ? withHeadlessDeps # Theora encoder
+, withTwolame ? withFullDeps # MP2 encoding
 , withV4l2 ? withHeadlessDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
@@ -292,6 +293,7 @@
 , srt
 , svt-av1
 , tesseract
+, twolame
 , vid-stab
 , vo-amrwbenc
 , vulkan-headers
@@ -577,6 +579,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withTensorflow "libtensorflow")
     (enableFeature withTesseract "libtesseract")
     (enableFeature withTheora "libtheora")
+    (enableFeature withTwolame "libtwolame")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
     (enableFeature withVaapi "vaapi")
@@ -702,6 +705,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTesseract [ tesseract ]
   ++ optionals withTheora [ libtheora ]
+  ++ optionals withTwolame [ twolame ]
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
