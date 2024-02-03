@@ -7,7 +7,7 @@ SELF_DIRNAME="$(dirname $(realpath $0))"
 export NIX_PATH="$SELF_DIRNAME/../../../.."
 TMPCFG="$(mktemp)"
 NIX_BUILD=${NIX_BUILD-nix-build}
-if git diff-index --quiet --cached HEAD --; then
+if git -C $NIX_PATH/nixpkgs diff-index --quiet HEAD; then
     TAG=$(git -C $NIX_PATH/nixpkgs rev-parse HEAD)
 else
     TAG="(dirty)"
