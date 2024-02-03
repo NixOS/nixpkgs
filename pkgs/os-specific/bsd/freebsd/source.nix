@@ -1,9 +1,10 @@
-{ buildPackages, sourceData, hostVersion }:
-# `buildPackages.fetchgit` avoids some probably splicing-caused infinite
-# recursion.
-buildPackages.fetchgit {
-  # TODO: Find some other more descriptive name with minor and such?
-  name = "${hostVersion}-src";
-  url = "https://git.FreeBSD.org/src.git";
+{ fetchFromGitHub, sourceData }:
+# Using fetchFromGitHub from their mirror because it's a lot faster than their git server
+# If you want you could fetchgit from "https://git.FreeBSD.org/src.git" instead.
+# The update script still pulls directly from git.freebsd.org
+fetchFromGitHub {
+  name = "freebsd-src";
+  owner = "freebsd";
+  repo = "freebsd-src";
   inherit (sourceData) rev hash;
 }
