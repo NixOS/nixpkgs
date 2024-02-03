@@ -109,7 +109,6 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libutil = callPackage ./libutil.nix {};
   libxo = callPackage ./libxo.nix {};
   libstdthreads = callPackage ./libstdthreads.nix {};
-  liblzma = callPackage ./liblzma.nix {};
   libypclnt = callPackage ./libypclnt.nix {};
   limits = callPackage ./limits.nix {};
   locale = callPackage ./locale.nix {};

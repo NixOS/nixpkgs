@@ -50,7 +50,6 @@ in
     freebsd.libcasper
     freebsd.libnv
     freebsd.libcapsicum
-    freebsd.liblzma
     libcxxrt
     zlib
     pcre2.out
@@ -75,6 +74,7 @@ in
     (lib.getLib zstd)
     (lib.getLib openssl)
     (lib.getLib gettext)
+    (lib.getLib xz)
 
     # headers
     (lib.getDev curl)
