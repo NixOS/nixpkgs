@@ -20,6 +20,9 @@
 , pytestCheckHook
 , pythonOlder
 , trio
+
+# reverse dependencies
+, fastapi
 }:
 
 buildPythonPackage rec {
@@ -68,6 +71,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "starlette"
   ];
+
+  passthru.tests = {
+    inherit fastapi;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/encode/starlette/releases/tag/${version}";
