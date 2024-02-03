@@ -521,9 +521,12 @@ in
     };
 
     networking.hostId = mkOption {
-      default = null;
+      default = if config.networking.machineId != null then lib.substring 0 8 config.networking.machineId else null;
+      defaultText = literalExpression ''
+        if config.networking.machineId != null then lib.substring 0 8 config.networking.machineId else null
+      '';
       example = "4e98920d";
-      type = types.nullOr types.str;
+      type = types.nullOr (types.strMatching "[[:xdigit:]]{8}");
       description = lib.mdDoc ''
         The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
 
@@ -538,6 +541,28 @@ in
 
         The primary use case is to ensure when using ZFS that a pool isn't imported
         accidentally on a wrong machine.
+      '';
+    };
+
+    networking.machineId = mkOption {
+      default = null;
+      example = "b23d9f80c4494c00b632f2f6448aaa72";
+      type = types.nullOr (types.strMatching "[[:xdigit:]]{32}");
+      description = lib.mdDoc ''
+        The [128-bit machine ID](https://www.freedesktop.org/software/systemd/man/latest/machine-id.html)
+        of the machine, formatted as 32 hexadecimal characters.
+
+        You should try to make this ID unique among your machines.
+        The ID is generated randomly on boot, if it does not already exists.
+
+        The current machine ID can be found in `/etc/machine-id`.
+
+        The primary use case is to ensure a unique identifier for the computer, used
+        by e.g. systemd journal.
+        If `networking.machineId` is set, but `networking.hostId` is not set, the
+        hostId will be derived from the machineId specified.
+
+        You can generate a random id with `openssl rand -hex 16`.
       '';
     };
 
@@ -1378,6 +1403,10 @@ in
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
           message = "Invalid value given to the networking.hostId option.";
         }
+        {
+          assertion = cfg.machineId == null || (stringLength cfg.machineId == 32 && isHexString cfg.machineId);
+          message = "Invalid value given to the networking.machineId option.";
+        }
       ];
 
     boot.kernelModules = [ ]
@@ -1419,6 +1448,8 @@ in
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
     boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };
+    environment.etc.machine-id = mkIf (cfg.machineId != null) { text = cfg.machineId; };
+    boot.initrd.systemd.contents."/etc/machine-id" = mkIf (cfg.machineId != null) { text = cfg.machineId; };
 
     # static hostname configuration needed for hostnamectl and the
     # org.freedesktop.hostname1 dbus service (both provided by systemd)
