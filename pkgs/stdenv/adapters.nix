@@ -317,125 +317,17 @@ rec {
   # `sdkVersion` can be any of the following:
   # * A version string indicating the requested SDK version; or
   # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
-  overrideSDK = stdenv: sdkVersion:
-    let
-      inherit (
-        { inherit (stdenv.hostPlatform) darwinMinVersion darwinSdkVersion; }
-        // (if lib.isAttrs sdkVersion then sdkVersion else { darwinSdkVersion = sdkVersion; })
-      ) darwinMinVersion darwinSdkVersion;
-
-      sdk = pkgs.darwin."apple_sdk_${lib.replaceStrings [ "." ] [ "_" ] darwinSdkVersion}";
-      # TODO: Make this unconditional after #229210 has been merged,
-      # and the 10.12 SDK is updated to follow the new structure.
-      Libsystem = if darwinSdkVersion == "10.12" then pkgs.darwin.Libsystem else sdk.Libsystem;
-
-      replacePropagatedFrameworks = pkg:
-        let
-          propagatedInputs = pkg.propagatedBuildInputs;
-          mappedInputs = map mapPackageToSDK propagatedInputs;
-
-          env = {
-            inherit (pkg) outputs;
-            # Map old frameworks to new ones and the package’s outputs to their original outPaths.
-            # Also map any packages that have propagated frameworks to their proxy packages using
-            # the requested SDK version. These mappings are rendered into tab-separated files to be
-            # parsed and read back with `read`.
-            dependencies = lib.concatMapStrings (pair: "${pair.fst}\t${pair.snd}\n") (lib.zipLists propagatedInputs mappedInputs);
-            pkgOutputs = lib.concatMapStrings (output: "${output}\t${(lib.getOutput output pkg).outPath}\n") pkg.outputs;
-            passAsFile = [ "dependencies" "pkgOutputs" ];
-          };
-        in
-        # Only remap the package’s propagated inputs if there are any and if any of them were themselves remapped.
-        if lib.length propagatedInputs > 0 && propagatedInputs != mappedInputs
-          then pkgs.runCommand pkg.name env ''
-            # Iterate over the outputs in the package being replaced to make sure the proxy is
-            # a fully functional replacement. This is like `symlinkJoin` except for outputs and
-            # the contents of `nix-support`, which will be customized for the requested SDK.
-            while IFS=$'\t\n' read -r outputName pkgOutputPath; do
-              mkdir -p "''${!outputName}"
-
-              for targetPath in "$pkgOutputPath"/*; do
-                targetName=$(basename "$targetPath")
-
-                # `nix-support` is special-cased because any propagated inputs need their SDK
-                # frameworks replaced with those from the requested SDK.
-                if [ "$targetName" == "nix-support" ]; then
-                  mkdir "''${!outputName}/nix-support"
-
-                  for file in "$targetPath"/*; do
-                    fileName=$(basename "$file")
-
-                    if [ "$fileName" == "propagated-build-inputs" ]; then
-                      cp "$file" "''${!outputName}/nix-support/$fileName"
-
-                      while IFS=$'\t\n' read -r oldFramework newFramework; do
-                        substituteInPlace "''${!outputName}/nix-support/$fileName" \
-                          --replace "$oldFramework" "$newFramework"
-                      done < "$dependenciesPath"
-                    fi
-                  done
-                else
-                  ln -s "$targetPath" "''${!outputName}/$targetName"
-                fi
-              done
-            done < "$pkgOutputsPath"
-          ''
-        else pkg;
-
-      # Remap a framework from one SDK version to another.
-      mapPackageToSDK = pkg:
-        let
-          name = lib.getName pkg;
-          framework = lib.removePrefix "apple-framework-" name;
-        in
-        /**/ if pkg == null then pkg
-        else if name != framework then sdk.frameworks."${framework}"
-        else replacePropagatedFrameworks pkg;
-
-      mapRuntimeToSDK = pkg:
-        # Only remap xcbuild for now, which exports the SDK used to build it.
-        if pkg != null && lib.isAttrs pkg && lib.getName pkg == "xcodebuild"
-          then pkg.override { stdenv = overrideSDK stdenv { inherit darwinMinVersion darwinSdkVersion; }; }
-          else pkg;
-
-      mapInputsToSDK = inputs: args:
-        let
-          runsAtBuild = lib.flip lib.elem [
-            "depsBuildBuild"
-            "depsBuildBuildPropagated"
-            "nativeBuildInputs"
-            "propagatedNativeBuildInputs"
-            "depsBuildTarget"
-            "depsBuildTargetPropagated"
-          ];
-          atBuildInputs = lib.filter runsAtBuild inputs;
-          atRuntimeInputs = lib.subtractLists atBuildInputs inputs;
-        in
-        lib.genAttrs atRuntimeInputs (input: map mapPackageToSDK (args."${input}" or [ ]))
-        // lib.genAttrs atBuildInputs (input: map mapRuntimeToSDK (args."${input}" or [ ]));
-
-      mkCC = cc: cc.override {
-        bintools = cc.bintools.override { libc = Libsystem; };
-        libc = Libsystem;
-      };
-    in
-    # TODO: make this work across all input types and not just propagatedBuildInputs
-    stdenv.override (old: {
-      buildPlatform = old.buildPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-      hostPlatform = old.hostPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-      targetPlatform = old.targetPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-
-      allowedRequisites = null;
-      cc = mkCC old.cc;
-
-      extraBuildInputs = [sdk.frameworks.CoreFoundation ];
-      mkDerivationFromStdenv = extendMkDerivationArgs old (mapInputsToSDK [
-        "buildInputs"
-        "nativeBuildInputs"
-        "propagatedNativeBuildInputs"
-        "propagatedBuildInputs"
-      ]);
-    });
+  overrideSDK = import ./darwin/override-sdk.nix {
+    inherit lib extendMkDerivationArgs;
+    inherit (pkgs)
+      stdenvNoCC
+      pkgsBuildBuild
+      pkgsBuildHost
+      pkgsBuildTarget
+      pkgsHostHost
+      pkgsHostTarget
+      pkgsTargetTarget;
+  };
 
   withDefaultHardeningFlags = defaultHardeningFlags: stdenv: let
     bintools = let
