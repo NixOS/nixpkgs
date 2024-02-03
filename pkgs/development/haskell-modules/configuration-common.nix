@@ -2837,6 +2837,10 @@ self: super: {
   # Too strict bounds on base
   kewar = doJailbreak super.kewar;
 
+  # Too strict bounds on scotty
+  # https://github.com/taffybar/taffybar/pull/572
+  taffybar = doJailbreak super.taffybar;
+
   # Too strict bounds on mtl, servant and servant-client
   unleash-client-haskell = doJailbreak super.unleash-client-haskell;
 
