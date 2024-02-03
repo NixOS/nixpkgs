@@ -13846,9 +13846,7 @@ self: super: with self; {
 
   stanza = callPackage ../development/python-modules/stanza { };
 
-  starlette = callPackage ../development/python-modules/starlette {
-    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
-  };
+  starlette = callPackage ../development/python-modules/starlette { };
 
   starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 
