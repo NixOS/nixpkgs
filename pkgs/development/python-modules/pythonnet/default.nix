@@ -4,8 +4,7 @@
 , pytestCheckHook
 , pycparser
 , psutil
-, dotnet-sdk
-, buildDotnetModule
+, dotnet_6
 , clr-loader
 , setuptools
 }:
@@ -21,7 +20,7 @@ let
 
   # This buildDotnetModule is used only to get nuget sources, the actual
   # build is done in `buildPythonPackage` below.
-  dotnet-build = buildDotnetModule {
+  dotnet-build = dotnet_6.buildDotnetModule {
     inherit pname version src;
     nugetDeps = ./deps.nix;
   };
@@ -38,7 +37,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     setuptools
-    dotnet-sdk
+    dotnet_6.sdk
   ];
 
   propagatedBuildInputs = [

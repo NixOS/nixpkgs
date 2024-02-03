@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, buildDotnetModule, ffmpeg-full, dotnetCorePackages }:
+{ lib, fetchFromGitHub, ffmpeg-full, dotnet_6 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "tone";
   version = "0.1.5";
 
@@ -19,7 +19,6 @@ buildDotnetModule rec {
     "-p:PublishSingleFile=false"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   runtimeDeps = [ ffmpeg-full ];
 
   meta = with lib; {

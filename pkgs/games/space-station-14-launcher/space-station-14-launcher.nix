@@ -1,6 +1,6 @@
 { lib
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_6
+, dotnet_8
 , fetchFromGitHub
 , wrapGAppsHook
 , iconConvTools
@@ -34,7 +34,10 @@ let
   version = "0.25.1";
   pname = "space-station-14-launcher";
 in
-buildDotnetModule rec {
+let
+  dotnet = dotnet_8.withExtraSDKs [ dotnet_6.sdk ];
+
+in dotnet.buildDotnetModule rec {
   inherit pname;
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
@@ -62,10 +65,6 @@ buildDotnetModule rec {
     inherit version; # Workaround so update script works.
     updateScript = ./update.sh;
   };
-
-  # SDK 6.0 required for Robust.LoaderApi
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_8_0 sdk_6_0 ];
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetFlags = [
     "-p:FullRelease=true"

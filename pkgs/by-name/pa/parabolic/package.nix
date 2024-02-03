@@ -1,7 +1,6 @@
 { lib
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_8
 , gtk4
 , libadwaita
 , pkg-config
@@ -14,7 +13,7 @@
 , ffmpeg
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "parabolic";
   version = "2023.12.0";
 
@@ -26,8 +25,6 @@ buildDotnetModule rec {
     fetchSubmodules = true;
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
   pythonEnv = python3.withPackages(ps: with ps; [ yt-dlp ]);
 
   projectFile = "NickvisionTubeConverter.GNOME/NickvisionTubeConverter.GNOME.csproj";

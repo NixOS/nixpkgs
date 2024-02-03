@@ -3,8 +3,7 @@
 # https://nixos.org/manual/nixpkgs/unstable/index.html#packaging-a-dotnet-application
 
 { lib
-, dotnet-sdk
-, buildDotnetModule
+, dotnet_6
 , runCommand
 }:
 
@@ -13,9 +12,9 @@ let
 
   # Specify the TargetFramework via an environment variable so that we don't
   # have to update the .csproj files when updating dotnet-sdk
-  TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
+  TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet_6.sdk)}";
 
-  library = buildDotnetModule {
+  library = dotnet_6.buildDotnetModule {
     name = "project-references-test-library";
     src = ./library;
     inherit nugetDeps TargetFramework;
@@ -23,7 +22,7 @@ let
     packNupkg = true;
   };
 
-  application = buildDotnetModule {
+  application = dotnet_6.buildDotnetModule {
     name = "project-references-test-application";
     src = ./application;
     inherit nugetDeps TargetFramework;

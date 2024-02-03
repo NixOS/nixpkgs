@@ -1,6 +1,5 @@
 { lib
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_7
 , fetchFromGitHub
 , glibcLocales
 , gtk3
@@ -8,7 +7,7 @@
 , wrapGAppsHook
 }:
 
-buildDotnetModule rec {
+dotnet_7.buildDotnetModule rec {
   pname = "Pinta";
   version = "2.1.1";
 
@@ -16,9 +15,6 @@ buildDotnetModule rec {
     intltool
     wrapGAppsHook
   ];
-
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   runtimeDeps = [ gtk3 ];
   buildInputs = runtimeDeps;

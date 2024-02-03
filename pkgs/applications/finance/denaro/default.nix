@@ -1,7 +1,6 @@
 { lib
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_8
 , gtk4
 , libadwaita
 , pkg-config
@@ -12,7 +11,7 @@
 , blueprint-compiler
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "denaro";
   version = "2024.2.0";
 
@@ -22,9 +21,6 @@ buildDotnetModule rec {
     rev = version;
     hash = "sha256-fEhwup8SiYvKH2FtzruEFsj8axG5g3YJ917aqc8dn/8=";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "NickvisionMoney.GNOME/NickvisionMoney.GNOME.csproj";
   nugetDeps = ./deps.nix;

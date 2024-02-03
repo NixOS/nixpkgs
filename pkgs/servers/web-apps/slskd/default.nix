@@ -1,8 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, dotnetCorePackages
-, buildDotnetModule
+, dotnet_7
 , mono
 , nodejs_18
 }:
@@ -38,13 +37,12 @@ let
     '';
   };
 
-in buildDotnetModule {
+in dotnet_7.buildDotnetModule {
   inherit pname version src meta;
 
   runtimeDeps = [ mono ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-runtime = dotnet_7.aspnetcore;
 
   projectFile = "slskd.sln";
 

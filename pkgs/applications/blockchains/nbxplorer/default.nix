@@ -1,10 +1,9 @@
 { lib
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_8
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "nbxplorer";
   version = "2.5.0";
 
@@ -18,8 +17,7 @@ buildDotnetModule rec {
   projectFile = "NBXplorer/NBXplorer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-runtime = dotnet_8.aspnetcore;
 
   # macOS has a case-insensitive filesystem, so these two can be the same file
   postFixup = ''

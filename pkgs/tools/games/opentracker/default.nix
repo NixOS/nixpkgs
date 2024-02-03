@@ -1,11 +1,10 @@
 {
   lib,
   stdenv,
-  buildDotnetModule,
   fetchFromGitHub,
   autoPatchelfHook,
   wrapGAppsHook,
-  dotnetCorePackages,
+  dotnet_6,
   fontconfig,
   gtk3,
   libunwind,
@@ -13,7 +12,7 @@
   xinput,
   xorg,
 }:
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "opentracker";
   version = "1.8.5";
 
@@ -25,8 +24,6 @@ buildDotnetModule rec {
   };
 
   patches = [./remove-project.patch];
-
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   nugetDeps = ./deps.nix;
 

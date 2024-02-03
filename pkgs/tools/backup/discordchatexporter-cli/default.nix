@@ -1,12 +1,11 @@
 { lib
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_7
 , fetchFromGitHub
 , testers
 , discordchatexporter-cli
 }:
 
-buildDotnetModule rec {
+dotnet_7.buildDotnetModule rec {
   pname = "discordchatexporter-cli";
   version = "2.41.2";
 
@@ -19,8 +18,6 @@ buildDotnetModule rec {
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   postFixup = ''
     ln -s $out/bin/DiscordChatExporter.Cli $out/bin/discordchatexporter-cli

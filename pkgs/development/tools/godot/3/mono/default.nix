@@ -3,7 +3,7 @@
 , mkNugetDeps
 , mkNugetSource
 , mono
-, dotnet-sdk
+, dotnet_6
 , writeText
 }:
 
@@ -12,7 +12,7 @@ godot3.overrideAttrs (self: base: {
 
   godotBuildDescription = "mono build";
 
-  nativeBuildInputs = base.nativeBuildInputs ++ [ mono dotnet-sdk ];
+  nativeBuildInputs = base.nativeBuildInputs ++ [ mono dotnet_6.sdk ];
 
   glue = callPackage ./glue.nix {};
 

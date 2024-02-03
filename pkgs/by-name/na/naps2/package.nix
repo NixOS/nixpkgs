@@ -1,6 +1,6 @@
 { lib
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_8
+, dotnet_6
 , fetchFromGitHub
 , gtk3
 , gdk-pixbuf
@@ -9,7 +9,10 @@
 , libnotify
 }:
 
-buildDotnetModule rec {
+let
+  dotnet = dotnet_8.withExtraSDKs [ dotnet_6.sdk ];
+
+in dotnet.buildDotnetModule rec {
   pname = "naps2";
   version = "7.3.0";
 
@@ -25,8 +28,6 @@ buildDotnetModule rec {
 
   executables = [ "naps2" ];
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
   selfContainedBuild = true;
   runtimeDeps = [
     gtk3

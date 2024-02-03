@@ -16,7 +16,7 @@
 , glib
 , ncurses5
 
-, dotnet-sdk_6
+, dotnet_6
 , dotnetSupport ? false
 
 , alsa-lib
@@ -61,7 +61,7 @@ let
   ]
   ++ lib.optionals dotnetSupport [
     # needs to be set to run .NET Bridge
-    "--set DOTNET_ROOT ${dotnet-sdk_6}"
+    "--set DOTNET_ROOT ${dotnet_6.sdk}"
     # .NET Bridge files are runtime dependencies, but cannot be patchelf'd
     "--prefix LD_LIBRARY_PATH : ${dyalogHome}"
   ]

@@ -2,7 +2,6 @@
 , lib
 , pkgs
 , buildDotnetPackage
-, buildDotnetModule
 , fetchurl
 , fetchFromGitHub
 , fetchNuGet

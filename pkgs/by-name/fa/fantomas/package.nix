@@ -1,6 +1,6 @@
-{ buildDotnetGlobalTool, lib }:
+{ dotnet_6, lib }:
 
-buildDotnetGlobalTool {
+dotnet_6.buildDotnetGlobalTool {
   pname = "fantomas";
   version = "6.2.3";
 

@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_6
 , libX11
 , libICE
 , libSM
@@ -21,7 +20,7 @@
 , autoSignDarwinBinariesHook
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "avalonia-ilspy";
   version = "7.2-rc";
 
@@ -75,9 +74,6 @@ buildDotnetModule rec {
     mkdir -p $out/Applications/ILSpy.app/Contents/MacOS
     ln -s $out/bin/ILSpy $out/Applications/ILSpy.app/Contents/MacOS/ILSpy
   '';
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   projectFile = "ILSpy/ILSpy.csproj";
   nugetDeps = ./deps.nix;

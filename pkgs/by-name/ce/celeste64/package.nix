@@ -1,7 +1,6 @@
 {
   lib,
-  buildDotnetModule,
-  dotnetCorePackages,
+  dotnet_8,
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
@@ -19,7 +18,7 @@
   withSELinux ? false,
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "celeste64";
   version = "1.1.1";
 
@@ -30,8 +29,6 @@ buildDotnetModule rec {
     hash = "sha256-XRAjDYIqYaQYCWNNT7UuLDKDBgq3vqxtCzay7pGICtA=";
   };
   projectFile = "Celeste64.csproj";
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
   nugetDeps = ./deps.nix;
   strictDeps = true;
   executables = [ "Celeste64" ];

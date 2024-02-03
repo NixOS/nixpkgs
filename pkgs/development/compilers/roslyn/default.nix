@@ -1,12 +1,11 @@
 { lib
 , fetchFromGitHub
 , mono
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_6
 , unzip
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "roslyn";
   version = "4.2.0";
 
@@ -16,8 +15,6 @@ buildDotnetModule rec {
     rev = "v${version}";
     hash = "sha256-4iXabFp0LqJ8TXOrqeD+oTAocg6ZTIfijfX3s3fMJuI=";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   projectFile = [ "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj" ];
 

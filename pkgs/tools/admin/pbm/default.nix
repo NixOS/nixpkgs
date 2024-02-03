@@ -1,6 +1,6 @@
-{ buildDotnetGlobalTool, lib }:
+{ dotnet_6, lib }:
 
-buildDotnetGlobalTool {
+dotnet_6.buildDotnetGlobalTool {
   pname = "pbm";
   version = "1.3.2";
 

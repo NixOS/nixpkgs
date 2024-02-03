@@ -1,4 +1,4 @@
-{ lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnetCorePackages, buildDotnetModule, netcoredbg, testers }:
+{ lib, clangStdenv, stdenv, cmake, autoPatchelfHook, fetchFromGitHub, dotnet_6, dotnet_7, netcoredbg, testers }:
 let
   pname = "netcoredbg";
   build = "1018";
@@ -14,8 +14,6 @@ let
     sha256 = "sha256-n7ySUTB4XOXxeeVomySdZIYepdp0PNNGW9pU/2wwVGM=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = pname;
@@ -26,7 +24,7 @@ let
   unmanaged = clangStdenv.mkDerivation {
     inherit src pname version;
 
-    nativeBuildInputs = [ cmake dotnet-sdk ];
+    nativeBuildInputs = [ cmake dotnet_7.sdk ];
 
     hardeningDisable = [ "strictoverflow" ];
 
@@ -36,13 +34,15 @@ let
 
     cmakeFlags = [
       "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
-      "-DDOTNET_DIR=${dotnet-sdk}"
+      "-DDOTNET_DIR=${dotnet_7.sdk}"
       "-DBUILD_MANAGED=0"
     ];
   };
 
-  managed = buildDotnetModule {
-    inherit pname version src dotnet-sdk;
+  managed = dotnet_7.buildDotnetModule {
+    inherit pname version src;
+
+    dotnet-runtime = dotnet_6.runtime;
 
     projectFile = "src/managed/ManagedPart.csproj";
     nugetDeps = ./deps.nix;

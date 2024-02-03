@@ -1,8 +1,7 @@
 { lib
 , git
-, dotnetCorePackages
+, dotnet_6
 , glibcLocales
-, buildDotnetModule
 , fetchFromGitHub
 , bintools
 , stdenv
@@ -12,7 +11,7 @@ let
   mainProgram = "EventStore.ClusterNode";
 in
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "EventStore";
   version = "23.6.0";
 
@@ -27,8 +26,7 @@ buildDotnetModule rec {
   # Fixes application reporting 0.0.0.0 as its version.
   MINVERVERSIONOVERRIDE = version;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-runtime = dotnet_6.aspnetcore;
 
   nativeBuildInputs = [ git glibcLocales bintools ];
 

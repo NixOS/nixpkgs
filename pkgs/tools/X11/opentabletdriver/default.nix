@@ -1,5 +1,5 @@
 { lib
-, buildDotnetModule
+, dotnet_6
 , fetchFromGitHub
 , gtk3
 , libX11
@@ -16,7 +16,7 @@
 , coreutils
 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "OpenTabletDriver";
   version = "0.6.4.0";
 

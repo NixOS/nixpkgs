@@ -921,12 +921,22 @@ with pkgs;
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
-  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
-  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+  inherit (dotnetCorePackages)
+    dotnet_6-bin
+    dotnet_7-bin
+    dotnet_8-bin
+    dotnet_9-bin
+    dotnet_6
+    dotnet_7
+    dotnet_8
+    dotnet_9;
+
+  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { dotnet = dotnet_6; };
+  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { dotnet = dotnet_6; };
   mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
   mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
 
-  buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
+  buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { dotnet = dotnet_6; };
 
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
 
@@ -3227,7 +3237,7 @@ with pkgs;
 
   aptly = callPackage ../tools/misc/aptly { };
 
-  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
+  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { dotnet_8 = dotnet_8-bin; };
 
   archivebox = callPackage ../applications/misc/archivebox { };
 

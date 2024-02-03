@@ -1,6 +1,6 @@
-{ lib, buildDotnetModule, fetchFromGitHub, z3 }:
+{ lib, dotnet_6, fetchFromGitHub, z3 }:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "Boogie";
   version = "3.1.1";
 
@@ -54,4 +54,3 @@ buildDotnetModule rec {
     platforms = with platforms; (linux ++ darwin);
   };
 }
-

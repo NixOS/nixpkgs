@@ -1,10 +1,10 @@
 { lib
 , buildDotnetModule
-, dotnetCorePackages
+, dotnet_8
 , fetchFromGitHub
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "lubelogger";
   version = "1.2.5";
 
@@ -18,8 +18,7 @@ buildDotnetModule rec {
   projectFile = "CarCareTracker.sln";
   nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-runtime = dotnet_8.aspnetcore;
 
   makeWrapperArgs = [
     "--set DOTNET_CONTENTROOT ${placeholder "out"}/lib/lubelogger"

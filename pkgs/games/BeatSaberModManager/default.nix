@@ -1,13 +1,11 @@
 {
   lib,
-  dotnet-sdk,
   stdenv,
   substituteAll,
 
-  buildDotnetModule,
+  dotnet_7,
+  dotnet_6,
   fetchFromGitHub,
-
-  dotnetCorePackages,
 
   libX11,
   libICE,
@@ -16,8 +14,10 @@
 
   xdg-utils,
 }:
+let
+  dotnet = dotnet_7.withExtraSDKs [ dotnet_6.sdk ];
 
-buildDotnetModule rec {
+in dotnet.buildDotnetModule rec {
   pname = "BeatSaberModManager";
   version = "0.0.5";
 
@@ -28,13 +28,6 @@ buildDotnetModule rec {
     sha256 = "sha256-HHWC+MAwJ+AMCuBzSuR7FbW3k+wLri0B9J1DftyfNEU=";
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
-
-  dotnet-sdk = with dotnetCorePackages; combinePackages [
-    sdk_7_0
-    sdk_6_0
-  ];
-
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   projectFile = [ "BeatSaberModManager/BeatSaberModManager.csproj" ];
 

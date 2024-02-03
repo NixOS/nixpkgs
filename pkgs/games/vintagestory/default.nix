@@ -15,7 +15,7 @@
 , libglvnd
 , pipewire
 , libpulseaudio
-, dotnet-runtime_7
+, dotnet_7
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
-  buildInputs = [ dotnet-runtime_7 ];
+  buildInputs = [ dotnet_7.runtime ];
 
   runtimeLibs = lib.makeLibraryPath ([
     gtk2
@@ -69,10 +69,10 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
+    makeWrapper ${dotnet_7.runtime}/bin/dotnet $out/bin/vintagestory \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --add-flags $out/share/vintagestory/Vintagestory.dll
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
+    makeWrapper ${dotnet_7.runtime}/bin/dotnet $out/bin/vintagestory-server \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
   '' + ''

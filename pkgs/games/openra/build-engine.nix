@@ -1,10 +1,10 @@
-{ lib, buildDotnetModule, dotnetCorePackages
+{ lib, dotnet_6
 , fetchFromGitHub
 , SDL2, freetype, openal, lua51Packages
 }:
 engine:
 
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "openra-${engine.build}";
   inherit (engine) version;
 
@@ -16,9 +16,6 @@ buildDotnetModule rec {
   };
 
   nugetDeps = engine.deps;
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   useAppHost = false;
 
@@ -67,7 +64,7 @@ buildDotnetModule rec {
     # Create Nix wrappers to the application scripts which setup the needed environment
     for bin in $(find $out/.bin-unwrapped -type f); do
       makeWrapper "$bin" "$out/bin/$(basename "$bin")" \
-        --prefix "PATH" : "${lib.makeBinPath [ dotnet-runtime ]}"
+        --prefix "PATH" : "${lib.makeBinPath [ dotnet_6.runtime ]}"
     done
   '';
 

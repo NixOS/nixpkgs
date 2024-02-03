@@ -2,9 +2,8 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
-  buildDotnetModule,
   buildGoModule,
-  dotnetCorePackages,
+  dotnet_6,
 }:
 let
   version = "4.0.5455";
@@ -21,11 +20,11 @@ let
     vendorHash = null;
   };
 in
-buildDotnetModule rec {
+dotnet_6.buildDotnetModule rec {
   pname = "azure-functions-core-tools";
   inherit src version;
 
-  dotnet-runtime = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnet_6.sdk;
   nugetDeps = ./deps.nix;
   useDotnetFromEnv = true;
   executables = [ "func" ];

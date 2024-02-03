@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, nuget, unzip, dotnetCorePackages, writeText, roslyn }:
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, glibcLocales, mono, nuget, unzip, dotnet_6, writeText, roslyn }:
 
 let
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnet_6.sdk;
 
   xplat = fetchurl {
     url = "https://github.com/mono/msbuild/releases/download/v16.9.0/mono_msbuild_6.12.0.137.zip";

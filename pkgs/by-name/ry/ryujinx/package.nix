@@ -1,6 +1,5 @@
 { lib
-, buildDotnetModule
-, dotnetCorePackages
+, dotnet_8
 , fetchFromGitHub
 , libX11
 , libgdiplus
@@ -23,7 +22,7 @@
 , SDL2_mixer
 }:
 
-buildDotnetModule rec {
+dotnet_8.buildDotnetModule rec {
   pname = "ryujinx";
   version = "1.1.1217"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
@@ -33,9 +32,6 @@ buildDotnetModule rec {
     rev = "bc4d99a0786dbcbfde62d3bdeb98ed3d12c94852";
     sha256 = "00qvwhl18f09lgs94b66kzxyf0pbhwdkcyrsc7vjyv5dl88f5120";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nugetDeps = ./deps.nix;
 

@@ -1,8 +1,7 @@
 { lib
 , stdenv
-, buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
+, dotnet_7
 , dbus
 , fontconfig
 , libICE
@@ -11,7 +10,7 @@
 , portaudio
 }:
 
-buildDotnetModule rec {
+dotnet_7.buildDotnetModule rec {
   pname = "OpenUtau";
   version = "0.1.327";
 
@@ -21,9 +20,6 @@ buildDotnetModule rec {
     rev = "build/${version}";
     hash = "sha256-Bss32Fk4yBEFqaIxT2dfdvWXz09sO6akiitDQBXoSvY=";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   projectFile = "OpenUtau.sln";
   nugetDeps = ./deps.nix;

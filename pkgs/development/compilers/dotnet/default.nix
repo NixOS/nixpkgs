@@ -1,11 +1,15 @@
 /*
-How to combine packages for use in development:
-dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
-
 Hashes and urls are retrieved from:
 https://dotnet.microsoft.com/download/dotnet
 */
-{ lib, config, callPackage, recurseIntoAttrs }:
+{ lib
+, config
+, callPackage
+, buildDotnetModule
+, buildDotnetGlobalTool
+, nuget-to-nix
+, recurseIntoAttrs
+}:
 let
   buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) {};
   buildAttrs = {
@@ -23,23 +27,41 @@ let
     "i686-windows" = "win-x86";
   };
 
-  # Convert a "stdenv.hostPlatform.system" to a dotnet RID
-  systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
+  combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
+
+  makeDotnet = args:
+    let self =
+      lib.makeOverridable ({ sdk, runtime, aspnetcore, ...}@pkgs:
+        recurseIntoAttrs (
+          pkgs // {
+            buildDotnetModule = buildDotnetModule.override { dotnet = self; };
+            buildDotnetGlobalTool = buildDotnetGlobalTool.override { dotnet = self; };
+            nuget-to-nix = nuget-to-nix.override { dotnet = self; };
+
+            withExtraSDKs = sdks: self.override {
+              sdk = combinePackages (lib.singleton sdk ++ sdks);
+            };
+          })) args;
+    in self;
 
   pkgs = rec {
-    inherit systemToDotnetRid;
+    # Convert a "stdenv.hostPlatform.system" to a dotnet RID
+    systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
 
-    combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
+    inherit combinePackages;
 
     ## Files in versions/ are generated automatically by update.sh ##
-    dotnet_6-bin = import ./versions/6.0.nix buildAttrs;
-    dotnet_7-bin = import ./versions/7.0.nix buildAttrs;
-    dotnet_8-bin = import ./versions/8.0.nix buildAttrs;
-    dotnet_8_0_102-bin = import ./versions/8.0.102.nix buildAttrs;
-    dotnet_9-bin = import ./versions/9.0.nix buildAttrs;
+    dotnet_6-bin = makeDotnet (import ./versions/6.0.nix buildAttrs);
+    dotnet_7-bin = makeDotnet (import ./versions/7.0.nix buildAttrs);
+    dotnet_8-bin = makeDotnet (import ./versions/8.0.nix buildAttrs);
+    dotnet_8_0_102-bin = makeDotnet (import ./versions/8.0.102.nix buildAttrs);
+    dotnet_9-bin = makeDotnet (import ./versions/9.0.nix buildAttrs);
 
-    dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0_102-bin.sdk; });
-    dotnet_9 = recurseIntoAttrs (callPackage ./9 {});
+    # We don't have source-builds of 6/7
+    dotnet_6 = dotnet_6-bin;
+    dotnet_7 = dotnet_7-bin;
+    dotnet_8 = makeDotnet (callPackage ./8 { bootstrapSdk = dotnet_8_0_102-bin.sdk; });
+    dotnet_9 = makeDotnet (callPackage ./9 {});
   };
 
 in

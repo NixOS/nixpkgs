@@ -1,9 +1,8 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, buildDotnetModule
 , buildNpmPackage
-, dotnetCorePackages
+, dotnet_6
 , nixosTests
 , substituteAll
 }:
@@ -19,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-jNhiwyz6iVSLlvMNjI689TwQYuEvTJ+QaPvvDQ4UOwc=";
   };
 
-  backend = buildDotnetModule {
+  backend = dotnet_6.buildDotnetModule {
     pname = "kavita-backend";
     inherit (finalAttrs) version src;
 
@@ -35,8 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     projectFile = "API/API.csproj";
     nugetDeps = ./nuget-deps.nix;
-    dotnet-sdk = dotnetCorePackages.sdk_6_0;
-    dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+    dotnet-runtime = dotnet_6.aspnetcore;
   };
 
   frontend =  buildNpmPackage {

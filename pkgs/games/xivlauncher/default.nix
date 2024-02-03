@@ -1,11 +1,11 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
+{ lib, fetchFromGitHub, dotnet_6, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
 , copyDesktopItems, makeDesktopItem, makeWrapper
 , useSteamRun ? true }:
 
 let
   rev = "1.0.7";
 in
-  buildDotnetModule rec {
+  dotnet_6.buildDotnetModule rec {
     pname = "XIVLauncher";
     version = rev;
 
