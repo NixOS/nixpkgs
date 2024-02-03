@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/guidog/phosh-mobile-settings";
     changelog = "https://gitlab.gnome.org/guidog/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ colinsane ];
+    maintainers = with maintainers; [ rvl ];
     platforms = platforms.linux;
   };
 }
