@@ -6583,6 +6583,16 @@
     githubId = 29337229;
     name = "mtths";
   };
+  fx-chun = {
+    email = "faye@lolc.at";
+    matrix = "@faye:lolc.at";
+    github = "fx-chun";
+    githubId = 40049608;
+    name = "Faye Chun";
+    keys = [{
+      fingerprint = "ACB8 DB1F E88D A908 6332  BDB1 5A71 B010 2FD7 3FC0";
+    }];
+  };
   fxfactorial = {
     email = "edgar.factorial@gmail.com";
     github = "fxfactorial";
@@ -13726,13 +13736,6 @@
     github = "NomisIV";
     githubId = 47303199;
     name = "Simon Gutgesell";
-  };
-  noneucat = {
-    email = "andy@lolc.at";
-    matrix = "@noneucat:lolc.at";
-    github = "noneucat";
-    githubId = 40049608;
-    name = "Andy Chun";
   };
   noodlez1232 = {
     email = "contact@nathanielbarragan.xyz";
