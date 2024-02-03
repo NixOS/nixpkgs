@@ -83,13 +83,13 @@ let
   # perSystemReleases :: List Package
   allReleases = lib.pipe releaseSets
     [
-      (builtins.attrValues)
+      (lib.attrValues)
       (lists.flatten)
-      (builtins.groupBy (p: lib.versions.majorMinor p.version))
-      (builtins.mapAttrs (_: builtins.sort preferable))
-      (builtins.mapAttrs (_: lib.take 1))
-      (builtins.attrValues)
-      (builtins.concatMap lib.trivial.id)
+      (lib.groupBy (p: lib.versions.majorMinor p.version))
+      (lib.mapAttrs (_: builtins.sort preferable))
+      (lib.mapAttrs (_: lib.take 1))
+      (lib.attrValues)
+      (lib.concatMap lib.trivial.id)
     ];
 
   newest = builtins.head (builtins.sort preferable allReleases);
