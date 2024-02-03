@@ -219,6 +219,8 @@ in
       '';
     } ];
 
+    environment.etc."dhcpcd.conf".source = dhcpcdConf;
+
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")

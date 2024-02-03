@@ -12,7 +12,8 @@
 , ninja
 , pkg-config
 , python3
-, systemd
+, substituteAll
+, systemdMinimal
 , usbutils
 , vala
 , which
@@ -33,6 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Hardcode absolute paths to libraries so that consumers
     # do not need to set LD_LIBRARY_PATH themselves.
     ./hardcode-paths.patch
+
+    # Replace references to udevadm with an absolute paths, so programs using
+    # umockdev will just work without having to provide it in their test environment
+    # $PATH.
+    (substituteAll {
+      src = ./substitute-udevadm.patch;
+      udevadm = "${systemdMinimal}/bin/udevadm";
+    })
   ];
 
   nativeBuildInputs = [
@@ -49,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdMinimal
     libpcap
   ];
 
@@ -59,9 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     python3
-    which
     usbutils
+    which
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dgtk_doc=true"

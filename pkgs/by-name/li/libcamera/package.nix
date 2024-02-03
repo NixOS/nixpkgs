@@ -1,7 +1,7 @@
 { stdenv
 , fetchgit
-, fetchpatch
 , lib
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -18,28 +18,22 @@
 , python3
 , python3Packages
 , systemd # for libudev
+, withQcam ? false
+, qt5 # withQcam
+, libtiff # withQcam
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-icHZtv25QvJEv0DlELT3cDxho3Oz2BJAMNKr5W4bshk=";
+    hash = "sha256-x0Im9m9MoACJhQKorMI34YQ+/bd62NdAPc2nWwaJAvM=";
   };
 
   outputs = [ "out" "dev" "doc" ];
-
-  patches = [
-    (fetchpatch {
-      # https://git.libcamera.org/libcamera/libcamera.git/commit/?id=6cb92b523bd60bd7718df134cc5b1eff51cf42e5
-      name = "libcamera-sphinx7.0-compat.patch";
-      url = "https://git.libcamera.org/libcamera/libcamera.git/patch/?id=6cb92b523bd60bd7718df134cc5b1eff51cf42e5";
-      hash = "sha256-gs0EiT3gWlmRjDim+o2C0VmnoWqEouP5pNTD4XbNSdE=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs utils/
@@ -69,7 +63,7 @@ stdenv.mkDerivation rec {
     libyaml
 
     gtest
-  ];
+  ] ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
 
   nativeBuildInputs = [
     meson
@@ -83,22 +77,22 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ];
+  ] ++ lib.optional withQcam qt5.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"
-    "-Dqcam=disabled"
+    "-Dqcam=${if withQcam then "enabled" else "disabled"}"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     "-Dwerror=false"
-    ];
+  ];
 
   # Fixes error on a deprecated declaration
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   # libcamera signs the IPA module libraries at install time, but they are then
   # modified by stripping and RPATH fixup. Therefore, we need to generate the
