@@ -62,6 +62,7 @@ CORES = {
     "mesen": {"repo": "mesen"},
     "mesen-s": {"repo": "mesen-s"},
     "meteor": {"repo": "meteor-libretro"},
+    "mrboom": {"repo": "mrboom-libretro", "owner": "Javanaise", "fetch_submodules": True},
     "mgba": {"repo": "mgba"},
     "mupen64plus": {"repo": "mupen64plus-libretro-nx"},
     "neocd": {"repo": "neocd_libretro"},
