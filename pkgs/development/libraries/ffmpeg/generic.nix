@@ -83,6 +83,7 @@
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRist ? withFullDeps # RIST support
 , withRtmp ? false # RTMP[E] support
+, withRubberband ? withFullDeps && withGPL # Rubberband filter
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
 , withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
@@ -275,6 +276,7 @@
 , rabbitmq-c
 , rav1e
 , rtmpdump
+, rubberband
 , samba
 , SDL2
 , shaderc
@@ -549,6 +551,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withRav1e "librav1e")
     (enableFeature withRist "librist")
     (enableFeature withRtmp "librtmp")
+    (enableFeature withRubberband "librubberband")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
   ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
@@ -671,6 +674,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRist [ librist ]
   ++ optionals withRtmp [ rtmpdump ]
+  ++ optionals withRubberband [ rubberband ]
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
   ++ optionals withShaderc [ shaderc ]
