@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Simple multilingual lemmatizer for Python, especially useful for speed and efficiency";
     homepage = "https://github.com/adbar/simplemma";
     license = licenses.mit;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
   };
 }

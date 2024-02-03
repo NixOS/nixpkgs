@@ -922,7 +922,9 @@ let
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
-    lambdapi = callPackage ../development/ocaml-modules/lambdapi { };
+    lambdapi = callPackage ../development/ocaml-modules/lambdapi {
+      why3 = pkgs.why3.override { ocamlPackages = self; };
+    };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
@@ -957,7 +959,7 @@ let
     linol-lwt = callPackage ../development/ocaml-modules/linol/lwt.nix { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      libllvm = pkgs.llvmPackages_10.libllvm;
+      libllvm = pkgs.llvmPackages.libllvm;
     };
 
     lo = callPackage ../development/ocaml-modules/lo { };
@@ -1068,6 +1070,8 @@ let
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
+    middleware = callPackage ../development/ocaml-modules/middleware { };
+
     mimic = callPackage ../development/ocaml-modules/mimic { };
 
     mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
@@ -1173,6 +1177,8 @@ let
     msgpck = callPackage ../development/ocaml-modules/msgpck { };
 
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
+
+    msat = callPackage ../development/ocaml-modules/msat { };
 
     mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
     mtime =  callPackage ../development/ocaml-modules/mtime { };
@@ -1753,6 +1759,10 @@ let
 
     timed = callPackage ../development/ocaml-modules/timed { };
 
+    timedesc = callPackage ../development/ocaml-modules/timedesc { };
+    timedesc-tzdb = callPackage ../development/ocaml-modules/timedesc/tzdb.nix { };
+    timedesc-tzlocal = callPackage ../development/ocaml-modules/timedesc/tzlocal.nix { };
+
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 
     tls = callPackage ../development/ocaml-modules/tls { };
@@ -1794,6 +1804,8 @@ let
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
+
+    type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
@@ -1979,7 +1991,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_5_1;
 
-  ocamlPackages = ocamlPackages_4_14;
+  ocamlPackages = ocamlPackages_5_1;
 
   # This is a nasty way to replace toplevel janestreet attributes in the scope,
   # so that modules outside of ocamlPackages that depend on JS OCaml libraries

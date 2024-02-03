@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";
-  version = "2.69.3";
+  version = "2.70.3";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-E7cHDeQV7NVKyoCgI8P3gennpBidk7JmdnFGSIulvvQ=";
+    sha256 = "sha256-QkksliLu2TnJ1GoM91e+Qf3SlRv3T06WNU++S3qq3e0=";
   };
 
   buildInputs = [ faust2jaqt faust2lv2 ];

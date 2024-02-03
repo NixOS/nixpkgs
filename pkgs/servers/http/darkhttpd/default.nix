@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "darkhttpd";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "emikulic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J/tjT3Rfhk5++jbmLBrZu9O4GgTBqeycuz82NliCBxw=";
+    sha256 = "sha256-G1lh3nHo2iU/dkiBykl5+DSIC2c6SCqqv42Bw0Frz3A=";
   };
 
   enableParallelBuilding = true;

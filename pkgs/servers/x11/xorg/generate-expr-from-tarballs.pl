@@ -332,7 +332,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 
     my $pcProvidesStr = "";
     if (defined $pcProvides{$pkg}) {
-      $pcProvidesStr = join "", map { "\"" . $_ . "\" " } @{$pcProvides{$pkg}};
+      $pcProvidesStr = join "", map { "\"" . $_ . "\" " } (sort @{$pcProvides{$pkg}});
     }
 
     print OUT <<EOF

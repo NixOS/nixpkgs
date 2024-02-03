@@ -407,6 +407,13 @@ fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
+if [[ ${#tmpDir} -ge 60 ]]; then
+    # Very long tmp dirs lead to "too long for Unix domain socket"
+    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
+    rmdir "$tmpDir"
+    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
+fi
+
 cleanup() {
     for ctrl in "$tmpDir"/ssh-*; do
         ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
@@ -572,6 +579,7 @@ if [ "$action" = repl ]; then
                     - ${blue}config${reset}   All option values
                     - ${blue}options${reset}  Option data and metadata
                     - ${blue}pkgs${reset}     Nixpkgs package set
+                    - ${blue}lib${reset}      Nixpkgs library functions
                     - other module arguments
 
                     - ${blue}flake${reset}    Flake outputs, inputs and source info of $flake
@@ -592,6 +600,7 @@ if [ "$action" = repl ]; then
                 configuration._module.specialArgs //
                 {
                   inherit (configuration) config options;
+                  lib = configuration.lib or configuration.pkgs.lib;
                   inherit flake;
                 };
           in builtins.seq scope builtins.trace motd scope

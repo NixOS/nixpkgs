@@ -20,6 +20,8 @@
 
   obs-command-source = callPackage ./obs-command-source.nix { };
 
+  obs-composite-blur = callPackage ./obs-composite-blur.nix { };
+
   obs-freeze-filter = qt6Packages.callPackage ./obs-freeze-filter.nix { };
 
   obs-gradient-source = callPackage ./obs-gradient-source.nix { };

@@ -15,6 +15,9 @@ ffmpeg_6-full.overrideAttrs (old: rec {
     hash = "sha256-LMwGxx++z6TpZLnpeRGraid4653Mp8T4pY5EP4Z7GXY=";
   };
 
+  # Clobber upstream patches as they don't apply to the Jellyfin fork
+  patches = [];
+
   buildInputs = old.buildInputs ++ [ chromaprint ];
 
   configureFlags = old.configureFlags ++ [

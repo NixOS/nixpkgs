@@ -79,15 +79,37 @@ let
         };
       };
 
-  attrInfos = map (name: [
-    name
-    (
+  byNameAttrs = builtins.listToAttrs (map (name: {
+    inherit name;
+    value.ByName =
       if ! pkgs ? ${name} then
         { Missing = null; }
       else
-        { Existing = attrInfo name pkgs.${name}; }
-    )
-  ]) attrs;
+        { Existing = attrInfo name pkgs.${name}; };
+  }) attrs);
 
+  # Information on all attributes that exist but are not in pkgs/by-name.
+  # We need this to enforce pkgs/by-name for new packages
+  nonByNameAttrs = builtins.mapAttrs (name: value:
+    let
+      output = attrInfo name value;
+      result = builtins.tryEval (builtins.deepSeq output null);
+    in
+    {
+      NonByName =
+        if result.success then
+          { EvalSuccess = output; }
+        else
+          { EvalFailure = null; };
+    }
+  ) (builtins.removeAttrs pkgs attrs);
+
+  # All attributes
+  attributes = byNameAttrs // nonByNameAttrs;
 in
-attrInfos
+# We output them in the form [ [ <name> <value> ] ]` such that the Rust side
+# doesn't need to sort them again to get deterministic behavior (good for testing)
+map (name: [
+  name
+  attributes.${name}
+]) (builtins.attrNames attributes)

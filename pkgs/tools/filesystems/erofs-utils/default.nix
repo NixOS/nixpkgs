@@ -1,6 +1,7 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fuse, util-linux, lz4, zlib, libselinux
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fuse, util-linux, lz4, xz, zlib, libselinux
 , fuseSupport ? stdenv.isLinux
 , selinuxSupport ? false
+, lzmaSupport ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +18,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ util-linux lz4 zlib ]
     ++ lib.optionals fuseSupport [ fuse ]
-    ++ lib.optionals selinuxSupport [ libselinux ];
+    ++ lib.optionals selinuxSupport [ libselinux ]
+    ++ lib.optionals lzmaSupport [ xz ];
 
   configureFlags = [
     "MAX_BLOCK_SIZE=4096"
   ] ++ lib.optional fuseSupport "--enable-fuse"
-    ++ lib.optional selinuxSupport "--with-selinux";
+    ++ lib.optional selinuxSupport "--with-selinux"
+    ++ lib.optional lzmaSupport "--enable-lzma";
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/about/";

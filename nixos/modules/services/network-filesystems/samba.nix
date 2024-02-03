@@ -154,7 +154,7 @@ in
       };
 
       securityType = mkOption {
-        type = types.str;
+        type = types.enum [ "auto" "user" "domain" "ads" ];
         default = "user";
         description = lib.mdDoc "Samba security type";
       };

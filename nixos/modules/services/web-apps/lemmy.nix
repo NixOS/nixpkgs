@@ -204,7 +204,6 @@ in
           };
           "/" = {
             # mixed frontend and backend requests, based on the request headers
-            proxyPass = "$proxpass";
             recommendedProxySettings = true;
             extraConfig = ''
               set $proxpass "${ui}";
@@ -220,6 +219,8 @@ in
 
               # Cuts off the trailing slash on URLs to make them valid
               rewrite ^(.+)/+$ $1 permanent;
+
+              proxy_pass $proxpass;
             '';
           };
         };

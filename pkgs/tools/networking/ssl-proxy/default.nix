@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-310K9ZSxy/OQ4HYFCcHQaj4NQwzATrOZ2YkhiSkhY5I=";
 
+  patches = [
+    ./go120-compatibility.patch
+  ];
+
   checkTarget = "test";
 
   meta = with lib; {

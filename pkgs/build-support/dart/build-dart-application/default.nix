@@ -87,7 +87,7 @@ let
       dartCompileCommand dartOutputType dartRuntimeCommand dartCompileFlags
       dartJitFlags;
 
-    outputs = args.outputs or [ ] ++ [ "out" "pubcache" ];
+    outputs = [ "out" "pubcache" ] ++ args.outputs or [ ];
 
     dartEntryPoints =
       if (dartEntryPoints != null)

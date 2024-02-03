@@ -10,11 +10,9 @@
 # 3. Firefox and Thunderbird should still build on x86_64-linux.
 
 { stdenv, lib
-, buildPackages
-, targetPackages
 , newScope, callPackage
 , CoreFoundation, Security, SystemConfiguration
-, pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
+, pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost, pkgsTargetTarget
 , makeRustPlatform
 , wrapRustcWith
 , llvmPackages_17, llvm_17
@@ -58,4 +56,4 @@ import ./default.nix {
   rustcPatches = [ ];
 }
 
-(builtins.removeAttrs args [ "pkgsBuildTarget" "pkgsBuildHost" "llvmPackages_17" "llvm_17"])
+(builtins.removeAttrs args [ "llvmPackages_17" "llvm_17"])

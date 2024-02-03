@@ -17,7 +17,7 @@ let auctex = stdenv.mkDerivation ( rec {
   buildInputs = [
     emacs
     ghostscript
-    (texliveBasic.withPackages (ps: [ ps.hypdoc ]))
+    (texliveBasic.withPackages (ps: [ ps.etoolbox ps.hypdoc ]))
   ];
 
   preConfigure = ''

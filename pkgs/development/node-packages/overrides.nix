@@ -72,23 +72,6 @@ final: prev: {
     '';
   };
 
-
-  graphite-cli = prev."@withgraphite/graphite-cli".override (old: {
-    name = "graphite-cli";
-    nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
-    buildInputs = with pkgs; [ cairo pango pixman ];
-    # 'gt completion' auto-detects zshell from environment variables:
-    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
-    postInstall = ''
-      installShellCompletion --cmd gt \
-        --bash <($out/bin/gt completion) \
-        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
-    '';
-    meta = old.meta // {
-      license = lib.licenses.unfree; # no license specified
-    };
-  });
-
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -400,9 +383,10 @@ final: prev: {
       };
   };
 
-  volar = final."@volar/vue-language-server".override {
+  volar = final."@volar/vue-language-server".override ({ meta, ... }: {
     name = "volar";
-  };
+    meta = meta // { mainProgram = "vue-language-server"; };
+  });
 
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];

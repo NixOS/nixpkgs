@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gtk-engine-murrine
 , breeze-icons
@@ -8,72 +8,72 @@
 , jdupes
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "nordic";
-  version = "unstable-2023-10-17";
+  version = "2.2.0-unstable-2024-01-20";
 
   srcs = [
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "e97d2bcf4494f8ab502e33d13c74b396469a42f4";
-      hash = "sha256-7WfCE3eoJ7maAYqgQNb0mlw8u3zc6NAwTJN+PVojDcE=";
+      rev = "218a1a8679fdb97aa0aa7997fdf8c5344d68fb2f";
+      hash = "sha256-a315U4HsQP1omluTJjq9U76L3ANP7uN831mCY54vZnk=";
       name = "Nordic";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "73ed3490c13b2df6c3d27d6b3bcba0c087297f4a";
-      hash = "sha256-fRmGiqtjfGFIfr5hRBS3ZPFYEpQx391WoxphB5gRTJo=";
+      rev = "59873a54c8524adb36411d17d473eb7b7c910eac";
+      hash = "sha256-RisW5W0onNrtsSPHtFW66OdrQWOQX3uDmLiM+5ckzSY=";
       name = "Nordic-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "4b1fc2942bad203a0aa035cbb688b28005bb1011";
-      hash = "sha256-VU5Bo39l8xdR6QmbTR0Qic6XkSfDFrhyjoHaMm9SBYM=";
+      rev = "6e2b8fb8017c34344ec6b70884f09ebb44863efb";
+      hash = "sha256-B4qH8L5r16gaPS1wpiIHPyS3g/g53Xi2C6F0rcZKgWk=";
       name = "Nordic-darker";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "6d57a16eef66c25f0212b7d2f02e208f2afdf4f9";
-      hash = "sha256-Sq5ZXOh+HA+udQHL2wUw5azgKwAVVvHGNb3SiuOn0nQ=";
+      rev = "2160a7bc69f55dd0b9efa64f029344256a4ef086";
+      hash = "sha256-1WdorWByZE4sXTfwsjFxvvSI0qQcAcfFoPXN5fGhEpc=";
       name = "Nordic-darker-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "566e38c40bca86df93d0e9226c33d5d525d34454";
-      hash = "sha256-Wl/m2O0tVCFgZhPC/gcNgKr0JqQbiyQBpGEcp8g6kvY=";
+      rev = "63e0844bc04e1500e4b0ef8031cb3812e15e12fb";
+      hash = "sha256-b0Zs2WsD913Ai8wvi7mPraFme93WZXm+7rnwhDvGuZM=";
       name = "Nordic-bluish-accent";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "b43efee28129634fdefe70f2a03c401efc7dc22f";
-      hash = "sha256-rLOWkfTMFEnVU2tuw5M2fvbNMPfxIu+gzi+3gnBEhx4=";
+      rev = "53e44ca5045a57903c0024197fa7a7a267432afb";
+      hash = "sha256-vF2f4PuQP0QkmPT6kR35eWYvQ9xLCYihEsobERURuBk=";
       name = "Nordic-bluish-accent-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "2192acfce55fbb9a2982886abe25e623d0e7ff66";
-      hash = "sha256-B/sAy4I+9gX9dHXUldcN5t0vlOL2Jnoan/hRV+tNnSo=";
+      rev = "4ec6f09782394d24d4d8cc78ac53c4692ec28985";
+      hash = "sha256-Z50ciafgfTHBahjpcVTapnsU88ioPUZ1RjggNpruJP0=";
       name = "Nordic-Polar";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "a24b42411d8ea0dc63bf0778e443be251858e586";
-      hash = "sha256-02z4eMFtok1+SeW+ai7vZCXZb6ZhU4l4ch1Zc/GyhYM=";
+      rev = "c6c7ee8e642a9df07f7d69ed048a6ef37a26153c";
+      hash = "sha256-e+B9oUKbPr2MKmaz+l5GTOP4iVmw24vVpS98mAxEekA=";
       name = "Nordic-Polar-standard-buttons";
     })
   ];
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # Propagate sddm theme dependencies to user env otherwise sddm
-    # does find them. Putting them in buildInputs is not enough.
+    # does not find them. Putting them in buildInputs is not enough.
 
     mkdir -p $sddm/nix-support
 

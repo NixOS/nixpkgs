@@ -362,7 +362,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.11.0";
+    version = "3.11.1";
 
     lispLibs = (with super; [
       alexandria
@@ -470,8 +470,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.11.0";
-      hash = "sha256-Nw2r3FdqwxHlq8CrZo7Z423xe0rR5zu+U4dDPdG880M=";
+      rev = "3.11.1";
+      hash = "sha256-7qnelRTZBJ+1CbZv5Bpzd3uOjcSr/VLkcyo2yK/U/4A=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -507,7 +507,7 @@ let
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
-      rm -v $out/nyxt
+      rm -fv $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \

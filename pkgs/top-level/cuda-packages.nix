@@ -106,8 +106,8 @@ let
       shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
       fixupFn = ../development/cuda-modules/tensorrt/fixup.nix;
     })
-    (callPackage ../test/cuda/cuda-samples/extension.nix {inherit cudaVersion;})
-    (callPackage ../test/cuda/cuda-library-samples/extension.nix {})
+    (callPackage ../development/cuda-modules/cuda-samples/extension.nix {inherit cudaVersion;})
+    (callPackage ../development/cuda-modules/cuda-library-samples/extension.nix {})
   ];
 
   cudaPackages = customisation.makeScope newScope (

@@ -20,9 +20,24 @@ buildGoModule rec {
     "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
   ];
 
+  preBuild = ''
+    # set k8s version to client-go version, to match upstream
+    K8S_MODULES_VER="$(go list -f '{{.Version}}' -m k8s.io/client-go)"
+    K8S_MODULES_MAJOR_VER="$(($(cut -d. -f1 <<<"$K8S_MODULES_VER") + 1))"
+    K8S_MODULES_MINOR_VER="$(cut -d. -f2 <<<"$K8S_MODULES_VER")"
+    old_ldflags="''${ldflags}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/lint/rules.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMajor=''${K8S_MODULES_MAJOR_VER}"
+    ldflags="''${ldflags} -X helm.sh/helm/v3/pkg/chartutil.k8sVersionMinor=''${K8S_MODULES_MINOR_VER}"
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''
+    # restore ldflags for tests
+    ldflags="''${old_ldflags}"
+
     # skipping version tests because they require dot git directory
     substituteInPlace cmd/helm/version_test.go \
       --replace "TestVersion" "SkipVersion"

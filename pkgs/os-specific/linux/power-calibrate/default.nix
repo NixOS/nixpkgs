@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "power-calibrate";
-  version = "0.01.35";
+  version = "0.01.36";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-6ggxerWWBfjVgkgwLmIv/kPb04JIsJxPcVBrRQAG/ZM=";
+    hash = "sha256-7NKR82waxooB62D59kRmJPqxoVHX9OIWKwLrmzsg9OQ=";
   };
 
   installFlags = [

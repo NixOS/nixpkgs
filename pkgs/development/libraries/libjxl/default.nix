@@ -9,7 +9,7 @@
 , libjpeg
 , libpng
 , libwebp
-, openexr
+, openexr_3
 , pkg-config
 , zlib
 , buildDocs ? true
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libwebp
-    openexr
+    openexr_3
     zlib
   ];
 

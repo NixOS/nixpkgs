@@ -97,7 +97,6 @@
 , errcheck
 , go-motion
 , go-tools
-, gocode
 , gocode-gomod
 , godef
 , gogetdoc
@@ -110,6 +109,7 @@
 , iferr
 , impl
 , reftools
+, revive
 , # hurl dependencies
   hurl
 , # must be lua51Packages
@@ -282,6 +282,10 @@
 
   cmp-snippy = super.cmp-snippy.overrideAttrs {
     dependencies = with self; [ nvim-cmp nvim-snippy ];
+  };
+
+  cmp-tabby = super.cmp-tabby.overrideAttrs {
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-tabnine = super.cmp-tabnine.overrideAttrs {
@@ -666,6 +670,10 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter ];
+  };
+
   hex-nvim = super.hex-nvim.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
@@ -969,9 +977,28 @@
     dependencies = with self; [ nvim-lspconfig ];
   };
 
-  nvim-spectre = super.nvim-spectre.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
-  };
+  nvim-spectre = super.nvim-spectre.overrideAttrs (old:
+    let
+      spectre_oxi = rustPlatform.buildRustPackage {
+        pname = "spectre_oxi";
+        inherit (old) version src;
+        sourceRoot = "source/spectre_oxi";
+
+        cargoHash = "sha256-y2ZIgOApIShkIesXmItPKDO6XjFrG4GS5HCPncJUmN8=";
+
+
+        preCheck = ''
+          mkdir tests/tmp/
+        '';
+      };
+    in
+    (lib.optionalAttrs stdenv.isLinux {
+      dependencies = with self;
+        [ plenary-nvim ];
+      postInstall = ''
+        ln -s ${spectre_oxi}/lib/libspectre_oxi.* $out/lua/spectre_oxi.so
+      '';
+    }));
 
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''
@@ -1093,7 +1120,7 @@
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-U+EGS0GMWzE2yFyMH04gXpR9lR7HRMgWBecqICfTUbE=";
+        cargoHash = "sha256-BDNFZ/7nnfvtBA7T6a7MDNJsq/cOI9tgW0kxUoIcbV8=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1136,12 +1163,12 @@
 
   sniprun =
     let
-      version = "1.3.10";
+      version = "1.3.11";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "refs/tags/v${version}";
-        hash = "sha256-7tDREZ8ZXYySHrXVOh+ANT23CknJQvZJ8WtU5r0pOOQ=";
+        hash = "sha256-f/EifFvlHr41wP0FfkwSGVdXLyz739st/XtnsSbzNT4=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1151,7 +1178,7 @@
           darwin.apple_sdk.frameworks.Security
         ];
 
-        cargoHash = "sha256-n/HW+q4Xrme/ssS9Th5uFEUsDgkxRxKt2wSR8k08uHY=";
+        cargoHash = "sha256-SmhfjOnw89n/ATGvmyvd5clQSucIh7ky3v9JsSjtyfI=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -1507,13 +1534,11 @@
   vim-go =
     let
       binPath = lib.makeBinPath [
-        # TODO: package commented packages
         asmfmt
         delve
         errcheck
         go-motion
-        go-tools # contains staticcheck
-        gocode
+        go-tools # contains staticcheck, keyify
         gocode-gomod
         godef
         gogetdoc
@@ -1521,15 +1546,12 @@
         golangci-lint
         gomodifytags
         gopls
-        # gorename
         gotags
-        gotools
-        # guru
+        gotools # contains guru, gorename
         iferr
         impl
-        # keyify
         reftools
-        # revive
+        revive
       ];
     in
     super.vim-go.overrideAttrs {

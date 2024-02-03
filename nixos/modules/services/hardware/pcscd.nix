@@ -22,7 +22,7 @@ in
     plugins = mkOption {
       type = types.listOf types.package;
       defaultText = literalExpression "[ pkgs.ccid ]";
-      example = literalExpression "with pkgs; [ pcsc-cyberjack yubikey-personalization ]";
+      example = literalExpression "[ pkgs.pcsc-cyberjack ]";
       description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
     };
 
@@ -46,7 +46,7 @@ in
   config = mkIf config.services.pcscd.enable {
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ package.out ];
     systemd.packages = [ (getBin package) ];
 
     services.pcscd.plugins = [ pkgs.ccid ];
