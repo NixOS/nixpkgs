@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , azure-datalake-store
 , azure-identity
 , azure-storage-blob
@@ -8,6 +9,8 @@
 , entrypoints
 , fetchFromGitHub
 , gcsfs
+, ipykernel
+, moto
 , nbclient
 , nbformat
 , pyarrow
@@ -72,20 +75,28 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    ipykernel
+    moto
     pytest-mock
-  ];
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.azure
+    ++ passthru.optional-dependencies.s3
+    ++ passthru.optional-dependencies.gcs;
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # The test suite depends on cloud resources azure/aws
-  doCheck = false;
-
   pythonImportsCheck = [
     "papermill"
   ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # might fail due to the sandbox
+    "test_end2end_autosave_slow_notebook"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Parametrize and run Jupyter and interact with notebooks";
