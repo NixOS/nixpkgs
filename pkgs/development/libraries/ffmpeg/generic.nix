@@ -58,6 +58,7 @@
 , withJxl ? withFullDeps && lib.versionAtLeast version "6.1" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLcms2 ? withFullDeps && lib.versionAtLeast version "5.0" # ICC profile support
+, withLv2 ? withFullDeps # LV2 audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
@@ -257,6 +258,7 @@
 , libXext
 , libxml2
 , libXv
+, lilv
 , nv-codec-headers
 , nv-codec-headers-12
 , ocl-icd # OpenCL ICD
@@ -514,6 +516,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
     (enableFeature withLcms2 "lcms2")
   ] ++ [
+    (enableFeature withLv2 "lv2")
     (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
     (enableFeature withModplug "libmodplug")
@@ -637,6 +640,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLcms2 [ lcms ]
+  ++ optionals withLv2 [ lilv ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
