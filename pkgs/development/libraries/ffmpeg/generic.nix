@@ -79,6 +79,7 @@
 , withOpus ? withHeadlessDeps # Opus de/encoder
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && !stdenv.isDarwin # Pulseaudio input support
+, withRabbitmq ? withFullDeps # RabbitMQ support
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
 , withRtmp ? false # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
@@ -269,6 +270,7 @@
 , opencv2
 , openh264
 , openjpeg
+, rabbitmq-c
 , rav1e
 , rtmpdump
 , samba
@@ -541,6 +543,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withPlacebo "libplacebo")
   ] ++ [
     (enableFeature withPulse "libpulse")
+    (enableFeature withRabbitmq "librabbitmq")
     (enableFeature withRav1e "librav1e")
     (enableFeature withRtmp "librtmp")
     (enableFeature withSamba "libsmbclient")
@@ -661,6 +664,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpus [ libopus ]
   ++ optionals withPlacebo [ (if (lib.versionAtLeast finalAttrs.version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withPulse [ libpulseaudio ]
+  ++ optionals withRabbitmq [ rabbitmq-c ]
   ++ optionals withRav1e [ rav1e ]
   ++ optionals withRtmp [ rtmpdump ]
   ++ optionals withSamba [ samba ]
