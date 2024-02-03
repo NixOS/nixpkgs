@@ -7331,6 +7331,7 @@ with pkgs;
 
   curl = curlMinimal.override ({
     idnSupport = true;
+    pslSupport = true;
     zstdSupport = true;
   } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
     brotliSupport = true;
