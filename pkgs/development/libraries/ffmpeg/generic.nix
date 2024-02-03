@@ -36,6 +36,7 @@
 , withCdio ? withFullDeps && withGPL # audio CD grabbing
 , withCelt ? withFullDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
+, withCodec2 ? withFullDeps # codec2 en/decoding
 , withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
@@ -193,6 +194,7 @@
 , bzip2
 , celt
 , chromaprint
+, codec2
 , clang
 , dav1d
 , fdk_aac
@@ -476,6 +478,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withCdio "libcdio")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
+    (enableFeature withCodec2 "libcodec2")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
     (enableFeature withDav1d "libdav1d")
@@ -600,6 +603,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCdio [ libcdio libcdio-paranoia ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
+  ++ optionals withCodec2 [ codec2 ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
