@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dask-histogram";
-  version = "2023.10.0";
+  version = "2024.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-histogram";
     rev = "refs/tags/${version}";
-    hash = "sha256-ugAqNdvCROCCXURwsGLpnl/lBEAremvTI7MVa/TWt6c=";
+    hash = "sha256-YU5i7mGOZxj/pvpkZLwohoSuHJgS3zkHYVuj1Vtyrj4=";
   };
 
   nativeBuildInputs = [
