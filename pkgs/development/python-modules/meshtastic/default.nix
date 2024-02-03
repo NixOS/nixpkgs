@@ -51,6 +51,7 @@ buildPythonPackage rec {
     setuptools
     tabulate
     timeago
+    pytap2
   ];
 
   passthru.optional-dependencies = {
