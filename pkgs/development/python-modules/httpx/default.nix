@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.25.2";
+  version = "0.26.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rGtIrs4dffs7Ndtjb400q7JrZh+HG9k0uwHw9pRlC5s=";
+    hash = "sha256-qMMx1CYu2/yH4NRvZFzJOflAPIbcvMYJqU4r+chuzl0=";
   };
 
   nativeBuildInputs = [
