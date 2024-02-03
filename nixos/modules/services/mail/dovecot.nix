@@ -1,18 +1,89 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) attrValues concatMapStringsSep concatStrings
-    concatStringsSep flatten imap1 literalExpression mapAttrsToList
-    mkEnableOption mkIf mkOption mkRemovedOptionModule optional optionalAttrs
-    optionalString singleton types mkRenamedOptionModule nameValuePair
-    mapAttrs' listToAttrs filter;
-  inherit (lib.strings) match;
+  inherit (lib) attrValues concatMapStringsSep concatStrings concatStringsSep
+    flatten imap1 isBool isDerivation isInt isList isPath isString
+    literalExpression mapAttrsToList mkEnableOption mkIf mkOption
+    mkRemovedOptionModule optional optionalAttrs optionalString singleton
+    types mkRenamedOptionModule nameValuePair mapAttrs' listToAttrs filter;
+  inherit (lib.generators) toPretty;
+  inherit (lib.lists) findFirstIndex length sublist reverseList;
+  inherit (lib.strings) escape match splitString;
 
   cfg = config.services.dovecot2;
   dovecotPkg = pkgs.dovecot;
 
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
+
+  /* Helper: Format string in way that may strech over multiple
+   * lines in a Dovecot configuration file
+   *
+   * This is a little complicated since Dovecot does not like when the last
+   * line is empty, so we first have to truncate all trailing empty lines
+   * before when can join them using the continuation line syntax.
+   */
+  formatDovecotMultiline =
+    string:
+      let
+        # Split input into line list
+        lines = splitString "\n" string;
+        # Find index of last non-empty line in line list
+        lastContentIndex = length lines - (findFirstIndex (
+          line: match "[[:space:]]*" line == null  # <=> Line is not empty
+        ) (length lines) (reverseList lines));
+        # Drop empty trailing lines from line list
+        trimmedLines = sublist 0 lastContentIndex lines;
+      in
+        # Reassemble content without trailing lines but with continuation markers
+        concatStringsSep " \\\n" trimmedLines;
+
+  /* Helper: Apply string escaping and quotation to Dovecot string if needed
+   *
+   * Dovecot is sometimes touchy about strings being quoted, so this only
+   * quotes the string when it is actually needed.
+   */
+  escapeDovecotString = string:
+    let
+      escapedString = escape ["\\" "\""] string;
+    in   if match ''[[:space:]]*<.*|.*[[:space:]#"\].*|'' string != null
+    then "\"${formatDovecotMultiline escapedString}\""
+    else string;
+
+  /* Helper: Convert a Dovecot value to a string
+   *
+   * Strings are escaped except for config variable interpolation, as such
+   * this function is unsuitable for performing in-Dovecot variable
+   * substitutions, however these can also easily be done using Nix instead.
+   *
+   * Reference: https://doc.dovecot.org/settings/types/
+   */
+  mkDovecotValue =
+    value: (
+      if isString value || isPath value || isDerivation value
+      then
+        escapeDovecotString (toString value)
+      else if isInt value
+      then
+        toString value
+      else if isBool value
+      then
+        if value then "yes" else "no"
+      else if isList value
+      then
+        concatMapStringsSep " " mkDovecotValue value
+      else
+        throw "mkDovecotValue: value not supported: ${toPretty {} value}"
+    );
+
+  /* Helper: Convert a complete Dovecot settings key list to a multiline string
+   *
+   * Reference: https://doc.dovecot.org/configuration_manual/config_file/
+   */
+  toDovecotKeyValue = indent: settings:
+    concatStringsSep "\n" (mapAttrsToList (
+      name: value: "${indent}${name} = ${mkDovecotValue value}"
+    ) settings);
 
   sieveScriptSettings = mapAttrs' (to: _: nameValuePair "sieve_${to}" "${stateDir}/sieve/${to}") cfg.sieve.scripts;
   imapSieveMailboxSettings = listToAttrs (flatten (imap1 (idx: el:
@@ -167,7 +238,7 @@ let
     # the control flow.
     ''
       plugin {
-        ${concatStringsSep "\n" (mapAttrsToList (key: value: "  ${key} = ${value}") cfg.pluginSettings)}
+      ${toDovecotKeyValue "  " cfg.pluginSettings}
       }
     ''
 
@@ -399,7 +470,11 @@ in
 
     pluginSettings = mkOption {
       # types.str does not coerce from packages, like `sievePipeBinScriptDirectory`.
-      type = types.attrsOf (types.oneOf [ types.str types.package ]);
+      type =
+        let
+          singleValueType = types.oneOf [ types.bool types.int types.str types.package ];
+        in
+        types.attrsOf (types.oneOf [ singleValueType (types.listOf singleValueType) ]);
       default = {};
       example = literalExpression ''
         {
