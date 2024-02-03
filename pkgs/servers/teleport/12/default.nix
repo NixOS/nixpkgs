@@ -1,5 +1,5 @@
-{ callPackage, ... }@args:
-callPackage ../generic.nix ({
+{ ... }@args:
+import ../generic.nix (args // {
   version = "12.4.32";
   hash = "sha256-dYriqQwrc3tfLv+/G/W8n+4cLbPUq7lq1/kGH/GIsHs=";
   vendorHash = "sha256-1z1Aocxi34/6Kuwj30LWjEq+LrZThG6ZzrMb0Qtok8w=";
@@ -14,4 +14,4 @@ callPackage ../generic.nix ({
     # https://github.com/NixOS/nixpkgs/issues/120738
     ../tsh.patch
   ];
-} // builtins.removeAttrs args [ "callPackage" ])
+})
