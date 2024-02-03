@@ -29,6 +29,7 @@
 , withAom ? withFullDeps # AV1 reference encoder
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
+, withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
@@ -187,6 +188,7 @@
  *  External libraries options
  */
 , alsa-lib
+, avisynthplus
 , bzip2
 , celt
 , chromaprint
@@ -463,6 +465,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
     (enableFeature withAss "libass")
+    (enableFeature withAvisynth "avisynth")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
@@ -580,6 +583,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withAom [ libaom ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
+  ++ optionals withAvisynth [ avisynthplus ]
   ++ optionals withBluray [ libbluray ]
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
