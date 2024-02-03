@@ -1,24 +1,22 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "geo-activity-playground";
-  version = "0.18.0";
+  version = "0.24.2";
   format = "pyproject";
   src = fetchFromGitHub {
     repo = "geo-activity-playground";
     owner = "martin-ueding";
     rev = version;
-    hash = "sha256-zYs+Y+n3T3pcC0xo1fTE6/1ueePdTToxM75VkE907KU=";
+    hash = "sha256-kJmaIUjEjW+hu6W/yS19QCZm/ZNbbr5X6F2UWPru4M8=";
   };
   nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
-  pythonRelaxDeps = [
-    "Pillow"
-    "flask"
-    "pyarrow"
-  ];
+  pythonRelaxDeps = [ "pyarrow" ];
   propagatedBuildInputs = with python3.pkgs; [
+    shapely
     poetry-core
     coloredlogs
     geojson
@@ -38,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     vl-convert-python
     xmltodict
     appdirs
+    imagehash
   ];
 
   meta = {
