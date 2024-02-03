@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+  ];
+
+  buildInputs = [
     openssl
   ];
 
