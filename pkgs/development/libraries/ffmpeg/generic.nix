@@ -33,6 +33,7 @@
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
+, withCdio ? withFullDeps && withGPL # audio CD grabbing
 , withCelt ? withFullDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
@@ -213,6 +214,8 @@
 , libbluray
 , libbs2b
 , libcaca
+, libcdio
+, libcdio-paranoia
 , libdc1394
 , libdrm
 , libGL
@@ -470,6 +473,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCaca "libcaca")
+    (enableFeature withCdio "libcdio")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCuda "cuda")
@@ -593,6 +597,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
+  ++ optionals withCdio [ libcdio libcdio-paranoia ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
   ++ optionals withDav1d [ dav1d ]
