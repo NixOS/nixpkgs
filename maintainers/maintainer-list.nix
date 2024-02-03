@@ -7983,6 +7983,12 @@
     githubId = 36193715;
     name = "Lassi Haasio";
   };
+  ilikefrogs101 = {
+    email = "ilikefrogs101_dev@proton.me";
+    github = "ilikefrogs101";
+    githubId = 87593516;
+    name = "ilikefrogs101";
+  };
   ilkecan = {
     email = "ilkecan@protonmail.com";
     matrix = "@ilkecan:matrix.org";
