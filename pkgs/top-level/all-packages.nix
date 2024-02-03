@@ -19857,9 +19857,7 @@ with pkgs;
 
   reshape = callPackage ../development/tools/reshape { } ;
 
-  retdec = callPackage ../development/tools/analysis/retdec {
-    stdenv = gcc8Stdenv;
-  };
+  retdec = callPackage ../development/tools/analysis/retdec { };
   retdec-full = retdec.override {
     withPEPatterns = true;
   };
