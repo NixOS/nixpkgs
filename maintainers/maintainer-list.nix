@@ -10720,6 +10720,12 @@
     name = "Yanning Chen";
     matrix = "@self:lightquantum.me";
   };
+  Ligthiago = {
+    email = "donets.andre@gmail.com";
+    github = "Ligthiago";
+    githubId = 142721811;
+    name = "Andrey Donets";
+  };
   lihop = {
     email = "nixos@leroy.geek.nz";
     github = "lihop";
