@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , pkg-config
 , openssl
@@ -12,20 +13,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-c5PIJMqe5ljNy582LuYJK18ixrphVhYRtiF5X5CB20Y=";
+    hash = "sha256-btgX1nDBJeZjwv2pBi4OEwzFf7xpRDaq63JTrSkF+BM=";
   };
+
+  patches = [
+    (fetchpatch {  # Fixes the build: https://github.com/mitsuhiko/rye/issues/575
+      name = "bump-monotrail";
+      url = "https://github.com/mitsuhiko/rye/commit/675255c2c12176fff8988b6c3896dcd10766b681.patch";
+      hash = "sha256-kBqjTHW7oT6DY17bdReoRfV9E75QtYqBlOv4FHbbexw=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
-      "monotrail-utils-0.0.1" = "sha256-4x5jnXczXnToU0QXpFalpG5A+7jeyaEBt8vBwxbFCKQ=";
+      "monotrail-utils-0.0.1" = "sha256-h2uxWsDrU9j2C5OWbYsfGz0S1VsPzYrfksQVEkwd2ys=";
     };
   };
 

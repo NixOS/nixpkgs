@@ -47,11 +47,6 @@
 }:
 
 let
-
-  # replace with global pdal version once
-  # https://github.com/qgis/QGIS/pull/54940 is backported
-  pdal = callPackage ./pdal-2_5.nix { };
-
   py = python3.override {
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
@@ -132,7 +127,7 @@ in mkDerivation rec {
     qtserialport
     qtxmlpatterns
     qt3d
-    pdal
+    # pdal
     zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
@@ -151,9 +146,11 @@ in mkDerivation rec {
     })
   ];
 
+  # PDAL is disabled until https://github.com/qgis/QGIS/pull/54940
+  # is backported.
   cmakeFlags = [
     "-DWITH_3D=True"
-    "-DWITH_PDAL=TRUE"
+    "-DWITH_PDAL=False"  # TODO: re-enable PDAL
     "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withGrass (let
