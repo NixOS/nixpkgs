@@ -10,8 +10,8 @@
    SELFCONTAINED_LIBS="$REMOTE_DEV_SERVER_DIR/selfcontained/lib"
    if [ ! -d "$SELFCONTAINED_LIBS" ]; then
 @@ -596,3 +598,5 @@
-     "$LAUNCHER" "$STARTER_COMMAND" "$@"
-   fi
- fi
+     "$LAUNCHER" "$STARTER_COMMAND" "$PROJECT_PATH" "$@"
+     ;;
+ esac
 +
 +unset REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS
