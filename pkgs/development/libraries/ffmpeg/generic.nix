@@ -71,6 +71,7 @@
 , withOpencl ? withFullDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
 , withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
+, withOpencv ? withFullDeps # video filtering with opencv
 , withOpengl ? false # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
@@ -265,6 +266,7 @@
 , openal
 , opencl-headers  # OpenCL headers
 , opencore-amr
+, opencv2
 , openh264
 , openjpeg
 , rav1e
@@ -529,6 +531,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpencl "opencl")
     (enableFeature withOpencoreAmrnb "libopencore-amrnb")
     (enableFeature withOpencoreAmrwb "libopencore-amrwb")
+    (enableFeature withOpencv "libopencv")
     (enableFeature withOpengl "opengl")
     (enableFeature withOpenh264 "libopenh264")
     (enableFeature withOpenjpeg "libopenjpeg")
@@ -650,6 +653,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
   ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
+  ++ optionals withOpencv [ opencv2 ]
   ++ optionals withOpengl [ libGL libGLU ]
   ++ optionals withOpenh264 [ openh264 ]
   ++ optionals withOpenjpeg [ openjpeg ]
