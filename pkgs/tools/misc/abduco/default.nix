@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, writeText, conf ? null }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, writeText, conf ? null }:
 
 stdenv.mkDerivation rec {
   pname = "abduco";
@@ -16,6 +16,15 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "install-completion" ];
   CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+
+  patches = [
+    # https://github.com/martanne/abduco/pull/22
+    (fetchpatch {
+      name = "use-XDG-directory-scheme-by-default";
+      url = "https://github.com/martanne/abduco/commit/0e9a00312ac9777edcb169122144762e3611287b.patch";
+      sha256 = "sha256-4NkIflbRkUpS5XTM/fxBaELpvlZ4S5lecRa8jk0XC9g=";
+    })
+  ];
 
   meta = with lib; {
     homepage = "http://brain-dump.org/projects/abduco";
