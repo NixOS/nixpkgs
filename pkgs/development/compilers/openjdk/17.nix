@@ -11,7 +11,7 @@
 let
   version = {
     feature = "17";
-    interim = ".0.7";
+    interim = ".0.10";
     build = "7";
   };
 
@@ -26,7 +26,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "sha256-S6QOB4Tbi+K1yjvvywTfvwFI2eX8AiqIx5c3zfxcskc=";
+      sha256 = "sha256-rlhIvzvugacK23+yLikSY6xLLaoPCF1Abtz8Gy3OAa8=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
