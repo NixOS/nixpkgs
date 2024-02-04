@@ -431,6 +431,9 @@ in
 
       curl = super.curlMinimal;
 
+      # Don’t link CoreServices during the bootstrap to prevent an infinite recursion.
+      gettext = super.gettext.override { darwin.apple_sdk.frameworks.CoreServices = null; };
+
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
 
@@ -1059,6 +1062,13 @@ in
       # depend on curl indirectly.
       cpio = super.cpio.override {
         inherit (prevStage) fetchurl;
+      };
+
+      # Use CoreServices from the previous stage to avoid an infinite recursion.
+      gettext = super.gettext.override {
+        darwin.apple_sdk.frameworks = {
+          inherit (prevStage.darwin.apple_sdk.frameworks) CoreServices;
+        };
       };
 
       libyaml = super.libyaml.override {

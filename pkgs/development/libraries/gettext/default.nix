@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, xz, bash
+{ stdenv, lib, fetchurl, libiconv, xz, bash, darwin
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
+  ] ++ lib.optionals (darwin.apple_sdk.frameworks.CoreServices == null) [
     # prevent infinite recursion for the darwin stdenv
     ./0002-Revert-Avoid-crash-on-macOS-14.patch
   ];
@@ -62,6 +63,9 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
     # HACK, see #10874 (and 14664)
     libiconv
+  ]
+  ++ lib.optionals (stdenv.isDarwin && darwin.apple_sdk.frameworks.CoreServices != null) [
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   setupHooks = [
