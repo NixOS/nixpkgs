@@ -39,6 +39,32 @@ in
     '';
   };
 
+  # Test that systemd-boot works with secure boot
+  secureBoot = makeTest {
+    name = "systemd-boot-secure-boot";
+
+    nodes.machine = {
+      imports = [ common ];
+      environment.systemPackages = [ pkgs.sbctl ];
+      virtualisation.useSecureBoot = true;
+    };
+
+    testScript = ''
+      machine.start(allow_reboot=True)
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("sbctl create-keys")
+      machine.succeed("sbctl enroll-keys --yes-this-might-brick-my-machine")
+      machine.succeed('sbctl sign /boot/EFI/systemd/systemd-bootx64.efi')
+      machine.succeed('sbctl sign /boot/EFI/BOOT/BOOTX64.EFI')
+      machine.succeed('sbctl sign /boot/EFI/nixos/*bzImage.efi')
+
+      machine.reboot()
+
+      assert "Secure Boot: enabled (user)" in machine.succeed("bootctl status")
+    '';
+  };
+
   # Check that specialisations create corresponding boot entries.
   specialisation = makeTest {
     name = "systemd-boot-specialisation";

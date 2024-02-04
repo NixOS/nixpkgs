@@ -172,6 +172,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     variables = "${prefix}_VARS.fd";
     # This will test the EFI firmware for the host platform as part of the NixOS Tests setup.
     tests.basic-systemd-boot = nixosTests.systemd-boot.basic;
+    tests.secureBoot-systemd-boot = nixosTests.systemd-boot.secureBoot;
+    inherit secureBoot systemManagementModeRequired;
   };
 
   meta = {
