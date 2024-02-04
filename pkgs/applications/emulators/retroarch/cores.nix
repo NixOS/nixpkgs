@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, gcc12Stdenv
 , alsa-lib
 , boost
 , bzip2
@@ -303,15 +304,21 @@ in
     };
   };
 
-  citra = mkLibretroCore {
+  citra = mkLibretroCore rec {
     core = "citra";
     extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
     makeFlags = [
       "HAVE_FFMPEG_STATIC=0"
-      # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L90
+      # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L87-L90
+      "GIT_REV=${(getCoreSrc core).rev}"
+      "GIT_DESC=${lib.substring 0 8 (getCoreSrc core).rev}"
+      "GIT_BRANCH=master"
       "BUILD_DATE=01/01/1970_00:00"
     ];
+    # FIXME: build fail with GCC13:
+    # error: 'mic_device_name' has incomplete type
+    stdenv = gcc12Stdenv;
     meta = {
       description = "Port of Citra to libretro";
       license = lib.licenses.gpl2Plus;
