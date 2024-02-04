@@ -1,12 +1,15 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../ -i python3 -p "python3.withPackages (ps: with ps; [ nix-prefetch-github ])" -p "git"
+#!nix-shell -I nixpkgs=../../../../ -i python3 -p "python3.withPackages (ps: with ps; [ requests ])" -p git -p nix-prefetch-github
 
 import json
 import os
 import subprocess
 import sys
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
+from pathlib import Path
+
+import requests
 
 SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
@@ -115,6 +118,29 @@ def info(*msg):
     print(*msg, file=sys.stderr)
 
 
+def get_rev_date_fetchFromGitHub(repo, owner, rev):
+    # https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
+    url = f"https://api.github.com/repos/{owner}/{repo}/commits/{rev}"
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    if token := os.environ.get("GITHUB_TOKEN"):
+        headers["Authorization"] = f"Bearer {token}"
+    r = requests.get(url, headers=headers)
+
+    try:
+        j = r.json()
+    except requests.exceptions.JSONDecodeError:
+        return None
+
+    date = j.get("commit", {}).get("committer", {}).get("date")
+    if date:
+        return f"unstable-{date[:10]}"
+    else:
+        return None
+
+
 def get_repo_hash_fetchFromGitHub(
     repo,
     owner="libretro",
@@ -146,6 +172,9 @@ def get_repo_hash_fetchFromGitHub(
         text=True,
     )
     j = json.loads(result.stdout)
+    date = get_rev_date_fetchFromGitHub(repo, owner, j["rev"])
+    if date:
+        j["date"] = date
     # Remove False values
     return {k: v for k, v in j.items() if v}
 

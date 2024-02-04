@@ -44,13 +44,21 @@
 let
   hashesFile = lib.importJSON ./hashes.json;
 
+  getCore = core: (lib.getAttr core hashesFile);
+
   getCoreSrc = core:
-    fetchFromGitHub (builtins.getAttr core hashesFile);
+    (lib.pipe core [
+      getCore
+      (x: builtins.removeAttrs x [ "date" ])
+      fetchFromGitHub
+    ]);
+
+  getCoreDate = core: (getCore core).date or "unstable-1970-01-01";
 
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2023-09-24"
+    , version ? (getCoreDate core)
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
