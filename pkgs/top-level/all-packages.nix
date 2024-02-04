@@ -24335,8 +24335,6 @@ with pkgs;
     buildPythonPackage buildPythonApplication setuptools pycsdr pydigiham;
   };
 
-  optparse-bash = callPackage ../development/libraries/optparse-bash { };
-
   oras = callPackage ../development/tools/oras { };
 
   orcania = callPackage ../development/libraries/orcania { };
