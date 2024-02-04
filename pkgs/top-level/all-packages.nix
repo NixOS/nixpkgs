@@ -13341,6 +13341,8 @@ with pkgs;
 
   sockdump = callPackage ../tools/networking/sockdump { };
 
+  specup = haskellPackages.specup.bin;
+
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
   };

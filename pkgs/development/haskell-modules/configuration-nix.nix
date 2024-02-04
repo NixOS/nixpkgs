@@ -470,6 +470,7 @@ self: super: builtins.intersectAttrs super {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
   shellify = enableSeparateBinOutput super.shellify;
+  specup = enableSeparateBinOutput super.specup;
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
