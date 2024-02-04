@@ -8172,6 +8172,8 @@ self: super: with self; {
 
   name-that-hash = callPackage ../development/python-modules/name-that-hash { };
 
+  nameko = callPackage ../development/python-modules/nameko { };
+
   nampa = callPackage ../development/python-modules/nampa { };
 
   nanoid = callPackage ../development/python-modules/nanoid { };
