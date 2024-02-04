@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , pkg-config
 , openssl
@@ -13,22 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-btgX1nDBJeZjwv2pBi4OEwzFf7xpRDaq63JTrSkF+BM=";
+    hash = "sha256-H41gJNNrelPyCP1EYXIjwEc+1v2lnw9xmm0J+12lENA=";
   };
-
-  patches = [
-    (fetchpatch {  # Fixes the build: https://github.com/mitsuhiko/rye/issues/575
-      name = "bump-monotrail";
-      url = "https://github.com/mitsuhiko/rye/commit/675255c2c12176fff8988b6c3896dcd10766b681.patch";
-      hash = "sha256-kBqjTHW7oT6DY17bdReoRfV9E75QtYqBlOv4FHbbexw=";
-    })
-  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
