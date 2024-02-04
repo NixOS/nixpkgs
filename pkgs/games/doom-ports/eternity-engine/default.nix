@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "New school Doom port by James Haley";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ MP2E ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dhewm/dhewm3";
     description = "Doom 3 port to SDL";
     license = lib.licenses.gpl3;
-    maintainers = with maintainers; [ MP2E ];
+    maintainers = with maintainers; [  ];
     platforms = with platforms; linux;
   };
 }
