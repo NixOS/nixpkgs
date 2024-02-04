@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-webkitgtk";
-  version = "ddf230852c3c338e69b248bdf453a0630f1298a7";
+  version = "unstable-2023-11-10";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
