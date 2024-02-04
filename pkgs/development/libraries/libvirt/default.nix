@@ -132,6 +132,8 @@ stdenv.mkDerivation rec {
       zfs = "${zfs}/bin/zfs";
       zpool = "${zfs}/bin/zpool";
     })
+  ] ++ lib.optionalString isLinux [
+    ./0003-substitute-modules-path.patch
   ];
 
   # remove some broken tests
