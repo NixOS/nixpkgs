@@ -20,20 +20,24 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.23";
+  version = "5.12.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-8qfpNM2rci4subdodxfJZLP3OvAxXl7QRl4MHGr15nA=";
+    hash = "sha256-XNhG28VZifQrl3TZfx/OHnsAOo0eKrhGKDk+OjOYD8k=";
   };
+
+  patches = [
+    ./0001-fix-build-on-new-dtk.diff
+  ];
 
   postPatch = ''
     substituteInPlace src/source/common/pluginmanager.cpp \
-      --replace "/usr/lib/" "$out/lib/"
+      --replace-fail "/usr/lib/" "$out/lib/"
     substituteInPlace src/desktop/deepin-compressor.desktop \
-      --replace "/usr" "$out"
+      --replace-fail "/usr" "$out"
   '';
 
   nativeBuildInputs = [
@@ -59,6 +63,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DVERSION=${version}"
     "-DUSE_TEST=OFF"
+  ];
+
+  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
+  qtWrapperArgs = [
+    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
   ];
 
   strictDeps = true;
