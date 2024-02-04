@@ -997,7 +997,9 @@ in {
           serviceConfig = {
             Type = "oneshot";
             User = "nextcloud";
+            ExecCondition = "${lib.getExe phpPackage} -f ${webroot}/occ status -e";
             ExecStart = "${lib.getExe phpPackage} -f ${webroot}/cron.php";
+            KillMode = "process";
           };
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
