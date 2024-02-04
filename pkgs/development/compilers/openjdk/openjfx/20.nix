@@ -7,8 +7,8 @@
 
 let
   major = "20";
-  update = "";
-  build = "+19";
+  update = "-ga";
+  build = "";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     # note: gradle does not yet support running on 19
