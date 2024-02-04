@@ -1,5 +1,4 @@
-{ corretto19
-, fetchFromGitHub
+{ fetchFromGitHub
 , gradle_7
 , jdk19
 , lib
