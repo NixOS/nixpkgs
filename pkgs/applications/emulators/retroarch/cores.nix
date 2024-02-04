@@ -828,6 +828,9 @@ in
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF" "-DBUILD_LIBRETRO_CORE=ON" ];
     postBuild = "cd Source/ui_libretro";
+    # FIXME: workaround the following GCC 13 error:
+    # error: 'printf' was not declared in this scop
+    CXXFLAGS = "-include cstdio";
     meta = {
       description = "Port of Play! to libretro";
       license = lib.licenses.bsd2;
