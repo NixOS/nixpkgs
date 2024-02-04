@@ -7164,6 +7164,8 @@ self: super: with self; {
 
   mlrose = callPackage ../development/python-modules/mlrose { };
 
+  mlx = callPackage ../development/python-modules/mlx { };
+
   mlxtend = callPackage ../development/python-modules/mlxtend { };
 
   mlt = toPythonModule (pkgs.mlt.override {
