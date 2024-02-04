@@ -28,6 +28,7 @@
 , xfce
 , yyjson
 , zlib
+, vulkanSupport ? true
 , waylandSupport ? true
 , x11Support ? true
 }:
@@ -66,8 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     opencl-headers
     pciutils
     rpm
-    vulkan-loader
     zlib
+  ] ++ lib.optionals vulkanSupport [
+    vulkan-loader
   ] ++ lib.optionals waylandSupport [
     wayland
   ] ++ lib.optionals x11Support [
@@ -95,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
     (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
     (lib.cmakeBool "ENABLE_GLX" x11Support)
+    (lib.cmakeBool "ENABLE_VULKAN" x11Support)
     (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
     (lib.cmakeBool "ENABLE_X11" x11Support)
     (lib.cmakeBool "ENABLE_XCB" x11Support)
