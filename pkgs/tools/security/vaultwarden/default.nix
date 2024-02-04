@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dani-garcia/vaultwarden";
     changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ msteen ivan ];
+    maintainers = with maintainers; [ SuperSandro2000 ivan ];
     mainProgram = "vaultwarden";
   };
 }
