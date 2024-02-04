@@ -123,6 +123,8 @@ let
     ro_mounts=()
     symlinks=()
     etc_ignored=()
+
+    # loop through all entries of root in the fhs environment, except its /etc.
     for i in ${fhsenv}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -136,6 +138,7 @@ let
       fi
     done
 
+    # loop through the entries of /etc in the fhs environment.
     if [[ -d ${fhsenv}/etc ]]; then
       for i in ${fhsenv}/etc/*; do
         path="/''${i##*/}"
@@ -144,7 +147,11 @@ let
         if [[ $path == '/fonts' || $path == '/ssl' ]]; then
           continue
         fi
-        ro_mounts+=(--ro-bind "$i" "/etc$path")
+        if [[ -L $i ]]; then
+          symlinks+=(--symlink "$i" "/etc$path")
+        else
+          ro_mounts+=(--ro-bind "$i" "/etc$path")
+        fi
         etc_ignored+=("/etc$path")
       done
     fi
@@ -156,6 +163,7 @@ let
       ro_mounts+=(--ro-bind /etc /.host-etc)
     fi
 
+    # link selected etc entries from the actual root
     for i in ${lib.escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
