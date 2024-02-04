@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages }:
+{ lib, stdenv, fetchurl, buildPackages, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" "man" "dev" ];
   propagatedBuildOutputs = [ ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ libintl ];
 
   makeFlags = [
     "TOPDIR=$(out)"

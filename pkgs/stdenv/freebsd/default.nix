@@ -210,21 +210,21 @@ in
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
-      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;
         name = "freebsd-boot-1-cc";
         nixSupport = {
-          cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib"];# "--push-state" "--as-needed" "-lgcc_s" "--pop-state"];
+          cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib"];
         };
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils;
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
-        cc = prevStage.gcc-unwrapped;
-        isGNU = true;
+        cc = prevStage.llvmPackages.clang-unwrapped;
+        isClang = true;
         bintools = import ../../build-support/bintools-wrapper {
           inherit lib stdenvNoCC;
           name = "freebsd-boot-1-bintools";
@@ -281,7 +281,7 @@ in
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
-      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;

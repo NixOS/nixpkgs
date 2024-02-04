@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, libiconv, xz, bash
+{ stdenv, lib, fetchurl, fetchpatch, libiconv, libiconvReal, xz, bash
 , gnulib
 , enableStatic ? false
 }:
@@ -63,9 +63,11 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
     bash
   ]
-  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
+  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin && !stdenv.hostPlatform.isFreeBSD) [
     # HACK, see #10874 (and 14664)
     libiconv
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    libiconvReal
   ];
 
   setupHooks = [

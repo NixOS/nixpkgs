@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 perl ] ++ lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
+  dontAutopatchAutotools = true;
 
   enableParallelBuilding = true;
 
