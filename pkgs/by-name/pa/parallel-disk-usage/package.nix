@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "parallel-disk-usage";
@@ -22,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = [maintainers.peret];
     mainProgram = "pdu";
-    platforms = platforms.all;
-    badPlatforms = ["aarch64-linux"];
+    # broken due to unit test failure
+    # https://github.com/KSXGitHub/parallel-disk-usage/issues/251
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
