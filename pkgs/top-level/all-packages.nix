@@ -25652,8 +25652,6 @@ with pkgs;
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
-  zlib = callPackage ../development/libraries/zlib { };
-
   zlib-ng = callPackage ../development/libraries/zlib-ng { };
 
   libdynd = callPackage ../development/libraries/libdynd { };
