@@ -14,7 +14,7 @@ let
             else if system == "aarch64=linux" then "arm64"
             else throw "Unsupported system";
 
-  version = "2023.9-b103";
+  version = "2023.9-b107";
 
   desktopItem = makeDesktopItem {
     name = "YourKit Java Profiler";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://download.yourkit.com/yjp/${vPath version}/YourKit-JavaProfiler-${version}-${arch}.zip";
-    hash = "sha256-fJk39cQEU924FViCwTcISIyhiwJEviVeqxLiNQifRis=";
+    hash = "sha256-vlYmGAp8wURcNN+0Qxj+fWjLXwkAgkRnRdUMvg2TM+k=";
   };
 
   nativeBuildInputs = [ copyDesktopItems imagemagick ];
