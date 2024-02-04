@@ -148,16 +148,13 @@ in
 
       serviceConfig = {
         User    = "terraria";
+        Group = "terraria";
         Type = "forking";
         GuessMainPID = true;
+        UMask = 007;
         ExecStart = "${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
-
-      postStart = ''
-        ${pkgs.coreutils}/bin/chmod 660 ${cfg.dataDir}/terraria.sock
-        ${pkgs.coreutils}/bin/chgrp terraria ${cfg.dataDir}/terraria.sock
-      '';
     };
 
     networking.firewall = mkIf cfg.openFirewall {
