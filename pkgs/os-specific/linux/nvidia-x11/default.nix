@@ -16,6 +16,12 @@ let
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version
     then b
     else a;
+
+  # https://forums.developer.nvidia.com/t/linux-6-7-3-545-29-06-550-40-07-error-modpost-gpl-incompatible-module-nvidia-ko-uses-gpl-only-symbol-rcu-read-lock/280908/19
+  rcu_patch = fetchpatch {
+    url = "https://github.com/gentoo/gentoo/raw/c64caf53/x11-drivers/nvidia-drivers/files/nvidia-drivers-470.223.02-gpl-pfn_valid.patch";
+    hash = "sha256-eZiQQp2S/asE7MfGvfe6dA/kdCvek9SYa/FFGp24dVg=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -33,6 +39,8 @@ rec {
     openSha256 = "sha256-/Hxod/LQ4CGZN1B1GRpgE/xgoYlkPpMh+n8L7tmxwjs=";
     settingsSha256 = "sha256-QKN/gLGlT+/hAdYKlkIjZTgvubzQTt4/ki5Y+2Zj3pk=";
     persistencedSha256 = "sha256-FRMqY5uAJzq3o+YdM2Mdjj8Df6/cuUUAnh52Ne4koME=";
+
+    patches = [ rcu_patch ];
   };
 
   latest = selectHighestVersion production (generic {
@@ -43,8 +51,9 @@ rec {
     settingsSha256 = "sha256-zj173HCZJaxAbVV/A2sbJ9IPdT1+3yrwyxD+AQdkSD8=";
     persistencedSha256 = "sha256-mmMi2pfwzI1WYOffMVdD0N1HfbswTGg7o57x9/IiyVU=";
 
-    patchFlags = [ "-p1" "-d" "kernel" ];
-    patches = [];
+    patches = [ rcu_patch ];
+
+    brokenOpen = kernel.kernelAtLeast "6.7";
   });
 
   beta = selectHighestVersion latest (generic {
@@ -54,6 +63,8 @@ rec {
     openSha256 = "sha256-m7D5LZdhFCZYAIbhrgZ0pN2z19LsU3I3Q7qsKX7Z6mM=";
     settingsSha256 = "sha256-+X6gDeU8Qlvprb05aB2quM55y0zEcBXtb65e3Rq9gKg=";
     persistencedSha256 = "sha256-RQJAIwPqOUI5FB3uf0/Y4K/iwFfoLpU1/+BOK/KF5VA=";
+
+    patches = [ rcu_patch ];
   });
 
   # Vulkan developer beta driver
@@ -67,6 +78,8 @@ rec {
     settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
     persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
+
+    patches = [ rcu_patch ];
   };
 
   # data center driver compatible with current default cudaPackages
@@ -79,6 +92,10 @@ rec {
     useSettings = false;
     usePersistenced = false;
     useFabricmanager = true;
+
+    patches = [ rcu_patch ];
+
+    broken = kernel.kernelAtLeast "6.5";
   };
 
   # Update note:
@@ -93,8 +110,7 @@ rec {
     settingsSha256 = "sha256-r6DuIH/rnsCm/y51iRgPNi5/kz+EFMVABREdTjBneZ0=";
     persistencedSha256 = "sha256-e71fpPBBv8S/aoeXxBXkzKy5bsMMbv8y024cSLc8DYc=";
 
-    patchFlags = [ "-p1" "-d" "kernel" ];
-    patches = [];
+    patches = [ rcu_patch ];
   };
 
   # Last one supporting x86
