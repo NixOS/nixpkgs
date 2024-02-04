@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, openjdk20, maven, makeDesktopItem, copyDesktopItems, makeWrapper, glib, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, jdk, maven, makeDesktopItem, copyDesktopItems, makeWrapper, glib, wrapGAppsHook }:
 
 let
-  jdk = openjdk20.override (lib.optionalAttrs stdenv.isLinux {
+  jdk' = jdk.override (lib.optionalAttrs stdenv.isLinux {
     enableJavaFX = true;
   });
   maven' = maven.override {
-    inherit jdk;
+    jdk = jdk';
   };
   selectSystem = attrs:
     attrs.${stdenv.hostPlatform.system}
@@ -45,7 +45,7 @@ maven'.buildMavenPackage rec {
   '';
 
   postFixup = ''
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk'}/bin/java $out/bin/${pname} \
       --add-flags "--add-modules javafx.web,javafx.fxml,javafx.swing,javafx.media" \
       --add-flags "--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED" \
       --add-flags "-cp $out/share/java/${pname}.jar" \
