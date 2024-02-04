@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
     sha256 = "x/TQQMx2prf+Z+CO+RBpEcPIDUD8iMv8jiaEpMlG4+Y=";
   };
 
+  patches = [
+    # Make the components started via PAM module configurable
+    # https://gitlab.gnome.org/GNOME/gnome-keyring/-/merge_requests/40
+    ./pam-components-config.patch
+    ./fix-warnings.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gettext

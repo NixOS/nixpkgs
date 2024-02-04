@@ -1,7 +1,7 @@
 # This module provides configuration for the PAM (Pluggable
 # Authentication Modules) system.
 
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -94,7 +94,7 @@ let
 
   parentConfig = config;
 
-  pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
+  pamOpts = { config, options, name, ... }: let cfg = config; in let config = parentConfig; in {
 
     options = {
 
@@ -500,6 +500,18 @@ let
         '';
       };
 
+      gnomeKeyringComponents = lib.genAttrs ["ssh" "secrets" "pkcs11"] (name: mkOption ({
+        default = true;
+        type = types.bool;
+        description = lib.mdDoc ''
+          If enabled, the ${name} component will be enabled in the gnome-keyring-daemon
+          started by pam_gnome_keyring.
+        '';
+      } // (lib.optionalAttrs (name == "ssh") {
+        default = !config.programs.gnupg.agent.enableSSHSupport;
+        defaultText = lib.literalExpression "!config.programs.gnupg.agent.enableSSHSupport";
+      })));
+
       failDelay = {
         enable = mkOption {
           type = types.bool;
@@ -624,6 +636,12 @@ let
           (map (rule: nameValuePair rule.name (removeAttrs rule [ "name" ])))
           listToAttrs
         ];
+        gnomeKeyringComponents = lib.filter
+          (component: cfg.gnomeKeyringComponents.${component})
+          (lib.attrNames options.gnomeKeyringComponents);
+        gnomeKeyringComponentsArgs = lib.optionals ((lib.length gnomeKeyringComponents) > 0) [
+          ("--components=" + (lib.concatStringsSep "," gnomeKeyringComponents))
+        ];
       in {
         account = autoOrderRules [
           { name = "ldap"; enable = use_ldap; control = "sufficient"; modulePath = "${pam_ldap}/lib/security/pam_ldap.so"; }
@@ -725,7 +743,7 @@ let
               { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
                 kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
               }; }
-              { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
+              { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; args = gnomeKeyringComponentsArgs; }
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
               }; }
@@ -790,7 +808,7 @@ let
           { name = "krb5"; enable = config.security.pam.krb5.enable; control = "sufficient"; modulePath = "${pam_krb5}/lib/security/pam_krb5.so"; settings = {
             use_first_pass = true;
           }; }
-          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
+          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; args = gnomeKeyringComponentsArgs; settings = {
             use_authtok = true;
           }; }
         ];
@@ -861,7 +879,7 @@ let
           { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
             kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
           }; }
-          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
+          { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; args = gnomeKeyringComponentsArgs; settings = {
             auto_start = true;
           }; }
           { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {

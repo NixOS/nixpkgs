@@ -1,0 +1,44 @@
+From 2bdd3748867d009702285d9876954e32923d155a Mon Sep 17 00:00:00 2001
+From: avitex <theavitex@gmail.com>
+Date: Sat, 27 Jan 2024 15:13:40 +1100
+Subject: [PATCH] Fix warnings
+
+- security_context_t usage replaced with char* due to type deprecation
+- handle seteuid and setegid results when reverting effective user
+---
+ pam/gkr-pam-module.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/pam/gkr-pam-module.c b/pam/gkr-pam-module.c
+index 7a6b735e..319007ac 100644
+--- a/pam/gkr-pam-module.c
++++ b/pam/gkr-pam-module.c
+@@ -319,7 +319,7 @@ cleanup_free_password (pam_handle_t *ph, void *data, int pam_end_status)
+    with default behaviour
+ */
+ static void setup_selinux_context(const char *command) {
+-	security_context_t fcon = NULL, newcon = NULL, execcon = NULL;
++	char *fcon = NULL, *newcon = NULL, *execcon = NULL;
+ 
+ 	if (is_selinux_enabled() != 1) return;
+ 
+@@ -388,10 +388,13 @@ setup_child (int inp[2],
+ 	close (outp[WRITE_END]);
+ 	close (errp[READ_END]);
+ 	close (errp[WRITE_END]);
+-	
++
+ 	/* We may be running effective as another user, revert that */
+-	seteuid (getuid ());
+-	setegid (getgid ());
++	if (seteuid (getuid ()) < 0 || setegid (getgid ()) < 0) {
++		syslog (GKR_LOG_ERR, "gkr-pam: couldn't revert effective user: %s",
++				strerror (errno));
++		exit (EXIT_FAILURE);
++	}
+ 	
+ 	/* Setup process credentials */
+ 	if (setgid (pwd->pw_gid) < 0 || setuid (pwd->pw_uid) < 0 ||
+-- 
+GitLab
+
