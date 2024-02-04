@@ -12821,6 +12821,7 @@
   mq37 = {
     email = "me@kopecky.io";
     github = "MQ37";
+    githubId = 29043708;
     name = "Jakub Kopecky";
   };
   mrcjkb = {
