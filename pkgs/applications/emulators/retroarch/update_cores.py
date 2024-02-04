@@ -1,12 +1,11 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../ -i python3 -p "python3.withPackages (ps: with ps; [ requests ])" -p git -p nix-prefetch-github
+#!nix-shell -I nixpkgs=./ -i python3 -p "python3.withPackages (ps: with ps; [ requests ])" -p git -p nix-prefetch-github
 
 import json
 import os
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -14,6 +13,16 @@ import requests
 SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
 GET_REPO_THREADS = int(os.environ.get("GET_REPO_THREADS", 8))
+# To add a new core, add it to the dictionary below. You need to set at least
+# `repo`, that is the repository name if the owner of the repository is
+# `libretro` itself, otherwise also set `owner`.
+# You may set `deep_clone`, `fetch_submodules` or `leave_dot_git` options to
+# `True` and they're similar to `fetchgit` options. Also if for some reason you
+# need to pin a specific revision, set `rev` to a commit.
+# To generate the hash file for your new core, you can run `update_cores.py
+# <core>`. The script needs to be run from the root of your `nixpkgs` clone.
+# Do not forget to add your core to `cores.nix` file with the proper overrides
+# so the core can be build.
 CORES = {
     "2048": {"repo": "libretro-2048"},
     "atari800": {"repo": "libretro-atari800"},
@@ -136,6 +145,7 @@ def get_rev_date_fetchFromGitHub(repo, owner, rev):
 
     date = j.get("commit", {}).get("committer", {}).get("date")
     if date:
+        # Date format returned by API: 2023-01-30T06:29:13Z
         return f"unstable-{date[:10]}"
     else:
         return None

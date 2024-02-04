@@ -44,25 +44,33 @@
 let
   hashesFile = lib.importJSON ./hashes.json;
 
-  getCore = core: (lib.getAttr core hashesFile);
+  getCore = repo: (lib.getAttr repo hashesFile);
 
-  getCoreSrc = core:
-    (lib.pipe core [
+  getCoreSrc = repo:
+    (lib.pipe repo [
       getCore
       (x: builtins.removeAttrs x [ "date" ])
       fetchFromGitHub
     ]);
 
-  getCoreDate = core: (getCore core).date or "unstable-1970-01-01";
+  getCoreDate = repo: (getCore repo).date or "unstable-1970-01-01";
 
   mkLibretroCore =
+    # Sometimes core name != repo name, so you may need to set them differently
+    # when necessary:
+    # - core: used by the resulting core library name, e.g.:
+    #   `${core}_libretro.so`. Needs to match their respectful core info file
+    #   (see https://github.com/libretro/libretro-core-info/)
+    # - repo: the repository name on GitHub
+    # See `update_cores.py` for instruction on how to add a new core.
     { core
-    , src ? (getCoreSrc core)
-    , version ? (getCoreDate core)
+    , repo ? core
+    , src ? (getCoreSrc repo)
+    , version ? (getCoreDate repo)
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
-      inherit lib stdenv core src version makeWrapper retroarch zlib;
+      inherit lib stdenv core repo src version makeWrapper retroarch zlib;
     } // args);
 in
 {
@@ -80,7 +88,7 @@ in
 
   beetle-gba = mkLibretroCore {
     core = "mednafen-gba";
-    src = getCoreSrc "beetle-gba";
+    repo = "beetle-gba";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's GameBoy Advance core to libretro";
@@ -90,7 +98,7 @@ in
 
   beetle-lynx = mkLibretroCore {
     core = "mednafen-lynx";
-    src = getCoreSrc "beetle-lynx";
+    repo = "beetle-lynx";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's Lynx core to libretro";
@@ -100,7 +108,7 @@ in
 
   beetle-ngp = mkLibretroCore {
     core = "mednafen-ngp";
-    src = getCoreSrc "beetle-ngp";
+    repo = "beetle-ngp";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's NeoGeo Pocket core to libretro";
@@ -110,7 +118,7 @@ in
 
   beetle-pce = mkLibretroCore {
     core = "mednafen-pce";
-    src = getCoreSrc "beetle-pce";
+    repo = "beetle-pce";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's PC Engine core to libretro";
@@ -120,7 +128,7 @@ in
 
   beetle-pce-fast = mkLibretroCore {
     core = "mednafen-pce-fast";
-    src = getCoreSrc "beetle-pce-fast";
+    repo = "beetle-pce-fast";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's PC Engine fast core to libretro";
@@ -130,7 +138,7 @@ in
 
   beetle-pcfx = mkLibretroCore {
     core = "mednafen-pcfx";
-    src = getCoreSrc "beetle-pcfx";
+    repo = "beetle-pcfx";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's PCFX core to libretro";
@@ -140,7 +148,7 @@ in
 
   beetle-psx = mkLibretroCore {
     core = "mednafen-psx";
-    src = getCoreSrc "beetle-psx";
+    repo = "beetle-psx";
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
     meta = {
@@ -151,7 +159,7 @@ in
 
   beetle-psx-hw = mkLibretroCore {
     core = "mednafen-psx-hw";
-    src = getCoreSrc "beetle-psx";
+    repo = "beetle-psx";
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
@@ -163,7 +171,7 @@ in
 
   beetle-saturn = mkLibretroCore {
     core = "mednafen-saturn";
-    src = getCoreSrc "beetle-saturn";
+    repo = "beetle-saturn";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's Saturn core to libretro";
@@ -174,7 +182,7 @@ in
 
   beetle-supafaust = mkLibretroCore {
     core = "mednafen-supafaust";
-    src = getCoreSrc "beetle-supafaust";
+    repo = "beetle-supafaust";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's experimental snes_faust core to libretro";
@@ -184,7 +192,7 @@ in
 
   beetle-supergrafx = mkLibretroCore {
     core = "mednafen-supergrafx";
-    src = getCoreSrc "beetle-supergrafx";
+    repo = "beetle-supergrafx";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's SuperGrafx core to libretro";
@@ -194,7 +202,7 @@ in
 
   beetle-vb = mkLibretroCore {
     core = "mednafen-vb";
-    src = getCoreSrc "beetle-vb";
+    repo = "beetle-vb";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's VirtualBoy core to libretro";
@@ -204,7 +212,7 @@ in
 
   beetle-wswan = mkLibretroCore {
     core = "mednafen-wswan";
-    src = getCoreSrc "beetle-wswan";
+    repo = "beetle-wswan";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's WonderSwan core to libretro";
@@ -240,7 +248,7 @@ in
 
   bsnes-hd = mkLibretroCore {
     core = "bsnes-hd-beta";
-    src = getCoreSrc "bsnes-hd";
+    repo = "bsnes-hd";
     makefile = "GNUmakefile";
     makeFlags =
       let
@@ -264,7 +272,7 @@ in
 
   bsnes-mercury = mkLibretroCore {
     core = "bsnes-mercury-accuracy";
-    src = getCoreSrc "bsnes-mercury";
+    repo = "bsnes-mercury";
     makefile = "Makefile";
     makeFlags = [ "PROFILE=accuracy" ];
     meta = {
@@ -275,7 +283,7 @@ in
 
   bsnes-mercury-balanced = mkLibretroCore {
     core = "bsnes-mercury-balanced";
-    src = getCoreSrc "bsnes-mercury";
+    repo = "bsnes-mercury";
     makefile = "Makefile";
     makeFlags = [ "PROFILE=balanced" ];
     meta = {
@@ -286,7 +294,7 @@ in
 
   bsnes-mercury-performance = mkLibretroCore {
     core = "bsnes-mercury-performance";
-    src = getCoreSrc "bsnes-mercury";
+    repo = "bsnes-mercury";
     makefile = "Makefile";
     makeFlags = [ "PROFILE=performance" ];
     meta = {
@@ -385,7 +393,7 @@ in
 
   eightyone = mkLibretroCore {
     core = "81";
-    src = getCoreSrc "eightyone";
+    repo = "eightyone";
     meta = {
       description = "Port of EightyOne to libretro";
       license = lib.licenses.gpl3Only;
@@ -660,7 +668,7 @@ in
 
   mupen64plus = mkLibretroCore {
     core = "mupen64plus-next";
-    src = getCoreSrc "mupen64plus";
+    repo = "mupen64plus";
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
     makeFlags = [
@@ -711,11 +719,10 @@ in
 
   np2kai = mkLibretroCore rec {
     core = "np2kai";
-    src = getCoreSrc core;
     makeFlags = [
       # See https://github.com/AZO234/NP2kai/tags
       "NP2KAI_VERSION=rev.22"
-      "NP2KAI_HASH=${src.rev}"
+      "NP2KAI_HASH=${(getCoreSrc core).rev}"
     ];
     preBuild = "cd sdl";
     meta = {
@@ -921,7 +928,7 @@ in
 
   smsplus-gx = mkLibretroCore {
     core = "smsplus";
-    src = getCoreSrc "smsplus-gx";
+    repo = "smsplus-gx";
     meta = {
       description = "SMS Plus GX libretro port";
       license = lib.licenses.gpl2Plus;
@@ -961,7 +968,7 @@ in
 
   snes9x2005-plus = mkLibretroCore {
     core = "snes9x2005-plus";
-    src = getCoreSrc "snes9x2005";
+    repo = "snes9x2005";
     makefile = "Makefile";
     makeFlags = [ "USE_BLARGG_APU=1" ];
     meta = {
@@ -1063,7 +1070,7 @@ in
 
   vba-m = mkLibretroCore {
     core = "vbam";
-    src = getCoreSrc "vba-m";
+    repo = "vba-m";
     makefile = "Makefile";
     preBuild = "cd src/libretro";
     meta = {
