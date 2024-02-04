@@ -914,6 +914,9 @@ in
     core = "same_cdi";
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib libGLU libGL portaudio xorg.libX11 ];
+    # FIXME: build fail with GCC13:
+    # error: 'uint8_t' in namespace 'std' does not name a type; did you mean 'wint_t'?
+    stdenv = gcc12Stdenv;
     meta = {
       description = "SAME_CDI is a libretro core to play CD-i games";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
