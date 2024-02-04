@@ -6,21 +6,24 @@
 
 buildGoModule rec {
   pname = "tgpt";
-  version = "2.0.4";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+5hNcemVVuCX1FCL6U9SoJ/Jsef9exQXQFCdPj8qhCk=";
+    hash = "sha256-XuTDEcs1wIrAe7Oaok4aFP01jDcyWB01R3HNrx6UEpo=";
   };
 
-  vendorHash = "sha256-HXpSoihk0s218DVCHe9VCGLBggWY8I25sw2qSaiUz4I=";
+  vendorHash = "sha256-docq/r6yyMPsuUyFbtCMaYfEVL0gLmyTy4PbrAemR00=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  # test tries to access the network
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 
