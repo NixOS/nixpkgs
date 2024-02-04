@@ -107,6 +107,14 @@ let
               original = pkgs.darwin.apple_sdk.sdk or pkgs.darwin.apple_sdk.MacOSX-SDK;
               replacement = newSDK.sdk or newSDK.MacOSX-SDK;
             }
+            # Remap the SDK root. This is used by clang to set the SDK version when
+            # linking. This behavior is automatic by clang and can’t be overriden.
+            # Otherwise, without the SDK root set, the SDK version will be inferred to
+            # be the same as the deployment target, which is not usually what you want.
+            {
+              original = pkgs.darwin.apple_sdk.sdkRoot;
+              replacement = newSDK.sdkRoot;
+            }
             # Override xcodebuild because it hardcodes the SDK version.
             # TODO: Make xcodebuild defer to the SDK root set in the stdenv.
             {
