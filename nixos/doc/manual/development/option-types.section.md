@@ -323,22 +323,40 @@ If the built-in Nix value types provide enough distinction, you simplify your sy
     Example:
 
     ```nix
-    types.attrTag {
-      bounce = mkOption {
-        description = "Send back a packet explaining why it wasn't forwarded.";
-        type = submodule {
-          options.errorMessage = mkOption { … };
-        };
+    { lib, ... }:
+    let inherit (lib) type mkOption;
+    in {
+      options.toyRouter.rules = mkOption {
+        description = ''
+          Rules for a fictional packet routing service.
+        '';
+        type = types.attrsOf (
+          types.attrTag {
+            bounce = mkOption {
+              description = "Send back a packet explaining why it wasn't forwarded.";
+              type = types.submodule {
+                options.errorMessage = mkOption { … };
+              };
+            };
+            forward = mkOption {
+              description = "Forward the packet.";
+              type = types.submodule {
+                options.destination = mkOption { … };
+              };
+            };
+            ignore = types.mkOption {
+              description = "Drop the packet without sending anything back.";
+              type = types.submodule {};
+            };
+          });
       };
-      forward = mkOption {
-        description = "Forward the packet.";
-        type = submodule {
-          options.destination = mkOption { … };
+      config.toyRouter.rules = {
+        http = {
+          bounce = {
+            errorMessage = "Unencrypted HTTP is banned. You must always use https://.";
+          };
         };
-      };
-      ignore = mkOption {
-        description = "Drop the packet without sending anything back.";
-        type = submodule {};
+        ssh = { drop = {}; };
       };
     }
     ```
