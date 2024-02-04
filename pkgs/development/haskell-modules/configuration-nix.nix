@@ -1379,4 +1379,12 @@ self: super: builtins.intersectAttrs super {
     mpi-hs-cereal
     mpi-hs-binary
     ;
+
+  postgresql-libpq = overrideCabal (drv: {
+    # Using use-pkg-config flag, because pg_config won't work when cross-compiling.
+    configureFlags = drv.configureFlags or [] ++ [ "-fuse-pkg-config" ];
+    # Move postgresql from SystemDepends to PkgconfigDepends
+    libraryPkgconfigDepends = drv.librarySystemDepends;
+    librarySystemDepends = [];
+  }) super.postgresql-libpq;
 }
