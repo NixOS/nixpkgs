@@ -26,21 +26,17 @@ assert (blas.isILP64 == lapack.isILP64 &&
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.8";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-suma1iS9NdJwU/4EQl6qoFyD4bErLSkY+0yxgh3dHkw=";
+    hash = "sha256-Iaez6Rrd684vsraCkEH5a16rXfc53MyPXcYf3sOcaOY=";
   };
 
   postPatch = ''
     echo "${finalAttrs.version}" > IGRAPH_VERSION
-  ''
-  # https://github.com/igraph/igraph/issues/2340
-  + lib.optionalString stdenv.isDarwin ''
-    sed -i "/safelocale/d" tests/CMakeLists.txt
   '';
 
   outputs = [ "out" "dev" "doc" ];
