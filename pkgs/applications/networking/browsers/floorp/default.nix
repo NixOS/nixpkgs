@@ -10,6 +10,7 @@
   packageVersion = "11.9.0";
   applicationName = "Floorp";
   binaryName = "floorp";
+  branding = "browser/branding/official";
 
   # Must match the contents of `browser/config/version.txt` in the source tree
   version = "115.7.0";
@@ -25,7 +26,6 @@
   extraConfigureFlags = [
     "--with-app-name=${pname}"
     "--with-app-basename=${applicationName}"
-    "--with-branding=browser/branding/official"
     "--with-distribution-id=app.floorp.Floorp"
     "--with-unsigned-addon-scopes=app,system"
     "--allow-addon-sideload"
