@@ -9,12 +9,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
   version = "1.12.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-wsSuU+X5/2EuTPlh8brD+RAK5UpRIsGxzUI26ITREsU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
