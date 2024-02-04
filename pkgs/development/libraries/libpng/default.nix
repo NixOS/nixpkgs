@@ -5,7 +5,7 @@
 assert zlib != null;
 
 let
-  patchVersion = "1.6.40";
+  patchVersion = "1.6.40"; # applies OK to .42, no release newer than .40 so far
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
     hash = "sha256-CjykZIKTjY1sciZivtLH7gxlobViRESzztIa2NNW2y8=";
@@ -14,11 +14,11 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
-  version = "1.6.40";
+  version = "1.6.42";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-U1tHmyRn/yMaPsbZKlJZBvuO8nl4vk9m2+BdPzoBs6E=";
+    hash = "sha256-yRnbwR9MA7Bauj+IhNjret/jVyrSKK+XK7YAV720hFA=";
   };
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
 
@@ -38,7 +38,7 @@ in stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "The official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
-    changelog = "https://github.com/glennrp/libpng/blob/v1.6.40/CHANGES";
+    changelog = "https://github.com/pnggroup/libpng/blob/v${finalAttrs.version}/CHANGES";
     license = licenses.libpng2;
     pkgConfigModules = [ "libpng" "libpng16" ];
     platforms = platforms.all;
