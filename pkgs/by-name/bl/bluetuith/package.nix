@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "bluetuith";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5Jn5qkCUj2ohpZU+XqR90Su2svcLqW+hW6kmeEVfrtI=";
+    sha256 = "sha256-KeIhul6xeak2UR+MadKC2j1uHiPwdsh5bjGr1uvOL/4=";
   };
 
-  vendorHash = "sha256-pYVEFKLPfstWWO6ypgv7ntAaE1Wmq2XKuZC2ccMa8Vc=";
+  vendorHash = "sha256-XthLmfHmkTsI4l5Sz5P1qeuxamVTLX7i+Wf73n7iv1M=";
 
   CGO_ENABLED = 0;
 
