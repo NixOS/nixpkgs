@@ -641,6 +641,15 @@ in
     };
   };
 
+  mrboom = mkLibretroCore {
+    core = "mrboom";
+    makefile = "Makefile";
+    meta = {
+      description = "Port of Mr.Boom to libretro";
+      license = lib.licenses.mit;
+    };
+  };
+
   mupen64plus = mkLibretroCore {
     core = "mupen64plus-next";
     src = getCoreSrc "mupen64plus";
