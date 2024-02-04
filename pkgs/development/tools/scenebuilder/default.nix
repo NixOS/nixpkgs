@@ -51,17 +51,19 @@ maven'.buildMavenPackage rec {
       --add-flags "-cp $out/share/java/${pname}.jar" \
       --add-flags "com.oracle.javafx.scenebuilder.app.SceneBuilderApp" \
       "''${gappsWrapperArgs[@]}"
-    '';
+  '';
 
-  desktopItems = [ (makeDesktopItem {
-    name = "scenebuilder";
-    exec = "scenebuilder";
-    icon = "scenebuilder";
-    comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = "Scene Builder";
-    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
-    categories = [ "Development" ];
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "scenebuilder";
+      exec = "scenebuilder";
+      icon = "scenebuilder";
+      comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
+      desktopName = "Scene Builder";
+      mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+      categories = [ "Development" ];
+    })
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
@@ -69,7 +71,7 @@ maven'.buildMavenPackage rec {
     homepage = "https://gluonhq.com/products/scene-builder/";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.bsd3;
     maintainers = with maintainers; [ wirew0rm ];
