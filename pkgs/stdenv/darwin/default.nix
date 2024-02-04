@@ -136,9 +136,11 @@ let
         hostPlatform = localSystem;
         targetPlatform = localSystem;
 
-        inherit config extraNativeBuildInputs;
+        inherit config;
 
         extraBuildInputs = [ prevStage.darwin.CF ];
+        extraNativeBuildInputs = extraNativeBuildInputs
+          ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
 
         preHook = lib.optionalString (!isBuiltByNixpkgsCompiler bash) ''
           # Don't patch #!/interpreter because it leads to retained
@@ -197,6 +199,7 @@ in
     cpio = null;
 
     darwin = {
+      apple_sdk.sdkRoot = null;
       binutils = null;
       binutils-unwrapped = null;
       cctools = null;
@@ -437,6 +440,10 @@ in
       });
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
+
         # Use this stage’s CF to build configd. It’s required but can’t be included in the stdenv.
         configd = superDarwin.configd.overrideAttrs (old: {
           buildInputs = old.buildInputs or [ ] ++ [ self.darwin.CF ];
@@ -562,9 +569,13 @@ in
 
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
-          CF Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
+          CF sdkRoot Libsystem binutils-unwrapped cctools cctools-port configd darwin-stubs dyld
           launchd libclosure libdispatch libobjc locale objc4 postLinkSignHook
           print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -641,6 +652,10 @@ in
         inherit (prevStage.darwin)
           CF Libsystem configd darwin-stubs dyld launchd libclosure libdispatch libobjc
           locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
 
         # Avoid building unnecessary Python dependencies due to building LLVM manpages.
         cctools-llvm = superDarwin.cctools-llvm.override { enableManpages = false; };
@@ -739,6 +754,10 @@ in
         inherit (prevStage.darwin)
           CF binutils-unwrapped cctools configd darwin-stubs launchd libobjc libtapi locale
           objc4 print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -777,7 +796,7 @@ in
     '';
   })
 
-  # This stage rebuilds CF and compiler-rt.
+  # This stage rebuilds CF, compiler-rt, and the sdkRoot derivation.
   #
   # CF requires:
   # - aarch64-darwin: libobjc (due to being apple_sdk.frameworks.CoreFoundation instead of swift-corefoundation)
@@ -960,6 +979,10 @@ in
           CF Libsystem binutils binutils-unwrapped cctools cctools-llvm cctools-port configd
           darwin-stubs dyld launchd libclosure libdispatch libobjc libtapi locale objc4
           postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
       });
 
       llvmPackages = super.llvmPackages // (
@@ -1037,6 +1060,10 @@ in
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
           # CF dependencies - don’t rebuild them.
           libobjc objc4;
+
+        apple_sdk = superDarwin.apple_sdk // {
+          inherit (prevStage.darwin.apple_sdk) sdkRoot;
+        };
 
         signingUtils = superDarwin.signingUtils.override {
           inherit (selfDarwin) sigtool;
@@ -1200,7 +1227,7 @@ in
 
       extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
         prevStage.updateAutotoolsGnuConfigScriptsHook
-      ];
+      ] ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
 
       extraBuildInputs = [ prevStage.darwin.CF ];
 
@@ -1287,6 +1314,7 @@ in
         dyld
         libtapi
         locale
+        apple_sdk.sdkRoot
       ]
       ++ lib.optional useAppleSDKLibs [ objc4 ]
       ++ lib.optionals doSign [ postLinkSignHook sigtool signingUtils ]);
@@ -1301,9 +1329,13 @@ in
           libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch pbzx
           pcre python3Minimal xar xz zlib zstd;
 
-        darwin = super.darwin.overrideScope (_: _: {
+        darwin = super.darwin.overrideScope (_: superDarwin: {
           inherit (prevStage.darwin)
             CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi rewrite-tbd xnu;
+
+          apple_sdk = superDarwin.apple_sdk // {
+            inherit (prevStage.darwin.apple_sdk) sdkRoot;
+          };
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
           inherit (prevStage.darwin) binutils binutils-unwrapped cctools-llvm cctools-port;
         });
