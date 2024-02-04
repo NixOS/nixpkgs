@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs:{
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${finalAttrs.version}";
-    sha256 = "sha256-X4nx8zARToogQS4bfkv3CbsS2qU2uL9BBYw0Lw7QC18=";
+    hash = "sha256-X4nx8zARToogQS4bfkv3CbsS2qU2uL9BBYw0Lw7QC18=";
   };
 
   buildInputs = [
