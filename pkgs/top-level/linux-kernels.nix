@@ -185,6 +185,14 @@ in {
       ];
     };
 
+    linux_rt_6_6 = callPackage ../os-specific/linux/kernel/linux-rt-6.6.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.export-rt-sched-migrate
+      ];
+    };
+
     linux_6_7 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "6.7";
       kernelPatches = [
@@ -614,6 +622,7 @@ in {
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
      linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
      linux_rt_6_1 = packagesFor kernels.linux_rt_6_1;
+     linux_rt_6_6 = packagesFor kernels.linux_rt_6_6;
   };
 
   rpiPackages = {
@@ -663,7 +672,7 @@ in {
     linux_latest = packages.linux_6_7;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
-    linux_rt_latest = packages.linux_rt_6_1;
+    linux_rt_latest = packages.linux_rt_6_6;
   };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
