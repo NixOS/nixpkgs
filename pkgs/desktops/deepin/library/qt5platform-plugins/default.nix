@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , extra-cmake-modules
 , pkg-config
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qt5platform-plugins";
-  version = "5.6.16";
+  version = "5.6.22";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-1/biT8wR44+sdOMhBW/8KMUSBDK/UxuEqsyjTZyjBT4=";
+    hash = "sha256-0XQ4s6xpFHoG6SC8RE8WVnbHH7qNeOYkhrYUkDEH8Dc=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +42,6 @@ stdenv.mkDerivation rec {
     wayland
     dwayland
     qtwayland
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "use-ECM-to-help-dwayland-find-wayland.patch";
-      url = "https://github.com/linuxdeepin/qt5platform-plugins/commit/d7f6230716a0ff5ce34fc7d292ec0af5bbac30e4.patch";
-      hash = "sha256-RY2+QBR3OjUGBX4Y9oVvIRY90IH9rTOCg8dCddkB2WE=";
-    })
   ];
 
   cmakeFlags = [
