@@ -231,7 +231,7 @@ let
         override = args:
           lib.warn (
             "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
-            + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
+            + toString (lib.attrNames (lib.toFunction args { }))
           ) overridableKernel;
       };
     in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
