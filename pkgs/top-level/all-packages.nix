@@ -4940,8 +4940,6 @@ with pkgs;
 
   csview = callPackage ../tools/text/csview { };
 
-  csvkit = callPackage ../tools/text/csvkit { };
-
   csvquote = callPackage ../tools/text/csvquote { };
 
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
