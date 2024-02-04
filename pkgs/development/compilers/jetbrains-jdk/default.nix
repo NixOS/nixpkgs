@@ -2,8 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , jetbrains
-, openjdk17
-, openjdk17-bootstrap
+, openjdk21
+, openjdk21-bootstrap
 , git
 , autoconf
 , unzip
@@ -37,16 +37,16 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   cpu = stdenv.hostPlatform.parsed.cpu.name;
 in
-openjdk17.overrideAttrs (oldAttrs: rec {
+openjdk21.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "17.0.8";
-  build = "1000.8";
+  javaVersion = "21.0.2";
+  build = "375.1";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git reset --hard [revision]
   # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-17.0.7+7";
+  openjdkTag = "jbr-21.0.2+13";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
@@ -56,9 +56,9 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     hash = "sha256-PXS8wRF37D9vzeC4CvmB3szFMbt+NRqhQqtPZcbeAO8=";
   };
 
-  BOOT_JDK = openjdk17-bootstrap.home;
+  BOOT_JDK = openjdk21-bootstrap.home;
   # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-  SOURCE_DATE_EPOCH = 1691119859;
+  SOURCE_DATE_EPOCH = 1708120903;
 
   patches = [ ];
 
@@ -144,7 +144,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
       your own risk.
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
-    inherit (openjdk17.meta) license platforms mainProgram;
+    inherit (openjdk21.meta) license platforms mainProgram;
     maintainers = with maintainers; [ edwtjo ];
 
     broken = stdenv.isDarwin;
