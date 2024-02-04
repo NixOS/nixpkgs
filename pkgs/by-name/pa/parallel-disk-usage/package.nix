@@ -22,5 +22,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = [maintainers.peret];
     mainProgram = "pdu";
+    platforms = platforms.all;
+    badPlatforms = ["aarch64-linux"];
   };
 }
