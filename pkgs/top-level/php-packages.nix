@@ -343,6 +343,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
+
+    zstd = callPackage ../development/php-packages/zstd { };
   } // lib.optionalAttrs config.allowAliases {
     php-spx = throw "php-spx is deprecated, use spx instead";
   } // (
