@@ -147,6 +147,28 @@ self: super: {
   # Doctest comments have bogus imports.
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
+  # This can be removed once https://github.com/typeclasses/ascii-predicates/pull/1
+  # is merged and in a release that's being tracked.
+  ascii-predicates = appendPatch
+    (pkgs.fetchpatch
+      { url = "https://github.com/typeclasses/ascii-predicates/commit/2e6d9ed45987a8566f3a77eedf7836055c076d1a.patch";
+        name = "ascii-predicates-pull-1.patch";
+        relative = "ascii-predicates";
+        sha256 = "sha256-4JguQFZNRQpjZThLrAo13jNeypvLfqFp6o7c1bnkmZo=";
+      })
+    super.ascii-predicates;
+
+  # This can be removed once https://github.com/typeclasses/ascii-numbers/pull/1
+  # is merged and in a release that's being tracked.
+  ascii-numbers = appendPatch
+    (pkgs.fetchpatch
+      { url = "https://github.com/typeclasses/ascii-numbers/commit/e9474ad91bc997891f1a46afd5d0bdf9b9f7d768.patch";
+        name = "ascii-numbers-pull-1.patch";
+        relative = "ascii-numbers";
+        sha256 = "sha256-buw1UeW57CFefEfqdDUraSyQ+H/NvCZOv6WF2ORiYQg=";
+      })
+    super.ascii-numbers;
+
   # Fix ghc-9.6.x build errors.
   libmpd = appendPatch
     # https://github.com/vimus/libmpd-haskell/pull/138
