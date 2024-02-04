@@ -238,8 +238,7 @@ let
     (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     (enableFeature enableLibraryForGhci "library-for-ghci")
-  ] ++ optionals (enableDeadCodeElimination) [
-     "--ghc-option=-split-sections"
+    (enableFeature enableDeadCodeElimination "split-sections")
   ] ++ optionals dontStrip [
     "--disable-library-stripping"
     "--disable-executable-stripping"
