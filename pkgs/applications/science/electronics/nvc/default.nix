@@ -7,7 +7,6 @@
 , pkg-config
 , which
 , elfutils
-, libelf
 , libffi
 , llvm
 , zlib
@@ -40,8 +39,6 @@ stdenv.mkDerivation rec {
     zstd
   ] ++ lib.optionals stdenv.isLinux [
     elfutils
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    libelf
   ];
 
   preConfigure = ''
