@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchzip {
     url = "https://monkeysaudio.com/files/MAC_${
       builtins.concatStringsSep "" (lib.strings.splitString "." finalAttrs.version)}_SDK.zip";
-    sha256 = "sha256-ZVJ6Czn2PNumMoWQwhJD0tjOJp9a0GxuD8LUMC47aNw=";
+    hash = "sha256-ZVJ6Czn2PNumMoWQwhJD0tjOJp9a0GxuD8LUMC47aNw=";
     stripRoot = false;
   };
   nativeBuildInputs = [
