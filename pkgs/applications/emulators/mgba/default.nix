@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
     license = with lib.licenses; [ mpl20 ];
     mainProgram = "mgba";
-    maintainers = with lib.maintainers; [ MP2E AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
     broken = enableDiscordRpc; # Some obscure `ld` error
   };
