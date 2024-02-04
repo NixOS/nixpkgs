@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = "obs-webkitgtk";
-    rev = version;
+    rev = "ddf230852c3c338e69b248bdf453a0630f1298a7";
     hash = "sha256-DU2w9dRgqWniTE76KTAtFdxIN82VKa/CS6ZdfNcTMto=";
   };
 
