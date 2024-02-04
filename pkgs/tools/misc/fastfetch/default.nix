@@ -28,6 +28,7 @@
 , xfce
 , yyjson
 , zlib
+, x11Support ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,10 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     dconf
     ddcutil
     glib
-    libglvnd
     libpulseaudio
-    libxcb
-    libXrandr
     networkmanager
     ocl-icd
     opencl-headers
@@ -69,10 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     rpm
     vulkan-loader
     wayland
-    xfce.xfconf
     zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+  ] ++ lib.optionals x11Support [
+    libXrandr
+    libglvnd
+    libxcb
+  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin))  [
+    xfce.xfconf
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Apple80211
     AppKit
     Cocoa
@@ -88,8 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
-    "-DENABLE_SYSTEM_YYJSON=YES"
+    (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
+    (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
+    (lib.cmakeBool "ENABLE_GLX" x11Support)
+    (lib.cmakeBool "ENABLE_X11" x11Support)
+    (lib.cmakeBool "ENABLE_XCB" x11Support)
+    (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
+    (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.isDarwin)))
+    (lib.cmakeBool "ENABLE_XRANDR" x11Support)
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
