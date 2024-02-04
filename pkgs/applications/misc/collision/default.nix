@@ -13,13 +13,13 @@
 }:
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.6.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
     rev = "v${version}";
-    hash = "sha256-Qxe4ILDdfYfxu95EvKRTvkAOgDIZDiLymBlZouBWn0M=";
+    hash = "sha256-PCC2Ne2kniz4mixfDLwoPwnztZTByCvKUlcZQ61JumI=";
   };
   patches = [ ./make.patch ];
   shardsFile = ./shards.nix;
