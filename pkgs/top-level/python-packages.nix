@@ -2191,6 +2191,8 @@ self: super: with self; {
 
   clldutils = callPackage ../development/python-modules/clldutils { };
 
+  cloud-tpu-client = callPackage ../development/python-modules/cloud-tpu-client { };
+
   cloudflare = callPackage ../development/python-modules/cloudflare { };
 
   cloudpathlib = callPackage ../development/python-modules/cloudpathlib { };
@@ -14580,6 +14582,8 @@ self: super: with self; {
   };
 
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
+
+  torch-xla = callPackage ../development/python-modules/torch-xla/default.nix { };
 
   torchaudio = callPackage ../development/python-modules/torchaudio { };
 

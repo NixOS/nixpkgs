@@ -1,0 +1,14 @@
+--- source.old/setup.py	2024-01-03 11:00:57.826446431 +0000
++++ source/setup.py	2024-01-03 11:02:20.323459506 +0000
+@@ -234,9 +234,8 @@
+   """A command that runs Bazel to build a C/C++ extension."""
+ 
+   def run(self):
+-    for ext in self.extensions:
+-      self.bazel_build(ext)
+-    command.build_ext.build_ext.run(self)
++    # Patched out by Nix build (we do the Bazel build in a separate derivation)
++    pass
+ 
+   def bazel_build(self, ext):
+     if not os.path.exists(self.build_temp):
