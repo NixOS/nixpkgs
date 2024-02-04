@@ -307,6 +307,13 @@
         "rev": "314bf7b676f5b820f396209eb0c7d6fbe8103486",
         "hash": "sha256-Rk+glDgSa1J1IIe5NrJElX9zr59+LQynfDXuHWyZcEM="
     },
+    "mrboom": {
+        "owner": "Javanaise",
+        "repo": "mrboom-libretro",
+        "rev": "c4ec620424fe79f0d6db719d73628f23ae285ada",
+        "hash": "sha256-twocTyayV79a4757Yfoz/P3wnQPgiwsbrBbLmT4EZKQ=",
+        "fetchSubmodules": true
+    },
     "mupen64plus": {
         "owner": "libretro",
         "repo": "mupen64plus-libretro-nx",
