@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -20,6 +21,8 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "ChatGPT in terminal without needing API keys";
