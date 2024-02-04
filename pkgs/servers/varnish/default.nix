@@ -53,8 +53,8 @@ in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.11";
-    hash = "sha256-UVkA2+tH/9MOs5BlyuAzFnmD7Pm9A6lDWic2B+HRKNs=";
+    version = "6.0.12";
+    hash = "sha256-OHzr06uzQ3MGWsDibm8r2iFAxBCotSA+EV9aZysr1qU=";
   };
   # EOL 2024-09-15
   varnish74 = common {
