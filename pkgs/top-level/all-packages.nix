@@ -40731,7 +40731,6 @@ with pkgs;
     };
     mysql = mysql;
     pcre = pcre-cpp;
-    jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
 
   owmods-cli = callPackage ../applications/misc/owmods-cli {
