@@ -610,6 +610,8 @@ in
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
     # Build failures when this is set to a bigger number
     NIX_BUILD_CORES = 8;
+    # Fix build errors in GCC13
+    NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
     meta = {
       description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
