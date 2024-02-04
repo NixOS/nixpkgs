@@ -12,6 +12,7 @@
 , flac
 , freetype
 , gamemode
+, gitUpdater
 , libdrm
 , libGL
 , libGLU
@@ -122,7 +123,12 @@ stdenv.mkDerivation rec {
     rm $out/share/man/man6/retroarch-cg2glsl.6*
   '';
 
-  passthru.tests = nixosTests.retroarch;
+  passthru = {
+    tests = nixosTests.retroarch;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://libretro.com";
