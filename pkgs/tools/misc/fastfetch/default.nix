@@ -9,23 +9,30 @@
 , ddcutil
 , glib
 , imagemagick_light
+, libXrandr
 , libglvnd
 , libpulseaudio
+, libselinux
+, libsepol
 , libxcb
-, libXrandr
 , makeBinaryWrapper
 , networkmanager
 , nix-update-script
 , ocl-icd
 , opencl-headers
 , pciutils
+, pcre
+, pcre2
 , pkg-config
+, python3
 , rpm
 , sqlite
 , testers
+, util-linux
 , vulkan-loader
 , wayland
 , xfce
+, xorg
 , yyjson
 , zlib
 , rpmSupport ? false
@@ -49,24 +56,29 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeBinaryWrapper
     pkg-config
+    python3
   ];
 
   buildInputs = [
     chafa
     imagemagick_light
+    pcre
+    pcre2
     sqlite
     yyjson
-  ]
-  ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     dbus
     dconf
     ddcutil
     glib
     libpulseaudio
+    libselinux
+    libsepol
     networkmanager
     ocl-icd
     opencl-headers
     pciutils
+    util-linux
     zlib
   ] ++ lib.optionals rpmSupport [
     rpm
@@ -78,6 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libglvnd
     libxcb
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.libXext
   ] ++ lib.optionals (x11Support && (!stdenv.isDarwin))  [
     xfce.xfconf
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
@@ -97,6 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
+    (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
+    (lib.cmakeBool "ENABLE_DRM" false)
+    (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
+    (lib.cmakeBool "ENABLE_OSMESA" false)
     (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
     (lib.cmakeBool "ENABLE_GLX" x11Support)
     (lib.cmakeBool "ENABLE_RPM" rpmSupport)
