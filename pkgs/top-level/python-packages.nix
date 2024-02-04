@@ -8178,6 +8178,8 @@ self: super: with self; {
 
   name-that-hash = callPackage ../development/python-modules/name-that-hash { };
 
+  nameko = callPackage ../development/python-modules/nameko { };
+
   nampa = callPackage ../development/python-modules/nampa { };
 
   nanoid = callPackage ../development/python-modules/nanoid { };
@@ -16318,9 +16320,7 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
-  xformers = callPackage ../development/python-modules/xformers {
-    openai-triton = self.openai-triton-cuda;
-  };
+  xformers = callPackage ../development/python-modules/xformers { };
 
   xgboost = callPackage ../development/python-modules/xgboost {
     inherit (pkgs) xgboost;
