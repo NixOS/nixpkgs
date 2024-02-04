@@ -266,24 +266,19 @@ rec {
 
     NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
    */
-  mergeUniqueOption = args@{ message, merge ? null }:
-    let
-      notUnique = loc: defs:
+  mergeUniqueOption = args@{
+      message,
+      # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
+      #   - type checked beyond what .check does (which should be very litte; only on the value head; not attribute values, etc)
+      #   - if you want attribute values to be checked, or list items
+      #   - if you want coercedTo-like behavior to work
+      merge ? loc: defs: (head defs).value }:
+    loc: defs:
+      if length defs == 1
+      then merge loc defs
+      else
         assert length defs > 1;
         throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
-    in
-    if merge == null
-    # The inner conditional could be factored out, but this way we take advantage of partial application.
-    then
-      loc: defs:
-        if length defs == 1
-        then (head defs).value
-        else notUnique loc defs
-    else
-      loc: defs:
-        if length defs == 1
-        then merge loc defs
-        else notUnique loc defs;
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
