@@ -18,17 +18,21 @@
 , zstd
 , jemalloc
 , follyMobile ? false
+
+# for passthru.tests
+, python3
+, watchman
 }:
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2023.02.27.00";
+  version = "2024.01.22.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-DfZiVxncpKSPn9BN25d8o0/tC27+HhSG/t53WgzAT/s=";
+    sha256 = "sha256-+z1wuEOgr7CMHFnOn5gLm9mtVH7mVURLstOoDqzxKbk=";
   };
 
   nativeBuildInputs = [
@@ -80,11 +84,16 @@ stdenv.mkDerivation rec {
       --replace '$'{_IMPORT_PREFIX}/lib/ $out/lib/
   '';
 
-  # folly-config.cmake, will `find_package` these, thus there should be
-  # a way to ensure abi compatibility.
   passthru = {
+    # folly-config.cmake, will `find_package` these, thus there should be
+    # a way to ensure abi compatibility.
     inherit boost;
     fmt = fmt_8;
+
+    tests = {
+      inherit watchman;
+      inherit (python3.pkgs) django pywatchman;
+    };
   };
 
   meta = with lib; {

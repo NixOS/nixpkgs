@@ -1,23 +1,24 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, boost
 , cmake
-, fmt_8
+, fizz
 , folly
+, gflags
 , glog
-, gtest
+, libsodium
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  pname = "edencommon";
+  pname = "mvfst";
   version = "2024.01.22.00";
 
   src = fetchFromGitHub {
-    owner = "facebookexperimental";
-    repo = "edencommon";
+    owner = "facebook";
+    repo = "mvfst";
     rev = "v${version}";
-    sha256 = "sha256-KY0vXptzOEJLDjHvGd3T5oiCCvggND2bPBzvll+YBo4=";
+    sha256 = "sha256-vhLwxA91v+vt5PQejhPOaj9YSkulg86hTD9GkpQKB24=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,18 +28,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glog
+    fizz
     folly
-    fmt_8
-    boost
-    gtest
+    folly.boost
+    folly.fmt
+    gflags
+    glog
+    libsodium
+    zlib
   ];
 
   meta = with lib; {
-    description = "A shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
-    homepage = "https://github.com/facebookexperimental/edencommon";
+    description = "An implementation of the QUIC transport protocol";
+    homepage = "https://github.com/facebook/mvfst";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ kylesferrazza ];
+    maintainers = with maintainers; [ ris ];
   };
 }
