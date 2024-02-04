@@ -15,6 +15,7 @@ let
     isList
     isString
     isStorePath
+    throwIf
     toDerivation
     toList
     ;
@@ -627,7 +628,13 @@ rec {
           mapAttrs
             (n: opt:
               builtins.addErrorContext "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix args.tags n}" (
-                assert opt._type == "option";
+                throwIf (opt._type or null != "option")
+                  "In attrTag/attrTagWith, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
+                    if opt?_type then
+                      if opt._type == "option-type"
+                      then "was a bare type, not wrapped in mkOption."
+                      else "was of type ${lib.strings.escapeNixString opt._type}."
+                    else "was not."}"
                 opt // {
                   declarations = opt.declarations or (
                     let pos = builtins.unsafeGetAttrPos n args.tags;
