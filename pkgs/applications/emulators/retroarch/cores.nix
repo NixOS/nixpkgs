@@ -594,7 +594,8 @@ in
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
-    enableParallelBuilding = false;
+    # Build failures when this is set to a bigger number
+    NIX_BUILD_CORES = 8;
     meta = {
       description = "Port of MAME ~2015 to libretro, compatible with MAME 0.160 sets";
       # MAME license, non-commercial clause
