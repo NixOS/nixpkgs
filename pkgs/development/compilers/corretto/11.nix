@@ -10,16 +10,16 @@
 }:
 
 let
-  corretto = import ./mk-corretto.nix {
+  corretto = import ./mk-corretto.nix rec {
     inherit lib stdenv rsync runCommand testers;
     jdk = jdk11;
     gradle = gradle_7;
-    version = "11.0.20.9.1";
+    version = "11.0.22.7.1";
     src = fetchFromGitHub {
       owner = "corretto";
       repo = "corretto-11";
-      rev = "b880bdc8397ec3dd6b7cd4b837ce846c9e902783";
-      sha256 = "sha256-IomJHQn0ZgqsBZ5BrRqVrEOhTq7wjLiIKMQlz53JxsU=";
+      rev = version;
+      sha256 = "sha256-GG2Fq30Gex47iicfC2qvckfRvYt3lvSqCXP3XDwEO34=";
     };
   };
 in
