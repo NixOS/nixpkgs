@@ -27980,8 +27980,6 @@ with pkgs;
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
 
-  tgpt = callPackage ../tools/misc/tgpt { };
-
   tgt = callPackage ../tools/networking/tgt { };
 
   lkl = callPackage ../applications/virtualization/lkl { };
