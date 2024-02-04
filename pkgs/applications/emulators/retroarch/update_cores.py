@@ -85,8 +85,9 @@ CORES = {
     "opera": {"repo": "opera-libretro"},
     "parallel-n64": {"repo": "parallel-n64"},
     # libretro/lrps2 is a hard-fork of pcsx2 with simplified code to target
-    # only libretro, while libretro/pcsx2 is supposedly closer to upstream.
-    # TODO: switch to libretro/pcsx2 since this is more up-to-date
+    # only libretro, while libretro/pcsx2 is supposedly closer to upstream but
+    # it is a WIP.
+    # TODO: switch to libretro/pcsx2 when upstream switches to it.
     "pcsx2": {"repo": "lrps2"},
     "pcsx_rearmed": {"repo": "pcsx_rearmed"},
     "picodrive": {"repo": "picodrive", "fetch_submodules": True},

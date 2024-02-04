@@ -790,18 +790,18 @@ in
       xxd
     ];
     makefile = "Makefile";
-    cmakeFlags = [
-      "-DLIBRETRO=ON"
-    ];
+    cmakeFlags = [ "-DLIBRETRO=ON" ];
+    # remove ccache
     postPatch = ''
-      # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
-
+    postBuild = "cd pcsx2";
     # causes redefinition of _FORTIFY_SOURCE
     hardeningDisable = [ "fortify3" ];
-
-    postBuild = "cd pcsx2";
+    # FIXME: multiple build errors with GCC13.
+    # Unlikely to be fixed until we switch to libretro/pcsx2 that is a more
+    # up-to-date port (but still WIP).
+    stdenv = gcc12Stdenv;
     meta = {
       description = "Port of PCSX2 to libretro";
       license = lib.licenses.gpl3Plus;
