@@ -105,6 +105,8 @@ let
     # conflicting LLVM modules.
     objc4 = stdenv.objc4 or (callPackage ./libobjc.nix { });
 
+    sdkRoot = pkgs.callPackage ../apple-sdk/sdkRoot.nix { sdkVersion = "11.0"; };
+
     # questionable aliases
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
