@@ -1,7 +1,6 @@
 { callPackages, lib, ... }@args:
 let
   f = args: rec {
-    teleport_12 = import ./12 args;
     teleport_13 = import ./13 args;
     teleport_14 = import ./14 args;
     teleport_15 = import ./15 args;
