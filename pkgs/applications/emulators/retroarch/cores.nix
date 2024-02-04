@@ -608,7 +608,8 @@ in
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-    enableParallelBuilding = false;
+    # Build failures when this is set to a bigger number
+    NIX_BUILD_CORES = 8;
     meta = {
       description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
