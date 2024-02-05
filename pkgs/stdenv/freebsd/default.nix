@@ -113,6 +113,7 @@ in
       "nm" "objcopy" "ranlib" "readelf" "size"
       "strings" "strip"
     ]; };
+    locales = linkBS { paths = ["share/locale"]; };
 
 
     fetchurl = import ../../build-support/fetchurl {
@@ -172,8 +173,18 @@ in
         };
       });
       overrides = self: super: {
+        gnutar = super.gnutar.overrideAttrs {
+          NIX_LDFLAGS = "-lintl";  # picks up libintl.h but not libintl.so from bootstrap
+        };
+        gettext = super.gettext.overrideAttrs {
+          NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1";  # we clearly have iconv. what do you want?
+        };
         inherit fetchurl curl cacert iconv;
         curlReal = super.curl;
+        freebsd = super.freebsd.overrideScope (self': super': {
+          inherit locales;
+          localesReal = super'.locales;
+        });
       };
       preHook = ''
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, perl, nixosTests }:
+{ lib, stdenv, fetchurl, zlib, perl, nixosTests, freebsd }:
 
 let
   # Name of an UTF-8 locale _always_ present at runtime, used for UTF-8 support
@@ -51,7 +51,13 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "regress";
   nativeCheckInputs = [ perl ];
-  preCheck = "patchShebangs --build regress/regress.pl";
+  preCheck = ''
+    patchShebangs --build regress/regress.pl
+  '';
+
+  env = lib.optionalAttrs stdenv.buildPlatform.isFreeBSD {
+    PATH_LOCALE = "${freebsd.locales}/share/locale";
+  };
 
   passthru.tests = {
     nixos = nixosTests.man;
