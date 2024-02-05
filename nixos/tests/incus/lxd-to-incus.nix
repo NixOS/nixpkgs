@@ -18,8 +18,6 @@ import ../make-test-python.nix (
     nodes.machine =
       { lib, ... }:
       {
-        environment.systemPackages = [ pkgs.lxd-to-incus ];
-
         virtualisation = {
           diskSize = 6144;
           cores = 2;

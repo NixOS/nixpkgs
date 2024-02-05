@@ -2616,10 +2616,6 @@ with pkgs;
 
   _86Box = callPackage ../applications/emulators/86box { };
 
-  atari800 = callPackage ../applications/emulators/atari800 { };
-
-  ataripp = callPackage ../applications/emulators/atari++ { };
-
   attract-mode = callPackage ../applications/emulators/attract-mode { };
 
   basiliskii = callPackage ../applications/emulators/basiliskii { };
@@ -19843,12 +19839,7 @@ with pkgs;
 
   reshape = callPackage ../development/tools/reshape { } ;
 
-  retdec = callPackage ../development/tools/analysis/retdec {
-    stdenv = gcc8Stdenv;
-  };
-  retdec-full = retdec.override {
-    withPEPatterns = true;
-  };
+  retdec = callPackage ../development/tools/analysis/retdec { };
 
   reviewdog = callPackage ../development/tools/misc/reviewdog { };
 
@@ -25793,17 +25784,6 @@ with pkgs;
   go = go_1_21;
   buildGoModule = buildGo121Module;
   buildGoPackage = buildGo121Package;
-
-  # requires a newer Apple SDK
-  go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
-  };
-  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_19;
-  };
-  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
-    go = buildPackages.go_1_19;
-  };
 
   # requires a newer Apple SDK
   go_1_20 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.20.nix {

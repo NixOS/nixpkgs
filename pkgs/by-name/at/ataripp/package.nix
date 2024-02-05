@@ -1,8 +1,8 @@
 { lib
 , stdenv
-, fetchurl
 , SDL
 , alsa-lib
+, fetchurl
 , gcc-unwrapped
 , libICE
 , libSM
@@ -30,10 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs} "$out/bin/atari++"
+    patchelf \
+      --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs} \
+      "$out/bin/atari++"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.xl-project.com/";
     description = "An enhanced, cycle-accurated Atari emulator";
     longDescription = ''
@@ -42,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
       and the Atari 5200 game console. The emulator is auto-configurable and
       will compile on a variety of systems (Linux, Solaris, Irix).
     '';
-    maintainers = [ maintainers.AndersonTorres ];
-    license = licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = with lib.licenses; [ gpl2Plus ];
+    platforms = lib.platforms.unix;
   };
 })
