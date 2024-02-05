@@ -245,6 +245,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   quazip = callPackage ../development/libraries/quazip { };
 
+  quickflux = callPackage ../development/libraries/quickflux { };
+
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qwt = callPackage ../development/libraries/qwt/default.nix { };
