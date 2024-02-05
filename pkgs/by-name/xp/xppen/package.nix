@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     hash = "sha256-A/dv6DpelH0NHjlGj32tKv37S+9q3F8cYByiYlMuqLg=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook qt5.wrapQtAppsHook ];
 
   buildInputs = [ qt5.full libusb1 libGL ];
 
