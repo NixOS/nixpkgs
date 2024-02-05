@@ -1,10 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , wrapQtAppsHook
-, alsa-lib
+, autoconf
 , boost
 , catch2_3
 , cmake
@@ -12,58 +11,46 @@
 , cpp-jwt
 , cubeb
 , discord-rpc
-, doxygen
 , enet
-, ffmpeg
 , fmt
 , glslang
-, httplib
-, inih
-, libjack2
 , libopus
-, libpulseaudio
 , libusb1
 , libva
-, libzip
 , lz4
 , nlohmann_json
+, nv-codec-headers-12
 , nx_tzdb
-, perl
 , pkg-config
-, python3
 , qtbase
 , qtmultimedia
 , qttools
 , qtwayland
 , qtwebengine
-, rapidjson
 , SDL2
-, sndio
-, speexdsp
-, udev
 , vulkan-headers
 , vulkan-loader
+, yasm
 , zlib
 , zstd
 }:
 stdenv.mkDerivation(finalAttrs: {
   pname = "yuzu";
-  version = "1696";
+  version = "1704";
 
   src = fetchFromGitHub {
     owner = "yuzu-emu";
     repo = "yuzu-mainline";
     rev = "mainline-0-${finalAttrs.version}";
-    hash = "sha256-9xIhOA8hA7rsjtO0sgg1ucqghSzaOtkuTAHyQvmT+y4=";
+    hash = "sha256-8vIwWahl5JmFlOfMRuec1LiYz4F6mPEH4+p2e1IRBdU=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    perl
+    glslang
     pkg-config
-    python3
+    qttools
     wrapQtAppsHook
   ];
 
@@ -72,7 +59,6 @@ stdenv.mkDerivation(finalAttrs: {
     # don't get picked up by accident
     vulkan-headers
 
-    alsa-lib
     boost
     catch2_3
     cpp-jwt
@@ -80,30 +66,31 @@ stdenv.mkDerivation(finalAttrs: {
     discord-rpc
     # intentionally omitted: dynarmic - prefer vendored version for compatibility
     enet
-    ffmpeg
+
+    # vendored ffmpeg deps
+    autoconf
+    yasm
+    libva  # for accelerated video decode on non-nvidia
+    nv-codec-headers-12  # for accelerated video decode on nvidia
+    # end vendored ffmpeg deps
+
     fmt
-    glslang
-    httplib
-    inih
-    libjack2
+    # intentionally omitted: gamemode - loaded dynamically at runtime
+    # intentionally omitted: httplib - upstream requires an older version than what we have
     libopus
-    libpulseaudio
     libusb1
-    libva
-    libzip
     # intentionally omitted: LLVM - heavy, only used for stack traces in the debugger
     lz4
     nlohmann_json
     qtbase
     qtmultimedia
-    qttools
     qtwayland
     qtwebengine
-    rapidjson
+    # intentionally omitted: renderdoc - heavy, developer only
     SDL2
-    sndio
-    speexdsp
-    udev
+    # not packaged in nixpkgs: simpleini
+    # intentionally omitted: stb - header only libraries, vendor uses git snapshot
+    # not packaged in nixpkgs: vulkan-memory-allocator
     # intentionally omitted: xbyak - prefer vendored version for compatibility
     zlib
     zstd
@@ -127,6 +114,9 @@ stdenv.mkDerivation(finalAttrs: {
     "-DYUZU_USE_EXTERNAL_SDL2=OFF"
     "-DYUZU_USE_EXTERNAL_VULKAN_HEADERS=OFF"
 
+    # don't use system ffmpeg, yuzu uses internal APIs
+    "-DYUZU_USE_BUNDLED_FFMPEG=ON"
+
     # don't check for missing submodules
     "-DYUZU_CHECK_SUBMODULES=OFF"
 
@@ -139,6 +129,9 @@ stdenv.mkDerivation(finalAttrs: {
     "-DYUZU_ENABLE_COMPATIBILITY_REPORTING=OFF"
     "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # We provide this deterministically
   ];
+
+  # Does some handrolled SIMD
+  env.NIX_CFLAGS_COMPILE = "-msse4.1";
 
   # Fixes vulkan detection.
   # FIXME: patchelf --add-rpath corrupts the binary for some reason, investigate
