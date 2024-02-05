@@ -2684,8 +2684,6 @@ with pkgs;
 
   emu2 = callPackage ../applications/emulators/emu2 { };
 
-  emulationstation = callPackage ../applications/emulators/emulationstation { };
-
   fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
 
   firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
