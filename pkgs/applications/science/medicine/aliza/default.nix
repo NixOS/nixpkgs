@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Aliza MS DICOM Viewer";
+    description = "A DICOM Viewer";
     homepage = "https://www.aliza-dicom-viewer.com/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lux ];
