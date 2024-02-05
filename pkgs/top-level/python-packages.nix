@@ -15888,6 +15888,8 @@ self: super: with self; {
 
   trlib = toPythonModule (pkgs.trlib.override { pythonSupport = true; python3Packages = self;});
 
+  trogon = callPackage ../development/python-modules/trogon { };
+
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
