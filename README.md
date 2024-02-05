@@ -1,3 +1,4 @@
+<br>
 <p align="center">
   <img src="./media/botnix_simple_narrow_bw_1000w.png" width="50%" alt="Botnix logo" />
 </p>
@@ -204,7 +205,7 @@ Any and all sublicenses can be found [here](sublicenses/).
 
 <p align="center">
   <br>
-  <img src="./media/logo_block_raven_rgi_modern_blueye_xwerx_bw_1000h.png" width="40%" alt="xwerx logo">
+  <img src="./media/logo_block_raven_rgi_modern_blueye_xwerx_bw_1000h.png" width="50%" alt="xwerx logo">
   <br>
   TM 2024 &copy; Nervosys, LLC
 </p>
