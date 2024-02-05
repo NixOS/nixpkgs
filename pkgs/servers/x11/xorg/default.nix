@@ -3819,11 +3819,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbcomp = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xkbcomp";
-    version = "1.4.6";
+    version = "1.4.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbcomp-1.4.6.tar.xz";
-      sha256 = "164fqnpq80vbl7693x82h38kvxcdf668vggpg9439q21xw8xcl7s";
+      url = "mirror://xorg/individual/app/xkbcomp-1.4.7.tar.xz";
+      sha256 = "0xqzz209m9i43jbyrf2lh4xdbyhzzzn9mis2f2c32kplwla82a0a";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
