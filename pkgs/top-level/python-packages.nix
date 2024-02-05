@@ -8800,6 +8800,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
 
+  opentelemetry-instrumentation-fastapi = callPackage ../development/python-modules/opentelemetry-instrumentation-fastapi { };
+
   opentelemetry-instrumentation-flask = callPackage ../development/python-modules/opentelemetry-instrumentation-flask { };
 
   opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
