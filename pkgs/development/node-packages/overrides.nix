@@ -36,6 +36,57 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
+  appium-chromium-driver = prev.appium-chromium-driver.override {
+    prePatch = ''
+      export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
+    '';
+  };
+
+  appium-espresso-driver = prev.appium-espresso-driver.override {
+    prePatch = ''
+      export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
+    '';
+  };
+
+  appium-uiautomator2-driver = prev.appium-uiautomator2-driver.override {
+    prePatch = ''
+      export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
+    '';
+  };
+
+  autoprefixer = prev.autoprefixer.override {
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/autoprefixer" \
+        --prefix NODE_PATH : ${final.postcss}/lib/node_modules
+    '';
+    passthru.tests = {
+      simple-execution = callPackage ./package-tests/autoprefixer.nix { inherit (final) autoprefixer; };
+    };
+  };
+
+  bash-language-server = prev.bash-language-server.override {
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/bash-language-server" \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.shellcheck ]}
+    '';
+  };
+
+  bower2nix = prev.bower2nix.override {
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      for prog in bower2nix fetch-bower; do
+        wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ pkgs.git pkgs.nix ]}
+      done
+    '';
+  };
+
+  expo-cli = prev."expo-cli".override (oldAttrs: {
+    # The traveling-fastlane-darwin optional dependency aborts build on Linux.
+    dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
+  });
+
   fast-cli = prev.fast-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     prePatch = ''
