@@ -13,6 +13,9 @@
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
+
+, rocmSupport ? config.rocmSupport
+, rocmPackages ? {}
 }:
 
 let
@@ -66,6 +69,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       libcublas.dev
       libcublas.lib
       libcublas.static
+    ]) ++ lib.optionals rocmSupport (with rocmPackages; [
+      clr
+      hipblas
+      rocblas
     ]);
 
   postPatch = let
@@ -81,6 +88,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     WHISPER_COREML_ALLOW_FALLBACK = "1";
   } // lib.optionalAttrs cudaSupport {
     WHISPER_CUBLAS = "1";
+  } // lib.optionalAttrs rocmSupport {
+    WHISPER_HIPBLAS = "1";
+    ROCM_PATH = rocmPackages.clr;
+    GPU_TARGETS = lib.concatStringsSep "," rocmPackages.clr.gpuTargets;
   };
 
   makeFlags = [ "main" "stream" "command" ];
