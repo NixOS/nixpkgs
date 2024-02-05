@@ -27642,6 +27642,12 @@ with pkgs;
 
   criu = callPackage ../os-specific/linux/criu { };
 
+  # Upstream Crust:
+  inherit (callPackage ../misc/crust {})
+    buildCrust
+    crustOlimexA64Teres1
+    ;
+
   cryptomator = callPackage ../tools/security/cryptomator {
     jdk = jdk21.override { enableJavaFX = true; };
   };
