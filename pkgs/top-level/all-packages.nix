@@ -39143,12 +39143,10 @@ with pkgs;
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
-    protobuf = protobuf_21;
-    # or-tools builds with -std=c++20, so abseil-cpp must
-    # also be built that way
-    abseil-cpp = abseil-cpp_202206.override {
+    protobuf = protobuf_23;
+    abseil-cpp = abseil-cpp_202301.override {
       static = true;
-      cxxStandard = "20";
+      cxxStandard = "17";
     };
   };
 
