@@ -2030,6 +2030,8 @@ with pkgs;
 
   sdkmanager = with python3Packages; toPythonApplication sdkmanager;
 
+  sesh = callPackage ../tools/misc/sesh { };
+
   sgrep = callPackage ../tools/text/sgrep { };
 
   shaperglot = with python3Packages; toPythonApplication shaperglot;
