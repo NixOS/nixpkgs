@@ -1,7 +1,7 @@
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::utils;
 use crate::validation::{self, ResultIteratorExt, Validation::Success};
-use crate::NixFileCache;
+use crate::NixFileStore;
 
 use anyhow::Context;
 use rowan::ast::AstNode;
@@ -11,17 +11,20 @@ use std::path::Path;
 /// Check that every package directory in pkgs/by-name doesn't link to outside that directory.
 /// Both symlinks and Nix path expressions are checked.
 pub fn check_references(
-    nix_file_cache: &mut NixFileCache,
+    nix_file_store: &mut NixFileStore,
     relative_package_dir: &Path,
     absolute_package_dir: &Path,
 ) -> validation::Result<()> {
-    // The empty argument here is the subpath under the package directory to check
-    // An empty one means the package directory itself
+    // The first subpath to check is the package directory itself, which we can represent as an
+    // empty path, since the absolute package directory gets prepended to this.
+    // We don't use `./.` to keep the error messages cleaner
+    // (there's no canonicalisation going on underneath)
+    let subpath = Path::new("");
     check_path(
-        nix_file_cache,
+        nix_file_store,
         relative_package_dir,
         absolute_package_dir,
-        Path::new(""),
+        subpath,
     )
     .with_context(|| {
         format!(
@@ -32,8 +35,12 @@ pub fn check_references(
 }
 
 /// Checks for a specific path to not have references outside
+///
+/// The subpath is the relative path within the package directory we're currently checking.
+/// A relative path so that the error messages don't get absolute paths (which are messy in CI).
+/// The absolute package directory gets prepended before doing anything with it though.
 fn check_path(
-    nix_file_cache: &mut NixFileCache,
+    nix_file_store: &mut NixFileStore,
     relative_package_dir: &Path,
     absolute_package_dir: &Path,
     subpath: &Path,
@@ -69,23 +76,22 @@ fn check_path(
             utils::read_dir_sorted(&path)?
                 .into_iter()
                 .map(|entry| {
-                    let entry_subpath = subpath.join(entry.file_name());
                     check_path(
-                        nix_file_cache,
+                        nix_file_store,
                         relative_package_dir,
                         absolute_package_dir,
-                        &entry_subpath,
+                        &subpath.join(entry.file_name()),
                     )
-                    .with_context(|| format!("Error while recursing into {}", subpath.display()))
                 })
-                .collect_vec()?,
+                .collect_vec()
+                .with_context(|| format!("Error while recursing into {}", subpath.display()))?,
         )
     } else if path.is_file() {
         // Only check Nix files
         if let Some(ext) = path.extension() {
             if ext == OsStr::new("nix") {
                 check_nix_file(
-                    nix_file_cache,
+                    nix_file_store,
                     relative_package_dir,
                     absolute_package_dir,
                     subpath,
@@ -106,29 +112,14 @@ fn check_path(
 /// Check whether a nix file contains path expression references pointing outside the package
 /// directory
 fn check_nix_file(
-    nix_file_cache: &mut NixFileCache,
+    nix_file_store: &mut NixFileStore,
     relative_package_dir: &Path,
     absolute_package_dir: &Path,
     subpath: &Path,
 ) -> validation::Result<()> {
     let path = absolute_package_dir.join(subpath);
 
-    let nix_file = match nix_file_cache.get(&path)? {
-        Ok(nix_file) => nix_file,
-        Err(error) =>
-        // NOTE: There's now another Nixpkgs CI check to make sure all changed Nix files parse
-        // correctly, though that uses mainline Nix instead of rnix, so it doesn't give the same
-        // errors. In the future we should unify these two checks, ideally moving the other CI
-        // check into this tool as well and checking for both mainline Nix and rnix.
-        {
-            return Ok(NixpkgsProblem::CouldNotParseNix {
-                relative_package_dir: relative_package_dir.to_path_buf(),
-                subpath: subpath.to_path_buf(),
-                error: error.clone(),
-            }
-            .into())
-        }
-    };
+    let nix_file = nix_file_store.get(&path)?;
 
     Ok(validation::sequence_(
         nix_file.syntax_root.syntax().descendants().map(|node| {
@@ -140,40 +131,31 @@ fn check_nix_file(
                 return Success(());
             };
 
-            use crate::nix_file::ResolvedPath::*;
+            use crate::nix_file::ResolvedPath;
 
             match nix_file.static_resolve_path(path, absolute_package_dir) {
-                Interpolated =>
-                // Filters out ./foo/${bar}/baz
-                // TODO: We can just check ./foo
-                {
-                    NixpkgsProblem::PathInterpolation {
-                        relative_package_dir: relative_package_dir.to_path_buf(),
-                        subpath: subpath.to_path_buf(),
-                        line,
-                        text,
-                    }
-                    .into()
-                }
-                SearchPath =>
-                // Filters out search paths like <nixpkgs>
-                {
-                    NixpkgsProblem::SearchPath {
-                        relative_package_dir: relative_package_dir.to_path_buf(),
-                        subpath: subpath.to_path_buf(),
-                        line,
-                        text,
-                    }
-                    .into()
-                }
-                Outside => NixpkgsProblem::OutsidePathReference {
+                ResolvedPath::Interpolated => NixpkgsProblem::PathInterpolation {
                     relative_package_dir: relative_package_dir.to_path_buf(),
                     subpath: subpath.to_path_buf(),
                     line,
                     text,
                 }
                 .into(),
-                Unresolvable(e) => NixpkgsProblem::UnresolvablePathReference {
+                ResolvedPath::SearchPath => NixpkgsProblem::SearchPath {
+                    relative_package_dir: relative_package_dir.to_path_buf(),
+                    subpath: subpath.to_path_buf(),
+                    line,
+                    text,
+                }
+                .into(),
+                ResolvedPath::Outside => NixpkgsProblem::OutsidePathReference {
+                    relative_package_dir: relative_package_dir.to_path_buf(),
+                    subpath: subpath.to_path_buf(),
+                    line,
+                    text,
+                }
+                .into(),
+                ResolvedPath::Unresolvable(e) => NixpkgsProblem::UnresolvablePathReference {
                     relative_package_dir: relative_package_dir.to_path_buf(),
                     subpath: subpath.to_path_buf(),
                     line,
@@ -181,10 +163,9 @@ fn check_nix_file(
                     io_error: e,
                 }
                 .into(),
-                Within(_p) =>
-                // No need to handle the case of it being inside the directory, since we scan through the
-                // entire directory recursively anyways
-                {
+                ResolvedPath::Within(..) => {
+                    // No need to handle the case of it being inside the directory, since we scan through the
+                    // entire directory recursively anyways
                     Success(())
                 }
             }

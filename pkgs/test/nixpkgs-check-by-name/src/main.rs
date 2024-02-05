@@ -1,4 +1,4 @@
-use crate::nix_file::NixFileCache;
+use crate::nix_file::NixFileStore;
 mod eval;
 mod nix_file;
 mod nixpkgs_problem;
@@ -118,7 +118,7 @@ pub fn check_nixpkgs<W: io::Write>(
     keep_nix_path: bool,
     error_writer: &mut W,
 ) -> validation::Result<ratchet::Nixpkgs> {
-    let mut nix_file_cache = NixFileCache::new();
+    let mut nix_file_store = NixFileStore::default();
 
     Ok({
         let nixpkgs_path = nixpkgs_path.canonicalize().with_context(|| {
@@ -136,9 +136,9 @@ pub fn check_nixpkgs<W: io::Write>(
             )?;
             Success(ratchet::Nixpkgs::default())
         } else {
-            check_structure(&nixpkgs_path, &mut nix_file_cache)?.result_map(|package_names|
+            check_structure(&nixpkgs_path, &mut nix_file_store)?.result_map(|package_names|
                 // Only if we could successfully parse the structure, we do the evaluation checks
-                eval::check_values(&nixpkgs_path, &mut nix_file_cache, package_names, keep_nix_path))?
+                eval::check_values(&nixpkgs_path, &mut nix_file_store, package_names, keep_nix_path))?
         }
     })
 }

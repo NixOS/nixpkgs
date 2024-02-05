@@ -15,35 +15,26 @@ use std::fs::read_to_string;
 use std::path::Path;
 use std::path::PathBuf;
 
-/// A structure to indefinitely cache parse results of Nix files in memory,
+/// A structure to store parse results of Nix files in memory,
 /// making sure that the same file never has to be parsed twice
-pub struct NixFileCache {
-    entries: HashMap<PathBuf, NixFileResult>,
+#[derive(Default)]
+pub struct NixFileStore {
+    entries: HashMap<PathBuf, NixFile>,
 }
 
-impl NixFileCache {
-    /// Creates a new empty NixFileCache
-    pub fn new() -> NixFileCache {
-        NixFileCache {
-            entries: HashMap::new(),
-        }
-    }
-
-    /// Get the cache entry for a Nix file if it exists, otherwise parse the file, insert it into
-    /// the cache, and return the value
+impl NixFileStore {
+    /// Get the store entry for a Nix file if it exists, otherwise parse the file, insert it into
+    /// the store, and return the value
     ///
     /// Note that this function only gives an anyhow::Result::Err for I/O errors.
     /// A parse error is anyhow::Result::Ok(Result::Err(error))
-    pub fn get(&mut self, path: &Path) -> anyhow::Result<&NixFileResult> {
+    pub fn get(&mut self, path: &Path) -> anyhow::Result<&NixFile> {
         match self.entries.entry(path.to_owned()) {
             Entry::Occupied(entry) => Ok(entry.into_mut()),
             Entry::Vacant(entry) => Ok(entry.insert(NixFile::new(path)?)),
         }
     }
 }
-
-/// A type to represent the result when trying to initialise a `NixFile`.
-type NixFileResult = Result<NixFile, rnix::parser::ParseError>;
 
 /// A structure for storing a successfully parsed Nix file
 pub struct NixFile {
@@ -57,7 +48,7 @@ pub struct NixFile {
 
 impl NixFile {
     /// Creates a new NixFile, failing for I/O or parse errors
-    fn new(path: impl AsRef<Path>) -> anyhow::Result<NixFileResult> {
+    fn new(path: impl AsRef<Path>) -> anyhow::Result<NixFile> {
         let Some(parent_dir) = path.as_ref().parent() else {
             anyhow::bail!("Could not get parent of path {}", path.as_ref().display())
         };
@@ -66,14 +57,21 @@ impl NixFile {
             .with_context(|| format!("Could not read file {}", path.as_ref().display()))?;
         let line_index = LineIndex::new(&contents);
 
-        Ok(rnix::Root::parse(&contents)
+        // NOTE: There's now another Nixpkgs CI check to make sure all changed Nix files parse
+        // correctly, though that uses mainline Nix instead of rnix, so it doesn't give the same
+        // errors. In the future we should unify these two checks, ideally moving the other CI
+        // check into this tool as well and checking for both mainline Nix and rnix.
+        rnix::Root::parse(&contents)
+            // rnix's ::ok returns Result<_, _> , so no error is thrown away like it would be with
+            // std::result's ::ok
             .ok()
             .map(|syntax_root| NixFile {
                 parent_dir: parent_dir.to_path_buf(),
                 path: path.as_ref().to_owned(),
                 syntax_root,
                 line_index,
-            }))
+            })
+            .with_context(|| format!("Could not parse file {} with rnix", path.as_ref().display()))
     }
 }
 
@@ -88,7 +86,11 @@ pub struct CallPackageArgumentInfo {
 
 impl NixFile {
     /// Returns information about callPackage arguments for an attribute at a specific line/column
-    /// index. If there's no guaranteed `callPackage` at that location, `None` is returned.
+    /// index.
+    /// If the location is not of the form `<attr> = callPackage <arg1> <arg2>;`, `None` is
+    /// returned.
+    /// This function only returns `Err` for problems that can't be caused by the Nix contents,
+    /// but rather problems in this programs code itself.
     ///
     /// This is meant to be used with the location returned from `builtins.unsafeGetAttrPos`, e.g.:
     /// - Create file `default.nix` with contents
@@ -102,7 +104,7 @@ impl NixFile {
     ///   builtins.unsafeGetAttrPos "foo" (import ./default.nix { })
     ///   ```
     ///   results in `{ file = ./default.nix; line = 2; column = 3; }`
-    /// - Get the NixFile for `.file` from a `NixFileCache`
+    /// - Get the NixFile for `.file` from a `NixFileStore`
     /// - Call this function with `.line`, `.column` and `relative_to` as the (absolute) current directory
     ///
     /// You'll get back
@@ -165,6 +167,7 @@ impl NixFile {
         };
 
         if attrpath_node.kind() != SyntaxKind::NODE_ATTRPATH {
+            // This can happen for e.g. `inherit foo`, so definitely not a syntactic `callPackage`
             return Ok(None);
         }
         // attrpath_node looks like "foo.bar"
@@ -183,7 +186,9 @@ impl NixFile {
         }
         // attrpath_value_node looks like "foo.bar = 10;"
 
-        // unwrap is fine because we confirmed that we can cast with the above check
+        // unwrap is fine because we confirmed that we can cast with the above check.
+        // We could avoid this `unwrap` for a `clone`, since `cast` consumes the argument,
+        // but we still need it for the error message when the cast fails.
         Ok(Some(ast::AttrpathValue::cast(attrpath_value_node).unwrap()))
     }
 
@@ -272,9 +277,8 @@ impl NixFile {
 
         // Check that <fun2> is an identifier, or an attribute path with an identifier at the end
         let ident = match function2 {
-            Expr::Ident(ident) =>
-            // This means it's something like `foo = callPackage <arg2> <arg1>`
-            {
+            Expr::Ident(ident) => {
+                // This means it's something like `foo = callPackage <arg2> <arg1>`
                 ident
             }
             Expr::Select(select) => {
@@ -340,13 +344,12 @@ pub enum ResolvedPath {
 
 impl NixFile {
     /// Statically resolves a Nix path expression and checks that it's within an absolute path
-    /// path
     ///
     /// E.g. for the path expression `./bar.nix` in `./foo.nix` and an absolute path of the
     /// current directory, the function returns `ResolvedPath::Within(./bar.nix)`
     pub fn static_resolve_path(&self, node: ast::Path, relative_to: &Path) -> ResolvedPath {
         if node.parts().count() != 1 {
-            // Only if there's more than 1 interpolated part, it's of the form `./foo/${bar}/baz`.
+            // If there's more than 1 interpolated part, it's of the form `./foo/${bar}/baz`.
             return ResolvedPath::Interpolated;
         }
 
@@ -364,9 +367,8 @@ impl NixFile {
         // That should be checked more strictly
         match self.parent_dir.join(Path::new(&text)).canonicalize() {
             Err(resolution_error) => ResolvedPath::Unresolvable(resolution_error),
-            Ok(resolved) =>
-            // Check if it's within relative_to
-            {
+            Ok(resolved) => {
+                // Check if it's within relative_to
                 match resolved.strip_prefix(relative_to) {
                     Err(_prefix_error) => ResolvedPath::Outside,
                     Ok(suffix) => ResolvedPath::Within(suffix.to_path_buf()),
@@ -411,7 +413,7 @@ mod tests {
 
         std::fs::write(&file, contents)?;
 
-        let nix_file = NixFile::new(&file)??;
+        let nix_file = NixFile::new(&file)?;
 
         // These are builtins.unsafeGetAttrPos locations for the attributes
         let cases = [
@@ -454,7 +456,7 @@ mod tests {
 
         std::fs::write(&file, contents)?;
 
-        let nix_file = NixFile::new(&file)??;
+        let nix_file = NixFile::new(&file)?;
 
         let cases = [
             (2, None),
