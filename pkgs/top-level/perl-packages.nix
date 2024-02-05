@@ -10821,6 +10821,19 @@ with self; {
     };
   };
 
+  GeometryAffineTransform = buildPerlPackage {
+    pname = "Geometry-AffineTransform";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LI/LIYANAGE/Geometry-AffineTransform-1.4.tar.gz";
+      sha256 = "2da85aca9da4dd62b51fdaa686e5683fbe8708ba0c7fb1e41fbebbed599442e4";
+    };
+    meta = {
+      description = "Affine Transformation to map 2D coordinates to other 2D coordinates";
+    };
+    propagatedBuildInputs = [ TestClass ];
+  };
+
   GetoptArgvFile = buildPerlPackage {
     pname = "Getopt-ArgvFile";
     version = "1.11";
