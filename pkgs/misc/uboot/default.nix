@@ -3,6 +3,7 @@
 , bc
 , bison
 , dtc
+, ed
 , fetchFromGitHub
 , fetchpatch
 , fetchurl
@@ -72,6 +73,7 @@ let
       bc
       bison
       dtc
+      ed
       flex
       installShellFiles
       (buildPackages.python3.withPackages (p: [
@@ -100,6 +102,10 @@ let
       runHook preConfigure
 
       make ${defconfig}
+
+      # Add local version
+      printf '%s\n' 'g/CONFIG_LOCALVERSION=""/s/^CONFIG_LOCALVERSION=""/CONFIG_LOCALVERSION="-nixos"/' w q | ed -s .config
+      printf '%s\n' 'g/^CONFIG_LOCALVERSION_AUTO=/s/^.*/# CONFIG_LOCALVERSION_AUTO is not set/' . w q | ed -s .config
 
       cat $extraConfigPath >> .config
 
