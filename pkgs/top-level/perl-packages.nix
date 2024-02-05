@@ -23544,6 +23544,21 @@ with self; {
     };
   };
 
+  StringPrint = buildPerlPackage {
+    pname = "String-Print";
+    version = "0.94";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/String-Print-0.94.tar.gz";
+      sha256 = "9b3cd677adb7a40cb183bd6c60db80d96adcabd5aae27e324e3ee37e3275229b";
+    };
+    propagatedBuildInputs = [ HTMLParser TimeDate UnicodeLineBreak ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Printf extensions";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StringRandom = buildPerlModule {
     pname = "String-Random";
     version = "0.32";
