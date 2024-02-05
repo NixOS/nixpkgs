@@ -50,9 +50,6 @@ in
             in
             {
               "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
-                "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
-
-              "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
                 "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
             };
           repartConfig = {
@@ -106,6 +103,6 @@ in
     assert 'IMAGE_VERSION="${imageVersion}"' in os_release
 
     bootctl_status = machine.succeed("bootctl status")
-    assert "Boot Loader Specification Type #2 (.efi)" in bootctl_status
+    assert "Stub: systemd-stub" in bootctl_status
   '';
 }
