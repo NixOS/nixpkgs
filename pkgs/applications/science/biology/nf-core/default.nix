@@ -1,12 +1,35 @@
 { lib
-, python3
+, buildPythonPackage
 , fetchFromGitHub
+, setuptools
+, wheel
+, click
+, filetype
+, gitpython
+, jinja2
+, jsonschema
+, markdown
+, packaging
+, pdiff
+, pillow
 , pre-commit
+, prompt-toolkit
+, pytest
+, pytest-workflow
+, pyyaml
+, questionary
+# NOTE Not going to support as it requires 10+ packages and is a niche feature
+# refgenie
+, requests
+, requests-cache
+, rich
+, rich-click
+, tabulate
+, trogon
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "nf-core";
-  version = "2.12";
   version = "2.12.1";
   pyproject = true;
 
@@ -18,41 +41,46 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
+    setuptools
+    wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     click
     filetype
-    # gitpython
+    gitpython
     jinja2
     jsonschema
     markdown
     packaging
     pdiff
+    pillow
     pre-commit
     prompt-toolkit
     pytest
     pytest-workflow
     pyyaml
     questionary
-    refgenie
     requests
     requests-cache
     rich
     rich-click
     tabulate
+    trogon
   ];
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "refgenie" ""
+  '';
 
   pythonImportsCheck = [ "nf_core" ];
 
   meta = with lib; {
     description = "Python package with helper tools for the nf-core community";
-    homepage = "https://nf-co.re/";
+    homepage = "https://nf-co.re/tools";
     changelog = "https://github.com/nf-core/tools/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ edmundmiller ];
-    mainProgram = "nf-core";
   };
 }

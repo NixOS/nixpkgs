@@ -41988,5 +41988,5 @@ with pkgs;
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
 
-  nf-core =  callPackage ../applications/science/biology/nf-core {};
+  nf-core =  with python3Packages; toPythonApplication nf-core;
 }

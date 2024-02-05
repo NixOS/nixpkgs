@@ -8338,6 +8338,8 @@ self: super: with self; {
 
   nextdns = callPackage ../development/python-modules/nextdns { };
 
+  nf-core = callPackage ../applications/science/biology/nf-core { };
+
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
   nftables = toPythonModule (pkgs.nftables.override {
