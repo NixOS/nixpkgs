@@ -39,5 +39,6 @@ buildGoModule rec {
     homepage = "https://github.com/superfly/litefs";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "litefs";
   };
 }

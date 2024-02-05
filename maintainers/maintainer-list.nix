@@ -4657,6 +4657,12 @@
     githubId = 30475873;
     name = "Andrei Hava";
   };
+  devplayer0 = {
+    email = "dev@nul.ie";
+    github = "devplayer0";
+    githubId = 1427254;
+    name = "Jack O'Sullivan";
+  };
   devusb = {
     email = "mhelton@devusb.us";
     github = "devusb";
@@ -15889,6 +15895,12 @@
     github = "rembo10";
     githubId = 801525;
     name = "rembo10";
+  };
+  remexre = {
+    email = "nathan+nixpkgs@remexre.com";
+    github = "remexre";
+    githubId = 4196789;
+    name = "Nathan Ringo";
   };
   renatoGarcia = {
     email = "fgarcia.renato@gmail.com";
