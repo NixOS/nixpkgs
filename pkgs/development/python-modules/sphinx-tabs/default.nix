@@ -30,10 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-uFSnIhvnmg3ZURJGbSOUpLVx0EDUs/9SewspM7gtNRk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'docutils~=0.18.0' 'docutils'
-  '';
-
   nativeBuildInputs = [
     setuptools
     sphinxHook
