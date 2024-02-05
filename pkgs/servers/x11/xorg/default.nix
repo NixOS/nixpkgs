@@ -1839,11 +1839,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxkbfile = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libxkbfile";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxkbfile-1.1.2.tar.xz";
-      sha256 = "1ca4crhzc5a2gdkc4r0m92wyirsy5mngnz0430bj02s2mi7pi8xq";
+      url = "mirror://xorg/individual/lib/libxkbfile-1.1.3.tar.xz";
+      sha256 = "1v2bhw1q1cj3wjfs0igq393iz10whcavbyxlm3k9xfvsk7m3xdm9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
