@@ -20,10 +20,11 @@ let
   mkBot = n: c:
     format.generate "${n}.json" (c.settings // {
       SteamLogin = if c.username == "" then n else c.username;
+      Enabled = c.enabled;
+    } // lib.optionalAttrs (c.passwordFile != null) {
       SteamPassword = c.passwordFile;
       # sets the password format to file (https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Security#file)
       PasswordFormat = 4;
-      Enabled = c.enabled;
     });
 in
 {
@@ -127,8 +128,12 @@ in
             default = "";
           };
           passwordFile = lib.mkOption {
-            type = lib.types.path;
-            description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.";
+            type = with lib.types; nullOr path;
+            default = null;
+            description = lib.mdDoc ''
+              Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.
+              Omit or set to null to provide the password a different way, such as through the web-ui.
+            '';
           };
           enabled = lib.mkOption {
             type = lib.types.bool;
