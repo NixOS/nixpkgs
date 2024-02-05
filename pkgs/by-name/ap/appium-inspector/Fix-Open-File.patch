@@ -1,0 +1,13 @@
+diff --git a/app/main.js b/app/main.js
+index a6607a8..b81c8cb 100644
+--- a/app/main.js
++++ b/app/main.js
+@@ -6,7 +6,7 @@ import {setupMainWindow} from './main/windows';
+ 
+ const isDev = process.env.NODE_ENV === 'development';
+ 
+-export let openFilePath = getAppiumSessionFilePath(process.argv, app.isPackaged, isDev);
++export let openFilePath = getAppiumSessionFilePath(process.argv, false, isDev);
+ 
+ app.on('open-file', (event, filePath) => {
+   openFilePath = filePath;
