@@ -2,7 +2,7 @@
 # docs deps
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
-, resholve, bash, coreutils, dbus, file, gawk, gnugrep, gnused, jq, lockfileProgs, nettools, procmail, procps, xdg-user-dirs
+, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, lockfileProgs, nettools, procmail, procps, xdg-user-dirs
 , perl, perlPackages
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
@@ -61,7 +61,7 @@ let
     {
       scripts = [ "bin/xdg-email" ];
       interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ gawk "${placeholder "out"}/bin" ];
+      inputs = commonDeps ++ [ gawk glib.bin "${placeholder "out"}/bin" ];
       execer = [
         "cannot:${placeholder "out"}/bin/xdg-mime"
         "cannot:${placeholder "out"}/bin/xdg-open"
@@ -71,7 +71,6 @@ let
       fake.external = commonFakes ++ [
         "exo-open"           # XFCE
         "gconftool-2"        # GNOME
-        "gdbus"              # Flatpak (calls xdg-portal)
         "gio"                # GNOME (new)
         "gnome-open"         # GNOME (very old)
         "gvfs-open"          # GNOME (old)
@@ -127,7 +126,7 @@ let
     {
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ nettools "${placeholder "out"}/bin" ];
+      inputs = commonDeps ++ [ nettools glib.bin "${placeholder "out"}/bin" ];
       execer = [
         "cannot:${placeholder "out"}/bin/xdg-mime"
       ];
@@ -138,7 +137,6 @@ let
         "dde-open"            # Deepin
         "enlightenment_open"  # Enlightenment
         "exo-open"            # XFCE
-        "gdbus"               # Flatpak (calls xdg-portal)
         "gio"                 # GNOME (new)
         "gnome-open"          # GNOME (very old)
         "gvfs-open"           # GNOME (old)
