@@ -1,0 +1,58 @@
+diff --git a/rust_builder/cargokit/build_tool/bin/build_tool.dart b/rust_builder/cargokit/build_tool/bin/build_tool.dart
+index 268eb52..e5f4b6b 100644
+--- a/rust_builder/cargokit/build_tool/bin/build_tool.dart
++++ b/rust_builder/cargokit/build_tool/bin/build_tool.dart
+@@ -1,7 +1,7 @@
+ /// This is copied from Cargokit (which is the official way to use it currently)
+ /// Details: https://fzyzcjy.github.io/flutter_rust_bridge/manual/integrate/builtin
+ 
+-import 'package:build_tool/build_tool.dart' as build_tool;
++import '../lib/build_tool.dart' as build_tool;
+ 
+ void main(List<String> arguments) {
+   build_tool.runMain(arguments);
+diff --git a/rust_builder/cargokit/build_tool/lib/src/artifacts_provider.dart b/rust_builder/cargokit/build_tool/lib/src/artifacts_provider.dart
+index e608cec..322d464 100644
+--- a/rust_builder/cargokit/build_tool/lib/src/artifacts_provider.dart
++++ b/rust_builder/cargokit/build_tool/lib/src/artifacts_provider.dart
+@@ -63,10 +63,8 @@ class ArtifactProvider {
+       return result;
+     }
+ 
+-    final rustup = Rustup();
+     for (final target in targets) {
+       final builder = RustBuilder(target: target, environment: environment);
+-      builder.prepare(rustup);
+       _log.info('Building ${environment.crateInfo.packageName} for $target');
+       final targetDir = await builder.build();
+       // For local build accept both static and dynamic libraries.
+diff --git a/rust_builder/cargokit/build_tool/lib/src/builder.dart b/rust_builder/cargokit/build_tool/lib/src/builder.dart
+index 84c46e4..d2ca68b 100644
+--- a/rust_builder/cargokit/build_tool/lib/src/builder.dart
++++ b/rust_builder/cargokit/build_tool/lib/src/builder.dart
+@@ -140,11 +140,8 @@ class RustBuilder {
+     final extraArgs = _buildOptions?.flags ?? [];
+     final manifestPath = path.join(environment.manifestDir, 'Cargo.toml');
+     runCommand(
+-      'rustup',
++      'cargo',
+       [
+-        'run',
+-        _toolchain,
+-        'cargo',
+         'build',
+         ...extraArgs,
+         '--manifest-path',
+diff --git a/rust_builder/cargokit/cmake/cargokit.cmake b/rust_builder/cargokit/cmake/cargokit.cmake
+index ddd05df..6276c9e 100644
+--- a/rust_builder/cargokit/cmake/cargokit.cmake
++++ b/rust_builder/cargokit/cmake/cargokit.cmake
+@@ -71,7 +71,7 @@ function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+             ${OUTPUT_LIB}
+             "${CMAKE_CURRENT_BINARY_DIR}/_phony_"
+             COMMAND ${CMAKE_COMMAND} -E env ${CARGOKIT_ENV}
+-            "${cargokit_cmake_root}/run_build_tool${SCRIPT_EXTENSION}" build-cmake
++            dart --packages=../../../../../../.dart_tool/package_config.json "${cargokit_cmake_root}/build_tool/bin/build_tool.dart" build-cmake
+             VERBATIM
+         )
+     endif()
