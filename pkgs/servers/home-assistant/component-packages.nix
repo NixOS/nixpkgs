@@ -188,7 +188,8 @@
       aiokafka
     ];
     "apcupsd" = ps: with ps; [
-    ]; # missing inputs: aioapcaccess
+      aioapcaccess
+    ];
     "api" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -5751,6 +5752,7 @@
     "anova"
     "anthemav"
     "apache_kafka"
+    "apcupsd"
     "api"
     "apple_tv"
     "application_credentials"
