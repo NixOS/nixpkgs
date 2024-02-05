@@ -63,12 +63,14 @@ stdenv.mkDerivation rec {
   # it tries to run everything with relative paths, which makes it CWD dependent
   # also point mod, screenshot, and save directory to $XDG_DATA_HOME
   # additionally, add some GC options to improve performance of the game
+  # and remove flags "PermSize" and "MaxPermSize" that were removed with Java 8
   postPatch = ''
     substituteInPlace starsector.sh \
-      --replace "./jre_linux/bin/java" "${openjdk}/bin/java" \
-      --replace "./native/linux" "$out/share/starsector/native/linux" \
-      --replace "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
-      --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC"
+      --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
+      --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
+      --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
+      --replace-warn "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
+      --replace-quiet " -XX:PermSize=192m -XX:MaxPermSize=192m" ""
   '';
 
   meta = with lib; {
