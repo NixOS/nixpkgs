@@ -35,7 +35,7 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? wineRelease != "stable",
+  mingwSupport ? false,
   waylandSupport ? stdenv.isLinux,
   x11Support ? stdenv.isLinux,
   embedInstallers ? false, # The Mono and Gecko MSI installers
