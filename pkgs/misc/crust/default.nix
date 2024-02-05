@@ -102,4 +102,12 @@ in {
   ##     maintainers = with lib.maintainers; [ your-usename-here ];
   ##   };
   ## };
+
+  crustOlimexA64Teres1 = buildCrust {
+    defconfig = "teres_i_defconfig";
+    extraMeta = {
+      description = "SCP (power management) firmware for TERES-1";
+      maintainers = with lib.maintainers; [ kreyren ];
+    };
+  };
 }
