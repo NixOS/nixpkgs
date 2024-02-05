@@ -25794,17 +25794,6 @@ with pkgs;
   buildGoPackage = buildGo121Package;
 
   # requires a newer Apple SDK
-  go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
-  };
-  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_19;
-  };
-  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
-    go = buildPackages.go_1_19;
-  };
-
-  # requires a newer Apple SDK
   go_1_20 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.20.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
