@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://pathos.readthedocs.io/";
-    changelog = "https://github.com/uqfoundation/pathos/releases/tag/pathos-${version}";
+    changelog = "https://github.com/uqfoundation/pathos/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
