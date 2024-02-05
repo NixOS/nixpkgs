@@ -14756,6 +14756,36 @@ with self; {
     };
   };
 
+  LogReport = buildPerlPackage {
+    pname = "Log-Report";
+    version = "1.33";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-1.33.tar.gz";
+      sha256 = "49624da338fd7d57288fa22a47241476fb5ce2f6008181f786c7830fe5af01ff";
+    };
+    propagatedBuildInputs = [ DevelGlobalDestruction LogReportOptional StringPrint ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Report a problem, pluggable handlers and language support";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LogReportOptional = buildPerlPackage {
+    pname = "Log-Report-Optional";
+    version = "1.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Log-Report-Optional-1.07.tar.gz";
+      sha256 = "b2658b53176df5afa5d02789368715c86b98c8d04ecd930252bcd7f832cc6224";
+    };
+    propagatedBuildInputs = [ StringPrint ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Log::Report in the lightest form";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   LongJump = buildPerlPackage {
     pname = "Long-Jump";
     version = "0.000001";
