@@ -705,7 +705,7 @@ mapAliases ({
   ### N ###
 
   ncdu_2 = ncdu; # Added 2022-07-22
-
+  nestopia = throw "nestopia was forked; use nestopia-ue instead"; # Added 2024-01-24
   net_snmp = throw "'net_snmp' has been renamed to/replaced by 'net-snmp'"; # Converted to throw 2023-09-10
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22

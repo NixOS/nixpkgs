@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , makeBinaryWrapper
 , bc
@@ -10,11 +10,12 @@
 , slurp
 , wl-clipboard
 , xcolor
+
 , waylandSupport ? true
 , x11Support ? true
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "farge";
   version = "1.0.9";
 
@@ -31,26 +32,28 @@ stdenv.mkDerivation (finalAttrs: {
   wrapperPath = lib.makeBinPath ([
     bc
     feh
-    #Needed to fix convert: unable to read font `(null)' @ error/annotate.c/RenderFreetype issue
-    (imagemagick.override { ghostscriptSupport = true;})
-    libnotify #Needed for the notify-send function call from the script
-  ] ++ lib.optionals waylandSupport [ grim slurp wl-clipboard ]
-    ++ lib.optionals x11Support [ xcolor ]);
+    libnotify # notify-send
+    # Needed to fix font rendering issue in imagemagick
+    (imagemagick.override { ghostscriptSupport = true; })
+  ] ++ lib.optionals waylandSupport [
+    grim
+    slurp
+    wl-clipboard
+  ] ++ lib.optional x11Support xcolor);
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    install -m755 farge $out/bin
+    install -Dm755 farge $out/bin/farge
     wrapProgram $out/bin/farge \
-        --prefix PATH : "${finalAttrs.wrapperPath}"
+      --prefix PATH : "${finalAttrs.wrapperPath}"
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A tool that shows the color value of a given pixel on your screen";
+    description = "View the color value of a specific pixel on your screen";
     homepage = "https://github.com/sdushantha/farge";
     license = licenses.mit;
-    platforms = platforms.all;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ jtbx justinlime ];
     mainProgram = "farge";
   };

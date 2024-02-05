@@ -934,6 +934,7 @@ in {
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = handleTest ./uptermd.nix {};
   uptime-kuma = handleTest ./uptime-kuma.nix {};
+  urn-timer = handleTest ./urn-timer.nix {};
   usbguard = handleTest ./usbguard.nix {};
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   user-expiry = runTest ./user-expiry.nix;
