@@ -6,8 +6,16 @@ let
   cfg = config.services.matrix-synapse;
   format = pkgs.formats.yaml { };
 
+  filterRecursiveNull = o:
+    if isAttrs o then
+      mapAttrs (_: v: filterRecursiveNull v) (filterAttrs (_: v: v != null) o)
+    else if isList o then
+      map filterRecursiveNull (filter (v: v != null) o)
+    else
+      o;
+
   # remove null values from the final configuration
-  finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
+  finalSettings = filterRecursiveNull cfg.settings;
   configFile = format.generate "homeserver.yaml" finalSettings;
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
