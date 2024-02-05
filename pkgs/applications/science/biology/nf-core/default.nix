@@ -65,6 +65,7 @@ buildPythonPackage rec {
     requests-cache
     rich
     rich-click
+    setuptools
     tabulate
     trogon
   ];
