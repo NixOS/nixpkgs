@@ -19858,9 +19858,6 @@ with pkgs;
   reshape = callPackage ../development/tools/reshape { } ;
 
   retdec = callPackage ../development/tools/analysis/retdec { };
-  retdec-full = retdec.override {
-    withPEPatterns = true;
-  };
 
   reviewdog = callPackage ../development/tools/misc/reviewdog { };
 
