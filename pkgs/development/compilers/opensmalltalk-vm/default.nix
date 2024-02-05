@@ -16,6 +16,7 @@
   pango,
   pkg-config,
   xorg,
+  libGL,
 }:
 let
   buildVM =
@@ -31,8 +32,8 @@ let
       src = fetchFromGitHub {
         owner = "OpenSmalltalk";
         repo = "opensmalltalk-vm";
-        tag = "202206021410";
-        hash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
+        tag = "202312181441";
+        hash = "sha256-j8fVL8072ccdaRyW5sPDcYXxMcIZIvSFJ+4Q1+41ey0=";
       };
     in
     stdenv.mkDerivation {
@@ -44,6 +45,10 @@ let
       version = src.rev;
 
       inherit src;
+
+      # Fixes build errors triggered by the format-security compiler flag
+      # and caused by passing non-literals as the first argument to printf.
+      patches = [ ./printOptionStrings.patch ];
 
       postPatch = ''
         vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
@@ -74,7 +79,10 @@ let
 
       configureFlags = [ "--with-scriptname=${scriptName}" ] ++ configureFlags;
 
-      buildFlags = [ "all" ];
+      buildFlags = [
+        "getversion"
+        "all"
+      ];
 
       enableParallelBuilding = true;
 
@@ -86,6 +94,7 @@ let
       buildInputs = [
         alsa-lib
         freetype
+        libGL
         libpulseaudio
         libtool
         libuuid
