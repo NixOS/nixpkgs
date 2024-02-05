@@ -23,7 +23,7 @@ NIXPKGS_ROOT = subprocess.Popen(['git',
 
 
 def load_code(name, **kwargs):
-    with open(f"{NIXPKGS_ROOT}/pkgs/development/compilers/flutter/update/{name}", 'r') as f:
+    with open(f"{NIXPKGS_ROOT}/pkgs/development/compilers/flutter/update/{name}.in", 'r') as f:
         code = f.read()
 
     for (key, value) in kwargs.items():
