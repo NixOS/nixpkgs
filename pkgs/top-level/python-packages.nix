@@ -2043,6 +2043,10 @@ self: super: with self; {
 
   chispa = callPackage ../development/python-modules/chispa { };
 
+  chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib {
+    inherit (pkgs) chroma-hnswlib;
+  };
+
   chromaprint = callPackage ../development/python-modules/chromaprint { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
