@@ -14646,6 +14646,22 @@ with self; {
     };
   };
 
+  MarpaR2 = buildPerlModule {
+    pname = "Marpa-R2";
+    version = "8.000000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JK/JKEGL/Marpa-R2-8.000000.tar.gz";
+      sha256 = "56e694a7198ea0c81dd7de61a9c495f5a86426823b8f4b9c54ae460a84028fe8";
+    };
+    buildInputs = [ ConfigAutoConf ];
+    propagatedBuildInputs = [ HTMLParser PPI ];
+    meta = {
+      homepage = "http://savage.net.au/Marpa.html";
+      description = "Release 2 of Marpa";
+      license = lib.licenses.lgpl3Plus;
+    };
+  };
+
   MCE = buildPerlPackage {
     pname = "MCE";
     version = "1.889";
