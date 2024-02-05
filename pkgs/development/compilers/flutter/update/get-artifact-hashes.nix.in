@@ -35,7 +35,7 @@ let
                 flutter = flutterPackages."v${flutterCompactVersion}";
                 inherit flutterPlatform;
                 inherit systemPlatform;
-                hash = "";
+                hash = lib.fakeSha256;
               })
             systemPlatforms)
       ) [ ]
