@@ -2684,8 +2684,6 @@ with pkgs;
 
   emu2 = callPackage ../applications/emulators/emu2 { };
 
-  emulationstation = callPackage ../applications/emulators/emulationstation { };
-
   fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
 
   firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
@@ -4694,7 +4692,10 @@ with pkgs;
 
   cloudbrute = callPackage ../tools/security/cloudbrute { };
 
-  cloudflared = callPackage ../applications/networking/cloudflared { };
+  cloudflared = callPackage ../applications/networking/cloudflared {
+    # https://github.com/cloudflare/cloudflared/issues/1054
+    buildGoModule = buildGo120Module;
+  };
 
   cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
@@ -34731,6 +34732,13 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
   };
+
+  qemu-python-utils = python3Packages.toPythonApplication (
+    python3Packages.qemu.override {
+      fuseSupport = true;
+      tuiSupport = true;
+    }
+  );
 
   qemu-utils = qemu.override {
     toolsOnly = true;
