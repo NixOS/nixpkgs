@@ -18123,6 +18123,12 @@
     githubId = 38893265;
     name = "StrikerLulu";
   };
+  struan = {
+    email = "contact@struanrobertson.co.uk";
+    github = "struan-robertson";
+    githubId = 7543617;
+    name = "Struan Robertson";
+  };
   stteague = {
     email = "stteague505@yahoo.com";
     github = "stteague";
