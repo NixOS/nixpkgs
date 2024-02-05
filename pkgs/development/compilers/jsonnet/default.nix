@@ -1,9 +1,12 @@
-{ stdenv, lib, jekyll, cmake, fetchFromGitHub, gtest }:
+{ stdenv, lib, jekyll, cmake, fetchFromGitHub, gtest
+  # jekyll build fails on Darwin as of 2024-02-05
+, withDocumentation ? (!stdenv.isDarwin)
+}:
 
 stdenv.mkDerivation rec {
   pname = "jsonnet";
   version = "0.20.0";
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" ] ++ lib.optional withDocumentation "doc";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FtVJE9alEl56Uik+nCpJMV5DMVVmRCnE1xMAiWdK39Y=";
   };
 
-  nativeBuildInputs = [ jekyll cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optional withDocumentation jekyll;
   buildInputs = [ gtest ];
 
   cmakeFlags = [
@@ -31,11 +34,11 @@ stdenv.mkDerivation rec {
 
   # Upstream writes documentation in html, not in markdown/rst, so no
   # other output formats, sorry.
-  postBuild = ''
+  postBuild = lib.optionalString withDocumentation ''
     jekyll build --source ../doc --destination ./html
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString withDocumentation ''
     mkdir -p $out/share/doc/jsonnet
     cp -r ./html $out/share/doc/jsonnet
   '';
