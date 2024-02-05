@@ -4940,8 +4940,6 @@ with pkgs;
 
   csview = callPackage ../tools/text/csview { };
 
-  csvkit = callPackage ../tools/text/csvkit { };
-
   csvquote = callPackage ../tools/text/csvquote { };
 
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
@@ -15395,9 +15393,6 @@ with pkgs;
 
   rush = callPackage ../shells/rush { };
 
-  xonsh = callPackage ../shells/xonsh/wrapper.nix { };
-  xonsh-unwrapped = callPackage ../shells/xonsh { };
-
   zsh = callPackage ../shells/zsh { };
 
   nix-zsh-completions = callPackage ../shells/zsh/nix-zsh-completions { };
@@ -24337,8 +24332,6 @@ with pkgs;
     inherit (python3Packages)
     buildPythonPackage buildPythonApplication setuptools pycsdr pydigiham;
   };
-
-  optparse-bash = callPackage ../development/libraries/optparse-bash { };
 
   oras = callPackage ../development/tools/oras { };
 

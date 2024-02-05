@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , substituteAll
+, fetchpatch
 , cmdstan
 , pythonRelaxDepsHook
 , setuptools
@@ -30,6 +31,11 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./use-nix-cmdstan-path.patch;
       cmdstan = "${cmdstan}/opt/cmdstan";
+    })
+    (fetchpatch {
+      name = "stan-2.34-fix-parsing-of-unit_e-output-files.patch";
+      url = "https://github.com/stan-dev/cmdstanpy/commit/144d641739ccd1109055d13b5b96e4e76607305d.patch";
+      hash = "sha256-21hcbK3Xs7vGBNRs4hMfY5g7jIwEG49WYnsOxYJ6ccs=";
     })
   ];
 

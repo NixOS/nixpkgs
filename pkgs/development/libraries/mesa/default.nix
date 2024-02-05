@@ -121,7 +121,6 @@ self = stdenv.mkDerivation {
     ./musl.patch
 
     ./opencl.patch
-    ./disk_cache-include-dri-driver-path-in-cache-key.patch
 
     # Backports to fix build
     # FIXME: remove when applied upstream
@@ -170,7 +169,6 @@ self = stdenv.mkDerivation {
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
     "-Db_ndebug=true"
 
-    "-Ddisk-cache-key=${placeholder "drivers"}"
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
     "-Dplatforms=${lib.concatStringsSep "," eglPlatforms}"
