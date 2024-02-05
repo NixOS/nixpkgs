@@ -11,7 +11,6 @@
 , lomiri-ui-extras
 , lomiri-ui-toolkit
 , pkg-config
-, python3
 , qqc2-suru-style
 , qtbase
 , qtdeclarative
@@ -91,9 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [
-      flake8
-    ]))
     xvfb-run
   ];
 
@@ -101,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
       # Exclude tests
       "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
+        # Don't care about linter failures
+        "^flake8"
+
         # Runs into ShapeMaterial codepath in lomiri-ui-toolkit which needs OpenGL, see LUITK for details
         "^tst_QmlTests"
       ]})")
