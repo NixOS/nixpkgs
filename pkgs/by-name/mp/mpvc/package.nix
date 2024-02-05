@@ -1,31 +1,61 @@
-{ lib, stdenv, socat, fetchFromGitHub, makeWrapper }:
+{ lib
+, stdenvNoCC
+, mpv
+, socat
+, fetchFromGitHub
+, makeWrapper
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mpvc";
   version = "1.3";
 
   src = fetchFromGitHub {
-    owner = "lwilletts";
+    owner = "gmt4";
     repo = "mpvc";
-    rev = version;
-    sha256 = "sha256-wPETEG0BtNBEj3ZyP70byLzIP+NMUKbnjQ+kdvrvK3s=";
+    rev = finalAttrs.version;
+    hash = "sha256-wPETEG0BtNBEj3ZyP70byLzIP+NMUKbnjQ+kdvrvK3s=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
-  installFlags = [ "PREFIX=$(out)" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/mpvc --prefix PATH : "${socat}/bin/"
+  postPatch = ''
+    patchShebangs mpvc extras/mpvc-*
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ socat ];
+  outputs = [ "out" "doc" ];
 
-  meta = with lib; {
+  buildInputs = [
+    mpv
+    socat
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  strictDeps = true;
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+    "DOCDIR=${placeholder "doc"}/share/doc/"
+  ];
+
+  preInstall = ''
+    mkdir -p $out $doc/share/doc/
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/mpvc \
+      --prefix PATH : "${lib.makeBinPath [ mpv socat ]}"
+  '';
+
+  meta = {
     description = "A mpc-like control interface for mpv";
-    homepage = "https://github.com/lwilletts/mpvc";
-    license = licenses.mit;
-    maintainers = [ maintainers.neeasade ];
-    platforms = platforms.linux;
+    homepage = "https://gmt4.github.io/mpvc/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres neeasade ];
+    platforms = lib.platforms.linux;
   };
-}
+})
