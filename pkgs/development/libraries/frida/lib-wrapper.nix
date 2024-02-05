@@ -3,6 +3,7 @@
 # build.
 { platforms
 , srcs
+, capstone
 , lib
 , stdenv
 , python3
@@ -117,7 +118,7 @@ stdenv.mkDerivation {
 
   # Include all includes within the unwrapped distribution and the build inputs
   # of the unwrapped distribution (chiefly glib).
-  env.FRIDA_LIB_ROOTS = builtins.concatStringsSep " " [ unwrapped glib.out glib.dev ];
+  env.FRIDA_LIB_ROOTS = builtins.concatStringsSep " " [ unwrapped glib.out glib.dev capstone ];
 
   meta = unwrapped.meta;
 }
