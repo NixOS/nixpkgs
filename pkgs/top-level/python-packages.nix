@@ -14727,6 +14727,8 @@ self: super: with self; {
 
   tritonclient = callPackage ../development/python-modules/tritonclient { };
 
+  trogon = callPackage ../development/python-modules/trogon { };
+
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
