@@ -833,7 +833,7 @@ substituteStream() {
             --replace)
                 # deprecated 2023-11-22
                 # this will either get removed, or switch to the behaviour of --replace-fail in the future
-                if [ -z "$_substituteStream_has_warned_replace_deprecation" ]; then
+                if [ -z "$is_quiet" ] && [ -z "$_substituteStream_has_warned_replace_deprecation" ]; then
                     echo "substituteStream(): WARNING: '--replace' is deprecated, use --replace-{fail,warn,quiet}. ($description)" >&2
                     _substituteStream_has_warned_replace_deprecation=1
                 fi
