@@ -258,8 +258,6 @@ with pkgs;
 
   ariang = callPackage ../servers/ariang { };
 
-  mov-cli = callPackage ../applications/video/mov-cli { };
-
   ani-cli = callPackage ../applications/video/ani-cli { };
 
   dra-cla = callPackage ../applications/video/dra-cla { };
@@ -2767,8 +2765,6 @@ with pkgs;
   mgba = libsForQt5.callPackage ../applications/emulators/mgba { };
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
-
-  nestopia = callPackage ../applications/emulators/nestopia { };
 
   np2kai = callPackage ../applications/emulators/np2kai { };
 
@@ -8243,8 +8239,6 @@ with pkgs;
   faraday-agent-dispatcher = callPackage ../tools/security/faraday-agent-dispatcher { };
 
   faraday-cli = callPackage ../tools/security/faraday-cli { };
-
-  farge = callPackage ../tools/misc/farge { };
 
   fastlane = callPackage ../tools/admin/fastlane { };
 
@@ -25214,8 +25208,6 @@ with pkgs;
 
   tdlib = callPackage ../development/libraries/tdlib { };
 
-  tecla = callPackage ../development/libraries/tecla { };
-
   tectonic = callPackage ../tools/typesetting/tectonic/wrapper.nix { };
 
   tectonic-unwrapped = callPackage ../tools/typesetting/tectonic {
@@ -28980,8 +28972,6 @@ with pkgs;
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
-
-  banana-cursor = callPackage ../data/icons/banana-cursor { };
 
   barlow = callPackage ../data/fonts/barlow { };
 
