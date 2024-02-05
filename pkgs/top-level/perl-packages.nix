@@ -28760,6 +28760,51 @@ with self; {
     };
   };
 
+  XMLCompile = buildPerlPackage {
+    pname = "XML-Compile";
+    version = "1.63";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-1.63.tar.gz";
+      sha256 = "4b0871ef4a70bff37266d531bebcd1d065b109e8f5c5e996f87189a9f92d595f";
+    };
+    propagatedBuildInputs = [ LogReport TestDeep TypesSerialiser XMLCompileTester XMLLibXML ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Compilation based XML processing";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XMLCompileCache = buildPerlPackage {
+    pname = "XML-Compile-Cache";
+    version = "1.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-Cache-1.06.tar.gz";
+      sha256 = "591b136bd92842c81a5176082503f47df6d5cc4d8e0d78953ef1557f747038a0";
+    };
+    propagatedBuildInputs = [ LogReport XMLCompile XMLCompileTester XMLLibXMLSimple ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Cache compiled XML translators";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XMLCompileTester = buildPerlPackage {
+    pname = "XML-Compile-Tester";
+    version = "0.91";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-Compile-Tester-0.91.tar.gz";
+      sha256 = "e5ccc6f965543391a43d25087a2f9a8bd5220425fc6244e074d9a4c8e3e73fb7";
+    };
+    propagatedBuildInputs = [ LogReport TestDeep ];
+    meta = {
+      homepage = "http://perl.overmeer.net/CPAN/";
+      description = "Support XML::Compile related regression testing";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   XMLDescent = buildPerlModule {
     pname = "XML-Descent";
     version = "1.04";
