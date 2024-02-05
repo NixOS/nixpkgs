@@ -23368,7 +23368,9 @@ with pkgs;
 
   libplacebo = callPackage ../development/libraries/libplacebo { };
 
-  libpng = callPackage ../development/libraries/libpng { };
+  libpng = callPackage ../development/libraries/libpng {
+    stdenv = stdenvAdapters.overrideSetup stdenv ../development/libraries/libpng/setup-xz-workaround.sh;
+  };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libpostal = callPackage ../development/libraries/libpostal { };
