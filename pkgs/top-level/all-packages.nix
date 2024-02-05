@@ -726,6 +726,8 @@ with pkgs;
 
   inspec = callPackage ../tools/misc/inspec { };
 
+  kdePackages = callPackage ../kde { };
+
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
   probe-rs = callPackage ../development/tools/rust/probe-rs {
