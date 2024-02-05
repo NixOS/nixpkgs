@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-s0N3Rt3lLOCyaeXeNYu6hlGtNtGR+YC7Aj4/3SeVMpQ=";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [
     cmake
     makeBinaryWrapper
