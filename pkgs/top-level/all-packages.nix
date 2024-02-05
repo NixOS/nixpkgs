@@ -7750,10 +7750,6 @@ with pkgs;
     inherit (pkgs.darwin.apple_sdk.libs) utmp;
   };
 
-  rage = callPackage ../tools/security/rage {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
-
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
   rocmPackages = rocmPackages_5;
