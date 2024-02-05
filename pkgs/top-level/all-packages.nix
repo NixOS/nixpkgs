@@ -2766,8 +2766,6 @@ with pkgs;
 
   mupen64plus = callPackage ../applications/emulators/mupen64plus { };
 
-  nestopia = callPackage ../applications/emulators/nestopia { };
-
   np2kai = callPackage ../applications/emulators/np2kai { };
 
   nuked-md = callPackage ../applications/emulators/nuked-md { };
