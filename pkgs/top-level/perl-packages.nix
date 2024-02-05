@@ -7233,6 +7233,22 @@ with self; {
     };
   };
 
+  DBDODBC = buildPerlPackage {
+    pname = "DBD-ODBC";
+    version = "1.61";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MJ/MJEVANS/DBD-ODBC-1.61.tar.gz";
+      sha256 = "96def438c9610d72d0e24d007ea0eacd0059b5203c17eadb623bdea22fa9f40a";
+    };
+    buildInputs = [ pkgs.unixODBC ];
+    propagatedBuildInputs = [ DBI ];
+    meta = {
+      homepage = "http://search.cpan.org/dist/DBD-ODBC/";
+      description = "ODBC DBD for Perl DBI";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DBDOracle = buildPerlPackage {
     pname = "DBD-Oracle";
     version = "1.83";
