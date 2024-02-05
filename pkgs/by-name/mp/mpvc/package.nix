@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mpvc";
-  version = "1.3";
+  version = "1.5-web";
 
   src = fetchFromGitHub {
     owner = "gmt4";
     repo = "mpvc";
     rev = finalAttrs.version;
-    hash = "sha256-wPETEG0BtNBEj3ZyP70byLzIP+NMUKbnjQ+kdvrvK3s=";
+    hash = "sha256-yNPTocqOJGCh/yLqa/3dpxhh5U2pmr6hQYu9l91D5Lg=";
   };
 
   postPatch = ''
@@ -47,6 +47,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
+    # This is not ArchLinux (TM), we don't need to store licensing files...
+    rm -r $out/share/licenses
+    rmdir $out/share/
     wrapProgram $out/bin/mpvc \
       --prefix PATH : "${lib.makeBinPath [ mpv socat ]}"
   '';
@@ -55,7 +58,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "A mpc-like control interface for mpv";
     homepage = "https://gmt4.github.io/mpvc/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres neeasade ];
+    mainProgram = "mpvc";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })
