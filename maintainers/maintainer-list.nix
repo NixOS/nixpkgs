@@ -10200,6 +10200,16 @@
     githubId = 4032;
     name = "Kristoffer Thømt Ravneberg";
   };
+  kreyren = {
+    email = "kreyren@proton.me";
+    github = "kreyren";
+    githubId = 11302521;
+    name = "Jacob KREYREN Hrbek";
+    keys = [{
+      longkeyid = "rsa4096/0x667F0DAFAF09BA2B";
+      fingerprint = "D050 1F79 80EA 70D1 92C0 3A52 667F 0DAF AF09 BA2B";
+    }];
+  };
   kristian-brucaj = {
     email = "kbrucaj@gmail.com";
     github = "Flameslice";
