@@ -2,20 +2,17 @@
 let
   pname = "betterdiscord-installer";
   version = "1.0.0-beta";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/BetterDiscord/Installer/releases/download/v${version}/Betterdiscord-Linux.AppImage";
     sha256 = "103acb11qmvjmf6g9lgsfm5jyahfwfdqw0x9w6lmv1hzwbs26dsr";
   };
 
-  appimageContents = appimageTools.extract { inherit name src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/betterdiscord.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/betterdiscord.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'

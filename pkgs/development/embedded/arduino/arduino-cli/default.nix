@@ -79,12 +79,11 @@ if stdenv.isLinux then
 # /lib64/ld-linux-x86-64.so.2
   buildFHSEnv
   {
-    inherit (pkg) name meta;
+    inherit (pkg) pname version meta;
 
     runScript = "${pkg.outPath}/bin/arduino-cli";
 
     extraInstallCommands = ''
-      mv $out/bin/$name $out/bin/arduino-cli
       cp -r ${pkg.outPath}/share $out/share
     '';
     passthru.pureGoPkg = pkg;

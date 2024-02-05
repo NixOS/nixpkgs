@@ -5,7 +5,6 @@ let
   pname = "MyCrypto";
   version = "1.7.17";
   sha256 = "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/mycryptohq/mycrypto/releases/download/${version}/linux-x86-64_${version}_MyCrypto.AppImage";
@@ -13,7 +12,7 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   desktopItem = makeDesktopItem {
@@ -26,14 +25,12 @@ let
   };
 
 in appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   multiArch = false; # no p32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
-
     mkdir -p $out/share
     cp -rt $out/share ${desktopItem}/share/applications ${appimageContents}/usr/share/icons
     chmod -R +w $out/share

@@ -35,7 +35,6 @@ in appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     # Add desktop convencience stuff
-    mv $out/bin/{${pname}-*,${pname}}
     install -Dm444 ${appimageContents}/flexoptix-app.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/pixmaps
     substituteInPlace $out/share/applications/flexoptix-app.desktop \

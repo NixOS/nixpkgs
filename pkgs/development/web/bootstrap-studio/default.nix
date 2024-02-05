@@ -13,8 +13,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/bstudio.desktop -t $out/share/applications
 
     substituteInPlace $out/share/applications/bstudio.desktop \

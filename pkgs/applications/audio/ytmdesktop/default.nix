@@ -3,20 +3,17 @@
 let
   pname = "ytmdesktop";
   version = "1.13.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/ytmdesktop/ytmdesktop/releases/download/v${version}/YouTube-Music-Desktop-App-${version}.AppImage";
     sha256 = "0f5l7hra3m3q9zd0ngc9dj4mh1lk0rgicvh9idpd27wr808vy28v";
   };
 
-  appimageContents = appimageTools.extract { inherit name src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
-
     install -m 444 \
         -D ${appimageContents}/youtube-music-desktop-app.desktop \
         -t $out/share/applications

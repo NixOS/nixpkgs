@@ -10,10 +10,6 @@ appimageTools.wrapType1 rec {
     url = "https://www.pureref.com/download.php";
   };
 
-  extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-  '';
-
   meta = with lib; {
     description = "Reference Image Viewer";
     homepage = "https://www.pureref.com";
