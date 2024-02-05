@@ -15623,6 +15623,12 @@
     github = "rafaelrc7";
     githubId = 5376043;
   };
+  rafaelsgirao = {
+    email = "git-nixpkgs@rafael.ovh";
+    github = "rafaelsgirao";
+    githubId = 7544832;
+    name = "Rafael Girão";
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";
