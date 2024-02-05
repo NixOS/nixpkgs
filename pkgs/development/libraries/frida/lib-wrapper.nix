@@ -7,14 +7,16 @@
 , stdenv
 , python3
 , fetchFromGitHub
+, runCommandCC
 , pkg-config
 , pcre2
 , util-linuxMinimal
 , libselinux
 , libsepol
 , pcre
+, glib
 }:
-{ unwrapped, devkitName }:
+{ unwrapped, devkitName, selfDerivation }:
 # NOTE: this can change to a direct clone of the newly (2024-01-25, frida commit e53a678b) split out
 # releng module when that gets into a release.
 let
@@ -63,6 +65,8 @@ let
     cpp = 'c++'
     ar = 'ar'
     pkgconfig = 'pkg-config'
+    objcopy = 'objcopy'
+    nm = 'nm'
 
     [built-in options]
     c_args = []
@@ -100,7 +104,20 @@ stdenv.mkDerivation {
 
     python3 releng/devkit.py ${devkitName} ${fridaHost} $out
   '';
-  env.FRIDA_LIB_ROOT = unwrapped;
+
+  passthru.unwrapped = unwrapped;
+  passthru.tests = {
+    # verifies that the header can be included without external dependencies
+    includeHeader = runCommandCC "include-header-test" { } ''
+      echo '#include <${devkitName}.h>' > test.c
+      cc -c -isystem ${selfDerivation} test.c
+      touch $out
+    '';
+  };
+
+  # Include all includes within the unwrapped distribution and the build inputs
+  # of the unwrapped distribution (chiefly glib).
+  env.FRIDA_LIB_ROOTS = builtins.concatStringsSep " " [ unwrapped glib.out glib.dev ];
 
   meta = unwrapped.meta;
 }

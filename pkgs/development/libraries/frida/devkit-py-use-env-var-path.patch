@@ -1,5 +1,5 @@
 diff --git a/releng/devkit.py b/releng/devkit.py
-index 45a422a..109d297 100755
+index 45a422a..4d06daf 100755
 --- a/releng/devkit.py
 +++ b/releng/devkit.py
 @@ -11,6 +11,7 @@ import shlex
@@ -14,16 +14,24 @@ index 45a422a..109d297 100755
  
  
  FRIDA_ROOT = Path(__file__).resolve().parent.parent
-+FRIDA_ROOT2 = Path(os.environ['FRIDA_LIB_ROOT'])
++FRIDA_ROOT2 = [Path(p) for p in os.environ.get('FRIDA_LIB_ROOTS', '').split(' ')]
  
  INCLUDE_PATTERN = re.compile("#include\s+[<\"](.*?)[>\"]")
  
-@@ -162,7 +164,7 @@ def generate_header(package, host, kit, flavor, meson_config, umbrella_header_pa
+@@ -74,6 +76,7 @@ def generate_devkit(kit, host, flavor, output_dir):
+     header_file = output_dir / f"{kit}.h"
+     if not umbrella_header_path.exists():
+         raise Exception(f"Header not found: {umbrella_header_path}")
++    umbrella_header_path = umbrella_header_path.resolve()
+     header_source = generate_header(package,
+                                     host,
+                                     kit,
+@@ -162,7 +165,7 @@ def generate_header(package, host, kit, flavor, meson_config, umbrella_header_pa
              check=True).stdout
          header_lines = header_dependencies.strip().split("\n")[1:]
          header_files = [Path(line.rstrip("\\").strip()) for line in header_lines]
 -        header_files = [h for h in header_files if h.is_relative_to(FRIDA_ROOT)]
-+        header_files = [h for h in header_files if h.is_relative_to(FRIDA_ROOT) or h.is_relative_to(FRIDA_ROOT2)]
++        header_files = [h for h in header_files if h.is_relative_to(FRIDA_ROOT) or any(h.is_relative_to(p) for p in FRIDA_ROOT2)]
  
      devkit_header_lines = []
      umbrella_header = header_files[0]

@@ -10,7 +10,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   frida-gum-unwrapped = callPackage ./frida-gum { inherit (self) srcs; };
   wrapFridaLib = callPackage ./lib-wrapper.nix { inherit (self) srcs platforms; };
-  frida-gum = self.wrapFridaLib { unwrapped = self.frida-gum-unwrapped; devkitName = "frida-gum"; };
+  frida-gum = self.wrapFridaLib { unwrapped = self.frida-gum-unwrapped; devkitName = "frida-gum"; selfDerivation = self.frida-gum; };
 
   platforms = callPackage ./platforms.nix { };
 })
