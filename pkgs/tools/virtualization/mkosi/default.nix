@@ -45,7 +45,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "20.1";
+  version = "20.2";
   format = "pyproject";
 
   outputs = [ "out" "man" ];
@@ -54,8 +54,17 @@ buildPythonApplication rec {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-gkn5d9ybfrV/QYKSUyzyHAouU++NCEBDT22zFMrEZt8=";
+    hash = "sha256-+mvepzoswDVIHzj+rEnlr0ouphGv5unpaNX3U8x517Y=";
   };
+
+  patches = [
+    # sandbox: Deal correctly with unmerged-usr.
+    # Remove on next release after v20.2.
+    (fetchpatch {
+      url = "https://github.com/systemd/mkosi/commit/5a708efdb432dee9c6e5a9a4754752359cac8944.patch";
+      hash = "sha256-dXkY8Hha6y9CoZC1WdtZuI/YJsOQ1fOt4o4RsPkGWYQ=";
+    })
+  ];
 
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
