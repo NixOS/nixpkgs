@@ -7,14 +7,14 @@
 , qtbase
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aliza";
   version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "AlizaMedicalImaging";
     repo = "AlizaMS";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bambl3NP42KEwh6NPb8jhQlGqaUCSt6QuzUmmBnEAQw=";
   };
 
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     cmake
     qtbase
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE:STRING=Release"
