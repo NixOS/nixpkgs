@@ -1,31 +1,39 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, acl
-, cowsql
-, hwdata
-, libcap
-, lxc
-, pkg-config
-, sqlite
-, udev
-, installShellFiles
-, nix-update-script
-, nixosTests
+{
+  lts ? false,
+
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  writeShellScript,
+  acl,
+  cowsql,
+  hwdata,
+  libcap,
+  lxc,
+  pkg-config,
+  sqlite,
+  udev,
+  installShellFiles,
+  nixosTests,
 }:
 
+let
+  releaseFile = if lts then ./lts.nix else ./latest.nix;
+  inherit (import releaseFile) version hash vendorHash;
+  name = "incus${lib.optionalString lts "-lts"}";
+in
+
 buildGoModule rec {
-  pname = "incus-unwrapped";
-  version = "0.5.1";
+  pname = "${name}-unwrapped";
+
+  inherit vendorHash version;
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3eWkQT2P69ZfN62H9B4WLnmlUOGkpzRR0rctgchP+6A=";
+    rev = "v${version}";
+    inherit hash;
   };
-
-  vendorHash = "sha256-2ZJU7WshN4UIbJv55bFeo9qiAQ/wxu182mnz7pE60xA=";
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
@@ -33,9 +41,11 @@ buildGoModule rec {
   '';
 
   excludedPackages = [
+    # statically compile these
     "cmd/incus-agent"
     "cmd/incus-migrate"
-    "cmd/lxd-to-incus"
+
+    # oidc test requires network
     "test/mini-oidc"
   ];
 
@@ -53,7 +63,10 @@ buildGoModule rec {
     udev.dev
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
   tags = [ "libsqlite3" ];
 
   # required for go-cowsql.
@@ -64,13 +77,15 @@ buildGoModule rec {
   '';
 
   preCheck =
-    let skippedTests = [
-      "TestValidateConfig"
-      "TestConvertNetworkConfig"
-      "TestConvertStorageConfig"
-      "TestSnapshotCommon"
-      "TestContainerTestSuite"
-    ]; in
+    let
+      skippedTests = [
+        "TestValidateConfig"
+        "TestConvertNetworkConfig"
+        "TestConvertStorageConfig"
+        "TestSnapshotCommon"
+        "TestContainerTestSuite"
+      ];
+    in
     ''
       # Disable tests requiring local operations
       buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
@@ -85,15 +100,14 @@ buildGoModule rec {
       --zsh <($out/bin/incus completion zsh)
   '';
 
-
   passthru = {
     tests.incus = nixosTests.incus;
 
-    updateScript = nix-update-script {
-       extraArgs = [
-        "-vr" "v\(.*\)"
-       ];
-     };
+    updateScript = writeShellScript "update-incus" ''
+      nix-update ${name}.unwrapped -vr 'v(.*)' --override-filename pkgs/by-name/in/incus/${
+        if lts then "lts" else "latest"
+      }.nix
+    '';
   };
 
   meta = {
