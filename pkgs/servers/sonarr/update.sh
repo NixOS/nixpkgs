@@ -13,7 +13,7 @@ updateHash()
 
     hashKey="${arch}-${os}_hash"
 
-    url="https://download.sonarr.tv/v4/main/${version}/Sonarr.main.${version}.${os}-${arch}.tar.gz";
+    url="https://github.com/Sonarr/Sonarr/releases/download/v${version}/Sonarr.main.${version}.${os}-${arch}.tar.gz";
     hash=$(nix-prefetch-url --type sha256 $url)
     sriHash="$(nix hash to-sri --type sha256 $hash)"
 
@@ -27,7 +27,7 @@ updateVersion()
 
 currentVersion=$(cd $dirname && nix eval --raw -f ../../.. sonarr.version)
 
-latestTag=$(curl https://api.github.com/repos/Sonarr/Sonarr/tags | jq -r '.[] | .name' | sort --version-sort | tail -1)
+latestTag=$(curl https://api.github.com/repos/Sonarr/Sonarr/releases/latest | jq -r ".tag_name")
 latestVersion="$(expr $latestTag : 'v\(.*\)')"
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then
