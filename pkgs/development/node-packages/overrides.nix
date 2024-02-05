@@ -29,6 +29,24 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
+  appium-chromium-driver = prev.appium-chromium-driver.override {
+    prePatch = ''
+      export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
+    '';
+  };
+
+  appium-espresso-driver = prev.appium-espresso-driver.override {
+    prePatch = ''
+      export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
+    '';
+  };
+
+  appium-uiautomator2-driver = prev.appium-uiautomator2-driver.override {
+    prePatch = ''
+      export APPIUM_SKIP_CHROMEDRIVER_INSTALL=true
+    '';
+  };
+
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
