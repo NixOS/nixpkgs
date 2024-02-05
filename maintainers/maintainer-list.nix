@@ -14176,6 +14176,12 @@
     github = "ony";
     githubId = 11265;
   };
+  oo-infty = {
+    name = "Justin Chen";
+    email = "oo-infty@outlook.com";
+    github = "oo-infty";
+    githubId = 42143810;
+  };
   ooliver1 = {
     name = "Oliver Wilkes";
     email = "oliverwilkes2006@icloud.com";
