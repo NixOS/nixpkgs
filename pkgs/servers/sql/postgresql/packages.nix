@@ -40,6 +40,8 @@ self: super: {
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
 
+    pgsodium = super.callPackage ./ext/pgsodium.nix { };
+
     pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
 
     pgvector = super.callPackage ./ext/pgvector.nix { };
