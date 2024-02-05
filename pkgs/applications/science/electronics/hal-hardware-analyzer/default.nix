@@ -73,6 +73,12 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/emsec/hal/commit/b639a56b303141afbf6731b70b7cc7452551f024.patch";
       hash = "sha256-a7AyDEKkqdbiHpa4OHTRuP9Yewb3Nxs/j6bwez5m0yU=";
     })
+    (fetchpatch {
+      name = "fix-gcc-13-build.patch";
+      # https://github.com/emsec/hal/pull/557
+      url = "https://github.com/emsec/hal/commit/831b1a7866aa9aabd55ff288c084862dc6a138d8.patch";
+      hash = "sha256-kB/sJJtLGl5PUv+mmWVpee/okkJzp5HF0BCiCRCcTKw=";
+    })
   ];
 
   # make sure bundled dependencies don't get in the way - install also otherwise

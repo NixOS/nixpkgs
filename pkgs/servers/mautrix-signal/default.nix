@@ -6,13 +6,13 @@ buildGoModule {
   # which is broken for new devices, see https://github.com/mautrix/signal/issues/388.
   # The new Go version fixes this by using the official libsignal as a library and
   # can be upgraded to directly from the Python version.
-  version = "unstable-2023-12-30";
+  version = "unstable-2024-01-31";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "6abe80e6c79b31b5dc37a484b65d346a1ffd4f05";
-    hash = "sha256-EDSP+kU0EmIaYbAB/hxAUTEay+H5aqn9ovBQFZg6wJk=";
+    rev = "103666990f30a692c63dd84a499b0dd390cef8a4";
+    hash = "sha256-UttLMI+jX5PNG02vs7Dty8pxdko2aM0sVB/90eWwmYw=";
   };
 
   buildInputs = [
@@ -22,7 +22,7 @@ buildGoModule {
     libsignal-ffi
   ];
 
-  vendorHash = "sha256-f3sWX+mBouuxVKu+fZIYTWLXT64fllUWpcUYAxjzQpI=";
+  vendorHash = "sha256-LKs/9yCJ7alKQh1VYQsPEg7y+ugZwUnnJh2l4IEjbaQ=";
 
   doCheck = false;
 

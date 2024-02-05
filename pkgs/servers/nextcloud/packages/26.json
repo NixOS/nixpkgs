@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "0lz1sly8p2lhr425ggj3dacz0i28xg32041zdg3nl916yayvqj2p",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.3/calendar-v4.6.3.tar.gz",
-    "version": "4.6.3",
+    "sha256": "06blkrgc9jq8zizgchn8az2cj0s3yy8s05kyhiwj1nb1rx32682j",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.6.4/calendar-v4.6.4.tar.gz",
+    "version": "4.6.4",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -43,7 +43,7 @@
     "sha256": "0ygisjx3abxc2nsrwqrw9dbpvm38qxa0bk280962yh1bb54i04vs",
     "url": "https://github.com/julien-nc/cospend-nc/releases/download/v1.5.14/cospend-1.5.14.tar.gz",
     "version": "1.5.14",
-    "description": "# Nextcloud Cospend 💰\n\nNextcloud Cospend is a group/shared budget manager. It was inspired by the great [IHateMoney](https://github.com/spiral-project/ihatemoney/).\n\nYou can use it when you share a house, when you go on vacation with friends, whenever you share money with others.\n\nIt lets you create projects with members and bills. Each member has a balance computed from the project bills. This way you can see who owes the group and who the group owes. Ultimately you can ask for a settlement plan telling you which payments to make to reset members balances.\n\nProject members are independent from Nextcloud users. Projects can be accessed and modified by people without a Nextcloud account. Each project has an ID and a password for guest access.\n\n[MoneyBuster](https://gitlab.com/eneiluj/moneybuster) Android client is [available in F-Droid](https://f-droid.org/packages/net.eneiluj.moneybuster/) and on the [Play store](https://play.google.com/store/apps/details?id=net.eneiluj.moneybuster).\n\n[PayForMe](https://github.com/mayflower/PayForMe) iOS client is currently being developped!\n\n## Features\n\n* ✎ create/edit/delete projects, members, bills, bill categories, currencies\n* ⚖ check member balances\n* 🗠 display project statistics\n* ♻ display settlement plan\n* 🎇 automatically create reimbursement bills from settlement plan\n* 🗓 create recurring bills (daily/weekly/monthly/yearly)\n* 📊 optionally provide custom amount for each member in new bills\n* 🔗 link bills with personal files (picture of physical bill for example)\n* 👩 guest access for people outside Nextcloud\n* 👫 share projects with Nextcloud users/groups/circles\n* 🖫 import/export projects as csv (compatible with csv files from IHateMoney)\n* 🔗 generate link/QRCode to easily import projects in MoneyBuster\n* 🗲 implement Nextcloud notifications and activity stream\n\nThis app is tested on Nextcloud 20+ with Firefox 57+ and Chromium.\n\nThis app is under development.\n\n🌍 Help us to translate this app on [Nextcloud-Cospend/MoneyBuster Crowdin project](https://crowdin.com/project/moneybuster).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://gitlab.com/eneiluj/cospend-nc/blob/master/CONTRIBUTING.md).\n\n## Documentation\n\n* [User documentation](https://github.com/eneiluj/cospend-nc/blob/master/docs/user.md)\n* [Admin documentation](https://github.com/eneiluj/cospend-nc/blob/master/docs/admin.md)\n* [Developer documentation](https://github.com/eneiluj/cospend-nc/blob/master/docs/dev.md)\n* [CHANGELOG](https://github.com/eneiluj/cospend-nc/blob/master/CHANGELOG.md#change-log)\n* [AUTHORS](https://github.com/eneiluj/cospend-nc/blob/master/AUTHORS.md#authors)\n\n## Known issues\n\n* it does not make you rich\n\nAny feedback will be appreciated.\n\n\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
+    "description": "# Nextcloud Cospend 💰\n\nNextcloud Cospend is a group/shared budget manager. It was inspired by the great [IHateMoney](https://github.com/spiral-project/ihatemoney/).\n\nYou can use it when you share a house, when you go on vacation with friends, whenever you share expenses with a group of people.\n\nIt lets you create projects with members and bills. Each member has a balance computed from the project bills. Balances are not an absolute amount of money at members disposal but rather a relative information showing if a member has spent more for the group than the group has spent for her/him, independently of exactly who spent money for whom. This way you can see who owes the group and who the group owes. Ultimately you can ask for a settlement plan telling you which payments to make to reset members balances.\n\nProject members are independent from Nextcloud users. Projects can be shared with other Nextcloud users or via public links.\n\n[MoneyBuster](https://gitlab.com/eneiluj/moneybuster) Android client is [available in F-Droid](https://f-droid.org/packages/net.eneiluj.moneybuster/) and on the [Play store](https://play.google.com/store/apps/details?id=net.eneiluj.moneybuster).\n\n[PayForMe](https://github.com/mayflower/PayForMe) iOS client is currently under developpement!\n\nThe private and public APIs are documented using [the Nextcloud OpenAPI extractor](https://github.com/nextcloud/openapi-extractor/). This documentation can be accessed directly in Nextcloud. All you need is to install Cospend (>= v1.6.0) and use the [the OCS API Viewer app](https://apps.nextcloud.com/apps/ocs_api_viewer) to browse the OpenAPI documentation.\n\n## Features\n\n* ✎ Create/edit/delete projects, members, bills, bill categories, currencies\n* ⚖ Check member balances\n* 🗠 Display project statistics\n* ♻ Display settlement plan\n* Move bills from one project to another\n* Move bills to trash before actually deleting them\n* Archive old projects before deleting them\n* 🎇 Automatically create reimbursement bills from settlement plan\n* 🗓 Create recurring bills (day/week/month/year)\n* 📊 Optionally provide custom amount for each member in new bills\n* 🔗 Link personal files to bills (picture of physical receipt for example)\n* 👩 Public links for people outside Nextcloud (can be password protected)\n* 👫 Share projects with Nextcloud users/groups/circles\n* 🖫 Import/export projects as csv (compatible with csv files from IHateMoney and SplitWise)\n* 🔗 Generate link/QRCode to easily add projects in MoneyBuster\n* 🗲 Implement Nextcloud notifications and activity stream\n\nThis app usually support the 2 or 3 last major versions of Nextcloud.\n\nThis app is under development.\n\n🌍 Help us to translate this app on [Nextcloud-Cospend/MoneyBuster Crowdin project](https://crowdin.com/project/moneybuster).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://github.com/julien-nc/cospend-nc/blob/master/CONTRIBUTING.md).\n\n## Documentation\n\n* [User documentation](https://github.com/julien-nc/cospend-nc/blob/master/docs/user.md)\n* [Admin documentation](https://github.com/julien-nc/cospend-nc/blob/master/docs/admin.md)\n* [Developer documentation](https://github.com/julien-nc/cospend-nc/blob/master/docs/dev.md)\n* [CHANGELOG](https://github.com/julien-nc/cospend-nc/blob/master/CHANGELOG.md#change-log)\n* [AUTHORS](https://github.com/julien-nc/cospend-nc/blob/master/AUTHORS.md#authors)\n\n## Known issues\n\n* It does not make you rich\n\nAny feedback will be appreciated.\n\n\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
     "homepage": "https://github.com/julien-nc/cospend-nc",
     "licenses": [
       "agpl"
@@ -129,20 +129,10 @@
       "agpl"
     ]
   },
-  "keeweb": {
-    "sha256": "11q15ajg1357y5y5a640dvsy6hhvvar7wp34zfsb07n7hqlmyci0",
-    "url": "https://github.com/jhass/nextcloud-keeweb/releases/download/v0.6.13/keeweb-0.6.13.tar.gz",
-    "version": "0.6.13",
-    "description": "Open Keepass stores inside Nextcloud with Keeweb just by clicking on an *.kdbx file in your\n        Nextcloud.",
-    "homepage": "https://github.com/jhass/nextcloud-keeweb",
-    "licenses": [
-      "agpl"
-    ]
-  },
   "mail": {
-    "sha256": "0brhaqw1sdh3fj5vdj4h8rkgg92ghwy0gyz51n120rppd8fhsch6",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.4/mail-v3.5.4.tar.gz",
-    "version": "3.5.4",
+    "sha256": "15268xavb4wpkc12anz6wiry87hvy55nf141lc660wr22iivy79r",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.5.5/mail-v3.5.5.tar.gz",
+    "version": "3.5.5",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -170,9 +160,9 @@
     ]
   },
   "music": {
-    "sha256": "06w82v34csx4scl5n4k4fpdxiivrzjb3yvj3hh4bc15gdz68cis9",
-    "url": "https://github.com/owncloud/music/releases/download/v1.9.1/music_1.9.1_for_nextcloud.tar.gz",
-    "version": "1.9.1",
+    "sha256": "1afjqvmcim1r22bs5vpp2b2wd01df5xdchw6ifqf57vgb7nzzkbs",
+    "url": "https://github.com/owncloud/music/releases/download/v1.10.0/music_1.10.0_for_nextcloud.tar.gz",
+    "version": "1.10.0",
     "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone",
     "homepage": "https://github.com/owncloud/music",
     "licenses": [
@@ -200,9 +190,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1h2qa5j31jq2wzpsj69h8knm4jzg9i72p77l92l855n98r4iiws8",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.7/notify_push-v0.6.7.tar.gz",
-    "version": "0.6.7",
+    "sha256": "1inq39kdfynip4j9hfrgybiscgii7r0wkjb5pssvmqknbpqf7x4g",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.9/notify_push-v0.6.9.tar.gz",
+    "version": "0.6.9",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -270,9 +260,9 @@
     ]
   },
   "spreed": {
-    "sha256": "0s31s0qwwzrdqwmnwcykv5vpvc953nmpviy69qn0d7gmd5qknrdx",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.9/spreed-v16.0.9.tar.gz",
-    "version": "16.0.9",
+    "sha256": "0da0c6a30pfwpn4ly4dczxs68v2jmi9kzmqhrpj4fvaalsk1wa7w",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v16.0.10/spreed-v16.0.10.tar.gz",
+    "version": "16.0.10",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -320,9 +310,9 @@
     ]
   },
   "user_oidc": {
-    "sha256": "0a9hkp69xpw5nzb533nfh56zs7rf2cvhi4yc6d1yjqv9jdak7vi4",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v1.3.5/user_oidc-v1.3.5.tar.gz",
-    "version": "1.3.5",
+    "sha256": "0iyd1lkzfl7nh2sy5k9a6p86mswm5p0cyqj3ia613sw2fm49sl1b",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v1.3.6/user_oidc-v1.3.6.tar.gz",
+    "version": "1.3.6",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [

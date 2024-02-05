@@ -429,6 +429,7 @@
   ./services/databases/couchdb.nix
   ./services/databases/dgraph.nix
   ./services/databases/dragonflydb.nix
+  ./services/databases/etcd.nix
   ./services/databases/ferretdb.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
@@ -679,7 +680,6 @@
   ./services/misc/dwm-status.nix
   ./services/misc/dysnomia.nix
   ./services/misc/errbot.nix
-  ./services/misc/etcd.nix
   ./services/misc/etebase-server.nix
   ./services/misc/etesync-dav.nix
   ./services/misc/evdevremapkeys.nix
@@ -1202,6 +1202,7 @@
   ./services/security/hologram-agent.nix
   ./services/security/hologram-server.nix
   ./services/security/infnoise.nix
+  ./services/security/intune.nix
   ./services/security/jitterentropy-rngd.nix
   ./services/security/kanidm.nix
   ./services/security/munge.nix

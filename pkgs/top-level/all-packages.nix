@@ -258,8 +258,6 @@ with pkgs;
 
   ariang = callPackage ../servers/ariang { };
 
-  mov-cli = callPackage ../applications/video/mov-cli { };
-
   ani-cli = callPackage ../applications/video/ani-cli { };
 
   dra-cla = callPackage ../applications/video/dra-cla { };
@@ -4698,10 +4696,7 @@ with pkgs;
 
   cloudbrute = callPackage ../tools/security/cloudbrute { };
 
-  cloudflared = callPackage ../applications/networking/cloudflared {
-    # https://github.com/cloudflare/cloudflared/issues/1054
-    buildGoModule = buildGo120Module;
-  };
+  cloudflared = callPackage ../applications/networking/cloudflared { };
 
   cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
@@ -4942,8 +4937,6 @@ with pkgs;
   csvdiff = callPackage ../tools/text/csvdiff { };
 
   csview = callPackage ../tools/text/csview { };
-
-  csvkit = callPackage ../tools/text/csvkit { };
 
   csvquote = callPackage ../tools/text/csvquote { };
 
@@ -8248,8 +8241,6 @@ with pkgs;
 
   faraday-cli = callPackage ../tools/security/faraday-cli { };
 
-  farge = callPackage ../tools/misc/farge { };
-
   fastlane = callPackage ../tools/admin/fastlane { };
 
   fatresize = callPackage ../tools/filesystems/fatresize { };
@@ -10813,7 +10804,7 @@ with pkgs;
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
-  mbutil = python3Packages.callPackage ../applications/misc/mbutil { };
+  mbutil = python310Packages.callPackage ../applications/misc/mbutil { };
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
 
@@ -13323,8 +13314,6 @@ with pkgs;
 
   snmpcheck = callPackage ../tools/networking/snmpcheck { };
 
-  sniffglue = callPackage ../tools/networking/sniffglue { };
-
   snobol4 = callPackage ../development/interpreters/snobol4 { };
 
   snort = callPackage ../applications/networking/ids/snort { };
@@ -15400,9 +15389,6 @@ with pkgs;
   scponly = callPackage ../shells/scponly { };
 
   rush = callPackage ../shells/rush { };
-
-  xonsh = callPackage ../shells/xonsh/wrapper.nix { };
-  xonsh-unwrapped = callPackage ../shells/xonsh { };
 
   zsh = callPackage ../shells/zsh { };
 
@@ -24349,8 +24335,6 @@ with pkgs;
     buildPythonPackage buildPythonApplication setuptools pycsdr pydigiham;
   };
 
-  optparse-bash = callPackage ../development/libraries/optparse-bash { };
-
   oras = callPackage ../development/tools/oras { };
 
   orcania = callPackage ../development/libraries/orcania { };
@@ -28766,6 +28750,7 @@ with pkgs;
     ubootOdroidC2
     ubootOdroidXU3
     ubootOlimexA64Olinuxino
+    ubootOlimexA64Teres1
     ubootOrangePi3
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
@@ -28997,8 +28982,6 @@ with pkgs;
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
-
-  banana-cursor = callPackage ../data/icons/banana-cursor { };
 
   barlow = callPackage ../data/fonts/barlow { };
 
