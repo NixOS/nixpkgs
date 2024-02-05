@@ -38,5 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ndilieto/uacme";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ malte-v ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
