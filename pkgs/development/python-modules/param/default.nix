@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "holoviz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IJchqSXZ87WZUKGDY3ObfdYCRfXM++N//kM7kb1wFow=";
+    hash = "sha256-kVuab6+l4KOtSvj6aI9zsQJ91tfCDJkHrSTcRL9SViY=";
   };
 
   nativeBuildInputs = [
