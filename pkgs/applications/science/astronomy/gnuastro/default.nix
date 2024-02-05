@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNU astronomy utilities and library";
     homepage = "https://www.gnu.org/software/gnuastro/";
+    changelog = "https://git.savannah.gnu.org/cgit/gnuastro.git/plain/NEWS?id=gnuastro_v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
