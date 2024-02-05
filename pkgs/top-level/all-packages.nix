@@ -2616,10 +2616,6 @@ with pkgs;
 
   _86Box = callPackage ../applications/emulators/86box { };
 
-  atari800 = callPackage ../applications/emulators/atari800 { };
-
-  ataripp = callPackage ../applications/emulators/atari++ { };
-
   attract-mode = callPackage ../applications/emulators/attract-mode { };
 
   basiliskii = callPackage ../applications/emulators/basiliskii { };
