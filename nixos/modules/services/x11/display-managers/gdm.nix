@@ -309,9 +309,18 @@ in
         session   include       login
       '';
 
-      gdm-autologin.text = ''
+      gdm-autologin.text = let
+        haveLoadkey = versionAtLeast (getVersion config.systemd.package) "255";
+        haveSystemPassword = config.boot.initrd.systemd.enable;
+        haveGnomeKeyring = config.security.pam.services.login.enableGnomeKeyring;
+      in ''
         auth      requisite     pam_nologin.so
 
+      '' + optionalString (haveLoadkey && haveSystemPassword) ''
+        auth      optional      ${config.systemd.package}/lib/security/pam_systemd_loadkey.so
+      '' + optionalString (haveLoadkey && haveSystemPassword && haveGnomeKeyring) ''
+        auth      optional      ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so
+      '' + ''
         auth      required      pam_succeed_if.so uid >= 1000 quiet
         auth      required      pam_permit.so
 
