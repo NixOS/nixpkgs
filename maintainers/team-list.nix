@@ -509,7 +509,6 @@ with lib.maintainers; {
     members = [
       aanderse
       edwtjo
-      MP2E
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
