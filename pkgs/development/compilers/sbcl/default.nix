@@ -96,7 +96,9 @@ stdenv.mkDerivation (self: rec {
   );
   buildInputs = lib.optionals coreCompression [ zstd ];
 
-  patches = lib.optionals (version == "2.4.0") [
+  patches = [
+    ./search-for-binaries-in-PATH.patch
+  ] ++ lib.optionals (version == "2.4.0") [
     ./fix-2.4.0-aarch64-darwin.patch
   ];
 
