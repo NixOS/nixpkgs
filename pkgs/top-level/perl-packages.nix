@@ -24575,6 +24575,21 @@ with self; {
     };
   };
 
+  TermReadLinePerl = buildPerlPackage {
+    pname = "Term-ReadLine-Perl";
+    version = "1.0303";
+    outputs = [ "out" ];
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Term-ReadLine-Perl-1.0303.tar.gz";
+      sha256 = "314b9f8df7e89e77eaac200b9bbcbe28e01e0dab2646ada83c5b26584839095d";
+    };
+    meta = {
+      homepage = "https://metacpan.org/dist/Term-ReadLine";
+      description = "Perl interface to various readline packages.";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TermReadLineGnu = buildPerlPackage {
     pname = "Term-ReadLine-Gnu";
     version = "1.46";
