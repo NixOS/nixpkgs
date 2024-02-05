@@ -18,7 +18,7 @@ buildFHSEnv {
   ];
 
   extraBwrapArgs = [
-    "--ro-bind /var/lib/pentablet /var/lib/pentablet"
+    "--bind /var/lib/pentablet /var/lib/pentablet"
   ];
 
   extraBuildCommands = ''
