@@ -4,8 +4,10 @@
   fetchFromGitHub,
   pkg-config,
   stdenv,
-  wayland,
-  kdeSupport ? true,
+  gnomeSupport ? false,
+  kdeSupport ? false,
+  wlrootsSupport ? false,
+  x11Support ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,14 +23,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ABzt8PMsas9+NRvpgtZlsoYjjvwpU8f6lqhceHxq91M=";
 
-  cargoBuildFlags = lib.optional kdeSupport "--features kde";
+  cargoBuildFlags =
+    lib.optional gnomeSupport "--features gnome"
+    ++ lib.optional kdeSupport "--features kde"
+    ++ lib.optional wlrootsSupport "--features wlroots"
+    ++ lib.optional x11Support "--features x11";
 
   nativeBuildInputs = [
     pkg-config
-  ];
-
-  buildInputs = lib.optionals stdenv.isLinux [
-    wayland
   ];
 
   meta = with lib; {
