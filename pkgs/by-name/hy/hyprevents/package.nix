@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
   makeFlags = [
     "PREFIX=$(out)"
   ];
-  
+
   postInstall = ''
     wrapProgram "$out/bin/hyprevents" \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ hyprland ]}"
