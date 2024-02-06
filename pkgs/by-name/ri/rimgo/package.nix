@@ -6,14 +6,14 @@
 }:
 buildGoModule rec {
   pname = "rimgo";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "rimgo";
     repo = "rimgo";
     rev = "v${version}";
-    hash = "sha256-nokXM+lnTiaWKwglmFYLBpnGHJn1yFok76tqb0nulVA=";
+    hash = "sha256-WXFKAIvgUHNJ3N6GqNS45fGo5rl9vngDjLMJeoD9EHA=";
   };
 
   vendorHash = "sha256-wDTSqfp1Bb1Jb9XX3A3/p5VUcjr5utpe6l/3pXfZpsg=";
