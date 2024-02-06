@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchurl, directoryListingUpdater }:
+{ lib, stdenvNoCC, fetchurl, directoryListingUpdater, crda }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "wireless-regdb";
@@ -16,7 +16,12 @@ stdenvNoCC.mkDerivation rec {
     "PREFIX="
   ];
 
-  passthru.updateScript = directoryListingUpdater { };
+  passthru = {
+    tests = {
+      inherit crda; # validate data base signature
+    };
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "Wireless regulatory database for CRDA";
