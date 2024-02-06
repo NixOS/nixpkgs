@@ -77,7 +77,30 @@ stdenv.mkDerivation rec {
   # oom/streambuf: [forking]
   #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
   #   [streambuf FAILED]
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  # disable tests on aarch32, the following tests fail there:
+  # sandbox/is_active: [forking] Feb 06 17:43:14.224 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
+  #   FAIL src/test/test_sandbox.c:146: assert(sandbox_is_active())
+  #   [is_active FAILED]
+  # sandbox/open_filename: [forking] Feb 06 17:43:14.279 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
+  #   FAIL src/test/test_sandbox.c:170: assert(fd OP_EQ -1): 9 vs -1
+  #   [open_filename FAILED]
+  # sandbox/opendir_dirname: [forking] Feb 06 17:43:14.343 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
+  #   FAIL src/test/test_sandbox.c:271: assert(dir OP_EQ NULL): 0xdf8300 vs (nil)
+  #   [opendir_dirname FAILED]
+  # sandbox/openat_filename: [forking] Feb 06 17:43:14.400 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
+  #   FAIL src/test/test_sandbox.c:249: assert(fd OP_EQ -1): 9 vs -1
+  #   [openat_filename FAILED]
+  # sandbox/chmod_filename: [forking] Feb 06 17:43:14.493 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
+  #   FAIL src/test/test_sandbox.c:190: assert(rc OP_EQ -1): 0 vs -1
+  #   [chmod_filename FAILED]
+  # sandbox/chown_filename: [forking] Feb 06 17:43:14.561 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
+  #   FAIL src/test/test_sandbox.c:208: assert(rc OP_EQ -1): 0 vs -1
+  #   [chown_filename FAILED]
+  # sandbox/rename_filename: [forking] Feb 06 17:43:14.629 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
+  #   FAIL src/test/test_sandbox.c:228: assert(rc OP_EQ -1): 0 vs -1
+  #   [rename_filename FAILED]
+
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64) && !(stdenv.isLinux && stdenv.isAarch32);
 
   postInstall = ''
     mkdir -p $geoip/share/tor
