@@ -1048,11 +1048,7 @@ _defaultUnpack() {
                 # stages. The XZ_OPT env var is only used by the full "XZ utils" implementation, which supports
                 # the --threads (-T) flag. This allows us to enable multithreaded decompression exclusively on
                 # that implementation, without the use of complex bash conditionals and checks.
-                DECOMPRESSED=$(mktemp xz.decompressed.XXXXXX)
-                XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn" > $DECOMPRESSED
-                tar xf - --warning=no-timestamp < $DECOMPRESSED
-                rm -f $DECOMPRESSED
-                # XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn" | tar xf - --warning=no-timestamp
+                (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn"; true) | tar xf - --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
