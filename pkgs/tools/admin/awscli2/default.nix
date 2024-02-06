@@ -55,7 +55,7 @@ with py.pkgs; buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
-      --replace 'awscrt==0.19.18' 'awscrt>=0.19' \
+      --replace 'awscrt>=0.19.18,<=0.19.19' 'awscrt>=0.19.18' \
       --replace 'docutils>=0.10,<0.20' 'docutils>=0.10' \
       --replace 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 

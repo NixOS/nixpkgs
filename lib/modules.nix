@@ -1256,7 +1256,7 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true }:
+  doRename = { from, to, visible, warn, use, withPriority ? true, condition ? true }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1272,7 +1272,7 @@ let
       } // optionalAttrs (toType != null) {
         type = toType;
       });
-      config = mkMerge [
+      config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
             "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
@@ -1280,7 +1280,7 @@ let
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
           else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
-      ];
+      ]);
     };
 
   /* Use this function to import a JSON file as NixOS configuration.
