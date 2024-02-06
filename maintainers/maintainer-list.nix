@@ -4365,6 +4365,12 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+  daylinmorgan = {
+    email = "daylinmorgan@gmail.com";
+    github = "daylinmorgan";
+    githubId = 47667941;
+    name = "Daylin Morgan";
+  };
   dbalan = {
     email = "nix@dbalan.in";
     github = "dbalan";
