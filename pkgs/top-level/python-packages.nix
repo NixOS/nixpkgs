@@ -8439,6 +8439,8 @@ self: super: with self; {
 
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
+  norbert = callPackage ../development/python-modules/norbert { };
+
   normality = callPackage ../development/python-modules/normality { };
 
   nose = callPackage ../development/python-modules/nose { };
@@ -13755,6 +13757,8 @@ self: super: with self; {
   sphinxext-opengraph = callPackage ../development/python-modules/sphinxext-opengraph { };
 
   spidev = callPackage ../development/python-modules/spidev { };
+
+  spleeter = callPackage ../development/python-modules/spleeter { };
 
   splinter = callPackage ../development/python-modules/splinter { };
 
