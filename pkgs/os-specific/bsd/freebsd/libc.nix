@@ -20,9 +20,9 @@ mkDerivation rec {
     "contrib/gdtoa"
     "contrib/libc-pwcache"
     "contrib/libc-vis"
-  ] ++ lib.optionals (hostVersion == "freebsd13") [
+  ] ++ lib.optionals (hostVersion == "13.2") [
     "contrib/tzcode/stdtime"
-  ] ++ lib.optionals (hostVersion == "freebsd14") [
+  ] ++ lib.optionals (hostVersion == "14.0") [
     "contrib/tzcode"
   ] ++ [
 

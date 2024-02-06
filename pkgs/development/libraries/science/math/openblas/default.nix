@@ -114,7 +114,7 @@ let
       USE_OPENMP = true;
     };
 
-    x86_64-freebsd14 = {
+    x86_64-freebsd = {
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = setDynamicArch true;

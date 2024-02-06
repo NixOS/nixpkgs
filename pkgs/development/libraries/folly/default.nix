@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "x86_64-freebsd14" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "x86_64-freebsd" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
 }

@@ -6,10 +6,10 @@ mkDerivation {
   #CC_HOST = "${pkgsBuildBuild.stdenv.cc}/bin/cc";
   MK_TESTS = "no";
   clangFixup = true;
-  preBuild = lib.optionalString (hostVersion != "freebsd13") ''
+  preBuild = lib.optionalString (hostVersion != "13.2") ''
     make -C ../tinfo $makeFlags curses.h ncurses_dll.h ncurses_def.h
   '';
-  buildInputs = lib.optionals (hostVersion != "freebsd13") [libncurses-tinfo];
+  buildInputs = lib.optionals (hostVersion != "13.2") [libncurses-tinfo];
 
   # some packages depend on libncursesw.so.8
   postInstall = ''

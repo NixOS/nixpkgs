@@ -107,7 +107,7 @@ let
           { nixPackage = libiconv; fileToCheckFor = null; }
         ];
       };
-      x86_64-freebsd14 = {
+      x86_64-freebsd = {
         variantSuffix = "";
         src = {
           url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-unknown-freebsd.tar.xz";

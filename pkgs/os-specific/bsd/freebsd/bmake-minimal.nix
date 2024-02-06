@@ -47,7 +47,7 @@ mkDerivation {
     substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
       --replace '-Wl,--fatal-warnings' "" \
       --replace '-Wl,--warn-shared-textrel' ""
-  '' + lib.optionalString (stdenv.targetPlatform.isFreeBSD && hostVersion != "freebsd13") ''
+  '' + lib.optionalString (stdenv.targetPlatform.isFreeBSD && hostVersion != "13.2") ''
     substituteInPlace $BSDSRCDIR/share/mk/local.sys.dirdeps.env.mk \
       --replace 'MK_host_egacy= yes' 'MK_host_egacy= no'
   '';

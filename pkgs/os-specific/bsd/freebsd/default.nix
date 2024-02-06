@@ -4,15 +4,13 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
   # build a self which is parameterized with whatever the targeted version is
-  # so e.g. pkgsCross.x86_64-freebsd14.freebsd.buildFreebsd will get you freebsd.packages14
+  # so e.g. pkgsCross.x86_64-freebsd.freebsd.packages14.buildFreebsd will get you freebsd.packages14
   buildFreebsd = buildPackages.freebsd.overrideScope (_: _: { inherit hostVersion; });
-  packages13 = self.overrideScope (_: _: { hostVersion = "freebsd13"; });
-  packages14 = self.overrideScope (_: _: { hostVersion = "freebsd14"; });
-  packages15 = self.overrideScope (_: _: { hostVersion = "freebsd15"; });
+  packages13 = self.overrideScope (_: _: { hostVersion = "13.2"; });
+  packages14 = self.overrideScope (_: _: { hostVersion = "14.0"; });
+  packagesGit = self.overrideScope (_: _: { hostVersion = "git"; });
 
-  hostVersion = if self.stdenv.hostPlatform.isFreeBSD
-    then ''${self.stdenv.hostPlatform.parsed.kernel.name}${builtins.toString (self.stdenv.hostPlatform.parsed.kernel.version or "")}''
-    else throw "The freebsd packages must be parameterized by a specific FreeBSD version when not building for FreeBSD. Do you want freebsd.packages14 or perhaps pkgsCross.x86_64-freebsd14.freebsd?";
+  hostVersion = "14.0";  # default
   hostArchBsd = {
     x86_64 = "amd64";
     aarch64 = "arm64";
@@ -95,7 +93,7 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   libifconfig = callPackage ./libifconfig.nix {};
   libjail = callPackage ./libjail.nix {};
   libkiconv = callPackage ./libkiconv.nix {};
-  libncurses-tinfo = if hostVersion == "freebsd13" then libncurses else callPackage ./libncurses-tinfo.nix {};
+  libncurses-tinfo = if hostVersion == "13.2" then libncurses else callPackage ./libncurses-tinfo.nix {};
   libncurses = callPackage ./libncurses.nix {};
   libnetbsd = callPackage ./libnetbsd.nix {};
   libnv = callPackage ./libnv.nix {};
