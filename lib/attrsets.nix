@@ -1070,30 +1070,29 @@ rec {
     else concatMapStringsSep "." escapeNixIdentifier path;
 
 
-  /* Get a package output.
+  /* Get the output derivation with specific name of a package.
      If no output is found, fallback to `.out` and then to the default.
 
      Example:
-       getOutput "dev" pkgs.openssl
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
+       "${getOutput "man" pkgs.openssl}"
+       => "/nix/store/0kdsik7cmyyw0wihnbqalmdhl77w95yn-openssl-3.0.12-man"
 
      Type:
-       getOutput :: String -> Derivation -> String
+       getOutput :: String -> Derivation -> Derivation
   */
   getOutput = output: pkg:
     if ! pkg ? outputSpecified || ! pkg.outputSpecified
       then pkg.${output} or pkg.out or pkg
       else pkg;
 
-  /* Get a package's `bin` output.
+  /* Get a package's `bin` output derivation.
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getBin pkgs.openssl
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r"
-
+       "${getBin pkgs.openssl}"
+       => "/nix/store/31dsrq2vv1bplkr7jdws8pikvphj4ggi-openssl-3.0.12-bin"
      Type:
-       getBin :: Derivation -> String
+       getBin :: Derivation -> Derivation
   */
   getBin = getOutput "bin";
 
@@ -1102,37 +1101,37 @@ rec {
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getLib pkgs.openssl
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-lib"
+       "${getLib pkgs.openssl}"
+       => "/nix/store/l65pk85mh54jd7ixyf2qkq7gw0rsczky-openssl-3.0.12"
 
      Type:
-       getLib :: Derivation -> String
+       getLib :: Derivation -> Derivation
   */
   getLib = getOutput "lib";
 
 
-  /* Get a package's `dev` output.
+  /* Get a package's `dev` output derivation.
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getDev pkgs.openssl
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
+       "${getDev pkgs.openssl}"
+       => "/nix/store/ca8y9b2x5fgyz5p6kvzbsajzz16vr3na-openssl-3.0.12-dev"
 
      Type:
-       getDev :: Derivation -> String
+       getDev :: Derivation -> Derivation
   */
   getDev = getOutput "dev";
 
 
-  /* Get a package's `man` output.
+  /* Get a package's `man` output derivation.
      If the output does not exist, fallback to `.out` and then to the default.
 
      Example:
-       getMan pkgs.openssl
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-man"
+       "${getMan pkgs.openssl}"
+       => "/nix/store/0kdsik7cmyyw0wihnbqalmdhl77w95yn-openssl-3.0.12-man"
 
      Type:
-       getMan :: Derivation -> String
+       getMan :: Derivation -> Derivation
   */
   getMan = getOutput "man";
 
