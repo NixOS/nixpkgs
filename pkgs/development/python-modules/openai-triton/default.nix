@@ -74,7 +74,12 @@ buildPythonPackage rec {
     zlib
   ];
 
-  propagatedBuildInputs = [ filelock ];
+  propagatedBuildInputs = [
+    filelock
+    # openai-triton uses setuptools at runtime:
+    # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
+    setuptools
+  ];
 
   postPatch = let
     # Bash was getting weird without linting,
