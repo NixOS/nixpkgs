@@ -11,6 +11,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    hardware.uinput.enable = true;
+
     environment.systemPackages = [
       cfg.package
     ];
