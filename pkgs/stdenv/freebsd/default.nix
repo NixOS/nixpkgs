@@ -41,6 +41,16 @@ let inherit (localSystem) system;
     executable = v.executable or true;
     name = v.name or a;
   })) all-bootstrap-urls;
+  mkExtraBuildCommands0 = cc: ''
+    rsrc="$out/resource-root"
+    mkdir "$rsrc"
+    ln -s "${cc.lib}/lib/clang/16/include" "$rsrc"
+    echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+  '';
+  mkExtraBuildCommands = cc: compiler-rt: mkExtraBuildCommands0 cc + ''
+    ln -s "${compiler-rt.out}/lib" "$rsrc/lib"
+    ln -s "${compiler-rt.out}/share" "$rsrc/share"
+  '';
 in
 [
   ({}: let
@@ -221,7 +231,7 @@ in
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
-      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;
@@ -231,11 +241,17 @@ in
         };
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils;
+        inherit (prevStage.llvmPackages) libcxx;
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
         cc = prevStage.llvmPackages.clang-unwrapped;
         isClang = true;
+        extraPackages = [
+          prevStage.llvmPackages.libcxx.cxxabi
+          prevStage.llvmPackages.compiler-rt
+        ];
+        extraBuildCommands = mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt;
         bintools = import ../../build-support/bintools-wrapper {
           inherit lib stdenvNoCC;
           name = "freebsd-boot-1-bintools";
@@ -293,7 +309,7 @@ in
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
-      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bash}/bin/bash";
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;
@@ -305,11 +321,17 @@ in
         };
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils;
+        inherit (prevStage.llvmPackages) libcxx;
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
-        cc = prevStage.gcc-unwrapped;
-        isGNU = true;
+        cc = prevStage.llvmPackages.clang-unwrapped;
+        isClang = true;
+        extraPackages = [
+          prevStage.llvmPackages.libcxx.cxxabi
+          prevStage.llvmPackages.compiler-rt
+        ];
+        extraBuildCommands = mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt;
         bintools = import ../../build-support/bintools-wrapper {
           inherit lib stdenvNoCC;
           name = "freebsd-bintools";
