@@ -8,7 +8,7 @@ in
   {
     bash = mkStatic pkgs.bash;
     patchelf = mkStatic pkgs.patchelf;
-    gnutar = mkStatic pkgs.gnutar;
+    gnutar = (mkStatic pkgs.gnutar).override { libintl = pkgs.gettext.override { enableStatic = true; }; };
     xz = mkStatic pkgs.xz;
     coreutils = (mkStatic pkgs.coreutils).override { gmpSupport = false; libiconv = pkgs.libiconvReal.override { enableStatic = true; }; };
   }

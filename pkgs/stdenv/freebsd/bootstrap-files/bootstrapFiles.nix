@@ -89,4 +89,7 @@ in
     (lib.getDev llvmPackages_16.libcxx)
     (lib.getDev llvmPackages_16.libcxxabi)
     (lib.getDev llvmPackages_16.compiler-rt)
-]))) {})
+
+    # misc
+  ] ++ (let locales = freebsd.locales.override { locales = ["C.UTF-8"]; }; in ([ locales ] ++ locales.paths))
+))) {})
