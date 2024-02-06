@@ -46,6 +46,9 @@ buildPythonPackage rec {
     })
   ] ++ lib.optionals (!cudaSupport) [
     ./0000-dont-download-ptxas.patch
+    # openai-triton wants to get ptxas version even if ptxas is not
+    # used, resulting in ptxas not found error.
+    ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
   ];
 
   nativeBuildInputs = [
