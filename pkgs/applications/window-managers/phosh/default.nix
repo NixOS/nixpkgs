@@ -113,18 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postFixup = ''
-    mkdir -p $out/share/wayland-sessions
-    ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-  '';
-
   passthru = {
-    providedSessions = [
-      "sm.puri.Phosh"
-    ];
-
+    providedSessions = [ "phosh" ];
     tests.phosh = nixosTests.phosh;
-
     updateScript = directoryListingUpdater { };
   };
 
