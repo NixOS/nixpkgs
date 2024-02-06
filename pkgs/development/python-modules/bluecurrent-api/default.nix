@@ -6,6 +6,7 @@
 , setuptools
 , pytz
 , websockets
+, pytest-asyncio
 , pytest-mock
 , pytestCheckHook
 }:
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bluecurrent_api" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];

@@ -419,7 +419,8 @@
     "bloomsky" = ps: with ps; [
     ];
     "blue_current" = ps: with ps; [
-    ]; # missing inputs: bluecurrent-api
+      bluecurrent-api
+    ];
     "bluemaestro" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -5784,6 +5785,7 @@
     "blackbird"
     "blebox"
     "blink"
+    "blue_current"
     "bluemaestro"
     "blueprint"
     "bluetooth"
