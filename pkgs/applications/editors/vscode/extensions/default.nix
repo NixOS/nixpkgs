@@ -1660,8 +1660,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.11.2023120102";
-          sha256 = "sha256-EUegM4sVP/vDikNr4LwnWzhDBSgfxYe6mxnrhSdXhIQ=";
+          version = "0.12.2024013003"; # latest version compatible with vscode 1.86
+          sha256 = "sha256-4ArWVFko2T6ze/i+HTdXAioWC7euWCycDsQxFTrEtUw=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
