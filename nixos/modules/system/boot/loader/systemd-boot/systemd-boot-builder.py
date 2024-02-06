@@ -28,6 +28,7 @@ CONFIGURATION_LIMIT = int("@configurationLimit@")
 CAN_TOUCH_EFI_VARIABLES = "@canTouchEfiVariables@"
 GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
+REMEMBER_LAST_CHOICE = "@rememberLastChoice"
 
 @dataclass
 class BootSpec:
@@ -90,7 +91,12 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
     with open(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf.tmp", 'w') as f:
         if TIMEOUT != "":
             f.write(f"timeout {TIMEOUT}\n")
-        f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
+        if REMEMBER_LAST_CHOICE != "":
+            default_setting = generation_conf_filename(profile, generation, specialisation)
+        else
+            default_setting = "@saved"
+
+        f.write("default %s\n" % default_setting)
         if not EDITOR:
             f.write("editor 0\n")
         f.write(f"console-mode {CONSOLE_MODE}\n")

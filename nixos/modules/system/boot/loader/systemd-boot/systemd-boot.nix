@@ -241,6 +241,20 @@ in {
       '';
     };
 
+    rememberLastChoice = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = lib.mdDoc ''
+        Remembers the last chosen systemd-boot entry. For example, given entries A and B. If B is
+	is selected, next boot B will automatically be highlighted instead of the latest generation.
+	This is done by setting `default @saved` within the systemd-boot config.
+
+	This option will not work properly unless `boot.loader.canTouchEfiVariables = true`
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
