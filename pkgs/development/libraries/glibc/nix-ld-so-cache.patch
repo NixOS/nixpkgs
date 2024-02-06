@@ -1,0 +1,38 @@
+diff --git a/elf/dl-cache.c b/elf/dl-cache.c
+index 804bf232..fda973a3 100644
+--- a/elf/dl-cache.c
++++ b/elf/dl-cache.c
+@@ -401,14 +401,18 @@ _dl_cache_libcmp (const char *p1, const char *p2)
+ char *
+ _dl_load_cache_lookup (const char *name)
+ {
++  const char *ld_so_cache = getenv ("NIX_LD_SO_CACHE");
++  if (ld_so_cache == NULL)
++    ld_so_cache = LD_SO_CACHE;
++
+   /* Print a message if the loading of libs is traced.  */
+   if (__glibc_unlikely (GLRO(dl_debug_mask) & DL_DEBUG_LIBS))
+-    _dl_debug_printf (" search cache=%s\n", LD_SO_CACHE);
++    _dl_debug_printf (" search cache=%s\n", ld_so_cache);
+ 
+   if (cache == NULL)
+     {
+       /* Read the contents of the file.  */
+-      void *file = _dl_sysdep_read_whole_file (LD_SO_CACHE, &cachesize,
++      void *file = _dl_sysdep_read_whole_file (ld_so_cache, &cachesize,
+ 					       PROT_READ);
+ 
+       /* We can handle three different cache file formats here:
+
+diff --git a/sysdeps/generic/unsecvars.h b/sysdeps/generic/unsecvars.h
+index 804bf232..fda973a3 100644
+--- a/sysdeps/generic/unsecvars.h
++++ b/sysdeps/generic/unsecvars.h
+@@ -12,6 +12,7 @@
+   "LOCPATH\0"								      \
+   "MALLOC_TRACE\0"							      \
+   "NIS_PATH\0"								      \
++  "NIX_LD_SO_CACHE\0"							      \
+   "NLSPATH\0"								      \
+   "RESOLV_HOST_CONF\0"							      \
+   "RES_OPTIONS\0"							      \
