@@ -1,4 +1,4 @@
-{ runCommand, gdal }:
+{ runCommand, gdal, jdk }:
 
 let
   inherit (gdal) pname version;
@@ -39,6 +39,17 @@ runCommand "${pname}-tests" { meta.timeout = 60; }
       test.tif
 
     ${gdal}/bin/gdalinfo ./test.tif
+
+    # test java bindings
+    cat <<EOF > main.java
+    import org.gdal.gdal.gdal;
+    class Main {
+      public static void main(String[] args) {
+      gdal.AllRegister();
+      }
+    }
+    EOF
+    ${jdk}/bin/java -Djava.library.path=${gdal}/lib/ -cp ${gdal}/share/java/gdal-${version}.jar main.java
 
     touch $out
   ''

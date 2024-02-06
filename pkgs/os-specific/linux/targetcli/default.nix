@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "targetcli";
-  version = "2.1.57";
+  version = "2.1.58";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     rev = "v${version}";
-    hash = "sha256-7JRNHKku9zTeSafL327hkM/E5EWTKqwPudCfmngvWuo=";
+    hash = "sha256-9QYo7jGk9iWr26j0qPQCqYsJ+vLXAsO4Xs7+7VT9/yc=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ configshell rtslib ];
@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "A command shell for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/targetcli-fb";
     license = licenses.asl20;
+    maintainers = lib.teams.helsinki-systems.members;
     platforms = platforms.linux;
   };
 }
