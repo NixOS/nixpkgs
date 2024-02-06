@@ -1098,6 +1098,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "slack": {
+    "hash": "sha256-efYNaDvy9cQmR4VhUABF+ozAh6M3y+em8bQtHlU7A2o=",
+    "homepage": "https://registry.terraform.io/providers/pablovarela/slack",
+    "owner": "pablovarela",
+    "repo": "terraform-provider-slack",
+    "rev": "v1.2.2",
+    "spdx": "GPL-3.0",
+    "vendorHash": "sha256-F1AuO/dkldEDRvkwrbq2EjByxjg3K2rohZAM4DzKPUw="
+  },
   "snowflake": {
     "hash": "sha256-uMXU/0LqOMBRaIOw1hxCdWuogrkWW9r/28YHniOxCbA=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
