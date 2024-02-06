@@ -75,6 +75,7 @@ in
     (lib.getLib openssl)
     (lib.getLib gettext)
     (lib.getLib xz)
+    (lib.getLib libiconvReal)
 
     # headers
     (lib.getDev curl)
