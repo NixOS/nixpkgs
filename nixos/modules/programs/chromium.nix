@@ -92,9 +92,9 @@ in
             "PasswordManagerEnabled" = false;
             "SpellcheckEnabled" = true;
             "SpellcheckLanguage" = [
-                                     "de"
-                                     "en-US"
-                                   ];
+              "de"
+              "en-US"
+            ];
           }
         '';
       };
