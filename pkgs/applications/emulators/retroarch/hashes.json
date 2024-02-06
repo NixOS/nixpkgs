@@ -448,10 +448,10 @@
     "play": {
         "owner": "jpd002",
         "repo": "Play-",
-        "rev": "c0da95cf596834620169173dc12b3f32ca092404",
-        "hash": "sha256-q6ApOsyNS5to+KBYgz+CZJOfNAcII6Eyv0MhcB4Q1bU=",
+        "rev": "34c4c74fbd0ca2223c203bffc23f57157769074b",
+        "hash": "sha256-Nn2VsZOuwyBQxFBGGLVfD5BvvqJBI7g8HoShmH0hch8=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-01-26"
+        "date": "unstable-2024-02-05"
     },
     "ppsspp": {
         "owner": "hrydgard",
