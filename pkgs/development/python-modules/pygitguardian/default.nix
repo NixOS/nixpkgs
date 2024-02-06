@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to access the GitGuardian API";
     homepage = "https://github.com/GitGuardian/py-gitguardian";
-    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
