@@ -7284,6 +7284,8 @@ self: super: with self; {
 
   mortgage = callPackage ../development/python-modules/mortgage { };
 
+  motmetrics = callPackage ../development/python-modules/motmetrics { };
+
   motionblinds = callPackage ../development/python-modules/motionblinds { };
 
   motioneye-client = callPackage ../development/python-modules/motioneye-client { };
@@ -8441,6 +8443,8 @@ self: super: with self; {
 
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
+  norfair = callPackage ../development/python-modules/norfair { };
+
   normality = callPackage ../development/python-modules/normality { };
 
   nose = callPackage ../development/python-modules/nose { };
@@ -8690,6 +8694,8 @@ self: super: with self; {
   };
 
   onnxruntime-tools = callPackage ../development/python-modules/onnxruntime-tools { };
+
+  onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
 
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
 
