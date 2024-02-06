@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rSEGQqCbmB1IWm6gHjYEO1wiTUPlz1s/SwQ5BiI1YRc=";
+    hash = "sha256-G9jXAo37mhvXzn7cQ/DEUGauGs+P7JxBntfu7ZPfaHc=";
   };
 
   nativeBuildInputs = [
