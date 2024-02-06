@@ -2,33 +2,34 @@
 
 buildGoModule rec {
   pname = "kluctl";
-  version = "2.23.1";
+  version = "2.23.4";
 
   src = fetchFromGitHub {
-    owner = "netthier";
+    owner = "kluctl";
     repo = "kluctl";
-    #rev = "v${version}";
-    rev = "go-embed-py-patch";
-    hash = "sha256-V6qZqWvMXOcRW0vKUgcg1jIdt/W2HAlpfOxfEMhP3e0=";
+    rev = "v${version}";
+    hash = "sha256-3Jsh/BZ9InZcZMyfotLUG1kqBhGlaMRljpPf6PXGOT4=";
   };
 
   subPackages = [ "cmd" ];
 
-  vendorHash = "sha256-E8RDDRWJmzVxmVA1ssRJd+tscjf7bJLiB/OhzDpRJ5o=";
+  vendorHash = "";
 
   ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   # Depends on docker
   doCheck = false;
 
+  buildInputs = [
+    pkgs.libxcrypt-legacy
+  ];
+
   nativeBuildInputs = [
     autoPatchelfHook
     pkgs.libxcrypt-legacy
   ];
 
-  buildInputs = with pkgs; [
-    libxcrypt-legacy
-  ];
+  dontAutoPatchelf = "true";
 
   passthru.tests.version = testers.testVersion {
     package = kluctl;
@@ -38,9 +39,12 @@ buildGoModule rec {
   modPostBuild = ''
     PREPARE_PATH=$(mktemp -d)
     cd vendor/github.com/kluctl/go-embed-python
-    go run -mod=mod github.com/kluctl/go-embed-python/python/generate --python-version=3.11.6 --python-standalone-version=20231002 --pack=false --prepare-path=$PREPARE_PATH
+    source python/internal/data/PYTHON_VERSION
+    go run -mod=mod github.com/kluctl/go-embed-python/python/generate --python-version=$PYTHON_VERSION --python-standalone-version=$PYTHON_STANDALONE_VERSION --pack=false --prepare-path=$PREPARE_PATH
     autoPatchelf $PREPARE_PATH
-    go run -mod=mod github.com/kluctl/go-embed-python/python/generate --python-version=3.11.6 --python-standalone-version=20231002 --prepare=false --prepare-path=$PREPARE_PATH
+    find $PREPARE_PATH -exec touch -t 197001010000.01 {} \;
+    go run -mod=mod github.com/kluctl/go-embed-python/python/generate --python-version=$PYTHON_VERSION --python-standalone-version=$PYTHON_STANDALONE_VERSION --prepare=false --prepare-path=$PREPARE_PATH
+    rm -rf $PREPARE_PATH
     cd ../../../..
   '';
 
