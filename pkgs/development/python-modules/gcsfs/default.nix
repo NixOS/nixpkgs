@@ -1,35 +1,41 @@
 { lib
+, aiohttp
 , buildPythonPackage
+, crcmod
+, decorator
 , fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+, fsspec
 , google-auth
 , google-auth-oauthlib
 , google-cloud-storage
-, requests
-, decorator
-, fsspec
-, ujson
-, aiohttp
-, crcmod
+, pytest-asyncio
 , pytest-timeout
 , pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, ujson
 , vcrpy
 }:
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2023.4.0";
-  format = "setuptools";
+  version = "2024.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fsspec";
-    repo = pname;
+    repo = "gcsfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-FHS+g0SuYH9OPiE/+p2SHrsWfzBQ82GM6hTph8koh+o=";
+    hash = "sha256-rmXQVc4sfHbXQ8HC+15gEYPmLvZ82QYKzhhhdrt3LAM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -44,17 +50,25 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-vcr
+    pytest-asyncio
     pytest-timeout
+    pytest-vcr
     pytestCheckHook
     vcrpy
   ];
 
   disabledTestPaths = [
     # Tests require a running Docker instance
+    "gcsfs/tests/derived/gcsfs_test.py"
     "gcsfs/tests/test_core.py"
+    "gcsfs/tests/test_inventory_report_listing.py"
     "gcsfs/tests/test_mapping.py"
     "gcsfs/tests/test_retry.py"
+  ];
+
+  disabledTests = [
+    # Test requires network access
+    "test_credentials_from_raw_token"
   ];
 
   pytestFlagsArray = [
