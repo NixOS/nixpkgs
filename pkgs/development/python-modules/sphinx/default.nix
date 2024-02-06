@@ -31,6 +31,7 @@
 , filelock
 , html5lib
 , pytestCheckHook
+, pytest-xdist
 }:
 
 buildPythonPackage rec {
@@ -86,6 +87,7 @@ buildPythonPackage rec {
     filelock
     html5lib
     pytestCheckHook
+    pytest-xdist
   ];
 
   preCheck = ''
