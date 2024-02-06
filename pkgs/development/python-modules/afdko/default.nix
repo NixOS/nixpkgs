@@ -17,7 +17,6 @@
 , booleanoperations
 , ufoprocessor
 , ufonormalizer
-, psautohint
 , tqdm
 , setuptools-scm
 , scikit-build
@@ -93,7 +92,6 @@ buildPythonPackage rec {
     mutatormath
     ufoprocessor
     ufonormalizer
-    psautohint
     tqdm
   ];
 
