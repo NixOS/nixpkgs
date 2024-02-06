@@ -1633,10 +1633,16 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.14.8";
-          sha256 = "sha256-kCgnOODT1KDi9PMWs3CATXESWoHnDRhCIZhEUSkm14o=";
+          version = "1.16.9";
+          sha256 = "sha256-Zj1dHz8uBHnRpjnD9tUr8OJILRq9Ty91ePiNq6/Vi7c=";
         };
-        meta = { license = lib.licenses.unfree; };
+
+        meta = {
+          description = "VSCode extensions that provides cloud-hosted development environments for any activity";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces";
+          homepage = "https://github.com/features/codespaces";
+          license = lib.licenses.unfree;
+        };
       };
 
       github.copilot = buildVscodeMarketplaceExtension {
