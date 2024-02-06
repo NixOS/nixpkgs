@@ -6,7 +6,7 @@
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , libadwaita
 , libhandy
 , libxkbcommon
@@ -34,13 +34,13 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
   version = "0.35.0";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
-    url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-hfm89G9uxVc8j8rDOg1ytI+Pm9s9WQWazH3yLZdWSRg=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -90,7 +90,10 @@ stdenv.mkDerivation rec {
     "-Dsystemd=true"
     "-Dcompositor=${phoc}/bin/phoc"
     # https://github.com/NixOS/nixpkgs/issues/36468
+    # https://gitlab.gnome.org/World/Phosh/phosh/-/merge_requests/1363
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    # Save some time building if tests are disabled
+    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   checkPhase = ''
@@ -128,10 +131,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
-    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${version}/debian/changelog";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
     mainProgram = "phosh-session";
   };
-}
+})
