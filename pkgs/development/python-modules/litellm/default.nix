@@ -12,15 +12,14 @@
 , certifi
 , appdirs
 , aiohttp
-, httpx
 }:
 let
   version = "1.22.3";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "litellm";
-  format = "pyproject";
   inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
