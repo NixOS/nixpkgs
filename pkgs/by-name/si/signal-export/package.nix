@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "signal-export";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZGF6vT+fjmBL3SGrZ/E6bvcxToTlbAcxspQAnR/Aboo=";
+    sha256 = "sha256-v4civFGu+CLRTGicQAMSei+k6Iyz0GAznTLEr7ylx24=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
