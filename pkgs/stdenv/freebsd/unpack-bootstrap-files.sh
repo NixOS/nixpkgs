@@ -24,8 +24,8 @@ for f in $(find $out -type f); do
             break
         fi
         echo scorch $f
-        SUFFIX="$(echo "$BADMAN" | cut -d/ -f5-)"
-        GOODMAN="$out/$SUFFIX"
+        BADMAN="$(echo "$BADMAN" | cut -d/ -f-4)"
+        GOODMAN="$out"
         if [ ${#GOODMAN} -gt ${#BADMAN} ]; then
             echo "Can't patch $f: $BADMAN too short"
             break

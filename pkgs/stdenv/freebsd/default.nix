@@ -252,9 +252,10 @@ in
         curlReal = super.curl;
         bash = prevStage.bash;
         gitMinimal = prevStage.gitMinimal;
-        freebsd = super.freebsd.overrideScope (self: super: {
+        freebsd = super.freebsd.overrideScope (self': super': {
           stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
-          libdl = prevStage.freebsd.libdl;
+          locales = prevStage.freebsd.locales;
+          localesReal = super'.locales;
         });
       };
       preHook = ''
@@ -329,8 +330,10 @@ in
         libcxxabi = self.llvmPackages_16.libcxxabi;
         libcxx = self.llvmPackages_16.libcxx;
         clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
-        freebsd = super.freebsd.overrideScope (self: super: {
+        freebsd = super.freebsd.overrideScope (self': super': {
           stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
+          locales = prevStage.freebsd.locales;
+          localesReal = super'.locales;
         });
         haskellPackages = super.haskellPackages.override {
           overrides = (self: super: {
