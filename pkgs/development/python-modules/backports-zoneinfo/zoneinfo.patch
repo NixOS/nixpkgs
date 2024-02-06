@@ -1,0 +1,17 @@
+diff --git a/src/backports/zoneinfo/_tzpath.py b/src/backports/zoneinfo/_tzpath.py
+index 9baaf6b..3f842af 100644
+--- a/src/backports/zoneinfo/_tzpath.py
++++ b/src/backports/zoneinfo/_tzpath.py
+@@ -24,10 +24,7 @@ def reset_tzpath(to=None):
+             base_tzpath = _parse_python_tzpath(env_var)
+         elif sys.platform != "win32":
+             base_tzpath = [
+-                "/usr/share/zoneinfo",
+-                "/usr/lib/zoneinfo",
+-                "/usr/share/lib/zoneinfo",
+-                "/etc/zoneinfo",
++                "@zoneinfo@"
+             ]
+ 
+             base_tzpath.sort(key=lambda x: not os.path.exists(x))
+

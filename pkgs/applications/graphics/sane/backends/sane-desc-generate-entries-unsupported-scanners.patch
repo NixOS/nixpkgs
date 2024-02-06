@@ -1,0 +1,19 @@
+sane-desc does not include unsupported .desc entries like EPSON V300 PHOTO,
+which can be supported by the (unfree) epkowa driver.
+But we need those entries so that unprivileged users which have installed epkowa
+can use the scanner.
+diff --git a/tools/sane-desc.c b/tools/sane-desc.c
+index 7a8645dea..9c9719fef 100644
+--- a/tools/sane-desc.c
++++ b/tools/sane-desc.c
+@@ -3243,10 +3243,6 @@ create_usbids_table (void)
+ 
+ 	      for (model = mfg->model; model; model = model->next)
+ 		{
+-		  if ((model->status == status_unsupported)
+-		      || (model->status == status_unknown))
+-		    continue;
+-
+ 		  if (model->usb_vendor_id && model->usb_product_id)
+ 		    {
+ 		      first_usbid = add_usbid (first_usbid, mfg->name,

@@ -1,0 +1,34 @@
+#!/bin/sh
+
+if [ $# -lt 3 ]; then
+    echo "Usage: $0 <source directory> <target file> <version info file>"
+    exit 1
+fi
+
+SOURCE_DIR=$1
+TARGET_FILE=$2
+VERSION_FILE=$3
+
+VERSION="1"
+LATEST_VERSION="1"
+MERGED_COMMANDS="merged.sql"
+
+[ -e $MERGED_COMMANDS ] && rm $MERGED_COMMANDS
+SCHEMA_FILE="$SOURCE_DIR/v${VERSION}.sql"
+while [ -e $SCHEMA_FILE ]; do
+    cat $SCHEMA_FILE >> $MERGED_COMMANDS
+    LATEST_VERSION=$VERSION
+    VERSION=$(($VERSION+1))
+    SCHEMA_FILE="$SOURCE_DIR/v${VERSION}.sql"
+done
+
+# To output the schema
+echo ".fullschema" >> $MERGED_COMMANDS
+
+# The schemas may use functions that history-service defines in C which don't affect the generated schema in a meaningful way.
+# sqlite will return an error after processing queries with such function calls, so remove them.
+sed -i -e '/normalizeId(/d' $MERGED_COMMANDS
+
+sqlite3 <$MERGED_COMMANDS >$TARGET_FILE
+
+echo $LATEST_VERSION > $VERSION_FILE
