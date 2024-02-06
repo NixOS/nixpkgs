@@ -5,6 +5,7 @@
 , temurin-jre-bin-11
 , bash
 , suitesparse
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    starts-web-server = nixosTests.photonvision;
+  };
 
   meta = with lib; {
     description = "The free, fast, and easy-to-use computer vision solution for the FIRST Robotics Competition";
