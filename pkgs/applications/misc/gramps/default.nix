@@ -21,12 +21,21 @@
 }:
 
 let
-  inherit (pythonPackages) python buildPythonApplication;
+  inherit (pythonPackages) python buildPythonApplication pythonOlder;
 in
 buildPythonApplication rec {
   version = "5.1.6";
   pname = "gramps";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "gramps-project";
+    repo = "gramps";
+    rev = "v${version}";
+    hash = "sha256-BerkDXdFYfZ3rV5AeMo/uk53IN2U5z4GFs757Ar26v0=";
+  };
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -36,12 +45,14 @@ buildPythonApplication rec {
     pythonPackages.setuptools
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-    pythonPackages.jsonschema
-    pythonPackages.mock
-    pythonPackages.lxml
-  ];
+  dontWrapGApps = true;
+
+  nativeCheckInputs = [ glibcLocales ] ++ (with pythonPackages; [
+    unittestCheckHook
+    jsonschema
+    mock
+    lxml
+  ]);
 
   buildInputs = [ gtk3 pango gexiv2 ]
     # Map support
@@ -52,14 +63,7 @@ buildPythonApplication rec {
     ++ lib.optional enableGhostscript ghostscript
   ;
 
-  src = fetchFromGitHub {
-    owner = "gramps-project";
-    repo = "gramps";
-    rev = "v${version}";
-    hash = "sha256-BerkDXdFYfZ3rV5AeMo/uk53IN2U5z4GFs757Ar26v0=";
-  };
-
-  pythonPath = with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
     bsddb3
     pyicu
     pygobject3
@@ -75,32 +79,25 @@ buildPythonApplication rec {
     })
   ];
 
-  # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
-  # install flag.
-  installPhase = ''
-    runHook preInstall
+  # fix bug with resolving the resource-path - remove next release
+  postPatch = ''
+    substituteInPlace gramps/gen/utils/resourcepath.py \
+        --replace-fail "fp.readline()" "fp.readline().rstrip()"
+  '';
 
-    mkdir -p "$out/${python.sitePackages}"
-
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/${python.sitePackages} \
-      --prefix="$out"
-
-    eapth="$out/${python.sitePackages}/easy-install.pth"
-    if [ -e "$eapth" ]; then
-        # move colliding easy_install.pth to specifically named one
-        mv "$eapth" $(dirname "$eapth")/${pname}-${version}.pth
-    fi
-
-    rm -f "$out/${python.sitePackages}"/site.py*
-
-    runHook postInstall
+  # tell gramps where the share directory is - remove next release
+  postInstall = ''
+    echo $out/share > $out/${python.sitePackages}/gramps/gen/utils/resource-path
   '';
 
   preCheck = ''
     export HOME=$TMPDIR
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+    )
   '';
 
   # https://github.com/NixOS/nixpkgs/issues/149812
@@ -110,8 +107,9 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Genealogy software";
     homepage = "https://gramps-project.org";
+    mainProgram = "gramps";
     maintainers = with maintainers; [ jk pinpox ];
-    changelog = "https://github.com/gramps-project/gramps/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/gramps-project/gramps/blob/${src.rev}/ChangeLog";
     longDescription = ''
       Every person has their own story but they are also part of a collective
       family history. Gramps gives you the ability to record the many details of
