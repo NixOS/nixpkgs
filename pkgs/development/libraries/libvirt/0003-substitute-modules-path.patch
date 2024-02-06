@@ -1,14 +1,15 @@
 diff --git a/src/util/virpci.c b/src/util/virpci.c
-index 780b4f9..41cb855 100644
+index 780b4f9..a383df1 100644
 --- a/src/util/virpci.c
 +++ b/src/util/virpci.c
-@@ -1460,8 +1460,11 @@ virPCIDeviceFindBestVFIOVariant(virPCIDevice *dev,
+@@ -1460,8 +1460,12 @@ virPCIDeviceFindBestVFIOVariant(virPCIDevice *dev,
  
      uname(&unameInfo);
      modulesAliasPath = g_strdup_printf("/lib/modules/%s/modules.alias", unameInfo.release);
 -    if (virFileReadAll(modulesAliasPath, 8 * 1024 * 1024, &modulesAliasContent) < 0)
 -        return -1;
 +    if (virFileReadAll(modulesAliasPath, 8 * 1024 * 1024, &modulesAliasContent) < 0) {
++        g_clear_pointer(&modulesAliasPath, g_free);
 +        modulesAliasPath = g_strdup_printf("/run/booted-system/kernel-modules/lib/modules/%s/modules.alias", unameInfo.release);
 +        if (virFileReadAll(modulesAliasPath, 8 * 1024 * 1024, &modulesAliasContent) < 0)
 +            return -1;
