@@ -153,6 +153,8 @@ self: super: with self; {
 
   aioambient = callPackage ../development/python-modules/aioambient { };
 
+  aioapcaccess = callPackage ../development/python-modules/aioapcaccess { };
+
   aioapns = callPackage ../development/python-modules/aioapns { };
 
   aiocron = callPackage ../development/python-modules/aiocron { };
