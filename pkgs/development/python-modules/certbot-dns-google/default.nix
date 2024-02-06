@@ -32,6 +32,9 @@ buildPythonPackage rec {
 
     # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
     "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
+
+    # Monitor https://github.com/certbot/certbot/issues/9828 for a solution
+    "-W 'ignore:X509Extension support in pyOpenSSL is deprecated:DeprecationWarning'"
   ];
 
   meta = certbot.meta // {

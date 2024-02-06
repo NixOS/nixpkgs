@@ -32,6 +32,9 @@ buildPythonPackage rec {
     "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
     "-W 'ignore:Package lexicon.providers is deprecated and will be removed in Lexicon 4>=.:DeprecationWarning'"
     "-W 'ignore:Legacy configuration object has been used to load the ConfigResolver.:DeprecationWarning'"
+
+    # Monitor https://github.com/certbot/certbot/issues/9828 for a solution
+    "-W 'ignore:X509Extension support in pyOpenSSL is deprecated:DeprecationWarning'"
   ];
 
   meta = certbot.meta // {
