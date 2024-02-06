@@ -10,6 +10,8 @@
 , scipy
 
 # solvers
+, clarabel
+, cvxopt
 , daqp
 , ecos
 , osqp
@@ -46,6 +48,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies.solvers = [
+    clarabel
+    cvxopt
     daqp
     ecos
     osqp
