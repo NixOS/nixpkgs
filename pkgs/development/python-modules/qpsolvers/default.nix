@@ -4,13 +4,17 @@
 , buildPythonPackage
 , unittestCheckHook
 , flit-core
+
+# required
+, numpy
+, scipy
+
+# solvers
 , daqp
 , ecos
-, numpy
 , osqp
-, scipy
-, scs
 , quadprog
+, scs
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
@@ -24,28 +28,36 @@ buildPythonPackage rec {
     hash = "sha256-/HLc9dFf9F/6W7ux2Fj2yJuV/xCVeGyO6MblddwIGdM=";
   };
 
-  pythonImportsCheck = [ "qpsolvers" ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
-    daqp
-    ecos
     numpy
-    osqp
     scipy
-    scs
   ];
 
   nativeCheckInputs = [
-    flit-core
-    quadprog
     unittestCheckHook
+  ] ++ passthru.optional-dependencies.solvers;
+
+  pythonImportsCheck = [
+    "qpsolvers"
   ];
 
-  meta = with lib; {
+  passthru.optional-dependencies.solvers = [
+    daqp
+    ecos
+    osqp
+    quadprog
+    scs
+  ];
+
+  meta = {
     changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.rev}/CHANGELOG.md";
     description = "Quadratic programming solvers in Python with a unified API";
     homepage = "https://github.com/qpsolvers/qpsolvers";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ renesat ];
   };
 }
