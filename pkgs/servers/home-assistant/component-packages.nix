@@ -183,7 +183,8 @@
     "anwb_energie" = ps: with ps; [
     ];
     "aosmith" = ps: with ps; [
-    ]; # missing inputs: py-aosmith
+      py-aosmith
+    ];
     "apache_kafka" = ps: with ps; [
       aiokafka
     ];
@@ -5752,6 +5753,7 @@
     "androidtv_remote"
     "anova"
     "anthemav"
+    "aosmith"
     "apache_kafka"
     "apcupsd"
     "api"
