@@ -1259,6 +1259,7 @@
   ./services/video/go2rtc/default.nix
   ./services/video/frigate.nix
   ./services/video/mirakurun.nix
+  ./services/video/photonvision.nix
   ./services/video/replay-sorcery.nix
   ./services/video/mediamtx.nix
   ./services/video/unifi-video.nix
