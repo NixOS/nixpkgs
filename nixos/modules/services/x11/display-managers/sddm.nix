@@ -7,7 +7,7 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = cfg.package;
+  sddm = cfg.package.override(old: { extraPackages = old.extraPackages or [] ++ cfg.extraPackages; });
 
   iniFmt = pkgs.formats.ini { };
 
@@ -140,6 +140,15 @@ in
         '';
       };
 
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        defaultText = "[]";
+        description = lib.mdDoc ''
+          Extra Qt plugins / QML libraries to add to the environment.
+        '';
+      };
+
       autoNumlock = mkOption {
         type = types.bool;
         default = false;
@@ -235,15 +244,7 @@ in
       }
     ];
 
-    services.xserver.displayManager.job = {
-      environment = {
-        # Load themes from system environment
-        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
-        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
-      };
-
-      execCmd = "exec /run/current-system/sw/bin/sddm";
-    };
+    services.xserver.displayManager.job.execCmd = "exec /run/current-system/sw/bin/sddm";
 
     security.pam.services = {
       sddm.text = ''
