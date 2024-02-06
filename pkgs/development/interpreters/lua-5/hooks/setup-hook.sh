@@ -17,7 +17,7 @@ addToLuaSearchPathWithCustomDelimiter() {
   local topDir="${absPattern%%\?*}"
 
   # export only if the folder exists else LUA_PATH/LUA_CPATH grow too large
-  if [[ ! -d "$topDir" ]]; then return; fi
+  if [[ ! -d "$topDir" ]] && [[ ! "$absPattern" =~ ^\./ ]]; then return; fi
 
   # export only if we haven't already got this dir in the search path
   if [[ ${!varName-} == *"$absPattern"* ]]; then return; fi
@@ -34,12 +34,22 @@ addToLuaPath() {
   fi
   cd "$dir"
   for pattern in @luapathsearchpaths@; do
-    addToLuaSearchPathWithCustomDelimiter LUA_PATH "$PWD/$pattern"
+    # handle relative paths at runtime
+    if [[ "$pattern" =~ ^\./ ]]; then
+        addToLuaSearchPathWithCustomDelimiter LUA_PATH "$pattern"
+    else
+        addToLuaSearchPathWithCustomDelimiter LUA_PATH "$PWD/$pattern"
+    fi
   done
 
   # LUA_CPATH
   for pattern in @luacpathsearchpaths@; do
-    addToLuaSearchPathWithCustomDelimiter LUA_CPATH "$PWD/$pattern"
+    # handle relative paths at runtime
+    if [[ "$pattern" =~ ^\./ ]]; then
+        addToLuaSearchPathWithCustomDelimiter LUA_CPATH "$pattern"
+    else
+        addToLuaSearchPathWithCustomDelimiter LUA_CPATH "$PWD/$pattern"
+    fi
   done
   cd - >/dev/null
 }
