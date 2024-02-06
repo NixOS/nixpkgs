@@ -333,6 +333,19 @@ in {
       };
     };
 
+    rememberLastChoice = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = ''
+        Remembers the last chosen systemd-boot entry. For example, given entries A and B. If B is
+        is selected, next boot B will automatically be highlighted instead of the latest generation.
+        This is done by setting `default @saved` within the systemd-boot config.
+
+        This option will not work properly unless `boot.loader.canTouchEfiVariables = true`
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -352,6 +365,10 @@ in {
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
         message = "This kernel does not support the EFI boot stub";
+      }
+      {
+        assertion = config.boot.loader.systemd-boot.rememberLastChoice -> config.boot.loader.efi.canTouchEfiVariables;
+        message = "systemd-boot rememberLastChoice requires mutable EFI variables.";
       }
     ] ++ concatMap (filename: [
       {

@@ -35,6 +35,7 @@ COPY_EXTRA_FILES = "@copyExtraFiles@"
 CHECK_MOUNTPOINTS = "@checkMountpoints@"
 BOOT_COUNTING_TRIES = "@bootCountingTries@"
 BOOT_COUNTING = "@bootCounting@" == "True"
+REMEMBER_LAST_CHOICE = "@rememberLastChoice"
 
 @dataclass
 class BootSpec:
@@ -187,6 +188,13 @@ def write_loader_conf(profile: str | None) -> None:
             f.write("default nixos-%s-generation-*\n" % profile)
         else:
             f.write("default nixos-generation-*\n")
+
+        if REMEMBER_LAST_CHOICE != "":
+            default_setting = generation_conf_filename(profile, generation, specialisation)
+        else
+            default_setting = "@saved"
+        f.write("default %s\n" % default_setting)
+
         if not EDITOR:
             f.write("editor 0\n")
         f.write(f"console-mode {CONSOLE_MODE}\n")
