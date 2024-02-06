@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeWrapper
-, openjdk17
+, openjdk
 , wget
 , which
 , gnused
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    openjdk17
+    openjdk
     wget
     which
     gnused
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/nextflow \
       --prefix PATH : ${lib.makeBinPath nativeBuildInputs} \
-      --set JAVA_HOME ${openjdk17.home}
+      --set JAVA_HOME ${openjdk.home}
   '';
 
   meta = with lib; {
