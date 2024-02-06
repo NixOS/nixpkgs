@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   #    _main in tar.o
   #  ld: symbol(s) not found for architecture x86_64
   buildInputs = lib.optional stdenv.isLinux acl
-  ++ lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) libintl;
+  ++ lib.optional stdenv.isDarwin libintl;
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.

@@ -16,8 +16,8 @@ let inherit (localSystem) system;
         hash = "sha256-rPNJ8R4EgyXsdsgxUKg05JbtoWrsd+3Txlhn2fiyan4=";
       };
       tar = {
-        url = "http://192.168.122.1:8000/wbq5nja164knjjnc3hsphl81ni95pkjm-x86_64-freebsd14-tar";
-        hash = "sha256-kDs8YyJXoI5zHN4ERBLn5WHGkwpvvRdBM3IkFG1yGXw=";
+        url = "http://192.168.122.1:8000/jcmznjj0avd0w0cr599yxgzqx07j6qzs-x86_64-freebsd14-tar";
+        hash = "sha256-0BO0f8AU2OYJDMk6eLAi4G1YE0hJpRzFKmVu/IbQCLg=";
       };
       unxz = {
         url = "http://192.168.122.1:8000/m1snvx8hihiipx0kxq8xdj83rzy2aczk-x86_64-freebsd14-unxz";
@@ -28,8 +28,8 @@ let inherit (localSystem) system;
         hash = "sha256-iBdzCXKU+03MfOA75ASrXOD3arPtQnvKqsdCf32oKxk=";
       };
       bootstrapFiles = {
-        url = "http://192.168.122.1:8000/sagqdwnbkg6vz9fvbfnis0imzcmrp1h1-x86_64-freebsd14-bootstrap-files.tar.xz";
-        hash = "sha256-WSkTKfRocflftx4i7WVhEJCMB+TYjBjSVVDtn/o7gVI=";
+        url = "http://192.168.122.1:8000/mi0c0q9vv7p9i7imwzihg0saxq1idiaa-x86_64-freebsd14-bootstrap-files.tar.xz";
+        hash = "sha256-ylLJ8T4C/P5m6KZn2aqMUmm+knTGOHbZj7EZlsPIre4=";
         name = "bootstrap-files.tar.xz";
         executable = false;
       };
