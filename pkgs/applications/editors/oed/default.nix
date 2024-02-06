@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oed";
-  version = "7.1";
+  version = "7.4";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "oed";
     rev = "oed-${version}";
-    hash = "sha256-ySfw8Xo/dCBd3K3dxWsdPz8gQ+KeXyReIlUo4q5SFCc=";
+    hash = "sha256-bbV89YhrmL7tOgKly5OfQDRz4QE0UzZrVsmoXiJ7ZZw=";
   };
 
   postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
