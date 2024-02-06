@@ -57,12 +57,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # this is optional, but without it phosh-mobile-settings won't know about lock screen plugins
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
-
-    # .desktop files marked `OnlyShowIn=Phosh;` aren't displayed even in our phosh, so remove that.
-    # also make the Exec path absolute.
-    substituteInPlace "$out/share/applications/mobi.phosh.MobileSettings.desktop" \
-      --replace 'OnlyShowIn=Phosh;' "" \
-      --replace 'Exec=phosh-mobile-settings' "Exec=$out/bin/phosh-mobile-settings"
   '';
 
   passthru.updateScript = directoryListingUpdater { };
