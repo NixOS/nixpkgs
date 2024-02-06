@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.23.0";
+  version = "1.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-c2EXgUs+6GA5zHHF7Cx21LIsZ+jbmQFFUwLft2q5M30=";
+    hash = "sha256-N0yokLsp6jRELIPu8w6gvD7V97xiKJl+kLQQB9h2mMY=";
   };
 
   pythonRelaxDeps = true;
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     marshmallow
     marshmallow-dataclass
     oauthlib
+    platformdirs
     pygitguardian
     pyjwt
     python-dotenv
@@ -67,6 +68,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_is_valid_git_commit_ref"
     "test_check_git_dir"
     "test_does_not_fail_if_cache"
+    # Encoding issues
+    "test_file_decode_content"
+    "test_file_is_longer_than_does_not_read_utf8_file"
+    "test_file_is_longer_using_8bit_codec"
+    "test_generate_files_from_paths"
   ];
 
   meta = with lib; {

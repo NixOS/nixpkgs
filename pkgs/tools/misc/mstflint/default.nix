@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , rdma-core
 , openssl
 , zlib
@@ -31,6 +32,15 @@ stdenv.mkDerivation rec {
     url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
     hash = "sha256-P8XACcz6d8UTOhFFeTijfFOthBqnUghGlDj9K145sZ8=";
   };
+
+  patches = [
+    # needed to introduce this with GCC 13. Remove, when https://github.com/Mellanox/mstflint/pull/916 is upstream.
+    (fetchpatch {
+      name = "elf.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/Mellanox/mstflint/pull/916.patch";
+      hash = "sha256-quBdmiuzwThu4MkAaT74eJDlZwIcUZMrLZa8OIcO96w=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf

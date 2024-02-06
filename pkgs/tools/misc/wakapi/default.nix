@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "wakapi";
-  version = "2.10.4";
+  version = "2.10.5";
 
   src = fetchFromGitHub {
     owner = "muety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xUFYwV9fuTMDEqp4FEyPRDQCB6I/3sqcmEX8pm6BDfw=";
+    sha256 = "sha256-u+br+C5tWSCc8LPGS3/CMkxpqaO30BsWPRFGOkloMlA=";
   };
 
   vendorHash = "sha256-TeKVhG1V9inyDWfILwtpU9QknJ9bt3Dja5GVHrK9PkA=";

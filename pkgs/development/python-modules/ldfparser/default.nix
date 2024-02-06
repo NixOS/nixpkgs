@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ldfparser";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "c4deszes";
     repo = "ldfparser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oHFfoeD2C69VIW82akbp0tmxZp5ImA+l5ZDnN9cjhhA=";
+    hash = "sha256-gSjTuMndkzFUDcixJCohuCChhztFXnLpbK/zTOjEBpg=";
   };
 
   nativeBuildInputs = [
