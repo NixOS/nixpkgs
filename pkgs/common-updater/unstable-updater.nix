@@ -79,7 +79,7 @@ let
     commit_date="$(${git}/bin/git show -s --pretty='format:%cs')"
     commit_sha="$(${git}/bin/git show -s --pretty='format:%H')"
     if [[ -z "$use_stable_version" ]]; then
-        new_version="unstable-$commit_date"
+        new_version="0-unstable-$commit_date"
     else
         depth=100
         while (( $depth < 10000 )); do
