@@ -121,3 +121,4 @@ toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda
+xml2lua,,,,,,teto

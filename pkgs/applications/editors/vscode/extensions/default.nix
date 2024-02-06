@@ -1633,18 +1633,24 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.14.8";
-          sha256 = "sha256-kCgnOODT1KDi9PMWs3CATXESWoHnDRhCIZhEUSkm14o=";
+          version = "1.16.9";
+          sha256 = "sha256-Zj1dHz8uBHnRpjnD9tUr8OJILRq9Ty91ePiNq6/Vi7c=";
         };
-        meta = { license = lib.licenses.unfree; };
+
+        meta = {
+          description = "VSCode extensions that provides cloud-hosted development environments for any activity";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces";
+          homepage = "https://github.com/features/codespaces";
+          license = lib.licenses.unfree;
+        };
       };
 
       github.copilot = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.151.659";
-          sha256 = "sha256-6jz7Nb9SGON7AXL4KJwC4H03la9JqLCX+AyBEvxD4HA=";
+          version = "1.156.691";
+          sha256 = "sha256-K7lzwfgqb0gUJAivro/ePaQetM31M+zTBRZMBy92ZuA=";
         };
 
         meta = {
@@ -1660,8 +1666,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.11.2023120102";
-          sha256 = "sha256-EUegM4sVP/vDikNr4LwnWzhDBSgfxYe6mxnrhSdXhIQ=";
+          version = "0.12.2024013003"; # latest version compatible with vscode 1.86
+          sha256 = "sha256-4ArWVFko2T6ze/i+HTdXAioWC7euWCycDsQxFTrEtUw=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";

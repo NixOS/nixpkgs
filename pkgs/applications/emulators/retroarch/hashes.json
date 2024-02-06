@@ -249,9 +249,9 @@
     "gpsp": {
         "owner": "libretro",
         "repo": "gpsp",
-        "rev": "9fc117ef5c719047818513c7e394c24371cb1dbd",
-        "hash": "sha256-6dPuj+uzqSYA2+Jm+G3u0HEeBFW2i+KmWd3PYbSxBu8=",
-        "date": "unstable-2024-01-15"
+        "rev": "85a2ac6c911ffcc77cf1bab418c78fe5218c0b1a",
+        "hash": "sha256-iHfdsI6E2LQTC9HjqVRBHihVUpagtB8326M8Crll2iY=",
+        "date": "unstable-2024-02-04"
     },
     "gw": {
         "owner": "libretro",
@@ -277,9 +277,9 @@
     "mame": {
         "owner": "libretro",
         "repo": "mame",
-        "rev": "68520cf9defd1c2762bca7f266f13ad593b7b3f3",
-        "hash": "sha256-moYxyoa6QUCvxVPTr4NpRiEC+7bPETohVSYu4EYegFA=",
-        "date": "unstable-2024-01-03"
+        "rev": "f55fe47b0997d24048700898195cb66bc0bccfb6",
+        "hash": "sha256-JUL4ha7UL+hNG5oi178nLT1aUuxqfev0/bRU6y/Mg7A=",
+        "date": "unstable-2024-02-05"
     },
     "mame2000": {
         "owner": "libretro",
@@ -361,10 +361,10 @@
     "mrboom": {
         "owner": "Javanaise",
         "repo": "mrboom-libretro",
-        "rev": "c4ec620424fe79f0d6db719d73628f23ae285ada",
-        "hash": "sha256-twocTyayV79a4757Yfoz/P3wnQPgiwsbrBbLmT4EZKQ=",
+        "rev": "865be65118ef70e9a486f872948f4fc805edf643",
+        "hash": "sha256-jdOthryC1QvVvuPZUh/YyZhJeFWk1XhBuCm4hmAy8+Q=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-01-23"
+        "date": "unstable-2024-02-05"
     },
     "mupen64plus": {
         "owner": "libretro",
@@ -448,18 +448,18 @@
     "play": {
         "owner": "jpd002",
         "repo": "Play-",
-        "rev": "c0da95cf596834620169173dc12b3f32ca092404",
-        "hash": "sha256-q6ApOsyNS5to+KBYgz+CZJOfNAcII6Eyv0MhcB4Q1bU=",
+        "rev": "34c4c74fbd0ca2223c203bffc23f57157769074b",
+        "hash": "sha256-Nn2VsZOuwyBQxFBGGLVfD5BvvqJBI7g8HoShmH0hch8=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-01-26"
+        "date": "unstable-2024-02-05"
     },
     "ppsspp": {
         "owner": "hrydgard",
         "repo": "ppsspp",
-        "rev": "d479b74ed9c3e321bc3735da29bc125a2ac3b9b2",
-        "hash": "sha256-I84zJqEE1X/eo/ukeGA2iZe3lWKvilk+RNGUzl2wZXY=",
+        "rev": "f65c84f4cb8117b273e7fa2ab578c95aedc6dd56",
+        "hash": "sha256-GgXozubq6ByZDWGkUrzeEgKxUaBaIN3NY5/IIRBNn/o=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-02-04"
+        "date": "unstable-2024-02-05"
     },
     "prboom": {
         "owner": "libretro",
