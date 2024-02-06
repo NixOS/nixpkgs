@@ -60,15 +60,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "0-unstable-2024-02-01";
+  version = "unstable-2024-02-05";
 
   outputs = [ "out" "man" ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "4d387ed61968f468e43571d15485b498e28acaec";
-    hash = "sha256-vVL8e+P/lnp0/jO+lQ/q0CehwxAvXh+FPOMJ8r+2Ftk=";
+    rev = "d0c057dbbb0f1ee9179769e187c0fbd3b00327d4";
+    hash = "sha256-3zpUqdxoKMwezRfMgnpY3KfMB5/PFfRYtGPZxWfNDtA=";
   };
 
   patches = [
