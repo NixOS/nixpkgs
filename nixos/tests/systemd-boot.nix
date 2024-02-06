@@ -598,4 +598,30 @@ in
       machine.wait_for_unit("multi-user.target")
     '';
   };
+
+  rememberLastChoice = makeTest {
+    name = "systemd-remember-last-choice";
+    meta.maintainers = with pkgs.lib.maintainers; [ noar-t ];
+    nodes.machine =
+      { pkgs, lib, ... }:
+      {
+        imports = [ common ];
+        boot.loader.systemd-boot.rememberLastChoice = true;
+
+      };
+
+    testScript =
+      { nodes, ... }:
+      ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed(
+            "test -e /boot/loader/loader.conf"
+        )
+        machine.succeed(
+            "grep -q '@saved' /boot/loader.conf"
+        )
+      '';
+  };
 }
