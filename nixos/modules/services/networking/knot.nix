@@ -113,8 +113,7 @@ let
   mkConfigFile = configString: pkgs.writeTextFile {
     name = "knot.conf";
     text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + configString;
-    # TODO: maybe we could do some checks even when private keys complicate this?
-    checkPhase = lib.optionalString (cfg.keyFiles == []) ''
+    checkPhase = lib.optionalString cfg.checkConfig ''
       ${cfg.package}/bin/knotc --config=$out conf-check
     '';
   };
@@ -143,6 +142,39 @@ in {
   options = {
     services.knot = {
       enable = mkEnableOption (lib.mdDoc "Knot authoritative-only DNS server");
+
+      enableXDP = mkOption {
+        type = types.bool;
+        default = lib.hasAttrByPath [ "xdp" "listen" ] cfg.settings;
+        defaultText = ''
+          Enabled when the `xdp.listen` setting is configured through `settings`.
+        '';
+        example = true;
+        description = ''
+          Extends the systemd unit with permissions to allow for the use of
+          the eXpress Data Path (XDP).
+
+          ::: {.note}
+            Make sure to read up on functional [limitations](https://www.knot-dns.cz/docs/latest/singlehtml/index.html#mode-xdp-limitations)
+            when running in XDP mode.
+          :::
+        '';
+      };
+
+      checkConfig = mkOption {
+        type = types.bool;
+        # TODO: maybe we could do some checks even when private keys complicate this?
+        # conf-check fails hard on missing IPs/devices with XDP
+        default = cfg.keyFiles == [] && !cfg.enableXDP;
+        defaultText = ''
+          Disabled when the config uses `keyFiles` or `enableXDP`.
+        '';
+        example = false;
+        description = ''
+          Toggles the configuration test at build time. It runs in a
+          sandbox, and therefore cannot be used in all scenarios.
+        '';
+      };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
@@ -210,7 +242,17 @@ in {
       wants = [ "network.target" ];
       after = ["network.target" ];
 
-      serviceConfig = {
+      serviceConfig = let
+        # https://www.knot-dns.cz/docs/3.3/singlehtml/index.html#pre-requisites
+        xdpCapabilities = lib.optionals (cfg.enableXDP) [
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+          "CAP_SYS_ADMIN"
+          "CAP_IPC_LOCK"
+        ] ++ lib.optionals (lib.versionOlder config.boot.kernelPackages.kernel.version "5.11") [
+          "CAP_SYS_RESOURCE"
+        ];
+      in {
         Type = "notify";
         ExecStart = "${cfg.package}/bin/knotd --config=${configFile} --socket=${socketFile} ${concatStringsSep " " cfg.extraArgs}";
         ExecReload = "${knot-cli-wrappers}/bin/knotc reload";
@@ -219,10 +261,10 @@ in {
 
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
-        ];
+        ] ++ xdpCapabilities;
         CapabilityBoundingSet = [
           "CAP_NET_BIND_SERVICE"
-        ];
+        ] ++ xdpCapabilities;
         DeviceAllow = "";
         DevicePolicy = "closed";
         LockPersonality = true;
@@ -247,6 +289,9 @@ in {
           "AF_INET"
           "AF_INET6"
           "AF_UNIX"
+        ] ++ lib.optionals (cfg.enableXDP) [
+          "AF_NETLINK"
+          "AF_XDP"
         ];
         RestrictNamespaces = true;
         RestrictRealtime =true;
@@ -258,6 +303,8 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
+        ] ++ optionals (cfg.enableXDP) [
+          "bpf"
         ];
         UMask = "0077";
       };
