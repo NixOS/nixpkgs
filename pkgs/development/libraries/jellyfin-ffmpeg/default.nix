@@ -6,13 +6,13 @@
 
 ffmpeg_6-full.overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
-  version = "6.0.1-1";
+  version = "6.0.1-2";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-LMwGxx++z6TpZLnpeRGraid4653Mp8T4pY5EP4Z7GXY=";
+    hash = "sha256-wc9OGwjcRDTDxlHYVTlbLe1B/F11z0Xcz6WRrO42zn4=";
   };
 
   # Clobber upstream patches as they don't apply to the Jellyfin fork

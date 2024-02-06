@@ -460,14 +460,14 @@ buildLuarocksPackage {
 fidget-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "fidget.nvim";
-  version = "1.0.0-1";
+  version = "1.1.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/fidget.nvim-1.0.0-1.rockspec";
-    sha256 = "09hhm95gvdxd6n9mz2y012gmvs05mpfr4w0qgwcr8zb4kz11nqlw";
+    url    = "mirror://luarocks/fidget.nvim-1.1.0-1.rockspec";
+    sha256 = "0pgjbsqp6bs9kwi0qphihwhl47j1lzdgg3xfa6msikrcf8d7j0hf";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/j-hui/fidget.nvim/archive/fa1445fe7230845ea66b2c8bec3398fe5d900307.zip";
-    sha256 = "0krvmyww42dx4q0gxv0qdyv14zxbbl5g4g8pa5dl5qdlznw9vagq";
+    url    = "https://github.com/j-hui/fidget.nvim/archive/300018af4abd00610a345e382ca1f4b7ba420f77.zip";
+    sha256 = "0bwjcqkb735wqnzc8rngvpq1b2rxgc7m0arjypvnvzsxw6wd1f61";
   };
 
   disabled = (luaOlder "5.1");
@@ -2860,6 +2860,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+nvim-nio = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder }:
+buildLuarocksPackage {
+  pname = "nvim-nio";
+  version = "1.2.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nvim-nio-1.2.0-1.rockspec";
+    sha256 = "0a62iv1lyx8ldrdbip6az0ixm8dmpcai3k8j5jsf49cr4zjpcjzk";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neotest/nvim-nio/archive/11864149f47e0c7a38c4dadbcea8fc17c968556e.zip";
+    sha256 = "141py3csgbijpqhscgmsbnkg4lbx7ma7nwpj0akfc7v37c143dq3";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/nvim-neotest/nvim-nio";
+    description = "A library for asynchronous IO in Neovim";
+    license.fullName = "MIT";
+  };
+}) {};
+
 penlight = callPackage({ buildLuarocksPackage, fetchgit, lua, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "penlight";
@@ -2945,6 +2968,29 @@ buildLuarocksPackage {
     homepage = "https://github.com/xpol/lua-rapidjson";
     description = "Json module based on the very fast RapidJSON.";
     license.fullName = "MIT";
+  };
+}) {};
+
+rocks-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, fidget-nvim, fzy, lua, luaOlder, nvim-nio, toml, toml-edit }:
+buildLuarocksPackage {
+  pname = "rocks.nvim";
+  version = "2.7.3-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/rocks.nvim-2.7.3-1.rockspec";
+    sha256 = "1nv6ym32d9vk69c6mg2i4bzn1lq0p1c039g5scf7482rx029zvnh";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neorocks/rocks.nvim/archive/v2.7.3.zip";
+    sha256 = "02s7bqskfpk2xbipryvv7ybxl3gjllmn8wa8by1sqmmb4p56836j";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ fidget-nvim fzy lua nvim-nio toml toml-edit ];
+
+  meta = {
+    homepage = "https://github.com/nvim-neorocks/rocks.nvim";
+    description = "Neovim plugin management inspired by Cargo.";
+    license.fullName = "GPL-3.0";
   };
 }) {};
 

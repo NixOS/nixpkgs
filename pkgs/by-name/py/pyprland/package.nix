@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "1.7.1";
+  version = "1.8.7";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     owner = "hyprland-community";
     repo = "pyprland";
     rev = "refs/tags/${version}";
-    hash = "sha256-VS1qWJxTJDRlmb4pfzSqU0geOcPAVYDYy2d/f5KcOpQ=";
+    hash = "sha256-6ne1wohpknxXpaLg29COM84pXUBKXBVH0jaLfypLtUo=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
@@ -21,11 +21,29 @@ python3Packages.buildPythonApplication rec {
     chmod -x $out/${python3Packages.python.sitePackages}/pyprland/command.py
   '';
 
+  # NOTE: this is required for the imports check below to work properly
+  HYPRLAND_INSTANCE_SIGNATURE = "dummy";
+
   pythonImportsCheck = [
     "pyprland"
+    "pyprland.command"
     "pyprland.common"
+    "pyprland.ipc"
     "pyprland.plugins"
+    "pyprland.plugins.experimental"
+    "pyprland.plugins.expose"
     "pyprland.plugins.interface"
+    "pyprland.plugins.layout_center"
+    "pyprland.plugins.lost_windows"
+    "pyprland.plugins.magnify"
+    "pyprland.plugins.monitors"
+    "pyprland.plugins.monitors_v0"
+    "pyprland.plugins.pyprland"
+    "pyprland.plugins.scratchpads"
+    "pyprland.plugins.shift_monitors"
+    "pyprland.plugins.toggle_dpms"
+    "pyprland.plugins.toggle_special"
+    "pyprland.plugins.workspaces_follow_focus"
   ];
 
   meta = with lib; {
