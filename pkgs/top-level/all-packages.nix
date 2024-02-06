@@ -212,10 +212,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  canonicalize-jar = callPackage ../build-support/java/canonicalize-jar.nix { };
   canonicalize-jars-hook = makeSetupHook {
     name = "canonicalize-jars-hook";
-    substitutions = { canonicalize_jar = canonicalize-jar; };
+    propagatedBuildInputs = [ stripzip-rs ];
   } ../build-support/setup-hooks/canonicalize-jars.sh;
 
   ensureNewerSourcesHook = { year }: makeSetupHook {
