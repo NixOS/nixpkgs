@@ -386,6 +386,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--without-ensurepip"
     "--with-system-expat"
+  ] ++ optionals (!(stdenv.isDarwin && pythonAtLeast "3.12")) [
+    #  ./Modules/_decimal/_decimal.c:4673:6: error: "No valid combination of CONFIG_64, CONFIG_32 and _PyHASH_BITS"
+    # https://hydra.nixos.org/build/248410479/nixlog/2/tail
     "--with-system-libmpdec"
   ] ++ optionals (openssl != null) [
     "--with-openssl=${openssl.dev}"
