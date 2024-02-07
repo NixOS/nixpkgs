@@ -210,12 +210,11 @@ in
 
     systemd.services.draupnir = {
       description = "Draupnir - a moderation tool for Matrix";
-      requires = [] ++ optionals (cfg.pantalaimon.enable) [
+      requires = optionals (cfg.pantalaimon.enable) [
         "pantalaimon-draupnir.service"
       ];
       wants = [
         "network-online.target"
-        "pantalaimon-draupnir.service"
       ];
       after = [
         "network-online.target"
@@ -235,10 +234,11 @@ in
         PrivateTmp = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
-        User = "draupnir";
+        # User = "draupnir";
+        DynamicUser = true;
         Restart = "on-failure";
 
-        /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
+        /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME" */
         DynamicUser = true;
         LoadCredential = [] ++
           optionals (cfg.accessTokenFile != null) [
@@ -247,7 +247,7 @@ in
           optionals (cfg.pantalaimon.passwordFile != null) [
             "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
           ];
-        */
+        /**/
       };
     };
 
