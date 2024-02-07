@@ -92,7 +92,7 @@ let
 
   test-firmware =
     let
-      version = "unstable-2022-04-02";
+      version = "0-unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
