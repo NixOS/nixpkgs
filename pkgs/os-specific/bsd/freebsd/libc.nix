@@ -79,6 +79,9 @@ mkDerivation rec {
 
     "lib/libelf"
     "contrib/elftoolchain"
+
+    "lib/libiconv_modules"
+    "include/paths.h"
   ];
 
   patches = [
@@ -95,6 +98,10 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace $COMPONENT_PATH/Makefile --replace '.include <src.opts.mk>' ""
+
+    substituteInPlace $BSDSRCDIR/include/paths.h --replace '/usr/lib/i18n' '${builtins.placeholder "out"}/lib/i18n'
+    substituteInPlace $BSDSRCDIR/include/paths.h --replace '/usr/lib/i18n' '${builtins.placeholder "out"}/lib/i18n'
+    #substituteInPlace lib/libiconv_modules/Makefile.inc --replace /usr/lib ${builtins.placeholder "out"}/lib/i18n
   '';
 
   nativeBuildInputs = [
@@ -210,6 +217,9 @@ mkDerivation rec {
 
     make -C $BSDSRCDIR/lib/libdevstat $makeFlags
     make -C $BSDSRCDIR/lib/libdevstat $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libiconv_modules $makeFlags
+    make -C $BSDSRCDIR/lib/libiconv_modules $makeFlags SHLIBDIR=${builtins.placeholder "out"}/lib/i18n install
 
   '' + lib.optionalString stdenv.hostPlatform.isx86_32 ''
     $CC -c $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.c -o $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.o
