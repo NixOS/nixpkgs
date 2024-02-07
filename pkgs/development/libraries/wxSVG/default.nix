@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     wxGTK
   ] ++ lib.optional stdenv.isDarwin Cocoa;
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://wxsvg.sourceforge.net/";
     description = "A SVG manipulation library built with wxWidgets";
