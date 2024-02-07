@@ -2,11 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , python3
-, makeWrapper
 }:
 
 let
-  pythonEnv = (python3.withPackages (ps: with ps; [
+  python = (python3.withPackages (ps: with ps; [
     pyside6
     py65
     qdarkstyle
@@ -23,18 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8cf7VhvC372Cqi94n2FSHcoCGblpZoZvBXcXq5jU6CY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/app
-    cp -R smb3parse foundry scribe data doc VERSION smb3-foundry.py smb3-scribe.py $out/app
+    mkdir -p $out/share/smb3-foundry $out/bin
+    cp -r smb3parse foundry scribe data doc VERSION smb3-foundry.py smb3-scribe.py $out/share/smb3-foundry
 
-    makeWrapper ${pythonEnv}/bin/python $out/bin/smb3-foundry \
-          --add-flags "$out/app/smb3-foundry.py"
-    makeWrapper ${pythonEnv}/bin/python $out/bin/smb3-scribe \
-          --add-flags "$out/app/smb3-scribe.py"
+    ln -s $out/share/smb3-foundry/smb3-foundry.py $out/bin/smb3-foundry
+    ln -s $out/share/smb3-foundry/smb3-scribe.py $out/bin/smb3-scribe
 
     runHook postInstall
   '';
