@@ -27622,8 +27622,6 @@ with pkgs;
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
-  crda = callPackage ../os-specific/linux/crda { };
-
   cshatag = callPackage ../os-specific/linux/cshatag { };
 
   # Darwin package set
