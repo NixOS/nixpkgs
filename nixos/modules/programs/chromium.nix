@@ -62,16 +62,14 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc "Chromium default search provider url.";
         default = null;
-        example =
-          "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
+        example = "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
       };
 
       defaultSearchProviderSuggestURL = mkOption {
         type = types.nullOr types.str;
         description = lib.mdDoc "Chromium default search provider url for suggestions.";
         default = null;
-        example =
-          "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
+        example = "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
       };
 
       extraOpts = mkOption {
@@ -101,15 +99,17 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable {
-    # for chromium
-    environment.etc."chromium/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."chromium/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
-    # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-    environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
-    # for brave
-    environment.etc."brave/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."brave/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+  config = {
+    environment.etc = lib.mkIf cfg.enable {
+      # for chromium
+      "chromium/policies/managed/default.json" = { text = builtins.toJSON defaultProfile; };
+      "chromium/policies/managed/extra.json" = { text = builtins.toJSON cfg.extraOpts; };
+      # for google-chrome https://www.chromium.org/administrators/linux-quick-start
+      "opt/chrome/policies/managed/default.json" = { text = builtins.toJSON defaultProfile; };
+      "opt/chrome/policies/managed/extra.json" = { text = builtins.toJSON cfg.extraOpts; };
+      # for brave
+      "brave/policies/managed/default.json" = { text = builtins.toJSON defaultProfile; };
+      "brave/policies/managed/extra.json" = { text = builtins.toJSON cfg.extraOpts; };
+    };
   };
 }
