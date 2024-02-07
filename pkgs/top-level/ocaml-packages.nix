@@ -156,6 +156,8 @@ let
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
+    capnp = callPackage ../development/ocaml-modules/capnp { };
+
     caqti = callPackage ../development/ocaml-modules/caqti { };
 
     caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
@@ -1607,6 +1609,8 @@ let
     reperf = callPackage ../development/ocaml-modules/reperf { };
 
     repr = callPackage ../development/ocaml-modules/repr { };
+
+    res = callPackage ../development/ocaml-modules/res { };
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 

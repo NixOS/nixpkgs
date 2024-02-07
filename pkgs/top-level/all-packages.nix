@@ -12019,7 +12019,7 @@ with pkgs;
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
   phoc = callPackage ../applications/misc/phoc {
-    wlroots = wlroots_0_16;
+    wlroots = wlroots_0_17;
   };
 
   phockup = callPackage ../applications/misc/phockup { };
@@ -14138,7 +14138,7 @@ with pkgs;
   tuptime = callPackage ../tools/system/tuptime { };
 
   turbo = callPackage ../tools/misc/turbo {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security IOKit CoreServices CoreFoundation;
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreServices CoreFoundation;
   };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
@@ -27617,8 +27617,6 @@ with pkgs;
   cramfsprogs = callPackage ../os-specific/linux/cramfsprogs { };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
-
-  crda = callPackage ../os-specific/linux/crda { };
 
   cshatag = callPackage ../os-specific/linux/cshatag { };
 
