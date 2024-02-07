@@ -15,7 +15,7 @@
 
 buildPythonApplication rec {
   pname = "nile";
-  version = "unstable-2024-03-09";
+  version = "1.0.2-unstable-2024-03-09";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -56,5 +56,7 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ aidalgol ];
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 }
