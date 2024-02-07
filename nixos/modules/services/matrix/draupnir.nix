@@ -77,58 +77,59 @@ in
       '';
       default = { };
       type =  types.submodule {
-      options = {
-        autojoinOnlyIfManager = mkOption {
-          type = types.bool;
-          default = false;
-          description = lib.mdDoc ''
-            If `true`, the bot will only autojoin rooms if the user is a manager.
-          '';
-        };
+        options = {
+          autojoinOnlyIfManager = mkOption {
+            type = types.bool;
+            default = false;
+            description = lib.mdDoc ''
+              If `true`, the bot will only autojoin rooms if the user is a manager.
+            '';
+          };
 
-        automaticallyRedactForReasons = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = lib.mdDoc ''
-            A list of reasons for which the bot will automatically redact messages.
-          '';
-        };
-        managementRoom = mkOption {
-          type = types.str;
-          default = "#moderators:example.org";
-          description = lib.mdDoc ''
-            The room ID or alias where moderators can use the bot's functionality.
+          automaticallyRedactForReasons = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = lib.mdDoc ''
+              A list of reasons for which the bot will automatically redact messages.
+            '';
+          };
+          managementRoom = mkOption {
+            type = types.str;
+            default = "#moderators:example.org";
+            description = lib.mdDoc ''
+              The room ID or alias where moderators can use the bot's functionality.
 
-            The bot has no access controls, so anyone in this room can use the bot - secure this room!
+              The bot has no access controls, so anyone in this room can use the bot - secure this room!
 
-            Warning: When using a room alias, make sure the alias used is on the local homeserver!
-            This prevents an issue where the control room becomes undefined when the alias can't be resolved.
-          '';
-        };
+              Warning: When using a room alias, make sure the alias used is on the local homeserver!
+              This prevents an issue where the control room becomes undefined when the alias can't be resolved.
+            '';
+          };
 
-        protectedRooms = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          example = literalExpression ''
-            [
-              "https://matrix.to/#/#yourroom:example.org"
-              "https://matrix.to/#/#anotherroom:example.org"
-            ]
-          '';
-          description = lib.mdDoc ''
-            A list of rooms to protect (matrix.to URLs).
-            These can also be configured interactively.
-          '';
-        };
-        homeserverUrl = mkOption {
-          type = types.str;
-          default = "https://matrix.org";
-          description = lib.mdDoc ''
-            Base URL of the Matrix homeserver, that provides the Client-Server API.
+          protectedRooms = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            example = literalExpression ''
+              [
+                "https://matrix.to/#/#yourroom:example.org"
+                "https://matrix.to/#/#anotherroom:example.org"
+              ]
+            '';
+            description = lib.mdDoc ''
+              A list of rooms to protect (matrix.to URLs).
+              These can also be configured interactively.
+            '';
+          };
+          homeserverUrl = mkOption {
+            type = types.str;
+            default = "https://matrix.org";
+            description = lib.mdDoc ''
+              Base URL of the Matrix homeserver, that provides the Client-Server API.
 
-            If `pantalaimon.enable` is `true`, this option will become the homeserver to which `pantalaimon` connects.
-            The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
-          '';
+              If `pantalaimon.enable` is `true`, this option will become the homeserver to which `pantalaimon` connects.
+              The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
+            '';
+          };
         };
       };
     };
