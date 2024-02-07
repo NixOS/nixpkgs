@@ -92,6 +92,12 @@ pub enum NixpkgsProblem {
         call_package_path: Option<PathBuf>,
         empty_arg: bool,
     },
+    InternalCallPackageUsed {
+        attr_name: String,
+    },
+    CannotDetermineAttributeLocation {
+        attr_name: String,
+    },
 }
 
 impl fmt::Display for NixpkgsProblem {
@@ -252,6 +258,16 @@ impl fmt::Display for NixpkgsProblem {
                     structure::relative_file_for_package(package_name).display(),
                 )
             },
-        }
+            NixpkgsProblem::InternalCallPackageUsed { attr_name } =>
+                write!(
+                    f,
+                    "pkgs.{attr_name}: This attribute is defined using `_internalCallByNamePackageFile`, which is an internal function not intended for manual use.",
+                ),
+            NixpkgsProblem::CannotDetermineAttributeLocation { attr_name } =>
+                write!(
+                    f,
+                    "pkgs.{attr_name}: Cannot determine the location of this attribute using `builtins.unsafeGetAttrPos`.",
+                ),
+       }
     }
 }
