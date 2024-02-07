@@ -183,7 +183,8 @@
     "anwb_energie" = ps: with ps; [
     ];
     "aosmith" = ps: with ps; [
-    ]; # missing inputs: py-aosmith
+      py-aosmith
+    ];
     "apache_kafka" = ps: with ps; [
       aiokafka
     ];
@@ -419,7 +420,8 @@
     "bloomsky" = ps: with ps; [
     ];
     "blue_current" = ps: with ps; [
-    ]; # missing inputs: bluecurrent-api
+      bluecurrent-api
+    ];
     "bluemaestro" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -5752,6 +5754,7 @@
     "androidtv_remote"
     "anova"
     "anthemav"
+    "aosmith"
     "apache_kafka"
     "apcupsd"
     "api"
@@ -5784,6 +5787,7 @@
     "blackbird"
     "blebox"
     "blink"
+    "blue_current"
     "bluemaestro"
     "blueprint"
     "bluetooth"
