@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , substituteAll
-, fetchpatch
 , cmdstan
 , pythonRelaxDepsHook
 , setuptools
@@ -17,25 +16,20 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1/X5JDvCx21qLNamNQXpg+w3d3DdSRlB+liIv2fThs4=";
+    hash = "sha256-q+AFhWEzjYElJpiHT4h6YfZrwZJ56pv+8R+001vREyQ=";
   };
 
   patches = [
     (substituteAll {
       src = ./use-nix-cmdstan-path.patch;
       cmdstan = "${cmdstan}/opt/cmdstan";
-    })
-    (fetchpatch {
-      name = "stan-2.34-fix-parsing-of-unit_e-output-files.patch";
-      url = "https://github.com/stan-dev/cmdstanpy/commit/144d641739ccd1109055d13b5b96e4e76607305d.patch";
-      hash = "sha256-21hcbK3Xs7vGBNRs4hMfY5g7jIwEG49WYnsOxYJ6ccs=";
     })
   ];
 
@@ -77,7 +71,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_lp_good" # Fails for some reason
     "test_serialization" # Pickle class mismatch errors
     # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
     "test_multi_proc_threads"
