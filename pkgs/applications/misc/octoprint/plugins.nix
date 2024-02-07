@@ -307,6 +307,30 @@ in
     };
   };
 
+  obico = buildPlugin rec {
+    pname = "obico";
+    version = "2.4.10";
+
+    src = fetchFromGitHub {
+      owner = "TheSpaghettiDetective";
+      repo = "OctoPrint-Obico";
+      rev = version;
+      sha256 = "sha256-1i6c8b1sksh8GLiOT5RjCsIwd9aF9u+k4Kuiz+kG/30=";
+    };
+
+    propagatedBuildInputs = with super; [
+      backoff
+      entry-sdk
+      bson
+    ];
+
+    meta = with lib; {
+      description = "Securely monitor and control your OctoPrint-connected printer from anywhere for free with Obico. Get unlimited live webcam streaming, full OctoPrint remote access, printer status notifications, and a free companion mobile app for iOS and Android. The best part? AI-powered failure detection watches your prints so you don’t have to.";
+      homepage = "https://www.obico.io/";
+      license = licenses.agpl3;
+    };
+  };
+
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
     version = "2.3.1";
