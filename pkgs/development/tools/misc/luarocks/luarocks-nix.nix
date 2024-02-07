@@ -2,7 +2,7 @@
 
 luarocks.overrideAttrs (old: {
   pname = "luarocks-nix";
-  version = "unstable-2023-10-19";
+  version = "0-unstable-2023-10-19";
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -14,7 +14,10 @@ luarocks.overrideAttrs (old: {
   patches = [ ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      # tags incompletely inherited from regular luarocks
+      hardcodeZeroVersion = true;
+    };
   };
 
   meta = old.meta // {
