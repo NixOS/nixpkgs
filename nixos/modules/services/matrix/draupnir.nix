@@ -77,6 +77,7 @@ in
       '';
       default = { };
       type =  types.submodule {
+        freeformType = format.type;
         options = {
           autojoinOnlyIfManager = mkOption {
             type = types.bool;
