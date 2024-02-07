@@ -142,6 +142,8 @@ lib.makeScope newScope (self: with self; { inherit stdenv;
   sed = callPackage ./sed.nix {};
   ldd = callPackage ./ldd.nix {};
   sockstat = callPackage ./sockstat.nix {};
+  mkesdb = callPackage ./mkesdb.nix {};
+  mkcsmapper = callPackage ./mkcsmapper.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};
