@@ -10,12 +10,12 @@
 }:
 
 let
-  python-env = python3.withPackages (ps: with ps; [ tkinter ]);
+  python = python3.withPackages (ps: with ps; [ tkinter ]);
   binPath = lib.makeBinPath [ ghostscript pdftk poppler_utils ];
 in
 stdenv.mkDerivation {
   pname = "pdf-sign";
-  version = "unstable-2023-08-08";
+  version = "0-unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "svenssonaxel";
@@ -26,18 +26,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
+  buildInputs = [ python ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp pdf-sign pdf-create-empty $out
-
-    makeWrapper ${python-env}/bin/python $out/bin/pdf-sign \
-          --add-flags $out/pdf-sign \
-          --prefix PATH : ${binPath}
-    makeWrapper ${python-env}/bin/python $out/bin/pdf-create-empty \
-          --add-flags $out/pdf-create-empty \
-          --prefix PATH : ${binPath}
+    install -Dm755 pdf-sign pdf-create-empty -t $out/bin
+    wrapProgram $out/bin/pdf-sign --prefix PATH : ${binPath}
+    wrapProgram $out/bin/pdf-create-empty --prefix PATH : ${binPath}
 
     runHook postInstall
   '';
