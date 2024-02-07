@@ -11,7 +11,7 @@
 , avahi
 , dbus
 , faad2
-, ffmpeg
+, ffmpeg_4
 , flac
 , fluidsynth
 , freefont_ttf
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     avahi
     dbus
     faad2
-    ffmpeg
+    ffmpeg_4
     flac
     fluidsynth
     fribidi
