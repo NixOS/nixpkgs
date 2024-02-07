@@ -24,7 +24,7 @@ see [the default configuration](https://github.com/the-draupnir-project/Draupnir
 
 First create a new Room which will be used as a management room for Draupnir. In
 this room, Draupnir will log possible errors and debugging information. You'll
-need to set this Room-ID in [services.draupnir.managementRoom](#opt-services.draupnir.managementRoom).
+need to set this Room-ID in [services.draupnir.settings.managementRoom](#opt-services.draupnir.settings.managementRoom).
 
 Next, create a new user for Draupnir on your homeserver, if not present already.
 
@@ -43,23 +43,25 @@ so your management room can be encrypted. This also applies if you are looking t
 To enable the Pantalaimon E2E Proxy for draupnir, enable
 [services.draupnir.pantalaimon](#opt-services.draupnir.pantalaimon.enable). This will
 autoconfigure a new Pantalaimon instance, which will connect to the homeserver
-set in [services.draupnir.homeserverUrl](#opt-services.draupnir.homeserverUrl) and Draupnir itself
+set in [services.draupnir.settings.homeserverUrl](#opt-services.draupnir.settings.homeserverUrl) and Draupnir itself
 will be configured to connect to the new Pantalaimon instance.
 
 ```
 {
   services.draupnir = {
     enable = true;
-    homeserverUrl = "https://matrix.domain.tld";
     pantalaimon = {
        enable = true;
        username = "draupnir";
        passwordFile = "/run/secrets/draupnir-password";
     };
-    protectedRooms = [
-      "https://matrix.to/#/!xxx:domain.tld"
-    ];
-    managementRoom = "!yyy:domain.tld";
+    settings = {
+      homeserverUrl = "https://matrix.domain.tld";
+      protectedRooms = [
+        "https://matrix.to/#/!xxx:domain.tld"
+      ];
+      managementRoom = "!yyy:domain.tld";
+    };
   };
 }
 ```
