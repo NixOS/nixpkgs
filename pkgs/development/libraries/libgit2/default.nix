@@ -15,6 +15,7 @@
 # for passthru.tests
 , libgit2-glib
 , python3Packages
+, gitstatus
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
+    inherit gitstatus;
   };
 
   meta = with lib; {
