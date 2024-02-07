@@ -235,7 +235,6 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         # User = "draupnir";
-        DynamicUser = true;
         Restart = "on-failure";
 
         /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME" */
