@@ -535,6 +535,12 @@ in {
           check_fullchain(webserver, "http.example.test")
           check_issuer(webserver, "http.example.test", "pebble")
 
+      # Perform account hash test
+      with subtest("Assert that account hash didn't unexpected change"):
+          hash = webserver.succeed("ls /var/lib/acme/.lego/accounts/")
+          print("Account hash: " + hash)
+          assert hash.strip() == "d590213ed52603e9128d"
+
       # Perform renewal test
       with subtest("Can renew certificates when they expire"):
           hash = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
