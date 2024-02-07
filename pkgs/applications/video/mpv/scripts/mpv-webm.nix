@@ -7,7 +7,7 @@
 
 buildLua {
   pname = "mpv-webm";
-  version = "unstable-2024-04-22";
+  version = "0-unstable-2024-04-22";
 
   src = fetchFromGitHub {
     owner = "ekisu";
@@ -15,7 +15,10 @@ buildLua {
     rev = "225e8e53842f7da6f77034309c1e54293dc629a4";
     hash = "sha256-82xWiuOChxfzX6e0+cGFxTqyuiPefyVwpvLM5ka7nPk=";
   };
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    # only "latest" tag pointing at HEAD
+    hardcodeZeroVersion = true;
+  };
 
   dontBuild = false;
   nativeBuildInputs = [ luaPackages.moonscript ];
