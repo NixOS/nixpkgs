@@ -3970,6 +3970,12 @@
       fingerprint = "2017 E152 BB81 5C16 955C  E612 45BC C1E2 709B 1788";
     }];
   };
+  crutonjohn = {
+    email = "crutonjohn+nixos@pm.me";
+    github = "crutonjohn";
+    githubId = 19677342;
+    name = "Curtis John";
+  };
   Cryolitia = {
     name = "Beiyan Cryolitia";
     email = "Cryolitia@gmail.com";
