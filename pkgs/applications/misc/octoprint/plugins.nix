@@ -194,6 +194,24 @@ in
     };
   };
 
+  fullscreen = buildPlugin {
+    pname = "fullscreen";
+    version = "0.0.6";
+
+    src = fetchFromGitHub {
+      owner = "BillyBlaze";
+      repo = "OctoPrint-FullScreen";
+      rev = version;
+      sha256 = "sha256-Z8twpj+gqgbiWWxNd9I9qflEAln5Obpb3cn34KwSc5A=";
+    };
+
+    meta = with lib; {
+      description = "Open webcam in fullscreen mode";
+      homepage = "https://github.com/BillyBlaze/OctoPrint-FullScreen";
+      license = licenses.agpl3;
+    };
+  };
+
   gcodeeditor = buildPlugin rec {
     pname = "gcodeeditor";
     version = "0.2.12";
