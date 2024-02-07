@@ -65,6 +65,11 @@ runCommand "ocf-resource-agents" {
   #   $ nix edit -f. ocf-resource-agents
   # just work.
   pos = builtins.unsafeGetAttrPos "version" resource-agentsForOCF;
+
+  # Useful to build and undate inputs individually:
+  passthru.inputs = {
+    inherit resource-agentsForOCF drbdForOCF pacemakerForOCF;
+  };
 } ''
   mkdir -p $out/usr/lib/ocf
   ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
