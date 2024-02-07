@@ -1575,6 +1575,8 @@ self: super: with self; {
 
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
+  bluecurrent-api = callPackage ../development/python-modules/bluecurrent-api { };
+
   bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
 
   bluepy = callPackage ../development/python-modules/bluepy { };
