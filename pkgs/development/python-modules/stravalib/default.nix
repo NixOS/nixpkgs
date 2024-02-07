@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "1.5";
+  version = "1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stravalib";
     repo = "stravalib";
-    rev = "v${version}";
-    hash = "sha256-EQcLDU9id/DpUZKMI9prCJC9zEK1CuhOtSB4FAWLg/g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-U+QlSrijvT77/m+yjhFxbcVTQe51J+PR4Kc8N+qG+wI=";
   };
 
   postPatch = ''

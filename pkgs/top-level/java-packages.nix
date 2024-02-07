@@ -10,10 +10,8 @@ let
   openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
   openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21.nix { };
 
-  mavenfod = pkgs.maven.buildMavenPackage;
-
 in {
-  inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
+  inherit openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
 
   compiler = let
 
@@ -241,4 +239,7 @@ in {
 
   inherit (pkgs.darwin.apple_sdk_11_0.callPackage ../development/java-modules/jogl { })
     jogl_2_4_0;
+}
+// lib.optionalAttrs config.allowAliases {
+  mavenfod = throw "'mavenfod' is renamed to/replaced by 'maven.buildMavenPackage'";
 }

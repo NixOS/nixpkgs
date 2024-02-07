@@ -132,5 +132,6 @@ in maven'.buildMavenPackage {
       binaryBytecode  # maven dependencies
     ];
     broken = stdenv.isDarwin;  # builds, doesn't run
+    mainProgram = "refine";
   };
 }

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcli";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "herrhotzenplotz";
     repo = "gcli";
     rev = version;
-    hash = "sha256-JZL0AcbrGYBceQ6ctspgnbzlVD4pg95deg9BWUFQCv8=";
+    hash = "sha256-extVTaTWVFXSTiXlZ/MtiiFdc/KZEDkc+A7xxylJaM4=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config byacc flex ];

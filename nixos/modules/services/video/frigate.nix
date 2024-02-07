@@ -17,7 +17,7 @@ let
 
   cfg = config.services.frigate;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
 
   filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ null ])) cfg.settings;
 
@@ -112,7 +112,7 @@ in
           };
         };
       };
-      default = {};
+      default = { };
       description = mdDoc ''
         Frigate configuration as a nix attribute set.
 
@@ -125,7 +125,7 @@ in
 
   config = mkIf cfg.enable {
     services.nginx = {
-      enable =true;
+      enable = true;
       additionalModules = with pkgs.nginxModules; [
         secure-token
         rtmp
@@ -133,31 +133,64 @@ in
       ];
       recommendedProxySettings = mkDefault true;
       recommendedGzipSettings = mkDefault true;
+      mapHashBucketSize = mkDefault 128;
       upstreams = {
         frigate-api.servers = {
-          "127.0.0.1:5001" = {};
+          "127.0.0.1:5001" = { };
         };
         frigate-mqtt-ws.servers = {
-          "127.0.0.1:5002" = {};
+          "127.0.0.1:5002" = { };
         };
         frigate-jsmpeg.servers = {
-          "127.0.0.1:8082" = {};
+          "127.0.0.1:8082" = { };
         };
         frigate-go2rtc.servers = {
-          "127.0.0.1:1984" = {};
+          "127.0.0.1:1984" = { };
         };
       };
-      # Based on https://github.com/blakeblackshear/frigate/blob/v0.12.0/docker/rootfs/usr/local/nginx/conf/nginx.conf
+      proxyCachePath."frigate" = {
+        enable = true;
+        keysZoneSize = "10m";
+        keysZoneName = "frigate_api_cache";
+        maxSize = "10m";
+        inactive = "1m";
+        levels = "1:2";
+      };
+      # Based on https://github.com/blakeblackshear/frigate/blob/v0.13.1/docker/main/rootfs/usr/local/nginx/conf/nginx.conf
       virtualHosts."${cfg.hostname}" = {
         locations = {
           "/api/" = {
             proxyPass = "http://frigate-api/";
+            extraConfig = ''
+              proxy_cache frigate_api_cache;
+              proxy_cache_lock on;
+              proxy_cache_use_stale updating;
+              proxy_cache_valid 200 5s;
+              proxy_cache_bypass $http_x_cache_bypass;
+              proxy_no_cache $should_not_cache;
+              add_header X-Cache-Status $upstream_cache_status;
+
+              location /api/vod/ {
+                  proxy_pass http://frigate-api/vod/;
+                  proxy_cache off;
+              }
+
+              location /api/stats {
+                  access_log off;
+                  rewrite ^/api/(.*)$ $1 break;
+                  proxy_pass http://frigate-api;
+              }
+
+              location /api/version {
+                  access_log off;
+                  rewrite ^/api/(.*)$ $1 break;
+                  proxy_pass http://frigate-api;
+              }
+            '';
           };
           "~* /api/.*\.(jpg|jpeg|png)$" = {
             proxyPass = "http://frigate-api";
             extraConfig = ''
-              add_header 'Access-Control-Allow-Origin' '*';
-              add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
               rewrite ^/api/(.*)$ $1 break;
             '';
           };
@@ -169,10 +202,6 @@ in
               secure_token $args;
               secure_token_types application/vnd.apple.mpegurl;
 
-              add_header Access-Control-Allow-Headers '*';
-              add_header Access-Control-Expose-Headers 'Server,range,Content-Length,Content-Range';
-              add_header Access-Control-Allow-Methods 'GET, HEAD, OPTIONS';
-              add_header Access-Control-Allow-Origin '*';
               add_header Cache-Control "no-store";
               expires off;
             '';
@@ -192,9 +221,57 @@ in
             proxyPass = "http://frigate-go2rtc/";
             proxyWebsockets = true;
           };
+          # frigate lovelace card uses this path
+          "/live/mse/api/ws" = {
+            proxyPass = "http://frigate-go2rtc/api/ws";
+            proxyWebsockets = true;
+            extraConfig = ''
+              limit_except GET {
+                  deny  all;
+              }
+            '';
+          };
           "/live/webrtc/" = {
             proxyPass = "http://frigate-go2rtc/";
             proxyWebsockets = true;
+          };
+          "/live/webrtc/api/ws" = {
+            proxyPass = "http://frigate-go2rtc/api/ws";
+            proxyWebsockets = true;
+            extraConfig = ''
+              limit_except GET {
+                  deny  all;
+              }
+            '';
+          };
+          # pass through go2rtc player
+          "/live/webrtc/webrtc.html" = {
+            proxyPass = "http://frigate-go2rtc/webrtc.html";
+            proxyWebsockets = true;
+            extraConfig = ''
+              limit_except GET {
+                  deny  all;
+              }
+            '';
+          };
+          "/api/go2rtc/api" = {
+            proxyPass = "http://frigate-go2rtc/api";
+            proxyWebsockets = true;
+            extraConfig = ''
+              limit_except GET {
+                  deny  all;
+              }
+            '';
+          };
+          # integrationn uses this to add webrtc candidate
+          "/api/go2rtc/webrtc" = {
+            proxyPass = "http://frigate-go2rtc/api/webrtc";
+            proxyWebsockets = true;
+            extraConfig = ''
+              limit_except GET {
+                  deny  all;
+              }
+            '';
           };
           "/cache/" = {
             alias = "/var/cache/frigate/";
@@ -202,17 +279,6 @@ in
           "/clips/" = {
             root = "/var/lib/frigate";
             extraConfig = ''
-              add_header 'Access-Control-Allow-Origin' "$http_origin" always;
-              add_header 'Access-Control-Allow-Credentials' 'true';
-              add_header 'Access-Control-Expose-Headers' 'Content-Length';
-              if ($request_method = 'OPTIONS') {
-                  add_header 'Access-Control-Allow-Origin' "$http_origin";
-                  add_header 'Access-Control-Max-Age' 1728000;
-                  add_header 'Content-Type' 'text/plain charset=UTF-8';
-                  add_header 'Content-Length' 0;
-                  return 204;
-              }
-
               types {
                   video/mp4 mp4;
                   image/jpeg jpg;
@@ -224,17 +290,6 @@ in
           "/recordings/" = {
             root = "/var/lib/frigate";
             extraConfig = ''
-              add_header 'Access-Control-Allow-Origin' "$http_origin" always;
-              add_header 'Access-Control-Allow-Credentials' 'true';
-              add_header 'Access-Control-Expose-Headers' 'Content-Length';
-              if ($request_method = 'OPTIONS') {
-                  add_header 'Access-Control-Allow-Origin' "$http_origin";
-                  add_header 'Access-Control-Max-Age' 1728000;
-                  add_header 'Content-Type' 'text/plain charset=UTF-8';
-                  add_header 'Content-Length' 0;
-                  return 204;
-              }
-
               types {
                   video/mp4 mp4;
               }
@@ -315,6 +370,12 @@ in
             }
         }
       '';
+      appendHttpConfig = ''
+        map $sent_http_content_type $should_not_cache {
+          'application/json' 0;
+          default 1;
+        }
+      '';
     };
 
     systemd.services.nginx.serviceConfig.SupplementaryGroups = [
@@ -325,7 +386,7 @@ in
       isSystemUser = true;
       group = "frigate";
     };
-    users.groups.frigate = {};
+    users.groups.frigate = { };
 
     systemd.services.frigate = {
       after = [
