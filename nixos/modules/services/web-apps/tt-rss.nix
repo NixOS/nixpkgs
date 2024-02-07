@@ -605,7 +605,7 @@ let
         description = "Tiny Tiny RSS feeds update daemon";
 
         preStart = ''
-          ${pkgs.php81}/bin/php ${cfg.root}/www/update.php --update-schema
+          ${pkgs.php81}/bin/php ${cfg.root}/www/update.php --update-schema --force-yes
         '';
 
         serviceConfig = {

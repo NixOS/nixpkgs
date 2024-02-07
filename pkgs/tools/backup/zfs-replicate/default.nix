@@ -38,8 +38,7 @@ buildPythonApplication rec {
     stringcase
   ];
 
-  # Current releases do not include tests.
-  doCheck = false;
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/alunduil/zfs-replicate";
