@@ -352,6 +352,8 @@ in rec {
 
   inherit darwin-stubs;
 
+  objc4 = pkgs.darwin.libobjc;
+
   inherit (pkgs.darwin) Libsystem;
 
   inherit sdk;
