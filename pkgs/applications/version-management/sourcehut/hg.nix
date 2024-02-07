@@ -13,8 +13,7 @@
 , setuptools
 }:
 
-buildPythonPackage rec {
-  pname = "hgsrht";
+let
   version = "0.32.4";
   gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; };
 
@@ -26,17 +25,9 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "hg.sr.ht";
     rev = version;
-    sha256 = "mYkA44c9wy/Iy1h1lXkVpc9gN7rQXFm4T3YBlQ1Dj60=";
+    hash = "sha256-mYkA44c9wy/Iy1h1lXkVpc9gN7rQXFm4T3YBlQ1Dj60=";
     vc = "hg";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api hgsrht-keys" ""
-
-    substituteInPlace hgsrht-shell \
-      --replace /var/log/hgsrht-shell /var/log/sourcehut/hgsrht-shell
-  '';
 
   hgsrht-api = buildGoModule ({
     inherit src version;
@@ -56,6 +47,18 @@ buildPythonPackage rec {
         --replace /var/log/hgsrht-keys /var/log/sourcehut/hgsrht-keys
     '';
   };
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "hgsrht";
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api hgsrht-keys" ""
+
+    substituteInPlace hgsrht-shell \
+      --replace /var/log/hgsrht-shell /var/log/sourcehut/hgsrht-shell
+  '';
 
   nativeBuildInputs = [
     pip
