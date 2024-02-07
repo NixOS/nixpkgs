@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [  pkg-config ];
 
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+
   postBuild = "make convert4chan";
 
   installPhase = ''
