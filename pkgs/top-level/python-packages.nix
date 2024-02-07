@@ -16507,6 +16507,8 @@ self: super: with self; {
     ffmpegSupport = false;
   };
 
+  youtubeaio = callPackage ../development/python-modules/youtubeaio { };
+
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 
   yt-dlp = callPackage ../tools/misc/yt-dlp {
