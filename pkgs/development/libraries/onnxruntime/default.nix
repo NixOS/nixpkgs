@@ -5,6 +5,7 @@
 , Foundation
 , abseil-cpp
 , cmake
+, eigen
 , gtest
 , libpng
 , nlohmann_json
@@ -26,14 +27,6 @@ let
     repo = "date";
     rev = "v2.4.1";
     sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
-  };
-
-  eigen = fetchFromGitLab {
-    owner = "libeigen";
-    repo = "eigen";
-    # https://github.com/microsoft/onnxruntime/blob/v1.16.3/cgmanifests/cgmanifest.json#L571
-    rev = "e7248b26a1ed53fa030c5c459f7ea095dfd276ac";
-    hash = "sha256-uQ1YYV3ojbMVfHdqjXRyUymRPjJZV3WHT36PTxPRius=";
   };
 
   mp11 = fetchFromGitHub {
@@ -94,6 +87,17 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # If you stumble on these patches trying to update onnxruntime, check
+    # `git blame` and ping the introducers.
+
+    # Context: we want the upstream to
+    # - always try find_package first (FIND_PACKAGE_ARGS),
+    # - use MakeAvailable instead of the low-level Populate,
+    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
+    ./0001-eigen-allow-dependency-injection.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -108,6 +112,7 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
+    eigen
     libpng
     zlib
     nlohmann_json
@@ -142,7 +147,6 @@ stdenv.mkDerivation rec {
     "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
     "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
-    "-DFETCHCONTENT_SOURCE_DIR_EIGEN=${eigen}"
     "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
