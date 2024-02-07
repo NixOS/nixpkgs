@@ -75,6 +75,9 @@ in
     (lib.getLib openssl)
     (lib.getLib gettext)
     (lib.getLib xz)
+    (lib.getLib libssh2)
+    (lib.getLib libkrb5)
+    (lib.getLib libunistring)
 
     # headers
     (lib.getDev curl)
