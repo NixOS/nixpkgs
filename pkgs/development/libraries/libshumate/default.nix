@@ -79,7 +79,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 
