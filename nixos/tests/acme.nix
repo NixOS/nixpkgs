@@ -382,8 +382,6 @@ in {
   testScript = { nodes, ... }:
     let
       caDomain = nodes.acme.test-support.acme.caDomain;
-      newServerSystem = nodes.webserver.config.system.build.toplevel;
-      switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
     # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
     # this is because a oneshot goes from inactive => activating => inactive, and never
