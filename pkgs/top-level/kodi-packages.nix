@@ -181,6 +181,8 @@ let self = rec {
 
   six = callPackage ../applications/video/kodi/addons/six { };
 
+  sponsorblock = callPackage ../applications/video/kodi/addons/sponsorblock { };
+
   urllib3 = callPackage ../applications/video/kodi/addons/urllib3 { };
 
   websocket = callPackage ../applications/video/kodi/addons/websocket { };
