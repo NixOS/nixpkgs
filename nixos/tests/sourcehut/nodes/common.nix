@@ -102,6 +102,6 @@ in
 
   environment.systemPackages = with pkgs; [
     hut # For interacting with the Sourcehut APIs via CLI
-    (callPackage ../srht-gen-oauth-tok.nix { }) # To automatically generate OAuth tokens
+    srht-gen-oauth-tok # To automatically generate user OAuth tokens
   ];
 }
