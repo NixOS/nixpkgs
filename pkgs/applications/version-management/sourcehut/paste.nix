@@ -19,7 +19,7 @@ let
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    sha256 = "sha256-ZZzcd14Jbo1MfET7B56X/fl9xWXpCJ8TuKrGVgJwZfQ=";
+    hash = "sha256-ZZzcd14Jbo1MfET7B56X/fl9xWXpCJ8TuKrGVgJwZfQ=";
   };
 
   pastesrht-api = buildGoModule ({

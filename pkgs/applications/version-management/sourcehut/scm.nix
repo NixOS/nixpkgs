@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "scm.sr.ht";
     rev = version;
-    sha256 = "sha256-058dOEYJDY3jtxH1VkV1CFq5CZTkauSnTWg57DCnNtw=";
+    hash = "sha256-058dOEYJDY3jtxH1VkV1CFq5CZTkauSnTWg57DCnNtw=";
   };
 
   nativeBuildInputs = [
