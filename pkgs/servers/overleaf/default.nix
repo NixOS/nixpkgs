@@ -6,7 +6,7 @@
 , python3
 , fetchYarnDeps
 , fixup_yarn_lock
-, nodejs_16
+, nodejs_18
 , yarn
 , callPackage
 }:
@@ -56,7 +56,7 @@ let
       )
     '';
 
-    buildInputs = [ pkgs.jq python3 fixup_yarn_lock nodejs_16 nodejs_16.pkgs.node-pre-gyp nodejs_16.pkgs.node-gyp yarn ];
+    buildInputs = [ pkgs.jq python3 fixup_yarn_lock nodejs_18 nodejs_18.pkgs.node-pre-gyp nodejs_18.pkgs.node-gyp yarn ];
 
     offlineCache = fetchYarnDeps {
       yarnLock = ./yarn.lock;
@@ -72,14 +72,14 @@ let
       yarn --offline --frozen-lockfile --ignore-scripts --ignore-engines
       (
         cd node_modules/bcrypt
-        export CPPFLAGS="-I${nodejs_16}/include/node"
-        node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs_16}/include/node
+        export CPPFLAGS="-I${nodejs_18}/include/node"
+        node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs_18}/include/node
       )
       (
         cd node_modules/diskusage
-        export CPPFLAGS="-I${nodejs_16}/include/node"
-        node-gyp configure --nodedir=${nodejs_16}/include/node
-        node-gyp build --nodedir=${nodejs_16}/include/node
+        export CPPFLAGS="-I${nodejs_18}/include/node"
+        node-gyp configure --nodedir=${nodejs_18}/include/node
+        node-gyp build --nodedir=${nodejs_18}/include/node
       )
       patchShebangs node_modules
     '';
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
   pname = "overleaf";
   version = "3.5";
   src = deps;
-  buildInputs = [ nodejs_16 makeWrapper ];
+  buildInputs = [ nodejs_18 makeWrapper ];
 
   buildPhase = ''
     (
@@ -111,58 +111,60 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-chat \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-chat \
       --add-flags app.js \
       --chdir $out/share/services/chat
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-clsi \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-clsi \
       --add-flags app.js \
       --chdir $out/share/services/clsi
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-contacts \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-contacts \
       --add-flags app.js \
       --chdir $out/share/services/contacts
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-docstore \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-docstore \
       --add-flags app.js \
       --chdir $out/share/services/docstore
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-document-updater \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-document-updater \
       --add-flags app.js \
       --chdir $out/share/services/document-updater
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-filestore \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-filestore \
       --add-flags app.js \
       --chdir $out/share/services/filestore
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-history-v1 \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-history-v1 \
       --add-flags app.js \
       --chdir $out/share/services/history-v1
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-notifications \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-notifications \
       --add-flags app.js \
       --chdir $out/share/services/notifications
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-project-history \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-project-history \
       --add-flags app.js \
       --chdir $out/share/services/project-history
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-real-time \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-real-time \
       --add-flags app.js \
       --chdir $out/share/services/real-time
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-spelling \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-spelling \
       --add-flags app.js \
       --chdir $out/share/services/spelling
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-track-changes \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-track-changes \
       --add-flags app.js \
       --chdir $out/share/services/track-changes
 
-    makeWrapper ${nodejs_16}/bin/node $out/bin/overleaf-web \
+    makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-web \
       --add-flags app.js \
       --chdir $out/share/services/web
   '';
+
+  passthru.updateScript = callPackage ./update.nix { };
 
   meta = with lib; {
     description = "A web-based collaborative LaTeX editor";
