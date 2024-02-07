@@ -90,19 +90,20 @@ let
                 ${git}/bin/git fetch --depth="$depth" --tags
                 depth=$(( $depth * 2 ))
             done
+
+            if [[ -z "$last_tag" ]]; then
+                # To be extra sure, check if full history helps with finding a tag
+                git fetch --tags
+                last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
+            fi
         else
-          last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
+            last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
         fi
         if [[ -z "$last_tag" ]]; then
-            if [[ "$shallow_clone" == "1" ]]; then
-                echo "Cound not find a tag within last 10000 commits" > /dev/stderr
-            else
-                echo "Cound not find a tag" > /dev/stderr
-            fi
-            exit 1
+            last_tag="0"
         fi
         if [[ -n "$tag_prefix" ]]; then
-          last_tag="''${last_tag#$tag_prefix}"
+            last_tag="''${last_tag#$tag_prefix}"
         fi
         if [[ ! "$last_tag" =~ ^[[:digit:]] ]]; then
             echo "Last tag '$last_tag' (after removing prefix '$tag_prefix') does not start with a digit" > /dev/stderr
