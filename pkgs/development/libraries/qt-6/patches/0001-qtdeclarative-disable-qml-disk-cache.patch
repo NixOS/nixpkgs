@@ -1,4 +1,4 @@
-From 2d561e0a80f2d123a7348187975ee845f9dcd9e0 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 10 Oct 2023 11:12:27 -0400
 Subject: [PATCH] qtdeclarative: disable qml disk cache
@@ -8,10 +8,10 @@ Subject: [PATCH] qtdeclarative: disable qml disk cache
  1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/src/qml/jsruntime/qv4engine.cpp b/src/qml/jsruntime/qv4engine.cpp
-index d1b4c4fff6..50f8a07420 100644
+index 506b920142..3cadb4fe06 100644
 --- a/src/qml/jsruntime/qv4engine.cpp
 +++ b/src/qml/jsruntime/qv4engine.cpp
-@@ -2232,11 +2232,7 @@ ExecutionEngine::DiskCacheOptions ExecutionEngine::diskCacheOptions() const
+@@ -2202,11 +2202,7 @@ ExecutionEngine::DiskCacheOptions ExecutionEngine::diskCacheOptions() const
  {
      if (forceDiskCache())
          return DiskCache::Enabled;
@@ -24,6 +24,3 @@ index d1b4c4fff6..50f8a07420 100644
  }
  
  void ExecutionEngine::callInContext(QV4::Function *function, QObject *self,
--- 
-2.42.0
-
