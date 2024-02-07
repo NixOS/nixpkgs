@@ -71,12 +71,16 @@ stdenv.mkDerivation rec {
       --ca_bundle_input "${extraCertificatesBundle}" ${lib.escapeShellArgs (map (arg: "${arg}") extraCertificateFiles)} \
       --blocklist "${blocklist}" \
       --ca_bundle_output ca-bundle.crt \
+      --ca_standard_bundle_output ca-no-trust-rules-bundle.crt \
       --ca_unpacked_output unbundled \
       --p11kit_output ca-bundle.trust.p11-kit
   '';
 
   installPhase = ''
     install -D -t "$out/etc/ssl/certs" ca-bundle.crt
+
+    # install standard PEM compatible bundle
+    install -D -t "$out/etc/ssl/certs" ca-no-trust-rules-bundle.crt
 
     # install p11-kit specific output to p11kit output
     install -D -t "$p11kit/etc/ssl/trust-source" ca-bundle.trust.p11-kit
