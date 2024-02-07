@@ -6989,6 +6989,11 @@
     githubId = 615606;
     name = "Glenn Searby";
   };
+  Gliczy = {
+    name = "Gliczy";
+    github = "Gliczy";
+    githubId = 129636582;
+  };
   glittershark = {
     name = "Griffin Smith";
     email = "root@gws.fyi";
