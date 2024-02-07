@@ -60,6 +60,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mandown" ];
 
   meta = with lib; {
+    changelog = "https://github.com/potatoeggy/mandown/releases/tag/v${version}";
     description = "Comic/manga/webtoon downloader and CBZ/EPUB/MOBI/PDF converter";
     homepage = "https://github.com/potatoeggy/mandown";
     license = licenses.agpl3Only;
