@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
-  version = "0.4.36";
+  version = "0.4.37";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-QQSGnOWRx5KK9eJP759E1V9zFVzvRol5bdJfD9mDr5g=";
+    sha256 = "sha256-A8ZSqIG+rGKwggs9ogvbMIi9gClFKe8gS6D5W426ebc=";
   };
 
-  cargoHash = "sha256-IlD4YI7jsWZw0Dn1PoljmhuIOqejva8HMhU4ULy32yE=";
+  cargoHash = "sha256-8GQM4pHiFbyoRkOx3SXuIV118ndzL+O+eA+Gd2jbsdI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
