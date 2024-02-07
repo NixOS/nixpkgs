@@ -14137,7 +14137,7 @@ with pkgs;
   tuptime = callPackage ../tools/system/tuptime { };
 
   turbo = callPackage ../tools/misc/turbo {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security IOKit CoreServices CoreFoundation;
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreServices CoreFoundation;
   };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
