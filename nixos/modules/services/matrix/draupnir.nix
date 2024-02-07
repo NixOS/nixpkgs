@@ -135,7 +135,7 @@ in
     };
   };
 
-  config = mkIf config.services.draupnir.enable {
+  config = mkIf cfg.enable {
     assertions = [
       {
         assertion = !(cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile == null);
