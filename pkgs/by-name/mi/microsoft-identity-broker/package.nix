@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/${pname}/${pname}_${version}_amd64.deb";
-    hash = "sha256-DYXGqMBUGKw4xsWpD973t5ZccBTh0LmVfLMX1T5DNms=";
+    hash = "sha256-81hKYQKbSimAScO6L13GdweFfzoVpeQzKuV8GJ6kZ1U=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper openjdk11 zip ];

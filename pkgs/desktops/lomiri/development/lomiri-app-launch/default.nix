@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -45,6 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-vuu6tZ5eDJN2rraOpmrDddSl1cIFFBSrILKMJqcUDVc=";
   };
+
+  patches = [
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-app-launch/-/merge_requests/57 merged & in release
+    (fetchpatch {
+      name = "0001-lomiri-app-launch-Fix-typelib-gir-dependency.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/0419b2592284f43ee5e76060948ea3d5f1c991fd.patch";
+      hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs tests/{desktop-hook-test.sh.in,repeat-until-pass.sh}
@@ -100,6 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_MIRCLIENT" false)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
+      # Exclude tests
+      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
+        # Flaky, randomly hangs
+        # https://gitlab.com/ubports/development/core/lomiri-app-launch/-/issues/19
+        "^helper-handshake-test"
+      ]})")
+    ]))
   ];
 
   postBuild = lib.optionalString withDocumentation ''

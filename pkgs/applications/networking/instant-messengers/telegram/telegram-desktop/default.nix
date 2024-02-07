@@ -64,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.14.9";
+  version = "4.14.13";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-VqLCkGav6qtam9qk2MsjCdyVSj3630FGQg50Mv0OBNE=";
+    hash = "sha256-JcW/gXSgtzxv/37V13brHsa4XcVyB5ZCiPj4slMFdro=";
   };
 
   patches = [
@@ -87,13 +87,16 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+      --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
-      --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+      --replace-fail '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
+      --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
   # We want to run wrapProgram manually (with additional parameters)

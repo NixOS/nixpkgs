@@ -4462,10 +4462,7 @@ with pkgs;
 
   brltty = callPackage ../tools/misc/brltty { };
 
-  brook = callPackage ../tools/networking/brook {
-    # See https://hydra.nixos.org/build/239027853/nixlog/2.
-    buildGoModule = buildGo120Module;
-  };
+  brook = callPackage ../tools/networking/brook { };
 
   broot = callPackage ../tools/misc/broot {
     inherit (darwin.apple_sdk.frameworks) Foundation Security;
