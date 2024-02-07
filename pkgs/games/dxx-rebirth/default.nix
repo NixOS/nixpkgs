@@ -23,7 +23,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dxx-rebirth";
-  version = "unstable-2024-01-13";
+  version = "0-unstable-2024-01-13";
 
   src = fetchFromGitHub {
     owner = "dxx-rebirth";
