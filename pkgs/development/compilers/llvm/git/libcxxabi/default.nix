@@ -44,6 +44,20 @@ stdenv.mkDerivation rec {
       sha256 = "1xyjd56m4pfwq8p3xh6i8lhkk9kq15jaml7qbhxdf87z4jjkk63a";
       stripLen = 1;
     })
+  ] ++ lib.optionals (lib.versionAtLeast version "18") [
+    # Allow building libcxxabi alone when using LLVM unwinder
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/77610dd10454e87bb387040d2b51100a17ac5755.patch";
+      stripLen = 1;
+      revert = true;
+      hash = "sha256-Jogx/cvTJ6fdyprTD1QzMIeRWcBlZZMWE/y9joOtVH0=";
+    })
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/48e5b5ea92674ded69b998cf35724d9012c0f57d.patch";
+      stripLen = 1;
+      revert = true;
+      hash = "sha256-7VeBFjG7CnEMWn0hpBvyNOyhRfz50PnD3zyQNDhNChk=";
+    })
   ];
 
   postPatch = ''
@@ -63,6 +77,8 @@ stdenv.mkDerivation rec {
     # CMake however checks for this anyways; this flag tells it not to. See:
     # https://github.com/llvm/llvm-project/blob/4bd3f3759259548e159aeba5c76efb9a0864e6fa/llvm/runtimes/CMakeLists.txt#L243
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
+  ] ++ lib.optionals (lib.versionAtLeast version "18" && !(stdenv.hostPlatform.useLLVM or false && !stdenv.hostPlatform.isWasm)) [
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false && !stdenv.hostPlatform.isWasm) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
