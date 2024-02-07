@@ -53,7 +53,8 @@ stdenv.mkDerivation {
       --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
     makeWrapper ${electron_26}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/app.asar
+      --add-flags $out/share/${pname}/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';
