@@ -65,8 +65,15 @@ in
     };
 
     settings =  types.submodule {
+      example = literalExpression ''
+        {
+          autojoinOnlyIfManager = true;
+          automaticallyRedactForReasons = [ "spam" "advertising" ];
+        }
+      '';
       description = lib.mdDoc ''
-        Settings for Draupnir, see [Draupnir's default configuration](https://github.com/the-draupnir-project/Draupnir/blob/main/config/default.yaml) for available settings.
+        Draupnir settings (see [Draupnir's default configuration](https://github.com/the-draupnir-project/Draupnir/blob/main/config/default.yaml) for available settings).
+        These settings will override settings made by the module config.
       '';
       default = { };
       type = format.type;
@@ -124,16 +131,6 @@ in
           '';
         };
       };
-      example = literalExpression ''
-        {
-          autojoinOnlyIfManager = true;
-          automaticallyRedactForReasons = [ "spam" "advertising" ];
-        }
-      '';
-      description = lib.mdDoc ''
-        Additional settings (see [Draupnir's default configuration](https://github.com/the-draupnir-project/Draupnir/blob/main/config/default.yaml) for available settings).
-        These settings will override settings made by the module config.
-      '';
     };
   };
 
