@@ -6405,6 +6405,12 @@
     githubId = 293586;
     name = "Adam Gamble";
   };
+  gangaram = {
+    email = "Ganga.Ram@tii.ae";
+    github = "gangaram-tii";
+    githubId = 131853076;
+    name = "Ganga Ram";
+  };
   garaiza-93 = {
     email = "araizagustavo93@gmail.com";
     github = "garaiza-93";
@@ -14028,6 +14034,11 @@
     email = "github@quasiparticle.net";
     github = "pennae";
     githubId = 82953136;
+  };
+  peret = {
+    name = "Peter Retzlaff";
+    github = "peret";
+    githubId = 617977;
   };
   periklis = {
     email = "theopompos@gmail.com";
