@@ -128,6 +128,8 @@ buildGoModule rec {
   preBuild = ''
     export PATH=${bootstrapTools}:$PATH
     export HOME=$TMPDIR
+
+    ldflags=("''$ldflags[@]/\"-buildid=\"")
   '';
 
   postBuild = ''
