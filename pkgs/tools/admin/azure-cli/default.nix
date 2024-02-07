@@ -13,6 +13,8 @@
 
   # List of extensions/plugins to include.
 , withExtensions ? [ ]
+
+, azure-cli
 }:
 
 let
@@ -337,6 +339,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
 
   passthru = {
     inherit extensions;
+    withExtensions = extensions: azure-cli.override { withExtensions = extensions; };
   };
 
   meta = with lib; {
