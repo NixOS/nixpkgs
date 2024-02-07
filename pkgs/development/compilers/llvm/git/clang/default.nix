@@ -21,6 +21,7 @@ let
     sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake ninja python3 ]
+      ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -70,7 +71,7 @@ let
       ln -sv $out/bin/clang $out/bin/cpp
 
       mkdir -p $lib/lib/clang
-      mv $lib/lib/18 $lib/lib/clang/18
+      mv $lib/lib/${lib.versions.major version} $lib/lib/clang/${lib.versions.major version}
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"

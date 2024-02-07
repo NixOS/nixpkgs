@@ -8,7 +8,6 @@
   SDL2,
   libGL,
   mesa,
-  fmodex,
   systemd,
   libpulseaudio,
   libselinux,
@@ -19,15 +18,16 @@
   libdrm,
   withSELinux ? false,
 }:
+
 buildDotnetModule rec {
   pname = "celeste64";
-  version = "0-unstable-2024-02-02";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     repo = "Celeste64";
     owner = "ExOK";
-    rev = "e7130d376deed9ddf17a6631cf06d89d19a702c6";
-    hash = "sha256-KCCgjplAk+Nhjxk/p6Omt4GxN36kAgvg/OPbed2Ey+4=";
+    rev = "v${version}";
+    hash = "sha256-XRAjDYIqYaQYCWNNT7UuLDKDBgq3vqxtCzay7pGICtA=";
   };
   projectFile = "Celeste64.csproj";
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -41,7 +41,6 @@ buildDotnetModule rec {
       libdecor
       libGL
       SDL2
-      fmodex
       systemd
       libpulseaudio
       wayland
@@ -79,7 +78,7 @@ buildDotnetModule rec {
 
   meta = {
     license = with lib.licenses; [ unfree mit ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     maintainers = with lib.maintainers; [ lychee ];
     mainProgram = "Celeste64";
     homepage = "https://github.com/ExOK/Celeste64";
