@@ -22,7 +22,7 @@ in
       enable = mkEnableOption (lib.mdDoc "{command}`chromium` policies");
 
       extensions = mkOption {
-        type = types.listOf types.str;
+        type = with types; nullOr (listOf str);
         description = lib.mdDoc ''
           List of chromium extensions to install.
           For list of plugins ids see id in url of extensions on
@@ -33,7 +33,7 @@ in
           [ExtensionInstallForcelist](https://cloud.google.com/docs/chrome-enterprise/policies/?policy=ExtensionInstallForcelist)
           for additional details.
         '';
-        default = [];
+        default = null;
         example = literalExpression ''
           [
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
@@ -102,14 +102,14 @@ in
   config = {
     environment.etc = lib.mkIf cfg.enable {
       # for chromium
-      "chromium/policies/managed/default.json" = { text = builtins.toJSON defaultProfile; };
-      "chromium/policies/managed/extra.json" = { text = builtins.toJSON cfg.extraOpts; };
+      "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
+      "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
       # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-      "opt/chrome/policies/managed/default.json" = { text = builtins.toJSON defaultProfile; };
-      "opt/chrome/policies/managed/extra.json" = { text = builtins.toJSON cfg.extraOpts; };
+      "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
+      "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
       # for brave
-      "brave/policies/managed/default.json" = { text = builtins.toJSON defaultProfile; };
-      "brave/policies/managed/extra.json" = { text = builtins.toJSON cfg.extraOpts; };
+      "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
+      "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
     };
   };
 }
