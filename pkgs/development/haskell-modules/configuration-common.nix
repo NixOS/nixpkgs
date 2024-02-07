@@ -2857,6 +2857,12 @@ self: super: {
     ghc-lib-parser = self.ghc-lib-parser_9_8_1_20231121;
   });
 
+  # Support base16 1.0
+  nix-serve-ng = appendPatch (fetchpatch {
+    url = "https://github.com/aristanetworks/nix-serve-ng/commit/4d9eacfcf753acbcfa0f513bec725e9017076270.patch";
+    hash = "sha256-zugyUpEq/iVkxghrvguL95+lJDEpE8MLvZivken0p24=";
+  }) super.nix-serve-ng;
+
   # Needs a matching version of ipython-kernel and a
   # ghc-syntax-highlighter compatible with a newer ghc-lib-parser it
   # transitively pulls in
