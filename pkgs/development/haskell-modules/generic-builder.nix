@@ -239,9 +239,8 @@ let
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     (enableFeature enableLibraryForGhci "library-for-ghci")
     (enableFeature enableDeadCodeElimination "split-sections")
-  ] ++ optionals dontStrip [
-    "--disable-library-stripping"
-    "--disable-executable-stripping"
+    (enableFeature (!dontStrip) "library-stripping")
+    (enableFeature (!dontStrip) "executable-stripping")
   ] ++ optionals isGhcjs [
     "--ghcjs"
   ] ++ optionals isCross ([
