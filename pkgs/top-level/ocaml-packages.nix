@@ -1590,6 +1590,8 @@ let
 
         ordering = callPackage ../development/ocaml-modules/ordering { };
 
+        osdp = callPackage ../development/ocaml-modules/osdp { };
+
         oseq = callPackage ../development/ocaml-modules/oseq { };
 
         otfed = callPackage ../development/ocaml-modules/otfed { };
