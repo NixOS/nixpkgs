@@ -13,6 +13,7 @@
 
 let
   version = "0.15.2";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -26,7 +27,7 @@ let
     pname = "pastesrht-api";
     modRoot = "api";
     vendorHash = "sha256-jiE73PUPSHxtWp7XBdH4mJw95pXmZjCl4tk2wQUf2M4=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+  } // gqlgen);
 in
 buildPythonPackage rec {
   inherit src version;

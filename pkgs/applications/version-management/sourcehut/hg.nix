@@ -16,6 +16,8 @@
 buildPythonPackage rec {
   pname = "hgsrht";
   version = "0.32.4";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; };
+
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -41,7 +43,7 @@ buildPythonPackage rec {
     pname = "hgsrht-api";
     modRoot = "api";
     vendorHash = "sha256-vuOYpnF3WjA6kOe9MVSuVMhJBQqCmIex+QUBJrP+VDs=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+  } // gqlgen);
 
   hgsrht-keys = buildGoModule {
     inherit src version;
