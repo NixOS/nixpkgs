@@ -163,11 +163,15 @@ in
       ];
       wants = [
         "network-online.target"
+        "matrix-synapse.service"
+        "conduit.service"
+        "dendrite.service"
       ];
       after = [
         "network-online.target"
         "matrix-synapse.service"
         "conduit.service"
+        "dendrite.service"
       ];
       wantedBy = [ "multi-user.target" ];
 
