@@ -2072,7 +2072,6 @@ broken-packages:
   - hakyll-shortcode # failure in job https://hydra.nixos.org/build/233240216 at 2023-09-02
   - hakyll-typescript # failure in job https://hydra.nixos.org/build/233218630 at 2023-09-02
   - HaLeX # failure in job https://hydra.nixos.org/build/233233225 at 2023-09-02
-  - hal # failure in job https://hydra.nixos.org/build/233243847 at 2023-09-02
   - halfs # failure in job https://hydra.nixos.org/build/233235337 at 2023-09-02
   - halide-haskell # failure in job https://hydra.nixos.org/build/233244282 at 2023-09-02
   - halipeto # failure in job https://hydra.nixos.org/build/233223245 at 2023-09-02
