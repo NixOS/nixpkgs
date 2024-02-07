@@ -73,6 +73,12 @@ mapAliases ({
   ansible_2_12 = throw "Ansible 2.12 goes end of life in 2023/05 and can't be supported throughout the 23.05 release cycle"; # Added 2023-05-16
   ansible_2_13 = throw "Ansible 2.13 goes end of life in 2023/11"; # Added 2023-12-30
   apacheAnt_1_9 = throw "Ant 1.9 has been removed since it's not used in nixpkgs anymore"; # Added 2023-11-12
+  apacheKafka_2_8 = throw "apacheKafka_2_8 through _3_4 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_0 = throw "apacheKafka_2_8 through _3_4 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_1 = throw "apacheKafka_2_8 through _3_4 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_2 = throw "apacheKafka_2_8 through _3_4 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_3 = throw "apacheKafka_2_8 through _3_4 have been removed from nixpkgs as outdated"; # Added 2024-02-12
+  apacheKafka_3_4 = throw "apacheKafka_2_8 through _3_4 have been removed from nixpkgs as outdated"; # Added 2024-02-12
   antimicroX = antimicrox; # Added 2021-10-31
   arcanPackages = throw "arcanPackages was removed and its sub-attributes were promoted to top-level"; # Added 2023-11-26
   ardour_6 = throw "ardour_6 has been removed in favor of newer versions"; # Added 2023-10-13

@@ -15,43 +15,6 @@ let
       sha256 = "sha256-vBryxHFLPFB8qpFFkMKOeBX2Zxp0MkvEd+HIOohUg8M=";
       jre = jdk17_headless;
     };
-    "3.4" = {
-      kafkaVersion = "3.4.1";
-      scalaVersion = "2.13";
-      sha256 = "sha256-p28XpSuPLNMd4RVx/zZqcUggtuTgKJOwFZ0J2w7a+Zg=";
-      jre = jdk17_headless;
-    };
-    "3.3" = {
-      kafkaVersion = "3.3.2";
-      scalaVersion = "2.13";
-      sha256 = "sha256-Gv5XrpXnEajH8fSbcfIfURz+QPcqTrJ1oe3SGXYLNRc=";
-      jre = jdk17_headless;
-    };
-    "3.2" = {
-      kafkaVersion = "3.2.3";
-      scalaVersion = "2.13";
-      sha256 = "sha256-tvkbwBP83M1zl31J4g6uu4/LEhqJoIA9Eam48fyT24A=";
-      jre = jdk17_headless;
-    };
-    "3.1" = {
-      kafkaVersion = "3.1.2";
-      scalaVersion = "2.13";
-      sha256 = "sha256-SO1bTQkG3YQSv657QjwBeBCWbDlDqS3E5eUp7ciojnI=";
-      jre = jdk17_headless;
-    };
-    "3.0" = {
-      kafkaVersion = "3.0.2";
-      scalaVersion = "2.13";
-      sha256 = "sha256-G8b6STGlwow+iDqMCeZkF3HTKd94TKccmyfZ7AT/7yE=";
-      jre = jdk17_headless;
-    };
-    "2.8" = {
-      kafkaVersion = "2.8.2";
-      scalaVersion = "2.13";
-      sha256 = "sha256-inZXZJSs8ivtEqF6E/ApoyUHn8vg38wUG3KhowP8mfQ=";
-      jre = jdk11_headless;
-    };
-
   };
 in
 
