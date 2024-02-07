@@ -14,13 +14,16 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+let
+  version = "2.6.0";
+  tag = "R_${lib.replaceStrings ["."] ["_"] version}";
+in stdenv.mkDerivation rec {
   pname = "expat";
-  version = "2.5.0";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "1gnwihpfz4x18rwd6cbrdggmfqjzwsdfh1gpmc0ph21c4gq2097g";
+    url = "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
+    hash = "sha256-y19ajqIR4cq9Wb4KkzpS48Aswyboak04fY0hjn7kej4=";
   };
 
   strictDeps = true;
@@ -57,6 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/libexpat/libexpat/blob/${tag}/expat/Changes";
     homepage = "https://libexpat.github.io/";
     description = "A stream-oriented XML parser library written in C";
     platforms = platforms.all;
