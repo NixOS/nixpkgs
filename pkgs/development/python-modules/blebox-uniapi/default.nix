@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , aiohttp
 , semver
 , deepmerge
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "blebox-uniapi";
   version = "2.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -25,8 +26,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
