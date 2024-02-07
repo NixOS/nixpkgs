@@ -2329,6 +2329,12 @@
       fingerprint = "D35E C9CE E631 638F F1D8  B401 6F0E 410D C3EE D02";
     }];
   };
+  benhiemer = {
+    name = "Benedikt Hiemer";
+    email = "ben.email@posteo.de";
+    github = "benhiemer";
+    githubId = 16649926;
+  };
   benjaminedwardwebb = {
     name = "Ben Webb";
     email = "benjaminedwardwebb@gmail.com";
