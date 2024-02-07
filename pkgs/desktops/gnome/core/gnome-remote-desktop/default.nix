@@ -23,6 +23,9 @@
 , tpm2-tss
 , fuse3
 , gnome
+, libvncserver
+, # Not recommended by upstream: https://github.com/GNOME/gnome-remote-desktop/commit/55ce55afa1ddb502d4c8e13ae813f348d5f76402
+  enableVnc ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -60,12 +63,12 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pipewire
     systemd
-  ];
+  ] ++ lib.optional enableVnc libvncserver;
 
   mesonFlags = [
     "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
     "-Dtests=false" # Too deep of a rabbit hole.
-  ];
+  ] ++ lib.optional enableVnc "-Dvnc=true";
 
   passthru = {
     updateScript = gnome.updateScript {
