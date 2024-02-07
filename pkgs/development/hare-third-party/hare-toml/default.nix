@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-toml";
-  version = "0.1.0-unstable-2023-12-27";
+  version = "0.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
