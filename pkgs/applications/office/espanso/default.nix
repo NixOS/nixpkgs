@@ -154,6 +154,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kimat thehedgeh0g ];
     platforms = platforms.unix;
+    mainProgram = "espanso";
 
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.
