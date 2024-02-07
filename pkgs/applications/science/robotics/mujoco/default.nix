@@ -183,5 +183,6 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela tmplt ];
+    broken = stdenv.isDarwin;
   };
 }
