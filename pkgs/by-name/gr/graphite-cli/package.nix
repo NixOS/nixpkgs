@@ -1,6 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchurl
+, git
 , installShellFiles
 }:
 
@@ -20,6 +21,7 @@ buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
+    git
     installShellFiles
   ];
 
@@ -28,6 +30,7 @@ buildNpmPackage rec {
   postInstall = ''
     installShellCompletion --cmd gt \
       --bash <($out/bin/gt completion) \
+      --fish <(GT_PAGER= $out/bin/gt fish) \
       --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
   '';
 

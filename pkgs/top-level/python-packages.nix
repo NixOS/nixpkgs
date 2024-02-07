@@ -1575,6 +1575,8 @@ self: super: with self; {
 
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
+  bluecurrent-api = callPackage ../development/python-modules/bluecurrent-api { };
+
   bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
 
   bluepy = callPackage ../development/python-modules/bluepy { };
@@ -7145,6 +7147,7 @@ self: super: with self; {
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
+  mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
   mkdocs-simple-hooks = callPackage ../development/python-modules/mkdocs-simple-hooks { };
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
@@ -8564,6 +8567,8 @@ self: super: with self; {
   python-yate = callPackage ../development/python-modules/python-yate { };
 
   python-youtube = callPackage ../development/python-modules/python-youtube { };
+
+  py-aosmith = callPackage ../development/python-modules/py-aosmith { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
