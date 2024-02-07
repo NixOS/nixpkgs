@@ -49,7 +49,7 @@ let
                 cp Cargo.lock $out
               '';
             };
-            hash = "sha256-I5w/roDgnRe5eyXo0wiRcoWPpXEtpL3kOl9eDg99t/w=";
+            hash = "sha256-csasA2RH1vwRdF/9/BpFmh0AKsP3xtGmrhCx6mbVf6k=";
           };
 
           dontBuild = false;
