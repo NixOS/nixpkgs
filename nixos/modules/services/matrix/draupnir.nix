@@ -65,6 +65,9 @@ in
     };
 
     settings =  types.submodule {
+      description = lib.mdDoc ''
+        Settings for Draupnir, see [Draupnir's default configuration](https://github.com/the-draupnir-project/Draupnir/blob/main/config/default.yaml) for available settings.
+      '';
       default = { };
       type = format.type;
       options = {
