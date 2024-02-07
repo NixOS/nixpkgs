@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tartan";
-  version = "unstable-2021-12-23";
+  version = "0.3.0-unstable-2021-12-23";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
