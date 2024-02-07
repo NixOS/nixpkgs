@@ -13,7 +13,14 @@
 
 let
   pname = "overleaf";
-  version = "3.5";
+  version = "4.2";
+
+  src = fetchFromGitHub {
+    owner = "overleaf";
+    repo = "overleaf";
+    rev = "06a4989b4417f2fbc3d5d4d2e9fad7cea8863620";
+    hash = "sha256-yfOTGDHqzwkzJD2xsRfW3yIz+obEDthh3nkQLd4Y7fI=";
+  };
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -26,14 +33,8 @@ let
   }.${system} or throwSystem;
 
   deps = stdenv.mkDerivation {
-    name = "${pname}-${version}-deps";
-
-    src = fetchFromGitHub {
-      owner = "overleaf";
-      repo = "overleaf";
-      rev = "d539aaf2262149361590514fe27fd5c8e0fab111";
-      hash = "sha256-HuK9s7040sH9lBHb6yGO+fll2hrpdTIGIYIUujVkhqw=";
-    };
+    pname = "${pname}-deps";
+    inherit version src;
 
     patches = [ ./versions.patch ];
 
@@ -92,9 +93,8 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "overleaf";
-  version = "3.5";
-  src = deps;
+  inherit pname version src;
+
   buildInputs = [ nodejs_18 makeWrapper ];
 
   buildPhase = ''
