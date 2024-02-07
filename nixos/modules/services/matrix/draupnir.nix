@@ -64,7 +64,7 @@ in
       };
     };
 
-    settings =  types.submodule {
+    settings = mkOption {
       example = literalExpression ''
         {
           autojoinOnlyIfManager = true;
@@ -76,7 +76,7 @@ in
         These settings will override settings made by the module config.
       '';
       default = { };
-      type = format.type;
+      type =  types.submodule {
       options = {
         autojoinOnlyIfManager = mkOption {
           type = types.bool;
