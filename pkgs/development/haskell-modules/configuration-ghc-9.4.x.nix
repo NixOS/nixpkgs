@@ -92,6 +92,9 @@ in {
 
   ghc-tags = self.ghc-tags_1_6;
 
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = super.ghc-exactprint_1_6_1_3;
+
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
   th-extras = doJailbreak super.th-extras;
