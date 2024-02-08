@@ -3961,7 +3961,6 @@ broken-packages:
   - overture # failure in job https://hydra.nixos.org/build/233245959 at 2023-09-02
   - owoify-hs # failure in job https://hydra.nixos.org/build/233213422 at 2023-09-02
   - package-description-remote # failure in job https://hydra.nixos.org/build/233221358 at 2023-09-02
-  - package-version # failure in job https://hydra.nixos.org/build/233191665 at 2023-09-02
   - package-vt # failure in job https://hydra.nixos.org/build/233225831 at 2023-09-02
   - packdeps # failure in job https://hydra.nixos.org/build/233216607 at 2023-09-02
   - packed-dawg # failure in job https://hydra.nixos.org/build/233207332 at 2023-09-02
