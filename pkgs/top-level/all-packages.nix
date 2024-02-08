@@ -316,6 +316,8 @@ with pkgs;
 
   ansi = callPackage ../development/tools/ansi { };
 
+  ansilove = callPackage ../applications/graphics/ansilove { };
+
   ares-rs = callPackage ../tools/security/ares-rs { };
 
   arti = callPackage ../tools/security/arti {
@@ -18971,6 +18973,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  durdraw = callPackage ../applications/graphics/durdraw { };
+
   dwfv = callPackage ../applications/science/electronics/dwfv { };
 
   dwz = callPackage ../development/tools/misc/dwz { };
@@ -22293,6 +22297,8 @@ with pkgs;
   libamqpcpp = callPackage ../development/libraries/libamqpcpp { };
 
   libantlr3c = callPackage ../development/libraries/libantlr3c { };
+
+  libansilove = callPackage ../development/libraries/libansilove { };
 
   libaom = callPackage ../development/libraries/libaom {
     # Remove circular dependency for libavif
