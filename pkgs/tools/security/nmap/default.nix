@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4
 , pcre, libssh2
 , withLua ? true
+, pkgs ? import <nixpkgs>
 }:
 
 stdenv.mkDerivation rec {
