@@ -1,29 +1,28 @@
 { config, pkgs, lib, ... }:
 
-with lib;
 let
   cfg = config.programs.ccache;
 in {
   options.programs.ccache = {
     # host configuration
-    enable = mkEnableOption (lib.mdDoc "CCache");
-    cacheDir = mkOption {
-      type = types.path;
+    enable = lib.mkEnableOption (lib.mdDoc "CCache");
+    cacheDir = lib.mkOption {
+      type = lib.types.path;
       description = lib.mdDoc "CCache directory";
       default = "/var/cache/ccache";
     };
     # target configuration
-    packageNames = mkOption {
-      type = types.listOf types.str;
+    packageNames = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
       default = [];
       example = [ "wxGTK32" "ffmpeg" "libav_all" ];
     };
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
     # host configuration
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
       systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 root nixbld -" ];
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
@@ -50,9 +49,9 @@ in {
     })
 
     # target configuration
-    (mkIf (cfg.packageNames != []) {
+    (lib.mkIf (cfg.packageNames != []) {
       nixpkgs.overlays = [
-        (self: super: genAttrs cfg.packageNames (pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }))
+        (self: super: lib.genAttrs cfg.packageNames (pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }))
 
         (self: super: {
           ccacheWrapper = super.ccacheWrapper.override {
