@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "courlan";
-  version = "0.9.5";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ONw1suO/H11RbQDVGsEuveVD40F8a+b2oic8D8W1s1M=";
+    hash = "sha256-PDVRHDZSXLL5Qc1nCbejp0LtlfC55WyX7sDBb9wDUYM=";
   };
 
   propagatedBuildInputs = [
@@ -35,11 +35,12 @@ buildPythonPackage rec {
     "test_urlcheck"
   ];
 
-  # nixify path to the courlan binary in the test suite
+  # tests try to write to /tmp directly. use $TMPDIR instead.
   postPatch = ''
     substituteInPlace tests/unit_tests.py \
       --replace "\"courlan --help\"" "\"$out/bin/courlan --help\"" \
-      --replace "courlan_bin = \"courlan\"" "courlan_bin = \"$out/bin/courlan\""
+      --replace "courlan_bin = \"courlan\"" "courlan_bin = \"$out/bin/courlan\"" \
+      --replace "/tmp" "$TMPDIR"
   '';
 
   pythonImportsCheck = [ "courlan" ];
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     description = "Clean, filter and sample URLs to optimize data collection";
     homepage = "https://github.com/adbar/courlan";
     changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
-    license = licenses.gpl3Plus;
+    license = licenses.asl20;
     maintainers = with maintainers; [ jokatzke ];
   };
 }
