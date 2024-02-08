@@ -72,6 +72,12 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/Version.cmake \
       --replace "unknown" "${version}" \
       --replace "0.0" "${version}"
+  ''
+  # There is broken and complicated logic when setting X265_LATEST_TAG for
+  # mingwW64 builds. This bypasses the logic by setting it at the end of the
+  # file
+  + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    echo 'set(X265_LATEST_TAG "${version}")' >> ./cmake/Version.cmake
   '';
 
   nativeBuildInputs = [ cmake nasm ] ++ lib.optionals (numaSupport) [ numactl ];
