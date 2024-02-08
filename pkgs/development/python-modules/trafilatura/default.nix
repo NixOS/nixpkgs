@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "trafilatura";
-  version = "1.6.3";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zx3W4AAOEBxLzo1w9ECLy3n8vyJ17iVZHv4z4sihYA0=";
+    hash = "sha256-oWbmfwBaahLvGU9Ix8n6ThsONnVv3Stk4CRzw1aWLwQ=";
   };
 
   propagatedBuildInputs = [

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.19.0";
+  version = "2.19.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zhtDkpuJ4NH1lOFYmw+oO+R/H9gP6L+ud/4fdzIknwY=";
+    hash = "sha256-P4vdD1zCDzDn0ydEXCw2C/aEFnJYR13knOM91eDFcZw=";
   };
 
   nativeBuildInputs = [
