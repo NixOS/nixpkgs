@@ -2,9 +2,10 @@
 let
   inherit (lib) literalMD mkOption filterAttrs types mkIf;
   loaders = config.boot.loader;
+  enabledBootloaders = filterAttrs (utils.enabledBootloader options.boot.loader) loaders;
   foldEnabledBootloaders = fn: start:
     lib.lists.foldl fn start
-    (builtins.attrValues (filterAttrs (utils.enabledBootloader options.boot.loader) loaders));
+    (builtins.attrValues enabledBootloaders);
 in
 {
   meta = {
@@ -26,6 +27,16 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        assertion = builtins.length (builtins.attrValues enabledBootloaders) > 0;
+        message = ''A NixOS system require a bootloader setup to be built.
+          Consider enabling the direct bootloader if you are booted via external means, e.g. QEMU, containers.
+          Or, use one of the standard available bootloader.
+          '';
+      }
+    ];
+
     system.build = let
       composedInnerBuilderScript =
         foldEnabledBootloaders (script: builder: ''
