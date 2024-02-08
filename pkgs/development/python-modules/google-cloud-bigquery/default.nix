@@ -23,13 +23,14 @@
 , python-dateutil
 , pythonOlder
 , requests
+, setuptools
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
   version = "3.17.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -37,6 +38,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-bhz2aaQOVnqzKJx7XyBWNj2p/Lhdmkc27pAkDUp9hOo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     grpcio
