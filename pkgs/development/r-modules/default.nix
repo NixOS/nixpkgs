@@ -525,6 +525,7 @@ let
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
+    archive = [ pkgs.libarchive];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
