@@ -1,3 +1,5 @@
+# nixpkgs-update: no auto update
+
 { lib
 , rustPlatform
 , fetchFromGitHub
