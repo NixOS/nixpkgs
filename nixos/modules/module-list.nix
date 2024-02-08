@@ -766,6 +766,7 @@
   ./services/misc/persistent-evdev.nix
   ./services/misc/pinnwand.nix
   ./services/misc/plex.nix
+  ./services/misc/overseerr.nix
   ./services/misc/plikd.nix
   ./services/misc/podgrab.nix
   ./services/misc/polaris.nix
