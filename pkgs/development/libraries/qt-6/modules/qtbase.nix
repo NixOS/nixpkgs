@@ -203,9 +203,9 @@ stdenv.mkDerivation rec {
 
   # https://bugreports.qt.io/browse/QTBUG-97568
   postPatch = ''
-    substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
+    substituteInPlace src/corelib/CMakeLists.txt --replace-fail "/bin/ls" "${coreutils}/bin/ls"
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/QtAutoDetect.cmake --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+    substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
   '';
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
