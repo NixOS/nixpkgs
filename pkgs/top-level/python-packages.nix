@@ -1575,6 +1575,8 @@ self: super: with self; {
 
   blosc2 = callPackage ../development/python-modules/blosc2 { };
 
+  bluecurrent-api = callPackage ../development/python-modules/bluecurrent-api { };
+
   bluemaestro-ble = callPackage ../development/python-modules/bluemaestro-ble { };
 
   bluepy = callPackage ../development/python-modules/bluepy { };
@@ -2394,6 +2396,8 @@ self: super: with self; {
   cot = callPackage ../development/python-modules/cot {
     qemu = pkgs.qemu;
   };
+
+  courlan = callPackage ../development/python-modules/courlan { };
 
   cov-core = callPackage ../development/python-modules/cov-core { };
 
@@ -5278,6 +5282,8 @@ self: super: with self; {
 
   html5-parser = callPackage ../development/python-modules/html5-parser { };
 
+  htmldate = callPackage ../development/python-modules/htmldate { };
+
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
@@ -6054,6 +6060,8 @@ self: super: with self; {
   justbases = callPackage ../development/python-modules/justbases { };
 
   justbytes = callPackage ../development/python-modules/justbytes { };
+
+  justext = callPackage ../development/python-modules/justext { };
 
   justnimbus = callPackage ../development/python-modules/justnimbus { };
 
@@ -7170,6 +7178,8 @@ self: super: with self; {
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
+
+  mlx = callPackage ../development/python-modules/mlx { };
 
   mlxtend = callPackage ../development/python-modules/mlxtend { };
 
@@ -8571,6 +8581,8 @@ self: super: with self; {
   python-yate = callPackage ../development/python-modules/python-yate { };
 
   python-youtube = callPackage ../development/python-modules/python-youtube { };
+
+  py-aosmith = callPackage ../development/python-modules/py-aosmith { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
@@ -10078,6 +10090,8 @@ self: super: with self; {
   py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
+
+  py3langid = callPackage ../development/python-modules/py3langid { };
 
   py3nvml = callPackage ../development/python-modules/py3nvml { };
 
@@ -14661,6 +14675,8 @@ self: super: with self; {
   tracing = callPackage ../development/python-modules/tracing { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
+
+  trafilatura = callPackage ../development/python-modules/trafilatura { };
 
   trailrunner = callPackage ../development/python-modules/trailrunner {};
 

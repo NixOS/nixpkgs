@@ -71,7 +71,6 @@ in
       after = [ "network.target" ];
       environment.ZIGBEE2MQTT_DATA = cfg.dataDir;
       serviceConfig = {
-        Type = "notify";
         ExecStart = "${cfg.package}/bin/zigbee2mqtt";
         User = "zigbee2mqtt";
         Group = "zigbee2mqtt";
