@@ -29564,10 +29564,6 @@ with pkgs;
 
   netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
 
-  netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
-    inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
-  };
-
   nordic = libsForQt5.callPackage ../data/themes/nordic { };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
