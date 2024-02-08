@@ -1,8 +1,6 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, rustPlatform
 }:
 rustPlatform.buildRustPackage rec {
   pname = "parallel-disk-usage";
@@ -17,14 +15,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Jk9sNvApq4t/FoEzfjlDT2Td5sr38Jbdo6RoaOVQJK8=";
 
+  checkFlags = [
+    # test example is ordered wrong on some systems
+    # https://github.com/KSXGitHub/parallel-disk-usage/issues/251
+    "--skip=multiple_names"
+  ];
+
   meta = with lib; {
     description = "Highly parallelized, blazing fast directory tree analyzer";
     homepage = "https://github.com/KSXGitHub/parallel-disk-usage";
     license = licenses.asl20;
     maintainers = [maintainers.peret];
     mainProgram = "pdu";
-    # broken due to unit test failure
-    # https://github.com/KSXGitHub/parallel-disk-usage/issues/251
-    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

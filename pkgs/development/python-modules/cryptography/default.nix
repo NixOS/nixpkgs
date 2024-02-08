@@ -7,6 +7,7 @@
 , cffi
 , cryptography-vectors ? (callPackage ./vectors.nix { })
 , fetchPypi
+, fetchpatch2
 , isPyPy
 , libiconv
 , libxcrypt
@@ -40,6 +41,14 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-jw/FC5rQO77h6omtBp0Nc2oitkVbNElbkBUduyprTIc=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # skip overflowing tests on 32 bit; https://github.com/pyca/cryptography/pull/10366
+      url = "https://github.com/pyca/cryptography/commit/d741901dddd731895346636c0d3556c6fa51fbe6.patch";
+      hash = "sha256-eC+MZg5O8Ia5CbjRE4y+JhaFs3Q5c62QtPHr3x9T+zw=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
