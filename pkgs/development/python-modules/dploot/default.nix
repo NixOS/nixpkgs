@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "dploot";
-  version = "2.2.4";
+  version = "2.2.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-40/5KOlEFvPL9ohCfR3kqoikpKFfJO22MToq3GhamKM=";
+    hash = "sha256-SINtHw9q1cNqwtvSpPQUgYj6PzEqKXV0WXuKiPvkFQU=";
   };
 
   pythonRelaxDeps = true;
