@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4
+{ lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4, gtk3, gobject-introspection, python3
 , pcre, libssh2
 , withLua ? true
-, pkgs ? import <nixpkgs>
 }:
 
 stdenv.mkDerivation rec {
@@ -38,8 +37,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    pkgs.gobject-introspection
-    (pkgs.python3.withPackages(pypkgs: [
+    gobject-introspection
+    (python3.withPackages(pypkgs: [
       pypkgs.pygobject3
     ]))
     wrapGAppsHook
