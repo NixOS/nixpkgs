@@ -346,9 +346,9 @@ let
 
   mkPackages = self: {
     postgresql_12 = self.callPackage generic {
-      version = "12.17";
+      version = "12.18";
       psqlSchema = "12";
-      hash = "sha256-k+jhsjmB1fA8bFdj93soGEwc5NtxlPpGbi7bZdnBxfY=";
+      hash = "sha256-T5kZcl2UHOmGjgf+HtHTqGdIWZtIM4ZUdYOSi3TDkYo=";
       this = self.postgresql_12;
       thisAttr = "postgresql_12";
       inherit self;
