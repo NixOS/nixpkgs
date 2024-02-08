@@ -62,7 +62,7 @@ in {
 
     mkOpenjdkLinuxOnly = path-linux: args: let
       openjdk = callPackage path-linux  (gnomeArgs // args);
-    in openjdk // {
+    in assert stdenv.isLinux; openjdk // {
       headless = openjdk.override { headless = true; };
     };
 
