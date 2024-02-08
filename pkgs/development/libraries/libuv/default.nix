@@ -23,14 +23,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.47.0";
+  version = "1.48.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J6qvq///A/tr+/vNRVCwCc80/VHKWQTYF6Mt1I+dBCU=";
+    hash = "sha256-U68BmIQNpmIy3prS7LkYl+wvDJQNikoeFiKh50yQFoA=";
   };
 
   outputs = [ "out" "dev" ];
