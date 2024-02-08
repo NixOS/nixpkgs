@@ -1301,7 +1301,7 @@ in
 
     networking.useDHCP = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = lib.mdDoc ''
         Whether to use DHCP to obtain an IP address and other
         configuration for all network interfaces that do not have any manually
