@@ -25928,12 +25928,12 @@ with pkgs;
 
   # Steel Bank Common Lisp
   sbcl_2_4_0 = wrapLisp {
-    pkg = callPackage ../by-name/sb/sbcl/package.nix { version = "2.4.0"; };
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.0"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl_2_4_1 = wrapLisp {
-    pkg = callPackage ../by-name/sb/sbcl/package.nix { version = "2.4.1"; };
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.1"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
