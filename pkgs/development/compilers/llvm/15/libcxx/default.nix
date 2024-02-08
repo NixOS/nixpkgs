@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       relative = "libcxx";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
+    ../../common/libcxx/libcxx-0001-musl-hacks.patch
   ];
 
   postPatch = ''
