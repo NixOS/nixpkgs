@@ -18,17 +18,26 @@ in {
       default = [];
       example = [ "wxGTK32" "ffmpeg" "libav_all" ];
     };
+    owner = lib.mkOption {
+      type = lib.types.str;
+      default = "root";
+      description = lib.mdDoc "Owner of CCache directory";
+    };
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "nixbld";
+      description = lib.mdDoc "Group owner of CCache directory";
+    };
   };
 
   config = lib.mkMerge [
     # host configuration
     (lib.mkIf cfg.enable {
-      systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 root nixbld -" ];
+      systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 ${cfg.owner} ${cfg.group} -" ];
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {
-        owner = "root";
-        group = "nixbld";
+        inherit (cfg) owner group;
         setuid = false;
         setgid = true;
         source = pkgs.writeScript "nix-ccache.pl" ''
@@ -64,7 +73,7 @@ in {
                 echo "Directory '$CCACHE_DIR' does not exist"
                 echo "Please create it with:"
                 echo "  sudo mkdir -m0770 '$CCACHE_DIR'"
-                echo "  sudo chown root:nixbld '$CCACHE_DIR'"
+                echo "  sudo chown ${cfg.owner}:${cfg.group} '$CCACHE_DIR'"
                 echo "====="
                 exit 1
               fi
