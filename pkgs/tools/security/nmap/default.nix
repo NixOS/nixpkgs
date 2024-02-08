@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     pkgs.gobject-introspection
-    pkgs.(python3.withPackages(pypkgs: [
+    (pkgs.python3.withPackages(pypkgs: [
       pypkgs.pygobject3
     ]))
     wrapGAppsHook
