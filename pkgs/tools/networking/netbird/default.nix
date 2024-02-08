@@ -4,6 +4,7 @@
 , nix-update-script
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch2
 , installShellFiles
 , pkg-config
 , gtk3
@@ -35,7 +36,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "netbirdio";
-    repo = pname;
+    repo = "netbird";
     rev = "v${version}";
     hash = "sha256-StZDhCBuwmJk8VimbsVO9Sfxlv5NcpV689YPUZRgOLk=";
   };
@@ -56,6 +57,14 @@ buildGoModule rec {
     Kernel
     UserNotifications
     WebKit
+  ];
+
+  patches = [
+    # Accept incomplete configs
+    (fetchpatch2 {
+      url = "https://github.com/netbirdio/netbird/pull/1586/commits/1a7e2051db312ed236e468ea0d2371bde24a393a.patch";
+      hash = "sha256-V+oYsBpAjjbh6Q7DUOJUP9m/YzctrQlMEoA5z1iBt8w=";
+    })
   ];
 
   subPackages = lib.attrNames modules;
@@ -111,6 +120,6 @@ buildGoModule rec {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [ misuzu ];
-    mainProgram = "netbird";
+    mainProgram = if ui then "netbird-ui" else "netbird";
   };
 }
