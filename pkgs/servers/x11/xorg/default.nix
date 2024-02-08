@@ -1298,11 +1298,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXext = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXext";
-    version = "1.3.5";
+    version = "1.3.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXext-1.3.5.tar.xz";
-      sha256 = "1jkv7l9qm4vms6af4faax916rirxp6r8rpjrhlxa6zn5jp4c056v";
+      url = "mirror://xorg/individual/lib/libXext-1.3.6.tar.xz";
+      sha256 = "0lwpx0b7lid47pff6dagp5h63bi0b3gsy05lqpyhbr4l76i9zdgd";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
