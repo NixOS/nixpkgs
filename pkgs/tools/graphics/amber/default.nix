@@ -6,6 +6,7 @@
 , python3
 , vulkan-headers
 , vulkan-loader
+, unstableGitUpdater
 }:
 let
   glslang = fetchFromGitHub {
@@ -46,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "amber";
-  version = "unstable-2022-04-21";
+  version = "0-unstable-2023-09-02";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "8b145a6c89dcdb4ec28173339dd176fb7b6f43ed";
-    hash = "sha256-+xFYlUs13khT6r475eJJ+XS875h2sb+YbJ8ZN4MOSAA=";
+    rev = "8e90b2d2f532bcd4a80069e3f37a9698209a21bc";
+    hash = "sha256-LuNCND/NXoNbbTWv7RYQUkq2QXL1qXR27uHwFIz0DXg=";
   };
 
   buildInputs = [
@@ -88,6 +89,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 -t $out/bin amber image_diff
   '';
+
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
     description = "Multi-API shader test framework";
