@@ -133,6 +133,7 @@ let
         RestartSec = 20;
         EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
+        LimitNOFILE = "1024000";
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;

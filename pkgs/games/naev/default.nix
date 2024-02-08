@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "naev";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "naev";
     repo = "naev";
     rev = "v${version}";
-    sha256 = "sha256-G6FsZnRWNTFjsIpQsxYcZhlyjhMUaalNlmLpYGQar0E=";
+    sha256 = "sha256-2n7i5qCFdpjBpjeMv6aCd0zyD4c60FciHmSafbArnms=";
     fetchSubmodules = true;
   };
 

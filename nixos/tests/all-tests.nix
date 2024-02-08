@@ -242,7 +242,7 @@ in {
   discourse = handleTest ./discourse.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   dnscrypt-wrapper = runTestOn ["x86_64-linux"] ./dnscrypt-wrapper;
-  dnsdist = handleTest ./dnsdist.nix {};
+  dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = handleTest ./doas.nix {};
   docker = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker.nix {};
   docker-rootless = handleTestOn ["aarch64-linux" "x86_64-linux"] ./docker-rootless.nix {};
@@ -390,6 +390,7 @@ in {
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
   livebook-service = handleTest ./livebook-service.nix {};
+  pyload = handleTest ./pyload.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
   odoo = handleTest ./odoo.nix {};
   odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
@@ -424,6 +425,7 @@ in {
   inspircd = handleTest ./inspircd.nix {};
   installer = handleTest ./installer.nix {};
   installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix {};
+  intune = handleTest ./intune.nix {};
   invoiceplane = handleTest ./invoiceplane.nix {};
   iodine = handleTest ./iodine.nix {};
   ipv6 = handleTest ./ipv6.nix {};
@@ -451,6 +453,7 @@ in {
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-generic = handleTest ./kernel-generic.nix {};
   kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix {};
+  kernel-rust = handleTestOn ["x86_64-linux"] ./kernel-rust.nix {};
   keter = handleTest ./keter.nix {};
   kexec = handleTest ./kexec.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
@@ -625,6 +628,7 @@ in {
   ntfy-sh = handleTest ./ntfy-sh.nix {};
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix {};
   ntpd-rs = handleTest ./ntpd-rs.nix {};
+  nvmetcfg = handleTest ./nvmetcfg.nix {};
   nzbget = handleTest ./nzbget.nix {};
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
@@ -711,6 +715,7 @@ in {
   power-profiles-daemon = handleTest ./power-profiles-daemon.nix {};
   pppd = handleTest ./pppd.nix {};
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
+  pretalx = runTest ./web-apps/pretalx.nix;
   printing-socket = handleTest ./printing.nix { socket = true; };
   printing-service = handleTest ./printing.nix { socket = false; };
   privoxy = handleTest ./privoxy.nix {};
@@ -761,6 +766,7 @@ in {
   sabnzbd = handleTest ./sabnzbd.nix {};
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
+  sane = handleTest ./sane.nix {};
   sanoid = handleTest ./sanoid.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
@@ -855,6 +861,7 @@ in {
   systemd-journal = handleTest ./systemd-journal.nix {};
   systemd-journal-gateway = handleTest ./systemd-journal-gateway.nix {};
   systemd-journal-upload = handleTest ./systemd-journal-upload.nix {};
+  systemd-lock-handler = runTestOn ["aarch64-linux" "x86_64-linux"] ./systemd-lock-handler.nix;
   systemd-machinectl = handleTest ./systemd-machinectl.nix {};
   systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-networkd-dhcpserver = handleTest ./systemd-networkd-dhcpserver.nix {};
@@ -927,6 +934,7 @@ in {
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = handleTest ./uptermd.nix {};
   uptime-kuma = handleTest ./uptime-kuma.nix {};
+  urn-timer = handleTest ./urn-timer.nix {};
   usbguard = handleTest ./usbguard.nix {};
   user-activation-scripts = handleTest ./user-activation-scripts.nix {};
   user-expiry = runTest ./user-expiry.nix;

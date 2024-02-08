@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luau";
-  version = "0.609";
+  version = "0.611";
 
   src = fetchFromGitHub {
     owner = "luau-lang";
     repo = "luau";
     rev = version;
-    hash = "sha256-L8ANZW4TyFNBn8tb5Y3k9zdGBbWbEVFUnjAkhfaZu3M=";
+    hash = "sha256-gtY/dv+9+1OcxPaU/r01vgMDyfxdB36wgQ7WEGKW17c=";
   };
 
   nativeBuildInputs = [ cmake ];

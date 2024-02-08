@@ -18,13 +18,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-Jt3PWnbv/8P6Rvf3E/Yli2vdtfgx3CmsW+jlc9CK5KA=";
+    hash = "sha256-KNNtHi3jx0MRiOgmluA4ucZJWB2WeIYdApfHuspbCqg=";
   };
 
   patches = [
@@ -65,9 +65,6 @@ python3.pkgs.buildPythonApplication rec {
 
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
-
-    # https://github.com/mesonbuild/meson/pull/12587
-    ./007-darwin-case-sensitivity.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [

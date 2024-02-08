@@ -9,6 +9,9 @@
 , pahole
 , lib
 , stdenv
+, rustc
+, rustPlatform
+, rust-bindgen
 
 , # The kernel source tarball.
   src
@@ -115,6 +118,8 @@ let
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([baseConfigStr] ++ configFromPatches);
 
+  withRust = ((configfile.moduleStructuredConfig.settings.RUST or {}).tristate or null) == "y";
+
   configfile = stdenv.mkDerivation {
     inherit ignoreConfigErrors autoModules preferBuiltin kernelArch extraMakeFlags;
     pname = "linux-config";
@@ -128,7 +133,11 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ lib.optional (lib.versionAtLeast version "5.2") pahole;
+      ++ lib.optional (lib.versionAtLeast version "5.2") pahole
+      ++ lib.optionals withRust [ rust-bindgen rustc ]
+    ;
+
+    RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
     platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
@@ -200,7 +209,7 @@ let
     inherit kernelPatches randstructSeed extraMakeFlags extraMeta configfile;
     pos = builtins.unsafeGetAttrPos "version" args;
 
-    config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
+    config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; } // lib.optionalAttrs withRust { CONFIG_RUST = "y"; };
   } // lib.optionalAttrs (modDirVersion != null) { inherit modDirVersion; });
 
   passthru = basicArgs // {

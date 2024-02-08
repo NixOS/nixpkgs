@@ -220,7 +220,7 @@ let
                 };
               };
             in {
-              inherit (bootstrap) dist test;
+              inherit (bootstrap) build dist test;
             }
           else if hasSuffix "-darwin" config then
             let
@@ -229,7 +229,7 @@ let
               };
             in {
               # Lightweight distribution and test
-              inherit (bootstrap) dist test;
+              inherit (bootstrap) build dist test;
               # Test a full stdenv bootstrap from the bootstrap tools definition
               # TODO: Re-enable once the new bootstrap-tools are in place.
               #inherit (bootstrap.test-pkgs) stdenv;

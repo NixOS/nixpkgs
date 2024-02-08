@@ -8,7 +8,15 @@ name: Check pkgs/by-name
 # see pkgs/test/nixpkgs-check-by-name/scripts/README.md
 on:
   # Using pull_request_target instead of pull_request avoids having to approve first time contributors
-  pull_request_target
+  pull_request_target:
+    # This workflow depends on the base branch of the PR,
+    # but changing the base branch is not included in the default trigger events,
+    # which would be `opened`, `synchronize` or `reopened`.
+    # Instead it causes an `edited` event, so we need to add it explicitly here
+    # While `edited` is also triggered when the PR title/body is changed,
+    # this PR action is fairly quick, and PR's don't get edited that often,
+    # so it shouldn't be a problem
+    types: [opened, synchronize, reopened, edited]
 
 permissions:
   # We need this permission to cancel the workflow run if there's a merge conflict

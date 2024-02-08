@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-R5LAR93xXvKdVbqOaKGiHgy3aS2H7N9yBEGYZFgvKA0=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+    ./mingw-install-exe-file.patch
+  ];
+
   configureFlags = [
     "CPPFLAGS=-DNDEBUG"
     "CFLAGS=-O3"

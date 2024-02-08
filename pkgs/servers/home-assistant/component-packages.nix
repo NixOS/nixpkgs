@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.1.5";
+  version = "2024.1.6";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -183,12 +183,14 @@
     "anwb_energie" = ps: with ps; [
     ];
     "aosmith" = ps: with ps; [
-    ]; # missing inputs: py-aosmith
+      py-aosmith
+    ];
     "apache_kafka" = ps: with ps; [
       aiokafka
     ];
     "apcupsd" = ps: with ps; [
-    ]; # missing inputs: aioapcaccess
+      aioapcaccess
+    ];
     "api" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -226,7 +228,8 @@
       aqualogic
     ];
     "aquostv" = ps: with ps; [
-    ]; # missing inputs: sharp_aquos_rc
+      sharp-aquos-rc
+    ];
     "aranet" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -417,7 +420,8 @@
     "bloomsky" = ps: with ps; [
     ];
     "blue_current" = ps: with ps; [
-    ]; # missing inputs: bluecurrent-api
+      bluecurrent-api
+    ];
     "bluemaestro" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -1675,6 +1679,7 @@
       aiohttp-zlib-ng
       fnv-hash-fast
       gcal-sync
+      ical
       oauth2client
       psutil-home-assistant
       sqlalchemy
@@ -4756,7 +4761,8 @@
       zeroconf
     ];
     "switchbot_cloud" = ps: with ps; [
-    ]; # missing inputs: switchbot-api
+      switchbot-api
+    ];
     "switcher_kis" = ps: with ps; [
       aioswitcher
     ];
@@ -5072,7 +5078,8 @@
       psutil-home-assistant
       python-kasa
       sqlalchemy
-    ]; # missing inputs: python-kasa.optional-dependencies.speedups
+    ]
+    ++ python-kasa.optional-dependencies.speedups;
     "tplink_lte" = ps: with ps; [
     ]; # missing inputs: tp-connected
     "tplink_omada" = ps: with ps; [
@@ -5255,7 +5262,8 @@
     "valve" = ps: with ps; [
     ];
     "vasttrafik" = ps: with ps; [
-    ]; # missing inputs: vtjp
+      vtjp
+    ];
     "velbus" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -5625,7 +5633,8 @@
       fnv-hash-fast
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: youtubeaio
+      youtubeaio
+    ];
     "zabbix" = ps: with ps; [
       py-zabbix
     ];
@@ -5746,7 +5755,9 @@
     "androidtv_remote"
     "anova"
     "anthemav"
+    "aosmith"
     "apache_kafka"
+    "apcupsd"
     "api"
     "apple_tv"
     "application_credentials"
@@ -5777,6 +5788,7 @@
     "blackbird"
     "blebox"
     "blink"
+    "blue_current"
     "bluemaestro"
     "blueprint"
     "bluetooth"
@@ -6358,6 +6370,7 @@
     "switch_as_x"
     "switchbee"
     "switchbot"
+    "switchbot_cloud"
     "switcher_kis"
     "syncthing"
     "syncthru"
@@ -6398,6 +6411,7 @@
     "tomorrowio"
     "toon"
     "totalconnect"
+    "tplink"
     "tplink_omada"
     "traccar"
     "trace"
@@ -6492,6 +6506,7 @@
     "yeelight"
     "yolink"
     "youless"
+    "youtube"
     "zamg"
     "zeroconf"
     "zerproc"

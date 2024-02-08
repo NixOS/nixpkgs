@@ -11,24 +11,24 @@ with lib;
 
 let
   pname = "gitkraken";
-  version = "9.10.0";
+  version = "9.11.1";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-JVeJY0VUNyIeR/IQcfoLBN0I1WQNFy7PpCjzk5bPv/Q=";
+      hash = "sha256-DTnVsVWOPAcG2O87dS6PwAB+VU0ijulELHe9CnOLYPU=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-npc+dwHH0tlVKkAZxmGwpoiHXeDn0VHkivqbwoJsI7M=";
+      hash = "sha256-JkmQYk+t4ACkK3V0IxrrIcheBWJEkxQzf9ZYRWs769c=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-fszsGdNKcVgKdv97gBBf+fSODzjKbOBB4MyCvWzm3CA=";
+      hash = "sha256-jWXvDSyM7A3+cer/yPvom9f0w2nGJmwOJ22qoQzRWGQ=";
     };
   };
 
@@ -109,6 +109,9 @@ let
     nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
     buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
+    # avoid double-wrapping
+    dontWrapGApps = true;
+
     installPhase = ''
       runHook preInstall
 
@@ -145,7 +148,9 @@ let
 
       # GitKraken expects the CA bundle to be located in the bundled git directory. Since we replace it with
       # the one from nixpkgs, which doesn't provide a CA bundle, we need to explicitly set its location at runtime
-      makeWrapper $out/share/${pname}/gitkraken $out/bin/gitkraken --set GIT_SSL_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt"
+      makeWrapper $out/share/${pname}/gitkraken $out/bin/gitkraken \
+        --set GIT_SSL_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
+        "''${gappsWrapperArgs[@]}"
     '';
   };
 

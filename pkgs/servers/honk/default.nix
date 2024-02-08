@@ -8,11 +8,11 @@
 
 buildGoModule rec {
   pname = "honk";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
-    hash = "sha256-kcrEg0KBdCaA4g8ivIgOWIGJVDCtY5rI4P7cp/ZyXe4=";
+    hash = "sha256-adBbJG45md7wUGzqYKA06RXzXul3Ltncrtz2eN4Ezqo=";
   };
   vendorHash = null;
 

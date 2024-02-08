@@ -245,6 +245,9 @@ buildStdenv.mkDerivation {
       hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
     })
   ]
+  ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
+    ./122.0-libvpx-mozbz1875201.patch
+  ]
   ++ extraPatches;
 
   postPatch = ''
@@ -292,6 +295,9 @@ buildStdenv.mkDerivation {
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
 
+    # Set reproducible build date; https://bugzilla.mozilla.org/show_bug.cgi?id=885777#c21
+    export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
+
     # Set predictable directories for build and state
     export MOZ_OBJDIR=$(pwd)/mozobj
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
@@ -320,11 +326,9 @@ buildStdenv.mkDerivation {
           unset 'configureFlagsArray[i]'
         fi
       done
-      configureFlagsArray+=(
-        "--enable-profile-use=cross"
-        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-        "--with-pgo-jarlog="$TMPDIR/jarlog""
-      )
+      appendToVar configureFlags --enable-profile-use=cross
+      appendToVar configureFlags --with-pgo-profile-path=$TMPDIR/merged.profdata
+      appendToVar configureFlags --with-pgo-jarlog=$TMPDIR/jarlog
       ${lib.optionalString stdenv.hostPlatform.isMusl ''
         LDFLAGS="$OLD_LDFLAGS"
         unset OLD_LDFLAGS

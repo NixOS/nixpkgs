@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "blurhash-python";
-  version = "1.2.1";
+  version = "1.2.2";
 
   disabled = pythonOlder "3.8";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "woltapp";
     repo = "blurhash-python";
     rev = "v${version}";
-    hash = "sha256-z7V2Ck8h12Vuj/5/s9ZP/uqQ4olo8xwg+ZR3iW4ca/M=";
+    hash = "sha256-Cz+PkPp1knvT3U5ofyb1PstM9kzBOkgPbx03LgOLXgw=";
   };
 
   nativeBuildInputs = [

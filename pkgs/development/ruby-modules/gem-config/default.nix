@@ -312,7 +312,9 @@ in
           cp -R ext/fast_mmaped_file_rs $out
         '';
       };
-      hash = "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+      hash = if lib.versionAtLeast attrs.version "1.1.0"
+        then "sha256-tSyoCEBtMMkFfPynaMx8oc9bO7I+Pf6Y/f3Ld8uwlEE="
+        else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
     };
     nativeBuildInputs = [
       cargo
@@ -320,9 +322,15 @@ in
       rustPlatform.cargoSetupHook
       rustPlatform.bindgenHook
     ];
+    disallowedReferences = [
+      rustc.unwrapped
+    ];
     preBuild = ''
       cat ../.cargo/config > ext/fast_mmaped_file_rs/.cargo/config.toml
       sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+    '';
+    postInstall = ''
+      find $out -type f -name .rustc_info.json -delete
     '';
   };
 

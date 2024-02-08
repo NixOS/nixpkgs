@@ -9,13 +9,15 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
       services.livebook = {
         enableUserService = true;
-        port = 20123;
+        environment = {
+          LIVEBOOK_PORT = 20123;
+          LIVEBOOK_COOKIE = "chocolate chip";
+          LIVEBOOK_TOKEN_ENABLED = true;
+
+        };
         environmentFile = pkgs.writeText "livebook.env" ''
           LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         '';
-        options = {
-          cookie = "chocolate chip";
-        };
       };
     };
   };

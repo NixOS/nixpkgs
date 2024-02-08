@@ -23,6 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Do-not-require-wget-and-unzip.patch
   ];
 
+  # Fix doc generation error with doxygen >= 1.10.0
+  # see https://github.com/eProsima/Fast-CDR/issues/193
+  postPatch = ''
+    substituteInPlace ./doxyfile.in --replace \
+      "WARN_AS_ERROR          = YES" \
+      "WARN_AS_ERROR          = NO"
+  '';
+
   cmakeFlags = lib.optional (stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=OFF"
   # upstream turns BUILD_TESTING=OFF by default and doesn't honor cmake's default (=ON)
   ++ lib.optional (finalAttrs.finalPackage.doCheck) "-DBUILD_TESTING=ON"

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , ncurses
 , perl
 , help2man
@@ -12,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-F4nWsbGlff4qere1M+6fXf2cv1tZuxuzwmEu0I0PaLI=";
+    hash = "sha256-h2l9YKMeELXLhqnwZR4ex77pgyDQSMBzlDGqw9V2T7Y=";
   };
 
   outputs = ["out" "apparmor"];
@@ -24,11 +23,6 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
-    (fetchpatch {
-      name = "CVE-2023-40303.patch";
-      url = "https://git.savannah.gnu.org/cgit/inetutils.git/patch/?id=e4e65c03f4c11292a3e40ef72ca3f194c8bffdd6";
-      hash = "sha256-I5skN537owfpFpAZr4vDKPHuERI6+oq5/hFW2RQeUxI=";
-    })
   ];
 
   strictDeps = true;

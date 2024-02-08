@@ -20,7 +20,7 @@ let
     ppx_deriving_yojson
     ppx_import
     stdlib-shims
-    why3
+    why3.dev
     re
     result
     seq

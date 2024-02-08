@@ -1,16 +1,18 @@
 { lib
+, async-interrupt
 , bleak
 , bleak-retry-connector
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.5.6-4";
-  format = "pyproject";
+  version = "0.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -18,12 +20,12 @@ buildPythonPackage rec {
     owner = "vincegio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ft5A2ZGVH9VHoRDAqDcc0rBfnQRxoXMylCAwUSwmViE=";
+    hash = "sha256-A7Nrg0O+WVoHP+m8pz6idnNcxulwPYmMt9DfhKTHG24=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'bleak-retry-connector = "^0.15.1"' 'bleak = "*"'
+      --replace "-v -Wdefault --cov=airthings_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   nativeBuildInputs = [
@@ -31,12 +33,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    async-interrupt
     bleak
     bleak-retry-connector
   ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "airthings_ble"

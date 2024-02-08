@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "recipe-scrapers";
-  version = "14.53.0";
+  version = "14.54.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "hhursev";
     repo = "recipe-scrapers";
     rev = "refs/tags/${version}";
-    hash = "sha256-uYUzn3JlsZmzzbk740aD3PW3OuGqdsAfU7HlYX5kPrY=";
+    hash = "sha256-Q7ubT7SBHNxyvfqFhDmBjnW7ssoXBsMZR+eYg5CntHY=";
   };
 
   nativeBuildInputs = [

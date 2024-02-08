@@ -98,9 +98,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
+    ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
     ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
     ++ lib.optionals (enablePython) [ which swig ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle fixDarwinDylibNames xcbuild ];
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
@@ -126,7 +127,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  desktopItems = [
+  desktopItems = lib.optionals (enableGL || enableX11) [
     (makeDesktopItem {
       name = pname;
       desktopName = pname;
