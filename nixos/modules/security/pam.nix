@@ -205,17 +205,6 @@ let
         };
       };
 
-      usbAuth = mkOption {
-        default = config.security.pam.usb.enable;
-        defaultText = literalExpression "config.security.pam.usb.enable";
-        type = types.bool;
-        description = lib.mdDoc ''
-          If set, users listed in
-          {file}`/etc/pamusb.conf` are able to log in
-          with the associated USB key.
-        '';
-      };
-
       otpwAuth = mkOption {
         default = config.security.pam.enableOTPW;
         defaultText = literalExpression "config.security.pam.enableOTPW";
@@ -665,7 +654,6 @@ let
             authfile = u2f.authFile;
             appid = u2f.appId;
           }; })
-          { name = "usb"; enable = cfg.usbAuth; control = "sufficient"; modulePath = "${pkgs.pam_usb}/lib/security/pam_usb.so"; }
           (let ussh = config.security.pam.ussh; in { name = "ussh"; enable = config.security.pam.ussh.enable && cfg.usshAuth; control = ussh.control; modulePath = "${pkgs.pam_ussh}/lib/security/pam_ussh.so"; settings = {
             ca_file = ussh.caFile;
             authorized_principals = ussh.authorizedPrincipals;
