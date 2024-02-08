@@ -86,7 +86,7 @@ in stdenv.mkDerivation (rec {
     # of the flags used for the normal LLVM build. To avoid the need for building
     # a native libLLVM.so (which would fail) we force llvm-config to be linked
     # statically against the necessary LLVM components always.
-    ../../llvm-config-link-static.patch
+    ../../common/llvm/llvm-config-link-static.patch
 
     ./gnu-install-dirs.patch
     # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
