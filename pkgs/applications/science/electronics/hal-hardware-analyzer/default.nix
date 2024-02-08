@@ -44,6 +44,11 @@ let
         --replace "igraph_scg_grouping3" "" \
         --replace "igraph_scg_semiprojectors2" ""
     '';
+    NIX_CFLAGS_COMPILE = (prev.NIX_CFLAGS_COMPILE or []) ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-strict-prototypes"
+      "-Wno-unused-but-set-parameter"
+      "-Wno-unused-but-set-variable"
+    ];
     # general options brought back from the old 0.9.x package
     buildInputs = prev.buildInputs ++ [ suitesparse ];
     cmakeFlags = prev.cmakeFlags ++ [ "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF" ];
@@ -138,7 +143,6 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;
