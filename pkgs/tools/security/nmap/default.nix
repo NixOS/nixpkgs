@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     (if withLua then "--with-liblua=${lua5_4}" else "--without-liblua")
     "--with-liblinear=included"
     "--without-ndiff"
-    "--without-zenmap"
   ];
 
   postInstall = ''
@@ -36,12 +35,26 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}gcc"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre libssh2 libpcap openssl ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    (python3.withPackages(pypkgs: [
+      pypkgs.pygobject3
+    ]))
+    wrapGAppsHook
+  ];
+
+  buildInputs = [ pcre libssh2 libpcap openssl gtk3 ];
 
   enableParallelBuilding = true;
 
   doCheck = false; # fails 3 tests, probably needs the net
+
+  installPhase = ''
+    cd zenmap
+    python setup.py install --prefix=$out
+    sed -i "58a sys.path.append(\"$out/lib/python${python3.sourceVersion.major}.${python3.sourceVersion.minor}/site-packages/\")" $out/bin/zenmap
+  '';
 
   meta = with lib; {
     description = "A free and open source utility for network discovery and security auditing";
