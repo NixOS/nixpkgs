@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null }:
+{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, patches ? null, conf ? null }:
 
 stdenv.mkDerivation rec {
   pname = "dmenu";
@@ -13,10 +13,17 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  postPatch = ''
-    sed -ri -e 's!\<(dmenu|dmenu_path|stest)\>!'"$out/bin"'/&!g' dmenu_run
-    sed -ri -e 's!\<stest\>!'"$out/bin"'/&!g' dmenu_path
-  '';
+  postPatch =
+    let
+      # Allow users to set the config.def.h file containing the configuration
+      configFile =
+        if lib.isDerivation conf || builtins.isPath conf
+        then conf else lib.writeText "config.def.h" conf;
+    in
+    ''
+      sed -ri -e 's!\<(dmenu|dmenu_path|stest)\>!'"$out/bin"'/&!g' dmenu_run
+      sed -ri -e 's!\<stest\>!'"$out/bin"'/&!g' dmenu_path
+    '' + lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   preConfigure = ''
     sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk
