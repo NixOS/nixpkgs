@@ -17,6 +17,7 @@
 , headless ? false
 , enable32bitGuests ? true
 , enableWebService ? false
+, extraConfigureFlags ? ""
 }:
 
 with lib;
@@ -158,6 +159,7 @@ in stdenv.mkDerivation {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
