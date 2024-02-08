@@ -140,6 +140,16 @@ let
         };
       });
 
+      anova-wifi = super.anova-wifi.overridePythonAttrs (old: rec {
+        version = "0.10.3";
+        src = fetchFromGitHub {
+          owner = "Lash-L";
+          repo = "anova_wifi";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-tCmvp29KSCkc+g0w0odcB7vGjtDx6evac7XsHEF0syM=";
+        };
+      });
+
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
