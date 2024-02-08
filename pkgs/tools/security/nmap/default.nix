@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4, gtk3, gobject-introspection, python3
+{ lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4, gtk3, gobject-introspection, python3, wrapGAppsHook
 , pcre, libssh2
 , withLua ? true
 }:
