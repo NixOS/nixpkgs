@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "mdformat-nix-alejandra";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
   ];
 
