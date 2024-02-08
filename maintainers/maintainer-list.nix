@@ -4638,6 +4638,12 @@
     githubId = 12224254;
     name = "Delta";
   };
+  delta1 = {
+    email = "byron@hambly.dev";
+    github = "delta1";
+    githubId = 351403;
+    name = "Byron Hambly";
+  };
   delta231 = {
     email = "swstkbaranwal@gmail.com";
     github = "Delta456";
