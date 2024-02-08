@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, fetchgit
 , bzip2
+, deterministic-uname
 , expat
 , libffi
 , gdbm
@@ -133,6 +134,8 @@ let
     pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
+  ] ++ optionals stdenv.hostPlatform.isFreeBSD [
+    deterministic-uname
   ];
 
   buildInputs = filter (p: p != null) ([
@@ -173,7 +176,8 @@ let
   # are not documented, and must be derived from the configure script (see links
   # below).
   sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
-    machdep = if isWindows then "win32" else (parsed.kernel.name + (lib.optionalString stdenv.isFreeBSD (builtins.toString parsed.kernel.version))); # win32 is added by Fedora’s patch
+    # TODO: Purify the python build! it pulls in the running kernel version!
+    machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
@@ -429,6 +433,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
   optionalString enableNoSemanticInterposition ''
     export CFLAGS_NODIST="-fno-semantic-interposition"
+  '' + optionalString (stdenv.buildPlatform.isFreeBSD && stdenv.hostPlatform.isFreeBSD) ''
+    sed -E -i -e 's/uname -p/uname -m/g' -e 's/uname -r/echo/g' config.guess
+    sed -E -i -e 's/uname -p/uname -m/g' -e 's/uname -r/echo/g' configure
   '';
 
   setupHook = python-setup-hook sitePackages;
