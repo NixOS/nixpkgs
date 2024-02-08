@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mdformat-tables";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
   ];
 
