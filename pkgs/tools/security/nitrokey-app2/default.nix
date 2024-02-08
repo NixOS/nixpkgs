@@ -11,7 +11,7 @@
 
 buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.5";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,8 +19,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
-    rev = "v${version}";
-    hash = "sha256-mR13zUgCdNS09EnpGLrnOnoIn3p6ZM/0fHKg0OUMWj4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-v6isbZAdhFyQ3+SL37cWNUgIXT7dW7y6F21k6DZh60E=";
   };
 
   # https://github.com/Nitrokey/nitrokey-app2/issues/152
