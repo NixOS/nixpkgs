@@ -87,6 +87,8 @@ self: super: {
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 
+    pg_squeeze = super.callPackage ./ext/pg_squeeze.nix { };
+
     pg_uuidv7 = super.callPackage ./ext/pg_uuidv7.nix { };
 
     promscale_extension = super.callPackage ./ext/promscale_extension.nix { };
