@@ -810,8 +810,8 @@ dependencies = [
 
 [[package]]
 name = "enolib"
-version = "0.3.0"
-source = "git+https://codeberg.org/simonrepp/enolib-rs?tag=0.3.0#e5739943579f23d43300f83a06988c47e9719f1a"
+version = "0.4.0"
+source = "git+https://codeberg.org/simonrepp/enolib-rs?tag=0.4.0#dc22b9114b210a6f3e16815c0d1d43bcbed551d5"
 
 [[package]]
 name = "equivalent"
@@ -837,7 +837,7 @@ dependencies = [
 
 [[package]]
 name = "faircamp"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "actix-files",
  "actix-web",
