@@ -4,6 +4,7 @@
 , flit-core
 , mdformat
 , mdit-py-plugins
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -12,11 +13,11 @@ buildPythonPackage rec {
   version = "1.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KyleKing";
-    repo = pname;
+    repo = "mdformat-admon";
     rev = "v${version}";
     hash = "sha256-33Q3Re/axnoOHZ9XYA32mmK+efsSelJXW8sD7C1M/jU=";
   };
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     mdformat
     mdit-py-plugins
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {
