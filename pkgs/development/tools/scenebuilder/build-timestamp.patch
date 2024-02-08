@@ -1,0 +1,13 @@
+diff --git a/app/pom.xml b/app/pom.xml
+index a713b84..0b1e99e 100644
+--- a/app/pom.xml
++++ b/app/pom.xml
+@@ -13,7 +13,7 @@
+     <properties>
+         <main.class.name>com.oracle.javafx.scenebuilder.app.SceneBuilderApp</main.class.name>
+         <!-- For about.properties file -->
+-        <buildDate>${maven.build.timestamp}</buildDate>
++        <buildDate>@release_date@ 00:00:00</buildDate>
+         <buildDateFormat>${maven.build.timestamp.format}</buildDateFormat>
+         <javaVersion>${java.version}, ${java.runtime.name}</javaVersion>
+         <javafxVersion>${javafx.version}</javafxVersion>
