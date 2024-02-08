@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "courlan";
-  version = "0.9.5";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ONw1suO/H11RbQDVGsEuveVD40F8a+b2oic8D8W1s1M=";
+    hash = "sha256-PDVRHDZSXLL5Qc1nCbejp0LtlfC55WyX7sDBb9wDUYM=";
   };
 
   propagatedBuildInputs = [
