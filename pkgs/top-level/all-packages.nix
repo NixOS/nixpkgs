@@ -8833,6 +8833,8 @@ with pkgs;
 
   graylog-5_1 = callPackage ../tools/misc/graylog/5.1.nix { };
 
+  graylog-5_2 = callPackage ../tools/misc/graylog/5.2.nix { };
+
   graylogPlugins = recurseIntoAttrs (
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
