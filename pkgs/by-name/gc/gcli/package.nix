@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     mainProgram = "gcli";
     maintainers = with maintainers; [ kenran ];
+    platforms = platforms.unix;
   };
 }
