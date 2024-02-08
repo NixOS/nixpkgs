@@ -28381,8 +28381,6 @@ with pkgs;
 
   pam_u2f = callPackage ../os-specific/linux/pam_u2f { };
 
-  pam_usb = callPackage ../os-specific/linux/pam_usb { };
-
   pam_ussh = callPackage ../os-specific/linux/pam_ussh { };
 
   paxctl = callPackage ../os-specific/linux/paxctl { };
