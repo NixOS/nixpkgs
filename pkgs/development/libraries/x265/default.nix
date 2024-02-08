@@ -5,14 +5,14 @@
 , cmake
 , nasm
 
-# NUMA support enabled by default on NUMA platforms:
+  # NUMA support enabled by default on NUMA platforms:
 , numaSupport ? (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64))
 , numactl
 
-# Multi bit-depth support (8bit+10bit+12bit):
+  # Multi bit-depth support (8bit+10bit+12bit):
 , multibitdepthSupport ? (stdenv.is64bit && !(stdenv.isAarch64 && stdenv.isLinux))
 
-# Other options:
+  # Other options:
 , cliSupport ? true # Build standalone CLI application
 , custatsSupport ? false # Internal profiling of encoder work
 , debugSupport ? false # Run-time sanity checks (debugging)
@@ -137,10 +137,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for encoding H.265/HEVC video streams";
-    homepage    = "https://www.x265.org/";
-    changelog   = "https://x265.readthedocs.io/en/master/releasenotes.html#version-${lib.strings.replaceStrings ["."] ["-"] version}";
-    license     = licenses.gpl2Plus;
+    homepage = "https://www.x265.org/";
+    changelog = "https://x265.readthedocs.io/en/master/releasenotes.html#version-${lib.strings.replaceStrings ["."] ["-"] version}";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }
