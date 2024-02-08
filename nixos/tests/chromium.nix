@@ -119,7 +119,7 @@ mapAttrs (channel: chromiumPkg: makeTest {
             machine.wait_until_succeeds(
                 ru(
                     "${xdo "create_new_win-wait_for_window" ''
-                      search --onlyvisible --name "New Tab"
+                      search --onlyvisible --name "New [tT]ab"
                       windowfocus --sync
                       windowactivate --sync
                     ''}"
@@ -132,7 +132,7 @@ mapAttrs (channel: chromiumPkg: makeTest {
         machine.wait_until_succeeds(
             ru(
                 "${xdo "close_new_tab_win-select_main_window" ''
-                  search --onlyvisible --name "New Tab"
+                  search --onlyvisible --name "New [tT]ab"
                   windowfocus --sync
                   windowactivate --sync
                 ''}"
@@ -143,7 +143,7 @@ mapAttrs (channel: chromiumPkg: makeTest {
         machine.wait_until_fails(
             ru(
                 "${xdo "close_new_tab_win-wait_for_close" ''
-                  search --onlyvisible --name "New Tab"
+                  search --onlyvisible --name "New [tT]ab"
                 ''}"
             )
         )
@@ -152,7 +152,7 @@ mapAttrs (channel: chromiumPkg: makeTest {
     @contextmanager
     def test_new_win(description, url, window_name):
         create_new_win()
-        machine.wait_for_window("New Tab")
+        machine.wait_for_window("New [tT]ab")
         machine.send_chars(f"{url}\n")
         machine.wait_for_window(window_name)
         machine.screenshot(description)
@@ -194,7 +194,9 @@ mapAttrs (channel: chromiumPkg: makeTest {
 
     create_new_win()
     # Optional: Wait for the new tab page to fully load before taking the screenshot:
-    machine.wait_for_text("Web Store")
+
+    if not "${getName chromiumPkg.name}".startswith("microsoft-edge"):
+        machine.wait_for_text("Web Store")
     machine.screenshot("empty_windows")
     close_new_tab_win()
 
@@ -254,9 +256,9 @@ mapAttrs (channel: chromiumPkg: makeTest {
         # TODO: Fix copying all of the text to the clipboard
 
 
-    with test_new_win("version_info", "chrome://version", "About Version") as clipboard:
+    with test_new_win("version_info", "chrome://version", "About [vV]ersion") as clipboard:
         filters = [
-            r"${chromiumPkg.version} \(Official Build",
+            r"${chromiumPkg.version} \(Official [bB]uild",
         ]
         if not all(
             re.search(filter, clipboard) for filter in filters
