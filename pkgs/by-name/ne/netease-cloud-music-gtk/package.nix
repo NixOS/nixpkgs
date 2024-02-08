@@ -19,8 +19,6 @@
 , glib-networking
 , gst_all_1
 , libsoup_3
-, Foundation
-, SystemConfiguration
 }:
 
 stdenv.mkDerivation rec {
