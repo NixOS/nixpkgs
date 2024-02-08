@@ -80,10 +80,13 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  # Flag needed by GCC 12 but unrecognized by GCC 9 (aarch64-linux default now)
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (with stdenv; cc.isGNU && lib.versionAtLeast cc.version "12") [
-    "-Wno-error=mismatched-new-delete"
-  ]);
+  env.CXXFLAGS = toString [ "-include cstdint" ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU (toString [
+    "-Wno-error=redundant-move"
+    # Flag needed by GCC 12 but unrecognized by GCC 9 (aarch64-linux default now)
+    (lib.optionalString (lib.versionAtLeast stdenv.cc.version "12") "-Wno-error=mismatched-new-delete")
+   ]);
 
   prePatch = ''
     patchShebangs scripts
