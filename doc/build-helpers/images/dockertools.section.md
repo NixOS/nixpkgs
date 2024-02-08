@@ -1088,102 +1088,199 @@ If you don't specify a `name` attribute, you'll encounter an evaluation error an
 
 ## Environment Helpers {#ssec-pkgs-dockerTools-helpers}
 
-Some packages expect certain files to be available globally.
-When building an image from scratch (i.e. without `fromImage`), these files are missing.
-`pkgs.dockerTools` provides some helpers to set up an environment with the necessary files.
-You can include them in `copyToRoot` like this:
+When building Docker images with Nix, you might also want to add certain files that are expected to be available globally by the software you're packaging.
+Simple examples are the `env` utility in `/usr/bin/env`, or trusted root TLS/SSL certificates.
+Such files will most likely not be included if you're building a Docker image from scratch with Nix, and they might also not be included if you're starting from a Docker image that doesn't include them.
+The helpers in this section are packages that provide some of these commonly-needed global files.
 
-```nix
-buildImage {
-  name = "environment-example";
-  copyToRoot = with pkgs.dockerTools; [
-    usrBinEnv
-    binSh
-    caCertificates
-    fakeNss
-  ];
-}
-```
+Most of these helpers are packages, which means you have to add them to the list of contents to be included in the image (this changes depending on the function you're using to build the image).
+[](#ex-dockerTools-helpers-buildImage) and [](#ex-dockerTools-helpers-buildLayeredImage) show how to include these packages on `dockerTools` functions that build an image.
+For more details on how that works, see the documentation for the function you're using.
 
 ### usrBinEnv {#sssec-pkgs-dockerTools-helpers-usrBinEnv}
 
 This provides the `env` utility at `/usr/bin/env`.
+This is currently implemented by linking to the `env` binary from the `coreutils` package, but is considered an implementation detail that could change in the future.
 
 ### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
 
-This provides `bashInteractive` at `/bin/sh`.
+This provides a `/bin/sh` link to the `bash` binary from the `bashInteractive` package.
+Because of this, it supports cases such as running a command interactively in a container (for example by running `docker run -it <image_name>`).
 
 ### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
 
-This sets up `/etc/ssl/certs/ca-certificates.crt`.
+This adds trusted root TLS/SSL certificates from the `cacert` package in multiple locations in an attempt to be compatible with binaries built for multiple Linux distributions.
+The locations currently used are:
 
+- `/etc/ssl/certs/ca-bundle.crt`
+- `/etc/ssl/certs/ca-certificates.crt`
+- `/etc/pki/tls/certs/ca-bundle.crt`
+
+[]{#ssec-pkgs-dockerTools-fakeNss}
 ### fakeNss {#sssec-pkgs-dockerTools-helpers-fakeNss}
 
-Provides `/etc/passwd` and `/etc/group` that contain root and nobody.
-Useful when packaging binaries that insist on using nss to look up
-username/groups (like nginx).
+This is a re-export of the `fakeNss` package from Nixpkgs.
+See [](#sec-fakeNss).
 
 ### shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
 
-This constant string is a helper for setting up the base files for managing users and groups, only if such files don't exist already. It is suitable for being used in a [`buildImage` `runAsRoot`](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
+This is a string containing a script that sets up files needed for [`shadow`](https://github.com/shadow-maint/shadow) to work (using the `shadow` package from Nixpkgs), and alters `PATH` to make all its utilities available in the same script.
+It is intended to be used with other dockerTools functions in attributes that expect scripts.
+After the script in `shadowSetup` runs, you'll then be able to add more commands that make use of the utilities in `shadow`, such as adding any extra users and/or groups.
+See [](#ex-dockerTools-shadowSetup-buildImage) and [](#ex-dockerTools-shadowSetup-buildLayeredImage) to better understand how to use it.
+
+`shadowSetup` achieves a result similar to [`fakeNss`](#sssec-pkgs-dockerTools-helpers-fakeNss), but only sets up a `root` user with different values for the home directory and the shell to use, in addition to setting up files for [PAM](https://en.wikipedia.org/wiki/Linux_PAM) and a {manpage}`login.defs(5)` file.
+
+:::{.caution}
+Using both `fakeNss` and `shadowSetup` at the same time will either cause your build to break or produce unexpected results.
+Use either `fakeNss` or `shadowSetup` depending on your use case, but avoid using both.
+:::
+
+:::{.note}
+When used with [`buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage) or [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage), you will have to set the `enableFakechroot` attribute to `true`, or else the script in `shadowSetup` won't run properly.
+See [](#ex-dockerTools-shadowSetup-buildLayeredImage).
+:::
+
+### Examples {#ssec-pkgs-dockerTools-helpers-examples}
+
+:::{.example #ex-dockerTools-helpers-buildImage}
+# Using `dockerTools`'s environment helpers with `buildImage`
+
+This example adds the [`binSh`](#sssec-pkgs-dockerTools-helpers-binSh) helper to a basic Docker image built with [`dockerTools.buildImage`](#ssec-pkgs-dockerTools-buildImage).
+This helper makes it possible to enter a shell inside the container.
+This is the `buildImage` equivalent of [](#ex-dockerTools-helpers-buildLayeredImage).
 
 ```nix
-buildImage {
-  name = "shadow-basic";
+{ dockerTools, hello }:
+dockerTools.buildImage {
+  name = "env-helpers";
+  tag = "latest";
 
-  runAsRoot = ''
-    #!${pkgs.runtimeShell}
-    ${pkgs.dockerTools.shadowSetup}
-    groupadd -r redis
-    useradd -r -g redis redis
-    mkdir /data
-    chown redis:redis /data
-  '';
-}
+  copyToRoot = [
+    hello
+    dockerTools.binSh
+  ];
 ```
 
-Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
+After building the image and loading it in Docker, we can create a container based on it and enter a shell inside the container.
+This is made possible by `binSh`.
 
-When using `buildLayeredImage`, you can put this in `fakeRootCommands` if you `enableFakechroot`:
-```nix
-buildLayeredImage {
-  name = "shadow-layered";
-
-  fakeRootCommands = ''
-    ${pkgs.dockerTools.shadowSetup}
-  '';
-  enableFakechroot = true;
-}
+```shell
+$ nix-build
+(some output removed for clarity)
+/nix/store/2p0i3i04cgjlk71hsn7ll4kxaxxiv4qg-docker-image-env-helpers.tar.gz
+$ docker load -i /nix/store/2p0i3i04cgjlk71hsn7ll4kxaxxiv4qg-docker-image-env-helpers.tar.gz
+(output removed for clarity)
+$ docker run --rm -it env-helpers:latest /bin/sh
+sh-5.2# help
+GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+(rest of output removed for clarity)
 ```
+:::
 
-## fakeNss {#ssec-pkgs-dockerTools-fakeNss}
+:::{.example #ex-dockerTools-helpers-buildLayeredImage}
+# Using `dockerTools`'s environment helpers with `buildLayeredImage`
 
-If your primary goal is providing a basic skeleton for user lookups to work,
-and/or a lesser privileged user, adding `pkgs.fakeNss` to
-the container image root might be the better choice than a custom script
-running `useradd` and friends.
-
-It provides a `/etc/passwd` and `/etc/group`, containing `root` and `nobody`
-users and groups.
-
-It also provides a `/etc/nsswitch.conf`, configuring NSS host resolution to
-first check `/etc/hosts`, before checking DNS, as the default in the absence of
-a config file (`dns [!UNAVAIL=return] files`) is quite unexpected.
-
-You can pair it with `binSh`, which provides `bin/sh` as a symlink
-to `bashInteractive` (as `/bin/sh` is configured as a shell).
+This example adds the [`binSh`](#sssec-pkgs-dockerTools-helpers-binSh) helper to a basic Docker image built with [`dockerTools.buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage).
+This helper makes it possible to enter a shell inside the container.
+This is the `buildLayeredImage` equivalent of [](#ex-dockerTools-helpers-buildImage).
 
 ```nix
-buildImage {
-  name = "shadow-basic";
+{ dockerTools, hello }:
+dockerTools.buildLayeredImage {
+  name = "env-helpers";
+  tag = "latest";
 
-  copyToRoot = pkgs.buildEnv {
-    name = "image-root";
-    paths = [ binSh pkgs.fakeNss ];
-    pathsToLink = [ "/bin" "/etc" "/var" ];
+  contents = [
+    hello
+    dockerTools.binSh
+  ];
+
+  config = {
+    Cmd = [ "/bin/hello" ];
   };
 }
 ```
+
+After building the image and loading it in Docker, we can create a container based on it and enter a shell inside the container.
+This is made possible by `binSh`.
+
+```shell
+$ nix-build
+(some output removed for clarity)
+/nix/store/rpf47f4z5b9qr4db4ach9yr4b85hjhxq-env-helpers.tar.gz
+$ docker load -i /nix/store/rpf47f4z5b9qr4db4ach9yr4b85hjhxq-env-helpers.tar.gz
+(output removed for clarity)
+$ docker run --rm -it env-helpers:latest /bin/sh
+sh-5.2# help
+GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
+(rest of output removed for clarity)
+```
+:::
+
+:::{.example #ex-dockerTools-shadowSetup-buildImage}
+# Using `dockerTools.shadowSetup` with `dockerTools.buildImage`
+
+This is an example that shows how to use `shadowSetup` with `dockerTools.buildImage`.
+Note that the extra script in `runAsRoot` uses `groupadd` and `useradd`, which are binaries provided by the `shadow` package.
+These binaries are added to the `PATH` by the `shadowSetup` script, but only for the duration of `runAsRoot`.
+
+```nix
+{ dockerTools, hello }:
+dockerTools.buildImage {
+  name = "shadow-basic";
+  tag = "latest";
+
+  copyToRoot = [ hello ];
+
+  runAsRoot = ''
+    ${dockerTools.shadowSetup}
+    groupadd -r hello
+    useradd -r -g hello hello
+    mkdir /data
+    chown hello:hello /data
+  '';
+
+  config = {
+    Cmd = [ "/bin/hello" ];
+    WorkingDir = "/data";
+  };
+}
+```
+:::
+
+:::{.example #ex-dockerTools-shadowSetup-buildLayeredImage}
+# Using `dockerTools.shadowSetup` with `dockerTools.buildLayeredImage`
+
+It accomplishes the same thing as [](#ex-dockerTools-shadowSetup-buildImage), but using `buildLayeredImage` instead.
+
+Note that the extra script in `fakeRootCommands` uses `groupadd` and `useradd`, which are binaries provided by the `shadow` package.
+These binaries are added to the `PATH` by the `shadowSetup` script, but only for the duration of `fakeRootCommands`.
+
+```nix
+{ dockerTools, hello }:
+dockerTools.buildLayeredImage {
+  name = "shadow-basic";
+  tag = "latest";
+
+  contents = [ hello ];
+
+  fakeRootCommands = ''
+    ${dockerTools.shadowSetup}
+    groupadd -r hello
+    useradd -r -g hello hello
+    mkdir /data
+    chown hello:hello /data
+  '';
+  enableFakechroot = true;
+
+  config = {
+    Cmd = [ "/bin/hello" ];
+    WorkingDir = "/data";
+  };
+}
+```
+:::
 
 ## buildNixShellImage {#ssec-pkgs-dockerTools-buildNixShellImage}
 
