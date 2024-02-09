@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "matinlotfali";
     repo = "KDE-Rounded-Corners";
     rev = "v${version}";
-    hash = "sha256-S6Z0j61LQHmZTYiLEpwG77JH9Nd32lF5Azb0U0+rdNg=";
+    hash = "sha256-DE3XTu3CQY9mGuOpehWno/4yFyLjHuh4RxdUh+aTU7M=";
   };
 
   postConfigure = ''
