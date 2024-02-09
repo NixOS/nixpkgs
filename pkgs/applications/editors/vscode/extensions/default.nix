@@ -3368,6 +3368,22 @@ let
         };
       };
 
+      snakemake.snakemake-lang = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "snakemake-lang";
+          publisher = "snakemake";
+          version = "0.1.8";
+          sha256 = "sha256-ZJa/QWeS3E7XOFAE7FfVykHMax6tMbGyEZTPJwwXe1s=";
+        };
+        meta =  {
+          changelog = "https://github.com/snakemake/snakemake-lang-vscode-plugin/blob/master/CHANGELOG.md";
+          description = "Language support and snippets for Snakemake workflows (Snakefile, *.smk).";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=snakemake.snakemake-lang";
+          homepage = "https://github.com/snakemake/snakemake-lang-vscode-plugin";
+          license = lib.licenses.mit;
+        };
+      };
+
       sonarsource.sonarlint-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "sonarlint-vscode";
