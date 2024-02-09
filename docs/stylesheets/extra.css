@@ -1,0 +1,10 @@
+.center {
+    display: block;
+    margin: 0 auto;
+}
+
+[data-md-color-scheme="nervosys"] {
+    --md-primary-fg-color: #ff008a;
+    --md-primary-fg-color--light: #5000cd;
+    --md-primary-fg-color--dark: #00ffcd;
+}

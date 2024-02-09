@@ -1,0 +1,118 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+# mkdocs.yml
+#
+# MkDocs configuration file.
+#
+# Copyright 2024 Nervosys, LLC
+#
+
+site_name: "Botnix"
+site_description: "The operating system for autonomous systems"
+site_url: "https://github.com/nervosys/Botnix"
+site_dir: "build_docs"
+
+repo_name: "nervosys/Botnix"
+repo_url: "https://github.com/nervosys/Botnix"
+remote_branch: "gh-pages"
+remote_name: "origin"
+edit_uri: "edit/master/docs/"
+
+copyright: "Copyright &copy; 2024 <a href=https://nervosys.ai/>Nervosys, LLC</a>"
+
+theme:
+  name: material # readthedocs mkdocs
+  features:
+    - announce.dismiss
+    - content.code.annotate
+    - content.code.copy
+    - content.tabs.link
+    # - header.autohide
+    # - mkdocstrings
+    - navigation.expand
+    # - navigation.instant
+    - navigation.top
+    # - navigation.tabs
+    # - navigation.sections
+    - navigation.instant
+    - navigation.path
+    - navigation.footer
+    # - navigation.tracking
+    # - search.highlight
+    - search.suggest
+    - search.share
+    - toc.follow
+    - toc.integrate
+  font:
+    text: "Roboto"
+    code: "Roboto Mono"
+  language: en
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: "Switch to light mode"
+    - media: "(prefers-color-scheme: light)"
+      scheme: nervosys # default
+      toggle:
+        icon: material/brightness-7
+        name: "Switch to dark mode"
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: "Switch to system preference"
+  favicon: images/rune.svg
+  icon:
+    logo: material/shield-airplane
+    repo: fontawesome/brands/git-alt
+    edit: material/pencil
+    view: material/eye
+
+plugins:
+  - search
+  - offline
+  #- social
+  #- optimize
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: "#"
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
+  - javascripts/mathjax.js
+  - "https://polyfill.io/v3/polyfill.min.js?features=es6"
+  - "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+
+extra:
+  highlightjs: true
+  version:
+    default: latest
+  feature:
+    tabs: true
+  #analytics:
+  #        provider: google
+  #        property: ""
+  social:
+    - icon: fontawesome/brands/github-alt
+      link: "https://github.com/nervosys/Botnix"
+    - icon: fontawesome/brands/discord
+      link: "https://discord.gg/x84JXYje"
+    - icon: fontawesome/brands/x-twitter
+      link: "https://x.com/nervosys"
+  generator: false
