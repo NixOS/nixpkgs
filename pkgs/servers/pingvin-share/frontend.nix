@@ -5,6 +5,7 @@
   pkg-config,
   src,
   version,
+  nixosTests,
 }:
 
 buildNpmPackage {
@@ -25,6 +26,10 @@ buildNpmPackage {
   npmDepsHash = "sha256-66CUVLbq2XdOQAr69DcvxTMvOgSR/RTKPaq80JG+8dg=";
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
+
+  passthru.tests = {
+    pingvin-share = nixosTests.pingvin-share;
+  };
 
   meta = with lib; {
     description = "Frontend of pingvin-share, a self-hosted file sharing platform";
