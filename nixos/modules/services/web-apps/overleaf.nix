@@ -4,20 +4,16 @@ with lib;
 let
   cfg = config.services.overleaf;
 
-  ferret = pkgs.ferretdb.overrideAttrs (final: prev: {
-    patches = [ ./fields.patch ];
-  });
-
-  sagetex-fixed = pkgs.sagetex.overrideAttrs (final: prev: {
+  sagetex-fixed = pkgs.sagetex.overrideAttrs (old: {
     buildInputs = with pkgs; [
       sage
-      texlive.combined.scheme-full
+      texliveFull
     ];
 
     buildPhase = ''
       make all
     '';
-    installPhase = prev.installPhase + ''
+    installPhase = old.installPhase + ''
       mkdir $out/bin
       cp -va *.py "$out/bin"
     '';
@@ -119,27 +115,32 @@ in
       description = mdDoc ''This enable a default nginx reverse proxy configuration.'';
     };
 
-    enableRedis = mkOption {
+    redis.enable = mkOption {
       type = types.bool;
       default = true;
-      description = mdDoc ''Redis'';
+      description = mdDoc ''Redis is enabled by default.'';
     };
 
-    mongodbType = mkOption {
-      type = types.str;
-      default = "mongodb";
-      example = "ferretdb";
-      description = mdDoc ''The type of MongoDB service to enable. One of "mongodb", "ferretdb" or "none".'';
+    mongodb = {
+      enable = mkEnableOption (mdDoc ''MongoDB/FerretDB service.'');
+
+      package = mkOption {
+        type = types.package;
+        example = literalExpression "pkgs.ferretdb";
+        default = pkgs.mongodb-4_4;
+        defaultText = "pkgs.ferretdb";
+        description = "MongoDB/FerretDB package to use.";
+      };
     };
 
     texlivePackage = mkOption {
       type = types.package;
-      default = pkgs.texlive.combined.scheme-medium;
-      defaultText = literalExpression "pkgs.textlive.combined.scheme-medium";
-      example = literalExpression "pkgs.texlive.combined.scheme-full";
+      default = pkgs.texliveMedium;
+      defaultText = literalExpression "pkgs.textliveMedium";
+      example = literalExpression "pkgs.texliveFull";
       description = mdDoc ''
         The package for TeX Live. See
-        <https://search.nixos.org/packages?query=texlive.combined>
+        <https://search.nixos.org/packages?query=texlive>
         for available options.
       '';
     };
@@ -349,41 +350,32 @@ in
           };
         };
         virtualHosts."git.${cfg.hostname}" = mkIf cfg.gitBridge.enable {
+          #proxyPass = "http://localhost:${cfg.settings.OVERLEAF_GITBRIDGE_PORT}";
           locations."/" = {
             proxyPass = "http://localhost:${cfg.settings.OVERLEAF_GITBRIDGE_PORT}";
-          };
-          locations."/project/" = {
-            proxyPass = "http://localhost:${cfg.settings.OVERLEAF_GITBRIDGE_PORT}";
+            extraConfig = ''
+              rewrite  ^/project/(.*) /$1 break;
+            '';
           };
         };
       };
 
-      services.redis.servers.overleaf = mkIf cfg.enableRedis {
+      services.redis.servers.overleaf = mkIf cfg.redis.enable {
         enable = true;
         user = "overleaf";
         port = 0;
       };
     }
 
-    (mkIf (cfg.mongodbType == "mongodb") {
-      services.mongodb = {
+    (mkIf cfg.mongodb.enable {
+      services.${mongodb.package.pname} = {
         enable = true;
-        package = pkgs.mongodb-4_2;
+        inherit (cfg.mongodb) package;
       };
     })
 
-    (mkIf (cfg.mongodbType == "ferretdb") {
-      systemd.services.ferretdb = {
-        description = "FerretDB";
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${ferret}/bin/ferretdb --postgresql-url=\"postgres://localhost/ferretdb?host=/run/postgresql\"";
-          StateDirectory = "ferretdb";
-          WorkingDirectory = "/var/lib/ferretdb";
-          User = "ferretdb";
-        };
-      };
+    (mkIf (cfg.mongodb.package.pname == "ferretdb") {
+      services.ferretdb.serviceConfig.ExecStart = "${ferret}/bin/ferretdb --postgresql-url=\"postgres://localhost/ferretdb?host=/run/postgresql\"";
       systemd.services.postgresql.environment.LC_ALL = "en_US.UTF-8";
 
       users.users.ferretdb = {
@@ -400,7 +392,7 @@ in
         ensureDatabases = [ "ferretdb" ];
         ensureUsers = [{
           name = "ferretdb";
-          ensurePermissions."DATABASE ferretdb" = "ALL PRIVILEGES";
+          ensureDBOwnership = true;
         }];
       };
     })
@@ -419,7 +411,7 @@ in
     })
 
     (mkIf (elem "pythontex" cfg.engines) {
-      services.overleaf.texlivePackage = mkOverride 99 pkgs.texlive.combined.scheme-full;
+      services.overleaf.texlivePackage = mkOverride 99 pkgs.texliveFull;
       services.overleaf.path = [ (pkgs.python3.withPackages (p: with p; [ pygments ] ++ cfg.extraPythonPackages)) ];
     })
   ]);

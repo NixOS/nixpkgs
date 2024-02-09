@@ -5,6 +5,7 @@
 }:
 
 let
+  # Overleaf contains git dependencies without package-lock.json
   gitDeps = lib.mapAttrs (repo: v: fetchFromGitHub { name = "overleaf-${repo}-source"; owner = "overleaf"; inherit repo; inherit (v) rev hash; })
     {
       "diff-match-patch" = { rev = "89805f9c671a77a263fc53461acd62aa7498f688"; hash = "sha256-MKqnBduRngD1z/s9Ya2sco3mxU7CoqUnxsdcj031tVU="; };
@@ -29,9 +30,21 @@ let
       chmod -R +w libraries/${repo}
     '')
     gitDeps);
+
+  # Move the prepare scripts to build time
+  prepareGitDeps = lib.concatStringsSep "\n" (lib.mapAttrsToList
+    (repo: v: ''
+      (
+        cd libraries/${repo}
+        ${lib.optionalString (repo != "codemirror-emacs") "[ -d node_modules ] && rm -r node_modules\n
+        ln -s $node_modules node_modules"}
+        if grep -q '"build":' package.json; then npm run build; fi
+      )
+    '')
+    gitDeps);
 in
 
-(buildNpmPackage.override { nodejs = nodejs_18; }) rec {
+(buildNpmPackage.override { nodejs = nodejs_18; }) {
   pname = "overleaf";
   version = "4.2";
 
@@ -42,33 +55,42 @@ in
     hash = "sha256-yfOTGDHqzwkzJD2xsRfW3yIz+obEDthh3nkQLd4Y7fI=";
   };
 
+  # Patch all package.json to remove git dependencies
+  prePatch = patchGitDeps + ''
+    find . -name "package.json" -exec sed -i {} -e 's|"[github:]*overleaf\([^#]*\)#[^"]*|"file:../../libraries\1|' \;
+    cp ${./package-lock.json} package-lock.json
+    # npm ci fails due to git dependencies prepare scripts
+    sed -i libraries/codemirror-{autocomplete,search}/package.json -e 's|"prepare":|"build":|'
+    find libraries -name "package.json" -exec sed -i {} \
+      -e 's|"prepare":|"noprepare":|' \
+      -e 's|"build": "\(.*\.js\)"|"build": "${nodejs_18}/bin/node \1"|' \;
+  '';
+
   # Fix ace-builds path due to git dependencies workaround
   patches = [ ./ace-builds.patch ];
 
-  prePatch = patchGitDeps + ''
-    # Patched package.json without git dependencies
-    find . -name "package.json" -exec sed -i {} -e 's|"[github:]*overleaf\([^#]*\)#[^"]*|"file:../../libraries\1|' \;
-    cp ${./package-lock.json} package-lock.json
-
-    # Remove useless prepare scripts in git dependencies
-    find libraries -name "package.json" -exec sed -i {} -e 's/"prepare": ".*"/"prepare": ""/' \;
-  '';
-
   npmDepsHash = "sha256-2tdOYghca1UmTG1ZnpUUaZ2bmw0YgzwtKiA7V4DDeq8=";
-  npmRebuildFlags = [ "--ignore-scripts" ];
+  npmRebuildFlags = [ "--ignore-scripts" ]; # If these scripts passed it would simplify everything
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
-  npmWorkspace = "services/web";
-  npmBuildScript = "webpack:production";
-  #nativeBuildInputs = [ python3 ];
 
-  preBuild = ''
+  preBuild = prepareGitDeps + ''
+    npm run postinstall
+
+    # Without this, bcrypt and diskusage are not built
+    export CPPFLAGS="-I${nodejs_18}/include/node"
     (
-      # Without this, bcrypt is not built
       cd node_modules/bcrypt
-      export CPPFLAGS="-I${nodejs_18}/include/node"
       ${nodejs_18.pkgs.node-pre-gyp}/bin/node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs_18}/include/node
     )
+    (
+      cd node_modules/diskusage
+      ${nodejs_18.pkgs.node-gyp}/bin/node-gyp configure --nodedir=${nodejs_18}/include/node
+      ${nodejs_18.pkgs.node-gyp}/bin/node-gyp build --nodedir=${nodejs_18}/include/node
+    )
   '';
+
+  npmWorkspace = "services/web";
+  npmBuildScript = "webpack:production";
 
   installPhase = ''
     mkdir -p $out/share
