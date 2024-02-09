@@ -15,10 +15,14 @@
 , openclSupport ? false
 , clblast
 
-, blasSupport ? !rocmSupport && !cudaSupport
+, vulkan-headers
+, vulkan-loader
+, vulkanSupport ? false
+
+, blasSupport ? !rocmSupport && !cudaSupport && !vulkanSupport
 , openblas
 , pkg-config
-, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport && !vulkanSupport
 , patchelf
 , static ? true # if false will build the shared objects as well
 }:
@@ -82,6 +86,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     clblast
   ] ++ lib.optionals blasSupport [
     openblas
+  ] ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
   ];
 
   cmakeFlags = [
@@ -110,6 +117,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!static) [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ]
+  ++ lib.optionals vulkanSupport [
+    (lib.cmakeBool "LLAMA_VULKAN" true)
   ];
 
   installPhase = ''
@@ -146,7 +156,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "llama-cpp-main";
     maintainers = with maintainers; [ dit7ya elohmeier ];
-    broken = (effectiveStdenv.isDarwin && effectiveStdenv.isx86_64) || lib.count lib.id [openclSupport blasSupport rocmSupport cudaSupport] == 0;
+    broken = (effectiveStdenv.isDarwin && effectiveStdenv.isx86_64)
+      || lib.count lib.id [openclSupport blasSupport rocmSupport cudaSupport vulkanSupport] == 0;
     platforms = platforms.unix;
   };
 })
