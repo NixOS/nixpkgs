@@ -1,6 +1,9 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform, AppKit, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
+  # Originally, this package was under the attribute `du-dust`, since `dust` was taken.
+  # Since then, `dust` has been freed up, allowing this package to take that attribute.
+  # However in order for tools like `nix-env` to detect package updates, keep `du-dust` for pname.
   pname = "du-dust";
   version = "0.9.0";
 
@@ -8,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "bootandy";
     repo = "dust";
     rev = "v${version}";
-    sha256 = "sha256-5X7gRMTUrG6ecZnwExBTadOJo/HByohTMDsgxFmp1HM=";
+    hash = "sha256-5X7gRMTUrG6ecZnwExBTadOJo/HByohTMDsgxFmp1HM=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
