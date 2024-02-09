@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
+    pkgConfigModules = [ "libffi" ];
   };
 }
