@@ -34,13 +34,13 @@
 }:
 
 let
-  version = "5.7.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-xcKmFI8HcRA9bbh6EQGElKykIQ3RJX/q5f4IxXvM1Is=";
+    hash = "sha256-mbOdlSb0ESKi9hMkq3amv70Xkp/YKnZYre24d/y5TD0=";
     fetchLFS = true;
     leaveDotGit = true;
 
