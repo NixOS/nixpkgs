@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "protobuf-c";
-  version = "unstable-2023-07-08";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "protobuf-c";
     repo = "protobuf-c";
-    rev = "fa86fddbd000316772d1deb5a8d1201fa7599ef7";
-    hash = "sha256-pmqZYFREPgSrWPekymTglhtAv6gQR1gP3dOl3hqjYig=";
+    rev = "v${version}";
+    hash = "sha256-Dkpcc7ZfvAIVY91trRiHuiRFcUGUbQxbheYKTBcq80I=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
