@@ -433,9 +433,9 @@
     "pcsx_rearmed": {
         "owner": "libretro",
         "repo": "pcsx_rearmed",
-        "rev": "06cdf83a3a30bfb8cafee768dbe83bbaef6c8ddd",
-        "hash": "sha256-E/+dAcJwfaUMjYJUjfAcn98SIh61BiS5YpcZg99lg+Q=",
-        "date": "unstable-2024-02-04"
+        "rev": "016c6e93f6db684211f5c8b05433cb500715ba50",
+        "hash": "sha256-uYzL0uuQbxa4N0uQT8YEBiCgwkIcigvjeNU600WqSDQ=",
+        "date": "unstable-2024-02-07"
     },
     "picodrive": {
         "owner": "libretro",
