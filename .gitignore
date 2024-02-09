@@ -38,3 +38,6 @@ update-git-commits.txt
 /pkgs/games/
 /pkgs/desktops/
 !/pkgs/desktops/gnome/
+
+# mkdocs gh-deploy
+build_docs/
