@@ -5,7 +5,7 @@ let
       stable = "0.0.42";
       ptb = "0.0.66";
       canary = "0.0.267";
-      development = "0.0.11";
+      development = "0.0.13";
     } else {
       stable = "0.0.292";
       ptb = "0.0.96";
@@ -29,7 +29,7 @@ let
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
-        hash = "sha256-bN77yfmz/W3ohSKHV4pwnKEET6yi3p29ZfqH1BvFqXs=";
+        hash = "sha256-/vYi82c9ef83MSBtmnZRGEgTNTOj/01zRUbvBWR0ayo=";
       };
     };
     x86_64-darwin = {
