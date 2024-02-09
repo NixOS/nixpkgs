@@ -4,23 +4,24 @@
 , cmake
 , pkg-config
 , openssl
+, samba
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "legba";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "legba";
     rev = "v${version}";
-    hash = "sha256-/ASjvlsPQAPNZpzdTTyZYrcYImV2GS+SSfhSQP0K2n0=";
+    hash = "sha256-yevQEbDuVaSsSfA3ug9rDeWtGjMvS+uD7qHguRVt4sg=";
   };
 
-  cargoHash = "sha256-QgnJ/oUpW4o2Hi2+xKfprxjCw4sho8kIyW+AUJ9pwuU=";
+  cargoHash = "sha256-UBt4FP5zW+dijneHNaFJ80Ui5R+m+8aSwHTcqKDeEVg=";
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl.dev ];
+  buildInputs = [ openssl.dev samba ];
 
   # Paho C test fails due to permission issue
   doCheck = false;

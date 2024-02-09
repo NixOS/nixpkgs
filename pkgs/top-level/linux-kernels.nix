@@ -185,6 +185,16 @@ in {
       ];
     };
 
+    linux_6_7 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.7";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.rust_1_74
+        kernelPatches.rust_1_75
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -193,19 +203,13 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.rust_1_75
         ];
       };
       latest = packageAliases.linux_latest.kernel;
     in if latest.kernelAtLeast testing.baseVersion
        then latest
        else testing;
-
-    # FIXME: Remove after 23.11 is released
-    linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
-      # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = linux_6_5;
-      kernelPatches = linux_6_5.kernelPatches;
-   };
 
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
@@ -256,6 +260,7 @@ in {
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_5_hardened = hardenedKernelFor kernels.linux_6_5 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
+    linux_6_7_hardened = hardenedKernelFor kernels.linux_6_7 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -297,15 +302,7 @@ in {
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
-    amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro {
-      libffi = pkgs.libffi.overrideAttrs (orig: rec {
-        version = "3.3";
-        src = fetchurl {
-          url = "https://github.com/libffi/libffi/releases/download/v${version}/${orig.pname}-${version}.tar.gz";
-          sha256 = "0mi0cpf8aa40ljjmzxb7im6dbj45bb0kllcd09xgmp834y9agyvj";
-        };
-      });
-    };
+    amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
     apfs = callPackage ../os-specific/linux/apfs { };
 
@@ -465,6 +462,8 @@ in {
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
+    rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
+
     tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
@@ -593,6 +592,7 @@ in {
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
+    linux_6_7 = recurseIntoAttrs (packagesFor kernels.linux_6_7);
     __attrsFailEvaluation = true;
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
@@ -626,8 +626,6 @@ in {
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
-    # FIXME: Remove after 23.11 is released
-    linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
@@ -638,6 +636,7 @@ in {
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_5_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_5_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
+    linux_6_7_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_7_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -659,7 +658,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_6;
+    linux_latest = packages.linux_6_7;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;

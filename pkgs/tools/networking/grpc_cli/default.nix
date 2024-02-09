@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc_cli";
-  version = "1.59.2";
+  version = "1.61.0";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-ZWVXoup+gpELOsdCg36swiJFeDdioR/cHkDV68OWsso=";
+    hash = "sha256-NLxcGFQ1F5RLoSFC0XYMjvGXkSWc/vLzgtk5qsOndEo=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ automake cmake autoconf ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
   meta = with lib; {
-    description = "The command line tool for interacting with grpc services.";
+    description = "The command line tool for interacting with grpc services";
     homepage = "https://github.com/grpc/grpc";
     license = licenses.asl20;
     maintainers = with maintainers; [ doriath ];

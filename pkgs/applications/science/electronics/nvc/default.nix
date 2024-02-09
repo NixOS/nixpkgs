@@ -7,7 +7,6 @@
 , pkg-config
 , which
 , elfutils
-, libelf
 , libffi
 , llvm
 , zlib
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.11.1";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
     rev = "r${version}";
-    hash = "sha256-aBH3TtPFuJXtVvGTJcGJev5DYVwqjUAM9cf5PatJq9Y=";
+    hash = "sha256-Z4YxXPf8uKlASSK9v6fbtHtkUibc9EeA4i+3kD/vBmY=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +39,6 @@ stdenv.mkDerivation rec {
     zstd
   ] ++ lib.optionals stdenv.isLinux [
     elfutils
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    libelf
   ];
 
   preConfigure = ''

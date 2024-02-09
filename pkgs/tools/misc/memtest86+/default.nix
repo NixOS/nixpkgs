@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "memtest86+";
-  version = "6.20";
+  version = "7.00";
 
   src = fetchFromGitHub {
     owner = "memtest86plus";
     repo = "memtest86plus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JzQJrAnPsa3GKNdy1PidOAZk7IQvRBi/YtmK2O9rWfM=";
+    hash = "sha256-DVYiE9yi20IR2AZs8bya1h9vK4si7nKdg9Nqef4WTrw=";
   };
 
   # Binaries are booted directly by BIOS/UEFI or bootloader

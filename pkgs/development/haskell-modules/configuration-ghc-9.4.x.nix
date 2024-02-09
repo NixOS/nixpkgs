@@ -46,14 +46,14 @@ in {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
   # Jailbreaks & Version Updates
 
@@ -75,12 +75,6 @@ in {
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
-
-  # Apply patches from head.hackage.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
 
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
@@ -115,16 +109,14 @@ in {
     (
       let
         hls_overlay = lself: lsuper: {
-          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231014;
+          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231121;
           ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
           Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        # Tests fail due to the newly-build fourmolu not being in PATH
-        # https://github.com/fourmolu/fourmolu/issues/231
-        fourmolu = dontCheck super.fourmolu_0_14_0_0;
+        fourmolu = self.fourmolu_0_14_0_0;
         ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
         hlint = super.hlint_3_6_1;
         stylish-haskell = super.stylish-haskell;

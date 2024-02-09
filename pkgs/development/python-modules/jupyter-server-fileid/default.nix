@@ -44,6 +44,8 @@ buildPythonPackage rec {
     export HOME=$TEMPDIR
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/jupyter-server/jupyter_server_fileid/blob/${src.rev}/CHANGELOG.md";
     description = "An extension that maintains file IDs for documents in a running Jupyter Server";

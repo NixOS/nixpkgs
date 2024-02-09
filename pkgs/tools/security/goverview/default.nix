@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -20,6 +21,15 @@ buildGoModule rec {
     "-w"
     "-s"
   ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+  postInstall = ''
+    installShellCompletion --cmd goverview \
+      --bash <($out/bin/goverview completion bash) \
+      --fish <($out/bin/goverview completion fish) \
+      --zsh <($out/bin/goverview completion zsh)
+  '';
 
   # Tests require network access
   doCheck = false;

@@ -300,10 +300,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1jw8a20a9k05fpz3q24im19b97idss3179z76yn5scc5b8lk2rl7";
+      sha256 = "1l8b0i24h4irivyhwy9xmkjbggw86cxkzkiqdqg0jpcp9qc8h4rl";
       type = "gem";
     };
-    version = "1.15.3";
+    version = "1.16.0";
   };
   psych = {
     dependencies = ["stringio"];

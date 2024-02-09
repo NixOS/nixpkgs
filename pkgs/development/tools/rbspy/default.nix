@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.17.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-stZWTzrRk+dyscV+OtL5aEOv+MLrN3bMSIrhrZXmCfc=";
+    owner = "rbspy";
+    repo = "rbspy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OO0EX+r7W8HxPjbER+84m+nagPBM6GlCdB30VQV58mQ=";
   };
 
-  cargoHash = "sha256-pexYgL3gSeuglAQWn09nXgxQCUX+TFvnFU0uiwHEfzk=";
+  cargoHash = "sha256-yywh/O4odm+VmM0k/Ft0DEihq6r+xehrpjbYryvVStw=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -44,16 +44,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_sample_subprocesses"
   ];
 
-  nativeBuildInputs = [ ruby which ]
-    ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+  nativeBuildInputs = [
+    ruby
+    which
+  ] ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://rbspy.github.io/";
-    description = ''
-      A Sampling CPU Profiler for Ruby.
-    '';
+    description = "A Sampling CPU Profiler for Ruby";
+    changelog = "https://github.com/rbspy/rbspy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ viraptor ];
     platforms = platforms.linux ++ platforms.darwin;

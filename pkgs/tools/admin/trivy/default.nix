@@ -1,25 +1,28 @@
 { lib
+, stdenv
+, buildPackages
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 , testers
 , trivy
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.48.1";
+  version = "0.49.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BljAzfTm/POxshj34mSjXQl64vxBkQZc8T3cTe95eVA=";
+    hash = "sha256-+wgnj7mDIJ5UPGfD7vogdcbUeBdvTenL/a0Ew4CfuvE=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-L+UGAg3UERhty3kwksgFojXchr5GzHqULcxJw6Gy2WM=";
+  vendorHash = "sha256-IL3FHgOYQYJIqJKr2eEeM/NzO+SeYucGSNUUY62kHNA=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -29,8 +32,21 @@ buildGoModule rec {
     "-X=github.com/aquasecurity/trivy/pkg/version.ver=v${version}"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   # Tests require network access
   doCheck = false;
+
+  postInstall =
+    let
+      trivy = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then placeholder "out" else buildPackages.trivy;
+    in
+    ''
+      installShellCompletion --cmd trivy \
+        --bash <(${trivy}/bin/trivy completion bash) \
+        --fish <(${trivy}/bin/trivy completion fish) \
+        --zsh <(${trivy}/bin/trivy completion zsh)
+    '';
 
   doInstallCheck = true;
 
@@ -51,6 +67,7 @@ buildGoModule rec {
       vulnerabilities of OS packages (Alpine, RHEL, CentOS, etc.) and
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
+    mainProgram = "trivy";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab jk ];
   };

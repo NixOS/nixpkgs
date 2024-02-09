@@ -1,4 +1,5 @@
 { lib
+, anyconfig
 , buildPythonPackage
 , fetchFromGitHub
 , isodate
@@ -8,6 +9,7 @@
 , requests
 , responses
 , poetry-core
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -24,11 +26,17 @@ buildPythonPackage rec {
     hash = "sha256-jLhM47o6LvkPux0kusOrRk4TDS6VLWE0QMEiQxlBCwo=";
   };
 
+  pythonRelaxDeps = [
+    "responses"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    anyconfig
     isodate
     pyyaml
     requests

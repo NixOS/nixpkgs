@@ -1,0 +1,21 @@
+diff --git a/packages/flutter_tools/lib/src/base/os.dart b/packages/flutter_tools/lib/src/base/os.dart
+index 1ce1951cef..1bd7602318 100644
+--- a/packages/flutter_tools/lib/src/base/os.dart
++++ b/packages/flutter_tools/lib/src/base/os.dart
+@@ -260,7 +260,15 @@ class _PosixUtils extends OperatingSystemUtils {
+   @override
+   String get pathVarSeparator => ':';
+ 
+-  HostPlatform? _hostPlatform;
++  // uname outputs build platform characteristics, not host platform characteristics.
++  // _MacOSUtils uses sysctl instead, which is still incorrect.
++  HostPlatform? _hostPlatform = switch (const String.fromEnvironment('NIX_FLUTTER_HOST_PLATFORM')) {
++    'x86_64-linux' => HostPlatform.linux_x64,
++    'aarch64-linux' => HostPlatform.linux_arm64,
++    'x86_64-darwin' => HostPlatform.darwin_x64,
++    'arm64-darwin' => HostPlatform.darwin_arm64,
++    String value => throw ArgumentError.value(value, 'NIX_FLUTTER_HOST_PLATFORM', 'Unknown Nix host platform!'),
++  };
+ 
+   @override
+   HostPlatform get hostPlatform {

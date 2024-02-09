@@ -5,35 +5,31 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.1.7";
-  format = "pyproject";
+  version = "2.1.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alterakey";
-    repo = pname;
+    repo = "trueseeing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pnIn+Rqun5J3F9cgeBUBX4e9WP5fgbm+vwN3Wqh/yEc=";
+    hash = "sha256-q7hUsBmTRPizmNWueFtFDc5t7rd1evMrBj3oX1Q2VfM=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     flit-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = with python3.pkgs; [
     attrs
-    ipython
     jinja2
     lxml
     pypubsub
     pyyaml
-    docker
+    termcolor
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "attrs~=21.4" "attrs>=21.4" \
-      --replace "docker~=5.0.3" "docker"
-  '';
 
   # Project has no tests
   doCheck = false;

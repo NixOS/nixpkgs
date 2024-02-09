@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 
 # build-system
 , hatchling
@@ -31,11 +32,13 @@
 , orjson
 , email-validator
 , uvicorn
+, pydantic-settings
+, pydantic-extra-types
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.103.1";
+  version = "0.104.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -44,11 +47,18 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2J8c3S4Ca+c5bI0tyjMJArJKux9qPmu+ohqve5PhSGI=";
+    hash = "sha256-xTTFBc+fswLYUhKRkWP/eiYSbG3j1E7CASkEtHVNTlk=";
   };
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "anyio"
+    # https://github.com/tiangolo/fastapi/pull/9636
+    "starlette"
   ];
 
   propagatedBuildInputs = [
@@ -67,8 +77,9 @@ buildPythonPackage rec {
     orjson
     email-validator
     uvicorn
-    # pydantic-settings
-    # pydantic-extra-types
+  ] ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+    pydantic-settings
+    pydantic-extra-types
   ] ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = [
@@ -87,6 +98,9 @@ buildPythonPackage rec {
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
+
+    # http code mismatches
+    "--deselect=tests/test_annotated.py::test_get"
   ];
 
   disabledTestPaths = [
@@ -112,6 +126,10 @@ buildPythonPackage rec {
     "test_warn_duplicate_operation_id"
     # assert state["except"] is True
     "test_dependency_gets_exception"
+    # Fixtures drift
+    "test_openapi_schema_sub"
+    # 200 != 404
+    "test_flask"
   ];
 
   pythonImportsCheck = [

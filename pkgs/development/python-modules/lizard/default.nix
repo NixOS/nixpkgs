@@ -27,12 +27,19 @@ buildPythonPackage rec {
     mock
   ];
 
+  disabledTestPaths = [
+    # re.error: global flags not at the start of the expression at position 14
+    "test/test_languages/testFortran.py"
+  ];
+
   pythonImportsCheck = [
     "lizard"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/terryyin/lizard/blob/${version}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
+    downloadPage = "https://github.com/terryyin/lizard";
     homepage = "http://www.lizard.ws";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];

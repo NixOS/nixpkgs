@@ -514,7 +514,7 @@ in
 
     # Make xsessions and wayland sessions available in XDG_DATA_DIRS
     # as some programs have behavior that depends on them being present
-    environment.sessionVariables.XDG_DATA_DIRS = [
+    environment.sessionVariables.XDG_DATA_DIRS = lib.mkIf (cfg.displayManager.sessionPackages != [ ]) [
       "${cfg.displayManager.sessionData.desktops}/share"
     ];
   };

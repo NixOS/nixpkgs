@@ -1,22 +1,27 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "bitmagnet";
-  version = "0.0.6";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${version}";
-    hash = "sha256-+KAIHg8M2CM+GRRv+htmev8MFe/Y1sJ8p+um/c7kI7c=";
+    hash = "sha256-17jRktEqBCAXiddx8FnqHg3+c/03nqKHC8BQc9AhQA0=";
   };
 
-  vendorHash = "sha256-ydiZ3KMEiVkmdzhHjYYLJ7wuiKmwlMEn4OWrKSOnaSo=";
+  vendorHash = "sha256-YfsSz72CeHdrh5610Ilo1NYxlCT993hxWRWh0OsvEQc=";
 
   ldflags = [ "-s" "-w" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "A self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
@@ -25,7 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://bitmagnet.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ eclairevoyant viraptor ];
     mainProgram = "bitmagnet";
   };
 }

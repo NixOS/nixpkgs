@@ -15,11 +15,22 @@ stdenv.mkDerivation {
 
   buildInputs = [ libsodium ];
 
-  buildPhase = "bash build.sh";
+  postPatch = ''
+    substituteInPlace build.sh \
+      --replace "cc=\"cc\"" "cc=\"$CC\""
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    bash build.sh
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
     rm out/quicktun*tgz
     install -vD out/quicktun* -t $out/bin
+    runHook postInstall
   '';
 
   passthru.tests.quicktun = nixosTests.quicktun;

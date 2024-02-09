@@ -12,7 +12,7 @@ let
     name = "oci-containers-${backend}";
 
     meta.maintainers = lib.teams.serokell.members
-                       ++ (with lib.maintainers; [ adisbladis benley mkaito ]);
+                       ++ (with lib.maintainers; [ benley mkaito ]);
 
     nodes = {
       ${backend} = { pkgs, ... }: {

@@ -35,6 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/influxdb_exporter";
     changelog = "https://github.com/prometheus/influxdb_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -12,13 +12,13 @@ let
   }.${system} or throwSystem;
 in stdenv.mkDerivation rec {
   pname = "shim";
-  version = "15.7";
+  version = "15.8";
 
   src = fetchFromGitHub {
     owner = "rhboot";
     repo = pname;
     rev = version;
-    hash = "sha256-CfUuq0anbXlCVo9r9NIb76oJzDqaPMIhL9cmXK1iqXo=";
+    hash = "sha256-xnr9HBfYP035C7p2YTRZasx5SF4a2ZkOl9IpsVduNm4=";
     fetchSubmodules = true;
   };
 

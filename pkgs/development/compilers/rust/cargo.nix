@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage.override {
 
   passthru = {
     rustc = rustc;
-    inherit (rustc) tests;
+    inherit (rustc.unwrapped) tests;
   };
 
   # Upstream rustc still assumes that musl = static[1].  The fix for
@@ -98,8 +98,7 @@ rustPlatform.buildRustPackage.override {
   # Disable check phase as there are failures (4 tests fail)
   doCheck = false;
 
-  doInstallCheck = !stdenv.hostPlatform.isStatic &&
-    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+  doInstallCheck = !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
     runHook preInstallCheck
     readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'

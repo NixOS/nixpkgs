@@ -5,6 +5,7 @@
 , python3
 , pipewire
 , libpulseaudio
+, libnotify
 , xdg-utils
 , electron_28
 , makeDesktopItem
@@ -13,16 +14,16 @@
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "v${version}";
-    hash = "sha256-d/+ATnDh+c3Jr3VY+KrMxTuNtB9o14wn2Z5KXtk1B2c=";
+    hash = "sha256-h0JEIfNoYx0MrHeEg/kwn/10JVxNVXIuvWcTOfellbg=";
   };
 
-  npmDepsHash = "sha256-XfACVvK7nOrgduGO71pCEAXtYPqjXA9/1y+w4hahdi0=";
+  npmDepsHash = "sha256-L6ZrPqi4DjTn1P4O+lWDmvzQwqpsWmSOtnFMBHkNQAI=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -44,6 +45,7 @@ buildNpmPackage rec {
       libPath = lib.makeLibraryPath [
         libpulseaudio
         pipewire
+        libnotify
       ];
       binPath = lib.makeBinPath [ xdg-utils ];
     in

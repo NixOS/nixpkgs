@@ -1,21 +1,20 @@
 { stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
-, fetchPypi, fetchFromGitLab, sudo }:
+, fetchPypi, fetchFromSourcehut, sudo }:
 
 buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nN4KUP9l3g5Q+QeWr4Fju2GiOyu2f7u94hz/VJlCYdw=";
+    hash = "sha256-buCfQsi10LezDzYeplArmFRSc3vbjtl+FuTm/VUS2us=";
   };
 
-  repo = fetchFromGitLab {
-    domain = "gitlab.com";
-    owner = "postmarketOS";
+  repo = fetchFromSourcehut {
+    owner = "~postmarketos";
     repo = pname;
     rev = version;
-    hash = "sha256-UkgCNob4nazFO8xXyosV+11Sj4yveYBfgh7aw+/6Rlg=";
+    hash = "sha256-3GZ4PeMnG/a46WwvWPQFeYbJPp+NGU7A98QasnlMIL0=";
   };
 
   pmb_test = "${repo}/test";
@@ -45,6 +44,7 @@ buildPythonApplication rec {
     "test_chroot_arguments"
     "test_chroot_interactive_shell"
     "test_chroot_interactive_shell_user"
+    "test_chroot_mount"
     "test_clean_worktree"
     "test_config_user"
     "test_cross_compile_distcc"

@@ -22,7 +22,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cambalache";
-  version = "0.12.1";
+  version = "0.16.0";
 
   format = "other";
 
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "jpu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kGCpccWIhaeWrzLlrDI7Vzd0KuAIKxvLrDuSqWtpSLU=";
+    sha256 = "sha256-Ha94Ca5a7EUBYuSJvMrLc5895Q2/01/tbKpwlHLmTDc=";
   };
 
   nativeBuildInputs = [

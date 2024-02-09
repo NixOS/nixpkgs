@@ -33,14 +33,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "25.1";
+  version = "26.0";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "bec2a598d8dfa8c2365b77f13012a733ec84b8c30386343b7ac1996e901198c9";
+    sha256 = "ab1d99276e28db62d1d9f3901e85ac358d7f1ebcb942d348a9c4e46f0fcdc0a1";
   };
 
   nativeBuildInputs =
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   postInstall = ''
-    installShellCompletion --cmd bitcoin-cli --bash contrib/completions/bash/bitcoin-cli.bash-completion
-    installShellCompletion --cmd bitcoind --bash contrib/completions/bash/bitcoind.bash-completion
-    installShellCompletion --cmd bitcoin-tx --bash contrib/completions/bash/bitcoin-tx.bash-completion
+    installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoind.bash
+    installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
 
     installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
     installShellCompletion --fish contrib/completions/fish/bitcoind.fish

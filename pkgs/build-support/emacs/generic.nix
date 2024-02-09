@@ -2,6 +2,26 @@
 
 { lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
+let
+  inherit (lib) optionalAttrs getLib;
+  handledArgs = [ "buildInputs" "packageRequires" "meta" ];
+
+  setupHook = writeText "setup-hook.sh" ''
+    source ${./emacs-funcs.sh}
+
+    if [[ ! -v emacsHookDone ]]; then
+      emacsHookDone=1
+
+      # If this is for a wrapper derivation, emacs and the dependencies are all
+      # run-time dependencies. If this is for precompiling packages into bytecode,
+      # emacs is a compile-time dependency of the package.
+      addEnvHooks "$hostOffset" addEmacsVars
+      addEnvHooks "$targetOffset" addEmacsVars
+    fi
+  '';
+
+in
+
 { pname
 , version
 , buildInputs ? []
@@ -9,15 +29,6 @@
 , meta ? {}
 , ...
 }@args:
-
-let
-  defaultMeta = {
-    broken = false;
-    platforms = emacs.meta.platforms;
-  } // lib.optionalAttrs ((args.src.meta.homepage or "") != "") {
-    homepage = args.src.meta.homepage;
-  };
-in
 
 stdenv.mkDerivation (finalAttrs: ({
   name = "emacs-${pname}-${finalAttrs.version}";
@@ -42,28 +53,21 @@ stdenv.mkDerivation (finalAttrs: ({
   propagatedBuildInputs = packageRequires;
   propagatedUserEnvPkgs = packageRequires;
 
-  setupHook = writeText "setup-hook.sh" ''
-    source ${./emacs-funcs.sh}
-
-    if [[ ! -v emacsHookDone ]]; then
-      emacsHookDone=1
-
-      # If this is for a wrapper derivation, emacs and the dependencies are all
-      # run-time dependencies. If this is for precompiling packages into bytecode,
-      # emacs is a compile-time dependency of the package.
-      addEnvHooks "$hostOffset" addEmacsVars
-      addEnvHooks "$targetOffset" addEmacsVars
-    fi
-  '';
+  inherit setupHook;
 
   doCheck = false;
 
-  meta = defaultMeta // meta;
+  meta = {
+    broken = false;
+    platforms = emacs.meta.platforms;
+  } // optionalAttrs ((args.src.meta.homepage or "") != "") {
+    homepage = args.src.meta.homepage;
+  } // meta;
 }
 
-// lib.optionalAttrs (emacs.withNativeCompilation or false) {
+// optionalAttrs (emacs.withNativeCompilation or false) {
 
-  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+  LIBRARY_PATH = "${getLib stdenv.cc.libc}/lib";
 
   nativeBuildInputs = [ gcc ];
 
@@ -83,4 +87,4 @@ stdenv.mkDerivation (finalAttrs: ({
   '';
 }
 
-// removeAttrs args [ "buildInputs" "packageRequires" "meta" ]))
+// removeAttrs args handledArgs))

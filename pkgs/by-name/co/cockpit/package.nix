@@ -30,7 +30,6 @@
 , pkg-config
 , polkit
 , python3Packages
-, ripgrep
 , runtimeShell
 , systemd
 , udev
@@ -45,13 +44,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "306";
+  version = "308";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     rev = "refs/tags/${version}";
-    hash = "sha256-RB5RpwFTi//XNIIm/86JR4Jo3q5nuoW6ruH05JSfMSk=";
+    hash = "sha256-0IJRd4QoUBcJDERWHkaR7ehCLhICnjGb7pYla18DMkk=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     pythonWithGobject.python
     python3Packages.setuptools
     systemd
-    ripgrep
     xmlto
   ];
 
@@ -197,7 +195,6 @@ stdenv.mkDerivation rec {
     glib-networking
     openssh
     python3Packages.pytest
-    python3Packages.vulture
   ];
   checkPhase = ''
     export GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules

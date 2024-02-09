@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-external-toc";
-  version = "1.0.0";
+  version = "1.0.1";
 
   format = "pyproject";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sphinx_external_toc";
-    sha256 = "sha256-990JX/OrD7dKMQ1BCwo2GPwd3G8s5DWJfWWayqSj6yQ=";
+    sha256 = "sha256-p9LGPMR+xohUZEOyi8TvRmEhgn7z3Hu1Cd41S61OouA=";
   };
 
   nativeBuildInputs = [ flit-core ];

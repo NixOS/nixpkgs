@@ -1,4 +1,4 @@
-{ picom, lib, fetchFromGitHub, installShellFiles }:
+{ picom, lib, fetchFromGitHub, installShellFiles, pcre }:
 
 picom.overrideAttrs (oldAttrs: rec {
   pname = "picom-allusive";
@@ -11,7 +11,7 @@ picom.overrideAttrs (oldAttrs: rec {
     hash = "sha256-yM4TJjoVs+i33m/u/oWlx1TDKJrgwlfiGu72DOL/tl8=";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ oldAttrs.nativeBuildInputs;
+  nativeBuildInputs = [ installShellFiles pcre ] ++ oldAttrs.nativeBuildInputs;
 
   postInstall = ''
     installManPage $src/man/picom.1.gz

@@ -16,13 +16,13 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.4";
+  version = "11.0";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-g0JM6pm1vkCh9yBB5mfrOiNrImqoyWdQcEe2g+AO6LQ=";
+    hash = "sha256-LVtDqgceZUrMriNy6+yK/ruBrTI8yx6hzTaPa1BTGlc=";
   };
 
   gradle = gradle_7;
@@ -92,7 +92,7 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-HveS3f8XHpJqefc4djYmnYfd01H2OBFK5PLNOsHAqlc=";
+    outputHash = "sha256-KT+XXowCNaNfOiPzYLwbPMaF84omKFobHkkNqZ6oyUA=";
   };
 
 in stdenv.mkDerivation {
@@ -123,6 +123,8 @@ in stdenv.mkDerivation {
     ln -s ${deps}/dependencies dependencies
 
     sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
+
+    rm -v Ghidra/Debug/Debugger-rmi-trace/build.gradle.orig
 
     gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildGhidra
   '';

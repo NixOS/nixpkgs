@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     asn1tools
     coverage
-    wxPython_4_2
+    wxpython
   ];
 
   pythonImportsCheck = [ "asn1editor" ];

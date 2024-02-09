@@ -4,16 +4,16 @@
 }:
 buildGoModule rec {
   pname = "drone-scp";
-  version = "1.6.11";
+  version = "1.6.14";
 
   src = fetchFromGitHub {
     owner = "appleboy";
     repo = "drone-scp";
     rev = "v${version}";
-    hash = "sha256-JCqiYPhuPKDcbg8eo4DFuUVazu+0e0YTnG87NZRARMU=";
+    hash = "sha256-RxpDlQ6lYT6XH5zrYZaRO5YsB++7Ujr7dvgsTtXIBfc=";
   };
 
-  vendorHash = "sha256-zPpwvU/shSK1bfm0Qc2VjifSzDTpFnsUiogQfQcdY7I=";
+  vendorHash = "sha256-0/RGPvafOLT/O0l9ENoiHLmtOaP3DpjmXjmotuxF944=";
 
   # Needs a specific user...
   doCheck = false;

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "HIPIFY";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-lCQ2VTUGmFC90Xu70/tvoeDhFaInGqLT3vC2A1UojNI=";
@@ -41,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Convert CUDA to Portable C++ Code";
-    homepage = "https://github.com/ROCm-Developer-Tools/HIPIFY";
+    homepage = "https://github.com/ROCm/HIPIFY";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

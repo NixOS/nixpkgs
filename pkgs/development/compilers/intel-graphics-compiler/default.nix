@@ -5,6 +5,7 @@
 , runCommandLocal
 , bison
 , flex
+, intel-compute-runtime
 , llvmPackages_14
 , opencl-clang
 , python3
@@ -19,8 +20,8 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.13.0";
-    hash = "sha256-A9G1PH0WGdxU2u/ODrou53qF9kvrmE0tJSl9cFIOus0=";
+    rev = "v0.14.0";
+    hash = "sha256-t7m2y+DiZf0xum1vneXvoCyH767SKMOq4YzMIuZngR8=";
   };
 
   inherit (llvmPackages_14) lld llvm;
@@ -30,13 +31,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.15136.4";
+  version = "1.0.15610.11";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    hash = "sha256-Qh3FNck1z+rr7eSqxVnNs7YKvgXpKGY5dd3yx1Ft9Mg=";
+    hash = "sha256-Fu1g5M2lpcnLw6aSHI5gx47VOfx+rIdIhBlwe/Dv8bk=";
   };
 
   nativeBuildInputs = [ bison cmake flex (python3.withPackages (ps : with ps; [ mako ])) ];
@@ -72,6 +73,10 @@ stdenv.mkDerivation rec {
     "-DIGC_OPTION__VC_INTRINSICS_MODE=Source"
     "-Wno-dev"
   ];
+
+  passthru.tests = {
+    inherit intel-compute-runtime;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/intel/intel-graphics-compiler";

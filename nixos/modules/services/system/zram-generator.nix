@@ -27,7 +27,7 @@ in
 
   config = lib.mkIf cfg.enable {
     system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isModule "ZRAM")
+      (isEnabled "ZRAM")
     ];
 
     systemd.packages = [ cfg.package ];

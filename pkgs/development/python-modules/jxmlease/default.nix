@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Converts between XML and intelligent Python data structures";
     homepage = "https://github.com/Juniper/jxmlease";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

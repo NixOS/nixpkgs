@@ -68,7 +68,7 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
-, ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffadoSupport ? x11Support && stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
 , libselinux
 }:
@@ -81,7 +81,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "1.0.0";
+    version = "1.0.1";
 
     outputs = [
       "out"
@@ -97,7 +97,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-mfnMluxJAxDbB6JlIM6HJ0zg7e1q3ia3uFbht6zeHCk=";
+      sha256 = "sha256-rvf0sZRgDDLcqroLg7hcMUqXD/4JT+3lBRX6/m+3Ry8=";
     };
 
     patches = [

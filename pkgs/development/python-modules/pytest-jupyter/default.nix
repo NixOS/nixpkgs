@@ -22,14 +22,14 @@
 
 let self = buildPythonPackage rec {
   pname = "pytest-jupyter";
-  version = "0.7.0";
-  format = "pyproject";
+  version = "0.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pytest-jupyter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZocpIBHnXTvQdjWU8yVhGK49I+FFct+teDhghiMnvW0=";
+    hash = "sha256-ND51UpPsvZGH6LdEaNFXaBLoCMB4n7caPoo1/Go9fNs=";
   };
 
   nativeBuildInputs = [
@@ -44,15 +44,18 @@ let self = buildPythonPackage rec {
     jupyter-core
   ];
 
-  passthru.optional-dependencies = rec {
+  passthru.optional-dependencies = {
     client = [
       jupyter-client
+      nbformat
       ipykernel
     ];
     server = [
       jupyter-server
+      jupyter-client
       nbformat
-    ] ++ client;
+      ipykernel
+    ];
   };
 
   doCheck = false; # infinite recursion with jupyter-server

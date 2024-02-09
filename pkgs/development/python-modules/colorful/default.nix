@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "colorful";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "timofurrer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fgxbj1WE9JcGt+oEcBguL0wQEWIn5toRTLWsvCFO3k8=";
+    hash = "sha256-8rHJIsHiyfjmjlGiEyrzvEwKgi1kP4Njm731mlFDMIU=";
   };
 
   nativeCheckInputs = [

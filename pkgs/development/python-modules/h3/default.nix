@@ -50,7 +50,7 @@ buildPythonPackage rec {
   prePatch =
     let
       cmakeCommands = ''
-        include_directories(${h3}/include/h3)
+        include_directories(${lib.getDev h3}/include/h3)
         link_directories(${h3}/lib)
       '';
     in ''

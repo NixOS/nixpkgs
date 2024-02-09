@@ -1,14 +1,14 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "txtpbfmt";
-  version = "unstable-2023-03-28";
+  version = "unstable-2023-10-25";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "txtpbfmt";
-    rev = "3462fbc510c07c0844c2e370719c9c18302f476f";
-    hash = "sha256-vvkZWDGrId164K6jhMXNa5BtOxQSgFDhMACGAH+9F08=";
+    rev = "084445ff1adf0d8a27429bba65dbde5663f02d26";
+    hash = "sha256-SoU1GON9avesty6FSZ+z6o2JHInUtwv+PVOzqCu+8L8=";
   };
 
   vendorHash = "sha256-IdD+R8plU4/e9fQaGSM5hJxyMECb6hED0Qg8afwHKbY=";

@@ -5,9 +5,32 @@ import multiprocessing
 import subprocess
 import sys
 import toml
+from urllib.parse import urlparse
 import yaml
 
 import dag
+
+# This should match the behavior of the default unpackPhase.
+# See https://github.com/NixOS/nixpkgs/blob/59fa082abdbf462515facc8800d517f5728c909d/pkgs/stdenv/generic/setup.sh#L1044
+archive_extensions = [
+  # xz extensions
+  ".tar.xz",
+  ".tar.lzma",
+  ".txz",
+
+  # *.tar or *.tar.*
+  ".tar",
+  ".tar.Z",
+  ".tar.bz2",
+  ".tar.gz",
+
+  # Other tar extensions
+  ".tgz",
+  ".tbz2",
+  ".tbz",
+
+  ".zip"
+  ]
 
 dependencies_path = Path(sys.argv[1])
 closure_yaml_path = Path(sys.argv[2])
@@ -33,6 +56,42 @@ with open(closure_yaml_path, "r") as f:
     if contents.get("depends_on"):
       closure_dependencies_dag.add_node(uuid, dependencies=contents["depends_on"].values())
 
+def get_archive_derivation(uuid, artifact_name, url, sha256):
+  depends_on = set()
+  if closure_dependencies_dag.has_node(uuid):
+    depends_on = set(closure_dependencies_dag.get_dependencies(uuid)).intersection(dependency_uuids)
+
+  other_libs = extra_libs.get(uuid, [])
+
+  fixup = f"""fixupPhase = let
+          libs = lib.concatMap (lib.mapAttrsToList (k: v: v.path))
+                               [{" ".join(["uuid-" + x for x in depends_on])}];
+          in ''
+            find $out -type f -executable -exec \
+              patchelf --set-rpath \$ORIGIN:\$ORIGIN/../lib:${{lib.makeLibraryPath (["$out" glibc] ++ libs ++ (with pkgs; [{" ".join(other_libs)}]))}} {{}} \;
+            find $out -type f -executable -exec \
+              patchelf --set-interpreter ${{glibc}}/lib/ld-linux-x86-64.so.2 {{}} \;
+          ''"""
+
+  return f"""stdenv.mkDerivation {{
+        name = "{artifact_name}";
+        src = fetchurl {{
+          url = "{url}";
+          sha256 = "{sha256}";
+        }};
+        sourceRoot = ".";
+        dontConfigure = true;
+        dontBuild = true;
+        installPhase = "cp -r . $out";
+        {fixup};
+      }}"""
+
+def get_plain_derivation(url, sha256):
+  return f"""fetchurl {{
+        url = "{url}";
+        sha256 = "{sha256}";
+      }}"""
+
 with open(out_path, "w") as f:
   f.write("{ lib, fetchurl, glibc, pkgs, stdenv }:\n\n")
   f.write("rec {\n")
@@ -53,38 +112,15 @@ with open(out_path, "w") as f:
 
       git_tree_sha1 = details["git-tree-sha1"]
 
-      depends_on = set()
-      if closure_dependencies_dag.has_node(uuid):
-        depends_on = set(closure_dependencies_dag.get_dependencies(uuid)).intersection(dependency_uuids)
-
-      other_libs = extra_libs.get(uuid, [])
-
-      fixup = f"""fixupPhase = let
-          libs = lib.concatMap (lib.mapAttrsToList (k: v: v.path))
-                               [{" ".join(["uuid-" + x for x in depends_on])}];
-          in ''
-            find $out -type f -executable -exec \
-              patchelf --set-rpath \$ORIGIN:\$ORIGIN/../lib:${{lib.makeLibraryPath (["$out" glibc] ++ libs ++ (with pkgs; [{" ".join(other_libs)}]))}} {{}} \;
-            find $out -type f -executable -exec \
-              patchelf --set-interpreter ${{glibc}}/lib/ld-linux-x86-64.so.2 {{}} \;
-          ''"""
-
-      derivation = f"""{{
-        name = "{artifact_name}";
-        src = fetchurl {{
-          url = "{url}";
-          sha256 = "{sha256}";
-        }};
-        sourceRoot = ".";
-        dontConfigure = true;
-        dontBuild = true;
-        installPhase = "cp -r . $out";
-        {fixup};
-      }}"""
+      parsed_url = urlparse(url)
+      if any(parsed_url.path.endswith(x) for x in archive_extensions):
+        derivation = get_archive_derivation(uuid, artifact_name, url, sha256)
+      else:
+        derivation = get_plain_derivation(url, sha256)
 
       lines.append(f"""    "{artifact_name}" = {{
       sha1 = "{git_tree_sha1}";
-      path = stdenv.mkDerivation {derivation};
+      path = {derivation};
     }};\n""")
 
     lines.append('  };\n')

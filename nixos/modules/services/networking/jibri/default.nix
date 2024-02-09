@@ -395,11 +395,11 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /var/log/jitsi/jibri 755 jibri jibri"
-    ];
-
-
+    systemd.tmpfiles.settings."10-jibri"."/var/log/jitsi/jibri".d = {
+      user = "jibri";
+      group = "jibri";
+      mode = "755";
+    };
 
     # Configure Chromium to not show the "Chrome is being controlled by automatic test software" message.
     environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON { CommandLineFlagSecurityWarningsEnabled = false; };

@@ -8,7 +8,6 @@
 , gnome
 , libsysprof-capture
 , sqlite
-, glib-networking
 , buildPackages
 , gobject-introspection
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
@@ -93,9 +92,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
     updateScript = gnome.updateScript {
       attrPath = "libsoup_3";
       packageName = pname;

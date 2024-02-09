@@ -114,6 +114,7 @@ self: super: builtins.intersectAttrs super {
       }))
       super)
     hls-brittany-plugin
+    hls-stan-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-overloaded-record-dot-plugin
@@ -228,11 +229,7 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      # Copy hledger man pages from the source tarball into the proper place.
-      # It always contains the relevant man page(s) at the top level. For
-      # hledger it additionally has all the other man pages in embeddedfiles/
-      # which we ignore.
-      installHledgerManPages = overrideCabal (drv: {
+      installHledgerExtraFiles = overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
         ];
@@ -242,6 +239,10 @@ self: super: builtins.intersectAttrs super {
           done
 
           install -v -Dm644 *.info* -t "$out/share/info/"
+
+          if [ -e shell-completion/hledger-completion.bash ]; then
+            installShellCompletion --name hledger shell-completion/hledger-completion.bash
+          fi
         '';
       });
 
@@ -253,15 +254,15 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerManPages super.hledger;
-      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerManPages super.hledger-ui;
+      hledger = installHledgerExtraFiles super.hledger;
+      hledger-web = installHledgerExtraFiles (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerExtraFiles super.hledger-ui;
 
-      hledger_1_30_1 = installHledgerManPages
+      hledger_1_30_1 = installHledgerExtraFiles
         (doDistribute (super.hledger_1_30_1.override {
           hledger-lib = self.hledger-lib_1_30;
         }));
-      hledger-web_1_30 = installHledgerManPages (hledgerWebTestFix
+      hledger-web_1_30 = installHledgerExtraFiles (hledgerWebTestFix
         (doDistribute (super.hledger-web_1_30.override {
           hledger = self.hledger_1_30_1;
           hledger-lib = self.hledger-lib_1_30;
@@ -327,6 +328,11 @@ self: super: builtins.intersectAttrs super {
 
   # Heist's test suite requires system pandoc
   heist = addTestToolDepend pkgs.pandoc super.heist;
+
+  # Use Nixpkgs' double-conversion library
+  double-conversion = disableCabalFlag "embedded_double_conversion" (
+    addBuildDepends [ pkgs.double-conversion ] super.double-conversion
+  );
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
   gio = lib.pipe super.gio
@@ -394,7 +400,6 @@ self: super: builtins.intersectAttrs super {
   socket = dontCheck super.socket;
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   textocat-api = dontCheck super.textocat-api;          # http://hydra.cryp.to/build/887011/log/raw
-  warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
@@ -414,13 +419,26 @@ self: super: builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # The curl executable is required for withApplication tests.
+  warp = addTestToolDepend pkgs.curl super.warp;
+
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
   hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;
   hasql-interpolate = dontCheck super.hasql-interpolate;
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
+  hasql-pool_0_10_0_1 = doDistribute (dontCheck super.hasql-pool_0_10_0_1);
   hasql-transaction = dontCheck super.hasql-transaction;
+
+  # Test suite requires a running postgresql server,
+  # avoid compiling twice by providing executable as a separate output (with small closure size),
+  # generate shell completion
+  postgrest = lib.pipe super.postgrest [
+    dontCheck
+    enableSeparateBinOutput
+    (self.generateOptparseApplicativeCompletions [ "postgrest" ])
+  ];
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
@@ -435,9 +453,8 @@ self: super: builtins.intersectAttrs super {
   mime-mail = appendConfigureFlag "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"" super.mime-mail;
 
   # Help the test suite find system timezone data.
-  tz = overrideCabal (drv: {
-    preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo";
-  }) super.tz;
+  tz = addBuildDepends [ pkgs.tzdata ] super.tz;
+  tzdata = addBuildDepends [ pkgs.tzdata ] super.tzdata;
 
   # https://hydra.nixos.org/build/128665302/nixlog/3
   # Disable tests because they require a running dbus session
@@ -475,8 +492,16 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
+  # llvm-ffi needs a specific version of LLVM which we hard code here. Since we
+  # can't use pkg-config (LLVM has no official .pc files), we need to pass the
+  # `dev` and `lib` output in, or Cabal will have trouble finding the library.
+  # Since it looks a bit neater having it in a list, we circumvent the singular
+  # LLVM input here.
+  llvm-ffi =
+    addBuildDepends [
+      pkgs.llvmPackages_16.llvm.lib
+      pkgs.llvmPackages_16.llvm.dev
+    ] (super.llvm-ffi.override { LLVM = null; });
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
@@ -802,8 +827,9 @@ self: super: builtins.intersectAttrs super {
 
   # Tests require internet
   http-download = dontCheck super.http-download;
+  http-download_0_2_1_0 = doDistribute (dontCheck super.http-download_0_2_1_0);
   pantry = dontCheck super.pantry;
-  pantry_0_5_2_1 = dontCheck super.pantry_0_5_2_1;
+  pantry_0_9_3_1 = dontCheck super.pantry_0_9_3_1;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -1063,42 +1089,8 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
-  cachix-api = overrideCabal (drv: {
-    version = "1.6.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "v1.6.1";
-      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
-    postPatch = ''
-      sed -i 's/1.6/1.6.1/' cachix-api.cabal
-    '';
-  }) super.cachix-api;
-  cachix = overrideCabal (drv: {
-    version = "1.6.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "v1.6.1";
-      sha256 = "sha256-6S8EOs7bGTyY4eDXGuTbJMTlaz0n1JYIAPKIB2cVYxg=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix";
-    postPatch = ''
-      sed -i 's/1.6/1.6.1/' cachix.cabal
-    '';
-  }) (lib.pipe
-        (super.cachix.override {
-          hnix-store-core = self.hnix-store-core_0_7_0_0;
-          nix = self.hercules-ci-cnix-store.nixPackage;
-        })
-        [
-         (addBuildTool self.hercules-ci-cnix-store.nixPackage)
-         (addBuildTool pkgs.pkg-config)
-         (addBuildDepend self.immortal)
-        ]
-  );
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
+    (enableSeparateBinOutput super.cachix);
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
@@ -1122,10 +1114,16 @@ self: super: builtins.intersectAttrs super {
     preCheck = "export CI=true";
   }) super.aeson-typescript;
 
-  # Enable extra optimisations which increase build time, but also
-  # later compiler performance, so we should do this for user's benefit.
-  # Flag added in Agda 2.6.2
-  Agda = appendConfigureFlag "-foptimise-heavily" super.Agda;
+  Agda = lib.pipe super.Agda [
+    # Enable extra optimisations which increase build time, but also
+    # later compiler performance, so we should do this for user's benefit.
+    # Flag added in Agda 2.6.2
+    (enableCabalFlag "optimise-heavily")
+    # Enable debug printing, which worsens performance slightly but is
+    # very useful.
+    # Flag added in Agda 2.6.4.1, was always enabled before
+    (enableCabalFlag "debug")
+  ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
   # to arbitrary files in $HOME. This doesn't either not achieve anything
@@ -1188,18 +1186,25 @@ self: super: builtins.intersectAttrs super {
   }) super.procex;
 
   # Test suite wants to run main executable
-  fourmolu = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/fourmolu:$PATH"
-    '';
-  }) super.fourmolu;
+  # https://github.com/fourmolu/fourmolu/issues/231
+  inherit (
+    let
+      fourmoluTestFix = overrideCabal (drv: {
+        preCheck = drv.preCheck or "" + ''
+          export PATH="$PWD/dist/build/fourmolu:$PATH"
+        '';
+      });
+    in
 
-  # Test suite wants to run main executable
-  fourmolu_0_10_1_0 = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/fourmolu:$PATH"
-    '';
-  }) super.fourmolu_0_10_1_0;
+    {
+      fourmolu = fourmoluTestFix super.fourmolu;
+      fourmolu_0_14_0_0 = fourmoluTestFix super.fourmolu_0_14_0_0;
+      fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
+    })
+    fourmolu
+    fourmolu_0_14_0_0
+    fourmolu_0_14_1_0
+    ;
 
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {

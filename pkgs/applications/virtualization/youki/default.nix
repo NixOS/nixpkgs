@@ -10,14 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "youki";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XoHGRCGLEG/a6gb+3ejYoeOuIml64U/p6CcxsFLoTWY=";
+    hash = "sha256-/cc+gHnakxC446MxErvgCDvc1gMWNi45h6fZ1Cd1Pj0=";
   };
+
+  cargoPatches = [
+    ./fix-cargo-lock.patch
+  ];
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
@@ -33,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "youki" ];
   cargoTestFlags = [ "-p" "youki" ];
 
-  cargoHash = "sha256-L5IhOPo8BDQAvaSs3IJzJHN0TbgmUcEyv60IDLN4kn0=";
+  cargoHash = "sha256-PKn448fOCnyMC42NtQnLt8kvZIBautsq4Fw/bRvwmpw=";
 
   meta = with lib; {
     description = "A container runtime written in Rust";

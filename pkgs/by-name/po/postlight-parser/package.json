@@ -1,0 +1,165 @@
+{
+  "name": "@postlight/parser",
+  "version": "2.2.3",
+  "description": "Postlight Parser transforms web pages into clean text. Publishers and programmers use it to make the web make sense, and readers use it to read any web article comfortably.",
+  "author": "Postlight <mercury@postlight.com>",
+  "homepage": "https://reader.postlight.com",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/postlight/parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/postlight/parser/issues"
+  },
+  "keywords": [
+    "mercury",
+    "parser",
+    "reader",
+    "web",
+    "content"
+  ],
+  "files": [
+    "dist",
+    "cli.js",
+    "src/shims/"
+  ],
+  "main": "./dist/mercury.js",
+  "bin": {
+    "mercury-parser": "./cli.js",
+    "postlight-parser": "./cli.js"
+  },
+  "scripts": {
+    "lint": "eslint . --fix",
+    "lint:ci": "remark . && eslint .",
+    "lint-fix-quiet": "eslint --fix --quiet",
+    "build": "yarn lint && rollup -c && yarn test:build",
+    "build:ci": "rollup -c && yarn test:build",
+    "build:web": "yarn lint && rollup -c rollup.config.web.js && yarn test:build:web",
+    "build:esm": "yarn lint && rollup -c rollup.config.esm.js && yarn test:build:esm",
+    "build:esm:ci": "rollup -c rollup.config.esm.js && yarn test:build:esm",
+    "build:web:ci": "rollup -c rollup.config.web.js && yarn test:build:web",
+    "release": "yarn build && yarn build:web",
+    "build:generator": "rollup -c scripts/rollup.config.js",
+    "test_build": "rollup -c",
+    "test": "yarn test:node && yarn test:web",
+    "test:node": "jest --json --outputFile test-output.json",
+    "test:web": "node ./node_modules/karma/bin/karma start karma.conf.js --auto-watch",
+    "test:build": "cd ./scripts && jest check-build.test.js",
+    "test:build:web": "node ./scripts/proxy-browser-test.js",
+    "test:build:esm": "node ./scripts/proxy-browser-test.js",
+    "watch:test": "jest --watch",
+    "generate-parser": "node ./dist/generate-custom-parser.js"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/runtime": "^7.0.0",
+    "@jesses/circle-github-bot": "^2.1.0",
+    "@octokit/rest": "^16.9.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.4.2",
+    "babel-plugin-module-alias": "^1.6.0",
+    "babel-plugin-module-resolver": "^3.1.2",
+    "babelify": "^10.0.0",
+    "babelrc-rollup": "^3.0.0",
+    "brfs": "^2.0.1",
+    "brfs-babel": "^2.0.0",
+    "browserify": "^16.2.3",
+    "changelog-maker": "^2.3.0",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-import-resolver-babel-module": "^2.2.1",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.3",
+    "express": "^4.16.4",
+    "husky": "^3.0.0",
+    "inquirer": "^7.0.0",
+    "jasmine-core": "^2.5.2",
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0",
+    "karma": "^6.3.16",
+    "karma-browserify": "8.1.0",
+    "karma-chrome-launcher": "^3.0.0",
+    "karma-cli": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-mocha": "^1.3.0",
+    "karma-requirejs": "^1.1.0",
+    "lint-staged": "^8.1.0",
+    "mocha": "^6.0.0",
+    "nock": "^10.0.6",
+    "ora": "^4.0.0",
+    "prettier": "^1.15.3",
+    "remark-cli": "^7.0.0",
+    "remark-lint": "^6.0.4",
+    "remark-preset-lint-recommended": "^3.0.2",
+    "request": "^2.88.2",
+    "requirejs": "^2.3.6",
+    "rollup": "^1.1.0",
+    "rollup-plugin-babel": "^4.0.1",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-uglify": "^6.0.1",
+    "watchify": "^3.11.1"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs2": "^7.2.0",
+    "@postlight/ci-failed-test-reporter": "^1.0",
+    "browser-request": "github:postlight/browser-request#feat-add-headers-to-response",
+    "cheerio": "^0.22.0",
+    "difflib": "github:postlight/difflib.js",
+    "ellipsize": "0.1.0",
+    "iconv-lite": "0.5.0",
+    "jquery": "^3.5.0",
+    "moment": "^2.23.0",
+    "moment-parseformat": "3.0.0",
+    "moment-timezone": "0.5.37",
+    "postman-request": "^2.88.1-postman.31",
+    "string-direction": "^0.1.2",
+    "turndown": "^7.1.1",
+    "valid-url": "^1.0.9",
+    "wuzzy": "^0.1.4",
+    "yargs-parser": "^15.0.1"
+  },
+  "bundleDependencies": [
+    "jquery",
+    "moment-timezone",
+    "browser-request"
+  ],
+  "browser": {
+    "main": "./dist/mercury.web.js",
+    "cheerio": "./src/shims/cheerio-query",
+    "jquery": "./node_modules/jquery/dist/jquery.min.js",
+    "postman-request": "browser-request",
+    "iconv-lite": "./src/shims/iconv-lite",
+    "moment-timezone": "./node_modules/moment-timezone/builds/moment-timezone-with-data-2012-2022.min.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json,css,md}": [
+      "remark .",
+      "prettier --write",
+      "git add"
+    ]
+  }
+}

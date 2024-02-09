@@ -48,6 +48,8 @@ let
         inherit gpus nvccCompatibilities flags;
         cudaMajorVersion = versions.major cudaVersion;
         cudaMajorMinorVersion = versions.majorMinor cudaVersion;
+        cudaOlder = strings.versionOlder cudaVersion;
+        cudaAtLeast = strings.versionAtLeast cudaVersion;
 
         # Maintain a reference to the final cudaPackages.
         # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an argument,
@@ -70,14 +72,7 @@ let
 
         # Loose packages
         cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit {};
-        # SaxPy is only available after 11.4 because it requires redistributable versions of CUDA libraries.
-        saxpy = attrsets.optionalAttrs (strings.versionAtLeast cudaVersion "11.4") (
-          final.callPackage ../development/cuda-modules/saxpy {}
-        );
-      }
-      # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
-      # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
-      // attrsets.optionalAttrs (!flags.isJetsonBuild) {
+        saxpy = final.callPackage ../development/cuda-modules/saxpy {};
         nccl = final.callPackage ../development/cuda-modules/nccl {};
         nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests {};
       }
@@ -111,8 +106,8 @@ let
       shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
       fixupFn = ../development/cuda-modules/tensorrt/fixup.nix;
     })
-    (callPackage ../test/cuda/cuda-samples/extension.nix {inherit cudaVersion;})
-    (callPackage ../test/cuda/cuda-library-samples/extension.nix {})
+    (callPackage ../development/cuda-modules/cuda-samples/extension.nix {inherit cudaVersion;})
+    (callPackage ../development/cuda-modules/cuda-library-samples/extension.nix {})
   ];
 
   cudaPackages = customisation.makeScope newScope (

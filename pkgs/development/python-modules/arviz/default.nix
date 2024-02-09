@@ -8,13 +8,11 @@
 , numba
 , numpy
 , pandas
-, pytest
 , setuptools
 , cloudpickle
 , pytestCheckHook
 , scipy
 , packaging
-, typing-extensions
 , pythonOlder
 , xarray
 , xarray-einstats
@@ -33,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.16.1";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -42,7 +40,7 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = "arviz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kixWGj0M0flTq5rXSiPB0nfZaGYRvvMBGAJpehdW8KY=";
+    hash = "sha256-DqVwbiNJHdRxK3Ppfa6sqPJzDqMaj1mtlAJHFq09u2Y=";
   };
 
   propagatedBuildInputs = [
@@ -86,6 +84,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "test_plot_ppc_transposed"
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signaturepdf";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "24eme";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-7yhvTxpjxHcmRxTE7avM+dN+yz9iVr8Ea/e2yfkBURA=";
+    hash = "sha256-5isvVyT8s2ZAhLP4x/jjxDssBQ2WAvYDkGOWf3NcjHM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --run 'echo "You may now open a web browser on http://localhost:$port"' \
       --add-flags '-S "localhost:$port" -t public'
 
-    runHook preInstall
+    runHook postInstall
   '';
 
   meta = with lib; {

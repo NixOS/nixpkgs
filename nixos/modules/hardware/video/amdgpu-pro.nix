@@ -39,9 +39,10 @@ in
 
     hardware.firmware = [ package.fw ];
 
-    system.activationScripts.setup-amdgpu-pro = ''
-      ln -sfn ${package}/opt/amdgpu{,-pro} /run
-    '';
+    systemd.tmpfiles.settings.amdgpu-pro = {
+      "/run/amdgpu"."L+".argument = "${package}/opt/amdgpu";
+      "/run/amdgpu-pro"."L+".argument = "${package}/opt/amdgpu-pro";
+    };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "DEVICE_PRIVATE")

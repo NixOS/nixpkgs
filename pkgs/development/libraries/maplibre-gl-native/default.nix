@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
+, fetchpatch2
 , cmake
 , pkg-config
 , qtbase
@@ -29,6 +30,11 @@ mkDerivation rec {
       name = "skip-license-check.patch";
       url = "https://git.alpinelinux.org/aports/plain/testing/mapbox-gl-native/0002-skip-license-check.patch?id=6751a93dca26b0b3ceec9eb151272253a2fe497e";
       sha256 = "1yybwzxbvn0lqb1br1fyg7763p2h117s6mkmywkl4l7qg9daa7ba";
+    })
+    (fetchpatch2 {
+      name = "cstdint.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/maplibre-gl-native/cstdint.patch?id=ae8edc6b02df388ef37a69c12a5df25dd8550238";
+      hash = "sha256-o7wT/rk5vgwxEutAyIEAxwfKNxCoBtkhVcLjc7uTsYc=";
     })
   ];
 

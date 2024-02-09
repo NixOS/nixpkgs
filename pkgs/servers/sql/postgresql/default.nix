@@ -5,6 +5,7 @@ let
       { stdenv, lib, fetchurl, makeWrapper, fetchpatch
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
+      , linux-pam
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
@@ -23,6 +24,10 @@ let
       , jitSupport ? false
       , nukeReferences, patchelf, llvmPackages
       , makeRustPlatform, buildPgxExtension, cargo, rustc
+
+      # PL/Python
+      , pythonSupport ? false
+      , python3
 
       # detection of crypt fails when using llvm stdenv, so we add it manually
       # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
@@ -62,7 +67,9 @@ let
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals enableSystemd [ systemd ]
+      ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
+      ++ lib.optionals stdenv'.isLinux [ linux-pam ]
       ++ lib.optionals (!stdenv'.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = [
@@ -95,8 +102,10 @@ let
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
+      ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals stdenv'.hostPlatform.isRiscV [ "--disable-spinlocks" ]
-      ++ lib.optionals jitSupport [ "--with-llvm" ];
+      ++ lib.optionals jitSupport [ "--with-llvm" ]
+      ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
 
     patches = [
       (if atLeast "16" then ./patches/disable-normalize_exec_path.patch
@@ -105,6 +114,17 @@ let
       ./patches/hardcode-pgxs-path.patch
       ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/findstring.patch
+
+      # Fix build with libxml2 2.12.0 and -Wincompatible-function-pointer-types
+      (if atLeast "16" then
+        # https://www.postgresql.org/message-id/CACpMh%2BDMZVHM%2BiDSyqdcpK8sr7jd_HxxLJRNvGTzcLBE0W07QA%40mail.gmail.com
+        fetchurl {
+          url = "https://www.postgresql.org/message-id/attachment/152769/v1-0001-Make-PostgreSQL-work-with-newer-version-of-libxml.patch";
+          hash = "sha256-1j5mtG++hFmYwfS98PdN1SmNI4T86q4FXvKLz2VeJyg=";
+        }
+      else
+        ./patches/libxml2.12-15.patch
+      )
 
       (substituteAll {
         src = ./locale-binary-path.patch;

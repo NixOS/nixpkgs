@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fpart";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
     rev = "${pname}-${version}";
-    sha256 = "sha256-SULtbfUUzYgD/Q6wmgYSIldiGgk9MY4dr0hveTTMwvw=";
+    sha256 = "sha256-kAvGLd5W633fRS+qVD/yclreFfcauyLygQGtzv7AP24=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

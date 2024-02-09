@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.35.2";
+  version = "3.36";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WQsUrSd5FMs/x9XiVHZIR/rNqqI8e6/YXsk4dPb0IUM=";
+    hash = "sha256-3MMROU/obcFvZQN7AHXiOO/P0uEuZdU+0ZaVRQKZbzw=";
   };
 
   postPatch = ''

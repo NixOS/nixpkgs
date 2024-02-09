@@ -30,8 +30,8 @@ let
       inherit patches;
     };
     beta = {
-      version = "2.5.59.3";
-      sha256 = "sha256-chHKEEMN0Dllebk7zQDg7mf2BU441RlSyXvXgiCmgA4=";
+      version = "2.5.59.6";
+      sha256 = "sha256-4ivhkcvVw5NlPsDz3J840aWc0qnp/XzCnTTCICwi3/c=";
       inherit patches;
     };
   };

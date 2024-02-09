@@ -299,14 +299,13 @@ python3Packages.buildPythonApplication rec {
     hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
-  nativeBuildInputs = [
-    python3Packages.setuptools
-    python3Packages.wheel
+  nativeBuildInputs = with python3Packages; [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.tornado
-    python3Packages.python-daemon
+  propagatedBuildInputs = with python3Packages; [
+    tornado
+    python-daemon
   ];
 
   meta = with lib; {
@@ -2061,7 +2060,7 @@ and create update commits, and supports the `fetchPypi`, `fetchurl` and
 hosted on GitHub, exporting a `GITHUB_API_TOKEN` is highly recommended.
 
 Updating packages in bulk leads to lots of breakages, which is why a
-stabilization period on the `python-unstable` branch is required.
+stabilization period on the `python-updates` branch is required.
 
 If a package is fragile and often breaks during these bulks updates, it
 may be reasonable to set `passthru.skipBulkUpdate = true` in the

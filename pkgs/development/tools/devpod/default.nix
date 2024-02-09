@@ -63,7 +63,8 @@ rec {
     '';
 
     passthru.tests.version = testers.testVersion {
-      package = pname;
+      package = devpod;
+      command = "devpod version";
       version = "v${version}";
     };
   };

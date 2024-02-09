@@ -93,7 +93,7 @@ let
         else if stdenv.hostPlatform.isBSD
           then if stdenv.hostPlatform.isx86_64 then "./Configure BSD-x86_64"
           else if stdenv.hostPlatform.isx86_32
-            then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+            then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
           else "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${lib.optionalString
@@ -234,6 +234,13 @@ let
   });
 
 in {
+  # intended version "policy":
+  # - 1.1 as long as some package exists, which does not build without it
+  # - latest 3.x LTS
+  # - latest 3.x non-LTS as preview/for development
+  #
+  # - other versions in between only when reasonable need is stated for some package
+  # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
 
   # If you do upgrade here, please update in pkgs/top-level/release.nix
   # the permitted insecure version to ensure it gets cached for our users
@@ -279,9 +286,9 @@ in {
     };
   };
 
-  openssl_3_1 = common {
-    version = "3.1.4";
-    hash = "sha256-hAr1Nmq5tSK95SWCa+PvD7Cvgcap69hMqmAP6hcx7uM=";
+  openssl_3_2 = common {
+    version = "3.2.0";
+    hash = "sha256-FMgm8Hx+QzcG+1xp+p4l2rlWhIRLTJYqLPG/GD60aQ4=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -291,8 +298,8 @@ in {
       ./3.0/openssl-disable-kernel-detection.patch
 
       (if stdenv.hostPlatform.isDarwin
-       then ./use-etc-ssl-certs-darwin.patch
-       else ./use-etc-ssl-certs.patch)
+       then ./3.2/use-etc-ssl-certs-darwin.patch
+       else ./3.2/use-etc-ssl-certs.patch)
     ];
 
     withDocs = true;

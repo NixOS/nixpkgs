@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.11.1";
+  version = "2.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JdKeBaAFjtXxnGHAp4sbU63qTZNktGTQFPvalB9tHJo=";
+    hash = "sha256-U2ikUCt5PZu/gSpZEuE+Tmn5vYf277UIRgxD9bvRzkE=";
   };
 
   propagatedBuildInputs = [

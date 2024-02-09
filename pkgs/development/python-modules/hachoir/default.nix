@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "hachoir";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "vstinner";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BRrb6bnPSDVjZF1cOA9NlUYd2HrtqZEAVhHgkjmE0Xg=";
+    hash = "sha256-sTUJx8Xyhw4Z6juRtREw/okuVjSTSVWpSLKeZ7T8IR8=";
   };
 
   propagatedBuildInputs = [

@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
-    eyeD3
+    eyed3
     pillow
     mutagen
     pytaglib

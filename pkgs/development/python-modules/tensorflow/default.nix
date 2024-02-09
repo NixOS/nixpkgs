@@ -480,6 +480,7 @@ let
     };
 
     meta = with lib; {
+      badPlatforms = lib.optionals cudaSupport lib.platforms.darwin;
       changelog = "https://github.com/tensorflow/tensorflow/releases/tag/v${version}";
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";

@@ -7,7 +7,7 @@ binaryheap,,,,,,vcunat
 busted,,,,,,
 cassowary,,,,,,marsam alerque
 cldr,,,,,,alerque
-compat53,,,,0.7-1,,vcunat
+compat53,,,,,,vcunat
 cosmo,,,,,,marsam
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
@@ -15,12 +15,14 @@ cyan,,,,,,
 digestif,https://github.com/astoff/digestif.git,,,,5.3,
 dkjson,,,,,,
 fennel,,,,,,misterio77
+fidget.nvim,,,,,,mrcjkb
 fifo,,,,,,
 fluent,,,,,,alerque
 fzy,,,,,,mrcjkb
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
 haskell-tools.nvim,,,,,,
 http,,,,0.3-0,,vcunat
+image.nvim,,,,,,teto
 inspect,,,,,,
 jsregexp,,,,,,
 ldbus,,,http://luarocks.org/dev,,,
@@ -54,7 +56,7 @@ lua-subprocess,https://github.com/0x0ade/lua-subprocess,,,,5.1,scoder12
 lua-term,,,,,,
 lua-toml,,,,,,
 lua-zlib,,,,,,koral
-lua_cliargs,https://github.com/amireh/lua_cliargs.git,,,,,
+lua_cliargs,,,,,,
 luabitop,https://github.com/teto/luabitop.git,,,,,
 luacheck,,,,,,
 luacov,,,,,,
@@ -85,7 +87,7 @@ luautf8,,,,,,pstn
 luazip,,,,,,
 lua-yajl,,,,,,pstn
 lua-iconv,,,,7.0.0,,
-luuid,,,,,,
+luuid,,,,20120509-2,,
 luv,,,,1.44.2-1,,
 lush.nvim,https://github.com/rktjmp/lush.nvim,,,,,teto
 lyaml,,,,,,lblasc
@@ -98,9 +100,11 @@ moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
+nvim-nio,,,,,,mrcjkb
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
+rocks.nvim,,,,,5.1,teto mrcjkb
 rest.nvim,,,,,5.1,teto
 rustaceanvim,,,,,,mrcjkb
 say,https://github.com/Olivine-Labs/say.git,,,,,
@@ -117,3 +121,4 @@ toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda
+xml2lua,,,,,,teto

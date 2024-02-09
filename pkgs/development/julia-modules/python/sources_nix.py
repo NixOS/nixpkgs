@@ -45,9 +45,13 @@ with open(out_path, "w") as f:
       path = registry_info["path"]
       packageToml = toml.load(registry_path / path / "Package.toml")
 
-      all_versions = toml.load(registry_path / path / "Versions.toml")
+      versions_toml = registry_path / path / "Versions.toml"
+      all_versions = toml.load(versions_toml)
       if not pkg["version"] in all_versions: continue
       version_to_use = all_versions[pkg["version"]]
+
+      if not "nix-sha256" in version_to_use:
+        raise KeyError(f"""Couldn't find nix-sha256 hash for {pkg["name"]} {pkg["version"]} in {versions_toml}. This might indicate that we failed to prefetch the hash when computing the augmented registry. Was there a relevant failure in {registry_path / "failures.yml"}?""")
 
       repo = packageToml["repo"]
       f.write(f"""  "{uuid}" = {{

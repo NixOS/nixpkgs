@@ -2,21 +2,25 @@
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2023-10-11";
+  version = "unstable-2023-12-04";
 
   src = fetchFromGitHub {
     owner = "plt-amy";
     repo = pname;
-    rev = "c6e0c3c714486fd6c89ace31443428ba48871685";
-    hash = "sha256-PC75NtT0e99HVyFedox+6xz/CY2zP2g4Vzqruj5Bjhc=";
+    rev = "47c2a96220b4d14419e5ddb973bc1fa06933e723";
+    hash = "sha256-0U6s6sXdynk2IWRBDXBJCf7Gc+gE8AhR1PXZl0DS4yU=";
   };
 
-  # We don't need anything in support; avoid installing LICENSE.agda
   postPatch = ''
+    # We don't need anything in support; avoid installing LICENSE.agda
     rm -rf support
+
+    # Remove verbosity options as they make Agda take longer and use more memory.
+    shopt -s globstar extglob
+    sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' src/**/*.@(agda|lagda.md)
   '';
 
-  libraryName = "cubical-1lab";
+  libraryName = "1lab";
   libraryFile = "1lab.agda-lib";
   everythingFile = "src/index.lagda.md";
 

@@ -12,11 +12,11 @@
 
 mkDerivation rec {
   pname = "datovka";
-  version = "4.22.1";
+  version = "4.23.4";
 
   src = fetchurl {
     url = "https://gitlab.nic.cz/datovka/datovka/-/archive/v${version}/datovka-v${version}.tar.gz";
-    sha256 = "sha256-R18dBsfrMBcBB3EraC0tIJABwZBROFqi/fhm62IDa2g=";
+    sha256 = "sha256-xyRUm6DaxlIFmeskQuUMu6JV3QtzgOZf/pLiBNGUBRo=";
   };
 
   buildInputs = [ libdatovka qmake qtbase qtsvg libxml2 qtwebsockets ];

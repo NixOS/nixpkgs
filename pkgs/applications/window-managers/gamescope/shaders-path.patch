@@ -1,0 +1,13 @@
+diff --git a/src/reshade_effect_manager.cpp b/src/reshade_effect_manager.cpp
+index 3597ca1..de45250 100644
+--- a/src/reshade_effect_manager.cpp
++++ b/src/reshade_effect_manager.cpp
+@@ -34,7 +34,7 @@ static std::string GetLocalUsrDir()
+
+ static std::string GetUsrDir()
+ {
+-    return "/usr";
++    return "@out@";
+ }
+
+ static LogScope reshade_log("gamescope_reshade");

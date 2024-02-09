@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwaylandvideobridge";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/xwaylandvideobridge/xwaylandvideobridge-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+Npuj+DsO9XqeXr4qtj+Haqzb8PHfi02u3RDgyzfz/o=";
+    hash = "sha256-6nKseypnV46ZlNywYZYC6tMJekb7kzZmHaIA5jkn6+Y=";
   };
 
   nativeBuildInputs = [

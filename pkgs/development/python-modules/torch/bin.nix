@@ -68,7 +68,7 @@ in buildPythonPackage {
     jinja2
     networkx
     filelock
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [
     openai-triton
   ];
 

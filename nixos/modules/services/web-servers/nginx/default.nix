@@ -334,8 +334,8 @@ let
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
           + optionalString (extraParameters != []) (concatStringsSep " "
-            (let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
-                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            (let inCompatibleParameters = [ "accept_filter" "backlog" "deferred" "fastopen" "http2" "proxy_protocol" "so_keepalive" "ssl" ];
+                isCompatibleParameter = param: !(any (p: lib.hasPrefix p param) inCompatibleParameters);
             in filter isCompatibleParameter extraParameters))
           + ";"))
           + "
@@ -352,18 +352,21 @@ let
 
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
-        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
+        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null))
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
+        ''
           location ^~ /.well-known/acme-challenge/ {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
             auth_basic off;
+            auth_request off;
           }
           ${optionalString (vhost.acmeFallbackHost != null) ''
             location @acme-fallback {
               auth_basic off;
+              auth_request off;
               proxy_pass http://${vhost.acmeFallbackHost};
             }
           ''}
@@ -375,10 +378,11 @@ let
             ${concatMapStringsSep "\n" listenString redirectListen}
 
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${acmeLocation}
+
             location / {
               return ${toString vhost.redirectCode} https://$host$request_uri;
             }
+            ${acmeLocation}
           }
         ''}
 
@@ -391,13 +395,6 @@ let
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
-          ''}
-          ${acmeLocation}
-          ${optionalString (vhost.root != null) "root ${vhost.root};"}
-          ${optionalString (vhost.globalRedirect != null) ''
-            location / {
-              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
-            }
           ''}
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
@@ -413,14 +410,16 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.quic && vhost.http3)
-            # Advertise that HTTP/3 is available
-          ''
-            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
-          ''}
-
           ${mkBasicAuth vhostName vhost}
 
+          ${optionalString (vhost.root != null) "root ${vhost.root};"}
+
+          ${optionalString (vhost.globalRedirect != null) ''
+            location / {
+              return ${toString vhost.redirectCode} http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
+            }
+          ''}
+          ${acmeLocation}
           ${mkLocations vhost.locations}
 
           ${vhost.extraConfig}
@@ -472,7 +471,7 @@ let
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 
-  oldHTTP2 = versionOlder cfg.package.version "1.25.1";
+  oldHTTP2 = (versionOlder cfg.package.version "1.25.1" && !(cfg.package.pname == "angie" || cfg.package.pname == "angieQuic"));
 in
 
 {
@@ -1130,14 +1129,6 @@ in
       }
 
       {
-        assertion = any (host: host.kTLS) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.21.4";
-        message = ''
-          services.nginx.virtualHosts.<name>.kTLS requires nginx version
-          1.21.4 or above; see the documentation for services.nginx.package.
-        '';
-      }
-
-      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
@@ -1344,6 +1335,8 @@ in
     users.groups = optionalAttrs (cfg.group == "nginx") {
       nginx.gid = config.ids.gids.nginx;
     };
+
+    boot.kernelModules = optional (versionAtLeast config.boot.kernelPackages.kernel.version "4.17") "tls";
 
     # do not delete the default temp directories created upon nginx startup
     systemd.tmpfiles.rules = [

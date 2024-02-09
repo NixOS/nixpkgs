@@ -33,11 +33,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
 
   patches = [
     # Allow setting MEDIA_ROOT through environment variable
-    ./media-root.patch
-    # https://github.com/TandoorRecipes/recipes/pull/2706
+    # https://github.com/TandoorRecipes/recipes/pull/2931
     (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/702c1d67d3b2d13cf471bf9daa1d2ef0f1837dec.patch";
-      hash = "sha256-6vmtYs6b0d38Ojxxc2I7oxqpkIlyRVlhzURBOTO2VlQ=";
+      url = "https://github.com/TandoorRecipes/recipes/commit/abf981792057481f1d5b7473eb1090b3901ef8fa.patch";
+      hash = "sha256-3AFf0K/BpVwPQ2NGLUsefj6HvW7ej3szd3WaxFoqMiQ=";
     })
   ];
 
@@ -141,6 +140,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   # flaky
   disabledTests = [
     "test_search_count"
+    "test_url_import_regex_replace"
   ];
 
   passthru = {

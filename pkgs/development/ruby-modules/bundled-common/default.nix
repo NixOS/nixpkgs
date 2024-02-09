@@ -117,9 +117,10 @@ let
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
-    passthru = rec {
-      inherit ruby bundler gems confFiles envPaths;
+    passthru = (lib.optionalAttrs (pname != null) {
       inherit (gems.${pname}) gemType;
+    } // rec {
+      inherit ruby bundler gems confFiles envPaths;
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";
@@ -172,7 +173,7 @@ let
             exit 1
           '';
         };
-    };
+    });
   };
 
   basicEnv =

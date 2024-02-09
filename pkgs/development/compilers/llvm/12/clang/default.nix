@@ -47,7 +47,7 @@ let
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
       (substituteAll {
-        src = ../../clang-11-12-LLVMgold-path.patch;
+        src = ../../clang-11-15-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];

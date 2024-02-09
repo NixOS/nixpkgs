@@ -31,6 +31,7 @@ let
     i686 = "FV/OVMF";
     x86_64 = "FV/OVMF";
     aarch64 = "FV/AAVMF";
+    riscv64 = "FV/RISCV_VIRT";
   };
 
 in

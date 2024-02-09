@@ -36,8 +36,6 @@ buildPythonPackage rec {
   # required to make tests deterministic
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     crc32c
     numpy

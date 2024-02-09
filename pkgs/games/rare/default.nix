@@ -3,6 +3,7 @@
 , buildPythonApplication
 , qt5
 , legendary-gl
+, orjson
 , pypresence
 , pyqt5
 , python
@@ -14,14 +15,14 @@
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.10.7";
+  version = "1.10.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RareDevs";
     repo = "Rare";
     rev = "refs/tags/${version}";
-    hash = "sha256-rV6B9tCdwWK9yvEtVyLnv4Lo1WP5xW0f4JcsNZ7iBGI=";
+    hash = "sha256-2DtI5iaK4bYdGfIEhPy52WaEqh+IJMZ6qo/348lMnLY=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     legendary-gl
+    orjson
     pypresence
     pyqt5
     qtawesome

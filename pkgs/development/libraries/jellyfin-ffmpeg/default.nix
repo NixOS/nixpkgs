@@ -1,22 +1,22 @@
 { ffmpeg_6-full
-, nv-codec-headers-12
 , chromaprint
 , fetchFromGitHub
 , lib
 }:
 
-(ffmpeg_6-full.override {
-  nv-codec-headers-11 = nv-codec-headers-12;
-}).overrideAttrs (old: rec {
+ffmpeg_6-full.overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
-  version = "6.0-7";
+  version = "6.0.1-2";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    sha256 = "sha256-Z4getn/mVYIRANkIOyt7jMpcqHBvq5GXLK/ST5zV1r4=";
+    hash = "sha256-wc9OGwjcRDTDxlHYVTlbLe1B/F11z0Xcz6WRrO42zn4=";
   };
+
+  # Clobber upstream patches as they don't apply to the Jellyfin fork
+  patches = [];
 
   buildInputs = old.buildInputs ++ [ chromaprint ];
 
@@ -39,5 +39,6 @@
     homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
     license = licenses.gpl3;
     maintainers = with maintainers; [ justinas ];
+    pkgConfigModules = [ "libavutil" ];
   };
 })

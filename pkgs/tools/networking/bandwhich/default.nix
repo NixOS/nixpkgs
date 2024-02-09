@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.21.1";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9+7ol2QSIXLkkRt/YlAobZHb3Tm+SmnjW/JufwimMTE=";
+    hash = "sha256-/uG1xjhxnIkS3rq7Tv1q1v8X7p1baDB8OiSEV9OLyfo=";
   };
 
   cargoLock = {

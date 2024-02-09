@@ -133,10 +133,11 @@ let
         RestartSec = 20;
         EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
         WorkingDirectory = cfg.package;
+        LimitNOFILE = "1024000";
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-      path = with pkgs; [ file imagemagick ffmpeg ];
+      path = with pkgs; [ ffmpeg-headless file imagemagick ];
     })
   ) cfg.sidekiqProcesses;
 
@@ -773,7 +774,7 @@ in {
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-      path = with pkgs; [ file imagemagick ffmpeg ];
+      path = with pkgs; [ ffmpeg-headless file imagemagick ];
     };
 
     systemd.services.mastodon-media-auto-remove = lib.mkIf cfg.mediaAutoRemove.enable {

@@ -618,7 +618,7 @@ let
     LCMCR = [ pkgs.gsl ];
     BNSP = [ pkgs.gsl ];
     scModels = [ pkgs.mpfr.dev ];
-    multibridge = [ pkgs.mpfr.dev ];
+    multibridge = with pkgs; [ pkg-config mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
@@ -1304,7 +1304,7 @@ let
         substituteInPlace R/zzz.R \
           --replace ".onLoad <- function(...) {" \
             ".onLoad <- function(...) {
-          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/lib/${pkgs.python3Packages.python.libPrefix}/site-packages/pyspark\"))
+          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/${pkgs.python3Packages.python.sitePackages}/pyspark\"))
           Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
       '';
     });
@@ -1344,6 +1344,10 @@ let
 
     flowClust = old.flowClust.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
+    httr2 = old.httr2.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
     geomorph = old.geomorph.overrideAttrs (attrs: {
       RGL_USE_NULL = "true";
     });
@@ -1357,7 +1361,6 @@ let
     });
 
     rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
-      propagatedBuildInputs = with pkgs; attrs.propagatedBuildInputs ++ [ (hdf5-blosc.override {hdf5 = self.Rhdf5lib.hdf5;}) ];
       patches = [ ./patches/rhdf5filters.patch ];
     });
 

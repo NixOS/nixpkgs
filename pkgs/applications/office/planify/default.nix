@@ -11,6 +11,7 @@
 , glib
 , glib-networking
 , gtk4
+, gtksourceview5
 , json-glib
 , libadwaita
 , libgee
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.3.1";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-YF4un5j7zv0ishcgt00XDGy0AhR/bo6HJj04t0qfxwU=";
+    hash = "sha256-HX6ZMx2NUAQxEGLIk/wgUlQX0BFtee3+t/JdlMTIYBw=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk4
+    gtksourceview5
     json-glib
     libadwaita
     libgee

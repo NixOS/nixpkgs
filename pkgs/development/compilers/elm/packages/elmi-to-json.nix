@@ -8,9 +8,8 @@ mkDerivation {
   version = "1.3.0";
   src = fetchgit {
     url = "https://github.com/stoeffel/elmi-to-json";
-    sha256 = "11j56vcyhijkwi9hzggkwwmxlhzhgm67ab2m7kxkhcbbqgpasa8n";
-    rev = "ae40d1aa1e3d6878f2af514e611d44890e7abc1e";
-    fetchSubmodules = true;
+    rev = "bd18efb59d247439b362272b480e67a16a4e424e";
+    sha256 = "sha256-9fScXRSyTkqzeXwh/Jjza6mnENCThlU6KI366CLFcgY=";
   };
   isLibrary = true;
   isExecutable = true;

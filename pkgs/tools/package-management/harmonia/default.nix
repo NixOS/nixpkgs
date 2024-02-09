@@ -5,6 +5,7 @@
 , nixVersions
 , pkg-config
 , rustPlatform
+, stdenv
 , nix-update-script
 , nixosTests
 }:
@@ -31,6 +32,11 @@ rustPlatform.buildRustPackage rec {
     libsodium
     nixVersions.nix_2_19
   ];
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   passthru = {
     updateScript = nix-update-script {

@@ -1,14 +1,14 @@
-{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles, testers, vcluster }:
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.17.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xmSp3cNqNv48gBWpt0Pnvl3l5gIyV1oPNGrB58X+OVU=";
+    hash = "sha256-TJjMB7x8MOlr3GexsnOZBFPJovVkf4ByRn1aGprvZFQ=";
   };
 
   vendorHash = null;
@@ -36,8 +36,14 @@ buildGoModule rec {
   postInstall = ''
     installShellCompletion --cmd vcluster \
       --bash <($out/bin/vcluster completion bash) \
+      --fish <($out/bin/vcluster completion fish) \
       --zsh <($out/bin/vcluster completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = vcluster;
+    command = "vcluster --version";
+  };
 
   meta = with lib; {
     description = "Create fully functional virtual Kubernetes clusters";

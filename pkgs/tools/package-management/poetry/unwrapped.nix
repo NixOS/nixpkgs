@@ -10,8 +10,8 @@
 , cleo
 , crashtest
 , dulwich
+, fastjsonschema
 , installer
-, jsonschema
 , keyring
 , packaging
 , pexpect
@@ -37,6 +37,7 @@
 , pytest-mock
 , pytest-xdist
 , pythonAtLeast
+, darwin
 }:
 
 buildPythonPackage rec {
@@ -59,8 +60,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # only pinned to avoid dependency on Rust
-    "jsonschema"
+    # platformdirs 4.x is backwards compatible; https://github.com/python-poetry/poetry/commit/eb80d10846f7336b0b2a66ce2964e72dffee9a1c
+    "platformdirs"
+    # xattr 1.0 is backwards compatible modulo dropping Python 2 support: https://github.com/xattr/xattr/compare/v0.10.0...v1.0.0
+    "xattr"
   ];
 
   propagatedBuildInputs = [
@@ -69,8 +72,8 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
+    fastjsonschema
     installer
-    jsonschema
     keyring
     packaging
     pexpect
@@ -108,6 +111,8 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.ps
   ];
 
   preCheck = (''
