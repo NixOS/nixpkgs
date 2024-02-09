@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , logbook
 , aiofiles
 , aiohttp
@@ -38,6 +39,26 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-hFSS2Nys95YJgBNED8SBan24iRo2q/UOr6pqUPAF5Ms=";
   };
+
+  patches = [
+    # Those two patches makes `matrix-nio` more compatible with alternative
+    # Matrix homeservers like conduit.rs. They are critical for… well using this library…
+    # https://github.com/matrix-nio/matrix-nio/pull/483
+    (fetchpatch {
+      url = "https://github.com/matrix-nio/matrix-nio/commit/5c1a393fa16d5310e458539d64c25e0c2034a025.patch";
+      hash = "sha256-C39eufMI/HITnElEBpj0jBUIn3m0/XxXdxRdz1fhXhs=";
+    })
+    # https://github.com/matrix-nio/matrix-nio/pull/482
+    (fetchpatch {
+      url = "https://github.com/matrix-nio/matrix-nio/pull/482/commits/64c646edb918fe7ef57a6f9d76d95c24d3c41c07.patch";
+      hash = "sha256-SllZV+gBMjqfX9BUD1OrmZpy617c2FO110As9hw5mS0=;";
+    })
+    # https://github.com/matrix-nio/matrix-nio/pull/486
+    (fetchpatch {
+      url = "https://github.com/matrix-nio/matrix-nio/pull/486/commits/7826f7a1fa2bf55fd4ae32292550237a3dd65ef7.patch";
+      hash = "sha256-vT12I+DOyNLZrkG7LzlgWFminEfKfrQDZ6Fokz1gUsE=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
