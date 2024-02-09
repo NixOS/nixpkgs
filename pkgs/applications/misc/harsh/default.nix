@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "harsh";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "wakatara";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7QU3vbJNapMyjnCJrvK+jjUJDHE0+GaP7GKUu7UJcvU=";
+    hash = "sha256-MpKfUvDqwkvPsnjTxR3fohzYfSLQ2Nx25czYOE8LpK4=";
   };
 
   vendorHash = "sha256-zjLXq64uC5iRm9uxUGDW5127z25gNSVV2qhVVXuYqY0=";
