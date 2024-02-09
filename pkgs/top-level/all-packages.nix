@@ -1480,7 +1480,12 @@ with pkgs;
   writers = callPackage ../build-support/writers { };
 
   # lib functions depending on pkgs
-  inherit (import ../pkgs-lib { inherit lib pkgs; }) formats;
+  inherit (import ../pkgs-lib {
+    # The `lib` variable in this scope doesn't include any applied lib overlays,
+    # `pkgs.lib` does.
+    inherit (pkgs) lib;
+    inherit pkgs;
+  }) formats;
 
   testers = callPackage ../build-support/testers { };
 
