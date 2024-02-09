@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioelectricitymaps";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "aioelectricitymaps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-saIzVbgYx5nIM5fk7i3wu4X1gOIj81L/rRNq5Xl4cnw=";
+    hash = "sha256-q06B40c0uvSuzH/3YCoxg4p9aNIOPrphsoESktF+B14=";
   };
 
   postPatch = ''
