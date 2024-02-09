@@ -483,7 +483,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
-      (placeholder "out") ] ++ ((optional (libxcrypt != null)) libxcrypt)
+      (placeholder "out") ] ++ ((optionals (libxcrypt != null)) [libxcrypt])
     ++ optionals tzdataSupport [
       tzdata
     ]);
