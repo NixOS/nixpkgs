@@ -44,9 +44,9 @@
     "beetle-pce-fast": {
         "owner": "libretro",
         "repo": "beetle-pce-fast-libretro",
-        "rev": "cfb9362fd0de38141d40266725829f25f574162a",
-        "hash": "sha256-D/qAFFKe0mI/W4RnLwcB5lpwI+AlPjTfyo0SH6IZZkU=",
-        "date": "unstable-2024-02-02"
+        "rev": "86a80e1ba551f9a4627b8394901db0ee365c1442",
+        "hash": "sha256-aIDc4jzliVLpI2Xetcd5tG74/xvIlqRdVEb72yHrsCo=",
+        "date": "unstable-2024-02-09"
     },
     "beetle-pcfx": {
         "owner": "libretro",
