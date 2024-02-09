@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     description = "A low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;
+    pkgConfigModules = [ "pixman-1" ];
   };
 }
