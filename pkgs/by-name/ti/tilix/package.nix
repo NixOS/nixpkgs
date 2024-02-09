@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -19,15 +20,15 @@
 , fetchpatch
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tilix";
   version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
-    rev = version;
-    sha256 = "sha256-sPVL5oYDOmloRVm/nONKkC20vZc907c7ixBF6E2PQ8Y=";
+    rev = finalAttrs.version;
+    hash = "sha256-sPVL5oYDOmloRVm/nONKkC20vZc907c7ixBF6E2PQ8Y=";
   };
 
   # Default upstream else LDC fails to link
@@ -85,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "tilix";
   };
-}
+})
