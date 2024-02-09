@@ -1358,6 +1358,9 @@ self: super: builtins.intersectAttrs super {
       webkit2gtk3-javascriptcore
       gi-webkit2
       gi-webkit2webextension
+      gi-gtk_4_0_8
+      gi-gdk_4_0_7
+      gi-gsk
       ;
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
