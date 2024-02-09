@@ -39,17 +39,22 @@ in
   else if stdenv.hostPlatform.isDarwin then x86_64-dmg
   else if stdenv.hostPlatform.isCygwin then x86_64-windows
   else x86_64-appimage
-).overrideAttrs
-  (oldAttrs: {
-    passthru = (oldAttrs.passthru or { }) // {
-      inherit x86_64-appimage x86_64-dmg aarch64-dmg x86_64-windows;
+).overrideAttrs (finalAttrs: previousAttrs: {
+  passthru = (previousAttrs.passthru or { }) // {
+    inherit x86_64-appimage x86_64-dmg aarch64-dmg x86_64-windows;
+    updateBinaryPackage = callPackage ./update-binary-package.nix { };
+    updateScript = finalAttrs.passthru.updateBinaryPackage {
+      filesToOverride = [ (toString ./default.nix) ];
+      formatAttrNames = [ "x86_64-appimage" "x86_64-dmg" "aarch64-dmg" "x86_64-windows" ];
+      repoUrl = "https://github.com/mifi/lossless-cut";
     };
-    meta = oldAttrs.meta // {
-      platforms = lib.unique (
-        x86_64-appimage.meta.platforms
-          ++ x86_64-dmg.meta.platforms
-          ++ aarch64-dmg.meta.platforms
-          ++ x86_64-windows.meta.platforms
-      );
-    };
-  })
+  };
+  meta = previousAttrs.meta // {
+    platforms = lib.unique (
+      x86_64-appimage.meta.platforms
+        ++ x86_64-dmg.meta.platforms
+        ++ aarch64-dmg.meta.platforms
+        ++ x86_64-windows.meta.platforms
+    );
+  };
+})
