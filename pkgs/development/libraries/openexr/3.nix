@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , imath
 , libdeflate
@@ -20,10 +21,16 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
-  patches =
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-5841.patch";
+      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/46944c3a87ebc6c5d9a9a4962a94569ba1082bc3.patch";
+      hash = "sha256-erWX8WHPKTDdQga1VpyvBDcLOJmBC81esRJdZIspMmA=";
+    })
+  ]
     # Disable broken test on musl libc
     # https://github.com/AcademySoftwareFoundation/openexr/issues/1556
-    lib.optional stdenv.hostPlatform.isMusl ./disable-iex-test.patch
+    ++ lib.optional stdenv.hostPlatform.isMusl ./disable-iex-test.patch
   ;
 
   # tests are determined to use /var/tmp on unix
