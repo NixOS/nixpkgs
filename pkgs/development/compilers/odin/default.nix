@@ -53,6 +53,7 @@ in stdenv.mkDerivation rec {
     cp odin $out/bin/odin
 
     mkdir -p $out/share
+    cp -r base $out/share/base
     cp -r core $out/share/core
     cp -r vendor $out/share/vendor
 
