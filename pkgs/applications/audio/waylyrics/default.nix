@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     description = "Desktop lyrics with QQ and NetEase Music source";
     homepage = "https://github.com/poly000/waylyrics";
     license = with licenses; [ mit cc-by-40 ];
-    maintainers = [ maintainers.shadowrz ];
+    maintainers = with maintainers; [ shadowrz aleksana ];
     platforms = platforms.linux;
   };
 }
