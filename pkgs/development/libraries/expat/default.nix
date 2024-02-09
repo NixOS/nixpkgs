@@ -7,6 +7,7 @@
 , haskellPackages
 , luaPackages
 , ocamlPackages
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -17,13 +18,14 @@
 let
   version = "2.6.0";
   tag = "R_${lib.replaceStrings ["."] ["_"] version}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
-    hash = "sha256-y19ajqIR4cq9Wb4KkzpS48Aswyboak04fY0hjn7kej4=";
+    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
+    sha256 = "1gnwihpfz4x18rwd6cbrdggmfqjzwsdfh1gpmc0ph21c4gq2097g";
   };
 
   patches = [
@@ -51,7 +53,7 @@ in stdenv.mkDerivation rec {
   # CMake files incorrectly calculate library path from dev prefix
   # https://github.com/libexpat/libexpat/issues/501
   postFixup = ''
-    substituteInPlace $dev/lib/cmake/expat-${version}/expat-noconfig.cmake \
+    substituteInPlace $dev/lib/cmake/expat-${finalAttrs.version}/expat-noconfig.cmake \
       --replace "$"'{_IMPORT_PREFIX}' $out
   '';
 
@@ -62,6 +64,9 @@ in stdenv.mkDerivation rec {
     inherit (perlPackages) XMLSAXExpat XMLParser;
     inherit (luaPackages) luaexpat;
     inherit (ocamlPackages) ocaml_expat;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -70,5 +75,6 @@ in stdenv.mkDerivation rec {
     description = "A stream-oriented XML parser library written in C";
     platforms = platforms.all;
     license = licenses.mit; # expat version
+    pkgConfigModules = [ "expat" ];
   };
-}
+})
