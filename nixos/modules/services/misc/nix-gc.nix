@@ -64,8 +64,7 @@ in
         example = "--max-freed $((64 * 1024**3))";
         type = lib.types.singleLineStr;
         description = lib.mdDoc ''
-          Options given to {file}`nix-collect-garbage` when the
-          garbage collector is run automatically.
+          Options given to [`nix-collect-garbage`](https://nixos.org/manual/nix/stable/command-ref/nix-collect-garbage) when the garbage collector is run automatically.
         '';
       };
 
