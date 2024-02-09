@@ -209,10 +209,34 @@ with lib;
         user = mkOption {
           type = types.nullOr types.str;
           description = mdDoc ''
-            User under which to run the service. If null, will use a systemd dynamic user.
+            User under which to run the service.
+
+            If this option and the `group` option is set to `null`,
+            the service runs as a dynamically allocated user.
+
+            Also see the `group` option for an overview on the effects of the `user` and `group` settings.
           '';
           default = null;
           defaultText = literalExpression "username";
+        };
+
+        group = mkOption {
+          type = types.nullOr types.str;
+          description = mdDoc ''
+            Group under which to run the service.
+
+            The effect of this option depends on the value of the `user` option:
+
+            - `group == null` and `user == null`:
+              The service runs with a dynamically allocated user and group.
+            - `group == null` and `user != null`:
+              The service runs as the given user and its default group.
+            - `group != null` and `user == null`:
+              This configuration is invalid. In this case, the service would use the given group
+              but run as root implicitly. If this is really what you want, set `user = "root"` explicitly.
+          '';
+          default = null;
+          defaultText = literalExpression "groupname";
         };
 
         workDir = mkOption {

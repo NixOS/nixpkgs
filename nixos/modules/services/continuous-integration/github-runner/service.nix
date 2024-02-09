@@ -12,6 +12,10 @@ with lib;
         assertion = !cfg.noDefaultLabels || (cfg.extraLabels != [ ]);
         message = "`services.github-runners.${name}`: The `extraLabels` option is mandatory if `noDefaultLabels` is set";
       }
+      {
+        assertion = cfg.group == null || cfg.user != null;
+        message = ''`services.github-runners.${name}`: Setting `group` while leaving `user` unset runs the service as `root`. If this is really what you want, set `user = "root"` explicitly'';
+      }
     ])
   );
 
@@ -283,6 +287,10 @@ with lib;
         (mkIf (cfg.user != null) {
           DynamicUser = false;
           User = cfg.user;
+        })
+        (mkIf (cfg.group != null) {
+          DynamicUser = false;
+          Group = cfg.group;
         })
         cfg.serviceOverrides
       ];
