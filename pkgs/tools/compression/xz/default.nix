@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
+    pkgConfigModules = [ "liblzma" ];
   };
 }
