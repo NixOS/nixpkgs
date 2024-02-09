@@ -61,7 +61,7 @@ Coming soon.
 
 ### AutonomySim
 
-`Botnix` is only half of the equation in developing and deploying autonomous systems for the real world. `Botnix` is designed to be co-developed and integrated with [`AutonomySim`](https://github.com/nervosys/AutonomySim/), the simulation engine for autonomous systems, for which documentation can be found below.
+`Botnix` is only half of the equation in developing and deploying autonomous systems for the real world. `Botnix` is designed to be co-developed and integrated with [`AutonomySim`](https://github.com/nervosys/AutonomySim/), the simulation engine for autonomous systems.
 
 * [AutonomySim](https://nervosys.github.io/AutonomySim) - The simulation engine for autonomous systems
 
