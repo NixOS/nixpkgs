@@ -188,10 +188,11 @@ in
         #   isNormalUser = true;
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
         #   packages = with pkgs; [
-        #     firefox
         #     tree
         #   ];
         # };
+
+        # programs.firefox.enable = true;
 
         # List packages installed in system profile. To search, run:
         # \$ nix search wget
