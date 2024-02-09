@@ -6,7 +6,7 @@
 , httpx
 , iso8601
 , poetry-core
-, pydantic_1
+, pydantic
 , pyjwt
 , pytest-asyncio
 , pytestCheckHook
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     "attrs"
     "httpx"
     "iso8601"
+    "pydantic"
   ];
 
   nativeBuildInputs = [
@@ -58,7 +59,7 @@ buildPythonPackage rec {
     attrs
     httpx
     iso8601
-    pydantic_1
+    pydantic
     pyjwt
     python-dateutil
     retrying
