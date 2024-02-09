@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
       hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
     })
+    (fetchpatch {
+      # Fix compatibility with Abseil 202401. Remove with the next release.
+      url = "https://github.com/grpc/grpc/commit/bc044174401a0842b36b8682936fc93b5041cf88.patch";
+      hash = "sha256-VKAuPtLqsR2dmrpKuFXq2HIhuDxPJVSH2w1G00N07RI=";
+      excludes = [ "src/core/lib/transport/message.cc" ];
+    })
   ];
 
   nativeBuildInputs = [ cmake pkg-config ]
