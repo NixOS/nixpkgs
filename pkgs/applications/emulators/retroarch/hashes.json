@@ -79,9 +79,9 @@
     "beetle-supergrafx": {
         "owner": "libretro",
         "repo": "beetle-supergrafx-libretro",
-        "rev": "d24d383f88ff892e9f8dce7c1f3ce491f2f7731a",
-        "hash": "sha256-Cbol57jpDpkMnfKCULw6DgJwcnfTNexZ1hSw817z+E8=",
-        "date": "unstable-2024-02-02"
+        "rev": "32070ffd0082fd5127519bb6e92a2daecc359408",
+        "hash": "sha256-ZBZtDMP2inarEuLE76Zw1/qZ2YfyTJy+2eN10hhpn64=",
+        "date": "unstable-2024-02-09"
     },
     "beetle-vb": {
         "owner": "libretro",
