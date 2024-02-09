@@ -30481,8 +30481,6 @@ with pkgs;
 
   banking = callPackage ../applications/office/banking { };
 
-  baresip = callPackage ../applications/networking/instant-messengers/baresip { };
-
   barrier = libsForQt5.callPackage ../applications/misc/barrier { };
 
   bashSnippets = callPackage ../applications/misc/bashSnippets { };
