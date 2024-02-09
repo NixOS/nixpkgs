@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://acoustid.org/chromaprint";
     description = "AcoustID audio fingerprinting library";
-    maintainers = with maintainers; [ ehmry ];
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
   };
