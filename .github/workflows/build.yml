@@ -52,8 +52,12 @@ jobs:
     - name: Install requirements (MacOS)
       run: |
            brew update
-           # Temporary fix, see https://github.com/orgs/Homebrew/discussions/3895
-           brew install --overwrite python@3.12
+           # Temporary fix, see https://github.com/actions/setup-python/issues/577
+           rm /usr/local/bin/2to3 || true
+           rm /usr/local/bin/idle3 || true
+           rm /usr/local/bin/pydoc3 || true
+           rm /usr/local/bin/python3 || true
+           rm /usr/local/bin/python3-config || true
            brew install llvm
            brew install macfuse
            echo "LDFLAGS=-L/usr/local/opt/llvm/lib" >> $GITHUB_ENV
