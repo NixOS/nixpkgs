@@ -11312,6 +11312,8 @@ self: super: with self; {
 
   pyscaffoldext-cookiecutter = callPackage ../development/python-modules/pyscaffoldext-cookiecutter { };
 
+  pyscaffoldext-custom-extension = callPackage ../development/python-modules/pyscaffoldext-custom-extension { };
+
   pyscf = callPackage ../development/python-modules/pyscf { };
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
