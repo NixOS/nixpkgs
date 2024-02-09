@@ -12621,8 +12621,6 @@ with pkgs;
 
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
-  rrdtool = callPackage ../tools/misc/rrdtool { };
-
   rscw = callPackage ../applications/radio/rscw { };
 
   rset = callPackage ../tools/admin/rset { };
