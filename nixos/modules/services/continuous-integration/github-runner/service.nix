@@ -278,11 +278,12 @@ with lib;
           # compiled code
           LockPersonality = mkDefault false;
 
-          # Note that this has some interactions with the User setting; so you may
-          # want to consult the systemd docs if using both.
           DynamicUser = mkDefault true;
         }
-        (mkIf (cfg.user != null) { User = cfg.user; })
+        (mkIf (cfg.user != null) {
+          DynamicUser = false;
+          User = cfg.user;
+        })
         cfg.serviceOverrides
       ];
     }
