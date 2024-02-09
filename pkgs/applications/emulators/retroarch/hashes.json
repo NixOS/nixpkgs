@@ -298,9 +298,9 @@
     "mame2003-plus": {
         "owner": "libretro",
         "repo": "mame2003-plus-libretro",
-        "rev": "53c6083a2044c3529a436b51c5206cd9a896d12c",
-        "hash": "sha256-k4jl3cN18HQya3F4DXHN/Hoq7UXKVmJg5Lgp08n6M/M=",
-        "date": "unstable-2024-02-03"
+        "rev": "debcb547ea7ae197433142810e99e1313c58cb14",
+        "hash": "sha256-l9YmDiUJ+CQP4i8O8W+E9uTLPZZgLqLR9v7e5hFgJhE=",
+        "date": "unstable-2024-02-09"
     },
     "mame2010": {
         "owner": "libretro",
