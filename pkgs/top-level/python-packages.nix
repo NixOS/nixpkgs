@@ -14638,6 +14638,8 @@ self: super: with self; {
     inherit (pkgs.darwin) libobjc;
   };
 
+  torch-pitch-shift = callPackage ../development/python-modules/torch-pitch-shift { };
+
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
     openai-triton = self.openai-triton-bin;
   };
