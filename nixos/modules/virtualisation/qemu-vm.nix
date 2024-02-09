@@ -250,7 +250,7 @@ let
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           ${concatStringsSep " \\\n    "
             (mapAttrsToList
-              (tag: share: "-virtfs local,path=${share.source},security_model=none,mount_tag=${tag}")
+              (tag: share: "-virtfs local,path=${share.source},security_model=${share.securityModel},mount_tag=${tag}")
               config.virtualisation.sharedDirectories)} \
           ${drivesCmdLine config.virtualisation.qemu.drives} \
           ${concatStringsSep " \\\n    " config.virtualisation.qemu.options} \
@@ -473,6 +473,11 @@ in
             options.target = mkOption {
               type = types.path;
               description = lib.mdDoc "The mount point of the directory inside the virtual machine";
+            };
+            options.securityModel = mkOption {
+              type = types.enum [ "passthrough" "mapped" "mapped-xattr" "mapped-file" "none" ];
+              default = "none";
+              description = lib.mdDoc "The security model to use for this share";
             };
           });
         default = { };
