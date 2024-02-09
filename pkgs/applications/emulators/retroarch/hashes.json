@@ -242,9 +242,9 @@
     "genesis-plus-gx": {
         "owner": "libretro",
         "repo": "Genesis-Plus-GX",
-        "rev": "59cdc560e21eeddfa4d5a5c935413cdaa9d660f3",
-        "hash": "sha256-FB0znNFG6T67V63jm7WprhGRw9rHNJgH4SZ/BtgAyFg=",
-        "date": "unstable-2024-02-02"
+        "rev": "ecb956d914d6bc4e5deb49384bc929939e9a19e5",
+        "hash": "sha256-Fk+Ldjav+yQl6fkYESR6t1JEOKiCZYCW386QL4ozE68=",
+        "date": "unstable-2024-02-06"
     },
     "gpsp": {
         "owner": "libretro",
