@@ -1,0 +1,4164 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The operating system for autonomous systems">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/nervosys/Botnix/languages-frameworks/coq.section.html">
+      
+      
+        <link rel="prev" href="chicken.section.html">
+      
+      
+        <link rel="next" href="crystal.section.html">
+      
+      
+      <link rel="icon" href="../images/rune.svg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.7">
+    
+    
+      
+        <title>Coq and coq packages - Botnix</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.f2e4d321.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sec-language-coq" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Botnix" class="md-header__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Botnix
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Coq and coq packages
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="nervosys" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Botnix" class="md-nav__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    Botnix
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development of Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functions reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nixpkgs lib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using-nixpkgs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Build helpers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/fetchers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fetchers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Special build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/testers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/trivial-build-helpers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trivial build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_6" id="__nav_10_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_6">
+            <span class="md-nav__icon md-icon"></span>
+            Images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/appimagetools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.appimageTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/binarycache.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkBinaryCache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/dockertools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.dockerTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/makediskimage.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    &lt;nixpkgs/nixos/lib/make-disk-image.nix&gt;
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/ocitools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.ociTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/portableservice.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.portableService
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/snaptools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.snapTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_7" id="__nav_10_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Special
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_7">
+            <span class="md-nav__icon md-icon"></span>
+            Special
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/checkpoint-build.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.checkpointBuildTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fakenss.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    fakeNss
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fhs-environments.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    buildFHSEnv
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/makesetuphook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.makeSetupHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/mkshell.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkShell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/vm-tools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vmTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/coding-conventions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coding conventions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/contributing-to-documentation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/quick-start.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start to Adding a Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/reviewing-contributions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reviewing contributions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/submitting-changes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Submitting changes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/vulnerability-roundup.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vulnerability Roundup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/opening-issues.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Opening issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Functions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Functions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/debug.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debugging Nix Expressions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/generators.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/nix-gitignore.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.nix-gitignore
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/prefer-remote-fetch.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    prefer-remote-fetch overlay
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Hooks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Hooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hooks reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autoconf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Autoconf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/automake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autopatchelf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    autoPatchelfHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/bmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    bmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/breakpoint.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    breakpointHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/cmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    cmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gdk-pixbuf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    gdk-pixbuf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ghc.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GHC
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gnome.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GNOME platform
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/installShellFiles.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    installShellFiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libiconv.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libiconv, libintl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libxml2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libxml2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/meson.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meson
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/mpi-check-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    mpiCheckPhaseHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ninja.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ninja
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/patch-rc-path-hooks.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    patchRcPath hooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/postgresql-test-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    postgresqlTestHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/scons.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    scons
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/tetex-tex-live.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    teTeX / TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/unzip.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    unzip
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/validatePkgConfig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    validatePkgConfig
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/waf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    wafHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/xcbuild.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    xcbuildHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/zig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    zig.hook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Languages frameworks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Languages frameworks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages and frameworks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="agda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Agda
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="android.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Android
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="beam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BEAM Languages (Erlang, Elixir & LFE)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bower.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bower
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="chicken.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CHICKEN
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Coq and coq packages
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="coq.section.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Coq and coq packages
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#coq-derivation-coq" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coq derivation: coq
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coq-packages-attribute-sets-coqpackages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Coq packages attribute sets: coqPackages
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coq-overriding-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Three ways of overriding Coq packages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Three ways of overriding Coq packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#coq-override" class="md-nav__link">
+    <span class="md-ellipsis">
+      .override
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coq-overrideCoqDerivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      overrideCoqDerivation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coq-overrideAttrs" class="md-nav__link">
+    <span class="md-ellipsis">
+      .overrideAttrs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="crystal.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Crystal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CUDA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuelang.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cue (Cuelang)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dart.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dhall.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dhall
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dotnet.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dotnet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="emscripten.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emscripten
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="gnome.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GNOME
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="go.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Go
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="haskell.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Haskell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hy.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ios.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    iOS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="java.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Java
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="javascript.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Javascript
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="julia.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Julia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lisp.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    lisp-modules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lua.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User’s Guide to Lua Infrastructure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="maven.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Maven
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="nim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ocaml.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OCaml
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="octave.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Octave
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="php.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="qt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Qt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="r.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    R
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ruby.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ruby
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="rust.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Rust
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="swift.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swift
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="texlive.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="titanium.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Titanium
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="vim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Module system
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Module system
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-system/module-system.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Module System
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Packages
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/cataclysm-dda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cataclysm: Dark Days Ahead
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/citrix.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Citrix Workspace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/darwin-builder.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    darwin.linux-builder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/dlib.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DLib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/eclipse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Eclipse
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/elm.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Elm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/emacs.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emacs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/etc-files.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    /etc files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/firefox.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Firefox
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fish.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fish
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fuse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FUSE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/ibus.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ibus-engines.typing-booster
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/kakoune.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kakoune
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/linux.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Linux kernel
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/locales.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Locales
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/nginx.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/opengl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/shell-helpers.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interactive shell helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/steam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Steam
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/urxvt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Urxvt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/weechat.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WeeChat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/xorg.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    X.org
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Stdenv
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            Stdenv
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/cross-compilation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cross-compilation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/meta.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meta-attributes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/multiple-output.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multiple-output packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/platform-notes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/stdenv.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The Standard Environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Using
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            Using
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/configuration.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Global configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overlays.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overlays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overrides.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overriding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/platform-support.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Support
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="sec-language-coq">Coq and coq packages<a class="headerlink" href="#sec-language-coq" title="Permanent link">#</a></h1>
+<h2 id="coq-derivation-coq">Coq derivation: <code>coq</code><a class="headerlink" href="#coq-derivation-coq" title="Permanent link">#</a></h2>
+<p>The Coq derivation is overridable through the <code>coq.override overrides</code>, where overrides is an attribute set which contains the arguments to override. We recommend overriding either of the following</p>
+<ul>
+<li><code>version</code> (optional, defaults to the latest version of Coq selected for nixpkgs, see <code>pkgs/top-level/coq-packages</code> to witness this choice), which follows the conventions explained in the <code>coqPackages</code> section below,</li>
+<li><code>customOCamlPackages</code> (optional, defaults to <code>null</code>, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of <code>ocaml-ng</code> (such as <code>ocaml-ng.ocamlPackages_4_10</code> which is the default for Coq 8.11 for example).</li>
+<li><code>coq-version</code> (optional, defaults to the short version e.g. "8.10"), is a version number of the form "x.y" that indicates which Coq's version build behavior to mimic when using a source which is not a release. E.g. <code>coq.override { version = "d370a9d1328a4e1cdb9d02ee032f605a9d94ec7a"; coq-version = "8.10"; }</code>.</li>
+</ul>
+<p>The associated package set can be obtained using <code>mkCoqPackages coq</code>, where <code>coq</code> is the derivation to use.</p>
+<h2 id="coq-packages-attribute-sets-coqpackages">Coq packages attribute sets: <code>coqPackages</code><a class="headerlink" href="#coq-packages-attribute-sets-coqpackages" title="Permanent link">#</a></h2>
+<p>The recommended way of defining a derivation for a Coq library, is to use the <code>coqPackages.mkCoqDerivation</code> function, which is essentially a specialization of <code>mkDerivation</code> taking into account most of the specifics of Coq libraries. The following attributes are supported:</p>
+<ul>
+<li><code>pname</code> (required) is the name of the package,</li>
+<li><code>version</code> (optional, defaults to <code>null</code>), is the version to fetch and build,
+  this attribute is interpreted in several ways depending on its type and pattern:</li>
+<li>if it is a known released version string, i.e. from the <code>release</code> attribute below, the according release is picked, and the <code>version</code> attribute of the resulting derivation is set to this release string,</li>
+<li>if it is a majorMinor <code>"x.y"</code> prefix of a known released version (as defined above), then the latest <code>"x.y.z"</code> known released version is selected (for the ordering given by <code>versionAtLeast</code>),</li>
+<li>if it is a path or a string representing an absolute path (i.e. starting with <code>"/"</code>), the provided path is selected as a source, and the <code>version</code> attribute of the resulting derivation is set to <code>"dev"</code>,</li>
+<li>if it is a string of the form <code>owner:branch</code> then it tries to download the <code>branch</code> of owner <code>owner</code> for a project of the same name using the same vcs, and the <code>version</code> attribute of the resulting derivation is set to <code>"dev"</code>, additionally if the owner is not provided (i.e. if the <code>owner:</code> prefix is missing), it defaults to the original owner of the package (see below),</li>
+<li>if it is a string of the form <code>"#N"</code>, and the domain is github, then it tries to download the current head of the pull request <code>#N</code> from github,</li>
+<li><code>defaultVersion</code> (optional). Coq libraries may be compatible with some specific versions of Coq only. The <code>defaultVersion</code> attribute is used when no <code>version</code> is provided (or if <code>version = null</code>) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a <code>coq</code> version number but also possibly on other packages versions (e.g. <code>mathcomp</code>). If its value ends up to be <code>null</code>, the package is marked for removal in end-user <code>coqPackages</code> attribute set.</li>
+<li><code>release</code> (optional, defaults to <code>{}</code>), lists all the known releases of the library and for each of them provides an attribute set with at least a <code>sha256</code> attribute (you may put the empty string <code>""</code> in order to automatically insert a fake sha256, this will trigger an error which will allow you to find the correct sha256), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.<code>domain</code>, <code>owner</code>, <code>repo</code>, <code>rev</code> assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. <code>version</code> and <code>src</code>).</li>
+<li><code>fetcher</code> (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an <code>owner</code>, a <code>repo</code>, a <code>rev</code>, and a <code>hash</code> and returns an attribute set with a <code>version</code> and <code>src</code>.</li>
+<li><code>repo</code> (optional, defaults to the value of <code>pname</code>),</li>
+<li><code>owner</code> (optional, defaults to <code>"coq-community"</code>).</li>
+<li><code>domain</code> (optional, defaults to <code>"github.com"</code>), domains including the strings <code>"github"</code> or <code>"gitlab"</code> in their names are automatically supported, otherwise, one must change the <code>fetcher</code> argument to support them (cf <code>pkgs/development/coq-modules/heq/default.nix</code> for an example),</li>
+<li><code>releaseRev</code> (optional, defaults to <code>(v: v)</code>), provides a default mapping from release names to revision hashes/branch names/tags,</li>
+<li><code>displayVersion</code> (optional), provides a way to alter the computation of <code>name</code> from <code>pname</code>, by explaining how to display version numbers,</li>
+<li><code>namePrefix</code> (optional, defaults to <code>[ "coq" ]</code>), provides a way to alter the computation of <code>name</code> from <code>pname</code>, by explaining which dependencies must occur in <code>name</code>,</li>
+<li><code>nativeBuildInputs</code> (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely <code>which</code>, <code>dune</code> and <code>ocaml</code> depending on whether <code>useDune</code>, <code>useDuneifVersion</code> and <code>mlPlugin</code> are set).</li>
+<li><code>extraNativeBuildInputs</code> (optional, deprecated), an additional list of derivation to add to <code>nativeBuildInputs</code>,</li>
+<li><code>overrideNativeBuildInputs</code> (optional) replaces the default list of derivation to which <code>nativeBuildInputs</code> and <code>extraNativeBuildInputs</code> adds extra elements,</li>
+<li><code>buildInputs</code> (optional), is a list of libraries and dependencies that are required to build and run the current derivation, in addition to the default one <code>[ coq ]</code>,</li>
+<li><code>extraBuildInputs</code> (optional, deprecated), an additional list of derivation to add to <code>buildInputs</code>,</li>
+<li><code>overrideBuildInputs</code> (optional) replaces the default list of derivation to which <code>buildInputs</code> and <code>extraBuildInputs</code> adds extras elements,</li>
+<li><code>propagatedBuildInputs</code> (optional) is passed as is to <code>mkDerivation</code>, we recommend to use this for Coq libraries and Coq plugin dependencies, as this makes sure the paths of the compiled libraries and plugins will always be added to the build environments of subsequent derivation, which is necessary for Coq packages to work correctly,</li>
+<li><code>mlPlugin</code> (optional, defaults to <code>false</code>). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to <code>true</code>. For a finer grain control, the <code>coq.ocamlPackages</code> attribute can be used in <code>nativeBuildInputs</code>, <code>buildInputs</code>, and <code>propagatedBuildInputs</code> to depend on the same package set Coq was built against.</li>
+<li><code>useDuneifVersion</code> (optional, default to <code>(x: false)</code> uses Dune to build the package if the provided predicate evaluates to true on the version, e.g. <code>useDuneifVersion = versions.isGe "1.1"</code>  will use dune if the version of the package is greater or equal to <code>"1.1"</code>,</li>
+<li><code>useDune</code> (optional, defaults to <code>false</code>) uses Dune to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.</li>
+<li><code>opam-name</code> (optional, defaults to concatenating with a dash separator the components of <code>namePrefix</code> and <code>pname</code>), name of the Dune package to build.</li>
+<li><code>enableParallelBuilding</code> (optional, defaults to <code>true</code>), since it is activated by default, we provide a way to disable it.</li>
+<li><code>extraInstallFlags</code> (optional), allows to extend <code>installFlags</code> which initializes the variable <code>COQMF_COQLIB</code> so as to install in the proper subdirectory. Indeed Coq libraries should be installed in <code>$(out)/lib/coq/${coq.coq-version}/user-contrib/</code>. Such directories are automatically added to the <code>$COQPATH</code> environment variable by the hook defined in the Coq derivation.</li>
+<li><code>setCOQBIN</code> (optional, defaults to <code>true</code>), by default, the environment variable <code>$COQBIN</code> is set to the current Coq's binary, but one can disable this behavior by setting it to <code>false</code>,</li>
+<li><code>useMelquiondRemake</code> (optional, default to <code>null</code>) is an attribute set, which, if given, overloads the <code>preConfigurePhases</code>, <code>configureFlags</code>, <code>buildPhase</code>, and <code>installPhase</code> attributes of the derivation for a specific use in libraries using <code>remake</code> as set up by Guillaume Melquiond for <code>flocq</code>, <code>gappalib</code>, <code>interval</code>, and <code>coquelicot</code> (see the corresponding derivation for concrete examples of use of this option). For backward compatibility, the attribute <code>useMelquiondRemake.logpath</code> must be set to the logical root of the library (otherwise, one can pass <code>useMelquiondRemake = {}</code> to activate this without backward compatibility).</li>
+<li><code>dropAttrs</code>, <code>keepAttrs</code>, <code>dropDerivationAttrs</code> are all optional and allow to tune which attribute is added or removed from the final call to <code>mkDerivation</code>.</li>
+</ul>
+<p>It also takes other standard <code>mkDerivation</code> attributes, they are added as such, except for <code>meta</code> which extends an automatically computed <code>meta</code> (where the <code>platform</code> is the same as <code>coq</code> and the homepage is automatically computed).</p>
+<p>Here is a simple package example. It is a pure Coq library, thus it depends on Coq. It builds on the Mathematical Components library, thus it also takes some <code>mathcomp</code> derivations as <code>extraBuildInputs</code>.</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span> lib<span class="p">,</span> mkCoqDerivation<span class="p">,</span> version <span class="o">?</span> <span class="no">null</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">,</span> coq<span class="p">,</span> mathcomp<span class="p">,</span> mathcomp-finmap<span class="p">,</span> mathcomp-bigenough <span class="p">}:</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">with</span> lib<span class="p">;</span> mkCoqDerivation <span class="p">{</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  <span class="cm">/* namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2` */</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  <span class="ss">namePrefix</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;coq&quot;</span> <span class="s2">&quot;mathcomp&quot;</span> <span class="p">];</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  <span class="ss">pname</span> <span class="o">=</span> <span class="s2">&quot;multinomials&quot;</span><span class="p">;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  <span class="ss">owner</span> <span class="o">=</span> <span class="s2">&quot;math-comp&quot;</span><span class="p">;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  <span class="k">inherit</span> version<span class="p">;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  <span class="ss">defaultVersion</span> <span class="o">=</span>  <span class="k">with</span> versions<span class="p">;</span> switch <span class="p">[</span> coq<span class="o">.</span>version mathcomp<span class="o">.</span>version <span class="p">]</span> <span class="p">[</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      <span class="p">{</span> <span class="ss">cases</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span>range <span class="s2">&quot;8.7&quot;</span> <span class="s2">&quot;8.12&quot;</span><span class="p">)</span>  <span class="s2">&quot;1.11.0&quot;</span> <span class="p">];</span>             <span class="ss">out</span> <span class="o">=</span> <span class="s2">&quot;1.5.2&quot;</span><span class="p">;</span> <span class="p">}</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      <span class="p">{</span> <span class="ss">cases</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span>range <span class="s2">&quot;8.7&quot;</span> <span class="s2">&quot;8.11&quot;</span><span class="p">)</span>  <span class="p">(</span>range <span class="s2">&quot;1.8&quot;</span> <span class="s2">&quot;1.10&quot;</span><span class="p">)</span> <span class="p">];</span> <span class="ss">out</span> <span class="o">=</span> <span class="s2">&quot;1.5.0&quot;</span><span class="p">;</span> <span class="p">}</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      <span class="p">{</span> <span class="ss">cases</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span>range <span class="s2">&quot;8.7&quot;</span> <span class="s2">&quot;8.10&quot;</span><span class="p">)</span>  <span class="p">(</span>range <span class="s2">&quot;1.8&quot;</span> <span class="s2">&quot;1.10&quot;</span><span class="p">)</span> <span class="p">];</span> <span class="ss">out</span> <span class="o">=</span> <span class="s2">&quot;1.4&quot;</span><span class="p">;</span> <span class="p">}</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>      <span class="p">{</span> <span class="ss">cases</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;8.6&quot;</span>                 <span class="p">(</span>range <span class="s2">&quot;1.6&quot;</span> <span class="s2">&quot;1.7&quot;</span><span class="p">)</span> <span class="p">];</span>  <span class="ss">out</span> <span class="o">=</span> <span class="s2">&quot;1.1&quot;</span><span class="p">;</span> <span class="p">}</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="p">]</span> <span class="no">null</span><span class="p">;</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  <span class="ss">release</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="s2">&quot;1.5.2&quot;</span><span class="o">.</span><span class="ss">sha256</span> <span class="o">=</span> <span class="s2">&quot;15aspf3jfykp1xgsxf8knqkxv8aav2p39c2fyirw7pwsfbsv2c4s&quot;</span><span class="p">;</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="s2">&quot;1.5.1&quot;</span><span class="o">.</span><span class="ss">sha256</span> <span class="o">=</span> <span class="s2">&quot;13nlfm2wqripaq671gakz5mn4r0xwm0646araxv0nh455p9ndjs3&quot;</span><span class="p">;</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="s2">&quot;1.5.0&quot;</span><span class="o">.</span><span class="ss">sha256</span> <span class="o">=</span> <span class="s2">&quot;064rvc0x5g7y1a0nip6ic91vzmq52alf6in2bc2dmss6dmzv90hw&quot;</span><span class="p">;</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="s2">&quot;1.5.0&quot;</span><span class="o">.</span><span class="ss">rev</span>    <span class="o">=</span> <span class="s2">&quot;1.5&quot;</span><span class="p">;</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="s2">&quot;1.4&quot;</span><span class="o">.</span><span class="ss">sha256</span>   <span class="o">=</span> <span class="s2">&quot;0vnkirs8iqsv8s59yx1fvg1nkwnzydl42z3scya1xp1b48qkgn0p&quot;</span><span class="p">;</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="s2">&quot;1.3&quot;</span><span class="o">.</span><span class="ss">sha256</span>   <span class="o">=</span> <span class="s2">&quot;0l3vi5n094nx3qmy66hsv867fnqm196r8v605kpk24gl0aa57wh4&quot;</span><span class="p">;</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="s2">&quot;1.2&quot;</span><span class="o">.</span><span class="ss">sha256</span>   <span class="o">=</span> <span class="s2">&quot;1mh1w339dslgv4f810xr1b8v2w7rpx6fgk9pz96q0fyq49fw2xcq&quot;</span><span class="p">;</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="s2">&quot;1.1&quot;</span><span class="o">.</span><span class="ss">sha256</span>   <span class="o">=</span> <span class="s2">&quot;1q8alsm89wkc0lhcvxlyn0pd8rbl2nnxg81zyrabpz610qqjqc3s&quot;</span><span class="p">;</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    <span class="s2">&quot;1.0&quot;</span><span class="o">.</span><span class="ss">sha256</span>   <span class="o">=</span> <span class="s2">&quot;1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m&quot;</span><span class="p">;</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>  <span class="p">};</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>  <span class="ss">propagatedBuildInputs</span> <span class="o">=</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="p">[</span> mathcomp<span class="o">.</span>ssreflect mathcomp<span class="o">.</span>algebra mathcomp-finmap mathcomp-bigenough <span class="p">];</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>  <span class="ss">meta</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="ss">description</span> <span class="o">=</span> <span class="s2">&quot;A Coq/SSReflect Library for Monoidal Rings and Multinomials&quot;</span><span class="p">;</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="ss">license</span> <span class="o">=</span> licenses<span class="o">.</span>cecill-c<span class="p">;</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>  <span class="p">};</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="coq-overriding-packages">Three ways of overriding Coq packages<a class="headerlink" href="#coq-overriding-packages" title="Permanent link">#</a></h2>
+<p>There are three distinct ways of changing a Coq package by overriding one of its values: <code>.override</code>, <code>overrideCoqDerivation</code>, and <code>.overrideAttrs</code>.  This section explains what sort of values can be overridden with each of these methods.</p>
+<h3 id="coq-override"><code>.override</code><a class="headerlink" href="#coq-override" title="Permanent link">#</a></h3>
+<p><code>.override</code> lets you change arguments to a Coq derivation.  In the case of the <code>multinomials</code> package above, <code>.override</code> would let you override arguments like <code>mkCoqDerivation</code>, <code>version</code>, <code>coq</code>, <code>mathcomp</code>, <code>mathcom-finmap</code>, etc.</p>
+<p>For example, assuming you have a special <code>mathcomp</code> dependency you want to use, here is how you could override the <code>mathcomp</code> dependency:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>multinomials<span class="o">.</span>override <span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  <span class="ss">mathcomp</span> <span class="o">=</span> my-special-mathcomp<span class="p">;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>In Nixpkgs, all Coq derivations take a <code>version</code> argument.  This can be overridden in order to easily use a different version:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>coqPackages<span class="o">.</span>multinomials<span class="o">.</span>override <span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  <span class="ss">version</span> <span class="o">=</span> <span class="s2">&quot;1.5.1&quot;</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Refer to <a href="#coq-packages-attribute-sets-coqpackages"></a> for all the different formats that you can potentially pass to <code>version</code>, as well as the restrictions.</p>
+<h3 id="coq-overrideCoqDerivation"><code>overrideCoqDerivation</code><a class="headerlink" href="#coq-overrideCoqDerivation" title="Permanent link">#</a></h3>
+<p>The <code>overrideCoqDerivation</code> function lets you easily change arguments to <code>mkCoqDerivation</code>.  These arguments are described in <a href="#coq-packages-attribute-sets-coqpackages"></a>.</p>
+<p>For example, here is how you could locally add a new release of the <code>multinomials</code> library, and set the <code>defaultVersion</code> to use this release:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>coqPackages<span class="o">.</span>lib<span class="o">.</span>overrideCoqDerivation
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  <span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="ss">defaultVersion</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span><span class="p">;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    release<span class="o">.</span><span class="s2">&quot;2.0&quot;</span><span class="o">.</span><span class="ss">sha256</span> <span class="o">=</span> <span class="s2">&quot;1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkk&quot;</span><span class="p">;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  <span class="p">}</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  coqPackages<span class="o">.</span>multinomials
+</span></code></pre></div>
+<h3 id="coq-overrideAttrs"><code>.overrideAttrs</code><a class="headerlink" href="#coq-overrideAttrs" title="Permanent link">#</a></h3>
+<p><code>.overrideAttrs</code> lets you override arguments to the underlying <code>stdenv.mkDerivation</code> call. Internally, <code>mkCoqDerivation</code> uses <code>stdenv.mkDerivation</code> to create derivations for Coq libraries.  You can override arguments to <code>stdenv.mkDerivation</code> with <code>.overrideAttrs</code>.</p>
+<p>For instance, here is how you could add some code to be performed in the derivation after installation is complete:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>coqPackages<span class="o">.</span>multinomials<span class="o">.</span>overrideAttrs <span class="p">(</span>oldAttrs<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  <span class="ss">postInstall</span> <span class="o">=</span> oldAttrs<span class="o">.</span>postInstall <span class="ow">or</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s s-Multiline">    echo &quot;you can do anything you want here&quot;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s s-Multiline">  &#39;&#39;</span><span class="p">;</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">})</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="chicken.section.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: CHICKEN">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                CHICKEN
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="crystal.section.html" class="md-footer__link md-footer__link--next" aria-label="Next: Crystal">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Crystal
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 <a href=https://nervosys.ai/>Nervosys, LLC</a>
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/nervosys/Botnix" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://discord.gg/x84JXYje" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541ZM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241Zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241Z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/nervosys" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.8 48h145.6l100.5 132.9L389.2 48zm-24.8 373.8h39.1L151.1 88h-42l255.3 333.8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.expand", "navigation.top", "navigation.instant", "navigation.path", "navigation.footer", "search.suggest", "search.share", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.caa56a14.min.js"></script>
+      
+        <script src="../javascripts/extra.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

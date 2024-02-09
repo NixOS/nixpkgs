@@ -1,0 +1,4322 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The operating system for autonomous systems">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/nervosys/Botnix/languages-frameworks/gnome.section.html">
+      
+      
+        <link rel="prev" href="emscripten.section.html">
+      
+      
+        <link rel="next" href="go.section.html">
+      
+      
+      <link rel="icon" href="../images/rune.svg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.7">
+    
+    
+      
+        <title>GNOME - Botnix</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.f2e4d321.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sec-language-gnome" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Botnix" class="md-header__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Botnix
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GNOME
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="nervosys" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Botnix" class="md-nav__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    Botnix
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development of Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functions reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nixpkgs lib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using-nixpkgs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Build helpers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/fetchers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fetchers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Special build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/testers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/trivial-build-helpers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trivial build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_6" id="__nav_10_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_6">
+            <span class="md-nav__icon md-icon"></span>
+            Images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/appimagetools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.appimageTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/binarycache.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkBinaryCache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/dockertools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.dockerTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/makediskimage.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    &lt;nixpkgs/nixos/lib/make-disk-image.nix&gt;
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/ocitools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.ociTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/portableservice.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.portableService
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/snaptools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.snapTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_7" id="__nav_10_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Special
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_7">
+            <span class="md-nav__icon md-icon"></span>
+            Special
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/checkpoint-build.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.checkpointBuildTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fakenss.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    fakeNss
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fhs-environments.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    buildFHSEnv
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/makesetuphook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.makeSetupHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/mkshell.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkShell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/vm-tools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vmTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/coding-conventions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coding conventions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/contributing-to-documentation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/quick-start.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start to Adding a Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/reviewing-contributions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reviewing contributions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/submitting-changes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Submitting changes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/vulnerability-roundup.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vulnerability Roundup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/opening-issues.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Opening issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Functions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Functions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/debug.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debugging Nix Expressions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/generators.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/nix-gitignore.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.nix-gitignore
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/prefer-remote-fetch.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    prefer-remote-fetch overlay
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Hooks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Hooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hooks reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autoconf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Autoconf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/automake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autopatchelf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    autoPatchelfHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/bmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    bmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/breakpoint.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    breakpointHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/cmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    cmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gdk-pixbuf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    gdk-pixbuf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ghc.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GHC
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gnome.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GNOME platform
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/installShellFiles.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    installShellFiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libiconv.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libiconv, libintl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libxml2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libxml2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/meson.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meson
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/mpi-check-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    mpiCheckPhaseHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ninja.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ninja
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/patch-rc-path-hooks.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    patchRcPath hooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/postgresql-test-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    postgresqlTestHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/scons.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    scons
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/tetex-tex-live.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    teTeX / TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/unzip.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    unzip
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/validatePkgConfig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    validatePkgConfig
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/waf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    wafHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/xcbuild.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    xcbuildHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/zig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    zig.hook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Languages frameworks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Languages frameworks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages and frameworks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="agda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Agda
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="android.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Android
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="beam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BEAM Languages (Erlang, Elixir & LFE)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bower.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bower
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="chicken.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CHICKEN
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="coq.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coq and coq packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="crystal.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Crystal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CUDA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuelang.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cue (Cuelang)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dart.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dhall.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dhall
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dotnet.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dotnet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="emscripten.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emscripten
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    GNOME
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="gnome.section.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    GNOME
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ssec-gnome-packaging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Packaging GNOME applications
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Packaging GNOME applications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-gio-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      GIO modules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-gdk-pixbuf-loaders" class="md-nav__link">
+    <span class="md-ellipsis">
+      GdkPixbuf loaders
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-icons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Icons
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-icon-theme-packaging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Packaging icon themes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-themes" class="md-nav__link">
+    <span class="md-ellipsis">
+      GTK Themes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-typelibs" class="md-nav__link">
+    <span class="md-ellipsis">
+      GObject introspection typelibs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      Various plug-ins
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssec-gnome-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Onto wrapGAppsHook
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssec-gnome-updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updating GNOME packages
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssec-gnome-common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Frequently encountered issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Frequently encountered issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-common-issues-no-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      GLib-GIO-ERROR **: 06:04:50.903: No GSettings schemas are installed on the system
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-common-issues-missing-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      GLib-GIO-ERROR **: 06:04:50.903: Settings schema ‘org.gnome.foo’ is not installed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-common-issues-double-wrapped" class="md-nav__link">
+    <span class="md-ellipsis">
+      When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-common-issues-unwrappable-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      I am packaging a project that cannot be wrapped, like a library or GNOME Shell extension.
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssec-gnome-common-issues-weird-location" class="md-nav__link">
+    <span class="md-ellipsis">
+      I need to wrap a binary outside bin and libexec directories.
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="go.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Go
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="haskell.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Haskell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hy.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ios.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    iOS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="java.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Java
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="javascript.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Javascript
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="julia.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Julia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lisp.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    lisp-modules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lua.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User’s Guide to Lua Infrastructure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="maven.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Maven
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="nim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ocaml.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OCaml
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="octave.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Octave
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="php.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="qt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Qt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="r.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    R
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ruby.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ruby
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="rust.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Rust
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="swift.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swift
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="texlive.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="titanium.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Titanium
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="vim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Module system
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Module system
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-system/module-system.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Module System
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Packages
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/cataclysm-dda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cataclysm: Dark Days Ahead
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/citrix.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Citrix Workspace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/darwin-builder.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    darwin.linux-builder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/dlib.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DLib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/eclipse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Eclipse
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/elm.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Elm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/emacs.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emacs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/etc-files.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    /etc files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/firefox.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Firefox
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fish.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fish
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fuse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FUSE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/ibus.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ibus-engines.typing-booster
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/kakoune.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kakoune
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/linux.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Linux kernel
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/locales.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Locales
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/nginx.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/opengl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/shell-helpers.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interactive shell helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/steam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Steam
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/urxvt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Urxvt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/weechat.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WeeChat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/xorg.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    X.org
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Stdenv
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            Stdenv
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/cross-compilation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cross-compilation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/meta.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meta-attributes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/multiple-output.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multiple-output packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/platform-notes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/stdenv.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The Standard Environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Using
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            Using
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/configuration.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Global configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overlays.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overlays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overrides.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overriding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/platform-support.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Support
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="sec-language-gnome">GNOME<a class="headerlink" href="#sec-language-gnome" title="Permanent link">#</a></h1>
+<h2 id="ssec-gnome-packaging">Packaging GNOME applications<a class="headerlink" href="#ssec-gnome-packaging" title="Permanent link">#</a></h2>
+<p>Programs in the GNOME universe are written in various languages but they all use GObject-based libraries like GLib, GTK or GStreamer. These libraries are often modular, relying on looking into certain directories to find their modules. However, due to Nix’s specific file system organization, this will fail without our intervention. Fortunately, the libraries usually allow overriding the directories through environment variables, either natively or thanks to a patch in nixpkgs. <a href="#fun-wrapProgram">Wrapping</a> the executables to ensure correct paths are available to the application constitutes a significant part of packaging a modern desktop application. In this section, we will describe various modules needed by such applications, environment variables needed to make the modules load, and finally a script that will do the work for us.</p>
+<h3 id="ssec-gnome-settings">Settings<a class="headerlink" href="#ssec-gnome-settings" title="Permanent link">#</a></h3>
+<p><a href="https://developer.gnome.org/gio/stable/GSettings.html">GSettings</a> API is often used for storing settings. GSettings schemas are required, to know the type and other metadata of the stored values. GLib looks for <code>glib-2.0/schemas/gschemas.compiled</code> files inside the directories of <code>XDG_DATA_DIRS</code>.</p>
+<p>On Linux, GSettings API is implemented using <a href="https://wiki.gnome.org/Projects/dconf">dconf</a> backend. You will need to add <code>dconf</code> <a href="#ssec-gnome-gio-modules">GIO module</a> to <code>GIO_EXTRA_MODULES</code> variable, otherwise the <code>memory</code> backend will be used and the saved settings will not be persistent.</p>
+<p>Last you will need the dconf database D-Bus service itself. You can enable it using <code>programs.dconf.enable</code>.</p>
+<p>Some applications will also require <code>gsettings-desktop-schemas</code> for things like reading proxy configuration or user interface customization. This dependency is often not mentioned by upstream, you should grep for <code>org.gnome.desktop</code> and <code>org.gnome.system</code> to see if the schemas are needed.</p>
+<h3 id="ssec-gnome-gio-modules">GIO modules<a class="headerlink" href="#ssec-gnome-gio-modules" title="Permanent link">#</a></h3>
+<p>GLib’s <a href="https://developer.gnome.org/gio/stable/ch01.html">GIO</a> library supports several <a href="https://developer.gnome.org/gio/stable/extending-gio.html">extension points</a>. Notably, they allow:</p>
+<ul>
+<li>implementing settings backends (already <a href="#ssec-gnome-settings">mentioned</a>)</li>
+<li>adding TLS support</li>
+<li>proxy settings</li>
+<li>virtual file systems</li>
+</ul>
+<p>The modules are typically installed to <code>lib/gio/modules/</code> directory of a package and you need to add them to <code>GIO_EXTRA_MODULES</code> if you need any of those features.</p>
+<p>In particular, we recommend:</p>
+<ul>
+<li>adding <code>dconf.lib</code> for any software on Linux that reads <a href="#ssec-gnome-settings">GSettings</a> (even transitively through e.g. GTK’s file manager)</li>
+<li>adding <code>glib-networking</code> for any software that accesses network using GIO or libsoup – glib-networking contains a module that implements TLS support and loads system-wide proxy settings</li>
+</ul>
+<p>To allow software to use various virtual file systems, <code>gvfs</code> package can be also added. But that is usually an optional feature so we typically use <code>gvfs</code> from the system (e.g. installed globally using NixOS module).</p>
+<h3 id="ssec-gnome-gdk-pixbuf-loaders">GdkPixbuf loaders<a class="headerlink" href="#ssec-gnome-gdk-pixbuf-loaders" title="Permanent link">#</a></h3>
+<p>GTK applications typically use <a href="https://gitlab.gnome.org/GNOME/gdk-pixbuf/">GdkPixbuf</a> to load images. But <code>gdk-pixbuf</code> package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring to use third-party loader modules for other formats. This is especially painful since GTK itself includes SVG icons, which cannot be rendered without a loader provided by <code>librsvg</code>.</p>
+<p>Unlike other libraries mentioned in this section, GdkPixbuf only supports a single value in its controlling environment variable <code>GDK_PIXBUF_MODULE_FILE</code>. It is supposed to point to a cache file containing information about the available loaders. Each loader package will contain a <code>lib/gdk-pixbuf-2.0/2.10.0/loaders.cache</code> file describing the default loaders in <code>gdk-pixbuf</code> package plus the loader contained in the package itself. If you want to use multiple third-party loaders, you will need to create your own cache file manually. Fortunately, this is pretty rare as <a href="https://gitlab.gnome.org/federico/gdk-pixbuf-survey/blob/master/src/modules.md">not many loaders exist</a>.</p>
+<p><code>gdk-pixbuf</code> contains <a href="#ssec-gnome-hooks-gdk-pixbuf">a setup hook</a> that sets <code>GDK_PIXBUF_MODULE_FILE</code> from dependencies but as mentioned in further section, it is pretty limited. Loaders should propagate this setup hook.</p>
+<h3 id="ssec-gnome-icons">Icons<a class="headerlink" href="#ssec-gnome-icons" title="Permanent link">#</a></h3>
+<p>When an application uses icons, an icon theme should be available in <code>XDG_DATA_DIRS</code> during runtime. The package for the default, icon-less <a href="https://www.freedesktop.org/wiki/Software/icon-theme/">hicolor-icon-theme</a> (should be propagated by every icon theme) contains <a href="#ssec-gnome-hooks-hicolor-icon-theme">a setup hook</a> that will pick up icon themes from <code>buildInputs</code> and add their datadirs to <code>XDG_ICON_DIRS</code> environment variable (this is Nixpkgs specific, not actually a XDG standard variable). Unfortunately, relying on that would mean every user has to download the theme included in the package expression no matter their preference. For that reason, we leave the installation of icon theme on the user. If you use one of the desktop environments, you probably already have an icon theme installed.</p>
+<p>In the rare case you need to use icons from dependencies (e.g. when an app forces an icon theme), you can use the following to pick them up:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  <span class="ss">buildInputs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    pantheon<span class="o">.</span>elementary-icon-theme
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  <span class="p">];</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  <span class="ss">preFixup</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s s-Multiline">    gappsWrapperArgs+=(</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s s-Multiline">      # The icon theme is hardcoded.</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s s-Multiline">      --prefix XDG_DATA_DIRS : &quot;$XDG_ICON_DIRS&quot;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s s-Multiline">    )</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s s-Multiline">  &#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>To avoid costly file system access when locating icons, GTK, <a href="https://woboq.com/blog/qicon-reads-gtk-icon-cache-in-qt57.html">as well as Qt</a>, can rely on <code>icon-theme.cache</code> files from the themes' top-level directories. These files are generated using <code>gtk-update-icon-cache</code>, which is expected to be run whenever an icon is added or removed to an icon theme (typically an application icon into <code>hicolor</code> theme) and some programs do indeed run this after icon installation. However, since packages are installed into their own prefix by Nix, this would lead to conflicts. For that reason, <code>gtk3</code> provides a <a href="#ssec-gnome-hooks-gtk-drop-icon-theme-cache">setup hook</a> that will clean the file from installation. Since most applications only ship their own icon that will be loaded on start-up, it should not affect them too much. On the other hand, icon themes are much larger and more widely used so we need to cache them. Because we recommend installing icon themes globally, we will generate the cache files from all packages in a profile using a NixOS module. You can enable the cache generation using <code>gtk.iconCache.enable</code> option if your desktop environment does not already do that.</p>
+<h3 id="ssec-icon-theme-packaging">Packaging icon themes<a class="headerlink" href="#ssec-icon-theme-packaging" title="Permanent link">#</a></h3>
+<p>Icon themes may inherit from other icon themes. The inheritance is specified using the <code>Inherits</code> key in the <code>index.theme</code> file distributed with the icon theme. According to the <a href="https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html">icon theme specification</a>, icons not provided by the theme are looked for in its parent icon themes. Therefore the parent themes should be installed as dependencies for a more complete experience regarding the icon sets used.</p>
+<p>The package <code>hicolor-icon-theme</code> provides a setup hook which makes symbolic links for the parent themes into the directory <code>share/icons</code> of the current theme directory in the nix store, making sure they can be found at runtime. For that to work the packages providing parent icon themes should be listed as propagated build dependencies, together with <code>hicolor-icon-theme</code>.</p>
+<p>Also make sure that <code>icon-theme.cache</code> is installed for each theme provided by the package, and set <code>dontDropIconThemeCache</code> to <code>true</code> so that the cache file is not removed by the <code>gtk3</code> setup hook.</p>
+<h3 id="ssec-gnome-themes">GTK Themes<a class="headerlink" href="#ssec-gnome-themes" title="Permanent link">#</a></h3>
+<p>Previously, a GTK theme needed to be in <code>XDG_DATA_DIRS</code>. This is no longer necessary for most programs since GTK incorporated Adwaita theme. Some programs (for example, those designed for <a href="https://docs.elementary.io/hig">elementary HIG</a>) might require a special theme like <code>pantheon.elementary-gtk-theme</code>.</p>
+<h3 id="ssec-gnome-typelibs">GObject introspection typelibs<a class="headerlink" href="#ssec-gnome-typelibs" title="Permanent link">#</a></h3>
+<p><a href="https://wiki.gnome.org/Projects/GObjectIntrospection">GObject introspection</a> allows applications to use C libraries in other languages easily. It does this through <code>typelib</code> files searched in <code>GI_TYPELIB_PATH</code>.</p>
+<h3 id="ssec-gnome-plugins">Various plug-ins<a class="headerlink" href="#ssec-gnome-plugins" title="Permanent link">#</a></h3>
+<p>If your application uses <a href="https://gstreamer.freedesktop.org/">GStreamer</a> or <a href="https://wiki.gnome.org/Projects/Grilo">Grilo</a>, you should set <code>GST_PLUGIN_SYSTEM_PATH_1_0</code> and <code>GRL_PLUGIN_PATH</code>, respectively.</p>
+<h2 id="ssec-gnome-hooks">Onto <code>wrapGAppsHook</code><a class="headerlink" href="#ssec-gnome-hooks" title="Permanent link">#</a></h2>
+<p>Given the requirements above, the package expression would become messy quickly:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="ss">preFixup</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s s-Multiline">  for f in $(find $out/bin/ $out/libexec/ -type f -executable); do</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s s-Multiline">    wrapProgram &quot;$f&quot; \</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s s-Multiline">      --prefix GIO_EXTRA_MODULES : &quot;</span><span class="si">${</span>getLib dconf<span class="si">}</span><span class="s s-Multiline">/lib/gio/modules&quot; \</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s s-Multiline">      --prefix XDG_DATA_DIRS : &quot;$out/share&quot; \</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s s-Multiline">      --prefix XDG_DATA_DIRS : &quot;$out/share/gsettings-schemas/</span><span class="si">${</span>name<span class="si">}</span><span class="s s-Multiline">&quot; \</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s s-Multiline">      --prefix XDG_DATA_DIRS : &quot;</span><span class="si">${</span>gsettings-desktop-schemas<span class="si">}</span><span class="s s-Multiline">/share/gsettings-schemas/</span><span class="si">${</span>gsettings-desktop-schemas<span class="o">.</span>name<span class="si">}</span><span class="s s-Multiline">&quot; \</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s s-Multiline">      --prefix XDG_DATA_DIRS : &quot;</span><span class="si">${</span>hicolor-icon-theme<span class="si">}</span><span class="s s-Multiline">/share&quot; \</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s s-Multiline">      --prefix GI_TYPELIB_PATH : &quot;</span><span class="si">${</span>lib<span class="o">.</span>makeSearchPath <span class="s2">&quot;lib/girepository-1.0&quot;</span> <span class="p">[</span> pango json-glib <span class="p">]</span><span class="si">}</span><span class="s s-Multiline">&quot;</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s s-Multiline">  done</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s s-Multiline">&#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Fortunately, there is [<code>wrapGAppsHook</code>]{#ssec-gnome-hooks-wrapgappshook}. It works in conjunction with other setup hooks that populate environment variables, and it will then wrap all executables in <code>bin</code> and <code>libexec</code> directories using said variables.</p>
+<p>For convenience, it also adds <code>dconf.lib</code> for a GIO module implementing a GSettings backend using <code>dconf</code>, <code>gtk3</code> for GSettings schemas, and <code>librsvg</code> for GdkPixbuf loader to the closure. There is also [<code>wrapGAppsHook4</code>]{#ssec-gnome-hooks-wrapgappshook4}, which replaces GTK 3 with GTK 4. And in case you are packaging a program without a graphical interface, you might want to use [<code>wrapGAppsNoGuiHook</code>]{#ssec-gnome-hooks-wrapgappsnoguihook}, which runs the same script as <code>wrapGAppsHook</code> but does not bring <code>gtk3</code> and <code>librsvg</code> into the closure.</p>
+<ul>
+<li>
+<p><code>wrapGAppsHook</code> itself will add the package’s <code>share</code> directory to <code>XDG_DATA_DIRS</code>.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-hooks-glib} <code>glib</code> setup hook will populate <code>GSETTINGS_SCHEMAS_PATH</code> and then <code>wrapGAppsHook</code> will prepend it to <code>XDG_DATA_DIRS</code>.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-hooks-gdk-pixbuf} <code>gdk-pixbuf</code> setup hook will populate <code>GDK_PIXBUF_MODULE_FILE</code> with the path to biggest <code>loaders.cache</code> file from the dependencies containing <a href="#ssec-gnome-gdk-pixbuf-loaders">GdkPixbuf loaders</a>. This works fine when there are only two packages containing loaders (<code>gdk-pixbuf</code> and e.g. <code>librsvg</code>) – it will choose the second one, reasonably expecting that it will be bigger since it describes extra loader in addition to the default ones. But when there are more than two loader packages, this logic will break. One possible solution would be constructing a custom cache file for each package containing a program like <code>services/x11/gdk-pixbuf.nix</code> NixOS module does. <code>wrapGAppsHook</code> copies the <code>GDK_PIXBUF_MODULE_FILE</code> environment variable into the produced wrapper.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-hooks-gtk-drop-icon-theme-cache} One of <code>gtk3</code>’s setup hooks will remove <code>icon-theme.cache</code> files from package’s icon theme directories to avoid conflicts. Icon theme packages should prevent this with <code>dontDropIconThemeCache = true;</code>.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-hooks-dconf} <code>dconf.lib</code> is a dependency of <code>wrapGAppsHook</code>, which then also adds it to the <code>GIO_EXTRA_MODULES</code> variable.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-hooks-hicolor-icon-theme} <code>hicolor-icon-theme</code>’s setup hook will add icon themes to <code>XDG_ICON_DIRS</code>.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-hooks-gobject-introspection} <code>gobject-introspection</code> setup hook populates <code>GI_TYPELIB_PATH</code> variable with <code>lib/girepository-1.0</code> directories of dependencies, which is then added to wrapper by <code>wrapGAppsHook</code>. It also adds <code>share</code> directories of dependencies to <code>XDG_DATA_DIRS</code>, which is intended to promote GIR files but it also <a href="https://github.com/NixOS/nixpkgs/issues/32790">pollutes the closures</a> of packages using <code>wrapGAppsHook</code>.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-hooks-gst-grl-plugins} Setup hooks of <code>gst_all_1.gstreamer</code> and <code>grilo</code> will populate the <code>GST_PLUGIN_SYSTEM_PATH_1_0</code> and <code>GRL_PLUGIN_PATH</code> variables, respectively, which will then be added to the wrapper by <code>wrapGAppsHook</code>.</p>
+</li>
+</ul>
+<p>You can also pass additional arguments to <code>makeWrapper</code> using <code>gappsWrapperArgs</code> in <code>preFixup</code> hook:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="ss">preFixup</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s s-Multiline">  gappsWrapperArgs+=(</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s s-Multiline">    # Thumbnailers</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s s-Multiline">    --prefix XDG_DATA_DIRS : &quot;</span><span class="si">${</span>gdk-pixbuf<span class="si">}</span><span class="s s-Multiline">/share&quot;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s s-Multiline">    --prefix XDG_DATA_DIRS : &quot;</span><span class="si">${</span>librsvg<span class="si">}</span><span class="s s-Multiline">/share&quot;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s s-Multiline">    --prefix XDG_DATA_DIRS : &quot;</span><span class="si">${</span>shared-mime-info<span class="si">}</span><span class="s s-Multiline">/share&quot;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s s-Multiline">  )</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s s-Multiline">&#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<h2 id="ssec-gnome-updating">Updating GNOME packages<a class="headerlink" href="#ssec-gnome-updating" title="Permanent link">#</a></h2>
+<p>Most GNOME package offer <a href="#var-passthru-updateScript"><code>updateScript</code></a>, it is therefore possible to update to latest source tarball by running <code>nix-shell maintainers/scripts/update.nix --argstr package gnome.nautilus</code> or even en masse with <code>nix-shell maintainers/scripts/update.nix --argstr path gnome</code>. Read the package’s <code>NEWS</code> file to see what changed.</p>
+<h2 id="ssec-gnome-common-issues">Frequently encountered issues<a class="headerlink" href="#ssec-gnome-common-issues" title="Permanent link">#</a></h2>
+<h3 id="ssec-gnome-common-issues-no-schemas"><code>GLib-GIO-ERROR **: 06:04:50.903: No GSettings schemas are installed on the system</code><a class="headerlink" href="#ssec-gnome-common-issues-no-schemas" title="Permanent link">#</a></h3>
+<p>There are no schemas available in <code>XDG_DATA_DIRS</code>. Temporarily add a random package containing schemas like <code>gsettings-desktop-schemas</code> to <code>buildInputs</code>. <a href="#ssec-gnome-hooks-glib"><code>glib</code></a> and <a href="#ssec-gnome-hooks-wrapgappshook"><code>wrapGAppsHook</code></a> setup hooks will take care of making the schemas available to application and you will see the actual missing schemas with the <a href="#ssec-gnome-common-issues-missing-schema">next error</a>. Or you can try looking through the source code for the actual schemas used.</p>
+<h3 id="ssec-gnome-common-issues-missing-schema"><code>GLib-GIO-ERROR **: 06:04:50.903: Settings schema ‘org.gnome.foo’ is not installed</code><a class="headerlink" href="#ssec-gnome-common-issues-missing-schema" title="Permanent link">#</a></h3>
+<p>Package is missing some GSettings schemas. You can find out the package containing the schema with <code>nix-locate org.gnome.foo.gschema.xml</code> and let the hooks handle the wrapping as <a href="#ssec-gnome-common-issues-no-schemas">above</a>.</p>
+<h3 id="ssec-gnome-common-issues-double-wrapped">When using <code>wrapGAppsHook</code> with special derivers you can end up with double wrapped binaries.<a class="headerlink" href="#ssec-gnome-common-issues-double-wrapped" title="Permanent link">#</a></h3>
+<p>This is because derivers like <code>python.pkgs.buildPythonApplication</code> or <code>qt5.mkDerivation</code> have setup-hooks automatically added that produce wrappers with makeWrapper. The simplest way to workaround that is to disable the <code>wrapGAppsHook</code> automatic wrapping with <code>dontWrapGApps = true;</code> and pass the arguments it intended to pass to makeWrapper to another.</p>
+<p>In the case of a Python application it could look like:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python3<span class="o">.</span>pkgs<span class="o">.</span>buildPythonApplication <span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  <span class="ss">pname</span> <span class="o">=</span> <span class="s2">&quot;gnome-music&quot;</span><span class="p">;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  <span class="ss">version</span> <span class="o">=</span> <span class="s2">&quot;3.32.2&quot;</span><span class="p">;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  <span class="ss">nativeBuildInputs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    wrapGAppsHook
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    gobject-introspection
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="o">...</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  <span class="p">];</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>  <span class="ss">dontWrapGApps</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>  <span class="c1"># Arguments to be passed to `makeWrapper`, only used by buildPython*</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>  <span class="ss">preFixup</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s s-Multiline">    makeWrapperArgs+=(&quot;</span><span class="se">&#39;&#39;$</span><span class="s s-Multiline">{gappsWrapperArgs[@]}&quot;)</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s s-Multiline">  &#39;&#39;</span><span class="p">;</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>And for a QT app like:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mkDerivation <span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  <span class="ss">pname</span> <span class="o">=</span> <span class="s2">&quot;calibre&quot;</span><span class="p">;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  <span class="ss">version</span> <span class="o">=</span> <span class="s2">&quot;3.47.0&quot;</span><span class="p">;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>  <span class="ss">nativeBuildInputs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    wrapGAppsHook
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    qmake
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="o">...</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>  <span class="p">];</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>  <span class="ss">dontWrapGApps</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>  <span class="c1"># Arguments to be passed to `makeWrapper`, only used by qt5’s mkDerivation</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>  <span class="ss">preFixup</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s s-Multiline">    qtWrapperArgs+=(&quot;</span><span class="se">&#39;&#39;$</span><span class="s s-Multiline">{gappsWrapperArgs[@]}&quot;)</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s s-Multiline">  &#39;&#39;</span><span class="p">;</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="ssec-gnome-common-issues-unwrappable-package">I am packaging a project that cannot be wrapped, like a library or GNOME Shell extension.<a class="headerlink" href="#ssec-gnome-common-issues-unwrappable-package" title="Permanent link">#</a></h3>
+<p>You can rely on applications depending on the library setting the necessary environment variables but that is often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:</p>
+<ul>
+<li>
+<p>[]{#ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext} <a href="https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/gnome-3/core/gnome-shell-extensions/default.nix#L21-L24">Replacing a <code>GI_TYPELIB_PATH</code> in GNOME Shell extension</a> – we are using <code>substituteAll</code> to include the path to a typelib into a patch.</p>
+</li>
+<li>
+<p>[]{#ssec-gnome-common-issues-unwrappable-package-gsettings} The following examples are hardcoding GSettings schema paths. To get the schema paths we use the functions</p>
+</li>
+<li>
+<p><code>glib.getSchemaPath</code> Takes a nix package attribute as an argument.</p>
+</li>
+<li>
+<p><code>glib.makeSchemaPath</code> Takes a package output like <code>$out</code> and a derivation name. You should use this if the schemas you need to hardcode are in the same derivation.</p>
+</li>
+</ul>
+<p>[]{#ssec-gnome-common-issues-unwrappable-package-gsettings-vala} <a href="https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86">Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)</a> – here, <code>substituteAll</code> cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a <a href="https://github.com/NixOS/nix/issues/1846">Nix bug</a>.</p>
+<p>[]{#ssec-gnome-common-issues-unwrappable-package-gsettings-c} <a href="https://github.com/NixOS/nixpkgs/blob/29c120c065d03b000224872251bed93932d42412/pkgs/development/libraries/glib-networking/default.nix#L31-L34">Hard-coding GSettings schema path in C library</a> – nothing special other than using <a href="https://github.com/NixOS/nixpkgs/pull/67957#issuecomment-527717467">Coccinelle patch</a> to generate the patch itself.</p>
+<h3 id="ssec-gnome-common-issues-weird-location">I need to wrap a binary outside <code>bin</code> and <code>libexec</code> directories.<a class="headerlink" href="#ssec-gnome-common-issues-weird-location" title="Permanent link">#</a></h3>
+<p>You can manually trigger the wrapping with <code>wrapGApp</code> in <code>preFixup</code> phase. It takes a path to a program as a first argument; the remaining arguments are passed directly to <a href="#fun-wrapProgram"><code>wrapProgram</code></a> function.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="emscripten.section.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Emscripten">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Emscripten
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="go.section.html" class="md-footer__link md-footer__link--next" aria-label="Next: Go">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Go
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 <a href=https://nervosys.ai/>Nervosys, LLC</a>
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/nervosys/Botnix" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://discord.gg/x84JXYje" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541ZM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241Zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241Z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/nervosys" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.8 48h145.6l100.5 132.9L389.2 48zm-24.8 373.8h39.1L151.1 88h-42l255.3 333.8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.expand", "navigation.top", "navigation.instant", "navigation.path", "navigation.footer", "search.suggest", "search.share", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.caa56a14.min.js"></script>
+      
+        <script src="../javascripts/extra.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

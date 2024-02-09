@@ -1,0 +1,4621 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The operating system for autonomous systems">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/nervosys/Botnix/languages-frameworks/javascript.section.html">
+      
+      
+        <link rel="prev" href="java.section.html">
+      
+      
+        <link rel="next" href="julia.section.html">
+      
+      
+      <link rel="icon" href="../images/rune.svg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.7">
+    
+    
+      
+        <title>Javascript - Botnix</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.f2e4d321.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#language-javascript" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Botnix" class="md-header__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Botnix
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Javascript
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="nervosys" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Botnix" class="md-nav__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    Botnix
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development of Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functions reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nixpkgs lib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using-nixpkgs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Build helpers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/fetchers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fetchers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Special build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/testers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/trivial-build-helpers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trivial build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_6" id="__nav_10_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_6">
+            <span class="md-nav__icon md-icon"></span>
+            Images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/appimagetools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.appimageTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/binarycache.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkBinaryCache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/dockertools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.dockerTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/makediskimage.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    &lt;nixpkgs/nixos/lib/make-disk-image.nix&gt;
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/ocitools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.ociTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/portableservice.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.portableService
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/snaptools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.snapTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_7" id="__nav_10_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Special
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_7">
+            <span class="md-nav__icon md-icon"></span>
+            Special
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/checkpoint-build.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.checkpointBuildTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fakenss.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    fakeNss
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fhs-environments.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    buildFHSEnv
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/makesetuphook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.makeSetupHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/mkshell.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkShell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/vm-tools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vmTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/coding-conventions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coding conventions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/contributing-to-documentation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/quick-start.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start to Adding a Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/reviewing-contributions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reviewing contributions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/submitting-changes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Submitting changes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/vulnerability-roundup.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vulnerability Roundup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/opening-issues.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Opening issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Functions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Functions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/debug.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debugging Nix Expressions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/generators.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/nix-gitignore.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.nix-gitignore
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/prefer-remote-fetch.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    prefer-remote-fetch overlay
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Hooks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Hooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hooks reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autoconf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Autoconf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/automake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autopatchelf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    autoPatchelfHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/bmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    bmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/breakpoint.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    breakpointHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/cmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    cmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gdk-pixbuf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    gdk-pixbuf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ghc.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GHC
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gnome.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GNOME platform
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/installShellFiles.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    installShellFiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libiconv.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libiconv, libintl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libxml2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libxml2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/meson.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meson
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/mpi-check-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    mpiCheckPhaseHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ninja.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ninja
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/patch-rc-path-hooks.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    patchRcPath hooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/postgresql-test-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    postgresqlTestHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/scons.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    scons
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/tetex-tex-live.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    teTeX / TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/unzip.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    unzip
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/validatePkgConfig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    validatePkgConfig
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/waf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    wafHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/xcbuild.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    xcbuildHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/zig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    zig.hook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Languages frameworks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Languages frameworks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages and frameworks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="agda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Agda
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="android.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Android
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="beam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BEAM Languages (Erlang, Elixir & LFE)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bower.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bower
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="chicken.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CHICKEN
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="coq.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coq and coq packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="crystal.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Crystal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CUDA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuelang.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cue (Cuelang)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dart.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dhall.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dhall
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dotnet.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dotnet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="emscripten.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emscripten
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="gnome.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GNOME
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="go.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Go
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="haskell.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Haskell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hy.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ios.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    iOS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="java.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Java
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Javascript
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="javascript.section.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Javascript
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-finding-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting unstuck / finding code examples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting unstuck / finding code examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-finding-examples-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      Github
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-finding-examples-gitlab" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gitlab
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-tools-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tools overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-general-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      General principles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General principles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-upstream-node-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Try to use the same node version used upstream
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-upstream-package-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Try to respect the package manager originally used by upstream (and use the upstream lock file)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-upstream-package-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      Try to use upstream package.json
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-using-node_modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using node_modules directly
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-packages-nixpkgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Javascript packages inside nixpkgs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Javascript packages inside nixpkgs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-adding-or-updating-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding and Updating Javascript packages in nixpkgs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding and Updating Javascript packages in nixpkgs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-git-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      Git protocol error
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-tool-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tool specific instructions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tool specific instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-buildNpmPackage" class="md-nav__link">
+    <span class="md-ellipsis">
+      buildNpmPackage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="buildNpmPackage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-buildNpmPackage-arguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Arguments
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-buildNpmPackage-prefetch-npm-deps" class="md-nav__link">
+    <span class="md-ellipsis">
+      prefetch-npm-deps
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-buildNpmPackage-fetchNpmDeps" class="md-nav__link">
+    <span class="md-ellipsis">
+      fetchNpmDeps
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-corepack" class="md-nav__link">
+    <span class="md-ellipsis">
+      corepack
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-node2nix" class="md-nav__link">
+    <span class="md-ellipsis">
+      node2nix
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="node2nix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-node2nix-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-node2nix-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pitfalls
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-yarn2nix" class="md-nav__link">
+    <span class="md-ellipsis">
+      yarn2nix
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="yarn2nix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-yarn2nix-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preparation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-yarn2nix-mkYarnPackage" class="md-nav__link">
+    <span class="md-ellipsis">
+      mkYarnPackage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-yarn2nix-mkYarnModules" class="md-nav__link">
+    <span class="md-ellipsis">
+      mkYarnModules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-mkYarnPackage-overriding-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overriding dependency behavior
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-yarn2nix-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pitfalls
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#javascript-outside-nixpkgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Outside Nixpkgs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outside Nixpkgs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-npmlock2nix" class="md-nav__link">
+    <span class="md-ellipsis">
+      npmlock2nix
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="npmlock2nix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-npmlock2nix-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pitfalls
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-nix-npm-buildpackage" class="md-nav__link">
+    <span class="md-ellipsis">
+      nix-npm-buildpackage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="nix-npm-buildpackage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#javascript-nix-npm-buildpackage-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pitfalls
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="julia.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Julia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lisp.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    lisp-modules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lua.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User’s Guide to Lua Infrastructure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="maven.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Maven
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="nim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ocaml.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OCaml
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="octave.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Octave
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="php.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="qt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Qt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="r.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    R
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ruby.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ruby
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="rust.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Rust
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="swift.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swift
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="texlive.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="titanium.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Titanium
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="vim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Module system
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Module system
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-system/module-system.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Module System
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Packages
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/cataclysm-dda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cataclysm: Dark Days Ahead
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/citrix.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Citrix Workspace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/darwin-builder.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    darwin.linux-builder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/dlib.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DLib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/eclipse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Eclipse
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/elm.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Elm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/emacs.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emacs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/etc-files.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    /etc files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/firefox.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Firefox
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fish.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fish
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fuse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FUSE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/ibus.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ibus-engines.typing-booster
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/kakoune.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kakoune
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/linux.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Linux kernel
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/locales.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Locales
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/nginx.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/opengl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/shell-helpers.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interactive shell helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/steam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Steam
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/urxvt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Urxvt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/weechat.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WeeChat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/xorg.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    X.org
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Stdenv
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            Stdenv
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/cross-compilation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cross-compilation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/meta.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meta-attributes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/multiple-output.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multiple-output packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/platform-notes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/stdenv.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The Standard Environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Using
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            Using
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/configuration.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Global configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overlays.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overlays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overrides.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overriding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/platform-support.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Support
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="language-javascript">Javascript<a class="headerlink" href="#language-javascript" title="Permanent link">#</a></h1>
+<h2 id="javascript-introduction">Introduction<a class="headerlink" href="#javascript-introduction" title="Permanent link">#</a></h2>
+<p>This contains instructions on how to package javascript applications.</p>
+<p>The various tools available will be listed in the <a href="#javascript-tools-overview">tools-overview</a>. Some general principles for packaging will follow. Finally some tool specific instructions will be given.</p>
+<h2 id="javascript-finding-examples">Getting unstuck / finding code examples<a class="headerlink" href="#javascript-finding-examples" title="Permanent link">#</a></h2>
+<p>If you find you are lacking inspiration for packing javascript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.</p>
+<h3 id="javascript-finding-examples-github">Github<a class="headerlink" href="#javascript-finding-examples-github" title="Permanent link">#</a></h3>
+<ul>
+<li>Searching Nix files for <code>mkYarnPackage</code>: <a href="https://github.com/search?q=mkYarnPackage+language%3ANix&amp;type=code">https://github.com/search?q=mkYarnPackage+language%3ANix&amp;type=code</a></li>
+<li>Searching just <code>flake.nix</code> files for <code>mkYarnPackage</code>: <a href="https://github.com/search?q=mkYarnPackage+path%3A**%2Fflake.nix&amp;type=code">https://github.com/search?q=mkYarnPackage+path%3A**%2Fflake.nix&amp;type=code</a></li>
+</ul>
+<h3 id="javascript-finding-examples-gitlab">Gitlab<a class="headerlink" href="#javascript-finding-examples-gitlab" title="Permanent link">#</a></h3>
+<ul>
+<li>Searching Nix files for <code>mkYarnPackage</code>: <a href="https://gitlab.com/search?scope=blobs&amp;search=mkYarnPackage+extension%3Anix">https://gitlab.com/search?scope=blobs&amp;search=mkYarnPackage+extension%3Anix</a></li>
+<li>Searching just <code>flake.nix</code> files for <code>mkYarnPackage</code>: <a href="https://gitlab.com/search?scope=blobs&amp;search=mkYarnPackage+filename%3Aflake.nix">https://gitlab.com/search?scope=blobs&amp;search=mkYarnPackage+filename%3Aflake.nix</a></li>
+</ul>
+<h2 id="javascript-tools-overview">Tools overview<a class="headerlink" href="#javascript-tools-overview" title="Permanent link">#</a></h2>
+<h2 id="javascript-general-principles">General principles<a class="headerlink" href="#javascript-general-principles" title="Permanent link">#</a></h2>
+<p>The following principles are given in order of importance with potential exceptions.</p>
+<h3 id="javascript-upstream-node-version">Try to use the same node version used upstream<a class="headerlink" href="#javascript-upstream-node-version" title="Permanent link">#</a></h3>
+<p>It is often not documented which node version is used upstream, but if it is, try to use the same version when packaging.</p>
+<p>This can be a problem if upstream is using the latest and greatest and you are trying to use an earlier version of node. Some cryptic errors regarding V8 may appear.</p>
+<h3 id="javascript-upstream-package-manager">Try to respect the package manager originally used by upstream (and use the upstream lock file)<a class="headerlink" href="#javascript-upstream-package-manager" title="Permanent link">#</a></h3>
+<p>A lock file (package-lock.json, yarn.lock...) is supposed to make reproducible installations of node_modules for each tool.</p>
+<p>Guidelines of package managers, recommend to commit those lock files to the repos. If a particular lock file is present, it is a strong indication of which package manager is used upstream.</p>
+<p>It's better to try to use a Nix tool that understand the lock file. Using a different tool might give you hard to understand error because different packages have been installed. An example of problems that could arise can be found <a href="https://github.com/NixOS/nixpkgs/pull/126629">here</a>. Upstream use NPM, but this is an attempt to package it with <code>yarn2nix</code> (that uses yarn.lock).</p>
+<p>Using a different tool forces to commit a lock file to the repository. Those files are fairly large, so when packaging for nixpkgs, this approach does not scale well.</p>
+<p>Exceptions to this rule are:</p>
+<ul>
+<li>When you encounter one of the bugs from a Nix tool. In each of the tool specific instructions, known problems will be detailed. If you have a problem with a particular tool, then it's best to try another tool, even if this means you will have to recreate a lock file and commit it to nixpkgs. In general <code>yarn2nix</code> has less known problems and so a simple search in nixpkgs will reveal many yarn.lock files committed.</li>
+<li>Some lock files contain particular version of a package that has been pulled off NPM for some reason. In that case, you can recreate upstream lock (by removing the original and <code>npm install</code>, <code>yarn</code>, ...) and commit this to nixpkgs.</li>
+<li>The only tool that supports workspaces (a feature of NPM that helps manage sub-directories with different package.json from a single top level package.json) is <code>yarn2nix</code>. If upstream has workspaces you should try <code>yarn2nix</code>.</li>
+</ul>
+<h3 id="javascript-upstream-package-json">Try to use upstream package.json<a class="headerlink" href="#javascript-upstream-package-json" title="Permanent link">#</a></h3>
+<p>Exceptions to this rule are:</p>
+<ul>
+<li>Sometimes the upstream repo assumes some dependencies be installed globally. In that case you can add them manually to the upstream package.json (<code>yarn add xxx</code> or <code>npm install xxx</code>, ...). Dependencies that are installed locally can be executed with <code>npx</code> for CLI tools. (e.g. <code>npx postcss ...</code>, this is how you can call those dependencies in the phases).</li>
+<li>Sometimes there is a version conflict between some dependency requirements. In that case you can fix a version by removing the <code>^</code>.</li>
+<li>Sometimes the script defined in the package.json does not work as is. Some scripts for example use CLI tools that might not be available, or cd in directory with a different package.json (for workspaces notably). In that case, it's perfectly fine to look at what the particular script is doing and break this down in the phases. In the build script you can see <code>build:*</code> calling in turns several other build scripts like <code>build:ui</code> or <code>build:server</code>. If one of those fails, you can try to separate those into,</li>
+</ul>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>yarn<span class="w"> </span>build:ui
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>yarn<span class="w"> </span>build:server
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># OR</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>npm<span class="w"> </span>run<span class="w"> </span>build:ui
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>npm<span class="w"> </span>run<span class="w"> </span>build:server
+</span></code></pre></div>
+<p>when you need to override a package.json. It's nice to use the one from the upstream source and do some explicit override. Here is an example:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="ss">patchedPackageJSON</span> <span class="o">=</span> final<span class="o">.</span>runCommand <span class="s2">&quot;package.json&quot;</span> <span class="p">{</span> <span class="p">}</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="s s-Multiline">  </span><span class="si">${</span>jq<span class="si">}</span><span class="s s-Multiline">/bin/jq &#39;.version = &quot;0.4.0&quot; |</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s s-Multiline">    .devDependencies.&quot;@jsdoc/cli&quot; = &quot;^0.2.5&quot;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s s-Multiline">    </span><span class="si">${</span>sonar-src<span class="si">}</span><span class="s s-Multiline">/package.json &gt; $out</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s s-Multiline">&#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>You will still need to commit the modified version of the lock files, but at least the overrides are explicit for everyone to see.</p>
+<h3 id="javascript-using-node_modules">Using node_modules directly<a class="headerlink" href="#javascript-using-node_modules" title="Permanent link">#</a></h3>
+<p>Each tool has an abstraction to just build the node_modules (dependencies) directory. You can always use the <code>stdenv.mkDerivation</code> with the node_modules to build the package (symlink the node_modules directory and then use the package build command). The node_modules abstraction can be also used to build some web framework frontends. For an example of this see how <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix">plausible</a> is built. <code>mkYarnModules</code> to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory.</p>
+<h2 id="javascript-packages-nixpkgs">Javascript packages inside nixpkgs<a class="headerlink" href="#javascript-packages-nixpkgs" title="Permanent link">#</a></h2>
+<p>The <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages">pkgs/development/node-packages</a> folder contains a generated collection of <a href="https://npmjs.com/">NPM packages</a> that can be installed with the Nix package manager.</p>
+<p>As a rule of thumb, the package set should only provide <em>end user</em> software packages, such as command-line utilities. Libraries should only be added to the package set if there is a non-NPM package that requires it.</p>
+<p>When it is desired to use NPM libraries in a development project, use the <code>node2nix</code> generator directly on the <code>package.json</code> configuration file of the project.</p>
+<p>The package set provides support for the official stable Node.js versions. The latest stable LTS release in <code>nodePackages</code>, as well as the latest stable current release in <code>nodePackages_latest</code>.</p>
+<p>If your package uses native addons, you need to examine what kind of native build system it uses. Here are some examples:</p>
+<ul>
+<li><code>node-gyp</code></li>
+<li><code>node-gyp-builder</code></li>
+<li><code>node-pre-gyp</code></li>
+</ul>
+<p>After you have identified the correct system, you need to override your package expression while adding in build system as a build input. For example, <code>dat</code> requires <code>node-gyp-build</code>, so we override its expression in <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix">pkgs/development/node-packages/overrides.nix</a>:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    <span class="ss">dat</span> <span class="o">=</span> prev<span class="o">.</span>dat<span class="o">.</span>override <span class="p">(</span>oldAttrs<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>      <span class="ss">buildInputs</span> <span class="o">=</span> <span class="p">[</span> final<span class="o">.</span>node-gyp-build pkgs<span class="o">.</span>libtool pkgs<span class="o">.</span>autoconf pkgs<span class="o">.</span>automake <span class="p">];</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>      <span class="ss">meta</span> <span class="o">=</span> oldAttrs<span class="o">.</span>meta <span class="o">//</span> <span class="p">{</span> <span class="ss">broken</span> <span class="o">=</span> since <span class="s2">&quot;12&quot;</span><span class="p">;</span> <span class="p">};</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="p">});</span>
+</span></code></pre></div>
+<h3 id="javascript-adding-or-updating-packages">Adding and Updating Javascript packages in nixpkgs<a class="headerlink" href="#javascript-adding-or-updating-packages" title="Permanent link">#</a></h3>
+<p>To add a package from NPM to nixpkgs:</p>
+<ol>
+<li>Modify <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/node-packages.json">pkgs/development/node-packages/node-packages.json</a> to add, update or remove package entries to have it included in <code>nodePackages</code> and <code>nodePackages_latest</code>.</li>
+<li>Run the script:</li>
+</ol>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./pkgs/development/node-packages/generate.sh
+</span></code></pre></div>
+<ol>
+<li>Build your new package to test your changes:</li>
+</ol>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>nix-build<span class="w"> </span>-A<span class="w"> </span>nodePackages.&lt;new-or-updated-package&gt;
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>To build against the latest stable Current Node.js version (e.g. 18.x):
+
+```sh
+nix-build -A nodePackages_latest.&lt;new-or-updated-package&gt;
+```
+
+If the package doesn&#39;t build, you may need to add an override as explained above.
+</code></pre></div>
+<ol>
+<li>If the package's name doesn't match any of the executables it provides, add an entry in <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/main-programs.nix">pkgs/development/node-packages/main-programs.nix</a>. This will be the case for all scoped packages, e.g., <code>@angular/cli</code>.</li>
+<li>Add and commit all modified and generated files.</li>
+</ol>
+<p>For more information about the generation process, consult the <a href="https://github.com/svanderburg/node2nix">README.md</a> file of the <code>node2nix</code> tool.</p>
+<p>To update NPM packages in nixpkgs, run the same <code>generate.sh</code> script:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./pkgs/development/node-packages/generate.sh
+</span></code></pre></div>
+<h4 id="javascript-git-error">Git protocol error<a class="headerlink" href="#javascript-git-error" title="Permanent link">#</a></h4>
+<p>Some packages may have Git dependencies from GitHub specified with <code>git://</code>.
+GitHub has <a href="https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git">disabled unencrypted Git connections</a>, so you may see the following error when running the generate script:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>The unauthenticated git protocol on port 9418 is no longer supported
+</span></code></pre></div>
+<p>Use the following Git configuration to resolve the issue:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>url.<span class="s2">&quot;https://github.com/&quot;</span>.insteadOf<span class="w"> </span>git://github.com/
+</span></code></pre></div>
+<h2 id="javascript-tool-specific">Tool specific instructions<a class="headerlink" href="#javascript-tool-specific" title="Permanent link">#</a></h2>
+<h3 id="javascript-buildNpmPackage">buildNpmPackage<a class="headerlink" href="#javascript-buildNpmPackage" title="Permanent link">#</a></h3>
+<p><code>buildNpmPackage</code> allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in <a href="#javascript-node2nix">node2nix</a>). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.</p>
+<p>Here's an example:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span> lib<span class="p">,</span> buildNpmPackage<span class="p">,</span> fetchFromGitHub <span class="p">}:</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>buildNpmPackage <span class="k">rec</span> <span class="p">{</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  <span class="ss">pname</span> <span class="o">=</span> <span class="s2">&quot;flood&quot;</span><span class="p">;</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  <span class="ss">version</span> <span class="o">=</span> <span class="s2">&quot;4.7.0&quot;</span><span class="p">;</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>  <span class="ss">src</span> <span class="o">=</span> fetchFromGitHub <span class="p">{</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="ss">owner</span> <span class="o">=</span> <span class="s2">&quot;jesec&quot;</span><span class="p">;</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="ss">repo</span> <span class="o">=</span> pname<span class="p">;</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="ss">rev</span> <span class="o">=</span> <span class="s2">&quot;v</span><span class="si">${</span>version<span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="ss">hash</span> <span class="o">=</span> <span class="s2">&quot;sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=&quot;</span><span class="p">;</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>  <span class="p">};</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>  <span class="ss">npmDepsHash</span> <span class="o">=</span> <span class="s2">&quot;sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=&quot;</span><span class="p">;</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>  <span class="c1"># The prepack script runs the build script, which we&#39;d rather do in the build phase.</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>  <span class="ss">npmPackFlags</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;--ignore-scripts&quot;</span> <span class="p">];</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>  <span class="ss">NODE_OPTIONS</span> <span class="o">=</span> <span class="s2">&quot;--openssl-legacy-provider&quot;</span><span class="p">;</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>  <span class="ss">meta</span> <span class="o">=</span> <span class="k">with</span> lib<span class="p">;</span> <span class="p">{</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>    <span class="ss">description</span> <span class="o">=</span> <span class="s2">&quot;A modern web UI for various torrent clients with a Node.js backend and React frontend&quot;</span><span class="p">;</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>    <span class="ss">homepage</span> <span class="o">=</span> <span class="s2">&quot;https://flood.js.org&quot;</span><span class="p">;</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>    <span class="ss">license</span> <span class="o">=</span> licenses<span class="o">.</span>gpl3Only<span class="p">;</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>    <span class="ss">maintainers</span> <span class="o">=</span> <span class="k">with</span> maintainers<span class="p">;</span> <span class="p">[</span> winter <span class="p">];</span>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>  <span class="p">};</span>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>In the default <code>installPhase</code> set by <code>buildNpmPackage</code>, it uses <code>npm pack --json --dry-run</code> to decide what files to install in <code>$out/lib/node_modules/$name/</code>, where <code>$name</code> is the <code>name</code> string defined in the package's <code>package.json</code>. Additionally, the <code>bin</code> and <code>man</code> keys in the source's <code>package.json</code> are used to decide what binaries and manpages are supposed to be installed. If these are not defined, <code>npm pack</code> may miss some files, and no binaries will be produced.</p>
+<h4 id="javascript-buildNpmPackage-arguments">Arguments<a class="headerlink" href="#javascript-buildNpmPackage-arguments" title="Permanent link">#</a></h4>
+<ul>
+<li><code>npmDepsHash</code>: The output hash of the dependencies for this project. Can be calculated in advance with <a href="#javascript-buildNpmPackage-prefetch-npm-deps"><code>prefetch-npm-deps</code></a>.</li>
+<li><code>makeCacheWritable</code>: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.</li>
+<li><code>npmBuildScript</code>: The script to run to build the project. Defaults to <code>"build"</code>.</li>
+<li><code>npmWorkspace</code>: The workspace directory within the project to build and install.</li>
+<li><code>dontNpmBuild</code>: Option to disable running the build script. Set to <code>true</code> if the package does not have a build script. Defaults to <code>false</code>. Alternatively, setting <code>buildPhase</code> explicitly also disables this.</li>
+<li><code>dontNpmInstall</code>: Option to disable running <code>npm install</code>. Defaults to <code>false</code>. Alternatively, setting <code>installPhase</code> explicitly also disables this.</li>
+<li><code>npmFlags</code>: Flags to pass to all npm commands.</li>
+<li><code>npmInstallFlags</code>: Flags to pass to <code>npm ci</code>.</li>
+<li><code>npmBuildFlags</code>: Flags to pass to <code>npm run ${npmBuildScript}</code>.</li>
+<li><code>npmPackFlags</code>: Flags to pass to <code>npm pack</code>.</li>
+<li><code>npmPruneFlags</code>: Flags to pass to <code>npm prune</code>. Defaults to the value of <code>npmInstallFlags</code>.</li>
+<li><code>makeWrapperArgs</code>: Flags to pass to <code>makeWrapper</code>, added to executable calling the generated <code>.js</code> with <code>node</code> as an interpreter. These scripts are defined in <code>package.json</code>.</li>
+<li><code>nodejs</code>: The <code>nodejs</code> package to build against, using the corresponding <code>npm</code> shipped with that version of <code>node</code>. Defaults to <code>pkgs.nodejs</code>.</li>
+<li><code>npmDeps</code>: The dependencies used to build the npm package. Especially useful to not have to recompute workspace depedencies.</li>
+</ul>
+<h4 id="javascript-buildNpmPackage-prefetch-npm-deps">prefetch-npm-deps<a class="headerlink" href="#javascript-buildNpmPackage-prefetch-npm-deps" title="Permanent link">#</a></h4>
+<p><code>prefetch-npm-deps</code> is a Nixpkgs package that calculates the hash of the dependencies of an npm project ahead of time.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gp">$ </span>ls
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="go">package.json package-lock.json index.js</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="gp">$ </span>prefetch-npm-deps<span class="w"> </span>package-lock.json
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="go">...</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="go">sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</span>
+</span></code></pre></div>
+<h4 id="javascript-buildNpmPackage-fetchNpmDeps">fetchNpmDeps<a class="headerlink" href="#javascript-buildNpmPackage-fetchNpmDeps" title="Permanent link">#</a></h4>
+<p><code>fetchNpmDeps</code> is a Nix function that requires the following mandatory arguments:</p>
+<ul>
+<li><code>src</code>: A directory / tarball with <code>package-lock.json</code> file</li>
+<li><code>hash</code>: The output hash of the node dependencies defined in <code>package-lock.json</code>.</li>
+</ul>
+<p>It returns a derivation with all <code>package-lock.json</code> dependencies downloaded into <code>$out/</code>, usable as an npm cache.</p>
+<h3 id="javascript-corepack">corepack<a class="headerlink" href="#javascript-corepack" title="Permanent link">#</a></h3>
+<p>This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the <code>packageManager</code> setting in the <code>package.json</code>.</p>
+<h3 id="javascript-node2nix">node2nix<a class="headerlink" href="#javascript-node2nix" title="Permanent link">#</a></h3>
+<h4 id="javascript-node2nix-preparation">Preparation<a class="headerlink" href="#javascript-node2nix-preparation" title="Permanent link">#</a></h4>
+<p>You will need to generate a Nix expression for the dependencies. Don't forget the <code>-l package-lock.json</code> if there is a lock file. Most probably you will need the <code>--development</code> to include the <code>devDependencies</code></p>
+<p>So the command will most likely be:
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>node2nix<span class="w"> </span>--development<span class="w"> </span>-l<span class="w"> </span>package-lock.json
+</span></code></pre></div></p>
+<p>See <code>node2nix</code> <a href="https://github.com/svanderburg/node2nix">docs</a> for more info.</p>
+<h4 id="javascript-node2nix-pitfalls">Pitfalls<a class="headerlink" href="#javascript-node2nix-pitfalls" title="Permanent link">#</a></h4>
+<ul>
+<li>If upstream package.json does not have a "version" attribute, <code>node2nix</code> will crash. You will need to add it like shown in <a href="#javascript-upstream-package-json">the package.json section</a>.</li>
+<li><code>node2nix</code> has some <a href="https://github.com/svanderburg/node2nix/issues/238">bugs</a> related to working with lock files from NPM distributed with <code>nodejs_16</code>.</li>
+<li><code>node2nix</code> does not like missing packages from NPM. If you see something like <code>Cannot resolve version: vue-loader-v16@undefined</code> then you might want to try another tool. The package might have been pulled off of NPM.</li>
+</ul>
+<h3 id="javascript-yarn2nix">yarn2nix<a class="headerlink" href="#javascript-yarn2nix" title="Permanent link">#</a></h3>
+<h4 id="javascript-yarn2nix-preparation">Preparation<a class="headerlink" href="#javascript-yarn2nix-preparation" title="Permanent link">#</a></h4>
+<p>You will need at least a <code>yarn.lock</code> file. If upstream does not have one you need to generate it and reference it in your package definition.</p>
+<p>If the downloaded files contain the <code>package.json</code> and <code>yarn.lock</code> files they can be used like this:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="ss">offlineCache</span> <span class="o">=</span> fetchYarnDeps <span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  <span class="ss">yarnLock</span> <span class="o">=</span> src <span class="o">+</span> <span class="s2">&quot;/yarn.lock&quot;</span><span class="p">;</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>  <span class="ss">hash</span> <span class="o">=</span> <span class="s2">&quot;....&quot;</span><span class="p">;</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="p">};</span>
+</span></code></pre></div>
+<h4 id="javascript-yarn2nix-mkYarnPackage">mkYarnPackage<a class="headerlink" href="#javascript-yarn2nix-mkYarnPackage" title="Permanent link">#</a></h4>
+<p><code>mkYarnPackage</code> will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React, WebPack, ...), you will need to explicitly override the build step with your instructions.</p>
+<p>It's important to use the <code>--offline</code> flag. For example if you script is <code>"build": "something"</code> in <code>package.json</code> use:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="ss">buildPhase</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="s s-Multiline">  export HOME=$(mktemp -d)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="s s-Multiline">  yarn --offline build</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="s s-Multiline">&#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>The dist phase is also trying to build a binary, the only way to override it is with:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="ss">distPhase</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="ss">configurePhase</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="s s-Multiline">  ln -s $node_modules node_modules</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="s s-Multiline">&#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<p>or if you need a writeable node_modules directory:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="ss">configurePhase</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="s s-Multiline">  cp -r $node_modules node_modules</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="s s-Multiline">  chmod +w node_modules</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="s s-Multiline">&#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<h4 id="javascript-yarn2nix-mkYarnModules">mkYarnModules<a class="headerlink" href="#javascript-yarn2nix-mkYarnModules" title="Permanent link">#</a></h4>
+<p>This will generate a derivation including the <code>node_modules</code> directory.
+If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.</p>
+<h4 id="javascript-mkYarnPackage-overriding-dependencies">Overriding dependency behavior<a class="headerlink" href="#javascript-mkYarnPackage-overriding-dependencies" title="Permanent link">#</a></h4>
+<p>In the <code>mkYarnPackage</code> record the property <code>pkgConfig</code> can be used to override packages when you encounter problems building.</p>
+<p>For instance, say your package is throwing errors when trying to invoke node-sass:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>ENOENT: no such file or directory, scandir &#39;/build/source/node_modules/node-sass/vendor&#39;
+</span></code></pre></div>
+<p>To fix this we will specify different versions of build inputs to use, as well as some post install steps to get the software built the way we want:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>mkYarnPackage <span class="k">rec</span> <span class="p">{</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>  <span class="ss">pkgConfig</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>    <span class="ss">node-sass</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>      <span class="ss">buildInputs</span> <span class="o">=</span> <span class="k">with</span> final<span class="p">;[</span> python libsass pkg-config <span class="p">];</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>      <span class="ss">postInstall</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="s s-Multiline">        LIBSASS_EXT=auto yarn --offline run build</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="s s-Multiline">        rm build/config.gypi</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="s s-Multiline">      &#39;&#39;</span><span class="p">;</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="p">};</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>  <span class="p">};</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<h4 id="javascript-yarn2nix-pitfalls">Pitfalls<a class="headerlink" href="#javascript-yarn2nix-pitfalls" title="Permanent link">#</a></h4>
+<ul>
+<li>If version is missing from upstream package.json, yarn will silently install nothing. In that case, you will need to override package.json as shown in the <a href="#javascript-upstream-package-json">package.json section</a></li>
+<li>Having trouble with <code>node-gyp</code>? Try adding these lines to the <code>yarnPreBuild</code> steps:</li>
+</ul>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="ss">yarnPreBuild</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="s s-Multiline">  mkdir -p $HOME/.node-gyp/</span><span class="si">${</span>nodejs<span class="o">.</span>version<span class="si">}</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="s s-Multiline">  echo 9 &gt; $HOME/.node-gyp/</span><span class="si">${</span>nodejs<span class="o">.</span>version<span class="si">}</span><span class="s s-Multiline">/installVersion</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="s s-Multiline">  ln -sfv </span><span class="si">${</span>nodejs<span class="si">}</span><span class="s s-Multiline">/include $HOME/.node-gyp/</span><span class="si">${</span>nodejs<span class="o">.</span>version<span class="si">}</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="s s-Multiline">  export npm_config_nodedir=</span><span class="si">${</span>nodejs<span class="si">}</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="s s-Multiline">&#39;&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<ul>
+<li>The <code>echo 9</code> steps comes from this answer: <a href="https://stackoverflow.com/a/49139496">https://stackoverflow.com/a/49139496</a></li>
+<li>Exporting the headers in <code>npm_config_nodedir</code> comes from this issue: <a href="https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919">https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919</a></li>
+<li><code>offlineCache</code> (described <a href="#javascript-yarn2nix-preparation">above</a>) must be specified to avoid <a href="#ssec-import-from-derivation">Import From Derivation</a> (IFD) when used inside Nixpkgs.</li>
+</ul>
+<h2 id="javascript-outside-nixpkgs">Outside Nixpkgs<a class="headerlink" href="#javascript-outside-nixpkgs" title="Permanent link">#</a></h2>
+<p>There are some other tools available, which are written in the Nix language.
+These that can't be used inside Nixpkgs because they require <a href="#ssec-import-from-derivation">Import From Derivation</a>, which is not allowed in Nixpkgs.</p>
+<p>If you are packaging something outside Nixpkgs, consider the following:</p>
+<h3 id="javascript-npmlock2nix">npmlock2nix<a class="headerlink" href="#javascript-npmlock2nix" title="Permanent link">#</a></h3>
+<p><a href="https://github.com/nix-community/npmlock2nix">npmlock2nix</a> aims at building <code>node_modules</code> without code generation. It hasn't reached v1 yet, the API might be subject to change.</p>
+<h4 id="javascript-npmlock2nix-pitfalls">Pitfalls<a class="headerlink" href="#javascript-npmlock2nix-pitfalls" title="Permanent link">#</a></h4>
+<p>There are some <a href="https://github.com/tweag/npmlock2nix/issues/45">problems with npm v7</a>.</p>
+<h3 id="javascript-nix-npm-buildpackage">nix-npm-buildpackage<a class="headerlink" href="#javascript-nix-npm-buildpackage" title="Permanent link">#</a></h3>
+<p><a href="https://github.com/serokell/nix-npm-buildpackage">nix-npm-buildpackage</a> aims at building <code>node_modules</code> without code generation. It hasn't reached v1 yet, the API might change. It supports both <code>package-lock.json</code> and yarn.lock.</p>
+<h4 id="javascript-nix-npm-buildpackage-pitfalls">Pitfalls<a class="headerlink" href="#javascript-nix-npm-buildpackage-pitfalls" title="Permanent link">#</a></h4>
+<p>There are some <a href="https://github.com/serokell/nix-npm-buildpackage/issues/33">problems with npm v7</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="java.section.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Java">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Java
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="julia.section.html" class="md-footer__link md-footer__link--next" aria-label="Next: Julia">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Julia
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 <a href=https://nervosys.ai/>Nervosys, LLC</a>
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/nervosys/Botnix" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://discord.gg/x84JXYje" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541ZM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241Zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241Z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/nervosys" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.8 48h145.6l100.5 132.9L389.2 48zm-24.8 373.8h39.1L151.1 88h-42l255.3 333.8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.expand", "navigation.top", "navigation.instant", "navigation.path", "navigation.footer", "search.suggest", "search.share", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.caa56a14.min.js"></script>
+      
+        <script src="../javascripts/extra.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

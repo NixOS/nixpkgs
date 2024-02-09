@@ -1,0 +1,5294 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The operating system for autonomous systems">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/nervosys/Botnix/languages-frameworks/haskell.section.html">
+      
+      
+        <link rel="prev" href="go.section.html">
+      
+      
+        <link rel="next" href="hy.section.html">
+      
+      
+      <link rel="icon" href="../images/rune.svg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.7">
+    
+    
+      
+        <title>Haskell - Botnix</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.f2e4d321.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#haskell" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="Botnix" class="md-header__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Botnix
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Haskell
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="nervosys" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="Botnix" class="md-nav__button md-logo" aria-label="Botnix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4m0 4.68c.5 0 .95.43.95.95v3.48L18 13.26v1.27l-5.05-1.58v3.47l1.26.95v.95L12 17.68l-2.21.64v-.95l1.26-.95v-3.47L6 14.53v-1.27l5.05-3.15V6.63c0-.52.45-.95.95-.95Z"/></svg>
+
+    </a>
+    Botnix
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/nervosys/Botnix" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    nervosys/Botnix
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development of Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functions reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nixpkgs lib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Standard environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using-nixpkgs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using Nixpkgs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Build helpers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Build helpers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/fetchers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fetchers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Special build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/testers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/trivial-build-helpers.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trivial build helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_6" id="__nav_10_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_6">
+            <span class="md-nav__icon md-icon"></span>
+            Images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/appimagetools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.appimageTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/binarycache.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkBinaryCache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/dockertools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.dockerTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/makediskimage.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    &lt;nixpkgs/nixos/lib/make-disk-image.nix&gt;
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/ocitools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.ociTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/portableservice.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.portableService
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/images/snaptools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.snapTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_7" id="__nav_10_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Special
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_7">
+            <span class="md-nav__icon md-icon"></span>
+            Special
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/checkpoint-build.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.checkpointBuildTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fakenss.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    fakeNss
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/fhs-environments.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    buildFHSEnv
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/makesetuphook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.makeSetupHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/mkshell.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.mkShell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-helpers/special/vm-tools.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    vmTools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/coding-conventions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coding conventions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/contributing-to-documentation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing to Nixpkgs documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/quick-start.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start to Adding a Package
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/reviewing-contributions.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reviewing contributions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/submitting-changes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Submitting changes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/vulnerability-roundup.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vulnerability Roundup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/opening-issues.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Opening issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Functions
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Functions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/debug.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debugging Nix Expressions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/generators.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/nix-gitignore.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkgs.nix-gitignore
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functions/prefer-remote-fetch.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    prefer-remote-fetch overlay
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Hooks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Hooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hooks reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autoconf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Autoconf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/automake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/autopatchelf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    autoPatchelfHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/bmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    bmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/breakpoint.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    breakpointHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/cmake.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    cmake
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gdk-pixbuf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    gdk-pixbuf
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ghc.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GHC
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/gnome.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GNOME platform
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/installShellFiles.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    installShellFiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libiconv.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libiconv, libintl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/libxml2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    libxml2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/meson.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meson
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/mpi-check-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    mpiCheckPhaseHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/ninja.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ninja
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/patch-rc-path-hooks.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    patchRcPath hooks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/postgresql-test-hook.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    postgresqlTestHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/scons.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    scons
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/tetex-tex-live.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    teTeX / TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/unzip.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    unzip
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/validatePkgConfig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    validatePkgConfig
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/waf.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    wafHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/xcbuild.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    xcbuildHook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/zig.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    zig.hook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Languages frameworks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Languages frameworks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Languages and frameworks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="agda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Agda
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="android.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Android
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="beam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BEAM Languages (Erlang, Elixir & LFE)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bower.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bower
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="chicken.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CHICKEN
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="coq.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coq and coq packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="crystal.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Crystal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CUDA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cuelang.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cue (Cuelang)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dart.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dhall.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dhall
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dotnet.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dotnet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="emscripten.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emscripten
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="gnome.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GNOME
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="go.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Go
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Haskell
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="haskell.section.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Haskell
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#haskell-available-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available packages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#haskell-available-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available package versions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-dependency-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency resolution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limitations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haskell-mkderivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      haskellPackages.mkDerivation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="haskellPackages.mkDerivation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#haskell-derivation-args" class="md-nav__link">
+    <span class="md-ellipsis">
+      General arguments
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-derivation-deps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifying dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-derivation-meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      Meta attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-incremental-builds" class="md-nav__link">
+    <span class="md-ellipsis">
+      Incremental builds
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haskell-development-environments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development environments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development environments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#haskell-shellFor" class="md-nav__link">
+    <span class="md-ellipsis">
+      shellFor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-language-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      haskell-language-server
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haskell-overriding-haskell-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overriding Haskell packages
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overriding Haskell packages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#haskell-overriding-a-single-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overriding a single package
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overriding a single package">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#haskell-haskell.lib.compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      haskell.lib.compose
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="haskell.lib.compose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#haskell-packaging-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Packaging Helpers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-development-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development Helpers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-trivial-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trivial Helpers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-package-set-lib-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Library functions in the Haskell package sets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haskell-faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      F.A.Q.
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="F.A.Q.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#haskell-why-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why is topic X not covered in this section? Why is section Y missing?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haskell-faq-override-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to enable or disable profiling builds globally?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hy.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="idris2.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Idris2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ios.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    iOS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="java.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Java
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="javascript.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Javascript
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="julia.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Julia
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lisp.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    lisp-modules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="lua.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User’s Guide to Lua Infrastructure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="maven.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Maven
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="nim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ocaml.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OCaml
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="octave.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Octave
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="perl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Perl
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="php.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pkg-config.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    pkg-config
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="python.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="qt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Qt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="r.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    R
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ruby.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ruby
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="rust.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Rust
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="swift.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swift
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="texlive.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TeX Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="titanium.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Titanium
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="vim.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vim
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Module system
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Module system
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-system/module-system.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Module System
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Packages
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/cataclysm-dda.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cataclysm: Dark Days Ahead
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/citrix.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Citrix Workspace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/darwin-builder.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    darwin.linux-builder
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/dlib.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DLib
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/eclipse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Eclipse
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/elm.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Elm
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/emacs.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Emacs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/etc-files.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    /etc files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/firefox.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Firefox
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fish.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fish
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/fuse.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FUSE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/ibus.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ibus-engines.typing-booster
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/kakoune.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kakoune
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/linux.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Linux kernel
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/locales.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Locales
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/nginx.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/opengl.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenGL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/shell-helpers.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interactive shell helpers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/steam.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Steam
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/urxvt.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Urxvt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/weechat.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WeeChat
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packages/xorg.section.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    X.org
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_18" >
+        
+          
+          <label class="md-nav__link" for="__nav_18" id="__nav_18_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Stdenv
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_18">
+            <span class="md-nav__icon md-icon"></span>
+            Stdenv
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/cross-compilation.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cross-compilation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/meta.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Meta-attributes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/multiple-output.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multiple-output packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/platform-notes.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stdenv/stdenv.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The Standard Environment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_19" >
+        
+          
+          <label class="md-nav__link" for="__nav_19" id="__nav_19_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Using
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_19">
+            <span class="md-nav__icon md-icon"></span>
+            Using
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/configuration.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Global configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overlays.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overlays
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/overrides.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overriding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../using/platform-support.chapter.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Platform Support
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="haskell">Haskell<a class="headerlink" href="#haskell" title="Permanent link">#</a></h1>
+<p>The Haskell infrastructure in Nixpkgs has two main purposes: The primary purpose
+is to provide a Haskell compiler and build tools as well as infrastructure for
+packaging Haskell-based packages.</p>
+<p>The secondary purpose is to provide support for Haskell development environments
+including prebuilt Haskell libraries. However, in this area sacrifices have been
+made due to self-imposed restrictions in Nixpkgs, to lessen the maintenance
+effort and to improve performance. (More details in the subsection
+<a href="#haskell-limitations">Limitations.</a>)</p>
+<h2 id="haskell-available-packages">Available packages<a class="headerlink" href="#haskell-available-packages" title="Permanent link">#</a></h2>
+<p>The compiler and most build tools are exposed at the top level:</p>
+<ul>
+<li><code>ghc</code> is the default version of GHC</li>
+<li>Language specific tools: <code>cabal-install</code>, <code>stack</code>, <code>hpack</code>, …</li>
+</ul>
+<p>Many “normal” user facing packages written in Haskell, like <code>niv</code> or <code>cachix</code>,
+are also exposed at the top level, and there is nothing Haskell specific to
+installing and using them.</p>
+<p>All of these packages are originally defined in the <code>haskellPackages</code> package
+set and are re-exposed with a reduced dependency closure for convenience.
+(see <code>justStaticExecutables</code> or <code>separateBinOutput</code> below)</p>
+<p>The <code>haskellPackages</code> set includes at least one version of every package from
+Hackage as well as some manually injected packages. This amounts to a lot of
+packages, so it is hidden from <code>nix-env -qa</code> by default for performance reasons.
+You can still list all packages in the set like this:</p>
+<p><div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="gp">$ </span>nix-env<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;&lt;nixpkgs&gt;&#39;</span><span class="w"> </span>-qaP<span class="w"> </span>-A<span class="w"> </span>haskellPackages
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="go">haskellPackages.a50                                                         a50-0.5</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="go">haskellPackages.AAI                                                         AAI-0.2.0.1</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="go">haskellPackages.aasam                                                       aasam-0.2.0.0</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="go">haskellPackages.abacate                                                     abacate-0.0.0.0</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="go">haskellPackages.abc-puzzle                                                  abc-puzzle-0.2.1</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="go">…</span>
+</span></code></pre></div>
+Also, the <code>haskellPackages</code> set is included on <a href="https://search.nixos.org">search.nixos.org</a>.</p>
+<p>The attribute names in <code>haskellPackages</code> always correspond with their name on
+Hackage. Since Hackage allows names that are not valid Nix without escaping,
+you need to take care when handling attribute names like <code>3dmodels</code>.</p>
+<p>For packages that are part of <a href="https://www.stackage.org">Stackage</a> (a curated set of known to be
+compatible packages), we use the version prescribed by a Stackage snapshot
+(usually the current LTS one) as the default version. For all other packages we
+use the latest version from <a href="https://hackage.org">Hackage</a> (the repository of
+basically all open source Haskell packages). See <a href="#haskell-available-
+versions">below</a> for a few more details on this.</p>
+<p>Roughly half of the 16K packages contained in <code>haskellPackages</code> don’t actually
+build and are <a href="https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml">marked as broken semi-automatically</a>.
+Most of those packages are deprecated or unmaintained, but sometimes packages
+that should build, do not build. Very often fixing them is not a lot of work.</p>
+<!--
+TODO(@sternenseemann):
+How you can help with that is
+described in [Fixing a broken package](#haskell-fixing-a-broken-package).
+-->
+
+<p><code>haskellPackages</code> is built with our default compiler, but we also provide other
+releases of GHC and package sets built with them. You can list all available
+compilers like this:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="gp">$ </span>nix-env<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;&lt;nixpkgs&gt;&#39;</span><span class="w"> </span>-qaP<span class="w"> </span>-A<span class="w"> </span>haskell.compiler
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="go">haskell.compiler.ghc810                  ghc-8.10.7</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="go">haskell.compiler.ghc90                   ghc-9.0.2</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="go">haskell.compiler.ghc925                  ghc-9.2.5</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="go">haskell.compiler.ghc926                  ghc-9.2.6</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="go">haskell.compiler.ghc927                  ghc-9.2.7</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="go">haskell.compiler.ghc92                   ghc-9.2.8</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="go">haskell.compiler.ghc945                  ghc-9.4.5</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="go">haskell.compiler.ghc946                  ghc-9.4.6</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="go">haskell.compiler.ghc947                  ghc-9.4.7</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="go">haskell.compiler.ghc94                   ghc-9.4.8</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="go">haskell.compiler.ghc963                  ghc-9.6.3</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="go">haskell.compiler.ghc96                   ghc-9.6.4</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="go">haskell.compiler.ghc98                   ghc-9.8.1</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="go">haskell.compiler.ghcHEAD                 ghc-9.9.20231121</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="go">haskell.compiler.ghc8107Binary           ghc-binary-8.10.7</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="go">haskell.compiler.ghc865Binary            ghc-binary-8.6.5</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="go">haskell.compiler.ghc924Binary            ghc-binary-9.2.4</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="go">haskell.compiler.integer-simple.ghc8107  ghc-integer-simple-8.10.7</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="go">haskell.compiler.integer-simple.ghc810   ghc-integer-simple-8.10.7</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="go">haskell.compiler.native-bignum.ghc90     ghc-native-bignum-9.0.2</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="go">haskell.compiler.native-bignum.ghc902    ghc-native-bignum-9.0.2</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="go">haskell.compiler.native-bignum.ghc925    ghc-native-bignum-9.2.5</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="go">haskell.compiler.native-bignum.ghc926    ghc-native-bignum-9.2.6</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="go">haskell.compiler.native-bignum.ghc927    ghc-native-bignum-9.2.7</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="go">haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.8</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="go">haskell.compiler.native-bignum.ghc928    ghc-native-bignum-9.2.8</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="go">haskell.compiler.native-bignum.ghc945    ghc-native-bignum-9.4.5</span>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="go">haskell.compiler.native-bignum.ghc946    ghc-native-bignum-9.4.6</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="go">haskell.compiler.native-bignum.ghc947    ghc-native-bignum-9.4.7</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="go">haskell.compiler.native-bignum.ghc94     ghc-native-bignum-9.4.8</span>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="go">haskell.compiler.native-bignum.ghc948    ghc-native-bignum-9.4.8</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="go">haskell.compiler.native-bignum.ghc963    ghc-native-bignum-9.6.3</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="go">haskell.compiler.native-bignum.ghc96     ghc-native-bignum-9.6.4</span>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="go">haskell.compiler.native-bignum.ghc964    ghc-native-bignum-9.6.4</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="go">haskell.compiler.native-bignum.ghc98     ghc-native-bignum-9.8.1</span>
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="go">haskell.compiler.native-bignum.ghc981    ghc-native-bignum-9.8.1</span>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="go">haskell.compiler.native-bignum.ghcHEAD   ghc-native-bignum-9.9.20231121</span>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="go">haskell.compiler.ghcjs                   ghcjs-8.10.7</span>
+</span></code></pre></div>
+<p>Each of those compiler versions has a corresponding attribute set built using
+it. However, the non-standard package sets are not tested regularly and, as a
+result, contain fewer working packages. The corresponding package set for GHC
+9.4.5 is <code>haskell.packages.ghc945</code>. In fact <code>haskellPackages</code> is just an alias
+for <code>haskell.packages.ghc927</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="gp">$ </span>nix-env<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;&lt;nixpkgs&gt;&#39;</span><span class="w"> </span>-qaP<span class="w"> </span>-A<span class="w"> </span>haskell.packages.ghc927
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="go">haskell.packages.ghc927.a50                                                         a50-0.5</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="go">haskell.packages.ghc927.AAI                                                         AAI-0.2.0.1</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="go">haskell.packages.ghc927.aasam                                                       aasam-0.2.0.0</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="go">haskell.packages.ghc927.abacate                                                     abacate-0.0.0.0</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="go">haskell.packages.ghc927.abc-puzzle                                                  abc-puzzle-0.2.1</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="go">…</span>
+</span></code></pre></div>
+<p>Every package set also re-exposes the GHC used to build its packages as <code>haskell.packages.*.ghc</code>.</p>
+<h3 id="haskell-available-versions">Available package versions<a class="headerlink" href="#haskell-available-versions" title="Permanent link">#</a></h3>
+<p>We aim for a “blessed” package set which only contains one version of each
+package, like <a href="https://www.stackage.org">Stackage</a>, which is a curated set of known to be compatible
+packages. We use the version information from Stackage snapshots and extend it
+with more packages. Normally in Nixpkgs the number of building Haskell packages
+is roughly two to three times the size of Stackage. For choosing the version to
+use for a certain package we use the following rules:</p>
+<ol>
+<li>By default, for <code>haskellPackages.foo</code> is the newest version of the package
+<code>foo</code> found on <a href="https://hackage.org">Hackage</a>, which is the central registry
+of all open source Haskell packages. Nixpkgs contains a reference to a pinned
+Hackage snapshot, thus we use the state of Hackage as of the last time we
+updated this pin.</li>
+<li>If the <a href="https://www.stackage.org">Stackage</a> snapshot that we use (usually the newest LTS snapshot)
+contains a package, <a href="https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml">we use instead the version in the Stackage snapshot as
+default version for that package.</a></li>
+<li>For some packages, which are not on Stackage, we have if necessary <a href="https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml">manual
+overrides to set the default version to a version older than the newest on
+Hackage.</a></li>
+<li>For all packages, for which the newest Hackage version is not the default
+version, there will also be a <code>haskellPackages.foo_x_y_z</code> package with the
+newest version. The <code>x_y_z</code> part encodes the version with dots replaced by
+underscores. When the newest version changes by a new release to Hackage the
+old package will disappear under that name and be replaced by a newer one under
+the name with the new version. The package name including the version will
+also disappear when the default version e.g. from Stackage catches up with the
+newest version from Hackage. E.g. if <code>haskellPackages.foo</code> gets updated from
+1.0.0 to 1.1.0 the package <code>haskellPackages.foo_1_1_0</code> becomes obsolete and
+gets dropped.</li>
+<li>For some packages, we also <a href="https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml">manually add other <code>haskellPackages.foo_x_y_z</code>
+versions</a>,
+if they are required for a certain build.</li>
+</ol>
+<p>Relying on <code>haskellPackages.foo_x_y_z</code> attributes in derivations outside
+nixpkgs is discouraged because they may change or disappear with every package
+set update.</p>
+<!-- TODO(@maralorn) We should add a link to callHackage, etc. once we added
+them to the docs. -->
+
+<p>All <code>haskell.packages.*</code> package sets use the same package descriptions and the same sets
+of versions by default. There are however GHC version specific override <code>.nix</code>
+files to loosen this a bit.</p>
+<h3 id="haskell-dependency-resolution">Dependency resolution<a class="headerlink" href="#haskell-dependency-resolution" title="Permanent link">#</a></h3>
+<p>Normally when you build Haskell packages with <code>cabal-install</code>, <code>cabal-install</code>
+does dependency resolution. It will look at all Haskell package versions known
+on Hackage and tries to pick for every (transitive) dependency of your build
+exactly one version. Those versions need to satisfy all the version constraints
+given in the <code>.cabal</code> file of your package and all its dependencies.</p>
+<p>The <a href="#haskell-mkderivation">Haskell builder in nixpkgs</a> does no such thing.
+It will take as input packages with names off the desired dependencies
+and just check whether they fulfill the version bounds and fail if they don’t
+(by default, see <code>jailbreak</code> to circumvent this).</p>
+<p>The <code>haskellPackages.callPackage</code> function does the package resolution.
+It will, e.g., use <code>haskellPackages.aeson</code>which has the default version as
+described above for a package input of name <code>aeson</code>. (More general:
+<code>&lt;packages&gt;.callPackage f</code> will call <code>f</code> with named inputs provided from the
+package set <code>&lt;packages&gt;</code>.)
+While this is the default behavior, it is possible to override the dependencies
+for a specific package, see
+<a href="#haskell-overriding-haskell-packages"><code>override</code> and <code>overrideScope</code></a>.</p>
+<h3 id="haskell-limitations">Limitations<a class="headerlink" href="#haskell-limitations" title="Permanent link">#</a></h3>
+<p>Our main objective with <code>haskellPackages</code> is to package Haskell software in
+nixpkgs. This entails some limitations, partially due to self-imposed
+restrictions of nixpkgs, partially in the name of maintainability:</p>
+<ul>
+<li>Only the packages built with the default compiler see extensive testing of the
+  whole package set. For other GHC versions only a few essential packages are
+  tested and cached.</li>
+<li>As described above we only build one version of most packages.</li>
+</ul>
+<p>The experience using an older or newer packaged compiler or using different
+versions may be worse, because builds will not be cached on <code>cache.nixos.org</code>
+or may fail.</p>
+<p>Thus, to get the best experience, make sure that your project can be compiled
+using the default compiler of nixpkgs and recent versions of its dependencies.</p>
+<p>A result of this setup is, that getting a valid build plan for a given
+package can sometimes be quite painful, and in fact this is where most of the
+maintenance work for <code>haskellPackages</code> is required. Besides that, it is not
+possible to get the dependencies of a legacy project from nixpkgs or to use a
+specific stack solver for compiling a project.</p>
+<p>Even though we couldn’t use them directly in nixpkgs, it would be desirable
+to have tooling to generate working Nix package sets from build plans generated
+by <code>cabal-install</code> or a specific Stackage snapshot via import-from-derivation.
+Sadly we currently don’t have tooling for this. For this you might be
+interested in the alternative <a href="https://input-output-hk.github.io/haskell.nix/index.html">haskell.nix</a> framework, which, be warned, is
+completely incompatible with packages from <code>haskellPackages</code>.</p>
+<!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
+
+<h2 id="haskell-mkderivation"><code>haskellPackages.mkDerivation</code><a class="headerlink" href="#haskell-mkderivation" title="Permanent link">#</a></h2>
+<p>Every haskell package set has its own haskell-aware <code>mkDerivation</code> which is used
+to build its packages. Generally you won't have to interact with this builder
+since <a href="https://github.com/nixos/cabal2nix">cabal2nix</a> can generate packages
+using it for an arbitrary cabal package definition. Still it is useful to know
+the parameters it takes when you need to
+<a href="#haskell-overriding-haskell-packages">override</a> a generated Nix expression.</p>
+<p><code>haskellPackages.mkDerivation</code> is a wrapper around <code>stdenv.mkDerivation</code> which
+re-defines the default phases to be haskell aware and handles dependency
+specification, test suites, benchmarks etc. by compiling and invoking the
+package's <code>Setup.hs</code>. It does <em>not</em> use or invoke the <code>cabal-install</code> binary,
+but uses the underlying <code>Cabal</code> library instead.</p>
+<h3 id="haskell-derivation-args">General arguments<a class="headerlink" href="#haskell-derivation-args" title="Permanent link">#</a></h3>
+<p><code>pname</code>
+: Package name, assumed to be the same as on Hackage (if applicable)</p>
+<p><code>version</code>
+: Packaged version, assumed to be the same as on Hackage (if applicable)</p>
+<p><code>src</code>
+: Source of the package. If omitted, fetch package corresponding to <code>pname</code>
+and <code>version</code> from Hackage.</p>
+<p><code>sha256</code>
+: Hash to use for the default case of <code>src</code>.</p>
+<p><code>revision</code>
+: Revision number of the updated cabal file to fetch from Hackage.
+If <code>null</code> (which is the default value), the one included in <code>src</code> is used.</p>
+<p><code>editedCabalFile</code>
+: <code>sha256</code> hash of the cabal file identified by <code>revision</code> or <code>null</code>.</p>
+<p><code>configureFlags</code>
+: Extra flags passed when executing the <code>configure</code> command of <code>Setup.hs</code>.</p>
+<p><code>buildFlags</code>
+: Extra flags passed when executing the <code>build</code> command of <code>Setup.hs</code>.</p>
+<p><code>haddockFlags</code>
+: Extra flags passed to <code>Setup.hs haddock</code> when building the documentation.</p>
+<p><code>doCheck</code>
+: Whether to execute the package's test suite if it has one. Defaults to <code>true</code> unless cross-compiling.</p>
+<p><code>doBenchmark</code>
+: Whether to execute the package's benchmark if it has one. Defaults to <code>false</code>.</p>
+<p><code>doHoogle</code>
+: Whether to generate an index file for <a href="https://wiki.haskell.org/Hoogle">hoogle</a> as part of
+<code>haddockPhase</code> by passing the <a href="https://haskell-haddock.readthedocs.io/en/latest/invoking.html#cmdoption-hoogle"><code>--hoogle</code> option</a>.
+Defaults to <code>true</code>.</p>
+<p><code>doHaddockQuickjump</code>
+: Whether to generate an index for interactive navigation of the HTML documentation.
+Defaults to <code>true</code> if supported.</p>
+<p><code>doInstallIntermediates</code>
+: Whether to install intermediate build products (files written to <code>dist/build</code>
+by GHC during the build process). With <code>enableSeparateIntermediatesOutput</code>,
+these files are instead installed to <a href="https://nixos.org/manual/nixpkgs/stable/#chap-multiple-output">a separate <code>intermediates</code>
+output.</a> The output can then be passed into a future build of
+the same package with the <code>previousIntermediates</code> argument to support
+incremental builds. See <a href="#haskell-incremental-builds">“Incremental builds”</a> for
+more information. Defaults to <code>false</code>.</p>
+<p><code>enableLibraryProfiling</code>
+: Whether to enable <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html">profiling</a> for libraries contained in the
+package. Enabled by default if supported.</p>
+<p><code>enableExecutableProfiling</code>
+: Whether to enable <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html">profiling</a> for executables contained in the
+package. Disabled by default.</p>
+<p><code>profilingDetail</code>
+: <a href="https://cabal.readthedocs.io/en/latest/cabal-project.html#cfg-field-profiling-detail">Profiling detail level</a> to set. Defaults to <code>exported-functions</code>.</p>
+<p><code>enableSharedExecutables</code>
+: Whether to link executables dynamically. By default, executables are linked statically.</p>
+<p><code>enableSharedLibraries</code>
+: Whether to build shared Haskell libraries. This is enabled by default unless we are using
+<code>pkgsStatic</code> or shared libraries have been disabled in GHC.</p>
+<p><code>enableStaticLibraries</code>
+: Whether to build static libraries. Enabled by default if supported.</p>
+<p><code>enableDeadCodeElimination</code>
+: Whether to enable linker based dead code elimination in GHC.
+Enabled by default if supported.</p>
+<p><code>enableHsc2hsViaAsm</code>
+: Whether to pass <code>--via-asm</code> to <code>hsc2hs</code>. Enabled by default only on Windows.</p>
+<p><code>hyperlinkSource</code>
+: Whether to render the source as well as part of the haddock documentation
+by passing the <a href="https://haskell-haddock.readthedocs.io/en/latest/invoking.html#cmdoption-hyperlinked-source"><code>--hyperlinked-source</code> flag</a>.
+Defaults to <code>true</code>.</p>
+<p><code>isExecutable</code>
+: Whether the package contains an executable.</p>
+<p><code>isLibrary</code>
+: Whether the package contains a library.</p>
+<p><code>jailbreak</code>
+: Whether to execute <a href="https://github.com/NixOS/jailbreak-cabal/">jailbreak-cabal</a> before <code>configurePhase</code>
+to lift any version constraints in the cabal file. Note that this can't
+lift version bounds if they are conditional, i.e. if a dependency is hidden
+behind a flag.</p>
+<p><code>enableParallelBuilding</code>
+: Whether to use the <code>-j</code> flag to make GHC/Cabal start multiple jobs in parallel.</p>
+<p><code>maxBuildCores</code>
+: Upper limit of jobs to use in parallel for compilation regardless of
+<code>$NIX_BUILD_CORES</code>. Defaults to 16 as Haskell compilation with GHC currently
+sees a <a href="https://gitlab.haskell.org/ghc/ghc/-/issues/9221">performance regression</a>
+if too many parallel jobs are used.</p>
+<p><code>doCoverage</code>
+: Whether to generate and install files needed for <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html#observing-code-coverage">HPC</a>.
+Defaults to <code>false</code>.</p>
+<p><code>doHaddock</code>
+: Whether to build (HTML) documentation using <a href="https://www.haskell.org/haddock/">haddock</a>.
+Defaults to <code>true</code> if supported.</p>
+<p><code>testTarget</code>
+: Name of the test suite to build and run. If unset, all test suites will be executed.</p>
+<p><code>preCompileBuildDriver</code>
+: Shell code to run before compiling <code>Setup.hs</code>.</p>
+<p><code>postCompileBuildDriver</code>
+: Shell code to run after compiling <code>Setup.hs</code>.</p>
+<p><code>preHaddock</code>
+: Shell code to run before building documentation using haddock.</p>
+<p><code>postHaddock</code>
+: Shell code to run after building documentation using haddock.</p>
+<p><code>coreSetup</code>
+: Whether to only allow core libraries to be used while building <code>Setup.hs</code>.
+Defaults to <code>false</code>.</p>
+<p><code>useCpphs</code>
+: Whether to enable the <a href="https://Hackage.haskell.org/package/cpphs">cpphs</a> preprocessor. Defaults to <code>false</code>.</p>
+<p><code>enableSeparateBinOutput</code>
+: Whether to install executables to a separate <code>bin</code> output. Defaults to <code>false</code>.</p>
+<p><code>enableSeparateDataOutput</code>
+: Whether to install data files shipped with the package to a separate <code>data</code> output.
+Defaults to <code>false</code>.</p>
+<p><code>enableSeparateDocOutput</code>
+: Whether to install documentation to a separate <code>doc</code> output.
+Is automatically enabled if <code>doHaddock</code> is <code>true</code>.</p>
+<p><code>enableSeparateIntermediatesOutput</code>
+: When <code>doInstallIntermediates</code> is true, whether to install intermediate build
+products to a separate <code>intermediates</code> output. See <a href="#haskell-incremental-builds">“Incremental
+builds”</a> for more information. Defaults to
+<code>false</code>.</p>
+<p><code>allowInconsistentDependencies</code>
+: If enabled, allow multiple versions of the same Haskell package in the
+dependency tree at configure time. Often in such a situation compilation would
+later fail because of type mismatches. Defaults to <code>false</code>.</p>
+<p><code>enableLibraryForGhci</code>
+: Build and install a special object file for GHCi. This improves performance
+when loading the library in the REPL, but requires extra build time and
+disk space. Defaults to <code>false</code>.</p>
+<p><code>previousIntermediates</code>
+: If non-null, intermediate build artifacts are copied from this input to
+<code>dist/build</code> before performing compiling. See <a href="#haskell-incremental-builds">“Incremental
+builds”</a> for more information. Defaults to <code>null</code>.</p>
+<p><code>buildTarget</code>
+: Name of the executable or library to build and install.
+If unset, all available targets are built and installed.</p>
+<h3 id="haskell-derivation-deps">Specifying dependencies<a class="headerlink" href="#haskell-derivation-deps" title="Permanent link">#</a></h3>
+<p>Since <code>haskellPackages.mkDerivation</code> is intended to be generated from cabal
+files, it reflects cabal's way of specifying dependencies. For one, dependencies
+are grouped by what part of the package they belong to. This helps to reduce the
+dependency closure of a derivation, for example benchmark dependencies are not
+included if <code>doBenchmark == false</code>.</p>
+<p><code>setup*Depends</code>
+: dependencies necessary to compile <code>Setup.hs</code></p>
+<p><code>library*Depends</code>
+: dependencies of a library contained in the package</p>
+<p><code>executable*Depends</code>
+: dependencies of an executable contained in the package</p>
+<p><code>test*Depends</code>
+: dependencies of a test suite contained in the package</p>
+<p><code>benchmark*Depends</code>
+: dependencies of a benchmark contained in the package</p>
+<p>The other categorization relates to the way the package depends on the dependency:</p>
+<p><code>*ToolDepends</code>
+: Tools we need to run as part of the build process.
+They are added to the derivation's <code>nativeBuildInputs</code>.</p>
+<p><code>*HaskellDepends</code>
+: Haskell libraries the package depends on.
+They are added to <code>propagatedBuildInputs</code>.</p>
+<p><code>*SystemDepends</code>
+: Non-Haskell libraries the package depends on.
+They are added to <code>buildInputs</code></p>
+<p><code>*PkgconfigDepends</code>
+: <code>*SystemDepends</code> which are discovered using <code>pkg-config</code>.
+They are added to <code>buildInputs</code> and it is additionally
+ensured that <code>pkg-config</code> is available at build time.</p>
+<p><code>*FrameworkDepends</code>
+: Apple SDK Framework which the package depends on when compiling it on Darwin.</p>
+<p>Using these two distinctions, you should be able to categorize most of the dependency
+specifications that are available:
+<code>benchmarkFrameworkDepends</code>,
+<code>benchmarkHaskellDepends</code>,
+<code>benchmarkPkgconfigDepends</code>,
+<code>benchmarkSystemDepends</code>,
+<code>benchmarkToolDepends</code>,
+<code>executableFrameworkDepends</code>,
+<code>executableHaskellDepends</code>,
+<code>executablePkgconfigDepends</code>,
+<code>executableSystemDepends</code>,
+<code>executableToolDepends</code>,
+<code>libraryFrameworkDepends</code>,
+<code>libraryHaskellDepends</code>,
+<code>libraryPkgconfigDepends</code>,
+<code>librarySystemDepends</code>,
+<code>libraryToolDepends</code>,
+<code>setupHaskellDepends</code>,
+<code>testFrameworkDepends</code>,
+<code>testHaskellDepends</code>,
+<code>testPkgconfigDepends</code>,
+<code>testSystemDepends</code> and
+<code>testToolDepends</code>.</p>
+<p>That only leaves the following extra ways for specifying dependencies:</p>
+<p><code>buildDepends</code>
+: Allows specifying Haskell dependencies which are added to <code>propagatedBuildInputs</code> unconditionally.</p>
+<p><code>buildTools</code>
+: Like <code>*ToolDepends</code>, but are added to <code>nativeBuildInputs</code> unconditionally.</p>
+<p><code>extraLibraries</code>
+: Like <code>*SystemDepends</code>, but are added to <code>buildInputs</code> unconditionally.</p>
+<p><code>pkg-configDepends</code>
+: Like <code>*PkgconfigDepends</code>, but are added to <code>buildInputs</code> unconditionally.</p>
+<p><code>testDepends</code>
+: Deprecated, use either <code>testHaskellDepends</code> or <code>testSystemDepends</code>.</p>
+<p><code>benchmarkDepends</code>
+: Deprecated, use either <code>benchmarkHaskellDepends</code> or <code>benchmarkSystemDepends</code>.</p>
+<p>The dependency specification methods in this list which are unconditional
+are especially useful when writing <a href="#haskell-overriding-haskell-packages">overrides</a>
+when you want to make sure that they are definitely included. However, it is
+recommended to use the more accurate ones listed above when possible.</p>
+<h3 id="haskell-derivation-meta">Meta attributes<a class="headerlink" href="#haskell-derivation-meta" title="Permanent link">#</a></h3>
+<p><code>haskellPackages.mkDerivation</code> accepts the following attributes as direct
+arguments which are transparently set in <code>meta</code> of the resulting derivation. See
+the <a href="#chap-meta">Meta-attributes section</a> for their documentation.</p>
+<ul>
+<li>These attributes are populated with a default value if omitted:<ul>
+<li><code>homepage</code>: defaults to the Hackage page for <code>pname</code>.</li>
+<li><code>platforms</code>: defaults to <code>lib.platforms.all</code> (since GHC can cross-compile)</li>
+</ul>
+</li>
+<li>These attributes are only set if given:<ul>
+<li><code>description</code></li>
+<li><code>license</code></li>
+<li><code>changelog</code></li>
+<li><code>maintainers</code></li>
+<li><code>broken</code></li>
+<li><code>hydraPlatforms</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="haskell-incremental-builds">Incremental builds<a class="headerlink" href="#haskell-incremental-builds" title="Permanent link">#</a></h3>
+<p><code>haskellPackages.mkDerivation</code> supports incremental builds for GHC 9.4 and
+newer with the <code>doInstallIntermediates</code>, <code>enableSeparateIntermediatesOutput</code>,
+and <code>previousIntermediates</code> arguments.</p>
+<p>The basic idea is to first perform a full build of the package in question,
+save its intermediate build products for later, and then copy those build
+products into the build directory of an incremental build performed later.
+Then, GHC will use those build artifacts to avoid recompiling unchanged
+modules.</p>
+<p>For more detail on how to store and use incremental build products, see
+<a href="https://www.haskellforall.com/2022/12/nixpkgs-support-for-incremental-haskell.html">Gabriella Gonzalez’ blog post “Nixpkgs support for incremental Haskell
+builds”.</a> motivation behind this feature.</p>
+<p>An incremental build for <a href="https://hackage.haskell.org/package/turtle">the <code>turtle</code> package</a> can be performed like
+so:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">let</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  <span class="ss">pkgs</span> <span class="o">=</span> <span class="nb">import</span> <span class="l">&lt;nixpkgs&gt;</span> <span class="p">{};</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  <span class="k">inherit</span> <span class="p">(</span>pkgs<span class="p">)</span> haskell<span class="p">;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  <span class="k">inherit</span> <span class="p">(</span>haskell<span class="o">.</span>lib<span class="o">.</span>compose<span class="p">)</span> overrideCabal<span class="p">;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  <span class="c1"># Incremental builds work with GHC &gt;=9.4.</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  <span class="ss">turtle</span> <span class="o">=</span> haskell<span class="o">.</span>packages<span class="o">.</span>ghc944<span class="o">.</span>turtle<span class="p">;</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>  <span class="c1"># This will do a full build of `turtle`, while writing the intermediate build products</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>  <span class="c1"># (compiled modules, etc.) to the `intermediates` output.</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>  <span class="ss">turtle-full-build-with-incremental-output</span> <span class="o">=</span> overrideCabal <span class="p">(</span>drv<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="ss">doInstallIntermediates</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="ss">enableSeparateIntermediatesOutput</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>  <span class="p">})</span> turtle<span class="p">;</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>  <span class="c1"># This will do an incremental build of `turtle` by copying the previously</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>  <span class="c1"># compiled modules and intermediate build products into the source tree</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>  <span class="c1"># before running the build.</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>  <span class="c1">#</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>  <span class="c1"># GHC will then naturally pick up and reuse these products, making this build</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>  <span class="c1"># complete much more quickly than the previous one.</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>  <span class="ss">turtle-incremental-build</span> <span class="o">=</span> overrideCabal <span class="p">(</span>drv<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="ss">previousIntermediates</span> <span class="o">=</span> turtle-full-build-with-incremental-output<span class="o">.</span>intermediates<span class="p">;</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>  <span class="p">})</span> turtle<span class="p">;</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="k">in</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>  turtle-incremental-build
+</span></code></pre></div>
+<h2 id="haskell-development-environments">Development environments<a class="headerlink" href="#haskell-development-environments" title="Permanent link">#</a></h2>
+<p>In addition to building and installing Haskell software, nixpkgs can also
+provide development environments for Haskell projects. This has the obvious
+advantage that you benefit from <code>cache.nixos.org</code> and no longer need to compile
+all project dependencies yourself. While it is often very useful, this is not
+the primary use case of our package set. Have a look at the section
+<a href="#haskell-available-versions">available package versions</a> to learn which
+versions of packages we provide and the section
+<a href="#haskell-limitations">limitations</a>, to judge whether a <code>haskellPackages</code>
+based development environment for your project is feasible.</p>
+<p>By default, every derivation built using
+<a href="#haskell-mkderivation"><code>haskellPackages.mkDerivation</code></a> exposes an environment
+suitable for building it interactively as the <code>env</code> attribute. For example, if
+you have a local checkout of <code>random</code>, you can enter a development environment
+for it like this (if the dependencies in the development and packaged version
+match):</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/src/random
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="gp">$ </span>nix-shell<span class="w"> </span>-A<span class="w"> </span>haskellPackages.random.env<span class="w"> </span><span class="s1">&#39;&lt;nixpkgs&gt;&#39;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="gp">[nix-shell:~/src/random]$ </span>ghc-pkg<span class="w"> </span>list
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="go">/nix/store/a8hhl54xlzfizrhcf03c1l3f6l9l8qwv-ghc-9.2.4-with-packages/lib/ghc-9.2.4/package.conf.d</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="go">    Cabal-3.6.3.0</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="go">    array-0.5.4.0</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="go">    base-4.16.3.0</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="go">    binary-0.8.9.0</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="go">    …</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="go">    ghc-9.2.4</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="go">    …</span>
+</span></code></pre></div>
+<p>As you can see, the environment contains a GHC which is set up so it finds all
+dependencies of <code>random</code>. Note that this environment does not mirror
+the environment used to build the package, but is intended as a convenient
+tool for development and simple debugging. <code>env</code> relies on the <code>ghcWithPackages</code>
+wrapper which automatically injects a pre-populated package-db into every
+GHC invocation. In contrast, using <code>nix-shell -A haskellPackages.random</code> will
+not result in an environment in which the dependencies are in GHCs package
+database. Instead, the Haskell builder will pass in all dependencies explicitly
+via configure flags.</p>
+<p><code>env</code> mirrors the normal derivation environment in one aspect: It does not include
+familiar development tools like <code>cabal-install</code>, since we rely on plain <code>Setup.hs</code>
+to build all packages. However, <code>cabal-install</code> will work as expected if in
+<code>PATH</code> (e.g. when installed globally and using a <code>nix-shell</code> without <code>--pure</code>).
+A declarative and pure way of adding arbitrary development tools is provided
+via <a href="#haskell-shellFor"><code>shellFor</code></a>.</p>
+<p>When using <code>cabal-install</code> for dependency resolution you need to be a bit
+careful to achieve build purity. <code>cabal-install</code> will find and use all
+dependencies installed from the packages <code>env</code> via Nix, but it will also
+consult Hackage to potentially download and compile dependencies if it can’t
+find a valid build plan locally. To prevent this you can either never run
+<code>cabal update</code>, remove the cabal database from your <code>~/.cabal</code> folder or run
+<code>cabal</code> with <code>--offline</code>. Note though, that for some usecases <code>cabal2nix</code> needs
+the local Hackage db.</p>
+<p>Often you won't work on a package that is already part of <code>haskellPackages</code> or
+Hackage, so we first need to write a Nix expression to obtain the development
+environment from. Luckily, we can generate one very easily from an already
+existing cabal file using <code>cabal2nix</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="gp">$ </span>ls
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="go">my-project.cabal src …</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="gp">$ </span>cabal2nix<span class="w"> </span>./.<span class="w"> </span>&gt;<span class="w"> </span>my-project.nix
+</span></code></pre></div>
+<p>The generated Nix expression evaluates to a function ready to be
+<code>callPackage</code>-ed. For now, we can add a minimal <code>default.nix</code> which does just
+that:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Retrieve nixpkgs impurely from NIX_PATH for now, you can pin it instead, of course.</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span> pkgs <span class="o">?</span> <span class="nb">import</span> <span class="l">&lt;nixpkgs&gt;</span> <span class="p">{}</span> <span class="p">}:</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># use the nixpkgs default haskell package set</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>pkgs<span class="o">.</span>haskellPackages<span class="o">.</span>callPackage <span class="l">./my-project.nix</span> <span class="p">{</span> <span class="p">}</span>
+</span></code></pre></div>
+<p>Using <code>nix-build default.nix</code> we can now build our project, but we can also
+enter a shell with all the package's dependencies available using <code>nix-shell
+-A env default.nix</code>. If you have <code>cabal-install</code> installed globally, it'll work
+inside the shell as expected.</p>
+<h3 id="haskell-shellFor">shellFor<a class="headerlink" href="#haskell-shellFor" title="Permanent link">#</a></h3>
+<p>Having to install tools globally is obviously not great, especially if you want
+to provide a batteries-included <code>shell.nix</code> with your project. Luckily there's a
+proper tool for making development environments out of packages' build
+environments: <code>shellFor</code>, a function exposed by every haskell package set. It
+takes the following arguments and returns a derivation which is suitable as a
+development environment inside <code>nix-shell</code>:</p>
+<p><code>packages</code>
+: This argument is used to select the packages for which to build the
+development environment. This should be a function which takes a haskell package
+set and returns a list of packages. <code>shellFor</code> will pass the used package set to
+this function and include all dependencies of the returned package in the build
+environment. This means you can reuse Nix expressions of packages included in
+nixpkgs, but also use local Nix expressions like this: <code>hpkgs: [
+(hpkgs.callPackage ./my-project.nix { }) ]</code>.</p>
+<p><code>nativeBuildInputs</code>
+: Expects a list of derivations to add as build tools to the build environment.
+This is the place to add packages like <code>cabal-install</code>, <code>doctest</code> or <code>hlint</code>.
+Defaults to <code>[]</code>.</p>
+<p><code>buildInputs</code>
+: Expects a list of derivations to add as library dependencies, like <code>openssl</code>.
+This is rarely necessary as the haskell package expressions usually track system
+dependencies as well. Defaults to <code>[]</code>. (see also
+<a href="#haskell-derivation-deps">derivation dependencies</a>)</p>
+<p><code>withHoogle</code>
+: If this is true, <code>hoogle</code> will be added to <code>nativeBuildInputs</code>.
+Additionally, its database will be populated with all included dependencies,
+so you'll be able search through the documentation of your dependencies.
+Defaults to <code>false</code>.</p>
+<p><code>genericBuilderArgsModifier</code>
+: This argument accepts a function allowing you to modify the arguments passed
+to <code>mkDerivation</code> in order to create the development environment. For example,
+<code>args: { doCheck = false; }</code> would cause the environment to not include any test
+dependencies. Defaults to <code>lib.id</code>.</p>
+<p><code>doBenchmark</code>
+: This is a shortcut for enabling <code>doBenchmark</code> via <code>genericBuilderArgsModifier</code>.
+Setting it to <code>true</code> will cause the development environment to include all
+benchmark dependencies which would be excluded by default. Defaults to <code>false</code>.</p>
+<p>One neat property of <code>shellFor</code> is that it allows you to work on multiple
+packages using the same environment in conjunction with
+<a href="https://cabal.readthedocs.io/en/latest/cabal-project.html">cabal.project files</a>.
+Say our example above depends on <code>distribution-nixpkgs</code> and we have a project
+file set up for both, we can add the following <code>shell.nix</code> expression:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span> pkgs <span class="o">?</span> <span class="nb">import</span> <span class="l">&lt;nixpkgs&gt;</span> <span class="p">{}</span> <span class="p">}:</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>pkgs<span class="o">.</span>haskellPackages<span class="o">.</span>shellFor <span class="p">{</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  <span class="ss">packages</span> <span class="o">=</span> hpkgs<span class="p">:</span> <span class="p">[</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="c1"># reuse the nixpkgs for this package</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    hpkgs<span class="o">.</span>distribution-nixpkgs
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="c1"># call our generated Nix expression manually</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="p">(</span>hpkgs<span class="o">.</span>callPackage <span class="l">./my-project/my-project.nix</span> <span class="p">{</span> <span class="p">})</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  <span class="p">];</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>  <span class="c1"># development tools we use</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>  <span class="ss">nativeBuildInputs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    pkgs<span class="o">.</span>cabal-install
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    pkgs<span class="o">.</span>haskellPackages<span class="o">.</span>doctest
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    pkgs<span class="o">.</span>cabal2nix
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>  <span class="p">];</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>  <span class="c1"># Extra arguments are added to mkDerivation&#39;s arguments as-is.</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>  <span class="c1"># Since it adds all passed arguments to the shell environment,</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>  <span class="c1"># we can use this to set the environment variable the `Paths_`</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>  <span class="c1"># module of distribution-nixpkgs uses to search for bundled</span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>  <span class="c1"># files.</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>  <span class="c1"># See also: https://cabal.readthedocs.io/en/latest/cabal-package.html#accessing-data-files-from-package-code</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>  <span class="ss">distribution_nixpkgs_datadir</span> <span class="o">=</span> <span class="nb">toString</span> <span class="l">./distribution-nixpkgs</span><span class="p">;</span>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="p">}</span>
+</span></code></pre></div>
+<!-- TODO(@sternenseemann): deps are not included if not selected -->
+
+<h3 id="haskell-language-server">haskell-language-server<a class="headerlink" href="#haskell-language-server" title="Permanent link">#</a></h3>
+<p>To use HLS in short: Install <code>pkgs.haskell-language-server</code> e.g. in
+<code>nativeBuildInputs</code> in <code>shellFor</code> and use the <code>haskell-language-server-wrapper</code>
+command to run it. See the <a href="https://haskell-language-server.readthedocs.io/en/latest/configuration.html#configuring-your-editor">HLS user guide</a> on how to configure your text
+editor to use HLS and how to test your setup.</p>
+<p>HLS needs to be compiled with the GHC version of the project you use it
+on.</p>
+<p><code>pkgs.haskell-language-server</code> provides
+<code>haskell-language-server-wrapper</code>, <code>haskell-language-server</code>
+and <code>haskell-language-server-x.x.x</code>
+binaries, where <code>x.x.x</code> is the GHC version for which it is compiled. By
+default, it only includes binaries for the current GHC version, to reduce
+closure size. The closure size is large, because HLS needs to be dynamically
+linked to work reliably. You can override the list of supported GHC versions
+with e.g.</p>
+<p><div class="language-nix highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pkgs<span class="o">.</span>haskell-language-server<span class="o">.</span>override <span class="p">{</span> <span class="ss">supportedGhcVersions</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;90&quot;</span> <span class="s2">&quot;94&quot;</span> <span class="p">];</span> <span class="p">}</span>
+</span></code></pre></div>
+Where all strings <code>version</code> are allowed such that
+<code>haskell.packages.ghc${version}</code> is an existing package set.</p>
+<p>When you run <code>haskell-language-server-wrapper</code> it will detect the GHC
+version used by the project you are working on (by asking e.g. cabal or
+stack) and pick the appropriate versioned binary from your path.</p>
+<p>Be careful when installing HLS globally and using a pinned nixpkgs for a
+Haskell project in a <code>nix-shell</code>. If the nixpkgs versions deviate to much
+(e.g., use different <code>glibc</code> versions) the <code>haskell-language-server-?.?.?</code>
+executable will try to detect these situations and refuse to start. It is
+recommended to obtain HLS via <code>nix-shell</code> from the nixpkgs version pinned in
+there instead.</p>
+<p>The top level <code>pkgs.haskell-language-server</code> attribute is just a convenience
+wrapper to make it possible to install HLS for multiple GHC versions at the
+same time. If you know, that you only use one GHC version, e.g., in a project
+specific <code>nix-shell</code> you can use
+<code>pkgs.haskellPackages.haskell-language-server</code> or
+<code>pkgs.haskell.packages.*.haskell-language-server</code> from the package set you use.</p>
+<p>If you use <code>nix-shell</code> for your development environments remember to start your
+editor in that environment. You may want to use something like <code>direnv</code> and/or an
+editor plugin to achieve this.</p>
+<h2 id="haskell-overriding-haskell-packages">Overriding Haskell packages<a class="headerlink" href="#haskell-overriding-haskell-packages" title="Permanent link">#</a></h2>
+<h3 id="haskell-overriding-a-single-package">Overriding a single package<a class="headerlink" href="#haskell-overriding-a-single-package" title="Permanent link">#</a></h3>
+<!-- TODO(@sternenseemann): we should document /somewhere/ that base == null etc. -->
+
+<p>Like many language specific subsystems in nixpkgs, the Haskell infrastructure
+also has its own quirks when it comes to overriding. Overriding of the <em>inputs</em>
+to a package at least follows the standard procedure. For example, imagine you
+need to build <code>nix-tree</code> with a more recent version of <code>brick</code> than the default
+one provided by <code>haskellPackages</code>:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>haskellPackages<span class="o">.</span>nix-tree<span class="o">.</span>override <span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  <span class="ss">brick</span> <span class="o">=</span> haskellPackages<span class="o">.</span>brick_0_67<span class="p">;</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<!-- TODO(@sternenseemann): This belongs in the next section
+One common problem you may run into with such an override is the build failing
+with “abort because of serious configure-time warning from Cabal”. When scrolling
+up, you'll usually notice that Cabal noticed that more than one versions of the same
+package was present in the dependency graph. This typically causes a later compilation
+failure (the error message `haskellPackages.mkDerivation` produces tries to save
+you the time of finding this out yourself, but if you wish to do so, you can
+disable it using `allowInconsistentDependencies`). Luckily, `haskellPackages` provides
+you with a tool to deal with this. `overrideScope` creates a new `haskellPackages`
+instance with the override applied *globally* for this package, so the dependency
+closure automatically uses a consistent version of the overridden package. E. g.
+if `haskell-ci` needs a recent version of `Cabal`, but also uses other packages
+that depend on that library, you may want to use:
+
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>haskellPackages<span class="o">.</span>haskell-ci<span class="o">.</span>overrideScope <span class="p">(</span>self<span class="p">:</span> super<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  <span class="ss">Cabal</span> <span class="o">=</span> self<span class="o">.</span>Cabal_3_6_2_0<span class="p">;</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">})</span>
+</span></code></pre></div>
+
+-->
+
+<p>The custom interface comes into play when you want to override the arguments
+passed to <code>haskellPackages.mkDerivation</code>. For this, the function <code>overrideCabal</code>
+from <code>haskell.lib.compose</code> is used. E.g., if you want to install a man page
+that is distributed with the package, you can do something like this:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>haskell<span class="o">.</span>lib<span class="o">.</span>compose<span class="o">.</span>overrideCabal <span class="p">(</span>drv<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  <span class="ss">postInstall</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="s s-Multiline">    </span><span class="si">${</span>drv<span class="o">.</span>postInstall <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="si">}</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s s-Multiline">    install -Dm644 man/pnbackup.1 -t $out/share/man/man1</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s s-Multiline">  &#39;&#39;</span><span class="p">;</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">})</span> haskellPackages<span class="o">.</span>pnbackup
+</span></code></pre></div>
+<p><code>overrideCabal</code> takes two arguments:</p>
+<ol>
+<li>A function which receives all arguments passed to <code>haskellPackages.mkDerivation</code>
+   before and returns a set of arguments to replace (or add) with a new value.</li>
+<li>The Haskell derivation to override.</li>
+</ol>
+<p>The arguments are ordered so that you can easily create helper functions by making
+use of currying:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">let</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  <span class="ss">installManPage</span> <span class="o">=</span> haskell<span class="o">.</span>lib<span class="o">.</span>compose<span class="o">.</span>overrideCabal <span class="p">(</span>drv<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="ss">postInstall</span> <span class="o">=</span> <span class="s s-Multiline">&#39;&#39;</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="s s-Multiline">      </span><span class="si">${</span>drv<span class="o">.</span>postInstall <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="si">}</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="s s-Multiline">      install -Dm644 man/</span><span class="si">${</span>drv<span class="o">.</span>pname<span class="si">}</span><span class="s s-Multiline">.1 -t &quot;$out/share/man/man1&quot;</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="s s-Multiline">    &#39;&#39;</span><span class="p">;</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>  <span class="p">});</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="k">in</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>installManPage haskellPackages<span class="o">.</span>pnbackup
+</span></code></pre></div>
+<p>In fact, <code>haskell.lib.compose</code> already provides lots of useful helpers for common
+tasks, detailed in the next section. They are also structured in such a way that
+they can be combined using <code>lib.pipe</code>:</p>
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>lib<span class="o">.</span>pipe my-haskell-package <span class="p">[</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>  <span class="c1"># lift version bounds on dependencies</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>  haskell<span class="o">.</span>lib<span class="o">.</span>compose<span class="o">.</span>doJailbreak
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>  <span class="c1"># disable building the haddock documentation</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>  haskell<span class="o">.</span>lib<span class="o">.</span>compose<span class="o">.</span>dontHaddock
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>  <span class="c1"># pass extra package flag to Cabal&#39;s configure step</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>  <span class="p">(</span>haskell<span class="o">.</span>lib<span class="o">.</span>compose<span class="o">.</span>enableCabalFlag <span class="s2">&quot;myflag&quot;</span><span class="p">)</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">]</span>
+</span></code></pre></div>
+<h4 id="haskell-haskell.lib.compose"><code>haskell.lib.compose</code><a class="headerlink" href="#haskell-haskell.lib.compose" title="Permanent link">#</a></h4>
+<p>The base interface for all overriding is the following function:</p>
+<p><code>overrideCabal f drv</code>
+: Takes the arguments passed to obtain <code>drv</code> to <code>f</code> and uses the resulting
+attribute set to update the argument set. Then a recomputed version of <code>drv</code>
+using the new argument set is returned.</p>
+<!--
+TODO(@sternenseemann): ideally we want to be more detailed here as well, but
+I want to avoid the documentation having to be kept in sync in too many places.
+We already document this stuff in the mkDerivation section and lib/compose.nix.
+Ideally this section would be generated from the latter in the future.
+-->
+
+<p>All other helper functions are implemented in terms of <code>overrideCabal</code> and make
+common overrides shorter and more complicate ones trivial. The simple overrides
+which only change a single argument are only described very briefly in the
+following overview. Refer to the
+<a href="#haskell-mkderivation">documentation of <code>haskellPackages.mkDerivation</code></a>
+for a more detailed description of the effects of the respective arguments.</p>
+<h5 id="haskell-packaging-helpers">Packaging Helpers<a class="headerlink" href="#haskell-packaging-helpers" title="Permanent link">#</a></h5>
+<p><code>overrideSrc { src, version } drv</code>
+: Replace the source used for building <code>drv</code> with the path or derivation given
+as <code>src</code>. The <code>version</code> attribute is optional. Prefer this function over
+overriding <code>src</code> via <code>overrideCabal</code>, since it also automatically takes care of
+removing any Hackage revisions.</p>
+<!-- TODO(@sternenseemann): deprecated
+
+`generateOptparseApplicativeCompletions list drv`
+: Generate and install shell completion files for the installed executables whose
+names are given via `list`. The executables need to be using `optparse-applicative`
+for this to work.
+-->
+
+<p><code>justStaticExecutables drv</code>
+: Only build and install the executables produced by <code>drv</code>, removing everything
+that may refer to other Haskell packages' store paths (like libraries and
+documentation). This dramatically reduces the closure size of the resulting
+derivation. Note that the executables are only statically linked against their
+Haskell dependencies, but will still link dynamically against libc, GMP and
+other system library dependencies. If dependencies use their Cabal-generated
+<code>Paths_*</code> module, this may not work as well if GHC's dead code elimination
+is unable to remove the references to the dependency's store path that module
+contains.</p>
+<p><code>enableSeparateBinOutput drv</code>
+: Install executables produced by <code>drv</code> to a separate <code>bin</code> output. This
+has a similar effect as <code>justStaticExecutables</code>, but preserves the libraries
+and documentation in the <code>out</code> output alongside the <code>bin</code> output with a
+much smaller closure size.</p>
+<p><code>markBroken drv</code>
+: Sets the <code>broken</code> flag to <code>true</code> for <code>drv</code>.</p>
+<p><code>markUnbroken drv</code>, <code>unmarkBroken drv</code>
+: Set the <code>broken</code> flag to <code>false</code> for <code>drv</code>.</p>
+<p><code>doDistribute drv</code>
+: Updates <code>hydraPlatforms</code> so that Hydra will build <code>drv</code>. This is
+sometimes necessary when working with versioned packages in
+<code>haskellPackages</code> which are not built by default.</p>
+<p><code>dontDistribute drv</code>
+: Sets <code>hydraPlatforms</code> to <code>[]</code>, causing Hydra to skip this package
+altogether. Useful if it fails to evaluate cleanly and is causing
+noise in the evaluation errors tab on Hydra.</p>
+<h5 id="haskell-development-helpers">Development Helpers<a class="headerlink" href="#haskell-development-helpers" title="Permanent link">#</a></h5>
+<p><code>sdistTarball drv</code>
+: Create a source distribution tarball like those found on Hackage
+instead of building the package <code>drv</code>.</p>
+<p><code>documentationTarball drv</code>
+: Create a documentation tarball suitable for uploading to Hackage
+instead of building the package <code>drv</code>.</p>
+<p><code>buildFromSdist drv</code>
+: Uses <code>sdistTarball drv</code> as the source to compile <code>drv</code>. This helps to catch
+packaging bugs when building from a local directory, e.g. when required files
+are missing from <code>extra-source-files</code>.</p>
+<p><code>failOnAllWarnings drv</code>
+: Enables all warnings GHC supports and makes it fail the build if any of them
+are emitted.</p>
+<!-- TODO(@sternenseemann):
+`checkUnusedPackages opts drv`
+: Adds an extra check to `postBuild` which fails the build if any dependency
+taken as an input is not used. The `opts` attribute set allows relaxing this
+check.
+-->
+
+<p><code>enableDWARFDebugging drv</code>
+: Compiles the package with additional debug symbols enabled, useful
+for debugging with e.g. <code>gdb</code>.</p>
+<p><code>doStrip drv</code>
+: Sets <code>doStrip</code> to <code>true</code> for <code>drv</code>.</p>
+<p><code>dontStrip drv</code>
+: Sets <code>doStrip</code> to <code>false</code> for <code>drv</code>.</p>
+<!-- TODO(@sternenseemann): shellAware -->
+
+<h5 id="haskell-trivial-helpers">Trivial Helpers<a class="headerlink" href="#haskell-trivial-helpers" title="Permanent link">#</a></h5>
+<p><code>doJailbreak drv</code>
+: Sets the <code>jailbreak</code> argument to <code>true</code> for <code>drv</code>.</p>
+<p><code>dontJailbreak drv</code>
+: Sets the <code>jailbreak</code> argument to <code>false</code> for <code>drv</code>.</p>
+<p><code>doHaddock drv</code>
+: Sets <code>doHaddock</code> to <code>true</code> for <code>drv</code>.</p>
+<p><code>dontHaddock drv</code>
+: Sets <code>doHaddock</code> to <code>false</code> for <code>drv</code>. Useful if the build of a package is
+failing because of e.g. a syntax error in the Haddock documentation.</p>
+<p><code>doHyperlinkSource drv</code>
+: Sets <code>hyperlinkSource</code> to <code>true</code> for <code>drv</code>.</p>
+<p><code>dontHyperlinkSource drv</code>
+: Sets <code>hyperlinkSource</code> to <code>false</code> for <code>drv</code>.</p>
+<p><code>doCheck drv</code>
+: Sets <code>doCheck</code> to <code>true</code> for <code>drv</code>.</p>
+<p><code>dontCheck drv</code>
+: Sets <code>doCheck</code> to <code>false</code> for <code>drv</code>. Useful if a package has a broken,
+flaky or otherwise problematic test suite breaking the build.</p>
+<!-- Purposefully omitting the non-list variants here. They are a bit
+ugly, and we may want to deprecate them at some point. -->
+
+<p><code>appendConfigureFlags list drv</code>
+: Adds the strings in <code>list</code> to the <code>configureFlags</code> argument for <code>drv</code>.</p>
+<p><code>enableCabalFlag flag drv</code>
+: Makes sure that the Cabal flag <code>flag</code> is enabled in Cabal's configure step.</p>
+<p><code>disableCabalFlag flag drv</code>
+: Makes sure that the Cabal flag <code>flag</code> is disabled in Cabal's configure step.</p>
+<p><code>appendBuildFlags list drv</code>
+: Adds the strings in <code>list</code> to the <code>buildFlags</code> argument for <code>drv</code>.</p>
+<!-- TODO(@sternenseemann): removeConfigureFlag -->
+
+<p><code>appendPatches list drv</code>
+: Adds the <code>list</code> of derivations or paths to the <code>patches</code> argument for <code>drv</code>.</p>
+<!-- TODO(@sternenseemann): link dep section -->
+
+<p><code>addBuildTools list drv</code>
+: Adds the <code>list</code> of derivations to the <code>buildTools</code> argument for <code>drv</code>.</p>
+<p><code>addExtraLibraries list drv</code>
+: Adds the <code>list</code> of derivations to the <code>extraLibraries</code> argument for <code>drv</code>.</p>
+<p><code>addBuildDepends list drv</code>
+: Adds the <code>list</code> of derivations to the <code>buildDepends</code> argument for <code>drv</code>.</p>
+<p><code>addTestToolDepends list drv</code>
+: Adds the <code>list</code> of derivations to the <code>testToolDepends</code> argument for <code>drv</code>.</p>
+<p><code>addPkgconfigDepends list drv</code>
+: Adds the <code>list</code> of derivations to the <code>pkg-configDepends</code> argument for <code>drv</code>.</p>
+<p><code>addSetupDepends list drv</code>
+: Adds the <code>list</code> of derivations to the <code>setupHaskellDepends</code> argument for <code>drv</code>.</p>
+<p><code>doBenchmark drv</code>
+: Set <code>doBenchmark</code> to <code>true</code> for <code>drv</code>. Useful if your development
+environment is missing the dependencies necessary for compiling the
+benchmark component.</p>
+<p><code>dontBenchmark drv</code>
+: Set <code>doBenchmark</code> to <code>false</code> for <code>drv</code>.</p>
+<p><code>setBuildTargets drv list</code>
+: Sets the <code>buildTarget</code> argument for <code>drv</code> so that the targets specified in <code>list</code> are built.</p>
+<p><code>doCoverage drv</code>
+: Sets the <code>doCoverage</code> argument to <code>true</code> for <code>drv</code>.</p>
+<p><code>dontCoverage drv</code>
+: Sets the <code>doCoverage</code> argument to <code>false</code> for <code>drv</code>.</p>
+<p><code>enableExecutableProfiling drv</code>
+: Sets the <code>enableExecutableProfiling</code> argument to <code>true</code> for <code>drv</code>.</p>
+<p><code>disableExecutableProfiling drv</code>
+: Sets the <code>enableExecutableProfiling</code> argument to <code>false</code> for <code>drv</code>.</p>
+<p><code>enableLibraryProfiling drv</code>
+: Sets the <code>enableLibraryProfiling</code> argument to <code>true</code> for <code>drv</code>.</p>
+<p><code>disableLibraryProfiling drv</code>
+: Sets the <code>enableLibraryProfiling</code> argument to <code>false</code> for <code>drv</code>.</p>
+<h4 id="haskell-package-set-lib-functions">Library functions in the Haskell package sets<a class="headerlink" href="#haskell-package-set-lib-functions" title="Permanent link">#</a></h4>
+<p>Some library functions depend on packages from the Haskell package sets. Thus they are
+exposed from those instead of from <code>haskell.lib.compose</code> which can only access what is
+passed directly to it. When using the functions below, make sure that you are obtaining them
+from the same package set (<code>haskellPackages</code>, <code>haskell.packages.ghc944</code> etc.) as the packages
+you are working with or – even better – from the <code>self</code>/<code>final</code> fix point of your overlay to
+<code>haskellPackages</code>.</p>
+<p>Note: Some functions like <code>shellFor</code> that are not intended for overriding per se, are omitted
+in this section. <!-- TODO(@sternenseemann): note about ifd section --></p>
+<p><code>cabalSdist { src, name ? ... }</code>
+: Generates the Cabal sdist tarball for <code>src</code>, suitable for uploading to Hackage.
+Contrary to <code>haskell.lib.compose.sdistTarball</code>, it uses <code>cabal-install</code> over <code>Setup.hs</code>,
+so it is usually faster: No build dependencies need to be downloaded, and we can
+skip compiling <code>Setup.hs</code>.</p>
+<p><code>buildFromCabalSdist drv</code>
+: Build <code>drv</code>, but run its <code>src</code> attribute through <code>cabalSdist</code> first. Useful for catching
+files necessary for compilation that are missing from the sdist.</p>
+<p><code>generateOptparseApplicativeCompletions list drv</code>
+: Generate and install shell completion files for the installed executables whose
+names are given via <code>list</code>. The executables need to be using <code>optparse-applicative</code>
+for <a href="https://github.com/pcapriotti/optparse-applicative/blob/7726b63796aa5d0df82e926d467f039b78ca09e2/README.md#bash-zsh-and-fish-completions">this to work</a>.
+Note that this feature is automatically disabled when cross-compiling, since it
+requires executing the binaries in question.</p>
+<!--
+
+TODO(@NixOS/haskell): finish these planned sections
+### Overriding the entire package set
+
+
+## Import-from-Derivation helpers
+
+* `callCabal2nix`
+* `callHackage`, `callHackageDirect`
+* `developPackage`
+
+## Contributing {#haskell-contributing}
+
+### Fixing a broken package {#haskell-fixing-a-broken-package}
+
+### Package set generation {#haskell-package-set-generation}
+
+### Packaging a Haskell project
+
+### Backporting {#haskell-backporting}
+
+Backporting changes to a stable NixOS version in general is covered
+in nixpkgs' `CONTRIBUTING.md` in general. In particular refer to the
+[backporting policy](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#criteria-for-backporting-changes)
+to check if the change you have in mind may be backported.
+
+This section focuses on how to backport a package update (e.g. a
+bug fix or security release). Fixing a broken package works like
+it does for the unstable branches.
+
+-->
+
+<h2 id="haskell-faq">F.A.Q.<a class="headerlink" href="#haskell-faq" title="Permanent link">#</a></h2>
+<h3 id="haskell-why-not-covered">Why is topic X not covered in this section? Why is section Y missing?<a class="headerlink" href="#haskell-why-not-covered" title="Permanent link">#</a></h3>
+<p>We have been working on <a href="https://github.com/NixOS/nixpkgs/issues/121403">moving the nixpkgs Haskell documentation back into the
+nixpkgs manual</a>. Since this
+process has not been completed yet, you may find some topics missing here
+covered in the old <a href="https://haskell4nix.readthedocs.io/">haskell4nix docs</a>.</p>
+<p>If you feel any important topic is not documented at all, feel free to comment
+on the issue linked above.</p>
+<h3 id="haskell-faq-override-profiling">How to enable or disable profiling builds globally?<a class="headerlink" href="#haskell-faq-override-profiling" title="Permanent link">#</a></h3>
+<p>By default, Nixpkgs builds a profiling version of each Haskell library. The
+exception to this rule are some platforms where it is disabled due to concerns
+over output size. You may want to…</p>
+<ul>
+<li>
+<p>…enable profiling globally so that you can build a project you are working on
+  with profiling ability giving you insight in the time spent across your code
+  and code you depend on using <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html">GHC's profiling feature</a>.</p>
+</li>
+<li>
+<p>…disable profiling (globally) to reduce the time spent building the profiling
+  versions of libraries which a significant amount of build time is spent on
+  (although they are not as expensive as the “normal” build of a Haskell library).</p>
+</li>
+</ul>
+<p>::: {.note}
+The method described below affects the build of all libraries in the
+respective Haskell package set as well as GHC. If your choices differ from
+Nixpkgs' default for your (host) platform, you will lose the ability to
+substitute from the official binary cache.</p>
+<p>If you are concerned about build times and thus want to disable profiling, it
+probably makes sense to use <code>haskell.lib.compose.disableLibraryProfiling</code> (see
+<a href="#haskell-trivial-helpers"></a>) on the packages you are building locally while
+continuing to substitute their dependencies and GHC.
+:::</p>
+<p>Since we need to change the profiling settings for the desired Haskell package
+set <em>and</em> GHC (as the core libraries like <code>base</code>, <code>filepath</code> etc. are bundled
+with GHC), it is recommended to use overlays for Nixpkgs to change them.
+Since the interrelated parts, i.e. the package set and GHC, are connected
+via the Nixpkgs fixpoint, we need to modify them both in a way that preserves
+their connection (or else we'd have to wire it up again manually). This is
+achieved by changing GHC and the package set in separate overlays to prevent
+the package set from pulling in GHC from <code>prev</code>.</p>
+<p>The result is two overlays like the ones shown below. Adjustable parts are
+annotated with comments, as are any optional or alternative ways to achieve
+the desired profiling settings without causing too many rebuilds.</p>
+<!-- TODO(@sternenseemann): buildHaskellPackages != haskellPackages with this overlay,
+affected by https://github.com/NixOS/nixpkgs/issues/235960 which needs to be fixed
+properly still.
+-->
+
+<div class="language-nix highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">let</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  <span class="c1"># Name of the compiler and package set you want to change. If you are using</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  <span class="c1"># the default package set `haskellPackages`, you need to look up what version</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  <span class="c1"># of GHC it currently uses (note that this is subject to change).</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>  <span class="ss">ghcName</span> <span class="o">=</span> <span class="s2">&quot;ghc92&quot;</span><span class="p">;</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>  <span class="c1"># Desired new setting</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>  <span class="ss">enableProfiling</span> <span class="o">=</span> <span class="no">true</span><span class="p">;</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="k">in</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="p">[</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>  <span class="c1"># The first overlay modifies the GHC derivation so that it does or does not</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>  <span class="c1"># build profiling versions of the core libraries bundled with it. It is</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>  <span class="c1"># recommended to only use such an overlay if you are enabling profiling on a</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>  <span class="c1"># platform that doesn&#39;t by default, because compiling GHC from scratch is</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>  <span class="c1"># quite expensive.</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>  <span class="p">(</span>final<span class="p">:</span> prev<span class="p">:</span>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>  <span class="k">let</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>    <span class="k">inherit</span> <span class="p">(</span>final<span class="p">)</span> lib<span class="p">;</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>  <span class="k">in</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>  <span class="p">{</span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>    <span class="ss">haskell</span> <span class="o">=</span> prev<span class="o">.</span>haskell <span class="o">//</span> <span class="p">{</span>
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>      <span class="ss">compiler</span> <span class="o">=</span> prev<span class="o">.</span>haskell<span class="o">.</span>compiler <span class="o">//</span> <span class="p">{</span>
+</span><span id="__span-14-24"><a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a>        <span class="si">${</span>ghcName<span class="si">}</span> <span class="o">=</span> prev<span class="o">.</span>haskell<span class="o">.</span>compiler<span class="o">.</span><span class="si">${</span>ghcName<span class="si">}</span><span class="o">.</span>override <span class="p">{</span>
+</span><span id="__span-14-25"><a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>          <span class="c1"># Unfortunately, the GHC setting is named differently for historical reasons</span>
+</span><span id="__span-14-26"><a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a>          <span class="ss">enableProfiledLibs</span> <span class="o">=</span> enableProfiling<span class="p">;</span>
+</span><span id="__span-14-27"><a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>        <span class="p">};</span>
+</span><span id="__span-14-28"><a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a>      <span class="p">};</span>
+</span><span id="__span-14-29"><a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a>    <span class="p">};</span>
+</span><span id="__span-14-30"><a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a>  <span class="p">})</span>
+</span><span id="__span-14-31"><a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a>
+</span><span id="__span-14-32"><a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a>  <span class="p">(</span>final<span class="p">:</span> prev<span class="p">:</span>
+</span><span id="__span-14-33"><a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a>  <span class="k">let</span>
+</span><span id="__span-14-34"><a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a>    <span class="k">inherit</span> <span class="p">(</span>final<span class="p">)</span> lib<span class="p">;</span>
+</span><span id="__span-14-35"><a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a>    <span class="ss">haskellLib</span> <span class="o">=</span> final<span class="o">.</span>haskell<span class="o">.</span>lib<span class="o">.</span>compose<span class="p">;</span>
+</span><span id="__span-14-36"><a id="__codelineno-14-36" name="__codelineno-14-36" href="#__codelineno-14-36"></a>  <span class="k">in</span>
+</span><span id="__span-14-37"><a id="__codelineno-14-37" name="__codelineno-14-37" href="#__codelineno-14-37"></a>
+</span><span id="__span-14-38"><a id="__codelineno-14-38" name="__codelineno-14-38" href="#__codelineno-14-38"></a>  <span class="p">{</span>
+</span><span id="__span-14-39"><a id="__codelineno-14-39" name="__codelineno-14-39" href="#__codelineno-14-39"></a>    <span class="ss">haskell</span> <span class="o">=</span> prev<span class="o">.</span>haskell <span class="o">//</span> <span class="p">{</span>
+</span><span id="__span-14-40"><a id="__codelineno-14-40" name="__codelineno-14-40" href="#__codelineno-14-40"></a>      <span class="ss">packages</span> <span class="o">=</span> prev<span class="o">.</span>haskell<span class="o">.</span>packages <span class="o">//</span> <span class="p">{</span>
+</span><span id="__span-14-41"><a id="__codelineno-14-41" name="__codelineno-14-41" href="#__codelineno-14-41"></a>        <span class="si">${</span>ghcName<span class="si">}</span> <span class="o">=</span> prev<span class="o">.</span>haskell<span class="o">.</span>packages<span class="o">.</span><span class="si">${</span>ghcName<span class="si">}</span><span class="o">.</span>override <span class="p">{</span>
+</span><span id="__span-14-42"><a id="__codelineno-14-42" name="__codelineno-14-42" href="#__codelineno-14-42"></a>          <span class="ss">overrides</span> <span class="o">=</span> hfinal<span class="p">:</span> hprev<span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-14-43"><a id="__codelineno-14-43" name="__codelineno-14-43" href="#__codelineno-14-43"></a>            <span class="ss">mkDerivation</span> <span class="o">=</span> args<span class="p">:</span> hprev<span class="o">.</span>mkDerivation <span class="p">(</span>args <span class="o">//</span> <span class="p">{</span>
+</span><span id="__span-14-44"><a id="__codelineno-14-44" name="__codelineno-14-44" href="#__codelineno-14-44"></a>              <span class="c1"># Since we are forcing our ideas upon mkDerivation, this change will</span>
+</span><span id="__span-14-45"><a id="__codelineno-14-45" name="__codelineno-14-45" href="#__codelineno-14-45"></a>              <span class="c1"># affect every package in the package set.</span>
+</span><span id="__span-14-46"><a id="__codelineno-14-46" name="__codelineno-14-46" href="#__codelineno-14-46"></a>              <span class="ss">enableLibraryProfiling</span> <span class="o">=</span> enableProfiling<span class="p">;</span>
+</span><span id="__span-14-47"><a id="__codelineno-14-47" name="__codelineno-14-47" href="#__codelineno-14-47"></a>
+</span><span id="__span-14-48"><a id="__codelineno-14-48" name="__codelineno-14-48" href="#__codelineno-14-48"></a>              <span class="c1"># To actually use profiling on an executable, executable profiling</span>
+</span><span id="__span-14-49"><a id="__codelineno-14-49" name="__codelineno-14-49" href="#__codelineno-14-49"></a>              <span class="c1"># needs to be enabled for the executable you want to profile. You</span>
+</span><span id="__span-14-50"><a id="__codelineno-14-50" name="__codelineno-14-50" href="#__codelineno-14-50"></a>              <span class="c1"># can either do this globally or…</span>
+</span><span id="__span-14-51"><a id="__codelineno-14-51" name="__codelineno-14-51" href="#__codelineno-14-51"></a>              <span class="ss">enableExecutableProfiling</span> <span class="o">=</span> enableProfiling<span class="p">;</span>
+</span><span id="__span-14-52"><a id="__codelineno-14-52" name="__codelineno-14-52" href="#__codelineno-14-52"></a>            <span class="p">});</span>
+</span><span id="__span-14-53"><a id="__codelineno-14-53" name="__codelineno-14-53" href="#__codelineno-14-53"></a>
+</span><span id="__span-14-54"><a id="__codelineno-14-54" name="__codelineno-14-54" href="#__codelineno-14-54"></a>            <span class="c1"># …only for the package that contains an executable you want to profile.</span>
+</span><span id="__span-14-55"><a id="__codelineno-14-55" name="__codelineno-14-55" href="#__codelineno-14-55"></a>            <span class="c1"># That saves on unnecessary rebuilds for packages that you only depend</span>
+</span><span id="__span-14-56"><a id="__codelineno-14-56" name="__codelineno-14-56" href="#__codelineno-14-56"></a>            <span class="c1"># on for their library, but also contain executables (e.g. pandoc).</span>
+</span><span id="__span-14-57"><a id="__codelineno-14-57" name="__codelineno-14-57" href="#__codelineno-14-57"></a>            <span class="ss">my-executable</span> <span class="o">=</span> haskellLib<span class="o">.</span>enableExecutableProfiling hprev<span class="o">.</span>my-executable<span class="p">;</span>
+</span><span id="__span-14-58"><a id="__codelineno-14-58" name="__codelineno-14-58" href="#__codelineno-14-58"></a>
+</span><span id="__span-14-59"><a id="__codelineno-14-59" name="__codelineno-14-59" href="#__codelineno-14-59"></a>            <span class="c1"># If you are disabling profiling to save on build time, but want to</span>
+</span><span id="__span-14-60"><a id="__codelineno-14-60" name="__codelineno-14-60" href="#__codelineno-14-60"></a>            <span class="c1"># retain the ability to substitute from the binary cache. Drop the</span>
+</span><span id="__span-14-61"><a id="__codelineno-14-61" name="__codelineno-14-61" href="#__codelineno-14-61"></a>            <span class="c1"># override for mkDerivation above and instead have an override like</span>
+</span><span id="__span-14-62"><a id="__codelineno-14-62" name="__codelineno-14-62" href="#__codelineno-14-62"></a>            <span class="c1"># this for the specific packages you are building locally and want</span>
+</span><span id="__span-14-63"><a id="__codelineno-14-63" name="__codelineno-14-63" href="#__codelineno-14-63"></a>            <span class="c1"># to make cheaper to build.</span>
+</span><span id="__span-14-64"><a id="__codelineno-14-64" name="__codelineno-14-64" href="#__codelineno-14-64"></a>            <span class="ss">my-library</span> <span class="o">=</span> haskellLib<span class="o">.</span>disableLibraryProfiling hprev<span class="o">.</span>my-library<span class="p">;</span>
+</span><span id="__span-14-65"><a id="__codelineno-14-65" name="__codelineno-14-65" href="#__codelineno-14-65"></a>          <span class="p">};</span>
+</span><span id="__span-14-66"><a id="__codelineno-14-66" name="__codelineno-14-66" href="#__codelineno-14-66"></a>        <span class="p">};</span>
+</span><span id="__span-14-67"><a id="__codelineno-14-67" name="__codelineno-14-67" href="#__codelineno-14-67"></a>      <span class="p">};</span>
+</span><span id="__span-14-68"><a id="__codelineno-14-68" name="__codelineno-14-68" href="#__codelineno-14-68"></a>    <span class="p">};</span>
+</span><span id="__span-14-69"><a id="__codelineno-14-69" name="__codelineno-14-69" href="#__codelineno-14-69"></a>  <span class="p">})</span>
+</span><span id="__span-14-70"><a id="__codelineno-14-70" name="__codelineno-14-70" href="#__codelineno-14-70"></a><span class="p">]</span>
+</span></code></pre></div>
+<!-- TODO(@sternenseemann): write overriding mkDerivation, overriding GHC, and
+overriding the entire package set sections and link to them from here where
+relevant.
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="go.section.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Go">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Go
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="hy.section.html" class="md-footer__link md-footer__link--next" aria-label="Next: Hy">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Hy
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 <a href=https://nervosys.ai/>Nervosys, LLC</a>
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/nervosys/Botnix" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://discord.gg/x84JXYje" target="_blank" rel="noopener" title="discord.gg" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541ZM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241Zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241Z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/nervosys" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8l164.9-188.5L26.8 48h145.6l100.5 132.9L389.2 48zm-24.8 373.8h39.1L151.1 88h-42l255.3 333.8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.code.annotate", "content.code.copy", "content.tabs.link", "navigation.expand", "navigation.top", "navigation.instant", "navigation.path", "navigation.footer", "search.suggest", "search.share", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.caa56a14.min.js"></script>
+      
+        <script src="../javascripts/extra.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
