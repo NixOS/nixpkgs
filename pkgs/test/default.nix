@@ -177,4 +177,6 @@ with pkgs;
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
   systemd = callPackage ./systemd { };
+
+  substitute = recurseIntoAttrs (callPackage ./substitute { });
 }
