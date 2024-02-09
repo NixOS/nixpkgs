@@ -33,6 +33,7 @@
 , haskellPackages
 , ocamlPackages
 , phpExtensions
+, pkgsStatic
 , python3
 , tests
 , testers
@@ -195,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      static = pkgsStatic.curl;
     } // lib.optionalAttrs (!stdenv.isDarwin) {
       fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
     };
