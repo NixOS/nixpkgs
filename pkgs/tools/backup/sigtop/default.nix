@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   name = "sigtop";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "tbvdm";
     repo = "sigtop";
     rev = "v${version}";
-    sha256 = "sha256-vFs6/b2ypwMXDgmkZDgfKPqW0GRh9A2t4QQvkUdhYQw=";
+    sha256 = "sha256-+TV3mlFW3SxgLyXyOPWKhMdkPf/ZTK2/EMWaZHC82YM=";
   };
 
-  vendorHash = "sha256-H43XOupVicLpYfkWNjArpSxQWcFqh9h2Zb6zGZ5xtfs=";
+  vendorHash = "sha256-kkRmyWYrWDq96fECe2YMsDjRZPX2K0jKFitMJycaVVA=";
 
   makeFlags = [
     "PREFIX=\${out}"
