@@ -27,13 +27,13 @@
 , dbusSupport ? true
 }:
 stdenv.mkDerivation rec {
-  version = "3.8.1";
+  version = "3.9.0";
   pname = "baresip";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    hash = "sha256-39HRvRTyA0V8NKFUUpj7UGc01KVXULTE3HUd9Kh06bw=";
+    hash = "sha256-AJCm823Fyu1n3gWw6wUfakM6YWwMtzQ84M0OKXZ4ThI=";
   };
   prePatch = lib.optionalString (!dbusSupport) ''
     substituteInPlace cmake/modules.cmake --replace 'list(APPEND MODULES ctrl_dbus)' ""
@@ -126,7 +126,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A modular SIP User-Agent with audio and video support";
     homepage = "https://github.com/baresip/baresip";
-    maintainers = with lib.maintainers; [ elohmeier raskin ];
+    maintainers = with lib.maintainers; [ elohmeier raskin ehmry ];
+    mainProgram = "baresip";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
