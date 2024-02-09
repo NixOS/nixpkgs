@@ -4302,6 +4302,15 @@
     githubId = 34766150;
     name = "datafoo";
   };
+  DataHearth = {
+    email = "dev@antoine-langlois.net";
+    github = "DataHearth";
+    githubId = 28595242;
+    name = "DataHearth";
+    keys = [{
+      fingerprint = "A129 2547 0298 BFEE 7EE0  92B3 946E 2D0C 410C 7B3D";
+    }];
+  };
   davegallant = {
     name = "Dave Gallant";
     email = "davegallant@gmail.com";
