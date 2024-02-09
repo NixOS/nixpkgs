@@ -70,14 +70,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # disable tests on aarch64-darwin, the following tests fail there:
-  # oom/circbuf: [forking]
-  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
-  #   [circbuf FAILED]
-  # oom/streambuf: [forking]
-  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
-  #   [streambuf FAILED]
-  # disable tests on aarch32, the following tests fail there:
+  # disable tests on linux aarch32, the following tests fail there:
   # sandbox/is_active: [forking] Feb 06 17:43:14.224 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
   #   FAIL src/test/test_sandbox.c:146: assert(sandbox_is_active())
   #   [is_active FAILED]
@@ -99,8 +92,7 @@ stdenv.mkDerivation rec {
   # sandbox/rename_filename: [forking] Feb 06 17:43:14.629 [err] install_syscall_filter(): Bug: (Sandbox) failed to load: -125 (Operation canceled)! Are you sure that your kernel has seccomp2 support? The sandbox won't work without it. (on Tor 0.4.8.10 )
   #   FAIL src/test/test_sandbox.c:228: assert(rc OP_EQ -1): 0 vs -1
   #   [rename_filename FAILED]
-
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64) && !(stdenv.isLinux && stdenv.isAarch32);
+  doCheck = !(stdenv.isLinux && stdenv.isAarch32);
 
   postInstall = ''
     mkdir -p $geoip/share/tor
