@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog  = "https://gitlab.com/ita1024/waf/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd3;
     mainProgram = "waf";
-    maintainers = with lib.maintainers; [ AndersonTorres vrthra ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (python3.meta) platforms;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
