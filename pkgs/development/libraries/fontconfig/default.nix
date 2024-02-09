@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
     maintainers = with maintainers; teams.freedesktop.members ++ [ ];
+    pkgConfigModules = [ "fontconfig" ];
   };
 }
