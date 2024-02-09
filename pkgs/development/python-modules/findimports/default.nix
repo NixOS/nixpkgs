@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "findimports";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mgedmin";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yA1foeGhgOXZArc/nZfS1tbGyONXJZ9lW+Zcx7hCedM=";
+    hash = "sha256-ar05DYSc/raYC1RJyLCxDYnd7Zjx20aczywlb6wc67Y=";
   };
 
   pythonImportsCheck = [
