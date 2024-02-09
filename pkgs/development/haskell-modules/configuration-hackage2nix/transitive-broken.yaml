@@ -1479,7 +1479,6 @@ dont-distribute-packages:
  - gi-ges
  - gi-gstpbutils
  - gi-gtk-declarative-app-simple
- - gi-gtk_4_0_8
  - git-config
  - git-fmt
  - git-gpush
@@ -4002,7 +4001,6 @@ dont-distribute-packages:
  - wahsp
  - wai-devel
  - wai-dispatch
- - wai-handler-hal
  - wai-handler-snap
  - wai-hastache
  - wai-middleware-brotli
