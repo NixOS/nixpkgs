@@ -701,7 +701,10 @@ in
           type = types.listOf types.str;
           default = [];
           example = [ "-vga std" ];
-          description = lib.mdDoc "Options passed to QEMU.";
+          description = lib.mdDoc ''
+            Options passed to QEMU.
+            See [QEMU User Documentation](https://www.qemu.org/docs/master/system/qemu-manpage) for a complete list.
+          '';
         };
 
       consoles = mkOption {
@@ -732,6 +735,7 @@ in
           description = lib.mdDoc ''
             Networking-related command-line options that should be passed to qemu.
             The default is to use userspace networking (SLiRP).
+            See the [QEMU Wiki on Networking](https://wiki.qemu.org/Documentation/Networking) for details.
 
             If you override this option, be advised to keep
             ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the example)
