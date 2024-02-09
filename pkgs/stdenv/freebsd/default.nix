@@ -1,3 +1,6 @@
+# afaik the longest dependency chain is stdenv -> stdenv-2#coreutils -> stdenv-2#gmp -> stdenv-1#libcxx -> stdenv-0#libc
+# attempts were made to make stdenv-1#libcxx -> stdenv1#libc and collapse the entire chain by one step but it failed.
+# effort to shorten bootstrap time is maybe better spent propagating the bootstrap binaries down to further stdenvs until they are no longer needed to remove spurious recompiles
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
 }:
@@ -124,6 +127,10 @@ in
       "strings" "strip"
     ]; };
     locales = linkBS { paths = ["share/locale"]; };
+    libcxx = linkBS {
+      name = "libcxx";
+      paths = ["lib/libc++.so" "lib/libc++.so.1"];
+    };
 
 
     fetchurl = import ../../build-support/fetchurl {
@@ -157,7 +164,6 @@ in
         inherit lib;
         name = "freebsd-boot-0-cc";
         nixSupport = {
-          libcxx-ldflags = ["-lunwind"];
           libcxx-cxxflags = ["-isystem ${bootstrapLibs}/include/c++/v1"];
         };
         stdenvNoCC = stdenvNoCC;
@@ -236,19 +242,15 @@ in
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;
         name = "freebsd-boot-1-cc";
-        nixSupport = {
-          cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib"];
-        };
         inherit (prevStage.freebsd) libc;
-        inherit (prevStage) gnugrep coreutils;
-        inherit (prevStage.llvmPackages) libcxx;
+        inherit (prevStage) gnugrep coreutils libcxx;
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
         cc = prevStage.llvmPackages.clang-unwrapped;
         isClang = true;
         extraPackages = [
-          prevStage.llvmPackages.libcxx.cxxabi
+          prevStage.libcxx.cxxabi
           prevStage.llvmPackages.compiler-rt
         ];
         extraBuildCommands = mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt;
@@ -267,9 +269,10 @@ in
         curl = prevStage.curlReal;
         curlReal = super.curl;
         bash = prevStage.bash;
+        bashReal = super.bash;
         gitMinimal = prevStage.gitMinimal;
         freebsd = super.freebsd.overrideScope (self': super': {
-          stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
+          #stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
           locales = prevStage.freebsd.locales;
           localesReal = super'.locales;
         });
@@ -284,7 +287,90 @@ in
   (prevStage: let
     fetchurlBoot = import ../../build-support/fetchurl {
       inherit lib stdenvNoCC;
-      curl = prevStage.curl;
+      curl = prevStage.curlReal;
+    };
+
+    bsdcp = (prevStage.runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${prevStage.freebsd.cp}/bin/cp $out/bin/bsdcp");
+
+    stdenvNoCC = import ../generic {
+      inherit config fetchurlBoot;
+      name = "stdenvNoCC-freebsd-boot-2";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bashReal prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
+      shell = "${prevStage.bashReal}/bin/bash";
+      cc = null;
+    };
+
+    in rec {
+    inherit config overlays;
+    stdenv = import ../generic {
+      inherit config fetchurlBoot;
+      name = "stdenv-freebsd-boot-2";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bashReal prevStage.gzip prevStage.bzip2 prevStage.xz bsdcp];
+      extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
+      shell = "${prevStage.bashReal}/bin/bash";
+      cc = import ../../build-support/cc-wrapper ({
+        inherit lib stdenvNoCC;
+        name = "freebsd-boot-2-cc";
+        inherit (prevStage.freebsd) libc;
+        inherit (prevStage) gnugrep coreutils;
+        inherit (prevStage.llvmPackages) libcxx;
+        propagateDoc = false;
+        nativeTools = false;
+        nativeLibc = false;
+        cc = prevStage.llvmPackages.clang-unwrapped;
+        isClang = true;
+        extraPackages = [
+          prevStage.llvmPackages.libcxx.cxxabi
+          prevStage.llvmPackages.compiler-rt
+        ];
+        extraBuildCommands = mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt;
+        bintools = import ../../build-support/bintools-wrapper {
+          inherit lib stdenvNoCC;
+          name = "freebsd-boot-2-bintools";
+          inherit (prevStage.freebsd) libc;
+          inherit (prevStage) gnugrep coreutils;
+          bintools = prevStage.binutils-unwrapped;
+          propagateDoc = false;
+          nativeTools = false;
+          nativeLibc = false;
+          buildPackages = prevStage.buildPackages;
+        };
+      });
+      overrides = self: super: {
+        curl = prevStage.curlReal;
+        cacert = prevStage.cacert;
+        inherit (prevStage) fetchurl;
+        freebsd = super.freebsd.overrideScope (self': super': {
+          locales = prevStage.freebsd.locales;
+          localesReal = super'.locales;
+        });
+        haskellPackages = super.haskellPackages.override {
+          overrides = (self: super: {
+            digest = super.digest.overrideAttrs {
+              postPatch = ''
+                sed -E -i -e 's/ && !os\(freebsd\)//' digest.cabal
+              '';
+            };
+          });
+        };
+      };
+      preHook = ''
+          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+          export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+        '';
+    };
+  })
+
+  (prevStage: let
+    fetchurlBoot = import ../../build-support/fetchurl {
+      inherit lib stdenvNoCC;
+      curl = prevStage.curlReal;
     };
 
     bsdcp = (prevStage.runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${prevStage.freebsd.cp}/bin/cp $out/bin/bsdcp");
@@ -314,11 +400,6 @@ in
       cc = import ../../build-support/cc-wrapper ({
         inherit lib stdenvNoCC;
         name = "freebsd-cc";
-        nixSupport = {
-          #cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib" "--push-state" "--as-needed" "-lgcc_s" "--pop-state"];
-          cc-ldflags = ["-L${lib.getLib prevStage.freebsd.libdl}/lib"];
-          #libcxx-ldflags = ["-rpath" "${lib.getLib prevStage.llvmPackages_16.libcxxabi}/lib"];
-        };
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils;
         inherit (prevStage.llvmPackages) libcxx;
@@ -345,15 +426,10 @@ in
         };
       });
       overrides = self: super: {
-        curl = prevStage.curl;
-        #curl = prevStage.curlReal;
+        curl = prevStage.curlReal;
         cacert = prevStage.cacert;
         inherit (prevStage) fetchurl;
-        libcxxabi = self.llvmPackages_16.libcxxabi;
-        libcxx = self.llvmPackages_16.libcxx;
-        clangStdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
         freebsd = super.freebsd.overrideScope (self': super': {
-          stdenv = prevStage.overrideCC stdenv prevStage.llvmPackages_16.clang;
           locales = prevStage.freebsd.locales;
           localesReal = super'.locales;
         });

@@ -83,6 +83,8 @@ mkDerivation rec {
     "lib/libiconv_modules"
     "share/i18n"
     "include/paths.h"
+
+    "lib/libdl"
   ];
 
   patches = [
@@ -222,6 +224,9 @@ mkDerivation rec {
 
     make -C $BSDSRCDIR/lib/libiconv_modules $makeFlags
     make -C $BSDSRCDIR/lib/libiconv_modules $makeFlags SHLIBDIR=${builtins.placeholder "out"}/lib/i18n install
+
+    make -C $BSDSRCDIR/lib/libdl $makeFlags
+    make -C $BSDSRCDIR/lib/libdl $makeFlags install
 
     make -C $BSDSRCDIR/share/i18n $makeFlags
     make -C $BSDSRCDIR/share/i18n $makeFlags ESDBDIR=${builtins.placeholder "out"}/share/i18n/esdb CSMAPPERDIR=${builtins.placeholder "out"}/share/i18n/csmapper install
