@@ -114,9 +114,9 @@
     "bsnes": {
         "owner": "libretro",
         "repo": "bsnes-libretro",
-        "rev": "dda5b43ed6a552310528509af59bed26af2527f5",
-        "hash": "sha256-7AXHq6ASQ+42yef/jQ74kZtpW9SUuXpmWZbtO84/COg=",
-        "date": "unstable-2024-02-02"
+        "rev": "d230353616ab4c7dc01a2f2a63865011bd5c7ffd",
+        "hash": "sha256-TiOdptWOb13UQ8jKDbIlZQQ3mY3h/lPHr/GskPVAkwA=",
+        "date": "unstable-2024-02-09"
     },
     "bsnes-hd": {
         "owner": "DerKoun",
