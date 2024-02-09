@@ -58,9 +58,9 @@
     "beetle-psx": {
         "owner": "libretro",
         "repo": "beetle-psx-libretro",
-        "rev": "fb579de80d7b9ca09940602c14e657f6317dd046",
-        "hash": "sha256-NRnznhvmgOQdNuEYyi0HIeVPzPz7ILEQ3vsYTZY8AbE=",
-        "date": "unstable-2024-02-02"
+        "rev": "3adff889b9b8251526ca7dae963be46bf8401e2e",
+        "hash": "sha256-DaDzoAQJLuer/c+V1bJGbejnyGYB2RYdebZ1YIoVRKw=",
+        "date": "unstable-2024-02-09"
     },
     "beetle-saturn": {
         "owner": "libretro",
