@@ -11,7 +11,6 @@
 , libdrm
 , polkit
 , libxmlb
-, glib
 , gusb
 , sqlite
 , libarchive
@@ -121,7 +120,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.12";
+  version = "1.9.13";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -132,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-hPRp61m/XTXFacYkBOb4SsG4fcFvWrdMfc+sxLk5/sQ=";
+    hash = "sha256-h2e9MFTb777xbNRlzKWXc5GUdu/BHSkJTaogEE5byjo=";
   };
 
   patches = [
@@ -214,6 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Defi_os_dir=nixos"
     "-Dplugin_modem_manager=enabled"
+    "-Dvendor_metadata=true"
     # We do not want to place the daemon into lib (cyclic reference)
     "--libexecdir=${placeholder "out"}/libexec"
   ] ++ lib.optionals (!enablePassim) [
@@ -341,12 +341,6 @@ stdenv.mkDerivation (finalAttrs: {
       "grub.d/35_fwupd"
     ];
 
-    # DisabledPlugins key in fwupd/daemon.conf
-    defaultDisabledPlugins = [
-      "test"
-      "test_ble"
-    ];
-
     # For updating.
     inherit test-firmware;
 
@@ -371,12 +365,6 @@ stdenv.mkDerivation (finalAttrs: {
           passthru_etc = set(${listToPy finalAttrs.passthru.filesInstalledToEtc})
           assert len(package_etc - passthru_etc) == 0, f'fwupd package contains the following paths in /etc that are not listed in passthru.filesInstalledToEtc: {package_etc - passthru_etc}'
           assert len(passthru_etc - package_etc) == 0, f'fwupd package lists the following paths in passthru.filesInstalledToEtc that are not contained in /etc: {passthru_etc - package_etc}'
-
-          config = configparser.RawConfigParser()
-          config.read('${finalAttrs.finalPackage}/etc/fwupd/fwupd.conf')
-          package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
-          passthru_disabled_plugins = ${listToPy finalAttrs.passthru.defaultDisabledPlugins}
-          assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'
 
           pathlib.Path(os.getenv('out')).touch()
         '';

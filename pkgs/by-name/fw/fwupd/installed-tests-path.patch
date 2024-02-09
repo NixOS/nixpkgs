@@ -6,7 +6,7 @@ index dfce86b1c..5e34c4fa6 100644
    output: 'fwupd-tests.conf',
    configuration: con2,
    install: true,
--  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
+-  install_dir: join_paths(datadir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
