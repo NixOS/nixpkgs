@@ -317,7 +317,6 @@
   ./security/oath.nix
   ./security/pam.nix
   ./security/pam_mount.nix
-  ./security/pam_usb.nix
   ./security/please.nix
   ./security/polkit.nix
   ./security/rngd.nix

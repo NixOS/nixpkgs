@@ -9504,6 +9504,8 @@ self: super: with self; {
 
   pygnmi = callPackage ../development/python-modules/pygnmi { };
 
+  pygount = callPackage ../development/python-modules/pygount { };
+
   pygti = callPackage ../development/python-modules/pygti { };
 
   pyheck = callPackage ../development/python-modules/pyheck { };
@@ -16518,6 +16520,8 @@ self: super: with self; {
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
     ffmpegSupport = false;
   };
+
+  youtubeaio = callPackage ../development/python-modules/youtubeaio { };
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 

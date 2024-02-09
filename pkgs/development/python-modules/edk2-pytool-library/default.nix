@@ -4,19 +4,19 @@
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
-, pythonRelaxDepsHook
 , pyasn1
 , pyasn1-modules
 , cryptography
 , joblib
 , gitpython
 , sqlalchemy
+, pygount
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.20.0";
+  version = "0.21.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,18 +25,12 @@ buildPythonPackage rec {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uqXQbSk/diyTq4d+J1ubc6ylJpETmJt699vfbSuY290=";
+    hash = "sha256-xJ5OuQXvccgEjzuMqa75+mv3MipgdsiHc9yjrZYoCow=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "tinydb"
-    "joblib"
   ];
 
   propagatedBuildInputs = [
@@ -46,6 +40,7 @@ buildPythonPackage rec {
     joblib
     gitpython
     sqlalchemy
+    pygount
   ];
 
   nativeCheckInputs = [

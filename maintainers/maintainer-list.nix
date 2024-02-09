@@ -5907,6 +5907,12 @@
     githubId = 2512008;
     name = "Even Brenden";
   };
+  evey = {
+    email = "nix@lubdub.nl";
+    github = "lub-dub";
+    githubId = 159288204;
+    name = "evey";
+  };
   evilmav = {
     email = "elenskiy.ilya@gmail.com";
     github = "evilmav";
@@ -12836,6 +12842,16 @@
     githubId = 10601196;
     name = "Jérémie Ferry";
   };
+  motiejus = {
+    email = "motiejus@jakstys.lt";
+    github = "motiejus";
+    githubId = 107720;
+    keys = [{
+      fingerprint = "5F6B 7A8A 92A2 60A4 3704  9BEB 6F13 3A0C 1C28 48D7";
+    }];
+    matrix = "@motiejus:jakstys.lt";
+    name = "Motiejus Jakštys";
+  };
   mounium = {
     email = "muoniurn@gmail.com";
     github = "Mounium";
@@ -15775,6 +15791,12 @@
     githubId = 1891350;
     name = "Michael Raskin";
   };
+  raspher = {
+    email = "raspher@protonmail.com";
+    github = "raspher";
+    githubId = 23345803;
+    name = "Szymon Scholz";
+  };
   ratcornu = {
     email = "ratcornu@skaven.org";
     github = "RatCornu";
@@ -16003,7 +16025,7 @@
   };
   RGBCube = {
     name = "RGBCube";
-    email = "rgbsphere+nixpkgs@gmail.com";
+    email = "nixpkgs@rgbcu.be";
     github = "RGBCube";
     githubId = 78925721;
     keys = [{

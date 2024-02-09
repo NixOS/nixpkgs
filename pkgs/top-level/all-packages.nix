@@ -4680,8 +4680,19 @@ with pkgs;
   cloudbrute = callPackage ../tools/security/cloudbrute { };
 
   cloudflared = callPackage ../applications/networking/cloudflared {
-    # https://github.com/cloudflare/cloudflared/issues/1054
-    buildGoModule = buildGo120Module;
+    # https://github.com/cloudflare/cloudflared/issues/1151#issuecomment-1888819250
+    buildGoModule = buildGoModule.override {
+      go = go.overrideAttrs {
+        pname = "cloudflare-go";
+        version = "0-unstable-2023-12-06";
+        src = fetchFromGitHub {
+          owner = "cloudflare";
+          repo = "go";
+          rev = "34129e47042e214121b6bbff0ded4712debed18e";
+          sha256 = "sha256-RA9KTY4cSxIt7dyJgAFQPemc6YBgcSwc/hqB4JHPxng=";
+        };
+      };
+    };
   };
 
   cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
@@ -7724,7 +7735,7 @@ with pkgs;
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
   lychee = callPackage ../tools/networking/lychee {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   magic-vlsi = callPackage ../applications/science/electronics/magic-vlsi { };
@@ -19233,7 +19244,9 @@ with pkgs;
 
   gtranslator = callPackage ../tools/text/gtranslator { };
 
-  gtree = callPackage ../tools/text/gtree { };
+  gtree = callPackage ../tools/text/gtree {
+    buildGoModule = buildGo122Module;
+  };
 
   guff = callPackage ../tools/graphics/guff { };
 
@@ -25506,7 +25519,6 @@ with pkgs;
 
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK32;
-    stdenv = gcc12Stdenv;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
@@ -25926,12 +25938,12 @@ with pkgs;
 
   # Steel Bank Common Lisp
   sbcl_2_4_0 = wrapLisp {
-    pkg = callPackage ../by-name/sb/sbcl/package.nix { version = "2.4.0"; };
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.0"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl_2_4_1 = wrapLisp {
-    pkg = callPackage ../by-name/sb/sbcl/package.nix { version = "2.4.1"; };
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.1"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
@@ -28389,8 +28401,6 @@ with pkgs;
 
   pam_u2f = callPackage ../os-specific/linux/pam_u2f { };
 
-  pam_usb = callPackage ../os-specific/linux/pam_usb { };
-
   pam_ussh = callPackage ../os-specific/linux/pam_ussh { };
 
   paxctl = callPackage ../os-specific/linux/paxctl { };
@@ -29559,10 +29569,6 @@ with pkgs;
   national-park-typeface = callPackage ../data/fonts/national-park { };
 
   netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
-
-  netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
-    inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
-  };
 
   nordic = libsForQt5.callPackage ../data/themes/nordic { };
 

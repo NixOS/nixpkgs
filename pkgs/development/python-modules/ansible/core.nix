@@ -4,6 +4,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , installShellFiles
+, docutils
 , ansible
 , cryptography
 , importlib-resources
@@ -41,10 +42,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
+
+    patchShebangs --build packaging/cli-doc/build.py
   '';
 
   nativeBuildInputs = [
     installShellFiles
+    docutils
   ] ++ lib.optionals (pythonOlder "3.10") [
     pythonRelaxDepsHook
   ];
@@ -82,7 +86,9 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    installManPage docs/man/man1/*.1
+    export HOME="$(mktemp -d)"
+    packaging/cli-doc/build.py man --output-dir=man
+    installManPage man/*
   '';
 
   # internal import errors, missing dependencies
