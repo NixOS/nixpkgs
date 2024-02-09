@@ -1,9 +1,9 @@
 { lib
-, aiohttp
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , poetry-core
-, pythonOlder
+, aiohttp
 , tenacity
 }:
 
@@ -38,7 +38,6 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for A. O. Smith water heaters";
     homepage = "https://github.com/bdr99/py-aosmith";
-    changelog = "https://github.com/bdr99/py-aosmith/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
