@@ -9921,6 +9921,8 @@ self: super: with self; {
 
   primecountpy = callPackage ../development/python-modules/primecountpy { };
 
+  primepy = callPackage ../development/python-modules/primepy { };
+
   primer3 = callPackage ../development/python-modules/primer3 { };
 
   priority = callPackage ../development/python-modules/priority { };
