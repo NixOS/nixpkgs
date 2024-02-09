@@ -9280,8 +9280,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon OpenGL;
   };
 
-  factor-lang-scope = callPackage ../development/compilers/factor-lang/scope.nix { };
-  factor-lang = factor-lang-scope.interpreter;
+  factorPackages = callPackage ./factor-packages.nix { };
+  factor-lang = factorPackages.factor-lang;
 
   far2l = callPackage ../applications/misc/far2l {
     inherit (darwin.apple_sdk.frameworks)
