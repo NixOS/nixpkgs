@@ -5766,6 +5766,8 @@ with pkgs;
 
   jwx = callPackage ../tools/security/jwx { } ;
 
+  kamal = rubyPackages.kamal;
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   karma = callPackage ../servers/monitoring/karma { };
