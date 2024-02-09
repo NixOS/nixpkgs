@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "69";
+  version = "70";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "aiounifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XYwdnG3OprHRZm3zQgoPw4VOzvvVflsQzi7+XQiASAU=";
+    hash = "sha256-yLqGqRWzuMqymGqGR1mA4oQb+tWt58lA7C/kXC5bYz8=";
   };
 
   postPatch = ''
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Kane610/aiounifi";
     changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ ];
   };
 }
