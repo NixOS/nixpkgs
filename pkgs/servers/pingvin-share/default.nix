@@ -1,6 +1,7 @@
 { callPackage
 , fetchFromGitHub
 , recurseIntoAttrs
+, nixosTests
 }:
 
 let
@@ -17,4 +18,8 @@ recurseIntoAttrs {
   backend = callPackage ./backend.nix { inherit src version; };
 
   frontend = callPackage ./frontend.nix { inherit src version; };
+
+  passthru.tests = {
+    pingvin-share = nixosTests.pingvin-share;
+  };
 }

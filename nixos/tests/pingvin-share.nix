@@ -13,8 +13,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
   testScript = ''
     machine.wait_for_unit("pingvin-share-frontend.service")
+    machine.wait_for_open_port(9010)
     machine.wait_for_open_port(9011)
-    machine.succeed("curl --fail http://127.0.0.1:9010/")
+    machine.succeed("curl --fail http://127.0.0.1:9010/api/configs")
     machine.succeed("curl --fail http://127.0.0.1:9011/")
   '';
 })
