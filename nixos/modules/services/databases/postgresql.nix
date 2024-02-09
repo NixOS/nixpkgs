@@ -161,33 +161,6 @@ in
               '';
             };
 
-            ensurePermissions = mkOption {
-              type = types.attrsOf types.str;
-              default = {};
-              visible = false; # This option has been deprecated.
-              description = lib.mdDoc ''
-                This option is DEPRECATED and should not be used in nixpkgs anymore,
-                use `ensureDBOwnership` instead. It can also break with newer
-                versions of PostgreSQL (≥ 15).
-
-                Permissions to ensure for the user, specified as an attribute set.
-                The attribute names specify the database and tables to grant the permissions for.
-                The attribute values specify the permissions to grant. You may specify one or
-                multiple comma-separated SQL privileges here.
-
-                For more information on how to specify the target
-                and on which privileges exist, see the
-                [GRANT syntax](https://www.postgresql.org/docs/current/sql-grant.html).
-                The attributes are used as `GRANT ''${attrValue} ON ''${attrName}`.
-              '';
-              example = literalExpression ''
-                {
-                  "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
-                  "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
-                }
-              '';
-            };
-
             ensureDBOwnership = mkOption {
               type = types.bool;
               default = false;
@@ -460,16 +433,6 @@ in
         Offender: ${name} has not been found among databases.
       '';
     }) cfg.ensureUsers;
-    # `ensurePermissions` is now deprecated, let's avoid it.
-    warnings = lib.optional (any ({ ensurePermissions, ... }: ensurePermissions != {}) cfg.ensureUsers) "
-      `services.postgresql.ensureUsers.*.ensurePermissions` is used in your expressions,
-      this option is known to be broken with newer PostgreSQL versions,
-      consider migrating to `services.postgresql.ensureUsers.*.ensureDBOwnership` or
-      consult the release notes or manual for more migration guidelines.
-
-      This option will be removed in NixOS 24.05 unless it sees significant
-      maintenance improvements.
-    ";
 
     services.postgresql.settings =
       {
@@ -583,11 +546,6 @@ in
               concatMapStrings
               (user:
               let
-                  userPermissions = concatStringsSep "\n"
-                    (mapAttrsToList
-                      (database: permission: ''$PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"' '')
-                      user.ensurePermissions
-                    );
                   dbOwnershipStmt = optionalString
                     user.ensureDBOwnership
                     ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
@@ -599,7 +557,6 @@ in
                   userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
                 in ''
                   $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-                  ${userPermissions}
                   ${userClauses}
 
                   ${dbOwnershipStmt}
