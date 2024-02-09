@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
       # Assertion failed in test/test-tcp-bind-error.c on line 99: r == UV_EADDRINUSE
       "tcp_bind6_error_addrinuse" "tcp_bind_error_addrinuse_listen"
+      # https://github.com/libuv/libuv/pull/4075#issuecomment-1935572237
+      "thread_priority"
     ] ++ lib.optionals stdenv.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
