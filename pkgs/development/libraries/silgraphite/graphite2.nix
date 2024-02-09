@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://graphite.sil.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.raskin ];
+    pkgConfigModules = [ "graphite2" ];
     mainProgram = "gr2fonttest";
     platforms = platforms.unix;
   };
