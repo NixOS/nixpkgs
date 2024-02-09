@@ -1,0 +1,566 @@
+commit 6d1e3fb07b45e2e31e469b16cf21b24bccf8914c
+Author: Andreas K. Hüttel <dilfridge@gentoo.org>
+Date:   Wed Jan 31 02:12:43 2024 +0100
+
+    Replace advisories directory
+    
+    Signed-off-by: Andreas K. Hüttel <dilfridge@gentoo.org>
+
+diff --git a/ADVISORIES b/ADVISORIES
+new file mode 100644
+index 0000000000..d4e33f2df3
+--- /dev/null
++++ b/ADVISORIES
+@@ -0,0 +1,2 @@
++For the GNU C Library Security Advisories, see the git master branch:
++https://sourceware.org/git/?p=glibc.git;a=tree;f=advisories;hb=HEAD
+diff --git a/advisories/GLIBC-SA-2023-0001 b/advisories/GLIBC-SA-2023-0001
+deleted file mode 100644
+index 3d19c91b6a..0000000000
+--- a/advisories/GLIBC-SA-2023-0001
++++ /dev/null
+@@ -1,14 +0,0 @@
+-printf: incorrect output for integers with thousands separator and width field
+-
+-When the printf family of functions is called with a format specifier
+-that uses an <apostrophe> (enable grouping) and a minimum width
+-specifier, the resulting output could be larger than reasonably expected
+-by a caller that computed a tight bound on the buffer size.  The
+-resulting larger than expected output could result in a buffer overflow
+-in the printf family of functions.
+-
+-CVE-Id: CVE-2023-25139
+-Public-Date: 2023-02-02
+-Vulnerable-Commit: e88b9f0e5cc50cab57a299dc7efe1a4eb385161d (2.37)
+-Fix-Commit: c980549cc6a1c03c23cc2fe3e7b0fe626a0364b0 (2.38)
+-Fix-Commit: 07b9521fc6369d000216b96562ff7c0ed32a16c4 (2.37-4)
+diff --git a/advisories/GLIBC-SA-2023-0002 b/advisories/GLIBC-SA-2023-0002
+deleted file mode 100644
+index 5122669a64..0000000000
+--- a/advisories/GLIBC-SA-2023-0002
++++ /dev/null
+@@ -1,15 +0,0 @@
+-getaddrinfo: Stack read overflow in no-aaaa mode
+-
+-If the system is configured in no-aaaa mode via /etc/resolv.conf,
+-getaddrinfo is called for the AF_UNSPEC address family, and a DNS
+-response is received over TCP that is larger than 2048 bytes,
+-getaddrinfo may potentially disclose stack contents via the returned
+-address data, or crash.
+-
+-CVE-Id: CVE-2023-4527
+-Public-Date: 2023-09-12
+-Vulnerable-Commit: f282cdbe7f436c75864e5640a409a10485e9abb2 (2.36)
+-Fix-Commit: bd77dd7e73e3530203be1c52c8a29d08270cb25d (2.39)
+-Fix-Commit: 4ea972b7edd7e36610e8cde18bf7a8149d7bac4f (2.36-113)
+-Fix-Commit: b7529346025a130fee483d42178b5c118da971bb (2.37-38)
+-Fix-Commit: b25508dd774b617f99419bdc3cf2ace4560cd2d6 (2.38-19)
+diff --git a/advisories/GLIBC-SA-2023-0003 b/advisories/GLIBC-SA-2023-0003
+deleted file mode 100644
+index d3aef80348..0000000000
+--- a/advisories/GLIBC-SA-2023-0003
++++ /dev/null
+@@ -1,15 +0,0 @@
+-getaddrinfo: Potential use-after-free
+-
+-When an NSS plugin only implements the _gethostbyname2_r and
+-_getcanonname_r callbacks, getaddrinfo could use memory that was freed
+-during buffer resizing, potentially causing a crash or read or write to
+-arbitrary memory.
+-
+-CVE-Id: CVE-2023-4806
+-Public-Date: 2023-09-12
+-Fix-Commit: 973fe93a5675c42798b2161c6f29c01b0e243994 (2.39)
+-Fix-Commit: e09ee267c03e3150c2c9ba28625ab130705a485e (2.34-420)
+-Fix-Commit: e3ccb230a961b4797510e6a1f5f21fd9021853e7 (2.35-270)
+-Fix-Commit: a9728f798ec7f05454c95637ee6581afaa9b487d (2.36-115)
+-Fix-Commit: 6529a7466c935f36e9006b854d6f4e1d4876f942 (2.37-39)
+-Fix-Commit: 00ae4f10b504bc4564e9f22f00907093f1ab9338 (2.38-20)
+diff --git a/advisories/GLIBC-SA-2023-0004 b/advisories/GLIBC-SA-2023-0004
+deleted file mode 100644
+index 5286a7aa54..0000000000
+--- a/advisories/GLIBC-SA-2023-0004
++++ /dev/null
+@@ -1,16 +0,0 @@
+-tunables: local privilege escalation through buffer overflow
+-
+-If a tunable of the form NAME=NAME=VAL is passed in the environment of a
+-setuid program and NAME is valid, it may result in a buffer overflow,
+-which could be exploited to achieve escalated privileges.  This flaw was
+-introduced in glibc 2.34.
+-
+-CVE-Id: CVE-2023-4911
+-Public-Date: 2023-10-03
+-Vulnerable-Commit: 2ed18c5b534d9e92fc006202a5af0df6b72e7aca (2.34)
+-Fix-Commit: 1056e5b4c3f2d90ed2b4a55f96add28da2f4c8fa (2.39)
+-Fix-Commit: dcc367f148bc92e7f3778a125f7a416b093964d9 (2.34-423)
+-Fix-Commit: c84018a05aec80f5ee6f682db0da1130b0196aef (2.35-274)
+-Fix-Commit: 22955ad85186ee05834e47e665056148ca07699c (2.36-118)
+-Fix-Commit: b4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3 (2.37-45)
+-Fix-Commit: 750a45a783906a19591fb8ff6b7841470f1f5701 (2.38-27)
+diff --git a/advisories/GLIBC-SA-2023-0005 b/advisories/GLIBC-SA-2023-0005
+deleted file mode 100644
+index cc4eb90b82..0000000000
+--- a/advisories/GLIBC-SA-2023-0005
++++ /dev/null
+@@ -1,18 +0,0 @@
+-getaddrinfo: DoS due to memory leak
+-
+-The fix for CVE-2023-4806 introduced a memory leak when an application
+-calls getaddrinfo for AF_INET6 with AI_CANONNAME, AI_ALL and AI_V4MAPPED
+-flags set.
+-
+-CVE-Id: CVE-2023-5156
+-Public-Date: 2023-09-25
+-Vulnerable-Commit: e09ee267c03e3150c2c9ba28625ab130705a485e (2.34-420)
+-Vulnerable-Commit: e3ccb230a961b4797510e6a1f5f21fd9021853e7 (2.35-270)
+-Vulnerable-Commit: a9728f798ec7f05454c95637ee6581afaa9b487d (2.36-115)
+-Vulnerable-Commit: 6529a7466c935f36e9006b854d6f4e1d4876f942 (2.37-39)
+-Vulnerable-Commit: 00ae4f10b504bc4564e9f22f00907093f1ab9338 (2.38-20)
+-Fix-Commit: 8006457ab7e1cd556b919f477348a96fe88f2e49 (2.34-421)
+-Fix-Commit: 17092c0311f954e6f3c010f73ce3a78c24ac279a (2.35-272)
+-Fix-Commit: 856bac55f98dc840e7c27cfa82262b933385de90 (2.36-116)
+-Fix-Commit: 4473d1b87d04b25cdd0e0354814eeaa421328268 (2.37-42)
+-Fix-Commit: 5ee59ca371b99984232d7584fe2b1a758b4421d3 (2.38-24)
+diff --git a/advisories/GLIBC-SA-2024-0001 b/advisories/GLIBC-SA-2024-0001
+deleted file mode 100644
+index 28931c75ae..0000000000
+--- a/advisories/GLIBC-SA-2024-0001
++++ /dev/null
+@@ -1,15 +0,0 @@
+-syslog: Heap buffer overflow in __vsyslog_internal
+-
+-__vsyslog_internal did not handle a case where printing a SYSLOG_HEADER
+-containing a long program name failed to update the required buffer
+-size, leading to the allocation and overflow of a too-small buffer on
+-the heap.
+-
+-CVE-Id: CVE-2023-6246
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: 6bd0e4efcc78f3c0115e5ea9739a1642807450da (2.39)
+-Fix-Commit: 23514c72b780f3da097ecf33a793b7ba9c2070d2 (2.38-42)
+-Fix-Commit: 97a4292aa4a2642e251472b878d0ec4c46a0e59a (2.37-57)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: d1a83b6767f68b3cb5b4b4ea2617254acd040c82 (2.36-126)
+diff --git a/advisories/GLIBC-SA-2024-0002 b/advisories/GLIBC-SA-2024-0002
+deleted file mode 100644
+index 940bfcf2fc..0000000000
+--- a/advisories/GLIBC-SA-2024-0002
++++ /dev/null
+@@ -1,15 +0,0 @@
+-syslog: Heap buffer overflow in __vsyslog_internal
+-
+-__vsyslog_internal used the return value of snprintf/vsnprintf to
+-calculate buffer sizes for memory allocation.  If these functions (for
+-any reason) failed and returned -1, the resulting buffer would be too
+-small to hold output.
+-
+-CVE-Id: CVE-2023-6779
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: 7e5a0c286da33159d47d0122007aac016f3e02cd (2.39)
+-Fix-Commit: d0338312aace5bbfef85e03055e1212dd0e49578 (2.38-43)
+-Fix-Commit: 67062eccd9a65d7fda9976a56aeaaf6c25a80214 (2.37-58)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: 2bc9d7c002bdac38b5c2a3f11b78e309d7765b83 (2.36-127)
+diff --git a/advisories/GLIBC-SA-2024-0003 b/advisories/GLIBC-SA-2024-0003
+deleted file mode 100644
+index b43a5150ab..0000000000
+--- a/advisories/GLIBC-SA-2024-0003
++++ /dev/null
+@@ -1,13 +0,0 @@
+-syslog: Integer overflow in __vsyslog_internal
+-
+-__vsyslog_internal calculated a buffer size by adding two integers, but
+-did not first check if the addition would overflow.
+-
+-CVE-Id: CVE-2023-6780
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: ddf542da94caf97ff43cc2875c88749880b7259b (2.39)
+-Fix-Commit: d37c2b20a4787463d192b32041c3406c2bd91de0 (2.38-44)
+-Fix-Commit: 2b58cba076e912961ceaa5fa58588e4b10f791c0 (2.37-59)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: b9b7d6a27aa0632f334352fa400771115b3c69b7 (2.36-128)
+diff --git a/advisories/README b/advisories/README
+deleted file mode 100644
+index 94e68b1350..0000000000
+--- a/advisories/README
++++ /dev/null
+@@ -1,73 +0,0 @@
+-GNU C Library Security Advisory Format
+-======================================
+-
+-Security advisories in this directory follow a simple git commit log
+-format, with a heading and free-format description augmented with tags
+-to allow parsing key information.  References to code changes are
+-specific to the glibc repository and follow a specific format:
+-
+-  Tag-name: <commit-ref> (release-version)
+-
+-The <commit-ref> indicates a specific commit in the repository.  The
+-release-version indicates the publicly consumable release in which this
+-commit is known to exist.  The release-version is derived from the
+-git-describe format, (i.e. stripped out from glibc-2.34.NNN-gxxxx) and
+-is of the form 2.34-NNN.  If the -NNN suffix is absent, it means that
+-the change is in that release tarball, otherwise the change is on the
+-release/2.YY/master branch and not in any released tarball.
+-
+-The following tags are currently being used:
+-
+-CVE-Id:
+-This is the CVE-Id assigned under the CVE Program
+-(https://www.cve.org/).
+-
+-Public-Date:
+-The date this issue became publicly known.
+-
+-Vulnerable-Commit:
+-The commit that introduced this vulnerability.  There could be multiple
+-entries, one for each release branch in the glibc repository; the
+-release-version portion of this tag should tell you which branch this is
+-on.
+-
+-Fix-Commit:
+-The commit that fixed this vulnerability.  There could be multiple
+-entries for each release branch in the glibc repository, indicating that
+-all of those commits contributed to fixing that issue in each of those
+-branches.
+-
+-Adding an Advisory
+-------------------
+-
+-An advisory for a CVE needs to be added on the master branch in two steps:
+-
+-1. Add the text of the advisory without any Fix-Commit tags along with
+-   the fix for the CVE.  Add the Vulnerable-Commit tag, if applicable.
+-   The advisories directory does not exist in release branches, so keep
+-   the advisory text commit distinct from the code changes, to ease
+-   backports.  Ask for the GLIBC-SA advisory number from the security
+-   team.
+-
+-2. Finish all backports on release branches and then back on the msater
+-   branch, add all commit refs to the advisory using the Fix-Commit
+-   tags.  Don't bother adding the release-version subscript since the
+-   next step will overwrite it.
+-
+-3. Run the process-advisories.sh script in the scripts directory on the
+-   advisory:
+-
+-     scripts/process-advisories.sh update GLIBC-SA-YYYY-NNNN
+-
+-   (replace YYYY-NNNN with the actual advisory number).
+-
+-4. Verify the updated advisory and push the result.
+-
+-Getting a NEWS snippet from advisories
+---------------------------------------
+-
+-Run:
+-
+-  scripts/process-advisories.sh news
+-
+-and copy the content into the NEWS file.
+
+commit 63295e4fda1f6dab4bf7442706fe303bf283036c
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Feb 5 16:10:24 2024 +0000
+
+    arm: Remove wrong ldr from _dl_start_user (BZ 31339)
+    
+    The commit 49d877a80b29d3002887b084eec6676d9f5fec18 (arm: Remove
+    _dl_skip_args usage) removed the _SKIP_ARGS literal, which was
+    previously loader to r4 on loader _start.  However, the cleanup did not
+    remove the following 'ldr r4, [sl, r4]' on _dl_start_user, used to check
+    to skip the arguments after ld self-relocations.
+    
+    In my testing, the kernel initially set r4 to 0, which makes the
+    ldr instruction just read the _GLOBAL_OFFSET_TABLE_.  However, since r4
+    is a callee-saved register; a different runtime might not zero
+    initialize it and thus trigger an invalid memory access.
+    
+    Checked on arm-linux-gnu.
+    
+    Reported-by: Adrian Ratiu <adrian.ratiu@collabora.com>
+    Reviewed-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
+    (cherry picked from commit 1e25112dc0cb2515d27d8d178b1ecce778a9d37a)
+
+diff --git a/sysdeps/arm/dl-machine.h b/sysdeps/arm/dl-machine.h
+index b857bbc868..dd1a0f6b6e 100644
+--- a/sysdeps/arm/dl-machine.h
++++ b/sysdeps/arm/dl-machine.h
+@@ -139,7 +139,6 @@ _start:\n\
+ _dl_start_user:\n\
+ 	adr	r6, .L_GET_GOT\n\
+ 	add	sl, sl, r6\n\
+-	ldr	r4, [sl, r4]\n\
+ 	@ save the entry point in another register\n\
+ 	mov	r6, r0\n\
+ 	@ get the original arg count\n\
+
+commit 312e159626b67fe11f39e83e222cf4348a3962f3
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Thu Feb 1 14:29:53 2024 -0300
+
+    mips: FIx clone3 implementation (BZ 31325)
+    
+    For o32 we need to setup a minimal stack frame to allow cprestore
+    on __thread_start_clone3 (which instruct the linker to save the
+    gp for PIC).  Also, there is no guarantee by kABI that $8 will be
+    preserved after syscall execution, so we need to save it on the
+    provided stack.
+    
+    Checked on mipsel-linux-gnu.
+    
+    Reported-by: Khem Raj <raj.khem@gmail.com>
+    Tested-by: Khem Raj <raj.khem@gmail.com>
+    (cherry picked from commit bbd248ac0d75efdef8fe61ea69b1fb25fb95b6e7)
+
+diff --git a/sysdeps/unix/sysv/linux/mips/clone3.S b/sysdeps/unix/sysv/linux/mips/clone3.S
+index e9fec2fa47..481b8ae963 100644
+--- a/sysdeps/unix/sysv/linux/mips/clone3.S
++++ b/sysdeps/unix/sysv/linux/mips/clone3.S
+@@ -37,11 +37,6 @@
+ 
+ 	.text
+ 	.set		nomips16
+-#if _MIPS_SIM == _ABIO32
+-# define EXTRA_LOCALS 1
+-#else
+-# define EXTRA_LOCALS 0
+-#endif
+ #define FRAMESZ ((NARGSAVE*SZREG)+ALSZ)&ALMASK
+ GPOFF= FRAMESZ-(1*SZREG)
+ NESTED(__clone3, SZREG, sp)
+@@ -68,8 +63,31 @@ NESTED(__clone3, SZREG, sp)
+ 	beqz	a0, L(error)	/* No NULL cl_args pointer.  */
+ 	beqz	a2, L(error)	/* No NULL function pointer.  */
+ 
++#if _MIPS_SIM == _ABIO32
++	/* Both stack and stack_size on clone_args are defined as uint64_t, and
++	   there is no need to handle values larger than to 32 bits for o32.  */
++# if __BYTE_ORDER == __BIG_ENDIAN
++#  define CL_STACKPOINTER_OFFSET  44
++#  define CL_STACKSIZE_OFFSET     52
++# else
++#  define CL_STACKPOINTER_OFFSET  40
++#  define CL_STACKSIZE_OFFSET     48
++# endif
++
++	/* For o32 we need to setup a minimal stack frame to allow cprestore
++	   on __thread_start_clone3.  Also there is no guarantee by kABI that
++	   $8 will be preserved after syscall execution (so we need to save it
++	   on the provided stack).  */
++	lw	t0, CL_STACKPOINTER_OFFSET(a0)	/* Load the stack pointer.  */
++	lw	t1, CL_STACKSIZE_OFFSET(a0)	/* Load the stack_size.  */
++	addiu	t1, -32				/* Update the stack size.  */
++	addu	t2, t1, t0			/* Calculate the thread stack.  */
++	sw	a3, 0(t2)			/* Save argument pointer.  */
++	sw	t1, CL_STACKSIZE_OFFSET(a0)	/* Save the new stack size.  */
++#else
+ 	move	$8, a3		/* a3 is set to 0/1 for syscall success/error
+ 				   while a4/$8 is returned unmodified.  */
++#endif
+ 
+ 	/* Do the system call, the kernel expects:
+ 	   v0: system call number
+@@ -125,7 +143,11 @@ L(thread_start_clone3):
+ 
+ 	/* Restore the arg for user's function.  */
+ 	move		t9, a2		/* Function pointer.  */
++#if _MIPS_SIM == _ABIO32
++	PTR_L		a0, 0(sp)
++#else
+ 	move		a0, $8		/* Argument pointer.  */
++#endif
+ 
+ 	/* Call the user's function.  */
+ 	jal		t9
+
+commit d0724994de40934c552f1f68de89053848a44927
+Author: Xi Ruoyao <xry111@xry111.site>
+Date:   Thu Feb 22 21:26:55 2024 +0100
+
+    math: Update mips64 ulps
+    
+    Signed-off-by: Andreas K. Hüttel <dilfridge@gentoo.org>
+    (cherry picked from commit e2a65ecc4b30a797df7dc6529f09b712aa256029)
+
+diff --git a/sysdeps/mips/mips64/libm-test-ulps b/sysdeps/mips/mips64/libm-test-ulps
+index 78969745b2..933aba4735 100644
+--- a/sysdeps/mips/mips64/libm-test-ulps
++++ b/sysdeps/mips/mips64/libm-test-ulps
+@@ -1066,17 +1066,17 @@ double: 1
+ ldouble: 1
+ 
+ Function: "j0":
+-double: 2
++double: 3
+ float: 9
+ ldouble: 2
+ 
+ Function: "j0_downward":
+-double: 5
++double: 6
+ float: 9
+ ldouble: 9
+ 
+ Function: "j0_towardzero":
+-double: 6
++double: 7
+ float: 9
+ ldouble: 9
+ 
+@@ -1146,6 +1146,7 @@ float: 6
+ ldouble: 8
+ 
+ Function: "log":
++double: 1
+ float: 1
+ ldouble: 1
+ 
+
+commit e0910f1d3278f05439fb434ee528fc9be1b6bd5e
+Author: Stefan Liebler <stli@linux.ibm.com>
+Date:   Thu Feb 22 15:03:27 2024 +0100
+
+    S390: Do not clobber r7 in clone [BZ #31402]
+    
+    Starting with commit e57d8fc97b90127de4ed3e3a9cdf663667580935
+    "S390: Always use svc 0"
+    clone clobbers the call-saved register r7 in error case:
+    function or stack is NULL.
+    
+    This patch restores the saved registers also in the error case.
+    Furthermore the existing test misc/tst-clone is extended to check
+    all error cases and that clone does not clobber registers in this
+    error case.
+    
+    (cherry picked from commit 02782fd12849b6673cb5c2728cb750e8ec295aa3)
+
+diff --git a/sysdeps/unix/sysv/linux/s390/s390-32/clone.S b/sysdeps/unix/sysv/linux/s390/s390-32/clone.S
+index 4c882ef2ee..a7a863242c 100644
+--- a/sysdeps/unix/sysv/linux/s390/s390-32/clone.S
++++ b/sysdeps/unix/sysv/linux/s390/s390-32/clone.S
+@@ -53,6 +53,7 @@ ENTRY(__clone)
+ 	br	%r14
+ error:
+ 	lhi	%r2,-EINVAL
++	lm	%r6,%r7,24(%r15)	/* Load registers.  */
+ 	j	SYSCALL_ERROR_LABEL
+ PSEUDO_END (__clone)
+ 
+diff --git a/sysdeps/unix/sysv/linux/s390/s390-64/clone.S b/sysdeps/unix/sysv/linux/s390/s390-64/clone.S
+index 4eb104be71..c552a6b8de 100644
+--- a/sysdeps/unix/sysv/linux/s390/s390-64/clone.S
++++ b/sysdeps/unix/sysv/linux/s390/s390-64/clone.S
+@@ -54,6 +54,7 @@ ENTRY(__clone)
+ 	br	%r14
+ error:
+ 	lghi	%r2,-EINVAL
++	lmg	%r6,%r7,48(%r15)	/* Restore registers.  */
+ 	jg	SYSCALL_ERROR_LABEL
+ PSEUDO_END (__clone)
+ 
+diff --git a/sysdeps/unix/sysv/linux/tst-clone.c b/sysdeps/unix/sysv/linux/tst-clone.c
+index 470676ab2b..2bc7124983 100644
+--- a/sysdeps/unix/sysv/linux/tst-clone.c
++++ b/sysdeps/unix/sysv/linux/tst-clone.c
+@@ -16,12 +16,16 @@
+    License along with the GNU C Library; if not, see
+    <https://www.gnu.org/licenses/>.  */
+ 
+-/* BZ #2386 */
++/* BZ #2386, BZ #31402 */
+ #include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <sched.h>
++#include <stackinfo.h>  /* For _STACK_GROWS_{UP,DOWN}.  */
++#include <support/check.h>
++
++volatile unsigned v = 0xdeadbeef;
+ 
+ int child_fn(void *arg)
+ {
+@@ -30,22 +34,67 @@ int child_fn(void *arg)
+ }
+ 
+ static int
+-do_test (void)
++__attribute__((noinline))
++do_clone (int (*fn)(void *), void *stack)
+ {
+   int result;
++  unsigned int a = v;
++  unsigned int b = v;
++  unsigned int c = v;
++  unsigned int d = v;
++  unsigned int e = v;
++  unsigned int f = v;
++  unsigned int g = v;
++  unsigned int h = v;
++  unsigned int i = v;
++  unsigned int j = v;
++  unsigned int k = v;
++  unsigned int l = v;
++  unsigned int m = v;
++  unsigned int n = v;
++  unsigned int o = v;
++
++  result = clone (fn, stack, 0, NULL);
++
++  /* Check that clone does not clobber call-saved registers.  */
++  TEST_VERIFY (a == v && b == v && c == v && d == v && e == v && f == v
++	       && g == v && h == v && i == v && j == v && k == v && l == v
++	       && m == v && n == v && o == v);
++
++  return result;
++}
++
++static void
++__attribute__((noinline))
++do_test_single (int (*fn)(void *), void *stack)
++{
++  printf ("%s (fn=%p, stack=%p)\n", __FUNCTION__, fn, stack);
++  errno = 0;
++
++  int result = do_clone (fn, stack);
++
++  TEST_COMPARE (errno, EINVAL);
++  TEST_COMPARE (result, -1);
++}
+ 
+-  result = clone (child_fn, NULL, 0, NULL);
++static int
++do_test (void)
++{
++  char st[128 * 1024] __attribute__ ((aligned));
++  void *stack = NULL;
++#if _STACK_GROWS_DOWN
++  stack = st + sizeof (st);
++#elif _STACK_GROWS_UP
++  stack = st;
++#else
++# error "Define either _STACK_GROWS_DOWN or _STACK_GROWS_UP"
++#endif
+ 
+-  if (errno != EINVAL || result != -1)
+-    {
+-      printf ("FAIL: clone()=%d (wanted -1) errno=%d (wanted %d)\n",
+-              result, errno, EINVAL);
+-      return 1;
+-    }
++  do_test_single (child_fn, NULL);
++  do_test_single (NULL, stack);
++  do_test_single (NULL, NULL);
+ 
+-  puts ("All OK");
+   return 0;
+ }
+ 
+-#define TEST_FUNCTION do_test ()
+-#include "../test-skeleton.c"
++#include <support/test-driver.c>
