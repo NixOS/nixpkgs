@@ -35,7 +35,6 @@ let
     "notifications"
     "project-history"
     "real-time"
-    "track-changes"
     "web"
   ] ++ (optional (cfg.dicts != [ ]) "spelling")
   ++ (optional (cfg.gitBridge.enable != [ ]) "gitbridge");
