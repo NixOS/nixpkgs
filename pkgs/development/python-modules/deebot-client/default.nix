@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "5.1.0";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-XKsS0Ty3n6rQW+f+4lLCc4i9DBqs3b6R5FEIr8L11UE=";
+    hash = "sha256-axz31GboqaWAcBU8DtG700Se6rX7VV7eBrQBDazG+Ig=";
   };
 
   nativeBuildInputs = [
