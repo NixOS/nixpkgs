@@ -14,9 +14,10 @@
 
 ## Announcements
 
+* _Welcome to Botnix!_
 * We are working on our first major release: `Botnix 1.0 Torbjörn` (pronounced *torr-beyourn*, meaning "Bear of Thor") &#128059;
 * `Botnix` works out-of-the-box using standard `NixOS` conventions and is currently in active development.
-* Join us in building the future of robot operating systems! See the [Contributing](#contributing) section.
+* Join us in building the future of robot operating systems! See the [Contributing](#contributing) section. We welcome contributions from all.
 
 ## Vision
 
@@ -28,7 +29,11 @@
 
 `Botnix` is designed with the future in mind. As a community of [Builders](https://a16z.com/its-time-to-build/), we aim to accelerate the development and deployment of AI for robotics. The `Botnix` software and community are free and open-source. We welcome contributions from all individuals, organizations, and industries. *We are grateful for your support!*
 
-## Operational Modes
+## Getting Started
+
+Coming soon.
+
+### Operational Modes
 
 The Botnix OS will be available in seven different operational modes or flavours:
 
@@ -44,13 +49,27 @@ Each of the modes involves specialized configurations that reflect their use cas
 
 At present, we are focusing on the `Agent` mode.
 
-## Getting Started
-
-Coming soon.
-
 ## Documentation
 
+Below you can find documentation for Robotics Linux (`Botnix`), Robotics Packages (`Botpkgs`), and `AutonomySim` from [Nervosys](https://nervosys.ai/), as well as related [NixOS Foundation](https://nixos.org/community/index.html) projects.
+
+### Botnix and Botpkgs
+
 Coming soon.
+
+* [Botnix and Botpkgs Manual](#documentation) - To be hosted here: https://nervosys.github.io/Botnix
+
+### AutonomySim
+
+`Botnix` is only half of the equation in developing and deploying autonomous systems for the real world. `Botnix` is designed to be co-developed and integrated with [`AutonomySim`](https://github.com/nervosys/AutonomySim/), the simulation engine for autonomous systems, for which documentation can be found below.
+
+* [AutonomySim](https://nervosys.github.io/AutonomySim) - The simulation engine for autonomous systems
+
+### NixOS, Nixpkgs, Nix
+
+* [NixOS Manual](https://nixos.org/nixos/manual/) - how to install, configure, and maintain a purely-functional Linux distribution
+* [Nixpkgs Manual](https://nixos.org/nixpkgs/manual/) - contributing to Nixpkgs and using programming-language-specific Nix expressions
+* [Nix Manual](https://nixos.org/nix/manual/) - how to write Nix expressions (programs), and how to use Nix command line tools
 
 ## Why Botnix?
 
@@ -72,19 +91,10 @@ After careful consideration, we decided that the focus of `Botnix` substantially
 
 Last, we felt that the Apache 2.0 license might be better suited to commercial adoption.
 
-## Manuals
-
-* [Botnix Manual]() - coming soon
-* [Botpkgs Manual]() - coming soon
-* [NixOS Manual](https://nixos.org/nixos/manual/) - how to install, configure, and maintain a purely-functional Linux distribution
-* [Nixpkgs Manual](https://nixos.org/nixpkgs/manual/) - contributing to Nixpkgs and using programming-language-specific Nix expressions
-* [Nix Manual](https://nixos.org/nix/manual/) - how to write Nix expressions (programs), and how to use Nix command line tools
-
 ## Related Projects
 
 All official `NixOS` project sources are maintained at the [NixOS organization](https://github.com/NixOS/) on GitHub:
 
-* [AutonomySim](https://github.com/nervosys/AutonomySim/) - the simulation engine for autonomous systems
 * [Nix](https://github.com/NixOS/nix/) - a purely functional package manager
 * [NixOps](https://github.com/NixOS/nixops/) - a tool to remotely deploy NixOS machines
 * [NixOS hardware](https://github.com/NixOS/nixos-hardware/) - NixOS profiles to optimize settings for different hardware
