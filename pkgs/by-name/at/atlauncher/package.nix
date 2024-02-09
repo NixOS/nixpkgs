@@ -1,19 +1,40 @@
-{ copyDesktopItems, fetchurl, jre, lib, makeDesktopItem, makeWrapper, stdenv, udev, xorg }:
+{ copyDesktopItems
+, fetchFromGitHub
+, fetchurl
+, lib
+, makeDesktopItem
+, makeWrapper
+, stdenvNoCC
 
-stdenv.mkDerivation (finalAttrs: {
+, # dependencies
+  jre
+, udev
+, xorg
+}:
+
+let
   pname = "atlauncher";
   version = "3.4.35.9";
 
-  src = fetchurl {
-    url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${finalAttrs.version}/ATLauncher-${finalAttrs.version}.jar";
-    hash = "sha256-Y2MGhzq4IbtjEG+CER+FWU8CY+hn5ehjMOcP02zIsR4=";
+  srcs = {
+    source = (fetchFromGitHub {
+      owner = "ATLauncher";
+      repo = "ATLauncher";
+      rev = "v${version}";
+      hash = "sha256-QbSCerrALrbHMWuPgJEthUrcYlaDEWuU6Kzwqe2mr8Q=";
+    });
+    jar = (fetchurl {
+      url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${version}/ATLauncher-${version}.jar";
+      hash = "sha256-Y2MGhzq4IbtjEG+CER+FWU8CY+hn5ehjMOcP02zIsR4=";
+    });
   };
 
-  env.ICON = fetchurl {
-    url = "https://atlauncher.com/assets/images/logo.svg";
-    hash = "sha256-XoqpsgLmkpa2SdjZvPkgg6BUJulIBIeu6mBsJJCixfo=";
-  };
+  packagingDir = "${srcs.source}/packaging/linux/_common";
+in
+stdenvNoCC.mkDerivation {
+  inherit pname version;
 
+  src = srcs.jar;
   dontUnpack = true;
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
@@ -21,8 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/java
-    cp $src $out/share/java/ATLauncher.jar
+    install -D -m 444 $src $out/share/java/ATLauncher.jar
 
     makeWrapper ${jre}/bin/java $out/bin/atlauncher \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm udev ]}" \
@@ -30,21 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
       --add-flags "--no-launcher-update"
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp $ICON $out/share/icons/hicolor/scalable/apps/atlauncher.svg
-
     runHook postInstall
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      categories = [ "Game" ];
-      desktopName = "ATLauncher";
-      exec = "atlauncher";
-      icon = "atlauncher";
-      name = "atlauncher";
-    })
-  ];
+  postInstall = ''
+    install -D -m 644 ${packagingDir}/atlauncher.svg $out/share/icons/hicolor/scalable/apps/atlauncher.svg
+  '';
+
+  desktopItems = [ "${packagingDir}/atlauncher.desktop" ];
 
   meta = with lib; {
     description = "A simple and easy to use Minecraft launcher which contains many different modpacks for you to choose from and play";
@@ -56,4 +69,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
-})
+}
