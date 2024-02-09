@@ -35,15 +35,15 @@ Coming soon.
 
 ### Operational Modes
 
-The Botnix OS will be available in seven different operational modes or flavours:
+The `Botnix` OS will be available in seven different flavors or operational modes:
 
-* Agent
-* Orchestrator
-* Knowledgebase
-* Monitor
-* Simulator (via [AutonomySim](https://github.com/nervosys/AutonomySim))
-* Trainer
-* Developer
+1. Agent
+2. Orchestrator
+3. Knowledgebase (or vector database)
+4. Monitor
+5. Simulator (via [AutonomySim](https://github.com/nervosys/AutonomySim))
+6. Trainer
+7. Developer
 
 Each of the modes involves specialized configurations that reflect their use cases within the realm of autonomous systems.
 
@@ -109,17 +109,10 @@ All official `NixOS` project sources are maintained at the [NixOS organization](
 
 `Nixpkgs` and `NixOS` are built and tested using the `Nix`-based [Hydra](https://hydra.nixos.org/) CI/CD system.
 
-<<<<<<< HEAD
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
 * [Continuous package builds for the NixOS 23.11 release](https://hydra.nixos.org/jobset/nixos/release-23.11)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
 * [Tests for the NixOS 23.11 release](https://hydra.nixos.org/job/nixos/release-23.11/tested#tabs-constituents)
-=======
-* [Nixpkgs builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Nixpkgs builds for NixOS 23.05](https://hydra.nixos.org/jobset/nixos/release-23.05)
-* [Nixpkgs tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Nixpkgs tests for NixOS 23.05](https://hydra.nixos.org/job/nixos/release-23.05/tested#tabs-constituents)
->>>>>>> f5cee62560f4 (Update README.md)
 
 Artifacts successfully built with Hydra are published to the `Nixpkgs` [https://cache.nixos.org/](cache).
 When building and testing succeed, the `Nixpkgs` expressions are distributed via [Nix channels](https://nixos.org/manual/nix/stable/package-management/channels.html).
