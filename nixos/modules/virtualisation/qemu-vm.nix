@@ -1066,10 +1066,18 @@ in
         ''}
       '';
 
-    systemd.tmpfiles.rules = lib.mkIf config.boot.initrd.systemd.enable [
-      "f /etc/NIXOS 0644 root root -"
-      "d /boot 0644 root root -"
-    ];
+    systemd.tmpfiles.settings."10-qemu-vm" = lib.mkIf config.boot.initrd.systemd.enable {
+      "/etc/NIXOS".f = {
+        mode = "0644";
+        user = "root";
+        group = "root";
+      };
+      "${config.boot.loader.efi.efiSysMountPoint}".d = {
+        mode = "0644";
+        user = "root";
+        group = "root";
+      };
+    };
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
