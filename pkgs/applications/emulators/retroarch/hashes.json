@@ -214,9 +214,9 @@
     "fmsx": {
         "owner": "libretro",
         "repo": "fmsx-libretro",
-        "rev": "1806eed4376fbe2fad82fa19271ea298cfbb7795",
-        "hash": "sha256-nX0H/+iEq7eBN4tm1+dT6/3BYLCpoyiE/L6waDPmUZI=",
-        "date": "unstable-2023-04-17"
+        "rev": "9b5cf868825a629cc4c7086768338165d3bbf706",
+        "hash": "sha256-zDDAMzV+pfu+AwjgXwduPfHyW1rQnvaDpFvz++QBBkA=",
+        "date": "unstable-2024-02-08"
     },
     "freeintv": {
         "owner": "libretro",
