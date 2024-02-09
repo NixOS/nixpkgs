@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/ebiggers/libdeflate/blob/v${version}/NEWS.md";
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej kaction ];
+    pkgConfigModules = [ "libdeflate" ];
   };
 }
