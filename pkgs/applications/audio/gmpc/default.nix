@@ -14,6 +14,8 @@
 , libunique
 , libSM
 , libICE
+, copyDesktopItems
+, makeDesktopItem
 , sqlite
 , hicolor-icon-theme
 , wrapGAppsHook
@@ -41,7 +43,16 @@ stdenv.mkDerivation rec {
     sha256 = "0b3bnxf98i5lhjyljvgxgx9xmb6p46cn3a9cccrng14nagri9556";
   };
 
-  nativeBuildInputs = [ pkg-config libtool intltool gob2 vala wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+    intltool
+    gob2
+    copyDesktopItems
+    vala
+    wrapGAppsHook
+  ];
+
   buildInputs = [
     glib
     gtk2
@@ -54,6 +65,17 @@ stdenv.mkDerivation rec {
     libICE
     sqlite
     hicolor-icon-theme
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gmpc";
+      exec = "gmpc";
+      icon = "gmpc";
+      comment = "GUI client for mpd.";
+      desktopName = "gmpc";
+      categories = [ "Audio" "AudioVideo" "GTK" ];
+    })
   ];
 
   meta = with lib; {
