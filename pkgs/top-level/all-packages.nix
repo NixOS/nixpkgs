@@ -3553,6 +3553,8 @@ with pkgs;
 
   bitwarden-cli = callPackage ../tools/security/bitwarden/cli.nix { };
 
+  inherit (callPackages ../tools/security/bitwarden-directory-connector { }) bitwarden-directory-connector-cli bitwarden-directory-connector;
+
   bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
 
   inherit (nodePackages) concurrently;
