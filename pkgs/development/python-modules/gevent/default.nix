@@ -42,6 +42,17 @@ buildPythonPackage rec {
       hash = "sha256-Y+cxIScuEgAVYmmxBJ8OI+JuJ4G+iiROTcRdWglo3l0=";
       includes = [ "src/gevent/events.py" ];
     })
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    (fetchpatch {
+      url = "https://github.com/gevent/gevent/commit/07035b7e0ccf35abea20d774827423e959429df1.patch";
+      hash = "sha256-w4Lw9kFALkg4QDUXLvWVmlyiOYGKE0W7kJIMd1jpGHI=";
+      includes = [ "src/gevent/events.py" ];
+    })
+    (fetchpatch {
+      url = "https://github.com/gevent/gevent/commit/d9e2479b83da1a8b2e75720d9bfa771bb97d7c94.patch";
+      hash = "sha256-j6AtVCYpwPXBz8HUJHSD0VfvkBsKuZBrmHh9WRgoEl4=";
+      includes = [ "src/gevent/events.py" ];
+    })
   ];
 
   nativeBuildInputs = [
