@@ -2215,6 +2215,12 @@
     githubId = 916366;
     name = "Brandon Elam Barker";
   };
+  bbb = {
+    email = "ollie@relph.me";
+    github = "BBB";
+    githubId = 73390;
+    name = "Ollie Relph";
+  };
   bbenne10 = {
     email = "Bryan.Bennett@protonmail.com";
     matrix = "@bryan.bennett:matrix.org";
