@@ -11245,6 +11245,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
   };
 
+  pyscaffold = callPackage ../development/python-modules/pyscaffold { };
+
   pyscf = callPackage ../development/python-modules/pyscf { };
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
