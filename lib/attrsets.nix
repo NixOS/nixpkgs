@@ -3,7 +3,7 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) id mergeAttrs;
+  inherit (lib.trivial) id mergeAttrs warn;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
 in
@@ -1197,9 +1197,10 @@ rec {
       (x // y) // mask;
 
   # DEPRECATED
-  zipWithNames = zipAttrsWithNames;
+  zipWithNames = warn
+    "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
 
   # DEPRECATED
-  zip = builtins.trace
-    "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
+  zip = warn
+    "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 }
