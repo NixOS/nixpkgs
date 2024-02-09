@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
   version = "24.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
@@ -15,6 +15,10 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     sha256 = "sha256-77yfysmFEneVOiejoCooi1buqEM/Ljv5xqjKv17DFWE=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     androguard
