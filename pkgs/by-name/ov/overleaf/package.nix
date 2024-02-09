@@ -2,7 +2,6 @@
 , buildNpmPackage
 , nodejs_18
 , fetchFromGitHub
-, python3
 }:
 
 let
@@ -60,8 +59,7 @@ in
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
   npmWorkspace = "services/web";
   npmBuildScript = "webpack:production";
-  nativeBuildInputs = [ nodejs_18 ];
-  buildInputs = [ python3 ];
+  #nativeBuildInputs = [ python3 ];
 
   preBuild = ''
     (
@@ -77,47 +75,25 @@ in
     cp -r {server-ce,services,libraries,node_modules} $out/share
   '';
 
-  postFixup = ''
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-chat \
-      --add-flags start \
-      --chdir $out/share/services/chat
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-clsi \
-      --add-flags start \
-      --chdir $out/share/services/clsi
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-contacts \
-      --add-flags start \
-      --chdir $out/share/services/contacts
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-docstore \
-      --add-flags start \
-      --chdir $out/share/services/docstore
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-document-updater \
-      --add-flags start \
-      --chdir $out/share/services/document-updater
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-filestore \
-      --add-flags start \
-      --chdir $out/share/services/filestore
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-git-bridge \
-      --add-flags start \
-      --chdir $out/share/services/git-bridge
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-history-v1 \
-      --add-flags start \
-      --chdir $out/share/services/history-v1
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-notifications \
-      --add-flags start \
-      --chdir $out/share/services/notifications
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/project-history \
-      --add-flags start \
-      --chdir $out/share/services/project-history
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-real-time \
-      --add-flags start \
-      --chdir $out/share/services/real-time
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-spelling \
-      --add-flags start \
-      --chdir $out/share/services/spelling
-    makeWrapper ${nodejs_18}/bin/npm $out/bin/overleaf-web \
-      --add-flags start \
-      --chdir $out/share/services/web
-  '';
+  postFixup = lib.concatMapStringsSep "\n"
+    (app: ''
+      makeWrapper ${nodejs_18}/bin/node $out/bin/overleaf-${app} \
+        --add-flags share/services/${app}/app.js \
+        --chdir $out
+    '') [
+    "chat"
+    "clsi"
+    "contacts"
+    "docstore"
+    "document-updater"
+    "filestore"
+    "history-v1"
+    "notifications"
+    "project-history"
+    "real-time"
+    "spelling"
+    "web"
+  ];
 
   meta = with lib; {
     description = "A web-based collaborative LaTeX editor";
