@@ -52,7 +52,7 @@ buildGoModule rec {
   '';
 
   # PostgreSQL's request for a shared memory segment exceeded your kernel's SHMALL parameter
-  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+  doCheck = !stdenv.isDarwin;
 
   passthru.tests = {
     inherit (nixosTests) dendrite;
