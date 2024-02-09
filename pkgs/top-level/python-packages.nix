@@ -11314,6 +11314,8 @@ self: super: with self; {
 
   pyscaffoldext-custom-extension = callPackage ../development/python-modules/pyscaffoldext-custom-extension { };
 
+  pyscaffoldext-dsproject = callPackage ../development/python-modules/pyscaffoldext-dsproject { };
+
   pyscf = callPackage ../development/python-modules/pyscf { };
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
