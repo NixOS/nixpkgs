@@ -234,6 +234,10 @@ buildFHSEnv {
     zlib
   ];
 
+  extraPreBwrapCmds = lib.optionalString studioVariant ''
+    mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
+  '';
+
   extraBwrapArgs = lib.optionals studioVariant [
     "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
   ];
