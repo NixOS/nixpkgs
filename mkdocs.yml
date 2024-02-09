@@ -28,12 +28,12 @@ theme:
     - content.tabs.link
     # - header.autohide
     # - mkdocstrings
-    - navigation.expand
+    # - navigation.expand
     # - navigation.instant
     - navigation.top
-    # - navigation.tabs
+    - navigation.tabs
     # - navigation.sections
-    - navigation.instant
+    # - navigation.instant
     - navigation.path
     - navigation.footer
     # - navigation.tracking
