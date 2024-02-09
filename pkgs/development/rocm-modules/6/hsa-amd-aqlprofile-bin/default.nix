@@ -9,8 +9,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hsa-amd-aqlprofile-bin";
   version = "6.0.2";
 
-  src = fetchurl {
-    url = "https://repo.radeon.com/rocm/apt/6.0.2/pool/main/h/hsa-amd-aqlprofile/hsa-amd-aqlprofile_1.0.0.60002.60002-115~22.04_amd64.deb";
+  src = let
+    version = finalAttrs.version;
+    dotless = builtins.replaceStrings ["."] ["0"] version;
+    incremental = "115";
+    osRelease = "22.04";
+  in fetchurl {
+    url = "https://repo.radeon.com/rocm/apt/${version}/pool/main/h/hsa-amd-aqlprofile/hsa-amd-aqlprofile_1.0.0.${dotless}.${dotless}-${incremental}~${osRelease}_amd64.deb";
     hash = "sha256-0XeKUKaof5pSMS/UgLwumBDBYgyH/pCex9jViUKENXY=";
   };
 

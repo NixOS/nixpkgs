@@ -41,7 +41,7 @@ let
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE=";
+    hash = "sha256-mbOdlSb0ESKi9hMkq3amv70Xkp/YKnZYre24d/y5TD0=";
     fetchLFS = true;
     leaveDotGit = true;
 
