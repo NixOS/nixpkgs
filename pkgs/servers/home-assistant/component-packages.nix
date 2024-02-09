@@ -5633,7 +5633,8 @@
       fnv-hash-fast
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: youtubeaio
+      youtubeaio
+    ];
     "zabbix" = ps: with ps; [
       py-zabbix
     ];
@@ -6505,6 +6506,7 @@
     "yeelight"
     "yolink"
     "youless"
+    "youtube"
     "zamg"
     "zeroconf"
     "zerproc"
