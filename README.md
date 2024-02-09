@@ -1,10 +1,12 @@
 <br>
 <p align="center">
-  <a href="https://nixos.org#gh-light-mode-only">
-    <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo"/>
-  </a>
-  <a href="https://nixos.org#gh-dark-mode-only">
-    <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png" width="500px" alt="NixOS logo"/>
+  <img src="./media/botnix_simple_narrow_bw_1000w.png" width="50%" alt="Botnix logo" />
+</p>
+
+<p align="center" width="100%">  
+  <a alt="Botnix Build"
+    href="https://github.com/nervosys/Botnix/actions/workflows/test_build.yml">
+    <img src="https://github.com/nervosys/Botnix/actions/workflows/test_build.yml/badge.svg">
   </a>
 </p>
 
