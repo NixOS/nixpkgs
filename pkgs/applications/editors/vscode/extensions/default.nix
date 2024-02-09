@@ -403,7 +403,7 @@ let
           homepage = "https://github.com/asdine/vscode-cue";
           changelog = "https://marketplace.visualstudio.com/items/asdine.cue/changelog";
           license = lib.licenses.mit;
-          maintainers = [lib.maintainers.matthewpi];
+          maintainers = [ lib.maintainers.matthewpi ];
         };
       };
 
@@ -612,7 +612,7 @@ let
         };
       };
 
-       bierner.docs-view = buildVscodeMarketplaceExtension {
+      bierner.docs-view = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "docs-view";
           publisher = "bierner";
@@ -823,30 +823,32 @@ let
       };
 
       charliermarsh.ruff = buildVscodeMarketplaceExtension {
-        mktplcRef = let
-          sources = {
-            "x86_64-linux" = {
-              arch = "linux-x64";
-              sha256 = "sha256-2c0tH/MlDOqeyffcV8ZCy4woogBTcf1GCuPPO8JXaWc=";
+        mktplcRef =
+          let
+            sources = {
+              "x86_64-linux" = {
+                arch = "linux-x64";
+                sha256 = "sha256-2c0tH/MlDOqeyffcV8ZCy4woogBTcf1GCuPPO8JXaWc=";
+              };
+              "x86_64-darwin" = {
+                arch = "darwin-x64";
+                sha256 = "sha256-euvGIlO7931N56R5BWKu3F9nSEoDgf+DXk7Hgl1qSUw=";
+              };
+              "aarch64-linux" = {
+                arch = "linux-arm64";
+                sha256 = "sha256-dGpIHChnfrQbxRZDuoAi4imgStyyPdxdvTQ3lknMYu0=";
+              };
+              "aarch64-darwin" = {
+                arch = "darwin-arm64";
+                sha256 = "sha256-tElX4C0I5AmpxSHMtqOsxSAUImD1tqArB5fnvhw4LFc=";
+              };
             };
-            "x86_64-darwin" = {
-              arch = "darwin-x64";
-              sha256 = "sha256-euvGIlO7931N56R5BWKu3F9nSEoDgf+DXk7Hgl1qSUw=";
-            };
-            "aarch64-linux" = {
-              arch = "linux-arm64";
-              sha256 = "sha256-dGpIHChnfrQbxRZDuoAi4imgStyyPdxdvTQ3lknMYu0=";
-            };
-            "aarch64-darwin" = {
-              arch = "darwin-arm64";
-              sha256 = "sha256-tElX4C0I5AmpxSHMtqOsxSAUImD1tqArB5fnvhw4LFc=";
-            };
-          };
-        in {
-          name = "ruff";
-          publisher = "charliermarsh";
-          version = "2024.4.0";
-        } // sources.${stdenv.system} or (throw "Unsupported system ${stdenv.system}");
+          in
+          {
+            name = "ruff";
+            publisher = "charliermarsh";
+            version = "2024.4.0";
+          } // sources.${stdenv.system} or (throw "Unsupported system ${stdenv.system}");
         meta = {
           license = lib.licenses.mit;
           changelog = "https://marketplace.visualstudio.com/items/charliermarsh.ruff/changelog";
@@ -1202,30 +1204,32 @@ let
       };
 
       devsense.phptools-vscode = buildVscodeMarketplaceExtension {
-        mktplcRef = let
-          sources = {
-            "x86_64-linux" = {
-              arch = "linux-x64";
-              sha256 = "sha256-8i5nRlzd+LnpEh9trWECxfiC1W4S0ekBab5vo18OlsA=";
+        mktplcRef =
+          let
+            sources = {
+              "x86_64-linux" = {
+                arch = "linux-x64";
+                sha256 = "sha256-8i5nRlzd+LnpEh9trWECxfiC1W4S0ekBab5vo18OlsA=";
+              };
+              "x86_64-darwin" = {
+                arch = "darwin-x64";
+                sha256 = "14crw56277rdwhigabb3nsndkfcs3yzzf7gw85jvryxviq32chgy";
+              };
+              "aarch64-linux" = {
+                arch = "linux-arm64";
+                sha256 = "1j1xlvbg3nrfmdd9zm6kywwicdwdkrq0si86lcndaii8m7sj5pfp";
+              };
+              "aarch64-darwin" = {
+                arch = "darwin-arm64";
+                sha256 = "0nlks6iqxkx1xlicsa8lrb1319rgznlxkv2gg7wkwgzph97ik8bi";
+              };
             };
-            "x86_64-darwin" = {
-              arch = "darwin-x64";
-              sha256 = "14crw56277rdwhigabb3nsndkfcs3yzzf7gw85jvryxviq32chgy";
-            };
-            "aarch64-linux" = {
-              arch = "linux-arm64";
-              sha256 = "1j1xlvbg3nrfmdd9zm6kywwicdwdkrq0si86lcndaii8m7sj5pfp";
-            };
-            "aarch64-darwin" = {
-              arch = "darwin-arm64";
-              sha256 = "0nlks6iqxkx1xlicsa8lrb1319rgznlxkv2gg7wkwgzph97ik8bi";
-            };
-          };
-        in {
-          name = "phptools-vscode";
-          publisher = "devsense";
-          version = "1.41.14332";
-        } // sources.${stdenv.system};
+          in
+          {
+            name = "phptools-vscode";
+            publisher = "devsense";
+            version = "1.41.14332";
+          } // sources.${stdenv.system};
 
         nativeBuildInputs = [
           autoPatchelfHook
@@ -3908,6 +3912,23 @@ let
           description = "VSCode extension that provides default Windows keybindings on any platform";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=smcpeak.default-keys-windows";
           homepage = "https://github.com/smcpeak/vscode-default-keys-windows";
+          license = lib.licenses.mit;
+          maintainers = [ ];
+        };
+      };
+
+      snakemake.snakemake-lang = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "snakemake-lang";
+          publisher = "snakemake";
+          version = "0.1.8";
+          sha256 = "sha256-ZJa/QWeS3E7XOFAE7FfVykHMax6tMbGyEZTPJwwXe1s=";
+        };
+        meta = {
+          changelog = "https://github.com/snakemake/snakemake-lang-vscode-plugin/blob/master/CHANGELOG.md";
+          description = "A Visual Studio Code extension that adds language support and snippets for Snakemake workflows.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=snakemake.snakemake-lang";
+          homepage = "https://github.com/snakemake/snakemake-lang-vscode-plugin";
           license = lib.licenses.mit;
           maintainers = [ ];
         };
