@@ -55,15 +55,13 @@ Below you can find documentation for Robotics Linux (`Botnix`), Robotics Package
 
 ### Botnix and Botpkgs
 
-Coming soon.
-
-* [Botnix and Botpkgs Manual](#documentation) - To be hosted here: https://nervosys.github.io/Botnix
+* [Botnix and Botpkgs Manual](https://nervosys.github.io/Botnix/) - The operating system for autonomous systems
 
 ### AutonomySim
 
 `Botnix` is only half of the equation in developing and deploying autonomous systems for the real world. `Botnix` is designed to be co-developed and integrated with [`AutonomySim`](https://github.com/nervosys/AutonomySim/), the simulation engine for autonomous systems, for which documentation can be found below.
 
-* [AutonomySim](https://nervosys.github.io/AutonomySim) - The simulation engine for autonomous systems
+* [AutonomySim](https://nervosys.github.io/AutonomySim/) - The simulation engine for autonomous systems
 
 ### NixOS, Nixpkgs, Nix
 
