@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "numactl";
-  version = "2.0.17";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qHR8BwHacFlMlwP9yjKLrPEXU4HsatI/Q6T0zhMMytk=";
+    hash = "sha256-ry29RUNa0Hv5gIhy2RTVT94mHhgfdIwb5aqjBycxxj0=";
   };
 
   outputs = [ "out" "dev" "man" ];
