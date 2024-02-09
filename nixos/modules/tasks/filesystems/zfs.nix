@@ -465,6 +465,18 @@ in
           {manpage}`systemd.time(7)`.
         '';
       };
+
+      randomizedDelaySec = mkOption {
+        default = "6h";
+        type = types.str;
+        example = "12h";
+        description = lib.mdDoc ''
+          Add a randomized delay before each ZFS trim.
+          The delay will be chosen between zero and this value.
+          This value must be a time span in the format specified by
+          {manpage}`systemd.time(7)`
+        '';
+      };
     };
 
     services.zfs.autoScrub = {
@@ -477,6 +489,18 @@ in
         description = lib.mdDoc ''
           Systemd calendar expression when to scrub ZFS pools. See
           {manpage}`systemd.time(7)`.
+        '';
+      };
+
+      randomizedDelaySec = mkOption {
+        default = "6h";
+        type = types.str;
+        example = "12h";
+        description = lib.mdDoc ''
+          Add a randomized delay before each ZFS autoscrub.
+          The delay will be chosen between zero and this value.
+          This value must be a time span in the format specified by
+          {manpage}`systemd.time(7)`
         '';
       };
 
@@ -894,6 +918,7 @@ in
         timerConfig = {
           OnCalendar = cfgScrub.interval;
           Persistent = "yes";
+          RandomizedDelaySec = cfgScrub.randomizedDelaySec;
         };
       };
     })
@@ -911,7 +936,10 @@ in
         serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'for pool in $(zpool list -H -o name); do zpool trim $pool;  done || true' ";
       };
 
-      systemd.timers.zpool-trim.timerConfig.Persistent = "yes";
+      systemd.timers.zpool-trim.timerConfig = {
+        Persistent = "yes";
+        RandomizedDelaySec = cfgTrim.randomizedDelaySec;
+      };
     })
   ];
 }
