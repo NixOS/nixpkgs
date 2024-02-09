@@ -150,8 +150,9 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Logitech/slimserver";
+    changelog = "https://github.com/Logitech/slimserver/blob/${version}/Changelog${lib.versions.major version}.html";
     description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
-    # the firmware is not under a free license, but not included in the default package
+    # the firmware is not under a free license, so we do not include firmware in the default package
     # https://github.com/Logitech/slimserver/blob/public/8.3/License.txt
     license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
     mainProgram = "slimserver";
