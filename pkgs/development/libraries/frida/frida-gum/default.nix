@@ -1,4 +1,4 @@
-{ srcs, stdenv, fetchFromGitHub, meson, glib, pkg-config, capstone, lzma, libunwind, libelf, libdwarf, ninja, lib }:
+{ srcs, stdenv, fetchFromGitHub, meson, glib-static, pcre2-static, pkg-config, capstone, lzma, libunwind, libelf, libdwarf, ninja, lib }:
 stdenv.mkDerivation {
   pname = "frida-gum-unwrapped";
   version = srcs.version;
@@ -14,7 +14,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    glib
+    glib-static
+    pcre2-static
     capstone
     lzma
     libunwind

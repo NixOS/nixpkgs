@@ -12,9 +12,10 @@
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
+, withDocs ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, libxml2, tzdata
+, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
@@ -44,8 +45,6 @@ let
     done
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
-
-  buildDocs = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -113,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     util-linuxMinimal # for libmount
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]) ++ lib.optionals buildDocs [
+  ]) ++ lib.optionals withDocs [
     # Note: this needs to be both in buildInputs and nativeBuildInputs. The
     # Meson gtkdoc module uses find_program to look it up (-> build dep), but
     # glib's own Meson configuration uses the host pkg-config to find its
@@ -137,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxslt
     docbook_xsl
-  ] ++ lib.optionals buildDocs [
+  ] ++ lib.optionals withDocs [
     gtk-doc
     docbook_xml_dtd_45
     libxml2
@@ -148,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${lib.boolToString buildDocs}"
+    "-Dgtk_doc=${lib.boolToString withDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
   ] ++ lib.optionals (!stdenv.isDarwin) [
@@ -209,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '' + lib.optionalString (!buildDocs) ''
+  '' + lib.optionalString (!withDocs) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 

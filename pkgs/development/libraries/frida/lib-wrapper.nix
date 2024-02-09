@@ -10,12 +10,12 @@
 , fetchFromGitHub
 , runCommandCC
 , pkg-config
-, pcre2
+, pcre2-static
 , util-linuxMinimal
 , libselinux
 , libsepol
 , pcre
-, glib
+, glib-static
 }:
 { unwrapped, devkitName, selfDerivation }:
 # NOTE: this can change to a direct clone of the newly (2024-01-25, frida commit e53a678b) split out
@@ -28,7 +28,7 @@ let
   # We need to include the transitive dependencies of everything required by pkg-config. I have no
   # idea why these aren't appropriately propagated.
   transitiveDependencies = [
-    pcre2
+    pcre2-static
   ] ++ lib.optionals stdenv.isLinux [
     util-linuxMinimal
     libselinux
@@ -118,7 +118,7 @@ stdenv.mkDerivation {
 
   # Include all includes within the unwrapped distribution and the build inputs
   # of the unwrapped distribution (chiefly glib).
-  env.FRIDA_LIB_ROOTS = builtins.concatStringsSep " " [ unwrapped glib.out glib.dev capstone ];
+  env.FRIDA_LIB_ROOTS = builtins.concatStringsSep " " [ unwrapped glib-static.out glib-static.dev capstone ];
 
   meta = unwrapped.meta;
 }

@@ -1,4 +1,4 @@
-{ rustPlatform, stdenv, lib, fridaPackages, slirp4netns, glib, pkg-config, protobuf, makeWrapper, openssl }:
+{ rustPlatform, stdenv, lib, fridaPackages, slirp4netns, pkg-config, protobuf, makeWrapper, openssl }:
 let
   wrapperArgs = lib.optionals stdenv.isLinux [
     "--prefix PATH ':' '${slirp4netns}/bin'"
@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage {
   env = {
     # Avoid requiring nightly Rust.
     RUSTC_BOOTSTRAP = 1;
+  } // lib.optionalAttrs stdenv.isLinux {
+    NIX_LDFLAGS = "-L ${fridaPackages.frida-gum}";
   };
 
   preConfigure = ''
@@ -41,7 +43,6 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isLinux [
-    glib
     fridaPackages.frida-gum
   ];
 
