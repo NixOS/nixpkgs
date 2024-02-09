@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     description = "A stream-oriented XML parser library written in C";
     platforms = platforms.all;
     license = licenses.mit; # expat version
+    pkgConfigModules = [ "expat" ];
   };
 }
