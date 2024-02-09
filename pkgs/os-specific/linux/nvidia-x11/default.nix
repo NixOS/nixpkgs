@@ -16,6 +16,12 @@ let
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version
     then b
     else a;
+
+  # https://forums.developer.nvidia.com/t/linux-6-7-3-545-29-06-550-40-07-error-modpost-gpl-incompatible-module-nvidia-ko-uses-gpl-only-symbol-rcu-read-lock/280908/19
+  rcu_patch = fetchpatch {
+    url = "https://github.com/gentoo/gentoo/raw/c64caf53/x11-drivers/nvidia-drivers/files/nvidia-drivers-470.223.02-gpl-pfn_valid.patch";
+    hash = "sha256-eZiQQp2S/asE7MfGvfe6dA/kdCvek9SYa/FFGp24dVg=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -33,6 +39,8 @@ rec {
     openSha256 = "sha256-wvRdHguGLxS0mR06P5Qi++pDJBCF8pJ8hr4T8O6TJIo=";
     settingsSha256 = "sha256-9wqoDEWY4I7weWW05F4igj1Gj9wjHsREFMztfEmqm10=";
     persistencedSha256 = "sha256-d0Q3Lk80JqkS1B54Mahu2yY/WocOqFFbZVBh+ToGhaE=";
+
+    patches = [ rcu_patch ];
   };
 
   latest = selectHighestVersion production (generic {
@@ -43,8 +51,7 @@ rec {
     settingsSha256 = "sha256-YBaKpRQWSdXG8Usev8s3GYHCPqL8PpJeF6gpa2droWY=";
     persistencedSha256 = "sha256-AiYrrOgMagIixu3Ss2rePdoL24CKORFvzgZY3jlNbwM=";
 
-    patchFlags = [ "-p1" "-d" "kernel" ];
-    patches = [];
+    patches = [ rcu_patch ];
 
     brokenOpen = kernel.kernelAtLeast "6.7";
   });
@@ -56,21 +63,23 @@ rec {
     openSha256 = "sha256-mRUTEWVsbjq+psVe+kAT6MjyZuLkG2yRDxCMvDJRL1I=";
     settingsSha256 = "sha256-c30AQa4g4a1EHmaEu1yc05oqY01y+IusbBuq+P6rMCs=";
     persistencedSha256 = "sha256-11tLSY8uUIl4X/roNnxf5yS2PQvHvoNjnd2CB67e870=";
+
+    patches = [ rcu_patch ];
   });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "535.43.23";
+    version = "535.43.25";
     persistencedVersion = "535.98";
     settingsVersion = "535.98";
-    sha256_64bit = "sha256-lnCiXkkRpKBVjvRSnJ5W8k4Mix6qMw1Lo2S0VjdexzI=";
-    openSha256 = "sha256-i74x94a4HCkqIqwInFgqZEFagVlMNZ1/OIztcTR1ReA=";
+    sha256_64bit = "sha256-Ir75rT1xs3Cycd1Wl7EqIUuU5bGfeSPYbGiq2Eqjlsw=";
+    openSha256 = "sha256-HnM4/sUKvZ8hGuwa0YSTAuC9HShw6on3+lk0TcqcPEQ=";
     settingsSha256 = "sha256-jCRfeB1w6/dA27gaz6t5/Qo7On0zbAPIi74LYLel34s=";
     persistencedSha256 = "sha256-WviDU6B50YG8dO64CGvU3xK8WFUX8nvvVYm/fuGyroM=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
 
-    brokenOpen = kernel.kernelAtLeast "6.7";
+    patches = [ rcu_patch ];
   };
 
   # data center driver compatible with current default cudaPackages
@@ -83,6 +92,10 @@ rec {
     useSettings = false;
     usePersistenced = false;
     useFabricmanager = true;
+
+    patches = [ rcu_patch ];
+
+    broken = kernel.kernelAtLeast "6.5";
   };
 
   dc_535 = generic rec {
@@ -94,6 +107,8 @@ rec {
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
+
+    patches = [ rcu_patch ];
   };
 
   # Update note:
@@ -108,8 +123,7 @@ rec {
     settingsSha256 = "sha256-r6DuIH/rnsCm/y51iRgPNi5/kz+EFMVABREdTjBneZ0=";
     persistencedSha256 = "sha256-e71fpPBBv8S/aoeXxBXkzKy5bsMMbv8y024cSLc8DYc=";
 
-    patchFlags = [ "-p1" "-d" "kernel" ];
-    patches = [];
+    patches = [ rcu_patch ];
   };
 
   # Last one supporting x86

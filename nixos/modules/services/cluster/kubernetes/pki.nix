@@ -174,9 +174,8 @@ in
       '')
       (optionalString cfg.genCfsslAPIToken ''
         if [ ! -f "${cfsslAPITokenPath}" ]; then
-          head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ' >"${cfsslAPITokenPath}"
+          install -u cfssl -m 400 <(head -c ${toString (cfsslAPITokenLength / 2)} /dev/urandom | od -An -t x | tr -d ' ') "${cfsslAPITokenPath}"
         fi
-        chown cfssl "${cfsslAPITokenPath}" && chmod 400 "${cfsslAPITokenPath}"
       '')]);
 
     systemd.services.kube-certmgr-bootstrap = {
@@ -194,7 +193,7 @@ in
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
         else
-          touch "${certmgrAPITokenPath}" && chmod 600 "${certmgrAPITokenPath}"
+          install -m 600 /dev/null "${certmgrAPITokenPath}"
         fi
       ''
       (optionalString (cfg.pkiTrustOnBootstrap) ''
@@ -220,7 +219,6 @@ in
             inherit (cert) action;
             authority = {
               inherit remote;
-              file.path = cert.caCert;
               root_ca = cert.caCert;
               profile = "default";
               auth_key_file = certmgrAPITokenPath;
@@ -297,8 +295,7 @@ in
           exit 1
         fi
 
-        echo $token > ${certmgrAPITokenPath}
-        chmod 600 ${certmgrAPITokenPath}
+        install -m 0600 <(echo $token) ${certmgrAPITokenPath}
 
         echo "Restarting certmgr..." >&1
         systemctl restart certmgr

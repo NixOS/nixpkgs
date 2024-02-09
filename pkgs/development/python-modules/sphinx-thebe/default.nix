@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-thebe";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sphinx_thebe";
-    hash = "sha256-xg2rG1m5LWouq41xGeh8BzBHDaYvPIS/bKdWkEh9BQU=";
+    hash = "sha256-V2BH9FVg6C9kql8VIAsesJTc/hxbj1MaimW9II4lpJM=";
   };
 
   nativeBuildInputs = [

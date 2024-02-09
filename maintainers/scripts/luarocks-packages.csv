@@ -100,9 +100,11 @@ moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
+nvim-nio,,,,,,mrcjkb
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
+rocks.nvim,,,,,5.1,teto mrcjkb
 rest.nvim,,,,,5.1,teto
 rustaceanvim,,,,,,mrcjkb
 say,https://github.com/Olivine-Labs/say.git,,,,,
@@ -119,3 +121,4 @@ toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda
+xml2lua,,,,,,teto

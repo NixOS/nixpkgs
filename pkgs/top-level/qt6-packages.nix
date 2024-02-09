@@ -88,6 +88,10 @@ makeScopeWithSplicing' {
   # is, to allow users to choose the right build if needed.
   sddm = callPackage ../applications/display-managers/sddm {};
 
+  waylib = callPackage ../development/libraries/waylib { };
+
+  wayqt = callPackage ../development/libraries/wayqt { };
+
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Convert to a throw on 01-01-2023.
     # Warnings show up in various cli tool outputs, throws do not.

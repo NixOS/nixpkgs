@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lout";
-  version = "3.42.2";
+  version = "3.43";
 
   src = fetchFromGitHub {
     owner = "william8000";
     repo = pname;
     rev = version;
-    hash = "sha256-rzCRxmwppBno6o4RM2GjE0pe/5yvyzyo375XdfX04As=";
+    hash = "sha256-YUFrlM7BnDlG1rUV90yBvWG6lOKW5qKxs/xdq6I/kI0=";
   };
 
   buildInputs = [ ghostscript ];

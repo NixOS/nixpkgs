@@ -7,11 +7,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    hash = "sha256-iCoEFudFqxjYZerhOe7u6bPzN5EUOpwSpWCbTzUmF8U=";
+    hash = "sha256-QrhfUru6Sju44W8j/DlMQwK8/ZY48GfwHDfSPy7kSaA=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   buildInputs = lib.optional withReadline readline;
-  # As of 0.19.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
+  # As of 0.20.0 the build generates an error on MacOS (using clang version 16.0.6 in the builder),
   # whereas running it outside of Nix with clang version 15.0.0 generates just a warning. The shell seems to
   # work just fine though, so we disable the error here.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";

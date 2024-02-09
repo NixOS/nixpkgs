@@ -76,6 +76,7 @@ let
         CallPackage = {
           call_package_variant = value._callPackageVariant;
           is_derivation = pkgs.lib.isDerivation value;
+          location = builtins.unsafeGetAttrPos name pkgs;
         };
       };
 

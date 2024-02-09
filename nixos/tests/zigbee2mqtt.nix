@@ -3,6 +3,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     name = "zigbee2mqtt";
     nodes.machine = { pkgs, ... }:
       {
+        systemd.services.dummy-serial = {
+          wantedBy = [
+            "multi-user.target"
+          ];
+          serviceConfig = {
+            ExecStart = "${pkgs.socat}/bin/socat pty,link=/dev/ttyACM0,mode=666 pty,link=/dev/ttyACM1";
+          };
+        };
+
         services.zigbee2mqtt = {
           enable = true;
         };
@@ -11,10 +20,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
 
     testScript = ''
-      machine.wait_for_unit("zigbee2mqtt.service")
+      machine.wait_for_unit("multi-user.target")
       machine.wait_until_fails("systemctl status zigbee2mqtt.service")
       machine.succeed(
-          "journalctl -eu zigbee2mqtt | grep \"Error: Error while opening serialport 'Error: Error: No such file or directory, cannot open /dev/ttyACM0'\""
+          "journalctl -eu zigbee2mqtt | grep 'Failed to connect to the adapter'"
       )
 
       machine.log(machine.succeed("systemd-analyze security zigbee2mqtt.service"))

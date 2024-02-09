@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-yZ4UAx95f/cjeObBtzpiYtwDjgOgkKnD64yGe6ouVGw=";
+
+  passthru.tests = {
+    inherit (nixosTests) nvmetcfg;
+  };
 
   meta = with lib; {
     description = "NVMe-oF Target Configuration Utility for Linux";

@@ -545,12 +545,14 @@ let
       };
 
       server = mkOption {
-        type = types.nullOr types.str;
-        inherit (defaultAndText "server" null) default defaultText;
+        type = types.str;
+        inherit (defaultAndText "server" "https://acme-v02.api.letsencrypt.org/directory") default defaultText;
+        example = "https://acme-staging-v02.api.letsencrypt.org/directory";
         description = lib.mdDoc ''
-          ACME Directory Resource URI. Defaults to Let's Encrypt's
-          production endpoint,
-          <https://acme-v02.api.letsencrypt.org/directory>, if unset.
+          ACME Directory Resource URI.
+          Defaults to Let's Encrypt's production endpoint.
+          For testing Let's Encrypt's [staging endpoint](https://letsencrypt.org/docs/staging-environment/)
+          should be used to avoid the rather tight rate limit on the production endpoint.
         '';
       };
 

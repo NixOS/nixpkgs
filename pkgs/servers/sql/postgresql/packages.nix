@@ -12,6 +12,8 @@ self: super: {
 
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
+    lantern = super.callPackage ./ext/lantern.nix { };
+
     periods = super.callPackage ./ext/periods.nix { };
 
     postgis = super.callPackage ./ext/postgis.nix { };
@@ -37,6 +39,8 @@ self: super: {
     pgaudit = super.callPackage ./ext/pgaudit.nix { };
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
+
+    pgsodium = super.callPackage ./ext/pgsodium.nix { };
 
     pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
 
@@ -82,6 +86,8 @@ self: super: {
     pg_relusage = super.callPackage ./ext/pg_relusage.nix { };
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
+
+    pg_squeeze = super.callPackage ./ext/pg_squeeze.nix { };
 
     pg_uuidv7 = super.callPackage ./ext/pg_uuidv7.nix { };
 

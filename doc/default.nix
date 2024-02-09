@@ -25,6 +25,7 @@ let
       { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
       { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
       { name = "meta"; description = "functions for derivation metadata"; }
+      { name = "derivations"; description = "miscellaneous derivation-specific functions"; }
     ];
   };
 

@@ -46,6 +46,24 @@ let
         ];
       });
 
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.9.3";
+        src = fetchFromGitHub {
+          owner = "aio-libs";
+          repo = "aiohttp";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-dEeMHruFJ1o0J6VUJcpUk7LhEC8sV8hUKXoKcd618lE=";
+        };
+        nativeCheckInputs = with self; [
+          freezegun
+          gunicorn
+          pytest-mock
+          pytestCheckHook
+          python-on-whales
+          re-assert
+        ];
+      });
+
       aionotion = super.aionotion.overridePythonAttrs (oldAttrs: rec {
         version = "2023.05.5";
         src = fetchFromGitHub {
@@ -448,7 +466,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.1.5";
+  hassVersion = "2024.1.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -466,13 +484,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-6HPHoUpS2WXbYx7Tbqp9LLo25DyNzNd/THpSo7Y43Jw=";
+    hash = "sha256-zCpdOl16ZkO9mr0nYZg1mlnGNaPaX0RALFEDRHGfKvM=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-cptN6NgB/1qnvz+/EqDBQiH2vSQsOeSljSVFZBFXR5Y=";
+    hash = "sha256-ipAw+vqePa5KA/Gqhl3WsQbzmzMXjmVx0NvbrM84SKg=";
   };
 
   nativeBuildInputs = with python.pkgs; [
