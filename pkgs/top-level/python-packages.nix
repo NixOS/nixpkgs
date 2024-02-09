@@ -11318,6 +11318,8 @@ self: super: with self; {
 
   pyscaffoldext-markdown = callPackage ../development/python-modules/pyscaffoldext-markdown { };
 
+  pyscaffoldext-travis = callPackage ../development/python-modules/pyscaffoldext-travis { };
+
   pyscf = callPackage ../development/python-modules/pyscf { };
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
