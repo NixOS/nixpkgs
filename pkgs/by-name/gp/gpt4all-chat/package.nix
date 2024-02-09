@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all-chat";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-BQE4UQEOOUAh0uGwQf7Q9D30s+aoGFyyMH6EI/WVIkc=";
+    hash = "sha256-l9Do58Cld9n89J+px8RPjyioIa0Bo3qGSQe7QEGcZr8=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
