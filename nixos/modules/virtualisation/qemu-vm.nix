@@ -734,7 +734,7 @@ in
             The default is to use userspace networking (SLiRP).
 
             If you override this option, be advised to keep
-            ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the example)
+            `''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}` (as seen in the example)
             to keep the default runtime behaviour.
           '';
         };
