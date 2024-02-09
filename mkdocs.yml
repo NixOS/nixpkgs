@@ -105,9 +105,9 @@ extra:
     default: latest
   feature:
     tabs: true
-  #analytics:
-  #        provider: google
-  #        property: ""
+  analytics:
+    provider: google
+    property: "G-3JYW5T5565"
   social:
     - icon: fontawesome/brands/github-alt
       link: "https://github.com/nervosys/Botnix"
