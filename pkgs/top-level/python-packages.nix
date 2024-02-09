@@ -10116,6 +10116,8 @@ self: super: with self; {
 
   pyannote-metrics = callPackage ../development/python-modules/pyannote-metrics { };
 
+  pyannote-database = callPackage ../development/python-modules/pyannote-database { };
+
   pyannote-core = callPackage ../development/python-modules/pyannote-core { };
 
   pyarlo = callPackage ../development/python-modules/pyarlo { };
