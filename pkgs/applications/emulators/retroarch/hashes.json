@@ -235,9 +235,9 @@
     "gambatte": {
         "owner": "libretro",
         "repo": "gambatte-libretro",
-        "rev": "c9a07107f121498a158762116d47d7068a247d3c",
-        "hash": "sha256-U4FR794/hB3tHsdbtnC7qL0qr1oi1ZF4PYFTu+sVMVI=",
-        "date": "unstable-2024-02-02"
+        "rev": "05c4e10168aa3070b4ea01f7da7ab1c0d4241103",
+        "hash": "sha256-W/s8FWjFOIcclLkbM5s2+2dcvr+X2My5319SvRo5/lU=",
+        "date": "unstable-2024-02-09"
     },
     "genesis-plus-gx": {
         "owner": "libretro",
