@@ -259,6 +259,11 @@ cfgusers = """  # Define a user account. Don't forget to set a password with ‘
 
 """
 
+cfgfirefox = """  # Install firefox.
+  programs.firefox.enable = true;
+
+"""
+
 cfgautologin = """  # Enable automatic login for the user.
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "@@username@@";
@@ -544,6 +549,9 @@ def run():
         elif (gs.value("autoLoginUser") is not None):
             cfg += cfgautologintty
 
+    if gs.value("packagechooser_packagechooser") != "":
+        cfg += cfgfirefox
+
     # Check if unfree packages are allowed
     free = True
     if gs.value("packagechooser_unfree") is not None:
@@ -554,9 +562,9 @@ def run():
     cfg += cfgpkgs
     # Use firefox as default as a graphical web browser, and add kate to plasma desktop
     if gs.value("packagechooser_packagechooser") == "plasma":
-        catenate(variables, "pkgs", "\n      firefox\n      kate\n    #  thunderbird\n    ")
+        catenate(variables, "pkgs", "\n      kate\n    #  thunderbird\n    ")
     elif gs.value("packagechooser_packagechooser") != "":
-        catenate(variables, "pkgs", "\n      firefox\n    #  thunderbird\n    ")
+        catenate(variables, "pkgs", "\n    #  thunderbird\n    ")
     else:
         catenate(variables, "pkgs", "")
 
