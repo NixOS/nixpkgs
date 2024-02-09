@@ -206,10 +206,10 @@
     "flycast": {
         "owner": "flyinghead",
         "repo": "flycast",
-        "rev": "c146a92f83ae2cba8df8970e21efc54301b9ade1",
-        "hash": "sha256-+ZED9pLfPr4uNNMNTmsrQWUgbKLW3DnPBdniwQ1fr9U=",
+        "rev": "7029e1615a215bc43e51f8eac605f31dd01ba8cd",
+        "hash": "sha256-JUXKlUNIg+1vvOfUQpysxUMYIRJqIzj9UNIwb+8HRPo=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-02-03"
+        "date": "unstable-2024-02-09"
     },
     "fmsx": {
         "owner": "libretro",
