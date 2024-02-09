@@ -10112,6 +10112,8 @@ self: super: with self; {
 
   pyannote-audio = callPackage ../development/python-modules/pyannote-audio { };
 
+  pyannote-pipeline = callPackage ../development/python-modules/pyannote-pipeline { };
+
   pyannote-core = callPackage ../development/python-modules/pyannote-core { };
 
   pyarlo = callPackage ../development/python-modules/pyarlo { };
