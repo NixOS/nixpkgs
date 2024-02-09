@@ -192,9 +192,9 @@
     "fbneo": {
         "owner": "libretro",
         "repo": "fbneo",
-        "rev": "e8cd9f81bc974f7427d9cff9ffc1d2f3a8d15f1f",
-        "hash": "sha256-XR/pLOvQ8L2dLguC1I2C7z8FoBid6oFSudnQNY3ub7c=",
-        "date": "unstable-2024-01-30"
+        "rev": "bb7aa7ea1e3a9a293fcf4e2b15994afde2e52899",
+        "hash": "sha256-XTOZGKq02obnzbtUEAEs99Kxhd8hFqLjI/smwtNAU8Q=",
+        "date": "unstable-2024-02-08"
     },
     "fceumm": {
         "owner": "libretro",
