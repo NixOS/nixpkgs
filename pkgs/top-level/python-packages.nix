@@ -4121,13 +4121,9 @@ self: super: with self; {
 
   flask-assets = callPackage ../development/python-modules/flask-assets { };
 
-  flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
-
   flask-babel = callPackage ../development/python-modules/flask-babel { };
 
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
-
-  flask-basicauth = callPackage ../development/python-modules/flask-basicauth { };
 
   flask-bcrypt = callPackage ../development/python-modules/flask-bcrypt { };
 
@@ -4194,8 +4190,6 @@ self: super: with self; {
   flask-session = callPackage ../development/python-modules/flask-session { };
 
   flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
-
-  flask-sessionstore = callPackage ../development/python-modules/flask-sessionstore { };
 
   flask-security-too = callPackage ../development/python-modules/flask-security-too { };
 
@@ -9654,7 +9648,9 @@ self: super: with self; {
 
   python-mbedtls = callPackage ../development/python-modules/python-mbedtls { };
 
-  python-memcached = callPackage ../development/python-modules/python-memcached { };
+  python-memcached = callPackage ../development/python-modules/python-memcached {
+    inherit (pkgs) memcached;
+  };
 
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
 
@@ -13885,9 +13881,7 @@ self: super: with self; {
 
   stanza = callPackage ../development/python-modules/stanza { };
 
-  starlette = callPackage ../development/python-modules/starlette {
-    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
-  };
+  starlette = callPackage ../development/python-modules/starlette { };
 
   starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 

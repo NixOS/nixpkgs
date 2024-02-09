@@ -204,7 +204,7 @@ qtModule {
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
   ];
 
   propagatedBuildInputs = [

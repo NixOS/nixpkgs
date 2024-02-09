@@ -7321,6 +7321,7 @@ with pkgs;
 
   curl = curlMinimal.override ({
     idnSupport = true;
+    pslSupport = true;
     zstdSupport = true;
   } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
     brotliSupport = true;
@@ -7917,7 +7918,7 @@ with pkgs;
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
-  efivar = disable-warnings-if-gcc13 (callPackage ../tools/system/efivar { });
+  efivar = callPackage ../tools/system/efivar { };
 
   eget = callPackage ../tools/misc/eget { };
 
@@ -20369,7 +20370,7 @@ with pkgs;
       then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
-  abseil-cpp = abseil-cpp_202301;
+  abseil-cpp = abseil-cpp_202401;
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -22303,10 +22304,7 @@ with pkgs;
 
   libantlr3c = callPackage ../development/libraries/libantlr3c { };
 
-  libaom = callPackage ../development/libraries/libaom {
-    # Remove circular dependency for libavif
-    libjxl = libjxl.override { buildDocs = false; };
-  };
+  libaom = callPackage ../development/libraries/libaom { };
 
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
@@ -22387,7 +22385,7 @@ with pkgs;
 
   libcacard = callPackage ../development/libraries/libcacard { };
 
-  libcamera = callPackage ../development/libraries/libcamera { };
+  libcamera-qcam = callPackage ../by-name/li/libcamera/package.nix { withQcam = true; };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreServices AppKit;
@@ -24219,9 +24217,7 @@ with pkgs;
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
 
-  openldap = callPackage ../development/libraries/openldap {
-    openssl = openssl_legacy;
-  };
+  openldap = callPackage ../development/libraries/openldap { };
 
   opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
@@ -36491,9 +36487,7 @@ with pkgs;
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
-  xdg-utils = callPackage ../tools/X11/xdg-utils {
-    w3m = buildPackages.w3m-batch;
-  };
+  xdg-utils = callPackage ../tools/X11/xdg-utils {};
 
   xdgmenumaker = callPackage ../applications/misc/xdgmenumaker { };
 
@@ -39044,7 +39038,9 @@ with pkgs;
 
   notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
-  openblas = callPackage ../development/libraries/science/math/openblas { };
+  openblas = callPackage ../development/libraries/science/math/openblas {
+    inherit (llvmPackages) openmp;
+  };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
@@ -39162,7 +39158,9 @@ with pkgs;
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix { };
-  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse { };
+  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
+    inherit (llvmPackages) openmp;
+  };
   suitesparse = suitesparse_5_3;
 
   suitesparse-graphblas = callPackage ../development/libraries/science/math/suitesparse-graphblas { };
