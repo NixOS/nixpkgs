@@ -62,8 +62,8 @@ theme:
         icon: material/brightness-4
         name: "Switch to system preference"
   favicon: media/images/rune.svg
+  logo: media/images/rune.svg
   icon:
-    logo: media/images/rune.svg
     repo: fontawesome/brands/git-alt
     edit: material/pencil
     view: material/eye
