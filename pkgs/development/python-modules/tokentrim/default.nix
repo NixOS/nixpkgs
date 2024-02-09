@@ -5,16 +5,16 @@
 , tiktoken
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "tokentrim";
-  version = "unstable-2023-09-07";
-  format = "pyproject";
+  version = "0.1.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KillianLucas";
-    repo = "tokentrim";
-    rev = "e98ad3a2ca0e321a7347f76c30be584175495139";
-    hash = "sha256-95xitHnbFFaj0xPuLMWvIvuJzoCO3VSd592X1RI9h3A=";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zr2SLT3MBuMD98g9fdS0mLuijcssRQ/S3+tCq2Cw1/4=";
   };
 
   nativeBuildInputs = [

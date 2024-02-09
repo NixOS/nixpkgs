@@ -17,8 +17,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preBuild = ''
-    substituteInPlace src/CMakeLists.txt --replace \$'{PYTHONLIB}' "$out/lib/${python3.libPrefix}/site-packages";
-    export NIX_CFLAGS_COMPILE="-L $out/lib/${python3.libPrefix}/site-packages $NIX_CFLAGS_COMPILE"
+    substituteInPlace src/CMakeLists.txt --replace \$'{PYTHONLIB}' "$out/${python3.sitePackages}";
+    export NIX_CFLAGS_COMPILE="-L $out/${python3.sitePackages} $NIX_CFLAGS_COMPILE"
   '';
 
   dontConfigure = true;

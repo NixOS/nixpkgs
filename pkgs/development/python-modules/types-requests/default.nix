@@ -1,18 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
+, urllib3
 , types-urllib3
 }:
 
 buildPythonPackage rec {
   pname = "types-requests";
-  version = "2.31.0.10";
-  format = "setuptools";
+  version = "2.31.0.20240125";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3FhSp28er2Dq+oGi5Qrvo9HwFcNM8MuhMJMIZrGyKpI=";
+    hash = "sha256-A6KM4dfNVBmRSOBDsgec3e0i1nldGaLCpnkaSyteLrU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    urllib3
+  ];
 
   propagatedBuildInputs = [
     types-urllib3

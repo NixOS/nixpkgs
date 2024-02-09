@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     # Don't force building tests
     substituteInPlace Makefile \
       --replace 'all: $(MMLGUI_BIN) test' 'all: $(MMLGUI_BIN)'
+
+    # Breaking change in libvgm
+    substituteInPlace src/emu_player.cpp \
+      --replace 'Resmpl_SetVals(&resmpl, 0xff' 'Resmpl_SetVals(&resmpl, RSMODE_LINEAR'
   '';
 
   strictDeps = true;

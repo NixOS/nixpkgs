@@ -229,11 +229,7 @@ self: super: builtins.intersectAttrs super {
   # hledger* overrides
   inherit (
     let
-      # Copy hledger man pages from the source tarball into the proper place.
-      # It always contains the relevant man page(s) at the top level. For
-      # hledger it additionally has all the other man pages in embeddedfiles/
-      # which we ignore.
-      installHledgerManPages = overrideCabal (drv: {
+      installHledgerExtraFiles = overrideCabal (drv: {
         buildTools = drv.buildTools or [] ++ [
           pkgs.buildPackages.installShellFiles
         ];
@@ -243,6 +239,10 @@ self: super: builtins.intersectAttrs super {
           done
 
           install -v -Dm644 *.info* -t "$out/share/info/"
+
+          if [ -e shell-completion/hledger-completion.bash ]; then
+            installShellCompletion --name hledger shell-completion/hledger-completion.bash
+          fi
         '';
       });
 
@@ -254,15 +254,15 @@ self: super: builtins.intersectAttrs super {
       });
     in
     {
-      hledger = installHledgerManPages super.hledger;
-      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerManPages super.hledger-ui;
+      hledger = installHledgerExtraFiles super.hledger;
+      hledger-web = installHledgerExtraFiles (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerExtraFiles super.hledger-ui;
 
-      hledger_1_30_1 = installHledgerManPages
+      hledger_1_30_1 = installHledgerExtraFiles
         (doDistribute (super.hledger_1_30_1.override {
           hledger-lib = self.hledger-lib_1_30;
         }));
-      hledger-web_1_30 = installHledgerManPages (hledgerWebTestFix
+      hledger-web_1_30 = installHledgerExtraFiles (hledgerWebTestFix
         (doDistribute (super.hledger-web_1_30.override {
           hledger = self.hledger_1_30_1;
           hledger-lib = self.hledger-lib_1_30;
@@ -491,9 +491,6 @@ self: super: builtins.intersectAttrs super {
 
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
-
-  # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
   # llvm-ffi needs a specific version of LLVM which we hard code here. Since we
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
@@ -1117,10 +1114,16 @@ self: super: builtins.intersectAttrs super {
     preCheck = "export CI=true";
   }) super.aeson-typescript;
 
-  # Enable extra optimisations which increase build time, but also
-  # later compiler performance, so we should do this for user's benefit.
-  # Flag added in Agda 2.6.2
-  Agda = appendConfigureFlag "-foptimise-heavily" super.Agda;
+  Agda = lib.pipe super.Agda [
+    # Enable extra optimisations which increase build time, but also
+    # later compiler performance, so we should do this for user's benefit.
+    # Flag added in Agda 2.6.2
+    (enableCabalFlag "optimise-heavily")
+    # Enable debug printing, which worsens performance slightly but is
+    # very useful.
+    # Flag added in Agda 2.6.4.1, was always enabled before
+    (enableCabalFlag "debug")
+  ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
   # to arbitrary files in $HOME. This doesn't either not achieve anything

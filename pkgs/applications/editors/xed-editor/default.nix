@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MXRxzmRo/dRhp5Llib9ng1gzWW8uvzqTMjUVK8a3eJ8=";
   };
 
+  patches = [
+    # We patch gobject-introspection and meson to store absolute paths to libraries in typelibs
+    # but that requires the install_dir is an absolute path.
+    ./correct-gir-lib-path.patch
+  ];
+
   nativeBuildInputs = [
     meson
     pkg-config

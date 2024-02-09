@@ -1,9 +1,21 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, jre
+, jdk_headless
+, jre_minimal
 , makeBinaryWrapper
 }:
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.logging"
+      "java.xml"
+      "java.desktop"
+      "java.management"
+    ];
+    jdk = jdk_headless;
+  };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
   version = "2023-12-14";
@@ -34,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html";
     license = licenses.unfree;
     mainProgram = "dynamodb-local";
-    maintainers = with maintainers; [ shyim ];
+    maintainers = with maintainers; [ shyim martinjlowm ];
     platforms = platforms.all;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

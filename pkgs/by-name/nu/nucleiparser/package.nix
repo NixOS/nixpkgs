@@ -1,18 +1,17 @@
 { lib
-, python3
 , fetchFromGitHub
+, python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nucleiparser";
-  version = "unstable-2023-12-26";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sinkmanu";
     repo = "nucleiparser";
-    # https://github.com/Sinkmanu/nucleiparser/issues/1
-    rev = "42f3d57c70300c436497c2539cdb3c49977fc48d";
+    rev = "refs/tags/${version}";
     hash = "sha256-/SLaRuO06rF7aLV7zY7tfIxkJRzsx+/Z+mc562RX2OQ=";
   };
 
@@ -31,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "A Nuclei output parser for CLI";
     homepage = "https://github.com/sinkmanu/nucleiparser";
+    changelog = "https://github.com/Sinkmanu/nucleiparser/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "nparser";

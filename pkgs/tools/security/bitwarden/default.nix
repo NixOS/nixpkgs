@@ -30,30 +30,29 @@ let
   electron = electron_27;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.12.1";
+  version = "2024.1.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-kmMEi9jYMPFHIdXyZAkeu8rh+34fEAkFw9uhwUt5k9o=";
+    hash = "sha256-lDDy1b1yfw3nZrwEEkpvh6xYucgn20XHsGACc45eb2w=";
   };
 
   patches = [
     (fetchpatch2 {
-      # https://github.com/bitwarden/clients/issues/6812#issuecomment-1806830091
-      url = "https://github.com/solopasha/bitwarden_flatpak/raw/daec07b067b9cec5e260b44a53216fc65866ba1d/wayland-clipboard.patch";
-      hash = "sha256-hcaRa9Nl7MYaTNwmB5Qdm65Mtufv3z+IPwLDPiO3pcw=";
+      # https://github.com/bitwarden/clients/pull/7508
+      url = "https://github.com/amarshall/bitwarden-clients/commit/e85fa4ef610d9dd05bd22a9b93d54b0c7901776d.patch";
+      hash = "sha256-P9MTsiNbAb2kKo/PasIm9kGm0lQjuVUxAJ3Fh1DfpzY=";
     })
-    # Workaround Electron 25 EOL and 26 has https://github.com/bitwarden/clients/issues/6560
-    ./electron-27.patch
   ];
 
   nodejs = nodejs_18;
 
   makeCacheWritable = true;
+  npmFlags = [ "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-IDqyHiXdMezdPNlZDyRdNzwC3SO5G3gI3h5zoxzzz/g=";
+  npmDepsHash = "sha256-RR8Ua41D9SXymiPuabOnIab3byu8DR63rOfdeTaQpy4=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -69,7 +68,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-8A33f2q9GoSM8Wh55iqnSfqWIpeRBz+EQT+rmsZsuXs=";
+    hash = "sha256-EiJjIWiyu8MvX3Tj0Fkeh0T0El5kdCko2maiY6kkPPA=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

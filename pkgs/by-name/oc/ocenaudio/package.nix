@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ocenaudio";
-  version = "3.13.3";
+  version = "3.13.4";
 
   src = fetchurl {
-    url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
-    hash = "sha256-B0+NyFZ9c0ljzYMJm3741TpoxFS0Zo6hxzhadYFofSA=";
+    url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=v${version}";
+    hash = "sha256-vE+xwwkBXIksy+6oygLDsrT8mFfHYIGcb6+8KMZe0no=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,12 @@ stdenv.mkDerivation rec {
     dpkg -x $src $out
     cp -av $out/opt/ocenaudio/* $out
     rm -rf $out/opt
+    mv $out/usr/share $out/share
+    rm -rf $out/usr
+    substituteInPlace $out/share/applications/ocenaudio.desktop \
+      --replace-fail "/opt/ocenaudio/bin/ocenaudio" "ocenaudio"
+    mkdir -p $out/share/licenses/ocenaudio
+    mv $out/bin/ocenaudio_license.txt $out/share/licenses/ocenaudio/LICENSE
 
     # Create symlink bzip2 library
     ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/libbz2.so.1.0

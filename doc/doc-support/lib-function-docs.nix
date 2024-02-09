@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     mkdir -p "$out"
 
     cat > "$out/index.md" << 'EOF'
-    ```{=include=} sections
+    ```{=include=} sections auto-id-prefix=auto-generated
     EOF
 
     ${lib.concatMapStrings ({ name, baseName ? name, description }: ''

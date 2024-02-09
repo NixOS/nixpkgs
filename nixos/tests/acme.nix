@@ -522,6 +522,7 @@ in {
           'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
+      acme.systemctl("start network-online.target")
       acme.wait_for_unit("network-online.target")
       acme.wait_for_unit("pebble.service")
 

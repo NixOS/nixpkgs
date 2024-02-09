@@ -25,14 +25,14 @@ let
 
 in buildPythonPackage rec {
   pname = "pythran";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     rev = version;
-    hash = "sha256-in0ty0aBAIx7Is13hjiHZGS8eKbhxb6TL3bENzfx5vQ=";
+    hash = "sha256-TpD8YZnnv48PKYrUqR0/qvJG1XRbcMBcrkcERh6Q4q0=";
   };
 
   patches = [
@@ -41,17 +41,12 @@ in buildPythonPackage rec {
       src = ./0001-hardcode-path-to-libgomp.patch;
       gomp = "${if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib}/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
-    (fetchpatch {
-      # Python 3.12 support
-      url = "https://github.com/serge-sans-paille/pythran/commit/258ab9aaf26172f669eab1bf2a346b5f65db3ac0.patch";
-      hash = "sha256-T+FLptDYIgzHBSXShULqHr/G8ttBFamq1M5JlB2HxDM=";
-    })
   ];
 
   # xsimd: unvendor this header-only C++ lib
   postPatch = ''
-    rm -r third_party/xsimd
-    ln -s '${lib.getDev xsimd}'/include/xsimd third_party/
+    rm -r pythran/xsimd
+    ln -s '${lib.getDev xsimd}'/include/xsimd pythran/
   '';
 
   nativeBuildInputs = [
@@ -84,5 +79,6 @@ in buildPythonPackage rec {
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

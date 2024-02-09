@@ -79,7 +79,6 @@ rustPlatform.buildRustPackage {
     '';
     homepage = "https://nymtech.net";
     license = licenses.asl20;
-    maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;
   };
 }

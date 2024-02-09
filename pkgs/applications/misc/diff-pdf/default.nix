@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "diff-pdf";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "diff-pdf";
     rev = "v${version}";
-    sha256 = "sha256-jt11wssl8cH2cH3NXF+iWHxVNxPJm0I8toignBHq3q0=";
+    sha256 = "sha256-6aKF3Xqp/1BoHEiZVZJSemTjn5Qwwr3QyhsXOIjTr08=";
   };
 
   nativeBuildInputs = [ autoconf automake pkg-config ];

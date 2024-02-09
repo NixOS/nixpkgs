@@ -11,6 +11,7 @@
 , protobuf
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , setuptools
 }:
@@ -28,7 +29,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "google-auth"
   ];
 
   propagatedBuildInputs = [

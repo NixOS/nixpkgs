@@ -205,17 +205,6 @@ let
         };
       };
 
-      usbAuth = mkOption {
-        default = config.security.pam.usb.enable;
-        defaultText = literalExpression "config.security.pam.usb.enable";
-        type = types.bool;
-        description = lib.mdDoc ''
-          If set, users listed in
-          {file}`/etc/pamusb.conf` are able to log in
-          with the associated USB key.
-        '';
-      };
-
       otpwAuth = mkOption {
         default = config.security.pam.enableOTPW;
         defaultText = literalExpression "config.security.pam.enableOTPW";
@@ -665,7 +654,6 @@ let
             authfile = u2f.authFile;
             appid = u2f.appId;
           }; })
-          { name = "usb"; enable = cfg.usbAuth; control = "sufficient"; modulePath = "${pkgs.pam_usb}/lib/security/pam_usb.so"; }
           (let ussh = config.security.pam.ussh; in { name = "ussh"; enable = config.security.pam.ussh.enable && cfg.usshAuth; control = ussh.control; modulePath = "${pkgs.pam_ussh}/lib/security/pam_ussh.so"; settings = {
             ca_file = ussh.caFile;
             authorized_principals = ussh.authorizedPrincipals;
@@ -700,6 +688,7 @@ let
               || cfg.pamMount
               || cfg.enableKwallet
               || cfg.enableGnomeKeyring
+              || config.services.intune.enable
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
@@ -726,6 +715,7 @@ let
                 kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
               }; }
               { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
+              { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
               }; }
@@ -867,9 +857,7 @@ let
           { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
             no-autostart = cfg.gnupg.noAutostart;
           }; }
-          { name = "cgfs"; enable = config.virtualisation.lxc.lxcfs.enable; control = "optional"; modulePath = "${pkgs.lxc}/lib/security/pam_cgfs.so"; args = [
-            "-c" "all"
-          ]; }
+          { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
         ];
       };
     };
@@ -1086,8 +1074,8 @@ in
 
     security.pam.krb5 = {
       enable = mkOption {
-        default = config.krb5.enable;
-        defaultText = literalExpression "config.krb5.enable";
+        default = config.security.krb5.enable;
+        defaultText = literalExpression "config.security.krb5.enable";
         type = types.bool;
         description = lib.mdDoc ''
           Enables Kerberos PAM modules (`pam-krb5`,
@@ -1095,7 +1083,7 @@ in
 
           If set, users can authenticate with their Kerberos password.
           This requires a valid Kerberos configuration
-          (`config.krb5.enable` should be set to
+          (`config.security.krb5.enable` should be set to
           `true`).
 
           Note that the Kerberos PAM modules are not necessary when using SSS
@@ -1476,7 +1464,7 @@ in
         '';
       }
       {
-        assertion = config.security.pam.enableSSHAgentAuth -> config.services.openssh.authorizedKeysFiles != [];
+        assertion = with config.security.pam.sshAgentAuth; enable -> authorizedKeysFiles != [];
         message = ''
           `security.pam.enableSSHAgentAuth` requires `services.openssh.authorizedKeysFiles` to be a non-empty list.
           Did you forget to set `services.openssh.enable` ?

@@ -16,24 +16,14 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    python310 = {
-      sourceVersion = {
-        major = "3";
-        minor = "10";
-        patch = "13";
-        suffix = "";
-      };
-      hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
-    };
-
     python311 = {
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "7";
+        patch = "8";
         suffix = "";
       };
-      hash = "sha256-GOGqfmb/OlhCPVntIoFaaVTlM0ISLEXfIMlod8Biubc=";
+      hash = "sha256-ngYAjIkBkkOVvB2jA+rFZ6cprgErqhgqs5Jp9lA4O7M=";
     };
   };
 
@@ -78,11 +68,18 @@ in {
     inherit passthruFun;
   };
 
-  python310 = callPackage ./cpython ({
+  python310 = callPackage ./cpython {
     self = __splicedPackages.python310;
+    sourceVersion = {
+      major = "3";
+      minor = "10";
+      patch = "13";
+      suffix = "";
+    };
+    hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python310);
+  };
 
   python311 = callPackage ./cpython ({
     self = __splicedPackages.python311;
@@ -95,10 +92,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "12";
-      patch = "1";
+      patch = "2";
       suffix = "";
     };
-    hash = "sha256-jfuPQm/NImZX+eK9Xx6W5TJkllF2+hfTJljoc1ka6yE=";
+    hash = "sha256-vigRLayBPSBTVFwUvxOhZAGiGHfxpp626l2ExKDz2HA=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -109,9 +106,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "a2";
+      suffix = "a3";
     };
-    hash = "sha256-ttRrRBkMTAJCHraaBC0WsMVUgb3agYxsQW3CRBE6nC0=";
+    hash = "sha256-IHhMgwTrHGnID5ZuvfB3W+LjfiPfO2JGHuwSqF3Pfq0=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -125,8 +122,8 @@ in {
     readline = null;
     ncurses = null;
     gdbm = null;
-    sqlite = null;
     configd = null;
+    sqlite = null;
     tzdata = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;

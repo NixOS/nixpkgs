@@ -93,7 +93,7 @@ let
         else if stdenv.hostPlatform.isBSD
           then if stdenv.hostPlatform.isx86_64 then "./Configure BSD-x86_64"
           else if stdenv.hostPlatform.isx86_32
-            then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+            then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
           else "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${lib.optionalString
@@ -264,8 +264,8 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.12";
-    hash = "sha256-+Tyejt3l6RZhGd4xdV/Ie0qjSGNmL2fd/LoU0La2m2E=";
+    version = "3.0.13";
+    hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -287,8 +287,8 @@ in {
   };
 
   openssl_3_2 = common {
-    version = "3.2.0";
-    hash = "sha256-FMgm8Hx+QzcG+1xp+p4l2rlWhIRLTJYqLPG/GD60aQ4=";
+    version = "3.2.1";
+    hash = "sha256-g8cyn+UshQZ3115dCwyiRTCbl+jsvP3B39xKufrDWzk=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch

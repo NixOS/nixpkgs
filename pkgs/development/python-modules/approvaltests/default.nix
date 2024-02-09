@@ -5,6 +5,7 @@
 , buildPythonPackage
 , empty-files
 , fetchFromGitHub
+, mock
 , mrjob
 , numpy
 , pyperclip
@@ -18,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.2.0";
+  version = "10.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2NaqqgrHXJovoVExvbr0s86eRbcxy+DUrsdRH/vak3E=";
+    hash = "sha256-1f0iTwLREF20Khkd4/xEfxXINJIpc4LfszsvCblS/yM=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest

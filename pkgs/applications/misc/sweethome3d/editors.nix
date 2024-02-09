@@ -3,9 +3,7 @@
 , fetchurl
 , makeWrapper
 , makeDesktopItem
-# sweethome3d 6.5.2 does not yet fully build&run with jdk 9 and later?
-, jdk8
-, jre8
+, jdk
 , ant
 , gtk3
 , gsettings-desktop-schemas
@@ -44,7 +42,7 @@ let
     };
 
     nativeBuildInputs = [ makeWrapper unzip ];
-    buildInputs = [ ant jre8 jdk8 gtk3 gsettings-desktop-schemas ];
+    buildInputs = [ ant jdk gtk3 gsettings-desktop-schemas ];
 
     postPatch = ''
       sed -i -e 's,../SweetHome3D,${applicationSrc},g' build.xml
@@ -54,7 +52,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      ant -lib ${applicationSrc}/libtest -lib ${applicationSrc}/lib -lib ${jdk8}/lib
+      ant -lib ${applicationSrc}/libtest -lib ${applicationSrc}/lib -lib ${jdk}/lib
 
       runHook postBuild
     '';
@@ -64,7 +62,7 @@ let
       mkdir -p $out/share/{java,applications}
       cp ${module}-${version}.jar $out/share/java/.
       cp "${editorItem}/share/applications/"* $out/share/applications
-      makeWrapper ${jre8}/bin/java $out/bin/$exec \
+      makeWrapper ${jdk}/bin/java $out/bin/$exec \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-jar $out/share/java/${module}-${version}.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '';
@@ -77,6 +75,7 @@ let
       inherit license;
       maintainers = [ lib.maintainers.edwtjo ];
       platforms = lib.platforms.linux;
+      mainProgram = exec;
     };
 
   };

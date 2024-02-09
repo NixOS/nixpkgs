@@ -177,8 +177,8 @@ let
       darwin = pkgs.darwin.basic_cmds;
     };
     xxd = {
-      linux = pkgs.vim;
-      darwin = pkgs.vim;
+      linux = pkgs.vim.xxd;
+      darwin = pkgs.vim.xxd;
     };
   };
 

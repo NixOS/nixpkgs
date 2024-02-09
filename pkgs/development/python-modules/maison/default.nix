@@ -6,25 +6,31 @@
 , pydantic
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "maison";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbatten5";
     repo = "maison";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XNo7QS8BCYzkDozLW0T+KMQPI667lDTCFtOqKq9q3hw=";
+    hash = "sha256-2hUmk91wr5o2cV3un2nMoXDG+3GT7SaIOKY+QaZY3nw=";
   };
+
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -47,6 +53,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/dbatten5/maison/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    broken = versionAtLeast pydantic.version "2";
   };
 }

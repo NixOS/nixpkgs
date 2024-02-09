@@ -26,18 +26,18 @@ let
     pygobject3
   ] ++ lib.optionals withGui [
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-nCCIi+UAQqvx+IqQDr6tQj42OHYamvCnKeBJOm6XjZE=";
+    sha256 = "sha256-+EDJrHryO1pXkuKnQdh8hGyi8/TOkb3ZLulQkiaOOqs=";
   };
 
   patches = [

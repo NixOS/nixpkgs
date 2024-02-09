@@ -2,7 +2,6 @@
 , cmake
 , darwin
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , stdenv
 
@@ -20,6 +19,8 @@
 , openblas
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, patchelf
+, static ? true # if false will build the shared objects as well
 }:
 
 let
@@ -30,25 +31,14 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1710";
+  version = "2074";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-fbzHjaL+qAE9HdtBVxboo8T2/KCdS5O1RkTQvDwD/xs=";
+    hash = "sha256-i5I0SsjnDSo+/EzKQzCLV/SNMlLdvY+h9jKN+KlN6L4=";
   };
-
-  patches = [
-    # openblas > v0.3.21 64-bit pkg-config file is now named openblas64.pc
-    # can remove when patch is accepted upstream
-    # https://github.com/ggerganov/llama.cpp/pull/4134
-    (fetchpatch {
-      name = "openblas64-pkg-config.patch";
-      url = "https://github.com/ggerganov/llama.cpp/commit/c885cc9f76c00557601b877136191b0f7aadc320.patch";
-      hash = "sha256-GBTxCiNrCazYRvcHwbqVMAALuJ+Svzf5BE7+nkxw064=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace ./ggml-metal.m \
@@ -117,15 +107,26 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals blasSupport [
     "-DLLAMA_BLAS=ON"
     "-DLLAMA_BLAS_VENDOR=OpenBLAS"
+  ]
+  ++ lib.optionals (!static) [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+    ${lib.optionalString (!static) ''
+      mkdir $out/lib
+      cp libggml_shared.so $out/lib
+      cp libllama.so $out/lib
+    ''}
 
     for f in bin/*; do
       test -x "$f" || continue
+      ${lib.optionalString (!static) ''
+        ${patchelf}/bin/patchelf "$f" --set-rpath "$out/lib"
+      ''}
       cp "$f" $out/bin/llama-cpp-"$(basename "$f")"
     done
 

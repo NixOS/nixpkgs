@@ -70,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "xwayland" true)
   ];
 
+  passthru = {
+    providedSessions = [ "labwc" ];
+  };
+
   meta = {
     homepage = "https://github.com/labwc/labwc";
     description = "A Wayland stacking compositor, inspired by Openbox";

@@ -78,9 +78,10 @@ stdenv.mkDerivation rec {
     "-Dman=enabled"
   ] ++ backendFlags;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     asciidoc
-    cmocka
     docbook_xsl
     libxslt
     meson
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cmocka
     icu
     libxkbcommon
     pango
