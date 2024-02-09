@@ -1,13 +1,14 @@
 { lib
 , aiohttp
 , aioresponses
-, pydantic_1
+, pydantic
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -31,11 +32,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
   ];
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic_1
+    pydantic
   ];
 
   nativeCheckInputs = [
