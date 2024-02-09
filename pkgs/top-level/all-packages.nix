@@ -17955,9 +17955,11 @@ with pkgs;
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
   ant = apacheAnt;
 
+  inherit (callPackages ../servers/apache-kafka { })
+    apacheKafka_3_5
+    apacheKafka_3_6;
+
   apacheKafka = apacheKafka_3_6;
-  apacheKafka_3_5 = callPackage ../servers/apache-kafka { majorVersion = "3.5"; };
-  apacheKafka_3_6 = callPackage ../servers/apache-kafka { majorVersion = "3.6"; };
 
   apng2gif = callPackage ../tools/graphics/apng2gif { };
 
