@@ -520,9 +520,9 @@
     "snes9x": {
         "owner": "snes9xgit",
         "repo": "snes9x",
-        "rev": "e76abdc4ef8f961ea0f8e87c160cf59cc6d44e42",
-        "hash": "sha256-JERfp69UB/PC2iIjbepOKpPdmZJbrzWbXhaLMJfOaXY=",
-        "date": "unstable-2024-01-28"
+        "rev": "be6372c0345c82a87b880c791703fb1929ecf72c",
+        "hash": "sha256-JzUXxTJZG3LdWC+FCM/3/ynGclQ11rCj7q5fs45r5Bw=",
+        "date": "unstable-2024-02-08"
     },
     "snes9x2002": {
         "owner": "libretro",
