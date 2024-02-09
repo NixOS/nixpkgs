@@ -217,5 +217,7 @@ Any and all sublicenses can be found [here](sublicenses/).
   <br>
   <img src="./media/images/logo_block_raven_rgi_modern_blueye_xwerx_bw_1000h.png" width="50%" alt="xwerx logo">
   <br>
-  TM 2024 &copy; Nervosys, LLC
+  <i>"Accelerating the development of robotic general intelligence"</i>
+  <br>
+  TM 2024 &copy; <a href="https://nervosys.ai/">Nervosys, LLC</a>
 </p>
