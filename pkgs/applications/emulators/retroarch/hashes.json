@@ -369,9 +369,9 @@
     "mupen64plus": {
         "owner": "libretro",
         "repo": "mupen64plus-libretro-nx",
-        "rev": "0e1dc5abacf91f1640206d32d18735e82071681e",
-        "hash": "sha256-gt9oVJunDCdhHbaqL9xaGlztxdT1D2UvYETqCXogIwU=",
-        "date": "unstable-2024-01-30"
+        "rev": "fa55ddca926d3c3ad2285911646919def4aa6fa3",
+        "hash": "sha256-Fn/qSQDR8FuHG9eLE0I24wUa0sdosrl6+lhnf9cD+yQ=",
+        "date": "unstable-2024-02-06"
     },
     "neocd": {
         "owner": "libretro",
