@@ -102,6 +102,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
+
+    # Put all resources related to demo app into devdoc output.
+    for d in applications icons metainfo; do
+      moveToOutput "share/$d" "$devdoc"
+    done
   '';
 
   passthru = {
