@@ -115,5 +115,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     mainProgram = "appstreamcli";
     platforms = platforms.unix;
+    pkgConfigModules = [ "appstream" ];
   };
 }
