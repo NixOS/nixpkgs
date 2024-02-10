@@ -70,7 +70,12 @@ def handle_commit(
     ref_name: str,
     ref_type: str,
     supported_refs: typing.List[str],
+    old_versions: dict,
 ):
+    if old_versions.get(ref_name, {}).get("rev", None) == rev.hexsha:
+        print(f"{ref_name}: revision still {rev.hexsha}, skipping")
+        return old_versions[ref_name]
+
     repo.git.checkout(rev)
     print(f"{ref_name}: checked out {rev.hexsha}")
 
@@ -123,6 +128,13 @@ os.remove(os.path.join(workdir, ".git"))
 
 print(f"Working in directory {repo.working_dir} with git directory {repo.git_dir}")
 
+
+try:
+    with open(os.path.join(BASE_DIR, "versions.json"), "r") as f:
+        old_versions = json.load(f)
+except FileNotFoundError:
+    old_versions = dict()
+
 versions = dict()
 for tag in repo.tags:
     m = TAG_PATTERN.match(tag.name)
@@ -135,7 +147,9 @@ for tag in repo.tags:
 
     print(f"Trying tag {tag.name} ({version})")
 
-    result = handle_commit(repo, tag.commit, tag.name, "tag", supported_refs)
+    result = handle_commit(
+        repo, tag.commit, tag.name, "tag", supported_refs, old_versions
+    )
     versions[tag.name] = result
 
 for branch in repo.remote("origin").refs:
@@ -153,7 +167,9 @@ for branch in repo.remote("origin").refs:
     else:
         continue
 
-    result = handle_commit(repo, branch.commit, fullname, "branch", supported_refs)
+    result = handle_commit(
+        repo, branch.commit, fullname, "branch", supported_refs, old_versions
+    )
     versions[fullname] = result
 
 
