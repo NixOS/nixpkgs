@@ -5,13 +5,15 @@ let
   cfg = config.services.draupnir;
 
   format = pkgs.formats.yaml {};
-  config = format.generate "draupnir.yaml" cfg.settings;
+  configFile = format.generate "draupnir.yaml" cfg.settings;
 in
 {
+  #region Options
   imports = [
-    (mkRemovedOptionModule [ "services" "draupnir" "dataPath" ] "Customising data path is not supported in the Draupnir module. Please move your Mjolnir data to /var/lib/draupnir!" )
-    (mkRemovedOptionModule [ "services" "draupnir" "verboseLogging" ] "Verbose logging was deprecated in Draupnir, and the option has been removed to reflect this." )
+    (mkRemovedOptionModule [ "services" "draupnir" "settings" "dataPath" ] "Customising data path is not supported in the Draupnir module. Please move your Mjolnir data to /var/lib/draupnir!" )
+    (mkRemovedOptionModule [ "services" "draupnir" "settings" "verboseLogging" ] "Verbose logging was deprecated in Draupnir, and the option has been removed to reflect this." )
   ];
+  
   options.services.draupnir = {
     enable = mkEnableOption (lib.mdDoc "Draupnir, a moderation tool for Matrix");
 
@@ -23,6 +25,7 @@ in
       '';
     };
 
+    #region Pantalaimon options
     pantalaimon = mkOption {
       description = lib.mdDoc ''
         `pantalaimon` options (enables E2E Encryption support).
@@ -63,7 +66,9 @@ in
         };
       };
     };
+    #endregion
 
+    #region Draupnir settings
     settings = mkOption {
       example = literalExpression ''
         {
@@ -79,6 +84,31 @@ in
       type =  types.submodule {
         freeformType = format.type;
         options = {
+          #region Readonly settings - these settings are not configurable
+          dataPath = mkOption {
+            type = types.str;
+            default = "/var/lib/draupnir";
+            readOnly = true;
+            description = lib.mdDoc ''
+              The path where Draupnir stores its data.
+            '';
+          };
+          #endregion
+        
+          #region Base settings
+          homeserverUrl = mkOption {
+            type = types.str;
+            default = "https://matrix.org";
+            description = lib.mdDoc ''
+              Base URL of the Matrix homeserver, that provides the Client-Server API.
+
+              If `pantalaimon.enable` is `true`, this option will become the homeserver to which `pantalaimon` connects.
+              The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
+            '';
+          };
+          #endregion
+
+          #region Common settings
           autojoinOnlyIfManager = mkOption {
             type = types.bool;
             default = false;
@@ -121,21 +151,15 @@ in
               These can also be configured interactively.
             '';
           };
-          homeserverUrl = mkOption {
-            type = types.str;
-            default = "https://matrix.org";
-            description = lib.mdDoc ''
-              Base URL of the Matrix homeserver, that provides the Client-Server API.
-
-              If `pantalaimon.enable` is `true`, this option will become the homeserver to which `pantalaimon` connects.
-              The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
-            '';
-          };
+          #endregion
         };
       };
     };
+    #endregion
   };
+  #endregion
 
+  #region Service configuration
   config = mkIf cfg.enable {
     assertions = [
       {
@@ -177,8 +201,9 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.draupnir} --draupnir-config ${config}";
-        ExecStartPre = [ generateConfig ];
+        ExecStart = "${lib.getExe pkgs.draupnir} --draupnir-config ${configFile}" 
+          + optionalString (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) " --pantalaimon-password-file $CREDENTIALS_DIRECTORY/pantalaimon_password"
+          + optionalString (cfg.accessTokenFile != null) " --access-token-file $CREDENTIALS_DIRECTORY/access_token";
         WorkingDirectory = "/var/lib/draupnir";
         StateDirectory = "draupnir";
         StateDirectoryMode = "0700";
@@ -194,14 +219,14 @@ in
         LoadCredential =
           optionals (cfg.accessTokenFile != null) [
             "access_token:${cfg.accessTokenFile}"
-          ] ++
-          optionals (cfg.pantalaimon.passwordFile != null) [
+          ]
+          ++ optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
             "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
           ];
-        /**/
       };
     };
   };
+  #endregion
 
   meta = {
     doc = ./draupnir.md;
