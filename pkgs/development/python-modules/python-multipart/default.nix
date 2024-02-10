@@ -6,6 +6,13 @@
 , mock
 , pyyaml
 , six
+
+# for passthru.tests
+, asgi-csrf
+, connexion
+, fastapi
+, gradio
+, starlette
 }:
 
 buildPythonPackage rec {
@@ -36,6 +43,16 @@ buildPythonPackage rec {
     mock
     pyyaml
   ];
+
+  passthru.tests = {
+    inherit
+      asgi-csrf
+      connexion
+      fastapi
+      gradio
+      starlette
+    ;
+  };
 
   meta = with lib; {
     description = "A streaming multipart parser for Python";
