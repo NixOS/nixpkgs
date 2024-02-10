@@ -13,7 +13,7 @@ in
     (mkRemovedOptionModule [ "services" "draupnir" "settings" "dataPath" ] "Customising data path is not supported in the Draupnir module. Please move your Mjolnir data to /var/lib/draupnir!" )
     (mkRemovedOptionModule [ "services" "draupnir" "settings" "verboseLogging" ] "Verbose logging was deprecated in Draupnir, and the option has been removed to reflect this." )
   ];
-  
+
   options.services.draupnir = {
     enable = mkEnableOption (lib.mdDoc "Draupnir, a moderation tool for Matrix");
 
@@ -94,7 +94,7 @@ in
             '';
           };
           #endregion
-        
+
           #region Base settings
           homeserverUrl = mkOption {
             type = types.str;
@@ -201,7 +201,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.draupnir} --draupnir-config ${configFile}" 
+        ExecStart = "${lib.getExe pkgs.draupnir} --draupnir-config ${configFile}"
           + optionalString (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) " --pantalaimon-password-file $CREDENTIALS_DIRECTORY/pantalaimon_password"
           + optionalString (cfg.accessTokenFile != null) " --access-token-file $CREDENTIALS_DIRECTORY/access_token";
         WorkingDirectory = "/var/lib/draupnir";
