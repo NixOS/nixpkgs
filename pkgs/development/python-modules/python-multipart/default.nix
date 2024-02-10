@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "python-multipart";
-  version = "0.0.7";
-  format = "pyproject";
+  version = "0.0.9";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "python_multipart";
     inherit version;
-    hash = "sha256-KIpsObBllsG5iLtnlMb7yA5sNp415QYmN98la+4Mmvk=";
+    hash = "sha256-A/VGiMZj8beXcQXwIQQ7B5MVHkyxwanUoR/BPWIsQCY=";
   };
 
   nativeBuildInputs = [
