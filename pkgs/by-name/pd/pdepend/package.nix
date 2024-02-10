@@ -2,7 +2,7 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pdepend";
-  version = "2.15.1";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "pdepend";

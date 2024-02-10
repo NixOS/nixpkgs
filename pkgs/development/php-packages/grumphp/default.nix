@@ -5,7 +5,7 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "grumphp";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "phpro";

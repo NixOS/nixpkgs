@@ -2,7 +2,7 @@
 
 php82.buildComposerProject (finalAttrs: {
   pname = "box";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "box-project";
