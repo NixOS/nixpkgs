@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , httpx
-, pydantic_1
+, pydantic
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic_1
+    pydantic
   ];
 
   nativeCheckInputs = [
@@ -54,5 +54,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }
