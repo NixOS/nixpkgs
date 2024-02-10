@@ -17,7 +17,11 @@ in
   postInstall = ''
     cd $out/bin
     for f in *; do
-      mv -- "$f" "woodpecker-$f"
+      if [ "$f" = cli ]; then
+        mv -- "$f" "woodpecker"
+      else
+        mv -- "$f" "woodpecker-$f"
+      fi
     done
     cd -
   '';
