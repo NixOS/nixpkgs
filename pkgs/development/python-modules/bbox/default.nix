@@ -26,13 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-FrJ8FhlqwmnEB/QvPlkDfqZncNGPhwY9aagM9yv1LGs=";
   };
 
-  nativebuildInputs = [
-    poetry-core
-  ];
-
   propagatedBuildInputs = [
     pyquaternion
     numpy
+    poetry-core
   ];
 
   nativeCheckInputs = [
