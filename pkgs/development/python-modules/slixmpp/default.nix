@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.8.4";
+  version = "1.8.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QG8fS6t+dXPdVZpEECfT3jPRe7o1S88g3caq+6JyKGs=";
+    hash = "sha256-dePwrUhVX39ckijnBmwdQ1izPWQLT753PsNLA7f66aM=";
   };
 
   propagatedBuildInputs = [
