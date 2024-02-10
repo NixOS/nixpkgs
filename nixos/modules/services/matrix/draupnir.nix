@@ -207,11 +207,11 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs ([
           (lib.getExe pkgs.draupnir)
-          "--draupnir-config" "${configFile}"
-        ] ++ optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null)
+          "--draupnir-config" configFile
+        ] ++ optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
           "--pantalaimon-password-file"
           "$CREDENTIALS_DIRECTORY/pantalaimon_password"
-        ] ++ optionals (cfg.accessTokenFile != null)
+        ] ++ optionals (cfg.accessTokenFile != null) [
           "--access-token-file"
           "$CREDENTIALS_DIRECTORY/access_token"
         ]);
