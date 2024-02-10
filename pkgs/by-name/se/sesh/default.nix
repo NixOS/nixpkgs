@@ -17,8 +17,7 @@ buildGoModule rec {
     description = "Smart session manager for the terminal.";
     homepage = "https://github.com/joshmedeski/sesh";
     license = licenses.mit;
-    maintainers = with maintainers;
-      [ Meliketoaste ];
+    maintainers = with maintainers; [ Meliketoaste ];
   };
 
 }
