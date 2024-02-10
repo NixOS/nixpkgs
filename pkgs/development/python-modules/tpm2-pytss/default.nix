@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch
 , pythonOlder
 , asn1crypto
@@ -20,39 +20,26 @@
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-W1tLFFb9wa7vPSw5cL6qB4yPfyZIyXppvPYMWi+VyJc=";
+  src = fetchFromGitHub {
+    owner = "tpm2-software";
+    repo = pname;
+    rev = version;
+    hash = "sha256-lX7FZNjvacSLowdL/5lu+wg/WIsCiofwBtsy2Lel75Y=";
   };
 
   patches = [
-    # This patches the call to the C preprocessor not to include types
-    # pycparser does not handle.
-    # `hardeningDisable = [ "fortify" ]` would have the same effect but
-    # would also disable hardening from generated FFI objects.
+    # Fix building with cryptography>=42.0.1
+    # Can be removed when 2.2.1 is out
     #
-    # backport of https://github.com/tpm2-software/tpm2-pytss/pull/523
+    # partial backport of https://github.com/tpm2-software/tpm2-pytss/pull/562
     (fetchpatch {
-      url = "https://github.com/baloo/tpm2-pytss/commit/099c069f28cfcd0a3019adebfeafa976f9395221.patch";
-      sha256 = "sha256-wU2WfLYFDmkhGzYornZ386tB3zb3GYfGOTc+/QOFb1o=";
-    })
-
-    # Lookup tcti via getinfo not system's ld_library_path
-    # https://github.com/tpm2-software/tpm2-pytss/pull/525
-    (fetchpatch {
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/97289a08ddf44f7bdccdd122d6055c69e12dc584.patch";
-      sha256 = "sha256-VFq3Hv4I8U8ifP/aSjyu0BiW/4jfPlRDKqRcqUGw6UQ=";
-    })
-
-    (fetchpatch {
-      name = "test-new-cryptography.patch";
-      url = "https://github.com/tpm2-software/tpm2-pytss/commit/e4006e6066c015d9ed55befa9b98247fbdcafd7d.diff";
-      sha256 = "sha256-Wxe9u7Cvv2vKMGTcK3X8W1Mq/nCt70zrzWUKA+83Sas=";
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/0fbb9d099370c0a7031dd13990986538f586836a.patch";
+      hash = "sha256-xnQIr4/iJra0+rn5estVqSvG8pXcuwWykmmayBpCzgw=";
     })
 
     # Fix hardcoded `fapi-config.json` configuration path
