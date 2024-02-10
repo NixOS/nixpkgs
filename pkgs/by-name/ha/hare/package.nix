@@ -8,7 +8,6 @@
 , scdoc
 , tzdata
 , substituteAll
-, unstableGitUpdater
 , callPackage
 , enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit)
 , pkgsCross
@@ -133,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   passthru = {
-    updateScript = unstableGitUpdater { };
     tests = lib.optionalAttrs enableCrossCompilation {
       crossCompilation = callPackage ./cross-compilation-tests.nix {
         hare = finalAttrs.finalPackage;
