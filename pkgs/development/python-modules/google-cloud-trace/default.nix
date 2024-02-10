@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "1.13.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2oGGbqPLcPdMuSjVCG9yIV0moEToLUxjVFW22yHbRzc=";
+    hash = "sha256-KJpHnWbmrFVcixfvKQ/nvDWLy4Sn1lVDVsjkS/2+p5w=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core

@@ -28252,8 +28252,6 @@ with pkgs;
 
   go-callvis = callPackage ../development/tools/go-callvis { };
 
-  gofumpt = callPackage ../development/tools/gofumpt { };
-
   gotags = callPackage ../development/tools/gotags { };
 
   go-task = callPackage ../development/tools/go-task { };
