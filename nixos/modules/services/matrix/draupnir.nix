@@ -10,7 +10,7 @@ in
 {
   #region Options
   imports = [
-    (mkRemovedOptionModule [ "services" "draupnir" "settings" "dataPath" ] "Customising data path is not supported in the Draupnir module. Please move your Mjolnir data to /var/lib/draupnir!" )
+    #(mkRemovedOptionModule [ "services" "draupnir" "settings" "dataPath" ] "Customising data path is not supported in the Draupnir module. Please move your Mjolnir data to /var/lib/draupnir!" )
     (mkRemovedOptionModule [ "services" "draupnir" "settings" "verboseLogging" ] "Verbose logging was deprecated in Draupnir, and the option has been removed to reflect this." )
   ];
 
@@ -91,6 +91,10 @@ in
             readOnly = true;
             description = lib.mdDoc ''
               The path where Draupnir stores its data.
+
+              ::: {.note}
+                If you want to customize where this data is stored, use a bind mount.
+              :::
             '';
           };
           #endregion
