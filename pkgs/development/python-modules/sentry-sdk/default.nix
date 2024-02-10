@@ -27,6 +27,7 @@
 , pytest-watch
 , pytestCheckHook
 , pythonOlder
+, quart
 , rq
 , sanic
 , setuptools
@@ -37,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.39.2";
+  version = "1.40.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-MC+9w53fsC5XB7CR9SS+z4bu2GgxkqdeYWERhk8lhcA=";
+    hash = "sha256-cVBqSFMBSRoIIv2RmkSLhlQ+jrofJVT9QoAPyjyX0ms=";
   };
 
   nativeBuildInputs = [
@@ -96,7 +97,7 @@ buildPythonPackage rec {
       pure-eval
     ];
     quart = [
-      # quart missing
+      quart
       blinker
     ];
     rq = [

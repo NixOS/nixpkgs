@@ -1527,6 +1527,7 @@
   ./tasks/filesystems/jfs.nix
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/ntfs.nix
+  ./tasks/filesystems/overlayfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/sshfs.nix
   ./tasks/filesystems/squashfs.nix

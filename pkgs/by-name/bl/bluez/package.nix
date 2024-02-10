@@ -5,7 +5,6 @@
 , docutils
 , ell
 , enableExperimental ? false
-, fetchpatch
 , fetchurl
 , glib
 , json_c
@@ -19,12 +18,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.71";
+  version = "5.72";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uCjUGMk87R9Vthb7VILPAVN0QL+zT72hpWTz7OlHNdg=";
+    hash = "sha256-SZ1/o0WplsG7ZQ9cZ0nh2SkRH6bs4L4OmGh/7mEkU24=";
   };
+
+  patches =
+    # Disable one failing test with musl libc, also seen by alpine
+    # https://github.com/bluez/bluez/issues/726
+    lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
+      (fetchurl {
+        url = "https://git.alpinelinux.org/aports/plain/main/bluez/disable_aics_unit_testcases.patch?id=8e96f7faf01a45f0ad8449c1cd825db63a8dfd48";
+        hash = "sha256-1PJkipqBO3qxxOqRFQKfpWlne1kzTCgtnTFYI1cFQt4=";
+      })
+  ;
 
   buildInputs = [
     alsa-lib
@@ -41,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     docutils
     pkg-config
+    python3.pkgs.pygments
     python3.pkgs.wrapPython
   ];
 

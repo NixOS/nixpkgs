@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pixman";
-  version = "0.43.0";
+  version = "0.43.2";
 
   src = fetchurl {
     urls = [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-plwoIJhY+xa+5Q2AnID5Co5BXA5P2DIQeKGCJ4WlVgo=";
+    hash = "sha256-6nkpflQY+1KNBGbotbkdG+iIV/o3BvSXd7KSWnKumSQ=";
   };
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;

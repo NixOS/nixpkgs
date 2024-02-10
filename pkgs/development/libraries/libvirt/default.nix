@@ -250,6 +250,9 @@ stdenv.mkDerivation rec {
       substituteInPlace src/util/virpolkit.h \
         --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
+      substituteInPlace src/util/virpci.c \
+         --replace '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
+
       patchShebangs .
     ''
     + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));

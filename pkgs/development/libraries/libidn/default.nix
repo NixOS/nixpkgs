@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libidn";
-  version = "1.41";
+  version = "1.42";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-iE1wY2S4Gr3Re+6Whtj/KudDHFoUZRBHxorfizH9iUU=";
+    sha256 = "sha256-1sGZ3NgG5P4nk2DLSwg0mg05Vg7VSP/RzK3ajN7LRyM=";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
