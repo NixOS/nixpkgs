@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "thermopro-ble";
-  version = "0.8.0";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ENzFX0rD97hCnllFKjcSGbAbEksqln/Hj0MuDVOKGDo=";
+    hash = "sha256-x/eO+LNJ98ThrQD5c9S54cPRnupN21UkpF7uR3+WwSU=";
   };
 
   nativeBuildInputs = [
