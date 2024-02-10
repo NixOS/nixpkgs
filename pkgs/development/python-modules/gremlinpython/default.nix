@@ -17,8 +17,8 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.7.0";
-  format = "pyproject";
+  version = "3.7.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "tinkerpop";
     rev = "refs/tags/${version}";
-    hash = "sha256-Uc9vpiHgUq1DOVpW//i4F6DO5lmlAXhZxwmtOaUvx3E=";
+    hash = "sha256-2viZXksHNFynOm6+1Vo2a8xrXl4pQcAxAVgehp5y6us=";
   };
 
   sourceRoot = "${src.name}/gremlin-python/src/main/python";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
     sed -i '/pytest-runner/d' setup.py
 
     substituteInPlace setup.py \
-      --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
-      --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
+      --replace-fail 'importlib-metadata<5.0.0' 'importlib-metadata' \
+      --replace-fail "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
   '';
 
   # setup-requires requirements
@@ -69,6 +69,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests/driver/test_client.py"
     "tests/driver/test_driver_remote_connection.py"
+    "tests/driver/test_driver_remote_connection_http.py"
     "tests/driver/test_driver_remote_connection_threaded.py"
     "tests/driver/test_web_socket_client_behavior.py"
     "tests/process/test_dsl.py"
