@@ -159,7 +159,7 @@ let
     if refindBinary != null then
       ''
       # Adds rEFInd to the ISO.
-      cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/boot/
+      cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/BOOT/
       ''
     else
       "# No refind for ${targetArch}"
@@ -210,11 +210,11 @@ let
     ${ # When there is a theme configured, use it, otherwise use the background image.
     if config.isoImage.grubTheme != null then ''
       # Sets theme.
-      set theme=(\$root)/EFI/boot/grub-theme/theme.txt
+      set theme=(\$root)/EFI/BOOT/grub-theme/theme.txt
       # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
     '' else ''
-      if background_image (\$root)/EFI/boot/efi-background.png; then
+      if background_image (\$root)/EFI/BOOT/efi-background.png; then
         # Black background means transparent background when there
         # is a background image set... This seems undocumented :(
         set color_normal=black/black
@@ -235,7 +235,7 @@ let
     nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
     strictDeps = true;
   } ''
-    mkdir -p $out/EFI/boot/
+    mkdir -p $out/EFI/BOOT
 
     # Add a marker so GRUB can find the filesystem.
     touch $out/EFI/nixos-installer-image
@@ -309,13 +309,13 @@ let
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
-      -o $out/EFI/boot/boot${targetArch}.efi \
-      -p /EFI/boot \
+      -o $out/EFI/BOOT/BOOT${lib.toUpper targetArch}.EFI \
+      -p /EFI/BOOT \
       -O ${grubPkgs.grub2_efi.grubTarget} \
       ''${MODULES[@]}
-    cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
+    cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/BOOT/
 
-    cat <<EOF > $out/EFI/boot/grub.cfg
+    cat <<EOF > $out/EFI/BOOT/grub.cfg
 
     set textmode=${lib.boolToString (config.isoImage.forceTextMode)}
     set timeout=${toString grubEfiTimeout}
@@ -331,12 +331,12 @@ let
     ${grubMenuCfg}
 
     hiddenentry 'Text mode' --hotkey 't' {
-      loadfont (\$root)/EFI/boot/unicode.pf2
+      loadfont (\$root)/EFI/BOOT/unicode.pf2
       set textmode=true
       terminal_output console
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
       set textmode=false
       terminal_output gfxterm
     }
@@ -411,7 +411,7 @@ let
         # Force root to be the FAT partition
         # Otherwise it breaks rEFInd's boot
         search --set=root --no-floppy --fs-uuid 1234-5678
-        chainloader (\$root)/EFI/boot/${refindBinary}
+        chainloader (\$root)/EFI/BOOT/${refindBinary}
       }
     fi
     ''}
@@ -427,7 +427,7 @@ let
     }
     EOF
 
-    grub-script-check $out/EFI/boot/grub.cfg
+    grub-script-check $out/EFI/BOOT/grub.cfg
 
     ${refind}
   '';
@@ -440,8 +440,8 @@ let
     #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
     ''
       mkdir ./contents && cd ./contents
-      mkdir -p ./EFI/boot
-      cp -rp "${efiDir}"/EFI/boot/{grub.cfg,*.efi} ./EFI/boot
+      mkdir -p ./EFI/BOOT
+      cp -rp "${efiDir}"/EFI/BOOT/{grub.cfg,*.EFI,*.efi} ./EFI/BOOT
 
       # Rewrite dates for everything in the FS
       find . -exec touch --date=2000-01-01 {} +
@@ -836,11 +836,11 @@ in
         { source = "${efiDir}/EFI";
           target = "/EFI";
         }
-        { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
+        { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/BOOT/grub.cfg") + "/grub";
           target = "/boot/grub";
         }
         { source = config.isoImage.efiSplashImage;
-          target = "/EFI/boot/efi-background.png";
+          target = "/EFI/BOOT/efi-background.png";
         }
       ] ++ lib.optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
@@ -848,7 +848,7 @@ in
         }
       ] ++ lib.optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
-          target = "/EFI/boot/grub-theme";
+          target = "/EFI/BOOT/grub-theme";
         }
       ];
 
