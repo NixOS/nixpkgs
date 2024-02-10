@@ -251,7 +251,7 @@ stdenv.mkDerivation rec {
         --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
       substituteInPlace src/util/virpci.c \
-         --replace '/lib/modules' '${if isLinux then "/run/current-system/kernel-modules" else ""}/lib/modules'
+         --replace '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
 
       patchShebangs .
     ''

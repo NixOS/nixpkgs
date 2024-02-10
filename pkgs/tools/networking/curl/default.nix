@@ -33,6 +33,7 @@
 , haskellPackages
 , ocamlPackages
 , phpExtensions
+, pkgsStatic
 , python3
 , tests
 , testers
@@ -102,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
+  '' + lib.optionalString (pslSupport && stdenv.hostPlatform.isStatic) ''
+    # curl doesn't understand that libpsl2 has deps because it doesn't use
+    # pkg-config.
+    # https://github.com/curl/curl/pull/12919
+    configureFlagsArray+=("LIBS=-lidn2 -lunistring")
   '';
 
   configureFlags = [
@@ -190,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      static = pkgsStatic.curl;
     } // lib.optionalAttrs (!stdenv.isDarwin) {
       fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
     };

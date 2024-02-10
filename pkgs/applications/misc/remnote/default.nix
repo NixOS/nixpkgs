@@ -6,11 +6,11 @@ stdenv.mkDerivation (finalAttrs: let
 in
 {
   pname = "remnote";
-  version = "1.13.34";
+  version = "1.13.52";
 
   src = fetchurl {
     url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
-    hash = "sha256-QOfU1pZWQfShq8bQPh9ZiGKxzIV6LH8S/sQk3MQVKD0=";
+    hash = "sha256-4wN4lqeA9olo6igr1M1JhecPG/ruVivdOyWiRlDAzQQ=";
   };
   appexec = appimageTools.wrapType2 {
     inherit pname version src;
