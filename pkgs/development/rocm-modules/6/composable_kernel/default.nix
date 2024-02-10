@@ -7,6 +7,7 @@
 , clr
 , openmp
 , clang-tools-extra
+, git
 , gtest
 , buildTests ? false
 , buildExamples ? false
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    git
     cmake
     rocm-cmake
     clr
