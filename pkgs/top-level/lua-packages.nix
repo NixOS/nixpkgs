@@ -54,10 +54,10 @@ rec {
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
-  luarocks = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
+  luarocks = toLuaModule (callPackage ../by-name/lu/luarocks/package.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
-  luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
+  luarocks-nix = toLuaModule (callPackage ../by-name/lu/luarocks/luarocks-nix.nix { });
 
  lua-pam = callPackage({fetchFromGitHub, linux-pam, openpam}: buildLuaPackage rec {
     pname = "lua-pam";
