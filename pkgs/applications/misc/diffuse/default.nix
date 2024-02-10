@@ -10,6 +10,7 @@
 , python3
 , atk
 , gtk3
+, hicolor-icon-theme
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -47,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   preConfigure = ''
     # app bundle for macos
-    substituteInPlace src/diffuse/meson.build data/icons/meson.build --replace "/Applications" "$out/Applications";
+    substituteInPlace src/diffuse/meson.build data/icons/meson.build src/diffuse/mac-os-app/diffuse-mac.in --replace-fail "/Applications" "$out/Applications";
   '';
 
   mesonFlags = [
@@ -56,6 +57,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # to avoid running gtk-update-icon-cache, update-desktop-database and glib-compile-schemas
   DESTDIR = "/";
+
+  makeWrapperArgs = [
+      "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
+  ];
 
   passthru = {
     updateScript = gitUpdater {
