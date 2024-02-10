@@ -189,11 +189,13 @@ in
             };
 
             ensureDBOwnership = mkOption {
-              type = types.bool;
+              type = with types; oneOf [(listOf str) bool];
               default = false;
               description = mdDoc ''
-                Grants the user ownership to a database with the same name.
-                This database must be defined manually in
+                When set to true it grants the user ownership to a database with the same name.
+                When set to a list of strings if grants the user ownership those databases.
+
+                These databases must be defined manually in
                 [](#opt-services.postgresql.ensureDatabases).
               '';
             };
@@ -450,11 +452,14 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = map ({ name, ensureDBOwnership, ... }: {
-      assertion = ensureDBOwnership -> builtins.elem name cfg.ensureDatabases;
+    assertions = map ({ name, ensureDBOwnership, ... }: let
+        dbOwnershipList = if builtins.isList ensureDBOwnership then ensureDBOwnership else if ensureDBOwnership then [name] else [];
+      in {
+      assertion = builtins.all (db: builtins.elem db cfg.ensureDatabases) dbOwnershipList;
       message = ''
         For each database user defined with `services.postgresql.ensureUsers` and
-        `ensureDBOwnership = true;`, a database with the same name must be defined
+        `ensureDBOwnership = true;` or `ensureDBOwnership = ["db_name"];`,
+        a database with the same name must be defined
         in `services.postgresql.ensureDatabases`.
 
         Offender: ${name} has not been found among databases.
@@ -588,9 +593,10 @@ in
                       (database: permission: ''$PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"' '')
                       user.ensurePermissions
                     );
-                  dbOwnershipStmt = optionalString
-                    user.ensureDBOwnership
-                    ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
+                  dbOwnershipStmts = let
+                    dbOwnershipList = if builtins.isList user.ensureDBOwnership then user.ensureDBOwnership else if user.ensureDBOwnership then [user.name] else [];
+                  in concatStringsSep "\n"
+                    (builtins.map (db: ''$PSQL -tAc 'ALTER DATABASE "${db}" OWNER TO "${user.name}";' '') dbOwnershipList);
 
                   filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
 
@@ -602,7 +608,7 @@ in
                   ${userPermissions}
                   ${userClauses}
 
-                  ${dbOwnershipStmt}
+                  ${dbOwnershipStmts}
                 ''
               )
               cfg.ensureUsers
