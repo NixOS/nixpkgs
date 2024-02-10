@@ -48,13 +48,15 @@ let
   getCore = repo: (lib.getAttr repo hashesFile);
 
   getCoreSrc = repo:
-    (lib.pipe repo [
-      getCore
-      (x: builtins.removeAttrs x [ "date" ])
-      fetchFromGitHub
-    ]);
+    let
+      inherit (getCore repo) src fetcher;
+      fetcherFn = {
+        inherit fetchFromGitHub;
+      }.${fetcher} or (throw "Unknown fetcher: ${fetcher}");
+    in
+    fetcherFn src;
 
-  getCoreDate = repo: (getCore repo).date or "unstable-1970-01-01";
+  getCoreVersion = repo: (getCore repo).version;
 
   mkLibretroCore =
     # Sometimes core name != repo name, so you may need to set them differently
@@ -67,7 +69,7 @@ let
     { core
     , repo ? core
     , src ? (getCoreSrc repo)
-    , version ? (getCoreDate repo)
+    , version ? (getCoreVersion repo)
     , ...
     }@args:
     import ./mkLibretroCore.nix ({

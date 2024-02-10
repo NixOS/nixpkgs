@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./ -i python3 -p "python3.withPackages (ps: with ps; [ requests ])" -p git -p nix-prefetch-github
+#!nix-shell -I nixpkgs=./ -i python3 -p "python3.withPackages (ps: with ps; [ ])" -p git -p nix-prefetch-github -p nix-prefetch-scripts
 
 import json
 import os
@@ -7,8 +7,6 @@ import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-
-import requests
 
 SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
@@ -19,10 +17,13 @@ GET_REPO_THREADS = int(os.environ.get("GET_REPO_THREADS", 8))
 # You may set `deep_clone`, `fetch_submodules` or `leave_dot_git` options to
 # `True` and they're similar to `fetchgit` options. Also if for some reason you
 # need to pin a specific revision, set `rev` to a commit.
-# To generate the hash file for your new core, you can run `update_cores.py
-# <core>`. The script needs to be run from the root of your `nixpkgs` clone.
-# Do not forget to add your core to `cores.nix` file with the proper overrides
-# so the core can be build.
+# There is also a `fetcher` option that for now only supports `fetchFromGitHub`
+# (see `get_repo_hash()`), but it may be extended in the future if there is a
+# need to support fetchers from other source hubs.
+# To generate the hash file for your new core, you can run
+# `<nixpkgs>/pkgs/applications/emulators/retroarch/update_cores.py <core>`. Do
+# not forget to add your core to `cores.nix` file with the proper overrides so
+# the core can be build.
 CORES = {
     "2048": {"repo": "libretro-2048"},
     "atari800": {"repo": "libretro-atari800"},
@@ -128,30 +129,6 @@ def info(*msg):
     print(*msg, file=sys.stderr)
 
 
-def get_rev_date_fetchFromGitHub(repo, owner, rev):
-    # https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
-    url = f"https://api.github.com/repos/{owner}/{repo}/commits/{rev}"
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
-    if token := os.environ.get("GITHUB_TOKEN"):
-        headers["Authorization"] = f"Bearer {token}"
-    r = requests.get(url, headers=headers)
-
-    try:
-        j = r.json()
-    except requests.exceptions.JSONDecodeError:
-        return None
-
-    date = j.get("commit", {}).get("committer", {}).get("date")
-    if date:
-        # Date format returned by API: 2023-01-30T06:29:13Z
-        return f"unstable-{date[:10]}"
-    else:
-        return None
-
-
 def get_repo_hash_fetchFromGitHub(
     repo,
     owner="libretro",
@@ -176,18 +153,24 @@ def get_repo_hash_fetchFromGitHub(
     if rev:
         extra_args.append("--rev")
         extra_args.append(rev)
-    result = subprocess.run(
-        ["nix-prefetch-github", owner, repo, *extra_args],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            ["nix-prefetch-github", owner, repo, "--meta", *extra_args],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except subprocess.CalledProcessError as ex:
+        info(f"Error while updating {owner}/{repo}:", ex.stderr)
+        raise ex
+
     j = json.loads(result.stdout)
-    date = get_rev_date_fetchFromGitHub(repo, owner, j["rev"])
-    if date:
-        j["date"] = date
-    # Remove False values
-    return {k: v for k, v in j.items() if v}
+    return {
+        "fetcher": "fetchFromGitHub",
+        # Remove False values
+        "src": {k: v for k, v in j["src"].items() if v},
+        "version": f"unstable-{j['meta']['commitDate']}",
+    }
 
 
 def get_repo_hash(fetcher="fetchFromGitHub", **kwargs):
@@ -229,6 +212,7 @@ def main():
 
     cores = {core: repo for core, repo in CORES.items() if core in cores_to_update}
     repo_hashes = get_repo_hashes(cores)
+    repo_hashes["!comment"] = "Generated with update_cores.py script, do not edit!"
     info(f"Generating '{HASHES_PATH}'...")
     with open(HASHES_PATH, "w") as f:
         f.write(json.dumps(dict(sorted(repo_hashes.items())), indent=4))
