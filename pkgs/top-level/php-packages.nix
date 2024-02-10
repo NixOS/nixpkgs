@@ -260,6 +260,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     inotify = callPackage ../development/php-packages/inotify { };
 
+    ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
+
     mailparse = callPackage ../development/php-packages/mailparse { };
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
