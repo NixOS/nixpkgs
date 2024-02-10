@@ -107,7 +107,7 @@ rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 rocks.nvim,,,,,5.1,teto mrcjkb
 rest.nvim,,,,,5.1,teto
 rustaceanvim,,,,,,mrcjkb
-say,https://github.com/Olivine-Labs/say.git,,,,,alerque
+say,,,,,,alerque
 serpent,,,,,,lockejan
 sqlite,,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
