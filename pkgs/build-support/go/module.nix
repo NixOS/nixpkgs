@@ -188,19 +188,29 @@ let
     buildPhase = args.buildPhase or (''
       runHook preBuild
 
-      exclude='\(/_\|examples\|Godeps\|testdata'
-      if [[ -n "$excludedPackages" ]]; then
-        IFS=' ' read -r -a excludedArr <<<$excludedPackages
-        printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
-        excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
-        exclude+='\|'"$excludedAlternates"
-      fi
-      exclude+='\)'
+      filterExcluded() {
+        local pkgs=("$@")
+        local filteredPkgs=()
+        read -ra excludedPackages <<< "$excludedPackages"
+        for pkg in "''${pkgs[@]}"; do
+          for exclude in "''${excludedPackages[@]}"; do
+            # Regexp match for backwards compatibility
+            # TODO: Use exact match after fixing packages
+            if [[ "$pkg" =~ $exclude ]]; then
+              continue 2
+            fi
+          done
+          filteredPkgs+=("$pkg")
+        done
+        echo "''${filteredPkgs[@]}"
+      }
 
       buildGoDirs() {
         local cmd="$1"
         shift
-        local dirs=("$@")
+        local pkgs=("$@")
+
+        read -ra pkgs < <(filterExcluded "''${pkgs[@]}")
 
         . $TMPDIR/buildFlagsArray
 
@@ -216,7 +226,7 @@ let
         fi
 
         local OUT
-        if ! OUT="$(go $cmd "''${flags[@]}" "''${dirs[@]}" 2>&1)"; then
+        if ! OUT="$(go $cmd "''${flags[@]}" "''${pkgs[@]}" 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -229,12 +239,12 @@ let
       }
 
       getPackagesToBuild() {
-        if [ -n "$subPackages" ]; then
-          local subpkgs
-          subpkgs=$(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
+        if [[ -n "$subPackages" ]]; then
+          local subPkgs
+          read -ra subPkgs < <(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
           go list \
-              -f '{{ if ne .Module nil }}{{ if .Module.Main }}{{ .Dir }}{{ end }}{{ end }}' \
-              -deps "$subpkgs" | \
+              -f '{{ .Dir }}' \
+              ''${subPkgs[@]} | \
               xargs echo
         else
           # Make Go recurse all packages of the module.
@@ -256,7 +266,8 @@ let
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
-      buildGoDirs install $(getPackagesToBuild)"
+      read -ra buildPkgs < <(getPackagesToBuild)
+      buildGoDirs install "''${buildPkgs[@]}"
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
@@ -279,12 +290,14 @@ let
       export GOFLAGS=''${GOFLAGS//-trimpath/}
 
       getPackagesToTest() {
-        if [ -n "$subPackages" ]; then
+        if [[ -n "$subPackages" ]]; then
           # Find all packages belonging to this Go module that are dependencies
           # of the targeted subPackages.
+          local subPkgs
+          read -ra subPkgs < <(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
           go list \
               -f '{{ if ne .Module nil }}{{ if .Module.Main }}{{ .Dir }}{{ end }}{{ end }}' \
-              -deps "$subPackages" | \
+              -deps ''${subPkgs[@]} | \
               xargs echo
         else
           # Make Go recurse all packages of the module.
@@ -294,7 +307,8 @@ let
         fi
       }
 
-      buildGoDirs test $(getPackagesToTest)
+      read -ra testPkgs < <(getPackagesToTest)
+      buildGoDirs test "''${testPkgs[@]}"
 
       runHook postCheck
     '';
