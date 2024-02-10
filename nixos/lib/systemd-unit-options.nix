@@ -74,6 +74,15 @@ in rec {
       '';
     };
 
+    upheldBy = mkOption {
+      default = [];
+      type = types.listOf unitNameType;
+      description = lib.mdDoc ''
+        Keep this unit running as long as the listed units are running. This is a continuously
+        enforced version of wantedBy.
+      '';
+    };
+
     wantedBy = mkOption {
       default = [];
       type = types.listOf unitNameType;
@@ -144,6 +153,20 @@ in rec {
         type = types.listOf unitNameType;
         description = lib.mdDoc ''
           Start the specified units when this unit is started.
+        '';
+      };
+
+      upholds = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = lib.mdDoc ''
+          Configures dependencies similar to Wants=, but as long as this unit is up, all units
+          listed in Upholds= are started whenever found to be inactive or failed, and no job is
+          queued for them. While a Wants= dependency on another unit has a one-time effect when
+          this units started, a Upholds= dependency on it has a continuous effect, constantly
+          restarting the unit if necessary. This is an alternative to the Restart= setting of
+          service units, to ensure they are kept running whatever happens. The restart happens
+          without delay, and usual per-unit rate-limit applies.
         '';
       };
 
