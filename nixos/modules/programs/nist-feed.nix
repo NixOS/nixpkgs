@@ -11,8 +11,8 @@ in
       enable = mkEnableOption (mdDoc "NIST Feed, which notifies you about the newest published CVEs");
       package = mkPackageOption pkgs "nist-feed" { };
       extraArgs = mkOption {
-        type = types.str;
-        default = "-l -s CRITICAL";
+        type = with types; listOf str;
+        default = [ "-l" "-s" "CRITICAL" ];
         description = mdDoc ''
           Arguments to provide to NIST-Feed, see a full list at
           <https://github.com/D3vil0p3r/NIST-Feed/blob/main/README.md#nist-feed>
