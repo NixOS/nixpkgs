@@ -5,6 +5,7 @@
 , limits
 , mock
 , hiro
+, httpx
 , poetry-core
 , pytestCheckHook
 , pythonAtLeast
@@ -50,6 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fastapi
     hiro
+    httpx
     mock
     pytestCheckHook
     starlette
