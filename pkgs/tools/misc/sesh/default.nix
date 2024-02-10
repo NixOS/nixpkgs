@@ -13,4 +13,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-zt1/gE4bVj+3yr9n0kT2FMYMEmiooy3k1lQ77rN6sTk=";
 
+  meta = with lib; {
+    description = "Smart session manager for the terminal.";
+    homepage = "https://github.com/joshmedeski/sesh";
+    license = licenses.mit;
+    maintainers = with maintainers;
+      [ Meliketoaste ];
+  };
+
 }
