@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-nibbles";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-nibbles/${lib.versions.majorMinor finalAttrs.version}/gnome-nibbles-${finalAttrs.version}.tar.xz";
-    sha256 = "xrG89vesx0RQAmveV7OONcJJ08K3xC2c/hH4YvPW12I=";
+    sha256 = "SF+Mnq03/xr/ANXFfZk40PXc/xyocDHyKkrjhS6HU8U=";
   };
 
   nativeBuildInputs = [
