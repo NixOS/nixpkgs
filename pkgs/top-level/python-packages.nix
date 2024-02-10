@@ -5169,6 +5169,8 @@ self: super: with self; {
 
   hickle = callPackage ../development/python-modules/hickle { };
 
+  highdicom = callPackage ../development/python-modules/highdicom { };
+
   hid = callPackage ../development/python-modules/hid {
     inherit (pkgs) hidapi;
   };
@@ -9371,6 +9373,8 @@ self: super: with self; {
   };
 
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
+
+  pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
 
   pillow-simd = callPackage ../development/python-modules/pillow-simd {
       inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
