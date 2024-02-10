@@ -95,6 +95,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs hipamd/src
+    patchShebangs hipamd/download_libamhip64_v5.sh
 
     # We're not on Windows so these are never installed to hipcc...
     substituteInPlace hipamd/CMakeLists.txt \
