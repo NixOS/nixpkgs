@@ -5,12 +5,7 @@ with lib;
 let
   cfg = config.services.jibri;
 
-  # Copied from the jitsi-videobridge.nix file.
-  toHOCON = x:
-    if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  format = pkgs.formats.hocon { };
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
@@ -38,13 +33,13 @@ let
         control-login = {
           domain = env.control.login.domain;
           username = env.control.login.username;
-          password.__hocon_envvar = toVarName "${name}_control";
+          password = format.lib.mkSubstitution (toVarName "${name}_control");
         };
 
         call-login = {
           domain = env.call.login.domain;
           username = env.call.login.username;
-          password.__hocon_envvar = toVarName "${name}_call";
+          password = format.lib.mkSubstitution (toVarName "${name}_call");
         };
 
         strip-from-room-domain = env.stripFromRoomDomain;
@@ -85,13 +80,13 @@ let
   };
   # Allow overriding leaves of the default config despite types.attrs not doing any merging.
   jibriConfig = recursiveUpdate defaultJibriConfig cfg.config;
-  configFile = pkgs.writeText "jibri.conf" (toHOCON { jibri = jibriConfig; });
+  configFile = format.generate "jibri.conf" { jibri = jibriConfig; };
 in
 {
   options.services.jibri = with types; {
     enable = mkEnableOption (lib.mdDoc "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`");
     config = mkOption {
-      type = attrs;
+      type = format.type;
       default = { };
       description = lib.mdDoc ''
         Jibri configuration.

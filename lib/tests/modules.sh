@@ -407,6 +407,16 @@ checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
 
+# types.unique
+#   requires a single definition
+checkConfigError 'The option .examples\.merged. is defined multiple times while it.s expected to be unique' config.examples.merged.a ./types-unique.nix
+#   user message is printed
+checkConfigError 'We require a single definition, because seeing the whole value at once helps us maintain critical invariants of our system.' config.examples.merged.a ./types-unique.nix
+#   let the inner merge function check the values (on demand)
+checkConfigError 'A definition for option .examples\.badLazyType\.a. is not of type .string.' config.examples.badLazyType.a ./types-unique.nix
+#   overriding still works (unlike option uniqueness)
+checkConfigOutput '^"bee"$' config.examples.override.b ./types-unique.nix
+
 ## types.raw
 checkConfigOutput '^true$' config.unprocessedNestingEvaluates.success ./raw.nix
 checkConfigOutput "10" config.processedToplevel ./raw.nix
