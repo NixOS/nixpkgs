@@ -5,20 +5,21 @@
 , pysigma
 , pytestCheckHook
 , pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
-  pname = "pysigma-pipeline-crowdstrike";
-  version = "1.0.3";
+  pname = "pysigma-backend-sqlite";
+  version = "0.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
-    repo = "pySigma-pipeline-crowdstrike";
+    repo = "pySigma-backend-sqlite";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0uSoZC2cUgdOGE5saLlx5n0gbVPX61kkASCBFD4F5QM=";
+    hash = "sha256-wbFSgtsiP5k1aGJx8PWDl0N28r0dgn6Fduk0PuM8x3w=";
   };
 
   nativeBuildInputs = [
@@ -31,17 +32,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    requests
   ];
 
   pythonImportsCheck = [
-    "sigma.pipelines.crowdstrike"
+    "sigma.backends.sqlite"
   ];
 
   meta = with lib; {
-    description = "Library to support CrowdStrike pipeline for pySigma";
-    homepage = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike";
-    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Only ];
+    description = "Library to support sqlite for pySigma";
+    homepage = "https://github.com/SigmaHQ/pySigma-backend-sqlite";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-sqlite/releases/tag/v${version}";
+    license = with licenses; [ lgpl3Only ];
     maintainers = with maintainers; [ fab ];
   };
 }
