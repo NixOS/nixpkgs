@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fixup bad symlinks
   postInstall = ''
-    rm -r $out/hip/bin
+    mkdir $out/hip
     ln -s $out/bin $out/hip/bin
     patchShebangs $out/bin
   '';
