@@ -19,17 +19,25 @@ in
 
     services.udev.packages = [ cfg.package ];
 
-    system.activationScripts.xppen.text = with pkgs; ''
-      install -m 755 -d "/var/lib/pentablet/conf/xppen"
+    systemd.services.xppen-create-config-dir = {
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        TimeoutSec = 60;
+        ExecStart = pkgs.writeScript "xppen-create-config-dir" ''
+          #!${pkgs.bash}/bin/bash
+          install -m 755 -d "/var/lib/pentablet/conf/xppen"
 
-      readarray -d "" files < <(find ${cfg.package}/usr/lib/pentablet/conf -type f -print0)
+          readarray -d "" files < <(find ${cfg.package}/usr/lib/pentablet/conf -type f -print0)
 
-      for file in "''${files[@]}"; do
-        file_new="/var''${file#${cfg.package + "/usr"}}"
-        if [ ! -f $file_new ]; then
-          install -m 666 "''$file" "''$file_new"
-        fi
-      done
-    '';
+          for file in "''${files[@]}"; do
+            file_new="/var''${file#${cfg.package + "/usr"}}"
+            if [ ! -f $file_new ]; then
+              install -m 666 "''$file" "''$file_new"
+            fi
+          done
+        '';
+      };
+    };
   };
 }
