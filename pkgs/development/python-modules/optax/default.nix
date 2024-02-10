@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     jaxlib
   ];
 
