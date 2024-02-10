@@ -102,7 +102,7 @@ in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
   version = "0.37.0";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "mpv-player";
@@ -111,18 +111,27 @@ in stdenv'.mkDerivation (finalAttrs: {
     hash = "sha256-izAz9Iiam7tJAWIQkmn2cKOfoaog8oPKq4sOUtp1nvU=";
   };
 
-  env.NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
-
   patches = [ ./darwin-sigtool-no-deep.patch ];
 
-  # A trick to patchShebang everything except mpv_identify.sh
-  postPatch = ''
+  postPatch = lib.concatStringsSep "\n" [
+    # Don't reference compile time dependencies or create a build outputs cycle
+    # between out and dev
+    ''
+    substituteInPlace meson.build \
+      --replace-fail "conf_data.set_quoted('CONFIGURATION', configuration)" \
+                     "conf_data.set_quoted('CONFIGURATION', '<ommited>')"
+    ''
+    # A trick to patchShebang everything except mpv_identify.sh
+    ''
     pushd TOOLS
     mv mpv_identify.sh mpv_identify
     patchShebangs *.py *.sh
     mv mpv_identify mpv_identify.sh
     popd
-  '';
+    ''
+  ];
+
+  env.NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
   # Ensure we reference 'lib' (not 'out') of Swift.
   preConfigure = lib.optionalString swiftSupport ''
