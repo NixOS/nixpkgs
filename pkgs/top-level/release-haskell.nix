@@ -344,6 +344,7 @@ let
         sourceAndTags
         spacecookie
         spago
+        specup
         splot
         stack
         stack2nix
