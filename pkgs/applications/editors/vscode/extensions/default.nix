@@ -3007,6 +3007,21 @@ let
         };
       };
 
+      quarto.quarto = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "quarto";
+          publisher = "quarto";
+          version = "1.110.1";
+          sha256 = "sha256-9k0ynU7dFc64LTND50R5C98qGkdek8BzWXZKs0sqRWA=";
+        };
+        meta = {
+          description = "Extension for the Quarto scientific and technical publishing system.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=quarto.quarto";
+          homepage = "https://quarto.org/";
+          license = lib.licenses.agpl3;
+        };
+      };
+
       quicktype.quicktype = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "quicktype";
