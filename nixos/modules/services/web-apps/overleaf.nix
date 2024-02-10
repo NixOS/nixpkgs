@@ -122,7 +122,11 @@ in
     };
 
     mongodb = {
-      enable = mkEnableOption (mdDoc ''MongoDB/FerretDB service.'');
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = mdDoc ''MongoDB is enabled by default.'';
+      };
 
       package = mkOption {
         type = types.package;
@@ -259,10 +263,9 @@ in
     {
       services.overleaf.settings = {
         NODE_ENV = "production";
-        # OVERLEAF_CONFIG = "${pkgs.overleaf}/share/server-ce/config/settings.js";
-        OVERLEAF_CONFIG = "/var/lib/overleaf/settings.js";
+        OVERLEAF_CONFIG = "${pkgs.overleaf}/share/server-ce/config/settings.js";
         DATA_DIR = mkDefault "/var/lib/overleaf";
-        OVERLEAF_MONGO_URL = mkDefault "mongodb://localhost:27017/overleaf";
+        OVERLEAF_MONGO_URL = mkDefault "mongodb://127.0.0.1:27017/overleaf";
         OVERLEAF_REDIS_PATH = mkDefault "/run/redis-overleaf/redis.sock";
         WEB_PORT = mkDefault "3032";
         WEB_API_USER = mkDefault "overleaf";
@@ -367,15 +370,19 @@ in
       };
     }
 
-    (mkIf cfg.mongodb.enable {
-      services.${mongodb.package.pname} = {
+    (mkIf (cfg.mongodb.enable && cfg.mongodb.package.pname == "mongodb") {
+      services.mongodb = {
         enable = true;
         inherit (cfg.mongodb) package;
       };
     })
 
-    (mkIf (cfg.mongodb.package.pname == "ferretdb") {
-      services.ferretdb.serviceConfig.ExecStart = "${ferret}/bin/ferretdb --postgresql-url=\"postgres://localhost/ferretdb?host=/run/postgresql\"";
+    (mkIf (cfg.mongodb.enable && cfg.mongodb.package.pname == "ferretdb") {
+      services.ferretdb = {
+        enable = true;
+        inherit (cfg.mongodb) package;
+      };
+      systemd.services.ferretdb.serviceConfig.ExecStart = "${cfg.mongodb.package}/bin/ferretdb --postgresql-url=\"postgres://localhost/ferretdb?host=/run/postgresql\"";
       systemd.services.postgresql.environment.LC_ALL = "en_US.UTF-8";
 
       users.users.ferretdb = {
