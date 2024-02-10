@@ -57,8 +57,6 @@ in {
         KillSignal = "SIGINT";
         Restart = "on-failure";
         RestartSec = 5;
-        StandardOutput = "syslog";
-        StandardError = "syslog";
         SyslogIdentifier = "stalwart-mail";
 
         DynamicUser = true;
