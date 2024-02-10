@@ -1,30 +1,53 @@
-{ lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
-, aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
-, hcxdumptool, which, bully, pixiewps }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3
+, python3Packages
+, wirelesstools
+, aircrack-ng
+, wireshark-cli
+, reaverwps-t6x
+, cowpatty
+, hashcat
+, hcxtools
+, hcxdumptool
+, which
+, bully
+, pixiewps
+, john
+, iw
+, macchanger
+}:
 
+let
+  pythonDependencies = with python3Packages; [
+    chardet
+    scapy
+  ];
+in
 python3.pkgs.buildPythonApplication rec {
-  version = "2.6.0";
   pname = "wifite2";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "wifite2";
     rev = version;
-    sha256 = "sha256-q8aECegyIoAtYFsm8QEr8OnX+GTqjEeWfYQyESk27SA=";
+    hash = "sha256-G2AKKZUDS2UQm95TEhGJIucyMRcm7oL0d3J8uduEQhw=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.5.8-2/debian/patches/Disable-aircrack-failing-test.patch";
-      sha256 = "1kj2m973l067fdg9dj61vbjf4ym9x1m9kn0q8ci9r6bb30yg6sv2";
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.7.0-1/debian/patches/Disable-aircrack-failing-test.patch";
+      hash = "sha256-BUAowBajfnZ1x6Z3Ce3L0rAERv7v/KrdHcdvKxTxSrM=";
     })
     (fetchpatch {
-      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.5.8-2/debian/patches/Disable-two-failing-tests.patch";
-      sha256 = "15vas7zvpdk2lr1pzv8hli6jhdib0dibp7cmikiai53idjxay56z";
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.7.0-1/debian/patches/Disable-two-failing-tests.patch";
+      hash = "sha256-wCwfNkF/GvOU5FWPmQ3dJ4Txthz9T9TO2xhSL5vllQc=";
     })
     (fetchpatch {
-      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.5.8-2/debian/patches/fix-for-new-which.patch";
-      sha256 = "0p6sa09qpq9qarkjrai2ksx9nz2v2hs6dk1y01qnfbsmc4hhm30g";
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/2.7.0-1/debian/patches/fix-for-new-which.patch";
+      hash = "sha256-8xs+O2ILSRcvsw2pyx2gEBFHdduoI+xmUvDBchKz2Qs=";
     })
   ];
 
@@ -40,15 +63,19 @@ python3.pkgs.buildPythonApplication rec {
     which
     bully
     pixiewps
-  ];
+    john
+    iw
+    macchanger
+  ] ++ pythonDependencies;
 
   nativeCheckInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/kimocoder/wifite2";
     description = "Rewrite of the popular wireless network auditor, wifite";
-    license = licenses.gpl2;
+    mainProgram = "wifite";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus danielfullmer ];
+    maintainers = with maintainers; [ lassulus danielfullmer d3vil0p3r ];
   };
 }
