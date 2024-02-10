@@ -15,13 +15,13 @@
 
 builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
   inherit pname;
-  version = "3.10.15";
+  version = "3.14.2";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     rev = "v${version}";
-    hash = "sha256-3yVRVM98tVjot3gIkUb/CDwmwKdOOBjBjzGL6htDtpk=";
+    hash = "sha256-zJB/G/Yt+bw54j6agq+QG3xQKQPo+MJhizB4JLNsGBc=";
   };
 
   ldflags = [
@@ -45,7 +45,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
 })) {
   ivpn = {
     modRoot = "cli";
-    vendorHash = "sha256-T49AE3SUmdP3Tu9Sp5C/QryKDto/NzEqRuUQ3+aJFL0=";
+    vendorHash = "sha256-S+QffV3TCjFL840zVJyI/fItDJueuBNjaxVlEFC4pxY=";
   };
   ivpn-service = {
     modRoot = "daemon";
