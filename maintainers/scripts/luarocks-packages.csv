@@ -6,12 +6,12 @@ basexx,,,,,,
 bcrypt,,,,,,ulysseszhan
 binaryheap,,,,,,vcunat
 bit32,,,,,5.1,lblasc
-busted,,,,,,
+busted,,,,,,alerque
 busted-htest,,,,,,mrcjkb
 cassowary,,,,,,alerque
 cldr,,,,,,alerque
 commons.nvim,,,,,5.1,mrcjkb
-compat53,,,,,,vcunat
+compat53,,,,,,vcunat alerque
 coop.nvim,,,,,,
 cosmo,,,,,,
 coxpcall,,,,1.17.0-1,,
@@ -37,7 +37,7 @@ inspect,,,,,,
 jsregexp,,,,0.0.7-2,,
 kulala.nvim,,,,,,
 ldbus,,,https://luarocks.org/dev,,,
-ldoc,,,,,,
+ldoc,,,,,,alerque
 lgi,,,,,,
 linenoise,https://raw.githubusercontent.com/hoelzro/lua-linenoise/master/linenoise-0.9-1.rockspec,,,,,
 ljsyscall,,,,,5.1,lblasc
@@ -61,7 +61,7 @@ lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,
 lua-ffi-zlib,,,,,,
-lua-iconv,,,,7.0.0,,
+lua-iconv,,,,7.0.0,,alerque
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
 lua-protobuf,,,,,,lockejan
@@ -77,10 +77,10 @@ lua-toml,,,,,,
 lua-utils.nvim,,,,,,mrcjkb
 lua-yajl,,,,,,pstn
 lua-zlib,,,,,,koral
-lua_cliargs,,,,,,
+lua_cliargs,,,,,,alerque
 luabitop,https://raw.githubusercontent.com/teto/luabitop/master/luabitop-1.0.2-3.rockspec,,,,,
-luacheck,,,,,,
-luacov,,,,,,
+luacheck,,,,,,alerque
+luacov,,,,,,alerque
 luacov-reporter-lcov,,,,,,ulysseszhan
 luadbi,,,,,,
 luadbi-mysql,,,,,,
@@ -90,7 +90,7 @@ luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,,,arobyn flosse
 luaffi,,,https://luarocks.org/dev,,,
-luafilesystem,,,,,,flosse
+luafilesystem,,,,,,flosse alerque
 lualdap,,,,,,aanderse
 lualine.nvim,,,https://luarocks.org/dev,,,
 lualogging,,,,,,
@@ -103,12 +103,12 @@ luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-tree-sitter-cli,,,,,,
 luarocks-build-treesitter-parser,,,,,,mrcjkb
 luarocks-build-treesitter-parser-cpp,,,,,,mrcjkb
-luasec,,,,,,flosse
+luasec,,,,,,flosse alerque
 luasnip,,,,,,
-luasocket,,,,,,
+luasocket,,,,,,alerque
 luasql-sqlite3,,,,,,
-luassert,,,,,,
-luasystem,,,,,,
+luassert,,,,,,alerque
+luasystem,,,,,,alerque
 luatext,,,,,,
 luaunbound,,,,,,
 luaunit,,,,,,lockejan
@@ -157,7 +157,7 @@ rocks-git.nvim,,,,,5.1,mrcjkb
 rocks.nvim,,,,,5.1,mrcjkb
 rtp.nvim,,,,,5.1,mrcjkb
 rustaceanvim,,,,,5.1,mrcjkb
-say,,,,,,
+say,,,,,,alerque
 serpent,,,,,,lockejan
 sofa,,,,,,f4z3r
 sqlite,,,,,,
