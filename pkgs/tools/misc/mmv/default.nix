@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mmv";
-  version = "2.5.1";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "rrthomas";
     repo = "mmv";
     rev = "v${version}";
-    sha256 = "sha256-01MJjYVPfDaRkzitqKXTJZHbkkZTEaFoyYZEEMizHp0=";
+    sha256 = "sha256-hYSTENSmkJP5rAemDyTzbzMKFrWYcMpsJDRWq43etTM=";
     fetchSubmodules = true;
   };
 
