@@ -97,6 +97,23 @@ buildPythonPackage rec {
     "test_transfer_monitor_callbacks"
   ];
 
+  passthru.tests = {
+    inherit (nixosTests)
+      dendrite
+      matrix-appservice-irc
+      matrix-conduit
+      mjolnir
+    ;
+    inherit (weechatScripts)
+      weechat-matrix
+    ;
+    inherit
+      opsdroid
+      pantalaimon
+      zulip
+    ;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/poljar/matrix-nio";
     changelog = "https://github.com/poljar/matrix-nio/blob/${version}/CHANGELOG.md";
