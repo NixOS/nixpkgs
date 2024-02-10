@@ -3,12 +3,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "querystring_parser";
+  pname = "querystring-parser";
   version = "1.2.4";
   disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "querystring_parser";
+    inherit version;
     sha256 = "644fce1cffe0530453b43a83a38094dbe422ccba8c9b2f2a1c00280e14ca8a62";
   };
 

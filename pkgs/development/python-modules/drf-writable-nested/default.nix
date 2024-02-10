@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "drf-writable-nested";
   version = "0.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "beda-software";

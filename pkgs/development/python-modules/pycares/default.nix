@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "4.3.0";
+  version = "4.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xUJpb22sl46dmRkjhHRaZfgKfZRQUBFR5KdWPgYBDUU=";
+    hash = "sha256-9HV51Qjy9W7d0WznIEV4KtOxs7Z4CYaZ4rahswcz4cI=";
   };
 
   buildInputs = [

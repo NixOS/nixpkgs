@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "astunparse";
   version =  "1.6.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,4 +1,5 @@
 { buildGoModule
+, buildPackages
 , fetchFromGitHub
 , fetchNpmDeps
 , lib
@@ -17,27 +18,27 @@
 
 buildGoModule rec {
   pname = "navidrome";
-  version = "0.49.3";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-JBvY+0QAouEc0im62aVSJ27GAB7jt0qVnYtc6VN2qTA=";
+    hash = "sha256-AsDVU1J/lPjTY6R7khzorbBCWuL9FX6aZnMD2snBSys=";
   };
 
-  vendorHash = "sha256-C8w/qCts8VqNDTQVXtykjmSbo5uDrvS9NOu3SHpAlDE=";
+  vendorHash = "sha256-Q95OchWkxd/EmG7Vu0e/dge9nOIrGmcTgjGL5dBvEKA=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/ui";
-    hash = "sha256-qxwTiXLmZnTnmTSBmWPjeFCP7qzvTFN0xXp5lFkWFog=";
+    hash = "sha256-LrLswdt6RA55FQE/YWHNwtjxljjlCNSTLWJNqy1ohKo=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    buildPackages.makeWrapper
     nodejs
     npmHooks.npmConfigHook
     pkg-config

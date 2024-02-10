@@ -28,7 +28,7 @@ toPythonModule (stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DPYGMO_INSTALL_PATH=${placeholder "out"}/lib/${python.libPrefix}/site-packages"
+    "-DPYGMO_INSTALL_PATH=${placeholder "out"}/${python.sitePackages}"
   ];
 
   nativeBuildInputs = [

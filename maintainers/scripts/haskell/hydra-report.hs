@@ -187,7 +187,7 @@ getBuildReports opt = runReq defaultHttpConfig do
 
 getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
 getEvalBuilds NoHydraSlownessWorkaround id =
-  hydraJSONQuery (responseTimeout 900000000) ["eval", showT id, "builds"]
+  hydraJSONQuery mempty ["eval", showT id, "builds"]
 getEvalBuilds HydraSlownessWorkaround id = do
   Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
   forM builds $ \buildId -> do
@@ -195,14 +195,15 @@ getEvalBuilds HydraSlownessWorkaround id = do
     hydraJSONQuery mempty [ "build", showT buildId ]
 
 hydraQuery :: HttpResponse a => Proxy a -> Option 'Https -> [Text] -> Req (HttpResponseBody a)
-hydraQuery responseType option query =
-   responseBody
-      <$> req
-         GET
-         (foldl' (/:) (https "hydra.nixos.org") query)
-         NoReqBody
-         responseType
-         (header "User-Agent" "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell) pls fix https://github.com/NixOS/nixos-org-configurations/issues/270" <> option)
+hydraQuery responseType option query = do
+  let customHeaderOpt =
+        header
+          "User-Agent"
+          "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell) pls fix https://github.com/NixOS/nixos-org-configurations/issues/270"
+      customTimeoutOpt = responseTimeout 900_000_000 -- 15 minutes
+      opts = customHeaderOpt <> customTimeoutOpt <> option
+      url = foldl' (/:) (https "hydra.nixos.org") query
+  responseBody <$> req GET url NoReqBody responseType opts
 
 hydraJSONQuery :: FromJSON a => Option 'Https -> [Text] -> Req a
 hydraJSONQuery = hydraQuery jsonResponse
@@ -381,22 +382,22 @@ data BuildState
 
 icon :: BuildState -> Text
 icon = \case
-   Failed -> ":x:"
-   DependencyFailed -> ":heavy_exclamation_mark:"
-   OutputLimitExceeded -> ":warning:"
+   Failed -> "❌"
+   DependencyFailed -> "❗"
+   OutputLimitExceeded -> "⚠️"
    Unknown x -> "unknown code " <> showT x
-   TimedOut -> ":hourglass::no_entry_sign:"
-   Canceled -> ":no_entry_sign:"
-   Unfinished -> ":hourglass_flowing_sand:"
-   HydraFailure -> ":construction:"
-   Success -> ":heavy_check_mark:"
+   TimedOut -> "⌛🚫"
+   Canceled -> "🚫"
+   Unfinished -> "⏳"
+   HydraFailure -> "🚧"
+   Success -> "✅"
 
 platformIcon :: Platform -> Text
 platformIcon (Platform x) = case x of
-   "x86_64-linux" -> ":penguin:"
-   "aarch64-linux" -> ":iphone:"
-   "x86_64-darwin" -> ":apple:"
-   "aarch64-darwin" -> ":green_apple:"
+   "x86_64-linux" -> "🐧"
+   "aarch64-linux" -> "📱"
+   "x86_64-darwin" -> "🍎"
+   "aarch64-darwin" -> "🍏"
    _ -> x
 
 platformIsOS :: OS -> Platform -> Bool
@@ -625,7 +626,7 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
          <> optionalHideableList "#### Unmaintained packages with failed dependency" (unmaintainedList (failedDeps summary))
          <> optionalHideableList "#### Unmaintained packages with unknown error" (unmaintainedList (unknownErr summary))
          <> optionalHideableList "#### Top 50 broken packages, sorted by number of reverse dependencies" (brokenLine <$> topBrokenRdeps)
-         <> ["","*:arrow_heading_up:: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
+         <> ["","*⤴️: The number of packages that depend (directly or indirectly) on this package (if any). If two numbers are shown the first (lower) number considers only packages which currently have enabled hydra jobs, i.e. are not marked broken. The second (higher) number considers all packages.*",""]
          <> footer
   where
    footer = ["*Report generated with [maintainers/scripts/haskell/hydra-report.hs](https://github.com/NixOS/nixpkgs/blob/haskell-updates/maintainers/scripts/haskell/hydra-report.hs)*"]
@@ -650,7 +651,7 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
    brokenLine :: (PkgName, Int) -> Text
    brokenLine (PkgName name, rdeps) =
       "[" <> name <> "](https://packdeps.haskellers.com/reverse/" <> name <>
-      ") :arrow_heading_up: " <> Text.pack (show rdeps) <> "  "
+      ") ⤴️ " <> Text.pack (show rdeps) <> "  "
 
    numSummary = statusToNumSummary summary
 
@@ -732,7 +733,7 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
          , Text.pack
             ( if summaryReverseDeps entry > 0
                then
-                  " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>
+                  " ⤴️ " <> show (summaryUnbrokenReverseDeps entry) <>
                   " | " <> show (summaryReverseDeps entry)
                else ""
             )
@@ -749,9 +750,9 @@ printBuildSummary eval@Eval{id} fetchTime summary topBrokenRdeps =
          )
 
    tldr = case (errors, warnings) of
-            ([],[]) -> [":green_circle: **Ready to merge** (if there are no [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
-            ([],_) -> [":yellow_circle: **Potential issues** (and possibly [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
-            _ -> [":red_circle: **Branch not mergeable**"]
+            ([],[]) -> ["🟢 **Ready to merge** (if there are no [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+            ([],_) -> ["🟡 **Potential issues** (and possibly [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+            _ -> ["🔴 **Branch not mergeable**"]
    warnings =
       if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>
       if' (Unfinished == maybe Success worstState mergeableJob) "`mergeable` jobset is not finished." <>

@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "python-mimeparse";
   version = "1.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

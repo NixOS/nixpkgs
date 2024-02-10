@@ -11,21 +11,20 @@
 , segno
 , setuptools
 , trustme
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "65";
-  format = "pyproject";
+  version = "69";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Kane610";
-    repo = pname;
+    repo = "aiounifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VpDtr5r7BxZDd8G8tPrHRVo+LRhsFoMlVUuOcG/3g0s=";
+    hash = "sha256-XYwdnG3OprHRZm3zQgoPw4VOzvvVflsQzi7+XQiASAU=";
   };
 
   postPatch = ''
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [

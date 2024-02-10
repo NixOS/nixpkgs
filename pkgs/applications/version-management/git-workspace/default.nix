@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-workspace";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dtOYMZGBnFwas/k3yHSNnKlVwwLUOx7QseshJWY1X4o=";
+    sha256 = "sha256-9/t2MDZ5bYTuzCYTodeATqk+xqST2aQMr7Z1x5fPIuw=";
   };
 
-  cargoSha256 = "sha256-4zqbNhR8A0yPD/qIJgP6049bUunAKRyGmlNmC3yPc5Q=";
+  cargoSha256 = "sha256-/drXVkYgdkFqZJsz2fNx3Ms21xYKQmwLXRJEmKSaikQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orf/git-workspace";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ misuzu ];
+    mainProgram = "git-workspace";
   };
 }

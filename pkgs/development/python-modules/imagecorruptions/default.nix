@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "imagecorruptions";
   version = "1.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

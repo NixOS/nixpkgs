@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/maaslalani/invoice";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "invoice";
   };
 }

@@ -16,5 +16,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/domgreen/clini";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
+    mainProgram = "clini";
   };
 }

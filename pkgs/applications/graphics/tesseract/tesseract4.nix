@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
   # great, but tesseract4's days are numbered anyway
   postPatch = ''
     sed -i '/allheaders.h/a#include "pix_internal.h"' src/textord/devanagari_processing.cpp
+
+    # gcc-13 compat fix, simulate this upstream patch:
+    #   https://github.com/tesseract-ocr/tesseract/commit/17e795aaae7d40dbcb7d3365835c2f55ecc6355d.patch
+    #   https://github.com/tesseract-ocr/tesseract/commit/c0db7b7e930322826e09981360e39fdbd16cc9b0.patch
+
+    sed -i src/ccutil/helpers.h -e '1i #include <climits>'
+    sed -i src/ccutil/helpers.h -e '1i #include <cstdint>'
+    sed -i src/dict/matchdefs.h -e '1i #include <cstdint>'
   '';
 
   enableParallelBuilding = true;

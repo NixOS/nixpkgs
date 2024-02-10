@@ -44,6 +44,7 @@ let
         ++ [ (sec_list_fa "id" nix_def "template") ]
         ++ [ (sec_list_fa "domain" nix_def "zone") ]
         ++ [ (sec_plain nix_def "include") ]
+        ++ [ (sec_plain nix_def "clear") ]
       );
 
     # A plain section contains directly attributes (we don't really check that ATM).
@@ -182,14 +183,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.knot-dns;
-        defaultText = literalExpression "pkgs.knot-dns";
-        description = lib.mdDoc ''
-          Which Knot DNS package to use
-        '';
-      };
+      package = mkPackageOption pkgs "knot-dns" { };
     };
   };
   imports = [

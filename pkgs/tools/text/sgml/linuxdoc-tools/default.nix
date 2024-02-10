@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchFromGitLab, perl, flex
-, gnused, coreutils, which, opensp, groff, texlive, texinfo, withLatex ? false
+, gnused, coreutils, which, opensp, groff, texliveMedium, texinfo, withLatex ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex which makeWrapper ];
 
   buildInputs = [ opensp groff texinfo perl gnused coreutils ]
-    ++ lib.optionals withLatex [ texlive.combined.scheme-medium ];
+    ++ lib.optionals withLatex [ texliveMedium ];
 
   meta = with lib; {
     description = "Toolset for processing LinuxDoc DTD SGML files";

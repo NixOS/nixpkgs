@@ -12,31 +12,31 @@ index 65faae9b2..4297513d4 100644
    configuration : gdbus_codegen_conf
  )
 diff --git a/gio/meson.build b/gio/meson.build
-index 462606f3b..a3047fca1 100644
+index 75686bb3e..2f1a73482 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -880,14 +880,15 @@ pkg.generate(libgio,
-   variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
-                'schemasdir=' + join_paths('${datadir}', schemas_subdir),
-                'bindir=' + join_paths('${prefix}', get_option('bindir')),
-+               'devbindir=' + get_option('devbindir'),
-                'giomoduledir=' + pkgconfig_giomodulesdir,
-                'gio=' + join_paths('${bindir}', 'gio'),
--               'gio_querymodules=@0@'.format(pkgconfig_multiarch_bindir / 'gio-querymodules'),
--               'glib_compile_schemas=@0@'.format(pkgconfig_multiarch_bindir / 'glib-compile-schemas'),
--               'glib_compile_resources=' + join_paths('${bindir}', 'glib-compile-resources'),
-+               'gio_querymodules=@0@'.format('${devbindir}' / 'gio-querymodules'),
-+               'glib_compile_schemas=@0@'.format('${devbindir}' / 'glib-compile-schemas'),
-+               'glib_compile_resources=' + join_paths('${devbindir}', 'glib-compile-resources'),
-                'gdbus=' + join_paths('${bindir}', 'gdbus'),
--               'gdbus_codegen=' + join_paths('${bindir}', 'gdbus-codegen'),
--               'gresource=' + join_paths('${bindir}', 'gresource'),
-+               'gdbus_codegen=' + join_paths('${devbindir}', 'gdbus-codegen'),
-+               'gresource=' + join_paths('${devbindir}', 'gresource'),
-                'gsettings=' + join_paths('${bindir}', 'gsettings')],
+@@ -882,14 +882,15 @@ pkg.generate(libgio,
+     'schemasdir=' + '${datadir}' / schemas_subdir,
+     'dtdsdir=' + '${datadir}' / dtds_subdir,
+     'bindir=' + '${prefix}' / get_option('bindir'),
++    'devbindir=' + get_option('devbindir'),
+     'giomoduledir=' + pkgconfig_giomodulesdir,
+     'gio=' + '${bindir}' / 'gio',
+-    'gio_querymodules=' + pkgconfig_multiarch_bindir / 'gio-querymodules',
+-    'glib_compile_schemas=' + pkgconfig_multiarch_bindir / 'glib-compile-schemas',
+-    'glib_compile_resources=' + '${bindir}' / 'glib-compile-resources',
++    'gio_querymodules=' + '${devbindir}' / 'gio-querymodules',
++    'glib_compile_schemas=' + '${devbindir}' / 'glib-compile-schemas',
++    'glib_compile_resources=' + '${devbindir}' / 'glib-compile-resources',
+     'gdbus=' + '${bindir}' /'gdbus',
+-    'gdbus_codegen=' + '${bindir}' / 'gdbus-codegen',
+-    'gresource=' + '${bindir}' / 'gresource',
++    'gdbus_codegen=' + '${devbindir}' / 'gdbus-codegen',
++    'gresource=' + '${devbindir}' / 'gresource',
+     'gsettings=' + '${bindir}' / 'gsettings',
+   ],
    version : glib_version,
-   install_dir : glib_pkgconfigreldir,
-@@ -989,6 +990,7 @@ executable('gio', gio_tool_sources,
+@@ -992,6 +993,7 @@ executable('gio', gio_tool_sources,
  
  executable('gresource', 'gresource-tool.c',
    install : true,
@@ -44,7 +44,7 @@ index 462606f3b..a3047fca1 100644
    install_tag : 'bin',
    # intl.lib is not compatible with SAFESEH
    link_args : noseh_link_args,
-@@ -996,7 +998,7 @@ executable('gresource', 'gresource-tool.c',
+@@ -999,7 +1001,7 @@ executable('gresource', 'gresource-tool.c',
  
  gio_querymodules = executable('gio-querymodules', 'gio-querymodules.c', 'giomodule-priv.c',
    install : true,
@@ -53,7 +53,7 @@ index 462606f3b..a3047fca1 100644
    install_tag : 'bin',
    c_args : gio_c_args,
    # intl.lib is not compatible with SAFESEH
-@@ -1006,7 +1008,7 @@ gio_querymodules = executable('gio-querymodules', 'gio-querymodules.c', 'giomodu
+@@ -1009,7 +1011,7 @@ gio_querymodules = executable('gio-querymodules', 'gio-querymodules.c', 'giomodu
  glib_compile_schemas = executable('glib-compile-schemas',
    ['glib-compile-schemas.c'],
    install : true,
@@ -62,7 +62,7 @@ index 462606f3b..a3047fca1 100644
    install_tag : 'bin',
    # intl.lib is not compatible with SAFESEH
    link_args : noseh_link_args,
-@@ -1015,6 +1017,7 @@ glib_compile_schemas = executable('glib-compile-schemas',
+@@ -1018,6 +1020,7 @@ glib_compile_schemas = executable('glib-compile-schemas',
  glib_compile_resources = executable('glib-compile-resources',
    [gconstructor_as_data_h, 'glib-compile-resources.c'],
    install : true,
@@ -70,25 +70,66 @@ index 462606f3b..a3047fca1 100644
    install_tag : 'bin-devel',
    c_args : gio_c_args,
    # intl.lib is not compatible with SAFESEH
+diff --git a/gio/tests/meson.build b/gio/tests/meson.build
+index 4ef3343ab..2a0a6b56b 100644
+--- a/gio/tests/meson.build
++++ b/gio/tests/meson.build
+@@ -1131,16 +1131,18 @@ if have_bash and have_pkg_config
+ 
+   gio_binaries = [
+     'gio',
+-    'glib-compile-resources',
+     'gdbus',
+-    'gdbus-codegen',
+-    'gresource',
+     'gsettings',
+   ]
+-  gio_multiarch_binaries = [
++  gio_dev_binaries = [
++    'glib-compile-resources',
++    'gdbus-codegen',
++    'gresource',
+     'gio-querymodules',
+     'glib-compile-schemas',
+   ]
++  gio_multiarch_binaries = [
++  ]
+ 
+   foreach binary: gio_binaries
+     pkg_config_tests += [
+@@ -1149,6 +1151,13 @@ if have_bash and have_pkg_config
+         prefix / get_option('bindir') / binary)
+     ]
+   endforeach
++  foreach binary: gio_dev_binaries
++    pkg_config_tests += [
++      'test "$(pkg-config --variable=@0@ gio-2.0)" = "@1@"'.format(
++        binary.underscorify(),
++        prefix / get_option('devbindir') / binary)
++    ]
++  endforeach
+ 
+   foreach binary: gio_multiarch_binaries
+     pkg_config_tests += [
 diff --git a/glib/meson.build b/glib/meson.build
-index da76fc005..8e2ef990c 100644
+index c26a35e42..38effe12a 100644
 --- a/glib/meson.build
 +++ b/glib/meson.build
-@@ -441,9 +441,10 @@ pkg.generate(libglib,
-   subdirs : ['glib-2.0'],
-   extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
-   variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
--               'glib_genmarshal=' + join_paths('${bindir}', 'glib-genmarshal'),
--               'gobject_query=' + join_paths('${bindir}', 'gobject-query'),
--               'glib_mkenums=' + join_paths('${bindir}', 'glib-mkenums')],
-+               'devbindir=' + get_option('devbindir'),
-+               'glib_genmarshal=' + join_paths('${devbindir}', 'glib-genmarshal'),
-+               'gobject_query=' + join_paths('${devbindir}', 'gobject-query'),
-+               'glib_mkenums=' + join_paths('${devbindir}', 'glib-mkenums')],
-   version : glib_version,
-   install_dir : glib_pkgconfigreldir,
-   filebase : 'glib-2.0',
-@@ -480,6 +481,7 @@ if host_system == 'windows'
+@@ -447,9 +447,10 @@ pkg.generate(libglib,
+   variables : [
+     'bindir=' + '${prefix}' / get_option('bindir'),
+     'datadir=' + '${prefix}' / get_option('datadir'),
+-    'glib_genmarshal=' + '${bindir}' / 'glib-genmarshal',
+-    'gobject_query=' + '${bindir}' / 'gobject-query',
+-    'glib_mkenums=' + '${bindir}' / 'glib-mkenums',
++    'devbindir=' + get_option('devbindir'),
++    'glib_genmarshal=' + '${devbindir}' / 'glib-genmarshal',
++    'gobject_query=' + '${devbindir}' / 'gobject-query',
++    'glib_mkenums=' + '${devbindir}' / 'glib-mkenums',
+     'glib_valgrind_suppressions=' + '${datadir}' /
+       valgrind_suppression_file_install_subdir /
+       fs.name(valgrind_suppression_file),
+@@ -490,6 +491,7 @@ if host_system == 'windows'
  else
    gtester = executable('gtester', 'gtester.c',
      install : true,
@@ -96,7 +137,7 @@ index da76fc005..8e2ef990c 100644
      install_tag : 'bin-devel',
      c_args : ['-UG_DISABLE_ASSERT'],
      include_directories : configinc,
-@@ -492,7 +494,7 @@ report_conf.set('PYTHON', python_name)
+@@ -505,7 +507,7 @@ report_conf.set('PYTHON', python_name)
  configure_file(
    input: 'gtester-report.in',
    output: 'gtester-report',
@@ -105,6 +146,22 @@ index da76fc005..8e2ef990c 100644
    install_tag : 'bin-devel',
    configuration: report_conf,
    install_mode: 'rwxr-xr-x'
+diff --git a/glib/tests/meson.build b/glib/tests/meson.build
+index 09ecd5ab3..9748d4122 100644
+--- a/glib/tests/meson.build
++++ b/glib/tests/meson.build
+@@ -508,9 +508,9 @@ if have_bash and have_pkg_config
+         'test "$(pkg-config --variable=datadir glib-2.0)" = "@0@"'.format(
+           prefix / get_option('datadir')),
+         'test "$(pkg-config --variable=gobject_query glib-2.0)" = "@0@"'.format(
+-          prefix / get_option('bindir') / 'gobject-query'),
++          prefix / get_option('devbindir') / 'gobject-query'),
+         'test "$(pkg-config --variable=glib_mkenums glib-2.0)" = "@0@"'.format(
+-          prefix / get_option('bindir') / 'glib-mkenums'),
++          prefix / get_option('devbindir') / 'glib-mkenums'),
+         'test "$(pkg-config --variable=glib_valgrind_suppressions glib-2.0)" = "@0@"'.format(
+           prefix / get_option('datadir') /
+           valgrind_suppression_file_install_subdir / fs.name(valgrind_suppression_file)),
 diff --git a/gobject/meson.build b/gobject/meson.build
 index 2129aaf8a..da8462428 100644
 --- a/gobject/meson.build
@@ -143,7 +200,7 @@ index 517d5757c..198cc1b3c 100644
         type : 'string',
         value : '',
 diff --git a/tools/meson.build b/tools/meson.build
-index 2d4192e46..d7e710d6f 100644
+index 257312ebf..f8315392b 100644
 --- a/tools/meson.build
 +++ b/tools/meson.build
 @@ -8,7 +8,7 @@ if have_sh

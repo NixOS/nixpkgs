@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "A Python framework for sequence labeling evaluation";
     homepage = "https://github.com/chakki-works/seqeval";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

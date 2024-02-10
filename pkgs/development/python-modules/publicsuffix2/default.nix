@@ -7,6 +7,7 @@ buildPythonPackage {
   # tags have dashes, while the library version does not
   # see https://github.com/nexB/python-publicsuffix2/issues/12
   version = lib.replaceStrings ["-"] [""] tagVersion;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nexB";

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch8";
-  version = "8.10.1";
+  version = "8.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-naLy7xSqHlz8QNbQhM+iydJi8m6DQqBWlDLijOOT7ak=";
+    hash = "sha256-YFsrdsAAelOest7Pw3+Zl3lV+Q/e7YMELmL3TodBKSM=";
   };
 
   nativeBuildInputs = [

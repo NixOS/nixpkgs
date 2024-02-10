@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyx";
   version = "0.16";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

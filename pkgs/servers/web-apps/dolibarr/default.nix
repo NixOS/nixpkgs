@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolibarr";
-  version = "18.0.2";
+  version = "18.0.4";
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
     rev = version;
-    sha256 = "sha256-dlyq+ZrsiodYwZqzFLdR067O6gaePdPIX3N0xvXLcwg=";
+    sha256 = "sha256-VHLkd8WAyPcfDzmzZl4G1pSTaklC2k0ez/YaZ+ci/1Q=";
   };
 
   dontBuild = true;
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "A enterprise resource planning (ERP) and customer relationship manager (CRM) server";
     homepage = "https://dolibarr.org/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raitobezarius ];
+    maintainers = [ ];
   };
 }

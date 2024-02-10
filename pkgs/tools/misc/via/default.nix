@@ -37,5 +37,6 @@ appimageTools.wrapType2 {
     license = licenses.gpl3;
     maintainers = with maintainers; [ emilytrau ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "via";
   };
 }

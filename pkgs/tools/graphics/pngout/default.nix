@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "http://advsys.net/ken/utils.htm";
     platforms = lib.attrNames platforms;
     maintainers = [ lib.maintainers.sander ];
+    mainProgram = "pngout";
   };
 }

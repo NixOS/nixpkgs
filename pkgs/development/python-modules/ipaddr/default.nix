@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "ipaddr";
   version = "2.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

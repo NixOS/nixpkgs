@@ -153,6 +153,7 @@ with lib;
     type = types.attrs;
     description = lib.mdDoc ''
       Modify the systemd service. Can be used to, e.g., adjust the sandboxing options.
+      See {manpage}`systemd.exec(5)` for more options.
     '';
     example = {
       ProtectHome = false;
@@ -161,14 +162,7 @@ with lib;
     default = {};
   };
 
-  package = mkOption {
-    type = types.package;
-    description = lib.mdDoc ''
-      Which github-runner derivation to use.
-    '';
-    default = pkgs.github-runner;
-    defaultText = literalExpression "pkgs.github-runner";
-  };
+  package = mkPackageOption pkgs "github-runner" { };
 
   ephemeral = mkOption {
     type = types.bool;

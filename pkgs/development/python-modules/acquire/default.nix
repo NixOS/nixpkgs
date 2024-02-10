@@ -17,8 +17,8 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.9";
-  format = "pyproject";
+  version = "3.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -26,10 +26,8 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "acquire";
     rev = "refs/tags/${version}";
-    hash = "sha256-ppkfnPJEvCImTA0+NjYD8r6SHcx9eBN9GBvo0IZYcjY=";
+    hash = "sha256-anRNCnLDKHAEfOWi6m1n4R9lvFTlZgw5xxh39exvzH0=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

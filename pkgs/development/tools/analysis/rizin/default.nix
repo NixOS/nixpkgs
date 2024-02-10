@@ -109,7 +109,7 @@ let rizin = stdenv.mkDerivation rec {
       jsdec = pkgs.callPackage ./jsdec.nix {
         inherit rizin openssl;
       };
-      rz-ghidra = pkgs.libsForQt5.callPackage ./rz-ghidra.nix {
+      rz-ghidra = pkgs.qt6.callPackage ./rz-ghidra.nix {
         inherit rizin openssl;
         enableCutterPlugin = false;
       };

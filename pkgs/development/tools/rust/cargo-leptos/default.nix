@@ -1,7 +1,6 @@
 { darwin
 , fetchFromGitHub
 , lib
-, openssl
 , pkg-config
 , rustPlatform
 , stdenv
@@ -9,33 +8,28 @@
 let
   inherit (darwin.apple_sdk.frameworks)
     CoreServices
+    SystemConfiguration
     Security;
   inherit (lib) optionals;
   inherit (stdenv) isDarwin;
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.0";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-+qAXBLV+Jn1qWG7TThn4twUBvN7lO4MX2SSo/gdjgFY=";
+    rev = version;
+    hash = "sha256-veRhTruM+Nw2rerzXC/kpi2Jr8mMMBLqOM2YBCpFePU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "leptos_hot_reload-0.5.0" = "sha256-huOwadWMYPGGWmZHxztFPPzs4UhIPEmq9rKOB6WPCTE=";
-    };
   };
 
-  nativeBuildInputs = optionals (!isDarwin) [ pkg-config ];
-
-  buildInputs = optionals (!isDarwin) [
-    openssl
-  ] ++ optionals isDarwin [
+  buildInputs = optionals isDarwin [
+    SystemConfiguration
     Security
     CoreServices
   ];
@@ -47,6 +41,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A build tool for the Leptos web framework";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
+    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ benwis ];
   };

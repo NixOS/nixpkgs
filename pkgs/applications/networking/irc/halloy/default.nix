@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2023.4";
+  version = "2023.5";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-j5Yw7rXdNd32RnbV2jQ+ZUjbm14AKZ7khQNX6A+qPAM=";
+    hash = "sha256-XGNFLfZDDGTT55UAsapUf1B0uSzrNjwSRK+yQSU3wG0=";
   };
 
   cargoLock = {
@@ -82,5 +82,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "halloy";
   };
 }

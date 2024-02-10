@@ -33,5 +33,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/amietn/vcsi";
     license = licenses.mit;
     maintainers = with maintainers; [ dandellion zopieux ];
+    mainProgram = "vcsi";
   };
 }

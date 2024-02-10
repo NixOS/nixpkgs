@@ -4,13 +4,13 @@
 
 callPackage ./generic.nix rec {
   pname = "experienced-pixel-dungeon";
-  version = "2.15.3";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Experienced-Pixel-Dungeon-Redone";
     rev = "ExpPD-${version}";
-    hash = "sha256-qwZk08e+GX8YAVnOZCQ6sIIfV06lWn5bM6/PKD0PAH0=";
+    hash = "sha256-fTHAA3pCXAA9W32eeY29eaLnfcG5pLop/awQG5zKMt4=";
   };
 
   postPatch = ''

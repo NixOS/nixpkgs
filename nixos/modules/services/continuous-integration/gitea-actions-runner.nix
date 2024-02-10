@@ -19,7 +19,7 @@ let
     mapAttrs'
     mkEnableOption
     mkOption
-    mkPackageOptionMD
+    mkPackageOption
     mkIf
     nameValuePair
     types
@@ -56,7 +56,7 @@ in
   ];
 
   options.services.gitea-actions-runner = with types; {
-    package = mkPackageOptionMD pkgs "gitea-actions-runner" { };
+    package = mkPackageOption pkgs "gitea-actions-runner" { };
 
     instances = mkOption {
       default = {};
@@ -188,6 +188,7 @@ in
         nameValuePair "gitea-runner-${escapeSystemdPath name}" {
           inherit (instance) enable;
           description = "Gitea Actions Runner";
+          wants = [ "network-online.target" ];
           after = [
             "network-online.target"
           ] ++ optionals (wantsDocker) [

@@ -1,14 +1,11 @@
 { lib
 , fetchFromGitHub
 , hostPlatform
-, targetPlatform
-, cargo
-, rustc
 , lld
 }:
 
 let
-  arch = targetPlatform.qemuArch;
+  arch = hostPlatform.qemuArch;
 
   target = ./. + "/${arch}-unknown-none.json";
 
@@ -25,12 +22,7 @@ let
     };
   };
 
-  # inherit (cross) rustPlatform;
-  # ^ breaks because we are doing a no_std embedded build with a custom sysroot,
-  # but the fast_cross rustc wrapper already passes a sysroot argument
-  rustPlatform = cross.makeRustPlatform {
-    inherit rustc cargo;
-  };
+  inherit (cross) rustPlatform;
 
 in
 
@@ -68,5 +60,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ astro ];
     platforms = [ "x86_64-none" ];
+    mainProgram = "hypervisor-fw";
   };
 }

@@ -16,16 +16,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uuu";
-  version = "1.5.125";
+  version = "1.5.141";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${finalAttrs.version}";
-    hash = "sha256-f9Nt303xXZzLSu3GtOEpyaL91WVFUmKO7mxi8UNX3go=";
+    hash = "sha256-N5L6k2oVXfnER7JRoX0JtzgEhb/vFMexu7hUKQhmcoE=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "uuu_\([0-9.]+\)" ];
+  };
 
   nativeBuildInputs = [
     cmake

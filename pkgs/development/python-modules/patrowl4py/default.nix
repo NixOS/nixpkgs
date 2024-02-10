@@ -22,6 +22,7 @@
 buildPythonPackage rec {
   pname = "patrowl4py";
   version = "1.1.9";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Patrowl";

@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "cabextract";
   };
 }

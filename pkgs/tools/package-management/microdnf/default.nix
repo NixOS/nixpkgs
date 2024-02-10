@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ rb2k ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "microdnf";
   };
 }

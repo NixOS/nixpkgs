@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     license = licenses.bsd2;
     maintainers = [ maintainers.balsoft ];
     platforms = platforms.linux;
+    mainProgram = "wmfs";
   };
 }

@@ -1,10 +1,13 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
+, setuptools
+, pkg-config
 , swig
 , pcsclite
 , PCSC
+, pytestCheckHook
 }:
 
 let
@@ -15,27 +18,44 @@ in
 buildPythonPackage rec {
   version = "2.0.7";
   pname = "pyscard";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-J4BUUl+nX76LEEYNh+3NA6cK2U1oixE0Xkc5mH+Fwb8=";
+  src = fetchFromGitHub {
+    owner = "LudovicRousseau";
+    repo = "pyscard";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nkDI1OPQ4SsNhWkg53ZTsG7j0+mvpkJI7dsyaOl1a/8=";
   };
 
-  postPatch = if withApplePCSC then ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
-                "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
-  '' else ''
-    substituteInPlace smartcard/scard/winscarddll.c \
-      --replace "libpcsclite.so.1" \
-                "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+  nativeBuildInputs = [
+    setuptools
+    swig
+  ] ++ lib.optionals (!withApplePCSC) [
+    pkg-config
+  ];
+
+  buildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch =
+    if withApplePCSC then ''
+      substituteInPlace smartcard/scard/winscarddll.c \
+        --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
+                  "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
+    '' else ''
+      substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
+      substituteInPlace smartcard/scard/winscarddll.c \
+        --replace "libpcsclite.so.1" \
+                  "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+    '';
+
+  preCheck = ''
+    # remove src module, so tests use the installed module instead
+    rm -r smartcard
   '';
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (! withApplePCSC)
-    "-I ${lib.getDev pcsclite}/include/PCSC";
-
-  propagatedBuildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
-  nativeBuildInputs = [ swig ];
 
   meta = with lib; {
     homepage = "https://pyscard.sourceforge.io/";

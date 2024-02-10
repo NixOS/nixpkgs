@@ -19,6 +19,18 @@
 , qttools
 }:
 
+let
+  # https://github.com/olive-editor/olive/issues/2284
+  # we patch support for 2.3+, but 2.5 fails
+  openimageio' = openimageio.overrideAttrs (old: rec {
+    version = "2.4.15.0";
+    src = (old.src.override {
+      rev = "v${version}";
+      hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
+    });
+  });
+in
+
 stdenv.mkDerivation {
   pname = "olive-editor";
   version = "unstable-2023-06-12";
@@ -61,7 +73,7 @@ stdenv.mkDerivation {
     ffmpeg_4
     frei0r
     opencolorio
-    openimageio
+    openimageio'
     imath
     openexr_3
     portaudio
@@ -79,5 +91,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
+    mainProgram = "olive-editor";
   };
 }

@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sondr3/git-ignore/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "git-ignore";
   };
 }

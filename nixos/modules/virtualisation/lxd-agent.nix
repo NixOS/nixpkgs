@@ -45,7 +45,9 @@ let
     chown -R root:root "$PREFIX"
   '';
 in {
-  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   options = {
     virtualisation.lxd.agent.enable = lib.mkEnableOption (lib.mdDoc "Enable LXD agent");
@@ -56,18 +58,28 @@ in {
     systemd.services.lxd-agent = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.kmod pkgs.util-linux ];
+      before = [ "shutdown.target" ] ++ lib.optionals config.services.cloud-init.enable [
+        "cloud-init.target" "cloud-init.service" "cloud-init-local.service"
+      ];
+      conflicts = [ "shutdown.target" ];
+      path = [
+        pkgs.kmod
+        pkgs.util-linux
+
+        # allow `incus exec` to find system binaries
+        "/run/current-system/sw"
+      ];
 
       preStart = preStartScript;
 
       # avoid killing nixos-rebuild switch when executed through lxc exec
+      restartIfChanged = false;
       stopIfChanged = false;
 
       unitConfig = {
         Description = "LXD - agent";
         Documentation = "https://documentation.ubuntu.com/lxd/en/latest";
         ConditionPathExists = "/dev/virtio-ports/org.linuxcontainers.lxd";
-        Before = lib.optionals config.services.cloud-init.enable [ "cloud-init.target" "cloud-init.service" "cloud-init-local.service" ];
         DefaultDependencies = "no";
         StartLimitInterval = "60";
         StartLimitBurst = "10";

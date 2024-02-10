@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "mock-open";
   version = "1.4.0";
+  format = "setuptools";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {

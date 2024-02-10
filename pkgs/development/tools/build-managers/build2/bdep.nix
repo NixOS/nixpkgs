@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bdep";
-  version = "0.15.0";
+  version = "0.16.0";
 
   outputs = [ "out" "doc" "man" ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${version}.tar.gz";
-    sha256 = "sha256-dZldNVeQJWim3INBtOaPYP8yQMH3sjBzCLEHemvdxnU=";
+    hash = "sha256-5w8Ng8TS8g+Nkbixn5txg4FGi57TSfc6ii+2wh8apCo=";
   };
 
   strictDeps = true;

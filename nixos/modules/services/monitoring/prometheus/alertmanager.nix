@@ -44,14 +44,7 @@ in {
     services.prometheus.alertmanager = {
       enable = mkEnableOption (lib.mdDoc "Prometheus Alertmanager");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.prometheus-alertmanager;
-        defaultText = literalExpression "pkgs.alertmanager";
-        description = lib.mdDoc ''
-          Package that should be used for alertmanager.
-        '';
-      };
+      package = mkPackageOption pkgs "prometheus-alertmanager" { };
 
       configuration = mkOption {
         type = types.nullOr types.attrs;
@@ -181,6 +174,7 @@ in {
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
+        wants    = [ "network-online.target" ];
         after    = [ "network-online.target" ];
         preStart = ''
            ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \

@@ -31,6 +31,7 @@
 , libepoxy
 , libva
 , libvdpau
+, libglvnd
 , numactl
 , amf-headers
 , intel-media-sdk
@@ -131,6 +132,7 @@ stdenv.mkDerivation rec {
     mesa
     xorg.libXrandr
     libxcb
+    libglvnd
   ];
 
   cmakeFlags = [
@@ -169,6 +171,7 @@ stdenv.mkDerivation rec {
     description = "Sunshine is a Game stream host for Moonlight";
     homepage = "https://github.com/LizardByte/Sunshine";
     license = licenses.gpl3Only;
+    mainProgram = "sunshine";
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;
   };

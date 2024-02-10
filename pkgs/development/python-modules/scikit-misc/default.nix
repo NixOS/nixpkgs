@@ -1,15 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cython
 , gfortran
 , git
 , meson-python
 , pkg-config
+, blas
+, lapack
 , numpy
-, openblas
 , setuptools
 , wheel
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -27,8 +30,14 @@ buildPythonPackage rec {
   postPatch = ''
     patchShebangs .
 
+    # unbound numpy and disable coverage testing in pytest
     substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>='
+      --replace 'numpy==' 'numpy>=' \
+      --replace 'addopts = "' '#addopts = "'
+
+    # provide a version to use when git fails to get the tag
+    [[ -f skmisc/_version.py ]] || \
+      echo '__version__ = "${version}"' > skmisc/_version.py
   '';
 
   nativeBuildInputs = [
@@ -42,9 +51,31 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     numpy
-    openblas
+  ];
+
+  buildInputs = [
+    blas
+    lapack
+  ];
+
+  mesonFlags = [
+    "-Dblas=${blas.pname}"
+    "-Dlapack=${lapack.pname}"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # can not run tests from source directory
+  preCheck = ''
+    cd "$(mktemp -d)"
+  '';
+
+  pytestFlagsArray = [
+    "--pyargs skmisc"
   ];
 
   pythonImportsCheck = [

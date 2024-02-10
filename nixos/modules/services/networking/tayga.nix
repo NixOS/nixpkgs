@@ -64,12 +64,7 @@ in
     services.tayga = {
       enable = mkEnableOption (lib.mdDoc "Tayga");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.tayga;
-        defaultText = lib.literalMD "pkgs.tayga";
-        description = lib.mdDoc "This option specifies the TAYGA package to use.";
-      };
+      package = mkPackageOption pkgs "tayga" { };
 
       ipv4 = mkOption {
         type = types.submodule (versionOpts 4);

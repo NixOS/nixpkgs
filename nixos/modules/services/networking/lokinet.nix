@@ -9,12 +9,7 @@ in with lib; {
   options.services.lokinet = {
     enable = mkEnableOption (lib.mdDoc "Lokinet daemon");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.lokinet;
-      defaultText = literalExpression "pkgs.lokinet";
-      description = lib.mdDoc "Lokinet package to use.";
-    };
+    package = mkPackageOption pkgs "lokinet" { };
 
     useLocally = mkOption {
       type = types.bool;

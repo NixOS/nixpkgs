@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ numkem ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
+    mainProgram = "hashi-ui";
   };
 }

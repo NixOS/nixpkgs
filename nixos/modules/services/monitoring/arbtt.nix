@@ -9,14 +9,7 @@ in {
     services.arbtt = {
       enable = mkEnableOption (lib.mdDoc "Arbtt statistics capture service");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.haskellPackages.arbtt;
-        defaultText = literalExpression "pkgs.haskellPackages.arbtt";
-        description = lib.mdDoc ''
-          The package to use for the arbtt binaries.
-        '';
-      };
+      package = mkPackageOption pkgs [ "haskellPackages" "arbtt" ] { };
 
       logFile = mkOption {
         type = types.str;

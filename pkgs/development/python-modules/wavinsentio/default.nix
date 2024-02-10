@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "wavinsentio";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c3MpFoJrT2FBQrNce+zP/bfIZFqu8gSAA9oIa1jKYCo=";
+    hash = "sha256-Oko3Ivj95vajNWjQTQK18i5B/DIBngjw2HLlzYqLv2Y=";
   };
 
   propagatedBuildInputs = [

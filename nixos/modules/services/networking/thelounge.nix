@@ -25,7 +25,7 @@ in
   options.services.thelounge = {
     enable = mkEnableOption (lib.mdDoc "The Lounge web IRC client");
 
-    package = mkPackageOptionMD pkgs "thelounge" { };
+    package = mkPackageOption pkgs "thelounge" { };
 
     public = mkOption {
       type = types.bool;

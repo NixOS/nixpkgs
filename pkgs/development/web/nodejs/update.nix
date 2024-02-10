@@ -25,5 +25,5 @@ writeScript "update-nodejs" ''
   hash_hex=`gpgv --keyring=$HOME/.gnupg/pubring.kbx --output - $HOME/SHASUMS256.txt.asc | grep -oP "^([0-9a-f]{64})(?=\s+node-v''${version}.tar.xz$)"`
   hash=`nix-hash --type sha256 --to-base32 ''${hash_hex}`
 
-  update-source-version nodejs-${majorVersion}_x "''${version}" "''${hash}"
+  update-source-version nodejs_${majorVersion} "''${version}" "''${hash}"
 ''

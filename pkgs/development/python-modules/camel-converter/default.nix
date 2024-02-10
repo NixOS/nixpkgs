@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "sanders41";
     repo = "camel-converter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ASUwSA63iUgeRfYdO6InZ8YzEbifQh1hr3fUbE3FYac=";
+    hash = "sha256-xrdk5Y3H8KlQaGtJYdJNHq16Qfos2p+93uIAfIl098c=";
   };
 
   postPatch = ''

@@ -263,9 +263,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           };
         };
       };
-
-      # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
 
     # This is the client behind the router. We should be receiving router
@@ -278,9 +275,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         useNetworkd = true;
         useDHCP = false;
       };
-
-      # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
   };
 
@@ -294,6 +288,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Since we only care about IPv6 that should not involve waiting for legacy
     # IP leases.
     client.start()
+    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
 
     # the static address on the router should not be reachable
@@ -312,6 +307,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     isp.wait_for_unit("multi-user.target")
 
     # wait until the uplink interface has a good status
+    router.systemctl("start network-online.target")
     router.wait_for_unit("network-online.target")
     router.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 

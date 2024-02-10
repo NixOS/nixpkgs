@@ -29,19 +29,8 @@ in
       description = lib.mdDoc "Hostname to use for the nginx vhost";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.roundcube;
-      defaultText = literalExpression "pkgs.roundcube";
-
-      example = literalExpression ''
-        roundcube.withPlugins (plugins: [ plugins.persistent_login ])
-      '';
-
-      description = lib.mdDoc ''
-        The package which contains roundcube's sources. Can be overridden to create
-        an environment which contains roundcube and third-party plugins.
-      '';
+    package = mkPackageOption pkgs "roundcube" {
+      example = "roundcube.withPlugins (plugins: [ plugins.persistent_login ])";
     };
 
     database = {
@@ -113,6 +102,12 @@ in
       apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
 
+    configureNginx = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = lib.mdDoc "Configure nginx as a reverse proxy for roundcube.";
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -131,7 +126,7 @@ in
       ${lib.optionalString (!localDB) ''
         $password = file('${cfg.database.passwordFile}')[0];
         $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
-        $password = end($password);
+        $password = rtrim(end($password));
         $password = str_replace("\\:", ":", $password);
         $password = str_replace("\\\\", "\\", $password);
       ''}
@@ -153,40 +148,61 @@ in
       ${cfg.extraConfig}
     '';
 
-    services.nginx = {
+    services.nginx = lib.mkIf cfg.configureNginx {
       enable = true;
       virtualHosts = {
         ${cfg.hostName} = {
           forceSSL = mkDefault true;
           enableACME = mkDefault true;
+          root = cfg.package;
           locations."/" = {
-            root = cfg.package;
             index = "index.php";
+            priority = 1100;
             extraConfig = ''
-              location ~* \.php(/|$) {
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_pass unix:${fpm.socket};
-
-                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                fastcgi_param PATH_INFO       $fastcgi_path_info;
-
-                include ${config.services.nginx.package}/conf/fastcgi_params;
-                include ${pkgs.nginx}/conf/fastcgi.conf;
-              }
+              add_header Cache-Control 'public, max-age=604800, must-revalidate';
+            '';
+          };
+          locations."~ ^/(SQL|bin|config|logs|temp|vendor)/" = {
+            priority = 3110;
+            extraConfig = ''
+              return 404;
+            '';
+          };
+          locations."~ ^/(CHANGELOG.md|INSTALL|LICENSE|README.md|SECURITY.md|UPGRADING|composer.json|composer.lock)" = {
+            priority = 3120;
+            extraConfig = ''
+              return 404;
+            '';
+          };
+          locations."~* \\.php(/|$)" = {
+            priority = 3130;
+            extraConfig = ''
+              fastcgi_pass unix:${fpm.socket};
+              fastcgi_param PATH_INFO $fastcgi_path_info;
+              fastcgi_split_path_info ^(.+\.php)(/.+)$;
+              include ${config.services.nginx.package}/conf/fastcgi.conf;
             '';
           };
         };
       };
     };
 
+    assertions = [
+      {
+        assertion = localDB -> cfg.database.username == cfg.database.dbname;
+        message = ''
+          When setting up a DB and its owner user, the owner and the DB name must be
+          equal!
+        '';
+      }
+    ];
+
     services.postgresql = mkIf localDB {
       enable = true;
       ensureDatabases = [ cfg.database.dbname ];
       ensureUsers = [ {
         name = cfg.database.username;
-        ensurePermissions = {
-          "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       } ];
     };
 
@@ -234,6 +250,7 @@ in
         path = [ config.services.postgresql.package ];
       })
       {
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         script = let

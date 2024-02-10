@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "cobs";
   version = "1.2.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cmcqueen/cobs-python/";
     license = licenses.mit;
-    maintainers = [ teams.ororatech ];
+    maintainers = teams.ororatech.members;
   };
 }

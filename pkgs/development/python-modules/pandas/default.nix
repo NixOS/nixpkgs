@@ -2,10 +2,12 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
 , cython
+, cython_3
 , meson-python
 , meson
 , oldest-supported-numpy
@@ -23,7 +25,6 @@
 , beautifulsoup4
 , bottleneck
 , blosc2
-, brotlipy
 , fsspec
 , gcsfs
 , html5lib
@@ -39,7 +40,6 @@
 , pymysql
 , pyqt5
 , pyreadstat
-, python-snappy
 , qtpy
 , s3fs
 , scipy
@@ -63,33 +63,30 @@
 , runtimeShell
 }:
 
-buildPythonPackage rec {
+let pandas = buildPythonPackage rec {
   pname = "pandas";
-  version = "2.1.0";
-  format = "pyproject";
+  version = "2.1.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QwMW/qc1n51DaVhUnIaG0bdOvDitvvPh6ftoDawiYlc=";
+    hash = "sha256-okGYzPJC3mpG+Sq4atjWwLlocUDnpjgGRPmQ+4ehQX0=";
   };
-
-  patches = [
-    # https://github.com/pandas-dev/pandas/issues/54888#issuecomment-1701186809
-    ./installer-fix.patch
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace "Cython>=0.29.33,<3" "Cython" \
       --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
-      --replace "meson==1.0.1" "meson>=1.0.1"
+      --replace "meson==1.2.1" "meson>=1.2.1"
   '';
 
   nativeBuildInputs = [
-    cython
+    # TODO: hack to support pandas on python3.12, remove with pandas 2.2.0
+    (if pythonAtLeast "3.12" then cython_3 else cython)
     meson-python
     meson
     numpy
@@ -121,8 +118,6 @@ buildPythonPackage rec {
         qtpy
       ];
       compression = [
-        brotlipy
-        python-snappy
         zstandard
       ];
       computation = [
@@ -192,16 +187,23 @@ buildPythonPackage rec {
     all = lib.concatLists (lib.attrValues extras);
   };
 
+  doCheck = false; # various infinite recursions
+
+  passthru.tests.pytest = pandas.overridePythonAttrs (_: { doCheck = true; });
+
   nativeCheckInputs = [
     glibcLocales
     hypothesis
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ]
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (stdenv.isLinux) [
     # for locale executable
     glibc
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ]
+  ++ lib.optionals (stdenv.isDarwin) [
     # for locale executable
     adv_cmds
   ];
@@ -268,4 +270,5 @@ buildPythonPackage rec {
     '';
     maintainers = with maintainers; [ raskin fridh knedlsepp ];
   };
-}
+};
+in pandas

@@ -5,9 +5,10 @@
 , hypothesis
 , pythonOlder
 , jbig2dec
-, deprecation
+, deprecated
 , lxml
-, mupdf
+, mupdf-headless
+, numpy
 , packaging
 , pillow
 , psutil
@@ -19,13 +20,12 @@
 , qpdf
 , setuptools
 , substituteAll
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "8.3.0";
-  format = "pyproject";
+  version = "8.11.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -39,14 +39,14 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-d76s4iJFwhzWSySXTS53PQQuWfWIboIRecEyjzobsME=";
+    hash = "sha256-mxUXXD7/ERC6mfmLLo+zdsVblIplrlcnzTNQ7YUk3Q4=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
-      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+      jbig2dec = lib.getExe' jbig2dec "jbig2dec";
+      mutool = lib.getExe' mupdf-headless "mutool";
     })
   ];
 
@@ -62,12 +62,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pybind11
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [
     attrs
     hypothesis
+    numpy
     pytest-xdist
     psutil
     pytestCheckHook
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    deprecation
+    deprecated
     lxml
     packaging
     pillow

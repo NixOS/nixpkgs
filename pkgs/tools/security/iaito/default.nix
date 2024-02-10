@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     install -m755 -Dt $out/bin iaito
     install -m644 -Dt $out/share/metainfo ../org.radare.iaito.appdata.xml
     install -m644 -Dt $out/share/applications ../org.radare.iaito.desktop
-    install -m644 -Dt $out/share/pixmaps ../img/iaito-o.svg
+    install -m644 -Dt $out/share/pixmaps ../img/org.radare.iaito.svg
 
     pushd ../../../${translations_src.name}
     make install -j$NIX_BUILD_CORES PREFIX=$out

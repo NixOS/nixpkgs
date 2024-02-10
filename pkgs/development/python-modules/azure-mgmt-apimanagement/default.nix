@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "4.0.0";
+  format = "setuptools";
   pname = "azure-mgmt-apimanagement";
   disabled = isPy27;
 

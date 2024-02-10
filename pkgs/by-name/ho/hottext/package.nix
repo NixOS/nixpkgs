@@ -1,10 +1,8 @@
-{ lib, nim2Packages, fetchFromSourcehut, gentium, makeDesktopItem, nim_lk, SDL2 }:
+{ lib, buildNimPackage, fetchFromSourcehut, gentium, makeDesktopItem }:
 
-nim2Packages.buildNimPackage (finalAttrs: {
+buildNimPackage (finalAttrs: {
   pname = "hottext";
   version = "20231003";
-
-  nimBinOnly = true;
 
   src = fetchFromSourcehut {
     owner = "~ehmry";
@@ -13,9 +11,7 @@ nim2Packages.buildNimPackage (finalAttrs: {
     hash = "sha256-ncH/1PV4vZY7JCUJ87FPz5bdrQsNlYxzGdc5BQNfQeA=";
   };
 
-  buildInputs = [ SDL2 ];
-
-  nimFlags = nim_lk.passthru.nimFlagsFromLockFile ./lock.json;
+  lockFile = ./lock.json;
 
   HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 

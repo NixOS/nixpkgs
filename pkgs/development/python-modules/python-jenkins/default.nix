@@ -7,7 +7,7 @@
 , pyyaml
 , setuptools
 , six
-, multi_key_dict
+, multi-key-dict
 , testscenarios
 , requests
 , requests-mock
@@ -18,11 +18,12 @@
 
 buildPythonPackage rec {
   pname = "python-jenkins";
-  version = "1.8.1";
+  version = "1.8.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/18dklOdkD+GmwLq8rExREfm1tePdn7c/dkpZ9UyucY=";
+    hash = "sha256-VufauwYHvbjh1vxtLUMBq+2+2RZdorIG+svTBxy27ss=";
   };
 
   # test uses timeout mechanism unsafe for use with the "spawn"
@@ -40,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
+  propagatedBuildInputs = [ pbr pyyaml setuptools six multi-key-dict requests ];
 
   __darwinAllowLocalNetworking = true;
 

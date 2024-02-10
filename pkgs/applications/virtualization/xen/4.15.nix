@@ -122,7 +122,7 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withInternalTraditionalQemu) "--enable-qemu-traditional"
     ++ optional (!withInternalTraditionalQemu) "--disable-qemu-traditional"
 
-    ++ optional (withSeabios) "--with-system-seabios=${seabios}"
+    ++ optional (withSeabios) "--with-system-seabios=${seabios}/share/seabios"
     ++ optional (!withInternalSeabios && !withSeabios) "--disable-seabios"
 
     ++ optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"

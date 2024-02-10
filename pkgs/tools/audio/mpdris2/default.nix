@@ -50,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    mainProgram = "mpDris2";
   };
 }

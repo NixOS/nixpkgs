@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  pkgsBuildBuild = [
+  depsBuildBuild = [
     pkg-config
   ];
 
@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with maintainers; [ mxkrsv ];
     platforms = platforms.linux;
+    mainProgram = "chayang";
   };
 })

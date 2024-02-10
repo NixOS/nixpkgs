@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/man $out/lib/${python3.libPrefix}/site-packages
+    mkdir -p $out/bin $out/man $out/${python3.sitePackages}
     make install
     wrapPythonPrograms
   '';

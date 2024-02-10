@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "xq";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "sibprogrammer";
     repo = "xq";
     rev = "v${version}";
-    hash = "sha256-bhJ8zMZQZn/VzhulkfGOW+uyS8E43TIREAvKIsEPonA=";
+    hash = "sha256-g1d5sS3tgxP2VRogWG/5OXezDsJuQ6e724te+Oj3r24=";
   };
 
-  vendorHash = "sha256-iJ1JMvIJqXLkZXuzn2rzKnLbiagTocg/6mJN3Pgd/4w=";
+  vendorHash = "sha256-Oy/BBE6qCKJQRNDn6UiBr+/Psgi3A9Eaytmbmjt7eq8=";
 
   ldflags = [
     "-s"

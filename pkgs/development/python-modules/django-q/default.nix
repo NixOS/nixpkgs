@@ -15,6 +15,8 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, redis
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -39,6 +41,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -55,7 +58,7 @@ buildPythonPackage rec {
     pytest-django
     pytest-mock
     pytestCheckHook
-  ];
+  ] ++ django-redis.optional-dependencies.hiredis;
 
   pythonImportsCheck = [
     "django_q"
@@ -86,6 +89,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ gador ];
     # django-q is unmaintained at the moment
     # https://github.com/Koed00/django-q/issues/733
-    broken = true;
+    broken = lib.versionAtLeast redis.version "5";
   };
 }

@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mapnik";
-  version = "unstable-2022-10-18";
+  version = "unstable-2023-11-28";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
-    rev = "05661e54392bcbb3367747f97a3ef6e468c105ba";
-    hash = "sha256-96AneLPH1gbh/u880Pdc9OdFq2MniSdaTJoKYqId7sw=";
+    rev = "2e1b32512b1f8b52331994f2a809d8a383c0c984";
+    hash = "sha256-qGdUfu6gFWum/Id/W3ICeGZroMQ3Tz9PQf1tt+gaaXM=";
     fetchSubmodules = true;
   };
 
@@ -57,7 +57,11 @@ stdenv.mkDerivation rec {
       src = ./catch2-src.patch;
       catch2_src = catch2.src;
     })
-    ./include.patch
+    # Disable broken test
+    # See discussion: https://github.com/mapnik/mapnik/issues/4329#issuecomment-1248778398
+    ./datasource-ogr-test-should-fail.patch
+    # Account for full paths when generating libmapnik.pc
+    ./export-pkg-config-full-paths.patch
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -83,8 +87,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # Would require qt otherwise.
-    "-DBUILD_DEMO_VIEWER=OFF"
+    "-DBUILD_DEMO_VIEWER:BOOL=OFF"
   ];
+
+  doCheck = true;
 
   # mapnik-config is currently not build with CMake. So we use the SCons for
   # this one. We can't add SCons to nativeBuildInputs though, as stdenv would
@@ -103,7 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [ hrdinka ];
+    maintainers = with maintainers; [ hrdinka hummeltech ];
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
   };

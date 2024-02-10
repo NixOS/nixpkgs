@@ -23,9 +23,10 @@ python3.pkgs.buildPythonApplication {
   ];
 
   meta = {
-    description = "Textualize See is a command line tool to open files in the terminal.";
+    description = "A CLI tool to open files in the terminal";
     homepage = "https://github.com/Textualize/textualize-see";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anselmschueler ];
+    mainProgram = "see";
   };
 }

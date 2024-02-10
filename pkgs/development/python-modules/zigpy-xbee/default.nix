@@ -6,25 +6,35 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.19.0";
-  # https://github.com/Martiusweb/asynctest/issues/152
-  # broken by upstream python bug with asynctest and
-  # is used exclusively by home-assistant with python 3.8
+  version = "0.20.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-KUXXOySuPFNKcW3O08FBYIfm4WwVjOuIF+GefmKnwl0=";
+    hash = "sha256-H0rs4EOzz2Nx5YuwqTZp2FGF1z2phBgSIyraKHHx4RA=";
   };
 
-  buildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
     pyserial
     pyserial-asyncio
     zigpy

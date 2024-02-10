@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildGoModule
-, buildGo121Module
 , fetchFromGitHub
 , fetchFromGitLab
 , callPackage
@@ -46,6 +45,8 @@ let
           name = "source-${rev}";
           inherit owner repo rev hash;
         };
+        # nixpkgs-update: no auto update
+        # easier to update all providers together
 
         meta = {
           inherit homepage;
@@ -85,7 +86,6 @@ let
       heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
-      tailscale = automated-providers.tailscale.override { mkProviderGoModule = buildGo121Module; };
     };
 
   # Put all the providers we not longer support in this list.
@@ -95,7 +95,7 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      ksyun = removed "ksyun" "2023/04";
+      fly = archived "fly" "2023/10";
     };
 
   # excluding aliases, used by terraform-full

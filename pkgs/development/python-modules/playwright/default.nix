@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, auditwheel
 , buildPythonPackage
 , git
 , greenlet
@@ -6,8 +8,10 @@
 , pyee
 , python
 , pythonOlder
+, setuptools
 , setuptools-scm
 , playwright-driver
+, pythonRelaxDepsHook
 }:
 
 let
@@ -16,15 +20,15 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.38.0";
-  format = "setuptools";
+  version = "1.40.0";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K3ZLDnDtV9PWX0etVv6RIDHp0vZZ7b7DGJ1GjP2kfXU=";
+    hash = "sha256-+gq/aFq/rQpl04LbaZXGxL35iIX1Wi/motYg5jwv91I=";
   };
 
   patches = [
@@ -46,10 +50,12 @@ buildPythonPackage rec {
     git commit -m "workaround setuptools-scm"
 
     substituteInPlace setup.py \
-      --replace "greenlet==2.0.1" "greenlet>=2.0.1" \
-      --replace "pyee==8.1.0" "pyee>=8.1.0" \
-      --replace "setuptools-scm==7.0.5" "setuptools-scm>=7.0.5" \
-      --replace "wheel==0.38.1" "wheel>=0.37.1"
+      --replace "setuptools-scm==8.0.4" "setuptools-scm" \
+      --replace "wheel==0.41.2" "wheel"
+
+    substituteInPlace pyproject.toml \
+      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.41.2", "auditwheel==5.4.0"]' \
+                'requires = ["setuptools", "setuptools-scm", "wheel"]'
 
     # Skip trying to download and extract the driver.
     # This is done manually in postInstall instead.
@@ -62,7 +68,16 @@ buildPythonPackage rec {
   '';
 
 
-  nativeBuildInputs = [ git setuptools-scm ];
+  nativeBuildInputs = [
+    git
+    setuptools-scm
+    setuptools
+    pythonRelaxDepsHook
+  ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
+
+  pythonRelaxDeps = [
+    "pyee"
+  ];
 
   propagatedBuildInputs = [
     greenlet
@@ -72,8 +87,6 @@ buildPythonPackage rec {
   postInstall = ''
     ln -s ${driver} $out/${python.sitePackages}/playwright/driver
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   # Skip tests because they require network access.
   doCheck = false;

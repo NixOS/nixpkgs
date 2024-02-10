@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     maintainers = with maintainers; [ kashw2 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "staruml";
   };
 })

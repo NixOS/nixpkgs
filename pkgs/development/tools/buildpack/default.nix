@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pack";
-  version = "0.31.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-v46Yfj0gRT84R1vttKkpan28dkeJWHNgzKzI+ZVCiNc=";
+    hash = "sha256-5pQ51T9QO0Lt2XFM8L2liFckxI+Y1x+S73lMF8Vv3A4=";
   };
 
-  vendorHash = "sha256-KZ2nAd+5D5PFgSDhNeHg6Hnp+h7HqZ2CRsKUek0KZhM=";
+  vendorHash = "sha256-UCNpKBsdwWmllgIi/3Dr6lWJLOh6okYwOHmRfRW0iAQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

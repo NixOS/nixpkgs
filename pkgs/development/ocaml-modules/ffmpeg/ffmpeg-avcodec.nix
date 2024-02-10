@@ -11,7 +11,7 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src duneVersion;
+  inherit (ffmpeg-base) version src;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ]

@@ -8,6 +8,7 @@
 , sassc
 , vala
 , gobject-introspection
+, appstream
 , fribidi
 , glib
 , gtk4
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.3.5";
+  version = "1.4.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-lxNIysW2uth4Hp6NHjo0vWHupITb9qWkkdG8YEDLrUE=";
+    hash = "sha256-SsQbCnNtgiRWMZerEjSSw+CU5m6bGRv8ILY/TITGtL4=";
   };
 
   depsBuildBuild = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    appstream
     fribidi
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit

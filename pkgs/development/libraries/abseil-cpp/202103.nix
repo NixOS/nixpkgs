@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/abseil/abseil-cpp/commit/808bc202fc13e85a7948db0d7fb58f0f051200b1.patch";
       sha256 = "sha256-ayY/aV/xWOdEyFSDqV7B5WDGvZ0ASr/aeBeYwP5RZVc=";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Don’t propagate the path to CoreFoundation. Otherwise, it’s impossible to build packages
+    # that require a different SDK other than the default one.
+    ./cmake-core-foundation.patch
   ];
 
   cmakeFlags = [

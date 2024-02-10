@@ -25,6 +25,7 @@
 buildPythonPackage rec {
   pname = "dragonfly";
   version = "0.35.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dictation-toolbox";

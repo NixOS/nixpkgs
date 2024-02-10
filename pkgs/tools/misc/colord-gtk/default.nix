@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
+    mainProgram = "cd-convert";
   };
 }

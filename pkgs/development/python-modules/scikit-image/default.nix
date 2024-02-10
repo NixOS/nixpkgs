@@ -19,6 +19,7 @@
 , pooch
 , pyamg
 , pytestCheckHook
+, numpydoc
 , pythran
 , pywavelets
 , scikit-learn
@@ -34,7 +35,7 @@ let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
-    version = "0.21.0";
+    version = "0.22.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -42,15 +43,9 @@ let
     src = fetchFromGitHub {
       owner = "scikit-image";
       repo = "scikit-image";
-      rev = "v${version}";
-      hash = "sha256-WJ2WNlcFCEtPr+bV/af6MoBBhbXDpOBEsJu4FmudoIo=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-M18y5JBPf3DR7SlJcCf82nG2MzwILg2w1AhJMzZXslg=";
     };
-
-    patches = [
-      # https://github.com/scikit-image/scikit-image/pull/7052
-      # prepare a patch file because the commit contains additional changes
-      ./suppress-deprecation-warning.patch
-    ];
 
     postPatch = ''
       patchShebangs skimage/_build_utils/{version,cythoner}.py
@@ -100,7 +95,7 @@ let
 
     # test suite is very cpu intensive, move to passthru.tests
     doCheck = false;
-    nativeCheckInputs = [ pytestCheckHook ];
+    nativeCheckInputs = [ pytestCheckHook numpydoc ];
 
     # (1) The package has cythonized modules, whose .so libs will appear only in the wheel, i.e. in nix store;
     # (2) To stop Python from importing the wrong directory, i.e. the one in the build dir, not the one in nix store, `skimage` dir should be removed or renamed;
@@ -126,9 +121,10 @@ let
       "skimage/feature/tests/test_util.py::test_plot_matches"
       "skimage/filters/tests/test_thresholding.py::TestSimpleImage::test_try_all_threshold"
       "skimage/io/tests/test_mpl_imshow.py::"
+      # See https://github.com/scikit-image/scikit-image/issues/7061 and https://github.com/scikit-image/scikit-image/issues/7104
+      "skimage/measure/tests/test_fit.py"
     ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
       # https://github.com/scikit-image/scikit-image/issues/7104
-      "skimage/measure/tests/test_fit.py"
       "skimage/measure/tests/test_moments.py"
     ]);
 

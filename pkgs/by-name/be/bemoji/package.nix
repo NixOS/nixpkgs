@@ -10,8 +10,8 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "marty-oehme";
     repo = "bemoji";
-    rev = version;
-    hash = "sha256-XXNrUaS06UHF3cVfIfWjGF1sdPE709W2tFhfwTitzNs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DhsJX5HlyTh0QLlHy1OwyaYg4vxWpBSsF71D9fxqPWE=";
   };
 
   strictDeps = true;

@@ -5,6 +5,7 @@
 , buildPythonPackage
 , dateparser
 , dnspython
+, elastic-transport
 , elasticsearch
 , elasticsearch-dsl
 , expiringdict
@@ -39,19 +40,20 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.6.1";
+  version = "8.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lnIhXkBodvLWVeqiwFcnU4M53zwWDmtFz+9TThQY63I=";
+    hash = "sha256-ibxSp1M85WngQKdjlRC4JvLxn0rEn9oVkid/V4iD6zY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "elasticsearch<7.14.0" "elasticsearch"
+      --replace "elasticsearch<7.14.0" "elasticsearch" \
+      --replace "elasticsearch-dsl==7.4.0" "elasticsearch-dsl"
   '';
 
   nativeBuildInputs = [
@@ -64,6 +66,7 @@ buildPythonPackage rec {
     boto3
     dateparser
     dnspython
+    elastic-transport
     elasticsearch
     elasticsearch-dsl
     expiringdict
@@ -89,7 +92,9 @@ buildPythonPackage rec {
   # https://github.com/domainaware/parsedmarc/issues/426
   doCheck = false;
 
-  pythonImportsCheck = [ "parsedmarc" ];
+  pythonImportsCheck = [
+    "parsedmarc"
+  ];
 
   passthru = {
     inherit dashboard;
@@ -97,11 +102,11 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    mainProgram = "parsedmarc";
-    maintainers = with maintainers; [ talyz ];
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     license = licenses.asl20;
+    maintainers = with maintainers; [ talyz ];
+    mainProgram = "parsedmarc";
   };
 }

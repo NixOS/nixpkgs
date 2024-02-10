@@ -186,9 +186,7 @@ in {
       ensureUsers = [
         {
           name = "peering-manager";
-          ensurePermissions = {
-            "DATABASE \"peering-manager\"" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -198,6 +196,7 @@ in {
     systemd.targets.peering-manager = {
       description = "Target for all Peering Manager services";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" "redis-peering-manager.service" ];
     };
 

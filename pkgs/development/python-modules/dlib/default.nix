@@ -6,6 +6,8 @@
 buildPythonPackage {
   inherit (dlib) pname version src nativeBuildInputs buildInputs meta;
 
+  format = "setuptools";
+
   patches = [
     ./build-cores.patch
   ];

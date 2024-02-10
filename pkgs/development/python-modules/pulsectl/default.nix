@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pulsectl";
   version = "23.5.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

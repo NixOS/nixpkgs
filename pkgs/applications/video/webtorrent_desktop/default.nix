@@ -1,15 +1,27 @@
-{ lib, stdenv, electron_22, buildNpmPackage, fetchFromGitHub }:
+{ lib, stdenv, electron, buildNpmPackage, fetchFromGitHub, fetchpatch }:
 
 buildNpmPackage {
   pname = "webtorrent-desktop";
-  version = "0.25-pre";
+  version = "0.25-pre-1eb612";
   src = fetchFromGitHub {
     owner = "webtorrent";
     repo = "webtorrent-desktop";
-    rev = "fce078defefd575cb35a5c79d3d9f96affc8a08f";
-    sha256 = "sha256-gXFiG36qqR0QHTqhaxgQKDO0UCHkJLnVwUTQB/Nct/c=";
+    rev = "1eb61201d6360698a2cc4ea72bf0fa7ee78b457c";
+    sha256 = "sha256-DBEFOamncyidMXypvKNnUmDIPUq1LzYjDgox7fa4+Gg=";
   };
-  npmDepsHash = "sha256-pEuvstrZ9oMdJ/iU6XwEQ1BYOyQp/ce6sYBTrMCjGMc=";
+  patches = [
+    # electron 27 fix
+    (fetchpatch {
+      url = "https://github.com/webtorrent/webtorrent-desktop/pull/2388.patch";
+      hash = "sha256-gam5oAZtsaiCNFwecA5ff0nhraySLx3SOHlb/js+cPM=";
+    })
+    # startup fix
+    (fetchpatch {
+      url = "https://github.com/webtorrent/webtorrent-desktop/pull/2389.patch";
+      hash = "sha256-hBJGLNNjcGRhYOFlLm/RL0po+70tEeJtR6Y/CfacPAI=";
+    })
+  ];
+  npmDepsHash = "sha256-tqhp3jDb1xtyV/n9kJtzkiznLQfqeYWeZiTnTVV0ibE=";
   makeCacheWritable = true;
   npmRebuildFlags = [ "--ignore-scripts" ];
   installPhase = ''
@@ -31,7 +43,7 @@ buildNpmPackage {
     cat > $out/bin/WebTorrent <<EOF
     #! ${stdenv.shell}
     set -eu
-    exec ${electron_22}/bin/electron --no-sandbox $out/lib/webtorrent-desktop "\$@"
+    exec ${electron}/bin/electron --no-sandbox $out/lib/webtorrent-desktop "\$@"
     EOF
     chmod +x $out/bin/WebTorrent
     cp -r static/linux/share/icons $out/share/
@@ -44,7 +56,8 @@ buildNpmPackage {
     description = "Streaming torrent app for Mac, Windows, and Linux";
     homepage = "https://webtorrent.io/desktop";
     license = licenses.mit;
-    maintainers = [ maintainers.flokli maintainers.bendlas ];
+    maintainers = [ maintainers.bendlas ];
+    mainProgram = "WebTorrent";
   };
 
 }

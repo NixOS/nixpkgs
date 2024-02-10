@@ -110,8 +110,8 @@ let
   trivialBuilders = self: super:
     import ../build-support/trivial-builders {
       inherit lib;
-      inherit (self) runtimeShell stdenv stdenvNoCC haskell;
-      inherit (self.pkgsBuildHost) shellcheck;
+      inherit (self) runtimeShell stdenv stdenvNoCC;
+      inherit (self.pkgsBuildHost) shellcheck-minimal;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
@@ -276,6 +276,19 @@ let
         gcc.abi = "elfv2";
       };
     });
+
+    pkgsExtraHardening = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsExtraHardening = super';
+          stdenv = super'.withDefaultHardeningFlags (
+            super'.stdenv.cc.defaultHardeningFlags ++ [
+              "zerocallusedregs"
+            ]
+          ) super'.stdenv;
+        })
+      ] ++ overlays;
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.

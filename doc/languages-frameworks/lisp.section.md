@@ -66,7 +66,7 @@ buildPhase = ''
 To save some work of writing Nix expressions, there is a script that imports all
 the packages distributed by Quicklisp into `imported.nix`. This works by parsing
 its `releases.txt` and `systems.txt` files, which are published every couple of
-months on [quicklisp.org](http://beta.quicklisp.org/dist/quicklisp.txt).
+months on [quicklisp.org](https://beta.quicklisp.org/dist/quicklisp.txt).
 
 The import process is implemented in the `import` directory as Common Lisp
 code in the `org.lispbuilds.nix` ASDF system. To run the script, one can
@@ -268,7 +268,7 @@ getting an environment variable for `ext:getenv`. This will load the
 
 ### Loading systems {#lisp-loading-systems}
 
-There, you can simply use `asdf:load-system`. This works by setting the right
+There, you can use `asdf:load-system`. This works by setting the right
 values for the `CL_SOURCE_REGISTRY`/`ASDF_OUTPUT_TRANSLATIONS` environment
 variables, so that systems are found in the Nix store and pre-compiled FASLs are
 loaded.

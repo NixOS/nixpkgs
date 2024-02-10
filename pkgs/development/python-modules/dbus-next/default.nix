@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "dbus-next";
   version = "0.2.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "altdesktop";

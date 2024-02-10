@@ -96,6 +96,16 @@ with lib.maintainers; {
     shortName = "Blockchains";
   };
 
+  buildbot = {
+    members = [
+      lopsided98
+      mic92
+      zowoq
+    ];
+    scope = "Maintain Buildbot CI framework";
+    shortName = "Buildbot";
+  };
+
   c = {
     members = [
       matthewbauer
@@ -125,14 +135,6 @@ with lib.maintainers; {
     scope = "Maintain Cinnamon desktop environment and applications made by the Linux Mint team.";
     shortName = "Cinnamon";
     enableFeatureFreezePing = true;
-  };
-
-  chia = {
-    members = [
-      lourkeur
-    ];
-    scope = "Maintain the Chia blockchain and its dependencies";
-    shortName = "Chia Blockchain";
   };
 
   coq = {
@@ -219,7 +221,6 @@ with lib.maintainers; {
       cole-h
       grahamc
       hoverbear
-      lheckemann
     ];
     scope = "Group registration for packages maintained by Determinate Systems.";
     shortName = "Determinate Systems employees";
@@ -299,10 +300,25 @@ with lib.maintainers; {
     members = [
       theuni
       dpausp
+      frlan
       leona
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
+  };
+
+  formatter = {
+    members = [
+      piegames
+      infinisil
+      das_j
+      tomberek
+      _0x4A6F
+      # Not in the maintainer list
+      # Sereja313
+    ];
+    scope = "Tentative Nix formatter team to be established in https://github.com/NixOS/rfcs/pull/166";
+    shortName = "Nix formatter team";
   };
 
   freedesktop = {
@@ -323,13 +339,20 @@ with lib.maintainers; {
 
   geospatial = {
     members = [
+      das-g
       imincik
-      sikmir
       nh2
+      nialov
+      r-burns
+      sikmir
       willcohen
+    ];
+    githubTeams = [
+      "geospatial"
     ];
     scope = "Maintain geospatial packages.";
     shortName = "Geospatial";
+    enableFeatureFreezePing = true;
   };
 
   gitlab = {
@@ -394,6 +417,7 @@ with lib.maintainers; {
       cdepillabout
       expipiplus1
       maralorn
+      ncfavier
       sternenseemann
     ];
     githubTeams = [
@@ -402,6 +426,16 @@ with lib.maintainers; {
     scope = "Maintain Haskell packages and infrastructure.";
     shortName = "Haskell";
     enableFeatureFreezePing = true;
+  };
+
+  helsinki-systems = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      ajs124
+      das_j
+    ];
+    scope = "Group registration for packages maintained by Helsinki Systems";
+    shortName = "Helsinki Systems employees";
   };
 
   home-assistant = {
@@ -431,6 +465,7 @@ with lib.maintainers; {
       cleeyv
       ryantm
       lassulus
+      yayayayaka
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -513,7 +548,6 @@ with lib.maintainers; {
       dtzWill
       ericson2314
       lovek323
-      primeos
       qyliss
       raitobezarius
       rrbutani
@@ -562,6 +596,18 @@ with lib.maintainers; {
     scope = "Maintain lumina desktop environment and related packages.";
     shortName = "Lumina";
     enableFeatureFreezePing = true;
+  };
+
+  lxc = {
+    members = [
+      aanderse
+      adamcstephens
+      jnsgruk
+      megheaiulian
+      mkg20001
+    ];
+    scope = "All things linuxcontainers. LXC, Incus, LXD and related packages.";
+    shortName = "lxc";
   };
 
   lxqt = {
@@ -673,18 +719,6 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
-  numtide = {
-    members = [
-      mic92
-      flokli
-      jfroche
-      tazjin
-      zimbatm
-    ];
-    scope = "Group registration for Numtide team members who collectively maintain packages.";
-    shortName = "Numtide team";
-  };
-
   ocaml = {
     members = [
       alizter
@@ -756,7 +790,6 @@ with lib.maintainers; {
 
   podman = {
     members = [
-      adisbladis
       saschagrunert
       vdemeester
     ];
@@ -912,7 +945,6 @@ with lib.maintainers; {
 
   tts = {
     members = [
-      hexa
       mic92
     ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";

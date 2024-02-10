@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = "11.1.0.11704";
+  version = "11.1.0.11711";
 
   src = if useChineseVersion then fetchurl {
-    url = "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitString "." version)}/wps-office_${version}_amd64.deb";
-    hash = "sha256-ffLSon9FpQZDQ1uapchBUkVaHOXs+H/6kHJLNiWqwiE=";
+    url = "https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${lib.last (lib.splitVersion version)}/wps-office_${version}_amd64.deb";
+    hash = "sha256-JHSTZZnOZoTpj8zF4C5PmjTkftEdxbeaqweY3ITiJto=";
   } else fetchurl {
-    url = "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitString "." version)}/wps-office_${version}.XA_amd64.deb";
-    hash = "sha256-nxpMEWKiNjjEUoVJkhpvjnCuWBCCGjPk+sUlKz+KjMI=";
+    url = "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitVersion version)}/wps-office_${version}.XA_amd64.deb";
+    hash = "sha256-2apkSE/8Wm6/OQ4x5n1PE1emhovqOgD0NVTY5QZZTYA=";
   };
 
   unpackCmd = "dpkg -x $src .";

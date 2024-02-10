@@ -2,7 +2,7 @@
 , which
 
 # GUI support
-, gtk2, gtk3, qt5
+, gtk3, qt5
 
 , pluginSearchPaths ? [
     "/run/current-system/sw/lib/gwenhywfar/plugins"
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    configureFlagsArray+=("--with-guis=gtk2 gtk3 qt5")
+    configureFlagsArray+=("--with-guis=gtk3 qt5")
   '';
 
   postPatch = let
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config gettext which ];
 
-  buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls openssl libgcrypt libgpg-error ];
+  buildInputs = [ gtk3 qt5.qtbase gnutls openssl libgcrypt libgpg-error ];
 
   dontWrapQtApps = true;
 

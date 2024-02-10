@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Tool for converting Xen images to raw and back";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    mainProgram = "xva-img";
   };
 }

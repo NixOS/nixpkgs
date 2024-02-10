@@ -16,13 +16,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2023.815.0";
+  version = "2024.131.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-Lm/unDa1ADc2zprrgP/a2bOzHb02CwU9gcvhmTOXKIM=";
+    hash = "sha256-fsXs/AzvEQ141y/DPRvg7a7b0K30IfjigbRj0qh88rs=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -83,7 +83,7 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ gepbird thiagokokada ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };

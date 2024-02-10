@@ -5,19 +5,20 @@ let
     isAttrs
     isPath
     isString
+    nixVersion
     pathExists
     readDir
-    seq
     split
     trace
     typeOf
+    fetchGit
     ;
 
   inherit (lib.attrsets)
     attrNames
     attrValues
     mapAttrs
-    setAttrByPath
+    optionalAttrs
     zipAttrsWith
     ;
 
@@ -28,7 +29,6 @@ let
   inherit (lib.lists)
     all
     commonPrefix
-    drop
     elemAt
     filter
     findFirst
@@ -43,6 +43,8 @@ let
   inherit (lib.path)
     append
     splitRoot
+    hasStorePathPrefix
+    splitStorePath
     ;
 
   inherit (lib.path.subpath)
@@ -55,8 +57,13 @@ let
     concatStringsSep
     substring
     stringLength
+    hasSuffix
+    versionAtLeast
     ;
 
+  inherit (lib.trivial)
+    inPureEvalMode
+    ;
 in
 # Rare case of justified usage of rec:
 # - This file is internal, so the return value doesn't matter, no need to make things overridable
@@ -170,7 +177,12 @@ rec {
       else
         value
     else if ! isPath value then
-      if isStringLike value then
+      if value ? _isLibCleanSourceWith then
+        throw ''
+          ${context} is a `lib.sources`-based value, but it should be a file set or a path instead.
+              To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
+              Note that this only works for sources created from paths.''
+      else if isStringLike value then
         throw ''
           ${context} ("${toString value}") is a string-like value, but it should be a file set or a path instead.
               Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
@@ -179,7 +191,8 @@ rec {
           ${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
     else if ! pathExists value then
       throw ''
-        ${context} (${toString value}) does not exist.''
+        ${context} (${toString value}) is a path that does not exist.
+            To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.''
     else
       _singleton value;
 
@@ -208,9 +221,9 @@ rec {
     if firstWithBase != null && differentIndex != null then
       throw ''
         ${functionContext}: Filesystem roots are not the same:
-            ${(head list).context}: root "${toString firstBaseRoot}"
-            ${(elemAt list differentIndex).context}: root "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
-            Different roots are not supported.''
+            ${(head list).context}: Filesystem root is "${toString firstBaseRoot}"
+            ${(elemAt list differentIndex).context}: Filesystem root is "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
+            Different filesystem roots are not supported.''
     else
       filesets;
 
@@ -379,7 +392,7 @@ rec {
 
   # Turn a fileset into a source filter function suitable for `builtins.path`
   # Only directories recursively containing at least one files are recursed into
-  # Type: Path -> fileset -> (String -> String -> Bool)
+  # Type: fileset -> (String -> String -> Bool)
   _toSourceFilter = fileset:
     let
       # Simplify the tree, necessary to make sure all empty directories are null
@@ -472,6 +485,59 @@ rec {
       empty
     else
       nonEmpty;
+
+  # Turn a builtins.filterSource-based source filter on a root path into a file set
+  # containing only files included by the filter.
+  # The filter is lazily called as necessary to determine whether paths are included
+  # Type: Path -> (String -> String -> Bool) -> fileset
+  _fromSourceFilter = root: sourceFilter:
+    let
+      # During the recursion we need to track both:
+      # - The path value such that we can safely call `readDir` on it
+      # - The path string value such that we can correctly call the `filter` with it
+      #
+      # While we could just recurse with the path value,
+      # this would then require converting it to a path string for every path,
+      # which is a fairly expensive operation
+
+      # Create a file set from a directory entry
+      fromDirEntry = path: pathString: type:
+        # The filter needs to run on the path as a string
+        if ! sourceFilter pathString type then
+          null
+        else if type == "directory" then
+          fromDir path pathString
+        else
+          type;
+
+      # Create a file set from a directory
+      fromDir = path: pathString:
+        mapAttrs
+          # This looks a bit funny, but we need both the path-based and the path string-based values
+          (name: fromDirEntry (path + "/${name}") (pathString + "/${name}"))
+          # We need to readDir on the path value, because reading on a path string
+          # would be unspecified if there are multiple filesystem roots
+          (readDir path);
+
+      rootPathType = pathType root;
+
+      # We need to convert the path to a string to imitate what builtins.path calls the filter function with.
+      # We don't want to rely on `toString` for this though because it's not very well defined, see ../path/README.md
+      # So instead we use `lib.path.splitRoot` to safely deconstruct the path into its filesystem root and subpath
+      # We don't need the filesystem root though, builtins.path doesn't expose that in any way to the filter.
+      # So we only need the components, which we then turn into a string as one would expect.
+      rootString = "/" + concatStringsSep "/" (components (splitRoot root).subpath);
+    in
+    if rootPathType == "directory" then
+      # We imitate builtins.path not calling the filter on the root path
+      _create root (fromDir root rootString)
+    else
+      # Direct files are always included by builtins.path without calling the filter
+      # But we need to lift up the base path to its parent to satisfy the base path invariant
+      _create (dirOf root)
+        {
+          ${baseNameOf root} = rootPathType;
+        };
 
   # Transforms the filesetTree of a file set to a shorter base path, e.g.
   # _shortenTreeBase [ "foo" ] (_create /foo/bar null)
@@ -698,9 +764,9 @@ rec {
 
       resultingTree =
         _differenceTree
-        positive._internalBase
-        positive._internalTree
-        negativeTreeWithPositiveBase;
+          positive._internalBase
+          positive._internalTree
+          negativeTreeWithPositiveBase;
     in
     # If the first file set is empty, we can never have any files in the result
     if positive._internalIsEmptyWithoutBase then
@@ -731,29 +797,139 @@ rec {
         _differenceTree (path + "/${name}") lhsValue (rhs.${name} or null)
       ) (_directoryEntries path lhs);
 
-  _fileFilter = predicate: fileset:
+  # Filters all files in a path based on a predicate
+  # Type: ({ name, type, ... } -> Bool) -> Path -> FileSet
+  _fileFilter = predicate: root:
     let
-      recurse = path: tree:
-        mapAttrs (name: subtree:
-          if isAttrs subtree || subtree == "directory" then
-            recurse (path + "/${name}") subtree
-          else if
-            predicate {
-              inherit name;
-              type = subtree;
-              # To ensure forwards compatibility with more arguments being added in the future,
-              # adding an attribute which can't be deconstructed :)
-              "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
-            }
-          then
-            subtree
+      # Check the predicate for a single file
+      # Type: String -> String -> filesetTree
+      fromFile = name: type:
+        if
+          predicate {
+            inherit name type;
+            hasExt = ext: hasSuffix ".${ext}" name;
+
+            # To ensure forwards compatibility with more arguments being added in the future,
+            # adding an attribute which can't be deconstructed :)
+            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file, hasExt }:`, use `{ name, file, hasExt, ... }:` instead." = null;
+          }
+        then
+          type
+        else
+          null;
+
+      # Check the predicate for all files in a directory
+      # Type: Path -> filesetTree
+      fromDir = path:
+        mapAttrs (name: type:
+          if type == "directory" then
+            fromDir (path + "/${name}")
           else
-            null
-        ) (_directoryEntries path tree);
+            fromFile name type
+        ) (readDir path);
+
+      rootType = pathType root;
     in
-    if fileset._internalIsEmptyWithoutBase then
-      _emptyWithoutBase
+    if rootType == "directory" then
+      _create root (fromDir root)
     else
-      _create fileset._internalBase
-        (recurse fileset._internalBase fileset._internalTree);
+      # Single files are turned into a directory containing that file or nothing.
+      _create (dirOf root) {
+        ${baseNameOf root} =
+          fromFile (baseNameOf root) rootType;
+      };
+
+  # Support for `builtins.fetchGit` with `submodules = true` was introduced in 2.4
+  # https://github.com/NixOS/nix/commit/55cefd41d63368d4286568e2956afd535cb44018
+  _fetchGitSubmodulesMinver = "2.4";
+
+  # Support for `builtins.fetchGit` with `shallow = true` was introduced in 2.4
+  # https://github.com/NixOS/nix/commit/d1165d8791f559352ff6aa7348e1293b2873db1c
+  _fetchGitShallowMinver = "2.4";
+
+  # Mirrors the contents of a Nix store path relative to a local path as a file set.
+  # Some notes:
+  # - The store path is read at evaluation time.
+  # - The store path must not include files that don't exist in the respective local path.
+  #
+  # Type: Path -> String -> FileSet
+  _mirrorStorePath = localPath: storePath:
+    let
+      recurse = focusedStorePath:
+        mapAttrs (name: type:
+          if type == "directory" then
+            recurse (focusedStorePath + "/${name}")
+          else
+            type
+        ) (builtins.readDir focusedStorePath);
+    in
+    _create localPath
+      (recurse storePath);
+
+  # Create a file set from the files included in the result of a fetchGit call
+  # Type: String -> String -> Path -> Attrs -> FileSet
+  _fromFetchGit = function: argument: path: extraFetchGitAttrs:
+    let
+      # The code path for when isStorePath is true
+      tryStorePath =
+        if pathExists (path + "/.git") then
+          # If there is a `.git` directory in the path,
+          # it means that the path was imported unfiltered into the Nix store.
+          # This function should throw in such a case, because
+          # - `fetchGit` doesn't generally work with `.git` directories in store paths
+          # - Importing the entire path could include Git-tracked files
+          throw ''
+            lib.fileset.${function}: The ${argument} (${toString path}) is a store path within a working tree of a Git repository.
+                This indicates that a source directory was imported into the store using a method such as `import "''${./.}"` or `path:.`.
+                This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+                You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+                If you can't avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.''
+        else
+          # Otherwise we're going to assume that the path was a Git directory originally,
+          # but it was fetched using a method that already removed files not tracked by Git,
+          # such as `builtins.fetchGit`, `pkgs.fetchgit` or others.
+          # So we can just import the path in its entirety.
+          _singleton path;
+
+      # The code path for when isStorePath is false
+      tryFetchGit =
+        let
+          # This imports the files unnecessarily, which currently can't be avoided
+          # because `builtins.fetchGit` is the only function exposing which files are tracked by Git.
+          # With the [lazy trees PR](https://github.com/NixOS/nix/pull/6530),
+          # the unnecessarily import could be avoided.
+          # However a simpler alternative still would be [a builtins.gitLsFiles](https://github.com/NixOS/nix/issues/2944).
+          fetchResult = fetchGit ({
+            url = path;
+          }
+          # In older Nix versions, repositories were always assumed to be deep clones, which made `fetchGit` fail for shallow clones
+          # For newer versions this was fixed, but the `shallow` flag is required.
+          # The only behavioral difference is that for shallow clones, `fetchGit` doesn't return a `revCount`,
+          # which we don't need here, so it's fine to always pass it.
+
+          # Unfortunately this means older Nix versions get a poor error message for shallow repositories, and there's no good way to improve that.
+          # Checking for `.git/shallow` doesn't seem worth it, especially since that's more of an implementation detail,
+          # and would also require more code to handle worktrees where `.git` is a file.
+          // optionalAttrs (versionAtLeast nixVersion _fetchGitShallowMinver) { shallow = true; }
+          // extraFetchGitAttrs);
+        in
+        # We can identify local working directories by checking for .git,
+        # see https://git-scm.com/docs/gitrepository-layout#_description.
+        # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
+        # even though `git ls-files` wouldn't return any files in that case.
+        if ! pathExists (path + "/.git") then
+          throw "lib.fileset.${function}: Expected the ${argument} (${toString path}) to point to a local working tree of a Git repository, but it's not."
+        else
+          _mirrorStorePath path fetchResult.outPath;
+
+    in
+    if ! isPath path then
+      throw "lib.fileset.${function}: Expected the ${argument} to be a path, but it's a ${typeOf path} instead."
+    else if pathType path != "directory" then
+      throw "lib.fileset.${function}: Expected the ${argument} (${toString path}) to be a directory, but it's a file instead."
+    else if hasStorePathPrefix path then
+      tryStorePath
+    else
+      tryFetchGit;
+
 }

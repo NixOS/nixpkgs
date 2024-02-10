@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.launchpad.net/lifeograph";
     rev = "v${version}";
-    sha256 = "sha256-RotbTdTtpwXmo+UKOyp93IAC6CCstv++KtnX2doN+nM=";
+    hash = "sha256-RotbTdTtpwXmo+UKOyp93IAC6CCstv++KtnX2doN+nM=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     description = "Lifeograph is an off-line and private journal and note taking application";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
+    mainProgram = "lifeograph";
     platforms = platforms.linux;
   };
 }

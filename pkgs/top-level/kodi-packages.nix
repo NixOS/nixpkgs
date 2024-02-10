@@ -1,4 +1,5 @@
-{ config, lib, newScope, kodi, libretro }:
+{ config, lib, newScope, kodi, libretro
+, disable-warnings-if-gcc13 }:
 
 with lib;
 
@@ -80,6 +81,8 @@ let self = rec {
 
   keymap = callPackage ../applications/video/kodi/addons/keymap { };
 
+  mediacccde = callPackage ../applications/video/kodi/addons/mediacccde { };
+
   netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
   orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
@@ -103,6 +106,8 @@ let self = rec {
   pvr-hdhomerun = callPackage ../applications/video/kodi/addons/pvr-hdhomerun { };
 
   pvr-iptvsimple = callPackage ../applications/video/kodi/addons/pvr-iptvsimple { };
+
+  pvr-vdr-vnsi = callPackage ../applications/video/kodi/addons/pvr-vdr-vnsi { };
 
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
@@ -152,7 +157,7 @@ let self = rec {
 
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
 
-  inputstream-ffmpegdirect = callPackage ../applications/video/kodi/addons/inputstream-ffmpegdirect { };
+  inputstream-ffmpegdirect = disable-warnings-if-gcc13 (callPackage ../applications/video/kodi/addons/inputstream-ffmpegdirect { });
 
   inputstream-rtmp = callPackage ../applications/video/kodi/addons/inputstream-rtmp { };
 

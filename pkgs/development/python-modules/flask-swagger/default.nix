@@ -3,6 +3,7 @@
 
 buildPythonPackage rec {
   version = "0.2.14";
+  format = "setuptools";
   pname = "flask-swagger";
 
   src = fetchPypi {

@@ -21,6 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sphinxcontrib.bayesnet" ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     homepage = "https://github.com/jluttine/sphinx-bayesnet";
     description = "Bayesian networks and factor graphs in Sphinx using TikZ syntax";

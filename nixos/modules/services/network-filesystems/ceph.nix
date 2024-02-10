@@ -210,7 +210,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mgr.name1
         '';
       };
-      package = mkPackageOptionMD pkgs "ceph" { };
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -231,7 +231,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mon.name1
         '';
       };
-      package = mkPackageOptionMD pkgs "ceph" { };
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -252,7 +252,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in osd.name1
         '';
       };
-      package = mkPackageOptionMD pkgs "ceph" { };
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {
@@ -280,7 +280,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mds.name1
         '';
       };
-      package = mkPackageOptionMD pkgs "ceph" { };
+      package = mkPackageOption pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -292,7 +292,7 @@ in
 
     rgw = {
       enable = mkEnableOption (lib.mdDoc "Ceph RadosGW daemon");
-      package = mkPackageOptionMD pkgs "ceph" { };
+      package = mkPackageOption pkgs "ceph" { };
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
@@ -398,12 +398,18 @@ in
       in
         mkMerge targets;
 
-    systemd.tmpfiles.rules = [
-      "d /etc/ceph - ceph ceph - -"
-      "d /run/ceph 0770 ceph ceph -"
-      "d /var/lib/ceph - ceph ceph - -"]
-    ++ optionals cfg.mgr.enable [ "d /var/lib/ceph/mgr - ceph ceph - -"]
-    ++ optionals cfg.mon.enable [ "d /var/lib/ceph/mon - ceph ceph - -"]
-    ++ optionals cfg.osd.enable [ "d /var/lib/ceph/osd - ceph ceph - -"];
+    systemd.tmpfiles.settings."10-ceph" = let
+      defaultConfig = {
+        user = "ceph";
+        group = "ceph";
+      };
+    in {
+      "/etc/ceph".d = defaultConfig;
+      "/run/ceph".d = defaultConfig // { mode = "0770"; };
+      "/var/lib/ceph".d = defaultConfig;
+      "/var/lib/ceph/mgr".d = mkIf (cfg.mgr.enable) defaultConfig;
+      "/var/lib/ceph/mon".d = mkIf (cfg.mon.enable) defaultConfig;
+      "/var/lib/ceph/osd".d = mkIf (cfg.osd.enable) defaultConfig;
+    };
   };
 }

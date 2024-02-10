@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "iapws";
   version = "1.5.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,15 +8,16 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.75"
 backoff = "0.4.0"
-base64 = "0.21.4"
+base64 = "0.21.5"
 digest = "0.10.7"
-env_logger = "0.10.0"
+env_logger = "0.10.1"
 isahc = { version = "1.7.2", default_features = false }
+log = "0.4.20"
 rayon = "1.8.0"
-serde = { version = "1.0.188", features = ["derive"] }
-serde_json = "1.0.107"
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
 sha1 = "0.10.6"
 sha2 = "0.10.8"
-tempfile = "3.8.0"
+tempfile = "3.8.1"
 url = { version = "2.4.1", features = ["serde"] }
 walkdir = "2.4.0"

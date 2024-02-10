@@ -19,7 +19,7 @@ let
       {
       ${pkgs.coreutils}/bin/cat << EOF
       From: smartd on ${host} <${nm.sender}>
-      To: undisclosed-recipients:;
+      To: ${nm.recipient}
       Subject: $SMARTD_SUBJECT
 
       $SMARTD_FULLMESSAGE

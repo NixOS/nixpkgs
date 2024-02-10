@@ -4,9 +4,10 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups-pk-helper cups-filters xdg-utils;
+  inherit (pkgs) cups-pk-helper cups-filters xdg-utils;
 
   cfg = config.services.printing;
+  cups = cfg.package;
 
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
@@ -109,11 +110,10 @@ let
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 
   parsePorts = addresses: let
-    splitAddress = addr: lib.strings.splitString ":" addr;
-    extractPort = addr: builtins.elemAt (builtins.tail (splitAddress addr)) 0;
-    toInt = str: lib.strings.toInt str;
+    splitAddress = addr: strings.splitString ":" addr;
+    extractPort = addr: builtins.foldl' (a: b: b) "" (splitAddress addr);
   in
-    builtins.map (address: toInt (extractPort address)) addresses;
+    builtins.map (address: strings.toInt (extractPort address)) addresses;
 
 in
 
@@ -140,6 +140,8 @@ in
           Whether to enable printing support through the CUPS daemon.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "cups" {};
 
       stateless = mkOption {
         type = types.bool;

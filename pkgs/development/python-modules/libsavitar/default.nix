@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, pythonOlder, fetchFromGitHub, cmake, sip_4 }:
+{ lib, buildPythonPackage, python, pythonOlder, fetchFromGitHub, cmake, sip4 }:
 
 buildPythonPackage rec {
   pname = "libsavitar";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [ sip_4 ];
+  propagatedBuildInputs = [ sip4 ];
 
   disabled = pythonOlder "3.4.0";
 

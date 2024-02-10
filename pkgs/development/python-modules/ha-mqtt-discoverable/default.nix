@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
-  version = "0.10.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0a39KTLZw3Y2D0TXlKCmvVeNoXAN/uLXQGDlA9iM9J0=";
+    hash = "sha256-Ue8az6Q7uU02IJJyyHk64Ji4J6sf/bShvTeHhN9U92Y=";
   };
 
   nativeBuildInputs = [
@@ -49,5 +49,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

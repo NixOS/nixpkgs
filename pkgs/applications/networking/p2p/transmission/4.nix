@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.0.4";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    hash = "sha256-Sz3+5VvfOgET1aiormEnBOrF+yN79tiSQvjLAoGqTLw=";
+    hash = "sha256-gd1LGAhMuSyC/19wxkoE2mqVozjGPfupIPGojKY0Hn4=";
     fetchSubmodules = true;
   };
 
@@ -134,11 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
       r @{PROC}/@{pid}/mounts,
       rwk /tmp/tr_session_id_*,
 
-      r $out/share/transmission/web/**,
+      r $out/share/transmission/public_html/**,
 
       include <local/bin.transmission-daemon>
     }
     EOF
+    install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
   '';
 
   passthru.tests = {

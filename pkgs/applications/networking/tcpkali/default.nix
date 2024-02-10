@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ethercrow ];
+    mainProgram = "tcpkali";
   };
 }

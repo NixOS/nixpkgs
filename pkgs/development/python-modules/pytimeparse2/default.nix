@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pytimeparse2";
   version = "1.7.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "onegreyonewhite";

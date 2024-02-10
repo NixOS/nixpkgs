@@ -1,5 +1,5 @@
 diff --git a/pkg/machine/machine_common.go b/pkg/machine/machine_common.go
-index 649748947..a981d93bf 100644
+index 4e43dd54c..a981d93bf 100644
 --- a/pkg/machine/machine_common.go
 +++ b/pkg/machine/machine_common.go
 @@ -127,14 +127,6 @@ address can't be used by podman. `
@@ -7,10 +7,10 @@ index 649748947..a981d93bf 100644
  				if len(helper) < 1 {
  					fmt.Print(fmtString)
 -				} else {
--					fmtString += `If you would like to install it run the\nfollowing commands:
+-					fmtString += `If you would like to install it, run the following commands:
 -
 -        sudo %s install
--        podman machine stop%[1]s; podman machine start%[1]s
+-        podman machine stop%[2]s; podman machine start%[2]s
 -
 -                `
 -					fmt.Printf(fmtString, helper, suffix)

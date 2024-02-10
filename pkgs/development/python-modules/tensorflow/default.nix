@@ -19,8 +19,8 @@
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , config
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
-, cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
+, cudaPackagesGoogle
+, cudaCapabilities ? cudaPackagesGoogle.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
 , tensorboardSupport ? true
 # XLA without CUDA is broken
@@ -50,14 +50,15 @@ let
   # __ZN4llvm11SmallPtrSetIPKNS_10AllocaInstELj8EED1Ev in any of the
   # translation units, so the build fails at link time
   stdenv =
-    if cudaSupport then cudaPackages.backendStdenv
+    if cudaSupport then cudaPackagesGoogle.backendStdenv
     else if originalStdenv.isDarwin then llvmPackages_11.stdenv
     else originalStdenv;
-  inherit (cudaPackages) cudatoolkit nccl;
+  inherit (cudaPackagesGoogle) cudatoolkit nccl;
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
   # cudaPackages.cudnn led to this:
   # https://github.com/tensorflow/tensorflow/issues/60398
-  cudnn = cudaPackages.cudnn_8_6;
+  cudnnAttribute = "cudnn_8_6";
+  cudnn = cudaPackagesGoogle.${cudnnAttribute};
   gentoo-patches = fetchzip {
     url = "https://dev.gentoo.org/~perfinion/patches/tensorflow-patches-2.12.0.tar.bz2";
     hash = "sha256-SCRX/5/zML7LmKEPJkcM5Tebez9vv/gmE4xhT/jyqWs=";
@@ -65,15 +66,7 @@ let
   protobuf-extra = linkFarm "protobuf-extra" [
     { name = "include"; path = protobuf-core.src; }
   ];
-in
 
-assert cudaSupport -> cudatoolkit != null
-                   && cudnn != null;
-
-# unsupported combination
-assert ! (stdenv.isDarwin && cudaSupport);
-
-let
   withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
 
   # FIXME: migrate to redist cudaPackages
@@ -111,6 +104,7 @@ let
   tfFeature = x: if x then "1" else "0";
 
   version = "2.13.0";
+  format = "setuptools";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
@@ -427,7 +421,9 @@ let
       x86_64-linux = if cudaSupport
         then "sha256-5VFMNHeLrUxW5RTr6EhT3pay9nWJ5JkZTGirDds5QkU="
         else "sha256-KzgWV69Btr84FdwQ5JI2nQEsqiPg1/+TWdbw5bmxXOE=";
-      aarch64-linux = "sha256-9btXrNHqd720oXTPDhSmFidv5iaZRLjCVX8opmrMjXk=";
+      aarch64-linux = if cudaSupport
+        then "sha256-ty5+51BwHWE1xR4/0WcWTp608NzSAS/iiyN+9zx7/wI="
+        else "sha256-9btXrNHqd720oXTPDhSmFidv5iaZRLjCVX8opmrMjXk=";
       x86_64-darwin = "sha256-gqb03kB0z2pZQ6m1fyRp1/Nbt8AVVHWpOJSeZNCLc4w=";
       aarch64-darwin = "sha256-WdgAaFZU+ePwWkVBhLzjlNT7ELfGHOTaMdafcAMD5yo=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
@@ -484,13 +480,18 @@ let
     };
 
     meta = with lib; {
+      badPlatforms = lib.optionals cudaSupport lib.platforms.darwin;
       changelog = "https://github.com/tensorflow/tensorflow/releases/tag/v${version}";
       description = "Computation using data flow graphs for scalable machine learning";
       homepage = "http://tensorflow.org";
       license = licenses.asl20;
       maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
-      broken = stdenv.isDarwin || !(xlaSupport -> cudaSupport);
+      broken =
+        stdenv.isDarwin
+        || !(xlaSupport -> cudaSupport)
+        || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackagesGoogle)
+        || !(cudaSupport -> cudaPackagesGoogle ? cudatoolkit);
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
@@ -593,7 +594,7 @@ in buildPythonPackage {
   # Regression test for #77626 removed because not more `tensorflow.contrib`.
 
   passthru = {
-    inherit cudaPackages;
+    cudaPackages = cudaPackagesGoogle;
     deps = bazel-build.deps;
     libtensorflow = bazel-build.out;
   };

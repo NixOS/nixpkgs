@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "3.2.2";
+  format = "setuptools";
   pname = "django-cache-url";
 
   src = fetchFromGitHub {

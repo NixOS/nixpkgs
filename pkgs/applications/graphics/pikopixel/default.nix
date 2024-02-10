@@ -1,28 +1,23 @@
 { lib
 , fetchurl
 , gnustep
-, llvmPackages_9
 }:
 
-let
-  # Earlier llvm than 9 segfaults
-  gnustep' = gnustep.override { llvmPackages = llvmPackages_9; };
-
-in gnustep'.gsmakeDerivation rec {
+gnustep.gsmakeDerivation rec {
   pname = "pikopixel";
   version = "1.0-b10";
 
   src = fetchurl {
-    url = "http://twilightedge.com/downloads/PikoPixel.Sources.${version}.tar.gz";
+    url = "https://twilightedge.com/downloads/PikoPixel.Sources.${version}.tar.gz";
     sha256 = "1b27npgsan2nx1p581b9q2krx4506yyd6s34r4sf1r9x9adshm77";
   };
 
   sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
 
   buildInputs = [
-    gnustep'.base
-    gnustep'.gui
-    gnustep'.back
+    gnustep.base
+    gnustep.gui
+    gnustep.back
   ];
 
   # Fix the Exec and Icon paths in the .desktop file, and save the file in the
@@ -38,8 +33,8 @@ in gnustep'.gsmakeDerivation rec {
 
   meta = with lib; {
     description = "Application for drawing and editing pixel-art images";
-    homepage = "http://twilightedge.com/mac/pikopixel/";
-    downloadPage = "http://twilightedge.com/mac/pikopixel/";
+    homepage = "https://twilightedge.com/mac/pikopixel/";
+    downloadPage = "https://twilightedge.com/mac/pikopixel/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

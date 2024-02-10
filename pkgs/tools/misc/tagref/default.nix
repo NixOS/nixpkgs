@@ -1,4 +1,5 @@
 { lib, fetchFromGitHub, rustPlatform }:
+
 rustPlatform.buildRustPackage rec {
   pname = "tagref";
   version = "1.8.4";
@@ -13,10 +14,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-Wis6C4Wlz7NScFeKXWODA8BKmRtL7adaYxPVR13wNsg=";
 
   meta = with lib; {
-    description = "Tagref helps you refer to other locations in your codebase.";
+    description = "Manage cross-references in your code";
     homepage = "https://github.com/stepchowfun/tagref";
     license = licenses.mit;
     maintainers = [ maintainers.yusdacra ];
     platforms = platforms.unix;
+    mainProgram = "tagref";
   };
 }

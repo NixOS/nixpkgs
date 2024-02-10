@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pg_featureserv";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kii9Qbff6dIAaHx3QfNPTg8g+QrBpZghGlHxrsGaMbo=";
+    sha256 = "sha256-GsloUZFgrOrJc23vKv+8iSeyIEKblaukPSCpZGRtSL4=";
   };
 
   vendorHash = "sha256-BHiEVyi3FXPovYy3iDP8q+y+LgfI4ElDPVZexd7nnuo=";
@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "Lightweight RESTful Geospatial Feature Server for PostGIS in Go";
     homepage = "https://github.com/CrunchyData/pg_featureserv";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
   };
 }

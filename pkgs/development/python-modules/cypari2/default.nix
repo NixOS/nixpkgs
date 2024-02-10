@@ -5,23 +5,24 @@
 , fetchPypi
 , pari
 , gmp
-, cython
+, cython_3
 , cysignals
 }:
 
 buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.1.3";
+  version = "2.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17beb467d3cb39fffec3227c468f0dd8db8a09129faeb95a6bb4c84b2b6c6683";
+    sha256 = "sha256-76SkTZb2k8sRVtof1vzMEw2vz5wZr0GFz3cL9E0A2/w=";
   };
 
   patches = [
     # patch to avoid some segfaults in sage's totallyreal.pyx test.
-    # (https://trac.sagemath.org/ticket/27267). depends on Cython patch.
+    # (https://trac.sagemath.org/ticket/27267).
     (fetchpatch {
       name = "use-trashcan-for-gen.patch";
       url = "https://raw.githubusercontent.com/sagemath/sage/b6ea17ef8e4d652de0a85047bac8d41e90b25555/build/pkgs/cypari/patches/trashcan.patch";
@@ -29,20 +30,13 @@ buildPythonPackage rec {
     })
   ];
 
-  # This differs slightly from the default python installPhase in that it pip-installs
-  # "." instead of "*.whl".
-  # That is because while the default install phase succeeds to build the package,
-  # it fails to generate the file "auto_paridecl.pxd".
-  installPhase = ''
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-
-    # install "." instead of "*.whl"
-    pip install . --no-index --no-warn-script-location --prefix="$out" --no-cache
+  preBuild = ''
+    # generate cythonized extensions (auto_paridecl.pxd is crucial)
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
   nativeBuildInputs = [
     pari
-    python.pythonForBuild.pkgs.pip
   ];
 
   buildInputs = [
@@ -51,10 +45,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cysignals
-    cython
+    cython_3
   ];
 
   checkPhase = ''
+    test -f "$out/${python.sitePackages}/cypari2/auto_paridecl.pxd"
     make check
   '';
 

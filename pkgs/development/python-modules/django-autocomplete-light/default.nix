@@ -20,6 +20,7 @@
 buildPythonPackage rec {
   pname = "django-autocomplete-light";
   version = "3.9.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yourlabs";

@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       diff regions to achieve exactly the merge output desired.
     '';
     mainProgram = "tkdiff";
-    maintainers = with lib.maintainers; [ robert-manchester ];
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = tk.meta.platforms;
   };
 })

@@ -41,5 +41,6 @@ nodePackages.n8n.override {
     description = "Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.";
     maintainers = with maintainers; [ freezeboy k900 ];
     license = licenses.sustainableUse;
+    mainProgram = "n8n";
   };
 }

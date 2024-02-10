@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ goibhniu fortuneteller2k ];
+    maintainers = with maintainers; [ goibhniu moni ];
     description = "Wacom digitizer driver for X11";
     homepage = "https://linuxwacom.sourceforge.net";
     license = licenses.gpl2Only;

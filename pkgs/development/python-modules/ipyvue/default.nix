@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ipyvue";
   version = "1.10.1";
+  format = "setuptools";
 
   disabled = isPy27;
 

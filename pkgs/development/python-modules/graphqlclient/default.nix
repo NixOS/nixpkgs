@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "graphqlclient";
   version = "0.2.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

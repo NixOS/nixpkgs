@@ -54,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ ehmry wegank ];
+    mainProgram = "unrar";
+    maintainers = with maintainers; [ wegank ];
     platforms = platforms.all;
   };
 })

@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       virtualisation = {
         cores = 2;
-        memorySize = 2048;
+        memorySize = 4096;
       };
     };
   };

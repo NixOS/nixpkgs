@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
   pname = "fortran-fpm";
 
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://github.com/fortran-lang/fpm/releases/download/v${version}/fpm-${version}.F90";
-    sha256 = "sha256-VWs4g7odtv1iyZunFD8el+u0CXKcQgnwOqPG/JcMzj8=";
+    sha256 = "sha256-SOVj23Sva5OW6+Sme9NxIQ4uqMbis8wjDmgYPOdQlCI=";
   };
 
   dontUnpack = true;
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.proofconstruction ];
     license = licenses.mit;
     platforms = platforms.all;
+    mainProgram = "fortran-fpm";
   };
 }

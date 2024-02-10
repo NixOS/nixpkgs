@@ -8,12 +8,7 @@ in {
   options.services.hardware.openrgb = {
     enable = mkEnableOption (lib.mdDoc "OpenRGB server");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.openrgb;
-      defaultText = literalMD "pkgs.openrgb";
-      description = lib.mdDoc "Set version of openrgb package to use.";
-    };
+    package = mkPackageOption pkgs "openrgb" { };
 
     motherboard = mkOption {
       type = types.nullOr (types.enum [ "amd" "intel" ]);

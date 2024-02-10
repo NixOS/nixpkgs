@@ -1,22 +1,26 @@
 { lib
-, python3
+, buildPythonApplication
 , fetchFromGitHub
+, pythonOlder
+, pyside6
+, poetry-core
 , pynitrokey
-, wrapQtAppsHook
+, pyudev
+, qt-material
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.2";
+  version = "2.1.5";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.9";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     rev = "v${version}";
-    hash = "sha256-VyhIFNXxH/FohgjhBeZXoQYppP7PEz+ei0qzsWz1xhk=";
+    hash = "sha256-mR13zUgCdNS09EnpGLrnOnoIn3p6ZM/0fHKg0OUMWj4=";
   };
 
   # https://github.com/Nitrokey/nitrokey-app2/issues/152
@@ -24,35 +28,19 @@ python3.pkgs.buildPythonApplication rec {
   # pythonRelaxDepsHook does not work here, because it runs in postBuild and
   # only modifies the dependencies in the built distribution.
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "pynitrokey ==" "pynitrokey >="
+    substituteInPlace pyproject.toml --replace 'pynitrokey = "' 'pynitrokey = ">='
   '';
 
-  # The pyproject.toml file seems to be incomplete and does not generate
-  # resources (i.e. run pyrcc5 and pyuic5) but the Makefile does.
-  preBuild = ''
-    make build-ui
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
-    flit-core
-    pyqt5
-    wrapQtAppsHook
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  dontWrapQtApps = true;
-
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     pynitrokey
     pyudev
-    pyqt5
-    pyqt5-stubs
+    pyside6
     qt-material
   ];
-
-  preFixup = ''
-    wrapQtApp "$out/bin/nitrokeyapp" \
-      --set-default CRYPTOGRAPHY_OPENSSL_NO_LEGACY 1
-  '';
 
   pythonImportsCheck = [
     "nitrokeyapp"
@@ -63,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    maintainers = with maintainers; [ _999eagle panicgh ];
     mainProgram = "nitrokeyapp";
   };
 }

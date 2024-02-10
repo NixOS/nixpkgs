@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     inherit (src.meta) homepage;
+    mainProgram = "omping";
   };
 }

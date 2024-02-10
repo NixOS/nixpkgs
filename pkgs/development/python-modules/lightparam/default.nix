@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "lightparam";
   version = "0.4.6";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

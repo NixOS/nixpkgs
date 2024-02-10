@@ -586,6 +586,7 @@ in
         }) all_peers;
 
     boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+    boot.kernelModules = [ "wireguard" ];
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
     systemd.services =

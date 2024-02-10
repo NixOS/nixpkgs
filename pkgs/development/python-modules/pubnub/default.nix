@@ -10,12 +10,13 @@
 , pytest-asyncio
 , requests
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "7.3.1";
-  format = "setuptools";
+  version = "7.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,8 +24,12 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V6yw/OscTGwrFcjHEhwtaT7txWLqbVj0uYjuoSAtP2E=";
+    hash = "sha256-XYovKAk2GEMi7GE/DVtLjMbww7guGkZzDOHC7Z6ZpJo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.29.0";
+  version = "1.34.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MiXG4MVzomyc4LjovPsvhmPngtJv85s6Ypo/Cm2Whho=";
+    hash = "sha256-G93YtgXo4li+tLWKgJFaxx4Ax4sK4F+vK6M3WTXIeiU=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tmuxp.git-pull.com/";
     changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg otavio ];
+    mainProgram = "tmuxp";
   };
 }

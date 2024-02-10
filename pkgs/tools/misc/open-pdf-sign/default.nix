@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    mainProgram = "open-pdf-sign";
   };
 })

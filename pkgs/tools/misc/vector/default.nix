@@ -9,10 +9,12 @@
 , oniguruma
 , zstd
 , rust-jemalloc-sys
+, rust-jemalloc-sys-unprefixed
 , Security
 , libiconv
 , coreutils
 , CoreServices
+, SystemConfiguration
 , tzdata
 , cmake
 , perl
@@ -27,14 +29,14 @@
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
 , nixosTests
 , nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.33.1";
+  version = "0.35.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -43,7 +45,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SjTXzLDxQ8tPSFirGCiUkgJbCHRRRK5Fr0CKgJ189Yc=";
+    hash = "sha256-hScmHDkKkR6g1rrVRzBjtkrq59w1efIjeRJdDxmb+nY=";
   };
 
   cargoLock = {
@@ -60,8 +62,10 @@ rustPlatform.buildRustPackage {
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
+  buildInputs =
+    [ oniguruma openssl protobuf rdkafka zstd ]
+    ++ lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -94,6 +98,8 @@ rustPlatform.buildRustPackage {
     "--skip=sources::aws_kinesis_firehose::tests::aws_kinesis_firehose_forwards_events_gzip_request"
     "--skip=sources::aws_kinesis_firehose::tests::handles_acknowledgement_failure"
   ];
+
+  patches = [ ./vector-pr19518.patch ];
 
   # recent overhauls of DNS support in 0.9 mean that we try to resolve
   # vector.dev during the checkPhase, which obviously isn't going to work.

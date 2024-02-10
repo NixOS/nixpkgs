@@ -24,7 +24,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOptionMD pkgs [ "greetd" "regreet" ] { };
+    package = lib.mkPackageOption pkgs [ "greetd" "regreet" ] { };
 
     settings = lib.mkOption {
       type = lib.types.either lib.types.path settingsFormat.type;
@@ -78,11 +78,15 @@ in
         else settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
-    systemd.tmpfiles.rules = let
-      group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
-    in [
-      "d /var/log/regreet 0755 greeter ${group} - -"
-      "d /var/cache/regreet 0755 greeter ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-regreet" = let
+      defaultConfig = {
+        user = "greeter";
+        group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
+        mode = "0755";
+      };
+    in {
+      "/var/log/regreet".d = defaultConfig;
+      "/var/cache/regreet".d = defaultConfig;
+    };
   };
 }

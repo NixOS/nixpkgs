@@ -12,7 +12,7 @@ let
     mkOption
     mdDoc
     mkEnableOption
-    mkPackageOptionMD
+    mkPackageOption
     types
     ;
 
@@ -24,7 +24,7 @@ in
 
 {
   options.services.wyoming.faster-whisper = with types; {
-    package = mkPackageOptionMD pkgs "wyoming-faster-whisper" { };
+    package = mkPackageOption pkgs "wyoming-faster-whisper" { };
 
     servers = mkOption {
       default = {};
@@ -121,6 +121,7 @@ in
   in mkIf (cfg.servers != {}) {
     systemd.services = mapAttrs' (server: options:
       nameValuePair "wyoming-faster-whisper-${server}" {
+        inherit (options) enable;
         description = "Wyoming faster-whisper server instance ${server}";
         after = [
           "network-online.target"
@@ -146,6 +147,8 @@ in
           CapabilityBoundingSet = "";
           DeviceAllow = if builtins.elem options.device [ "cuda" "auto" ] then [
             # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+            # CUDA not working? Check DeviceAllow and PrivateDevices first!
+            "/dev/nvidia0"
             "/dev/nvidia1"
             "/dev/nvidia2"
             "/dev/nvidia3"
@@ -160,7 +163,6 @@ in
           DevicePolicy = "closed";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
-          PrivateDevices = true;
           PrivateUsers = true;
           ProtectHome = true;
           ProtectHostname = true;

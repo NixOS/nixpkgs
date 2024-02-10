@@ -1,21 +1,21 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchpatch
+, callPackage
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
-, glog, boost, gflags, protobuf3_21
+, glog, boost, gflags, protobuf_21
 , config
 
 , enableJPEG      ? true, libjpeg
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
+, enableEXR ?     !stdenv.isDarwin, openexr_3
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
-, enableCuda      ? config.cudaSupport &&
-                    stdenv.hostPlatform.isx86_64
+, enableCuda      ? config.cudaSupport
 , cudaPackages ? { }
 , enableUnfree    ? false
 , enableIpp       ? false
@@ -186,7 +186,7 @@ stdenv.mkDerivation {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost gflags ]
-    ++ lib.optional useSystemProtobuf protobuf3_21
+    ++ lib.optional useSystemProtobuf protobuf_21
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -194,7 +194,7 @@ stdenv.mkDerivation {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
-    ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optionals enableEXR [ openexr_3 ]
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
@@ -218,8 +218,6 @@ stdenv.mkDerivation {
     ++ lib.optional enableCuda cudatoolkit;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
@@ -289,7 +287,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { pythonPath = []; } // {
+    tests = lib.optionalAttrs enableCuda {
+      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv3"; };
+    };
+  };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";

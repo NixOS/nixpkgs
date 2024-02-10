@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-subscription";
   version = "3.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

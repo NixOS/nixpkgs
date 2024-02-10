@@ -4,7 +4,7 @@
 , fetchYarnDeps
 , makeDesktopItem
 , copyDesktopItems
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , makeWrapper
 , nodejs
 , yarn
@@ -13,23 +13,23 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "22.0.3";
+  version = "22.1.18";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Im0T+1jm1IZT3UILsOJ4Rp5P5IiBUKcJJ+cqv3WsqXw=";
+    hash = "sha256-qOZm7XbF8QOx5rD5EJY0lJhaq2Yhp/nppOA4BIWheyE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-Abyu/WoNOPAIfRIThG7vKFECW9NQMgcBAkLgEPwdJDQ=";
+    hash = "sha256-TwI3NCIn5NnKXuwW5dBl4q6Ma5rZR7NVNb5hoKbmNLM=";
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    prefetch-yarn-deps
     makeWrapper
     nodejs
     yarn
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

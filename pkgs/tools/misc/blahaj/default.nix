@@ -5,13 +5,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "blahaj";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "BLAHAJ";
     rev = "v${version}";
-    hash = "sha256-rX6isAIlpNDBOGLmtvRXmqY90ByFfXeYI0HAAPIMXf8=";
+    hash = "sha256-CmMF9jDKUo+c8dYc2UEHKdBDE4dgwExcRS5sSUsUJik=";
   };
 
   meta = with lib; {
@@ -19,5 +19,6 @@ crystal.buildCrystalPackage rec {
     homepage = "https://blahaj.queer.software";
     license = licenses.bsd2;
     maintainers = with maintainers; [ aleksana cafkafk ];
+    mainProgram = "blahaj";
   };
 }

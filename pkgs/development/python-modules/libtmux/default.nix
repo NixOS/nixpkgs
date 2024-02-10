@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.23.2";
+  version = "0.25.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-W1gBhukBooPo8uej6i8i3UxLuDeBBeSX5xU50SyjjlA=";
+    hash = "sha256-cAogRdhJdXC0lMQRlWwSHQj205mG9uwd1XkFJYsAetA=";
   };
 
   postPatch = ''
-    sed -i '/addopts/d' setup.cfg
+    sed -i '/addopts/d' pyproject.toml
   '';
 
   nativeBuildInputs = [

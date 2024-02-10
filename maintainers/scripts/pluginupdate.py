@@ -17,6 +17,7 @@ import http
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -26,7 +27,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -192,6 +193,11 @@ class RepoGitHub(Repo):
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
             xml = req.read()
+
+            # Filter out illegal XML characters
+            illegal_xml_regex = re.compile(b"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]")
+            xml = illegal_xml_regex.sub(b"", xml)
+
             root = ET.fromstring(xml)
             latest_entry = root.find(ATOM_ENTRY)
             assert latest_entry is not None, f"No commits found in repository {self}"
@@ -788,14 +794,12 @@ def update_plugins(editor: Editor, args):
     autocommit = not args.no_commit
 
     if autocommit:
-        from datetime import date
-
         try:
             repo = git.Repo(os.getcwd())
-            updated = date.today().strftime('%m-%d-%Y')
+            updated = datetime.now(tz=UTC).strftime('%Y-%m-%d')
             print(args.outfile)
             commit(repo,
-                   f"{editor.attr_path}: updated the {updated}", [args.outfile]
+                   f"{editor.attr_path}: update on {updated}", [args.outfile]
                    )
         except git.InvalidGitRepositoryError as e:
             print(f"Not in a git repository: {e}", file=sys.stderr)

@@ -1,27 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeDesktopItem, SDL2, SDL2_image, SDL2_mixer, SDL2_net }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, makeDesktopItem
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_net
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
-  version = "4.1.1.0";
+  version = "4.3.8.1";
 
   src = fetchurl {
-    url = "https://www.artsoft.org/RELEASES/unix/${pname}/rocksndiamonds-${version}.tar.gz";
-    sha256 = "1k0m6l5g886d9mwwh6q0gw75qsb85mpf8i0rglh047app56nsk72";
+    url = "https://www.artsoft.org/RELEASES/linux/${pname}/${pname}-${version}-linux.tar.gz";
+    hash = "sha256-kc8E9hyXSr8UdwDA5I4/iP6NfpV/Lso5Q//E/cV02UA=";
   };
-
-  patches = [
-    # Pull upstream fix for -fno-common toolchain.
-    (fetchpatch {
-      name = "fno-common-p1.patch";
-      url = "https://git.artsoft.org/?p=rocksndiamonds.git;a=patch;h=b4271393b10b7c664a58f3db7349a3875c1676fe";
-      sha256 = "0bdy4d2ril917radmm0c2yh2gqfyh7q1c8kahig5xknn2rkf2iac";
-    })
-    (fetchpatch {
-      name = "fno-common-p2.patch";
-      url = "https://git.artsoft.org/?p=rocksndiamonds.git;a=patch;h=81dbde8a570a94dd2e938eff2f52dc5a3ecced21";
-      sha256 = "1mk5yb8pxrpxvvsxw3pjcbgx2c658baq9vmqqipbj5byhkkw7v2l";
-    })
-  ];
 
   desktopItem = makeDesktopItem {
     name = "rocksndiamonds";
@@ -33,11 +29,11 @@ stdenv.mkDerivation rec {
     categories = [ "Game" "LogicGame" ];
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net ];
+  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net zlib ];
 
   preBuild = ''
     dataDir="$out/share/rocksndiamonds"
-    makeFlags+="RO_GAME_DIR=$dataDir"
+    makeFlags+="BASE_PATH=$dataDir"
   '';
 
   installPhase = ''
@@ -47,7 +43,7 @@ stdenv.mkDerivation rec {
     cp rocksndiamonds $out/bin/
     ln -s ${desktopItem}/share/applications/* $appDir/
     ln -s $dataDir/graphics/gfx_classic/RocksIcon32x32.png $iconDir/rocksndiamonds.png
-    cp -r docs graphics levels music sounds $dataDir
+    cp -r conf docs graphics levels music sounds $dataDir
   '';
 
   enableParallelBuilding = true;
@@ -57,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.artsoft.org/rocksndiamonds/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej xfix ];
   };
 }

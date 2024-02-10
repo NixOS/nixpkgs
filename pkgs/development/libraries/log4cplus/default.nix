@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "log4cplus";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/log4cplus/log4cplus-${version}.tar.bz2";
-    sha256 = "sha256-oElFrKX7wEh1A8hSvvuc3vvDrj/mFLCKkFMz9t91Q4c=";
+    sha256 = "sha256-ZZfeeCd15OD7qP3K2TjDcJ/YOagITEtu3648xQRuJog=";
   };
 
   meta = {

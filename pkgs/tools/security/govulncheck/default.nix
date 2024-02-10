@@ -1,20 +1,29 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, substituteAll
 }:
 
 buildGoModule rec {
   pname = "govulncheck";
-  version = "1.0.1";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cewQ03dK/k3mXevE09M01Yox/3ZWP6IrG0H4QsZMzy8=";
+    hash = "sha256-GLZaJ/hVA1A2Mek1G7QkDGowqa5Bm4sRh0Y7QMhud/w=";
   };
 
-  vendorHash = "sha256-r9XshbgVA5rppJF46SFYPad344ZHMLWTHTnL6vbIFH8=";
+  patches = [
+    # patch in version information
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
+
+  vendorHash = "sha256-Jg2Nx63Xak149111jbBP6SgK3hze21Dx5qcDKXCqa48=";
 
   subPackages = [
     "cmd/govulncheck"

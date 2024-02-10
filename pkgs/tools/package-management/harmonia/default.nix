@@ -2,35 +2,41 @@
 , boost
 , fetchFromGitHub
 , libsodium
-, nix
+, nixVersions
 , pkg-config
 , rustPlatform
+, stdenv
 , nix-update-script
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "harmonia";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-LzStxaqoez144LhqLjLP3yNgCj/HFqKSy+JcAW/FwM8=";
+    hash = "sha256-72JMrXmxw/FuGjqXXxMIGiAbUUOqXEERdQwch+s3iwU=";
   };
 
-  cargoHash = "sha256-4DXIMsT69PhxqZX1j2aJ/XDLjvX76WbzEN0yxrnP9v0=";
+  cargoHash = "sha256-Q5Y5v7mmJpfZFGRgurTcRBRtbApFRrwqOBHdZTJbyzc=";
 
   nativeBuildInputs = [
-    pkg-config nix
+    pkg-config nixVersions.nix_2_19
   ];
 
   buildInputs = [
     boost
     libsodium
-    nix
+    nixVersions.nix_2_19
   ];
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   passthru = {
     updateScript = nix-update-script {

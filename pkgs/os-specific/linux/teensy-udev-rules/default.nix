@@ -19,7 +19,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.pjrc.com/teensy/00-teensy.rules";
-    description = ''
+    description = "udev rules for the Teensy microcontrollers";
+    longDescription = ''
       udev rules that give non-root users permission to communicate with the
       Teensy family of microcontrolers.
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
       this package's homepage) for possible workarounds.
     '';
     platforms = platforms.linux;
-    license = "unknown";
+    license = licenses.unfree; # No license specified.
     maintainers = with maintainers; [ aidalgol ];
   };
 }

@@ -2,7 +2,6 @@
 , lib
 , callPackage
 , fetchurl
-, fetchpatch
 , makeWrapper
 , cmake
 , coreutils
@@ -58,7 +57,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.28.08";
+  version = "6.30.04";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -66,7 +65,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-o+ZLTAH4fNm75X5h75a0FibkmwRGCVBw1B2b+6NSaGI=";
+    hash = "sha256-K0GAtpjznMZdkQhNgzqIRRWzJbxfZzyOOavoGLAl2Mw=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -110,26 +109,18 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
-    # glibc >=2.38 already has strlcat implemented.
-    # merged upstream, remove on next package bump.
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/8fb0e35446ed67c9d56639b4708c8f05459b7f84.patch";
-      hash = "sha256-7EabmYanqlQsYSQsi+S9eWs1v1pY6MncopL420Y3D4w=";
-    })
-  ] ++ lib.optionals (python.pkgs.pythonAtLeast "3.11") [
-    # Fix build against Python 3.11
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc.patch";
-      hash = "sha256-4qur2e3SxMIPgOg4IjlvuULR2BObuP7xdvs+LmNT2/s=";
-    })
   ];
 
   preConfigure = ''
-    rm -rf builtins/*
+    for path in builtins/*; do
+      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
+        rm -rf "$path"
+      fi
+    done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
-    substituteInPlace interpreter/llvm/src/tools/clang/tools/driver/CMakeLists.txt \
+    substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
       --replace 'add_clang_symlink(''${link} clang)' ""
 
     # Don't require textutil on macOS
@@ -144,8 +135,8 @@ stdenv.mkDerivation rec {
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '' + lib.optionalString stdenv.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
-    substituteInPlace core/CMakeLists.txt \
-      --replace "-F/System/Library/PrivateFrameworks" ""
+    substituteInPlace core/macosx/CMakeLists.txt \
+      --replace "-F/System/Library/PrivateFrameworks " ""
   '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
@@ -159,7 +150,7 @@ stdenv.mkDerivation rec {
     "-Dbuiltin_freetype=OFF"
     "-Dbuiltin_gtest=OFF"
     "-Dbuiltin_nlohmannjson=OFF"
-    "-Dbuiltin_openui5=OFF"
+    "-Dbuiltin_openui5=ON"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
     "-Dcastor=OFF"
@@ -188,12 +179,13 @@ stdenv.mkDerivation rec {
     "-Dpythia6=OFF"
     "-Dpythia8=OFF"
     "-Drfio=OFF"
-    "-Droot7=OFF"
+    "-Droot7=ON"
     "-Dsqlite=OFF"
     "-Dssl=ON"
     "-Dtmva=ON"
+    "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
-    "-Dwebgui=OFF"
+    "-Dwebgui=ON"
     "-Dxml=ON"
     "-Dxrootd=ON"
   ]
@@ -206,6 +198,9 @@ stdenv.mkDerivation rec {
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
   ];
+
+  # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
 
   # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
   # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.

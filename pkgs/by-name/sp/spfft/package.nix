@@ -6,9 +6,16 @@
 , mpi
 , gfortran
 , llvmPackages
-, gpuBackend ? "none"
 , cudaPackages
 , rocmPackages
+, config
+, gpuBackend ? (
+  if config.cudaSupport
+  then "cuda"
+  else if config.rocmSupport
+  then "rocm"
+  else "none"
+)
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
@@ -27,13 +34,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     gfortran
-  ];
+   ] ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
 
   buildInputs = [
     fftw
-  ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optionals (gpuBackend == "rocm") [
+  ] ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.libcufft
+    cudaPackages.cuda_cudart
+  ] ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocfft
     rocmPackages.hipfft

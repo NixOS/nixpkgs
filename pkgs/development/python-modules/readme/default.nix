@@ -2,12 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, readme_renderer
+, readme-renderer
 }:
 
 buildPythonPackage rec {
   pname = "readme";
   version = "0.7.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    readme_renderer
+    readme-renderer
   ];
 
   checkPhase = ''
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   # tests are not included with pypi release
-  # package is not readme_renderer
+  # package is not readme-renderer
   doCheck = false;
 
   meta = with lib; {

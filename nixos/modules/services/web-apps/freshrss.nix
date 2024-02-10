@@ -12,12 +12,7 @@ in
   options.services.freshrss = {
     enable = mkEnableOption (mdDoc "FreshRSS feed reader");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.freshrss;
-      defaultText = lib.literalExpression "pkgs.freshrss";
-      description = mdDoc "Which FreshRSS package to use.";
-    };
+    package = mkPackageOption pkgs "freshrss" { };
 
     defaultUser = mkOption {
       type = types.str;
@@ -233,9 +228,10 @@ in
       };
       users.groups."${cfg.user}" = { };
 
-      systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      ];
+      systemd.tmpfiles.settings."10-freshrss".${cfg.dataDir}.d = {
+        inherit (cfg) user;
+        group = config.users.users.${cfg.user}.group;
+      };
 
       systemd.services.freshrss-config =
         let
@@ -299,7 +295,6 @@ in
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
         after = [ "freshrss-config.service" ];
-        wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
         environment = {
           DATA_PATH = cfg.dataDir;

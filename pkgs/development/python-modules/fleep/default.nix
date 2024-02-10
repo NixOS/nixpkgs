@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "fleep";
   version = "1.0.1";
+  format = "setuptools";
 
   # Pypi version does not have tests
   src = fetchFromGitHub {

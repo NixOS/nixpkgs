@@ -17,12 +17,8 @@ in {
     services.bee = {
       enable = mkEnableOption (lib.mdDoc "Ethereum Swarm Bee");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.bee;
-        defaultText = literalExpression "pkgs.bee";
-        example = literalExpression "pkgs.bee-unstable";
-        description = lib.mdDoc "The package providing the bee binary for the service.";
+      package = mkPackageOption pkgs "bee" {
+        example = "bee-unstable";
       };
 
       settings = mkOption {

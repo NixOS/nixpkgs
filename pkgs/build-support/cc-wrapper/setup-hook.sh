@@ -111,7 +111,7 @@ export CC${role_post}=@named_cc@
 export CXX${role_post}=@named_cxx@
 
 # If unset, assume the default hardening flags.
-: ${NIX_HARDENING_ENABLE="fortify fortify3 stackprotector pic strictoverflow format relro bindnow"}
+: ${NIX_HARDENING_ENABLE="@default_hardening_flags_str@"}
 export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file

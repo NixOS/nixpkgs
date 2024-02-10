@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "psensor";
   };
 }

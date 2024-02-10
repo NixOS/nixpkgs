@@ -3,7 +3,7 @@
 , useSteamRun ? true }:
 
 let
-  rev = "1.0.6";
+  rev = "1.0.7";
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
@@ -13,7 +13,7 @@ in
       owner = "goatcorp";
       repo = "XIVLauncher.Core";
       inherit rev;
-      hash = "sha256-P1i12vw9KQOTL7QBxjKPSlda5rvoyl7DGmuuD5iVEQs=";
+      hash = "sha256-bWrFGaNkcKo5vUhhrpzEMuX1Ws6ud57sJ0tM4CUuUEk=";
       fetchSubmodules = true;
     };
 
@@ -71,7 +71,7 @@ in
 
     meta = with lib; {
       description = "Custom launcher for FFXIV";
-      homepage = "https://github.com/goatcorp/FFXIVQuickLauncher";
+      homepage = "https://github.com/goatcorp/XIVLauncher.Core";
       license = licenses.gpl3;
       maintainers = with maintainers; [ sersorrel witchof0x20 ];
       platforms = [ "x86_64-linux" ];

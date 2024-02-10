@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
+, fetchpatch
 , bash
 , cmake
 , colordiff
@@ -16,19 +17,27 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.8.0";
+  version = "2.9.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9HFCFgpRXqefFJLulwvi6nx0fl0G6IXI9gSinekJXRU=";
+    hash = "sha256-4LEKVh3jNU3xOq75+IQezjhbL/6uAGQ3r0Au2cxx1WA=";
   };
 
   patches = [
     # Refer to unifdef by absolute path.
     ./unifdef.patch
+
+    # Refer to shell via /usr/bin/env:
+    #   https://github.com/marxin/cvise/pull/121
+    (fetchpatch {
+      name = "env-shell.patch";
+      url = "https://github.com/marxin/cvise/commit/6a416eb590be978a2ad25c610974fdde84e88651.patch";
+      hash = "sha256-Kn6+TXP+wJpMs6jrgsa9OwjXf6vmIgGzny8jg3dfKWA=";
+    })
   ];
 
   postPatch = ''
@@ -36,10 +45,6 @@ buildPythonApplication rec {
     # tested compilers.
     substituteInPlace CMakeLists.txt \
       --replace " -Werror " " "
-
-    # 'cvise --command=...' generates a script with hardcoded shebang.
-    substituteInPlace cvise.py \
-      --replace "#!/bin/bash" "#!${bash}/bin/bash"
 
     substituteInPlace cvise/utils/testing.py \
       --replace "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , poetry-core
 , pkg-config
 , pytestCheckHook
@@ -36,6 +37,10 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ poetry-core ];
+
+  # ModuleNotFoundError: No module named 'distutils'
+  # https://github.com/matze/pkgconfig/issues/64
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

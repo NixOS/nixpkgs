@@ -8,11 +8,12 @@
 
 buildPythonPackage rec {
   pname = "aiorwlock";
-  version = "1.3.0";
+  version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g/Eth99LlyiguP2hdWWFqw1lKxB7q1nGCE4bGtaSq0U=";
+    hash = "sha256-TOpb7E6dA1M6JpGSmTlIIqFCKqUZvKndCReOxJD40cw=";
   };
 
   nativeCheckInputs = [

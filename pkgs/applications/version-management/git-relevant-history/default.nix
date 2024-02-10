@@ -20,5 +20,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = [ maintainers.bendlas ];
+    mainProgram = "git-relevant-history";
   };
 }

@@ -11,7 +11,7 @@ with pkgs; {
     {
       services.postgresql = {
         enable = true;
-        extraPlugins = [ pgjwt pgtap ];
+        extraPlugins = ps: with ps; [ pgjwt pgtap ];
       };
     };
   };

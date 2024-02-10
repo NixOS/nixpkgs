@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "smpeg";
@@ -16,7 +16,23 @@ stdenv.mkDerivation rec {
     ./gcc6.patch
     ./libx11.patch
     ./gtk.patch
+    # These patches remove use of the `register` storage class specifier,
+    # allowing smpeg to build with clang 16, which defaults to C++17.
+    (fetchpatch {
+      url = "https://github.com/icculus/smpeg/commit/cc114ba0dd8644c0d6205bbce2384781daeff44b.patch";
+      hash = "sha256-GxSD82j05pw0r2SxmPYAe/BXX4iUc+iHWhB9Ap4GzfA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/icculus/smpeg/commit/b369feca5bf99d6cff50d8eb316395ef48acf24f.patch";
+      hash = "sha256-U+a6dbc5cm249KlUcf4vi79yUiT4hgEvMv522K4PqUc=";
+    })
   ];
+
+  postPatch = ''
+    substituteInPlace video/gdith.cpp \
+      --replace 'register int' 'int' \
+      --replace 'register Uint16' 'Uint16'
+  '';
 
   enableParallelBuilding = true;
 

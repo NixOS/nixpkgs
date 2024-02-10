@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.deepin.members;
+    broken = true;
   };
 }
 

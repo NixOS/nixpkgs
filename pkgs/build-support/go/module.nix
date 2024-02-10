@@ -39,6 +39,8 @@
   # Not needed with buildGoModule
 , goPackagePath ? ""
 
+, ldflags ? [ ]
+
   # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
@@ -153,6 +155,9 @@ let
 
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
     inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
+
+    # If not set to an explicit value, set the buildid empty for reproducibility.
+    ldflags = ldflags ++ lib.optionals (!lib.any (lib.hasPrefix "-buildid=") ldflags) [ "-buildid=" ];
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -289,7 +294,8 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go goModules vendorHash; } // { inherit (args') vendorSha256; };
+    passthru = passthru // { inherit go goModules vendorHash; }
+                        // lib.optionalAttrs (args' ? vendorSha256 ) { inherit (args') vendorSha256; };
 
     meta = {
       # Add default meta information
@@ -297,6 +303,8 @@ let
     } // meta;
   });
 in
+lib.warnIf (args' ? vendorSha256) "`vendorSha256` is deprecated. Use `vendorHash` instead"
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
   package

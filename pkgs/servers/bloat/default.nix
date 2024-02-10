@@ -6,12 +6,12 @@
 
 buildGoModule {
   pname = "bloat";
-  version = "unstable-2023-10-15";
+  version = "unstable-2023-12-28";
 
   src = fetchgit {
     url = "git://git.freesoftwareextremist.com/bloat";
-    rev = "67b13c71baea56eeb15532ca1b1377f6da8d18ac";
-    hash = "sha256-h885uAuVjpVsp5cAAX9pIxfydcBiajBX3ZSmQUr3/4Q=";
+    rev = "1d61f1aa27376e778b7a517fdd5739a8c1976d2e";
+    hash = "sha256-u75COa68sKhWeR3asQGgu2thQmDDGpJPmXLgnesQfNc=";
   };
 
   vendorHash = null;
@@ -38,5 +38,6 @@ buildGoModule {
     downloadPage = "https://git.freesoftwareextremist.com/bloat/";
     license = licenses.cc0;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "bloat";
   };
 }

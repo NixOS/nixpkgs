@@ -9,25 +9,24 @@
 , ipykernel
 , jupyter-core
 , jupyter-lsp
-, jupyterlab_server
+, jupyterlab-server
 , jupyter-server
 , notebook-shim
 , jinja2
 , tomli
 , pythonOlder
-, jupyter-packaging
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.0.6";
-  format = "pyproject";
+  version = "4.0.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bEOuWmof0v36/LNFQASVi95tp2Mxq7RM/8b55Daxm6E=";
+    hash = "sha256-ll2S76gqU47XDMs5aNmqu6eIhA2oguE9ewYXgM3tw7c=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     ipykernel
     jupyter-core
     jupyter-lsp
-    jupyterlab_server
+    jupyterlab-server
     jupyter-server
     notebook-shim
     jinja2

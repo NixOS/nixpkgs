@@ -7,7 +7,7 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , electron
 , libpulseaudio
 , pipewire
@@ -19,28 +19,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.18";
+  version = "1.4.10";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-evOwjHUmeGw8AUpXSig8zVW2cpJbWkNTH/RUuNipFsQ=";
+    hash = "sha256-dR9YJJBBxvnJkD42+MwIql3B1dlA6WUSLJ//lW22mmc=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-tMC8/qHYli7+OTdxVWRDEyCNzrkYA+zKlHJXlTsl+W0=";
+    hash = "sha256-Z2vnLr14F/Etuq9yWH7ygQwa54an7v99LbU3gPcEuII=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

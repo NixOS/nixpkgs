@@ -7,16 +7,26 @@ root=../../../..
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 
+attr_path() {
+  case "$1" in
+    pagessrht) printf "sourcehut.$1";;
+    *) printf "sourcehut.python.pkgs.$1";;
+  esac
+}
+
 default() {
-  (cd "$root" && nix-instantiate --eval --strict -A "sourcehut.python.pkgs.$1.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+  local p="$(attr_path "$1")"
+  (cd "$root" && nix-instantiate --eval --strict -A $p.meta.position | sed -re 's/^"(.*):[0-9]+"$/\1/')
 }
 
 version() {
-  (cd "$root" && nix-instantiate --eval --strict -A "sourcehut.python.pkgs.$1.version" | tr -d '"')
+  local p="$(attr_path "$1")"
+  (cd "$root" && nix-instantiate --eval --strict -A $p.version | tr -d '"')
 }
 
 src_url() {
-  nix-instantiate --eval --strict --expr " with import $root {}; let src = sourcehut.python.pkgs.$1.drvAttrs.src; in src.meta.homepage" | tr -d '"'
+  local p="$(attr_path "$1")"
+  nix-instantiate --eval --strict --expr " with import $root {}; let src = $p.drvAttrs.src; in src.meta.homepage" | tr -d '"'
 }
 
 get_latest_version() {
@@ -35,8 +45,9 @@ update_version() {
   default_nix="$(default "$1")"
   oldVersion="$(version "$1")"
   version="$(get_latest_version "$1")"
+  local p="$(attr_path "$1")"
 
-  (cd "$root" && update-source-version "sourcehut.python.pkgs.$1" "$version")
+  (cd "$root" && update-source-version "$p" "$version")
 
   # Update vendorHash of Go modules
   retry=true

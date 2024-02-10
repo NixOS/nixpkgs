@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "safeio";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "safeIO";

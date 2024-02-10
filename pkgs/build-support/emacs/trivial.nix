@@ -2,8 +2,6 @@
 
 { callPackage, lib, ... }@envargs:
 
-with lib;
-
 args:
 
 callPackage ./generic.nix envargs ({

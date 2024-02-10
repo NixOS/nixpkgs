@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonAtLeast
 , pythonOlder
 , pytestCheckHook
@@ -10,6 +11,7 @@
 , packaging
 , psutil
 , pyyaml
+, safetensors
 , torch
 , evaluate
 , parameterized
@@ -18,15 +20,16 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.24.1";
-  format = "pyproject";
+  version = "0.26.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DKyFb+4DUMhVUwr+sgF2IaJS9pEj2o2shGYwExfffWg=";
+    hash = "sha256-l0RSBVAa2u3bGDLbg/e/1UP5WO8z2+YBqzwdviAcMA0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -36,6 +39,7 @@ buildPythonPackage rec {
     packaging
     psutil
     pyyaml
+    safetensors
     torch
   ];
 
@@ -73,9 +77,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
     "CheckpointTest"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # python3.11 not yet supported for torch.compile
-    "test_dynamo_extract_model"
   ];
 
   disabledTestPaths = lib.optionals (!(stdenv.isLinux && stdenv.isx86_64)) [

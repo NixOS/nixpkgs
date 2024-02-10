@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pymorphy2";
   version = "0.9.1";
+  format = "setuptools";
 
   disabled = !isPy3k;
 

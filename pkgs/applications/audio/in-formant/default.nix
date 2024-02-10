@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp in-formant $out/bin
+    install -Dm444 $src/dist-res/in-formant.desktop -t $out/share/applications
+    install -Dm444 $src/dist-res/in-formant.png -t $out/share/icons/hicolor/512x512/apps
   '';
 
   meta = with lib; {

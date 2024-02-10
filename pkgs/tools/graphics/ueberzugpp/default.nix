@@ -24,8 +24,6 @@
 , wayland-protocols
 , enableX11 ? stdenv.isLinux
 , xorg
-, withoutStdRanges ? stdenv.isDarwin
-, range-v3
 }:
 
 stdenv.mkDerivation rec {
@@ -69,8 +67,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableX11 [
     xorg.libX11
     xorg.xcbutilimage
-  ] ++ lib.optionals withoutStdRanges [
-    range-v3
   ];
 
   cmakeFlags = lib.optionals (!enableOpencv) [

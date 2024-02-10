@@ -1,16 +1,16 @@
 {buildGoModule, fetchFromGitHub, lib}:
 buildGoModule rec {
   pname = "cf-vault";
-  version = "0.0.16";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-puuP7L8KJ3MvlWz5tOeov8HZad+Lvo64DqTbaKPfg6o=";
+    sha256 = "sha256-vp9ufjNZabY/ck2lIT+QpD6IgaVj1BkBRTjPxkb6IjQ=";
   };
 
-  vendorHash = "sha256-cnv3vustgougdfU9RlyP4O3e7kx9nNzzJm1Q2d+sCDo=";
+  vendorHash = "sha256-7qFB1Y1AnqMgdu186tAXCdoYOhCMz8pIh6sY02LbIgs=";
 
   meta = with lib; {
     description = ''

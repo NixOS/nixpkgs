@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib
-    mv lib*${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/
+    mv lib*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
 
     mkdir -p $out/include
     mv *.h $out/include/

@@ -1,4 +1,4 @@
-From afbe4002948e60ee3b27cb9be9e549ae416373f8 Mon Sep 17 00:00:00 2001
+From 90734859d2f9e6b9a1754c3e694ceb1a3c870bce Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Thu, 13 Apr 2023 23:42:29 +0800
 Subject: [PATCH 01/11] qtbase: qmake: always use libname instead of absolute

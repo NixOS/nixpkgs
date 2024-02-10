@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "baycomp";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

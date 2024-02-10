@@ -11,29 +11,37 @@ index 3fb887c3..e8cbe1bd 100644
  Terminal=false
  NoDisplay=true
  Icon=org.gnome.Shell.Extensions.GSConnect
+diff --git a/src/__nix-prepend-search-paths.js b/src/__nix-prepend-search-paths.js
+new file mode 100644
+index 00000000..d009dfd9
+--- /dev/null
++++ b/src/__nix-prepend-search-paths.js
+@@ -0,0 +1,2 @@
++import GIRepository from 'gi://GIRepository';
++'@typelibPath@'.split(':').forEach(path => GIRepository.Repository.prepend_search_path(path));
 diff --git a/src/extension.js b/src/extension.js
-index 3fae443a..7aa19842 100644
+index 53ecd5fc..78782357 100644
 --- a/src/extension.js
 +++ b/src/extension.js
-@@ -4,6 +4,8 @@
+@@ -2,6 +2,8 @@
+ //
+ // SPDX-License-Identifier: GPL-2.0-or-later
  
- 'use strict';
- 
-+'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));
++import './__nix-prepend-search-paths.js';
 +
- const Gio = imports.gi.Gio;
- const GObject = imports.gi.GObject;
- const Gtk = imports.gi.Gtk;
+ import Gio from 'gi://Gio';
+ import GObject from 'gi://GObject';
+ 
 diff --git a/src/prefs.js b/src/prefs.js
-index b8860c82..d6292606 100644
+index dd20fd20..5f82c53a 100644
 --- a/src/prefs.js
 +++ b/src/prefs.js
-@@ -4,6 +4,8 @@
+@@ -2,6 +2,8 @@
+ //
+ // SPDX-License-Identifier: GPL-2.0-or-later
  
- 'use strict';
- 
-+'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));
++import './__nix-prepend-search-paths.js';
 +
- const {Gio, GLib, Adw} = imports.gi;
- 
- // Bootstrap
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import Adw from 'gi://Adw';

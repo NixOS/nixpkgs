@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sassman/t-rec-rs";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ hoverbear matthiasbeyer ];
+    mainProgram = "t-rec";
   };
 }

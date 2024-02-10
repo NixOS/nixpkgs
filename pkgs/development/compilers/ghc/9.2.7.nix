@@ -46,12 +46,9 @@
 
 , #  Whether to build sphinx documentation.
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , enableHaddockProgram ?
@@ -194,6 +191,8 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
       sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
     })
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    ./docs-sphinx-7.patch
     # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
@@ -216,7 +215,7 @@ stdenv.mkDerivation (rec {
     # These cause problems as they're not eliminated by GHC's dead code
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./Cabal-3.6-3.8-paths-fix-cycle-aarch64-darwin.patch
+    ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
   ];
 
   postPatch = "patchShebangs .";

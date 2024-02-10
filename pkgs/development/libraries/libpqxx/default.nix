@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpqxx";
-  version = "7.7.0";
+  version = "7.7.5";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = pname;
     rev = version;
-    sha256 = "sha256-O30czHwEDXz5xY4o3MWhmEK06OKTKMQCy0M6qwSEpy8=";
+    sha256 = "sha256-mvGPMbk4b8NmPvzy5hS+Au69NtDGha8ONTEQf6I3VZE=";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--enable-shared --disable-documentation" ];
+  CXXFLAGS = [ "-std=c++17" ];
 
   meta = {
     description = "A C++ library to access PostgreSQL databases";

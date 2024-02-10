@@ -17,5 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [ fuzzdk ];
     platforms = with lib.platforms; linux;
+    mainProgram = "xdiskusage";
   };
 })

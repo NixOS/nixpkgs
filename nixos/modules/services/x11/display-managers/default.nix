@@ -96,7 +96,7 @@ let
       )}
 
       # Speed up application start by 50-150ms according to
-      # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
+      # https://kdemonkey.blogspot.com/2008/04/magic-trick.html
       compose_cache="''${XCOMPOSECACHE:-$HOME/.compose-cache}"
       mkdir -p "$compose_cache"
       # To avoid accidentally deleting a wrongly set up XCOMPOSECACHE directory,
@@ -514,7 +514,7 @@ in
 
     # Make xsessions and wayland sessions available in XDG_DATA_DIRS
     # as some programs have behavior that depends on them being present
-    environment.sessionVariables.XDG_DATA_DIRS = [
+    environment.sessionVariables.XDG_DATA_DIRS = lib.mkIf (cfg.displayManager.sessionPackages != [ ]) [
       "${cfg.displayManager.sessionData.desktops}/share"
     ];
   };

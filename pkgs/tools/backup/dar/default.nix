@@ -1,7 +1,6 @@
-args @ {
+{
   lib,
   stdenv,
-  llvmPackages_12, # Anything newer than 11
   fetchzip,
   which,
   attr,
@@ -21,12 +20,6 @@ args @ {
   zstd,
   CoreFoundation,
 }:
-
-let
-  # Fails to build with clang-11 on Darwin:
-  # error: exception specification of overriding function is more lax than base version
-  stdenv = if args.stdenv.isDarwin then llvmPackages_12.stdenv else args.stdenv;
-in
 
 stdenv.mkDerivation rec {
   version = "2.7.13";

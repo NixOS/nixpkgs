@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "anyconfig";
   version = "0.13.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

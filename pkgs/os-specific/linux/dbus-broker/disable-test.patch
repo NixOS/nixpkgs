@@ -1,0 +1,11 @@
+--- b/src/meson.build
++++ a/src/meson.build
+@@ -196,9 +195,6 @@
+ test_fdlist = executable('test-fdlist', ['util/test-fdlist.c'], dependencies: dep_bus)
+ test('Utility File-Desciptor Lists', test_fdlist)
+
+-test_fs = executable('test-fs', ['util/test-fs.c'], dependencies: dep_bus)
+-test('File System Helpers', test_fs)
+-
+ test_match = executable('test-match', ['bus/test-match.c'], dependencies: dep_bus)
+ test('D-Bus Match Handling', test_match)

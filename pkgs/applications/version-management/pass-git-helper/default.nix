@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname   = "pass-git-helper";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner  = "languitar";
     repo   = "pass-git-helper";
-    rev    = "v${version}";
-    sha256 = "sha256-An9JKnS/Uor7iZ+lbBGR3eOkxOgV+SjnCWN/QmqFI/I=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-wkayj7SvT3SOM+rol17+8LQJR/YXSC6I+iKbHRUbdZc=";
   };
 
   propagatedBuildInputs = [ pyxdg ];
@@ -22,5 +22,6 @@ buildPythonApplication rec {
     description = "A git credential helper interfacing with pass, the standard unix password manager";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hmenke vanzef ];
+    mainProgram = "pass-git-helper";
   };
 }

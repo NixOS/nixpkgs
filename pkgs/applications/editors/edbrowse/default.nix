@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl1Plus;
     maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
     platforms = platforms.linux;
+    mainProgram = "edbrowse";
   };
 }
 # TODO: send the patch to upstream developers

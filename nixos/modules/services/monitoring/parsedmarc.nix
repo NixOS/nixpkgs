@@ -301,6 +301,7 @@ in
               description = lib.mdDoc ''
                 The addresses to send outgoing mail to.
               '';
+              apply = x: if x == [] then null else lib.concatStringsSep "," x;
             };
           };
 

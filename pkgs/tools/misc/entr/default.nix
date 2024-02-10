@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "5.4";
+  version = "5.5";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
-    hash = "sha256-SR3e0sw/Hc2NJvSWpMezqZa5HHqyCIPKN1A3o5giH54=";
+    hash = "sha256-EowM4u/qWua9P9M8PNMeFh6wwCYJ2HF6036VtBZW5SY=";
   };
 
   postPatch = ''
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub synthetica ];
+    mainProgram = "entr";
   };
 }

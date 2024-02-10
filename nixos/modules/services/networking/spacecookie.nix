@@ -27,15 +27,8 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "spacecookie");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.spacecookie;
-        defaultText = literalExpression "pkgs.spacecookie";
-        example = literalExpression "pkgs.haskellPackages.spacecookie";
-        description = lib.mdDoc ''
-          The spacecookie derivation to use. This can be used to
-          override the used package or to use another version.
-        '';
+      package = mkPackageOption pkgs "spacecookie" {
+        example = "haskellPackages.spacecookie";
       };
 
       openFirewall = mkOption {

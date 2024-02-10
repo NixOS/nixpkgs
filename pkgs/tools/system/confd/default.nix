@@ -20,5 +20,6 @@ buildGoPackage rec {
     homepage = "https://github.com/kelseyhightower/confd";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zimbatm ];
+    mainProgram = "confd";
   };
 }

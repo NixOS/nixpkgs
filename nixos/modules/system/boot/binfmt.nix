@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mkOption mkDefault types optionalString stringAfter;
+  inherit (lib) mkOption mkDefault types optionalString;
 
   cfg = config.boot.binfmt;
 

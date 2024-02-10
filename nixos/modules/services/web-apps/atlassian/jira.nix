@@ -132,18 +132,14 @@ in
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atlassian-jira;
-        defaultText = literalExpression "pkgs.atlassian-jira";
-        description = lib.mdDoc "Atlassian JIRA package to use.";
-      };
+      package = mkPackageOption pkgs "atlassian-jira" { };
 
-      jrePackage = mkOption {
-        type = types.package;
-        default = pkgs.oraclejre8;
-        defaultText = literalExpression "pkgs.oraclejre8";
-        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+      jrePackage = mkPackageOption pkgs "oraclejre8" {
+        extraDescription = ''
+        ::: {.note }
+        Atlassian only supports the Oracle JRE (JRASERVER-46152).
+        :::
+        '';
       };
     };
   };

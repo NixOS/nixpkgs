@@ -16,14 +16,7 @@ with lib;
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.v2ray;
-        defaultText = literalExpression "pkgs.v2ray";
-        description = lib.mdDoc ''
-          Which v2ray package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "v2ray" { };
 
       configFile = mkOption {
         type = types.nullOr types.str;

@@ -29,6 +29,7 @@ buildFHSEnv {
     perl
     psmisc
     python3
+    unzip
     which
     xorg.xrandr
     zstd

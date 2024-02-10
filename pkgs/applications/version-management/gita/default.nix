@@ -39,5 +39,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/nosarthur/gita";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
+    mainProgram = "gita";
   };
 }

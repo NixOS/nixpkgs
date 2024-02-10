@@ -42,5 +42,6 @@ buildGoModule rec {
     homepage = "https://github.com/doronbehar/pistol";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
+    mainProgram = "pistol";
   };
 }

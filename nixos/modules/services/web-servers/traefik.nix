@@ -126,12 +126,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      default = pkgs.traefik;
-      defaultText = literalExpression "pkgs.traefik";
-      type = types.package;
-      description = lib.mdDoc "Traefik package to use.";
-    };
+    package = mkPackageOption pkgs "traefik" { };
 
     environmentFiles = mkOption {
       default = [];
@@ -149,6 +144,7 @@ in {
 
     systemd.services.traefik = {
       description = "Traefik web server";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 86400;

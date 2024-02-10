@@ -6,7 +6,7 @@
 , nest-asyncio
 , qiskit-terra
 , requests
-, requests_ntlm
+, requests-ntlm
 , websocket-client
   # Visualization inputs
 , withVisualization ? true
@@ -41,6 +41,7 @@ in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
   version = "0.20.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -56,7 +57,7 @@ buildPythonPackage rec {
     nest-asyncio
     qiskit-terra
     requests
-    requests_ntlm
+    requests-ntlm
     websocket-client
     websockets
   ] ++ lib.optionals withVisualization visualizationPackages;

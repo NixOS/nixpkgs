@@ -36,10 +36,9 @@ builder rec {
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
-  depsBuildBuild = if stdenv.buildPlatform.isDarwin
-    then [ buildPackages.darwin.apple_sdk_11_0.stdenv.cc ]
-    else [ buildPackages.stdenv.cc ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     pkgsBuildBuild.guile_3_0;
   nativeBuildInputs = [
     makeWrapper
@@ -75,6 +74,7 @@ builder rec {
 
   patches = [
     ./eai_system.patch
+    ./guile-hurd-posix-spawn.patch
   ] ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
   ++ lib.optional stdenv.isDarwin
     (fetchpatch {
@@ -129,6 +129,9 @@ builder rec {
   doCheck = false;
   doInstallCheck = doCheck;
 
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
+
   setupHook = ./setup-hook-3.0.sh;
 
   passthru = rec {
@@ -161,7 +164,7 @@ builder rec {
       foreign function call interface, and powerful string processing.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo lovek323 vrthra ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

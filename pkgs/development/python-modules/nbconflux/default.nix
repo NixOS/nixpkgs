@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "nbconflux";
   version = "0.7.0";
+  format = "setuptools";
   disabled = isPy27; # no longer compatible with python 2 urllib
 
   src = fetchFromGitHub {

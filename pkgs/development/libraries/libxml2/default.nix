@@ -34,7 +34,7 @@ in
 let
 libxml = stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.11.5";
+  version = "2.12.4";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -43,7 +43,7 @@ libxml = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    sha256 = "NyeweMNg7Gn6hp3hS9b3XX7o02mHsHHmko1HIKKN86Y=";
+    hash = "sha256-SXNg5CPPC9merNt8YhXeqS5tbonulAOTwrrg53y5t9A=";
   };
 
   strictDeps = true;
@@ -83,7 +83,7 @@ libxml = stdenv.mkDerivation rec {
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ];
 
   installFlags = lib.optionals pythonSupport [

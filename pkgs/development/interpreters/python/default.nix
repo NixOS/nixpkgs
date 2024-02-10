@@ -16,24 +16,14 @@
   passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    python310 = {
-      sourceVersion = {
-        major = "3";
-        minor = "10";
-        patch = "13";
-        suffix = "";
-      };
-      hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
-    };
-
     python311 = {
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "5";
+        patch = "7";
         suffix = "";
       };
-      hash = "sha256-hc0S6c8dbVpF8X96/hzr5+5ijTKCKBxJLoat9jbe+j8=";
+      hash = "sha256-GOGqfmb/OlhCPVntIoFaaVTlM0ISLEXfIMlod8Biubc=";
     };
   };
 
@@ -78,11 +68,18 @@ in {
     inherit passthruFun;
   };
 
-  python310 = callPackage ./cpython ({
+  python310 = callPackage ./cpython {
     self = __splicedPackages.python310;
+    sourceVersion = {
+      major = "3";
+      minor = "10";
+      patch = "13";
+      suffix = "";
+    };
+    hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
     inherit (darwin) configd;
     inherit passthruFun;
-  } // sources.python310);
+  };
 
   python311 = callPackage ./cpython ({
     self = __splicedPackages.python311;
@@ -95,10 +92,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "12";
-      patch = "0";
+      patch = "1";
       suffix = "";
     };
-    hash = "sha256-eVw09E30Wg6blxDIxxwVxnGHFSTNQSyhTe8hLozLFV0=";
+    hash = "sha256-jfuPQm/NImZX+eK9Xx6W5TJkllF2+hfTJljoc1ka6yE=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -109,9 +106,9 @@ in {
       major = "3";
       minor = "13";
       patch = "0";
-      suffix = "a1";
+      suffix = "a3";
     };
-    hash = "sha256-8Cgb8izABBQ2HBT8kZcYPn6y6rtylla2lEIiT7tj7ss=";
+    hash = "sha256-IHhMgwTrHGnID5ZuvfB3W+LjfiPfO2JGHuwSqF3Pfq0=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -125,8 +122,8 @@ in {
     readline = null;
     ncurses = null;
     gdbm = null;
-    sqlite = null;
     configd = null;
+    sqlite = null;
     tzdata = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;
@@ -206,7 +203,7 @@ in {
 
   pypy39_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = __splicedPackages.pythonInterpreters.pypy38_prebuilt;
+    self = __splicedPackages.pythonInterpreters.pypy39_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";

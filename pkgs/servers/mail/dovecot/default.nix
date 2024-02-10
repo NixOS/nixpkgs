@@ -66,6 +66,9 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
       hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fix timespec calls
+    ./timespec.patch
   ];
 
   configureFlags = [
@@ -111,7 +114,7 @@ stdenv.mkDerivation rec {
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
     mainProgram = "dovecot";
-    maintainers = with maintainers; [ fpletz globin ajs124 ];
+    maintainers = with maintainers; [ fpletz globin ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
   passthru.tests = {

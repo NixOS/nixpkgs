@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   version = "0.14.2";
+  format = "setuptools";
   pname = "hdmedians";
 
   src = fetchPypi {

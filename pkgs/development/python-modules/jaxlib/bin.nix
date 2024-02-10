@@ -29,17 +29,13 @@
 , stdenv
   # Options:
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackagesGoogle
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn;
-in
+  inherit (cudaPackagesGoogle) cudatoolkit cudnn cudaVersion;
 
-assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
-
-let
-  version = "0.4.19";
+  version = "0.4.23";
 
   inherit (python) pythonVersion;
 
@@ -60,87 +56,105 @@ let
       "3.9-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp39";
-        hash = "sha256-8bTrWutuK0qVnbkcwMfgBf414YdaLc3GK5IsCm/JNPE=";
+        hash = "sha256-maN9RzK6/hYIuPRd8n8n5qa/HyPgAf6UD+mlqzZ1/Xc=";
       };
       "3.9-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp39";
-        hash = "sha256-Tmv2iOqlNbZqw/rYjef6GmM0N18EA5JTt6T3lQe+4Rs=";
+        hash = "sha256-gdb07c12HCfK5VXT2C+9lYKSiIpPgD8sNmd4eG2M6M4=";
       };
       "3.9-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp39";
-        hash = "sha256-mDT1INLqPdCkxtMMFR0qHLOIZdWEy8Iuzw1/vOoECsA=";
+        hash = "sha256-TdU4wEoqEhsDq18MuLEpmKqpU51+xUYp/reZqEDJK1U=";
       };
 
       "3.10-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp310";
-        hash = "sha256-ksnY+CPEstact5lKjbSg+ZSPJtSt0Y0NFWEFufBCByk=";
+        hash = "sha256-cnX75aSJxoPFUCYD1V5QgyPNovS9lSGqg4PGdPsKsvM=";
       };
       "3.10-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp310";
-        hash = "sha256-O7dHvdKLKfNELGfF4TKy7N5EX6Ca7Zu8OtLXWvFykR8=";
+        hash = "sha256-H9sbeR4+4XytREYLP0LJphqGkQqHcinTC9NlT0Rj1aA=";
       };
       "3.10-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp310";
-        hash = "sha256-gqKMUZSXrt8sQtTAoQbzAfCzO8gM9Y1/tZpuJVWyN0Y=";
+        hash = "sha256-43VuBgGvdjauWPQtJK9w5GBI/++JvV4FwwO4maIXfDY=";
       };
 
       "3.11-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp311";
-        hash = "sha256-m+NDzwXMNboNjDl2nLY+vqAoN2dQJZVWb1UQDpqqDPw=";
+        hash = "sha256-mEdm0wmyHKg4RlA7q9/e1OOu+BfGcPKBCSvLwXfFhJI=";
       };
       "3.11-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp311";
-        hash = "sha256-zCOAjaWWCQT9Jnm1jjc1Rh5gemqy7ACtTKLM0MqSJzM=";
+        hash = "sha256-1kb/m8DODrtXO2drIfpttCLC72oNVszADbSDspllQVs=";
       };
       "3.11-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp311";
-        hash = "sha256-gOLIxkk+2hew2GqWu1WgMVEx1YEutx7Zod7QbwsuUVQ=";
+        hash = "sha256-jhLX4ps+EtU1sku722v51mz2SSamo4/dkdRWX3zFcRE=";
       };
 
       "3.12-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp312";
-        hash = "sha256-BZTmkgNuV4nWtfbY4t/19aP43szZQEdgpFXh5qwGRXk=";
+        hash = "sha256-oimiuQopgN1oKhbDc7SsRJPnA6JiEI9UieikWR2qpVk=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-aAMTrLXU9EYwPv+kdeyI88/D7b4NANB39Fn8vuXUqFA=";
+        hash = "sha256-J4zaKcx0c0Bgk7w/n6klqDlgY9IqTNINfg6g033LUDk=";
       };
       "3.12-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp312";
-        hash = "sha256-KHzlIfa9KtYcHX+i/F/SKaYTpD4/XjHVu5j3BdRTUmc=";
+        hash = "sha256-UFEE/mBitEOVUoijhUfphyy24QfWPZ+FQPsQ0cjY79A=";
       };
     };
 
-  # Find new releases at https://storage.googleapis.com/jax-releases/jax_releases.html.
+  # Note that the prebuilt jaxlib binary requires specific version of CUDA to
+  # work. The cuda12 jaxlib binaries only works with CUDA 12.2, and cuda11
+  # jaxlib binaries only works with CUDA 11.8. This is why we need to find a
+  # binary that matches the provided cudaVersion.
+  gpuSrcVersionString = "cuda${cudaVersion}-${pythonVersion}";
+
+  # Find new releases at https://storage.googleapis.com/jax-releases
   # When upgrading, you can get these hashes from prefetch.sh. See
   # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
   gpuSrcs = {
-    "3.9" = fetchurl {
+    "cuda12.2-3.9" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp39-cp39-manylinux2014_x86_64.whl";
-      hash = "sha256-WB5Vbr/XeYKXCP/3DIXF20jR6/1xE3huX1h5ow8ETl0=";
+      hash = "sha256-our2mSwHPdjVoDAZP+9aNUkJ+vxv1Tq7G5UqA9HvhNI=";
     };
-    "3.10" = fetchurl {
+    "cuda12.2-3.10" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-zfN0n31+5GohwBkeQrqHus4qOyhM/GEdqG6KUupCZ4o=";
+      hash = "sha256-jkIABnJZnn7A6n9VGs/MldzdDiKwWh0fEvl7Vqn85Kg=";
     };
-    "3.11" = fetchurl {
+    "cuda12.2-3.11" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp311-cp311-manylinux2014_x86_64.whl";
-      hash = "sha256-Q8ZtF2GCrG30GFbCeCZTWPmW2TBybeXzh2u+NRiYpx4=";
+      hash = "sha256-dMUcRnHjl8NyUeO3P1x7CNgF0iAHFKIzUtHh+/CNkow=";
     };
-    "3.12" = fetchurl {
+    "cuda12.2-3.12" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp312-cp312-manylinux2014_x86_64.whl";
-      hash = "sha256-lphkSDOJ9SwbO0hp/xC1bYn5fWgth9A9Iwsc9zV0buI=";
+      hash = "sha256-kXJ6bUwX+QybqYPV9Kpwv+lhdoGEFRr4+1T0vfXoWRo=";
+    };
+    "cuda11.8-3.9" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp39-cp39-manylinux2014_x86_64.whl";
+      hash = "sha256-m2Y5p12gF3OaADu+aGw5RjcKFrj9RB8xzNWnKNpSz60=";
+    };
+    "cuda11.8-3.10" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp310-cp310-manylinux2014_x86_64.whl";
+      hash = "osha256-aQ7iX3o0kQ4liPexv7dkBVWVTUpaty83L083MybGkf0=";
+    };
+    "cuda11.8-3.11" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp311-cp311-manylinux2014_x86_64.whl";
+      hash = "sha256-uIEyjEmv0HBaiYVl5PuICTI9XnH4zAfQ1l9tjALRcP4=";
     };
   };
 
@@ -158,7 +172,7 @@ buildPythonPackage {
       (
         cpuSrcs."${pythonVersion}-${stdenv.hostPlatform.system}"
           or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
-      ) else gpuSrcs."${pythonVersion}";
+      ) else gpuSrcs."${gpuSrcVersionString}";
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
@@ -213,5 +227,10 @@ buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
+    broken =
+      !(cudaSupport -> (cudaPackagesGoogle ? cudatoolkit) && lib.versionAtLeast cudatoolkit.version "11.1")
+      || !(cudaSupport -> (cudaPackagesGoogle ? cudnn) && lib.versionAtLeast cudnn.version "8.2")
+      || !(cudaSupport -> stdenv.isLinux)
+      || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"));
   };
 }

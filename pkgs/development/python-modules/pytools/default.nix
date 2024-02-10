@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pytools";
   version = "2023.1.1";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

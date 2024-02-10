@@ -14,6 +14,15 @@ stdenv.mkDerivation rec {
     substituteInPlace build/build-usual-image --replace '"(made by $USER on $date)"' '""'
   '';
 
+  # Silence warnings related to use of implicitly declared library functions and implicit ints.
+  # TODO: Remove and/or fix with patches the next time this package is updated.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+    ];
+  };
+
   meta = with lib; {
     homepage = "https://s48.org/";
     description = "Scheme 48 interpreter for R5RS";

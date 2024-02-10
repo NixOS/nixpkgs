@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.kaction ];
     platforms = lib.platforms.unix;
+    mainProgram = "rcshist";
   };
 }

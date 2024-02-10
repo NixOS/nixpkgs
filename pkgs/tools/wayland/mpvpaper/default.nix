@@ -2,7 +2,6 @@
 , lib
 , meson
 , ninja
-, wlroots
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpvpaper";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "GhostNaN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0LjIwOY2hBUb0nziD3HLP2Ek5+8v3ntssRFD9eQgWkc=";
+    sha256 = "sha256-pJPoI47KKazVT6RfqyftZe+lPe6Kn2cllRSfq0twUpQ=";
   };
 
   strictDeps = true;
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wlroots
     wayland
     wayland-protocols
     egl-wayland

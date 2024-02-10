@@ -51,5 +51,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/dtrx-py/dtrx";
     license = licenses.gpl3Plus;
     maintainers = [ ];
+    mainProgram = "dtrx";
   };
 }

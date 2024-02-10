@@ -25,6 +25,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-rigetti";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   disabled = pythonOlder "3.7";

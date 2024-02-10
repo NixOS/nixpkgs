@@ -3,6 +3,7 @@
 This section lists the release notes for each stable version of NixOS and current unstable revision.
 
 ```{=include=} sections
+rl-2405.section.md
 rl-2311.section.md
 rl-2305.section.md
 rl-2211.section.md

@@ -2,8 +2,9 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
-, dataclasses-json
 , fetchFromGitHub
+, mashumaro
+, orjson
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -13,17 +14,22 @@
 
 buildPythonPackage rec {
   pname = "aioelectricitymaps";
-  version = "0.1.4";
+  version = "0.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aioelectricitymaps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Whg3F4Oyfqn2Lod44e15Pxc3m0dEB2F+MK0bvEM7c7w=";
+    hash = "sha256-saIzVbgYx5nIM5fk7i3wu4X1gOIj81L/rRNq5Xl4cnw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-warn "--cov" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -31,7 +37,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    dataclasses-json
+    mashumaro
+    orjson
   ];
 
   nativeCheckInputs = [

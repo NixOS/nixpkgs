@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     description = "Tools related to the kexec Linux feature";
     platforms = platforms.linux;
     badPlatforms = [
+      "microblaze-linux" "microblazeel-linux"
       "riscv64-linux" "riscv32-linux"
       "sparc-linux" "sparc64-linux"
     ];

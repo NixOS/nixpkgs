@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ genericnerdyusername ];
     platforms = lib.platforms.unix;
+    mainProgram = "lssecret";
   };
 }

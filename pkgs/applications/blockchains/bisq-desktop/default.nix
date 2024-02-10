@@ -13,6 +13,7 @@
 , tor
 , zip
 , xz
+, findutils
 }:
 
 let
@@ -24,7 +25,9 @@ let
     # whereas Nix only scans for hashes in uncompressed text.
     # ${bisq-tor}
 
-    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication ${args}" bisq-desktop-wrapped "$@"
+    classpath=@out@/lib/desktop.jar:@out@/lib/*
+
+    exec "${openjdk11}/bin/java" -Djpackage.app-version=@version@ -XX:MaxRAM=8g -Xss1280k -XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -classpath $classpath ${args} bisq.desktop.app.BisqAppMain "$@"
   '';
 
   bisq-tor = writeScript "bisq-tor" ''
@@ -35,11 +38,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.9.12";
+  version = "1.9.14";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "0zzrl7dmd3m7pymwvl68gnjspbpzf1w17bcwr0ipgsszmr35k9rs";
+    sha256 = "0xbq94qbp59523xjp80bly38aisfwkfi0y9hmyhf8xlw084b82kz";
   };
 
   nativeBuildInputs = [
@@ -50,6 +53,7 @@ stdenv.mkDerivation rec {
     strip-nondeterminism
     xz
     zip
+    findutils
   ];
 
   desktopItems = [
@@ -83,24 +87,22 @@ stdenv.mkDerivation rec {
     mkdir -p native/linux/x64/
     cp ${bisq-tor} ./tor
     tar --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cJf native/linux/x64/tor.tar.xz tor
-    zip -r opt/bisq/lib/app/desktop-${version}-all.jar native
-    strip-nondeterminism opt/bisq/lib/app/desktop-${version}-all.jar
+    tor_jar_file=$(find ./opt/bisq/lib/app -name "tor-binary-linux64-*.jar")
+    zip -r $tor_jar_file native
+    strip-nondeterminism ./opt/bisq/lib/app/*.jar
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib $out/bin
-    cp opt/bisq/lib/app/desktop-${version}-all.jar $out/lib
+    mkdir -p $out $out/bin
+    cp -r opt/bisq/lib/app $out/lib
 
-    makeWrapper ${openjdk11}/bin/java $out/bin/bisq-desktop-wrapped \
-      --add-flags "-jar $out/lib/desktop-${version}-all.jar bisq.desktop.app.BisqAppMain"
+    install -D -m 777 ${bisq-launcher ""} $out/bin/bisq-desktop
+    substituteAllInPlace $out/bin/bisq-desktop
 
-    makeWrapper ${bisq-launcher ""} $out/bin/bisq-desktop \
-      --prefix PATH : $out/bin
-
-    makeWrapper ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq-desktop-hidpi \
-      --prefix PATH : $out/bin
+    install -D -m 777 ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq-desktop-hidpi
+    substituteAllInPlace $out/bin/bisq-desktop-hidpi
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n

@@ -36,7 +36,7 @@ plugins: let
     $CC -shared -fPIC ${source} -o "$out/lib/libvapoursynth-nix-plugins${ext}"
   '';
 
-  ext = stdenv.targetPlatform.extensions.sharedLibrary;
+  ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
 runCommand "${vapoursynth.name}-with-plugins" {
   nativeBuildInputs = [ makeWrapper ];

@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.4.15";
+  version = "0.4.17";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    hash = "sha256-VwzpPAVfoaV47O7OjXtPQj5s8zfH5rkB22Pdlg7u5Fg=";
+    hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals (enableDocs || enableGI) [
     doxygen
-    (python3.pythonForBuild.withPackages (ps: with ps;
+    (python3.pythonOnBuildForHost.withPackages (ps: with ps;
       lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ]
       ++ lib.optionals enableGI [ lxml ]
     ))

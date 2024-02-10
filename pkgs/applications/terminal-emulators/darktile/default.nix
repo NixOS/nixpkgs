@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , lib
-, go
 , pkg-config
 , libX11
 , libXcursor
@@ -12,20 +11,23 @@
 , libXxf86vm
 , libGL
 , nixosTests
+, buildGoModule
 }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "darktile";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "darktile";
     rev = "v${version}";
-    sha256 = "0pdj4yv3qrq56gb67p85ara3g8qrzw5ha787bl2ls4vcx85q7303";
+    hash = "sha256-M3vySAyYwqscR9n0GGXp1ttO/mhdSCponZNYJRBBI18=";
   };
 
-  nativeBuildInputs = [ go pkg-config ];
+  vendorHash = null;
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libX11
@@ -38,25 +40,6 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
-  postPatch = ''
-    substituteInPlace scripts/build.sh \
-      --replace "bash" "sh"
-  '';
-
-  postConfigure = ''
-    export GOPATH=$TMP/go
-  '';
-
-  makeFlags = [ "HOME=$TMP" ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 darktile -t $out/bin
-
-    runHook postInstall
-  '';
-
   passthru.tests.test = nixosTests.terminal-emulators.darktile;
 
   meta = with lib; {
@@ -65,6 +48,9 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/liamg/darktile/releases";
     changelog = "https://github.com/liamg/darktile/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ flexagoon ];
+    platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];
+    maintainers = with maintainers; [ mikaelfangel ];
+    mainProgram = "darktile";
   };
 }

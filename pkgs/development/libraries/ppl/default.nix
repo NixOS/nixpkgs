@@ -17,6 +17,13 @@ stdenv.mkDerivation {
     sha256 = "1zj90hm25pkgvk4jlkfzh18ak9b98217gbidl3731fdccbw6hr87";
   })];
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace src/PIP_Tree.cc \
+      --replace "std::auto_ptr" "std::unique_ptr"
+    substituteInPlace src/Powerset_inlines.hh src/Pointset_Powerset_inlines.hh \
+      --replace "std::mem_fun_ref" "std::mem_fn"
+  '';
+
   nativeBuildInputs = [ perl gnum4 ];
   propagatedBuildInputs = [ gmpxx ];
 

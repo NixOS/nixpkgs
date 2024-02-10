@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs:{
   pname = "wxmaxima";
-  version = "23.10.0";
+  version = "24.02.0";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${finalAttrs.version}";
-    sha256 = "sha256-3zQzpw0KWNAAvML55O2FMlid9j0GtP8OWy1eqifzVwI=";
+    hash = "sha256-X4nx8zARToogQS4bfkv3CbsS2qU2uL9BBYw0Lw7QC18=";
   };
 
   buildInputs = [

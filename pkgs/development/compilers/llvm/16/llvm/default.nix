@@ -2,7 +2,6 @@
 , pkgsBuildBuild
 , monorepoSrc
 , runCommand
-, fetchpatch
 , cmake
 , darwin
 , ninja
@@ -31,7 +30,7 @@
   # broken for the armv7l builder
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
-} @args:
+}:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -326,12 +325,13 @@ in
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (false) [
+  ] ++ optionals enableGoldPlugin [
+    # For LLVMgold plugin
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

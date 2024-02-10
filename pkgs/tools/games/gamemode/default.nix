@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , libgamemode32
+, makeWrapper
 , meson
 , ninja
 , pkg-config
@@ -10,36 +10,28 @@
 , inih
 , systemd
 , appstream
-, makeWrapper
 , findutils
 , gawk
 , procps
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gamemode";
-  version = "1.7";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "FeralInteractive";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-DIFcmWFkoZOklo1keYcCl6n2GJgzWKC8usHFcJmfarU=";
+    repo = "gamemode";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-kusb58nGxYA3U9GbZdW3hLjA3NmHc+af0VT4iGRewBw=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "static" ];
+  outputs = [ "out" "dev" "lib" "man" ];
 
   patches = [
     # Add @libraryPath@ template variable to fix loading the PRELOAD library
     ./preload-nix-workaround.patch
-    # Do not install systemd sysusers configuration
-    ./no-install-systemd-sysusers.patch
-
-    # fix build with glibc >=2.36 (declaration of pidfd_open)
-    (fetchpatch {
-      url = "https://github.com/FeralInteractive/gamemode/commit/4934191b1928ef695c3e8af21e75781f8591745f.patch";
-      sha256 = "sha256-pWf2NGbd3gEJFwVP/EIJRbTD29V7keTQHy388enktsY=";
-    })
   ];
 
   postPatch = ''
@@ -66,23 +58,21 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # libexec is just a way to package binaries without including them
-    # in PATH. It doesn't make sense to install them to $lib
-    # (the default behaviour in the meson hook).
-    "--libexecdir=${placeholder "out"}/libexec"
-
+    "-Dwith-pam-limits-dir=etc/security/limits.d"
     "-Dwith-systemd-user-unit-dir=lib/systemd/user"
+    "-Dwith-systemd-group-dir=lib/sysusers.d"
+
+    # The meson builder installs internal executables to $lib/lib by
+    # default, but they should be installed to "$out". It's also more
+    # appropriate to install these executables under a libexec
+    # directory instead of lib.
+    "--libexecdir=libexec"
   ];
 
   doCheck = true;
   nativeCheckInputs = [
     appstream
   ];
-
-  # Move static libraries to $static so $lib only contains dynamic libraries.
-  postInstall = ''
-    moveToOutput lib/*.a "$static"
-  '';
 
   postFixup = ''
     # Add $lib/lib to gamemoded & gamemode-simulate-game's rpath since
@@ -100,11 +90,15 @@ stdenv.mkDerivation rec {
       ]}
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Optimise Linux system performance on demand";
-    homepage = "https://github.com/FeralInteractive/GameMode";
+    homepage = "https://github.com/FeralInteractive/gamemode";
+    changelog = "https://github.com/FeralInteractive/gamemode/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
+    mainProgram = "gamemoderun"; # Requires NixOS module to run
   };
-}
+})

@@ -195,7 +195,8 @@ in
 
     systemd.services.login-duo = lib.mkIf cfg.ssh.enable {
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       script = ''
         if test -f "${cfg.secretKeyFile}"; then
@@ -216,7 +217,8 @@ in
 
     systemd.services.pam-duo = lib.mkIf cfg.ssh.enable {
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       script = ''
         if test -f "${cfg.secretKeyFile}"; then

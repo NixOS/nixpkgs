@@ -214,7 +214,7 @@ in {
         RestrictRealtime = true;
         PrivateMounts = true;
         SystemCallFilter = [
-          "@system-service @pkey"
+          "@system-service @pkey @chown"
           "~@privileged @resources"
         ];
         SystemCallArchitectures = "native";

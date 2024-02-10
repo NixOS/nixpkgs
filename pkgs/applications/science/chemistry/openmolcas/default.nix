@@ -8,7 +8,7 @@
 , blas-ilp64
 , hdf5-cpp
 , python3
-, texlive
+, texliveMinimal
 , armadillo
 , libxc
 , makeWrapper
@@ -59,6 +59,9 @@ stdenv.mkDerivation {
 
     # Required for a local QCMaquis build
     ./qcmaquis.patch
+
+    # PyParsing >= 3.11 compatibility, can be removed on next release
+    ./pyparsing.patch
   ];
 
   postPatch = ''
@@ -78,7 +81,7 @@ stdenv.mkDerivation {
     perl
     gfortran
     cmake
-    texlive.combined.scheme-minimal
+    texliveMinimal
     makeWrapper
     autoPatchelfHook
   ];

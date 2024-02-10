@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = libX11.meta.platforms;
     maintainers = with maintainers; [ takagiy ];
+    mainProgram = "wmderland";
   };
 }

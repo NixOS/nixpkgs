@@ -5,18 +5,18 @@
 
 buildGoModule rec {
   pname = "google-cloud-sql-proxy";
-  version = "2.7.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "cloud-sql-proxy";
     rev = "v${version}";
-    hash = "sha256-8UoAN5z84gGV869AgOWGrC92NdEnkw5b6QME4QKQ/mM=";
+    hash = "sha256-ZCUBr7K7mGpV/oCS4X6cteUGRjMjqAAA3saPfZ6Vowk=";
   };
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-S2bt015AD25K6yrVGK3qv8Gq2fVifVV0AVBSt/8V9So=";
+  vendorHash = "sha256-ScGfP5HdXkMlU2PQmlQxuRC7a+iadf3dOKpFFi2EaAY=";
 
   preCheck = ''
     buildFlagsArray+="-short"

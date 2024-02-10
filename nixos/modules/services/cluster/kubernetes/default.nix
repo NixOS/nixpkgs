@@ -122,12 +122,7 @@ in {
       type = types.listOf (types.enum ["master" "node"]);
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Kubernetes package to use.";
-      type = types.package;
-      default = pkgs.kubernetes;
-      defaultText = literalExpression "pkgs.kubernetes";
-    };
+    package = mkPackageOption pkgs "kubernetes" { };
 
     kubeconfig = mkKubeConfigOptions "Default kubeconfig";
 

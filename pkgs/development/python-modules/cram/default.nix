@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.7";
+  format = "setuptools";
   pname = "cram";
 
   nativeCheckInputs = [ which ];

@@ -15,8 +15,8 @@ in {
       type = types.listOf types.str;
       example = literalExpression ''
         [
-          "/run/kea-dhcp4/kea-dhcp4.socket"
-          "/run/kea-dhcp6/kea-dhcp6.socket"
+          "/run/kea/kea-dhcp4.socket"
+          "/run/kea/kea-dhcp6.socket"
         ]
       '';
       description = lib.mdDoc ''
@@ -31,13 +31,15 @@ in {
     ];
     serviceConfig = {
       User = "kea";
+      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-kea-exporter}/bin/kea-exporter \
           --address ${cfg.listenAddress} \
           --port ${toString cfg.port} \
           ${concatStringsSep " " cfg.controlSocketPaths}
       '';
-      SupplementaryGroups = [ "kea" ];
+      RuntimeDirectory = "kea";
+      RuntimeDirectoryPreserve = true;
       RestrictAddressFamilies = [
         # Need AF_UNIX to collect data
         "AF_UNIX"

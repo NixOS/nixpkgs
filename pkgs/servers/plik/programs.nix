@@ -17,6 +17,7 @@ let
     description = "Scalable & friendly temporary file upload system";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.mit;
+    mainProgram = "plik";
   };
 
   postPatch = ''

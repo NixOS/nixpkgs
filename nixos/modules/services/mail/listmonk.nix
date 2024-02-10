@@ -128,7 +128,7 @@ in {
           '';
         };
       };
-      package = mkPackageOptionMD pkgs "listmonk" {};
+      package = mkPackageOption pkgs "listmonk" {};
       settings = mkOption {
         type = types.submodule { freeformType = tomlFormat.type; };
         description = lib.mdDoc ''
@@ -168,7 +168,7 @@ in {
 
       ensureUsers = [{
         name = "listmonk";
-        ensurePermissions = { "DATABASE listmonk" = "ALL PRIVILEGES"; };
+        ensureDBOwnership = true;
       }];
 
       ensureDatabases = [ "listmonk" ];
@@ -201,13 +201,12 @@ in {
         DynamicUser = true;
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
-        SystemCallArchitecture = "native";
+        SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" ];
-        ProtectDevices = true;
+        PrivateDevices = true;
         ProtectControlGroups = true;
         ProtectKernelTunables = true;
         ProtectHome = true;
-        DeviceAllow = false;
         RestrictNamespaces = true;
         RestrictRealtime = true;
         UMask = "0027";

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.5.4";
+  version = "3.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "pymodbus-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IgGDYNIRS39t8vHkJSGnDGCTKxpeIYZyedLzyS5pOI0=";
+    hash = "sha256-SYdjM3wFZD+bAOd0vRFe6N5UwF+1Wv97ooihJjKV8K0=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +72,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests often hang
     "test_connected"
+  ] ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+    "test_split_serial_packet"
+    "test_serial_poll"
+    "test_simulator"
   ];
 
   meta = with lib; {

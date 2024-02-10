@@ -5,12 +5,17 @@ let
   xnu-src = if stdenv.isAarch64 then macosPackages_11_0_1.xnu.src else xnu.src;
   arch = if stdenv.isAarch64 then "arm" else "i386";
 in appleDerivation {
+  patches = [
+    # Fixes a build failure with newer versions of clang that make implicit int an error.
+    ./fix-implicit-int.patch
+  ];
+
   nativeBuildInputs = [ xcbuildHook ];
   buildInputs = [ libutil ];
 
   env.NIX_CFLAGS_COMPILE = "-I.";
   NIX_LDFLAGS = "-lutil";
-  patchPhase = ''
+  prePatch = ''
     # ugly hacks for missing headers
     # most are bsd related - probably should make this a drv
     unpackFile ${Libc.src}

@@ -1,19 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
-  version = "0.4.35";
+  version = "0.4.36";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-oplR34M2PbcIwrfIkA4Ttk2zt3ve883TfXGIDnfJt/4=";
+    sha256 = "sha256-QQSGnOWRx5KK9eJP759E1V9zFVzvRol5bdJfD9mDr5g=";
   };
 
-  cargoHash = "sha256-D0XhrweO0A1+81Je4JZ0lmnbIHstNvefpmogCyB4FEE=";
+  cargoHash = "sha256-IlD4YI7jsWZw0Dn1PoljmhuIOqejva8HMhU4ULy32yE=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mdbook \
+      --bash <($out/bin/mdbook completions bash) \
+      --fish <($out/bin/mdbook completions fish) \
+      --zsh  <($out/bin/mdbook completions zsh )
+  '';
 
   passthru = {
     tests = {

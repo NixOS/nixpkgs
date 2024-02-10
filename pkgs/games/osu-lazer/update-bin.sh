@@ -34,7 +34,7 @@ for pair in \
     else
         hash=$(jq -r '.hash' <<<"$prefetch_output")
     fi
-    echo "$1 ($2): sha256 = $hash"
+    echo "$1 ($2): hash = $hash"
     sed -Ei.bak '/ *'"$1"' = /{N;N; s@("sha256-)[^;"]+@"'"$hash"'@}' "$bin_file"
     rm "$bin_file.bak"
 done

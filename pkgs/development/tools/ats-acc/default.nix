@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Pretty-print error messages of the ATS Compiler";
     homepage = "https://github.com/sparverius/ats-acc";
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     license = licenses.unfree; # Upstream has no license
   };
 }

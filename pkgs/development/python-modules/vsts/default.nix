@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   version = "0.1.25";
+  format = "setuptools";
   pname = "vsts";
 
   src = fetchPypi {

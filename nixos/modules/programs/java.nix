@@ -30,13 +30,8 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.jdk;
-        defaultText = literalExpression "pkgs.jdk";
-        description = lib.mdDoc ''
-          Java package to install. Typical values are pkgs.jdk or pkgs.jre.
-        '';
-        type = types.package;
+      package = mkPackageOption pkgs "jdk" {
+        example = "jre";
       };
 
       binfmt = mkEnableOption (lib.mdDoc "binfmt to execute java jar's and classes");

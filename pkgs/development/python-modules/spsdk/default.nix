@@ -26,7 +26,9 @@
 , pyocd
 , pypemicro
 , pyserial
+, requests
 , ruamel-yaml
+, setuptools
 , sly
 , spsdk
 , testers
@@ -37,17 +39,19 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.11.0";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-B3qedAXSG3A8rcWu1O2GnZ1ZqHN+7fQK43qXzGnDEY0=";
+    rev = version;
+    hash = "sha256-C6cz5jhIHI4WkCYT0rURFa4kBAu6cMcKpQHiHACIiu8=";
   };
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -60,6 +64,8 @@ buildPythonPackage rec {
     "pylink-square"
     "pyocd"
     "typing-extensions"
+    "click"
+    "ruamel.yaml"
   ];
 
   pythonRemoveDeps = [
@@ -90,6 +96,7 @@ buildPythonPackage rec {
     pyocd
     pypemicro
     pyserial
+    requests
     ruamel-yaml
     sly
     typing-extensions

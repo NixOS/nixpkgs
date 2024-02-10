@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pegen";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,10 +19,8 @@ buildPythonPackage rec {
     owner = "we-like-parsers";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5nxOMgkDAkHtVFSNXf0SPoag6/E7b97eVnFoAqyJE3g=";
+    hash = "sha256-P4zX8za9lBlXhNPkQe9p136ggZEJh6fHfBr+DQKvtTg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -37,7 +35,10 @@ buildPythonPackage rec {
     "pegen"
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+  disabledTests = [
+    # ValueError: Expected locations of (1, 3) and...
+    "test_invalid_call_arguments"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
     # https://github.com/we-like-parsers/pegen/issues/89
     "test_invalid_def_stmt"
   ];

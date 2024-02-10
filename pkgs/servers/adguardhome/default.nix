@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ numkem iagoq rhoriguchi ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
+    mainProgram = "adguardhome";
   };
 }

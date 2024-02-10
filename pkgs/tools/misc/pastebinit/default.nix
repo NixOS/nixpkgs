@@ -1,52 +1,55 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
 , python3
+, libxslt
+, docbook_xsl
+, installShellFiles
+, callPackage
 }:
-
 stdenv.mkDerivation rec {
-  version = "1.5";
+  version = "1.6.2";
   pname = "pastebinit";
 
-  src = fetchurl {
-    url = "https://launchpad.net/pastebinit/trunk/${version}/+download/${pname}-${version}.tar.bz2";
-    sha256 = "0mw48fgm9lyh9d3pw997fccmglzsjccf2y347gxjas74wx6aira2";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    hash = "sha256-vuAWkHlQM6QTWarThpSbY0qrxzej0GvLU0jT2JOS/qc=";
   };
+
+  patches = [
+    ./use-drv-etc.patch
+  ];
+
+  nativeBuildInputs = [
+    libxslt
+    installShellFiles
+  ];
 
   buildInputs = [
     (python3.withPackages (p: [ p.distro ]))
   ];
 
-  patchFlags = [ "-p0" ];
-
-  patches = [
-    # Required to allow pastebinit 1.5 to run on Python 3.8
-    (fetchpatch {
-      name = "use-distro-module.patch";
-      url = "https://bazaar.launchpad.net/~arnouten/pastebinit/python38/diff/264?context=3";
-      sha256 = "1gp5inp4xald65xbb7fc5aqq5s2fhw464niwjjja9anqyp3zhawj";
-    })
-    # Required because pastebin.com now redirects http requests to https
-    (fetchpatch {
-      name = "pastebin-com-https.patch";
-      url = "https://bazaar.launchpad.net/~arnouten/pastebinit/pastebin-com-https/diff/264?context=3";
-      sha256 = "0hxhhfcai0mll8qfyhdl3slmbf34ynb759b648x63274m9nd2kji";
-    })
-  ];
+  buildPhase = ''
+    xsltproc --nonet ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl pastebinit.xml
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/etc
     cp -a pastebinit $out/bin
+    cp -a utils/* $out/bin
     cp -a pastebin.d $out/etc
-    substituteInPlace $out/bin/pastebinit --replace "'/etc/pastebin.d" "'$out/etc/pastebin.d"
+    substituteInPlace $out/bin/pastebinit --subst-var-by "etc" "$out/etc"
+    installManPage pastebinit.1
   '';
 
   meta = with lib; {
-    homepage = "https://launchpad.net/pastebinit";
+    homepage = "https://stgraber.org/category/pastebinit/";
     description = "A software that lets you send anything you want directly to a pastebin from the command line";
-    maintainers = with maintainers; [ raboof ];
+    maintainers = with maintainers; [ raboof samuel-martineau ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ lib.platforms.darwin;
   };
 }

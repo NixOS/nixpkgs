@@ -5,15 +5,19 @@
 }:
 buildPythonPackage rec {
   pname = "parse";
-  version = "1.19.1";
+  version = "1.20.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "r1chardj0n3s";
     repo = "parse";
     rev = "refs/tags/${version}";
-    hash = "sha256-f08SlkGnwhSh0ajTKFqBAGGFvLj8nWBZVb6uClbRaP4=";
+    hash = "sha256-InYOgqTvMvQ/HWIa0WrJ4M2LL4LL87KwBst8yYnt3dk=";
   };
+
+  postPatch = ''
+    rm .pytest.ini
+  '';
 
   nativeBuildInputs = [
     setuptools

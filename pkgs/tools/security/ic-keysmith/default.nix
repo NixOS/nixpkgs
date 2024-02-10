@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/dfinity/keysmith";
     license = licenses.mit;
     maintainers = with maintainers; [ imalison ];
+    mainProgram = "keysmith";
   };
 }

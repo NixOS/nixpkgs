@@ -17,6 +17,7 @@
 buildPythonPackage rec {
   pname = "pyalgotrade";
   version = "0.20";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyAlgoTrade";

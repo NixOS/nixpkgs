@@ -10,45 +10,51 @@
 , numpy
 , pyperclip
 , pytest
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , testfixtures
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.0.0";
-  format = "setuptools";
+  version = "10.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3KorHpJUeWSJKVN/4IN0AqKOIL0sT5MaxkvQqpeilhw=";
+    hash = "sha256-1f0iTwLREF20Khkd4/xEfxXINJIpc4LfszsvCblS/yM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     allpairspy
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest
     testfixtures
-    typing-extensions
   ];
 
   nativeCheckInputs = [
-    mock
     numpy
+    pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
+    "test_docstrings"
     # Tests expects paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"

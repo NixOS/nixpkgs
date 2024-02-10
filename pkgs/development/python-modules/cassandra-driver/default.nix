@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, cryptography
 , cython
 , eventlet
 , fetchFromGitHub
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.26.0";
+  version = "3.28.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "datastax";
     repo = "python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-mLQEG41WyFtXY2PJzoM4uaI4Cm+0xSIAPGhijHHbTBk=";
+    hash = "sha256-5JRbzYl7ftgK6GuvXWdvo52ZlS1th9JyLAYu/UCcPVc=";
   };
 
   postPatch = ''
@@ -56,17 +57,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    eventlet
     mock
     nose
     pytz
     pyyaml
     sure
-    scales
-    gremlinpython
-    gevent
-    twisted
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
@@ -77,6 +73,13 @@ buildPythonPackage rec {
   '') + ''
     # increase tolerance for time-based test
     substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
+
+    export HOME=$(mktemp -d)
+    # cythonize this before we hide the source dir as it references
+    # one of its files
+    cythonize -i tests/unit/cython/types_testhelper.pyx
+
+    mv cassandra .cassandra.hidden
   '';
 
   pythonImportsCheck = [
@@ -104,6 +107,15 @@ buildPythonPackage rec {
     # time-sensitive
     "test_nts_token_performance"
   ];
+
+  passthru.optional-dependencies = {
+    cle = [ cryptography ];
+    eventlet = [ eventlet ];
+    gevent = [ gevent ];
+    graph = [ gremlinpython ];
+    metrics = [ scales ];
+    twisted = [ twisted ];
+  };
 
   meta = with lib; {
     description = "A Python client driver for Apache Cassandra";

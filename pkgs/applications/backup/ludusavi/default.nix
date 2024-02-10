@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eEuaDMfFxWcNM9+5TvZZXLgbDuGbyIAIuzEMVWbvYbg=";
+    hash = "sha256-FVM/HJpBd9G161JTaVTeWQhz4p5uDgQtohaIw1iNOJo=";
   };
 
-  cargoSha256 = "sha256-ENo562Y6K238NNEtgYoPw6EXjbcuxPuXiftIp/bGYYU=";
+  cargoHash = "sha256-5RhFyC4e4OOdnhwk4sgG6mmRVa1gLaBUA8DW5XW6E14=";
 
   nativeBuildInputs = [
     cmake
@@ -83,5 +83,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ pasqui23 ];
+    mainProgram = "ludusavi";
   };
 }

@@ -7,17 +7,19 @@
 
 ((buildMozillaMach rec {
   pname = "floorp";
-  packageVersion = "11.5.0";
+  packageVersion = "11.9.0";
   applicationName = "Floorp";
   binaryName = "floorp";
-  version = "155.4.0";
+
+  # Must match the contents of `browser/config/version.txt` in the source tree
+  version = "115.7.0";
 
   src = fetchFromGitHub {
     owner = "Floorp-Projects";
     repo = "Floorp";
     fetchSubmodules = true;
     rev = "v${packageVersion}";
-    hash = "sha256-adK3LAu3cDh6d+GvtnkWmSnxansnSZoIgtA9TAqIMyA=";
+    hash = "sha256-Mk/5bkaSLQYFFGhCSjVho8CUilZSYDGarnIt4Wg9/6g=";
   };
 
   extraConfigureFlags = [
@@ -43,6 +45,7 @@
   tests = [ nixosTests.floorp ];
 }).override {
   privacySupport = true;
+  webrtcSupport = true;
   enableOfficialBranding = false;
 }).overrideAttrs (prev: {
   MOZ_REQUIRE_SIGNING = "";

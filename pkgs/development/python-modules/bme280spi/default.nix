@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "bme280spi";
   version = "0.2.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 

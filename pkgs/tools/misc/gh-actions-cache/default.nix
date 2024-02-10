@@ -21,8 +21,9 @@ buildGoModule rec {
     "-w"
   ];
 
-  # Tests need network
-  doCheck = false;
+  # Needed for tests.
+  # https://github.com/actions/gh-actions-cache/issues/53#issuecomment-1464954495
+  env.GH_TOKEN = "dummy-token-to-facilitate-rest-client";
 
   meta = {
     description = "gh extension to manage GitHub Actions caches";
@@ -30,5 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/actions/gh-actions-cache/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
+    mainProgram = "gh-actions-cache";
   };
 }

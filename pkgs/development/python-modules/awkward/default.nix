@@ -1,7 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , hatch-fancy-pypi-readme
 , hatchling
 , awkward-cpp
@@ -23,14 +24,16 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.4.6";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MRnrPChX3a26JELh4oH5nefwoQurpvpprZXeNnz1Cwo=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "awkward";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-G9jXAo37mhvXzn7cQ/DEUGauGs+P7JxBntfu7ZPfaHc=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +58,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     fsspec
-    jax
-    jaxlib
     numba
     setuptools
     numexpr
@@ -64,12 +65,15 @@ buildPythonPackage rec {
     pyarrow
     pytest-xdist
     pytestCheckHook
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # no support for darwin
+    jax
+    jaxlib
   ];
 
   # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
     "tests-cuda"
-    "tests-cuda-kernels"
   ];
 
   meta = with lib; {

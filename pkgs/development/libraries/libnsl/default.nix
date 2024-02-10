@@ -2,14 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libnsl";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f9kNzzR8baf5mLgrh+bKO/rBRZA5ZYc1tJdyLE7Bi1w=";
+    sha256 = "sha256-bCToqXVE4RZcoZ2eTNZcVHyzKlWyIpSAssQCOZcfmEA=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libtirpc ];

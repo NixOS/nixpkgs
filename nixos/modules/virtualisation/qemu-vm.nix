@@ -701,7 +701,10 @@ in
           type = types.listOf types.str;
           default = [];
           example = [ "-vga std" ];
-          description = lib.mdDoc "Options passed to QEMU.";
+          description = lib.mdDoc ''
+            Options passed to QEMU.
+            See [QEMU User Documentation](https://www.qemu.org/docs/master/system/qemu-manpage) for a complete list.
+          '';
         };
 
       consoles = mkOption {
@@ -732,6 +735,7 @@ in
           description = lib.mdDoc ''
             Networking-related command-line options that should be passed to qemu.
             The default is to use userspace networking (SLiRP).
+            See the [QEMU Wiki on Networking](https://wiki.qemu.org/Documentation/Networking) for details.
 
             If you override this option, be advised to keep
             ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the example)
@@ -899,7 +903,7 @@ in
     virtualisation.tpm = {
       enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm.";
 
-      package = mkPackageOptionMD cfg.host.pkgs "swtpm" { };
+      package = mkPackageOption cfg.host.pkgs "swtpm" { };
 
       deviceModel = mkOption {
         type = types.str;
@@ -1066,10 +1070,18 @@ in
         ''}
       '';
 
-    systemd.tmpfiles.rules = lib.mkIf config.boot.initrd.systemd.enable [
-      "f /etc/NIXOS 0644 root root -"
-      "d /boot 0644 root root -"
-    ];
+    systemd.tmpfiles.settings."10-qemu-vm" = lib.mkIf config.boot.initrd.systemd.enable {
+      "/etc/NIXOS".f = {
+        mode = "0644";
+        user = "root";
+        group = "root";
+      };
+      "${config.boot.loader.efi.efiSysMountPoint}".d = {
+        mode = "0644";
+        user = "root";
+        group = "root";
+      };
+    };
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
@@ -1256,6 +1268,8 @@ in
         unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
       }];
       services.rw-store = {
+        before = [ "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         unitConfig = {
           DefaultDependencies = false;
           RequiresMountsFor = "/sysroot/nix/.rw-store";

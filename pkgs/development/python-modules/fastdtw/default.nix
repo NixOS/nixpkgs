@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "fastdtw";
   version = "0.3.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "slaypni";

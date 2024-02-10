@@ -19,12 +19,7 @@ in
       description = lib.mdDoc "Name of this iscsi initiator";
       example = "iqn.2020-08.org.linux-iscsi.initiatorhost:example";
     };
-    package = mkOption {
-      type = package;
-      description = lib.mdDoc "openiscsi package to use";
-      default = pkgs.openiscsi;
-      defaultText = literalExpression "pkgs.openiscsi";
-    };
+    package = mkPackageOption pkgs "openiscsi" { };
 
     extraConfig = mkOption {
       type = str;

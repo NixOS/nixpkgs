@@ -21,6 +21,7 @@
 buildPythonPackage rec {
   pname = "moviepy";
   version = "1.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

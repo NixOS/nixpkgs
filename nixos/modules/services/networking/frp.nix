@@ -4,8 +4,8 @@ with lib;
 
 let
   cfg = config.services.frp;
-  settingsFormat = pkgs.formats.ini { };
-  configFile = settingsFormat.generate "frp.ini" cfg.settings;
+  settingsFormat = pkgs.formats.toml { };
+  configFile = settingsFormat.generate "frp.toml" cfg.settings;
   isClient = (cfg.role == "client");
   isServer = (cfg.role == "server");
 in
@@ -14,7 +14,7 @@ in
     services.frp = {
       enable = mkEnableOption (mdDoc "frp");
 
-      package = mkPackageOptionMD pkgs "frp" { };
+      package = mkPackageOption pkgs "frp" { };
 
       role = mkOption {
         type = types.enum [ "server" "client" ];
@@ -31,17 +31,13 @@ in
         default = { };
         description = mdDoc ''
           Frp configuration, for configuration options
-          see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_legacy_full.ini)
-          or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_legacy_full.ini) on github.
+          see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_full_example.toml)
+          or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_full_example.toml) on github.
         '';
-        example = literalExpression ''
-          {
-            common = {
-              server_addr = "x.x.x.x";
-              server_port = 7000;
-            };
-          }
-        '';
+        example = {
+            serverAddr = "x.x.x.x";
+            serverPort = 7000;
+          };
       };
     };
   };
@@ -62,7 +58,7 @@ in
             Type = "simple";
             Restart = "on-failure";
             RestartSec = 15;
-            ExecStart = "${cfg.package}/bin/${executableFile} -c ${configFile}";
+            ExecStart = "${cfg.package}/bin/${executableFile} --strict_config -c ${configFile}";
             StateDirectoryMode = optionalString isServer "0700";
             DynamicUser = true;
             # Hardening

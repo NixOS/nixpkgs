@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "python-youtube";
-  version = "0.9.2";
+  version = "0.9.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sns-sdks";
     repo = "python-youtube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jUs6n8j1coA37V0RTYqr7pqt+LRABieX7gbyWsXQpUM=";
+    hash = "sha256-vd+cbESypc/q7eSrERqkMvGhVMIfKMsoxPblPJwPiUg=";
   };
 
   postPatch = ''

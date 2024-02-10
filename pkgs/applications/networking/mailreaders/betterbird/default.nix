@@ -12,13 +12,13 @@
 let
   thunderbird-unwrapped = thunderbirdPackages.thunderbird-115;
 
-  version = "115.3.2";
+  version = "115.6.0";
   majVer = lib.versions.major version;
 
   betterbird-patches = fetchFromGitHub {
     owner = "Betterbird";
     repo = "thunderbird-patches";
-    rev = "${version}-bb15";
+    rev = "${version}-bb21-correct-series-take2";
     postFetch = ''
       echo "Retrieving external patches"
 
@@ -36,7 +36,7 @@ let
       . ./external.sh
       rm external.sh
     '';
-    hash = "sha256-6alAGEid7ipr01I52TB0xrlLroCIc03N2IagGJq8te8=";
+    hash = "sha256-YERSRyLfFTexvAYmP9qG6joQkK5fSIvU4pNLhCyIbOY=";
   };
 in ((buildMozillaMach {
   pname = "betterbird";
@@ -49,7 +49,7 @@ in ((buildMozillaMach {
   src = fetchurl {
     # https://download.cdn.mozilla.net/pub/thunderbird/releases/
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    hash = "sha256-kn35avKqUdMix8VJrKJjSWViMLe/WnnxNasPpM7/cdM=";
+    hash = "sha256-Oxz5drDQ9IJVpgP4/+jiQ5Ds1b0oX8TRD+SOG6JRN0Q=";
   };
 
   extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''

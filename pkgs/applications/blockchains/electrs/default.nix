@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/romanz/electrs";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
+    mainProgram = "electrs";
   };
 }

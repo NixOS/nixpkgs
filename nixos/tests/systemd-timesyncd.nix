@@ -15,13 +15,14 @@ in {
       # create the path that should be migrated by our activation script when
       # upgrading to a newer nixos version
       system.stateVersion = "19.03";
-      systemd.tmpfiles.rules = [
-        "r /var/lib/systemd/timesync -"
-        "d /var/lib/systemd -"
-        "d /var/lib/private/systemd/timesync -"
-        "L /var/lib/systemd/timesync - - - - /var/lib/private/systemd/timesync"
-        "d /var/lib/private/systemd/timesync - systemd-timesync systemd-timesync -"
-      ];
+      systemd.tmpfiles.settings.systemd-timesyncd-test = {
+        "/var/lib/systemd/timesync".R = { };
+        "/var/lib/systemd/timesync".L.argument = "/var/lib/private/systemd/timesync";
+        "/var/lib/private/systemd/timesync".d = {
+          user = "systemd-timesync";
+          group = "systemd-timesync";
+        };
+      };
     });
   };
 

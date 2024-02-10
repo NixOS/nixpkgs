@@ -32,6 +32,8 @@ makeScopeWithSplicing' {
 
       libxfce4util = callPackage ./core/libxfce4util { };
 
+      libxfce4windowing = callPackage ./core/libxfce4windowing { };
+
       thunar = callPackage ./core/thunar {
         thunarPlugins = [ ];
       };
@@ -121,6 +123,8 @@ makeScopeWithSplicing' {
       xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
 
       xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
+
+      xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
 
       xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
 

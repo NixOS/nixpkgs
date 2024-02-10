@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fuyufjh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gTyjj7NND5IYtnXhc454cWSzhAE+DwfPRGEWrHH+GNM=";
+    hash = "sha256-oP0yIdYytXSsbZ2pNaZ8Rrak1qJsudTe/oP6dGncGUM=";
   };
 
   cargoHash = "sha256-yKHAZpELuUD7wlM3Mi7XvxbKgdU1QxD9hsvIFcj3twE=";
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_DIR = "${lib.getDev openssl}";
 
   meta = with lib; {
-    description = "A simple command-line interface for ChatGPT API.";
+    description = "A simple command-line interface for ChatGPT API";
     homepage = "https://github.com/fuyufjh/heygpt";
     license = licenses.mit;
-    mainProgram = pname;
+    mainProgram = "heygpt";
     maintainers = with maintainers; [aldoborrero];
   };
 }

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
+
   preBuild = ''
     makeFlagsArray+=(USER_DEFINES='-DNEWUIDMAP_PATH=${shadow}/bin/newuidmap -DNEWGIDMAP_PATH=${shadow}/bin/newgidmap')
   '';
@@ -36,5 +38,6 @@ stdenv.mkDerivation rec {
     license     = licenses.asl20;
     maintainers = with maintainers; [ arturcygan bosu c0bw3b ];
     platforms   = platforms.linux;
+    mainProgram = "nsjail";
   };
 }

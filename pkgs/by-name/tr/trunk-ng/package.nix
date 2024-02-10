@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk-ng";
-  version = "0.17.10";
+  version = "0.17.11";
 
   src = fetchFromGitHub {
     owner = "ctron";
     repo = "trunk";
     rev = "v${version}";
-    hash = "sha256-F2g/GMxnS5r44i3NIJGOic9f+H5+JbFi3dqMqI6h6JQ=";
+    hash = "sha256-ZaSWfuz0w9bkilpDv4EAt6gn6ZdKOLTYJlJMQqtZAwY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-37nCqRTgbsg2cXu4xwYC/qfodPIxx97Qns8FQe9NroQ=";
+  cargoHash = "sha256-O3e8v0r76VeMYODah2RYTmwr9WNAX+HPhYVmDuP2gfg=";
 
   meta = with lib; {
     homepage = "https://github.com/ctron/trunk";

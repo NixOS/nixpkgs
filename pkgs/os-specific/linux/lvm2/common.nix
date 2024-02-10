@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
     }))
     # Musl fix from Alpine
     ./fix-stdio-usage.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    ./no-shared.patch
+    # https://gitlab.com/lvmteam/lvm2/-/merge_requests/8
+    ./fix-static.patch
   ];
 
   doCheck = false; # requires root
@@ -156,6 +156,6 @@ stdenv.mkDerivation rec {
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 bsd2 lgpl21 ];
-    maintainers = with maintainers; [ raskin ajs124 ];
+    maintainers = with maintainers; [ raskin ] ++ teams.helsinki-systems.members;
   };
 }

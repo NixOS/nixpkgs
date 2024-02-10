@@ -4,7 +4,7 @@
 , icalendar
 , pytz
 , pytestCheckHook
-, restructuredtext_lint
+, restructuredtext-lint
 , pygments
 }:
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    restructuredtext_lint
+    restructuredtext-lint
     pygments
   ];
 

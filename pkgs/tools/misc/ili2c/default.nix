@@ -1,30 +1,55 @@
-{ lib, stdenv, fetchFromGitHub, jdk8, ant, makeWrapper, jre8 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk8
+, jre8
+, makeWrapper
+, canonicalize-jars-hook
+}:
 
-let jdk = jdk8; jre = jre8; in
-stdenv.mkDerivation rec {
+let
+  jdk = jdk8;
+  jre = jre8;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ili2c";
-  version = "5.1.1";
+  version = "5.1.1"; # There are newer versions, but they use gradle
 
-  nativeBuildInputs = [ ant jdk makeWrapper ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    canonicalize-jars-hook
+  ];
 
   src = fetchFromGitHub {
     owner = "claeis";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-FHhx+f253+UdbFjd2fOlUY1tpQ6pA2aVu9CBSwUVoKQ=";
+    repo = "ili2c";
+    rev = "ili2c-${finalAttrs.version}";
+    hash = "sha256-FHhx+f253+UdbFjd2fOlUY1tpQ6pA2aVu9CBSwUVoKQ=";
   };
 
-  buildPhase = "ant jar";
+  patches = [
+    # avoids modifying Version.properties file because that would insert the current timestamp into the file
+    ./dont-use-build-timestamp.patch
+  ];
 
-  installPhase =
-    ''
-      mkdir -p $out/share/${pname}
-      cp $build/build/source/build/jar/ili2c.jar $out/share/${pname}
+  buildPhase = ''
+    runHook preBuild
+    ant jar
+    runHook postBuild
+  '';
 
-      mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/ili2c \
-        --add-flags "-jar $out/share/${pname}/ili2c.jar"
-    '';
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 build/jar/ili2c.jar -t $out/share/ili2c
+    makeWrapper ${jre}/bin/java $out/bin/ili2c \
+        --add-flags "-jar $out/share/ili2c/ili2c.jar"
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "The INTERLIS Compiler";
@@ -34,10 +59,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.interlis.ch/downloads/ili2c";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependencies as jars
+      binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.das-g ];
     platforms = platforms.linux;
+    mainProgram = "ili2c";
   };
-}
+})

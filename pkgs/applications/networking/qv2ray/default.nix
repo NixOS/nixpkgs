@@ -5,7 +5,6 @@
 , symlinkJoin
 , qttools
 , cmake
-, clang_8
 , grpc
 , protobuf
 , openssl
@@ -68,8 +67,7 @@ mkDerivation rec {
     pkg-config
     qttools
     curl
-    # The default clang_7 will result in reproducible ICE.
-  ] ++ lib.optional (stdenv.isDarwin) clang_8;
+  ];
 
   meta = with lib; {
     description = "An GUI frontend to v2ray";
@@ -79,5 +77,6 @@ mkDerivation rec {
     platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
     broken = stdenv.isDarwin;
+    mainProgram = "qv2ray";
   };
 }

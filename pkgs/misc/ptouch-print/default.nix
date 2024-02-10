@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mockmoon-cybernetics.ch/computer/p-touch2430pc/";
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
+    mainProgram = "ptouch-print";
   };
 }

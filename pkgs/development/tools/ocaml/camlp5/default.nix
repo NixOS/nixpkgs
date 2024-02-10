@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, perl, makeWrapper
-, rresult, bos, ocaml_pcre, re, camlp-streams
+, rresult, bos, re, camlp-streams
 , legacy ? false
 }:
 
@@ -10,26 +10,19 @@ else
 let params =
   if lib.versionAtLeast ocaml.version "4.12" && !legacy
   then rec {
-    version = "8.00.05";
+    version = "8.02.01";
 
     src = fetchFromGitHub {
       owner = "camlp5";
       repo = "camlp5";
       rev = version;
-      hash = "sha256-Havr3RB6iUP7QzV+LUGwMHtGzmRdS5RqYsqJ0N5w6gE=";
+      hash = "sha256-qSA2559vqWLU+0ns7LPUGI2K5f8sfu+QQ0sCH8sR6To=";
     };
 
     nativeBuildInputs = [ makeWrapper ocaml findlib perl ];
-    buildInputs = [ bos ocaml_pcre re rresult ];
+    buildInputs = [ bos re rresult ];
     propagatedBuildInputs = [ camlp-streams ];
 
-    postFixup = ''
-      for p in camlp5 camlp5o camlp5r camlp5sch mkcamlp5 ocpp5
-      do
-        wrapProgram $out/bin/$p \
-        --suffix CAML_LD_LIBRARY_PATH : ${ocaml_pcre}/lib/ocaml/${ocaml.version}/site-lib/stublibs
-      done
-    '';
   } else rec {
     version = "7.14";
     src = fetchFromGitHub {

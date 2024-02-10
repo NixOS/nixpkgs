@@ -4,7 +4,7 @@
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
-, openssl, openssl_1_1
+, openssl
 , linuxPackages, libsystemtap
 } @ args:
 
@@ -15,19 +15,11 @@ let
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
-  openssl3Gem = fetchFromGitHub {
-    owner = "ruby";
-    repo = "openssl";
-    rev = "v3.0.2";
-    hash = "sha256-KhuKRP1JkMJv7CagGRQ0KKGOd5Oh0FP0fbj0VZ4utGo=";
-  };
-
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  generic = { version, sha256, cargoSha256 ? null }: let
+  generic = { version, hash, cargoHash ? null }: let
     ver = version;
-    atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     atLeast31 = lib.versionAtLeast ver.majMin "3.1";
     atLeast32 = lib.versionAtLeast ver.majMin "3.2";
     # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
@@ -37,7 +29,7 @@ let
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
-      , openssl, openssl_1_1, opensslSupport ? true
+      , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
       , ncurses, readline, cursesSupport ? true
       , groff, docSupport ? true
@@ -72,7 +64,7 @@ let
 
         src = fetchurl {
           url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
-          inherit sha256;
+          inherit hash;
         };
 
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -91,8 +83,7 @@ let
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op (atLeast30 && opensslSupport) openssl)
-          ++ (op (!atLeast30 && opensslSupport) openssl_1_1)
+          ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses
@@ -110,7 +101,7 @@ let
         enableParallelInstalling = false;
 
         patches = op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-          ++ op (atLeast30 && useBaseRuby) (
+          ++ op useBaseRuby (
             if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch
             else ./do-not-update-gems-baseruby.patch
           )
@@ -118,24 +109,9 @@ let
             # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
             (fetchpatch {
               url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
-              sha256 = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
+              hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
             })
          ]
-          ++ ops (!atLeast30 && rubygemsSupport) [
-            # We upgrade rubygems to a version that isn't compatible with the
-            # ruby 2.7 installer. Backport the upstream fix.
-            ./rbinstall-new-rubygems-compat.patch
-
-            # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
-            # the resulting error was swallowed. Newer rubygems no longer swallows
-            # this error. We upgrade rubygems when rubygemsSupport is enabled, so
-            # we have to fix this bug to prevent the install step from failing.
-            # See https://github.com/ruby/ruby/pull/2930
-            (fetchpatch {
-              url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
-              sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
-            })
-          ]
           ++ ops atLeast31 [
             # When using a baseruby, ruby always sets "libdir" to the build
             # directory, which nix rejects due to a reference in to /build/ in
@@ -149,29 +125,18 @@ let
         cargoDeps = if yjitSupport then rustPlatform.fetchCargoTarball {
           inherit src;
           sourceRoot = "${pname}-${version}/${cargoRoot}";
-          sha256 = cargoSha256;
+          hash = cargoHash;
         } else null;
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
           cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
-          cp -r ${rubygems}/test/rubygems $sourceRoot/test
-        '' + opString (ver.majMin == "3.0" && opensslSupport) ''
-          # Replace the Gem by a OpenSSL3-compatible one.
-          echo "Hotpatching the OpenSSL gem with a 3.x series for OpenSSL 3 support..."
-          cp -vr ${openssl3Gem}/ext/openssl $sourceRoot/ext/
-          cp -vr ${openssl3Gem}/lib/ $sourceRoot/ext/openssl/
-          cp -vr ${openssl3Gem}/{History.md,openssl.gemspec} $sourceRoot/ext/openssl/
         '';
 
         postPatch = ''
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
-        '' + opString (!atLeast30) ''
-          # Make the build reproducible for ruby <= 2.7
-          # See https://github.com/ruby/io-console/commit/679a941d05d869f5e575730f6581c027203b7b26#diff-d8422f096931c58d4463e2489f62a228b0f24f0492950ba88c8c89a0d741cfe6
-          sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
         configureFlags = [
@@ -329,31 +294,21 @@ in {
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "8" "";
-    sha256 = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
-  };
-
-  ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "6" "";
-    sha256 = "sha256-bmy9SQAw15EMD/IO3vq0KU380QRvD49H94tZeYesaD4=";
-  };
-
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "4" "";
-    sha256 = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
+    hash = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "2" "";
-    sha256 = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
-    cargoSha256 = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
+    version = rubyVersion "3" "2" "3" "";
+    hash = "sha256-r38XV9ndtjA0WYgTkhHx/VcP9bqDDe8cx8Rorptlybo=";
+    cargoHash = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "0" "preview2";
-    sha256 = "sha256-MM6LD+EbN7WsCI9aV2V0S5NerEW7ianjgXMVMxRPWZE=";
-    cargoSha256 = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
+    version = rubyVersion "3" "3" "0" "";
+    hash = "sha256-llGIFNmDK+zpKoVBWoGdSJOzB9tZIa4fD3Uamomla30=";
+    cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 
 }

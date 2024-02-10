@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.8.2";
+  version = "1.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jD/8Xy/o9U/qtjz5FABg5krMIvbnrT+MlK0OvXFTJkI=";
+    hash = "sha256-dh33m7wgOwUETjdNqqDKZnpTgbrYCg9/XXC296tHm4w=";
   };
 
   postPatch = ''
@@ -52,8 +52,6 @@ buildPythonPackage rec {
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" ""
   '';
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "autopep8"
@@ -146,6 +144,7 @@ buildPythonPackage rec {
     # https://github.com/python-lsp/python-lsp-server/issues/243
     "test_numpy_completions"
     "test_workspace_loads_pycodestyle_config"
+    "test_autoimport_code_actions_and_completions_for_notebook_document"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # pyqt5 is broken on aarch64-darwin
     "test_pyqt_completion"

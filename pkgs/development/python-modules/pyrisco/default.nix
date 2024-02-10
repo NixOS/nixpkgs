@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyrisco";
   version = "0.5.8";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

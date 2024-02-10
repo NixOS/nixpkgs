@@ -59,5 +59,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "A Matrix-Facebook Messenger puppeting bridge";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ kevincox ];
+    mainProgram = "mautrix-facebook";
   };
 }

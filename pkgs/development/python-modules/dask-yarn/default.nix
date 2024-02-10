@@ -4,6 +4,7 @@
 , dask
 , distributed
 , fetchFromGitHub
+, fetchpatch
 , grpcio
 , pytestCheckHook
 , pythonOlder
@@ -19,10 +20,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
+    repo = "dask-yarn";
+    rev = "refs/tags/${version}";
     hash = "sha256-/BTsxQSiVQrihrCa9DE7pueyg3aPAdjd/Dt4dpUwdtM=";
   };
+
+  patches = [
+    (fetchpatch {  # https://github.com/dask/dask-yarn/pull/150
+      name = "address-deprecations-introduced-in-distributed-2021-07-0";
+      url = "https://github.com/dask/dask-yarn/pull/150/commits/459848afcdc22568905ee98622c74e4071496423.patch";
+      hash = "sha256-LS46QBdiAmsp4jQq4DdYdmmk1qzx5JZNTQUlRcRwY5k=";
+    })
+  ];
 
   propagatedBuildInputs = [
     distributed

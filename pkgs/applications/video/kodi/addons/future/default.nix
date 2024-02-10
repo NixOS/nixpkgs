@@ -3,11 +3,11 @@
 buildKodiAddon rec {
   pname = "future";
   namespace = "script.module.future";
-  version = "0.18.2+matrix.1";
+  version = "0.18.3+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-QBG7V70Dwmfq8ISILxGNvtmQT9fJp2e5gs2C9skRwIw=";
+    sha256 = "sha256-jKO2Qxi54z6UiCmMkxU+2pog40K2yb8/KYbNPFYuSsQ=";
   };
 
   passthru = {

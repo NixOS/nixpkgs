@@ -16,7 +16,7 @@ let
     mkRemovedOptionModule
     mkRenamedOptionModule
     types
-
+    mkPackageOption
     ;
 
   cfg = config.services.hercules-ci-agent;
@@ -45,14 +45,7 @@ in
         Support is available at [help@hercules-ci.com](mailto:help@hercules-ci.com).
       '';
     };
-    package = mkOption {
-      description = lib.mdDoc ''
-        Package containing the bin/hercules-ci-agent executable.
-      '';
-      type = types.package;
-      default = pkgs.hercules-ci-agent;
-      defaultText = literalExpression "pkgs.hercules-ci-agent";
-    };
+    package = mkPackageOption pkgs "hercules-ci-agent" { };
     settings = mkOption {
       description = lib.mdDoc ''
         These settings are written to the `agent.toml` file.

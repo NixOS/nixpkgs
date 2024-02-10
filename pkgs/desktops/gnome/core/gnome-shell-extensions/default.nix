@@ -11,13 +11,13 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extensions";
-  version = "44.0";
+  version = "45.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "jDRecvMaHjf1UGPgsVmXMBsBGU7WmHcv2HrrUMuxAas=";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major finalAttrs.version}/gnome-shell-extensions-${finalAttrs.version}.tar.xz";
+    sha256 = "7jL2OHotGK2/96lWaJvHR4ZrSocS1zeQwAKr6uTMqq8=";
   };
 
   patches = [
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-shell-extensions";
+      attrPath = "gnome.gnome-shell-extensions";
     };
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-}
+})

@@ -2,11 +2,11 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.69.0";
+  version = "2.75.0";
 
   src = fetchurl {
     url = "https://download.live.ledger.com/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-9eELWlOzUd3xwAoob5XCj16JihOt6SHZe0Ybxb9dtQI=";
+    hash = "sha256-sVaQbfpgHgd1OZgR+R0PUmNENfDOcNRfvO2AVKFyDqM=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -33,5 +33,7 @@ appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "ledger-live-desktop";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "aioextensions";
   version = "21.7.2261349";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

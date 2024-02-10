@@ -26,13 +26,13 @@ let
            stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    version = "2.9.0";
+    version = "2.10.0";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      hash = "sha256-F7RNYNLh0ORzl5PmzRX9wGK8dZgUQVLKQg1M9oNd0pk=";
+      hash = "sha256-CAuftVST9Fje/DWaaoX0K2SfWwlGMaUFG4huuwsTOSU=";
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -141,7 +141,6 @@ in {
     platform = "rk3328";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
-    platformCanUseHDCPBlob = true;
   };
 
   armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {

@@ -1,10 +1,31 @@
---- a/extension.js
-+++ b/extension.js
-@@ -20,6 +20,8 @@
- const ExtensionUtils = imports.misc.extensionUtils;
- const Me = ExtensionUtils.getCurrentExtension();
-
-+imports.gi.GIRepository.Repository.prepend_search_path('@gmenu_path@');
+--- a/menuWidgets.js
++++ b/menuWidgets.js
+@@ -3,7 +3,11 @@ 
+ import Atk from 'gi://Atk';
+ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+-import GMenu from 'gi://GMenu';
 +
- const Constants = Me.imports.constants;
- const Controller = Me.imports.controller;
++import GIRepository from 'gi://GIRepository';
++GIRepository.Repository.prepend_search_path('@gmenu_path@');
++const {default: GMenu} = await import('gi://GMenu');
++
+ import GObject from 'gi://GObject';
+ import Graphene from 'gi://Graphene';
+ import Pango from 'gi://Pango';
+--- a/menulayouts/baseMenuLayout.js
++++ b/menulayouts/baseMenuLayout.js
+@@ -1,7 +1,11 @@
+ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+-import GMenu from 'gi://GMenu';
++
++import GIRepository from 'gi://GIRepository';
++GIRepository.Repository.prepend_search_path('@gmenu_path@');
++const {default: GMenu} = await import('gi://GMenu');
++
+ import GObject from 'gi://GObject';
+ import Shell from 'gi://Shell';
+ import St from 'gi://St';

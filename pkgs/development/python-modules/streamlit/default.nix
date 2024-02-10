@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.28.0";
+  version = "1.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vm/SQOKQvip5hXsa14IrU6PJDxXPbOl9iev02ALX7bE=";
+    hash = "sha256-kDM5FdnfjOOwbeMbilu6tR6M8JgtxsMtqdax8rSp+ng=";
   };
 
   nativeBuildInputs = [

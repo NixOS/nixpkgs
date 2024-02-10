@@ -1,8 +1,10 @@
-{ lib, stdenv, zlib, autoreconfHook }:
+{ lib, stdenv, zlib, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation {
   pname = "minizip";
   inherit (zlib) src version;
+
+  patchFlags = [ "-p3" ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib ];

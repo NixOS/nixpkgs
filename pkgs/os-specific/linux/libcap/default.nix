@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optional isStatic "SHARED=no";
+  ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
 
   postPatch = ''
     patchShebangs ./progs/mkcapshdoc.sh

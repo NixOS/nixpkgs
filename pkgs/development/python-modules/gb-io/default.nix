@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "gb-io";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "althonos";

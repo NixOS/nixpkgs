@@ -24,6 +24,7 @@
 
 # tests
 , nettools
+, unixtools
 , mock
 , magic-wormhole-transit-relay
 , magic-wormhole-mailbox-server
@@ -72,7 +73,8 @@ buildPythonPackage rec {
     magic-wormhole-mailbox-server
     pytestCheckHook
   ]
-  ++ passthru.optional-dependencies.dilation;
+  ++ passthru.optional-dependencies.dilation
+  ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # These tests doesn't work within Darwin's sandbox

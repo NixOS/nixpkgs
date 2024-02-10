@@ -15,7 +15,6 @@
 , libobjc
 , rustPlatform
 , rustc
-, rust
 , cargo-auditable-cargo-wrapper
 , gi-docgen
 , python3Packages
@@ -43,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.56.3";
+  version = "2.57.1";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -51,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WjKASKAtAUZFzSf2EUD04LESgPssfyohhk/gxZrBzog=";
+    hash = "sha256-B0Zxo+1vvNZ8ripA5TkQf08JfKikqxqJTAXiUk/zQO8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-s7eNMSdajr2VhB/BPVUFftHhHKCqpR9sTfxfWwag1mI=";
+    hash = "sha256-zICI7sps5KYe8/yWXbCJv529KxGLjoyDOmpCgVAIsTs=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
@@ -106,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     "--enable-always-build-tests"
   ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "8.2.0";
+  version = "8.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    hash = "sha256-7Udmon/5E741+v2vBHHL7h31r91RR33hN1WhL3FiDQc=";
+    hash = "sha256-fL3JlZWTEEinYILNeHw0cuvVza27atLLxjrBZkVLRiU=";
   };
 
   propagatedBuildInputs = [

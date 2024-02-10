@@ -22,6 +22,7 @@
 buildPythonPackage rec {
   pname = "sfepy";
   version = "2023.1";
+  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {

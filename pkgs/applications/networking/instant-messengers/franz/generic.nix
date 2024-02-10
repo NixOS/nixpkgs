@@ -23,6 +23,7 @@
 , libnotify
 , xdg-utils
 , mesa
+, libglvnd
 , libappindicator-gtk3
 }:
 
@@ -68,7 +69,7 @@ in stdenv.mkDerivation (rec {
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
+  runtimeDependencies = [ libglvnd stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
   unpackPhase = "dpkg-deb -x $src .";
 

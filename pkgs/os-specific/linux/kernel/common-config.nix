@@ -123,6 +123,7 @@ let
     };
 
     optimization = {
+      X86_GENERIC = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # Optimize with -O2, not -Os
       CC_OPTIMIZE_FOR_SIZE = no;
     };
@@ -275,6 +276,12 @@ let
       INFINIBAND = module;
       INFINIBAND_IPOIB = module;
       INFINIBAND_IPOIB_CM = yes;
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # Not enabled by default, hides modules behind it
+      NET_VENDOR_MEDIATEK = yes;
+      # Enable SoC interface for MT7915 module, required for MT798X.
+      MT7986_WMAC = whenBetween "5.18" "6.6" yes;
+      MT798X_WMAC = whenAtLeast "6.6" yes;
     };
 
     wireless = {
@@ -290,6 +297,7 @@ let
       # At the time of writing (25-06-2023): this is only used in a "correct" way by ath drivers for initiating DFS radiation
       # for "certified devices"
       EXPERT                      = option yes; # this is needed for offering the certification option
+      RFKILL_INPUT                = option yes; # counteract an undesired effect of setting EXPERT
       CFG80211_CERTIFICATION_ONUS = option yes;
       # DFS: "Dynamic Frequency Selection" is a spectrum-sharing mechanism that allows
       # you to use certain interesting frequency when your local regulatory domain mandates it.
@@ -337,7 +345,7 @@ let
     };
 
     video = {
-      DRM_LEGACY = no;
+      DRM_LEGACY = whenOlder "6.8" no;
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
@@ -371,6 +379,16 @@ let
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
+    };
+
+    # Enables Rust support in the Linux kernel. This is currently not enabled by default, because it occasionally requires
+    # patching the Linux kernel for the specific Rust toolchain in nixpkgs. These patches usually take a bit
+    # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
+    #
+    # Once Rust in the kernel has more users, we can reconsider enabling it by default.
+    rust = optionalAttrs ((features.rust or false) && versionAtLeast version "6.7") {
+      RUST = yes;
+      GCC_PLUGINS = no;
     };
 
     sound = {
@@ -470,6 +488,9 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
+      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
+      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
+
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
       F2FS_FS             = module;
@@ -562,6 +583,13 @@ let
       KEYS_REQUEST_CACHE               = whenAtLeast "5.3" yes;
       # randomized slab caches
       RANDOM_KMALLOC_CACHES            = whenAtLeast "6.6" yes;
+
+      # NIST SP800-90A DRBG modes - enabled by most distributions
+      #   and required by some out-of-tree modules (ShuffleCake)
+      #   This does not include the NSA-backdoored Dual-EC mode from the same NIST publication.
+      CRYPTO_DRBG_HASH                 = yes;
+      CRYPTO_DRBG_CTR                  = yes;
+
     } // optionalAttrs stdenv.hostPlatform.isx86_64 {
       # Enable Intel SGX
       X86_SGX     = whenAtLeast "5.11" yes;
@@ -659,6 +687,8 @@ let
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
 
+      UDMABUF = whenAtLeast "4.20" yes;
+
       # VirtualBox guest drivers in the kernel conflict with the ones in the
       # official additions package and prevent the vboxsf module from loading,
       # so disable them for now.
@@ -715,7 +745,6 @@ let
       ZSWAP          = option yes;
       ZPOOL          = yes;
       ZBUD           = option yes;
-      ZSMALLOC       = module;
     };
 
     brcmfmac = {
@@ -838,6 +867,8 @@ let
       # upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a4ee518185e902758191d968600399f3bc2be31
       CLEANCACHE = whenOlder "5.17" (option yes);
       CRASH_DUMP = option no;
+
+      FSCACHE_STATS = yes;
 
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 
@@ -975,6 +1006,9 @@ let
       # > CONFIG_KUNIT should not be enabled in a production environment. Enabling KUnit disables Kernel Address-Space Layout Randomization (KASLR), and tests may affect the state of the kernel in ways not suitable for production.
       # https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html
       KUNIT = whenAtLeast "5.5" no;
+
+      # Set system time from RTC on startup and resume
+      RTC_HCTOSYS = option yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , writeShellScript
-, texlive
+, texliveBasic
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   outputs = [ "tex" ];
 
   nativeBuildInputs = [
-    texlive.combined.scheme-basic
+    texliveBasic
     # multiple-outputs.sh fails if $out is not defined
     (writeShellScript "force-tex-output.sh" ''
       out="''${tex-}"

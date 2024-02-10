@@ -9,6 +9,7 @@ assert !useUnrar -> libarchive != null;
 buildPythonPackage rec {
   pname = "rarfile";
   version = "4.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

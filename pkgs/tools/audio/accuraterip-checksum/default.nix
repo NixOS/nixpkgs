@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
+    mainProgram = "accuraterip-checksum";
   };
 }

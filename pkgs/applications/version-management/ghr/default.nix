@@ -32,5 +32,6 @@ buildGoModule rec {
     description = "Upload multiple artifacts to GitHub Release in parallel";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
+    mainProgram = "ghr";
   };
 }

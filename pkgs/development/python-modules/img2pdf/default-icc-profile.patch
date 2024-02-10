@@ -1,8 +1,8 @@
 diff --git a/src/img2pdf.py b/src/img2pdf.py
-index 036232b..d2e7829 100755
+index f89670b..01ec4d3 100755
 --- a/src/img2pdf.py
 +++ b/src/img2pdf.py
-@@ -3815,14 +3815,7 @@ def gui():
+@@ -3841,17 +3841,7 @@ def validate_icc(fname):
  
  
  def get_default_icc_profile():
@@ -11,8 +11,11 @@ index 036232b..d2e7829 100755
 -        "/usr/share/color/icc/OpenICC/sRGB.icc",
 -        "/usr/share/color/icc/colord/sRGB.icc",
 -    ]:
--        if os.path.exists(profile):
--            return profile
+-        if not os.path.exists(profile):
+-            continue
+-        if not file_is_icc(profile):
+-            continue
+-        return profile
 -    return "/usr/share/color/icc/sRGB.icc"
 +    return "@srgbProfile@"
  

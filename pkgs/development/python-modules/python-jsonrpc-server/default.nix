@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "palantir";

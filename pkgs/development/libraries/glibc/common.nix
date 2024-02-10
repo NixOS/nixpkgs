@@ -44,7 +44,7 @@
 
 let
   version = "2.38";
-  patchSuffix = "-23";
+  patchSuffix = "-44";
   sha256 = "sha256-+4KZiZiyspllRnvBtp0VLpwwfSzzAcnq+0VVt3DvP9I=";
 in
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.38/master && git describe
-          glibc-2.38-23-g0e1ef6779a
+          glibc-2.38-44-gd37c2b20a4
           $ git show --minimal --reverse glibc-2.38.. | gzip -9n --rsyncable - > 2.38-master.patch.gz
 
          To compare the archive contents zdiff can be used.
@@ -96,7 +96,24 @@ stdenv.mkDerivation ({
          & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
+
+      /* Retrieved from https://salsa.debian.org/glibc-team/glibc/-/commit/662dbc4f9287139a0d9c91df328a5ba6cc6abee1#0f3c6d67cb8cf5bb35c421c20f828fea97b68edf
+         Qualys advisory: https://www.qualys.com/2024/01/30/qsort.txt
+       */
+      ./local-qsort-memory-corruption.patch
     ]
+    /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
+       every HPC piece of software, without this patch CUDA compilation on ARM
+       is effectively broken. See
+       https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
+    */
+    ++ (
+      let
+        isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
+        isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
+      in
+      lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
+    )
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
 
@@ -143,7 +160,7 @@ stdenv.mkDerivation ({
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
-    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       # Enable Intel Control-flow Enforcement Technology (CET) support
       "--enable-cet"
     ] ++ lib.optionals withLinuxHeaders [
@@ -276,7 +293,7 @@ stdenv.mkDerivation ({
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ eelco ma27 ];
+    maintainers = with maintainers; [ eelco ma27 connorbaker ];
     platforms = platforms.linux;
   } // (args.meta or {});
 })

@@ -252,11 +252,10 @@ let
       text = ''
         ${cfg.backend} rm -f ${name} || true
         ${optionalString (isValidLogin container.login) ''
-          cat ${container.login.passwordFile} | \
           ${cfg.backend} login \
           ${container.login.registry} \
           --username ${container.login.username} \
-          --password-stdin
+          --password-stdin < ${container.login.passwordFile}
         ''}
         ${optionalString (container.imageFile != null) ''
           ${cfg.backend} load -i ${container.imageFile}
@@ -268,6 +267,7 @@ let
     };
   in {
     wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
+    wants = lib.optional (container.imageFile == null)  "network-online.target";
     after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ]
             # if imageFile is not set, the service needs the network to download the image from the registry
             ++ lib.optionals (container.imageFile == null) [ "network-online.target" ]

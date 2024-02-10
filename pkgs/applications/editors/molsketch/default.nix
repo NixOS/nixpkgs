@@ -48,6 +48,7 @@ mkDerivation rec {
     description = "2D molecule editor";
     homepage = "https://sourceforge.net/projects/molsketch/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.fortuneteller2k ];
+    maintainers = [ maintainers.moni ];
+    mainProgram = "molsketch";
   };
 }

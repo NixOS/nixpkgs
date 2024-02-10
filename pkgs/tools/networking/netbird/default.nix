@@ -17,6 +17,7 @@
 , UserNotifications
 , WebKit
 , ui ? false
+, netbird-ui
 }:
 let
   modules =
@@ -30,16 +31,16 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.24.2";
+  version = "0.25.6";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/gSQiBlcOeQQud8rXPIjY88+jjC0/6S+OTmFqhQxQVM=";
+    hash = "sha256-eGTyH+IjCNvqRwUQa+z2Xp1JRXrgaSQuV8SE1dxL+Mg=";
   };
 
-  vendorHash = "sha256-mSK5qQqPd6pTDLIBUa2MK8nNdi1VzNRU+GEaW+lGLpY=";
+  vendorHash = "sha256-61i/QqUFuKXbOGBJVDRi5BdUxB/k18RM8dvgQwiHb/k=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
@@ -89,7 +90,7 @@ buildGoModule rec {
       '')
       modules) + lib.optionalString (stdenv.isLinux && ui) ''
     mkdir -p $out/share/pixmaps
-    cp $src/client/ui/disconnected.png $out/share/pixmaps/netbird.png
+    cp $src/client/ui/netbird-systemtray-default.png $out/share/pixmaps/netbird.png
 
     mkdir -p $out/share/applications
     cp $src/client/ui/netbird.desktop $out/share/applications/netbird.desktop
@@ -100,6 +101,7 @@ buildGoModule rec {
 
   passthru = {
     tests.netbird = nixosTests.netbird;
+    tests.netbird-ui = netbird-ui;
     updateScript = nix-update-script { };
   };
 
@@ -109,5 +111,6 @@ buildGoModule rec {
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [ misuzu ];
+    mainProgram = "netbird";
   };
 }

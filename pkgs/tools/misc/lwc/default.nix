@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/timdp/lwc";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "lwc";
   };
 }

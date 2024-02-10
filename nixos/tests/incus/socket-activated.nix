@@ -3,7 +3,9 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
 {
   name = "incus-socket-activated";
 
-  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   nodes.machine = { lib, ... }: {
     virtualisation = {

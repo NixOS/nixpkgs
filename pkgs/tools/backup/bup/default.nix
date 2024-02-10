@@ -6,7 +6,7 @@
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.2";
+  version = "0.33.3";
 
   pythonDeps = with python3.pkgs; [ setuptools tornado ]
     ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    hash = "sha256-DDVCrY4SFqzKukXm8rIq90xAW2U+yYyhyPmUhslMMWI=";
+    hash = "sha256-w7yPs7hG4v0Kd9i2tYhWH7vW95MAMfI/8g61MB6bfps=";
   };
 
   buildInputs = [ git python3 ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   postInstall = ''
     wrapProgram $out/bin/bup \

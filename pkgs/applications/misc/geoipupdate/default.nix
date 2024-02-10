@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "geoipupdate";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "geoipupdate";
     rev = "v${version}";
-    sha256 = "sha256-Rm/W3Q5mb+qkrUYqWK83fi1FgO4KoL7+MjTuvhvY/qk=";
+    sha256 = "sha256-/iLWy3yKO34nnn5ygAewR036PzgUGIqdhXNK4fx3Ym8=";
   };
 
-  vendorHash = "sha256-YXybBVGCbdsP2pP7neHWI7KhkpE3tRo9Wpsx1RaEn9w=";
+  vendorHash = "sha256-jW5/09sOUvPZVM1wzL4xg/a14kZ0KsM8e+zEQoADsl4=";
 
   ldflags = [ "-X main.version=${version}" ];
 
@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "Automatic GeoIP database updater";
     homepage = "https://github.com/maxmind/geoipupdate";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ das_j ];
+    maintainers = teams.helsinki-systems.members;
   };
 }

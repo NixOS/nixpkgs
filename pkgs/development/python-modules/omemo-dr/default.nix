@@ -1,22 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, protobuf }:
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, protobuf
+, pytestCheckHook
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "omemo-dr";
-  version = "1.0.0";
+  version = "1.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sP5QI+lHoXt0D7ftSqJGEg1vIdgZtYEulN/JVwUgvmE=";
+    hash = "sha256-KoqMdyMdc5Sb3TdSeNTVomElK9ruUstiQayyUcIC02E=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography
     protobuf
   ];
 
-  meta = {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "omemo_dr"
+  ];
+
+  meta = with lib; {
     description = "OMEMO Double Ratchet";
-    license = lib.licenses.lgpl3;
     homepage = "https://dev.gajim.org/gajim/omemo-dr/";
+    changelog = "https://dev.gajim.org/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ];
   };
 }

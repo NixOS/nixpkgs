@@ -10,7 +10,7 @@ let
 in {
   port = 9253;
   extraOpts = {
-    package = lib.mkPackageOptionMD pkgs "prometheus-php-fpm-exporter" {};
+    package = lib.mkPackageOption pkgs "prometheus-php-fpm-exporter" {};
 
     telemetryPath = lib.mkOption {
       type = lib.types.str;

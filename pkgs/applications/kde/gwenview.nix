@@ -14,6 +14,7 @@ mkDerivation {
     description = "KDE image viewer";
     license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = [ lib.maintainers.ttuegel ];
+    mainProgram = "gwenview";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

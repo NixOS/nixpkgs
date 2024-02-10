@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "paps";
   };
 }

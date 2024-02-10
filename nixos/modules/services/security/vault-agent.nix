@@ -14,7 +14,7 @@ let
       options = {
         enable = mkEnableOption (mdDoc "this ${flavour} instance") // { default = true; };
 
-        package = mkPackageOptionMD pkgs pkgName { };
+        package = mkPackageOption pkgs pkgName { };
 
         user = mkOption {
           type = types.str;

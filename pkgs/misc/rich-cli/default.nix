@@ -75,5 +75,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/Textualize/rich-cli/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ joelkoen ];
+    mainProgram = "rich";
   };
 }

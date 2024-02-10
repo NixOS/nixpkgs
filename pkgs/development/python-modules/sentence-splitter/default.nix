@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "sentence-splitter";
   version = "1.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
@@ -36,6 +37,6 @@ buildPythonPackage rec {
     description = "Text to sentence splitter using heuristic algorithm by Philipp Koehn and Josh Schroeder";
     homepage = "https://github.com/mediacloud/sentence-splitter";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -30,6 +30,11 @@ rustPlatform.buildRustPackage {
 
   cargoSha256 = "sha256-5WiGckh/jq7AHH3JWZL8tIsj1Gqr8iLX7IyppKsW96k=";
 
+  # Workaround for https://github.com/nixos/nixpkgs/issues/166205
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
   nativeBuildInputs = [
     pkg-config
   ];

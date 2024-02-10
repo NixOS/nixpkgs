@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "qrcode";
-  version = "unstable-2022-01-10";
+  version = "unstable-2023-12-02";
 
   src = fetchFromGitHub {
     owner = "qsantos";
     repo = "qrcode";
-    rev = "f4475866bbf963ad118db936060f606eedc224d5";
-    hash = "sha256-IbWYSAc0PvSWcxKaPUXDldGDCK/lPZjptepYtLppPmA=";
+    rev = "96fac69ad3e4f616ce75c0e3ef4ed0574cfab315";
+    hash = "sha256-Aesjys6FchB6qcLRWJNGfcEZRlO3stw3+IM8Xe2pF+Q=";
   };
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
@@ -27,5 +25,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; unix;
+    mainProgram = "qrcode";
   };
 }

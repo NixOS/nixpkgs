@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     "-DPYTHON_BINDINGS=${onOff pythonSupport}"
     "-DDOCUMENTATION=${onOff docSupport}"
   ] ++ lib.optionals pythonSupport [
-    "-DPYTHON_EXECUTABLE=${python3.pythonForBuild.interpreter}"
+    "-DPYTHON_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
     "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 

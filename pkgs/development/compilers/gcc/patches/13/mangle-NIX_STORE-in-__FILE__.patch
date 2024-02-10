@@ -1,0 +1,95 @@
+From b10785c1be469319a09b10bc69db21159b0599ee Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <siarheit@google.com>
+Date: Fri, 22 Sep 2023 22:41:49 +0100
+Subject: [PATCH] gcc/file-prefix-map.cc: always mangle __FILE__ into invalid
+ store path
+
+Without the change `__FILE__` used in static inline functions in headers
+embed paths to header files into executable images. For local headers
+it's not a problem, but for headers in `/nix/store` this causes `-dev`
+inputs to be retained in runtime closure.
+
+Typical examples are `nix` -> `nlohmann_json` and `pipewire` ->
+`lttng-ust.dev`.
+
+For this reason we want to remove the occurrences of hashes in the
+expansion of `__FILE__`. `nuke-references` does it by replacing hashes
+by `eeeeee...` but those paths are also used for debug symbols. It is
+handy to be able to invert the transformation to go back to the original
+store path for debuginfod servers. The chosen solution is to make the
+hash uppercase:
+- it does not trigger runtime references (except for all digit hashes,
+  which are unlikely enough)
+- it visually looks like a bogus store path
+- it is easy to find the original store path if required
+
+Ideally we would like to use `-fmacro-prefix-map=` feature of `gcc` as:
+
+  -fmacro-prefix-map=/nix/store/$hash1-nlohmann-json-ver=/nix/store/$HASH1-nlohmann-json-ver
+  -fmacro-prefix-map=/nix/...
+
+In practice it quickly exhausts argument length limit due to `gcc`
+deficiency: https://gcc.gnu.org/PR111527
+
+Until it's fixed let's hardcode header mangling if $NIX_STORE variable
+is present in the environment.
+
+Tested as:
+
+    $ printf "# 0 \"/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-pppppp-vvvvvvv\" \nconst char * f(void) { return __FILE__; }" | NIX_STORE=/nix/store ./gcc/xgcc -Bgcc -x c - -S -o -
+    ...
+    .string "/nix/store/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-pppppp-vvvvvvv"
+    ...
+
+Mangled successfully.
+--- a/gcc/file-prefix-map.cc
++++ b/gcc/file-prefix-map.cc
+@@ -69,6 +69,9 @@ add_prefix_map (file_prefix_map *&maps, const char *arg, const char *opt)
+   maps = map;
+ }
+ 
++/* Forward declaration for a $NIX_STORE remap hack below. */
++static file_prefix_map *macro_prefix_maps; /* -fmacro-prefix-map  */
++
+ /* Perform user-specified mapping of filename prefixes.  Return the
+    GC-allocated new name corresponding to FILENAME or FILENAME if no
+    remapping was performed.  */
+@@ -102,6 +105,30 @@ remap_filename (file_prefix_map *maps, const char *filename)
+       break;
+   if (!map)
+     {
++      if (maps == macro_prefix_maps)
++	{
++	  /* Remap all fo $NIX_STORE/.{32} paths to uppercase
++	   *
++	   * That way we avoid argument parameters explosion
++	   * and still avoid embedding headers into runtime closure:
++	   *   https://gcc.gnu.org/PR111527
++	   */
++	   char * nix_store = getenv("NIX_STORE");
++	   size_t nix_store_len = nix_store ? strlen(nix_store) : 0;
++	   const char * name = realname ? realname : filename;
++	   size_t name_len = strlen(name);
++	   if (nix_store && name_len >= nix_store_len + 1 + 32 && memcmp(name, nix_store, nix_store_len) == 0)
++	     {
++		s = (char *) ggc_alloc_atomic (name_len + 1);
++		memcpy(s, name, name_len + 1);
++		for (int i = nix_store_len + 1; i < nix_store_len + 1 + 32; i++) {
++		  s[i] = TOUPPER(s[i]);
++		}
++		if (realname != filename)
++		  free (const_cast <char *> (realname));
++		return s;
++	     }
++	}
+       if (realname != filename)
+ 	free (const_cast <char *> (realname));
+       return filename;
+@@ -124,7 +151,6 @@ remap_filename (file_prefix_map *maps, const char *filename)
+    ignore it in DW_AT_producer (gen_command_line_string in opts.cc).  */
+ 
+ /* Linked lists of file_prefix_map structures.  */
+-static file_prefix_map *macro_prefix_maps; /* -fmacro-prefix-map  */
+ static file_prefix_map *debug_prefix_maps; /* -fdebug-prefix-map  */
+ static file_prefix_map *profile_prefix_maps; /* -fprofile-prefix-map  */
+ 

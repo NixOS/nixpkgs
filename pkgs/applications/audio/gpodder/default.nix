@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     mygpoclient
     requests
     pygobject3
-    eyeD3
+    eyed3
     podcastparser
     html5lib
     mutagen
@@ -95,6 +95,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://gpodder.org/";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ skeidel mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

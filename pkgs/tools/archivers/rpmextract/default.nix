@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     platforms = platforms.all;
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "rpmextract";
   };
 }

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "hdfs";
   version = "2.7.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mtth";

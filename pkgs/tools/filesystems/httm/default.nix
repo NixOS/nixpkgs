@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kimono-koans/httm/releases/tag/${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ wyndon ];
+    mainProgram = "httm";
   };
 }

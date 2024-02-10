@@ -113,5 +113,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.fitzgibbon ];
     platforms = platforms.linux;
+    mainProgram = "gnome-inform7";
   };
 }

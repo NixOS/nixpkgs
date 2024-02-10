@@ -52,12 +52,7 @@ in
       description = lib.mdDoc "Path to RouteDNS TOML configuration file.";
     };
 
-    package = mkOption {
-      default = pkgs.routedns;
-      defaultText = literalExpression "pkgs.routedns";
-      type = types.package;
-      description = lib.mdDoc "RouteDNS package to use.";
-    };
+    package = mkPackageOption pkgs "routedns" { };
   };
 
   config = mkIf cfg.enable {

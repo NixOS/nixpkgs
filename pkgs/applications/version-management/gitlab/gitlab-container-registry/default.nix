@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "3.85.0";
+  version = "3.88.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    sha256 = "sha256-F20f1qDsI+moBAL+Tpx5AALgOi0vTH7hZ5RIvRMwY1s=";
+    hash = "sha256-egslb+8+RsDjpL5xQpdCU3QwFH59grRCkODQnAkZe/0=";
   };
 
-  vendorHash = "sha256-JWuSJD2Mi0om9vA6+mYbArfr2lmGlRua6IM0DhDzSBk=";
+  vendorHash = "sha256-IFXIr0xYJCKM5VUHQV+4S/+FEAhFEjbMaU+9JWIh8cA=";
 
   patches = [
     ./Disable-inmemory-storage-driver-test.patch

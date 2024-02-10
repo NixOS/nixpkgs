@@ -1,24 +1,27 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, rust-jemalloc-sys
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.0.15";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "web-infra-dev";
     repo = "oxc";
     rev = "oxlint_v${version}";
-    hash = "sha256-zjTJF8yU3Hb8CTzzsPdo2EJI7QriEsjUyXVwprb22xQ=";
+    hash = "sha256-XQDkNfgqjfUSDwC3JgdzCqYT4O14UWGImpk5gVyQKfE=";
   };
 
-  cargoHash = "sha256-mRmoCH0VVO9LhFfEd4VfDbCfl5VCpcIKBkaNzU0+9SU=";
+  cargoHash = "sha256-pJW7191gUv3Sbp8C2IYxJz2G/nunmBnnKaV+yLX1ZKc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

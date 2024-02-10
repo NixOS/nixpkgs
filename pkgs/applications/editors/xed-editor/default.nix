@@ -19,14 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.4.3";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-nc8YS1PcmtM37TJpGl691SlxJliyI2gSGJtNzkWbk9A=";
+    sha256 = "sha256-MXRxzmRo/dRhp5Llib9ng1gzWW8uvzqTMjUVK8a3eJ8=";
   };
+
+  patches = [
+    # We patch gobject-introspection and meson to store absolute paths to libraries in typelibs
+    # but that requires the install_dir is an absolute path.
+    ./correct-gir-lib-path.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -64,5 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    mainProgram = "xed";
   };
 }

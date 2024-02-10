@@ -214,7 +214,8 @@ in
       ''
         # Create the required /bin/sh symlink; otherwise lots of things
         # (notably the system() function) won't work.
-        mkdir -m 0755 -p /bin
+        mkdir -p /bin
+        chmod 0755 /bin
         ln -sfn "${cfg.binsh}" /bin/.sh.tmp
         mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
       '';

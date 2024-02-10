@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rraval/git-nomad/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ rraval ];
+    mainProgram = "git-nomad";
   };
 }

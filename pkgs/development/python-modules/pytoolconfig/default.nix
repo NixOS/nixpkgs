@@ -18,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "pytoolconfig";
-  version = "1.2.6";
-  format = "pyproject";
+  version = "1.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "bagel897";
     repo = "pytoolconfig";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KmmaxFJbvdOGG9T9iiHKnJpFzZiLVkPJki+qHPxPTdY=";
+    hash = "sha256-h21SDgVsnCDZQf5GS7sFE19L/p+OlAFZGEYKc0RHn30=";
   };
 
   outputs = [
@@ -46,11 +46,6 @@ buildPythonPackage rec {
     sphinx-rtd-theme
     sphinxHook
   ] ++ passthru.optional-dependencies.doc;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "packaging>=22.0" "packaging"
-  '';
 
   propagatedBuildInputs = [
     packaging

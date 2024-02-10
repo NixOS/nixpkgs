@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.9.4";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
+    url = "mirror://kde/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
     hash = "sha256-xBCWDpYiXeChxIiMPqHG3CyiRau2kUdDJtzcPtvWpSA=";
   };
 

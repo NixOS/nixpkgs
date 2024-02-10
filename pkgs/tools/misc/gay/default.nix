@@ -17,5 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Colour your text / terminal to be more gay";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres CodeLongAndProsper90 ];
+    mainProgram = "gay";
   };
 }

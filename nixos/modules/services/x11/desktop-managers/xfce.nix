@@ -178,5 +178,7 @@ in
     ]) excludePackages;
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
+
+    xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
   };
 }

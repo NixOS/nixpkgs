@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "23.10.24";
+  version = "24.1.15";
 
   src = fetchurl {
     name = "exodus-linux-x64-${version}.zip";
     url = "https://downloads.exodus.com/releases/${pname}-linux-x64-${version}.zip";
     curlOptsList = [ "--user-agent" "Mozilla/5.0" ];
-    sha256 = "sha256-g28jSQaqjnM34sCpyYLSipUoU3pqAcXQIyWhlrR4xz4=";
+    sha256 = "sha256-KfUlYnonlyI/5sWIM9CS/eo9a4KWeG7Gqe/KkAqSbbY=";
   };
 
   nativeBuildInputs = [ unzip ];

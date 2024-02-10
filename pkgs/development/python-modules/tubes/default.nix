@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "tubes";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Tubes";

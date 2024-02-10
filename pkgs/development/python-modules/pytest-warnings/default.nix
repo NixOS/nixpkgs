@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pytest-warnings";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

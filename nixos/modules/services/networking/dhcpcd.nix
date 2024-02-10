@@ -98,7 +98,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
+          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service ntpd-rs.service || true
       fi
 
       ${cfg.runHook}
@@ -218,6 +218,8 @@ in
           to set `enablePrivSep = false`.
       '';
     } ];
+
+    environment.etc."dhcpcd.conf".source = dhcpcdConf;
 
     systemd.services.dhcpcd = let
       cfgN = config.networking;

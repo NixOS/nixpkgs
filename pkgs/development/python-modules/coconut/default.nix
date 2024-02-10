@@ -8,24 +8,42 @@
 , pygments
 , pytestCheckHook
 , prompt-toolkit
+, setuptools
 , tkinter
 , watchdog
 }:
 
 buildPythonPackage rec {
   pname = "coconut";
-  version = "3.0.3";
+  version = "3.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u1tcIu0U1VZrUx2hVdtRDv1N4jVf176kQSw47/7lOXY=";
+    hash = "sha256-TIYep9EuCfcN8bp0vkaoB5W626lrD4PVh+oYKmVrfeY=";
   };
 
-  propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pexpect pytestCheckHook tkinter ];
+  propagatedBuildInputs = [
+    cpyparsing
+    ipykernel
+    mypy
+    pygments
+    prompt-toolkit
+    setuptools
+    watchdog
+  ];
+
+  nativeCheckInputs = [
+    pexpect
+    pytestCheckHook
+    tkinter
+  ];
 
   # Currently most tests have performance issues
   pytestFlagsArray = [

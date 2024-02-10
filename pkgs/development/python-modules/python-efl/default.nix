@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "python-efl";
   version = "1.26.1";
+  format = "setuptools";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
@@ -31,11 +32,11 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext
   '';
 
   installPhase = ''
-    ${python.pythonForBuild.interpreter} setup.py install --prefix=$out --single-version-externally-managed
+    ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;

@@ -82,14 +82,7 @@ in {
 
     enable = mkEnableOption (lib.mdDoc "PostgreSQL connection pooler");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.pgbouncer;
-      defaultText = literalExpression "pkgs.pgbouncer";
-      description = lib.mdDoc ''
-        The pgbouncer package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "pgbouncer" { };
 
     openFirewall = mkOption {
       type = types.bool;

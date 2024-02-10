@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-chameleon-gnupg";
-  version = "0.3.2";
+  version = "unstable-2023-11-22";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Qe9KKZh0Zim/BdPn2aMxkH6FBOBB6zijkp5ft9YfzzU=";
+    rev = "fd9df5a4e1ec3c3ca986a1a25bacf13f024c934a";
+    hash = "sha256-OxWlkOQxuuCFyLMx+ucervyqIduUpyJ9lCGFQlfEUFc=";
   };
 
-  cargoHash = "sha256-KuVSpbAfLVIy5YJ/8qb+Rfw1TgZkWfR+Ai9gDcf4EQ4=";
+  cargoHash = "sha256-4+PA1kYJgn8yDAYr88DQYg6sdgSN3MWzKAUATW3VO6I=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   # gpgconf: error creating socket directory

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.13.3";
+  version = "1.16.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "optimum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4bKQcltUr7q8wHfiRXQcK5dw0TrnMr9/bTNXeOyg7oA=";
+    hash = "sha256-bEwCUPZJT1UTD8mQJKg+Nwag6kpn4076uyKocKI/+/M=";
   };
 
   propagatedBuildInputs = [

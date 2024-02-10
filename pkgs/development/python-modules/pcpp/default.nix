@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pcpp";
   version = "1.30";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ned14";

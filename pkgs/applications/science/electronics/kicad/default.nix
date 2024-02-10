@@ -1,31 +1,47 @@
 { lib, stdenv
+, runCommand
+, newScope
 , fetchFromGitLab
-, gnome
-, dconf
-, wxGTK32
-, gtk3
 , makeWrapper
-, gsettings-desktop-schemas
-, hicolor-icon-theme
+, symlinkJoin
 , callPackage
 , callPackages
+
+, gnome
+, dconf
+, gtk3
+, wxGTK32
 , librsvg
 , cups
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+
+, unzip
+, jq
 
 , pname ? "kicad"
 , stable ? true
+, testing ? false
 , withNgspice ? !stdenv.isDarwin
 , libngspice
 , withScripting ? true
 , python3
+, addons ? [ ]
 , debug ? false
 , sanitizeAddress ? false
 , sanitizeThreads ? false
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
-, symlinkJoin
 }:
+
+# `addons`: https://dev-docs.kicad.org/en/addons/
+#
+# ```nix
+# kicad = pkgs.kicad.override {
+#   addons = with pkgs.kicadAddons; [ kikit kikit-library ];
+# };
+# ```
 
 # The `srcs` parameter can be used to override the kicad source code
 # and all libraries, which are otherwise inaccessible
@@ -62,7 +78,9 @@
 # }
 
 let
-  baseName = if (stable) then "kicad" else "kicad-unstable";
+  baseName = if (testing) then "kicad-testing"
+    else if (stable) then "kicad"
+    else "kicad-unstable";
   versionsImport = import ./versions.nix;
 
   # versions.nix does not provide us with version, src and rev. We
@@ -105,7 +123,33 @@ let
 
   wxGTK = wxGTK32;
   python = python3;
-  wxPython = python.pkgs.wxPython_4_2;
+  wxPython = python.pkgs.wxpython;
+  addonPath = "addon.zip";
+  addonsDrvs = map (pkg: pkg.override { inherit addonPath python3; }) addons;
+
+  addonsJoined =
+    runCommand "addonsJoined"
+      {
+        inherit addonsDrvs;
+        nativeBuildInputs = [ unzip jq ];
+      } ''
+      mkdir $out
+
+      for pkg in $addonsDrvs; do
+        unzip $pkg/addon.zip -d unpacked
+
+        folder_name=$(jq .identifier unpacked/metadata.json --raw-output | tr . _)
+        for d in unpacked/*; do
+          if [ -d "$d" ]; then
+            dest=$out/share/kicad/scripting/$(basename $d)/$folder_name
+            mkdir -p $(dirname $dest)
+
+            mv $d $dest
+          fi
+        done
+        rm -r unpacked
+      done
+    '';
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
@@ -113,8 +157,9 @@ stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
-    inherit stable baseName;
+    inherit stable testing baseName;
     inherit kicadSrc kicadVersion;
     inherit wxGTK python wxPython;
     inherit withNgspice withScripting withI18n;
@@ -131,7 +176,7 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   pythonPath = optionals (withScripting)
-    [ wxPython python.pkgs.six python.pkgs.requests ];
+    [ wxPython python.pkgs.six python.pkgs.requests ] ++ addonsDrvs;
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optionals (withScripting)
@@ -164,6 +209,17 @@ stdenv.mkDerivation rec {
     "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
     "--set-default KICAD7_TEMPLATE_DIR ${template_dir}"
   ]
+  ++ optionals (addons != [ ]) (
+    let stockDataPath = symlinkJoin {
+      name = "kicad_stock_data_path";
+      paths = [
+        "${base}/share/kicad"
+        "${addonsJoined}/share/kicad"
+      ];
+    };
+    in
+    [ "--set-default NIX_KICAD7_STOCK_DATA_PATH ${stockDataPath}" ]
+  )
   ++ optionals (with3d)
   [
     "--set-default KICAD7_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
@@ -211,17 +267,16 @@ stdenv.mkDerivation rec {
     ln -s ${base}/share/metainfo $out/share/metainfo
   '';
 
-  # can't run this for each pname
-  # stable and unstable are in the same versions.nix
-  # and kicad-small reuses stable
-  # with "all" it updates both, run it manually if you don't want that
-  # and can't git commit if this could be running in parallel with other scripts
-  passthru.updateScript = [ ./update.sh "all" ];
+  passthru.updateScript = {
+    command = [ ./update.sh "${pname}" ];
+    supportedFeatures = [ "commit" ];
+  };
 
   meta = rec {
     description = (if (stable)
     then "Open Source Electronics Design Automation suite"
-    else "Open Source EDA suite, development build")
+    else if (testing) then "Open Source EDA suite, latest on stable branch"
+    else "Open Source EDA suite, latest on master branch")
     + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''

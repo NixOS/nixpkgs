@@ -6,35 +6,24 @@
 , makeWrapper
 , alsa-lib
 , curl
-, egl-wayland
 , libao
-, libdecor
-, libevdev
-, libffi
-, libGL
 , libpulseaudio
-, libX11
-, libXext
-, libxkbcommon
 , libzip
-, mesa
+, lua
 , miniupnpc
-, udev
-, vulkan-headers
+, SDL2
 , vulkan-loader
-, wayland
-, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "flycast";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
-    rev = "V${version}";
-    sha256 = "sha256-PRInOqg9OpaUVLwSj1lOxDtjpVaYehkRsp0jLrVKPyY=";
+    rev = "v${version}";
+    sha256 = "sha256-eQMKaUaZ1b0oXre4Ouli4qIyNaG64KntyRGk3/YIopc=";
     fetchSubmodules = true;
   };
 
@@ -47,23 +36,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     curl
-    egl-wayland
     libao
-    libdecor
-    libevdev
-    libffi
-    libGL
     libpulseaudio
-    libX11
-    libXext
-    libxkbcommon
     libzip
-    mesa # for libgbm
+    lua
     miniupnpc
-    udev
-    vulkan-headers
-    wayland
-    zlib
+    SDL2
+  ];
+
+  cmakeFlags = [
+    "-DUSE_HOST_SDL=ON"
   ];
 
   postFixup = ''

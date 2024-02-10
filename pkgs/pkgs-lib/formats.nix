@@ -41,6 +41,8 @@ rec {
 
   libconfig = (import ./formats/libconfig/default.nix { inherit lib pkgs; }).format;
 
+  hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
+
   json = {}: {
 
     type = with lib.types; let
@@ -140,6 +142,20 @@ rec {
           else value;
       in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
 
+  };
+
+  # As defined by systemd.syntax(7)
+  #
+  # null does not set any value, which allows for RFC42 modules to specify
+  # optional config options.
+  systemd = let
+    mkValueString = lib.generators.mkValueStringDefault {};
+    mkKeyValue = k: v:
+      if v == null then "# ${k} is unset"
+      else "${k} = ${mkValueString v}";
+  in ini {
+    listsAsDuplicateKeys = true;
+    inherit mkKeyValue;
   };
 
   keyValue = {

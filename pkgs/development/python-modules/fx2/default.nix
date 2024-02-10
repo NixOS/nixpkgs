@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "fx2";
   version = "unstable-2023-09-20";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "whitequark";

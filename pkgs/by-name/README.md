@@ -1,11 +1,9 @@
 # Name-based package directories
 
 The structure of this directory maps almost directly to top-level package attributes.
-This is the recommended way to add new top-level packages to Nixpkgs [when possible](#limitations).
+Add new top-level packages to Nixpkgs using this mechanism [whenever possible](#limitations).
 
-Packages found in the named-based structure do not need to be explicitly added to the
-`top-level/all-packages.nix` file unless they require overriding the default value
-of an implicit attribute (see below).
+Packages found in the name-based structure are automatically included, without needing to be added to `all-packages.nix`. However if the implicit attribute defaults need to be changed for a package, this [must still be declared in `all-packages.nix`](#changing-implicit-attribute-defaults).
 
 ## Example
 
@@ -99,7 +97,9 @@ There's some limitations as to which packages can be defined using this structur
 - Only packages defined using `pkgs.callPackage`.
   This excludes packages defined using `pkgs.python3Packages.callPackage ...`.
 
-  Instead use the [category hierarchy](../README.md#category-hierarchy) for such attributes.
+  Instead:
+  - Either change the package definition to work with `pkgs.callPackage`.
+  - Or use the [category hierarchy](../README.md#category-hierarchy).
 
 - Only top-level packages.
   This excludes packages for other package sets like `pkgs.pythonPackages.*`.
@@ -110,12 +110,11 @@ There's some limitations as to which packages can be defined using this structur
 
 CI performs [certain checks](../test/nixpkgs-check-by-name/README.md#validity-checks) on the `pkgs/by-name` structure.
 This is done using the [`nixpkgs-check-by-name` tool](../test/nixpkgs-check-by-name).
-The version of this tool used is the one that corresponds to the NixOS channel of the PR base branch.
-See [here](../../.github/workflows/check-by-name.yml) for details.
 
-The tool can be run locally using
+You can locally emulate the CI check using
 
-```bash
-nix-build -A tests.nixpkgs-check-by-name
-result/bin/nixpkgs-check-by-name .
 ```
+$ ./pkgs/test/nixpkgs-check-by-name/scripts/run-local.sh master
+```
+
+See [here](../../.github/workflows/check-by-name.yml) for more info.

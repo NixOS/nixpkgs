@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/mgartner/pg_flame";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "pg_flame";
   };
 }

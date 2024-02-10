@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.28.9"; # N.B: if you change this, change botocore and awscli to a matching version
+  version = "1.33.6"; # N.B: if you change this, change botocore and awscli to a matching version
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = pname;
     rev = version;
-    hash = "sha256-NkNHA20yn1Q7uoq/EL1Wn8F1fpi1waQujutGIKsnxlI=";
+    hash = "sha256-oOrUVBh1sbaOibU8A+bGZ4z7IEiE4gjHwZ+8889Hv60=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,10 @@ buildPythonPackage rec {
     # Integration tests require networking
     "tests/integration"
   ];
+
+  passthru.optional-dependencies = {
+    crt = [ botocore.optional-dependencies.crt ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/boto/boto3";

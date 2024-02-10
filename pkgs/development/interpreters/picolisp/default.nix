@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateInfo = {
-      downloadPage = "http://www.software-lab.de/down.html";
+      downloadPage = "https://www.software-lab.de/down.html";
     };
   };
 }

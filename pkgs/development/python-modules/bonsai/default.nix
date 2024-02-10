@@ -5,7 +5,6 @@
 , setuptools
 , cyrus_sasl
 , openldap
-, typing-extensions
 , gevent
 , tornado
 , trio
@@ -14,17 +13,17 @@
 
 buildPythonPackage rec {
   pname = "bonsai";
-  version = "1.5.1";
+  version = "1.5.2";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "bonsai";
     rev = "v${version}";
-    hash = "sha256-UR/Ds5famD8kuDa6IIIyEv45eJuAcoygXef8XE+5Cxk=";
+    hash = "sha256-h/PbwQ69fDcmUCazMtxXP1iE0fE1on+WoK+wYgQ9jLs=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +33,6 @@ buildPythonPackage rec {
   buildInputs = [
     cyrus_sasl
     openldap
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   passthru.optional-dependencies = {

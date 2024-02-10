@@ -3,8 +3,9 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_25
+, electron_28
 , fetchFromGitHub
+, fetchpatch2
 , glib
 , gnome
 , gtk3
@@ -15,8 +16,10 @@
 , moreutils
 , napi-rs-cli
 , nodejs_18
+, patchutils_0_4_2
 , pkg-config
 , python3
+, runCommand
 , rustc
 , rustPlatform
 }:
@@ -24,29 +27,48 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-  electron = electron_25;
-in buildNpmPackage' rec {
+  electron = electron_28;
+in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.10.0";
+  version = "2024.2.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-egXToXWfb9XV7JuCRBYJO4p/e+WOwMncPKz0oBgeALQ=";
+    hash = "sha256-nCjcwe+7Riml/J0hAVv/t6/oHIDPhwFD5A3iQ/LNR5Y=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/bitwarden/clients/pull/7508
+      url = "https://github.com/amarshall/bitwarden-clients/commit/e85fa4ef610d9dd05bd22a9b93d54b0c7901776d.patch";
+      hash = "sha256-P9MTsiNbAb2kKo/PasIm9kGm0lQjuVUxAJ3Fh1DfpzY=";
+    })
+  ];
+
+  nodejs = nodejs_18;
+
   makeCacheWritable = true;
+  npmFlags = [ "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-iO8ZozVl1vOOqowQARnRJWSFUFnau46+dKfcMSkyU3o=";
+  npmDepsHash = "sha256-GJl9pVwFWEg9yku9IXLcu2XMJZz+ZoQOxCf1TrW715Y=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
+    patches = map
+      (patch: runCommand
+        (builtins.baseNameOf patch)
+        { nativeBuildInputs = [ patchutils_0_4_2 ]; }
+        ''
+          < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
+        ''
+      )
+      patches;
+    patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-I7wENo4cCxcllEyT/tgAavHNwYPrQkPXxg/oTsl/ClA=";
+    hash = "sha256-KJUz5hvdsurnohUWRZedXvuWMnLtR0dcdTeHtJGrZBs=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -164,5 +186,6 @@ in buildNpmPackage' rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall kiwi ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "bitwarden";
   };
 }

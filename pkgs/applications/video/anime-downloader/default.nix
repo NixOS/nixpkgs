@@ -50,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.unlicense;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "anime";
   };
 }

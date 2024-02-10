@@ -122,72 +122,13 @@ let
     };
   };
 
-  # The current implementations of `doRename`,  `mkRenamedOptionModule` do not provide the full options path when used with submodules.
-  # They would only show `settings.useacl' instead of `services.dokuwiki.sites."site1.local".settings.useacl'
-  # The partial re-implementation of these functions is done to help users in debugging by showing the full path.
-  mkRenamed = from: to: { config, options, name, ... }: let
-    pathPrefix = [ "services" "dokuwiki" "sites" name ];
-    fromPath = pathPrefix  ++ from;
-    fromOpt = getAttrFromPath from options;
-    toOp = getAttrsFromPath to config;
-    toPath = pathPrefix ++ to;
-  in {
-    options = setAttrByPath from (mkOption {
-      visible = false;
-      description = lib.mdDoc "Alias of {option}${showOption toPath}";
-      apply = x: builtins.trace "Obsolete option `${showOption fromPath}' is used. It was renamed to ${showOption toPath}" toOp;
-    });
-    config = mkMerge [
-      {
-        warnings = optional fromOpt.isDefined
-          "The option `${showOption fromPath}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption toPath}'.";
-      }
-      (lib.modules.mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt)
-    ];
-  };
-
   siteOpts = { options, config, lib, name, ... }:
     {
-      imports = [
-        (mkRenamed [ "aclUse" ] [ "settings" "useacl" ])
-        (mkRenamed [ "superUser" ] [ "settings" "superuser" ])
-        (mkRenamed [ "disableActions" ] [ "settings"  "disableactions" ])
-        ({ config, options, ... }: let
-          showPath = suffix: lib.options.showOption ([ "services" "dokuwiki" "sites" name ] ++ suffix);
-          replaceExtraConfig = "Please use `${showPath ["settings"]}' to pass structured settings instead.";
-          ecOpt = options.extraConfig;
-          ecPath = showPath [ "extraConfig" ];
-        in {
-          options.extraConfig = mkOption {
-            visible = false;
-            apply = x: throw "The option ${ecPath} can no longer be used since it's been removed.\n${replaceExtraConfig}";
-          };
-          config.assertions = [
-            {
-              assertion = !ecOpt.isDefined;
-              message = "The option definition `${ecPath}' in ${showFiles ecOpt.files} no longer has any effect; please remove it.\n${replaceExtraConfig}";
-            }
-            {
-              assertion = config.mergedConfig.useacl -> (config.acl != null || config.aclFile != null);
-              message = "Either ${showPath [ "acl" ]} or ${showPath [ "aclFile" ]} is mandatory if ${showPath [ "settings" "useacl" ]} is true";
-            }
-            {
-              assertion = config.usersFile != null -> config.mergedConfig.useacl != false;
-              message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defined as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
-            }
-          ];
-        })
-      ];
 
       options = {
         enable = mkEnableOption (lib.mdDoc "DokuWiki web application");
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.dokuwiki;
-          defaultText = literalExpression "pkgs.dokuwiki";
-          description = lib.mdDoc "Which DokuWiki package to use.";
-        };
+        package = mkPackageOption pkgs "dokuwiki" { };
 
         stateDir = mkOption {
           type = types.path;
@@ -335,14 +276,9 @@ let
           '';
         };
 
-        phpPackage = mkOption {
-          type = types.package;
-          relatedPackages = [ "php81" "php82" ];
-          default = pkgs.php81;
-          defaultText = "pkgs.php81";
-          description = lib.mdDoc ''
-            PHP package to use for this dokuwiki site.
-          '';
+        phpPackage = mkPackageOption pkgs "php" {
+          default = "php81";
+          example = "php82";
         };
 
         phpOptions = mkOption {
@@ -402,21 +338,6 @@ let
           '';
         };
 
-      # Required for the mkRenamedOptionModule
-      # TODO: Remove me once https://github.com/NixOS/nixpkgs/issues/96006 is fixed
-      # or we don't have any more notes about the removal of extraConfig, ...
-      warnings = mkOption {
-        type = types.listOf types.unspecified;
-        default = [ ];
-        visible = false;
-        internal = true;
-      };
-      assertions = mkOption {
-        type = types.listOf types.unspecified;
-        default = [ ];
-        visible = false;
-        internal = true;
-      };
     };
   };
 in
@@ -449,10 +370,6 @@ in
 
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
-
-    warnings = flatten (mapAttrsToList (_: cfg: cfg.warnings) eachSite);
-
-    assertions = flatten (mapAttrsToList (_: cfg: cfg.assertions) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {

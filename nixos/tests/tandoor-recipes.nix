@@ -3,10 +3,8 @@ import ./make-test-python.nix ({ lib, ... }: {
   meta.maintainers = with lib.maintainers; [ ambroisie ];
 
   nodes.machine = { pkgs, ... }: {
-    # Setup using Postgres
     services.tandoor-recipes = {
       enable = true;
-
       extraConfig = {
         DB_ENGINE = "django.db.backends.postgresql";
         POSTGRES_HOST = "/run/postgresql";
@@ -21,7 +19,7 @@ import ./make-test-python.nix ({ lib, ... }: {
       ensureUsers = [
         {
           name = "tandoor_recipes";
-          ensurePermissions."DATABASE tandoor_recipes" = "ALL PRIVILEGES";
+          ensureDBOwnership = true;
         }
       ];
     };

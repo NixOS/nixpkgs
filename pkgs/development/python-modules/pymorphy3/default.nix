@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pymorphy3";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "no-plagiarism";

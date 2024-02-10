@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "lark"
   ];
 
-  pythonImportChecks = [ "ndn" ];
+  pythonImportsCheck = [ "ndn" ];
 
   meta = with lib; {
     description = "An NDN client library with AsyncIO support";

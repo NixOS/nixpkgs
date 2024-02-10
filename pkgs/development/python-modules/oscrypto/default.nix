@@ -3,6 +3,7 @@
 , asn1crypto
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , openssl
 , pytestCheckHook
 , pythonOlder
@@ -24,6 +25,12 @@ buildPythonPackage rec {
 
   patches = [
     ./support-openssl-3.0.10.patch
+
+    (fetchpatch {
+      # backport removal of imp module usage
+      url = "https://github.com/wbond/oscrypto/commit/3865f5d528740aa1205d16ddbee84c5b48aeb078.patch";
+      hash = "sha256-lQGoPM7EicwCPWapEDkqWEqMqXk4tijiImxndcDFqY4=";
+    })
   ];
 
   postPatch = ''

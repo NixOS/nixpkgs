@@ -4,29 +4,41 @@
 , fetchPypi
 , gcsfs
 , pythonRelaxDepsHook
-, setuptools-scm }:
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
   pname = "dvc-gs";
-  version = "2.22.1";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IKDwdSfolZwv8TvHHicVV42PYeULhskv8csbkiJzLbk=";
+    hash = "sha256-5UMKKX+4GCNm98S8kQsasQTY5cwi9hGhm84FFl3/7NQ=";
   };
 
   # Prevent circular dependency
-  pythonRemoveDeps = [ "dvc" ];
+  pythonRemoveDeps = [
+    "dvc"
+  ];
 
-  nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    setuptools-scm
+    pythonRelaxDepsHook
+  ];
 
-  propagatedBuildInputs = [ gcsfs dvc-objects ];
+  propagatedBuildInputs = [
+    gcsfs
+    dvc-objects
+  ];
 
   # Network access is needed for tests
   doCheck = false;
 
-  pythonImportsCheck = [ "dvc_gs" ];
+  # Circular dependency
+  # pythonImportsCheck = [
+  #   "dvc_gs"
+  # ];
 
   meta = with lib; {
     description = "gs plugin for dvc";

@@ -47,5 +47,6 @@ buildGoModule rec {
     description = "Fast, simple, scalable, Docker-ready HTTP microservice for high-level image processing";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda urandom ];
+    mainProgram = "imaginary";
   };
 }

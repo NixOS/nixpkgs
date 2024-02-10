@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://0x2a.at/site/projects/djvu2pdf/";
     license = lib.licenses.gpl1Only;
     platforms = lib.platforms.all;
+    mainProgram = "djvu2pdf";
   };
 }

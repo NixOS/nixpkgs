@@ -1,5 +1,5 @@
 { stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
-, fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
+, fetchzip, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
 , libuuid, libxfs, lvm2, openssl, perl, procps, quota
 , time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
 
@@ -7,10 +7,9 @@ stdenv.mkDerivation rec {
   pname = "xfstests";
   version = "2023.05.14";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "v${version}";
-    sha256 = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${version}.tar.gz";
+    hash = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
   };
 
   nativeBuildInputs = [
@@ -107,5 +106,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
+    mainProgram = "xfstests-check";
   };
 }

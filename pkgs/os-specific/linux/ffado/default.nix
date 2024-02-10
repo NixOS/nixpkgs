@@ -24,12 +24,14 @@ let
 in
 mkDerivation rec {
   pname = "ffado";
-  version = "2.4.7";
+  version = "2.4.8";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "0vsn3y52g6f77lqh9qfkd7dslmb7bbgy46cv5idynx4frqscc23s";
+    hash = "sha256-f0x561ehKw6uMSri0RZip+v1JHZuhixtywl0PVU/N44=";
   };
+
+  sourceRoot = "libffado-${version}/libffado";
 
   prePatch = ''
     substituteInPlace ./support/tools/ffado-diag.in \

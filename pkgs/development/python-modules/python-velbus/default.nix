@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-velbus";
-  version = "2.1.12";
+  version = "2.1.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X0jg1qd4rWbaRZqgMBJKOZD50sFq3Eyhw9RU6cEjORo=";
+    hash = "sha256-3eDfXPMO167QI/umLBjlHTBV67XQ8QYkg4EzfrRTw6M=";
   };
 
   propagatedBuildInputs = [

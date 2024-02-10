@@ -1,6 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
 , buildPackages
-, llvmPackages_16
 , ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
@@ -27,7 +26,7 @@ let
   # Sometimes we access `llvmPackages` via `pkgs`, and other times
   # via `pkgsFooBar`, so a string (attrname) is the only way to have
   # a single point of control over the LLVM version used.
-  llvmPackages_attrName = "llvmPackages_16";
+  llvmPackages_attrName = "llvmPackages_17";
   stdenv = pkgs.${llvmPackages_attrName}.stdenv;
 
   # Helper functions for changes that depend on specific versions:
@@ -60,6 +59,7 @@ let
           inherit (upstream-info.deps.gn) url rev hash;
         };
       });
+      recompressTarball = callPackage ./recompress-tarball.nix { };
     });
 
     browser = callPackage ./browser.nix {

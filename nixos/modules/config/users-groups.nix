@@ -153,7 +153,7 @@ let
           {file}`pam_mount.conf.xml`.
           Useful attributes might include `path`,
           `options`, `fstype`, and `server`.
-          See <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>
+          See <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>
           for more information.
         '';
       };
@@ -475,7 +475,7 @@ let
   sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
   groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
-  usersWithoutExistingGroup = lib.filterAttrs (n: u: !lib.elem u.group groupNames) cfg.users;
+  usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -685,7 +685,7 @@ in {
       shadow.gid = ids.gids.shadow;
     };
 
-    system.activationScripts.users = {
+    system.activationScripts.users = if !config.systemd.sysusers.enable then {
       supportsDryActivation = true;
       text = ''
         install -m 0700 -d /root
@@ -694,7 +694,7 @@ in {
         ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
         -w ${./update-users-groups.pl} ${spec}
       '';
-    };
+    } else ""; # keep around for backwards compatibility
 
     system.activationScripts.update-lingering = let
       lingerDir = "/var/lib/systemd/linger";
@@ -711,7 +711,9 @@ in {
     '';
 
     # Warn about user accounts with deprecated password hashing schemes
-    system.activationScripts.hashes = {
+    # This does not work when the users and groups are created by
+    # systemd-sysusers because the users are created too late then.
+    system.activationScripts.hashes = if !config.systemd.sysusers.enable then {
       deps = [ "users" ];
       text = ''
         users=()
@@ -729,7 +731,7 @@ in {
           printf ' - %s\n' "''${users[@]}"
         fi
       '';
-    };
+    } else ""; # keep around for backwards compatibility
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";

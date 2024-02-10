@@ -4,7 +4,6 @@
 , buildPythonPackage
 , certifi
 , fetchFromGitHub
-, fetchpatch
 , numpy
 , poetry-core
 , pygments
@@ -17,32 +16,17 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2023.08.1";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyairvisual";
     rev = "refs/tags/${version}";
-    hash = "sha256-+yqN3q+uA/v01uCguzUSoeCJK9lRmiiYn8d272+Dd2M=";
+    hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
-
-  patches = [
-    # https://github.com/bachya/pyairvisual/pull/298
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/pyairvisual/commit/eb32beb7229a53ff81917cc417ed66b26aae47dd.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace \
-      'certifi = ">=2023.07.22"' \
-      'certifi = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core

@@ -28,8 +28,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     jaraco-classes
     jaraco-text

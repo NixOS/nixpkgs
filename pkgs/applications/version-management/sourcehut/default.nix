@@ -1,19 +1,20 @@
-{ python3
+{ lib
+, stdenv
+, python3
 , callPackage
 , recurseIntoAttrs
 , nixosTests
 , config
+, fetchPypi
 }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
 # Then we expose them through all-packages.nix as an application through `toPythonApplication`
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 let
-  fetchNodeModules = callPackage ./fetchNodeModules.nix { };
-
   python = python3.override {
     packageOverrides = self: super: {
-      srht = self.callPackage ./core.nix { inherit fetchNodeModules; };
+      srht = self.callPackage ./core.nix { };
 
       buildsrht = self.callPackage ./builds.nix { };
       gitsrht = self.callPackage ./git.nix { };
@@ -26,6 +27,43 @@ let
       todosrht = self.callPackage ./todo.nix { };
 
       scmsrht = self.callPackage ./scm.nix { };
+
+      # sourcehut is not (yet) compatible with SQLAlchemy 2.x
+      sqlalchemy = super.sqlalchemy_1_4;
+
+      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.1";
+        format = "setuptools";
+        src = fetchPypi {
+          pname = "Flask-SQLAlchemy";
+          inherit version;
+          hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
+        };
+        propagatedBuildInputs = with self; [
+          flask
+          sqlalchemy
+        ];
+      });
+
+      # sourcehut is not (yet) compatible with factory-boy 3.x
+      factory-boy = super.factory-boy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.12.0";
+        src = fetchPypi {
+          pname = "factory_boy";
+          inherit version;
+          hash = "sha256-+vSNYIoXNfDQo8nL9TbWT5EytUfa57pFLE2Zp56Eo3A=";
+        };
+        nativeCheckInputs = (with super; [
+          django
+          flask
+          mongoengine
+          pytestCheckHook
+        ]) ++ (with self; [
+          sqlalchemy
+          flask-sqlalchemy
+        ]);
+        postPatch = "";
+      });
     };
   };
 in

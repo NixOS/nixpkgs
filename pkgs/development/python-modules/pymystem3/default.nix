@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pymystem3";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

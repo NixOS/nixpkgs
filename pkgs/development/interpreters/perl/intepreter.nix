@@ -236,14 +236,14 @@ stdenv.mkDerivation (rec {
     mainProgram = "perl";
   };
 } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-  crossVersion = "1.5"; # Jul 03, 2023
+  crossVersion = "84db4c71ae3d3b01fb2966cd15a060a7be334710"; # Nov 29, 2023
 
   perl-cross-src = fetchFromGitHub {
     name = "perl-cross-${crossVersion}";
     owner = "arsv";
     repo = "perl-cross";
     rev = crossVersion;
-    sha256 = "sha256-9nRFJinZUWUSpXXyyIVmhRLQ1B5LB3UmN2iAckmem58=";
+    sha256 = "sha256-1Zqw4sy/lD2nah0Z8rAE11tSpq1Ym9nBbatDczR+mxs=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];

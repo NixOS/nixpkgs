@@ -5,22 +5,22 @@
 , fetchPypi
 , isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
-, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook, setuptools
+, libxcb, openjpeg, libimagequant, numpy, pytestCheckHook, setuptools
 # for passthru.tests
 , imageio, matplotlib, pilkit, pydicom, reportlab
 }@args:
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "10.0.1";
+  version = "10.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Pillow";
+    pname = "pillow";
     inherit version;
-    hash = "sha256-1ylnsGvpMA/tXPvItbr87sSL983H2rZrHSVJA1KHGR0=";
+    hash = "sha256-6H8LLHgVfhLXaGsn1jwHD9ZdmU6N2ubzKODc9KDNAH4=";
   };
 
   passthru.tests = {

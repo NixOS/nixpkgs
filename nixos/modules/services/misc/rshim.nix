@@ -14,7 +14,7 @@ in
   options.services.rshim = {
     enable = lib.mkEnableOption (lib.mdDoc "user-space rshim driver for the BlueField SoC");
 
-    package = lib.mkPackageOptionMD pkgs "rshim-user-space" { };
+    package = lib.mkPackageOption pkgs "rshim-user-space" { };
 
     backend = lib.mkOption {
       type = with lib.types; nullOr (enum [ "usb" "pcie" "pcie_lf" ]);

@@ -112,7 +112,7 @@ rec {
           sed "s|${ide.outPath}|$out|" \
             -i $(realpath $out/bin/${meta.mainProgram}) \
             -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
-          autoPatchelf $out/${meta.mainProgram}/bin
+          autoPatchelf $out
         '';
     };
 }

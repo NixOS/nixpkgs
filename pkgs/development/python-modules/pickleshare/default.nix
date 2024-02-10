@@ -8,6 +8,7 @@
 
 buildPythonPackage rec {
   version = "0.7.5";
+  format = "setuptools";
   pname = "pickleshare";
 
   src = fetchPypi {
