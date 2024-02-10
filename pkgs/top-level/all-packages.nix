@@ -4776,6 +4776,10 @@ with pkgs;
 
   slurp = callPackage ../tools/wayland/slurp { };
 
+  sway-unwrapped = callPackage ../by-name/sw/sway-unwrapped/package.nix {
+    wlroots = wlroots_0_17;
+  };
+
   swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
   swayr = callPackage ../tools/wayland/swayr { };
