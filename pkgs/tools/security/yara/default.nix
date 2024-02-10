@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-axHFy7YwLhhww+lh+ORyW6YG+T385msysIHK5SMyhMk=";
   };
 
-  # FIXME: make unconditional on staging
-  patches = lib.optionals (!stdenv.hostPlatform.isGnu && !stdenv.hostPlatform.isDarwin) [
+  patches = [
     (fetchpatch {
       name = "musl.patch";
       url = "https://github.com/VirusTotal/yara/commit/515ed861cf30e154b14a69ffd46c347fb81df72f.patch";
