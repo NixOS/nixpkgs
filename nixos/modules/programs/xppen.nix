@@ -20,6 +20,7 @@ in
     services.udev.packages = [ cfg.package ];
 
     systemd.services.xppen-create-config-dir = {
+      restartTriggers = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
