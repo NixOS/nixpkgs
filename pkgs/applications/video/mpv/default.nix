@@ -131,8 +131,6 @@ in stdenv'.mkDerivation (finalAttrs: {
     ''
   ];
 
-  env.NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
-
   # Ensure we reference 'lib' (not 'out') of Swift.
   preConfigure = lib.optionalString swiftSupport ''
     export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
