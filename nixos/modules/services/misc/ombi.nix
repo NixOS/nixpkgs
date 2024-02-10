@@ -67,7 +67,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}' --baseurl ${cfg.baseUrl}";
+        ExecStart = "${lib.getExe pkgs.ombi} --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}' --baseurl ${cfg.baseUrl}";
         Restart = "on-failure";
       };
     };
