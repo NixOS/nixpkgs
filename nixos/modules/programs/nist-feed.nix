@@ -33,7 +33,6 @@ in
     systemd.user.services.nist-feed = {
         wantedBy = [ "default.target" ];
         description = "A notification daemon for CVEs";
-        path = [ pkgs.curl pkgs.busybox ];
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${cfg.package}/bin/nist-feed ${cfg.extraArgs}";
