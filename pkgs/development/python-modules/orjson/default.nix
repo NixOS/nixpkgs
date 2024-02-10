@@ -12,6 +12,13 @@
 , python-dateutil
 , pytz
 , xxhash
+
+# for passthru.tests
+, falcon
+, fastapi
+, gradio
+, mashumaro
+, ufolib2
 }:
 
 buildPythonPackage rec {
@@ -57,6 +64,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "orjson"
   ];
+
+  passthru.tests = {
+    inherit
+      falcon
+      fastapi
+      gradio
+      mashumaro
+      ufolib2
+    ;
+  };
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
