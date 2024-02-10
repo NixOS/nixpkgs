@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       name = "gmpc";
       exec = "gmpc";
       icon = "gmpc";
-      comment = "GUI client for mpd.";
+      comment = "GUI client for mpd";
       desktopName = "gmpc";
       categories = [ "Audio" "AudioVideo" "GTK" ];
     })
