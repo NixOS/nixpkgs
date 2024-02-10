@@ -73,7 +73,7 @@ let
   fallbacks = rocblas.overrideAttrs { pname = "rocblas-tensile-fallbacks"; };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
-  version = "5.7.1";
+  version = "6.0.2";
 
   outputs = [
     "out"
@@ -87,7 +87,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-3wKnwvAra8u9xqlC05wUD+gSoBILTVJFU2cIV6xv3Lk=";
+    hash = "sha256-G68d/gvBbTdNx8xR3xY+OkBm5Yxq1NFjxby9BbpOcUk=";
   };
 
   nativeBuildInputs = [

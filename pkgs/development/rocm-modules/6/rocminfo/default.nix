@@ -18,14 +18,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.7.1";
+  version = "6.0.2";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocminfo";
     rev = "rocm-${finalAttrs.version}";
-    sha256 = "sha256-UzOo2qDT/uM+vdGdBM4pV5e143mfa+/6sZLBExOO26g=";
+    sha256 = "sha256-k0QeCyQcarGbAh4ft8Y7JBK6l2nWxDUc20XoYmtrMMs=";
   };
 
   nativeBuildInputs = [

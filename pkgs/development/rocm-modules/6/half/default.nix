@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "half";
-  version = "5.7.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "half";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-82It+/wm8+umBdQYn7lz/fS69h+f0mzwPdGxoJNYUq0=";
+    hash = "sha256-wvl8ny7pbY9hUGGtJ70R7/4YIsahgI7qcVzUnxmUfZM=";
   };
 
   nativeBuildInputs = [

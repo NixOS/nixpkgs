@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcc";
-  version = "5.7.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPCC";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-lJX6nF1V4YmK5ai7jivXlRnG3doIOf6X9CWLHVdRuVg=";
+    hash = "sha256-/LRQN+RSMBPk2jS/tdp3psUL/B0RJZQhRri7e67KsG4=";
   };
 
   nativeBuildInputs = [ cmake ];
