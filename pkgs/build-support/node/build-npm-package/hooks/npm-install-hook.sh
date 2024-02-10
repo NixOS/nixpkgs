@@ -5,6 +5,21 @@ npmInstallHook() {
 
     runHook preInstall
 
+    if ! @jq@ -e 'select(.name) | any' package.json; then
+        echo
+        echo
+        echo "ERROR: missing \"name\" field in package.json"
+        echo
+        echo "Here are some ways to fix this:"
+        echo
+        echo "- Add a \"name\" field to your package.json file (with jq: jq '. + {\"name\": \"my-package\"}' package.json | sponge package.json)"
+        echo "- Use a custom \"installPhase\" hook to install the package"
+        echo
+        echo
+
+        exit 1
+    fi
+
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
     # `npm pack` writes to cache so temporarily override it
