@@ -24591,8 +24591,6 @@ with pkgs;
 
   readline = readline82;
 
-  readline63 = callPackage ../development/libraries/readline/6.3.nix { };
-
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
   readline82 = callPackage ../development/libraries/readline/8.2.nix { };
