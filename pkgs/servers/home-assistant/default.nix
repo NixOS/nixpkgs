@@ -46,6 +46,24 @@ let
         ];
       });
 
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.9.3";
+        src = fetchFromGitHub {
+          owner = "aio-libs";
+          repo = "aiohttp";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-dEeMHruFJ1o0J6VUJcpUk7LhEC8sV8hUKXoKcd618lE=";
+        };
+        nativeCheckInputs = with self; [
+          freezegun
+          gunicorn
+          pytest-mock
+          pytestCheckHook
+          python-on-whales
+          re-assert
+        ];
+      });
+
       aionotion = super.aionotion.overridePythonAttrs (oldAttrs: rec {
         version = "2023.05.5";
         src = fetchFromGitHub {
@@ -61,6 +79,21 @@ let
             hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
           })
         ];
+      });
+
+      aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
+        version = "2022.12.1";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "aiopurpleair";
+          rev = "refs/tags/${version}";
+          hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml --replace \
+            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
+            '"poetry-core"'
+        '';
       });
 
       aiopvapi = super.aiopvapi.overridePythonAttrs (oldAttrs: rec {
@@ -104,6 +137,16 @@ let
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-5SWJnTxRm6mzP0RxrgA+jnV+Gp23WjqQA57wbT2V9Dk=";
+        };
+      });
+
+      anova-wifi = super.anova-wifi.overridePythonAttrs (old: rec {
+        version = "0.10.3";
+        src = fetchFromGitHub {
+          owner = "Lash-L";
+          repo = "anova_wifi";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-tCmvp29KSCkc+g0w0odcB7vGjtDx6evac7XsHEF0syM=";
         };
       });
 
@@ -180,16 +223,6 @@ let
           repo = "justnimbus";
           rev = "refs/tags/${version}";
           hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
-        };
-      });
-
-      mcstatus = super.mcstatus.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.0";
-        src = fetchFromGitHub {
-          owner = "py-mine";
-          repo = "mcstatus";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-1jPIsFEJ17kjtCBiX4IvSf2FxYw9DkH3MrrJ85N71tc=";
         };
       });
 
@@ -317,6 +350,16 @@ let
         };
       });
 
+      python-kasa = super.python-kasa.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.4";
+        src = fetchFromGitHub {
+          owner = "python-kasa";
+          repo = "python-kasa";
+          rev = "refs/tags/${version}";
+          hash = "sha256-wGPMrYaTtKkkNW88eyiiciFcBSTRqqChYi6e15WUCHo=";
+        };
+      });
+
       python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
         version = "0.38.0";
         src = fetchFromGitHub {
@@ -409,6 +452,13 @@ let
         ];
       });
 
+      youtubeaio = super.youtubeaio.overridePythonAttrs (old: {
+        pytestFlagsArray = [
+          # fails with pydantic v1
+          "--deselect=tests/test_video.py::test_fetch_video"
+        ];
+      });
+
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -433,7 +483,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.1.2";
+  hassVersion = "2024.1.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -451,13 +501,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-FlGSVYgKDw0x4l1z1qe+cUAuzFH0XrE2o7LC2ByY5Bo=";
+    hash = "sha256-zCpdOl16ZkO9mr0nYZg1mlnGNaPaX0RALFEDRHGfKvM=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-ijs9RNx17JI0nSHCBB3ysgrM4OdOtcH/96O9DcrTtFQ=";
+    hash = "sha256-ipAw+vqePa5KA/Gqhl3WsQbzmzMXjmVx0NvbrM84SKg=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -469,7 +519,9 @@ in python.pkgs.buildPythonApplication rec {
     "awesomeversion"
     "ciso8601"
     "cryptography"
+    "home-assistant-bluetooth"
     "httpx"
+    "jinja2"
     "lru-dict"
     "orjson"
     "pyopenssl"

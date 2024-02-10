@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub, clangStdenv
-, fetchpatch
 , brotli
 , cmake
 , giflib
@@ -9,23 +8,18 @@
 , libjpeg
 , libpng
 , libwebp
-, openexr
+, openexr_3
 , pkg-config
 , zlib
-, buildDocs ? true
 , asciidoc
 , graphviz
 , doxygen
 , python3
 }:
 
-# strange libgcc linking issue
-let stdenv' = if stdenv.isFreeBSD then clangStdenv else stdenv;
-
-in
-stdenv'.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.8.2";
+  version = "0.9.1";
 
   outputs = [ "out" "dev" ];
 
@@ -33,31 +27,21 @@ stdenv'.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
+    hash = "sha256-n5KNbbw6NQRROEM7Cojla/igRCFNawUq7nfhzJlMlPI=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Add missing <atomic> content to fix gcc compilation for RISCV architecture
-    # https://github.com/libjxl/libjxl/pull/2211
-    (fetchpatch {
-      url = "https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc.patch";
-      hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     gtest
     pkg-config
-  ] ++ lib.optionals buildDocs [
     asciidoc
     doxygen
     python3
   ];
 
-  depsBuildBuild = lib.optionals buildDocs [
+  depsBuildBuild = [
     graphviz
   ];
 
@@ -83,7 +67,7 @@ stdenv'.mkDerivation rec {
     libjpeg
     libpng
     libwebp
-    openexr
+    openexr_3
     zlib
   ];
 

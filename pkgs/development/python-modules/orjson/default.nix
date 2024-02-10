@@ -12,6 +12,7 @@
 , python-dateutil
 , pytz
 , xxhash
+, python
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,8 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-2eRV+oZQvsWWJ4AUTeuE0CHtTHC6jNZiX/y5uXuwvns=";
   };
+
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     cffi

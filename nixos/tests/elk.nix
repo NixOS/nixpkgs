@@ -1,6 +1,6 @@
 # To run the test on the unfree ELK use the following command:
 # cd path/to/nixpkgs
-# NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.elk.unfree.ELK-6
+# NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.elk.unfree.ELK-7
 
 { system ? builtins.currentSystem,
   config ? {},
@@ -120,7 +120,7 @@ let
               };
 
               elasticsearch-curator = {
-                enable = true;
+                enable = elk ? elasticsearch-curator;
                 actionYAML = ''
                 ---
                 actions:
@@ -246,7 +246,7 @@ let
           one.wait_until_succeeds(
               expect_hits("SuperdupercalifragilisticexpialidociousIndeed")
           )
-    '' + ''
+    '' + lib.optionalString (elk ? elasticsearch-curator) ''
       with subtest("Elasticsearch-curator works"):
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")

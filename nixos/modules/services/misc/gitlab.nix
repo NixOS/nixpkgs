@@ -27,13 +27,7 @@ let
       encoding = "utf8";
       pool = cfg.databasePool;
     } // cfg.extraDatabaseConfig;
-  in if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.9" then {
-    production.main = val;
-    # Starting with GitLab 15.9, single connections were deprecated and will be
-    # removed in GitLab 17.0. The CI connection however requires database_tasks set
-    # to false.
-    production.ci = val // { database_tasks = false; };
-  } else if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then {
+  in if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then {
     production.main = val;
   } else {
     production = val;
@@ -1354,7 +1348,7 @@ in {
                 fi
 
                 jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                   '.${if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then "production.main" else "production"}.password = $ENV.db_password ${if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.9" then "| .production.ci.password = $ENV.db_password | .production.main as $main | del(.production.main) | .production |= {main: $main} + ." else ""}' \
+                   '.${if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then "production.main" else "production"}.password = $ENV.db_password' \
                    >'${cfg.statePath}/config/database.yml'
               ''
               else ''
@@ -1392,10 +1386,8 @@ in {
 
     systemd.services.gitlab-db-config = {
       after = [ "gitlab-config.service" "gitlab-postgresql.service" "postgresql.service" ];
-      bindsTo = [
-        "gitlab-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service"
-        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+      wants = optional (cfg.databaseHost == "") "postgresql.service" ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+      bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       serviceConfig = {
@@ -1428,10 +1420,10 @@ in {
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      ];
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv // (optionalAttrs cfg.sidekiq.memoryKiller.enable {
@@ -1618,10 +1610,10 @@ in {
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      ];
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;

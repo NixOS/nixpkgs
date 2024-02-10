@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, dissect-btrfs
 , dissect-cim
 , dissect-clfs
 , dissect-cobaltstrike
@@ -8,11 +9,12 @@
 , dissect-etl
 , dissect-eventlog
 , dissect-evidence
+, dissect-executable
 , dissect-extfs
 , dissect-fat
 , dissect-ffs
-, dissect-executable
 , dissect-hypervisor
+, dissect-jffs
 , dissect-ntfs
 , dissect-ole
 , dissect-regf
@@ -26,14 +28,15 @@
 , dissect-xfs
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.11";
-  format = "pyproject";
+  version = "3.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -41,15 +44,19 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect";
     rev = "refs/tags/${version}";
-    hash = "sha256-6y+p+Ulc1Viu5s1AL/ecVtO4YRnmem/ZleY8xC4CJrU=";
+    hash = "sha256-hy5Yr/yR7CC7cp6pA1JP+GKazu+N4AwPqFKwb7zM+N8=";
   };
 
+  pythonRelaxDeps = true;
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    dissect-btrfs
     dissect-cim
     dissect-clfs
     dissect-cobaltstrike
@@ -63,6 +70,7 @@ buildPythonPackage rec {
     dissect-fat
     dissect-ffs
     dissect-hypervisor
+    dissect-jffs
     dissect-ntfs
     dissect-ole
     dissect-regf

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , setuptools
 , mypy
 , pytestCheckHook
@@ -24,15 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-oEWUXkE8U7/ye6puJZRSkQFi10BPGuc8XZQbHwqOPEI=";
   };
 
-  patches = [
-    # https://github.com/python-lsp/pylsp-mypy/pull/64
-    (fetchpatch {
-      name = "fix-hanging-test.patch";
-      url = "https://github.com/python-lsp/pylsp-mypy/commit/90d28edb474135007804f1e041f88713a95736f9.patch";
-      hash = "sha256-3DVyUXVImRemXCuyoXlYbPJm6p8OnhBdEKmwjx88ets=";
-    })
-  ];
-
   nativeBuildInputs = [
     setuptools
   ];
@@ -40,7 +30,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     mypy
     python-lsp-server
-  ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 

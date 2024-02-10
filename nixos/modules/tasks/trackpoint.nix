@@ -88,7 +88,7 @@ with lib;
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         serviceConfig.ExecStart = ''
-          ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}
+          ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}"
         '';
       };
     })

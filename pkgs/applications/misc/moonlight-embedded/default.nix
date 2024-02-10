@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/moonlight-stream/moonlight-embedded";
     license = licenses.gpl3Plus;
     maintainers = [];
+    mainProgram = "moonlight";
     platforms = platforms.linux;
   };
 }

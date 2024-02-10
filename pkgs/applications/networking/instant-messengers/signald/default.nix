@@ -137,7 +137,7 @@ in stdenv.mkDerivation {
       binaryBytecode  # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ expipiplus1 ma27 ];
+    maintainers = with maintainers; [ expipiplus1 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

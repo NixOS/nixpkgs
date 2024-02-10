@@ -13,19 +13,20 @@
 , requests
 , setuptools
 , setuptools-scm
+, tqdm
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.29.0";
+  version = "1.29.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h/pXLGpQ2+ENxWqIb9yteroaudsS8Hz+sraON+65TMw=";
+    hash = "sha256-Talw1P0JnPdU+dDgC8J2TJSOV/LshgQyBbPYEqzKpfA=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     logfury
     requests
+    tqdm
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.12") [

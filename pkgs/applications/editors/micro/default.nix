@@ -1,5 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, callPackage }:
-
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, callPackage
+, wl-clipboard
+, xclip
+, makeWrapper
+, withXclip ? true
+, withWlclip ? true
+}:
+let
+  clipboardPkgs = if stdenv.isLinux then
+    lib.optional withXclip xclip ++
+    lib.optional withWlclip wl-clipboard
+    else [ ];
+in
 buildGoModule rec {
   pname = "micro";
   version = "2.0.13";
@@ -13,7 +29,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   subPackages = [ "cmd/micro" ];
 
@@ -32,6 +48,11 @@ buildGoModule rec {
     installManPage assets/packaging/micro.1
     install -Dm444 -t $out/share/applications assets/packaging/micro.desktop
     install -Dm644 assets/micro-logo-mark.svg $out/share/icons/hicolor/scalable/apps/micro.svg
+  '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/micro" \
+      --prefix PATH : "${lib.makeBinPath clipboardPkgs}"
   '';
 
   passthru.tests.expect = callPackage ./test-with-expect.nix { };

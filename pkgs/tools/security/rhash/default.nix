@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , which
 , enableStatic ? stdenv.hostPlatform.isStatic
+, gettext
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
   patches = [ ./dont-fail-ln.patch ];
 
   nativeBuildInputs = [ which ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
 
   # configure script is not autotools-based, doesn't support these options
   dontAddStaticConfigureFlags = true;

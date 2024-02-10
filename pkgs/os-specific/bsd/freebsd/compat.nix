@@ -20,7 +20,7 @@ mkDerivation {
     # Take only individual headers, or else we will clobber native libc, etc.
 
     "sys/rpc/types.h"
-  ] ++ lib.optionals (hostVersion == "freebsd14") [
+  ] ++ lib.optionals (hostVersion == "14.0") [
     "sys/sys/bitcount.h"
   ] ++ [
 
@@ -36,7 +36,7 @@ mkDerivation {
     "include/nl_types.h"
     "include/elf.h"
     "sys/sys/ctf.h"
-  ] ++ lib.optionals (hostVersion == "freebsd14") [
+  ] ++ lib.optionals (hostVersion == "14.0") [
     "include/bitstring.h"
     "sys/sys/bitstring.h"
     "sys/sys/nv_namespace.h"

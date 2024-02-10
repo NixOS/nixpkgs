@@ -1,16 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dynalite-devices";
   version = "0.1.48";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,17 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-i88aIsRNsToSceQdwfspJg+Y5MO5zC4O6EkyhrYR27g=";
   };
 
-  patches = [
-    (fetchpatch {
-      # remove asynctest from tests
-      url = "https://github.com/ziv1234/python-dynalite-devices/commit/1729035f2b435b345b4e694aeae5d1823d732208.patch";
-      hash = "sha256-LqFXrJrZTPPjPnWT4+blHFYS3W1fD9T+iwaLUauxjNE=";
-    })
-  ];
-
   postPatch = ''
     sed -i '/^addopts/d' setup.cfg
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -47,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   # it would use the erroneous tag v0.47
-  passthru.skipBulkUpdate = false;
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "An unofficial Dynalite DyNET interface creating devices";

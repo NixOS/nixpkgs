@@ -234,19 +234,12 @@ in lib.makeExtensible (self: ({
     hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
     patches = [
       patch-rapidcheck-shared
-    ] ++ lib.optionals aws-sdk-cpp.stdenv.hostPlatform.isFreeBSD [
-      ./patches/FreeBSD-tests-restricted.sh.patch
-      ./patches/FreeBSD-configure.ac.patch
     ];
   };
 
   nix_2_19 = common {
-    version = "2.19.2";
-    hash = "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=";
-    patches = lib.optionals aws-sdk-cpp.stdenv.hostPlatform.isFreeBSD [
-      ./patches/FreeBSD-tests-restricted.sh-2_19.patch
-      ./patches/FreeBSD-configure.ac.patch
-    ];
+    version = "2.19.3";
+    hash = "sha256-EtL6M0H5+0mFbFh+teVjm+0B+xmHoKwtBvigS5NMWoo=";
   };
 
   # The minimum Nix version supported by Nixpkgs

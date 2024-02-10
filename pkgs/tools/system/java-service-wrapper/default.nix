@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wrapper.tanukisoftware.com/";
     changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${version}";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = [ maintainers.suhr ];
     mainProgram = "wrapper";
   };

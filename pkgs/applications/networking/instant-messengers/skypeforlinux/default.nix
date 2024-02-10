@@ -124,5 +124,6 @@ in stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "skypeforlinux";
   };
 }

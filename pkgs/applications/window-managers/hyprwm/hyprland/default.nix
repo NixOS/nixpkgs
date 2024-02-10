@@ -20,6 +20,7 @@
 , pango
 , pciutils
 , systemd
+, tomlplusplus
 , udis86
 , wayland
 , wayland-protocols
@@ -42,13 +43,13 @@ assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` ha
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.33.1";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-p7el5oQZPy9l1zyIrlHu6nA4BAu59eLoSqBjhkw2jaw=";
+    hash = "sha256-dU5m6Cd4+WQZal2ICDVf1kww/dNzo1YUWRxWeCctEig=";
   };
 
   patches = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "@HASH@" '${finalAttrs.src.rev}' \
       --replace "@BRANCH@" "" \
       --replace "@MESSAGE@" "" \
+      --replace "@DATE@" "2024-02-05" \
       --replace "@TAG@" "" \
       --replace "@DIRTY@" ""
   '';
@@ -100,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       pango
       pciutils
+      tomlplusplus
       wlroots
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
@@ -111,9 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     then "debug"
     else "release";
 
+  mesonAutoFeatures = "disabled";
+
   mesonFlags = builtins.concatLists [
-    (lib.optional (!enableXWayland) "-Dxwayland=disabled")
-    (lib.optional legacyRenderer "-DLEGACY_RENDERER:STRING=true")
+    (lib.optional enableXWayland "-Dxwayland=enabled")
+    (lib.optional legacyRenderer "-Dlegacy_renderer=enabled")
     (lib.optional withSystemd "-Dsystemd=enabled")
   ];
 
@@ -121,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${wlroots}/include/wlr $dev/include/hyprland/wlroots
     ${lib.optionalString wrapRuntimeDeps ''
       wrapProgram $out/bin/Hyprland \
-        --suffix PATH : ${lib.makeBinPath [binutils pciutils]}
+        --suffix PATH : ${lib.makeBinPath [binutils pciutils stdenv.cc]}
     ''}
   '';
 

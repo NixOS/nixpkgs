@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zope.size";
-  version = "4.4";
+  version = "5.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bhv3QJdZtNpyAuL6/aZXWD1Acx8661VweWaItJPpkHk=";
+    hash = "sha256-sVRT40+Bb/VFmtg82TUCmqWBxqRTRj4DxeLZe9IKQyo=";
   };
 
   propagatedBuildInputs = [ zope-i18nmessageid zope-interface ];

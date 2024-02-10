@@ -1,38 +1,38 @@
 {
     "testing": {
-        "version": "6.7-rc8",
-        "hash": "sha256:02drhwl3f53y97gimgclz61zsa57v29vphkbrzr4cwmz4sh1vngk"
+        "version": "6.8-rc3",
+        "hash": "sha256:1djrivjf84l28slhf14j7cc007pibwyjygq9nml39k6zk8gnhl0x"
     },
     "6.5": {
         "version": "6.5.13",
         "hash": "sha256:1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq"
     },
     "6.1": {
-        "version": "6.1.71",
-        "hash": "sha256:0hghnwsa282js9hy4krhdbgrb4khjzslr05zgvjx9zzragfp9xrd"
+        "version": "6.1.77",
+        "hash": "sha256:07grng6rrgpy6c3465hwqhn3gcdam1c8rwya30vgpk8nfxbfqm1v"
     },
     "5.15": {
-        "version": "5.15.146",
-        "hash": "sha256:14nijbspmzd4r38l8cpl4vn9dhawzcfnhyc0gnaxl2m8l9gpm02s"
+        "version": "5.15.148",
+        "hash": "sha256:1n75lrck581mppx84cds1a1l5vj05cdkp8ahpry7dx6rgz4pb1f4"
     },
     "5.10": {
-        "version": "5.10.206",
-        "hash": "sha256:0ns8qxcrxj9i76b93xcghl002l8vbkg7ksd435sikig62qr62gf4"
+        "version": "5.10.209",
+        "hash": "sha256:1mc8rssk5aypgb58jz6i2bbflfr6qh1kgqpam0k8fqvwcjnjzqj4"
     },
     "5.4": {
-        "version": "5.4.265",
-        "hash": "sha256:05cvvwjiznn7hfd02qklklalg0chahvh5v18w64lcva6kzj9kbjd"
+        "version": "5.4.268",
+        "hash": "sha256:081695lgkdwlrp6gpp6pyflgh76zax1w52shys4s9zjnrfkarj5g"
     },
     "4.19": {
-        "version": "4.19.303",
-        "hash": "sha256:0dlbl47xs7z4yf9cxbxqzd7zs1f9070jr6ck231wgppa6lwwwb82"
+        "version": "4.19.306",
+        "hash": "sha256:06dy270xw4frnrc9p2qjh8chgp02fr5ll5g2b0lx9xqzlq7y86xr"
     },
     "6.6": {
-        "version": "6.6.10",
-        "hash": "sha256:0v2l0l90w7scv7bxkxxjgqnay0fjh678k9gdlgycgbh9q7j2grly"
+        "version": "6.6.16",
+        "hash": "sha256:0c5a9agdr27bwd1z6790whczb858z8i34hhn548lzbdylfamf7dj"
     },
     "6.7": {
-        "version": "6.7",
-        "hash": "sha256:0s8hbcsg7fdvspqam8kzcxygjsznr4zfi60nqgc81l3n4m518cgg"
+        "version": "6.7.4",
+        "hash": "sha256:036nk3h7vqzd7gnxan2173kpss5qm2pci1lvd58gh90azigrz3gn"
     }
 }

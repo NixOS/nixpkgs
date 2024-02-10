@@ -48,6 +48,7 @@ rec {
     isRiscV64      = { cpu = { family = "riscv"; bits = 64; }; };
     isRx           = { cpu = { family = "rx"; }; };
     isSparc        = { cpu = { family = "sparc"; }; };
+    isSparc64      = { cpu = { family = "sparc"; bits = 64; }; };
     isWasm         = { cpu = { family = "wasm"; }; };
     isMsp430       = { cpu = { family = "msp430"; }; };
     isVc4          = { cpu = { family = "vc4"; }; };
@@ -62,7 +63,8 @@ rec {
 
     is32bit        = { cpu = { bits = 32; }; };
     is64bit        = { cpu = { bits = 64; }; };
-    isILP32        = map (a: { abi = { abi = a; }; }) [ "n32" "ilp32" "x32" ];
+    isILP32        = [ { cpu = { family = "wasm"; bits = 32; }; } ] ++
+                     map (a: { abi = { abi = a; }; }) [ "n32" "ilp32" "x32" ];
     isBigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     isLittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 

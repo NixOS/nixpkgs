@@ -2,16 +2,19 @@
 , fetchFromGitHub
 , buildPythonPackage
 
-# build-system
-, setuptools
+  # build-system
+, poetry-core
 
-# dependencies
+  # dependencies
 , beautifulsoup4
 , httpx
 , pbkdf2
 , pillow
 , pyaes
 , rsa
+
+  # test dependencies
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -27,26 +30,23 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
+    poetry-core
   ];
 
   propagatedBuildInputs = [
+    pillow
     beautifulsoup4
     httpx
     pbkdf2
-    pillow
     pyaes
     rsa
   ];
 
-  postPatch = ''
-    sed -i "s/httpx.*/httpx',/" setup.py
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # has no tests
-  doCheck = false;
-
-  pythonImportsCheck = [ "audible"];
+  pythonImportsCheck = [ "audible" ];
 
   meta = with lib; {
     description = "A(Sync) Interface for internal Audible API written in pure Python";

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 let
-  version = "1.6.1";
+  version = "1.7.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "fangfrisch";
@@ -13,8 +13,8 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "fangfrisch";
-    rev = version;
-    hash = "sha256-yXXzwN0BI//NqpNNmKIhwFv3hDwNZLl1K81hUD/tCrQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-s55W5/ppwr008ZIjDgQa90N+Ax9cwnvc+mXRetFdy+4=";
   };
 
   nativeBuildInputs = [

@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "apktool";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchurl {
     urls = [
       "https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_${version}.jar"
       "https://github.com/iBotPeaches/Apktool/releases/download/v${version}/apktool_${version}.jar"
     ];
-    hash = "sha256-gx8P/Je28g9RHWGDy/Z4VGTTQarLD7fm8i7wx7IokRo=";
+    hash = "sha256-eVbrBBlDAM4NCoStGHce68lLifuNHdzOjqTAVoGGRvQ=";
   };
 
   dontUnpack = true;

@@ -11,6 +11,18 @@ If you are packaging a Flutter desktop application, use [`buildFlutterApplicatio
 `pubspecLock` is the parsed pubspec.lock file. pub2nix uses this to download required packages.
 This can be converted to JSON from YAML with something like `yq . pubspec.lock`, and then read by Nix.
 
+Alternatively, `autoPubspecLock` can be used instead, and set to a path to a regular `pubspec.lock` file. This relies on import-from-derivation, and is not permitted in Nixpkgs, but can be useful at other times.
+
+::: {.warning}
+When using `autoPubspecLock` with a local source directory, make sure to use a
+concatenation operator (e.g. `autoPubspecLock = src + "/pubspec.lock";`), and
+not string interpolation.
+
+String interpolation will copy your entire source directory to the Nix store and
+use its store path, meaning that unrelated changes to your source tree will
+cause the generated `pubspec.lock` derivation to rebuild!
+:::
+
 If the package has Git package dependencies, the hashes must be provided in the `gitHashes` set. If a hash is missing, an error message prompting you to add it will be shown.
 
 The `dart` commands run can be overridden through `pubGetScript` and `dartCompileCommand`, you can also add flags using `dartCompileFlags` or `dartJitFlags`.
@@ -68,6 +80,8 @@ Do _not_ use `dart run <package_name>`, as this will attempt to download depende
 
 ### Usage with nix-shell {#ssec-dart-applications-nix-shell}
 
+#### Using dependencies from the Nix store {#ssec-dart-applications-nix-shell-deps}
+
 As `buildDartApplication` provides dependencies instead of `pub get`, Dart needs to be explicitly told where to find them.
 
 Run the following commands in the source directory to configure Dart appropriately.
@@ -89,7 +103,10 @@ See the [Dart documentation](#ssec-dart-applications) for more details on requir
 
 flutter.buildFlutterApplication {
   pname = "firmware-updater";
-  version = "unstable-2023-04-30";
+  version = "0-unstable-2023-04-30";
+
+  # To build for the Web, use the targetFlutterPlatform argument.
+  # targetFlutterPlatform = "web";
 
   src = fetchFromGitHub {
     owner = "canonical";
@@ -101,8 +118,19 @@ flutter.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 }
+```
 
 ### Usage with nix-shell {#ssec-dart-flutter-nix-shell}
 
-See the [Dart documentation](#ssec-dart-applications-nix-shell) nix-shell instructions.
-```
+Flutter-specific `nix-shell` usage notes are included here. See the [Dart documentation](#ssec-dart-applications-nix-shell) for general `nix-shell` instructions.
+
+#### Entering the shell {#ssec-dart-flutter-nix-shell-enter}
+
+By default, dependencies for only the `targetFlutterPlatform` are available in the
+build environment. This is useful for keeping closures small, but be problematic
+during development. It's common, for example, to build Web apps for Linux during
+development to take advantage of native features such as stateful hot reload.
+
+To enter a shell with all the usual target platforms available, use the `multiShell` attribute.
+
+e.g. `nix-shell '<nixpkgs>' -A fluffychat-web.multiShell`.

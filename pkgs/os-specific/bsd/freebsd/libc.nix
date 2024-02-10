@@ -20,9 +20,9 @@ mkDerivation rec {
     "contrib/gdtoa"
     "contrib/libc-pwcache"
     "contrib/libc-vis"
-  ] ++ lib.optionals (hostVersion == "freebsd13") [
+  ] ++ lib.optionals (hostVersion == "13.2") [
     "contrib/tzcode/stdtime"
-  ] ++ lib.optionals (hostVersion == "freebsd14") [
+  ] ++ lib.optionals (hostVersion == "14.0") [
     "contrib/tzcode"
   ] ++ [
 
@@ -79,6 +79,10 @@ mkDerivation rec {
 
     "lib/libelf"
     "contrib/elftoolchain"
+
+    "lib/libiconv_modules"
+    "share/i18n"
+    "include/paths.h"
   ];
 
   patches = [
@@ -95,6 +99,10 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace $COMPONENT_PATH/Makefile --replace '.include <src.opts.mk>' ""
+
+    substituteInPlace $BSDSRCDIR/include/paths.h \
+        --replace '/usr/lib/i18n' '${builtins.placeholder "out"}/lib/i18n' \
+        --replace '/usr/share/i18n' '${builtins.placeholder "out"}/share/i18n'
   '';
 
   nativeBuildInputs = [
@@ -103,6 +111,7 @@ mkDerivation rec {
     buildFreebsd.install
 
     buildPackages.flex buildPackages.byacc buildFreebsd.gencat buildFreebsd.rpcgen
+    buildFreebsd.mkcsmapper buildFreebsd.mkesdb
   ];
   buildInputs = [ include csu ];
   env.NIX_CFLAGS_COMPILE = "-B${csu}/lib";
@@ -210,6 +219,12 @@ mkDerivation rec {
 
     make -C $BSDSRCDIR/lib/libdevstat $makeFlags
     make -C $BSDSRCDIR/lib/libdevstat $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libiconv_modules $makeFlags
+    make -C $BSDSRCDIR/lib/libiconv_modules $makeFlags SHLIBDIR=${builtins.placeholder "out"}/lib/i18n install
+
+    make -C $BSDSRCDIR/share/i18n $makeFlags
+    make -C $BSDSRCDIR/share/i18n $makeFlags ESDBDIR=${builtins.placeholder "out"}/share/i18n/esdb CSMAPPERDIR=${builtins.placeholder "out"}/share/i18n/csmapper install
 
   '' + lib.optionalString stdenv.hostPlatform.isx86_32 ''
     $CC -c $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.c -o $BSDSRCDIR/contrib/llvm-project/compiler-rt/lib/builtins/udivdi3.o

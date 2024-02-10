@@ -52,7 +52,7 @@ in
     freebsd.libcapsicum
     libcxxrt
     zlib
-    pcre2
+    pcre2.out
     libffi
     ncurses
     readline
@@ -73,6 +73,12 @@ in
     (lib.getLib libidn2)
     (lib.getLib zstd)
     (lib.getLib openssl)
+    (lib.getLib gettext)
+    (lib.getLib xz)
+    (lib.getLib libssh2)
+    (lib.getLib libkrb5)
+    (lib.getLib libunistring)
+    (lib.getLib libpsl)
 
     # headers
     (lib.getDev curl)
@@ -87,4 +93,7 @@ in
     (lib.getDev llvmPackages_16.libcxx)
     (lib.getDev llvmPackages_16.libcxxabi)
     (lib.getDev llvmPackages_16.compiler-rt)
-]))) {})
+
+    # misc
+  ] ++ (let locales = freebsd.locales.override { locales = ["C.UTF-8"]; }; in ([ locales ] ++ locales.paths))
+))) {})

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "dublin-traceroute";
-  version = "0.4.2-unstable-2023-04-12";
+  version = "0.4.2-unstable-2024-01-09";
 
   src = fetchFromGitHub {
     owner = "insomniacslk";
     repo = "dublin-traceroute";
-    rev = "2fb78ea05596dfdf8f7764b497eb8d3a812cb695";
-    hash = "sha256-E1HYMd0wDTfAZ0TamQFazh8CPhMa2lNIbF4aEBf5qhk=";
+    rev = "b136db81cfbb30d5fd324dfccc97fca49a5ecee1";
+    hash = "sha256-FsolpeQGaLDjDE5Yk58t2hFQJgM58zafIx6s5ejYKnY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

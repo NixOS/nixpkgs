@@ -12,7 +12,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_gstat";
   inherit (nushell) version src;
-  cargoHash = "sha256-Ar5rFPHf+ugZuugVKVRFACYhh3F0JvQtfp6KibPIByw=";
+  cargoHash = "sha256-YUr//URKoN99Pc5tJx9eGopKqy4Yu83jPBhLu5UYgiY=";
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     LIBCLANG_PATH = "${libclang.lib}/lib";

@@ -38,14 +38,14 @@ assert cudaSupport -> gpuSupport != true;
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ik0FHfKrIhiZihb3cS6EPunpbYsJ/7/MGFM9oSfg2gI=";
+    hash = "sha256-AG9XhKm87kPlp+lD3E8C3hui7np68e5fGQ04Pztsnr4=";
   };
 
   nativeBuildInputs = [

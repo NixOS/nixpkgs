@@ -5,6 +5,9 @@ $chmod +w -R $out
 for f in $out/bin/* $out/bin/.*; do
     patchelf --set-rpath $out/lib --set-interpreter $out/libexec/ld-elf.so.? $f
 done
+for f in $out/lib/* $out/lib/.*; do
+    patchelf --set-rpath $out/lib $f
+done
 for f in $($out/bin/find $out/lib -type f); do
     patchelf --set-rpath $out/lib $f
 done
@@ -21,8 +24,8 @@ for f in $(find $out -type f); do
             break
         fi
         echo scorch $f
-        SUFFIX="$(echo "$BADMAN" | cut -d/ -f5-)"
-        GOODMAN="$out/$SUFFIX"
+        BADMAN="$(echo "$BADMAN" | cut -d/ -f-4)"
+        GOODMAN="$out"
         if [ ${#GOODMAN} -gt ${#BADMAN} ]; then
             echo "Can't patch $f: $BADMAN too short"
             break

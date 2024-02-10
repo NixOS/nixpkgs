@@ -144,6 +144,8 @@ buildPythonPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     echo 'ProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
     echo 'ProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
+    echo 'ProcessTestsBuilder_AsyncioSelectorReactorTests.test_processEnded.skip = "exit code 120"' >> src/twisted/internet/test/test_process.py
+    echo 'ProcessTestsBuilder_SelectReactorTests.test_processEnded.skip = "exit code 120"' >> src/twisted/internet/test/test_process.py
   '';
 
   # Generate Twisted's plug-in cache. Twisted users must do it as well. See

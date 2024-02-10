@@ -5,18 +5,18 @@
 
 buildGoModule rec {
   pname = "expr";
-  version = "1.15.8";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "expr";
     rev = "v${version}";
-    hash = "sha256-leZEP6RJv136z/bNc1S74tw+JQ3QD7NCMbo/Wo7q0ek=";
+    hash = "sha256-GLh4NayAbqGXI0Ekkk3lXCRwpLwGLbJIo7WjDfpKDhI=";
   };
 
   sourceRoot = "${src.name}/repl";
 
-  vendorHash = "sha256-Rs2tlno0vJo8FSdnnk3cxQCCxdByQD1jRzmePzMMfvs=";
+  vendorHash = "sha256-42kFO7kXIdqVrp2FQGELZ90OUobOp4zbdo533vresIw=";
 
   ldflags = [ "-s" "-w" ];
 

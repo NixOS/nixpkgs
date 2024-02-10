@@ -70,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.36.2";
+  version = "1.37.2";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-GyQqI3ciRO0TRaAeM4rGu+j/eB4bJlQ7VBTTxUGMNt4=";
+    hash = "sha256-xLdk3pJSV1YaloSV3TuTdJhujXsxUGrDru+mu86YBTU=";
   };
 
   configureFlags = [
@@ -97,7 +97,10 @@ mkDerivation rec {
     (lib.withFeature stdenv.isLinux "inotify")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DNIXPKGS"
+    "-fpermissive" # libxml2-2.12 changed const qualifiers
+  ];
 
   patches = [
     # fix "No/bad main configuration file" error

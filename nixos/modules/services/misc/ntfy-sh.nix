@@ -79,12 +79,6 @@ in
         cache-file = mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
 
-      systemd.tmpfiles.rules = [
-        "f ${cfg.settings.auth-file} 0600 ${cfg.user} ${cfg.group} - -"
-        "d ${cfg.settings.attachment-cache-dir} 0700 ${cfg.user} ${cfg.group} - -"
-        "f ${cfg.settings.cache-file} 0600 ${cfg.user} ${cfg.group} - -"
-      ];
-
       systemd.services.ntfy-sh = {
         description = "Push notifications server";
 

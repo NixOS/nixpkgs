@@ -19,7 +19,7 @@ mkDerivation {
   ++ lib.optionals (true && stdenv.targetPlatform.isx86_64) [
     "LIBS32=${lib.getLib ((import ../../../.. {
       crossSystem = {
-        config = "i686-${hostVersion}";
+        config = "i686-freebsd";
         useLLVM = true;
       };
       localSystem = stdenv.buildPlatform;

@@ -314,5 +314,9 @@
   "systemd-veritysetup@.service(8)": "https://www.freedesktop.org/software/systemd/man/systemd-veritysetup@.service.html",
   "systemd-volatile-root(8)": "https://www.freedesktop.org/software/systemd/man/systemd-volatile-root.html",
   "systemd-xdg-autostart-generator(8)": "https://www.freedesktop.org/software/systemd/man/systemd-xdg-autostart-generator.html",
-  "udevadm(8)": "https://www.freedesktop.org/software/systemd/man/udevadm.html"
+  "udevadm(8)": "https://www.freedesktop.org/software/systemd/man/udevadm.html",
+  "passwd(5)": "https://man.archlinux.org/man/passwd.5",
+  "group(5)": "https://man.archlinux.org/man/group.5",
+  "login.defs(5)": "https://man.archlinux.org/man/login.defs.5",
+  "nix-shell(1)": "https://nixos.org/manual/nix/stable/command-ref/nix-shell.html"
 }

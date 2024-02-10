@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , dacite
-, pysnmplib
+, pysnmp-lextudio
 , pytest-asyncio
 , pytest-error-for-skips
 , pytestCheckHook
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     dacite
-    pysnmplib
+    pysnmp-lextudio
   ];
 
   nativeCheckInputs = [

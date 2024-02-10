@@ -6,13 +6,14 @@ in lib.makeScope newScope (self: with self; { inherit stdenv;
   compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
   # build a self which is parameterized with whatever the targeted version is
-  # so e.g. pkgsCross.x86_64-freebsd14.freebsd.buildFreebsd will get you freebsd.packages14
+  # so e.g. pkgsCross.x86_64-freebsd.freebsd.branches."releng/14.0".buildFreebsd will get you
+  # freebsd.branches."releng/14.0"
   buildFreebsd = buildPackages.freebsd.overrideScope (_: _: { inherit hostBranch; });
   branches = lib.flip lib.mapAttrs versions (branch: _: self.overrideScope (_: _: { hostBranch = branch; }));
 
   packages13 = self.overrideScope (_: _: { hostBranch = "release/13.2.0"; });
   packages14 = self.overrideScope (_: _: { hostBranch = "release/14.0.0"; });
-  packages15 = self.overrideScope (_: _: { hostBranch = "main"; });
+  packagesGit = self.overrideScope (_: _: { hostBranch = "main"; });
 
   hostBranch = let
     allBranches = builtins.attrNames versions;
@@ -39,7 +40,7 @@ in lib.makeScope newScope (self: with self; { inherit stdenv;
 
   sourceData = versions.${hostBranch};
   versionData = sourceData.version;
-  hostVersion = "freebsd${toString versionData.major}";
+  hostVersion = versionData.revision;
 
   hostArchBsd = {
     x86_64 = "amd64";
@@ -122,7 +123,7 @@ in lib.makeScope newScope (self: with self; { inherit stdenv;
   libifconfig = callPackage ./libifconfig.nix {};
   libjail = callPackage ./libjail.nix {};
   libkiconv = callPackage ./libkiconv.nix {};
-  libncurses-tinfo = if hostVersion == "freebsd13" then libncurses else callPackage ./libncurses-tinfo.nix {};
+  libncurses-tinfo = if hostVersion == "13.2" then libncurses else callPackage ./libncurses-tinfo.nix {};
   libncurses = callPackage ./libncurses.nix {};
   libnetbsd = callPackage ./libnetbsd.nix {};
   libnv = callPackage ./libnv.nix {};
@@ -135,6 +136,7 @@ in lib.makeScope newScope (self: with self; { inherit stdenv;
   libtacplus = callPackage ./libtacplus.nix {};
   libutil = callPackage ./libutil.nix {};
   libxo = callPackage ./libxo.nix {};
+  libstdthreads = callPackage ./libstdthreads.nix {};
   libypclnt = callPackage ./libypclnt.nix {};
   limits = callPackage ./limits.nix {};
   locale = callPackage ./locale.nix {};
@@ -168,7 +170,8 @@ in lib.makeScope newScope (self: with self; { inherit stdenv;
   sed = callPackage ./sed.nix {};
   ldd = callPackage ./ldd.nix {};
   sockstat = callPackage ./sockstat.nix {};
-  libstdthreads = callPackage ./libstdthreads.nix {};
+  mkesdb = callPackage ./mkesdb.nix {};
+  mkcsmapper = callPackage ./mkcsmapper.nix {};
 
   # kernel
   sys = callPackage ./sys.nix {};

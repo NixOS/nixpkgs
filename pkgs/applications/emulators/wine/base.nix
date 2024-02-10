@@ -3,6 +3,7 @@
   bison, flex, fontforge, makeWrapper, pkg-config,
   nixosTests,
   supportFlags,
+  wineRelease,
   patches,
   moltenvk,
   buildScript ? null, configureFlags ? [], mainProgram ? "wine"
@@ -46,7 +47,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 }) // rec {
   inherit version src;
 
-  pname = prevName + lib.optionalString supportFlags.waylandSupport "-wayland";
+  pname = prevName + lib.optionalString (wineRelease == "wayland") "-wayland";
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;

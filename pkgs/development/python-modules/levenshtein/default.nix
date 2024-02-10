@@ -22,7 +22,8 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O39Xe26WKAGcv6DEvwuOL8NZJBem5SYZDX1TPAY7/uA=";
+    hash = "sha256-xQimslz/G6nf2uYerLSaRAK5gvmfDmWTzEx/fh+nqg0=";
+    fetchSubmodules = true; ## for vendored `rapidfuzz-cpp`
   };
 
   nativeBuildInputs = [

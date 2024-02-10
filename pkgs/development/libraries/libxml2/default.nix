@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchFromGitLab
 , zlib
 , pkg-config
 , autoreconfHook
@@ -36,19 +35,16 @@ in
 let
 libxml = stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.12.3-unstable-2023-12-14";
+  version = "2.12.5";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared && splitStaticOutput) "static";
   outputMan = "bin";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libxml2";
-    rev = "f006355eda722cae204606b9f95ba51f5ce9189b";
-    hash = "sha256-3WE90KDZq4Uaawuulc3t2+R8duCqgjEGUDN4HSXxohY=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+    hash = "sha256-qXJ5Zpav04Bz4PWcKDw6L1pWC1JotLq8ORsoYWZSayE=";
   };
 
   strictDeps = true;
