@@ -14806,6 +14806,8 @@ self: super: with self; {
 
   sparse = callPackage ../development/python-modules/sparse { };
 
+  sparsezoo = callPackage ../development/python-modules/sparsezoo { };
+
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 
   spatialmath-python = callPackage ../development/python-modules/spatialmath-python { };
