@@ -7493,7 +7493,7 @@ with pkgs;
 
   dleyna-server = callPackage ../development/libraries/dleyna-server { };
 
-  dmd = callPackage ../development/compilers/dmd ({
+  dmd = callPackage ../by-name/dm/dmd/package.nix ({
     inherit (darwin.apple_sdk.frameworks) Foundation;
   } // lib.optionalAttrs stdenv.isLinux {
     # https://github.com/NixOS/nixpkgs/pull/206907#issuecomment-1527034123
