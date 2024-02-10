@@ -14,16 +14,16 @@ let
   rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg";
 in rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "14.0.3";
+  version = "14.1.0";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    hash = "sha256-NBGbiy+1AUIBJFx6kcGPSKo08a+dkNo4rNH2I1pki4U=";
+    hash = "sha256-CBU1GzgWMPTVsgaPMy39VRcENw5iWRUrRpjyuGiZpPI=";
   };
 
-  cargoHash = "sha256-s6oK0/eL+NAhG3ySUlJBRatUuWXxfRVgAvlJm++0lkg=";
+  cargoHash = "sha256-8FxN5MhYduMkzym7Xx4dnVbWaBKv9pgbXMIRGiRRQew=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;

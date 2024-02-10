@@ -61,6 +61,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.cachix-watch-store-agent = {
       description = "Cachix watch store Agent";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];

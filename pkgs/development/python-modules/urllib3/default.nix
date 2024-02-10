@@ -1,18 +1,20 @@
 { lib
-, backports-zoneinfo
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+
+# build-system
+, hatchling
+
+# optional-dependencies
 , brotli
 , brotlicffi
-, buildPythonPackage
-, certifi
-, cryptography
-, fetchPypi
-, hatchling
-, idna
-, isPyPy
-, pyopenssl
 , pysocks
-, pytest-timeout
+
+# tests
+, backports-zoneinfo
 , pytestCheckHook
+, pytest-timeout
 , pythonOlder
 , tornado
 , trustme
@@ -20,12 +22,12 @@
 
 let self = buildPythonPackage rec {
   pname = "urllib3";
-  version = "2.0.7";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yX394fe9Q6ccjSpY42npsr9pLRM06p+crlWt19DdD4Q=";
+    hash = "sha256-33qor7AUj6eEiOeJmyxZtfT/z6gubFTMud03wde1LVQ=";
   };
 
   nativeBuildInputs = [
@@ -37,13 +39,6 @@ let self = buildPythonPackage rec {
       brotlicffi
     ] else [
       brotli
-    ];
-    # Use carefully since pyopenssl is not supported aarch64-darwin
-    secure = [
-      certifi
-      cryptography
-      idna
-      pyopenssl
     ];
     socks = [
       pysocks

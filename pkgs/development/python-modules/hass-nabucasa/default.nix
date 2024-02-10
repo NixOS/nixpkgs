@@ -12,6 +12,7 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , snitun
 , syrupy
@@ -34,6 +35,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "acme"
   ];
 
   propagatedBuildInputs = [

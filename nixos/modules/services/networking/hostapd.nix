@@ -1197,8 +1197,6 @@ in {
 
     environment.systemPackages = [cfg.package];
 
-    services.udev.packages = with pkgs; [crda];
-
     systemd.services.hostapd = {
       description = "IEEE 802.11 Host Access-Point Daemon";
 

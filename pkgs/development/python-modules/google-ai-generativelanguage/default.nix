@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-ai-generativelanguage";
-  version = "0.4.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yBmQZsCPdMTpEpB3gym7nzV7oepdb4LeK8DRBVK/T4w=";
+    hash = "sha256-Nf5XTdQbfkA28hd0E0VAexZXCQR6MR9oQnsG7Ipz7h8=";
   };
 
   propagatedBuildInputs = [

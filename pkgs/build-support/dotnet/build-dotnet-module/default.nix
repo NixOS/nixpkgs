@@ -37,7 +37,7 @@
 
   # The path to publish the project to. When unset, the directory "$out/lib/$pname" is used.
 , installPath ? null
-  # The binaries that should get installed to `$out/bin`, relative to `$out/lib/$pname/`. These get wrapped accordingly.
+  # The binaries that should get installed to `$out/bin`, relative to `$installPath/`. These get wrapped accordingly.
   # Unfortunately, dotnet has no method for doing this automatically.
   # If unset, all executables in the projects root will get installed. This may cause bloat!
 , executables ? null

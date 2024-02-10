@@ -5,13 +5,13 @@ let
 in
 buildDotnetModule rec {
   pname = "fsautocomplete";
-  version = "0.68.0";
+  version = "0.69.0";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
     rev = "v${version}";
-    sha256 = "sha256-wAPTJXD2CxZQA2EG4rQCM9v3dIu6hn3q23K7Vv9wkAk=";
+    hash = "sha256-o0aR4yRzRb3y8vARuhP7JnBQ72XBX0whfpC51b2cqF0=";
   };
 
   nugetDeps = ./deps.nix;
@@ -36,7 +36,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/fsharp/FsAutoComplete";
     changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ gbtb mdarocha ];
   };
 }

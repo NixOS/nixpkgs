@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , setuptools-scm
 , wheel
@@ -29,6 +30,9 @@ buildPythonPackage rec {
     setuptools-scm
     wheel
   ];
+
+  # https://github.com/tqdm/tqdm/issues/1537
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     pytestCheckHook

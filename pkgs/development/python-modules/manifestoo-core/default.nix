@@ -27,8 +27,6 @@ buildPythonPackage rec {
     lib.optionals (pythonOlder "3.7") [ importlib-resources ]
     ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

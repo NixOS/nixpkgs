@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "heudiconv";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cW6G2NtPZiyqqJ3w9a3Y/6blEaXtR9eGG5epPknimsw=";
+    hash = "sha256-KMEvuxRFFbnyAez+cpcHKDDXdrHfeZcqlGNwy8RWTxg=";
   };
 
   postPatch = ''

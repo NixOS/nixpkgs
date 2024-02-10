@@ -1,35 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , importlib-metadata
 , joblib
 , llvmlite
 , numba
 , scikit-learn
 , scipy
+, setuptools
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.10";
-  format = "setuptools";
+  version = "0.5.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XV3Gg8A+9V/j3faThZcgyhj4XG5uW7C08UhwJ41SiK0=";
+    hash = "sha256-b0TO2dWp2iyH2bL/8wu1MIVAwGV2BeTVzeftMnW7rVA=";
   };
 
-  patches = [
-    # https://github.com/lmcinnes/pynndescent/pull/224
-    (fetchpatch {
-      url = "https://github.com/lmcinnes/pynndescent/commit/86e0d716a3a4d5f4e6a0a3c2952f6fe339524e96.patch";
-      hash = "sha256-dfnT5P9Qsn/nSAr4Ysqo/olbLLfoZXvBRz33yzhN3J4=";
-    })
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -44,16 +40,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # numpy.core._exceptions._UFuncNoLoopError
-    "test_sparse_nn_descent_query_accuracy_angular"
-    "test_nn_descent_query_accuracy_angular"
-    "test_alternative_distances"
-    # scipy: ValueError: Unknown Distance Metric: wminkowski
-    # https://github.com/scikit-learn/scikit-learn/pull/21741
-    "test_weighted_minkowski"
   ];
 
   pythonImportsCheck = [

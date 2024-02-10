@@ -1,25 +1,51 @@
-{ buildPythonPackage
+{ lib
+, aiohttp
+, buildPythonPackage
+, certifi
+, elastic-transport
 , fetchPypi
-, urllib3, requests
-, nosexcover, mock
-, lib
+, pythonOlder
+, requests
+, urllib3
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "elasticsearch";
-  version = "8.9.0";
+  version = "8.11.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0zZ/wBPgT8eq00mm3p+tHuBPttYnsOeJaqUFwS/eXgQ=";
+    sha256 = "sha256-nghBO+r/Oka8EMbFcGmoRwTfaqqTCFxzffB/WKKBG3g=";
   };
+
+  nativeBuildInputs = [
+    elastic-transport
+  ];
+
+  propagatedBuildInputs = [
+    urllib3
+    certifi
+  ];
+
+  passthru.optional-dependencies = {
+    requests = [
+      requests
+    ];
+    async = [
+      aiohttp
+    ];
+  };
+
+  pythonImportsCheck = [
+    "elasticsearch"
+  ];
 
   # Check is disabled because running them destroy the content of the local cluster!
   # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
   doCheck = false;
-  propagatedBuildInputs = [ urllib3 requests ];
-  buildInputs = [ nosexcover mock ];
 
   meta = with lib; {
     description = "Official low-level client for Elasticsearch";
@@ -28,4 +54,4 @@ buildPythonPackage (rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };
-})
+}

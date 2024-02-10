@@ -1,17 +1,36 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, testers, grpc-gateway }:
 
 buildGoModule rec {
   pname = "grpc-gateway";
-  version = "2.18.1";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "grpc-ecosystem";
     repo = "grpc-gateway";
     rev = "v${version}";
-    sha256 = "sha256-mbRceXqc7UmrhM2Y6JJIUvMf9YxMFMjRW7VvEa8/xHs=";
+    sha256 = "sha256-CdGQpQfOSimeio8v1lZ7xzE/oAS2qFyu+uN+H9i7vpo=";
   };
 
-  vendorHash = "sha256-zVojs4q8TytJY3myKvLdACnMFJ0iK9Cfn+aZ4d/j34s=";
+  vendorHash = "sha256-no7kZGpf/VOuceC3J+izGFQp5aMS3b+Rn+x4BFZ2zgs=";
+
+  ldflags = [
+    "-X=main.version=${version}"
+    "-X=main.date=1970-01-01T00:00:00Z"
+    "-X=main.commit=unknown"
+  ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = grpc-gateway;
+      command = "protoc-gen-grpc-gateway --version";
+      version = "Version ${version}, commit unknown, built at 1970-01-01T00:00:00Z";
+    };
+    openapiv2Version = testers.testVersion {
+      package = grpc-gateway;
+      command = "protoc-gen-openapiv2 --version";
+      version = "Version ${version}, commit unknown, built at 1970-01-01T00:00:00Z";
+    };
+  };
 
   meta = with lib; {
     description =

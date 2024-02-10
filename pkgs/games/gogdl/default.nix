@@ -11,14 +11,14 @@
 
 buildPythonApplication rec {
   pname = "gogdl";
-  version = "0.7.3";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "heroic-gogdl";
-    rev = "89d15f1593cc26f15a5f8f409bb623764c095d37";
-    hash = "sha256-EECpXGVhcwihKB8fLObVvYzFD8uh7CxYKtFiGc0Jqbk=";
+    rev = "e1c3e5b98feda53ea88f54f9aa5c614ae9424ef0";
+    hash = "sha256-MGxpWfDGchZruVmSiea5s1JQV23F9QvQLWrxPmIsBEo=";
   };
 
   disabled = pythonOlder "3.8";

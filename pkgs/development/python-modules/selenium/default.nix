@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.14.0";
+  version = "4.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
     rev = "refs/tags/selenium-${version}";
-    hash = "sha256-cTMCKfFLUlJDbTUQA3Z/pKCE1RQQRMb4K8hKKn9HqvU=";
+    hash = "sha256-AacpHZw6N6RruuBO+bZ3/cxOODe9VPGblKmIm1ffqrc=";
   };
 
   preConfigure = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    DST_PREFIX=$out/lib/${python.libPrefix}/site-packages/selenium/webdriver/
+    DST_PREFIX=$out/${python.sitePackages}/selenium/webdriver/
     DST_REMOTE=$DST_PREFIX/remote/
     DST_FF=$DST_PREFIX/firefox
     cp ../rb/lib/selenium/webdriver/atoms/getAttribute.js $DST_REMOTE

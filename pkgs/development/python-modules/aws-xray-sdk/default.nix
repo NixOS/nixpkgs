@@ -14,6 +14,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 , sqlalchemy
 , webtest
 , wrapt
@@ -22,7 +23,7 @@
 buildPythonPackage rec {
   pname = "aws-xray-sdk";
   version = "2.12.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -32,6 +33,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-NLFNst4Yqsz2u5IXwe8OdJPW77irLRO5tWWn1uV3tMg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     botocore

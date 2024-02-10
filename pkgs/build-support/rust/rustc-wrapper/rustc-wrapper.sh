@@ -1,6 +1,19 @@
 #!@shell@
 
-extraBefore=(@sysroot@)
+defaultSysroot=(@sysroot@)
+
+for arg; do
+    case "$arg" in
+        --sysroot|--sysroot=*)
+            defaultSysroot=()
+            ;;
+        --)
+            break
+            ;;
+    esac
+done
+
+extraBefore=("${defaultSysroot[@]}")
 extraAfter=($NIX_RUSTFLAGS)
 
 # Optionally print debug info.

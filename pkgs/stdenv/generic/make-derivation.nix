@@ -239,23 +239,28 @@ let
     # disabling fortify implies fortify3 should also be disabled
     then unique (hardeningDisable ++ [ "fortify3" ])
     else hardeningDisable;
-  supportedHardeningFlags = [ "fortify" "fortify3" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-  # Musl-based platforms will keep "pie", other platforms will not.
-  # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
-  # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
-      # Except when:
-      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-      #    - static armv7l, where compilation fails.
-      !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-    then supportedHardeningFlags
-    else remove "pie" supportedHardeningFlags;
+  knownHardeningFlags = [
+    "bindnow"
+    "format"
+    "fortify"
+    "fortify3"
+    "pic"
+    "pie"
+    "relro"
+    "stackprotector"
+    "strictoverflow"
+    "zerocallusedregs"
+  ];
+  defaultHardeningFlags =
+    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
+      # fallback safe-ish set of flags
+      (remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
     else subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
-  erroneousHardeningFlags = subtractLists supportedHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
+  erroneousHardeningFlags = subtractLists knownHardeningFlags (hardeningEnable ++ remove "all" hardeningDisable);
 
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps: flip imap1 deps (index: dep:
@@ -264,7 +269,7 @@ let
     else throw "Dependency is not of a valid type: ${concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
-  inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
+  inherit erroneousHardeningFlags hardeningDisable hardeningEnable knownHardeningFlags;
 })
 else let
   doCheck = doCheck';

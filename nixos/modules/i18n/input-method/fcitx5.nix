@@ -19,6 +19,14 @@ in
           Enabled Fcitx5 addons.
         '';
       };
+      waylandFrontend = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Use the Wayland input method frontend.
+          See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland).
+        '';
+      };
       quickPhrase = mkOption {
         type = with types; attrsOf str;
         default = { };
@@ -118,10 +126,11 @@ in
       ];
 
     environment.variables = {
-      GTK_IM_MODULE = "fcitx";
-      QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
       QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
+    } // lib.optionalAttrs (!cfg.waylandFrontend) {
+      GTK_IM_MODULE = "fcitx";
+      QT_IM_MODULE = "fcitx";
     } // lib.optionalAttrs cfg.ignoreUserConfig {
       SKIP_FCITX_USER_PATH = "1";
     };

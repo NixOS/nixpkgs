@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , accelerate
 , attrs
 , bitsandbytes
@@ -41,6 +42,17 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "hatch-vcs==0.3.0" "hatch-vcs" \
+      --replace "hatchling==1.18.0" "hatchling"
+  '';
+
+  pythonRelaxDeps = [
+    "cattrs"
   ];
 
   propagatedBuildInputs = [

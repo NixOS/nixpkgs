@@ -14,6 +14,7 @@
 , libXrandr
 , vulkan-headers
 , vulkan-loader
+, vulkan-volk
 , wayland
 , wayland-protocols
 , moltenvk
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.268.0";
+  version = "1.3.275.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-IsMxiAR4ak6kC3BNYhtI+JVNkEka4ZceSElxk39THXg=";
+    hash = "sha256-0sAwO8gXzpMst+7l7LS1oiDLo9E6otDktCti+v8jwDw=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     glslang
     vulkan-headers
     vulkan-loader
+    vulkan-volk
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libffi
     libX11
@@ -57,17 +59,6 @@ stdenv.mkDerivation rec {
     AppKit
     Cocoa
   ];
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # Modify mac_common.cmake to find the ICD where nixpkgs puts it.
-    substituteInPlace mac_common.cmake \
-      --replace MoltenVK/icd/MoltenVK_icd.json MoltenVK_icd.json
-    # Remove the unconditional check for `ibtool` since the cube demo that needs it won’t be built.
-    sed -e '/#.*Interface Builder/,/^endif()/d' -i mac_common.cmake
-    # Install `vulkaninfo` to $out/bin even on Darwin.
-    substituteInPlace vulkaninfo/CMakeLists.txt \
-      --replace 'install(TARGETS vulkaninfo RUNTIME DESTINATION "vulkaninfo")' 'install(TARGETS vulkaninfo)'
-  '';
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
 

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "bitmagnet";
-  version = "0.4.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${version}";
-    hash = "sha256-Geukd4JYwmdG7M+HDCCqpiUjor1TWsqBY42ACd+LasU=";
+    hash = "sha256-17jRktEqBCAXiddx8FnqHg3+c/03nqKHC8BQc9AhQA0=";
   };
 
-  vendorHash = "sha256-TbfbrvXbO+eOb1Ot/gWRBjggTj9jkSGulHIJdziqsVc=";
+  vendorHash = "sha256-YfsSz72CeHdrh5610Ilo1NYxlCT993hxWRWh0OsvEQc=";
 
   ldflags = [ "-s" "-w" ];
 

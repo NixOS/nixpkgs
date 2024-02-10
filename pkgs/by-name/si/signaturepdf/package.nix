@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --run 'echo "You may now open a web browser on http://localhost:$port"' \
       --add-flags '-S "localhost:$port" -t public'
 
-    runHook preInstall
+    runHook postInstall
   '';
 
   meta = with lib; {

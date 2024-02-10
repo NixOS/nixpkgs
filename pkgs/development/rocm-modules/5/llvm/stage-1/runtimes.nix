@@ -1,11 +1,12 @@
 { lib
+, stdenv
 , callPackage
 , rocmUpdateScript
 , llvm
 }:
 
 callPackage ../base.nix rec {
-  inherit rocmUpdateScript;
+  inherit stdenv rocmUpdateScript;
   buildDocs = false;
   buildMan = false;
   buildTests = false;

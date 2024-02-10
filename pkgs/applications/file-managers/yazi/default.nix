@@ -31,16 +31,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.1.5";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FhKrq4N32uJRHGc0qRl+CIVNRW597jACcTFEgj8hiSE=";
+    hash = "sha256-2AiaJs6xY8hsB1DBxpPwdZtc8IZvsoCGWBOFVMf4dvk=";
   };
 
-  cargoHash = "sha256-YUymZhDp1Pjm+W6m8Vmh2AgMCdaNt6TQQpiJwSg/gPw=";
+  cargoHash = "sha256-fRUmXv27sHYz8z0cc795JCPLHDQGgTV4wAWAtQ/pbg4=";
+
+  env.YAZI_GEN_COMPLETIONS = true;
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
@@ -62,9 +64,9 @@ rustPlatform.buildRustPackage rec {
       wrapProgram $out/bin/yazi \
          --prefix PATH : "${makeBinPath runtimePaths}"
       installShellCompletion --cmd yazi \
-        --bash ./config/completions/yazi.bash \
-        --fish ./config/completions/yazi.fish \
-        --zsh  ./config/completions/_yazi
+        --bash ./yazi-config/completions/yazi.bash \
+        --fish ./yazi-config/completions/yazi.fish \
+        --zsh  ./yazi-config/completions/_yazi
     '';
 
   passthru.updateScript = nix-update-script { };

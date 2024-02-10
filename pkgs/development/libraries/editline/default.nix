@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/troglobit/editline/commit/265c1fb6a0b99bedb157dc7c320f2c9629136518.patch";
       sha256 = "sha256-9fhQH0hT8BcykGzOUoT18HBtWjjoXnePSGDJQp8GH30=";
     })
+
+    # Pending autoconf-2.72 upstream support:
+    #   https://github.com/troglobit/editline/pull/64
+    (fetchpatch {
+      name = "autoconf-2.72.patch";
+      url = "https://github.com/troglobit/editline/commit/f444a316f5178b8e20fe31e7b2d979e651da077e.patch";
+      hash = "sha256-m3jExTkPvE+ZBwHzf/A+ugzzfbLmeWYn726l7Po7f10=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

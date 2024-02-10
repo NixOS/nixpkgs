@@ -3,7 +3,7 @@
 , fetchPypi
 , setuptools
 , lazr-delegates
-, zope_interface
+, zope-interface
 , pytestCheckHook
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     lazr-delegates
-    zope_interface
+    zope-interface
   ];
 
   pythonImportsCheck = [

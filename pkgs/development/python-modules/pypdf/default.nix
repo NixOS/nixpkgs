@@ -89,6 +89,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires fpdf2 which we don't package yet
     "test_compression"
+    # infinite recursion when including fpdf2
+    "test_merging_many_temporary_files"
   ];
 
   meta = with lib; {
@@ -96,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

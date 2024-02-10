@@ -5,7 +5,7 @@ make_vala_find_vapi_files() {
     fi
 }
 
-addEnvHooks "$hostOffset" make_vala_find_vapi_files
+addEnvHooks "$targetOffset" make_vala_find_vapi_files
 
 disable_incompabile_pointer_conversion_warning() {
     # Work around incompatible function pointer conversion errors with clang 16

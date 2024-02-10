@@ -11,18 +11,17 @@
 }:
 let
   inherit (lib)
+    attrsets
     maintainers
     meta
     strings
     versions
     ;
-  targetArch =
-    if hostPlatform.isx86_64 then
-      "x86_64-linux-gnu"
-    else if hostPlatform.isAarch64 then
-      "aarch64-linux-gnu"
-    else
-      "unsupported";
+  # targetArch :: String
+  targetArch = attrsets.attrByPath [ hostPlatform.system ] "unsupported" {
+    x86_64-linux = "x86_64-linux-gnu";
+    aarch64-linux = "aarch64-linux-gnu";
+  };
 in
 finalAttrs: prevAttrs: {
   # Useful for inspecting why something went wrong.
@@ -69,7 +68,7 @@ finalAttrs: prevAttrs: {
 
   preInstall =
     (prevAttrs.preInstall or "")
-    + ''
+    + strings.optionalString (targetArch != "unsupported") ''
       # Replace symlinks to bin and lib with the actual directories from targets.
       for dir in bin lib; do
         rm "$dir"

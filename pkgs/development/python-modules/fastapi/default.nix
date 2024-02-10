@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 
 # build-system
 , hatchling
@@ -31,12 +32,14 @@
 , orjson
 , email-validator
 , uvicorn
+, pydantic-settings
+, pydantic-extra-types
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.103.1";
-  format = "pyproject";
+  version = "0.109.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -44,11 +47,18 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2J8c3S4Ca+c5bI0tyjMJArJKux9qPmu+ohqve5PhSGI=";
+    hash = "sha256-iZBc0tYGmhQuOL/pdthhBYYnZhe+wEttoinePNAIgEs=";
   };
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "anyio"
+    # https://github.com/tiangolo/fastapi/pull/9636
+    "starlette"
   ];
 
   propagatedBuildInputs = [
@@ -67,8 +77,9 @@ buildPythonPackage rec {
     orjson
     email-validator
     uvicorn
-    # pydantic-settings
-    # pydantic-extra-types
+  ] ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+    pydantic-settings
+    pydantic-extra-types
   ] ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = [
@@ -90,8 +101,6 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Disabled tests require orjson which requires rust nightly
-    "tests/test_default_response_class.py"
     # Don't test docs and examples
     "docs_src"
     # databases is incompatible with SQLAlchemy 2.0
@@ -99,26 +108,12 @@ buildPythonPackage rec {
     "tests/test_tutorial/test_sql_databases"
   ];
 
-  disabledTests = [
-    "test_get_custom_response"
-    # Failed: DID NOT RAISE <class 'starlette.websockets.WebSocketDisconnect'>
-    "test_websocket_invalid_data"
-    "test_websocket_no_credentials"
-    # TypeError: __init__() missing 1...starlette-releated
-    "test_head"
-    "test_options"
-    "test_trace"
-    # Unexpected number of warnings caught
-    "test_warn_duplicate_operation_id"
-    # assert state["except"] is True
-    "test_dependency_gets_exception"
-  ];
-
   pythonImportsCheck = [
     "fastapi"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/tiangolo/fastapi/releases/tag/${version}";
     description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
     license = licenses.mit;

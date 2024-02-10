@@ -30,10 +30,13 @@
 , textToSpeechSupport ? stdenv.isLinux
 , controllerSupport ? stdenv.isLinux
 
-# The flag `withWaylandGLFW` enables runtime-checking of `WAYLAND_DISPLAY`;
-# if the option is enabled, a patched version of GLFW will be added to
-# `LD_LIBRARY_PATH` so that the launcher can use the correct one
-# depending on the desktop environment used.
+  # Adds `glfw-wayland-minecraft` to `LD_LIBRARY_PATH`
+  # when launched on wayland, allowing for the game to be run natively.
+  # Make sure to enable "Use system installation of GLFW" in instance settings
+  # for this to take effect
+  #
+  # Warning: This build of glfw may be unstable, and the launcher
+  # itself can take slightly longer to start
 , withWaylandGLFW ? false
 
 , jdks ? [ jdk17 jdk8 ]
@@ -44,14 +47,6 @@
 assert lib.assertMsg (withWaylandGLFW -> stdenv.isLinux) "withWaylandGLFW is only available on Linux";
 
 let
-  # By default, this package uses a binary wrapper for `wrapQtAppsHook`.
-  # Enabling `shellWrapper` will add `makeWrapper` to `nativeBuildInputs`,
-  # causing `wrapQtAppsHook` to output a shell wrapper instead.
-  # This is needed for checking environment variables at runtime
-  # and modifying others if necessary (see above option for example).
-  # Warning: This can make the program start slower, by about four milliseconds.
-  shellWrapper = withWaylandGLFW;
-
   prismlauncher' = prismlauncher-unwrapped.override {
     inherit msaClientID gamemodeSupport;
   };
@@ -65,7 +60,9 @@ symlinkJoin {
   nativeBuildInputs = [
     wrapQtAppsHook
   ]
-  ++ lib.optional shellWrapper makeWrapper;
+  # purposefully using a shell wrapper here for variable expansion
+  # see https://github.com/NixOS/nixpkgs/issues/172583
+  ++ lib.optional withWaylandGLFW makeWrapper;
 
   buildInputs = [
     qtbase

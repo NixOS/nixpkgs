@@ -1,6 +1,6 @@
 # Contributing to this manual {#chap-contributing}
 
-The [DocBook] and CommonMark sources of the NixOS manual are in the [nixos/doc/manual](https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual) subdirectory of the [Nixpkgs](https://github.com/NixOS/nixpkgs) repository.
+The sources of the NixOS manual are in the [nixos/doc/manual](https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual) subdirectory of the [Nixpkgs](https://github.com/NixOS/nixpkgs) repository.
 This manual uses the [Nixpkgs manual syntax](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup).
 
 You can quickly check your edits with the following:

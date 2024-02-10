@@ -39,6 +39,9 @@ with lib;
     # Allow the user to log in as root without a password.
     users.users.root.initialHashedPassword = "";
 
+    # Don't require sudo/root to `reboot` or `poweroff`.
+    security.polkit.enable = true;
+
     # Allow passwordless sudo from nixos user
     security.sudo = {
       enable = mkDefault true;

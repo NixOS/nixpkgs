@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , pytz
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pytz
-    zope_interface
+    zope-interface
   ];
 
   pythonImportsCheck = [
@@ -37,4 +37,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ icyrockcom ];
   };
 }
-

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonRelaxDepsHook
 , fetchPypi
 , emoji
 , pydbus
@@ -18,13 +19,20 @@ buildPythonPackage rec {
     hash = "sha256-p3nM80fOMtRmeKvOXuX40Fu9xH8gPgYyneXbUS678fE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     emoji
     pydbus
     pygobject3
     unidecode
+  ];
+
+  pythonRelaxDeps = [
+    "emoji"
   ];
 
   pythonImportsCheck = [ "mpris_server" ];

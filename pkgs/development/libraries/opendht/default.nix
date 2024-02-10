@@ -7,7 +7,7 @@
 , asio
 , nettle
 , gnutls
-, msgpack
+, msgpack-cxx
 , readline
 , libargon2
 , jsoncpp
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     fmt
     nettle
     gnutls
-    msgpack
+    msgpack-cxx
     readline
     libargon2
   ] ++ lib.optionals enableProxyServerAndClient [

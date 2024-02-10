@@ -10,18 +10,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcdr";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-CDR";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rdRn/vRcZuej7buyb1K6f+9A4oLSodNw3pwefjsUXHA=";
+    hash = "sha256-eSf6LNTVsGEBXjTmTBjjWKBqs68pbnVcw1p2bi1Asgg=";
   };
 
   patches = [
     ./0001-Do-not-require-wget-and-unzip.patch
   ];
+
+  # Fix doc generation error with doxygen >= 1.10.0
+  # see https://github.com/eProsima/Fast-CDR/issues/193
+  postPatch = ''
+    substituteInPlace ./doxyfile.in --replace \
+      "WARN_AS_ERROR          = YES" \
+      "WARN_AS_ERROR          = NO"
+  '';
 
   cmakeFlags = lib.optional (stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=OFF"
   # upstream turns BUILD_TESTING=OFF by default and doesn't honor cmake's default (=ON)

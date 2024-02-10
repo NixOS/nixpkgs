@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.27.8";
+  version = "3.27.9";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/s4kVj9peHD7uYLqi/F0gsnV+FXYyb8LgkY9dsno0Mw=";
+    hash = "sha256-YJqbmFcqal6kd/kSz/uXMQntTQpqaz+eI1PSzcBIcI4=";
   };
 
   patches = [
@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
+  separateDebugInfo = true;
   setOutputFlags = false;
 
   setupHooks = [
@@ -138,8 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-D_FILE_OFFSET_BITS=64"
     "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
   ]
-  # Workaround missing atomic ops with gcc <13
-  ++ lib.optional stdenv.hostPlatform.isRiscV "LDFLAGS=-latomic"
   ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.

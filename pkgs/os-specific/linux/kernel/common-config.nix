@@ -123,6 +123,7 @@ let
     };
 
     optimization = {
+      X86_GENERIC = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # Optimize with -O2, not -Os
       CC_OPTIMIZE_FOR_SIZE = no;
     };
@@ -296,6 +297,7 @@ let
       # At the time of writing (25-06-2023): this is only used in a "correct" way by ath drivers for initiating DFS radiation
       # for "certified devices"
       EXPERT                      = option yes; # this is needed for offering the certification option
+      RFKILL_INPUT                = option yes; # counteract an undesired effect of setting EXPERT
       CFG80211_CERTIFICATION_ONUS = option yes;
       # DFS: "Dynamic Frequency Selection" is a spectrum-sharing mechanism that allows
       # you to use certain interesting frequency when your local regulatory domain mandates it.
@@ -343,7 +345,7 @@ let
     };
 
     video = {
-      DRM_LEGACY = no;
+      DRM_LEGACY = whenOlder "6.8" no;
       NOUVEAU_LEGACY_CTX_SUPPORT = whenBetween "5.2" "6.3" no;
 
       # Allow specifying custom EDID on the kernel command line
@@ -377,6 +379,16 @@ let
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
+    };
+
+    # Enables Rust support in the Linux kernel. This is currently not enabled by default, because it occasionally requires
+    # patching the Linux kernel for the specific Rust toolchain in nixpkgs. These patches usually take a bit
+    # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
+    #
+    # Once Rust in the kernel has more users, we can reconsider enabling it by default.
+    rust = optionalAttrs ((features.rust or false) && versionAtLeast version "6.7") {
+      RUST = yes;
+      GCC_PLUGINS = no;
     };
 
     sound = {
@@ -475,6 +487,9 @@ let
       OCFS2_DEBUG_MASKLOG = option no;
 
       BTRFS_FS_POSIX_ACL = yes;
+
+      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
+      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
 
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
@@ -672,29 +687,31 @@ let
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
 
+      UDMABUF = whenAtLeast "4.20" yes;
+
       # VirtualBox guest drivers in the kernel conflict with the ones in the
       # official additions package and prevent the vboxsf module from loading,
       # so disable them for now.
       VBOXGUEST = option no;
       DRM_VBOXVIDEO = option no;
 
-      XEN                         = mkIf stdenv.is64bit (option yes);
-      XEN_DOM0                    = mkIf stdenv.is64bit (option yes);
-      PCI_XEN                     = mkIf stdenv.is64bit (option yes);
-      HVC_XEN                     = mkIf stdenv.is64bit (option yes);
-      HVC_XEN_FRONTEND            = mkIf stdenv.is64bit (option yes);
-      XEN_SYS_HYPERVISOR          = mkIf stdenv.is64bit (option yes);
-      SWIOTLB_XEN                 = mkIf stdenv.is64bit (option yes);
-      XEN_BACKEND                 = mkIf stdenv.is64bit (option yes);
-      XEN_BALLOON                 = mkIf stdenv.is64bit (option yes);
-      XEN_BALLOON_MEMORY_HOTPLUG  = mkIf stdenv.is64bit (option yes);
-      XEN_EFI                     = mkIf stdenv.is64bit (option yes);
-      XEN_HAVE_PVMMU              = mkIf stdenv.is64bit (option yes);
-      XEN_MCE_LOG                 = mkIf stdenv.is64bit (option yes);
-      XEN_PVH                     = mkIf stdenv.is64bit (option yes);
-      XEN_PVHVM                   = mkIf stdenv.is64bit (option yes);
-      XEN_SAVE_RESTORE            = mkIf stdenv.is64bit (option yes);
-      XEN_SELFBALLOONING          = mkIf stdenv.is64bit (whenOlder "5.3" yes);
+      XEN                         = option yes;
+      XEN_DOM0                    = option yes;
+      PCI_XEN                     = option yes;
+      HVC_XEN                     = option yes;
+      HVC_XEN_FRONTEND            = option yes;
+      XEN_SYS_HYPERVISOR          = option yes;
+      SWIOTLB_XEN                 = option yes;
+      XEN_BACKEND                 = option yes;
+      XEN_BALLOON                 = option yes;
+      XEN_BALLOON_MEMORY_HOTPLUG  = option yes;
+      XEN_EFI                     = option yes;
+      XEN_HAVE_PVMMU              = option yes;
+      XEN_MCE_LOG                 = option yes;
+      XEN_PVH                     = option yes;
+      XEN_PVHVM                   = option yes;
+      XEN_SAVE_RESTORE            = option yes;
+      XEN_SELFBALLOONING          = whenOlder "5.3" yes;
 
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
@@ -989,6 +1006,9 @@ let
       # > CONFIG_KUNIT should not be enabled in a production environment. Enabling KUnit disables Kernel Address-Space Layout Randomization (KASLR), and tests may affect the state of the kernel in ways not suitable for production.
       # https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html
       KUNIT = whenAtLeast "5.5" no;
+
+      # Set system time from RTC on startup and resume
+      RTC_HCTOSYS = option yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

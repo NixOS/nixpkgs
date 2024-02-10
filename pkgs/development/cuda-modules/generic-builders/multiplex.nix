@@ -20,7 +20,7 @@
   # The featureRelease is used to populate meta.platforms (by way of looking at the attribute names)
   # and to determine the outputs of the package.
   # shimFn :: {package, redistArch} -> AttrSet
-  shimsFn ? ({package, redistArch}: throw "shimsFn must be provided"),
+  shimsFn ? (throw "shimsFn must be provided"),
   # fixupFn :: Path
   # A path (or nix expression) to be evaluated with callPackage and then
   # provided to the package's overrideAttrs function.
@@ -29,16 +29,8 @@
   # - cudaVersion
   # - mkVersionedPackageName
   # - package
-  fixupFn ? (
-    {
-      final,
-      cudaVersion,
-      mkVersionedPackageName,
-      package,
-      ...
-    }:
-    throw "fixupFn must be provided"
-  ),
+  # - ...
+  fixupFn ? (throw "fixupFn must be provided"),
 }:
 let
   inherit (lib)
@@ -60,7 +52,7 @@ let
   # - Package: ../modules/${pname}/releases/package.nix
 
   # FIXME: do this at the module system level
-  propagatePlatforms = lib.mapAttrs (platform: subset: map (r: r // { inherit platform; }) subset);
+  propagatePlatforms = lib.mapAttrs (redistArch: packages: map (p: { inherit redistArch; } // p) packages);
 
   # All releases across all platforms
   # See ../modules/${pname}/releases/releases.nix
@@ -71,25 +63,35 @@ let
   # computeName :: Package -> String
   computeName = {version, ...}: mkVersionedPackageName pname version;
 
-  # Check whether a package supports our CUDA version
+  # Check whether a package supports our CUDA version and platform.
   # isSupported :: Package -> Bool
   isSupported =
     package:
-    !(strings.hasPrefix "unsupported" package.platform)
+    redistArch == package.redistArch
     && strings.versionAtLeast cudaVersion package.minCudaVersion
     && strings.versionAtLeast package.maxCudaVersion cudaVersion;
 
   # Get all of the packages for our given platform.
+  # redistArch :: String
+  # Value is `"unsupported"` if the platform is not supported.
   redistArch = flags.getRedistArch hostPlatform.system;
-
-  allReleases = builtins.concatMap (xs: xs) (builtins.attrValues releaseSets);
-
-  # All the supported packages we can build for our platform.
-  # perSystemReleases :: List Package
-  perSystemReleases = releaseSets.${redistArch} or [ ];
 
   preferable =
     p1: p2: (isSupported p2 -> isSupported p1) && (strings.versionAtLeast p1.version p2.version);
+
+  # All the supported packages we can build for our platform.
+  # perSystemReleases :: List Package
+  allReleases = lib.pipe releaseSets
+    [
+      (lib.attrValues)
+      (lists.flatten)
+      (lib.groupBy (p: lib.versions.majorMinor p.version))
+      (lib.mapAttrs (_: builtins.sort preferable))
+      (lib.mapAttrs (_: lib.take 1))
+      (lib.attrValues)
+      (lib.concatMap lib.trivial.id)
+    ];
+
   newest = builtins.head (builtins.sort preferable allReleases);
 
   # A function which takes the `final` overlay and the `package` being built and returns
@@ -113,7 +115,7 @@ let
       buildPackage =
         package:
         let
-          shims = final.callPackage shimsFn {inherit package redistArch;};
+          shims = final.callPackage shimsFn {inherit package; inherit (package) redistArch; };
           name = computeName package;
           drv = final.callPackage ./manifest.nix {
             inherit pname;
@@ -125,7 +127,7 @@ let
         attrsets.nameValuePair name fixedDrv;
 
       # versionedDerivations :: AttrSet Derivation
-      versionedDerivations = builtins.listToAttrs (lists.map buildPackage perSystemReleases);
+      versionedDerivations = builtins.listToAttrs (lists.map buildPackage allReleases);
 
       defaultDerivation = { ${pname} = (buildPackage newest).value; };
     in

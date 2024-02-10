@@ -1,18 +1,24 @@
 { lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# build-system
+, cython_3
+, setuptools
+
+# dependencies
 , aiohappyeyeballs
 , async-timeout
-, buildPythonPackage
 , chacha20poly1305-reuseable
-, cython_3
-, fetchFromGitHub
-, mock
 , noiseprotocol
 , protobuf
+, zeroconf
+
+# tests
+, mock
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
-, setuptools
-, zeroconf
 }:
 
 buildPythonPackage rec {

@@ -23,8 +23,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = with python3.pkgs; [
     appdirs
     deltachat

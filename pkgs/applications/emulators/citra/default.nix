@@ -15,13 +15,13 @@ let
 in {
   nightly = qt6Packages.callPackage ./generic.nix rec {
     pname = "citra-nightly";
-    version = "2043";
+    version = "2088";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-nightly";
       rev = "nightly-${version}";
-      sha256 = "sha256-26M3uzqp4rUMOhr619UooupZT11B03IJfamUPNkceQk=";
+      sha256 = "0l9w4i0zbafcv2s6pd1zqb11vh0i7gzwbqnzlz9al6ihwbsgbj3k";
       fetchSubmodules = true;
     };
 
@@ -30,13 +30,13 @@ in {
 
   canary = qt6Packages.callPackage ./generic.nix rec {
     pname = "citra-canary";
-    version = "2695";
+    version = "2766";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-canary";
       rev = "canary-${version}";
-      sha256 = "sha256-090er4aUGze8bk3DIFZoa+/6EcJhr4bim3nWgZHs1mo=";
+      sha256 = "1gm3ajphpzwhm3qnchsx77jyl51za8yw3r0j0h8idf9y1ilcjvi4";
       fetchSubmodules = true;
     };
 

@@ -27,6 +27,10 @@ buildPythonPackage rec {
     # are not in their focus
     substituteInPlace setup.py \
       --replace 'version="main",' 'version="${version}",'
+
+    # yarl 1.9.4 requires ports to be ints
+    substituteInPlace pytautulli/models/host_configuration.py \
+      --replace "str(self.port)" "int(self.port)"
   '';
 
   propagatedBuildInputs = [

@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index ffad1a4..e7551da 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -44,6 +44,9 @@ coverage = ">=6.4.4,<8.0.0"
+ pytest-cov = ">=3,<5"
+ ruff = "^0.1.7"
+ 
++[tool.poetry.scripts]
++fritzexporter = "fritzexporter.__main__:main"
++
+ [build-system]
+ requires = ["poetry-core"]
+ build-backend = "poetry.core.masonry.api"

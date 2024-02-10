@@ -53,17 +53,20 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.26.1";
+  version = "1.26.2";
   pyproject = true;
   disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-yMbHLUqfgx8yjvsTEmQqHK+vqoiYHZq3Y2jVDQfZPL4=";
+    hash = "sha256-9lc4RHZ2q1d38R5ru9uM4Rt4XhBfaQvEWWZXSBa20+o=";
   };
 
   patches = [
+    # Remove last usage of distutils to enable numpy on Python 3.12
+    ./0001-BLD-remove-last-usage-of-distutils-in-_core-code_gen.patch
+
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
     # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
     # 80-bit long double complex numbers.
@@ -111,7 +114,7 @@ in buildPythonPackage rec {
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/xianyi/OpenBLAS/issues/2993
+  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))

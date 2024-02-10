@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "types-pillow";
-  version = "10.1.0.2";
+  version = "10.1.0.20240106";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "types-Pillow";
-    hash = "sha256-UlwcXuZ7CsFyHEDSvGGCJu8hI8NH5SfhTgW5IHIaE7k=";
+    hash = "sha256-0sLtfs5rC+y02vFQ4jdMj02Xf+bv7GJe+VLiYldhkOc=";
   };
 
   # Modules doesn't have tests

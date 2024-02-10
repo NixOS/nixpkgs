@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [ zope_interface ];
+  propagatedBuildInputs = [ zope-interface ];
 
   # circular deps
   doCheck = false;

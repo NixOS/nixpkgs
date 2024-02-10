@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.454";
+  version = "8.3.459";
 
   src = fetchurl {
     url    = "http://opencircuitdesign.com/magic/archive/magic-${version}.tgz";
-    sha256 = "sha256-nHZJ2L54J2x+H7S29TeGPInTgjEhRFv3h2ki0ccGYB0=";
+    sha256 = "sha256-ErNFZHZiJ+Cw8QOQREY9ps5/8WoZYEUwj8aIu42dT9Q=";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "VLSI layout tool written in Tcl";
     homepage    = "http://opencircuitdesign.com/magic/";
     license     = licenses.mit;
-    maintainers = with maintainers; [ anna328p thoughtpolice AndersonTorres ];
+    maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
   };
 }

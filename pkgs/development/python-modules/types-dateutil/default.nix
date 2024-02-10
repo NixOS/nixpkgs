@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "types-dateutil";
-  version = "2.8.19.9";
+  version = "2.8.19.20240106";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "types-python-dateutil";
     inherit version;
-    hash = "sha256-Y3cW+zr73H62g/ZBFx+HSTevExSc1Faoxj6PgRJ6Oe0=";
+    hash = "sha256-H42yIcO5jmygLqg6WDcbIsN09Crlu98YbbnJp2WBRZ8=";
   };
 
   pythonImportsCheck = [

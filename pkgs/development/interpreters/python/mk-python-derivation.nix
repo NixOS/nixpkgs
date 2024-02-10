@@ -19,6 +19,7 @@
 , pythonOutputDistHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, pythonRuntimeDepsCheckHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -229,6 +230,13 @@ let
         }
       else
         pypaBuildHook
+    ) (
+      if isBootstrapPackage then
+        pythonRuntimeDepsCheckHook.override {
+          inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+        }
+      else
+        pythonRuntimeDepsCheckHook
     )] ++ lib.optionals (format' == "wheel") [
       wheelUnpackHook
     ] ++ lib.optionals (format' == "egg") [
@@ -300,7 +308,10 @@ let
   passthru.updateScript = let
       filename = builtins.head (lib.splitString ":" self.meta.position);
     in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation
-  (disabled -> throw "${name} not supported for interpreter ${python.executable}")
-  passthru
-  self
+in
+  if disabled then
+    throw "${name} not supported for interpreter ${python.executable}"
+else
+  self.overrideAttrs (attrs: {
+    passthru = lib.recursiveUpdate passthru attrs.passthru;
+  })

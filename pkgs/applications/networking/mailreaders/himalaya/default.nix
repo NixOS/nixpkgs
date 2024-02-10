@@ -2,37 +2,38 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, pkg-config
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
 , notmuch
-, withImapBackend ? true
-, withNotmuchBackend ? false
-, withSmtpSender ? true
+, gpgme
+, buildNoDefaultFeatures ? false
+, buildFeatures ? []
 }:
 
 rustPlatform.buildRustPackage rec {
+  inherit buildNoDefaultFeatures buildFeatures;
+
   pname = "himalaya";
-  version = "0.8.4";
+  version = "1.0.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AImLYRRCL6IvoSeMFH2mbkNOvUmLwIvhWB3cOoqDljk=";
+    hash = "sha256-dLj/bEPz3SD1v54yXbtVdUJKQsyw0OJxmQh10ql+3iI=";
   };
 
-  cargoSha256 = "deJZPaZW6rb7A6wOL3vcphBXu0F7EXc1xRwSDY/v8l4=";
+  cargoSha256 = "0IYpuKq5amAcYtsDMzJGghbxkuldAulsgUmChTl2DIg=";
 
-  nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
+  nativeBuildInputs = [ ]
+    ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) pkg-config
+    ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  buildInputs = lib.optional withNotmuchBackend notmuch;
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = [ ]
-    ++ lib.optional withImapBackend "imap-backend"
-    ++ lib.optional withNotmuchBackend "notmuch-backend"
-    ++ lib.optional withSmtpSender "smtp-sender";
+  buildInputs = [ ]
+    ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch
+    ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) gpgme;
 
   postInstall = lib.optionalString installManPages ''
     mkdir -p $out/man
@@ -46,8 +47,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "CLI to manage your emails.";
-    homepage = "https://pimalaya.org/himalaya/";
+    description = "CLI to manage emails";
+    homepage = "https://pimalaya.org/himalaya/cli/latest/";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ soywod toastal yanganto ];

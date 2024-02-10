@@ -6,26 +6,29 @@
 }:
 let
   # harec needs the dbgfile and dbgloc features implemented up to this commit.
-  # This can be dropped once 1.2 is released, for a possible release date see:
+  # This can be dropped once 1.2 is released. For a possible release date, see:
   # https://lists.sr.ht/~mpu/qbe/%3CZPkmHE9KLohoEohE%40cloudsdale.the-delta.net.eu.org%3E
   qbe' = qbe.overrideAttrs (_old: {
-    version = "1.1-unstable-2023-08-18";
+    version = "1.1-unstable-2024-01-12";
     src = fetchgit {
       url = "git://c9x.me/qbe.git";
-      rev = "36946a5142c40b733d25ea5ca469f7949ee03439";
-      hash = "sha256-bqxWFP3/aw7kRoD6ictbFcjzijktHvh4AgWAXBIODW8=";
+      rev = "85287081c4a25785dec1ec48c488a5879b3c37ac";
+      hash = "sha256-7bVbxUU/HXJXLtAxhoK0URmPtjGwMSZrPkx8WKl52Mg=";
     };
   });
+
+  platform = lib.toLower stdenv.hostPlatform.uname.system;
+  arch = stdenv.hostPlatform.uname.processor;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "unstable-2023-11-29";
+  version = "unstable-2024-02-03";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
-    rev = "ec3193e3870436180b0f3df82b769adc57a1c099";
-    hash = "sha256-HXQIgFC4YVDJjo5xbyg1ea3jWYKLEwKkD1KFzWFz9UI= ";
+    rev = "09cb18990266eef814917d8211d38b82e0896532";
+    hash = "sha256-cxWRqGipoDATN1+V9s9S2WJ3sLMcTqIJmhP5XTld3AU=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +39,20 @@ stdenv.mkDerivation (finalAttrs: {
     qbe'
   ];
 
+  makeFlags = [
+    "PREFIX=${builtins.placeholder "out"}"
+    "ARCH=${arch}"
+  ];
+
   strictDeps = true;
+
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  postConfigure = ''
+    ln -s configs/${platform}.mk config.mk
+  '';
 
   passthru = {
     # We create this attribute so that the `hare` package can access the
@@ -57,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://harelang.org/platforms/
     # UPDATE: https://github.com/hshq/harelang provides a MacOS port
     platforms = with lib.platforms;
-      lib.intersectLists (freebsd ++ linux) (aarch64 ++ x86_64 ++ riscv64);
+      lib.intersectLists (freebsd ++ openbsd ++ linux) (aarch64 ++ x86_64 ++ riscv64);
     badPlatforms = lib.platforms.darwin;
   };
 })

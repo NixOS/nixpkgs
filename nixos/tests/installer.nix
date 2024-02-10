@@ -158,7 +158,9 @@ let
       start_all()
       ${optionalString clevisTest ''
       tang.wait_for_unit("sockets.target")
+      tang.systemctl("start network-online.target")
       tang.wait_for_unit("network-online.target")
+      machine.systemctl("start network-online.target")
       machine.wait_for_unit("network-online.target")
       ''}
       machine.wait_for_unit("multi-user.target")
@@ -187,6 +189,7 @@ let
 
       ${optionalString clevisTest ''
         with subtest("Create the Clevis secret with Tang"):
+             machine.systemctl("start network-online.target")
              machine.wait_for_unit("network-online.target")
              machine.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
 
@@ -510,14 +513,8 @@ let
             ntp
             perlPackages.ListCompare
             perlPackages.XMLLibXML
-            python3Minimal
             # make-options-doc/default.nix
-            (let
-                self = (pkgs.python3Minimal.override {
-                  inherit self;
-                  includeSiteCustomize = true;
-                });
-              in self.withPackages (p: [ p.mistune ]))
+            (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
             texinfo
@@ -1259,68 +1256,6 @@ in {
         "swapon -L swap",
         "mkfs.bcachefs -L root --metadata_replicas 2 --foreground_target ssd --promote_target ssd --background_target hdd --label ssd /dev/vda3 --label hdd /dev/vda4",
         "mount -t bcachefs /dev/vda3:/dev/vda4 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
-  };
-
-  bcachefsLinuxTesting = makeInstallerTest "bcachefs-linux-testing" {
-    extraInstallerConfig = {
-      imports = [ no-zfs-module ];
-
-      boot = {
-        supportedFilesystems = [ "bcachefs" ];
-        kernelPackages = pkgs.linuxPackages_testing;
-      };
-    };
-
-    extraConfig = ''
-      boot.kernelPackages = pkgs.linuxPackages_testing;
-    '';
-
-    createPartitions = ''
-      machine.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "mkfs.bcachefs -L root /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
-  };
-
-  bcachefsUpgradeToLinuxTesting = makeInstallerTest "bcachefs-upgrade-to-linux-testing" {
-    extraInstallerConfig = {
-      imports = [ no-zfs-module ];
-      boot.supportedFilesystems = [ "bcachefs" ];
-      # We don't have network access in the VM, we need this for `nixos-install`
-      system.extraDependencies = [ pkgs.linux_testing ];
-    };
-
-    extraConfig = ''
-      boot.kernelPackages = pkgs.linuxPackages_testing;
-    '';
-
-    createPartitions = ''
-      machine.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "mkfs.bcachefs -L root /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",

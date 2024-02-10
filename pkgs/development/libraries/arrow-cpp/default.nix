@@ -52,16 +52,16 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "47f7b56b25683202c1fd957668e13f2abafc0f12";
-    hash = "sha256-ZDznR+yi0hm5O1s9as8zq5nh1QxJ8kXCRwbNQlzXpnI=";
+    rev = "ad82a736c170e97b7c8c035ebd8a801c17eec170";
+    hash = "sha256-wN0dam0ZXOAJ+D8bGDMhsdaV3llI9LsiCXwqW9mR3gQ=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "b2e7cc755159196e3a068c8594f7acbaecfdaaac";
-    hash = "sha256-IFvGTOkaRSNgZOj8DziRj88yH5JRF+wgSDZ5N0GNvjk=";
+    rev = "d69d979223e883faef9dc6fe3cf573087243c28a";
+    hash = "sha256-CUckfNjfDW05crWigzMP5b9UynviXKGZUlIr754OoGU=";
   };
 
   aws-sdk-cpp-arrow = aws-sdk-cpp.override {
@@ -76,16 +76,16 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "14.0.1";
+  version = "15.0.0";
 
   src = fetchurl {
-    url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-XHDq+xAR+dEkuvsyiv5U9izFuSgLcIDh49Zo94wOQH4=";
+    url = "mirror://apache/arrow/arrow-${finalAttrs.version}/apache-arrow-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Ad0/cOhdm1uTPsksDbik71BKUQX3jS2GIuhCeftFwl0=";
   };
 
-  sourceRoot = "apache-arrow-${version}/cpp";
+  sourceRoot = "apache-arrow-${finalAttrs.version}/cpp";
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -211,8 +211,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h" ];
 
   doInstallCheck = true;
-  ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
-  PARQUET_TEST_DATA = lib.optionalString doInstallCheck "${parquet-testing}/data";
+  ARROW_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${arrow-testing}/data";
+  PARQUET_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${parquet-testing}/data";
   GTEST_FILTER =
     let
       # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
@@ -236,7 +236,7 @@ stdenv.mkDerivation rec {
         "ExecPlanExecution.StressSourceSinkStopped"
       ];
     in
-    lib.optionalString doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
+    lib.optionalString finalAttrs.doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
 
   __darwinAllowLocalNetworking = true;
 
@@ -244,19 +244,21 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableS3 [ minio ]
     ++ lib.optionals enableFlight [ python3 ];
 
-  disabledTests = [
-    # requires networking
-    "arrow-gcsfs-test"
-    "arrow-flight-integration-test"
-  ];
+  installCheckPhase =
+    let
+      disabledTests = [
+        # requires networking
+        "arrow-gcsfs-test"
+        "arrow-flight-integration-test"
+      ];
+    in
+    ''
+      runHook preInstallCheck
 
-  installCheckPhase = ''
-    runHook preInstallCheck
+      ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
 
-    ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
-
-    runHook postInstallCheck
-  '';
+      runHook postInstallCheck
+    '';
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";
@@ -268,4 +270,4 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit enableFlight enableJemalloc enableS3 enableGcs;
   };
-}
+})

@@ -12,21 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "owmods-cli";
-  version = "0.11.3";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     rev = "cli_v${version}";
-    hash = "sha256-CobGF3ZQEdRRoMGL9l37alGQArIuRxiFbihQoRdnAsc=";
+    hash = "sha256-hvzKTJKjO7MafvnrpG9ZkCz1ePr9NCo54zaRRkRCc60=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-window-state-0.1.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
-    };
-  };
+  cargoHash = "sha256-db6wZs7OVPoESl4RnvOtmaM07FgKmko3nyf1CXzyJHA=";
 
   nativeBuildInputs = [
     pkg-config

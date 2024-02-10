@@ -1,23 +1,29 @@
 { lib
-, aiohttp
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , pythonOlder
+
+# build-system
 , setuptools
+
+# dependencies
+, aiohttp
 , yarl
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "4.0.2";
+  version = "4.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-D2NCTn1Q3/AknmEAAOZO4d7i2mpM/kMlt94RaLmmnjM=";
+    hash = "sha256-dCgbMyyVmYGPV8GyZUrMR+IO8nGoQ//dnmHmhFH2iJo=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +50,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Provides a python interface to interact with a device running OpenWebIf";
-    homepage = "https://github.com/autinerd/openwebifpy";
+    downloadPage = "https://github.com/autinerd/openwebifpy";
+    homepage = "https://openwebifpy.readthedocs.io/";
     changelog = "https://github.com/autinerd/openwebifpy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

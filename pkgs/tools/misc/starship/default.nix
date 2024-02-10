@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
+  # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
+  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    export HOME=$TMPDIR
+  '';
+
   postInstall = ''
     installShellCompletion --cmd starship \
       --bash <($out/bin/starship completions bash) \

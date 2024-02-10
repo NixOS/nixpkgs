@@ -1,0 +1,29 @@
+--- a/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h
++++ b/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor.h
+@@ -77,7 +77,12 @@ class XSLTProcessor final : public ScriptWrappable {
+ 
+   void reset();
+ 
++#if LIBXML_VERSION >= 21200
++  static void ParseErrorFunc(void* user_data, const xmlError*);
++#else
+   static void ParseErrorFunc(void* user_data, xmlError*);
++#endif
++
+   static void GenericErrorFunc(void* user_data, const char* msg, ...);
+ 
+   // Only for libXSLT callbacks
+--- a/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc
++++ b/src/3rdparty/chromium/third_party/blink/renderer/core/xml/xslt_processor_libxslt.cc
+@@ -66,7 +66,11 @@ void XSLTProcessor::GenericErrorFunc(void*, const char*, ...) {
+   // It would be nice to do something with this error message.
+ }
+ 
++#if LIBXML_VERSION >= 21200
++void XSLTProcessor::ParseErrorFunc(void* user_data, const xmlError* error) {
++#else
+ void XSLTProcessor::ParseErrorFunc(void* user_data, xmlError* error) {
++#endif
+   FrameConsole* console = static_cast<FrameConsole*>(user_data);
+   if (!console)
+     return;
