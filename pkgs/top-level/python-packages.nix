@@ -2939,6 +2939,8 @@ self: super: with self; {
 
   deepmerge = callPackage ../development/python-modules/deepmerge { };
 
+  deepsparse = callPackage ../development/python-modules/deepsparse { };
+
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
   deepwave = callPackage ../development/python-modules/deepwave { };
