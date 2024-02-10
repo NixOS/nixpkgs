@@ -1103,7 +1103,7 @@ self: super: builtins.intersectAttrs super {
   rel8 = pkgs.lib.pipe super.rel8 [
     (addTestToolDepend pkgs.postgresql)
     # https://github.com/NixOS/nixpkgs/issues/198495
-    (overrideCabal (lib.optionalAttrs (!pkgs.postgresql.doCheck) { doCheck = false; }))
+    (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
@@ -1178,9 +1178,7 @@ self: super: builtins.intersectAttrs super {
 
   # Some hash implementations are x86 only, but part of the test suite.
   # So executing and building it on non-x86 platforms will always fail.
-  hashes = overrideCabal (lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isx86) {
-    doCheck = false;
-  }) super.hashes;
+  hashes = dontCheckIf (!pkgs.stdenv.hostPlatform.isx86) super.hashes;
 
   # Tries to access network
   aws-sns-verify = dontCheck super.aws-sns-verify;
