@@ -55,8 +55,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
-    # upstream says windows, linux/unix but dropped support for macOS in 1.8.0
-    platforms = platforms.linux; # not sure how to express unix without darwin
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
     maintainers = [ maintainers.bjornfor maintainers.rongcuid ];
   };
 }
