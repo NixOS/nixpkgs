@@ -11,7 +11,6 @@
 , rocblas
 , rocmlir
 , composable_kernel
-, miopengemm
 , miopen
 , protobuf
 , half
@@ -87,7 +86,6 @@ in stdenv.mkDerivation (finalAttrs: {
     rocblas
     rocmlir
     composable_kernel
-    miopengemm
     miopen
     protobuf
     half

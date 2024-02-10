@@ -9,7 +9,6 @@
 , pkg-config
 , rpp
 , rocblas
-, miopengemm
 , miopen
 , migraphx
 , clang
@@ -58,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    miopengemm
     miopen
     migraphx
     rpp
@@ -103,9 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     export CXXFLAGS+="--rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
     patchShebangs rocAL/rocAL_pybind/examples
 
-    # Properly find miopengemm and miopen
+    # Properly find miopen
     substituteInPlace amd_openvx_extensions/CMakeLists.txt \
-      --replace "miopengemm PATHS \''${ROCM_PATH} QUIET" "miopengemm PATHS ${miopengemm} QUIET" \
       --replace "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
       --replace "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
 

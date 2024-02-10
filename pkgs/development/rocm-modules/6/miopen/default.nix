@@ -12,7 +12,6 @@
 , clr
 , clang-tools-extra
 , clang-ocl
-, miopengemm
 , composable_kernel
 , frugally-deep
 , rocm-docs-core
@@ -139,7 +138,6 @@ in stdenv.mkDerivation (finalAttrs: {
     rocblas
     rocmlir
     clang-ocl
-    miopengemm
     composable_kernel
     half
     boost
@@ -161,7 +159,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-Wno-#warnings" # <half> -> <half/half.hpp>
-    "-DMIOPEN_USE_MIOPENGEMM=ON"
     "-DUNZIPPER=${bzip2}/bin/bunzip2"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838

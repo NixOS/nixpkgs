@@ -239,10 +239,7 @@ in rec {
   # hipBlasLt - Very broken with Tensile at the moment, only supports GFX9
   # hipTensor - Only supports GFX9
 
-  miopengemm = callPackage ./miopengemm {
-    inherit rocmUpdateScript rocm-cmake clr;
-    stdenv = llvm.rocmClangStdenv;
-  };
+  miopengemm = throw "'miopengemm' has been deprecated"; # Added 2024-2-10;
 
   composable_kernel = callPackage ./composable_kernel {
     inherit rocmUpdateScript rocm-cmake clr;
@@ -256,7 +253,7 @@ in rec {
   };
 
   miopen = callPackage ./miopen {
-    inherit rocmUpdateScript rocm-cmake rocblas clang-ocl miopengemm composable_kernel rocm-comgr clr rocm-docs-core half;
+    inherit rocmUpdateScript rocm-cmake rocblas clang-ocl composable_kernel rocm-comgr clr rocm-docs-core half;
     inherit (llvm) clang-tools-extra;
     stdenv = llvm.rocmClangStdenv;
     rocmlir = rocmlir-rock;
@@ -272,7 +269,7 @@ in rec {
   };
 
   migraphx = callPackage ./migraphx {
-    inherit rocmUpdateScript rocm-cmake rocblas composable_kernel miopengemm miopen clr half rocm-device-libs;
+    inherit rocmUpdateScript rocm-cmake rocblas composable_kernel miopen clr half rocm-device-libs;
     inherit (llvm) openmp clang-tools-extra;
     stdenv = llvm.rocmClangStdenv;
     rocmlir = rocmlir-rock;
@@ -300,7 +297,7 @@ in rec {
   };
 
   mivisionx = callPackage ./mivisionx {
-    inherit rocmUpdateScript rocm-cmake rocm-device-libs clr rpp rocblas miopengemm miopen migraphx half rocm-docs-core;
+    inherit rocmUpdateScript rocm-cmake rocm-device-libs clr rpp rocblas miopen migraphx half rocm-docs-core;
     inherit (llvm) clang openmp;
     opencv = opencv.override { enablePython = true; };
     ffmpeg = ffmpeg_4;
