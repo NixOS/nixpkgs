@@ -14,7 +14,8 @@ in
         type = types.str;
         default = "-l -s CRITICAL";
         description = mdDoc ''
-          Arguments to provide to NIST-Feed, see a full list at https://github.com/D3vil0p3r/NIST-Feed/blob/main/README.md#nist-feed
+          Arguments to provide to NIST-Feed, see a full list at
+          <https://github.com/D3vil0p3r/NIST-Feed/blob/main/README.md#nist-feed>
         '';
       };
 
