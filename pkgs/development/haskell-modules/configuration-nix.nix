@@ -1361,6 +1361,7 @@ self: super: builtins.intersectAttrs super {
       gi-gtk_4_0_8
       gi-gdk_4_0_7
       gi-gsk
+      gi-adwaita
       ;
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.

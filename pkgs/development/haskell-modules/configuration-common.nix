@@ -2230,6 +2230,10 @@ self: super: {
   gi-gsk = super.gi-gsk.override {
     gi-gdk = self.gi-gdk_4;
   };
+  gi-adwaita = super.gi-adwaita.override {
+    gi-gdk = self.gi-gdk_4;
+    gi-gtk = self.gi-gtk_4;
+  };
 
   # Missing dependency on gi-cairo
   # https://github.com/haskell-gi/haskell-gi/pull/420

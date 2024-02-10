@@ -1862,7 +1862,6 @@ broken-packages:
   - ghc-time-alloc-prof # failure in job https://hydra.nixos.org/build/233242289 at 2023-09-02
   - ghc-usage # failure in job https://hydra.nixos.org/build/233199565 at 2023-09-02
   - gh-labeler # failure in job https://hydra.nixos.org/build/233233139 at 2023-09-02
-  - gi-adwaita # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/239685049 at 2023-11-10
   - giak # failure in job https://hydra.nixos.org/build/233242229 at 2023-09-02
   - gi-clutter # failure in job https://hydra.nixos.org/build/233252753 at 2023-09-02
   - gi-coglpango # failure in job https://hydra.nixos.org/build/233194401 at 2023-09-02
