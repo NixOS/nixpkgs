@@ -27,6 +27,16 @@ let
       sha256 = "WIaJkSQnoOm9T7GoAwmWl7fNg79coIo/ILUsWcbH+lA=";
     };
 
+    patches = [
+      # gcc-13 build fix:
+      #   https://github.com/TES3MP/CrabNet/pull/18
+      (fetchpatch {
+        name = "gcc-13.patch";
+        url = "https://github.com/TES3MP/CrabNet/commit/3ec9a338a7cefd5cc751c9d29095cafa4c73be20.patch";
+        hash = "sha256-zE87icjX9GSnApgKQXj0K4IjlrReV/upFLjVgNYkNfM=";
+      })
+    ];
+
     cmakeFlags = [
       "-DCRABNET_ENABLE_DLL=OFF"
     ];
