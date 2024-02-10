@@ -284,7 +284,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     sourceProvenance = [ sourceTypes.fromSource ];
     license = licenses.mit;
     mainProgram = "az";
-    maintainers = with maintainers; [ akechishiro jonringer ];
+    maintainers = with maintainers; [ jonringer ];
     platforms = platforms.all;
   };
 })
