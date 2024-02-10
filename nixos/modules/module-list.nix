@@ -840,6 +840,7 @@
   ./services/monitoring/riemann.nix
   ./services/monitoring/rustdesk-server.nix
   ./services/monitoring/scollector.nix
+  ./services/monitoring/scrutiny-collector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/snmpd.nix
   ./services/monitoring/statsd.nix
