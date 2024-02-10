@@ -35,7 +35,7 @@ in
         description = "A notification daemon for CVEs";
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${cfg.package}/bin/nist-feed ${cfg.extraArgs}";
+          ExecStart = "${cfg.package}/bin/nist-feed ${escapeShellArgs cfg.extraArgs}";
         };
     };
 
