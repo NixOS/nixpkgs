@@ -205,9 +205,17 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.draupnir} --draupnir-config ${configFile}"
-          + optionalString (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) " --pantalaimon-password-file $CREDENTIALS_DIRECTORY/pantalaimon_password"
-          + optionalString (cfg.accessTokenFile != null) " --access-token-file $CREDENTIALS_DIRECTORY/access_token";
+        ExecStart = utils.escapeSystemdExecArgs ([
+          (lib.getExe pkgs.draupnir)
+          "--draupnir-config" "${configFile}"
+        ] ++ optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null)
+          "--pantalaimon-password-file"
+          "$CREDENTIALS_DIRECTORY/pantalaimon_password"
+        ] ++ optionals (cfg.accessTokenFile != null)
+          "--access-token-file"
+          "$CREDENTIALS_DIRECTORY/access_token"
+        ]);
+
         WorkingDirectory = "/var/lib/draupnir";
         StateDirectory = "draupnir";
         StateDirectoryMode = "0700";
