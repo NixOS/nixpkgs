@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , stdenvNoCC
 , fetchurl
 , appimageTools
@@ -36,6 +37,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   buildInputs = [
+    stdenv.cc.cc.lib
     libusb1
   ];
 
