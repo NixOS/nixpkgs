@@ -29755,6 +29755,8 @@ with pkgs;
 
   scowl = callPackage ../data/misc/scowl { };
 
+  sesh = callPackage ../tools/misc/sesh { };
+
   seshat = callPackage ../data/fonts/seshat { };
 
   session-desktop = callPackage ../applications/networking/instant-messengers/session-desktop { };
