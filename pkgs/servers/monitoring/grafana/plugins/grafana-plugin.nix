@@ -7,13 +7,13 @@ let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
   src = if lib.isAttrs zipHash then
     fetchurl {
       name = "${pname}-${version}-${plat}.zip";
-      hash = zipHash.${plat} or (throw "unsupported system");
+      hash = zipHash.${plat} or (throw "Unsupported system: ${plat}");
       url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download" + {
         x86_64-linux = "?os=linux&arch=amd64";
         aarch64-linux = "?os=linux&arch=arm64";
         x86_64-darwin = "?os=darwin&arch=amd64";
         aarch64-darwin = "?os=darwin&arch=arm64";
-      }.${plat} or (throw "unknown system");
+      }.${plat} or (throw "Unsupported system: ${plat}");
     }
   else
     fetchurl {

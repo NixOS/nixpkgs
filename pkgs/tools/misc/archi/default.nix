@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://www.archimatetool.com/downloads/archi_5.php?/${version}/Archi-Mac-Silicon-${version}.dmg";
       hash = "sha256-Jg+tl902OWSm4GHxF7QXbRU5nxX4/5q6LTGubHWQ08E=";
     };
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system");
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   buildInputs = [
     libsecret
