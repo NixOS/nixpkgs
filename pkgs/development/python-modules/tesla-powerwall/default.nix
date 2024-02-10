@@ -3,14 +3,16 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, requests
-, responses
+, aiohttp
+, urllib3
+, orjson
+, aresponses
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tesla-powerwall";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +21,7 @@ buildPythonPackage rec {
     owner = "jrester";
     repo = "tesla_powerwall";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IqUxWwEvrSEbLAEnHG84oCV75qO0L5LmgpHOfaM6G8o=";
+    hash = "sha256-if/FCfxAB48WGXZOMvCtdSOW2FWO43OrlcHZbXIPmGE=";
   };
 
   nativeBuildInputs = [
@@ -27,12 +29,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    requests
+    aiohttp
+    urllib3
+    orjson
   ];
 
   nativeCheckInputs = [
+    aresponses
     pytestCheckHook
-    responses
   ];
 
   pytestFlagsArray = [
