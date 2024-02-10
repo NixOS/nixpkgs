@@ -69,6 +69,18 @@ in
   # Fix ace-builds path due to git dependencies workaround
   patches = [ ./ace-builds.patch ];
 
+  # Replace hard-coded values in settings by environment variables
+  postPatch = ''
+    find . -type f -not -path '*/\.*' -exec sed -E -i "s|SHARELATEX_|OVERLEAF_|g" {} +
+    sed -i server-ce/config/settings.js \
+      -e "s!mongodb://dockerhost/sharelatex!mongodb://localhost:27017/overleaf!" \
+      -e "s!'dockerhost',!undefined,\n      path: process.env.OVERLEAF_REDIS_PATH || undefined,!" \
+      -e "s!'6379'!undefined!" \
+      -e "s!httpAuthUser = 'sharelatex'!httpAuthUser = process.env.WEB_API_USER!" \
+      -e "s!'/var/lib/sharelatex\(.*\)'!\`\''${process.env.DATA_DIR}\1\`!" \
+      -e "s!'http://localhost:3000'!\`http://\''${process.env.WEB_API_HOST || process.env.WEB_HOST || 'localhost'}:\''${process.env.WEB_API_PORT || process.env.WEB_PORT || 3000}\`!"
+  '';
+
   npmDepsHash = "sha256-2tdOYghca1UmTG1ZnpUUaZ2bmw0YgzwtKiA7V4DDeq8=";
   npmRebuildFlags = [ "--ignore-scripts" ]; # If these scripts passed it would simplify everything
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
