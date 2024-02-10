@@ -8,7 +8,7 @@ buildFishPlugin rec {
     owner = "jhillyerd";
     repo = "plugin-git";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MfrRQdcj7UtIUgtqKjt4lqFLpA6YZgKjE03VaaypNzE";
+    hash = "sha256-DQLRat7uGoK57g/1x9Y514gtjvDdf9j4Iqnwif8QWVU=";
   };
 
   meta = with lib; {

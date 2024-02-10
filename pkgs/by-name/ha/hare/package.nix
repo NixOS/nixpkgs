@@ -8,7 +8,6 @@
 , scdoc
 , tzdata
 , substituteAll
-, unstableGitUpdater
 , callPackage
 , enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit)
 , pkgsCross
@@ -60,15 +59,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2024-02-05";
+  version = "unstable-2024-02-08";
 
   outputs = [ "out" "man" ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "d0c057dbbb0f1ee9179769e187c0fbd3b00327d4";
-    hash = "sha256-3zpUqdxoKMwezRfMgnpY3KfMB5/PFfRYtGPZxWfNDtA=";
+    rev = "5f65a5c112dd15efc0f0223ee895c2582e8f4915";
+    hash = "sha256-Ic/2Gn3ZIJ5wKXBsNS4MHoBUfvbH3ZqAsuj7tOlDtW4=";
   };
 
   patches = [
@@ -133,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   passthru = {
-    updateScript = unstableGitUpdater { };
     tests = lib.optionalAttrs enableCrossCompilation {
       crossCompilation = callPackage ./cross-compilation-tests.nix {
         hare = finalAttrs.finalPackage;
