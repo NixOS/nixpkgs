@@ -5,12 +5,12 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.89";
+  version = "2.0.92";
   pyproject= true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PBOj6u0TukT6wRKMQML4+XNQQZvsGyRzXBk9YsISst4=";
+    hash = "sha256-tt2D8pjU/SClweAn9vHYl+H1POdB1u2SQfrnZZvBQ7I=";
   };
 
   pythonRelaxDeps = true;

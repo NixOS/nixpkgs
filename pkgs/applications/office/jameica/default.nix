@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, wrapGAppsHook, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.10.2";
-  _build = "484";
+  _version = "2.10.4";
+  _build = "487";
   version = "${_version}-${_build}";
 
   swtSystem =
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    sha256 = "1x9sybknzsfxp9z0pvw9dx80732ynyap57y03p7xwwjbcrnjla57";
+    hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
   };
 
   dontWrapGApps = true;

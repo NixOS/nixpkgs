@@ -1,7 +1,10 @@
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::ratchet;
 use crate::structure;
+use crate::utils;
+use crate::validation::ResultIteratorExt as _;
 use crate::validation::{self, Validation::Success};
+use crate::NixFileStore;
 use std::path::Path;
 
 use anyhow::Context;
@@ -34,34 +37,43 @@ enum ByNameAttribute {
 }
 
 #[derive(Deserialize)]
-enum AttributeInfo {
-    /// The attribute exists, but its value isn't an attribute set
+struct AttributeInfo {
+    /// The location of the attribute as returned by `builtins.unsafeGetAttrPos`
+    location: Option<Location>,
+    attribute_variant: AttributeVariant,
+}
+
+/// The structure returned by a successful `builtins.unsafeGetAttrPos`
+#[derive(Deserialize, Clone, Debug)]
+struct Location {
+    pub file: PathBuf,
+    pub line: usize,
+    pub column: usize,
+}
+
+#[derive(Deserialize)]
+pub enum AttributeVariant {
+    /// The attribute is not an attribute set, we're limited in the amount of information we can get
+    /// from it (though it's obviously not a derivation)
     NonAttributeSet,
-    /// The attribute exists, but its value isn't defined using callPackage
-    NonCallPackage,
-    /// The attribute exists and its value is an attribute set
-    CallPackage(CallPackageInfo),
+    AttributeSet {
+        /// Whether the attribute is a derivation (`lib.isDerivation`)
+        is_derivation: bool,
+        /// The type of callPackage
+        definition_variant: DefinitionVariant,
+    },
 }
 
 #[derive(Deserialize)]
-struct CallPackageInfo {
-    call_package_variant: CallPackageVariant,
-    /// Whether the attribute is a derivation (`lib.isDerivation`)
-    is_derivation: bool,
-}
-
-#[derive(Deserialize)]
-enum CallPackageVariant {
-    /// The attribute is auto-called as pkgs.callPackage using pkgs/by-name,
-    /// and it is not overridden by a definition in all-packages.nix
-    Auto,
-    /// The attribute is defined as a pkgs.callPackage <path> <args>,
-    /// and overridden by all-packages.nix
-    Manual {
-        /// The <path> argument or None if it's not a path
-        path: Option<PathBuf>,
-        /// true if <args> is { }
-        empty_arg: bool,
+pub enum DefinitionVariant {
+    /// An automatic definition by the `pkgs/by-name` overlay
+    /// Though it's detected using the internal _internalCallByNamePackageFile attribute,
+    /// which can in theory also be used by other code
+    AutoDefinition,
+    /// A manual definition of the attribute, typically in `all-packages.nix`
+    ManualDefinition {
+        /// Whether the attribute is defined as `pkgs.callPackage ...` or something else.
+        is_semantic_call_package: bool,
     },
 }
 
@@ -70,6 +82,7 @@ enum CallPackageVariant {
 /// See the `eval.nix` file for how this is achieved on the Nix side
 pub fn check_values(
     nixpkgs_path: &Path,
+    nix_file_store: &mut NixFileStore,
     package_names: Vec<String>,
     keep_nix_path: bool,
 ) -> validation::Result<ratchet::Nixpkgs> {
@@ -142,150 +155,320 @@ pub fn check_values(
             )
         })?;
 
-    let check_result = validation::sequence(attributes.into_iter().map(
-        |(attribute_name, attribute_value)| {
-            let relative_package_file = structure::relative_file_for_package(&attribute_name);
-
-            use ratchet::RatchetState::*;
-            use Attribute::*;
-            use AttributeInfo::*;
-            use ByNameAttribute::*;
-            use CallPackageVariant::*;
-            use NonByNameAttribute::*;
-
-            let check_result = match attribute_value {
-                // The attribute succeeds evaluation and is NOT defined in pkgs/by-name
-                NonByName(EvalSuccess(attribute_info)) => {
-                    let uses_by_name = match attribute_info {
-                        // In these cases the package doesn't qualify for being in pkgs/by-name,
-                        // so the UsesByName ratchet is already as tight as it can be
-                        NonAttributeSet => Success(NonApplicable),
-                        NonCallPackage => Success(NonApplicable),
-                        // This is the case when the `pkgs/by-name`-internal _internalCallByNamePackageFile
-                        // is used for a package outside `pkgs/by-name`
-                        CallPackage(CallPackageInfo {
-                            call_package_variant: Auto,
-                            ..
-                        }) => {
-                            // With the current detection mechanism, this also triggers for aliases
-                            // to pkgs/by-name packages, and there's no good method of
-                            // distinguishing alias vs non-alias.
-                            // Using `config.allowAliases = false` at least currently doesn't work
-                            // because there's nothing preventing people from defining aliases that
-                            // are present even with that disabled.
-                            // In the future we could kind of abuse this behavior to have better
-                            // enforcement of conditional aliases, but for now we just need to not
-                            // give an error.
-                            Success(NonApplicable)
-                        }
-                        // Only derivations can be in pkgs/by-name,
-                        // so this attribute doesn't qualify
-                        CallPackage(CallPackageInfo {
-                            is_derivation: false,
-                            ..
-                        }) => Success(NonApplicable),
-
-                        // The case of an attribute that qualifies:
-                        // - Uses callPackage
-                        // - Is a derivation
-                        CallPackage(CallPackageInfo {
-                            is_derivation: true,
-                            call_package_variant: Manual { path, empty_arg },
-                        }) => Success(Loose(ratchet::CouldUseByName {
-                            call_package_path: path,
-                            empty_arg,
-                        })),
-                    };
-                    uses_by_name.map(|x| ratchet::Package {
-                        manual_definition: Tight,
-                        uses_by_name: x,
-                    })
-                }
-                NonByName(EvalFailure) => {
-                    // We don't know anything about this attribute really
-                    Success(ratchet::Package {
-                        // We'll assume that we can't remove any manual definitions, which has the
-                        // minimal drawback that if there was a manual definition that could've
-                        // been removed, fixing the package requires removing the definition, no
-                        // big deal, that's a minor edit.
-                        manual_definition: Tight,
-
-                        // Regarding whether this attribute could `pkgs/by-name`, we don't really
-                        // know, so return NonApplicable, which has the effect that if a
-                        // package evaluation gets broken temporarily, the fix can remove it from
-                        // pkgs/by-name again. For now this isn't our problem, but in the future we
-                        // might have another check to enforce that evaluation must not be broken.
-                        // The alternative of assuming that it's using `pkgs/by-name` already
-                        // has the problem that if a package evaluation gets broken temporarily,
-                        // fixing it requires a move to pkgs/by-name, which could happen more
-                        // often and isn't really justified.
-                        uses_by_name: NonApplicable,
-                    })
-                }
-                ByName(Missing) => NixpkgsProblem::UndefinedAttr {
-                    relative_package_file: relative_package_file.clone(),
-                    package_name: attribute_name.clone(),
-                }
-                .into(),
-                ByName(Existing(NonAttributeSet)) => NixpkgsProblem::NonDerivation {
-                    relative_package_file: relative_package_file.clone(),
-                    package_name: attribute_name.clone(),
-                }
-                .into(),
-                ByName(Existing(NonCallPackage)) => NixpkgsProblem::WrongCallPackage {
-                    relative_package_file: relative_package_file.clone(),
-                    package_name: attribute_name.clone(),
-                }
-                .into(),
-                ByName(Existing(CallPackage(CallPackageInfo {
-                    is_derivation,
-                    call_package_variant,
-                }))) => {
-                    let check_result = if !is_derivation {
-                        NixpkgsProblem::NonDerivation {
-                            relative_package_file: relative_package_file.clone(),
-                            package_name: attribute_name.clone(),
-                        }
-                        .into()
-                    } else {
-                        Success(())
-                    };
-
-                    check_result.and(match &call_package_variant {
-                        Auto => Success(ratchet::Package {
-                            manual_definition: Tight,
-                            uses_by_name: Tight,
-                        }),
-                        Manual { path, empty_arg } => {
-                            let correct_file = if let Some(call_package_path) = path {
-                                relative_package_file == *call_package_path
-                            } else {
-                                false
-                            };
-
-                            if correct_file {
-                                Success(ratchet::Package {
-                                    // Empty arguments for non-auto-called packages are not allowed anymore.
-                                    manual_definition: if *empty_arg { Loose(()) } else { Tight },
-                                    uses_by_name: Tight,
-                                })
-                            } else {
-                                NixpkgsProblem::WrongCallPackage {
-                                    relative_package_file: relative_package_file.clone(),
-                                    package_name: attribute_name.clone(),
-                                }
-                                .into()
-                            }
-                        }
-                    })
-                }
-            };
-            check_result.map(|value| (attribute_name.clone(), value))
-        },
-    ));
+    let check_result = validation::sequence(
+        attributes
+            .into_iter()
+            .map(|(attribute_name, attribute_value)| {
+                let check_result = match attribute_value {
+                    Attribute::NonByName(non_by_name_attribute) => handle_non_by_name_attribute(
+                        nixpkgs_path,
+                        nix_file_store,
+                        non_by_name_attribute,
+                    )?,
+                    Attribute::ByName(by_name_attribute) => by_name(
+                        nix_file_store,
+                        nixpkgs_path,
+                        &attribute_name,
+                        by_name_attribute,
+                    )?,
+                };
+                Ok::<_, anyhow::Error>(check_result.map(|value| (attribute_name.clone(), value)))
+            })
+            .collect_vec()?,
+    );
 
     Ok(check_result.map(|elems| ratchet::Nixpkgs {
         package_names: elems.iter().map(|(name, _)| name.to_owned()).collect(),
         package_map: elems.into_iter().collect(),
+    }))
+}
+
+/// Handles the evaluation result for an attribute in `pkgs/by-name`,
+/// turning it into a validation result.
+fn by_name(
+    nix_file_store: &mut NixFileStore,
+    nixpkgs_path: &Path,
+    attribute_name: &str,
+    by_name_attribute: ByNameAttribute,
+) -> validation::Result<ratchet::Package> {
+    use ratchet::RatchetState::*;
+    use ByNameAttribute::*;
+
+    let relative_package_file = structure::relative_file_for_package(attribute_name);
+    let absolute_package_file = nixpkgs_path.join(&relative_package_file);
+
+    // At this point we know that `pkgs/by-name/fo/foo/package.nix` has to exists.
+    // This match decides whether the attribute `foo` is defined accordingly
+    // and whether a legacy manual definition could be removed
+    let manual_definition_result = match by_name_attribute {
+        // The attribute is missing
+        Missing => {
+            // This indicates a bug in the `pkgs/by-name` overlay, because it's supposed to
+            // automatically defined attributes in `pkgs/by-name`
+            NixpkgsProblem::UndefinedAttr {
+                relative_package_file: relative_package_file.to_owned(),
+                package_name: attribute_name.to_owned(),
+            }
+            .into()
+        }
+        // The attribute exists
+        Existing(AttributeInfo {
+            // But it's not an attribute set, which limits the amount of information we can get
+            // about this attribute (see ./eval.nix)
+            attribute_variant: AttributeVariant::NonAttributeSet,
+            location: _location,
+        }) => {
+            // The only thing we know is that it's definitely not a derivation, since those are
+            // always attribute sets.
+            //
+            // We can't know whether the attribute is automatically or manually defined for sure,
+            // and while we could check the location, the error seems clear enough as is.
+            NixpkgsProblem::NonDerivation {
+                relative_package_file: relative_package_file.to_owned(),
+                package_name: attribute_name.to_owned(),
+            }
+            .into()
+        }
+        // The attribute exists
+        Existing(AttributeInfo {
+            // And it's an attribute set, which allows us to get more information about it
+            attribute_variant:
+                AttributeVariant::AttributeSet {
+                    is_derivation,
+                    definition_variant,
+                },
+            location,
+        }) => {
+            // Only derivations are allowed in `pkgs/by-name`
+            let is_derivation_result = if is_derivation {
+                Success(())
+            } else {
+                NixpkgsProblem::NonDerivation {
+                    relative_package_file: relative_package_file.to_owned(),
+                    package_name: attribute_name.to_owned(),
+                }
+                .into()
+            };
+
+            // If the definition looks correct
+            let variant_result = match definition_variant {
+                // An automatic `callPackage` by the `pkgs/by-name` overlay.
+                // Though this gets detected by checking whether the internal
+                // `_internalCallByNamePackageFile` was used
+                DefinitionVariant::AutoDefinition => {
+                    if let Some(_location) = location {
+                        // Such an automatic definition should definitely not have a location
+                        // Having one indicates that somebody is using `_internalCallByNamePackageFile`,
+                        NixpkgsProblem::InternalCallPackageUsed {
+                            attr_name: attribute_name.to_owned(),
+                        }
+                        .into()
+                    } else {
+                        Success(Tight)
+                    }
+                }
+                // The attribute is manually defined, e.g. in `all-packages.nix`.
+                // This means we need to enforce it to look like this:
+                //   callPackage ../pkgs/by-name/fo/foo/package.nix { ... }
+                DefinitionVariant::ManualDefinition {
+                    is_semantic_call_package,
+                } => {
+                    // We should expect manual definitions to have a location, otherwise we can't
+                    // enforce the expected format
+                    if let Some(location) = location {
+                        // Parse the Nix file in the location and figure out whether it's an
+                        // attribute definition of the form `= callPackage <arg1> <arg2>`,
+                        // returning the arguments if so.
+                        let optional_syntactic_call_package = nix_file_store
+                            .get(&location.file)?
+                            .call_package_argument_info_at(
+                            location.line,
+                            location.column,
+                            // We're passing `pkgs/by-name/fo/foo/package.nix` here, which causes
+                            // the function to verify that `<arg1>` is the same path,
+                            // making `syntactic_call_package.relative_path` end up as `""`
+                            // TODO: This is confusing and should be improved
+                            &absolute_package_file,
+                        )?;
+
+                        // At this point, we completed two different checks for whether it's a
+                        // `callPackage`
+                        match (is_semantic_call_package, optional_syntactic_call_package) {
+                            // Something like `<attr> = { ... }`
+                            // or a `pkgs.callPackage` but with the wrong file
+                            (false, None)
+                            // Something like `<attr> = pythonPackages.callPackage ./pkgs/by-name/...`
+                            | (false, Some(_))
+                            // Something like `<attr> = bar` where `bar = pkgs.callPackage ...`
+                            // or a `callPackage` but with the wrong file
+                            | (true, None) => {
+                                // All of these are not of the expected form, so error out
+                                // TODO: Make error more specific, don't lump everything together
+                                NixpkgsProblem::WrongCallPackage {
+                                      relative_package_file: relative_package_file.to_owned(),
+                                      package_name: attribute_name.to_owned(),
+                                }.into()
+                            }
+                            // Something like `<attr> = pkgs.callPackage ./pkgs/by-name/...`,
+                            // with the correct file
+                            (true, Some(syntactic_call_package)) => {
+                                Success(
+                                    // Manual definitions with empty arguments are not allowed
+                                    // anymore
+                                    if syntactic_call_package.empty_arg {
+                                        Loose(())
+                                    } else {
+                                        Tight
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        // If manual definitions don't have a location, it's likely `mapAttrs`'d
+                        // over, e.g. if it's defined in aliases.nix.
+                        // We can't verify whether its of the expected `callPackage`, so error out
+                        NixpkgsProblem::CannotDetermineAttributeLocation {
+                            attr_name: attribute_name.to_owned(),
+                        }
+                        .into()
+                    }
+                }
+            };
+
+            // Independently report problems about whether it's a derivation and the callPackage variant
+            is_derivation_result.and(variant_result)
+        }
+    };
+    Ok(
+        // Packages being checked in this function are _always_ already defined in `pkgs/by-name`,
+        // so instead of repeating ourselves all the time to define `uses_by_name`, just set it
+        // once at the end with a map
+        manual_definition_result.map(|manual_definition| ratchet::Package {
+            manual_definition,
+            uses_by_name: Tight,
+        }),
+    )
+}
+
+/// Handles the evaluation result for an attribute _not_ in `pkgs/by-name`,
+/// turning it into a validation result.
+fn handle_non_by_name_attribute(
+    nixpkgs_path: &Path,
+    nix_file_store: &mut NixFileStore,
+    non_by_name_attribute: NonByNameAttribute,
+) -> validation::Result<ratchet::Package> {
+    use ratchet::RatchetState::*;
+    use NonByNameAttribute::*;
+
+    // The ratchet state whether this attribute uses `pkgs/by-name`.
+    // This is never `Tight`, because we only either:
+    // - Know that the attribute _could_ be migrated to `pkgs/by-name`, which is `Loose`
+    // - Or we're unsure, in which case we use NonApplicable
+    let uses_by_name =
+        // This is a big ol' match on various properties of the attribute
+
+        // First, it needs to succeed evaluation. We can't know whether an attribute could be
+        // migrated to `pkgs/by-name` if it doesn't evaluate, since we need to check that it's a
+        // derivation.
+        //
+        // This only has the minor negative effect that if a PR that breaks evaluation
+        // gets merged, fixing those failures won't force anything into `pkgs/by-name`.
+        //
+        // For now this isn't our problem, but in the future we
+        // might have another check to enforce that evaluation must not be broken.
+        //
+        // The alternative of assuming that failing attributes would have been fit for `pkgs/by-name`
+        // has the problem that if a package evaluation gets broken temporarily,
+        // fixing it requires a move to pkgs/by-name, which could happen more
+        // often and isn't really justified.
+        if let EvalSuccess(AttributeInfo {
+            // We're only interested in attributes that are attribute sets (which includes
+            // derivations). Anything else can't be in `pkgs/by-name`.
+            attribute_variant: AttributeVariant::AttributeSet {
+                // Indeed, we only care about derivations, non-derivation attribute sets can't be
+                // in `pkgs/by-name`
+                is_derivation: true,
+                // Of the two definition variants, really only the manual one makes sense here.
+                // Special cases are:
+                // - Manual aliases to auto-called packages are not treated as manual definitions,
+                //   due to limitations in the semantic callPackage detection. So those should be
+                //   ignored.
+                // - Manual definitions using the internal _internalCallByNamePackageFile are
+                //   not treated as manual definitions, since _internalCallByNamePackageFile is
+                //   used to detect automatic ones. We can't distinguish from the above case, so we
+                //   just need to ignore this one too, even if that internal attribute should never
+                //   be called manually.
+                definition_variant: DefinitionVariant::ManualDefinition { is_semantic_call_package }
+            },
+            // We need the location of the manual definition, because otherwise
+            // we can't figure out whether it's a syntactic callPackage
+            location: Some(location),
+        }) = non_by_name_attribute {
+
+        // Parse the Nix file in the location and figure out whether it's an
+        // attribute definition of the form `= callPackage <arg1> <arg2>`,
+        // returning the arguments if so.
+        let optional_syntactic_call_package = nix_file_store
+            .get(&location.file)?
+            .call_package_argument_info_at(
+                location.line,
+                location.column,
+                // Passing the Nixpkgs path here both checks that the <arg1> is within Nixpkgs, and
+                // strips the absolute Nixpkgs path from it, such that
+                // syntactic_call_package.relative_path is relative to Nixpkgs
+                nixpkgs_path
+            )?;
+
+        // At this point, we completed two different checks for whether it's a
+        // `callPackage`
+        match (is_semantic_call_package, optional_syntactic_call_package) {
+            // Something like `<attr> = { }`
+            (false, None)
+            // Something like `<attr> = pythonPackages.callPackage ...`
+            | (false, Some(_))
+            // Something like `<attr> = bar` where `bar = pkgs.callPackage ...`
+            | (true, None) => {
+                // In all of these cases, it's not possible to migrate the package to `pkgs/by-name`
+                NonApplicable
+            }
+            // Something like `<attr> = pkgs.callPackage ...`
+            (true, Some(syntactic_call_package)) => {
+                // It's only possible to migrate such a definitions if..
+                match syntactic_call_package.relative_path {
+                    Some(ref rel_path) if rel_path.starts_with(utils::BASE_SUBPATH) => {
+                        // ..the path is not already within `pkgs/by-name` like
+                        //
+                        //   foo-variant = callPackage ../by-name/fo/foo/package.nix {
+                        //     someFlag = true;
+                        //   }
+                        //
+                        // While such definitions could be moved to `pkgs/by-name` by using
+                        // `.override { someFlag = true; }` instead, this changes the semantics in
+                        // relation with overlays, so migration is generally not possible.
+                        //
+                        // See also "package variants" in RFC 140:
+                        // https://github.com/NixOS/rfcs/blob/master/rfcs/0140-simple-package-paths.md#package-variants
+                        NonApplicable
+                    }
+                    _ => {
+                        // Otherwise, the path is outside `pkgs/by-name`, which means it can be
+                        // migrated
+                        Loose(syntactic_call_package)
+                    }
+                }
+            }
+        }
+    } else {
+        // This catches all the cases not matched by the above `if let`, falling back to not being
+        // able to migrate such attributes
+        NonApplicable
+    };
+    Ok(Success(ratchet::Package {
+        // Packages being checked in this function _always_ need a manual definition, because
+        // they're not using `pkgs/by-name` which would allow avoiding it.
+        // so instead of repeating ourselves all the time to define `manual_definition`,
+        // just set it once at the end here
+        manual_definition: Tight,
+        uses_by_name,
     }))
 }

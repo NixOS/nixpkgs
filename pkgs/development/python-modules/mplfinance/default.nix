@@ -22,6 +22,5 @@ buildPythonPackage rec {
     description = "Matplotlib utilities for the visualization, and visual analysis, of financial data";
     homepage = "https://github.com/matplotlib/mplfinance";
     license = [ licenses.bsd3 ];
-    maintainers = [ maintainers.ehmry ];
   };
 }

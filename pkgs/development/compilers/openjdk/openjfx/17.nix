@@ -41,6 +41,13 @@ let
 
     dontUseCmakeConfigure = true;
 
+    postPatch = ''
+      # Add missing includes for gcc-13 for webkit build:
+      sed -e '1i #include <cstdio>' \
+        -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+           modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
+    '';
+
     config = writeText "gradle.properties" (''
       CONF = Release
       JDK_HOME = ${openjdk17_headless.home}

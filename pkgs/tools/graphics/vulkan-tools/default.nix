@@ -60,17 +60,6 @@ stdenv.mkDerivation rec {
     Cocoa
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # Modify mac_common.cmake to find the ICD where nixpkgs puts it.
-    substituteInPlace mac_common.cmake \
-      --replace MoltenVK/icd/MoltenVK_icd.json MoltenVK_icd.json
-    # Remove the unconditional check for `ibtool` since the cube demo that needs it won’t be built.
-    sed -e '/#.*Interface Builder/,/^endif()/d' -i mac_common.cmake
-    # Install `vulkaninfo` to $out/bin even on Darwin.
-    substituteInPlace vulkaninfo/CMakeLists.txt \
-      --replace 'install(TARGETS vulkaninfo RUNTIME DESTINATION "vulkaninfo")' 'install(TARGETS vulkaninfo)'
-  '';
-
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
 
   dontPatchELF = true;

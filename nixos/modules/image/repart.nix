@@ -135,6 +135,16 @@ in
       '';
     };
 
+    sectorSize = lib.mkOption {
+      type = with lib.types; nullOr int;
+      default = 512;
+      example = lib.literalExpression "4096";
+      description = lib.mdDoc ''
+        The sector size of the disk image produced by systemd-repart. This
+        value must be a power of 2 between 512 and 4096.
+      '';
+    };
+
     package = lib.mkPackageOption pkgs "systemd-repart" {
       # We use buildPackages so that repart images are built with the build
       # platform's systemd, allowing for cross-compiled systems to work.
@@ -232,7 +242,7 @@ in
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
-        inherit (cfg) imageFileBasename compression split seed;
+        inherit (cfg) imageFileBasename compression split seed sectorSize;
         inherit fileSystems definitionsDirectory partitions;
       };
 

@@ -1,9 +1,9 @@
 { lib
 , arrow
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pint
-, pydantic
+, pydantic_1 # use pydantic 2 on next release
 , pythonOlder
 , pytz
 , requests
@@ -14,15 +14,22 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "1.5";
+  version = "1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OEdMRg3KjUrXt/CgJgsUqa/sVFAE0JONNZg5MBKtxmY=";
+  src = fetchFromGitHub {
+    owner = "stravalib";
+    repo = "stravalib";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-U+QlSrijvT77/m+yjhFxbcVTQe51J+PR4Kc8N+qG+wI=";
   };
+
+  postPatch = ''
+    # Remove on next release
+    sed -i 's/pydantic==1.10.9/pydantic/' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -32,7 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     arrow
     pint
-    pydantic
+    pydantic_1
     pytz
     requests
     responses
@@ -50,8 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/stravalib/stravalib";
     changelog = "https://github.com/stravalib/stravalib/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
-    # Support for pydantic > 2, https://github.com/stravalib/stravalib/issues/379
-    broken = versionAtLeast pydantic.version "2";
+    maintainers = with maintainers; [ sikmir ];
   };
 }

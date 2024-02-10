@@ -33,6 +33,7 @@ buildPythonApplication rec {
   patches = [
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
     ./hook-tmpl.patch
+    ./pygrep-pythonpath.patch
   ];
 
   propagatedBuildInputs = [

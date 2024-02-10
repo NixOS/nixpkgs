@@ -49,6 +49,8 @@ buildPythonPackage rec {
     "test_settings_restored"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "py.test plugin for testing of Django applications";
     homepage = "https://pytest-django.readthedocs.org/en/latest/";

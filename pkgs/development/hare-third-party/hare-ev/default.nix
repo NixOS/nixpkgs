@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "hare-ev";
-  version = "unstable-2023-12-04";
+  version = "0-unstable-2024-01-04";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-ev";
-    rev = "e3c3f7613c602672ac41a3e47c106a5bd27a2378";
-    hash = "sha256-TQsR2lXJfkPu53WpJy/K+Jruyfw8mCkEIE9DbFQoS+s=";
+    rev = "736ab9bb17257ee5eba3bc96f6650fc4a14608ea";
+    hash = "sha256-SXExwDZKlW/2XYzmJUhkLWj6NF/znrv3vY9V0mD5iFQ=";
   };
 
   nativeCheckInputs = [

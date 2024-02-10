@@ -34,14 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
           + lib.optionalString enableQt "-qt"
           + lib.optionalString (!enableQt) "-sdl"
           + lib.optionalString forceWayland "-wayland";
-  version = "1.16.6";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FCdYvYKcV+0TpQUSWiooNlTXKYtqbfnAWwjk7M8iF1Q=";
+    hash = "sha256-I84zJqEE1X/eo/ukeGA2iZe3lWKvilk+RNGUzl2wZXY=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optional enableQt wrapQtAppsHook;
+  ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
   buildInputs = [
     SDL2
@@ -67,17 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableQt [
     qtbase
     qtmultimedia
-  ] ++ lib.optional enableVulkan vulkan-loader
+  ] ++ lib.optionals enableVulkan [ vulkan-loader ]
   ++ lib.optionals vulkanWayland [ wayland libffi ];
 
   cmakeFlags = [
-    "-DHEADLESS=${if enableQt then "OFF" else "ON"}"
-    "-DOpenGL_GL_PREFERENCE=GLVND"
-    "-DUSE_SYSTEM_FFMPEG=ON"
-    "-DUSE_SYSTEM_LIBZIP=ON"
-    "-DUSE_SYSTEM_SNAPPY=ON"
-    "-DUSE_WAYLAND_WSI=${if vulkanWayland then "ON" else "OFF"}"
-    "-DUSING_QT_UI=${if enableQt then "ON" else "OFF"}"
+    (lib.cmakeBool "HEADLESS" (!enableQt))
+    (lib.cmakeBool "USE_SYSTEM_FFMPEG" true)
+    (lib.cmakeBool "USE_SYSTEM_LIBZIP" true)
+    (lib.cmakeBool "USE_SYSTEM_SNAPPY" true)
+    (lib.cmakeBool "USE_WAYLAND_WSI" vulkanWayland)
+    (lib.cmakeBool "USING_QT_UI" enableQt)
+    (lib.cmakeFeature "OpenGL_GL_PREFERENCE" "GLVND")
   ];
 
   desktopItems = [
@@ -98,7 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstall
 
       mkdir -p $out/share/{applications,ppsspp,icons}
-    '' + (if enableQt then ''
+    ''
+    + (if enableQt then ''
       install -Dm555 PPSSPPQt $out/bin/ppsspp
       wrapProgram $out/bin/ppsspp \
     '' else ''
@@ -106,9 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm555 PPSSPPSDL $out/share/ppsspp/
       makeWrapper $out/share/ppsspp/PPSSPPSDL $out/bin/ppsspp \
         --set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"} \
-    '') + lib.optionalString enableVulkan ''
+    '')
+    + lib.optionalString enableVulkan ''
         --prefix LD_LIBRARY_PATH : ${vulkanPath} \
-    '' + "\n" + ''
+    ''
+    + ''
+
       mv assets $out/share/ppsspp
       mv ../icons/hicolor $out/share/icons
 
@@ -119,8 +123,19 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ppsspp.org/";
     description = "A HLE Playstation Portable emulator, written in C++ ("
                   + (if enableQt then "Qt" else "SDL + headless") + ")";
+    longDescription = ''
+      PPSSPP is a PSP emulator, which means that it can run games and other
+      software that was originally made for the Sony PSP.
+
+      The PSP had multiple types of software. The two most common are native PSP
+      games on UMD discs and downloadable games (that were stored in the
+      directory PSP/GAME on the "memory stick"). But there were also UMD Video
+      discs, and PS1 games that could run in a proprietary emulator. PPSSPP does
+      not run those.
+    '';
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.AndersonTorres ];
+    mainProgram = "ppsspp";
     platforms = lib.platforms.linux;
   };
 })

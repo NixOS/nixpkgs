@@ -2,7 +2,6 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , cryptography
 , ifaddr
 , pytest-asyncio
@@ -14,25 +13,17 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.11.2";
-  format = "pyproject";
+  version = "2.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "XKNX";
-    repo = pname;
+    repo = "xknx";
     rev = "refs/tags/${version}";
-    hash = "sha256-rKvHb0wkWVuZO8M8uIQdOiY1N6DmGSpqUgz4YYbUfSM=";
+    hash = "sha256-Fwo76tvkLLx8QJeokuGohhnt83eGBMyWIUSHJGuQWJ4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "unpin-setuptools.patch";
-      url = "https://github.com/XKNX/xknx/commit/c0826aec52ab69b8bd81f600bea154fae16f334e.patch";
-      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools

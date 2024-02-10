@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ascii";
-  version = "3.18";
+  version = "3.19";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/ascii/${pname}-${version}.tar.gz";
-    sha256 = "0b87vy06s8s3a8q70pqavsbk4m4ff034sdml2xxa6qfsykaj513j";
+    sha256 = "sha256-+dou/tgvJFZY+VYeW3VoCecerw5adzWsW+uSTN2ppWA=";
   };
 
   prePatch = ''

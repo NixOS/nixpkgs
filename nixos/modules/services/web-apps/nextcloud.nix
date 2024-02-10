@@ -873,9 +873,11 @@ in {
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
         after = [ "nextcloud-setup.service" ];
-        timerConfig.OnBootSec = "5m";
-        timerConfig.OnUnitActiveSec = "5m";
-        timerConfig.Unit = "nextcloud-cron.service";
+        timerConfig = {
+          OnBootSec = "5m";
+          OnUnitActiveSec = "5m";
+          Unit = "nextcloud-cron.service";
+        };
       };
 
       systemd.tmpfiles.rules = map (dir: "d ${dir} 0750 nextcloud nextcloud - -") [
@@ -992,15 +994,21 @@ in {
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-          serviceConfig.Type = "oneshot";
-          serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${webroot}/cron.php";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "nextcloud";
+            ExecCondition = "${lib.getExe phpPackage} -f ${webroot}/occ status -e";
+            ExecStart = "${lib.getExe phpPackage} -f ${webroot}/cron.php";
+            KillMode = "process";
+          };
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           after = [ "nextcloud-setup.service" ];
-          serviceConfig.Type = "oneshot";
-          serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
-          serviceConfig.User = "nextcloud";
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+            User = "nextcloud";
+          };
           startAt = cfg.autoUpdateApps.startAt;
         };
       };

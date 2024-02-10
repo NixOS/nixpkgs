@@ -52,6 +52,7 @@
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
 /pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
+/pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
@@ -67,8 +68,8 @@
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nix, the package manager
-pkgs/tools/package-management/nix/                    @raitobezarius
-nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+pkgs/tools/package-management/nix/                    @raitobezarius @ma27
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -324,6 +325,9 @@ pkgs/applications/version-management/forgejo @bendlas @emilylange
 /pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
 /pkgs/build-support/node/fetch-npm-deps         @lilyinstarlight @winterqt
 /doc/languages-frameworks/javascript.section.md @lilyinstarlight @winterqt
+
+# environment.noXlibs option aka NoX
+/nixos/modules/config/no-x-libs.nix  @SuperSandro2000
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid

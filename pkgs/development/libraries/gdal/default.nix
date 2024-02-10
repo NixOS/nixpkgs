@@ -14,7 +14,9 @@
 , useHDF ? (!useMinimalFeatures)
 , useNetCDF ? (!useMinimalFeatures)
 , useArmadillo ? (!useMinimalFeatures)
+, useJava ? (!useMinimalFeatures)
 
+, ant
 , bison
 , cmake
 , gtest
@@ -36,6 +38,7 @@
 , libgeotiff
 , geos
 , giflib
+, jdk
 , libheif
 , dav1d
 , libaom
@@ -94,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.setuptools
     python3.pkgs.wrapPython
     swig
-  ];
+  ] ++ lib.optionals useJava [ ant jdk ];
 
   cmakeFlags = [
     "-DGDAL_USE_INTERNAL_LIBS=OFF"
@@ -110,6 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ] ++ lib.optionals (!useTiledb) [
     "-DGDAL_USE_TILEDB=OFF"
+  ] ++ lib.optionals (!useJava) [
+    # This is not strictly needed as the Java bindings wouldn't build anyway if
+    # ant/jdk were not available.
+    "-DBUILD_JAVA_BINDINGS=OFF"
   ];
 
   buildInputs =
@@ -144,7 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
         openexr
         xercesc
       ] ++ arrowDeps);
-    in [
+    in
+    [
       c-blosc
       brunsli
       cfitsio
@@ -178,20 +186,24 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       python3.pkgs.numpy
     ] ++ tileDbDeps
-      ++ libHeifDeps
-      ++ libJxlDeps
-      ++ mysqlDeps
-      ++ postgresDeps
-      ++ popplerDeps
-      ++ arrowDeps
-      ++ hdfDeps
-      ++ netCdfDeps
-      ++ armadilloDeps
-      ++ darwinDeps
-      ++ nonDarwinDeps;
+    ++ libHeifDeps
+    ++ libJxlDeps
+    ++ mysqlDeps
+    ++ postgresDeps
+    ++ popplerDeps
+    ++ arrowDeps
+    ++ hdfDeps
+    ++ netCdfDeps
+    ++ armadilloDeps
+    ++ darwinDeps
+    ++ nonDarwinDeps;
 
   postInstall = ''
     wrapPythonPrograms
+  '' + lib.optionalString useJava ''
+    cd $out/lib
+    ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
+    cd -
   '';
 
   enableParallelBuilding = true;

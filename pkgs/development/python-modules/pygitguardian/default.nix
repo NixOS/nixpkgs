@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ybl6QOLb1xE6v0D1C2wKMsSU+r2gWzj24Q4pPIMBsCY=";
+    hash = "sha256-LRzyZAusCo4uZlXFWoRPIfPgAGO4sP0KCGYOICNZ6f4=";
   };
 
   pythonRelaxDeps = [
@@ -69,6 +69,7 @@ buildPythonPackage rec {
     "test_quota_overview"
     "test_rate_limit"
     "test_sca_client_scan_diff"
+    "test_sca_scan_all_with_params"
     "test_sca_scan_directory_invalid_tar"
     "test_sca_scan_directory"
     "test_versions_from_headers"
@@ -77,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to access the GitGuardian API";
     homepage = "https://github.com/GitGuardian/py-gitguardian";
-    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/GitGuardian/py-gitguardian/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

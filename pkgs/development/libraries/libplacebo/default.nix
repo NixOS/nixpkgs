@@ -14,18 +14,19 @@
 , libunwind
 , libdovi
 , xxHash
+, fast-float
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "6.338.1";
+  version = "6.338.2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NZmwR3+lIC2PF+k+kqCjoMYkMM/PKOJmDwAq7t6YONY=";
+    hash = "sha256-gE6yKnFvsOFh8bFYc7b+bS+zmdDU7jucr0HwhdDeFzU=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
     libunwind
     libdovi
     xxHash
+  ] ++ lib.optionals (!stdenv.cc.isGNU) [
+    fast-float
   ];
 
   mesonFlags = with lib; [

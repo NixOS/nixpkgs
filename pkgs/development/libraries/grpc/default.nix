@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.60.0"; # N.B: if you change this, please update:
+  version = "1.61.0"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-0mn+nQAgaurd1WomzcLUAYwp88l26qGkP+cP1SSYxsE=";
+    hash = "sha256-NLxcGFQ1F5RLoSFC0XYMjvGXkSWc/vLzgtk5qsOndEo=";
     fetchSubmodules = true;
   };
 
@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
       name = "grpc-link-libatomic.patch";
       url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
       hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
+    })
+    (fetchpatch {
+      # Fix compatibility with Abseil 202401. Remove with the next release.
+      url = "https://github.com/grpc/grpc/commit/bc044174401a0842b36b8682936fc93b5041cf88.patch";
+      hash = "sha256-VKAuPtLqsR2dmrpKuFXq2HIhuDxPJVSH2w1G00N07RI=";
+      excludes = [ "src/core/lib/transport/message.cc" ];
     })
   ];
 
