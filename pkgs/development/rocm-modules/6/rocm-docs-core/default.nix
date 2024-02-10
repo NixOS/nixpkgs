@@ -27,7 +27,7 @@ buildPythonPackage rec {
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "rocm-docs-core";
     rev = "v${version}";
     hash = "sha256-p75g68Dn0RrjX9vYY+AWNu0qOKTLsBCnOZekMO0Usho=";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ROCm Documentation Python package for ReadTheDocs build standardization";
-    homepage = "https://github.com/RadeonOpenCompute/rocm-docs-core";
+    homepage = "https://github.com/ROCm/rocm-docs-core";
     license = with licenses; [ mit cc-by-40 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
