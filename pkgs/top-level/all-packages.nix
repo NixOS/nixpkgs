@@ -1471,7 +1471,12 @@ with pkgs;
   writers = callPackage ../build-support/writers { };
 
   # lib functions depending on pkgs
-  inherit (import ../pkgs-lib { inherit lib pkgs; }) formats;
+  inherit (import ../pkgs-lib {
+    # The `lib` variable in this scope doesn't include any applied lib overlays,
+    # `pkgs.lib` does.
+    inherit (pkgs) lib;
+    inherit pkgs;
+  }) formats;
 
   testers = callPackage ../build-support/testers { };
 
@@ -16362,7 +16367,7 @@ with pkgs;
   hugs = callPackage ../development/interpreters/hugs { };
 
   inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
-  openjfx = pin-to-gcc12-if-gcc13 (openjfx17.override { });
+  openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -18661,8 +18666,6 @@ with pkgs;
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   cc-tool = callPackage ../development/embedded/cc-tool { };
-
-  ccache = callPackage ../development/tools/misc/ccache { };
 
   # Wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
