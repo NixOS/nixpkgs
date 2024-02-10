@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "python-multipart";
-  version = "0.0.6";
+  version = "0.0.7";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "python_multipart";
     inherit version;
-    hash = "sha256-6ZJagLtmhSnxtnx/2wpdrN18v8b7C/8+pEP+Ir3WITI=";
+    hash = "sha256-KIpsObBllsG5iLtnlMb7yA5sNp415QYmN98la+4Mmvk=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +31,6 @@ buildPythonPackage rec {
     "multipart"
   ];
 
-  preCheck = ''
-    # https://github.com/andrew-d/python-multipart/issues/41
-    substituteInPlace multipart/tests/test_multipart.py \
-      --replace "yaml.load" "yaml.safe_load"
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     mock
@@ -47,6 +41,6 @@ buildPythonPackage rec {
     description = "A streaming multipart parser for Python";
     homepage = "https://github.com/andrew-d/python-multipart";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ris ];
   };
 }
