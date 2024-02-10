@@ -129,6 +129,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
+  d3dmetal = callPackage ../os-specific/darwin/d3dmetal { };
+
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
   darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
