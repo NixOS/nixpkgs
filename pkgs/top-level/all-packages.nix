@@ -23681,8 +23681,6 @@ with pkgs;
 
   libwacom-surface = callPackage ../development/libraries/libwacom/surface.nix { };
 
-  lightning = callPackage ../development/libraries/lightning { };
-
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
   lightspark = callPackage ../misc/lightspark { };
