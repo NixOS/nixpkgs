@@ -17,7 +17,7 @@
 , setuptools
 , pathspec
 , pyproject-metadata
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pybind11
     scikit-build-core
     setuptools
-    setuptools_scm
+    setuptools-scm
   ];
   buildInputs = [
     charls
