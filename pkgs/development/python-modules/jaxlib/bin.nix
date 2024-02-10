@@ -150,7 +150,7 @@ let
     };
     "cuda11.8-3.10" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "osha256-aQ7iX3o0kQ4liPexv7dkBVWVTUpaty83L083MybGkf0=";
+      hash = "sha256-aQ7iX3o0kQ4liPexv7dkBVWVTUpaty83L083MybGkf0=";
     };
     "cuda11.8-3.11" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp311-cp311-manylinux2014_x86_64.whl";

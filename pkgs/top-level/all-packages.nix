@@ -8841,6 +8841,8 @@ with pkgs;
 
   graylog-5_1 = callPackage ../tools/misc/graylog/5.1.nix { };
 
+  graylog-5_2 = callPackage ../tools/misc/graylog/5.2.nix { };
+
   graylogPlugins = recurseIntoAttrs (
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
@@ -27132,8 +27134,6 @@ with pkgs;
 
   restic-integrity = callPackage ../applications/backup/restic-integrity { };
   restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
-
-  restya-board = callPackage ../servers/web-apps/restya-board { };
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
