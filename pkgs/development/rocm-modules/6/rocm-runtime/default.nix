@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs image/blit_src/create_hsaco_ascii_file.sh
     patchShebangs core/runtime/trap_handler/create_trap_handler_header.sh
+    patchShebangs core/runtime/blit_shaders/create_blit_shader_header.sh
 
     substituteInPlace CMakeLists.txt \
       --replace 'hsa/include/hsa' 'include/hsa'
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   fixupPhase = ''
-    rm -rf $out/hsa/*
+    mkdir $out/hsa
     ln -s $out/{include,lib} $out/hsa
   '';
 
