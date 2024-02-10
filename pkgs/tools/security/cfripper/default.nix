@@ -3,7 +3,14 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pydantic = self.pydantic_1;
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "cfripper";
   version = "1.15.3";
   pyproject = true;
@@ -20,11 +27,11 @@ python3.pkgs.buildPythonApplication rec {
       --replace "pluggy~=0.13.1" "pluggy" \
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     boto3
     cfn-flip
     click
@@ -35,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     moto
     pytestCheckHook
   ];
