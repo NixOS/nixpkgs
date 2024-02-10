@@ -17,7 +17,7 @@
 
 let
   pname = "yabai";
-  version = "6.0.9";
+  version = "6.0.10";
 
   test-version = testers.testVersion {
     package = yabai;
@@ -53,7 +53,7 @@ in
 
     src = fetchzip {
       url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
-      hash = "sha256-v7V52R+ODJIYKWPs1NW2jNBK96wNz+XyabNMyEg/L+o=";
+      hash = "sha256-HabZzcX/r6eXm8SWcBA2QUJAIUzMqhvRUxCk8CclPfw=";
     };
 
     nativeBuildInputs = [
@@ -89,7 +89,7 @@ in
       owner = "koekeishiya";
       repo = "yabai";
       rev = "v${version}";
-      hash = "sha256-fI5Y6LAO1jieg4x9loIV6jdD+qZ9B07S545oBmRADkA=";
+      hash = "sha256-KQLL3iX0Tqap2WooaDXF3i9v6w3Bew9No1iccFArzzs=";
     };
 
     nativeBuildInputs = [
