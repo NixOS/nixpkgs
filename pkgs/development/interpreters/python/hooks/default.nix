@@ -118,6 +118,10 @@ in {
       } // lib.optionalAttrs useLegacyHook {
         inherit setuptools;
       };
+      passthru.tests = import ./python-catch-conflicts-hook-tests.nix {
+        inherit pythonOnBuildForHost runCommand;
+        inherit (pkgs) coreutils gnugrep writeShellScript;
+      };
     } ./python-catch-conflicts-hook.sh) {};
 
   pythonImportsCheckHook = callPackage ({ makePythonHook }:
