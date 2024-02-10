@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-sysmon";
-  version = "1.0.3";
+  version = "1.0.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-sysmon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5CDwevzD6R1nIcID6C5PV+i6pwY2CLakRC6NUXtmPs8=";
+    hash = "sha256-/WBHu1pFEiVPJQ97xEwjJJ92h9kHzTBPgmfQrR+RZjA=";
   };
 
   nativeBuildInputs = [
