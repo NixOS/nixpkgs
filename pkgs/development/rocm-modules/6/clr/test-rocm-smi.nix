@@ -7,7 +7,7 @@
 
 makeImpureTest {
   name = "rocm-smi";
-  testedPackage = "rocmPackages_5.clr";
+  testedPackage = "rocmPackages_6.clr";
   nativeBuildInputs = [ clinfo rocm-smi ];
   OCL_ICD_VENDORS = "${clr.icd}/etc/OpenCL/vendors";
 
