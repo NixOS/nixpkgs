@@ -11322,6 +11322,8 @@ self: super: with self; {
 
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
+  pysigma-backend-sqlite = callPackage ../development/python-modules/pysigma-backend-sqlite { };
+
   pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
 
   pysigma-pipeline-crowdstrike = callPackage ../development/python-modules/pysigma-pipeline-crowdstrike { };
