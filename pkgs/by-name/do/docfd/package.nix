@@ -1,4 +1,4 @@
-{ lib, ocamlPackages, fetchFromGitHub, python3, dune_3, makeWrapper, poppler_utils }:
+{ lib, ocamlPackages, fetchFromGitHub, python3, dune_3, makeWrapper, poppler_utils, fzf }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
@@ -14,12 +14,12 @@ ocamlPackages.buildDunePackage rec {
   };
 
   nativeBuildInputs = [ python3 dune_3 makeWrapper ];
-  buildInputs = [ poppler_utils ] ++
-    (with ocamlPackages; [ oseq spelll notty nottui lwd cmdliner domainslib digestif yojson eio_main containers-data timedesc ]);
+  buildInputs = with ocamlPackages; [ oseq spelll notty nottui lwd cmdliner domainslib digestif yojson eio_main containers-data timedesc ];
 
   postInstall = ''
   # docfd needs pdftotext from popler_utils to allow pdf search
-  wrapProgram $out/bin/docfd --prefix PATH : "${lib.getBin poppler_utils}/bin/"
+  # also fzf for "docfd ?" usage
+  wrapProgram $out/bin/docfd --prefix PATH : "${lib.makeBinPath [ poppler_utils fzf ]}"
   '';
 
   meta = with lib; {
