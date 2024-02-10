@@ -78,6 +78,7 @@ in
     (lib.getLib libssh2)
     (lib.getLib libkrb5)
     (lib.getLib libunistring)
+    (lib.getLib libpsl)
 
     # headers
     (lib.getDev curl)
