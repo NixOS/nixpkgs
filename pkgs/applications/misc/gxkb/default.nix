@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gxkb";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "zen-tools";
     repo = "gxkb";
     rev = "v${version}";
-    sha256 = "sha256-9r1eZl7PgIt2ZpK+QQHaa460imIHT3Lh5mpzcFglyWc=";
+    sha256 = "sha256-oBIBIkj4p6HlF0PRQtI/K5dhLs7pbPxN7Cgr/YZaI1s=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
