@@ -24,6 +24,8 @@ in
         default = "*:0/30";
         description = mdDoc ''
           How often NIST-Feed executes.
+          
+          This should be configured in the format specified in {manpage}`systemd.time(7)`
         '';
       };
     };
