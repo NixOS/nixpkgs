@@ -9617,6 +9617,10 @@ with pkgs;
 
   go-jira = callPackage ../applications/misc/go-jira { };
 
+  jogl = callPackage ../by-name/jo/jogl/package.nix {
+    stdenv = if stdenv.isDarwin && stdenv.isx86_64 then overrideSDK stdenv "11.0" else stdenv;
+  };
+
   john = callPackage ../tools/security/john { };
 
   joomscan = callPackage ../tools/security/joomscan { };

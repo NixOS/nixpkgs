@@ -236,10 +236,8 @@ in {
       else ../development/compilers/semeru-bin/jdk-darwin.nix
     ) {});
   };
-
-  inherit (pkgs.darwin.apple_sdk_11_0.callPackage ../development/java-modules/jogl { })
-    jogl_2_4_0;
 }
 // lib.optionalAttrs config.allowAliases {
+  jogl_2_4_0 = throw "'jogl_2_4_0' is renamed to/replaced by 'jogl'";
   mavenfod = throw "'mavenfod' is renamed to/replaced by 'maven.buildMavenPackage'";
 }
