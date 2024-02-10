@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     shodan
     slowapi
     starlette
+    ujson
     uvicorn
     uvloop
   ];
