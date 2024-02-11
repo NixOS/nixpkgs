@@ -134,6 +134,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     runHook postInstall
   '';
 
+  postInstall = ''
+    wrapProgram $out/lib/tandoor-recipes/manage.py --prefix PYTHONPATH : "$PYTHONPATH"
+  '';
+
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     pytest-django
@@ -155,6 +159,9 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
       inherit (nixosTests) tandoor-recipes;
       runTandoorRecipes = runCommand "run-${pname}" {} ''
         ${tandoor-recipes}/bin/tandoor-recipes > $out
+      '';
+      runManagePy = runCommand "run-${pname}" {} ''
+        ${tandoor-recipes}/lib/tandoor-recipes/manage.py > $out
       '';
     };
   };
