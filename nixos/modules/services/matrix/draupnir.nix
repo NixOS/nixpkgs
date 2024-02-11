@@ -198,7 +198,7 @@ in
   #endregion
 
   #region Service configuration
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = !(cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile == null);
@@ -214,7 +214,7 @@ in
       }
     ];
 
-    services.pantalaimon-headless.instances."draupnir" = mkIf cfg.pantalaimon.enable
+    services.pantalaimon-headless.instances."draupnir" = lib.mkIf cfg.pantalaimon.enable
       {
         homeserver = cfg.pantalaimon.homeserverUrl;
       } // cfg.pantalaimon.options;
