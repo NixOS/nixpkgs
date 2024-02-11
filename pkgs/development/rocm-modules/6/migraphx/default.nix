@@ -29,6 +29,7 @@
 , python3Packages
 , buildDocs ? false
 , buildTests ? false
+, gpuTargets ? clr.gpuTargets
 }:
 
 let
@@ -109,6 +110,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
   postPatch = ''
