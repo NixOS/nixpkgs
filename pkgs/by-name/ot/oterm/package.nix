@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "pillow"
+    "httpx"
   ];
 
   propagatedBuildInputs = with python3Packages; [
