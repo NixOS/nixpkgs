@@ -42,6 +42,14 @@ in
         ;
 
       chmod +x $out/bin/switch-to-configuration
+
+      substitute ${./capture-pty-to-journal.sh} $out/bin/capture-pty-to-journal \
+        --subst-var-by runtimeShell "${pkgs.bash}/bin/sh" \
+        --subst-var-by script "${pkgs.util-linux}/bin/script" \
+        ;
+
+      chmod +x $out/bin/capture-pty-to-journal
+
       ${lib.optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         if ! output=$(${perlWrapped}/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
           echo "switch-to-configuration syntax is not valid:"
