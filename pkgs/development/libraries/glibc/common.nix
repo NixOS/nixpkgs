@@ -36,6 +36,7 @@
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
+, enableCET ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
@@ -154,9 +155,9 @@ stdenv.mkDerivation ({
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
-    ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    ] ++ lib.optionals (enableCET != false) [
       # Enable Intel Control-flow Enforcement Technology (CET) support
-      "--enable-cet"
+      "--enable-cet${if builtins.isString enableCET then "=${enableCET}"  else ""}"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.10.0" # RHEL 7 and derivatives, seems oldest still supported kernel
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -208,7 +209,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" "enableCET" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {
