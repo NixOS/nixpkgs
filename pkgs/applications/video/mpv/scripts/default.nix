@@ -68,6 +68,7 @@ let
     convert = callPackage ./convert.nix { };
     cutter = callPackage ./cutter.nix { };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
+    memo = callPackage ./memo.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
