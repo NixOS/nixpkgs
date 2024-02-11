@@ -9895,6 +9895,8 @@ self: super: with self; {
 
   priority = callPackage ../development/python-modules/priority { };
 
+  prisma = callPackage ../development/python-modules/prisma { };
+
   prison = callPackage ../development/python-modules/prison { };
 
   proboscis = callPackage ../development/python-modules/proboscis { };
@@ -12665,6 +12667,8 @@ self: super: with self; {
   reretry = callPackage ../development/python-modules/reretry { };
 
   resampy = callPackage ../development/python-modules/resampy { };
+
+  resend = callPackage ../development/python-modules/resend { };
 
   resize-right = callPackage ../development/python-modules/resize-right { };
 
