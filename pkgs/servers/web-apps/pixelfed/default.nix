@@ -28,13 +28,13 @@ let
   });
 in package.override rec {
   pname = "pixelfed";
-  version = "0.11.8";
+  version = "0.11.11";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-du+xwSrMqt4KIzQRUos6EmVBRp+39gHuoLSRsgLe1CQ=";
+    hash = "sha256-ytE1ZCKQvoigC8jKPfQ/17jYA0XYOzospq7wY18o2Nk=";
   };
 
   passthru = {
