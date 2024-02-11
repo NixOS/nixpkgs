@@ -36,6 +36,13 @@ in
             used instead. The access token of the bot will be stored in /var/lib/draupnir.
           '');
 
+          homeserver = mkOption {
+            type = types.str;
+            description = lib.mdDoc ''
+              Account name on the Matrix homeserver.
+            '';
+          };
+
           username = mkOption {
             type = types.str;
             description = lib.mdDoc ''
@@ -127,11 +134,14 @@ in
           #region Base settings
           homeserverUrl = mkOption {
             type = types.str;
-            default = "https://matrix.org";
+            default = if cfg.pantalaimon.enable 
+              then "http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${config.services.pantalaimon-headless.instances."draupnir".listenPort}/"
+              else "https://matrix.org";
+            readOnly = if cfg.pantalaimon.enable then true else false;
             description = lib.mdDoc ''
               Base URL of the Matrix homeserver, that provides the Client-Server API.
 
-              If `pantalaimon.enable` is `true`, this option will become the homeserver to which `pantalaimon` connects.
+              If `pantalaimon.enable` is `true`, this option will become read only. Configure `pantalaimon.homeserver` instead in that case.
               The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
             '';
           };
@@ -207,7 +217,7 @@ in
 
     services.pantalaimon-headless.instances."draupnir" = mkIf cfg.pantalaimon.enable
       {
-        homeserver = cfg.settings.homeserverUrl;
+        homeserver = cfg.pantalaimon.homeserverUrl;
       } // cfg.pantalaimon.options;
 
     systemd.services.draupnir = {
