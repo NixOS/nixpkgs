@@ -282,8 +282,8 @@ rec {
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 
-  docker_24 = callPackage dockerGen rec {
-    version = "24.0.5";
+  docker_25 = callPackage dockerGen rec {
+    version = "25.0.3";
     cliRev = "v${version}";
     cliHash = "sha256-u1quVGTx/p8BDyRn33vYyyuE5BOhWMnGQ5uVX0PZ5mg=";
     mobyRev = "v${version}";
