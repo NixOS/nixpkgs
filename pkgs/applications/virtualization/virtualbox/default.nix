@@ -1,8 +1,8 @@
 { config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL2, libcap, libGL, libGLU
-, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
+, libpng, glib, lvm2, libXrandr, libXinerama, libopus, libtpms, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
+, alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib, xz
 , yasm, glslang
 , linuxPackages
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
@@ -17,6 +17,7 @@
 , headless ? false
 , enable32bitGuests ? true
 , enableWebService ? false
+, extraConfigureFlags ? ""
 }:
 
 with lib;
@@ -46,7 +47,7 @@ in stdenv.mkDerivation {
   buildInputs = [
     acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
     libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
-    libXmu libXrandr libpng libopus python3 ]
+    libXmu libXrandr libpng libopus libtpms python3 xz ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python3 # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
@@ -158,6 +159,7 @@ in stdenv.mkDerivation {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk

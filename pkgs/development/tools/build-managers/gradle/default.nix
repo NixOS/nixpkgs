@@ -135,9 +135,9 @@ rec {
   };
 
   gradle_7 = gen {
-    version = "7.6.3";
+    version = "7.6.4";
     nativeVersion = "0.22-milestone-25";
-    hash = "sha256-dAwuRy7kMmwzv3WlyfXNHmns8/m1gPbiNshtHz2Yz6w=";
+    hash = "sha256-vtHaM8yg9VerE2kcd/OLtnOIEZ5HlNET4FEDm4Cvm7E=";
     defaultJava = jdk17;
   };
 

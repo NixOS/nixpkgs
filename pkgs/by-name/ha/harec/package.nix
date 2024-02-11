@@ -3,7 +3,6 @@
 , fetchFromSourcehut
 , qbe
 , fetchgit
-, unstableGitUpdater
 }:
 let
   # harec needs the dbgfile and dbgloc features implemented up to this commit.
@@ -59,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     # We create this attribute so that the `hare` package can access the
     # overwritten `qbe`.
     qbeUnstable = qbe';
-    updateScript = unstableGitUpdater { };
   };
 
   meta = {

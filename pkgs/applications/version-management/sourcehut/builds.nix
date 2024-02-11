@@ -16,28 +16,29 @@
 , setuptools
 }:
 let
-  version = "0.86.10";
+  version = "0.89.13";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.39"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    hash = "sha256-frwJgwJst2/NWd8VR0KbsVwm8JfWuekkY2oIIAdh3Fw=";
+    hash = "sha256-JpRVRzuHB6cgk/qW1j4zF8/K1xwz3J4nZhijmz5kVWU=";
   };
 
   buildsrht-api = buildGoModule ({
     inherit src version;
     pname = "buildsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-2khk7j22KON4MsuvFUNKSUpouJtVIOxE0hkh63iaxZ4=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.29"; });
+    vendorHash = "sha256-kTqoUfFEoNdDDzVNJ7XIbH7tbsl5MdBL+/UDHFv7D+A=";
+  } // gqlgen);
 
-  buildsrht-worker = buildGoModule {
+  buildsrht-worker = buildGoModule ({
     inherit src version;
-    sourceRoot = "${src.name}/worker";
     pname = "buildsrht-worker";
-    vendorHash = "sha256-obdaeRwMhuiCV2kVwDo1c+rU/hmsbiL1IgAf7AcIpoc=";
-  };
+    modRoot = "worker";
+    vendorHash = "sha256-kTqoUfFEoNdDDzVNJ7XIbH7tbsl5MdBL+/UDHFv7D+A=";
+  } // gqlgen);
 in
 buildPythonPackage rec {
   inherit src version;
@@ -88,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
 }

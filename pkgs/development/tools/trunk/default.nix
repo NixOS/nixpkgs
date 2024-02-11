@@ -12,13 +12,13 @@ SystemConfiguration
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
-  version = "0.18.7";
+  version = "0.18.8";
 
   src = fetchFromGitHub {
     owner = "thedodd";
     repo = "trunk";
     rev = "v${version}";
-    hash = "sha256-TNF1J/hQ/b89Qo5gkYkYNZ9EQ/21n2YD0fA8cLQic5g=";
+    hash = "sha256-cx14IVqsu1SQezs8T1HFZ75+MPWkvf5RcvGCodW5G4A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-kqOaqhxBWcduu3Y1ShI7wko10dubJOs3W4FRZMaRNkc=";
+  cargoHash = "sha256-zMkRCNFrfkUvq6oz/7GtaWNw9YS5NygBUYzoOAoQl40=";
 
   # the dependency css-minify contains both README.md and Readme.md,
   # which causes a hash mismatch on systems with a case-insensitive filesystem

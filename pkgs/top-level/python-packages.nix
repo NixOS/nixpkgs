@@ -5169,6 +5169,8 @@ self: super: with self; {
 
   hickle = callPackage ../development/python-modules/hickle { };
 
+  highdicom = callPackage ../development/python-modules/highdicom { };
+
   hid = callPackage ../development/python-modules/hid {
     inherit (pkgs) hidapi;
   };
@@ -9372,6 +9374,8 @@ self: super: with self; {
 
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
 
+  pillow-jpls = callPackage ../development/python-modules/pillow-jpls { };
+
   pillow-simd = callPackage ../development/python-modules/pillow-simd {
       inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
       inherit (pkgs.xorg) libX11;
@@ -10570,6 +10574,8 @@ self: super: with self; {
 
   pygls = callPackage ../development/python-modules/pygls { };
 
+  pygltflib = callPackage ../development/python-modules/pygltflib { };
+
   pygmars = callPackage ../development/python-modules/pygmars { };
 
   pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
@@ -11321,6 +11327,8 @@ self: super: with self; {
   pysigma-backend-qradar = callPackage ../development/python-modules/pysigma-backend-qradar { };
 
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
+
+  pysigma-backend-sqlite = callPackage ../development/python-modules/pysigma-backend-sqlite { };
 
   pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
 
@@ -13606,6 +13614,8 @@ self: super: with self; {
   sparqlwrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   sparse = callPackage ../development/python-modules/sparse { };
+
+  spatial-image = callPackage ../development/python-modules/spatial-image { };
 
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
@@ -16326,6 +16336,8 @@ self: super: with self; {
   };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xarray-dataclasses = callPackage ../development/python-modules/xarray-dataclasses { };
 
   xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 

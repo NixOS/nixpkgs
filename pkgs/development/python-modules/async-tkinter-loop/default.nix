@@ -4,6 +4,7 @@
 , python3Packages
 , poetry-core
 , tkinter
+, typing-extensions
 , pythonRelaxDepsHook
 , pytestCheckHook
 }:
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     tkinter
+    typing-extensions
   ];
 
   pythonRemoveDeps = [
