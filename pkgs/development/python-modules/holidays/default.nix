@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "vacanza";
     repo = "python-holidays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BVmH3LO0VjIcpS8HoQmP6mHv7zDK0Aw3pS4oiZWhF/4=";
+    hash = "sha256-oVuzX/H5jj/c4dbPGmXUnZeDbgSd9v9qP2dXe6+PaUQ=";
   };
 
   nativeBuildInputs = [
