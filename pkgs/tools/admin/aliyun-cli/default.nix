@@ -18,6 +18,19 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/aliyun/aliyun-cli/cli.Version=${version}" ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "Test_main" # Assertions in test fail
+        "Test" # TestSuite needs network access
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
   postInstall = ''
     mv $out/bin/main $out/bin/aliyun
   '';

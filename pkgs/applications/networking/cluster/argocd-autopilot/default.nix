@@ -30,6 +30,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd" ];
 
+  checkFlags = [
+    # Tests asserts on installationManifestsURL which we set in ldflags.
+    "-skip=^Test_setBootstrapOptsDefaults/Basic$"
+  ];
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/argocd-autopilot version | grep ${src.rev} > /dev/null

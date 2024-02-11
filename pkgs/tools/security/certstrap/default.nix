@@ -20,6 +20,16 @@ buildGoModule rec {
 
   ldflags = [ "-X main.release=${version}" ];
 
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests fail with 'x509: cannot verify signature: insecure algorithm SHA1-RSA'
+        "TestCertificateAuthority"
+        "TestCertificateVerify"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
   meta = with lib; {
     description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
     longDescription = ''

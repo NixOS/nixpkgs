@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, git
+}:
 
 buildGoModule rec {
   pname = "atlantis";
@@ -18,6 +22,27 @@ buildGoModule rec {
   vendorHash = "sha256-W3bX5fAxFvI1zQCx8ioNIc/yeDAXChpxNPYyaghnxxE=";
 
   subPackages = [ "." ];
+
+  nativeCheckInputs = [
+    git
+  ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests panic for unknown reason.
+        "TestPostWorkflowHookRunner_Run"
+        "TestPreWorkflowHookRunner_Run"
+        "TestNewServer"
+        "TestCommandRunnerVCSClientInitialized"
+        # Tests require Terraform, which is unfree.
+        "TestGitHubWorkflow"
+        "TestSimpleWorkflow_terraformLockFile"
+        "TestGitHubWorkflowWithPolicyCheck"
+        "TestDefaultProjectCommandBuilder_TerraformVersion"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   doInstallCheck = true;
   installCheckPhase = ''

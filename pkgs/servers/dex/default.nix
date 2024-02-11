@@ -21,6 +21,16 @@ buildGoModule rec {
     "-w" "-s" "-X main.version=${src.rev}"
   ];
 
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests require network access.
+        "TestOpen"
+        "TestGetGroups"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}" ];
+
   postInstall = ''
     mkdir -p $out/share
     cp -r $src/web $out/share/web

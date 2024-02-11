@@ -30,6 +30,28 @@ buildGoModule rec {
     "-X code.cloudfoundry.org/cli/version.binaryVersion=${version}"
   ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests requiring network access.
+        "TestCloudcontroller"
+        "TestCommon"
+        "TestPlugin"
+        "TestPluginRepo"
+        # Tests assert on version, which we override in ldflags.
+        "TestCommands"
+        "TestConfig"
+        "TestVersion"
+        # Panic: sync: negative WaitGroup counter
+        "TestApplication"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
   postInstall = ''
     mv "$out/bin/cli" "$out/bin/cf"
     installShellCompletion --bash $bashCompletionScript

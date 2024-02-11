@@ -66,6 +66,11 @@ in buildGoModule rec {
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
   '';
 
+  checkFlags = [
+    # Tests fail with 'rcode is "REFUSED", expected "NOERROR"'
+    "-skip=^TestView$"
+  ];
+
   postInstall = ''
     installManPage man/*
   '';

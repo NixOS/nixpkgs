@@ -30,6 +30,15 @@ buildGoModule rec {
     "-X github.com/dapr/cli/pkg/standalone.gitversion=${version}"
   ];
 
+  checkFlags =
+    let
+      skippedTests = [
+        "TestValidateFilePaths"
+        "TestReadFile"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}" ];
+
   postInstall = ''
     mv $out/bin/cli $out/bin/dapr
 

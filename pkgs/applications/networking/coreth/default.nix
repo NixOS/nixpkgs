@@ -33,6 +33,16 @@ buildGoModule rec {
     "plugin"
   ];
 
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests require additional dependencies not specified in go.mod.
+        "TestGolangBindings"
+        "TestGolangBindingsOverload"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
   postInstall = "mv $out/bin/{plugin,evm}";
 
   meta = with lib; {

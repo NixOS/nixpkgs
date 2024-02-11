@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildGoModule
 , testers
+, git
 , athens
 }:
 buildGoModule rec {
@@ -21,6 +22,20 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X github.com/gomods/athens/pkg/build.version=${version}" ];
 
   subPackages = [ "cmd/proxy" ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests requiring network access.
+        "TestModules"
+        "TestList"
+        "TestConcurrentLists"
+        "TestLatest"
+        "TestInfo"
+        "TestGoMod"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     mv $out/bin/proxy $out/bin/athens

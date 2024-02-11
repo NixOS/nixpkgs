@@ -19,6 +19,16 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
+  checkFlags =
+    let
+      skippedTests = [
+        # Tests require Go module proxy lookup.
+        "TestInvoke"
+        "TestLibcni"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
   meta = with lib; {
     description = "Container Network Interface - networking for Linux containers";
     license = licenses.asl20;
