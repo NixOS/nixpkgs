@@ -324,6 +324,16 @@ let
         };
       });
 
+      python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
+        version = "8.0.1";
+        src = fetchFromGitHub {
+          owner = "un33k";
+          repo =  "python-slugify";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-MJac63XjgWdUQdyyEm8O7gAGVszmHxZzRF4frJtR0BU=";
+        };
+      });
+
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.1";
         src = fetchFromGitHub {
