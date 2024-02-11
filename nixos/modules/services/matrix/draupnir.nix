@@ -9,7 +9,7 @@ in
 {
   #region Options
   options.services.draupnir = {
-    enable = mkEnableOption ("Draupnir, a moderation tool for Matrix");
+    enable = lib.mkEnableOption ("Draupnir, a moderation tool for Matrix");
 
     accessTokenFile = mkOption {
       type = with types; nullOr path;
@@ -29,7 +29,7 @@ in
       default = { };
       type = types.submodule {
         options = {
-          enable = mkEnableOption (''
+          enable = lib.mkEnableOption (''
             pantalaimon, in order to enable E2EE support.
             If `true`, accessToken is ignored and the username/password below will be
             used instead. The access token of the bot will be stored in /var/lib/draupnir.
