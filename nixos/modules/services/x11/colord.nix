@@ -26,11 +26,16 @@ in {
 
     systemd.packages = [ pkgs.colord ];
 
+    systemd.services.colord = {
+      serviceConfig = {
+        StateDirectory = "colord";
+      };
+    };
+
     systemd.tmpfiles.packages = [ pkgs.colord ];
 
     users.users.colord = {
       isSystemUser = true;
-      home = "/var/lib/colord";
       group = "colord";
     };
 
