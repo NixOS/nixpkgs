@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, babel
 , gitpython
 , mkdocs
 , pytz
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    babel
     gitpython
     mkdocs
     pytz

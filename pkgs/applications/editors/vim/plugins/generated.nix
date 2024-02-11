@@ -10569,6 +10569,18 @@ final: prev:
     meta.homepage = "https://github.com/kaarmu/typst.vim/";
   };
 
+  ultimate-autopair = buildVimPlugin {
+    pname = "ultimate-autopair.nvim";
+    version = "2024-02-10";
+    src = fetchFromGitHub {
+      owner = "altermo";
+      repo = "ultimate-autopair.nvim";
+      rev = "25c13e0ce167db0255456cac10158b27d2be30c0";
+      sha256 = "16aizsf86cg5l131y2lszlfkdz1b998js89fja8yk25mwa79lsaf";
+    };
+    meta.homepage = "https://github.com/altermo/ultimate-autopair.nvim.git";
+  };
+
   ultisnips = buildVimPlugin {
     pname = "ultisnips";
     version = "2023-10-17";

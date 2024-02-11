@@ -13,9 +13,12 @@
 , colorVariants ? [] # default: all
 , opacityVariants ? [] # default: all
 , themeVariants ? [] # default: default (BigSur-like theme)
+, iconVariant ? null # default: standard (Apple logo)
+, nautilusStyle ? null # default: stable (BigSur-like style)
 , nautilusSize ? null # default: 200px
 , panelOpacity ? null # default: 15%
 , panelSize ? null # default: 32px
+, roundedMaxWindow ? false # default: false
 }:
 
 let
@@ -24,9 +27,11 @@ let
 
 in
 lib.checkListOfEnum "${pname}: alt variants" [ "normal" "alt" "all" ] altVariants
-lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: color variants" [ "Light" "Dark" ] colorVariants
 lib.checkListOfEnum "${pname}: opacity variants" [ "normal" "solid" ] opacityVariants
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: Activities icon variants" [ "standard" "simple" "gnome" "ubuntu" "tux" "arch" "manjaro" "fedora" "debian" "void" "opensuse" "popos" "mxlinux" "zorin" ] (single iconVariant)
+lib.checkListOfEnum "${pname}: nautilus style" [ "stable" "normal" "mojave" "glassy" ] (single nautilusStyle)
 lib.checkListOfEnum "${pname}: nautilus sidebar minimum width" [ "default" "180" "220" "240" "260" "280" ] (single nautilusSize)
 lib.checkListOfEnum "${pname}: panel opacity" [ "default" "30" "45" "60" "75" ] (single panelOpacity)
 lib.checkListOfEnum "${pname}: panel size" [ "default" "smaller" "bigger" ] (single panelSize)
@@ -79,9 +84,12 @@ stdenv.mkDerivation rec {
       ${toString (map (x: "--color " + x) colorVariants)} \
       ${toString (map (x: "--opacity " + x) opacityVariants)} \
       ${toString (map (x: "--theme " + x) themeVariants)} \
+      ${lib.optionalString (iconVariant != null) ("--icon " + iconVariant)} \
+      ${lib.optionalString (nautilusStyle != null) ("--nautilus-style " + nautilusStyle)} \
       ${lib.optionalString (nautilusSize != null) ("--size " + nautilusSize)} \
       ${lib.optionalString (panelOpacity != null) ("--panel-opacity " + panelOpacity)} \
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
+      ${lib.optionalString (roundedMaxWindow == true) "--roundedmaxwindow"} \
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share

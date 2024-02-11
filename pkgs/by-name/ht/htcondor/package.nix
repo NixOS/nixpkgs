@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "htcondor";
     repo = "htcondor";
 
-    rev = "v23.4.0";
+    rev = "v${version}";
     hash = "sha256-+WfNVxP7qsEpn8zPretLnOEAnPq0GylyxCbcQI8o0L0=";
   };
 
@@ -58,5 +58,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = with maintainers; [ evey ];
+    # cannot find -lpthread: No such file or directory
+    broken = stdenv.isAarch64;
   };
 }
