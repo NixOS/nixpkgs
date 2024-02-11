@@ -4219,11 +4219,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xprop = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xprop";
-    version = "1.2.6";
+    version = "1.2.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xprop-1.2.6.tar.xz";
-      sha256 = "0vjqnn42gscw1z2wdj24kdwjwvd7mw58pj0nm9203k1fn4jqa2sq";
+      url = "mirror://xorg/individual/app/xprop-1.2.7.tar.xz";
+      sha256 = "0pw2iv7dcy2xq5fh3427nx88pjj9d9rry3930qj1c6mricaf6dj4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
