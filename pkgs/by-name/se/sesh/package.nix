@@ -20,5 +20,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ Meliketoaste ];
     mainProgram = "sesh";
   };
-
 }
