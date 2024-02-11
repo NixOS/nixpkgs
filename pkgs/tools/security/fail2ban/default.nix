@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
 
     # see https://github.com/NixOS/nixpkgs/issues/4968
-    ${python3.interpreter} setup.py install_data --install-dir=$out --root=$out
+    ${python3.pythonOnBuildForHost.interpreter} setup.py install_data --install-dir=$out --root=$out
   '';
 
   postInstall =
@@ -61,6 +61,11 @@ python3.pkgs.buildPythonApplication rec {
       rm -r "${sitePackages}/etc"
 
       installManPage man/*.[1-9]
+
+      # This is a symlink to the build python version created by `updatePyExec`, seemingly to assure the same python version is used?
+      rm $out/bin/fail2ban-python
+      ln -s ${python3.interpreter} $out/bin/fail2ban-python
+
     '' + lib.optionalString stdenv.isLinux ''
       # see https://github.com/NixOS/nixpkgs/issues/4968
       rm -r "${sitePackages}/usr"

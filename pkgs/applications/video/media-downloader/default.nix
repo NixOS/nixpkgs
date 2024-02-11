@@ -1,24 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{ aria2
 , cmake
-, wrapQtAppsHook
-, qtbase
-, aria2
+, fetchFromGitHub
 , ffmpeg
+, lib
 , python3
+, qtbase
+, stdenv
+, wrapQtAppsHook
 , yt-dlp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "media-downloader";
-  version = "3.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
-    repo = pname;
-    rev = "${version}";
-    hash = "sha256-/oKvjmLFchR2B/mcLIUVIHBK78u2OQGf2aiwVR/ZoQc=";
+    repo = "media-downloader";
+    rev = finalAttrs.version;
+    hash = "sha256-hQLrs4RyHUtcG03h0nCn3uMsHEskGKMVwUkcssGZQLs=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,12 @@ stdenv.mkDerivation rec {
       ]}"
   ];
 
-  meta = with lib; {
-    description = "A Qt/C++ GUI front end to youtube-dl";
+  meta = {
+    description = "A Qt/C++ GUI front end for yt-dlp and others";
     homepage = "https://github.com/mhogomchungu/media-downloader";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zendo ];
+    platforms = lib.platforms.linux;
+    mainProgram = "media-downloader";
   };
-}
+})

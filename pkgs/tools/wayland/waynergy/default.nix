@@ -10,7 +10,6 @@
 , wayland-protocols
 , wl-clipboard
 , libxkbcommon
-, cmake
 , libressl
 }:
 stdenv.mkDerivation rec {
@@ -40,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/r-c-f/waynergy";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ maxhero pedrohlc ];
+    maintainers = with maintainers; [ maxhero ];
   };
 }

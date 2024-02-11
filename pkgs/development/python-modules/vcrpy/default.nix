@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, mock
 , pytest-httpbin
 , pytestCheckHook
 , pythonOlder
@@ -13,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "4.2.1";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fNPoGixJLgHCgfGAvMKoa1ILFz0rZWy12J2ZR1Qj4BM=";
+    hash = "sha256-u/FTLyYYoE8RvOKpmvOpZHoyyICVcpP/keCl8Ye2s9I=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +40,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     "TestVCRConnection"
+    # https://github.com/kevin1024/vcrpy/issues/645
+    "test_get_vcr_with_matcher"
+    "test_testcase_playback"
   ];
 
   pythonImportsCheck = [

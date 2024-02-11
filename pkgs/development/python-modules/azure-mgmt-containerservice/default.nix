@@ -1,32 +1,32 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
 , azure-common
 , azure-mgmt-core
 , azure-mgmt-nspkg
+, buildPythonPackage
+, fetchPypi
+, isodate
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "24.0.0";
+  version = "29.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-sUp3LDVsc1DmVf4HdaXGSDeEvmAE2weSHHTxL/BwRk8=";
+    hash = "sha256-0BiuK5JCj6rqfSYD8+GWca2k5SQ19MXEHR3TQcYzgoA=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
     azure-common
     azure-mgmt-core
+    isodate
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   # has no tests

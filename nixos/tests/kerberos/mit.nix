@@ -1,5 +1,6 @@
 import ../make-test-python.nix ({pkgs, ...}: {
   name = "kerberos_server-mit";
+
   nodes.machine = { config, libs, pkgs, ...}:
   { services.kerberos_server =
     { enable = true;
@@ -7,16 +8,18 @@ import ../make-test-python.nix ({pkgs, ...}: {
         "FOO.BAR".acl = [{principal = "admin"; access = ["add" "cpw"];}];
       };
     };
-    krb5 = {
+    security.krb5 = {
       enable = true;
-      kerberos = pkgs.krb5;
-      libdefaults = {
-        default_realm = "FOO.BAR";
-      };
-      realms = {
-        "FOO.BAR" = {
-          admin_server = "machine";
-          kdc = "machine";
+      package = pkgs.krb5;
+      settings = {
+        libdefaults = {
+          default_realm = "FOO.BAR";
+        };
+        realms = {
+          "FOO.BAR" = {
+            admin_server = "machine";
+            kdc = "machine";
+          };
         };
       };
     };
@@ -38,4 +41,6 @@ import ../make-test-python.nix ({pkgs, ...}: {
         "echo alice_pw | sudo -u alice kinit",
     )
   '';
+
+  meta.maintainers = [ pkgs.lib.maintainers.dblsaiko ];
 })

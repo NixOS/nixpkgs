@@ -19,7 +19,7 @@ let
     mapAttrs'
     mkEnableOption
     mkOption
-    mkPackageOptionMD
+    mkPackageOption
     mkIf
     nameValuePair
     types
@@ -30,6 +30,8 @@ let
   ;
 
   cfg = config.services.gitea-actions-runner;
+
+  settingsFormat = pkgs.formats.yaml { };
 
   # Check whether any runner instance label requires a container runtime
   # Empty label strings result in the upstream defined defaultLabels, which require docker
@@ -54,7 +56,7 @@ in
   ];
 
   options.services.gitea-actions-runner = with types; {
-    package = mkPackageOptionMD pkgs "gitea-actions-runner" { };
+    package = mkPackageOption pkgs "gitea-actions-runner" { };
 
     instances = mkOption {
       default = {};
@@ -119,6 +121,18 @@ in
               that follows the filesystem hierarchy standard.
             '';
           };
+          settings = mkOption {
+            description = lib.mdDoc ''
+              Configuration for `act_runner daemon`.
+              See https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml for an example configuration
+            '';
+
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+            };
+
+            default = { };
+          };
 
           hostPackages = mkOption {
             type = listOf package;
@@ -169,10 +183,12 @@ in
         wantsHost = hasHostScheme instance;
         wantsDocker = wantsContainerRuntime && config.virtualisation.docker.enable;
         wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
+        configFile = settingsFormat.generate "config.yaml" instance.settings;
       in
         nameValuePair "gitea-runner-${escapeSystemdPath name}" {
           inherit (instance) enable;
           description = "Gitea Actions Runner";
+          wants = [ "network-online.target" ];
           after = [
             "network-online.target"
           ] ++ optionals (wantsDocker) [
@@ -196,7 +212,12 @@ in
             User = "gitea-runner";
             StateDirectory = "gitea-runner";
             WorkingDirectory = "-/var/lib/gitea-runner/${name}";
-            ExecStartPre = pkgs.writeShellScript "gitea-register-runner-${name}" ''
+
+            # gitea-runner might fail when gitea is restarted during upgrade.
+            Restart = "on-failure";
+            RestartSec = 2;
+
+            ExecStartPre = [(pkgs.writeShellScript "gitea-register-runner-${name}" ''
               export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
               mkdir -vp "$INSTANCE_DIR"
               cd "$INSTANCE_DIR"
@@ -221,8 +242,8 @@ in
                 echo "$LABELS_WANTED" > "$LABELS_FILE"
               fi
 
-            '';
-            ExecStart = "${cfg.package}/bin/act_runner daemon";
+            '')];
+            ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
             SupplementaryGroups = optionals (wantsDocker) [
               "docker"
             ] ++ optionals (wantsPodman) [

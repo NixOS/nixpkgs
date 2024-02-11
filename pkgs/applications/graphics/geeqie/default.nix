@@ -8,20 +8,35 @@
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "2.0.1";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     rev = "v${version}";
-    sha256 = "sha256-0GOX77vZ4KZkvwnR1vlv52tlbR+ciwl3ycxbOIcDOqU=";
+    hash = "sha256-qkM/7auZ9TMF2r8KLnitxmvlyPmIjh7q9Ugh+QKh8hw=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "exiv2-0.28.0-support-1.patch";
+      url = "https://github.com/BestImageViewer/geeqie/commit/c45cca777aa3477eaf297db99f337e18d9683c61.patch";
+      hash = "sha256-YiFzAj3G3Z2w7p+8zZlDBjWqUqnfSqvaxMkESfPFdzc=";
+    })
+    (fetchpatch {
+      name = "exiv2-0.28.0-support-2.patch";
+      url = "https://github.com/BestImageViewer/geeqie/commit/b04f7cd0546976dc4f7ea440648ac0eedd8df3ce.patch";
+      hash = "sha256-V0ZOHbAZOrhLcNN+Al1/kvxvbw0vc/R7r99CegjuBQg=";
+    })
+    (fetchpatch {
+      name = "fix-compilation-with-lua.patch";
+      url = "https://github.com/BestImageViewer/geeqie/commit/a132645ee87e612217ac955b227cad04f21a5722.patch";
+      hash = "sha256-BozarBPoIKxZS3qpjuzHHAWZGIWZAwvJyqsNC8v+TMk=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
-    # libtiff detection is broken and looks for liblibtiff...
-    # fixed upstream, to remove for 2.1
-    substituteInPlace meson.build --replace 'libtiff' 'tiff'
   '';
 
   nativeBuildInputs =
@@ -67,7 +82,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.geeqie.org/";
 
-    maintainers = with maintainers; [ jfrankenau pSub markus1189 ];
+    maintainers = with maintainers; [ pSub markus1189 ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

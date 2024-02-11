@@ -2,48 +2,46 @@
 , buildPythonPackage
 , cryptography
 , fetchPypi
+, poetry-core
 , pyopenssl
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "1.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iTHa84+KTIUnSg6LfLJa3f2NHyj5+4++0FPdUa7HXck=";
+    hash = "sha256-MIs7+c6CWtTUu6djcs8ZtdwcLOlqnSmPlkKXXmS9E90=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     pyopenssl
     cryptography
-    setuptools
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --flake8 --cov-report xml --cov-report=term-missing --cov=josepy --cov-config .coveragerc" ""
-    sed -i '/flake8-ignore/d' pytest.ini
-  '';
-
   pythonImportsCheck = [
     "josepy"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/certbot/josepy/blob/v${version}/CHANGELOG.rst";
     description = "JOSE protocol implementation in Python";
-    homepage = "https://github.com/jezdez/josepy";
+    homepage = "https://github.com/certbot/josepy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

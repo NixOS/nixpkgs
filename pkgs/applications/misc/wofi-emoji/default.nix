@@ -1,19 +1,18 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, jq, wofi, wtype, wl-clipboard }:
 
 let emojiJSON = fetchurl {
-  url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.6/dist/emoji-en-US.json";
-  sha256 = "sha256-wf7zsIEbX/diLwmVvnN2Goxh2V5D3Z6nbEMSb5pSGt0=";
-};
+  url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.10/dist/emoji-en-US.json";
+  hash = "sha256-UhAB5hVp5vV2d1FjIb2TBd2FJ6OPBbiP31HGAEDQFnA=";};
 in
 stdenv.mkDerivation rec {
   pname = "wofi-emoji";
-  version = "unstable-2022-08-19";
+  version = "unstable-2023-12-22";
 
   src = fetchFromGitHub {
-    owner = "dln";
+    owner = "Zeioth";
     repo = pname;
-    rev = "c5ecb4f0f164aedb046f52b5eacac889609c8522";
-    sha256 = "1wq276bhf9x24ds13b2dwa69cjnr207p6977hr4bsnczryg609rh";
+    rev = "2cc95880848134a3bbe0675bcb62a0dae1d0f572";
+    hash = "sha256-t9M8z8JxuvBDzNs98L7YTNUfTK23W1DYGdHDiXNQOgk=";
   };
 
   nativeBuildInputs = [ jq ];
@@ -22,6 +21,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace build.sh \
       --replace 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
+    substituteInPlace wofi-emoji \
+      --replace 'wofi' '${wofi}/bin/wofi' \
+      --replace 'wtype' '${wtype}/bin/wtype' \
+      --replace 'wl-copy' '${wl-clipboard}/bin/wl-copy'
   '';
 
   buildPhase = ''

@@ -116,7 +116,7 @@ in
       }
 
       (lib.mkIf cfg.bendDomainToLocalhost {
-        nextcloud.extraOptions.trusted_proxies = [ "127.0.0.1" "::1" ];
+        nextcloud.settings.trusted_proxies = [ "127.0.0.1" "::1" ];
       })
     ];
   };

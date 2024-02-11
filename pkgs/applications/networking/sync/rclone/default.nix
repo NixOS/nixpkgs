@@ -1,20 +1,21 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
 , enableCmount ? true, fuse, macfuse-stubs
+, librclone
 }:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.62.2";
+  version = "1.65.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nG3XW6OGzfbvkBmlmeOCnVRFun3EWIVLLvMXGhOAi+4=";
+    hash = "sha256-P7VJ6pauZ7J8LvyYNi7ANsKrYOcmInZCfRO+X+K6LzI=";
   };
 
-  vendorSha256 = "sha256-UA6PlhKxJ9wpg3mbiJ4Mqc4npwEBa93qi6WrQR8JQSk=";
+  vendorHash = "sha256-budC8psvTtfVi3kYOaJ+dy/9H11ekJVkXMmeV9RhXVU=";
 
   subPackages = [ "." ];
 
@@ -40,6 +41,10 @@ buildGoModule rec {
         ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
         installShellCompletion rclone.$shell
       done
+
+      # filesystem helpers
+      ln -s $out/bin/rclone $out/bin/rclonefs
+      ln -s $out/bin/rclone $out/bin/mount.rclone
     '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
       # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
       # as the setuid wrapper is required as non-root on NixOS.
@@ -49,11 +54,16 @@ buildGoModule rec {
         --prefix LD_LIBRARY_PATH : "${fuse}/lib"
     '';
 
+  passthru.tests = {
+    inherit librclone;
+  };
+
   meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
+    mainProgram = "rclone";
+    maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

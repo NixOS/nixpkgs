@@ -5,12 +5,13 @@
 , pkg-config
 , nix-update-script
 , Security
+, SystemConfiguration
 , openssl
 }:
 
 let
   pname = "gptcommit";
-  version = "0.5.8";
+  version = "0.5.16";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -19,17 +20,18 @@ rustPlatform.buildRustPackage {
     owner = "zurawiki";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K4A0np8+gpFpSU4jBv6PAw4RyUWmIB7dTgWvpy36CYY=";
+    hash = "sha256-JhMkK2zw3VL9o7j8DJmjY/im+GyCjfV2TJI3GDo8T8c=";
   };
 
-  cargoSha256 = "sha256-awztElsrJCUGUn2HcGpCkxUO/nEy8iZO22/fQtwAKdg=";
+  cargoHash = "sha256-ye9MAfG3m24ofV95Kr+KTP4FEqfrsm3aTQ464hG9q08=";
 
   nativeBuildInputs = [ pkg-config ];
 
   # 0.5.6 release has failing tests
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ] ++ lib.optionals stdenv.isLinux [ openssl ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ]
+    ++ lib.optionals stdenv.isLinux [ openssl ];
 
   passthru = {
     updateScript = nix-update-script { };

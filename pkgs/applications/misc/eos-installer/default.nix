@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eos-installer";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "endlessm";
     repo = "eos-installer";
     rev = "Release_${version}";
-    sha256 = "utTTux8o8TN51bvnGldrtMEatiLA1AiHf/9XJZ7k7KM=";
+    sha256 = "BqvZglzFJabGXkI8hnLiw1r+CvM7kSKQPj8IKYBB6S4=";
     fetchSubmodules = true;
   };
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     description = "Installer UI which writes images to disk";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qyliss ];
+    mainProgram = "gnome-image-installer";
     platforms = platforms.linux;
   };
 }

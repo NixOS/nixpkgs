@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.21.0";
+  version = "3.22.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-EM4WGLs+M/rRbreVUrCj4SEXYkSKDX/OEcimJDuayXE=";
+    hash = "sha256-yBHbWt0sX3KZRMr0fE56Zdyqu5Rh5HK1eHZd179tLUw=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString stdenv.isFreeBSD ''
     substituteInPlace configure --replace '`uname -r`' \
-        ${toString stdenv.hostPlatform.parsed.kernel.version}.0
+        ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
   '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; lib.intersectLists
       (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
       (darwin ++ freebsd ++ illumos ++ linux);
-    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

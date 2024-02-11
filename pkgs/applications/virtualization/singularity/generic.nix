@@ -27,12 +27,14 @@ in
 , buildGoModule
 , runCommandLocal
   # Native build inputs
+, addDriverRunpath
 , makeWrapper
 , pkg-config
 , util-linux
 , which
   # Build inputs
 , bash
+, callPackage
 , conmon
 , coreutils
 , cryptsetup
@@ -54,6 +56,9 @@ in
 , hello
   # Overridable configurations
 , enableNvidiaContainerCli ? true
+  # --nvccli currently requires extra privileges:
+  # https://github.com/apptainer/apptainer/issues/1893#issuecomment-1881240800
+, forceNvcCli ? false
   # Compile with seccomp support
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
 , enableSeccomp ? true
@@ -65,12 +70,15 @@ in
   # Whether to compile with SUID support
 , enableSuid ? false
 , starterSuidPath ? null
+, substituteAll
   # newuidmapPath and newgidmapPath are to support --fakeroot
   # where those SUID-ed executables are unavailable from the FHS system PATH.
   # Path to SUID-ed newuidmap executable
 , newuidmapPath ? null
   # Path to SUID-ed newgidmap executable
 , newgidmapPath ? null
+  # External LOCALSTATEDIR
+, externalLocalStateDir ? null
   # Remove the symlinks to `singularity*` when projectName != "singularity"
 , removeCompat ? false
   # Workaround #86349
@@ -92,8 +100,12 @@ in
 (buildGoModule {
   inherit pname version src;
 
+  patches = lib.optionals (projectName == "apptainer") [
+    (substituteAll { src = ./apptainer/0001-ldCache-patch-for-driverLink.patch; inherit (addDriverRunpath) driverLink; })
+  ];
+
   # Override vendorHash with the output got from
-  # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).go-modules"
+  # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
   # or with `null` when using vendored source tarball.
   inherit vendorHash deleteVendor proxyVendor;
 
@@ -106,6 +118,7 @@ in
     inherit
       enableSeccomp
       enableSuid
+      externalLocalStateDir
       projectName
       removeCompat
       starterSuidPath
@@ -141,13 +154,16 @@ in
   configureScript = "./mconfig";
 
   configureFlags = [
-    "--localstatedir=/var/lib"
+    "--localstatedir=${if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"}"
     "--runstatedir=/var/run"
   ]
   ++ lib.optional (!enableSeccomp) "--without-seccomp"
   ++ lib.optional (enableSuid != defaultToSuid) (if enableSuid then "--with-suid" else "--without-suid")
   ++ extraConfigureFlags
   ;
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   # Packages to prefix to the Apptainer/Singularity container runtime default PATH
   # Use overrideAttrs to override
@@ -169,11 +185,18 @@ in
     if [[ ! -e .git || ! -e VERSION ]]; then
       echo "${version}" > VERSION
     fi
+
     # Patch shebangs for script run during build
     patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
+
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
     substituteInPlace cmd/internal/cli/actions.go \
       --replace "defaultPath = \"${defaultPathOriginal}\"" "defaultPath = \"''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}${defaultPathOriginal}\""
+
+    substituteInPlace internal/pkg/util/gpu/nvidia.go \
+      --replace \
+        'return fmt.Errorf("/usr/bin not writable in the container")' \
+        ""
   '';
 
   postConfigure = ''
@@ -204,11 +227,15 @@ in
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "''${defaultPathInputs// /\/bin:}"
+      --prefix PATH : "''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}"
     # Make changes in the config file
-    ${lib.optionalString enableNvidiaContainerCli ''
+    ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
         --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+    ''}
+    ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
+      substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
+        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"
@@ -253,6 +280,39 @@ in
         contents = [ hello cowsay ];
         singularity = finalAttrs.finalPackage;
       };
+    };
+    gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
+      # Should be in tests, but Ofborg would skip image-hello-cowsay because
+      # saxpy is unfree.
+      image-saxpy = callPackage
+        ({ singularity-tools, cudaPackages }:
+          singularity-tools.buildImage {
+            name = "saxpy";
+            contents = [ cudaPackages.saxpy ];
+            memSize = 2048;
+            diskSize = 2048;
+            singularity = finalAttrs.finalPackage;
+          })
+        { };
+      saxpy =
+        callPackage
+          ({ runCommand, writeShellScriptBin }:
+            let
+              unwrapped = writeShellScriptBin "apptainer-cuda-saxpy"
+                ''
+                  ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.tests.image-saxpy} saxpy
+                '';
+            in
+            runCommand "run-apptainer-cuda-saxpy"
+              {
+                requiredSystemFeatures = [ "cuda" ];
+                nativeBuildInputs = [ unwrapped ];
+                passthru = { inherit unwrapped; };
+              }
+              ''
+                apptainer-cuda-saxpy
+              '')
+          { };
     };
   };
 })

@@ -1,6 +1,6 @@
 { lib, stdenv, pkgsBuildHost, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
-, installShellFiles, makeWrapper, rustPlatform, rust, rustc
+, installShellFiles, makeWrapper, rustPlatform, rustc
 , CoreFoundation, Security
 , auditable ? !cargo-auditable.meta.broken
 , cargo-auditable
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage.override {
   cargo-auditable = cargo-auditable.bootstrap;
 } ({
   pname = "cargo";
-  inherit (rustc) version src;
+  inherit (rustc.unwrapped) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage.override {
 
   passthru = {
     rustc = rustc;
-    inherit (rustc) tests;
+    inherit (rustc.unwrapped) tests;
   };
 
   # Upstream rustc still assumes that musl = static[1].  The fix for
@@ -98,8 +98,7 @@ rustPlatform.buildRustPackage.override {
   # Disable check phase as there are failures (4 tests fail)
   doCheck = false;
 
-  doInstallCheck = !stdenv.hostPlatform.isStatic &&
-    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+  doInstallCheck = !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
     runHook preInstallCheck
     readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
@@ -116,6 +115,6 @@ rustPlatform.buildRustPackage.override {
     broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }
-// lib.optionalAttrs (rust.toRustTarget stdenv.buildPlatform != rust.toRustTarget stdenv.hostPlatform) {
+// lib.optionalAttrs (stdenv.buildPlatform.rust.rustcTarget != stdenv.hostPlatform.rust.rustcTarget) {
   HOST_PKG_CONFIG_PATH="${pkgsBuildBuild.pkg-config}/bin/pkg-config";
 })

@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.garage;
-  toml = pkgs.formats.toml {};
+  toml = pkgs.formats.toml { };
   configFile = toml.generate "garage.toml" cfg.settings;
 in
 {
@@ -19,12 +19,18 @@ in
     extraEnvironment = mkOption {
       type = types.attrsOf types.str;
       description = lib.mdDoc "Extra environment variables to pass to the Garage server.";
-      default = {};
-      example = { RUST_BACKTRACE="yes"; };
+      default = { };
+      example = { RUST_BACKTRACE = "yes"; };
+    };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      description = lib.mdDoc "File containing environment variables to be passed to the Garage server.";
+      default = null;
     };
 
     logLevel = mkOption {
-      type = types.enum (["info" "debug" "trace"]);
+      type = types.enum ([ "info" "debug" "trace" ]);
       default = "info";
       example = "debug";
       description = lib.mdDoc "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server> for examples.";
@@ -59,12 +65,8 @@ in
     };
 
     package = mkOption {
-      # TODO: when 23.05 is released and if Garage 0.9 is the default, put a stateVersion check.
-      default = if versionAtLeast config.system.stateVersion "23.05" then pkgs.garage_0_8
-                else pkgs.garage_0_7;
-      defaultText = literalExpression "pkgs.garage_0_7";
       type = types.package;
-      description = lib.mdDoc "Garage package to use, if you are upgrading from a major version, please read NixOS and Garage release notes for upgrade instructions.";
+      description = lib.mdDoc "Garage package to use, needs to be set explicitly. If you are upgrading from a major version, please read NixOS and Garage release notes for upgrade instructions.";
     };
   };
 
@@ -80,14 +82,15 @@ in
       after = [ "network.target" "network-online.target" ];
       wants = [ "network.target" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ configFile ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/garage server";
 
-        StateDirectory = mkIf (hasPrefix "/var/lib/garage" cfg.settings.data_dir && hasPrefix "/var/lib/garage" cfg.settings.metadata_dir) "garage";
+        StateDirectory = mkIf (hasPrefix "/var/lib/garage" cfg.settings.data_dir || hasPrefix "/var/lib/garage" cfg.settings.metadata_dir) "garage";
         DynamicUser = lib.mkDefault true;
         ProtectHome = true;
         NoNewPrivileges = true;
+        EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
       };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";

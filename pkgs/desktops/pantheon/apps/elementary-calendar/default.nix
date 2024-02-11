@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -20,27 +19,19 @@
 , libgee
 , libhandy
 , libical
+, libportal-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "6.1.2";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calendar";
     rev = version;
-    sha256 = "sha256-psUVgl/7pmmf+8dP8ghBx5C1u4UT9ncXuVYvDJOYeOI=";
+    sha256 = "sha256-qZvSzhLGr4Gg9DSJ638IQRLlPiZkbJUCJ7tZ8ZFZZ1E=";
   };
-
-  patches = [
-    # build: support evolution-data-server 3.46
-    # https://github.com/elementary/calendar/pull/758
-    (fetchpatch {
-      url = "https://github.com/elementary/calendar/commit/62c20e5786accd68b96c423b04e32c043e726cac.patch";
-      sha256 = "sha256-xatxoSwAIHiUA03vvBdM8HSW27vhPLvAxEuGK0gLiio=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -63,6 +54,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libical
+    libportal-gtk3
   ];
 
   postPatch = ''

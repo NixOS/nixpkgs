@@ -1,19 +1,20 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , squashfsTools
+, alsa-lib
 , fetchurl
 , makeDesktopItem
 , makeWrapper
 , stdenv
 , lib
+, libsecret
+, mesa
 , udev
 , wrapGAppsHook
-, libxshmfence
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "7.56.1";
+  version = "8.1.2";
 
   src = fetchurl {
     # find the latest version with
@@ -22,8 +23,8 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_144.snap";
-    sha512 = "aad9ab72ad3dcbb897fa99139b83993770c243f49e8784c34ac38603f0d76578374723e756c4f51ea2d0a39f6b9c7738e7ce070a8ddfa11f8cf831260563f6d9";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_167.snap";
+    hash = "sha512-M/cyLfSnoCFJcdGXlA5/kH/MuyRpYcfBoyp6y6KSsTyh8Goq6niGZAQcCdIjNX8KVUvmcTWISsx8so4W5BrkCw==";
   };
 
   desktopItem = makeDesktopItem {
@@ -41,9 +42,14 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
+  # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
 
-  buildInputs = atomEnv.packages ++ [ libxshmfence ];
+  buildInputs = [
+    alsa-lib
+    libsecret
+    mesa
+  ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -79,5 +85,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ Br1ght0ne th0rgal ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "termius-app";
   };
 }

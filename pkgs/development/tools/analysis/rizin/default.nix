@@ -1,4 +1,5 @@
 { lib
+, pkgs # for passthru.plugins
 , stdenv
 , fetchurl
 , pkg-config
@@ -8,11 +9,12 @@
 , perl
 , zlib
 , openssl
-, libuv
 , file
+, libmspack
 , libzip
 , lz4
 , xxHash
+, xz
 , meson
 , python3
 , cmake
@@ -21,13 +23,13 @@
 , tree-sitter
 }:
 
-stdenv.mkDerivation rec {
+let rizin = stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.5.2";
+  version = "0.6.3";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    hash = "sha256-cauA/DyKycgKEAANg4EoryigXTGg7hg5AMLFxuNQ7KM=";
+    hash = "sha256-lfZMarnm2qnp+lY0OY649s206/LoFNouTLlp0x9FCcI=";
   };
 
   mesonFlags = [
@@ -35,11 +37,22 @@ stdenv.mkDerivation rec {
     "-Duse_sys_magic=enabled"
     "-Duse_sys_libzip=enabled"
     "-Duse_sys_zlib=enabled"
-    "-Duse_sys_xxhash=enabled"
     "-Duse_sys_lz4=enabled"
+    "-Duse_sys_lzma=enabled"
+    "-Duse_sys_xxhash=enabled"
     "-Duse_sys_openssl=enabled"
+    "-Duse_sys_libmspack=enabled"
     "-Duse_sys_tree_sitter=enabled"
+    # this is needed for wrapping (adding plugins) to work
+    "-Dportable=true"
   ];
+
+  # Normally, Rizin only looks for files in the install prefix. With
+  # portable=true, it instead looks for files in relation to the parent
+  # of the directory of the binary file specified in /proc/self/exe,
+  # caching it. This patch replaces the entire logic to only look at
+  # the env var NIX_RZ_PREFIX
+  patches = [ ./librz-wrapper-support.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -77,9 +90,10 @@ stdenv.mkDerivation rec {
     zlib
     lz4
     openssl
-    libuv
+    libmspack
     tree-sitter
     xxHash
+    xz
   ];
 
   postPatch = ''
@@ -90,11 +104,31 @@ stdenv.mkDerivation rec {
       --replace "import('python').find_installation()" "find_program('python3')"
   '';
 
+  passthru = rec {
+    plugins = {
+      jsdec = pkgs.callPackage ./jsdec.nix {
+        inherit rizin openssl;
+      };
+      rz-ghidra = pkgs.qt6.callPackage ./rz-ghidra.nix {
+        inherit rizin openssl;
+        enableCutterPlugin = false;
+      };
+      # sigdb isn't a real plugin, but it's separated from the main rizin
+      # derivation so that only those who need it will download it
+      sigdb = pkgs.callPackage ./sigdb.nix { };
+    };
+    withPlugins = filter: pkgs.callPackage ./wrapper.nix {
+      inherit rizin;
+      plugins = filter plugins;
+    };
+  };
+
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset.";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "rizin";
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
     platforms = with lib.platforms; unix;
   };
-}
+}; in rizin

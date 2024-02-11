@@ -24,7 +24,7 @@ if [[ $# -ne 1 ]]; then
     )
 fi
 old_version=$(sed -nE 's/.*\bversion = "(.*)".*/\1/p' ./default.nix)
-if grep -q 'cargoSha256 = ""' ./default.nix; then
+if grep -q 'cargoHash = ""' ./default.nix; then
     old_version='broken'
 fi
 if [[ "$version" == "$old_version" ]]; then
@@ -34,10 +34,10 @@ echo "$old_version -> $version"
 
 # update hashes
 sed -E 's/\bversion = ".*?"/version = "'$version'"/' --in-place "$nixFile"
-srcHash=$(nix-prefetch-github vadimcn vscode-lldb --rev "v$version" | jq --raw-output .sha256)
-sed -E 's#\bsha256 = ".*?"#sha256 = "'$srcHash'"#' --in-place "$nixFile"
+srcHash=$(nix-prefetch-github vadimcn vscode-lldb --rev "v$version" | jq --raw-output .hash)
+sed -E 's#\bhash = ".*?"#hash = "'$srcHash'"#' --in-place "$nixFile"
 cargoHash=$(nix-prefetch "{ sha256 }: (import $nixpkgs {}).vscode-extensions.vadimcn.vscode-lldb.adapter.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
-sed -E 's#\bcargoSha256 = ".*?"#cargoSha256 = "'$cargoHash'"#' --in-place "$nixFile"
+sed -E 's#\bcargoHash = ".*?"#cargoHash = "'$cargoHash'"#' --in-place "$nixFile"
 
 pushd $TMPDIR
 curl -LO https://raw.githubusercontent.com/$owner/$repo/v${version}/package-lock.json

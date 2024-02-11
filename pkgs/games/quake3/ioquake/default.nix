@@ -1,44 +1,51 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, which
 , pkg-config
+, which
+, copyDesktopItems
+, makeBinaryWrapper
 , SDL2
 , libGL
-, openalSoft
+, openal
 , curl
 , speex
 , opusfile
 , libogg
 , libvorbis
-, libopus
 , libjpeg
-, mumble
+, makeDesktopItem
 , freetype
+, mumble
 }:
 
 stdenv.mkDerivation {
   pname = "ioquake3";
-  version = "unstable-2022-11-24";
+  version = "unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "70d07d91d62dcdd2f2268d1ac401bfb697b4c991";
-    sha256 = "sha256-WDjR0ik+xAs6OA1DNbUGIF1MXSuEoy8nNkPiHaegfF0=";
+    rev = "ee950eb7b0e41437cc23a9943254c958da8a61ab";
+    sha256 = "sha256-NfhInwrtw85i2mnv7EtBrrpNaslaQaVhLNlK0I9aYto=";
   };
 
-  nativeBuildInputs = [ which pkg-config ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeBinaryWrapper
+    pkg-config
+    which
+  ];
+
   buildInputs = [
     SDL2
     libGL
-    openalSoft
+    openal
     curl
     speex
     opusfile
     libogg
     libvorbis
-    libopus
     libjpeg
     freetype
     mumble
@@ -46,21 +53,38 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "USE_INTERNAL_LIBS=0" "USE_FREETYPE=1" "USE_OPENAL_DLOPEN=0" "USE_CURL_DLOPEN=0" ];
+  preConfigure = ''
+    cp ${./Makefile.local} ./Makefile.local
+  '';
 
   installTargets = [ "copyfiles" ];
 
-  installFlags = [ "COPYDIR=$(out)" "COPYBINDIR=$(out)/bin" ];
+  installFlags = [ "COPYDIR=$(out)/share/ioquake3" ];
 
-  preInstall = ''
-    mkdir -p $out/baseq3 $out/bin
+  postInstall = ''
+    install -Dm644 misc/quake3.svg $out/share/icons/hicolor/scalable/apps/ioquake3.svg
+
+    makeWrapper $out/share/ioquake3/ioquake3.* $out/bin/ioquake3
+    makeWrapper $out/share/ioquake3/ioq3ded.* $out/bin/ioq3ded
   '';
 
-  meta = with lib; {
+  desktopItems = [
+    (makeDesktopItem {
+      name = "IOQuake3";
+      exec = "ioquake3";
+      icon = "ioquake3";
+      comment = "A fast-paced 3D first-person shooter, a community effort to continue supporting/developing id's Quake III Arena";
+      desktopName = "ioquake3";
+      categories = [ "Game" "ActionGame" ];
+    })
+  ];
+
+  meta = {
     homepage = "https://ioquake3.org/";
-    description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rvolosatovs eelco abbradar ];
+    description = "A fast-paced 3D first-person shooter, a community effort to continue supporting/developing id's Quake III Arena";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "ioquake3";
+    maintainers = with lib.maintainers; [ abbradar drupol eelco rvolosatovs ];
+    platforms = lib.platforms.linux;
   };
 }

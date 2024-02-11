@@ -64,15 +64,28 @@ let
     systemd
   ];
 
+  version = "2023.6";
+
+  selectSystem = attrs: attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  platform = selectSystem {
+    x86_64-linux = "amd64";
+    aarch64-linux = "arm64";
+  };
+
+  hash = selectSystem {
+    x86_64-linux = "sha256-IhE93NXX8iwlvso+ei9wbVyJJLtkjrZf8qB43AZre+4=";
+    aarch64-linux = "sha256-HRAGDps0Cf7qOWTS7die9uouxMpAaM83t1Ixz7ElF6g=";
+  };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mullvad-vpn";
-  version = "2023.3";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
-    sha256 = "sha256-+XK9xUeSs93egmtsQ7qATug/n9taeQkmc4ZgObPYvn4=";
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_${platform}.deb";
+    inherit hash;
   };
 
   nativeBuildInputs = [
@@ -114,13 +127,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
   };
 

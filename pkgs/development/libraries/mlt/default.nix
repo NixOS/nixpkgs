@@ -1,55 +1,129 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, SDL, ffmpeg_4, frei0r, libjack2, libdv, libsamplerate, libexif
-, libvorbis, libxml2, movit, pkg-config, sox, fftw, opencv4, SDL2
-, gtk2, gitUpdater, libebur128, rubberband
-, jack2, ladspa-sdk, swig, which, ncurses
-, enablePython ? false, python3
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, which
+, ffmpeg
+, fftw
+, frei0r
+, libdv
+, libjack2
+, libsamplerate
+, libvorbis
+, libxml2
+, makeWrapper
+, movit
+, opencv4
+, rtaudio
+, rubberband
+, sox
+, vid-stab
+, darwin
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+, enableJackrack ? stdenv.isLinux
+, glib
+, ladspa-sdk
+, ladspaPlugins
+, enablePython ? false
+, python3
+, swig
+, qt ? null
+, enableSDL1 ? stdenv.isLinux
+, SDL
+, enableSDL2 ? true
+, SDL2
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "6.26.0";
+  version = "7.22.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "FPXROiX7A6oB1VMipw3slyhk7q4fO6m9amohnC67lnA=";
+    hash = "sha256-vJKpeEdQIWBQRRdDui5ibSZtD8qUlDZBD+UQE+0cQqk=";
   };
 
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    which
+    makeWrapper
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ] ++ lib.optionals enablePython [
+    python3
+    swig
+  ] ++ lib.optionals (qt != null) [
+    qt.wrapQtAppsHook
+  ];
+
   buildInputs = [
-    SDL ffmpeg_4 frei0r libjack2 libdv libsamplerate libvorbis libxml2.dev
-    movit sox libexif gtk2 fftw libebur128 opencv4 SDL2 jack2
-    ladspa-sdk rubberband
-  ] ++ lib.optional enablePython ncurses;
+    ffmpeg
+    fftw
+    frei0r
+    libdv
+    libjack2
+    libsamplerate
+    libvorbis
+    libxml2
+    movit
+    opencv4
+    rtaudio
+    rubberband
+    sox
+    vid-stab
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Accelerate
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ] ++ lib.optionals enableJackrack [
+    glib
+    ladspa-sdk
+    ladspaPlugins
+  ] ++ lib.optionals (qt != null) [
+    qt.qtbase
+    qt.qtsvg
+    (qt.qt5compat or null)
+  ] ++ lib.optionals enableSDL1 [
+    SDL
+  ] ++ lib.optionals enableSDL2 [
+    SDL2
+  ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper which ]
-  ++ lib.optionals enablePython [ python3 swig ];
+  outputs = [ "out" "dev" ];
 
-  strictDeps = true;
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMOD_OPENCV=ON"
+  ] ++ lib.optionals enablePython [
+    "-DSWIG_PYTHON=ON"
+  ] ++ lib.optionals (qt != null) [
+    "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
+  ];
 
-  # Mostly taken from:
-  # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
-  configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl3" "--enable-opengl"
-  ] ++ lib.optional enablePython "--swig-languages=python";
+  preFixup = ''
+    wrapProgram $out/bin/melt \
+      --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
+      ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
+      ${lib.optionalString (qt != null) "\${qtWrapperArgs[@]}"}
 
-  enableParallelBuilding = true;
-  outPythonPath = lib.optionalString enablePython "$(toPythonPath $out)";
-
-  postInstall = ''
-    wrapProgram $out/bin/melt --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
-
-    # Remove an unnecessary reference to movit.dev.
-    s=${movit.dev}/include
-    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
-    sed -i $out/lib/mlt/libmltopengl.so -e "s|$s|$t|g"
-  '' + lib.optionalString enablePython ''
-    mkdir -p ${outPythonPath}/mlt
-    cp -a src/swig/python/_mlt.so ${outPythonPath}/mlt/
-    cp -a src/swig/python/mlt.py ${outPythonPath}/mlt/__init__.py
-    sed -i ${outPythonPath}/mlt/__init__.py -e "s|return importlib.import_module('_mlt')|return importlib.import_module('mlt._mlt')|g"
   '';
+
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
+  passthru = {
+    inherit ffmpeg;
+  };
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -57,9 +131,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    homepage = "https://www.mltframework.org";
-    license = with licenses; [ gpl3Only gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ peti ];
-    platforms = platforms.linux;
+    homepage = "https://www.mltframework.org/";
+    license = with licenses; [ lgpl21Plus gpl2Plus ];
+    maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.unix;
   };
 }

@@ -2,12 +2,12 @@
 , licenseAccepted ? false
 }:
 
-{ cmdLineToolsVersion ? "9.0"
+{ cmdLineToolsVersion ? "11.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "34.0.1"
-, buildToolsVersions ? [ "33.0.2" ]
+, platformToolsVersion ? "34.0.5"
+, buildToolsVersions ? [ "34.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "33.1.6"
+, emulatorVersion ? "34.1.9"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -15,7 +15,7 @@
 , abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "25.2.9519653"
+, ndkVersion ? "26.1.10909125"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -151,7 +151,7 @@ rec {
     postInstall = ''
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
       ${linkPlugin { name = "patcher"; plugin = patcher; }}
-      ${linkPlugin { name = "emulator"; plugin = emulator; }}
+      ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
     '';
   };
 
@@ -171,14 +171,14 @@ rec {
     }
   ) buildToolsVersions;
 
-  emulator = callPackage ./emulator.nix {
+  emulator = lib.optionals includeEmulator (callPackage ./emulator.nix {
     inherit deployAndroidPackage os;
     package = check-version packages "emulator" emulatorVersion;
 
     postInstall = ''
       ${linkSystemImages { images = system-images; check = includeSystemImages; }}
     '';
-  };
+  });
 
   platforms = map (version:
     deployAndroidPackage {
@@ -314,6 +314,8 @@ rec {
       '') plugins}
     ''; # */
 
+  cmdline-tools-package = check-version packages "cmdline-tools" cmdLineToolsVersion;
+
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
   # requested and throws.
@@ -329,9 +331,9 @@ rec {
       by an environment variable for a single invocation of the nix tools.
         $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
   '' else callPackage ./cmdline-tools.nix {
-    inherit deployAndroidPackage os cmdLineToolsVersion;
+    inherit deployAndroidPackage os;
 
-    package = check-version packages "cmdline-tools" cmdLineToolsVersion;
+    package = cmdline-tools-package;
 
     postInstall = ''
       # Symlink all requested plugins
@@ -371,11 +373,13 @@ rec {
           ln -s $i $out/bin
       done
 
-      for i in ${emulator}/bin/*; do
-          ln -s $i $out/bin
-      done
+      ${lib.optionalString includeEmulator ''
+        for i in ${emulator}/bin/*; do
+            ln -s $i $out/bin
+        done
+      ''}
 
-      find $ANDROID_SDK_ROOT/cmdline-tools/${cmdLineToolsVersion}/bin -type f -executable | while read i; do
+      find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
           ln -s $i $out/bin
       done
 

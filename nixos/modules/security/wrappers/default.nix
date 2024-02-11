@@ -5,8 +5,29 @@ let
 
   parentWrapperDir = dirOf wrapperDir;
 
-  securityWrapper = pkgs.callPackage ./wrapper.nix {
-    inherit parentWrapperDir;
+  # This is security-sensitive code, and glibc vulns happen from time to time.
+  # musl is security-focused and generally more minimal, so it's a better choice here.
+  # The dynamic linker is still a fairly complex piece of code, and the wrappers are
+  # quite small, so linking it statically is more appropriate.
+  securityWrapper = sourceProg : pkgs.pkgsStatic.callPackage ./wrapper.nix {
+    inherit sourceProg;
+
+    # glibc definitions of insecure environment variables
+    #
+    # We extract the single header file we need into its own derivation,
+    # so that we don't have to pull full glibc sources to build wrappers.
+    #
+    # They're taken from pkgs.glibc so that we don't have to keep as close
+    # an eye on glibc changes. Not every relevant variable is in this header,
+    # so we maintain a slightly stricter list in wrapper.c itself as well.
+    unsecvars = lib.overrideDerivation (pkgs.srcOnly pkgs.glibc)
+      ({ name, ... }: {
+        name = "${name}-unsecvars";
+        installPhase = ''
+          mkdir $out
+          cp sysdeps/generic/unsecvars.h $out
+        '';
+      });
   };
 
   fileModeType =
@@ -91,8 +112,7 @@ let
     , ...
     }:
     ''
-      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
-      echo -n "${source}" > "$wrapperDir/${program}.real"
+      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
@@ -119,8 +139,7 @@ let
     , ...
     }:
     ''
-      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
-      echo -n "${source}" > "$wrapperDir/${program}.real"
+      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
@@ -248,39 +267,48 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
-    security.apparmor.includes."nixos/security.wrappers" = ''
-      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers"; } [
-        securityWrapper
+    security.apparmor.includes = lib.mapAttrs' (wrapName: wrap: lib.nameValuePair
+     "nixos/security.wrappers/${wrapName}" ''
+      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers.${wrapName}"; } [
+        (securityWrapper wrap.source)
       ]}"
-    '';
+      mrpx ${wrap.source},
+    '') wrappers;
 
-    ###### wrappers activation script
-    system.activationScripts.wrappers =
-      lib.stringAfter [ "specialfs" "users" ]
-        ''
-          chmod 755 "${parentWrapperDir}"
+    systemd.services.suid-sgid-wrappers = {
+      description = "Create SUID/SGID Wrappers";
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      after = [ "systemd-sysusers.service" ];
+      unitConfig.DefaultDependencies = false;
+      unitConfig.RequiresMountsFor = [ "/nix/store" "/run/wrappers" ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        chmod 755 "${parentWrapperDir}"
 
-          # We want to place the tmpdirs for the wrappers to the parent dir.
-          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-          chmod a+rx "$wrapperDir"
+        # We want to place the tmpdirs for the wrappers to the parent dir.
+        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+        chmod a+rx "$wrapperDir"
 
-          ${lib.concatStringsSep "\n" mkWrappedPrograms}
+        ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
-          if [ -L ${wrapperDir} ]; then
-            # Atomically replace the symlink
-            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-            old=$(readlink -f ${wrapperDir})
-            if [ -e "${wrapperDir}-tmp" ]; then
-              rm --force --recursive "${wrapperDir}-tmp"
-            fi
-            ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
-            mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
-            rm --force --recursive "$old"
-          else
-            # For initial setup
-            ln --symbolic "$wrapperDir" "${wrapperDir}"
+        if [ -L ${wrapperDir} ]; then
+          # Atomically replace the symlink
+          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+          old=$(readlink -f ${wrapperDir})
+          if [ -e "${wrapperDir}-tmp" ]; then
+            rm --force --recursive "${wrapperDir}-tmp"
           fi
-        '';
+          ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+          mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+          rm --force --recursive "$old"
+        else
+          # For initial setup
+          ln --symbolic "$wrapperDir" "${wrapperDir}"
+        fi
+      '';
+    };
 
     ###### wrappers consistency checks
     system.checks = lib.singleton (pkgs.runCommandLocal

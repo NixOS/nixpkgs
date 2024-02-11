@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -220,6 +220,12 @@ in
           in this case you can disable the failing check with this option.
         '';
       };
+
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "Additional command line arguments to pass on logrotate invocation";
+      };
     };
   };
 
@@ -231,7 +237,7 @@ in
       serviceConfig = {
         Restart = "no";
         User = "root";
-        ExecStart = "${pkgs.logrotate}/sbin/logrotate ${mailOption} ${cfg.configFile}";
+        ExecStart = "${pkgs.logrotate}/sbin/logrotate ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
       };
     };
     systemd.services.logrotate-checkconf = {
@@ -240,7 +246,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.logrotate}/sbin/logrotate --debug ${cfg.configFile}";
+        ExecStart = "${pkgs.logrotate}/sbin/logrotate ${utils.escapeSystemdExecArgs cfg.extraArgs} --debug ${cfg.configFile}";
       };
     };
   };

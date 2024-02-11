@@ -7,6 +7,8 @@
 , ninja
 , fixedPoint ? false
 , withCustomModes ? true
+, withIntrinsics ? stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86
+, withAsm ? false
 
 # tests
 , ffmpeg-headless
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-pkg-config-paths.patch
+    # Some tests time out easily on slower machines
+    ./test-timeout.patch
     # Fix meson build for arm64. Remove with next release
     # https://gitlab.xiph.org/xiph/opus/-/merge_requests/59
     (fetchpatch {
@@ -46,7 +50,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonBool "fixed-point" fixedPoint)
     (lib.mesonBool "custom-modes" withCustomModes)
-    (lib.mesonEnable "asm" false)
+    (lib.mesonEnable "intrinsics" withIntrinsics)
+    (lib.mesonEnable "rtcd" (withIntrinsics || withAsm))
+    (lib.mesonEnable "asm" withAsm)
     (lib.mesonEnable "docs" false)
   ];
 

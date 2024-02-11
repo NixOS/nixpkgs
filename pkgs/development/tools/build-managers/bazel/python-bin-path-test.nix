@@ -3,6 +3,7 @@
 , bazelTest
 , stdenv
 , darwin
+, extraBazelArgs ? ""
 , lib
 , runLocal
 , runtimeShell
@@ -51,6 +52,7 @@ let
     py_binary(
       name = "bin",
       srcs = [ "bin.py" ],
+      imports = [ "." ],
       deps = [ ":lib" ],
     )
   '';
@@ -76,6 +78,7 @@ let
       ${bazel}/bin/bazel \
         run \
         --distdir=${distDir} \
+        ${extraBazelArgs} \
         //python:bin
     '';
   };

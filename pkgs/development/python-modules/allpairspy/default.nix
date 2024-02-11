@@ -1,25 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "allpairspy";
-  version = "2.5.0";
+  version = "2.5.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9358484c91abe74ba18daf9d6d6904c5be7cc8818397d05248c9d336023c28b1";
+  src = fetchFromGitHub {
+    owner = "thombashi";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0wzoQDHB7Tt80ZTlKrNxFutztsgUuin5D2eb80c4PBI=";
   };
 
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [
+    "allpairspy"
+  ];
 
   meta = with lib; {
     description = "Pairwise test combinations generator";
     homepage = "https://github.com/thombashi/allpairspy";
+    changelog = "https://github.com/thombashi/allpairspy/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
   };
 }

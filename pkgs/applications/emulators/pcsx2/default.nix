@@ -1,34 +1,34 @@
 { cmake
 , fetchFromGitHub
 , lib
-, stdenv
+, llvmPackages_17
 , cubeb
 , curl
+, extra-cmake-modules
 , ffmpeg
-, fmt
-, gettext
-, harfbuzz
 , libaio
 , libbacktrace
 , libpcap
-, libsamplerate
+, libwebp
 , libXrandr
 , libzip
+, lz4
+, makeWrapper
 , pkg-config
 , qtbase
 , qtsvg
 , qttools
-, qttranslations
 , qtwayland
-, rapidyaml
 , SDL2
 , soundtouch
+, strip-nondeterminism
 , vulkan-headers
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
 , xz
 , zip
+, zstd
 }:
 
 let
@@ -36,54 +36,61 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "8db5ae467a35cc00dc50a65061aa78dc5115e6d1";
-    sha256 = "sha256-68kD7IAhBMASFmkGwvyQ7ppO/3B1csAKik+rU792JI4=";
+    rev = "189f79d73f8cd9fd85c7394a14ee4419ddfa267b";
+    sha256 = "sha256-gxwAxR7N7QU4sTGHTdd656dmsW8MrcfroYPvv2UoeRc=";
   };
 in
-stdenv.mkDerivation rec {
+llvmPackages_17.stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.4554";
+  version = "1.7.5497";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-9MRbpm7JdVmZwv8zD4lErzVTm7A4tYM0FgXE9KpX+/8=";
+    sha256 = "sha256-gbJkeelSyEHwD4DH/hbzPNNv47hmdgc4kyvX38txYhc=";
   };
 
-  cmakeFlags = [
-    "-DDISABLE_ADVANCE_SIMD=TRUE"
-    "-DUSE_SYSTEM_LIBS=ON"
-    "-DDISABLE_BUILD_DATE=TRUE"
+  patches = [
+    ./define-rev.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook zip ];
+  cmakeFlags = [
+    "-DDISABLE_ADVANCE_SIMD=ON"
+    "-DUSE_LINKED_FFMPEG=ON"
+    "-DPCSX2_GIT_REV=v${version}"
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    strip-nondeterminism
+    wrapQtAppsHook
+    zip
+  ];
 
   buildInputs = [
     curl
     ffmpeg
-    fmt
-    gettext
-    harfbuzz
     libaio
     libbacktrace
     libpcap
-    libsamplerate
+    libwebp
     libXrandr
     libzip
+    lz4
     qtbase
     qtsvg
     qttools
-    qttranslations
     qtwayland
-    rapidyaml
     SDL2
     soundtouch
     vulkan-headers
-    vulkan-loader
     wayland
     xz
+    zstd
   ]
   ++ cubeb.passthru.backendLibs;
 
@@ -91,18 +98,29 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -a bin/pcsx2-qt bin/resources $out/bin/
 
-    install -Dm644 $src/pcsx2/Resources/AppIcon64.png $out/share/pixmaps/PCSX2.png
+    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
     zip -jq $out/bin/resources/patches.zip ${pcsx2_patches}/patches/*
+    strip-nondeterminism $out/bin/resources/patches.zip
   '';
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([
-      ffmpeg # It's loaded with dlopen. They plan to change it https://github.com/PCSX2/pcsx2/issues/8624
-      vulkan-loader
-    ] ++ cubeb.passthru.backendLibs)}"
-  ];
+  qtWrapperArgs =
+    let
+      libs = lib.makeLibraryPath ([
+        vulkan-loader
+      ] ++ cubeb.passthru.backendLibs);
+    in [
+      "--prefix LD_LIBRARY_PATH : ${libs}"
+    ];
+
+  # https://github.com/PCSX2/pcsx2/pull/10200
+  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
+  postFixup = ''
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/pcsx2-qt \
+      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
+  '';
 
   meta = with lib; {
     description = "Playstation 2 emulator";

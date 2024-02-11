@@ -12,7 +12,6 @@
 , glib
 , gtksourceview5
 , wrapGAppsHook4
-, gobject-introspection
 , gnome
 , mpfr
 , gmp
@@ -25,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "44.0";
+  version = "45.0.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "FOdjMp+IMJp+FSeA1XNhtUMQDjI5BrNOBlX9wxW3EEM=";
+    sha256 = "fcvzI4SJcXHL5Ug+xmTZlOXnVekSrh35EWJPA8kIZ8I=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook4
-    gobject-introspection # for finding vapi files
   ];
 
   buildInputs = [

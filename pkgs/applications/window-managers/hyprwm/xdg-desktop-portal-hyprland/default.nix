@@ -1,55 +1,77 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, makeWrapper
-, meson
-, ninja
+, cmake
 , pkg-config
+, wayland-scanner
+, makeWrapper
+, wrapQtAppsHook
 , hyprland-protocols
-, hyprland-share-picker
-, inih
+, hyprlang
 , libdrm
-, libuuid
 , mesa
 , pipewire
+, qtbase
+, qttools
+, qtwayland
+, sdbus-cpp
 , systemd
 , wayland
 , wayland-protocols
-, wayland-scanner
+, hyprland
+, hyprpicker
+, slurp
 }:
-let
-  source = import ./source.nix { inherit lib fetchFromGitHub wayland; };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
-  inherit (source) src version meta;
+  version = "1.3.1";
 
-  strictDeps = true;
-  depsBuildBuild = [ pkg-config ];
+  src = fetchFromGitHub {
+    owner = "hyprwm";
+    repo = "xdg-desktop-portal-hyprland";
+    rev = "v${self.version}";
+    hash = "sha256-wP611tGIWBA4IXShWbah7TxqdbvhfcfT2vnXalX/qzk=";
+  };
+
   nativeBuildInputs = [
-    makeWrapper
-    meson
-    ninja
+    cmake
     pkg-config
     wayland-scanner
+    makeWrapper
+    wrapQtAppsHook
   ];
+
   buildInputs = [
     hyprland-protocols
-    inih
+    hyprlang
     libdrm
-    libuuid
     mesa
     pipewire
+    qtbase
+    qttools
+    qtwayland
+    sdbus-cpp
     systemd
     wayland
     wayland-protocols
   ];
 
-  mesonFlags = [
-    "-Dsd-bus-provider=libsystemd"
-  ];
+  dontWrapQtApps = true;
 
   postInstall = ''
-    wrapProgram $out/libexec/xdg-desktop-portal-hyprland --prefix PATH ":" ${lib.makeBinPath [hyprland-share-picker]}
+    wrapProgramShell $out/bin/hyprland-share-picker \
+      "''${qtWrapperArgs[@]}" \
+      --prefix PATH ":" ${lib.makeBinPath [slurp hyprland]}
+
+    wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
+      --prefix PATH ":" ${lib.makeBinPath [(placeholder "out") hyprpicker]}
   '';
-}
+
+  meta = with lib; {
+    homepage = "https://github.com/hyprwm/xdg-desktop-portal-hyprland";
+    description = "xdg-desktop-portal backend for Hyprland";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fufexan ];
+    platforms = platforms.linux;
+  };
+})

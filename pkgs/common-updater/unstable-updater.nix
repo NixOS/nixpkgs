@@ -12,6 +12,7 @@
 , branch ? null
 , stableVersion ? false # Use version format according to RFC 107 (i.e. LAST_TAG+date=YYYY-MM-DD)
 , tagPrefix ? "" # strip this prefix from a tag name when using stable version
+, shallowClone ? true
 }:
 
 let
@@ -22,6 +23,7 @@ let
     branch=""
     use_stable_version=""
     tag_prefix=""
+    shallow_clone=""
 
     while (( $# > 0 )); do
         flag="$1"
@@ -38,6 +40,9 @@ let
             ;;
           --tag-prefix=*)
             tag_prefix="''${flag#*=}"
+            ;;
+          --shallow-clone)
+            shallow_clone=1
             ;;
           *)
             echo "$0: unknown option ‘''${flag}’"
@@ -58,8 +63,11 @@ let
 
     cloneArgs=(
       --bare
-      --depth=1
     )
+
+    if [[ "$shallow_clone" == "1" ]]; then
+        cloneArgs+=(--depth=1)
+    fi
 
     if [[ -n "$branch" ]]; then
         cloneArgs+=(--branch="$branch")
@@ -101,7 +109,8 @@ let
         --rev="$commit_sha"
   '';
 
-in [
+in
+[
   updateScript
   "--url=${builtins.toString url}"
 ] ++ lib.optionals (branch != null) [
@@ -109,4 +118,6 @@ in [
 ] ++ lib.optionals stableVersion [
   "--use-stable-version"
   "--tag-prefix=${tagPrefix}"
+] ++ lib.optionals shallowClone [
+  "--shallow-clone"
 ]

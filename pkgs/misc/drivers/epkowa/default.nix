@@ -287,6 +287,38 @@ let plugins = {
     };
     meta = common_meta // { description = "iscan GT-X750 for " + passthru.hw; };
   };
+  gt1500 = stdenv.mkDerivation rec {
+    name = "iscan-gt-1500-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/gt-1500/rpm/x64/iscan-gt-1500-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "sha256-1rVsbBsb+QtCOT1FsyhgvCbZIN6IeQH7rZXNmsD7cl8=";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-1500-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x0133 "$plugin/lib/esci/libesint86 $plugin/share/esci/esfw86.bin"
+      '';
+      hw = "GT-1500";
+    };
+    meta = common_meta // { description = "iscan GT-1500 for " + passthru.hw; };
+  };
   network = stdenv.mkDerivation rec {
     pname = "iscan-nt-bundle";
     # for the version, look for the driver of XP-750 in the search page

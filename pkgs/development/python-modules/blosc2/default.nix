@@ -3,11 +3,13 @@
 , fetchFromGitHub
 
 # build-system
-, setuptools
-, scikit-build
-, cython
 , cmake
+, cython_3
 , ninja
+, oldest-supported-numpy
+, scikit-build
+, setuptools
+, wheel
 
 # propagates
 , msgpack
@@ -24,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "2.1.1";
+  version = "2.3.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -32,7 +34,7 @@ buildPythonPackage rec {
     repo = "python-blosc2";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-nbPMLkTye0/Q05ubE35LssN677sUIQErPTxjAtSuGgI=";
+    hash = "sha256-tRcyntJlmLPbqnX7nzdBQ/50uXy0fVLb2YGVOIwJjxU=";
   };
 
   postPatch = ''
@@ -42,11 +44,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_3
     ninja
-    numpy
+    oldest-supported-numpy
     scikit-build
     setuptools
+    wheel
   ];
 
   dontUseCmakeConfigure = true;

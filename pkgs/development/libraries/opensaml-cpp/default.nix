@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "A low-level library written in C++ that provides support for producing and consuming SAML messages";
     platforms   = platforms.unix;
     license     = licenses.asl20;
-    maintainers = [ maintainers.jammerful ];
+    maintainers = [ ];
   };
 }

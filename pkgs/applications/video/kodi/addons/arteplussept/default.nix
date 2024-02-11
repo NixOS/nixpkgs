@@ -3,11 +3,11 @@
 buildKodiAddon rec {
   pname = "arteplussept";
   namespace = "plugin.video.arteplussept";
-  version = "1.1.10";
+  version = "1.4.2";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    hash = "sha256-EDpoeS9FnFsn6jvg6EFKr089YixKipLi9yzxdi7YUmA=";
+    hash = "sha256-dqxGKaOnEYOI33Aw76zbjma5z7MqOUh367dFsV87olU=";
   };
 
   propagatedBuildInputs = [

@@ -147,7 +147,7 @@ in
               name = "zope2-${name}-env";
               paths = [
                 pkgs.python27
-                pkgs.python27Packages.recursivePthLoader
+                pkgs.python27Packages.recursive-pth-loader
                 pkgs.python27Packages."plone.recipe.zope2instance"
               ] ++ attrValues pkgs.python27.modules
                 ++ opts.packages;

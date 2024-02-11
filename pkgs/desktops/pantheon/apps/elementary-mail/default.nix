@@ -10,7 +10,10 @@
 , gtk3
 , libxml2
 , libhandy
+, libportal-gtk3
 , webkitgtk_4_1
+, elementary-gtk-theme
+, elementary-icon-theme
 , folks
 , glib-networking
 , granite
@@ -21,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "7.1.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-dvDlvn8KvFmiP/NClRtHNEs5gPTUjlzgTYmgIaCfoLw=";
+    sha256 = "sha256-hBOogZ9ZNS9KnuNn+jNhTtlupBxZL2DG/CiuBR1kFu0=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-icon-theme
     evolution-data-server
     folks
     glib-networking
@@ -48,12 +52,22 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libhandy
+    libportal-gtk3
     webkitgtk_4_1
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
   '';
 
   passthru = {

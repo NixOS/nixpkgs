@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "pyinotify";
   version = "0.9.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

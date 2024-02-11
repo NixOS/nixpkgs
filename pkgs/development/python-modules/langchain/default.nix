@@ -1,100 +1,70 @@
 { lib
+, bash
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , poetry-core
-, numpy
-, pyyaml
-, sqlalchemy
-, requests
-, async-timeout
 , aiohttp
-, numexpr
-, openapi-schema-pydantic
+, async-timeout
 , dataclasses-json
-, tqdm
+, jsonpatch
+, langsmith
+, langchain-core
+, langchain-community
+, numpy
+, pydantic
+, pyyaml
+, requests
+, sqlalchemy
 , tenacity
-, bash
   # optional dependencies
-, anthropic
+, azure-core
+, azure-cosmos
+, azure-identity
+, chardet
+, clarifai
 , cohere
-, openai
-, nlpcloud
+, esprima
 , huggingface-hub
+, lark
 , manifest-ml
-, torch
-, transformers
+, nlpcloud
+, openai
 , qdrant-client
 , sentence-transformers
-, azure-identity
-, azure-cosmos
-, azure-core
-, elasticsearch
-, opensearch-py
-, google-search-results
-, faiss
-, spacy
-, nltk
-, beautifulsoup4
 , tiktoken
-, jinja2
-, pinecone-client
-, weaviate-client
-, redis
-, google-api-python-client
-, pypdf
-, networkx
-, psycopg2
-, boto3
-, pyowm
-, pytesseract
-, html2text
-, atlassian-python-api
-, duckduckgo-search
-, lark
-, jq
-, steamship
-, pdfminer-six
-, lxml
-, chardet
-, requests-toolbelt
-, neo4j
-, langchainplus-sdk
+, torch
+, transformers
+, typer
   # test dependencies
-, pytest-vcr
+, freezegun
+, pandas
 , pytest-asyncio
 , pytest-mock
 , pytest-socket
-, pandas
+, pytestCheckHook
+, requests-mock
+, responses
 , syrupy
 , toml
-, freezegun
-, responses
-, pexpect
-, pytestCheckHook
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.207";
-  format = "pyproject";
+  version = "0.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "hwchase17";
+    owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/gPkgHcHHyFAhPF4hqEMkOaHV9Z1159ZdB2lwtsJEKE=";
+    hash = "sha256-cQz4u6FeVZLNbix4pyc6ulfj+nb/tARMJniusy7Q46A=";
   };
 
-  postPatch = ''
-    substituteInPlace langchain/utilities/bash.py \
-      --replace '"env", ["-i", "bash", ' '"${lib.getExe bash}", ['
-    substituteInPlace tests/unit_tests/test_bash.py \
-      --replace "/bin/sh" "${bash}/bin/sh"
-  '';
+  sourceRoot = "${src.name}/libs/langchain";
 
   nativeBuildInputs = [
     poetry-core
@@ -106,25 +76,28 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    numpy
-    pyyaml
+    langchain-core
+    langchain-community
+    pydantic
     sqlalchemy
     requests
+    pyyaml
+    numpy
     aiohttp
-    numexpr
-    openapi-schema-pydantic
-    dataclasses-json
-    tqdm
     tenacity
+    jsonpatch
+    dataclasses-json
+    langsmith
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
-  ] ++ passthru.optional-dependencies.all;
+  ];
 
   passthru.optional-dependencies = {
     llms = [
-      anthropic
+      clarifai
       cohere
       openai
+      # openlm
       nlpcloud
       huggingface-hub
       manifest-ml
@@ -136,9 +109,13 @@ buildPythonPackage rec {
     ];
     openai = [
       openai
+      tiktoken
     ];
     text_helpers = [
       chardet
+    ];
+    clarifai = [
+      clarifai
     ];
     cohere = [
       cohere
@@ -149,100 +126,45 @@ buildPythonPackage rec {
     embeddings = [
       sentence-transformers
     ];
+    javascript = [
+      esprima
+    ];
     azure = [
       azure-identity
       azure-cosmos
       openai
       azure-core
-    ];
-    all = [
-      anthropic
-      cohere
-      openai
-      nlpcloud
-      huggingface-hub
-      # jina
-      manifest-ml
-      elasticsearch
-      opensearch-py
-      google-search-results
-      faiss
-      sentence-transformers
-      transformers
-      spacy
-      nltk
-      # wikipedia
-      beautifulsoup4
-      tiktoken
-      torch
-      jinja2
-      pinecone-client
-      # pinecone-text
-      weaviate-client
-      redis
-      google-api-python-client
-      # wolframalpha
-      qdrant-client
-      # tensorflow-text
-      pypdf
-      networkx
-      # nomic
-      # aleph-alpha-client
-      # deeplake
-      # pgvector
-      psycopg2
-      boto3
-      pyowm
-      pytesseract
-      html2text
-      atlassian-python-api
-      # gptcache
-      duckduckgo-search
-      # arxiv
-      azure-identity
-      # clickhouse-connect
-      azure-cosmos
-      # lancedb
-      # langkit
-      lark
-      pexpect
-      # pyvespa
-      # O365
-      jq
-      # docarray
-      steamship
-      pdfminer-six
-      lxml
-      requests-toolbelt
-      neo4j
-      # openlm
       # azure-ai-formrecognizer
       # azure-ai-vision
       # azure-cognitiveservices-speech
-      langchainplus-sdk
+      # azure-search-documents
+      # azure-ai-textanalytics
+    ];
+    all = [
+    ];
+    cli = [
+      typer
     ];
   };
 
-  pythonRelaxDeps = [
-    "langchainplus-sdk"
-  ];
-
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-vcr
+    freezegun
+    lark
+    pandas
+    pytest-asyncio
     pytest-mock
     pytest-socket
-    pytest-asyncio
-    pandas
+    pytestCheckHook
+    requests-mock
+    responses
     syrupy
     toml
-    freezegun
-    responses
   ];
 
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
+    "--only-core"
   ];
 
   disabledTests = [
@@ -252,12 +174,19 @@ buildPythonPackage rec {
 
     # these tests have network access
     "test_socket_disabled"
+
+    # this test may require a specific version of langchain-community
+    "test_compatible_vectorstore_documentation"
+  ];
+
+  pythonImportsCheck = [
+    "langchain"
   ];
 
   meta = with lib; {
     description = "Building applications with LLMs through composability";
-    homepage = "https://github.com/hwchase17/langchain";
-    changelog = "https://github.com/hwchase17/langchain/releases/tag/v${version}";
+    homepage = "https://github.com/langchain-ai/langchain";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

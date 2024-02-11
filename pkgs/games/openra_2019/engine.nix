@@ -14,9 +14,7 @@
 , engine
 }:
 
-with lib;
-
-stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
+stdenv.mkDerivation (lib.recursiveUpdate packageAttrs rec {
   pname = "openra_2019";
   version = "${engine.name}-${engine.version}";
 
@@ -27,7 +25,7 @@ stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   configurePhase = ''
     runHook preConfigure
 
-    make version VERSION=${escapeShellArg version}
+    make version VERSION=${lib.escapeShellArg version}
 
     runHook postConfigure
   '';
@@ -48,7 +46,7 @@ stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   postInstall = ''
     ${wrapLaunchGame "" "openra"}
 
-    ${concatStrings (map (mod: ''
+    ${lib.concatStrings (map (mod: ''
       makeWrapper $out/bin/openra $out/bin/openra-${mod} --add-flags Game.Mod=${mod}
     '') engine.mods)}
   '';

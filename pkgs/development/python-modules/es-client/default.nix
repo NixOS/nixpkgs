@@ -2,6 +2,7 @@
 , buildPythonPackage
 , certifi
 , click
+, ecs-logging
 , elastic-transport
 , elasticsearch8
 , fetchFromGitHub
@@ -10,6 +11,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , requests
 , six
@@ -18,8 +20,8 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.7.0";
-  format = "pyproject";
+  version = "8.12.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,16 +29,20 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DJIo0yFJGR9gw5UJnmgnBFZx0uXUEW3rWT49jhfnXkQ=";
+    hash = "sha256-gaeNIxHnNulUOGhYHf9dIgBSh2rJIdsYdpPT8OTyEdg=";
   };
+
+  pythonRelaxDeps = true;
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     certifi
     click
+    ecs-logging
     elastic-transport
     elasticsearch8
     pyyaml
@@ -58,7 +64,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "test_bad_version_raises"
+    "test_basic_operation"
+    "test_basic_operation"
     "test_client_info"
+    "test_logging_options_ecs"
+    "test_logging_options_json"
     "test_multiple_hosts_raises"
     "test_non_dict_passed"
     "test_skip_version_check"

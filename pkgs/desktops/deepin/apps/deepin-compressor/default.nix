@@ -14,18 +14,19 @@
 , wrapQtAppsHook
 , minizip
 , libzip
+, libuuid
 , libarchive
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.15";
+  version = "5.12.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6grnbv9hMKntOmpVcmU5IpAbHM7r0dQWb+SoQYtc5YY=";
+    hash = "sha256-8qfpNM2rci4subdodxfJZLP3OvAxXl7QRl4MHGr15nA=";
   };
 
   postPatch = ''
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     karchive
     minizip
     libzip
+    libuuid
     libarchive
   ];
 

@@ -1,44 +1,57 @@
-{ stdenv, lib, fetchFromGitHub, meson, gettext, glib, gjs, ninja, python3, gtk3
-, webkitgtk, gsettings-desktop-schemas, wrapGAppsHook, desktop-file-utils
-, gobject-introspection, glib-networking }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, gettext
+, glib
+, gjs
+, ninja
+, gtk4
+, webkitgtk_6_0
+, gsettings-desktop-schemas
+, wrapGAppsHook4
+, desktop-file-utils
+, gobject-introspection
+, glib-networking
+, pkg-config
+, libadwaita
+}:
 
 stdenv.mkDerivation rec {
   pname = "foliate";
-  version = "2.6.4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "johnfactotum";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-Pr2YA2MHXD4W7lyCxGAVLKyoZarZ8t92RSkWle3LNuc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6cymAqQxHHoTgzEyUKXC7zV/lUEJfIG+54+tLsc9iHo=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
-
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
-  '';
-
-  postFixup = ''
-    sed -i "1 a imports.package._findEffectiveEntryPointName = () => 'com.github.johnfactotum.Foliate';" $out/bin/.com.github.johnfactotum.Foliate-wrapped
-    ln -s $out/bin/com.github.johnfactotum.Foliate $out/bin/foliate
-  '';
+  nativeBuildInputs = [
+    desktop-file-utils
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook4
+  ];
 
   buildInputs = [
     gettext
+    gjs
     glib
     glib-networking
-    gjs
-    gtk3
-    webkitgtk
-    desktop-file-utils
-    gobject-introspection
     gsettings-desktop-schemas
+    gtk4
+    libadwaita
+    webkitgtk_6_0
   ];
 
   meta = with lib; {
     description = "A simple and modern GTK eBook reader";
-    homepage = "https://johnfactotum.github.io/foliate/";
+    homepage = "https://johnfactotum.github.io/foliate";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];
   };

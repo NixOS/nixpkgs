@@ -3,32 +3,41 @@
 , buildPythonPackage
 , pythonOlder
 , rustPlatform
+, cmake
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+, jemalloc
+, rust-jemalloc-sys
 , darwin
 }:
 let
   pname = "polars";
-  version = "0.18.0"; # Can't update to >0.18.0 until we get rust 1.71
+  version = "0.19.12";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-uzo8KPEegaVuzrfKUmsHheQfmm9hVMgkNJMWdfqDrw8=";
+    hash = "sha256-6tn3Q6oZfMjgQ5l5xCFnGimLSDLOjTWCW5uEbi6yFZY=";
+  };
+  rust-jemalloc-sys' = rust-jemalloc-sys.override {
+    jemalloc = jemalloc.override {
+      disableInitExecTls = true;
+    };
   };
 in
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
   src = rootSource;
 
   # Cargo.lock file is sometimes behind actual release which throws an error,
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
   preBuild = ''
-    cd py-polars
     #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
   '';
 
@@ -38,21 +47,34 @@ buildPythonPackage {
       "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
     };
   };
-  cargoRoot = "py-polars";
+
+  sourceRoot = "source/py-polars";
 
   # Revisit this whenever package or Rust is upgraded
   RUSTC_BOOTSTRAP = 1;
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [
+    # needed for libz-ng-sys
+    # TODO: use pkgs.zlib-ng
+    cmake
+  ] ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
+
+  buildInputs = [
+    rust-jemalloc-sys'
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];
 
-  pythonImportsCheck = [ "polars" ];
   # nativeCheckInputs = [
   #   pytestCheckHook
   #   fixtures
@@ -63,9 +85,14 @@ buildPythonPackage {
   #   pydot
   # ];
 
+  pythonImportsCheck = [
+    "polars"
+  ];
+
   meta = with lib; {
-    description = "Fast multi-threaded DataFrame library in Rust | Python | Node.js ";
+    description = "Fast multi-threaded DataFrame library";
     homepage = "https://github.com/pola-rs/polars";
+    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
   };

@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-PfXrj4d2SHmatiPPFxjsxvhusML1HTRNjoYEQtzFzW8=";
   };
 
+  # code predates c99
+  env.CFLAGS = "-std=c89";
+
   preInstall = ''
     mkdir -p $out/man/man1 $out/bin
   '';

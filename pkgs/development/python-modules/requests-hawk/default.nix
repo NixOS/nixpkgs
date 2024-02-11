@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "requests-hawk";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

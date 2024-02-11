@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , coreutils
 , sharutils
-, runtimeShell
 , version
 , sha256
 }:

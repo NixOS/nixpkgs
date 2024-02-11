@@ -2,13 +2,13 @@
 
 luarocks.overrideAttrs (old: {
   pname = "luarocks-nix";
-  version = "unstable-2023-02-26";
+  version = "unstable-2023-10-19";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "4cfea3d5d826db4cfbc809ef8bb5f0a9f3a18919";
-    sha256 = "sha256-7L8B+/C7Kzt25Ec+OsM2rliYB2/wyZQ3OT63V7AaOxo=";
+    rev = "4240b25b95d7165cde66fc2acaf5a0f9ad40fd0c";
+    sha256 = "sha256-dqFFYehBgK0RqH0/1GtZXq7XLGCcc3Kfadq8ICYNCWk=";
   };
 
   patches = [ ];

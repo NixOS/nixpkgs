@@ -1,30 +1,34 @@
 { lib
-, flutter37
+, flutter
 , python3
 , fetchFromGitHub
 , pcre2
+, libnotify
+, libappindicator
+, pkg-config
 , gnome
 , makeWrapper
 , removeReferencesTo
 }:
 
-flutter37.buildFlutterApplication rec {
+flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.1.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    sha256 = "sha256-N9/qwC79mG9r+zMPLHSPjNSQ+srGtnXuKsf0ijtH7CI=";
+    hash = "sha256-XgRIX2Iv5niJw2NSBPwM0K4uF5sPj9c+Xj4oHtAQSbU=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-WfZiB7MO4wHUg81xm67BMu4zQdC9CfhN5BQol+AI2S8=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   postPatch = ''
+    rm -f pubspec.lock
+
     substituteInPlace linux/CMakeLists.txt \
       --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
@@ -52,31 +56,27 @@ flutter37.buildFlutterApplication rec {
     # Symlink binary.
     ln -sf "$out/app/authenticator" "$out/bin/yubioath-flutter"
 
-    # Needed for QR scanning to work.
-    wrapProgram "$out/bin/yubioath-flutter" \
-      --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
-
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
+  '';
 
-    # Remove unnecessary references to Flutter.
-    remove-references-to -t ${flutter37.unwrapped} $out/app/data/flutter_assets/shaders/ink_sparkle.frag
+  # Needed for QR scanning to work
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
   '';
 
   nativeBuildInputs = [
     makeWrapper
     removeReferencesTo
+    pkg-config
   ];
 
   buildInputs = [
     pcre2
-  ];
-
-  disallowedReferences = [
-    flutter37
-    flutter37.unwrapped
+    libnotify
+    libappindicator
   ];
 
   meta = with lib; {

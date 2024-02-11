@@ -14,7 +14,9 @@ let
       # taken from https://github.com/python/cpython/blob/05cb728d68a278d11466f9a6c8258d914135c96c/Lib/re.py#L251-L266
       special = [
         "(" ")" "[" "]" "{" "}" "?" "*" "+" "-" "|" "^" "$" "\\" "." "&" "~"
-        "#" " " "\t" "\n" "\r" "\v" "\f"
+        "#" " " "\t" "\n" "\r"
+        "" # \v / 0x0B
+        "" # \f / 0x0C
       ];
     in
       replaceStrings special (map (c: "\\${c}") special);
@@ -100,7 +102,7 @@ in
         options = {
           enable = mkEnableOption (mdDoc "cgit");
 
-          package = mkPackageOptionMD pkgs "cgit" {};
+          package = mkPackageOption pkgs "cgit" {};
 
           nginx.virtualHost = mkOption {
             description = mdDoc "VirtualHost to serve cgit on, defaults to the attribute name.";

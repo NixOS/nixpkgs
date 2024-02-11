@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.7.0";
 
   src = fetchurl {
-    url = "http://gavare.se/gxemul/src/${pname}-${version}.tar.gz";
+    url = "https://gavare.se/gxemul/src/${pname}-${version}.tar.gz";
     sha256 = "sha256-ecRDfG+MqQT0bTOsNgYqZf3PSpKiSEeOQIqxEpXPjoM=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://gavare.se/gxemul/";
+    homepage = "https://gavare.se/gxemul/";
     description = "Gavare's experimental emulator";
     longDescription = ''
       GXemul is a framework for full-system computer architecture

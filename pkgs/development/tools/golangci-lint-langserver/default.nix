@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "golangci-lint-langserver";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "nametake";
     repo = "golangci-lint-langserver";
     rev = "v${version}";
-    sha256 = "sha256-UdDWu3dZ/XUol2Y8lWk6d2zRZ+Pc1GiR6yqOuNaXxZY=";
+    sha256 = "sha256-jNRDqg2a5dXo7QI4CBRw0MLwhfpdGuhygpMoSKNcgC0=";
   };
 
   vendorHash = "sha256-tAcl6P+cgqFX1eMYdS8vnfdNyb+1QNWwWdJsQU6Fpgg=";
@@ -22,6 +22,7 @@ buildGoModule rec {
     description = "Language server for golangci-lint";
     homepage = "https://github.com/nametake/golangci-lint-langserver";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ kirillrdy ];
+    mainProgram = "golangci-lint-langserver";
   };
 }

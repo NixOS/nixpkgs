@@ -45,7 +45,7 @@ placeholder certificates in place of the real ACME certs. The placeholder
 certs are overwritten when the ACME certs arrive. For
 `foo.example.com` the config would look like this:
 
-```
+```nix
 security.acme.acceptTerms = true;
 security.acme.defaults.email = "admin+acme@example.com";
 services.nginx = {
@@ -72,7 +72,7 @@ services.nginx = {
       };
     };
   };
-}
+};
 ```
 
 ## Using ACME certificates in Apache/httpd {#module-security-acme-httpd}
@@ -88,7 +88,7 @@ This example uses a vhost called `certs.example.com`, with
 the intent that you will generate certs for all your vhosts and redirect
 everyone to HTTPS.
 
-```
+```nix
 security.acme.acceptTerms = true;
 security.acme.defaults.email = "admin+acme@example.com";
 
@@ -111,7 +111,7 @@ services.nginx = {
       };
     };
   };
-}
+};
 # Alternative config for Apache
 users.users.wwwrun.extraGroups = [ "acme" ];
 services.httpd = {
@@ -131,12 +131,12 @@ services.httpd = {
       '';
     };
   };
-}
+};
 ```
 
 Now you need to configure ACME to generate a certificate.
 
-```
+```nix
 security.acme.certs."foo.example.com" = {
   webroot = "/var/lib/acme/.challenges";
   email = "foo@example.com";
@@ -167,7 +167,7 @@ see the [lego docs](https://go-acme.github.io/lego/dns/)
 for provider/server specific configuration values. For the sake of these
 docs, we will provide a fully self-hosted example using bind.
 
-```
+```nix
 services.bind = {
   enable = true;
   extraConfig = ''
@@ -181,7 +181,7 @@ services.bind = {
       extraConfig = "allow-update { key rfc2136key.example.com.; };";
     }
   ];
-}
+};
 
 # Now we can configure ACME
 security.acme.acceptTerms = true;
@@ -189,7 +189,7 @@ security.acme.defaults.email = "admin+acme@example.com";
 security.acme.certs."example.com" = {
   domain = "*.example.com";
   dnsProvider = "rfc2136";
-  credentialsFile = "/var/lib/secrets/certs.secret";
+  environmentFile = "/var/lib/secrets/certs.secret";
   # We don't need to wait for propagation since this is a local DNS server
   dnsPropagationCheck = false;
 };
@@ -199,7 +199,7 @@ The {file}`dnskeys.conf` and {file}`certs.secret`
 must be kept secure and thus you should not keep their contents in your
 Nix config. Instead, generate them one time with a systemd service:
 
-```
+```nix
 systemd.services.dns-rfc2136-conf = {
   requiredBy = ["acme-example.com.service" "bind.service"];
   before = ["acme-example.com.service" "bind.service"];
@@ -250,13 +250,13 @@ first, however instead of setting the options for one certificate
 you will set them as defaults
 (e.g. [](#opt-security.acme.defaults.dnsProvider)).
 
-```
+```nix
 # Configure ACME appropriately
 security.acme.acceptTerms = true;
 security.acme.defaults.email = "admin+acme@example.com";
 security.acme.defaults = {
   dnsProvider = "rfc2136";
-  credentialsFile = "/var/lib/secrets/certs.secret";
+  environmentFile = "/var/lib/secrets/certs.secret";
   # We don't need to wait for propagation since this is a local DNS server
   dnsPropagationCheck = false;
 };
@@ -271,7 +271,7 @@ services.nginx = {
       acmeRoot = null;
     };
   };
-}
+};
 ```
 
 And that's it! Next time your configuration is rebuilt, or when
@@ -287,7 +287,7 @@ There is no way to change the user the ACME module uses (it will always be
 Below is an example configuration for OpenSMTPD, but this pattern
 can be applied to any service.
 
-```
+```nix
 # Configure ACME however you like (DNS or HTTP validation), adding
 # the following configuration for the relevant certificate.
 # Note: You cannot use `systemctl reload` here as that would mean
@@ -340,7 +340,7 @@ to be regenerated. In this scenario lego will produce the error `JWS verificatio
 The solution is to simply delete the associated accounts file and
 re-run the affected service(s).
 
-```
+```shell
 # Find the accounts folder for the certificate
 systemctl cat acme-example.com.service | grep -Po 'accounts/[^:]*'
 export accountdir="$(!!)"

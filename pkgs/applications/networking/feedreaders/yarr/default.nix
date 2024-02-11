@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yarr";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "nkanaev";
     repo = "yarr";
     rev = "v${version}";
-    hash = "sha256-LW0crWdxS6zcY5rxR0F2FLDYy9Ph2ZKyB/5VFVss+tA=";
+    hash = "sha256-ZMQ+IX8dZuxyxQhD/eWAe4bGGCVcaCeVgF+Wqs79G+k=";
   };
 
-  vendorHash = "sha256-yXnoibqa0+lHhX3I687thGgasaVeNiHpGFmtEnH7oWY=";
+  vendorHash = null;
 
   subPackages = [ "src" ];
 

@@ -1,6 +1,5 @@
 { lib
 , fetchFromSourcehut
-, makeWrapper
 , rustPlatform
 , wayland
 }:
@@ -27,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.linux;
+    mainProgram = "waylevel";
   };
 }

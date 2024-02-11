@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "pook";
   version = "1.1.1";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

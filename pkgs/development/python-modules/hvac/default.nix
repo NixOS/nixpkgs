@@ -3,32 +3,37 @@
 , fetchPypi
 , pyhcl
 , requests
-, six
+, poetry-core
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hvac";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "2.1.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B53KWIVt7mZG7VovIoOAnBbS3u3eHp6WFbKRAySkuWk=";
+    hash = "sha256-tIvNoRpKsKe2xHIyx7p8h/2jGK4tSnZigAxGWnh0KJQ=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     pyhcl
     requests
-    six
   ];
 
   # Requires running a Vault server
   doCheck = false;
 
-  pythonImportsCheck = [ "hvac" ];
+  pythonImportsCheck = [
+    "hvac"
+  ];
 
   meta = with lib; {
     description = "HashiCorp Vault API client";

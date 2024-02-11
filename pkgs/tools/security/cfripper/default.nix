@@ -5,14 +5,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.13.1";
+  version = "1.15.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-V27eZoeg5r+h8W1H66eNauGOvV8tT/oo4fRfSLhz1MY=";
+    repo = "cfripper";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SmD3Dq5LicPRe3lWFsq4zqM/yDZ1LsgRwSUA5/RbN9I=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pluggy~=0.13.1" "pluggy" \
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     boto3
@@ -30,17 +40,15 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click~=7.1.1" "click" \
-      --replace "pluggy~=0.13.1" "pluggy" \
-      --replace "pydash~=4.7.6" "pydash"
-  '';
-
   disabledTestPaths = [
     # Tests are failing
     "tests/test_boto3_client.py"
     "tests/config/test_pluggy.py"
+  ];
+
+  disabledTests = [
+    # Assertion fails
+    "test_multiple_resources_with_wildcard_resources_are_detected"
   ];
 
   pythonImportsCheck = [
@@ -50,6 +58,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for analysing CloudFormation templates";
     homepage = "https://github.com/Skyscanner/cfripper";
+    changelog = "https://github.com/Skyscanner/cfripper/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

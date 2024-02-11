@@ -1,4 +1,6 @@
 { coreutils, db, fetchurl, openssl, pcre2, perl, pkg-config, lib, stdenv
+, libxcrypt
+, procps, killall
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -7,20 +9,21 @@
 , enableDMARC ? true, opendmarc
 , enableRedis ? false, hiredis
 }:
-
-stdenv.mkDerivation rec {
+let
+  perl' = perl.withPackages (p: with p; [ FileFcntlLock ]);
+in stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.96";
+  version = "4.97.1";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-KZpWknsus0d9qv08W9oCvGflxOWJinrq8nQIdSeM8aM=";
+    hash = "sha256-vXggV1CaeTWTUIUoWQYm0YXqFgzjLLNL7aJi6Zzv36k=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ coreutils db openssl perl pcre2 ]
+  buildInputs = [ coreutils db openssl perl' pcre2 libxcrypt ]
     ++ lib.optional enableLDAP openldap
     ++ lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ lib.optional enableAuthDovecot dovecot
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
       s:^# \(MV_COMMAND\)=.*:\1=${coreutils}/bin/mv:
       s:^# \(RM_COMMAND\)=.*:\1=${coreutils}/bin/rm:
       s:^# \(TOUCH_COMMAND\)=.*:\1=${coreutils}/bin/touch:
-      s:^# \(PERL_COMMAND\)=.*:\1=${perl}/bin/perl:
+      s:^# \(PERL_COMMAND\)=.*:\1=${perl'}/bin/perl:
       s:^# \(LOOKUP_DSEARCH=yes\)$:\1:
       ${lib.optionalString enableLDAP ''
         s:^# \(LDAP_LIB_TYPE=OPENLDAP2\)$:\1:
@@ -95,6 +98,11 @@ stdenv.mkDerivation rec {
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
 
+    {
+      echo EXIWHAT_PS_CMD=${procps}/bin/ps
+      echo EXIWHAT_MULTIKILL_CMD=${killall}/bin/killall
+    } >> Local/Makefile
+
     runHook postConfigure
   '';
 
@@ -122,8 +130,9 @@ stdenv.mkDerivation rec {
     homepage = "https://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];
+    mainProgram = "exim";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tv ajs124 das_j ];
+    maintainers = with maintainers; [ tv ] ++ teams.helsinki-systems.members;
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }

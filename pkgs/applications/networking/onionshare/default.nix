@@ -8,6 +8,8 @@
 , flask
 , flask-httpauth
 , flask-socketio
+, gevent-socketio
+, gevent-websocket
 , cepa
 , psutil
 , pyqt5
@@ -56,6 +58,7 @@ let
 
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lourkeur ];
+    mainProgram = "onionshare-cli";
   };
 
   # TODO: package meek https://support.torproject.org/glossary/meek/
@@ -75,12 +78,13 @@ rec {
         inherit (tor) geoip;
       })
     ];
-    disable = !isPy3k;
     propagatedBuildInputs = [
       colorama
       flask
       flask-httpauth
       flask-socketio
+      gevent-socketio
+      gevent-websocket
       cepa
       psutil
       pycrypto
@@ -124,9 +128,9 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+      ./fix-qrcode-gui.patch
     ];
 
-    disable = !isPy3k;
     propagatedBuildInputs = [
       onionshare
       pyqt5
@@ -137,6 +141,13 @@ rec {
     ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+    postInstall = ''
+      mkdir -p $out/share/{appdata,applications,icons}
+      cp $src/org.onionshare.OnionShare.desktop $out/share/applications
+      cp $src/org.onionshare.OnionShare.svg $out/share/icons
+      cp $src/org.onionshare.OnionShare.appdata.xml $out/share/appdata
+    '';
 
     preFixup = ''
       wrapQtApp $out/bin/onionshare

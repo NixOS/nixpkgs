@@ -21,7 +21,7 @@ let
 
   gnuArch = if steamArch == "amd64" then "x86_64-linux-gnu"
             else if steamArch == "i386" then "i386-linux-gnu"
-            else abort "Unsupported architecture";
+            else throw "Unsupported architecture";
 
   libs = [ "lib/${gnuArch}" "lib" "usr/lib/${gnuArch}" "usr/lib" ];
   bins = [ "bin" "usr/bin" ];

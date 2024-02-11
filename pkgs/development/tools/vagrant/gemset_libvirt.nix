@@ -47,10 +47,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1s8b3bsajwjyrjs53h0nrfrpzzgi8igsrslprhr6fgl80ig3plld";
+      sha256 = "sha256-z0VkRqFk3JU02ULQ+xQbywekzrJgz1YPDul//Ov5ajU=";
       type = "gem";
     };
-    version = "0.9.0";
+    version = "0.11.0";
   };
   fog-xml = {
     dependencies = ["fog-core" "nokogiri"];
@@ -109,10 +109,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0rapl1sfmfi3bfr68da4ca16yhc0pp93vjwkj7y3rdqrzy3b41hy";
+      sha256 = "sha256-RrLSRMxv8BqJv2EnRpDAn9vcpHqErp6sOQOegSMa7nw=";
       type = "gem";
     };
-    version = "2.8.0";
+    version = "2.8.2";
   };
   multi_json = {
     groups = ["default"];
@@ -130,20 +130,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "11w59ga9324yx6339dgsflz3dsqq2mky1qqdwcg6wi5s1bf2yldi";
+      sha256 = "sha256-INyAC4++TE9LWxZOaqOrgqNxvLJ+toXBZpYcNN2KItc=";
       type = "gem";
     };
-    version = "1.13.6";
+    version = "1.15.2";
   };
   racc = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0la56m0z26j3mfn1a9lf2l03qx1xifanndf9p3vx1azf6sqy7v9d";
+      sha256 = "sha256-r2QSSDb908AOgwcD1/hz6l3qvekj83AGo59aXg2hY4c=";
       type = "gem";
     };
-    version = "1.6.0";
+    version = "1.7.1";
   };
   rexml = {
     groups = ["default"];
@@ -154,6 +154,26 @@
       type = "gem";
     };
     version = "3.2.5";
+  };
+  xml-simple = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "sha256-0hEx5RnIbxpbwrbS1X1G5pmOR/GO0kmyXK2GQz29aV0=";
+      type = "gem";
+    };
+    version = "1.1.9";
+  };
+  diffy = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "sha256-NrQv++UTjdxWGCEHwkrY1rBm7P0odoKfOR46SZPYmuE=";
+      type = "gem";
+    };
+    version = "3.4.2";
   };
   ruby-libvirt = {
     groups = ["default"];
@@ -166,14 +186,14 @@
     version = "0.8.0";
   };
   vagrant-libvirt = {
-    dependencies = ["fog-core" "fog-libvirt" "nokogiri" "rexml"];
+    dependencies = ["fog-core" "fog-libvirt" "nokogiri" "rexml" "xml-simple" "diffy"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1j31y6sjhslj5yr0ssvb36ngm7prfsbdfj6131757jl0l0ri8pyv";
+      sha256 = "sha256-NMiRjrVQo2Ui9nOJwpDmNJUk+95gsT85pwFMIiw3bwQ=";
       type = "gem";
     };
-    version = "0.8.2";
+    version = "0.12.2";
   };
 }

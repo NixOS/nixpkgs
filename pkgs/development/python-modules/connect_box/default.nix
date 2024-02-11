@@ -1,19 +1,23 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , aiohttp
 , attrs
+, buildPythonPackage
 , defusedxml
+, fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "connect-box";
-  version = "0.3.0";
+  version = "0.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "connect_box";
     inherit version;
-    hash = "sha256-d1KqVKaHlZDm2o1GJ7r8KoONwfd1lxXexJxavCvjfW8=";
+    hash = "sha256-x1ozcj3IL+iI/QtS12yEudCqNknCmyb5ew88Z39xaLA=";
   };
 
   propagatedBuildInputs = [
@@ -22,10 +26,12 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  # no tests are present
+  # No tests are present
   doCheck = false;
 
-  pythonImportsCheck = [ "connect_box" ];
+  pythonImportsCheck = [
+    "connect_box"
+  ];
 
   meta = with lib; {
     description = "Interact with a Compal CH7465LG cable modem/router";
@@ -36,6 +42,7 @@ buildPythonPackage rec {
       Hub 3.0 (IE), Ziggo Connectbox (NL) or Unitymedia Connect Box (DE).
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-connect-box";
+    changelog = "https://github.com/home-assistant-ecosystem/python-connect-box/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

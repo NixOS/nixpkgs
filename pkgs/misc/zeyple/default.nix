@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0r2d1drg2zvwmn3zg0qb32i9mh03r5di9q1yszx23r32rsax9mxh";
   };
 
-  propagatedBuildInputs = [ python3Packages.pygpgme ];
+  propagatedBuildInputs = [ python3Packages.gpgme ];
   installPhase = ''
     install -Dm755 $src/zeyple/zeyple.py $out/bin/zeyple
   '';
@@ -23,5 +23,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://infertux.com/labs/zeyple/";
     maintainers = with maintainers; [ ettom ];
     license = licenses.agpl3Plus;
+    mainProgram = "zeyple";
   };
 }

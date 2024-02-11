@@ -6,29 +6,46 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't work with latest urwid
+      urwid = super.urwid.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.2";
+        src = fetchFromGitHub {
+          owner = "urwid";
+          repo = "urwid";
+          rev = "refs/tags/${version}";
+          hash = "sha256-oPb2h/+gaqkZTXIiESjExMfBNnOzDvoMkXvkZ/+KVwo=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in
+py.pkgs.buildPythonApplication rec {
   pname = "khal";
   version = "0.11.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
-    repo = pname;
-    rev = "v${version}";
+    repo = "khal";
+    rev = "refs/tags/v${version}";
     hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
-  ] ++ (with python3.pkgs; [
+  ] ++ (with py.pkgs; [
     setuptools-scm
     sphinx
-    sphinxcontrib_newsfeed
+    sphinxcontrib-newsfeed
   ]);
 
-  propagatedBuildInputs = with python3.pkgs;[
+  propagatedBuildInputs = with py.pkgs;[
     atomicwrites
     click
     click-log
@@ -46,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python3.pkgs;[
+  nativeCheckInputs = with py.pkgs;[
     freezegun
     hypothesis
     packaging
@@ -62,7 +79,7 @@ python3.pkgs.buildPythonApplication rec {
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
-    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib_newsfeed ])}/bin:$PATH" \
+    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib-newsfeed ])}/bin:$PATH" \
     make -C doc man
     installManPage doc/build/man/khal.1
 
@@ -84,8 +101,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "CLI calendar application";
     homepage = "http://lostpackets.de/khal/";
+    changelog = "https://github.com/pimutils/khal/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
-    broken = stdenv.isDarwin;
   };
 }

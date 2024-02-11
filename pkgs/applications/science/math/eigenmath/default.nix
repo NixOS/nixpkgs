@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eigenmath";
-  version = "unstable-2023-06-16";
+  version = "unstable-2024-02-04";
 
   src = fetchFromGitHub {
     owner = "georgeweigt";
     repo = pname;
-    rev = "800adc5c0bd654eb9ad28497e1b78c4061b3a4cb";
-    hash = "sha256-/ViU44E3myAc7B8amm/TaIh70g2Z7IC4KRRG3++nOKs=";
+    rev = "3e37263611e181e2927d63b97b7656790c7f4fe1";
+    hash = "sha256-gjmz9Ma7OLQyIry6i2HMNy4Ai5Wh5NUzDKPO2a9Hp+s=";
   };
 
   checkPhase = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://georgeweigt.github.io";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.unix;
   };
 }

@@ -9,11 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "4.0.0";
+  version = "4.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mWt5795kM829AIiHLbxfs+1/4VeLaM27pjTxS7jdBHA=";
+    hash = "sha256-OQSxPfv+xH8AO453/VtYnNEZBKId3xqzimTyBNahDvY=";
   };
 
   buildInputs = [ pytest ];

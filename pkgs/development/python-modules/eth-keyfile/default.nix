@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "eth-keyfile";
   version = "0.6.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -42,6 +43,6 @@ buildPythonPackage rec {
     description = "Tools for handling the encrypted keyfile format used to store private keys";
     homepage = "https://github.com/ethereum/eth-keyfile";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

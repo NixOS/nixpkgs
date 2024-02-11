@@ -120,7 +120,7 @@ with lib;
         };
 
         maxpause = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr (oneOf [ str int ]);
           default = null;
           description = lib.mdDoc ''
              The maximum time to pause between successive queue runs, in seconds.
@@ -138,7 +138,7 @@ with lib;
         };
 
         pausetime = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr (oneOf [ str int ]);
           default = null;
           description = lib.mdDoc ''
             The minimum time to pause between successive queue runs when there
@@ -168,7 +168,7 @@ with lib;
         };
 
         sendtimeout = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr (oneOf [ str int ]);
           default = null;
           description = lib.mdDoc ''
             The  time to wait for a remote module listed above to complete sending
@@ -194,7 +194,7 @@ with lib;
     environment = {
       systemPackages = [ pkgs.nullmailer ];
       etc = let
-        validAttrs = filterAttrs (name: value: value != null) cfg.config;
+        validAttrs = lib.mapAttrs (_: toString) (filterAttrs (_: value: value != null) cfg.config);
       in
         (foldl' (as: name: as // { "nullmailer/${name}".text = validAttrs.${name}; }) {} (attrNames validAttrs))
           // optionalAttrs (cfg.remotesFile != null) { "nullmailer/remotes".source = cfg.remotesFile; };
@@ -203,7 +203,7 @@ with lib;
     users = {
       users.${cfg.user} = {
         description = "Nullmailer relay-only mta user";
-        group = cfg.group;
+        inherit (cfg) group;
         isSystemUser = true;
       };
 
@@ -211,10 +211,10 @@ with lib;
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/spool/nullmailer - ${cfg.user} - - -"
-      "d /var/spool/nullmailer/failed 750 ${cfg.user} - - -"
-      "d /var/spool/nullmailer/queue 750 ${cfg.user} - - -"
-      "d /var/spool/nullmailer/tmp 750 ${cfg.user} - - -"
+      "d /var/spool/nullmailer - ${cfg.user} ${cfg.group} - -"
+      "d /var/spool/nullmailer/failed 770 ${cfg.user} ${cfg.group} - -"
+      "d /var/spool/nullmailer/queue 770 ${cfg.user} ${cfg.group} - -"
+      "d /var/spool/nullmailer/tmp 770 ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.nullmailer = {
@@ -238,7 +238,7 @@ with lib;
       program = "sendmail";
       source = "${pkgs.nullmailer}/bin/sendmail";
       owner = cfg.user;
-      group = cfg.group;
+      inherit (cfg) group;
       setuid = true;
       setgid = true;
     };

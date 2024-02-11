@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = licenses.bsd3; # https://gitlab.com/git-latexdiff/git-latexdiff/issues/9
     platforms = platforms.unix;
+    mainProgram = "git-latexdiff";
   };
 }

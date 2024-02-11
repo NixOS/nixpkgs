@@ -8,7 +8,6 @@
 , glib
 , gnome
 , gnome-desktop
-, gnome-menus
 , graphene
 , gst_all_1
 , gtk-doc
@@ -23,6 +22,7 @@
 , libpulseaudio
 , libuuid
 , libwnck
+, magpie
 , mesa
 , meson
 , ninja
@@ -31,19 +31,20 @@
 , sassc
 , upower
 , vala
+, xfce
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.7.2";
+  version = "10.9.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
-    repo = pname;
-    rev = "v${version}";
+    repo = "budgie-desktop";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-fd3B2DMZxCI4Gb9mwdACjIPydKghXx8IkhFpMS/Clps=";
+    hash = "sha256-H+J/zFUjiXbr5ynDkkjrRsEbyO4LPOhqe8DdG60ikRw=";
   };
 
   patches = [
@@ -67,8 +68,6 @@ stdenv.mkDerivation rec {
     budgie-screensaver
     glib
     gnome-desktop
-    gnome-menus
-    gnome.gnome-bluetooth_1_0
     gnome.gnome-settings-daemon
     gnome.mutter
     gnome.zenity
@@ -83,10 +82,12 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libuuid
     libwnck
+    magpie
     mesa
     polkit
     sassc
     upower
+    xfce.libxfce4windowing
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base
@@ -96,11 +97,11 @@ stdenv.mkDerivation rec {
     "budgie-desktop"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A feature-rich, modern desktop designed to keep out the way of the user";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.federicoschonborn ];
-    license = with licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ federicoschonborn ];
   };
-}
+})

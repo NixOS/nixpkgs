@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "django-ipware";
-  version = "5.0.0";
+  version = "6.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T6VgfuheEu5eFYvHVp/x4TT7FXloGqH/Pw7QS+Ib4VM=";
+    hash = "sha256-YU0PCpEfinZeVbbTWLFxW7he62PR67d0R9CdZF8TQ+g=";
   };
 
   propagatedBuildInputs = [ django ];

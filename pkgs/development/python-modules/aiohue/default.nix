@@ -5,22 +5,34 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pytest-aiohttp
+, pytest-asyncio
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiohue";
-  version = "4.6.2";
-  format = "setuptools";
+  version = "4.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-DzslGfKwsXXWWhbTb0apJCsnNdnUe7AbvrRT8ZnPbVU=";
+    hash = "sha256-t48rUPAM0XpbDreCwHU/smoyhPtxhwrpDkb1170GkQM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     awesomeversion
@@ -30,6 +42,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
+    pytest-aiohttp
   ];
 
   pythonImportsCheck = [

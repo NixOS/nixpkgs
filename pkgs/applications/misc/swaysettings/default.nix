@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
     accountsservice
     dbus
     glib
-    gobject-introspection
     gsettings-desktop-schemas
     gtk-layer-shell
     gtk3

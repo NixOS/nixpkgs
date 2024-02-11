@@ -9,11 +9,11 @@ let
 in
 mkDerivation rec {
   pname = "phan";
-  version = "5.4.1";
+  version = "5.4.3";
 
   src = fetchurl {
     url = "https://github.com/phan/phan/releases/download/${version}/phan.phar";
-    hash = "sha256-DJr1BWAfNI3hYvmBui5Dp+n7ec+f+gkOso21KEd6m8I=";
+    hash = "sha256-wZU6YIlH0q18iD044y6Z5gSscBn7cI0AwRwZgT/YhOo=";
   };
 
   dontUnpack = true;

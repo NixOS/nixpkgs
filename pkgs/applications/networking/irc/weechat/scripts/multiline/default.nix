@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "multiline";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchurl {
-    url = "https://raw.githubusercontent.com/weechat/scripts/945315bed4bc2beaf1e47f9b946ffe8f638f77fe/perl/multiline.pl";
-    sha256 = "1smialb21ny7brhij4sbw46xvsmrdv6ig2da0ip63ga2afngwsy4";
+    url = "https://raw.githubusercontent.com/weechat/scripts/5f073d966e98d54344a91be4f5afc0ec9e2697dc/perl/multiline.pl";
+    sha256 = "sha256-TXbU2Q7Tm8iTwOQqrWpqHXuKrjoBFLyUWRsH+TsR9Lo=";
   };
 
   dontUnpack = true;

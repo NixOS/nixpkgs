@@ -1,4 +1,4 @@
-{ version, sha256Hash }:
+{ version, hash }:
 
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, util-linux, gettext, shadow
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     owner = "libfuse";
     repo = "libfuse";
     rev = "${pname}-${version}";
-    sha256 = sha256Hash;
+    inherit hash;
   };
 
   preAutoreconf = "touch config.rpath";
@@ -48,6 +48,7 @@ in stdenv.mkDerivation rec {
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
     "-Duseroot=false"
+    "-Dinitscriptdir="
   ];
 
   preConfigure = ''

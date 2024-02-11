@@ -1,8 +1,11 @@
 { lib
 , stdenv
+, beautifulsoup4
 , buildPythonPackage
 , fetchFromGitHub
+, html5lib
 , jinja2
+, lxml
 , matplotlib
 , odfpy
 , openpyxl
@@ -24,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "1.5.3.230321";
-  format = "pyproject";
+  version = "2.1.4.231227";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
-    repo = pname;
+    repo = "pandas-stubs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RjU762VyDPy86Cvmr8hfPkqLtmntB3F6tf2OAgqmnK4=";
+    hash = "sha256-AkgMesDesKkVkwxNnGYG71IuIgF3G+BecpfWNWVucC8=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +49,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    beautifulsoup4
+    html5lib
     jinja2
+    lxml
     matplotlib
     odfpy
     openpyxl
@@ -66,6 +72,7 @@ buildPythonPackage rec {
     # AttributeErrors, missing dependencies, error and warning checks
     "test_aggregate_frame_combinations"
     "test_aggregate_series_combinations"
+    "test_all_read_without_lxml_dtype_backend"
     "test_arrow_dtype"
     "test_attribute_conflict_warning"
     "test_categorical_conversion_warning"
@@ -79,6 +86,8 @@ buildPythonPackage rec {
     "test_database_error"
     "test_dummies"
     "test_from_dummies_args"
+    "test_hdf_context_manager"
+    "test_hdfstore"
     "test_incompatibility_warning"
     "test_index_astype"
     "test_indexing_error"
@@ -95,6 +104,9 @@ buildPythonPackage rec {
     "test_possible_precision_loss"
     "test_pyperclip_exception"
     "test_quantile_150_changes"
+    "test_read_hdf_iterator"
+    "test_read_sql_via_sqlalchemy_connection"
+    "test_read_sql_via_sqlalchemy_engine"
     "test_resample_150_changes"
     "test_reset_index_150_changes"
     "test_reset_index"
@@ -107,8 +119,6 @@ buildPythonPackage rec {
     "test_types_rank"
     "test_undefined_variable_error"
     "test_value_label_type_mismatch"
-    "test_read_sql_via_sqlalchemy_connection"
-    "test_read_sql_via_sqlalchemy_engine"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_plotting" # Fatal Python error: Illegal instruction
   ];

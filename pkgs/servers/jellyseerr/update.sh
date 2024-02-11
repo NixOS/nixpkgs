@@ -19,7 +19,7 @@ if [ -z "$tag" ]; then
 fi
 
 src="https://raw.githubusercontent.com/Fallenbagel/jellyseerr/$tag"
-src_sha256=$(nix-prefetch-github Fallenbagel jellyseerr --rev ${tag} | jq -r .sha256)
+src_hash=$(nix-prefetch-github Fallenbagel jellyseerr --rev ${tag} | jq -r .sha256)
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
@@ -33,7 +33,7 @@ curl -O "$src/package.json"
 cat > pin.json << EOF
 {
   "version": "$(echo $tag | grep -P '(\d|\.)+' -o)",
-  "srcSha256": "$src_sha256",
+  "srcHash": "sha256-$src_hash",
   "yarnSha256": "$yarn_sha256"
 }
 EOF

@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "langdetect";
   version = "1.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

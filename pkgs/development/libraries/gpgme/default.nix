@@ -19,6 +19,7 @@
 , swig2 ? null
 # only for passthru.tests
 , libsForQt5
+, qt6Packages
 , python3
 }:
 let
@@ -26,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.20.0";
+  version = "1.23.2";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    hash = "sha256-JaV4Wl2jVmiQAUQJJrlOln0C4TxJ63dD417wzyLkJ1A=";
+    hash = "sha256-lJnosfM8zLaBVSehvBYEnTWmGYpsX64BhfK9VhvOUiQ=";
   };
 
   patches = [
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ] ++ lib.optionals pythonSupport [
-    python3.pythonForBuild
+    python3.pythonOnBuildForHost
     ncurses
     swig2
     which
@@ -109,7 +110,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     python = python3.pkgs.gpgme;
-    qt = libsForQt5.qgpgme;
+    qt5 = libsForQt5.qgpgme;
+    qt6 = qt6Packages.qgpgme;
   };
 
   meta = with lib; {

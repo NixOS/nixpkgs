@@ -16,11 +16,9 @@ with rec {
     else if isAarch64 then [ "NEON" ]
     else [ "NONE" ];
 
-  archFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "-DARCH=aarch64" ];
-
   # CMake Build flags for the selected ISAs. For a list of flags, see
   # https://github.com/ARM-software/astc-encoder/blob/main/Docs/Building.md
-  isaFlags = map ( isa: "-DISA_${isa}=ON" ) isas;
+  isaFlags = map ( isa: "-DASTCENC_ISA_${isa}=ON" ) isas;
 
   # The suffix of the binary to link as 'astcenc'
   mainBinary = builtins.replaceStrings
@@ -31,25 +29,27 @@ with rec {
 
 stdenv.mkDerivation rec {
   pname = "astc-encoder";
-  version = "4.4.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
     rev = version;
-    sha256 = "sha256-pJmMquORG+vN2uLPywAZY1iZTuHB4SdMP/eriAjnyUU=";
+    sha256 = "sha256-UzMVJnXYLy7E9RuM4VPdqnIyfQjDOdAlKiqRkXuxnQ0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = isaFlags ++ archFlags ++ [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+  cmakeBuildType = "RelWithDebInfo";
+
+  cmakeFlags = isaFlags ++ [
+    "-DASTCENC_UNIVERSAL_BUILD=OFF"
   ];
 
   # Set a fixed build year to display within help output (otherwise, it would be 1980)
   postPatch = ''
     substituteInPlace Source/cmake_core.cmake \
-      --replace 'string(TIMESTAMP astcencoder_YEAR "%Y")' 'set(astcencoder_YEAR "2022")'
+      --replace 'string(TIMESTAMP astcencoder_YEAR "%Y")' 'set(astcencoder_YEAR "2023")'
   '';
 
   # Provide 'astcenc' link to main executable

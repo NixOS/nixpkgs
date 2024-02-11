@@ -4,14 +4,17 @@ with lib;
 
 let
   cfg = config.services.xrdp;
-  confDir = pkgs.runCommand "xrdp.conf" { preferLocalBuild = true; } ''
-    mkdir $out
 
-    cp ${cfg.package}/etc/xrdp/{km-*,xrdp,sesman,xrdp_keyboard}.ini $out
+  confDir = pkgs.runCommand "xrdp.conf" { preferLocalBuild = true; } ''
+    mkdir -p $out
+
+    cp -r ${cfg.package}/etc/xrdp/* $out
+    chmod -R +w $out
 
     cat > $out/startwm.sh <<EOF
     #!/bin/sh
     . /etc/profile
+    ${lib.optionalString cfg.audio.enable "${cfg.audio.package}/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init"}
     ${cfg.defaultWindowManager}
     EOF
     chmod +x $out/startwm.sh
@@ -25,13 +28,17 @@ let
 
     substituteInPlace $out/sesman.ini \
       --replace LogFile=xrdp-sesman.log LogFile=/dev/null \
-      --replace EnableSyslog=1 EnableSyslog=0
+      --replace EnableSyslog=1 EnableSyslog=0 \
+      --replace startwm.sh $out/startwm.sh \
+      --replace reconnectwm.sh $out/reconnectwm.sh \
 
     # Ensure that clipboard works for non-ASCII characters
     sed -i -e '/.*SessionVariables.*/ a\
     LANG=${config.i18n.defaultLocale}\
     LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
     ' $out/sesman.ini
+
+    ${cfg.extraConfDirCommands}
   '';
 in
 {
@@ -44,13 +51,11 @@ in
 
       enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xrdp;
-        defaultText = literalExpression "pkgs.xrdp";
-        description = lib.mdDoc ''
-          The package to use for the xrdp daemon's binary.
-        '';
+      package = mkPackageOptionMD pkgs "xrdp" { };
+
+      audio = {
+        enable = mkEnableOption (lib.mdDoc "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet");
+        package = mkPackageOptionMD pkgs "pulseaudio-module-xrdp" {};
       };
 
       port = mkOption {
@@ -100,86 +105,117 @@ in
       confDir = mkOption {
         type = types.path;
         default = confDir;
-        defaultText = literalMD "generated from configuration";
-        description = lib.mdDoc "The location of the config files for xrdp.";
+        internal = true;
+        description = lib.mdDoc ''
+          Configuration directory of xrdp and sesman.
+
+          Changes to this must be made through extraConfDirCommands.
+        '';
+        readOnly = true;
+      };
+
+      extraConfDirCommands = mkOption {
+        type = types.str;
+        default = "";
+        description = lib.mdDoc ''
+          Extra commands to run on the default confDir derivation.
+        '';
+        example = ''
+          substituteInPlace $out/sesman.ini \
+            --replace LogLevel=INFO LogLevel=DEBUG \
+            --replace LogFile=/dev/null LogFile=/var/log/xrdp.log
+        '';
       };
     };
   };
-
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkMerge [
+    (mkIf cfg.audio.enable {
+      environment.systemPackages = [ cfg.audio.package ];  # needed for autostart
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+      hardware.pulseaudio.extraModules = [ cfg.audio.package ];
+    })
 
-    # xrdp can run X11 program even if "services.xserver.enable = false"
-    xdg = {
-      autostart.enable = true;
-      menus.enable = true;
-      mime.enable = true;
-      icons.enable = true;
-    };
+    (mkIf cfg.enable {
 
-    fonts.enableDefaultFonts = mkDefault true;
+      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    systemd = {
-      services.xrdp = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        description = "xrdp daemon";
-        requires = [ "xrdp-sesman.service" ];
-        preStart = ''
-          # prepare directory for unix sockets (the sockets will be owned by loggedinuser:xrdp)
-          mkdir -p /tmp/.xrdp || true
-          chown xrdp:xrdp /tmp/.xrdp
-          chmod 3777 /tmp/.xrdp
-
-          # generate a self-signed certificate
-          if [ ! -s ${cfg.sslCert} -o ! -s ${cfg.sslKey} ]; then
-            mkdir -p $(dirname ${cfg.sslCert}) || true
-            mkdir -p $(dirname ${cfg.sslKey}) || true
-            ${pkgs.openssl.bin}/bin/openssl req -x509 -newkey rsa:2048 -sha256 -nodes -days 365 \
-              -subj /C=US/ST=CA/L=Sunnyvale/O=xrdp/CN=www.xrdp.org \
-              -config ${cfg.package}/share/xrdp/openssl.conf \
-              -keyout ${cfg.sslKey} -out ${cfg.sslCert}
-            chown root:xrdp ${cfg.sslKey} ${cfg.sslCert}
-            chmod 440 ${cfg.sslKey} ${cfg.sslCert}
-          fi
-          if [ ! -s /run/xrdp/rsakeys.ini ]; then
-            mkdir -p /run/xrdp
-            ${cfg.package}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
-          fi
-        '';
-        serviceConfig = {
-          User = "xrdp";
-          Group = "xrdp";
-          PermissionsStartOnly = true;
-          ExecStart = "${cfg.package}/bin/xrdp --nodaemon --port ${toString cfg.port} --config ${cfg.confDir}/xrdp.ini";
-        };
+      # xrdp can run X11 program even if "services.xserver.enable = false"
+      xdg = {
+        autostart.enable = true;
+        menus.enable = true;
+        mime.enable = true;
+        icons.enable = true;
       };
 
-      services.xrdp-sesman = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        description = "xrdp session manager";
-        restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/xrdp-sesman --nodaemon --config ${cfg.confDir}/sesman.ini";
-          ExecStop  = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
+      fonts.enableDefaultPackages = mkDefault true;
+
+      environment.etc."xrdp".source = "${confDir}/*";
+
+      systemd = {
+        services.xrdp = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          description = "xrdp daemon";
+          requires = [ "xrdp-sesman.service" ];
+          preStart = ''
+            # prepare directory for unix sockets (the sockets will be owned by loggedinuser:xrdp)
+            mkdir -p /tmp/.xrdp || true
+            chown xrdp:xrdp /tmp/.xrdp
+            chmod 3777 /tmp/.xrdp
+
+            # generate a self-signed certificate
+            if [ ! -s ${cfg.sslCert} -o ! -s ${cfg.sslKey} ]; then
+              mkdir -p $(dirname ${cfg.sslCert}) || true
+              mkdir -p $(dirname ${cfg.sslKey}) || true
+              ${lib.getExe pkgs.openssl} req -x509 -newkey rsa:2048 -sha256 -nodes -days 365 \
+                -subj /C=US/ST=CA/L=Sunnyvale/O=xrdp/CN=www.xrdp.org \
+                -config ${cfg.package}/share/xrdp/openssl.conf \
+                -keyout ${cfg.sslKey} -out ${cfg.sslCert}
+              chown root:xrdp ${cfg.sslKey} ${cfg.sslCert}
+              chmod 440 ${cfg.sslKey} ${cfg.sslCert}
+            fi
+            if [ ! -s /run/xrdp/rsakeys.ini ]; then
+              mkdir -p /run/xrdp
+              ${pkgs.xrdp}/bin/xrdp-keygen xrdp /run/xrdp/rsakeys.ini
+            fi
+          '';
+          serviceConfig = {
+            User = "xrdp";
+            Group = "xrdp";
+            PermissionsStartOnly = true;
+            ExecStart = "${pkgs.xrdp}/bin/xrdp --nodaemon --port ${toString cfg.port} --config ${confDir}/xrdp.ini";
+          };
         };
+
+        services.xrdp-sesman = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          description = "xrdp session manager";
+          restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children
+          serviceConfig = {
+            ExecStart = "${pkgs.xrdp}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
+            ExecStop  = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
+          };
+        };
+
       };
 
-    };
+      users.users.xrdp = {
+        description   = "xrdp daemon user";
+        isSystemUser  = true;
+        group         = "xrdp";
+      };
+      users.groups.xrdp = {};
 
-    users.users.xrdp = {
-      description   = "xrdp daemon user";
-      isSystemUser  = true;
-      group         = "xrdp";
-    };
-    users.groups.xrdp = {};
+      security.pam.services.xrdp-sesman = {
+        allowNullPassword = true;
+        startSession = true;
+      };
 
-    security.pam.services.xrdp-sesman = { allowNullPassword = true; startSession = true; };
-  };
+    })
+  ];
 
 }

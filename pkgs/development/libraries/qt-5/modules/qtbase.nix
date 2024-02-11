@@ -15,6 +15,7 @@
   # optional dependencies
 , cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
+, withQttranslation ? true, qttranslations ? null
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -28,13 +29,18 @@
 , developerBuild ? false
 , decryptSslTraffic ? false
 , testers
+, buildPackages
 }:
 
 let
   debugSymbols = debug || developerBuild;
+  qtPlatformCross = plat: with plat;
+    if isLinux
+    then "linux-generic-g++"
+    else throw "Please add a qtPlatformCross entry for ${plat.config}";
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: ({
   pname = "qtbase";
   inherit qtCompatVersion src version;
   debug = debugSymbols;
@@ -82,7 +88,20 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    # `qtbase` expects to find `cc` (with no prefix) in the
+    # `$PATH`, so the following is needed even if
+    # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+  } // {
+
   propagatedNativeBuildInputs = [ lndir ];
+
+  # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
+  # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.
+  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow file-read* (subpath "/usr/share/icu"))
+  '';
 
   enableParallelBuilding = true;
 
@@ -155,6 +174,13 @@ stdenv.mkDerivation (finalAttrs: {
     export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
 
     ./bin/syncqt.pl -version $version
+  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # QT's configure script will refuse to use pkg-config unless these two environment variables are set
+    export PKG_CONFIG_SYSROOT_DIR=/
+    export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
+    echo "QMAKE_LFLAGS=''${LDFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+    echo "QMAKE_CFLAGS=''${CFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+    echo "QMAKE_CXXFLAGS=''${CXXFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
   '';
 
   postConfigure = ''
@@ -179,21 +205,34 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
-    ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
-    ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
-    ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
-  ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
+  env = {
+    NIX_CFLAGS_COMPILE = toString ([
+      "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-Wno-warn=free-nonheap-object"
+      "-Wno-free-nonheap-object"
+      "-w"
+    ] ++ [
+      ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+      ''-DLIBRESOLV_SO="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+    ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
     ++ lib.optional stdenv.isLinux "-DUSE_X11"
     ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
       # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
       "-Wno-error=unguarded-availability"
     ]
     ++ lib.optionals withGtk3 [
-         ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-         ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-  ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
+      ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+      ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+    ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
+      "-Wno-warn=free-nonheap-object"
+      "-Wno-free-nonheap-object"
+      "-w"
+    ]);
+  };
 
   prefixKey = "-prefix ";
 
@@ -202,6 +241,9 @@ stdenv.mkDerivation (finalAttrs: {
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  configurePlatforms = [ ];
+  } // {
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
     "-plugindir $(out)/$(qtPluginPrefix)"
@@ -228,10 +270,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
     "-pch"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-device ${qtPlatformCross stdenv.hostPlatform}"
+    "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
   ++ lib.optional debugSymbols "-debug"
   ++ lib.optionals developerBuild [
     "-developer-build"
+    "-no-warnings-are-errors"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-no-warnings-are-errors"
   ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
     "-no-sse2"
@@ -304,6 +351,9 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
+    ] ++ lib.optional (withQttranslation && (qttranslations != null)) [
+      # depends on x11
+      "-translationdir" "${qttranslations}/translations"
     ]
   );
 
@@ -372,4 +422,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
   };
 
-})
+}))

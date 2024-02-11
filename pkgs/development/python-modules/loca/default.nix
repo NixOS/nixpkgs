@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut }:
+{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut, flit-core }:
 
 buildPythonPackage rec {
   pname = "loca";
   version = "2.0.1";
-  format = "flit";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
@@ -12,6 +12,10 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "1l6jimw3wd81nz1jrzsfw1zzsdm0jm998xlddcqaq0h38sx69w8g";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   doCheck = false; # all checks are static analyses
   pythonImportsCheck = [ "loca" ];

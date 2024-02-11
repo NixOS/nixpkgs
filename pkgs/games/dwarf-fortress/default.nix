@@ -1,4 +1,4 @@
-{ stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs, libsForQt5, newScope, texlive, perlPackages, jdk8, jre8 }:
+{ stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs, libsForQt5, newScope, texliveBasic, perlPackages, jdk8, jre8 }:
 
 # To whomever it may concern:
 #
@@ -46,9 +46,7 @@ let
   versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
 
   dwarf-therapist-original = libsForQt5.callPackage ./dwarf-therapist {
-    texlive = texlive.combine {
-      inherit (texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
-    };
+    texlive = texliveBasic.withPackages (ps: with ps; [ float caption wrapfig adjmulticol sidecap preprint enumitem ]);
   };
 
   # A map of names to each Dwarf Fortress package we know about.

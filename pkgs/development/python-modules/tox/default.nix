@@ -24,22 +24,20 @@
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.4.6";
+  version = "4.11.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     rev = "refs/tags/${version}";
-    hash = "sha256-kWvYN2PA4al2X813Mu4R/n2ZLsZ+MaYCCWNfmYD3nBo=";
+    hash = "sha256-pZmT8392YuHzCrAquPpveByYw3x6bkMGCUToCAqAGc8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "packaging>=22" "packaging"
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling

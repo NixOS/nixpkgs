@@ -6,7 +6,7 @@
 , httpx
 , iso8601
 , poetry-core
-, pydantic
+, pydantic_1
 , pyjwt
 , pytest-asyncio
 , pytestCheckHook
@@ -22,8 +22,8 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.21.5";
-  format = "pyproject";
+  version = "0.23.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lw6jswIaqDFExz/hjIrpZf4BC757l83MeCfOyZaTbfg=";
+    hash = "sha256-Z+RCjpSpfYU3oU5HQ8CzZfwqUjMHvCKVn+p2tq+VDxQ=";
   };
 
   patches = [
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "attrs"
     "httpx"
+    "iso8601"
   ];
 
   nativeBuildInputs = [
@@ -57,7 +58,7 @@ buildPythonPackage rec {
     attrs
     httpx
     iso8601
-    pydantic
+    pydantic_1
     pyjwt
     python-dateutil
     retrying

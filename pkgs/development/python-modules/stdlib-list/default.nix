@@ -1,19 +1,25 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchPypi
+
+# build-system
+, flit-core
 }:
 
 buildPythonPackage rec {
   pname = "stdlib-list";
-  version = "0.8.0";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "0.10.0";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "17vdn4q0sdlndc2fr9svapxx6366hnrhkn0fswp1xmr0jxqh7rd1";
+    pname = "stdlib_list";
+    inherit version;
+    hash = "sha256-ZRnFDWRVE+0odle/6FbVJ/J3MxVAaR3er3eyVFmWShQ=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   pythonImportsCheck = [
     "stdlib_list"
@@ -23,9 +29,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/pypi/stdlib-list/releases/tag/v${version}";
     description = "A list of Python Standard Libraries";
     homepage = "https://github.com/jackmaney/python-stdlib-list";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

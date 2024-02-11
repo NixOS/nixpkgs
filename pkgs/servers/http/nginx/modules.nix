@@ -11,17 +11,18 @@
 , curl
 , expat
 , fdk_aac
-, ffmpeg
+, ffmpeg-headless
 , geoip
 , libbsd
 , libiconv
+, libjpeg
 , libkrb5
 , libmaxminddb
 , libmodsecurity
 , libuuid
 , libxml2
 , lmdb
-, luajit
+, luajit_openresty
 , msgpuck
 , openssl
 , opentracing-cpp
@@ -41,8 +42,9 @@ let
       name = "http_proxy_connect_module_generic";
       owner = "chobits";
       repo = "ngx_http_proxy_connect_module";
-      rev = "96ae4e06381f821218f368ad0ba964f87cbe0266";
-      sha256 = "1nc7z31i7x9dzp67kzgvs34hs6ps749y26wcpi3wf5mm63i803rh";
+      # 2023-06-19
+      rev = "dcb9a2c614d376b820d774db510d4da12dfe1e5b";
+      hash = "sha256-AzMhTSzmk3osSYy2q28/hko1v2AOTnY/dP5IprqGlQo=";
     };
 
     patches = [
@@ -229,14 +231,16 @@ let self = {
     };
   };
 
-  echo = {
+  echo = rec {
     name = "echo";
+    version = "0.63";
+
     src = fetchFromGitHub {
       name = "echo";
       owner = "openresty";
       repo = "echo-nginx-module";
-      rev = "v0.62";
-      sha256 = "0kr1y094yw1a9fyrf4w73ikq18w5ys463wza9n7yfl77xdwirnvl";
+      rev = "v${version}";
+      hash = "sha256-K7oOE0yxPYLf+3YMVbBsncpHRpGHXjs/8B5QPO3MQC4=";
     };
 
     meta = with lib; {
@@ -303,12 +307,12 @@ let self = {
     };
   };
 
-  http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "18";
+  http_proxy_connect_module_v24 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "24";
   };
 
-  http_proxy_connect_module_v19 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "19";
+  http_proxy_connect_module_v25 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "25";
   };
 
   ipscrub = {
@@ -369,15 +373,17 @@ let self = {
 
   lua = rec {
     name = "lua";
+    version = "0.10.26";
+
     src = fetchFromGitHub {
       name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.22";
-      sha256 = "sha256-TyeTL7/0dI2wS2eACS4sI+9tu7UpDq09aemMaklkUss=";
+      rev = "v${version}";
+      hash = "sha256-007up/XncaSBimBumHpbwgB1WnkXgBe8e/q/yT6vthI=";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
 
     preConfigure = let
       # fix compilation against nginx 1.23.0
@@ -386,8 +392,8 @@ let self = {
         sha256 = "sha256-l7GHFNZXg+RG2SIBjYJO1JHdGUtthWnzLIqEORJUNr4=";
       };
     in ''
-      export LUAJIT_LIB="${luajit}/lib"
-      export LUAJIT_INC="$(realpath ${luajit}/include/luajit-*)"
+      export LUAJIT_LIB="${luajit_openresty}/lib"
+      export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
 
       # make source directory writable to allow generating src/ngx_http_lua_autoconf.h
       lua_src=$TMPDIR/lua-src
@@ -418,7 +424,7 @@ let self = {
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
 
-    inputs = [ luajit ];
+    inputs = [ luajit_openresty ];
     allowMemoryWriteExecute = true;
 
     meta = with lib; {
@@ -456,15 +462,15 @@ let self = {
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.34";
-      sha256 = "sha256-LsrN/rF/p17x/80Jw9CgbmK69to6LycCM1OwTBojz8M=";
+      rev = "v0.36";
+      sha256 = "sha256-X+ygIesQ9PGm5yM+u1BOLYVpm1172P8jWwXNr3ixFY4=";
     };
 
     meta = with lib; {
       description = "Set, add, and clear arbitrary output headers";
       homepage = "https://github.com/openresty/headers-more-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
@@ -508,8 +514,8 @@ let self = {
     name = "njs";
     src = fetchhg {
       url = "https://hg.nginx.org/njs";
-      rev = "0.7.10";
-      sha256 = "sha256-/yKzY+BUFxLk8bWo+mqKfRVRsC2moe+WvhaRYIGdr6Y=";
+      rev = "0.8.1";
+      sha256 = "sha256-bFHrcA1ROMwYf+s0EWOXzkru6wvfRLvjvN8BV/r2tMc=";
       name = "nginx-njs";
     };
 
@@ -690,8 +696,8 @@ let self = {
       name = "set-misc";
       owner = "openresty";
       repo = "set-misc-nginx-module";
-      rev = "v0.32";
-      sha256 = "048a6jwinbjgxiprjj9ml3fdp0mhkx89g6ggams57fsx9m5vaxax";
+      rev = "v0.33";
+      hash = "sha256-jMMj3Ki1uSfQzagoB/O4NarxPjiaF9YRwjSKo+cgMxo=";
     };
 
     meta = with lib; {
@@ -958,17 +964,18 @@ let self = {
     };
   };
 
-  video-thumbextractor = {
+  video-thumbextractor = rec {
     name = "video-thumbextractor";
+    version = "1.0.0";
     src = fetchFromGitHub {
       name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
-      rev = "92b80642538eec4cfc98114dec5917b8d820e912";
-      sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
+      rev = "refs/tags/${version}";
+      hash = "sha256-F2cuzCbJdGYX0Zmz9MSXTB7x8+FBR6pPpXtLlDRCcj8=";
     };
 
-    inputs = [ ffmpeg ];
+    inputs = [ ffmpeg-headless libjpeg ];
 
     meta = with lib; {
       description = "Extract thumbs from a video file";
@@ -984,11 +991,15 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "1.31";
-      hash = "sha256-ZpeO8QWQ+fGkz08u/zFOq7vj4aHcodzSHNrc1SgGUyc=";
+      rev = "1.32";
+      hash = "sha256-ZpG0oj60D3o7/7uyE8AybCiOtncVe1Jnjaz22sIFypk=";
+      postFetch = ''
+        substituteInPlace $out/vod/media_set.h \
+          --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
+      '';
     };
 
-    inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg-headless fdk_aac openssl libxml2 libiconv ];
 
     meta = with lib; {
       description = "VOD packager";
@@ -1022,8 +1033,8 @@ let self = {
       name = "zstd";
       owner = "tokers";
       repo = "zstd-nginx-module";
-      rev = "25d88c262be47462cf90015ee7ebf6317b6848f9";
-      sha256 = "sha256-YRluKekhx1tb6e5IL1FPK05jPtzfQPaHI47cdada928=";
+      rev = "0.1.1";
+      hash = "sha256-1gCV7uUsuYnZfb9e8VfjWkUloVINOUH5qzeJ03kIHgs=";
     };
 
     inputs = [ zstd ];

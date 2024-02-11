@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
-  version = "unstable-2022-12-16";
+  version = "unstable-2024-01-14";
 
   src = fetchFromGitHub {
     owner = "tinted-theming";
-    repo = "base16-schemes";
-    rev = "cf6bc892a24af19e11383adedc6ce7901f133ea7";
-    sha256 = "sha256-U9pfie3qABp5sTr3M9ga/jX8C807FeiXlmEZnC4ZM58=";
+    repo = "schemes";
+    rev = "395074124283df993571f2abb9c713f413b76e6e";
+    sha256 = "sha256-9LmwYbtTxNFiP+osqRUbOXghJXpYvyvAwBwW80JMO7s=";
   };
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/themes/
-    install *.yaml $out/share/themes/
+    install base16/*.yaml $out/share/themes/
 
     runHook postInstall
   '';

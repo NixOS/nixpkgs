@@ -24,7 +24,8 @@ It is expected that each meta-attribute is one of the following:
 
 ### `description` {#var-meta-description}
 
-A short (one-line) description of the package. This is shown by `nix-env -q --description` and also on the Nixpkgs release pages.
+A short (one-line) description of the package.
+This is displayed on [search.nixos.org](https://search.nixos.org/packages).
 
 Don’t include a period at the end. Don’t include newline characters. Capitalise the first character. For brevity, don’t repeat the name of package --- just describe what it does.
 
@@ -70,11 +71,11 @@ A list of the maintainers of this Nix expression. Maintainers are defined in [`n
 
 ### `mainProgram` {#var-meta-mainProgram}
 
-The name of the main binary for the package. This affects the binary `nix run` executes and falls back to the name of the package. Example: `"rg"`
+The name of the main binary for the package. This affects the binary `nix run` executes. Example: `"rg"`
 
 ### `priority` {#var-meta-priority}
 
-The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the Nix manual page for `nix-env` for details. Example: `"10"` (a low-priority package).
+The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the [manual page for `nix-env`](https://nixos.org/manual/nix/stable/command-ref/nix-env) for details. Example: `"10"` (a low-priority package).
 
 ### `platforms` {#var-meta-platforms}
 

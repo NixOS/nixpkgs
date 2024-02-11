@@ -6,21 +6,29 @@
 , numpy
 , pillow
 , pooch
+, pythonOlder
 , scooby
+, setuptools
 , vtk
 }:
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.39.1";
-  format = "setuptools";
+  version = "0.43.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-N+1FfTKDITBmLaOjKZsahMd6s26W19ObcWXk8gGQ0QI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yJEggiWK73zzUPvOsPucpalmSMxywinE9t2e2dqBM9M=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     imageio
@@ -40,8 +48,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://pyvista.org";
     description = "Easier Pythonic interface to VTK";
+    homepage = "https://pyvista.org";
+    changelog = "https://github.com/pyvista/pyvista/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];
   };

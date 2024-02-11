@@ -8,7 +8,6 @@
 , gtkmm2
 , gerbv
 , librsvg
-, bash
 }:
 
 stdenv.mkDerivation rec {

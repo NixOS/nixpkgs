@@ -22,7 +22,7 @@ let
 
     src = fetchurl {
       url = "https://packages.beyondidentity.com/public/linux-authenticator/deb/ubuntu/pool/focal/main/b/be/${pname}_${version}/${pname}_${version}_amd64.deb";
-      sha512 = "sha512-JrHLf7KkJVbJLxx54OTvOSaIzY3+hjX+bpkeBHKX23YriCJssUUvEP6vlbI4r6gjMMFMhW92k0iikAgD1Tr4ug==";
+      hash = "sha512-JrHLf7KkJVbJLxx54OTvOSaIzY3+hjX+bpkeBHKX23YriCJssUUvEP6vlbI4r6gjMMFMhW92k0iikAgD1Tr4ug==";
     };
 
     nativeBuildInputs = [

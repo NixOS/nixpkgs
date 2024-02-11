@@ -46,5 +46,6 @@ buildGoModule rec {
     changelog = "https://github.com/noriah/catnip/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "catnip";
   };
 }

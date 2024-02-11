@@ -2,12 +2,20 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
+, fetchpatch
+, pythonAtLeast
+
+# build-system
+, setuptools
+
+# dependencies
 , dnspython
 , greenlet
-, monotonic
+, isPyPy
 , six
-, nose
+
+# tests
+, nose3
 , iana-etc
 , pytestCheckHook
 , libredirect
@@ -16,7 +24,7 @@
 buildPythonPackage rec {
   pname = "eventlet";
   version = "0.33.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
@@ -25,20 +33,36 @@ buildPythonPackage rec {
     hash = "sha256-iSSEZgPkK7RrZfU11z7hUk+JbFsCPH/SD16e+/f6TFU=";
   };
 
+  patches = [
+    # Python 3.12 fixes:
+    # - remove usage of distutils
+    # - replace ssl.wrap_socket usage
+    ./remove-distutils-usage.patch
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/python-eventlet/raw/rawhide/f/python3.12.patch";
+      hash = "sha256-MxzprFaVcV1uamjjTeIz+2gPvfPy+Y1QaA20znMdwoA=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     dnspython
     greenlet
     six
-  ] ++ lib.optionals (pythonOlder "3.5") [
-    monotonic
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    nose
+    nose3
   ];
 
-  doCheck = !stdenv.isDarwin;
+  # libredirect is not available on darwin
+  # tests hang on pypy indefinitely
+  # nose3 is incompatible with Python 3.12.
+  doCheck = !stdenv.isDarwin && !isPyPy && !(pythonAtLeast "3.12");
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf
@@ -92,6 +116,7 @@ buildPythonPackage rec {
   # pythonImportsCheck = [ "eventlet" ];
 
   meta = with lib; {
+    changelog = "https://github.com/eventlet/eventlet/blob/v${version}/NEWS";
     description = "A concurrent networking library for Python";
     homepage = "https://github.com/eventlet/eventlet/";
     license = licenses.mit;

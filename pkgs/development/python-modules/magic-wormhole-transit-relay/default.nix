@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,6 +28,6 @@ buildPythonPackage rec {
     description = "Transit Relay server for Magic-Wormhole";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

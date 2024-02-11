@@ -1,58 +1,65 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
 , pixman, vde2, alsa-lib, texinfo, flex
-, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell, removeReferencesTo
+, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson
+, sigtool
+, makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
-, guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
-, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
-, jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? !nixosTestRunner, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? true && !nixosTestRunner, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner, ncurses
+, guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !toolsOnly
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !toolsOnly, numactl
+, seccompSupport ? stdenv.isLinux && !toolsOnly, libseccomp
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !toolsOnly
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libpulseaudio
+, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, pipewire
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, SDL2, SDL2_image
+, jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libjack2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !toolsOnly, gtk3, gettext, vte, wrapGAppsHook
+, vncSupport ? !nixosTestRunner && !toolsOnly, libjpeg, libpng
+, smartcardSupport ? !nixosTestRunner && !toolsOnly, libcacard
+, spiceSupport ? true && !nixosTestRunner && !toolsOnly, spice, spice-protocol
+, ncursesSupport ? !nixosTestRunner && !toolsOnly, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
+, rutabagaSupport ? openGLSupport && !toolsOnly && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx, rutabaga_gfx
 , virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? true, libiscsi
+, libiscsiSupport ? !toolsOnly, libiscsi
 , smbdSupport ? false, samba
-, tpmSupport ? true
+, tpmSupport ? !toolsOnly
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? false, canokey-qemu
-, capstoneSupport ? true, capstone
+, capstoneSupport ? !toolsOnly, capstone
 , enableDocs ? true
 , hostCpuOnly ? false
-, hostCpuTargets ? (if hostCpuOnly
+, hostCpuTargets ? (if toolsOnly
+                    then [ ]
+                    else if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
-, doCheck ? false
-, qemu  # for passthru.tests
+, toolsOnly ? false
+, gitUpdater
+, qemu-utils # for tests attribute
 }:
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
-    + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "8.0.2";
+    + lib.optionalString nixosTestRunner "-for-vm-tests"
+    + lib.optionalString toolsOnly "-utils";
+  version = "8.2.1";
 
   src = fetchurl {
-    url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "8GCr1DX75nlBJeLDmFaP/Dz6VABCWWkHqLGO3KNM9qU=";
+    url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hWJ1EVgXX50YfF8itXVVq+PIcPAyXIztEsNMbZh3Kb4=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -60,7 +67,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper removeReferencesTo
-    pkg-config flex bison meson ninja
+    pkg-config flex bison dtc meson ninja
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
     python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
@@ -79,6 +86,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
@@ -91,6 +99,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
     ++ lib.optionals openGLSupport [ mesa libepoxy libdrm ]
+    ++ lib.optionals rutabagaSupport [ rutabaga_gfx ]
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
@@ -154,9 +163,6 @@ stdenv.mkDerivation rec {
     "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    # Always use our Meson, not the bundled version, which doesn't
-    # have our patches and will be subtly broken because of that.
-    "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
@@ -206,7 +212,7 @@ stdenv.mkDerivation rec {
   preBuild = "cd build";
 
   # tests can still timeout on slower systems
-  inherit doCheck;
+  doCheck = false;
   nativeCheckInputs = [ socat ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
@@ -220,6 +226,7 @@ stdenv.mkDerivation rec {
 
     # point tests towards correct binaries
     substituteInPlace ../tests/unit/test-qga.c \
+      --replace '/bin/bash' "$(type -P bash)" \
       --replace '/bin/echo' "$(type -P echo)"
     substituteInPlace ../tests/unit/test-io-channel-command.c \
       --replace '/bin/socat' "$(type -P socat)"
@@ -240,14 +247,21 @@ stdenv.mkDerivation rec {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = ''
+  postInstall = lib.optionalString (!toolsOnly) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
-    tests = {
-      qemu-tests = qemu.override { doCheck = true; };
+    tests = lib.optionalAttrs (!toolsOnly) {
+      qemu-tests = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      qemu-utils-builds = qemu-utils;
+    };
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://gitlab.com/qemu-project/qemu.git";
+      rev-prefix = "v";
+      ignoredVersions = "(alpha|beta|rc).*";
     };
   };
 
@@ -255,11 +269,14 @@ stdenv.mkDerivation rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    homepage = "http://www.qemu.org/";
+    homepage = "https://www.qemu.org/";
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    mainProgram = "qemu-kvm";
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
+  }
+  # toolsOnly: Does not have qemu-kvm and there's no main support tool
+  // lib.optionalAttrs (!toolsOnly) {
+    mainProgram = "qemu-kvm";
   };
-}
+})

@@ -39,25 +39,26 @@ rustPlatform.buildRustPackage rec {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
-    maintainers = [ maintainers.tailhook ];
+    maintainers = [];
   };
 }
 ```
 
-`buildRustPackage` requires either the `cargoSha256` or the
-`cargoHash` attribute which is computed over all crate sources of this
-package. `cargoHash256` is used for traditional Nix SHA-256 hashes,
-such as the one in the example above. `cargoHash` should instead be
-used for [SRI](https://www.w3.org/TR/SRI/) hashes. For example:
-
-Exception: If the application has cargo `git` dependencies, the `cargoHash`/`cargoSha256`
-approach will not work, and you will need to copy the `Cargo.lock` file of the application
-to nixpkgs and continue with the next section for specifying the options of the`cargoLock`
-section.
+`buildRustPackage` requires either the `cargoHash` or the `cargoSha256`
+attribute which is computed over all crate sources of this package.
+`cargoSha256` is used for traditional Nix SHA-256 hashes. `cargoHash` should
+instead be used for [SRI](https://www.w3.org/TR/SRI/) hashes and should be
+preferred. For example:
 
 ```nix
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
 ```
+
+Exception: If the application has cargo `git` dependencies, the `cargoHash`/`cargoSha256`
+approach will not work, and you will need to copy the `Cargo.lock` file of the application
+to nixpkgs and continue with the next section for specifying the options of the `cargoLock`
+section.
+
 
 Both types of hashes are permitted when contributing to nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
@@ -102,7 +103,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
+    hash = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
   cargoHash = "sha256-tbrTbutUs5aPSV+yE0IBUZAAytgmZV7Eqxia7g+9zRs=";
@@ -558,7 +559,7 @@ buildPythonPackage rec {
     hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
     cargo
@@ -700,7 +701,7 @@ with import <nixpkgs> {};
     hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
       postPatch = ''
         substituteInPlace lib/zoneinfo.rs \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+          --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
       '';
     };
   };
@@ -817,7 +818,7 @@ $ cargo test
 ## Using community maintained Rust toolchains {#using-community-maintained-rust-toolchains}
 
 ::: {.note}
-Note: The following projects cannot be used within nixpkgs since [IFD](#ssec-import-from-derivation) is disallowed.
+The following projects cannot be used within Nixpkgs since [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs.
 To package things that require Rust nightly, `RUSTC_BOOTSTRAP = true;` can sometimes be used as a hack.
 :::
 
@@ -926,7 +927,7 @@ rustPlatform.buildRustPackage rec {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ mit unlicense ];
-    maintainers = with maintainers; [ tailhook ];
+    maintainers = with maintainers; [];
   };
 }
 ```
@@ -939,3 +940,67 @@ Fenix also has examples with `buildRustPackage`,
 [crane](https://github.com/ipetkov/crane),
 [naersk](https://github.com/nix-community/naersk),
 and cross compilation in its [Examples](https://github.com/nix-community/fenix#examples) section.
+
+## Using `git bisect` on the Rust compiler {#using-git-bisect-on-the-rust-compiler}
+
+Sometimes an upgrade of the Rust compiler (`rustc`) will break a
+downstream package.  In these situations, being able to `git bisect`
+the `rustc` version history to find the offending commit is quite
+useful.  Nixpkgs makes it easy to do this.
+
+First, roll back your nixpkgs to a commit in which its `rustc` used
+*the most recent one which doesn't have the problem.*  You'll need
+to do this because of `rustc`'s extremely aggressive
+version-pinning.
+
+Next, add the following overlay, updating the Rust version to the
+one in your rolled-back nixpkgs, and replacing `/git/scratch/rust`
+with the path into which you have `git clone`d the `rustc` git
+repository:
+
+```nix
+ (final: prev: /*lib.optionalAttrs prev.stdenv.targetPlatform.isAarch64*/ {
+   rust_1_72 =
+     lib.updateManyAttrsByPath [{
+       path = [ "packages" "stable" ];
+       update = old: old.overrideScope(final: prev: {
+         rustc-unwrapped = prev.rustc-unwrapped.overrideAttrs (_: {
+           src = lib.cleanSource /git/scratch/rust;
+           # do *not* put passthru.isReleaseTarball=true here
+         });
+       });
+     }]
+       prev.rust_1_72;
+ })
+```
+
+If the problem you're troubleshooting only manifests when
+cross-compiling you can uncomment the `lib.optionalAttrs` in the
+example above, and replace `isAarch64` with the target that is
+having problems.  This will speed up your bisect quite a bit, since
+the host compiler won't need to be rebuilt.
+
+Now, you can start a `git bisect` in the directory where you checked
+out the `rustc` source code.  It is recommended to select the
+endpoint commits by searching backwards from `origin/master` for the
+*commits which added the release notes for the versions in
+question.*  If you set the endpoints to commits on the release
+branches (i.e. the release tags), git-bisect will often get confused
+by the complex merge-commit structures it will need to traverse.
+
+The command loop you'll want to use for bisecting looks like this:
+
+```bash
+git bisect {good,bad}  # depending on result of last build
+git submodule update --init
+CARGO_NET_OFFLINE=false cargo vendor \
+  --sync ./src/tools/cargo/Cargo.toml \
+  --sync ./src/tools/rust-analyzer/Cargo.toml \
+  --sync ./compiler/rustc_codegen_cranelift/Cargo.toml \
+  --sync ./src/bootstrap/Cargo.toml
+nix-build $NIXPKGS -A package-broken-by-rust-changes
+```
+
+The `git submodule update --init` and `cargo vendor` commands above
+require network access, so they can't be performed from within the
+`rustc` derivation, unfortunately.

@@ -9,13 +9,14 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.11.0";
-  format = "setuptools";
+  version = "0.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,8 +24,18 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-zigate";
     rev = "refs/tags/${version}";
-    hash = "sha256-eGN2QvPHZ8gfPPFdUbAP9cs43jzUHDBS/w1tni1shB0=";
+    hash = "sha256-wziXUFYSUXhzWHM870jphG12h99WVzqiYimtIbkXyM0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     gpiozero

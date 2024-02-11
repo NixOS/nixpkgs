@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srandrd";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "jceb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07r1ck2ijj30n19ylndgw75ly9k3815kj9inpxblfnjpwbbw6ic0";
+    sha256 = "sha256-Wf+tVqDaNAiH6UHN8fFv2wM+LEch6wKlZOkqWEqLLkw=";
   };
 
   buildInputs = [ libX11 libXrandr libXinerama ];
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.utdemir ];
+    mainProgram = "srandrd";
   };
 
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "invoiceplane";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    sha256 = "sha256-EwhOwUoOy3LNZTDgp9kvR/0OsO2TDpWkdT0fd7u0Ns8=";
+    sha256 = "sha256-QSl/9hnAd9QxQm0xyZJ4ElIQDSOVStSzWa+fq3AJHjw=";
   };
 
   nativeBuildInputs = [ unzip ];

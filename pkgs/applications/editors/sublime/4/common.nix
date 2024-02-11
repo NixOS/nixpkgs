@@ -9,9 +9,10 @@
 let
   pnameBase = "sublimetext4";
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
-  binaries = [ "sublime_text" "plugin_host-3.3" "plugin_host-3.8" "crash_reporter" ];
+  binaries = [ "sublime_text" "plugin_host-3.3" "plugin_host-3.8" crashHandlerBinary ];
   primaryBinary = "sublime_text";
   primaryBinaryAliases = [ "subl" "sublime" "sublime4" ];
+  crashHandlerBinary = if lib.versionAtLeast buildVersion "4153" then "crash_handler" else "crash_reporter";
   downloadUrl = arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
   versionFile = builtins.toString ./packages.nix;

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     python
   ];
 
-  preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/lib/${python.libPrefix}/site-packages\"";
+  preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/${python.sitePackages}\"";
 
   cmakeFlags = [ "-DWITH_OPENEXR=1" ]
     ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")

@@ -1,39 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, zig, testers, findup }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, zig_0_10
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findup";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
-    owner = "hiljusti";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fafMBC/ibCHgC3JwCNEh74Qw/yZ+KQF//z1e+OpeGus=";
+    owner = "booniepepper";
+    repo = "findup";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Tpyiy5oJQ04lqVEOFshFC0+90VoNILQ+N6Dd7lbuH/Q=";
   };
 
-  nativeBuildInputs = [ zig ];
+  nativeBuildInputs = [ zig_0_10.hook ];
 
-  # Builds and installs (at the same time) with Zig.
-  dontConfigure = true;
-  dontBuild = true;
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  # Give Zig a directory for intermediate work.
-  preInstall = ''
-    export HOME=$TMPDIR
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline --prefix $out
-    runHook postInstall
-  '';
-
-  passthru.tests.version = testers.testVersion { package = findup; };
-
-  meta = with lib; {
-    homepage = "https://github.com/hiljusti/findup";
+  meta = {
+    homepage = "https://github.com/booniepepper/findup";
     description = "Search parent directories for sentinel files";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hiljusti ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ booniepepper ];
+    mainProgram = "findup";
   };
-}
+})

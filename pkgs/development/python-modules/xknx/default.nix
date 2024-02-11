@@ -8,24 +8,26 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.10.0";
-  format = "pyproject";
+  version = "2.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "XKNX";
-    repo = pname;
+    repo = "xknx";
     rev = "refs/tags/${version}";
-    hash = "sha256-3eSS3V1EgLRf8lB3icG4pNGq0VbXjfgwEQ91mMRKyAE=";
+    hash = "sha256-Fwo76tvkLLx8QJeokuGohhnt83eGBMyWIUSHJGuQWJ4=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

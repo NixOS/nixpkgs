@@ -5,16 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
-  version = "1.2.1";
-  format = "pyproject";
+  version = "1.2.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LogI9sJHvLN5WHJGdW47D09XZInKln/I2hNmG62d1JU=";
+    hash = "sha256-v0PJY0Ahxa4k011AwtWSIAWBXvt3Aybrd382j1SIT6M=";
   };
+
+  postPatch = ''
+    sed -i '/name = "zeekscript"/a version = "${version}"' pyproject.toml
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

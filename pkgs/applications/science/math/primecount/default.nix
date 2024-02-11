@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "primecount";
-  version = "7.8";
+  version = "7.10";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primecount";
     rev = "v${version}";
-    hash = "sha256-yKk+zXvA/MI7y9gCMwJNYHRYIYgeWyJHjyPi1uNWVnM=";
+    hash = "sha256-z7sHGR6zZSTV1PbL0WPGHf52CYQ572KC1yznCuIEJbQ=";
   };
 
   nativeBuildInputs = [

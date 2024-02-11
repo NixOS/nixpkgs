@@ -5,7 +5,8 @@
 , appstream-glib
 , desktop-file-utils
 , gettext
-, gtk3
+, gtk4
+, libadwaita
 , meson
 , ninja
 , pkg-config
@@ -14,18 +15,19 @@
 , libwebp
 , optipng
 , pngquant
+, oxipng
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "curtail";
-  version = "1.3.1";
+  version = "1.8.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-/xvkRXs1EVu+9RZM+TnyIGxFV2stUR9XHEmaJxsJ3V8=";
+    sha256 = "sha256-LLz4nZ9WFQMogQR2gCKn80gvHUG5hlpQpcNjpr4fs2s=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +35,8 @@ python3.pkgs.buildPythonApplication rec {
     appstream-glib
     desktop-file-utils
     gettext
-    gtk3
+    gtk4
+    libadwaita
     meson
     ninja
     pkg-config
@@ -43,7 +46,8 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     appstream-glib
     gettext
-    gtk3
+    gtk4
+    libadwaita
   ];
 
   propagatedBuildInputs = [
@@ -59,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath [ jpegoptim libwebp optipng pngquant ]}"
+      "--prefix" "PATH" ":" "${lib.makeBinPath [ jpegoptim libwebp optipng pngquant oxipng ]}"
     )
   '';
 

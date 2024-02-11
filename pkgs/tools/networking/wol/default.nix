@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/wake-on-lan/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ makefu ];
+    mainProgram = "wol";
     platforms = platforms.linux;
   };
 }

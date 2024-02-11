@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gbsplay";
-  version = "0.0.94";
+  version = "0.0.95";
 
   src = fetchFromGitHub {
     owner = "mmitch";
     repo = "gbsplay";
     rev = version;
-    sha256 = "VpaXbjotmc/Ref1geiKkBX9UhbPxfAGkFAdKVxP8Uxo=";
+    sha256 = "sha256-s6TGAWwIm2raXk3kA3D0/fg+Hn3O/lerPlxGOryXIBQ=";
   };
 
   configureFlags = [

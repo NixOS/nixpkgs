@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, libtool, automake, autoconf, ucx
-, enableCuda ? false
-, cudatoolkit
+, config
+, enableCuda ? config.cudaSupport
+, cudaPackages
 , enableAvx ? stdenv.hostPlatform.avxSupport
 , enableSse41 ? stdenv.hostPlatform.sse4_1Support
 , enableSse42 ? stdenv.hostPlatform.sse4_2Support
@@ -17,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7Mo9zU0sogGyDdWIfTgUPoR5Z8D722asC2y7sHnKbzs=";
   };
 
+  outputs = [ "out" "dev" ];
+
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -27,19 +30,31 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  nativeBuildInputs = [ libtool automake autoconf ]
+    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  buildInputs = [ ucx ]
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_cccl
+      cudaPackages.cuda_cudart
+    ];
+
+
   preConfigure = ''
     ./autogen.sh
+  '' + lib.optionalString enableCuda ''
+    configureFlagsArray+=( "--with-nvcc-gencode=${builtins.concatStringsSep " " cudaPackages.cudaFlags.gencode}" )
   '';
-
-  nativeBuildInputs = [ libtool automake autoconf ];
-  buildInputs = [ ucx ]
-    ++ lib.optional enableCuda cudatoolkit;
-
   configureFlags = [ ]
    ++ lib.optional enableSse41 "--with-sse41"
    ++ lib.optional enableSse42 "--with-sse42"
    ++ lib.optional enableAvx "--with-avx"
-   ++ lib.optional enableCuda "--with-cuda=${cudatoolkit}";
+   ++ lib.optional enableCuda "--with-cuda=${cudaPackages.cuda_cudart}";
+
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+    moveToOutput bin/ucc_info $dev
+  '';
 
   meta = with lib; {
     description = "Collective communication operations API";

@@ -7,17 +7,12 @@ let
   poolName = "freshrss";
 in
 {
-  meta.maintainers = with maintainers; [ etu stunkymonkey ];
+  meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
     enable = mkEnableOption (mdDoc "FreshRSS feed reader");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.freshrss;
-      defaultText = lib.literalExpression "pkgs.freshrss";
-      description = mdDoc "Which FreshRSS package to use.";
-    };
+    package = mkPackageOption pkgs "freshrss" { };
 
     defaultUser = mkOption {
       type = types.str;
@@ -27,7 +22,8 @@ in
     };
 
     passwordFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       description = mdDoc "Password for the defaultUser for FreshRSS.";
       example = "/run/secrets/freshrss";
     };
@@ -120,7 +116,13 @@ in
     user = mkOption {
       type = types.str;
       default = "freshrss";
-      description = lib.mdDoc "User under which Freshrss runs.";
+      description = lib.mdDoc "User under which FreshRSS runs.";
+    };
+
+    authType = mkOption {
+      type = types.enum [ "form" "http_auth" "none" ];
+      default = "form";
+      description = mdDoc "Authentication type for FreshRSS.";
     };
   };
 
@@ -160,6 +162,14 @@ in
       };
     in
     mkIf cfg.enable {
+      assertions = mkIf (cfg.authType == "form") [
+        {
+          assertion = cfg.passwordFile != null;
+          message = ''
+            `passwordFile` must be supplied when using "form" authentication!
+          '';
+        }
+      ];
       # Set up a Nginx virtual host.
       services.nginx = mkIf (cfg.virtualHost != null) {
         enable = true;
@@ -205,7 +215,7 @@ in
             "catch_workers_output" = true;
           };
           phpEnv = {
-            FRESHRSS_DATA_PATH = "${cfg.dataDir}";
+            DATA_PATH = "${cfg.dataDir}";
           };
         };
       };
@@ -218,16 +228,17 @@ in
       };
       users.groups."${cfg.user}" = { };
 
-      systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-      ];
+      systemd.tmpfiles.settings."10-freshrss".${cfg.dataDir}.d = {
+        inherit (cfg) user;
+        group = config.users.users.${cfg.user}.group;
+      };
 
       systemd.services.freshrss-config =
         let
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--default_user" = ''"${cfg.defaultUser}"'';
-              "--auth_type" = ''"form"'';
+              "--auth_type" = ''"${cfg.authType}"'';
               "--base_url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
@@ -252,32 +263,41 @@ in
             WorkingDirectory = cfg.package;
           };
           environment = {
-            FRESHRSS_DATA_PATH = cfg.dataDir;
+            DATA_PATH = cfg.dataDir;
           };
 
-          script = ''
-            # do installation or reconfigure
-            if test -f ${cfg.dataDir}/config.php; then
-              # reconfigure with settings
-              ./cli/reconfigure.php ${settingsFlags}
-              ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
-            else
-              # check correct folders in data folder
-              ./cli/prepare.php
-              # install with settings
-              ./cli/do-install.php ${settingsFlags}
-              ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
-            fi
-          '';
+          script =
+            let
+              userScriptArgs = ''--user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"'';
+              updateUserScript = optionalString (cfg.authType == "form") ''
+                ./cli/update-user.php ${userScriptArgs}
+              '';
+              createUserScript = optionalString (cfg.authType == "form") ''
+                ./cli/create-user.php ${userScriptArgs}
+              '';
+            in
+            ''
+              # do installation or reconfigure
+              if test -f ${cfg.dataDir}/config.php; then
+                # reconfigure with settings
+                ./cli/reconfigure.php ${settingsFlags}
+                ${updateUserScript}
+              else
+                # check correct folders in data folder
+                ./cli/prepare.php
+                # install with settings
+                ./cli/do-install.php ${settingsFlags}
+                ${createUserScript}
+              fi
+            '';
         };
 
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
         after = [ "freshrss-config.service" ];
-        wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
         environment = {
-          FRESHRSS_DATA_PATH = cfg.dataDir;
+          DATA_PATH = cfg.dataDir;
         };
         serviceConfig = defaultServiceConfig //{
           ExecStart = "${cfg.package}/app/actualize_script.php";

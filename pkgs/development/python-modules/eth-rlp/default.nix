@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "eth-rlp";
   version = "0.3.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     description = "RLP definitions for common Ethereum objects";
     homepage = "https://github.com/ethereum/eth-rlp";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

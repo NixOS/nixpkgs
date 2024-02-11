@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, fetchpatch, buildGoModule }:
 
 buildGoModule rec {
   pname = "pg_tileserv";
-  version = "1.0.9";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "CrunchyData";
-    repo = pname;
+    repo = "pg_tileserv";
     rev = "v${version}";
-    sha256 = "sha256-pNm802DJu5t+Y9QZU6wDUcAVpJTZ4SxDK0J61wzuuRE=";
+    hash = "sha256-xTIx39eLmHBUlaUjQy9KGpi5X4AU93DzX+Ofg5PMLWE=";
   };
 
-  vendorSha256 = "sha256-iw9bIh1Ngj5IGhrZwmSPciyaAR73msZ283TB0ibwt+c=";
+  vendorHash = "sha256-8CvYvoIKOYvR7npCV65ZqZGR8KCTH4GabTt/JGQG3uc=";
 
   ldflags = [ "-s" "-w" "-X main.programVersion=${version}" ];
 
@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "A very thin PostGIS-only tile server in Go";
     homepage = "https://github.com/CrunchyData/pg_tileserv";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
   };
 }

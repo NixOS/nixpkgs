@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "logilab-common";
-  version = "1.9.7";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/JlN9RlIRLbi9TL9V6SgO6ddPeKqLzK402DqkLBRuxM=";
+    hash = "sha256-ojvR2k3Wpj5Ej0OS57I4aFX/cGFVeL/PmT7riCTelws=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools
     mypy-extensions
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [

@@ -1,7 +1,8 @@
 { version, rev, sourceSha256 }:
 
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper
-, pkg-config, libX11, libuuid, xz, vtk, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+, expat, fftw, gdcm, hdf5-cpp, libjpeg, libminc, libtiff, libpng
+, libX11, libuuid, xz, vtk, zlib, Cocoa }:
 
 let
   itkGenericLabelInterpolatorSrc = fetchFromGitHub {
@@ -37,12 +38,18 @@ stdenv.mkDerivation {
     sha256 = sourceSha256;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-gcc13-build";
+      url = "https://github.com/InsightSoftwareConsortium/ITK/commit/9a719a0d2f5f489eeb9351b0ef913c3693147a4f.patch";
+      hash = "sha256-dDyqYOzo91afR8W7k2N64X6l7t6Ws1C9iuRkWHUe0fg=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMake/ITKSetStandardCompilerFlags.cmake  \
       --replace "-march=corei7" ""  \
       --replace "-mtune=native" ""
-    substituteInPlace Modules/ThirdParty/GDCM/src/gdcm/Utilities/gdcmopenjpeg/src/lib/openjp2/libopenjp2.pc.cmake.in  \
-      --replace "@OPENJPEG_INSTALL_LIB_DIR@" "@OPENJPEG_INSTALL_FULL_LIB_DIR@"
     ln -sr ${itkGenericLabelInterpolatorSrc} Modules/External/ITKGenericLabelInterpolator
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
     ln -sr ${itkSimpleITKFiltersSrc} Modules/External/ITKSimpleITKFilters
@@ -52,6 +59,15 @@ stdenv.mkDerivation {
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
     "-DITK_FORBID_DOWNLOADS=ON"
+    "-DITK_USE_SYSTEM_LIBRARIES=ON"  # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
+    # note ITK_USE_SYSTEM_EIGEN, part of ITK_USE_SYSTEM_LIBRARIES,
+    # causes "...-itk-5.2.1/include/ITK-5.2/itkSymmetricEigenAnalysis.h:23:31: fatal error: Eigen/Eigenvalues: No such file or directory"
+    # when compiling c3d, but maybe an ITK 5.2/eigen version issue:
+    "-DITK_USE_SYSTEM_EIGEN=OFF"
+    "-DITK_USE_SYSTEM_GOOGLETEST=OFF"  # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
+    "-DITK_USE_SYSTEM_GDCM=ON"
+    "-DITK_USE_SYSTEM_MINC=ON"
+    "-DLIBMINC_DIR=${libminc}/lib/cmake"
     "-DModule_ITKMINC=ON"
     "-DModule_ITKIOMINC=ON"
     "-DModule_ITKIOTransformMINC=ON"
@@ -63,8 +79,12 @@ stdenv.mkDerivation {
     "-DModule_GenericLabelInterpolator=ON"
   ];
 
-  nativeBuildInputs = [ cmake xz makeWrapper ];
-  buildInputs = [ libX11 libuuid vtk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [ cmake xz ];
+  buildInputs = [
+    libX11
+    libuuid
+    vtk
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
   # Due to ITKVtkGlue=ON and the additional dependencies needed to configure VTK 9
   # (specifically libGL and libX11 on Linux),
   # it's now seemingly necessary for packages that configure ITK to
@@ -72,11 +92,20 @@ stdenv.mkDerivation {
   # These deps were propagated from VTK 9 in https://github.com/NixOS/nixpkgs/pull/206935,
   # so we simply propagate them again from ITK.
   # This admittedly is a hack and seems like an issue with VTK 9's CMake configuration.
-  propagatedBuildInputs = vtk.propagatedBuildInputs;
-
-  postInstall = ''
-    wrapProgram "$out/bin/h5c++" --prefix PATH ":" "${pkg-config}/bin"
-  '';
+  propagatedBuildInputs = [
+    # The dependencies we've un-vendored from ITK, such as GDCM, must be propagated,
+    # otherwise other software built against ITK fails to configure since ITK headers
+    # refer to these previously vendored libraries:
+    expat
+    fftw
+    gdcm
+    hdf5-cpp
+    libjpeg
+    libminc
+    libpng
+    libtiff
+    zlib
+  ] ++ vtk.propagatedBuildInputs;
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";

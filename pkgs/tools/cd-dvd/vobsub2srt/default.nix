@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.ttuegel ];
+    mainProgram = "vobsub2srt";
   };
 }

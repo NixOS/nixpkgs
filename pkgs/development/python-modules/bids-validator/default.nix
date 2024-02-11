@@ -2,19 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+
+# build-system
+, setuptools
+, versioneer
 }:
 
 buildPythonPackage rec {
   pname = "bids-validator";
-  version = "1.11.0";
-  format = "setuptools";
+  version = "1.14.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QIxWdIt8+Yz3wxgi8zqNicXm59tSVMNFEH6NUnV2/1M=";
+    hash = "sha256-M7D4ZcGqPjn7klGN8WP6a3lHjRqhAq9S/VNwSl7y6kY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    versioneer
+  ];
 
   # needs packages which are not available in nixpkgs
   doCheck = false;

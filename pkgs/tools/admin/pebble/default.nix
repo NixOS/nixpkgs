@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "0sh67bzq3hlagk73w2kp45viq15g2rcxm760jk9fqshamq784m6m";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   passthru.tests = {
     smoke-test = nixosTests.acme;

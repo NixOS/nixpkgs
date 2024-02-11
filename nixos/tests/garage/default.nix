@@ -44,10 +44,11 @@ let
 in
   foldl
   (matrix: ver: matrix // {
-    "basic${toString ver}" = import ./basic.nix { inherit system pkgs; mkNode = mkNode pkgs."garage_${ver}"; };
-    "with-3node-replication${toString ver}" = import ./with-3node-replication.nix { inherit system pkgs; mkNode = mkNode pkgs."garage_${ver}"; };
+    "basic${toString ver}" = import ./basic.nix { inherit system pkgs ver; mkNode = mkNode pkgs."garage_${ver}"; };
+    "with-3node-replication${toString ver}" = import ./with-3node-replication.nix { inherit system pkgs ver; mkNode = mkNode pkgs."garage_${ver}"; };
   })
   {}
   [
     "0_8"
+    "0_9"
   ]

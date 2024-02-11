@@ -55,5 +55,6 @@ buildGoModule rec {
     changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab zowoq ];
+    mainProgram = "gdu";
   };
 }

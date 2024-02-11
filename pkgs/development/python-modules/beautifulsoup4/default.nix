@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , chardet
 , hatchling
 , html5lib
@@ -9,6 +10,14 @@
 , pythonOlder
 , soupsieve
 , sphinxHook
+
+# for passthru.tests
+, html-sanitizer
+, markdownify
+, mechanicalsoup
+, nbconvert
+, subliminal
+, wagtail
 }:
 
 buildPythonPackage rec {
@@ -24,6 +33,18 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-SSu8adyjXRLarHHE2xv/8Mh2wA70ov+sziJtRjjrcto=";
   };
+
+  patches = [
+    # Fix test with libxml 2.12.
+    # https://bugs.launchpad.net/beautifulsoup/+bug/2045481
+    (fetchpatch {
+      url = "https://bugs.launchpad.net/beautifulsoup/+bug/2045481/+attachment/5726132/+files/2045481.diff";
+      hash = "sha256-f/Wkh7El4r1iWM2/CSi5AKE1+NsEP3D5pxWgBcZ//Vs=";
+      excludes = [
+        "CHANGELOG"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     hatchling
@@ -51,6 +72,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "bs4"
   ];
+
+  passthru.tests = {
+    inherit html-sanitizer
+      markdownify
+      mechanicalsoup
+      nbconvert
+      subliminal
+      wagtail;
+  };
 
   meta = with lib; {
     changelog = "https://git.launchpad.net/beautifulsoup/tree/CHANGELOG?h=${version}";

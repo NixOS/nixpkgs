@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
   {
     imports = [ ./common/user-account.nix ];
 
-    fonts.fonts = with pkgs; [ dejavu_fonts ];
+    fonts.packages = with pkgs; [ dejavu_fonts ];
 
     services.cage = {
       enable = true;

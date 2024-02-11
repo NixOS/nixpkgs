@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, bzip2 }:
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, bzip2
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.337";
+  version = "2.0.358";
 
   src = fetchurl {
     url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-lYXJ0Q0iUiWk/n/I71BsKnnoRJh3a2EJT3EWV4+pQbM=";
+    hash = "sha256-qL+LxePCZnSpbeeNANvI/f8ntNStHe02fSqMA+XKFng=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +46,12 @@ stdenv.mkDerivation rec {
     cp -r opt/fastnetmon/app/bin $out/bin
     cp -r opt/fastnetmon/libraries $out/libexec/fastnetmon
 
+    readlink usr/sbin/gobgpd
+    readlink usr/bin/gobgp
+
+    ln -s $(readlink usr/sbin/gobgpd | sed "s:/opt/fastnetmon:$out/libexec/fastnetmon:") $out/bin/fnm-gobgpd
+    ln -s $(readlink usr/bin/gobgp | sed "s:/opt/fastnetmon:$out/libexec/fastnetmon:") $out/bin/fnm-gobgp
+
     addAutoPatchelfSearchPath $out/libexec/fastnetmon/libraries
   '';
 
@@ -48,13 +60,18 @@ stdenv.mkDerivation rec {
     set +o pipefail
     $out/bin/fastnetmon 2>&1 | grep "Can't open log file"
     $out/bin/fcli 2>&1 | grep "Please run this tool with root rights"
+    $out/bin/fnm-gobgp --help 2>&1 | grep "Available Commands"
+    $out/bin/fnm-gobgpd --help 2>&1 | grep "Application Options"
   '';
+
+  passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
 
   meta = with lib; {
     description = "A high performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
+    changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ yuka ];
+    maintainers = teams.wdz.members;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

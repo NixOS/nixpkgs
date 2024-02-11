@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, jupyter_console
+, jupyter-console
 , jupyter-core
 , pygments
+, setuptools
 , termcolor
 , txzmq
 }:
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-YxV6xC7GS5NXyMPRZN9YIJxamgP2etwrZUAZjk5PjtU=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    jupyter_console
+    jupyter-console
     jupyter-core
     pygments
     termcolor

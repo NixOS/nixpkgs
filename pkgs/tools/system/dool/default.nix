@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dool";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "scottchiefbaker";
     repo = "dool";
     rev = "v${version}";
-    hash = "sha256-e6gLPmxOZBw6htiJ5Ljob2tQ9xB4kjK8vPs/9WMGER4=";
+    hash = "sha256-g74XyNtNdYf2qTCFBWIVZ3LhngDln/yu3bRJzO890JU=";
   };
 
   buildInputs = [
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];
     platforms = platforms.unix;
+    mainProgram = "dool";
   };
 }

@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "slugid";
   version = "2.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "taskcluster";

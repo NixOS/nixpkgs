@@ -1,11 +1,13 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, gitUpdater
 , pkg-config
 , qmake
 , qt5compat ? null
 , qtbase
 , qttools
+, qtwayland
 , rtaudio
 , rtmidi
 , wrapQtAppsHook
@@ -13,16 +15,16 @@
 
 assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambootracker";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Ymi1tjJCgStF0Rtseelq/YuTtBs2PrbF898TlbjyYUw=";
+    hash = "sha256-rMYs2jixzoMGem9lxAjDMbFOMrnK8BLFjZIagdZk/Ok=";
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
@@ -41,14 +43,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
-    rtaudio
     rtmidi
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
   ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
     qt5compat
-  ];
+  ] ++ rtaudio.buildInputs;
 
   qmakeFlags = [
-    "CONFIG+=system_rtaudio"
+    # we don't have RtAudio 6 yet: https://github.com/NixOS/nixpkgs/pull/245075
+    # "CONFIG+=system_rtaudio"
     "CONFIG+=system_rtmidi"
   ];
 
@@ -64,6 +68,12 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
   '';
 
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
+
   meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     homepage = "https://bambootracker.github.io/BambooTracker/";
@@ -71,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
   };
-}
+})

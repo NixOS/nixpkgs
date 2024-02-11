@@ -2,7 +2,7 @@
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
  liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc, rpcsvc-proto, libtirpc, gperftools, nixosTests
+ rsync, getent, rpcsvc-proto, libtirpc, gperftools, nixosTests
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -42,7 +42,7 @@ let
     e2fsprogs # tune2fs
     findutils # find
     gawk # awk
-    glibc # getent
+    getent # getent
     gnugrep # grep
     gnused # sed
     lvm2 # lvs
@@ -55,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "11.0";
+  version = "11.1";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K2w8YqpoLzkzUuoOuI7itfC81sJPUf6elOL8LCrxKAI=";
+    sha256 = "sha256-ZClMfozeFO3266fkuCSV04QwpZaYa8B0uq2lTPEN2rQ=";
   };
   inherit buildInputs propagatedBuildInputs;
 

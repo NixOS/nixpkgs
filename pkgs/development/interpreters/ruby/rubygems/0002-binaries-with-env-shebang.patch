@@ -14,15 +14,15 @@ diff --git a/lib/rubygems/dependency_installer.rb b/lib/rubygems/dependency_inst
 index 34620860..00ab31d9 100644
 --- a/lib/rubygems/dependency_installer.rb
 +++ b/lib/rubygems/dependency_installer.rb
-@@ -18,7 +18,7 @@ class Gem::DependencyInstaller
+@@ -17,7 +17,7 @@ class Gem::DependencyInstaller
    extend Gem::Deprecate
  
    DEFAULT_OPTIONS = { # :nodoc:
--    :env_shebang => false,
-+    :env_shebang => true,
-     :document => %w[ri],
-     :domain => :both, # HACK dup
-     :force => false,
+-    env_shebang: false,
++    env_shebang: true,
+     document: %w[ri],
+     domain: :both, # HACK: dup
+     force: false,
 -- 
 2.21.0
 

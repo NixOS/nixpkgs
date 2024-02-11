@@ -1,25 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "writefreely";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
-    owner = "writeas";
+    owner = "writefreely";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GnuqYgiwXdKM+os5RzuUYe9ADOhZaxou5dD7GCEE1Ns=";
+    sha256 = "sha256-vOoTAr33FMQaHIwpwIX0g/KJWQvDn3oVJg14kEY6FIQ=";
   };
 
-  vendorSha256 = "sha256-IBer+8FP+IWWJPnaugr8zzQA9mSVFzP0Nofgl/PhtzQ=";
+  vendorHash = "sha256-xTo/zbz9pSjvNntr5dnytiJ7oRAdtEuyiu4mJZgwHTc=";
 
-  nativeBuildInputs = [ go-bindata ];
-
-  preBuild = ''
-    make assets
-  '';
-
-  ldflags = [ "-s" "-w" "-X github.com/writeas/writefreely.softwareVer=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/writefreely/writefreely.softwareVer=${version}" ];
 
   tags = [ "sqlite" ];
 
@@ -27,8 +21,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Build a digital writing community";
-    homepage = "https://github.com/writeas/writefreely";
+    homepage = "https://github.com/writefreely/writefreely";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ soopyc ];
   };
 }

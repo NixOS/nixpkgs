@@ -1,4 +1,4 @@
-{ lib, pkgs, libsForQt5 }:
+{ lib, pkgs, config, libsForQt5 }:
 let
   packages = self:
   let
@@ -9,10 +9,12 @@ let
     dtkcore = callPackage ./library/dtkcore { };
     dtkgui = callPackage ./library/dtkgui { };
     dtkwidget = callPackage ./library/dtkwidget { };
+    dtkdeclarative = callPackage ./library/dtkdeclarative { };
     deepin-pdfium = callPackage ./library/deepin-pdfium { };
     qt5platform-plugins = callPackage ./library/qt5platform-plugins { };
     qt5integration = callPackage ./library/qt5integration { };
     deepin-wayland-protocols = callPackage ./library/deepin-wayland-protocols { };
+    deepin-ocr-plugin-manager = callPackage ./library/deepin-ocr-plugin-manager { };
     dwayland = callPackage ./library/dwayland { };
     dde-qt-dbus-factory = callPackage ./library/dde-qt-dbus-factory { };
     disomaster = callPackage ./library/disomaster { };
@@ -23,21 +25,25 @@ let
     util-dfm = callPackage ./library/util-dfm { };
 
     #### CORE
-    dde-kwin = callPackage ./core/dde-kwin { };
     deepin-kwin = callPackage ./core/deepin-kwin { };
+    dde-appearance = callPackage ./core/dde-appearance { };
     dde-app-services = callPackage ./core/dde-app-services { };
+    dde-application-manager = callPackage ./core/dde-application-manager { };
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-clipboard = callPackage ./core/dde-clipboard { };
     dde-dock = callPackage ./core/dde-dock { };
     dde-file-manager = callPackage ./core/dde-file-manager { };
-    dde-launcher = callPackage ./core/dde-launcher { };
+    dde-launchpad = callPackage ./core/dde-launchpad { };
     dde-network-core = callPackage ./core/dde-network-core { };
+    dde-session = callPackage ./core/dde-session { };
     dde-session-shell = callPackage ./core/dde-session-shell { };
     dde-session-ui = callPackage ./core/dde-session-ui { };
+    deepin-service-manager = callPackage ./core/deepin-service-manager { };
     dde-polkit-agent = callPackage ./core/dde-polkit-agent { };
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
     dde-gsettings-schemas = callPackage ./core/dde-gsettings-schemas { };
+    dde-widgets = callPackage ./core/dde-widgets { };
 
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
@@ -79,10 +85,14 @@ let
     deepin-wallpapers = callPackage ./artwork/deepin-wallpapers { };
     deepin-gtk-theme = callPackage ./artwork/deepin-gtk-theme { };
     deepin-sound-theme = callPackage ./artwork/deepin-sound-theme { };
+    deepin-desktop-theme = callPackage ./artwork/deepin-desktop-theme { };
 
     #### MISC
     deepin-desktop-base = callPackage ./misc/deepin-desktop-base { };
     deepin-turbo = callPackage ./misc/deepin-turbo { };
+  } // lib.optionalAttrs config.allowAliases {
+    dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
+    dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
   };
 in
 lib.makeScope libsForQt5.newScope packages

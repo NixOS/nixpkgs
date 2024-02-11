@@ -13,24 +13,24 @@
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "2.9";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
-    hash = "sha256-eCu7AgL4bzstu8vsqBJImRZm1qMVnnycuOShY5fB+C4=";
+    hash = "sha256-Zt5J8+CYiPxp/e1wDaJp7R91vYJmGNqPQs39J/OIwiQ=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook
     gsettings-desktop-schemas
     gettext
+    gobject-introspection
   ];
 
   buildInputs = [
     (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
-    gobject-introspection
     gsettings-desktop-schemas
     gtk3
     glib

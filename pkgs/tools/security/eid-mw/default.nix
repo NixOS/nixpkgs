@@ -1,37 +1,44 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
 , autoconf-archive
-, pkg-config
+, autoreconfHook
 , makeWrapper
+, pkg-config
+, substituteAll
 , curl
 , gtk3
 , libassuan
 , libbsd
 , libproxy
 , libxml2
+, nssTools
 , openssl
 , p11-kit
 , pcsclite
-, nssTools
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.1.10";
+  version = "5.1.15";
 
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
     rev = "v${version}";
-    hash = "sha256-2Xru/s7KawZlIxON5nO679P+L3okofE054WDfRsE3ZI=";
+    hash = "sha256-balyAdQO8aZ9wGYerPUDxgBWGG7Ya2eIyo6UX62M4SI=";
   };
+
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+    substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
+  '';
+
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
   buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+
   preConfigure = ''
     mkdir openssl
     ln -s ${lib.getLib openssl}/lib openssl
@@ -43,10 +50,6 @@ stdenv.mkDerivation rec {
   '';
   # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
-
-  postPatch = ''
-    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
-  '';
 
   postInstall =
     let

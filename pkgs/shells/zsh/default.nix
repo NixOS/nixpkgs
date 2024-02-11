@@ -11,7 +11,9 @@
 , ncurses
 , pcre
 , pkg-config
-, buildPackages }:
+, buildPackages
+, nixosTests
+}:
 
 let
   version = "5.9";
@@ -30,6 +32,13 @@ stdenv.mkDerivation {
   patches = [
     # fix location of timezone data for TZ= completion
     ./tz_completion.patch
+    # Fixes configure misdetection when using clang 16, resulting in broken subshells on Darwin.
+    # This patch can be dropped with the next release of zsh.
+    (fetchpatch {
+      url = "https://github.com/zsh-users/zsh/commit/ab4d62eb975a4c4c51dd35822665050e2ddc6918.patch";
+      hash = "sha256-nXB4w7qqjZJC7/+CDxnNy6wu9qNwmS3ezjj/xK7JfeU=";
+      excludes = [ "ChangeLog" ];
+    })
   ];
 
   strictDeps = true;
@@ -45,6 +54,7 @@ stdenv.mkDerivation {
     "--enable-pcre"
     "--enable-zshenv=${placeholder "out"}/etc/zshenv"
     "--disable-site-fndir"
+    "--enable-function-subdirs"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && !stdenv.hostPlatform.isStatic) [
     # Also see: https://github.com/buildroot/buildroot/commit/2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
     "zsh_cv_shared_environ=yes"
@@ -56,6 +66,11 @@ stdenv.mkDerivation {
     "zsh_cv_sys_dynamic_strip_exe=yes"
     "zsh_cv_sys_dynamic_strip_lib=yes"
   ];
+
+  postPatch = ''
+    substituteInPlace Src/Modules/pcre.mdd \
+      --replace 'pcre-config' 'true'
+  '';
 
   preConfigure = ''
     # use pkg-config instead of pcre-config
@@ -107,6 +122,10 @@ EOF
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
+  postFixup = ''
+    HOST_PATH=$out/bin:$HOST_PATH patchShebangs --host $out/share/zsh/*/functions
+  '';
+
   meta = {
     description = "The Z shell";
     longDescription = ''
@@ -121,9 +140,13 @@ EOF
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [ pSub artturin ];
     platforms = lib.platforms.unix;
+    mainProgram = "zsh";
   };
 
   passthru = {
     shellPath = "/bin/zsh";
+    tests = {
+      inherit (nixosTests) zsh-history oh-my-zsh;
+    };
   };
 }

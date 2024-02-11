@@ -7,21 +7,26 @@
 , lxml
 , pythonOlder
 , requests
+, setuptools
 , slixmpp
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "gehomesdk";
-  version = "0.5.13";
-  format = "setuptools";
+  version = "0.5.27";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gkHAIrsk6LKNjieTiSU0ZH6WI2+wJB68edNqJ7n86tY=";
+    hash = "sha256-H76y784lYzETgq5XSsQOSGka/kvM+hyMHzUHEJuXTuk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

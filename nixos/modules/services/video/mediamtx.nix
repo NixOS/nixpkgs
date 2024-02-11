@@ -1,79 +1,66 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.mediamtx;
-  package = pkgs.mediamtx;
   format = pkgs.formats.yaml {};
 in
 {
+  meta.maintainers = with lib.maintainers; [ fpletz ];
+
   options = {
     services.mediamtx = {
-      enable = mkEnableOption (lib.mdDoc "MediaMTX");
+      enable = lib.mkEnableOption (lib.mdDoc "MediaMTX");
 
-      settings = mkOption {
+      package = lib.mkPackageOption pkgs "mediamtx" { };
+
+      settings = lib.mkOption {
         description = lib.mdDoc ''
-          Settings for MediaMTX.
-          Read more at <https://github.com/aler9/mediamtx/blob/main/mediamtx.yml>
+          Settings for MediaMTX. Refer to the defaults at
+          <https://github.com/bluenviron/mediamtx/blob/main/mediamtx.yml>.
         '';
         type = format.type;
-
-        default = {
-          logLevel = "info";
-          logDestinations = [
-            "stdout"
-          ];
-          # we set this so when the user uses it, it just works (see LogsDirectory below). but it's not used by default.
-          logFile = "/var/log/mediamtx/mediamtx.log";
-        };
-
+        default = {};
         example = {
           paths = {
             cam = {
-              runOnInit = "ffmpeg -f v4l2 -i /dev/video0 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH";
+              runOnInit = "\${lib.getExe pkgs.ffmpeg} -f v4l2 -i /dev/video0 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH";
               runOnInitRestart = true;
             };
           };
         };
       };
 
-      env = mkOption {
-        type = with types; attrsOf anything;
+      env = lib.mkOption {
+        type = with lib.types; attrsOf anything;
         description = lib.mdDoc "Extra environment variables for MediaMTX";
         default = {};
         example = {
           MTX_CONFKEY = "mykey";
         };
       };
+
+      allowVideoAccess = lib.mkEnableOption (lib.mdDoc ''
+        access to video devices like cameras on the system
+      '');
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf cfg.enable {
     # NOTE: mediamtx watches this file and automatically reloads if it changes
     environment.etc."mediamtx.yaml".source = format.generate "mediamtx.yaml" cfg.settings;
 
     systemd.services.mediamtx = {
-      environment = cfg.env;
-
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [
-        ffmpeg
-      ];
+      environment = cfg.env;
 
       serviceConfig = {
         DynamicUser = true;
         User = "mediamtx";
         Group = "mediamtx";
-
-        LogsDirectory = "mediamtx";
-
-        # user likely may want to stream cameras, can't hurt to add video group
-        SupplementaryGroups = "video";
-
-        ExecStart = "${package}/bin/mediamtx /etc/mediamtx.yaml";
+        SupplementaryGroups = lib.mkIf cfg.allowVideoAccess "video";
+        ExecStart = "${cfg.package}/bin/mediamtx /etc/mediamtx.yaml";
       };
     };
   };

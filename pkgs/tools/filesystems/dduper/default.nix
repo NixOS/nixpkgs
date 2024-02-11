@@ -1,15 +1,14 @@
 { lib, stdenv, fetchpatch, fetchFromGitHub, btrfs-progs, python3 }:
 
 let
-  btrfsProgsPatched = btrfs-progs.overrideAttrs (oldAttrs: {
+  btrfsProgsPatched = btrfs-progs.overrideAttrs {
     patches = [
       (fetchpatch {
-        name = "0001-Print-csum-for-a-given-file-on-stdout.patch";
-        url = "https://raw.githubusercontent.com/Lakshmipathi/dduper/ecc2664c380616ec75cfc1e600b5514cdff5c687/patch/btrfs-progs-v6.1/0001-Print-csum-for-a-given-file-on-stdout.patch";
-        sha256 = "sha256-M4LT7G6gwBfSXf6EL4pxNoQJMyUTOA+ojxEJqw2yss4=";
+        url = "https://raw.githubusercontent.com/Lakshmipathi/dduper/1f1d29eff61430e118f88239545a29f0bcf3e15d/patch/btrfs-progs-v6.3.3/0001-Print-csum-for-a-given-file-on-stdout.patch";
+        hash = "sha256-bO0t8QePnUbMkQQPesZlBF/khD/H8AaWHr2GkOnT6x8=";
       })
     ];
-  });
+  };
   py3 = python3.withPackages (ps: with ps; [
     prettytable
     numpy
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Fast block-level out-of-band BTRFS deduplication tool.";
+    description = "Fast block-level out-of-band BTRFS deduplication tool";
     homepage = "https://github.com/Lakshmipathi/dduper";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ thesola10 ];

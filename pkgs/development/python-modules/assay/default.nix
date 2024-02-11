@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "assay";
   version = "unstable-2022-01-19";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "brandon-rhodes";

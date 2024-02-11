@@ -37,6 +37,10 @@ rec {
     config = "armv6l-unknown-linux-gnueabihf";
   } // platforms.raspberrypi;
 
+  bluefield2 = {
+    config = "aarch64-unknown-linux-gnu";
+  } // platforms.bluefield2;
+
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
   } // platforms.zero-gravitas;
@@ -111,6 +115,7 @@ rec {
   };
 
   gnu64 = { config = "x86_64-unknown-linux-gnu"; };
+  gnu64_simplekernel = gnu64 // platforms.pc_simplekernel; # see test/cross/default.nix
   gnu32  = { config = "i686-unknown-linux-gnu"; };
 
   musl64 = { config = "x86_64-unknown-linux-musl"; };
@@ -126,6 +131,16 @@ rec {
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
+    libc = "newlib";
+  };
+
+  mips64-embedded = {
+    config = "mips64-none-elf";
+    libc = "newlib";
+  };
+
+  mips-embedded = {
+    config = "mips-none-elf";
     libc = "newlib";
   };
 
@@ -192,6 +207,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
+    rustc.config = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
@@ -297,6 +313,11 @@ rec {
     # That's the triplet they use in the mingw-w64 docs.
     config = "x86_64-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
+  };
+
+  ucrt64 = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
   # BSDs

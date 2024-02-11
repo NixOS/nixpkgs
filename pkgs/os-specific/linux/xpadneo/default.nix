@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   setSourceRoot = ''
-    export sourceRoot=$(pwd)/source/hid-xpadneo/src
+    export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoRoot = "src/fuzzy-finder";
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    sourceRoot = "source/src/fuzzy-finder";
+    sourceRoot = "${finalAttrs.src.name}/src/fuzzy-finder";
     hash = "sha256-CDKlmwA2Wj78xPaSiYPmIJ7xmiE5Co+oGGejZU3v1zI=";
   };
 

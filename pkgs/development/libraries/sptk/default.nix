@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sptk";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "sp-nitech";
     repo = "SPTK";
     rev = "v${version}";
-    hash = "sha256-t8XVdKrrewfqefUnEz5xHgRHF0NThNQD1KGPMLOO/o8=";
+    hash = "sha256-lIyOcN2AR3ilUZ9stpicjbwlredbwgGPwmMICxZEijU=";
   };
 
   nativeBuildInputs = [

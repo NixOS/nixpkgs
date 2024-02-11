@@ -1,11 +1,11 @@
 { stdenv, lib
 , makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu70, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking, graphicsmagick_q16, libva, libusb1, hiredis
+, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu70, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking, graphicsmagick_q16, libva, libusb1, hiredis, xcbutil
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
-  version = "4.5.0.2006";
+  version = "4.6.0.4187";
 
   src = fetchurl {
     # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/Packages
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/workspacesclient_${version}_amd64.deb"
       "https://archive.org/download/workspacesclient_${version}_amd64/workspacesclient_${version}_amd64.deb"
     ];
-    sha256 = "sha256-1ysj020fYOmIRvZR27+7ZNqdzqkA2QbrCwDU18ouxaI=";
+    sha256 = "sha256-A+b79ewh4hBIf8jgK0INILFktTqRRpOgXRH0FGziV6c=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     hiredis
     libusb1
     libva
+    xcbutil
   ];
 
   unpackPhase = ''

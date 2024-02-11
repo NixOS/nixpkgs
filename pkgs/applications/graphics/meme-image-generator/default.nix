@@ -5,22 +5,22 @@
 
 buildGoModule rec {
   pname = "meme-image-generator";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "nomad-software";
     repo = "meme";
     rev = "v${version}";
-    sha256 = "089r0v5az2d2njn0s3d3wd0861pcs4slg6zl0rj4cm1k5cj8yd1k";
+    hash = "sha256-L+JpNg9X3RSNXTozv2H1n2JiQx75i9gFGaQmDFaMIf0=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "A command line utility for creating image macro style memes";
     homepage = "https://github.com/nomad-software/meme";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
-    platforms = with platforms; linux ++ darwin;
+    mainProgram = "meme";
   };
 }

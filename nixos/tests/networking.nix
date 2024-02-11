@@ -29,23 +29,49 @@ let
             ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64; } ];
           })));
       };
-      services.dhcpd4 = {
-        enable = true;
-        interfaces = map (n: "eth${toString n}") vlanIfs;
-        extraConfig = flip concatMapStrings vlanIfs (n: ''
-          subnet 192.168.${toString n}.0 netmask 255.255.255.0 {
-            option routers 192.168.${toString n}.1;
-            range 192.168.${toString n}.3 192.168.${toString n}.254;
-          }
-        '')
-        ;
-        machines = flip map vlanIfs (vlan:
-          {
-            hostName = "client${toString vlan}";
-            ethernetAddress = qemu-common.qemuNicMac vlan 1;
-            ipAddress = "192.168.${toString vlan}.2";
-          }
-        );
+      services.kea = {
+        dhcp4 = {
+          enable = true;
+          settings = {
+            interfaces-config = {
+              interfaces = map (n: "eth${toString n}") vlanIfs;
+              dhcp-socket-type = "raw";
+              service-sockets-require-all = true;
+              service-sockets-max-retries = 5;
+              service-sockets-retry-wait-time = 2500;
+            };
+            subnet4 = map (n: {
+              id = n;
+              subnet = "192.168.${toString n}.0/24";
+              pools = [{ pool = "192.168.${toString n}.3 - 192.168.${toString n}.254"; }];
+              option-data = [{ name = "routers"; data = "192.168.${toString n}.1"; }];
+
+              reservations = [{
+                hw-address = qemu-common.qemuNicMac n 1;
+                hostname = "client${toString n}";
+                ip-address = "192.168.${toString n}.2";
+              }];
+            }) vlanIfs;
+          };
+        };
+        dhcp6 = {
+          enable = true;
+          settings = {
+            interfaces-config = {
+              interfaces = map (n: "eth${toString n}") vlanIfs;
+              service-sockets-require-all = true;
+              service-sockets-max-retries = 5;
+              service-sockets-retry-wait-time = 2500;
+            };
+
+            subnet6 = map (n: {
+              id = n;
+              subnet = "fd00:1234:5678:${toString n}::/64";
+              interface = "eth${toString n}";
+              pools = [{ pool = "fd00:1234:5678:${toString n}::2-fd00:1234:5678:${toString n}::2"; }];
+            }) vlanIfs;
+          };
+        };
       };
       services.radvd = {
         enable = true;
@@ -59,17 +85,6 @@ let
               AdvAutonomous off;
             };
           };
-        '');
-      };
-      services.dhcpd6 = {
-        enable = true;
-        interfaces = map (n: "eth${toString n}") vlanIfs;
-        extraConfig = ''
-          authoritative;
-        '' + flip concatMapStrings vlanIfs (n: ''
-          subnet6 fd00:1234:5678:${toString n}::/64 {
-            range6 fd00:1234:5678:${toString n}::2 fd00:1234:5678:${toString n}::2;
-          }
         '');
       };
     };
@@ -98,8 +113,8 @@ let
         networking = {
           useNetworkd = networkd;
           useDHCP = false;
-          defaultGateway = "192.168.1.1";
-          defaultGateway6 = "fd00:1234:5678:1::1";
+          defaultGateway = { address = "192.168.1.1"; interface = "enp1s0"; };
+          defaultGateway6 = { address = "fd00:1234:5678:1::1"; interface = "enp1s0"; };
           interfaces.enp1s0.ipv4.addresses = [
             { address = "192.168.1.2"; prefixLength = 24; }
             { address = "192.168.1.3"; prefixLength = 32; }
@@ -115,10 +130,12 @@ let
           start_all()
 
           client.wait_for_unit("network.target")
+          router.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
 
-          with subtest("Make sure dhcpcd is not started"):
-              client.fail("systemctl status dhcpcd.service")
+          with subtest("Make sure DHCP server is not started"):
+              client.fail("systemctl status kea-dhcp4-server.service")
+              client.fail("systemctl status kea-dhcp6-server.service")
 
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")
@@ -169,7 +186,11 @@ let
       nodes.router = router;
       nodes.client = { lib, ... }: {
         # Disable test driver default config
-        networking.interfaces = lib.mkForce {};
+        networking.interfaces = lib.mkForce {
+          # Make sure DHCP defaults correctly even when some unrelated config
+          # is set on the interface (nothing, in this case).
+          enp1s0 = {};
+        };
         networking.useNetworkd = networkd;
         virtualisation.interfaces.enp1s0.vlan = 1;
       };
@@ -202,6 +223,7 @@ let
           start_all()
 
           client.wait_for_unit("network.target")
+          router.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
 
           with subtest("Wait until we have an ip address on each interface"):
@@ -829,6 +851,7 @@ let
 
           client.wait_for_unit("network.target")
           client_with_privacy.wait_for_unit("network.target")
+          router.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
 
           with subtest("Wait until we have an ip address"):
@@ -1035,7 +1058,7 @@ let
       testScript = ''
         machine.succeed("udevadm settle")
         print(machine.succeed("ip link show dev enCustom"))
-        machine.wait_until_succeeds("ip link show dev enCustom | grep -q '52:54:00:12:0b:01")
+        machine.wait_until_succeeds("ip link show dev enCustom | grep -q 52:54:00:12:0b:01")
       '';
     };
   };

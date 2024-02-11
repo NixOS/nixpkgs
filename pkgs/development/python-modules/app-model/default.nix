@@ -1,31 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatch-vcs
+, hatchling
 , in-n-out
 , psygnal
 , pydantic
+, pydantic-compat
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
-, hatch-vcs
-, hatchling
 }:
 
 buildPythonPackage rec {
   pname = "app-model";
-  version = "0.1.4";
-  format = "pyproject";
+  version = "0.2.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
-    repo = pname;
+    repo = "app-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GvMPWIvDydJ8C7wDR5DjmEGhVt0jd5e4WzP10a7mGm8=";
+    hash = "sha256-idie99ditHJG/6rv97LDaF71iTjjgJyhLiTrbkQmbts=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatch-vcs
@@ -35,6 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psygnal
     pydantic
+    pydantic-compat
     in-n-out
     typing-extensions
   ];

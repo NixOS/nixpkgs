@@ -21,6 +21,16 @@ let
         expr = repeatedOverrides.entangled.pname == "a-better-figlet-with-blackjack";
         expected = true;
       })
+      ({
+        name = "overriding-using-only-attrset";
+        expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname == "hello-overriden";
+        expected = true;
+      })
+      ({
+        name = "overriding-using-only-attrset-no-final-attrs";
+        expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
+        expected = true;
+      })
     ];
 
   addEntangled = origOverrideAttrs: f:

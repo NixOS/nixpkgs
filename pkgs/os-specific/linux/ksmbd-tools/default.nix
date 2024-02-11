@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoconf
-, automake
+, meson
+, ninja
 , glib
 , libkrb5
 , libnl
@@ -13,22 +13,24 @@
 
 stdenv.mkDerivation rec {
   pname = "ksmbd-tools";
-  version = "3.4.8";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "cifsd-team";
     repo = pname;
     rev = version;
-    sha256 = "sha256-R/OWZekAGtDxE71MrzjWsdpaWGBu0c+VP0VkPro6GEo=";
+    sha256 = "sha256-1Htky39oggDqPYSbF4it2UMIxuoLp0aK+IjGojPgaiU=";
   };
 
   buildInputs = [ glib libnl ] ++ lib.optional withKerberos libkrb5;
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
-
-  preConfigure = "./autogen.sh";
-
-  configureFlags = lib.optional withKerberos "--enable-krb5";
+  nativeBuildInputs = [ meson ninja libtool pkg-config ];
+  patches = [ ./0001-skip-installing-example-configuration.patch ];
+  mesonFlags = [
+    "-Drundir=/run"
+    "-Dsystemdsystemunitdir=lib/systemd/system"
+    "--sysconfdir /etc"
+  ];
 
   meta = with lib; {
     description = "Userspace utilities for the ksmbd kernel SMB server";

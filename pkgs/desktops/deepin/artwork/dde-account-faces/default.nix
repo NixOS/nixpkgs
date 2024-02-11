@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "dde-account-faces";
-  version = "1.0.12.1";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NWjR8qxWi2IrcP0cSF+lLxBJ/GrVpk1BfTjVH0ytinY=";
+    hash = "sha256-/eTGy+9fcYmGrh09RdCIZ2Cn12gTaGtg4Tluv25n5r0=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}/var" ];

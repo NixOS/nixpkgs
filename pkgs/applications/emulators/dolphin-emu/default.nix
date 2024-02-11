@@ -11,7 +11,8 @@
 , curl
 , enet
 , ffmpeg
-, fmt_8
+, fmt_10
+, gtest
 , hidapi
 , libevdev
 , libGL
@@ -22,15 +23,16 @@
 , libXdmcp
 , libXext
 , libXrandr
+, lz4
+, lzo
 , mbedtls_2
-, mgba
 , miniupnpc
 , minizip-ng
 , openal
 , pugixml
 , qtbase
+, qtsvg
 , sfml
-, soundtouch
 , udev
 , vulkan-loader
 , xxHash
@@ -55,15 +57,22 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-19368";
+  version = "5.0-20347";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "dadbeb4bae7e7fa23af2b46e0add4143094dc107";
-    sha256 = "sha256-XLtFn2liONPizvrKyySZx0mY7qC2fpwhAWaRZLlEzh8=";
+    rev = "dc0814ae4622313d513468bdc377ee9c031de199";
+    hash = "sha256-s3mGwXkgdoLLfPEUVyjaqXb+a5KPKC3dhHIyKC2BF1w=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
+    ./find-minizip-ng.patch
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     stdenv.cc
@@ -86,23 +95,26 @@ stdenv.mkDerivation rec {
     curl
     enet
     ffmpeg
-    fmt_8
+    fmt_10
+    gtest
     hidapi
     libiconv
     libpulseaudio
     libspng
     libusb1
     libXdmcp
+    lz4
+    lzo
     mbedtls_2
     miniupnpc
     minizip-ng
     openal
     pugixml
     qtbase
+    qtsvg
     sfml
-    soundtouch
     xxHash
-    xz
+    xz # LibLZMA
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     bluez
@@ -110,7 +122,7 @@ stdenv.mkDerivation rec {
     libGL
     libXext
     libXrandr
-    # FIXME: Remove comment on next mgba version
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
     #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
@@ -118,7 +130,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
-    "-DUSE_SHARED_ENET=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
@@ -160,6 +171,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = dolphin-emu;
       command = "dolphin-emu-nogui --version";
+      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
     };
 
     updateScript = writeShellScript "dolphin-update-script" ''

@@ -3,9 +3,7 @@
 , pythonOlder
 , fetchPypi
 , appdirs
-, black
 , importlib-metadata
-, isPy3k
 , jedi
 , prompt-toolkit
 , pygments
@@ -25,7 +23,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     appdirs
-    black # yes, this is in install_requires
     jedi
     prompt-toolkit
     pygments

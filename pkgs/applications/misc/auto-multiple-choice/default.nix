@@ -25,10 +25,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "auto-multiple-choice";
-  version = "1.5.2";
+  version = "1.6.0";
   src = fetchurl {
-    url = "https://download.auto-multiple-choice.net/${pname}_${version}_precomp.tar.gz";
-    sha256 = "sha256-AjonJOooSe53Fww3QU6Dft95ojNqWrTuPul3nkIbctM=";
+    url = "https://download.auto-multiple-choice.net/${pname}_${version}_dist.tar.gz";
+    # before 1.6.0, the URL pattern used "precomp" instead of "dist".    ^^^^
+    sha256 = "sha256-I9Xw1BN8ZSQhi5F1R3axHBKE6tnaCNk8k5tts6LoMjY=";
   };
 
   # There's only the Makefile
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     pkg-config
     makeWrapper
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -106,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     cairo.dev
     dblatex
     gnumake
-    gobject-introspection
     graphicsmagick
     gsettings-desktop-schemas
     gtk3

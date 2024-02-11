@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , installShellFiles
 , nixosTests
@@ -31,6 +32,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Pull upstream fix for gcc-13:
+    #   https://github.com/USBGuard/usbguard/pull/586
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/USBGuard/usbguard/commit/22b1e0897af977cc96af926c730ff948bd120bb5.patch";
+      hash = "sha256-yw0ZHcn6naHcsfsqdBB/aTgCwvEHecew/6HDmjyY2ZA=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

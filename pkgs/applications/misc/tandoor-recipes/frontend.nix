@@ -1,4 +1,4 @@
-{ stdenv, fetchYarnDeps, fixup_yarn_lock, callPackage, nodejs }:
+{ stdenv, fetchYarnDeps, prefetch-yarn-deps, callPackage, nodejs }:
 let
   common = callPackage ./common.nix { };
 in
@@ -10,11 +10,11 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${common.src}/vue/yarn.lock";
-    sha256 = common.yarnSha256;
+    hash = common.yarnHash;
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
+    prefetch-yarn-deps
     nodejs
     nodejs.pkgs.yarn
   ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     command -v yarn
     yarn install --frozen-lockfile --offline --no-progress --non-interactive
     patchShebangs node_modules/

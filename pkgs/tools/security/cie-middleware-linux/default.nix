@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , strip-nondeterminism
 , meson
@@ -20,13 +21,13 @@
 
 let
   pname = "cie-middleware-linux";
-  version = "1.4.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = pname;
-    rev = "${version}-podofo";
-    sha256 = "sha256-Kyr9OTiY6roJ/wVJS/1aWfrrzDNQbuRTJQqo0akbMUU=";
+    rev = version;
+    sha256 = "sha256-Z8K2Ibg5bBfSql5HEapKgdfiCf/EIKTTD15oVeysQGk=";
   };
 
   gradle = gradle_7;
@@ -44,6 +45,7 @@ let
     buildPhase = ''
       # Run the fetchDeps task
       export GRADLE_USER_HOME=$(mktemp -d)
+      ls -l
       gradle --no-daemon -b cie-java/build.gradle fetchDeps
     '';
 
@@ -60,7 +62,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-WzT5vYF9yCMU2A7EkLZyjgWrN3gD7pnkPXc3hDFqpD8=";
+    outputHash = "sha256-jtaH8dBpnx8KMJe+jzJfkvcx1NO4nL5jsRO4+GI+d0c=";
   };
 
 in
@@ -84,17 +86,30 @@ stdenv.mkDerivation {
   buildInputs = [
     cryptopp
     fontconfig
-    podofo
+    podofo.dev
     openssl
     pcsclite
     curl
     libxml2
   ];
 
+  patches = [
+    # Fix gcc-13 build by adding missing include.
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/M0Rf30/cie-middleware-linux/commit/1da1196152f7a3bbe92ba3ce993ebb6785ff049e.patch";
+      hash = "sha256-aM23A1ZX8kebgX6RXVS78SEa+to93glUmIYO+lfUzfg=";
+    })
+  ];
+
   postPatch = ''
     # substitute the cieid command with this $out/bin/cieid
     substituteInPlace libs/pkcs11/src/CSP/AbilitaCIE.cpp \
       --replace 'file = "cieid"' 'file = "'$out'/bin/cieid"'
+
+    # revert https://github.com/M0Rf30/cie-middleware-linux/commit/1a389d8
+    sed -i libs/meson.build \
+        -e "s@podofo_dep = .\+@podofo_dep = dependency('libpodofo')@g"
   '';
 
   # Note: we use pushd/popd to juggle between the

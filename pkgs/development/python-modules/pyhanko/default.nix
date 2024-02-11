@@ -1,48 +1,58 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+, aiohttp
 , asn1crypto
+, buildPythonPackage
+, certomancer
 , click
 , cryptography
+, defusedxml
+, fetchFromGitHub
+, fonttools
+, freezegun
+, oscrypto
+, pillow
 , pyhanko-certvalidator
+, pytest-aiohttp
+, pytestCheckHook
+, python-barcode
+, python-pae
+, python-pkcs11
+, pythonOlder
 , pytz
 , pyyaml
 , qrcode
 , requests
-, tzlocal
-, certomancer
-, freezegun
-, python-pae
-, pytest-aiohttp
 , requests-mock
-, pytestCheckHook
-
-# optionals
-, defusedxml
-, oscrypto
-, fonttools
+, setuptools
+, tzlocal
 , uharfbuzz
-, pillow
-, python-barcode
-, python-pkcs11
-, aiohttp
+, wheel
+, xsdata
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.17.0";
-  format = "setuptools";
+  version = "0.21.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tvb2zdmIN6MkezmLNkyCcP8EfqxrbPg/FEqgW16Ka6Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+RlrXuKMY89mO4iuFw7RLQABy+wLrAeHlEvTDCpBSqU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ' "pytest-runner",' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -57,7 +67,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    extra_pubkey_algs = [
+    extra-pubkey-algs = [
       oscrypto
     ];
     xmp = [
@@ -74,15 +84,13 @@ buildPythonPackage rec {
     pkcs11 = [
       python-pkcs11
     ];
-    async_http = [
+    async-http = [
       aiohttp
     ];
+    etsi = [
+      xsdata
+    ];
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace ", 'pytest-runner'" "" \
-  '';
 
   nativeCheckInputs = [
     aiohttp
@@ -132,6 +140,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sign and stamp PDF files";
     homepage = "https://github.com/MatthiasValvekens/pyHanko";
+    changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];
   };

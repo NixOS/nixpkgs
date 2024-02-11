@@ -3,24 +3,24 @@
 }:
 
 let
-  version = "1.1.1";
-  rev = "af12e2e4da586275ba931eae8f40a2201251bf59";
+  version = "unstable-2023-07-08";
+  rev = "989cfe52a0458b991e0a7d87edec81d3fef472ac";
 
   baseUrl = "https://emux.cc/versions/${lib.substring 0 8 rev}/CCEmuX";
   jar =
     if useCCTweaked
     then fetchurl {
       url = "${baseUrl}-cct.jar";
-      sha256 = "0d9gzi1h5vz32fp4lfn7dam189jcm7bwbqwmlpj0c47p8l0d4lsv";
+      hash = "sha256-nna5KRp6jVLkbWKOHGtQqaPr3Zl05mVkCf/8X9C5lRY=";
     }
     else fetchurl {
       url = "${baseUrl}-cc.jar";
-      sha256 = "0ky5vxh8m1v98zllifxif8xxd25j2xdp19hjnj4xlkck71lbnb34";
+      hash = "sha256-2Z38O6z7OrHKe8GdLnexin749uJzQaCZglS+SwVD5YE=";
     };
 
   desktopIcon = fetchurl {
     url = "https://github.com/CCEmuX/CCEmuX/raw/${rev}/src/main/resources/img/icon.png";
-    sha256 = "1vmb6rg9k2y99j8xqfgbsvfgfi3g985rmqwrd7w3y54ffr2r99c2";
+    hash = "sha256-gqWURXaOFD/4aZnjmgtKb0T33NbrOdyRTMmLmV42q+4=";
   };
   desktopItem =  makeDesktopItem {
     name = "CCEmuX";
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/CCEmuX/CCEmuX";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ CrazedProgrammer ];
+    maintainers = with maintainers; [ CrazedProgrammer viluon ];
   };
 }

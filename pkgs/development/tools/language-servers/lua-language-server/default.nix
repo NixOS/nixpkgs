@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation }:
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation, ditto }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.6.22";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
-    rev = version;
-    sha256 = "sha256-0A5bbWoZtfL6NLG9nr8u4k1pLP1Fj/+A4ep2uN7x41o=";
+    rev = finalAttrs.version;
+    hash = "sha256-wJOOzKM2pgxfRqx5WZjOcCyRapz0Sub3AYm51LRYpFU=";
     fetchSubmodules = true;
   };
 
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation
     Foundation
+    ditto
   ];
 
   postPatch = ''
@@ -41,6 +42,11 @@ stdenv.mkDerivation rec {
     sed -i scripts/compiler/gcc.lua \
       -e '/cxx_/s,$cc,clang++,'
   '';
+
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   ninjaFlags = [
     "-fcompile/ninja/${if stdenv.isDarwin then "macos" else "linux"}.ninja"
@@ -79,7 +85,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/luals/lua-language-server";
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${version}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda sei40kr ];
+    maintainers = with maintainers; [ figsoda gepbird sei40kr ];
+    mainProgram = "lua-language-server";
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

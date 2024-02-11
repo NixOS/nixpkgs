@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "1.1.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    sha256 = "sha256-cQ9UNCTwRW61dOQYJX0mPNtCTk0qXKx8VQ6BIXl6Fa8=";
+    sha256 = "sha256-C7TLOuC0CHredDiWFIAFmOlV8ivX0j4bs3b8IB8FsqE=";
   };
 
   nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ra3xdh.github.io/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mazurel ];
+    maintainers = with maintainers; [ mazurel kashw2 ];
     platforms = with platforms; linux;
   };
 }

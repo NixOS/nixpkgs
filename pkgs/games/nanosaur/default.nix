@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin"

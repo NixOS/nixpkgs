@@ -26,6 +26,11 @@ mkDerivation rec {
     })
   ];
 
+  CXXFLAGS = [
+    # error: 'uint8_t' is not a member of 'std'; did you mean 'wint_t'?
+    "-include cstdint"
+  ];
+
   buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
   nativeBuildInputs = [ cmake wrapGAppsHook ];
 
@@ -49,5 +54,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.phryneas ];
     platforms = lib.platforms.linux;
+    mainProgram = "barrier";
   };
 }

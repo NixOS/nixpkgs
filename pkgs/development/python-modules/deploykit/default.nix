@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "deploykit";
-  version = "1.0.2";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "numtide";
     repo = pname;
     rev = version;
-    hash = "sha256-I1vAefWQBBRNykDw38LTNwdiPFxpPkLzCcevYAXO+Zo=";
+    hash = "sha256-7PiXq1bQJ1jswLHNqCDSYZabgfp8HRuRt5YPGzd5Ej0=";
   };
 
   buildInputs = [

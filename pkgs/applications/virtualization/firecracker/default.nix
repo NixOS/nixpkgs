@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "1.3.1";
+  version = "1.5.0";
   # nixpkgs-update: no auto update
 
   suffix = {
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-VfTo3TaTqqBYT2/CZW0F5tGXaT4CyBcKBnP5Xqc1BLI=";
-    aarch64-linux = "sha256-ODIBa482X8bNhRyvdmIGGi/6BZYif02cf8tAWYRcI2k=";
+    x86_64-linux = "sha256-TzNPWcLDKOv12eJ9PHckdJ7tfdlozPoXj2fbdOzHfAk=";
+    aarch64-linux = "sha256-cHNMfcoHCBw+BnWx9USny8jyvH97gXCCJW1aKvPXgCs=";
   };
 
   dontConfigure = true;
@@ -50,6 +50,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage = "http://firecracker-microvm.io";
+    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
+    mainProgram = "firecracker";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ thoughtpolice endocrimes ];

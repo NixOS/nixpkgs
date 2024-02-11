@@ -45,6 +45,17 @@ void test_subprocess(void) {
     assert(system(SUBTEST) == 0);
 }
 
+void test_stat_with_null_path(void) {
+    // This checks whether the compiler optimizes away the null pointer check
+    // on the path passed to stat(). If that's the case, the following code
+    // should segfault.
+    struct stat buf;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+    stat(NULL, &buf);
+#pragma GCC diagnostic pop
+}
+
 void assert_mktemp_path(
     const char * orig_prefix,
     const char * orig_suffix,
@@ -147,6 +158,7 @@ int main(int argc, char *argv[])
 
     test_spawn();
     test_system();
+    test_stat_with_null_path();
 
     // Only run subprocess if no arguments are given
     // as the subprocess will be called without argument

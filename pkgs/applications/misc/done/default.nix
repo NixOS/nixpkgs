@@ -12,20 +12,22 @@
 , gdk-pixbuf
 , gtk4
 , libadwaita
+, libsecret
 , openssl
 , sqlite
 , darwin
+, gettext
 }:
 
 stdenv.mkDerivation rec {
   pname = "done";
-  version = "0.1.7";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "done-devs";
     repo = "done";
     rev = "v${version}";
-    hash = "sha256-MLCb96jr3YWODZ6xh4fcyFnL5RjFDcEjHKnDD8Gysy8=";
+    hash = "sha256-97bWBayEyhCMjTxxxFVdO8V2pBZuVzss1Tp9/TnfDB0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -51,11 +53,18 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gtk4
     libadwaita
+    libsecret
     openssl
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.AppKit
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    GETTEXT_DIR = gettext;
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   meta = with lib; {
     description = "The ultimate task management solution for seamless organization and efficiency";

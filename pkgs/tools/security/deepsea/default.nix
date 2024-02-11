@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "02s03sha8vwp7dsaw3z446pskhb6wmy0hyj0mhpbx58sf147rkig";
   };
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   meta = with lib; {
     description = "Phishing tool for red teams and pentesters";
@@ -26,6 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/dsnezhkov/deepsea";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
-    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

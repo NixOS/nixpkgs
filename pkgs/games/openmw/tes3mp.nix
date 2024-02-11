@@ -3,16 +3,18 @@
 , cmake
 , openmw
 , fetchFromGitHub
+, fetchpatch
 , luajit
 , makeWrapper
 , symlinkJoin
+, disable-warnings-if-gcc13
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
 
 let
   # raknet could also be split into dev and lib outputs
-  raknet = stdenv.mkDerivation {
+  raknet = disable-warnings-if-gcc13 (stdenv.mkDerivation {
     pname = "raknet";
     version = "unstable-2020-01-19";
 
@@ -26,7 +28,6 @@ let
     };
 
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DCRABNET_ENABLE_DLL=OFF"
     ];
 
@@ -35,7 +36,7 @@ let
     installPhase = ''
       install -Dm555 lib/libRakNetLibStatic.a $out/lib/libRakNetLibStatic.a
     '';
-  };
+  });
 
   coreScripts = stdenv.mkDerivation {
     pname = "corescripts";
@@ -86,8 +87,15 @@ let
         --replace "\"./\"" "\"$out/bin/\""
     '';
 
-    # https://github.com/TES3MP/openmw-tes3mp/issues/552
-    patches = oldAttrs.patches ++ [ ./tes3mp.patch ];
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.com/OpenMW/openmw/-/commit/98a7d90ee258ceef9c70b0b2955d0458ec46f048.patch";
+        sha256 = "sha256-RhbIGeE6GyqnipisiMTwWjcFnIiR055hUPL8IkjPgZw=";
+      })
+
+      # https://github.com/TES3MP/openmw-tes3mp/issues/552
+      ./tes3mp.patch
+    ];
 
     env.NIX_CFLAGS_COMPILE = "-fpermissive";
 

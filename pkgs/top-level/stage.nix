@@ -8,6 +8,13 @@
    arguments. Normal users should not import this directly but instead
    import `pkgs/default.nix` or `default.nix`. */
 
+let
+  # An overlay to auto-call packages in ../by-name.
+  # By defining it at the top of the file,
+  # this value gets reused even if this file is imported multiple times,
+  # thanks to Nix's import-value cache.
+  autoCalledPackages = import ./by-name-overlay.nix ../by-name;
+in
 
 { ## Misc parameters kept the same for all stages
   ##
@@ -103,8 +110,8 @@ let
   trivialBuilders = self: super:
     import ../build-support/trivial-builders {
       inherit lib;
-      inherit (self) runtimeShell stdenv stdenvNoCC haskell;
-      inherit (self.pkgsBuildHost) shellcheck;
+      inherit (self) runtimeShell stdenv stdenvNoCC;
+      inherit (self.pkgsBuildHost) shellcheck-minimal;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
@@ -269,6 +276,19 @@ let
         gcc.abi = "elfv2";
       };
     });
+
+    pkgsExtraHardening = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsExtraHardening = super';
+          stdenv = super'.withDefaultHardeningFlags (
+            super'.stdenv.cc.defaultHardeningFlags ++ [
+              "zerocallusedregs"
+            ]
+          ) super'.stdenv;
+        })
+      ] ++ overlays;
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.
@@ -279,6 +299,7 @@ let
     stdenvAdapters
     trivialBuilders
     splice
+    autoCalledPackages
     allPackages
     otherPackageSets
     aliases

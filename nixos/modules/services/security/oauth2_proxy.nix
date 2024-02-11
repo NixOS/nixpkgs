@@ -87,14 +87,7 @@ in
   options.services.oauth2_proxy = {
     enable = mkEnableOption (lib.mdDoc "oauth2_proxy");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.oauth2-proxy;
-      defaultText = literalExpression "pkgs.oauth2-proxy";
-      description = lib.mdDoc ''
-        The package that provides oauth2-proxy.
-      '';
-    };
+    package = mkPackageOption pkgs "oauth2-proxy" { };
 
     ##############################################
     # PROVIDER configuration
@@ -579,7 +572,8 @@ in
       description = "OAuth2 Proxy";
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       serviceConfig = {
         User = "oauth2_proxy";

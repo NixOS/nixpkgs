@@ -7,19 +7,20 @@
 , wrapQtAppsHook
 , dtkwidget
 , dde-polkit-agent
+, qt5integration
 , libsecret
 , libgnome-keyring
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpa-ext-gnomekeyring";
-  version = "5.0.11";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mXaGwbtEwaqfOT0izK64zX4s3VFmsRpUGOVm6oSEhn8=";
+    hash = "sha256-SyoahSdGPkWitDek4RD5M2hTR78GFpuijryteKVAx6k=";
   };
 
   postPatch = ''
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dtkwidget
     dde-polkit-agent
+    qt5integration
     libgnome-keyring
     libsecret
   ];

@@ -18,6 +18,7 @@
 , pytest-click
 , pytest-subtests
 , pytest-timeout
+, pytest-xdist
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.3.0";
+  version = "5.3.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hqul7hTYyMC+2PYGPl4Q2r288jUDqGHPDhC3Ih2Zyw0=";
+    hash = "sha256-hwzHHXN8AgDDlykNcwNEzJkdE6BXU0NT0STJOAJnqrk=";
   };
 
   propagatedBuildInputs = [
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     pytest-click
     pytest-subtests
     pytest-timeout
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -77,6 +79,10 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+    # fails with pytest-xdist
+    "test_itercapture_limit"
+    "test_stamping_headers_in_options"
+    "test_stamping_with_replace"
   ] ++ lib.optionals stdenv.isDarwin [
     # too many open files on hydra
     "test_cleanup"
@@ -95,6 +101,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
+    changelog = "https://github.com/celery/celery/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

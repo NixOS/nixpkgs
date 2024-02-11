@@ -11,7 +11,7 @@ let
       # Rootfs diffs for layers 1 and 2 are identical (and empty)
       layer1 = pkgs.dockerTools.buildImage {  name = "empty";  };
       layer2 = layer1.overrideAttrs (_: { fromImage = layer1; });
-      repeatedRootfsDiffs = pkgs.runCommandNoCC "image-with-links.tar" {
+      repeatedRootfsDiffs = pkgs.runCommand "image-with-links.tar" {
         nativeBuildInputs = [pkgs.jq];
       } ''
         mkdir contents
@@ -55,7 +55,7 @@ in {
   nodes = {
     docker = { ... }: {
       virtualisation = {
-        diskSize = 2048;
+        diskSize = 3072;
         docker.enable = true;
       };
     };

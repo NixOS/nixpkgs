@@ -12,14 +12,14 @@ buildPythonPackage rec {
   # Note that there is a version 0.4.0, but it was released in error. At the
   # time of writing (2022-03-29), v0.0.11 is the latest as reported on GitHub
   # and PyPI.
-  version = "0.0.11";
+  version = "0.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cgarciae";
     repo = pname;
-    rev = version;
-    hash = "sha256-zs3F8i+G5OX/A9wOO60xVuvnm2QqrL+dHIrC0qwH37o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0py7sKjq6WqdsZwTq61jqaIbULTfwtpz29TTpt8M2Zw=";
   };
 
   # See https://github.com/cgarciae/treex/issues/68.
@@ -53,5 +53,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/cgarciae/treeo";
     license = licenses.mit;
     maintainers = with maintainers; [ ndl ];
+    # obsolete as of 2023-02-27 and not updated for more than a year as of 2023-08
+    broken = true;
   };
 }

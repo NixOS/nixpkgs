@@ -8,7 +8,7 @@ in
   options.services.lldap = with lib; {
     enable = mkEnableOption (mdDoc "lldap");
 
-    package = mkPackageOptionMD pkgs "lldap" { };
+    package = mkPackageOption pkgs "lldap" { };
 
     environment = mkOption {
       type = with types; attrsOf str;
@@ -104,6 +104,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

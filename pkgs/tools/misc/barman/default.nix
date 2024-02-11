@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.4.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = pname;
     rev = "refs/tags/release/${version}";
-    hash = "sha256-K5y5C+K/fMhgOcSsCMaIgY6ce9UUPszoyumsfNHKjBo=";
+    hash = "sha256-NcDW1SLeP2BVH+TQp1M03Otg75axSFXfwQzlEJ1JOxo=";
   };
 
   patches = [

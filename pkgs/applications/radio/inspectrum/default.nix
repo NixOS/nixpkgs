@@ -11,13 +11,13 @@
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "inspectrum";
-  version = "0.2.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "miek";
     repo = "inspectrum";
     rev = "v${version}";
-    sha256 = "1x6nyn429pk0f7lqzskrgsbq09mq5787xd4piic95add6n1cc355";
+    sha256 = "sha256-yY2W2hQpj8TIxiQBSbQHq0J16n74OfIwMDxFt3mLZYc=";
   };
 
   nativeBuildInputs = [

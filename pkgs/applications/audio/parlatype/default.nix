@@ -2,14 +2,11 @@
 , stdenv
 , fetchFromGitHub
 , appstream-glib
-, dbus
 , desktop-file-utils
 , gettext
 , glib
-, gobject-introspection
-, gsettings-desktop-schemas
 , gst_all_1
-, gtk3
+, gtk4
 , hicolor-icon-theme
 , isocodes
 , itstool
@@ -23,20 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
-  version = "3.1";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "gkarsay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1a4xlsbszb50vnz1g7kf7hl7aywp7s7xaravkcx13csn0a7l3x45";
+    sha256 = "1iyjxss6sgc9gx6ij30zz97bl31qix8pxklzn4kknh1b0j7hhbwq";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     gettext
-    gobject-introspection
     itstool
     libxml2
     meson
@@ -47,16 +43,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    dbus
     glib
-    gsettings-desktop-schemas
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
-    gtk3
+    gtk4
     hicolor-icon-theme
     isocodes
   ];

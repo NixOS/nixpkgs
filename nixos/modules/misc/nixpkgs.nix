@@ -176,22 +176,18 @@ in
         '';
       type = types.listOf overlayType;
       description = lib.mdDoc ''
-        List of overlays to use with the Nix Packages collection.
-        (For details, see the Nixpkgs documentation.)  It allows
-        you to override packages globally. Each function in the list
-        takes as an argument the *original* Nixpkgs.
-        The first argument should be used for finding dependencies, and
-        the second should be used for overriding recipes.
+        List of overlays to apply to Nixpkgs.
+        This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
 
-        If `nixpkgs.pkgs` is set, overlays specified here
-        will be applied after the overlays that were already present
-        in `nixpkgs.pkgs`.
+        For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+        If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays` will be applied after the overlays that were already included in `nixpkgs.pkgs`.
       '';
     };
 
     hostPlatform = mkOption {
       type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
@@ -209,7 +205,7 @@ in
     buildPlatform = mkOption {
       type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = cfg.hostPlatform;
-      example = { system = "x86_64-linux"; config = "x86_64-unknown-linux-gnu"; };
+      example = { system = "x86_64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this.
       apply = lib.systems.elaborate;
@@ -232,7 +228,7 @@ in
     localSystem = mkOption {
       type = types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = { inherit (cfg) system; };
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
@@ -266,7 +262,7 @@ in
     crossSystem = mkOption {
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       description = lib.mdDoc ''
         Systems with a recently generated `hardware-configuration.nix`
         may instead specify *only* {option}`nixpkgs.buildPlatform`,
@@ -381,6 +377,16 @@ in
           ${concatMapStrings showOptionWithDefLocs legacyOptionsDefined}
           For a future proof system configuration, we recommend to remove
           the legacy definitions.
+        '';
+      }
+      {
+        assertion = opt.pkgs.isDefined -> cfg.config == {};
+        message = ''
+          Your system configures nixpkgs with an externally created instance.
+          `nixpkgs.config` options should be passed when creating the instance instead.
+
+          Current value:
+          ${lib.generators.toPretty { multiline = true; } opt.config}
         '';
       }
     ];

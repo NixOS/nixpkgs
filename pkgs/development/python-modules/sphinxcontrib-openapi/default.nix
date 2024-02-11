@@ -9,17 +9,18 @@
 , picobox
 , pyyaml
 , sphinx-mdinclude
-, sphinxcontrib_httpdomain
+, sphinxcontrib-httpdomain
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
-  version = "0.8.1";
+  version = "0.8.3";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BPz4fCWTRRYqUEzj3+4PcTifUHw3l3mNxTHHdImVtOs=";
+    hash = "sha256-nGIRdUC1J2AGrHrUrzRpbQKvJ4r6KZcSdAw2gKmp3mw=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -29,12 +30,12 @@ buildPythonPackage rec {
     picobox
     pyyaml
     sphinx-mdinclude
-    sphinxcontrib_httpdomain
+    sphinxcontrib-httpdomain
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   doCheck = false;
+
+  pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";

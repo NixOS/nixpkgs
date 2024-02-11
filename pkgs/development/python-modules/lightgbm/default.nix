@@ -1,34 +1,61 @@
 { lib
+, config
 , stdenv
 , buildPythonPackage
 , fetchPypi
+
+# build-system
 , cmake
+, ninja
+, pathspec
+, pyproject-metadata
+, scikit-build-core
+
+# dependencies
+, llvmPackages
 , numpy
 , scipy
-, scikit-learn
-, llvmPackages ? null
 , pythonOlder
-, python
+
+# optionals
+, cffi
+, dask
+, pandas
+, pyarrow
+, scikit-learn
+
+# optionals: gpu
+, boost
 , ocl-icd
 , opencl-headers
-, boost
-, gpuSupport ? stdenv.isLinux
+, gpuSupport ? stdenv.isLinux && !cudaSupport
+, cudaSupport ? config.cudaSupport
+, cudaPackages
 }:
+
+assert gpuSupport -> cudaSupport != true;
+assert cudaSupport -> gpuSupport != true;
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "3.3.5";
-  format = "setuptools";
+  version = "4.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ELj73PhR5PaKHwLzjZm9xEx8f7mxpi3PkkoNKf9zOVw=";
+    hash = "sha256-AG9XhKm87kPlp+lD3E8C3hui7np68e5fGQ04Pztsnr4=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
+    pathspec
+    pyproject-metadata
+    scikit-build-core
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   dontUseCmakeConfigure = true;
@@ -39,25 +66,44 @@ buildPythonPackage rec {
     boost
     ocl-icd
     opencl-headers
-  ]);
+  ]) ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+  ];
 
   propagatedBuildInputs = [
     numpy
     scipy
-    scikit-learn
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
-
-    runHook postBuild
-  '';
+  pypaBuildFlags = lib.optionals gpuSupport [
+    "--config-setting=cmake.define.USE_GPU=ON"
+  ] ++ lib.optionals cudaSupport [
+    "--config-setting=cmake.define.USE_CUDA=ON"
+  ];
 
   postConfigure = ''
     export HOME=$(mktemp -d)
   '';
+
+  passthru.optional-dependencies = {
+    arrow = [
+      cffi
+      pyarrow
+    ];
+    dask = [
+      dask
+      pandas
+    ] ++ dask.optional-dependencies.array
+      ++ dask.optional-dependencies.dataframe
+      ++ dask.optional-dependencies.distributed;
+    pandas = [
+      pandas
+    ];
+    scikit-learn = [
+      scikit-learn
+    ];
+  };
 
   # The pypi package doesn't distribute the tests from the GitHub
   # repository. It contains c++ tests which don't seem to wired up to
@@ -73,6 +119,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh costrouc ];
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

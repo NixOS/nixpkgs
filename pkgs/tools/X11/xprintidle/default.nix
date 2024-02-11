@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.linux;
+    mainProgram = "xprintidle";
   };
 }

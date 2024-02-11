@@ -8,31 +8,41 @@
 , openssl
 , sphinxHook
 , sphinx-better-theme
+, buildPackages
 }:
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.9.5";
+  version = "2.9.9";
   format = "setuptools";
 
   # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
   # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
   disabled = pythonOlder "3.6" || isPyPy;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pSRtLmg6ly4hh6hxS1ws+BVsBkYp+amxqHPBcw2eJFo=";
-  };
-
   outputs = [ "out" "doc" ];
 
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-0UVL3pP7HiJBZoEWlNYA50ZDDABvuwMeoG7MLqQb8VY=";
+  };
+
+  postPatch = ''
+    # Preferably upstream would not depend on pg_config because config scripts are incompatible with cross-compilation, however postgresql's pc file is lacking information.
+    # some linker flags are added but the linker ignores them because they're incompatible
+    # https://github.com/psycopg/psycopg2/blob/89005ac5b849c6428c05660b23c5a266c96e677d/setup.py
+    substituteInPlace setup.py \
+      --replace "self.pg_config_exe = self.build_ext.pg_config" 'self.pg_config_exe = "${lib.getExe' buildPackages.postgresql "pg_config"}"'
+  '';
+
   nativeBuildInputs = [
-    postgresql
     sphinxHook
     sphinx-better-theme
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    postgresql
+  ] ++ lib.optionals stdenv.isDarwin [
     openssl
   ];
 
@@ -44,6 +54,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "psycopg2"
   ];
+
+  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ buildPackages.postgresql ];
 
   meta = with lib; {
     description = "PostgreSQL database adapter for the Python programming language";

@@ -1,19 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, bzip2
+, htslib
+, llvmPackages
+, xz
+, zlib
+, delly
+, runCommand
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.1.6";
+  version = "1.2.6";
 
   src = fetchFromGitHub {
-      owner = "dellytools";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-/I//7MhsC/CcBeIJblzbjXp/yOSBm83KWJsrYpl6UJk=";
+    owner = "dellytools";
+    repo = "delly";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-OO5nnaIcfNAV8pc03Z8YS5kE96bFOrJXA9QTiLi7vPc=";
   };
 
-  buildInputs = [ zlib htslib bzip2 xz ncurses boost ];
+  buildInputs = [
+    boost
+    bzip2
+    htslib
+    xz
+    zlib
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
-  EBROOTHTSLIB = htslib;
+  makeFlags = [
+    "EBROOTHTSLIB=${htslib}"
+    "PARALLEL=1"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -23,11 +43,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    simple = runCommand "${finalAttrs.pname}-test" { } ''
+      mkdir $out
+      ${lib.getExe delly} call -g ${delly.src}/example/ref.fa ${delly.src}/example/sr.bam > $out/sr.vcf
+      ${lib.getExe delly} lr -g ${delly.src}/example/ref.fa ${delly.src}/example/lr.bam > $out/lr.vcf
+      ${lib.getExe delly} cnv -g ${delly.src}/example/ref.fa -m ${delly.src}/example/map.fa.gz ${delly.src}/example/sr.bam > cnv.vcf
+    '';
+  };
+
   meta = with lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     longDescription = ''
       Delly is an integrated structural variant (SV) prediction method
       that can discover, genotype and visualize deletions, tandem duplications,
@@ -37,4 +66,4 @@ stdenv.mkDerivation rec {
       genomic rearrangements throughout the genome.
     '';
   };
-}
+})

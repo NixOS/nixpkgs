@@ -89,3 +89,18 @@ A user can be deleted using `userdel`:
 The flag `-r` deletes the user's home directory. Accounts can be
 modified using `usermod`. Unix groups can be managed using `groupadd`,
 `groupmod` and `groupdel`.
+
+## Create users and groups with `systemd-sysusers` {#sec-systemd-sysusers}
+
+::: {.note}
+This is experimental.
+:::
+
+Instead of using a custom perl script to create users and groups, you can use
+systemd-sysusers:
+
+```nix
+systemd.sysusers.enable = true;
+```
+
+The primary benefit of this is to remove a dependency on perl.

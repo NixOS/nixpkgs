@@ -7,20 +7,23 @@
 , darwin
 , fontconfig
 , glib
+, glibc
 , gtk3
 , makeWrapper
+, musl
+, runCommandCC
 , setJavaClassPath
 , unzip
 , xorg
 , zlib
   # extra params
-, javaVersion
-, meta ? { }
-, products ? [ ]
+, extraCLibs ? [ ]
 , gtkSupport ? stdenv.isLinux
+, useMusl ? false
 , ...
 } @ args:
 
+assert useMusl -> stdenv.isLinux;
 let
   extraArgs = builtins.removeAttrs args [
     "lib"
@@ -32,24 +35,41 @@ let
     "darwin"
     "fontconfig"
     "glib"
+    "glibc"
     "gtk3"
     "makeWrapper"
+    "musl"
+    "runCommandCC"
     "setJavaClassPath"
     "unzip"
     "xorg"
     "zlib"
-    "javaVersion"
-    "meta"
-    "products"
+    "extraCLibs"
     "gtkSupport"
+    "useMusl"
+    "passthru"
+    "meta"
   ];
+
+  cLibs = lib.optionals stdenv.isLinux (
+    [ glibc zlib.static ]
+    ++ lib.optionals (!useMusl) [ glibc.static ]
+    ++ lib.optionals useMusl [ musl ]
+    ++ extraCLibs
+  );
+
+  # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
+  musl-gcc = (runCommandCC "musl-gcc" { } ''
+    mkdir -p $out/bin
+    ln -s ${lib.getDev musl}/bin/musl-gcc $out/bin/${stdenv.hostPlatform.system}-musl-gcc
+  '');
+  binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv.cc ]);
+
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
-  mapProducts = key: default: (map (p: p.graalvmPhases.${key} or default) products);
-  concatProducts = key: lib.concatStringsSep "\n" (mapProducts key "");
 
-  graalvmXXX-ce = stdenv.mkDerivation ({
-    pname = "graalvm${javaVersion}-ce";
+  graalvm-ce = stdenv.mkDerivation ({
+    pname = "graalvm-ce";
 
     unpackPhase = ''
       runHook preUnpack
@@ -71,20 +91,14 @@ let
 
       # Sanity check
       if [ ! -d "$out/bin" ]; then
-          echo "The `bin` is directory missing after extracting the graalvm"
-          echo "tarball, please compare the directory structure of the"
-          echo "tarball with what happens in the unpackPhase (in particular"
-          echo "with regards to the `--strip-components` flag)."
-          exit 1
+        echo "The `bin` is directory missing after extracting the graalvm"
+        echo "tarball, please compare the directory structure of the"
+        echo "tarball with what happens in the unpackPhase (in particular"
+        echo "with regards to the `--strip-components` flag)."
+        exit 1
       fi
 
       runHook postUnpack
-    '';
-
-    postUnpack = ''
-      for product in ${toString products}; do
-        cp -Rv $product/* $out
-      done
     '';
 
     dontStrip = true;
@@ -106,7 +120,6 @@ let
       xorg.libXtst
     ];
 
-    preInstall = concatProducts "preInstall";
     postInstall = ''
       # jni.h expects jni_md.h to be in the header search path.
       ln -sf $out/include/linux/*_md.h $out/include/
@@ -115,52 +128,80 @@ let
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat > $out/nix-support/setup-hook << EOF
-        if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
-    '' + concatProducts "postInstall";
+
+      wrapProgram $out/bin/native-image \
+        --prefix PATH : ${binPath} \
+        ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
+    '';
 
     preFixup = lib.optionalString (stdenv.isLinux) ''
       for bin in $(find "$out/bin" -executable -type f); do
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       done
-    '' + concatProducts "preFixup";
-    postFixup = concatProducts "postFixup";
+    '';
 
     doInstallCheck = true;
     installCheckPhase = ''
       runHook preInstallCheck
 
       ${# broken in darwin
-        lib.optionalString stdenv.isLinux ''
+      lib.optionalString stdenv.isLinux ''
         echo "Testing Jshell"
         echo '1 + 1' | $out/bin/jshell
       ''}
 
-      echo ${
-        lib.escapeShellArg ''
-          public class HelloWorld {
-            public static void main(String[] args) {
-              System.out.println("Hello World");
-            }
+      echo ${lib.escapeShellArg ''
+        public class HelloWorld {
+          public static void main(String[] args) {
+            System.out.println("Hello World");
           }
-        ''
-      } > HelloWorld.java
+        }
+      ''} > HelloWorld.java
       $out/bin/javac HelloWorld.java
 
       # run on JVM with Graal Compiler
       echo "Testing GraalVM"
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
-      ${concatProducts "installCheckPhase"}
+      # Workaround GraalVM issue where the builder does not have access to the
+      # environment variables since 21.0.0
+      # Only needed for native-image tests
+      # https://github.com/oracle/graal/pull/6095
+      # https://github.com/oracle/graal/pull/6095
+      # https://github.com/oracle/graal/issues/7502
+      export NATIVE_IMAGE_DEPRECATED_BUILDER_SANITATION="true";
+
+      echo "Ahead-Of-Time compilation"
+      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
+      ./helloworld | fgrep 'Hello World'
+
+      ${# --static is only available in Linux
+      lib.optionalString (stdenv.isLinux && !useMusl) ''
+        echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
+        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC HelloWorld
+        ./helloworld | fgrep 'Hello World'
+
+        echo "Ahead-Of-Time compilation with --static"
+        $out/bin/native-image --static HelloWorld
+        ./helloworld | fgrep 'Hello World'
+      ''}
+
+      ${# --static is only available in Linux
+      lib.optionalString (stdenv.isLinux && useMusl) ''
+        echo "Ahead-Of-Time compilation with --static and --libc=musl"
+        $out/bin/native-image --static HelloWorld --libc=musl
+        ./helloworld | fgrep 'Hello World'
+      ''}
 
       runHook postInstallCheck
     '';
 
     passthru = {
-      inherit products;
-      home = graalvmXXX-ce;
-      updateScript = ./update.sh;
-    };
+      home = graalvm-ce;
+      updateScript = [ ./update.sh "graalvm-ce" ];
+    } // (args.passhtru or { });
 
     meta = with lib; ({
       homepage = "https://www.graalvm.org/";
@@ -169,7 +210,7 @@ let
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       mainProgram = "java";
       maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
-    } // meta);
+    } // (args.meta or { }));
   } // extraArgs);
 in
-graalvmXXX-ce
+graalvm-ce

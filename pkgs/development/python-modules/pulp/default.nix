@@ -1,4 +1,5 @@
 { lib
+, cbc
 , amply
 , buildPythonPackage
 , fetchFromGitHub
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pulp";
-  version = "2.7.0";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +19,14 @@ buildPythonPackage rec {
     owner = "coin-or";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-j0f6OiscJyTqPNyLp0qWRjCGLWuT3HdU1S/sxpnsiMo=";
+    hash = "sha256-lpbk1GeC8F/iLGV8G5RPHghnaM9eL82YekUYEt9+mvc=";
   };
+
+  postPatch = ''
+    sed -i pulp/pulp.cfg.linux \
+      -e 's|CbcPath = .*|CbcPath = ${cbc}/bin/cbc|' \
+      -e 's|PulpCbcPath = .*|PulpCbcPath = ${cbc}/bin/cbc|'
+  '';
 
   propagatedBuildInputs = [
     amply
@@ -34,14 +41,8 @@ buildPythonPackage rec {
     "pulp"
   ];
 
-  disabledTests = [
-    # The solver is not available
-    "PULP_CBC_CMDTest"
-    "test_examples"
-  ];
-
   meta = with lib; {
-    description = "Module to generate  generate MPS or LP files";
+    description = "Module to generate MPS or LP files";
     homepage = "https://github.com/coin-or/pulp";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

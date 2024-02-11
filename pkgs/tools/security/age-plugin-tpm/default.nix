@@ -2,28 +2,30 @@
 , buildGoModule
 , fetchFromGitHub
 , swtpm
+, openssl
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "age-plugin-tpm";
-  version = "unstable-2023-05-02";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "age-plugin-tpm";
-    rev = "c570739b05c067087c44f651efce6890eedc0647";
-    hash = "sha256-xlJtyNAYi/6vBWLsjymFLGfr30w80OplwG2xGTEB118=";
+    rev = "v${version}";
+    hash = "sha256-oTvK8U5j+llHgoChhGb+vcUrUf9doVYxd3d5MEuCNz8=";
   };
 
-  vendorHash = "sha256-S9wSxw0ZMibCOspgGt5vjzFhPL+bZncjTdIX2mkX5vE=";
+  proxyVendor = true;
 
-  postConfigure = ''
-    substituteInPlace vendor/github.com/foxboron/swtpm_test/swtpm.go \
-      --replace "/usr/share/swtpm/swtpm-create-user-config-files" "${swtpm}/share/swtpm/swtpm-create-user-config-files"
-  '';
+  vendorHash = "sha256-BSb+8p5+RJMfcYc2+BuT4YbhCWCbcYOt9upesD11Ytw=";
 
   nativeCheckInputs = [
     swtpm
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   ldflags = [
@@ -32,10 +34,10 @@ buildGoModule {
   ];
 
   meta = with lib; {
-    description = "TPM 2.0 plugin for age";
+    description = "TPM 2.0 plugin for age (This software is experimental, use it at your own risk)";
     homepage = "https://github.com/Foxboron/age-plugin-tpm";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes sgo ];
   };
 }

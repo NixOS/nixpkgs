@@ -5,17 +5,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "0.9.1";
+  version = "0.10.1";
 
   disabled = python3.pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o22Jn2x2mFczjQTttKEfrzGBAKpXSe9JT8kIA5WGjmA=";
+    hash = "sha256-gur0+2yHqxySXECMboW7dAyyf0ckSdS0FEy7HvA5Y5w=";
   };
 
   pythonRelaxDeps = true;
@@ -29,7 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     bite-parser
     dataclasses-serialization
     prometheus-client
-    typing-extensions
     uvicorn
     xsdata
   ]

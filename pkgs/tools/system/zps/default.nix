@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zps";
-  version = "1.2.8";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "zps";
     rev = version;
-    hash = "sha256-t0kVMrJn+eqUUD98pp3iIK28MoLwOplLk0sYgRJkO4c=";
+    hash = "sha256-t+y+m9cwngVlX5o7FQTI4FMj10bN0euH51DmAnOAvPc=";
   };
 
   nativeBuildInputs = [
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
     platforms = platforms.linux;
+    mainProgram = "zps";
   };
 }

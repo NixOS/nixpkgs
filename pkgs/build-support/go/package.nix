@@ -37,6 +37,8 @@
 
 , CGO_ENABLED ? go.CGO_ENABLED
 
+, ldflags ? [ ]
+
 # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
@@ -86,9 +88,13 @@ let
     inherit CGO_ENABLED enableParallelBuilding;
 
     GO111MODULE = "off";
+    GOTOOLCHAIN = "local";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+
+    # If not set to an explicit value, set the buildid empty for reproducibility.
+    ldflags = ldflags ++ lib.optionals (!lib.any (lib.hasPrefix "-buildid=") ldflags) [ "-buildid=" ];
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -279,4 +285,5 @@ let
 in
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
   package

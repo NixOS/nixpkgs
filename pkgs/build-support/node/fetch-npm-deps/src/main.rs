@@ -16,6 +16,7 @@ use walkdir::WalkDir;
 
 mod cacache;
 mod parse;
+mod util;
 
 fn cache_map_path() -> Option<PathBuf> {
     env::var_os("CACHE_MAP_PATH").map(PathBuf::from)
@@ -107,7 +108,7 @@ fn fixup_lockfile(
 
 // Recursive helper to fixup v1 lockfile deps
 fn fixup_v1_deps(
-    dependencies: &mut serde_json::Map<String, Value>,
+    dependencies: &mut Map<String, Value>,
     cache: &Option<HashMap<String, String>>,
     fixed: &mut bool,
 ) {
@@ -172,6 +173,8 @@ fn map_cache() -> anyhow::Result<HashMap<Url, String>> {
 }
 
 fn main() -> anyhow::Result<()> {
+    env_logger::init();
+
     let args = env::args().collect::<Vec<_>>();
 
     if args.len() < 2 {
@@ -180,6 +183,18 @@ fn main() -> anyhow::Result<()> {
         println!("Prefetches npm dependencies for usage by fetchNpmDeps.");
 
         process::exit(1);
+    }
+
+    if let Ok(jobs) = env::var("NIX_BUILD_CORES") {
+        if !jobs.is_empty() {
+            rayon::ThreadPoolBuilder::new()
+                .num_threads(
+                    jobs.parse()
+                        .expect("NIX_BUILD_CORES must be a whole number"),
+                )
+                .build_global()
+                .unwrap();
+        }
     }
 
     if args[1] == "--fixup-lockfile" {
@@ -219,14 +234,21 @@ fn main() -> anyhow::Result<()> {
         (out_tempdir.path(), true)
     };
 
-    let packages = parse::lockfile(&lock_content, env::var("FORCE_GIT_DEPS").is_ok())?;
+    let packages = parse::lockfile(
+        &lock_content,
+        env::var("FORCE_GIT_DEPS").is_ok(),
+        env::var("FORCE_EMPTY_CACHE").is_ok(),
+    )?;
 
     let cache = Cache::new(out.join("_cacache"));
+    cache.init()?;
 
     packages.into_par_iter().try_for_each(|package| {
         eprintln!("{}", package.name);
 
-        let tarball = package.tarball()?;
+        let tarball = package
+            .tarball()
+            .map_err(|e| anyhow!("couldn't fetch {} at {}: {e:?}", package.name, package.url))?;
         let integrity = package.integrity().map(ToString::to_string);
 
         cache

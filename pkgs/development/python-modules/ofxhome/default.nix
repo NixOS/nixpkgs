@@ -2,6 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.3.3";
+  format = "setuptools";
   pname = "ofxhome";
 
   src = fetchPypi {

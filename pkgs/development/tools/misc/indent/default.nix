@@ -1,20 +1,47 @@
-{ lib, stdenv, fetchurl, texinfo, buildPackages, pkgsStatic }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libintl
+, texinfo
+, buildPackages
+, pkgsStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "indent";
-  version = "2.2.12";
+  version = "2.2.13";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "12xvcd16cwilzglv9h7sgh4h1qqjd1h8s48ji2dla58m4706hzg7";
+    hash = "sha256-nmRjT8TOZ5eyBLy4iXzhT90KtIyldpb3h2fFnK5XgJU=";
   };
 
-  patches = [ ./darwin.patch ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-40305.part-1.patch";
+      url = "https://git.savannah.gnu.org/cgit/indent.git/patch/?id=df4ab2d19e247d059e0025789ba513418073ab6f";
+      hash = "sha256-OLXBlYTdEuFK8SIsyC5Xr/hHWlvXiRqY2h79w+H5pGk=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-40305.part-2.patch";
+      url = "https://git.savannah.gnu.org/cgit/indent.git/patch/?id=2685cc0bef0200733b634932ea7399b6cf91b6d7";
+      hash = "sha256-t+QF7N1aqQ28J2O8esZ2bc5K042cUuZR4MeMeuWIgPw=";
+    })
+  ];
+
+  # avoid https://savannah.gnu.org/bugs/?64751
+  postPatch = ''
+    sed -E -i '/output\/else-comment-2-br(-ce)?.c/d' regression/TEST
+    sed -E -i 's/else-comment-2-br(-ce)?.c//g' regression/TEST
+  '';
+
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   strictDeps = true;
   nativeBuildInputs = [ texinfo ];
-  pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
+  buildInputs = [ libintl ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-implicit-function-declaration"
@@ -22,6 +49,8 @@ stdenv.mkDerivation rec {
   );
 
   hardeningDisable = [ "format" ];
+
+  doCheck = true;
 
   passthru.tests.static = pkgsStatic.indent;
   meta = {

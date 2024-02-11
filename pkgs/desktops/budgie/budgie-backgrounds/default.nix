@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-backgrounds";
-  version = "1.0";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-backgrounds";
     rev = "v${version}";
-    hash = "sha256-TdtgOYHO2QH4W2jWBuAzYQwxwAPya2lC3VrIi7kvi+M=";
+    hash = "sha256-L6y9YVS0NFsycS90AmUJJd9HFMJ/Ge99pI426tC05jA=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +24,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ];
-
-  preConfigure = ''
-    chmod +x ./scripts/optimizeImage.sh
-    patchShebangs ./scripts/optimizeImage.sh
-  '';
 
   meta = with lib; {
     description = "The default background set for the Budgie Desktop";

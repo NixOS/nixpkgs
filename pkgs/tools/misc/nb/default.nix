@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nb";
-  version = "7.5.1";
+  version = "7.10.3";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    sha256 = "sha256-CZcXV8ZRFnx0qI5vZ8adXUAJWAR+KG/ChTFDQWKqmsA=";
+    sha256 = "sha256-1zZdgL4zy+3u7y4MptDLcmQDSmLZ3gJVlk27enW6xQc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.toonn ];
     platforms = platforms.all;
+    mainProgram = "nb";
   };
 }

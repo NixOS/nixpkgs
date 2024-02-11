@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "trashhalo";
     repo = "imgcat";
     rev = "v${version}";
-    sha256 = "0x7a1izsbrbfph7wa9ny9r4a8lp6z15qpb6jf8wsxshiwnkjyrig";
+    hash = "sha256-L2Yvp+UR6q45ctKsi0v45lKkSE7eJsUPvG7lpX8M6nQ=";
   };
 
-  vendorSha256 = "191gi4c5jk8p9xvbm1cdhk5yi8q2cp2jvjq1sgxqw1ad0lppwhg2";
+  vendorHash = "sha256-4kF+LwVNBY770wHLLcVlAqPoy4SNhbp2TxdNWRiJL6Q=";
 
   meta = with lib; {
     description = "A tool to output images as RGB ANSI graphics on the terminal";

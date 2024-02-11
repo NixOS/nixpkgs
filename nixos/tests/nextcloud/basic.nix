@@ -13,13 +13,15 @@ in {
     # The only thing the client needs to do is download a file.
     client = { ... }: {
       services.davfs2.enable = true;
-      system.activationScripts.davfs2-secrets = ''
-        echo "http://nextcloud/remote.php/webdav/ ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
-        chmod 600 /tmp/davfs2-secrets
-      '';
+      systemd.tmpfiles.settings.nextcloud = {
+        "/tmp/davfs2-secrets"."f+" = {
+          mode = "0600";
+          argument = "http://nextcloud/remote.php/dav/files/${adminuser} ${adminuser} ${adminpass}";
+        };
+      };
       virtualisation.fileSystems = {
         "/mnt/dav" = {
-          device = "http://nextcloud/remote.php/webdav/";
+          device = "http://nextcloud/remote.php/dav/files/${adminuser}";
           fsType = "davfs";
           options = let
             davfs2Conf = (pkgs.writeText "davfs2.conf" "secrets /tmp/davfs2-secrets");
@@ -36,8 +38,6 @@ in {
       systemd.tmpfiles.rules = [
         "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
       ];
-
-      system.stateVersion = "22.11"; # stateVersion >=21.11 to make sure that we use OpenSSL3
 
       services.nextcloud = {
         enable = true;
@@ -70,7 +70,7 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -90,8 +90,8 @@ in {
       test -e graph
       grep "$what" graph >$out || true
     '';
-    nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.config.system.build.vm;
-    nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.config.system.build.vm;
+    nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.system.build.vm;
+    nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.system.build.vm;
   in ''
     assert open("${nextcloudUsesImagick}").read() != ""
     assert open("${nextcloudWithoutDoesntUseIt}").read() == ""

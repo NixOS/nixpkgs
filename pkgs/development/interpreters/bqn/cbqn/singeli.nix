@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "singeli";
-  version = "unstable-2023-04-27";
+  version = "unstable-2023-11-22";
 
   src = fetchFromGitHub {
     owner = "mlochbaum";
     repo = "Singeli";
-    rev = "853ab1a06ae8d8603f228d8e784fa319cc401459";
-    hash = "sha256-X/NnufvakihJAE9H7geuuDS7Tv9l7tgLKdRgXC4ZX4A=";
+    rev = "528faaf9e2a7f4f3434365bcd91d6c18c87c4f08";
+    hash = "sha256-/z1KHqflCqPGC9JU80jtgqdk2mkX06eWSziuf4TU4TM=";
   };
 
   dontConfigure = true;

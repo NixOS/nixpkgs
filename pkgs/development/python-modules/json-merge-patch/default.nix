@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "json-merge-patch";
   version = "0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,6 +28,6 @@ buildPythonPackage rec {
     description = "JSON Merge Patch library";
     homepage = "https://github.com/open-contracting/json-merge-patch";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

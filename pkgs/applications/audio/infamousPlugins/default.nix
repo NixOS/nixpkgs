@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cairomm
 , cmake
@@ -17,28 +16,15 @@
 
 stdenv.mkDerivation rec {
   pname = "infamousPlugins";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ssj71";
     repo = "infamousPlugins";
     rev = "v${version}";
-    sha256 = "1r72agk5nxf5k0mghcc2j90z43j5d9i7rqjmf49jfyqnd443isip";
+    sha256 = "sha256-AhW4hLmCxz7yHMdxM6kOvtCXk1jEg/XtyPgt4yk1xqs=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ssj71/infamousPlugins/commit/06dd967b4736ea886dc1dc07f882cb1563961582.patch";
-      sha256 = "08xwh6px13y1gykaw103nhvjms7vgbgkcm0avh9f5d2d7aadq0l2";
-    })
-
-    # glibx-2.36 upstream fix: https://github.com/ssj71/infamousPlugins/pull/52
-    (fetchpatch {
-      name = "glibc-2.36.patch";
-      url = "https://github.com/ssj71/infamousPlugins/commit/eb4fd9af25362fdd006549c471f4cf0427816dd5.patch";
-      hash = "sha256-kBB2meQYVoVSTHIG77M8Fmeve87JBIUjpWCP6oiOkKI=";
-    })
-  ];
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler ];
 

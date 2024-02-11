@@ -4,6 +4,7 @@
   "date": "2023-05-05T15:36:48+09:00",
   "path": "/nix/store/fx50ap0gdspwcpgf0zni4j1pzz29abk5-tree-sitter-clojure",
   "sha256": "0hcl4svn0q4979mx0nn3hhi27xfxj1lz7g1926lcjx6sv1z4ihmj",
+  "hash": "sha256-ssJIftjadMmoESm882mQ3fUjIoTDWtBrOolgYLcmlEE=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

@@ -1,31 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, linear_operator
+, linear-operator
 , scikit-learn
+, setuptools
+, setuptools-scm
+, wheel
 , torch
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gpytorch";
-  version = "1.10";
+  version = "1.11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KY3ItkVjBfIYMkZAmD56EBGR9YN/MRN7b2K3zrK6Qmk=";
+    hash = "sha256-cpkfjx5G/4duL1Rr4nkHTHi03TDcYbcx3bKP2Ny7Ijo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'find_version("gpytorch", "version.py")' \"$version\"
-  '';
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
-    linear_operator
+    linear-operator
     scikit-learn
     torch
   ];
@@ -33,13 +37,17 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
   pythonImportsCheck = [ "gpytorch" ];
+
   disabledTests = [
     # AssertionError on number of warnings emitted
     "test_deprecated_methods"
     # flaky numerical tests
     "test_classification_error"
     "test_matmul_matrix_broadcast"
+    # https://github.com/cornellius-gp/gpytorch/issues/2396
+    "test_t_matmul_matrix"
   ];
 
   meta = with lib; {

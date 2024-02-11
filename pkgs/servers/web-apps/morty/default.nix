@@ -11,7 +11,7 @@ buildGoModule {
     sha256 = "sha256-ik2VAPdxllt76UVFt77c1ltxIwFNahAKjn3FuErNFYo=";
   };
 
-  vendorSha256 = "sha256-3sllcoTDYQBAyAT7e9KeKNrlTEbgnoZc0Vt0ksQByvo=";
+  vendorHash = "sha256-3sllcoTDYQBAyAT7e9KeKNrlTEbgnoZc0Vt0ksQByvo=";
 
   meta = with lib; {
     description = "Privacy aware web content sanitizer proxy as a service";

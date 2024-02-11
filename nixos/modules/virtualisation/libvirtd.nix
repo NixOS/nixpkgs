@@ -64,25 +64,14 @@ let
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.swtpm;
-        defaultText = literalExpression "pkgs.swtpm";
-        description = lib.mdDoc ''
-          swtpm package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "swtpm" { };
     };
   };
 
   qemuModule = types.submodule {
     options = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.qemu;
-        defaultText = literalExpression "pkgs.qemu";
-        description = lib.mdDoc ''
-          Qemu package to use with libvirt.
+      package = mkPackageOption pkgs "qemu" {
+        extraDescription = ''
           `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
           `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
         '';
@@ -125,6 +114,94 @@ let
         default = { };
         description = lib.mdDoc ''
           QEMU's swtpm options.
+        '';
+      };
+
+      vhostUserPackages = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        example = lib.literalExpression "[ pkgs.virtiofsd ]";
+        description = lib.mdDoc ''
+          Packages containing out-of-tree vhost-user drivers.
+        '';
+      };
+    };
+  };
+
+  hooksModule = types.submodule {
+    options = {
+      daemon = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/daemon.d/
+          and called for daemon start/shutdown/SIGHUP events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      qemu = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/qemu.d/
+          and called for qemu domains begin/end/migrate events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      lxc = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
+          and called for lxc domains begin/end events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      libxl = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/libxl.d/
+          and called for libxl-handled xen domains begin/end events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+
+      network = mkOption {
+        type = types.attrsOf types.path;
+        default = { };
+        description = lib.mdDoc ''
+          Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
+          and called for networks begin/end events.
+          Please see https://libvirt.org/hooks.html for documentation.
+        '';
+      };
+    };
+  };
+
+  nssModule = types.submodule {
+    options = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          This option enables the older libvirt NSS module. This method uses
+          DHCP server records, therefore is dependent on the hostname provided
+          by the guest.
+          Please see https://libvirt.org/nss.html for more information.
+        '';
+      };
+
+      enableGuest = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          This option enables the newer libvirt_guest NSS module. This module
+          uses the libvirt guest name instead of the hostname of the guest.
+          Please see https://libvirt.org/nss.html for more information.
         '';
       };
     };
@@ -170,14 +247,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.libvirt;
-      defaultText = literalExpression "pkgs.libvirt";
-      description = lib.mdDoc ''
-        libvirt package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "libvirt" { };
 
     extraConfig = mkOption {
       type = types.lines;
@@ -244,6 +314,22 @@ in
       default = { };
       description = lib.mdDoc ''
         QEMU related options.
+      '';
+    };
+
+    hooks = mkOption {
+      type = hooksModule;
+      default = { };
+      description = lib.mdDoc ''
+        Hooks related options.
+      '';
+    };
+
+    nss = mkOption {
+      type = nssModule;
+      default = { };
+      description = lib.mdDoc ''
+        libvirt NSS module options.
       '';
     };
   };
@@ -337,6 +423,15 @@ in
           ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
           ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
         '')}
+
+        # Symlink hooks to /var/lib/libvirt
+        ${concatStringsSep "\n" (map (driver:
+          ''
+          mkdir -p /var/lib/${dirName}/hooks/${driver}.d
+          rm -rf /var/lib/${dirName}/hooks/${driver}.d/*
+          ${concatStringsSep "\n" (mapAttrsToList (name: value:
+            "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}") cfg.hooks.${driver})}
+        '') (attrNames cfg.hooks))}
       '';
 
       serviceConfig = {
@@ -363,7 +458,7 @@ in
         ] ++ cfg.extraOptions
       );
 
-      path = [ cfg.qemu.package ] # libvirtd requires qemu-img to manage disk images
+      path = [ cfg.qemu.package pkgs.netcat ] # libvirtd requires qemu-img to manage disk images
         ++ optional vswitch.enable vswitch.package
         ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
@@ -371,6 +466,7 @@ in
         Type = "notify";
         KillMode = "process"; # when stopping, leave the VMs alone
         Restart = "no";
+        OOMScoreAdjust = "-999";
       };
       restartIfChanged = false;
     };
@@ -416,6 +512,14 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
+    systemd.tmpfiles.rules = let
+      vhostUserCollection = pkgs.buildEnv {
+        name = "vhost-user";
+        paths = cfg.qemu.vhostUserPackages;
+        pathsToLink = [ "/share/qemu/vhost-user" ];
+      };
+    in [ "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user" ];
+
     security.polkit = {
       enable = true;
       extraConfig = ''
@@ -427,5 +531,11 @@ in
         });
       '';
     };
+
+    system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
+    system.nssDatabases.hosts = builtins.concatLists [
+      (optional cfg.nss.enable "libvirt")
+      (optional cfg.nss.enableGuest "libvirt_guest")
+    ];
   };
 }

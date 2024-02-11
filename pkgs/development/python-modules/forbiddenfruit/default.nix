@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "0.1.4";
+  format = "setuptools";
   pname = "forbiddenfruit";
 
   src = fetchFromGitHub {

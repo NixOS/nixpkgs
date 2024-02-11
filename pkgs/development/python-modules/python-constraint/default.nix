@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "python-constraint";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-constraint";

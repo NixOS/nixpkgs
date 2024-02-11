@@ -114,6 +114,7 @@ let
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       license = licenses.asl20;
       homepage = "https://subversion.apache.org/";
+      mainProgram = "svn";
       maintainers = with maintainers; [ eelco lovek323 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -127,7 +128,7 @@ let
 
 in {
   subversion = common {
-    version = "1.14.2";
-    sha256 = "sha256-yRMOjQt1copm8OcDj8dwUuZxgw14W1YWqtU7SBDTzCg=";
+    version = "1.14.3";
+    sha256 = "sha256-lJ79RRoJQ19+hXNXTHHHtxsZTYRIkPpJzWHSJi6hpEA=";
   };
 }

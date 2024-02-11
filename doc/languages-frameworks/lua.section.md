@@ -134,11 +134,11 @@ The site proposes two types of packages, the `rockspec` and the `src.rock`
 
 Luarocks-based packages are generated in [pkgs/development/lua-modules/generated-packages.nix](https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/lua-modules/generated-packages.nix) from
 the whitelist maintainers/scripts/luarocks-packages.csv and updated by running
-the script
-[maintainers/scripts/update-luarocks-packages](https://github.com/NixOS/nixpkgs/tree/master/maintainers/scripts/update-luarocks-packages):
+the package `luarocks-packages-updater`:
 
 ```sh
-./maintainers/scripts/update-luarocks-packages update
+
+nix-shell -p luarocks-packages-updater --run luarocks-packages-updater
 ```
 
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
@@ -179,7 +179,7 @@ Each interpreter has the following attributes:
 
 #### `buildLuarocksPackage` function {#buildluarockspackage-function}
 
-The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-lua-package.nix`
+The `buildLuarocksPackage` function is implemented in `pkgs/development/interpreters/lua-5/build-luarocks-package.nix`
 The following is an example:
 ```nix
 luaposix = buildLuarocksPackage {

@@ -6,27 +6,27 @@
 , pandas
 , pytestCheckHook
 , pythonOlder
-, setuptoolsBuildHook
+, setuptools
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2023.2.0";
+  version = "2023.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qnYFAKLY+L6O/Y87J6lLKvOwqMLANzR9WV6vb/Cdinc=";
+    hash = "sha256-mkXhB0GES1+UjY4edotGDffpBpbRji7/LB1H9dnVAlI=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION="${version}";
-
   nativeBuildInputs = [
-    setuptoolsBuildHook
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

@@ -25,7 +25,7 @@ in
   options.services.thelounge = {
     enable = mkEnableOption (lib.mdDoc "The Lounge web IRC client");
 
-    package = mkPackageOptionMD pkgs "thelounge" { };
+    package = mkPackageOption pkgs "thelounge" { };
 
     public = mkOption {
       type = types.bool;
@@ -48,14 +48,16 @@ in
     extraConfig = mkOption {
       default = { };
       type = types.attrs;
-      example = literalExpression ''{
-        reverseProxy = true;
-        defaults = {
-          name = "Your Network";
-          host = "localhost";
-          port = 6697;
-        };
-      }'';
+      example = literalExpression ''
+        {
+          reverseProxy = true;
+          defaults = {
+            name = "Your Network";
+            host = "localhost";
+            port = 6697;
+          };
+        }
+      '';
       description = lib.mdDoc ''
         The Lounge's {file}`config.js` contents as attribute set (will be
         converted to JSON to generate the configuration file).

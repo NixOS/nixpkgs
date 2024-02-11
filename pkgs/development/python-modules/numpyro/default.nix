@@ -1,39 +1,43 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , jax
 , jaxlib
 , multipledispatch
 , numpy
-, pytestCheckHook
-, pythonOlder
-, tensorflow-probability
 , tqdm
+, funsor
+, pytestCheckHook
+# TODO: uncomment when tensorflow-probability gets fixed.
+# , tensorflow-probability
 }:
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.11.0";
+  version = "0.13.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-01fdGgFZ+G1FwjNwitM6PT1TQx0FtLvs4dBorkFoqo4=";
+    hash = "sha256-Um8LFVGAlMeOaN9uMwycHJzqEnTaxp8FYXIk+m2VTug=";
   };
 
   propagatedBuildInputs = [
     jax
     jaxlib
-    numpy
     multipledispatch
+    numpy
     tqdm
   ];
 
   nativeCheckInputs = [
-    tensorflow-probability
+    funsor
     pytestCheckHook
+    # TODO: uncomment when tensorflow-probability gets fixed.
+    # tensorflow-probability
   ];
 
   pythonImportsCheck = [
@@ -58,6 +62,11 @@ buildPythonPackage rec {
     "test_zero_inflated_logits_probs_agree"
     # NameError: unbound axis name: _provenance
     "test_model_transformation"
+  ];
+
+  # TODO: remove when tensorflow-probability gets fixed.
+  disabledTestPaths = [
+    "test/test_distributions.py"
   ];
 
   meta = with lib; {

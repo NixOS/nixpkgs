@@ -20,6 +20,7 @@ in
 buildPythonPackage rec {
   pname = "ml-collections";
   version = "0.1.1";
+  format = "setuptools";
 
   # ml-collections does not have any git release tags. See https://github.com/google/ml_collections/issues/8.
   src = fetchPypi {

@@ -1,11 +1,11 @@
-{ appstream-glib
+{ lib
+, blueprint-compiler
 , desktop-file-utils
-, fetchurl
+, fetchFromSourcehut
 , gobject-introspection
-, gtk3
-, lib
+, gtk4
+, libadwaita
 , libnotify
-, libhandy
 , meson
 , ninja
 , pkg-config
@@ -14,17 +14,21 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "confy";
-  version = "0.6.5";
+  version = "0.7.1";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~fabrixxm/confy/archive/${version}.tar.gz";
-    sha256 = "sha256-zfuwOZBSGQzJUc36M6C5wSHarLbPFqayQVFo+WbVo7k=";
+  src = fetchFromSourcehut {
+    owner = "~fabrixxm";
+    repo = "confy";
+    rev = finalAttrs.version;
+    hash = "sha256-BXQDnRRt2Kuqc1Gwx6Ba6BoEWhICTCsWWkGlBsStyT8=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
+    gobject-introspection
     meson
     ninja
     pkg-config
@@ -32,9 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     libnotify
     (python3.withPackages (ps: with ps; [
       icalendar
@@ -43,15 +46,15 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Remove executable bits so that meson runs the script with our Python interpreter
-    chmod -x build-aux/meson/postinstall.py
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   meta = with lib; {
+    changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";
     description = "Conferences schedule viewer";
     homepage = "https://confy.kirgroup.net/";
-    changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${version}";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
+    mainProgram = "confy";
     maintainers = with maintainers; [ michaelgrahamevans ];
   };
-}
+})

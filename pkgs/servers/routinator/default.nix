@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.12.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QH4M6Kr6UiDJAaDtEn2GXQT9oSSz3lqkf+VE0GfOqeg=";
+    hash = "sha256-ia9N2jZlFW0Gu5YDfwh023zorMyWWL/KggeBRvCD1W4=";
   };
 
-  cargoSha256 = "sha256-lzw26aat+Zk0E70H7/xwZ6azRMkknfQmTrE4wOJRwfo=";
+  cargoHash = "sha256-RHT6+zrY4SjoC/hgoMRal+cG8Ruip/6v7oVtKvR8doU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "routinator";
   };
 }

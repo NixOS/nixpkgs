@@ -8,20 +8,32 @@
 
 # runtime
 , expat
-, ipu6-camera-bin
+, ipu6-camera-bins
 , libtool
 , gst_all_1
-}:
 
+# Pick one of
+# - ipu6 (Tiger Lake)
+# - ipu6ep (Alder Lake)
+# - ipu6epmtl (Meteor Lake)
+, ipuVersion ? "ipu6"
+}:
+let
+  ipuTarget = {
+    "ipu6" = "ipu_tgl";
+    "ipu6ep" = "ipu_adl";
+    "ipu6epmtl" = "ipu_mtl";
+  }.${ipuVersion};
+in
 stdenv.mkDerivation {
-  pname = "${ipu6-camera-bin.ipuVersion}-camera-hal";
-  version = "unstable-2023-02-08";
+  pname = "${ipuVersion}-camera-hal";
+  version = "unstable-2023-09-25";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-hal";
-    rev = "884b81aae0ea19a974eb8ccdaeef93038136bdd4";
-    hash = "sha256-AePL7IqoOhlxhfPRLpCman5DNh3wYS4MUcLgmgBUcCM=";
+    rev = "9fa05a90886d399ad3dda4c2ddc990642b3d20c9";
+    hash = "sha256-yS1D7o6dsQ4FQkjfwcisOxcP7Majb+4uQ/iW5anMb5c=";
   };
 
   nativeBuildInputs = [
@@ -29,24 +41,23 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+  PKG_CONFIG_PATH = "${lib.makeLibraryPath [ ipu6-camera-bins ]}/${ipuTarget}/pkgconfig";
+
   cmakeFlags = [
-    "-DIPU_VER=${ipu6-camera-bin.ipuVersion}"
+    "-DIPU_VER=${ipuVersion}"
     # missing libiacss
     "-DUSE_PG_LITE_PIPE=ON"
-    # missing libipu4
-    "-DENABLE_VIRTUAL_IPU_PIPE=OFF"
   ];
 
   NIX_CFLAGS_COMPILE = [
-    "-I${lib.getDev ipu6-camera-bin}/include/ia_imaging"
-    "-I${lib.getDev ipu6-camera-bin}/include/ia_camera"
+    "-Wno-error"
   ];
 
   enableParallelBuilding = true;
 
   buildInputs = [
     expat
-    ipu6-camera-bin
+    ipu6-camera-bins
     libtool
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -58,12 +69,13 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    substituteInPlace $out/lib/pkgconfig/libcamhal.pc \
-      --replace 'prefix=/usr' "prefix=$out"
+    for lib in $out/lib/*.so; do
+      patchelf --add-rpath "${lib.makeLibraryPath [ ipu6-camera-bins ]}/${ipuTarget}" $lib
+    done
   '';
 
   passthru = {
-    inherit (ipu6-camera-bin) ipuVersion;
+    inherit ipuVersion;
   };
 
   meta = with lib; {

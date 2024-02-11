@@ -6,20 +6,20 @@
 
 buildGoModule rec {
   pname = "blocky";
-  version = "0.21";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "0xERR0R";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+88QMASMEY1pJuejFUqqW1Ky7TpoSwCzUy1oueL7FKU=";
+    hash = "sha256-IB5vi+nFXbV94YFtY2eMKTgzUgX8q8i8soSrso2zaD4=";
   };
 
   # needs network connection and fails at
   # https://github.com/0xERR0R/blocky/blob/development/resolver/upstream_resolver_test.go
   doCheck = false;
 
-  vendorSha256 = "sha256-EsANifwaEi5PdY0Y2QZjD55sZqsqYWrC5Vh4uxpTs5A=";
+  vendorHash = "sha256-h1CkvI7M1kt2Ix3D8+gDl97CFElV+0/9Eram1burOaM=";
 
   ldflags = [ "-s" "-w" "-X github.com/0xERR0R/blocky/util.Version=${version}" ];
 
@@ -31,5 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/0xERR0R/blocky/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [ ratsclub ];
+    mainProgram = "blocky";
   };
 }

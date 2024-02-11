@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pysqlcipher3";
   version = "1.2.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.3";
 
@@ -19,6 +20,6 @@ buildPythonPackage rec {
     description = "Python 3 bindings for SQLCipher";
     homepage = "https://github.com/rigglemania/pysqlcipher3/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

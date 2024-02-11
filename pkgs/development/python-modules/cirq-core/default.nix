@@ -1,10 +1,8 @@
 { lib
 , stdenv
 , buildPythonPackage
-, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , duet
 , matplotlib
 , networkx
@@ -32,36 +30,24 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.1.0";
+  version = "1.3.0";
   format = "setuptools";
 
-  # Upstream package is broken on Python 3.11 https://github.com/quantumlib/Cirq/issues/6018
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5j4hbG95KRfRQTyyZgoNp/eHIcy0FphyEhbYnzyUMO4=";
+    hash = "sha256-JAJJciFg3BuRha1wTKixtKWcYy3NA2mNpniPyPHTTe8=";
   };
 
-  sourceRoot = "source/${pname}";
-
-  patches = [
-    # https://github.com/quantumlib/Cirq/pull/5991
-    (fetchpatch {
-      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-cirq/cirq-pr5991-np1.24.patch?rev=8";
-      stripLen = 1;
-      hash = "sha256-d2FpaxM1PsPWT9ZM9v2gVrnLCy9zmvkkyAVgo85eL3U=";
-    })
-  ];
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "matplotlib~=3.0" "matplotlib" \
-      --replace "networkx~=2.4" "networkx" \
-      --replace "numpy>=1.16,<1.24" "numpy"
-  '';
+      --replace "matplotlib~=3.0" "matplotlib"
+   '';
 
   propagatedBuildInputs = [
     duet
@@ -97,13 +83,9 @@ buildPythonPackage rec {
     "cirq/_version_test.py"
   ];
 
-  disabledTests = [
-    # Tries to import flynt, which isn't in Nixpkgs
-    "test_metadata_search_path"
-    # Fails due pandas MultiIndex. Maybe issue with pandas version in nix?
-    "test_benchmark_2q_xeb_fidelities"
-    # https://github.com/quantumlib/Cirq/pull/5991
-    "test_json_and_repr_data"
+  disabledTests = lib.optionals stdenv.isAarch64 [
+    # https://github.com/quantumlib/Cirq/issues/5924
+    "test_prepare_two_qubit_state_using_sqrt_iswap"
   ];
 
   meta = with lib; {
@@ -112,6 +94,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger fab ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

@@ -54,8 +54,8 @@ if ! gh auth status 2>/dev/null ; then
 fi
 
 # Make sure this is configured before we start doing anything
-push_remote="$(git config branch.haskell-updates.pushRemote \
-  || die 'Can'\''t determine pushRemote for haskell-updates. Please set using `git config branch.haskell-updates.pushremote <remote name>`.')"
+push_remote="$(git config branch.haskell-updates.pushRemote)" \
+  || die 'Can'\''t determine pushRemote for haskell-updates. Please set using `git config branch.haskell-updates.pushremote <remote name>`.'
 
 # Fetch nixpkgs to get an up-to-date origin/haskell-updates branch.
 echo "Fetching origin..."

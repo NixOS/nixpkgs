@@ -23,14 +23,7 @@ in
       description = mdDoc "sftpgo";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.sftpgo;
-      defaultText = literalExpression "pkgs.sftpgo";
-      description = mdDoc ''
-        Which SFTPGo package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "sftpgo" { };
 
     extraArgs = mkOption {
       type = with types; listOf str;

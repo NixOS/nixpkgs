@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libudev-zero";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = version;
-    sha256 = "sha256-SU1pPmLLeTWZe5ybhmDplFw6O/vpEjFAKgfKDl0RS4U=";
+    sha256 = "sha256-NXDof1tfr66ywYhCBDlPa+8DUfFj6YH0dvSaxHFqsXI=";
   };
 
   makeFlags = [ "PREFIX=$(out)" "AR=${stdenv.cc.targetPrefix}ar" ];

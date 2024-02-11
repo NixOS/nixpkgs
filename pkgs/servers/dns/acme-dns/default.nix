@@ -30,5 +30,6 @@ buildGoModule rec {
     changelog = "https://github.com/joohoi/acme-dns/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange ];
+    mainProgram = "acme-dns";
   };
 }

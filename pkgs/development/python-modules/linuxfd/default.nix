@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "linuxfd";
   version = "1.5";
+  format = "setuptools";
 
 
   src = fetchPypi {

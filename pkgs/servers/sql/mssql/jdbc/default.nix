@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mssql-jdbc";
-  version = "12.2.0";
+  version = "12.4.2";
 
   src = fetchurl {
     url = "https://github.com/Microsoft/mssql-jdbc/releases/download/v${version}/mssql-jdbc-${version}.jre8.jar";
-    sha256 = "sha256-Z0z9cDAF7TZ8IJr3Uh2xU0nK2+aNgerk5hO1kY+/wfY=";
+    sha256 = "sha256-JGt6SXg4Ok+czMwGpDk9xdVw/WSkNLeBxqghcM3WmRE=";
   };
 
   dontUnpack = true;

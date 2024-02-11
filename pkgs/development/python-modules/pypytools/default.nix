@@ -2,18 +2,20 @@
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
+, attrs
 , freezegun
 , numpy
 , py
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pypytools";
   version = "0.6.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-oUDAU+TRwLroNfQGYusAQKdRkHcazysqiDLfp77v5Sk=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    # attrs is an implicit dependency
+    attrs
     py
   ];
 

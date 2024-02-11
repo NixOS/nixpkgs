@@ -29,6 +29,8 @@ buildPythonPackage rec {
   # conditional so that overrides are easier for web applications
   patches = lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [
     ./werkzeug-2.1.0-compat.patch
+  ] ++ lib.optionals (lib.versionAtLeast flask.version "3.0.0") [
+    ./flask-3.0-compat.patch
   ];
 
   propagatedBuildInputs = [
@@ -48,6 +50,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Broke in flask 2.2 upgrade
     "test_exception_header_forwarded"
+    # Broke in werkzeug 2.3 upgrade
+    "test_media_types_method"
+    "test_media_types_q"
   ];
 
   pythonImportsCheck = [

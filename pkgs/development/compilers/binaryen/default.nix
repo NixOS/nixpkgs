@@ -1,17 +1,33 @@
-{ lib, stdenv, cmake, python3, fetchFromGitHub, emscripten,
+{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten,
   gtest, lit, nodejs, filecheck
 }:
 
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "112";
+  version = "116";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-xVumVmiLMHJp3SItE8eL8OBPeq58HtOOiK9LL8SP4CQ=";
+    hash = "sha256-gMwbWiP+YDCVafQMBWhTuJGWmkYtnhEdn/oofKaUT08=";
   };
+
+  # FIXME: remove for next release
+  patches = [
+    (fetchpatch {
+      name = "nodejs-20.patch";
+      url = "https://github.com/WebAssembly/binaryen/commit/889422e0c92552ff484659f9b41e777ba7ab35c1.patch";
+      hash = "sha256-acM8mytL9nhm4np9tpUbd1X0wJ7y308HV2fvgcAW1lY=";
+    })
+
+    # Fix fmin tests on gcc-13: https://github.com/WebAssembly/binaryen/pull/5994
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/WebAssembly/binaryen/commit/1e17dfb695a19d5d41f1f88411fbcbc5f2408c8f.patch";
+      hash = "sha256-5JZh15CXkg5XdTG8eRJXPwO+zmymYeFjKbHutRPTmlU=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake python3 ];
 

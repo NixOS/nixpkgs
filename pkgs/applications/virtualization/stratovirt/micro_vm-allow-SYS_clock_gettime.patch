@@ -1,4 +1,4 @@
-From af3001b1b2697ae3165e2fdf47a560fd9ab19a68 Mon Sep 17 00:00:00 2001
+From c5ef87eb831f7f77c0564dd1dce92a579e7c4747 Mon Sep 17 00:00:00 2001
 From: Astro <astro@spaceboyz.net>
 Date: Sun, 18 Jun 2023 23:10:23 +0200
 Subject: [PATCH] micro_vm: allow SYS_clock_gettime
@@ -8,13 +8,13 @@ Subject: [PATCH] micro_vm: allow SYS_clock_gettime
  1 file changed, 2 insertions(+)
 
 diff --git a/machine/src/micro_vm/syscall.rs b/machine/src/micro_vm/syscall.rs
-index 89ce5c29..2a6aa0cc 100644
+index c37d3f4e..f9e7cce2 100644
 --- a/machine/src/micro_vm/syscall.rs
 +++ b/machine/src/micro_vm/syscall.rs
-@@ -128,6 +128,8 @@ pub fn syscall_whitelist() -> Vec<BpfRule> {
-         #[cfg(all(target_env = "gnu", target_arch = "x86_64"))]
+@@ -125,6 +125,8 @@ pub fn syscall_whitelist() -> Vec<BpfRule> {
          BpfRule::new(libc::SYS_readlink),
          BpfRule::new(libc::SYS_getrandom),
+         BpfRule::new(libc::SYS_fallocate),
 +        #[cfg(target_env = "gnu")]
 +        BpfRule::new(libc::SYS_clock_gettime),
          madvise_rule(),

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yubihsm-shell";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
     rev = version;
-    hash = "sha256-zWhvECPdZnrbSAVPDVZk54SWHVkd/HEQxS3FgXoqXHY=";
+    hash = "sha256-Un3DNmrD9aC9+A3+NNM21yrH1g14THXPHkJ0SUYrL/M=";
   };
 
   postPatch = ''
@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DDISABLE_LTO=ON"
   ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
     description = "yubihsm-shell and libyubihsm";

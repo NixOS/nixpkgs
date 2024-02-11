@@ -2,23 +2,26 @@
 , black
 , boto3
 , buildPythonPackage
+, cryptography
 , fetchFromGitHub
 , isort
 , jinja2
 , md-toc
 , mdformat
 , newversion
+, pip
 , poetry-core
 , pyparsing
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.14.5";
-  format = "pyproject";
+  version = "7.23.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -26,7 +29,7 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = "refs/tags/${version}";
-    hash = "sha256-T8BIfopprCfcOpv92soTD3S4eYoAdT70pSMSHlFbBuE=";
+    hash = "sha256-dbf2rHDQSeHEIN31yIm1142Z7AxTZzMf9FGvrWsJblA=";
   };
 
   nativeBuildInputs = [
@@ -36,13 +39,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     black
     boto3
+    cryptography
     isort
     jinja2
     md-toc
     mdformat
     newversion
+    pip
     pyparsing
     setuptools
+    typing-extensions
   ];
 
   nativeCheckInputs = [

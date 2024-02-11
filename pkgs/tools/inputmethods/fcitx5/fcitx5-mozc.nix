@@ -1,4 +1,4 @@
-{ lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, fetchgit
+{ lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch
 , python3Packages, ninja, pkg-config, protobuf, zinnia, qt5, fcitx5
 , jsoncpp, gtest, which, gtk2, unzip, abseil-cpp, breakpad, nixosTests }:
 let
@@ -24,7 +24,7 @@ let
     sha256 = "ExS0Cg3rs0I9IOVbZHLt8UEfk8/LmY9oAHPVVlYuTPw=";
   };
 
-in clangStdenv.mkDerivation rec {
+in clangStdenv.mkDerivation {
   pname = "fcitx5-mozc";
   version = "2.26.4220.102";
 

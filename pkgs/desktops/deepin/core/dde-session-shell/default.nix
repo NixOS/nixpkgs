@@ -2,49 +2,46 @@
 , lib
 , fetchFromGitHub
 , linkFarm
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
 , cmake
 , pkg-config
 , qttools
-, qtx11extras
 , wrapQtAppsHook
 , wrapGAppsHook
+, qtbase
+, dtkwidget
+, qt5integration
+, qt5platform-plugins
+, deepin-pw-check
 , gsettings-qt
 , lightdm_qt
+, qtx11extras
 , linux-pam
 , xorg
-, kwayland
 , gtest
 , xkeyboard_config
 , dbus
-, qtbase
 , dde-session-shell
 }:
+
 stdenv.mkDerivation rec {
   pname = "dde-session-shell";
-  version = "5.6.4";
+  version = "6.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mrdGu4t86d3No23IrnjypVLx1jxaySatr0xPMY9l5S4";
+    hash = "sha256-h4X3RZe7+CxVeFmk/7+7K4d/2D1+jhECKQaxl4TsuvM=";
   };
 
   postPatch = ''
-    substituteInPlace src/lightdm-deepin-greeter/greeterworker.cpp \
-      --replace "/usr/include/shadow.h" "shadow.h"
-
     substituteInPlace scripts/lightdm-deepin-greeter files/wayland/lightdm-deepin-greeter-wayland \
       --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
     substituteInPlace src/session-widgets/auth_module.h \
       --replace "/usr/lib/dde-control-center" "/run/current-system/sw/lib/dde-control-center"
 
-    substituteInPlace src/global_util/plugin_manager/modules_loader.cpp \
+    substituteInPlace src/global_util/modules_loader.cpp \
       --replace "/usr/lib/dde-session-shell/modules" "/run/current-system/sw/lib/dde-session-shell/modules"
 
     substituteInPlace src/{session-widgets/{lockcontent.cpp,userinfo.cpp},widgets/fullscreenbackground.cpp} \
@@ -53,7 +50,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/global_util/xkbparser.h \
       --replace "/usr/share/X11/xkb/rules/base.xml" "${xkeyboard_config}/share/X11/xkb/rules/base.xml"
 
-    substituteInPlace files/{com.deepin.dde.shutdownFront.service,com.deepin.dde.lockFront.service} \
+    substituteInPlace files/{org.deepin.dde.ShutdownFront1.service,org.deepin.dde.LockFront1.service} \
       --replace "/usr/bin/dbus-send" "${dbus}/bin/dbus-send" \
       --replace "/usr/share" "$out/share"
 
@@ -73,20 +70,22 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
+    qtbase
     dtkwidget
     qt5platform-plugins
-    dde-qt-dbus-factory
+    deepin-pw-check
     gsettings-qt
     lightdm_qt
     qtx11extras
     linux-pam
-    kwayland
     xorg.libXcursor
     xorg.libXtst
     xorg.libXrandr
     xorg.libXdmcp
     gtest
   ];
+
+  outputs = [ "out" "dev" ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [

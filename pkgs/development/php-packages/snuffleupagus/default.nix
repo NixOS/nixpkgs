@@ -1,38 +1,37 @@
-{ buildPecl
+{ stdenv
+, buildPecl
 , lib
+, libiconv
 , php
 , fetchFromGitHub
 , pcre2
-, fetchpatch
+, darwin
 }:
 
 buildPecl rec {
   pname = "snuffleupagus";
-  version = "0.7.0";
+  version = "0.10.0";
+
   src = fetchFromGitHub {
     owner = "jvoisin";
-    repo = pname;
+    repo = "snuffleupagus";
     rev = "v${version}";
-    sha256 = "1la6wa9xznc110b7isiy502x71mkvhisq6m8llhczpq4rs4nbcw2";
+    hash = "sha256-NwG8gBaToBaJGrZoCD7bDym7hQidWU0ArckoQCHN81o=";
   };
 
   buildInputs = [
     pcre2
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreFoundation
+    darwin.apple_sdk_11_0.Libsystem
+    libiconv
   ];
 
   internalDeps = with php.extensions; [
     session
   ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/jvoisin/snuffleupagus/commit/3c528d9d03cec872382a6f400b5701a8fbfd59b4.patch";
-      sha256 = "0lnj4xcl867f477mha697d1py1nwxhl18dvvg40qgflpdbywlzns";
-      stripLen = 1;
-    })
-  ];
-
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   configureFlags = [
     "--enable-snuffleupagus"
@@ -42,10 +41,10 @@ buildPecl rec {
     ./configure --enable-snuffleupagus
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest!";
-    license = licenses.lgpl3Only;
     homepage = "https://github.com/jvoisin/snuffleupagus";
-    maintainers = teams.php.members ++ [ maintainers.zupo ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = lib.teams.php.members ++ [ lib.maintainers.zupo ];
   };
 }

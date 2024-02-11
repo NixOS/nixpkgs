@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, SDL2, libpng, libiconv, libobjc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "qrencode";
   version = "4.1.1";
 
@@ -16,13 +16,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libiconv libpng ]
     ++ lib.optionals stdenv.isDarwin [ libobjc ];
 
-  configureFlags = [
-    "--with-tests"
-  ];
-
   nativeCheckInputs = [ SDL2 ];
 
-  doCheck = true;
+  doCheck = false;
 
   checkPhase = ''
     runHook preCheck
@@ -33,6 +29,11 @@ stdenv.mkDerivation rec {
 
     runHook postCheck
   '';
+
+  passthru.tests = finalAttrs.finalPackage.overrideAttrs (_: {
+    configureFlags = [ "--with-tests" ];
+    doCheck = true;
+  });
 
   meta = with lib; {
     homepage = "https://fukuchi.org/works/qrencode/";
@@ -45,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ adolfogc yana ];
     platforms = platforms.all;
+    mainProgram = "qrencode";
   };
-}
+})

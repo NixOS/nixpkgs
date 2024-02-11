@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.7.3";
+  version = "1.8.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HOM7BlrKpqm16plTMLFpC6VScEoMlxCJFhZ0mcIFIcE=";
+    hash = "sha256-YYbdd0GLVKE7+Oi0mpQjqhFdjdlquk/XnIg5WrtKcfI=";
   };
 
   propagatedBuildInputs = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
     "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
-    "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
+    "--prefix PYTHONPATH : $out/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [

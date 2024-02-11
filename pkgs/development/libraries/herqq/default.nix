@@ -9,7 +9,7 @@ mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  sourceRoot = "source/herqq";
+  sourceRoot = "${src.name}/herqq";
   src = fetchFromGitHub {
     owner = "ThomArmax";
     repo = "HUPnP";

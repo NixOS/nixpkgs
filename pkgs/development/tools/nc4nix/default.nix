@@ -6,15 +6,15 @@
 , fetchpatch
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "nc4nix";
-  version = "unstable-2023-06-06";
+  version = "unstable-2023-11-06";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "nc4nix";
-    rev = "3e015450726533770fd00e2771530cbe90f40517";
-    sha256 = "sha256-i3lx5Q+EswtimdRMZ0OPMWh01kBK9q+UI1pY6j/ZhuY=";
+    rev = "47666b418a71c609f8d2b2c2679956c2ac9818e5";
+    hash = "sha256-cXg0emFFAYI1Jtiz+Xilmct3JNiO9cSWUbghyIRQBnY=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "sha256-uhINWxFny/OY7M2vV3ehFzP90J6Z8cn5IZHWOuEg91M=";
+  vendorHash = "sha256-uhINWxFny/OY7M2vV3ehFzP90J6Z8cn5IZHWOuEg91M=";
 
  nativeBuildInputs = [
     makeWrapper

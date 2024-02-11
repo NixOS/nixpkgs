@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook
     intltool
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     gobject-introspection
   ];
 

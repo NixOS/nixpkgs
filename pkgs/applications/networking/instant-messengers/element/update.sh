@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../../ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github
+#!nix-shell -I nixpkgs=../../../../../ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github jq
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for the element packages."
@@ -20,7 +20,7 @@ version="${version#v}"
 
 # Element Web
 web_src="https://raw.githubusercontent.com/vector-im/element-web/v$version"
-web_src_hash=$(nix-prefetch-github vector-im element-web --rev v${version} | jq -r .sha256)
+web_src_hash=$(nix-prefetch-github vector-im element-web --rev v${version} | jq -r .hash)
 
 web_tmpdir=$(mktemp -d)
 trap 'rm -rf "$web_tmpdir"' EXIT
@@ -32,7 +32,7 @@ popd
 
 # Element Desktop
 desktop_src="https://raw.githubusercontent.com/vector-im/element-desktop/v$version"
-desktop_src_hash=$(nix-prefetch-github vector-im element-desktop --rev v${version} | jq -r .sha256)
+desktop_src_hash=$(nix-prefetch-github vector-im element-desktop --rev v${version} | jq -r .hash)
 
 desktop_tmpdir=$(mktemp -d)
 trap 'rm -rf "$desktop_tmpdir"' EXIT

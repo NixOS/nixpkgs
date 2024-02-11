@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+
+# Tests lib/sources.nix
+# Run:
+# [nixpkgs]$ lib/tests/sources.sh
+# or:
+# [nixpkgs]$ nix-build lib/tests/release.nix
+
 set -euo pipefail
 shopt -s inherit_errexit
 

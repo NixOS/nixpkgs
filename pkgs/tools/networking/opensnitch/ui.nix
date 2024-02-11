@@ -1,28 +1,33 @@
 { python3Packages
 , fetchFromGitHub
+, qtwayland
 , wrapQtAppsHook
 , lib
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.5.2";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-MF7K3WasG1xLdw1kWz6xVYrdfuZW5GUq6dlS0pPOkHI=";
+    hash = "sha256-fkRykhcjWZ4MDl2HZ1ZFaQmEeRYhiCBeUxG/Eu7D8NA=";
   };
 
   postPatch = ''
-    substituteInPlace ui/opensnitch/utils.py \
+    substituteInPlace ui/opensnitch/utils/__init__.py \
       --replace /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
   '';
 
   nativeBuildInputs = [
     python3Packages.pyqt5
     wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtwayland
   ];
 
   propagatedBuildInputs = with python3Packages; [

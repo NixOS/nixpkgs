@@ -27,5 +27,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aethelz ];
     platforms = platforms.unix;
+    mainProgram = "addic7ed";
   };
 }

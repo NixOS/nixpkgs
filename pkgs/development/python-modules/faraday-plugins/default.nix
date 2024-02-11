@@ -12,14 +12,15 @@
 , pythonOlder
 , pytz
 , requests
+, setuptools
 , simplejson
 , tabulate
 }:
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.12.0";
-  format = "setuptools";
+  version = "1.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,13 +28,17 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-dtSGNLQUG4Co+p/sPBgKxMhB7drZAMxUas+eH6g/cS8=";
+    hash = "sha256-1haWRuWK9WCgdR4geT2w3E95+CapBYDohGowUmnJ2H4=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=version," "version='${version}',"
+      --replace-warn "version=version," "version='${version}',"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4

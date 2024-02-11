@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "1.0.10";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yKeG0UCQ8haT1hvywoIwKQ519GK2wFg0wXaRTFeKYIk=";
+    hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
   };
 
   propagatedBuildInputs = [
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # AssertionError, https://github.com/timmo001/aiolyric/issues/5
-    "test_location"
+    # AssertionError, https://github.com/timmo001/aiolyric/issues/61
+    "test_priority"
   ];
 
   pythonImportsCheck = [

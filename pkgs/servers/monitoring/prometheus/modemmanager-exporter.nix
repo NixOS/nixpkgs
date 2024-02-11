@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-wQATmTjYsm1J2DicPryoa/jVpbLjXz+1TTQUH5yGV6w=";
   };
 
-  vendorSha256 = "sha256-wGCRpFnt9bxc5Ygg6H1kI9sXB4mVFBdLeaahAFtvNbg=";
+  vendorHash = "sha256-wGCRpFnt9bxc5Ygg6H1kI9sXB4mVFBdLeaahAFtvNbg=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) modemmanager; };
 

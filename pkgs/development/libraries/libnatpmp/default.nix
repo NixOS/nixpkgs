@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fixDarwinDylibNames }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   pname = "libnatpmp";
@@ -8,6 +13,14 @@ stdenv.mkDerivation rec {
     url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
     hash = "sha256-BoTtLIQGQ351GaG9IOqDeA24cbOjpddSMRuj6Inb/HA=";
   };
+
+  patches = [
+    # install natpmp_declspec.h too, else nothing that uses this library will build
+    (fetchpatch {
+      url = "https://github.com/miniupnp/libnatpmp/commit/5f4a7c65837a56e62c133db33c28cd1ea71db662.patch";
+      hash = "sha256-tvoGFmo5AzUgb40bIs/EzikE0ex1SFzE5peLXhktnbc=";
+    })
+  ];
 
   makeFlags = [
     "INSTALLPREFIX=$(out)"

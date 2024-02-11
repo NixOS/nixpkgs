@@ -26,12 +26,7 @@ in
   options.services.esphome = {
     enable = mkEnableOption (mdDoc "esphome");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.esphome;
-      defaultText = literalExpression "pkgs.esphome";
-      description = mdDoc "The package to use for the esphome command.";
-    };
+    package = lib.mkPackageOption pkgs "esphome" { };
 
     enableUnixSocket = mkOption {
       type = types.bool;
@@ -68,6 +63,12 @@ in
       '';
       type = types.listOf types.str;
     };
+
+    usePing = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc "Use ping to check online status of devices instead of mDNS";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -79,8 +80,10 @@ in
       wantedBy = ["multi-user.target"];
       path = [cfg.package];
 
-      # platformio fails to determine the home directory when using DynamicUser
-      environment.PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+      environment = {
+        # platformio fails to determine the home directory when using DynamicUser
+        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+      } // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
@@ -107,12 +110,12 @@ in
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
+        ProtectHostname = false; # breaks bwrap
+        ProtectKernelLogs = false; # breaks bwrap
         ProtectKernelModules = true;
-        ProtectKernelTunables = true;
+        ProtectKernelTunables = false; # breaks bwrap
         ProtectProc = "invisible";
-        ProcSubset = "pid";
+        ProcSubset = "all"; # Using "pid" breaks bwrap
         ProtectSystem = "strict";
         #RemoveIPC = true; # Implied by DynamicUser
         RestrictAddressFamilies = [

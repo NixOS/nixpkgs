@@ -7,7 +7,7 @@ buildGoModule rec {
   version = "0.5.20";
 
   proxyVendor = true;
-  vendorSha256 = "sha256-aRZoAEnRai8i5H08ReW8lEFlbmarYxU0lBRhR/Llw+M=";
+  vendorHash = "sha256-aRZoAEnRai8i5H08ReW8lEFlbmarYxU0lBRhR/Llw+M=";
 
   src = fetchFromGitHub {
     owner = "livepeer";
@@ -28,5 +28,6 @@ buildGoModule rec {
     homepage = "https://livepeer.org";
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];
+    mainProgram = "livepeer";
   };
 }

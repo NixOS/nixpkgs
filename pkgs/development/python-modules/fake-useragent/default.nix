@@ -10,8 +10,8 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "1.1.3";
-  format = "pyproject";
+  version = "1.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fake-useragent";
     repo = "fake-useragent";
     rev = "refs/tags/${version}";
-    hash = "sha256-8fVNko65nP/u9vLGBPfSseKW07b4JC6kCPFCPK2f6wU=";
+    hash = "sha256-Jmzq0yIM373bg2T6t0YFymBiH9vSpiCw+UAMfxsMJvY=";
   };
 
   postPatch = ''
@@ -39,6 +39,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "fake_useragent"
   ];
 
   meta = with lib; {

@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils }:
+{ lib, stdenv, fetchgit, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
-  version = "1.24";
+  version = "1.26";
 
   src = fetchgit {
     url = "https://salsa.debian.org/debian/${pname}.git";
     rev = "debian/${version}";
-    sha256 = "1nh433yx4y4djp0bs6aawqbwk7miq7fsbs9wpjlyh2k9dvil2lrm";
+    sha256 = "sha256-CVy5mOX3jNM1cNIn8HhVs8Mhh70pkz9pG08muFuPNfk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];
+    mainProgram = "datefudge";
   };
 }

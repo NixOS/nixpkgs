@@ -4,16 +4,16 @@
 }: rustPlatform.buildRustPackage rec {
 
   pname = "bkt";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "dimo414";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NgNXuTpI1EzgmxKRsqzxTOlQi75BHCcbjFnouhnfDDM=";
+    sha256 = "sha256-XQK7oZfutqCvFoGzMH5G5zoGvqB8YaXSdrwjS/SVTNU=";
   };
 
-  cargoSha256 = "sha256-PvcKviyXtiHQCHgJLGR2Mr+mPpTd06eKWQ5h6eGdl40=";
+  cargoHash = "sha256-Pl+a+ZpxaguRloH8R7x4FmYpTwTUwFrYy7AS/5K3L+8=";
 
   meta = {
     description = "A subprocess caching utility";

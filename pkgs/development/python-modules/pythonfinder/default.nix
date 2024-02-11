@@ -1,65 +1,82 @@
 { lib
 , buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, attrs
 , cached-property
 , click
+, fetchFromGitHub
+, fetchpatch
 , packaging
-, pytest-cov
+, pydantic
 , pytest-timeout
+, pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "1.3.2";
-  format = "pyproject";
+  version = "2.0.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sfoAS3QpD78we8HcXpxjSyEIN1xLRVLExaM3oXe6tLU=";
+    hash = "sha256-C/Em8Vmv7q030hmH3jU/apBRSSC9QFK9mbBWjBjJHXg=";
   };
+
+  patches = [
+    # https://github.com/sarugaku/pythonfinder/issues/142
+    (fetchpatch {
+      name = "pydantic_2-compatibility.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/python-pythonfinder/-/raw/2.0.6-1/python-pythonfinder-2.0.6-pydantic2.patch";
+      hash = "sha256-mON1MeA+pj6VTB3zpBjF3LfB30wG0QH9nU4bD1djWwg=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
 
   nativeBuildInputs = [
     setuptools
   ];
 
   propagatedBuildInputs = [
-    attrs
-    cached-property
-    click
     packaging
+    pydantic
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    cached-property
   ];
 
+  passthru.optional-dependencies = {
+    cli = [
+      click
+    ];
+  };
+
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov
     pytest-timeout
-  ];
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "pythonfinder"
   ];
 
-  pytestFlagsArray = [
-    "--no-cov"
-  ];
-
   # these tests invoke git in a subprocess and
   # for some reason git can't be found even if included in nativeCheckInputs
-  disabledTests = [
-    "test_shims_are_kept"
-    "test_shims_are_removed"
-  ];
+  # disabledTests = [
+  #   "test_shims_are_kept"
+  #   "test_shims_are_removed"
+  # ];
 
   meta = with lib; {
+    description = "Cross platform search tool for finding Python";
     homepage = "https://github.com/sarugaku/pythonfinder";
     changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
-    description = "Cross Platform Search Tool for Finding Pythons";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

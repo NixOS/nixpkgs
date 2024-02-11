@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
 
   preCheck = ''
-    patchShebangs ./configure ./run.sh ./test-driver-wrapper.sh
+    patchShebangs ./run.sh ./test-driver-wrapper.sh
   '';
 
   # CMake files incorrectly calculate library path from dev prefix

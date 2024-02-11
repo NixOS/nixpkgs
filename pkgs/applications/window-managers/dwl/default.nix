@@ -12,7 +12,7 @@
 , wayland-scanner
 , wayland
 , wayland-protocols
-, wlroots_0_16
+, wlroots
 , writeText
 , xcbutilwm
 , xwayland
@@ -20,18 +20,15 @@
 , conf ? null
 }:
 
-let
-  wlroots = wlroots_0_16;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = "dwl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OW7K7yMYSzqZWpQ9Vmpy8EgdWvyv3q1uh8A40f6AQF4=";
+    hash = "sha256-U/vqGE1dJKgEGTfPMw02z5KJbZLWY1vwDJWnJxT8urM=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
     "WAYLAND_SCANNER=wayland-scanner"
     "PREFIX=$(out)"
-    "MANDIR=$(man)/share/man/man1"
+    "MANDIR=$(man)/share/man"
   ];
 
   preBuild = ''
@@ -95,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (wayland.meta) platforms;
+    mainProgram = "dwl";
   };
 })
 # TODO: custom patches from upstream website

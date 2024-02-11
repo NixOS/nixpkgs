@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "kitty-themes";
-  version = "unstable-2023-06-01";
+  version = "unstable-2023-12-28";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty-themes";
-    rev = "f765eb1715d79c6cb3ad3d571342d612f21b810e";
-    hash = "sha256-Y3N8cyqEsY/kB2xMIlPYnbuYUs8grzepPx/11maG4bo=";
+    rev = "46d9dfe230f315a6a0c62f4687f6b3da20fd05e4";
+    hash = "sha256-jlYim4YXByT6s6ce0TydZuhX0Y1ZDcAq2XKNONisSzE=";
   };
 
   dontConfigure = true;
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/kovidgoyal/kitty-themes";
     description = "Themes for the kitty terminal emulator";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ AndersonTorres nelsonjeppesen ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 }

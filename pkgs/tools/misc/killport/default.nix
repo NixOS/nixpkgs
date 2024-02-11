@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "killport";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-aGnjLgDn86OUFQGj7K7+DUSGJuNEIL52yXJz/Mt5DT0=";
+    hash = "sha256-eyRI4ZVp9HPMvpzyV9sQdh2r966pCdyUPnEhxGkzH3Q=";
   };
 
-  cargoHash = "sha256-Z3+hqssm5g7rl3XCnrmjuPhsG8E0Yc2Qg8/mjGlnaT4=";
+  cargoHash = "sha256-QQ43dT9BTu7qCzpnTGKzlVL6jKDXofXStYWYNLHSuVs=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jkfran/killport";
     license = licenses.mit;
     maintainers = with maintainers; [ sno2wman ];
+    mainProgram = "killport";
   };
 }

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "3.3.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    hash = "sha256-xQDmBVALhtjc75JsjgqM5kyPR6UB05FbXnFPKWUY3ug=";
+    hash = "sha256-CfCWfKRzeGGk8/B0BLauO4Xb88/Si1ezvcGKeURgC9o=";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook

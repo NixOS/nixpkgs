@@ -2,29 +2,36 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
+
+# build-system
+, cython
 , gfortran
-, glibcLocales
 , numpy
+, oldest-supported-numpy
 , scipy
+, setuptools
+
+# native dependencies
+, glibcLocales
+, llvmPackages
 , pytestCheckHook
 , pytest-xdist
 , pillow
-, cython
 , joblib
-, llvmPackages
 , threadpoolctl
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.2.1";
+  version = "1.4.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+/ilyJPJtLmbzH7Y+z6FAJV6ET9BAYYDhtBmNVIPfPs=";
+    hash = "sha256-1Dc8mE66IOOTIW7dUaPj7t5Wy+k9QkdRbSBWQ8O5MSE=";
   };
 
   buildInputs = [
@@ -37,19 +44,26 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     gfortran
+    numpy
+    oldest-supported-numpy
+    scipy
+    setuptools
   ];
 
   propagatedBuildInputs = [
-    numpy
-    scipy
-    numpy.blas
     joblib
+    numpy
+    numpy.blas
+    scipy
     threadpoolctl
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
 
-  LC_ALL="en_US.UTF-8";
+  env.LC_ALL="en_US.UTF-8";
 
   preBuild = ''
     export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES

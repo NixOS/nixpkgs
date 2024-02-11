@@ -1,33 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pexpect
+, fetchFromGitHub
 , pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "3.1.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cuCDQIUtMlREWcDBmq0bSKosOpbejG5XQkVrT1OMpS8=";
+  src = fetchFromGitHub {
+    owner = "kislyuk";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Akwa6dsf8w/Sw0ydUrqKEP5+dzHYX4hS8vcl7Gw4ePc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"coverage",' "" \
-      --replace " + lint_require" ""
-  '';
-
-  propagatedBuildInputs = [
-    pexpect
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
-  # tries to build and install test packages which fails
+  # Tries to build and install test packages which fails
   doCheck = false;
 
   pythonImportsCheck = [
@@ -35,9 +33,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Bash tab completion for argparse";
-    homepage = "https://kislyuk.github.io/argcomplete/";
     changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
+    description = "Bash tab completion for argparse";
+    downloadPage = "https://github.com/kislyuk/argcomplete";
+    homepage = "https://kislyuk.github.io/argcomplete/";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo ];
   };

@@ -6,6 +6,7 @@
 , mypy
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , tomli
 , types-pytz
 , types-pyyaml
@@ -14,20 +15,23 @@
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "4.2.0";
-  format = "setuptools";
+  version = "4.2.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k7r/gk8KBW5xA2tCO5QqdPB7kJ5F4/o4GFuRD1l8XAg=";
+    hash = "sha256-jM0v9O5a3yK547expRbS4cIZHp2U5nLDXMK8PdYeD2s=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     django
     django-stubs-ext
-    mypy
     types-pytz
     types-pyyaml
     typing-extensions
@@ -35,8 +39,18 @@ buildPythonPackage rec {
     tomli
   ];
 
+  passthru.optional-dependencies = {
+    compatible-mypy = [
+      mypy
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "django-stubs"
   ];
 
   meta = with lib; {

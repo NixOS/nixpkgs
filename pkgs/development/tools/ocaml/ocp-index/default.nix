@@ -2,9 +2,7 @@
 
 buildDunePackage rec {
   pname = "ocp-index";
-  version = "1.3.4";
-
-  duneVersion = "3";
+  version = "1.3.5";
 
   minimalOCamlVersion = "4.08";
 
@@ -12,10 +10,8 @@ buildDunePackage rec {
     owner = "OCamlPro";
     repo = "ocp-index";
     rev = version;
-    sha256 = "sha256-a7SBGHNKUstfrdHx9KI33tYpvzTwIGhs4Hfie5EeKww=";
+    hash = "sha256-Zn3BPaMB68V363OljFFdmLyYf+S0wFJK44L8t1TSG1Q=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ cmdliner re ];

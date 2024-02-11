@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, python, cmake
-, libnest2d, sip_4, clipper }:
+, libnest2d, sip4, clipper }:
 
 buildPythonPackage rec {
   version = "4.12.0";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-QQdTDhO4i9NVhegGTmdEQSNv3gooaZzTX/Rv86h3GEo=";
   };
 
-  propagatedBuildInputs = [ libnest2d sip_4 clipper ];
+  propagatedBuildInputs = [ libnest2d sip4 clipper ];
   nativeBuildInputs = [ cmake ];
 
   CLIPPER_PATH = "${clipper.out}";

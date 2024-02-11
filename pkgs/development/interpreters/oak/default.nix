@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-DK5n8xK57CQiukyBt9+CFK1j8+nphP//T2jTXq64VH8=";
   };
 
-  vendorSha256 = "sha256-iQtb3zNa57nB6x4InVPw7FCmW7XPw5yuz0OcfASXPD8=";
+  vendorHash = "sha256-iQtb3zNa57nB6x4InVPw7FCmW7XPw5yuz0OcfASXPD8=";
 
   meta = with lib; {
     description = "Expressive, simple, dynamic programming language";

@@ -18,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.0.0";
-  format = "pyproject";
+  version = "3.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,8 +27,13 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rpUrMHIBr7sb0Cib6WYdLJ3KOPEgRnB0DCV/df1uE1A=";
+    hash = "sha256-QJVRT+d/IIGxkWfSNoXFSmbW017+8CTKuWD4W+TzvBs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "Cython==3.0.3" "Cython"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -55,9 +60,9 @@ buildPythonPackage rec {
     "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
   ]);
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  passthru.optional-dependencies = {
+    full = [ numpy ];
+  };
 
   preCheck = ''
     export RAPIDFUZZ_IMPLEMENTATION=cpp

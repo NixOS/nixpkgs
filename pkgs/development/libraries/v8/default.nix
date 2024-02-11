@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isDarwin ''use_lld=false'';
 
   env.NIX_CFLAGS_COMPILE = "-O2";
-  FORCE_MAC_SDK_MIN = stdenv.targetPlatform.sdkVer or "10.12";
+  FORCE_MAC_SDK_MIN = stdenv.hostPlatform.sdkVer or "10.12";
 
   nativeBuildInputs = [
     myGn
@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://v8.dev/";
     description = "Google's open source JavaScript engine";
-    maintainers = with maintainers; [ cstrahan proglodyte matthewbauer ];
+    maintainers = with maintainers; [ proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

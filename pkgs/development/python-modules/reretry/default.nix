@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "reretry";
   version = "0.11.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

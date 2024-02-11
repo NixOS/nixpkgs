@@ -4,20 +4,21 @@
 # - maintainers/scripts/update-luarocks-packages
 
 # format:
-# $ nix run nixpkgs.python3Packages.black -c black update.py
+# $ nix run nixpkgs#black maintainers/scripts/pluginupdate.py
 # type-check:
-# $ nix run nixpkgs.python3Packages.mypy -c mypy update.py
+# $ nix run nixpkgs#python3.pkgs.mypy maintainers/scripts/pluginupdate.py
 # linted:
-# $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265 update.py
+# $ nix run nixpkgs#python3.pkgs.flake8 -- --ignore E501,E265 maintainers/scripts/pluginupdate.py
 
 import argparse
 import csv
 import functools
 import http
 import json
-import os
-import subprocess
 import logging
+import os
+import re
+import subprocess
 import sys
 import time
 import traceback
@@ -25,14 +26,14 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from dataclasses import asdict, dataclass
+from datetime import UTC, datetime
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union, Any, Callable
-from urllib.parse import urljoin, urlparse
 from tempfile import NamedTemporaryFile
-from dataclasses import dataclass, asdict
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from urllib.parse import urljoin, urlparse
 
 import git
 
@@ -41,11 +42,12 @@ ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
 LOG_LEVELS = {
-    logging.getLevelName(level): level for level in [
-        logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR ]
+    logging.getLevelName(level): level
+    for level in [logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR]
 }
 
 log = logging.getLogger()
+
 
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
     """Retry calling the decorated function using an exponential backoff.
@@ -77,6 +79,7 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
     return deco_retry
 
+
 @dataclass
 class FetchConfig:
     proc: int
@@ -91,22 +94,21 @@ def make_request(url: str, token=None) -> urllib.request.Request:
 
 
 # a dictionary of plugins and their new repositories
-Redirects = Dict['PluginDesc', 'Repo']
+Redirects = Dict["PluginDesc", "Repo"]
+
 
 class Repo:
-    def __init__(
-        self, uri: str, branch: str
-    ) -> None:
+    def __init__(self, uri: str, branch: str) -> None:
         self.uri = uri
-        '''Url to the repo'''
+        """Url to the repo"""
         self._branch = branch
         # Redirect is the new Repo to use
-        self.redirect: Optional['Repo'] = None
+        self.redirect: Optional["Repo"] = None
         self.token = "dummy_token"
 
     @property
     def name(self):
-        return self.uri.split('/')[-1]
+        return self.uri.split("/")[-1]
 
     @property
     def branch(self):
@@ -114,6 +116,7 @@ class Repo:
 
     def __str__(self) -> str:
         return f"{self.uri}"
+
     def __repr__(self) -> str:
         return f"Repo({self.name}, {self.uri})"
 
@@ -125,9 +128,9 @@ class Repo:
     def latest_commit(self) -> Tuple[str, datetime]:
         log.debug("Latest commit")
         loaded = self._prefetch(None)
-        updated = datetime.strptime(loaded['date'], "%Y-%m-%dT%H:%M:%S%z")
+        updated = datetime.strptime(loaded["date"], "%Y-%m-%dT%H:%M:%S%z")
 
-        return loaded['rev'], updated
+        return loaded["rev"], updated
 
     def _prefetch(self, ref: Optional[str]):
         cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
@@ -144,23 +147,23 @@ class Repo:
         return loaded["sha256"]
 
     def as_nix(self, plugin: "Plugin") -> str:
-        return f'''fetchgit {{
+        return f"""fetchgit {{
       url = "{self.uri}";
       rev = "{plugin.commit}";
       sha256 = "{plugin.sha256}";
-    }}'''
+    }}"""
 
 
 class RepoGitHub(Repo):
-    def __init__(
-        self, owner: str, repo: str, branch: str
-    ) -> None:
+    def __init__(self, owner: str, repo: str, branch: str) -> None:
         self.owner = owner
         self.repo = repo
         self.token = None
-        '''Url to the repo'''
+        """Url to the repo"""
         super().__init__(self.url(""), branch)
-        log.debug("Instantiating github repo owner=%s and repo=%s", self.owner, self.repo)
+        log.debug(
+            "Instantiating github repo owner=%s and repo=%s", self.owner, self.repo
+        )
 
     @property
     def name(self):
@@ -190,6 +193,11 @@ class RepoGitHub(Repo):
         with urllib.request.urlopen(commit_req, timeout=10) as req:
             self._check_for_redirect(commit_url, req)
             xml = req.read()
+
+            # Filter out illegal XML characters
+            illegal_xml_regex = re.compile(b"[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]")
+            xml = illegal_xml_regex.sub(b"", xml)
+
             root = ET.fromstring(xml)
             latest_entry = root.find(ATOM_ENTRY)
             assert latest_entry is not None, f"No commits found in repository {self}"
@@ -213,7 +221,6 @@ class RepoGitHub(Repo):
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self.branch)
             self.redirect = new_repo
 
-
     def prefetch(self, commit: str) -> str:
         if self.has_submodules():
             sha256 = super().prefetch(commit)
@@ -233,12 +240,12 @@ class RepoGitHub(Repo):
         else:
             submodule_attr = ""
 
-        return f'''fetchFromGitHub {{
+        return f"""fetchFromGitHub {{
       owner = "{self.owner}";
       repo = "{self.repo}";
       rev = "{plugin.commit}";
       sha256 = "{plugin.sha256}";{submodule_attr}
-    }}'''
+    }}"""
 
 
 @dataclass(frozen=True)
@@ -258,15 +265,14 @@ class PluginDesc:
         return self.repo.name < other.repo.name
 
     @staticmethod
-    def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> 'PluginDesc':
+    def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> "PluginDesc":
         branch = row["branch"]
-        repo = make_repo(row['repo'], branch.strip())
+        repo = make_repo(row["repo"], branch.strip())
         repo.token = config.github_token
         return PluginDesc(repo, branch.strip(), row["alias"])
 
-
     @staticmethod
-    def load_from_string(config: FetchConfig, line: str) -> 'PluginDesc':
+    def load_from_string(config: FetchConfig, line: str) -> "PluginDesc":
         branch = "HEAD"
         alias = None
         uri = line
@@ -278,6 +284,7 @@ class PluginDesc:
         repo = make_repo(uri.strip(), branch.strip())
         repo.token = config.github_token
         return PluginDesc(repo, branch.strip(), alias)
+
 
 @dataclass
 class Plugin:
@@ -302,24 +309,45 @@ class Plugin:
         return copy
 
 
-def load_plugins_from_csv(config: FetchConfig, input_file: Path,) -> List[PluginDesc]:
+def load_plugins_from_csv(
+    config: FetchConfig,
+    input_file: Path,
+) -> List[PluginDesc]:
     log.debug("Load plugins from csv %s", input_file)
     plugins = []
-    with open(input_file, newline='') as csvfile:
+    with open(input_file, newline="") as csvfile:
         log.debug("Writing into %s", input_file)
-        reader = csv.DictReader(csvfile,)
+        reader = csv.DictReader(
+            csvfile,
+        )
         for line in reader:
             plugin = PluginDesc.load_from_csv(config, line)
             plugins.append(plugin)
 
     return plugins
 
-def run_nix_expr(expr):
-    with CleanEnvironment():
-        cmd = ["nix", "eval", "--extra-experimental-features",
-                "nix-command", "--impure", "--json", "--expr", expr]
-        log.debug("Running command %s", " ".join(cmd))
-        out = subprocess.check_output(cmd)
+
+
+def run_nix_expr(expr, nixpkgs: str):
+    '''
+    :param expr nix expression to fetch current plugins
+    :param nixpkgs Path towards a nixpkgs checkout
+    '''
+    with CleanEnvironment(nixpkgs) as nix_path:
+        cmd = [
+            "nix",
+            "eval",
+            "--extra-experimental-features",
+            "nix-command",
+            "--impure",
+            "--json",
+            "--expr",
+            expr,
+            "--nix-path",
+            nix_path,
+        ]
+        log.debug("Running command: %s", " ".join(cmd))
+        out = subprocess.check_output(cmd, timeout=90)
         data = json.loads(out)
         return data
 
@@ -348,7 +376,7 @@ class Editor:
         self.nixpkgs_repo = None
 
     def add(self, args):
-        '''CSV spec'''
+        """CSV spec"""
         log.debug("called the 'add' command")
         fetch_config = FetchConfig(args.proc, args.github_token)
         editor = self
@@ -356,28 +384,32 @@ class Editor:
             log.debug("using plugin_line", plugin_line)
             pdesc = PluginDesc.load_from_string(fetch_config, plugin_line)
             log.debug("loaded as pdesc", pdesc)
-            append = [ pdesc ]
-            editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, append=append)
-            plugin, _ = prefetch_plugin(pdesc, )
+            append = [pdesc]
+            editor.rewrite_input(
+                fetch_config, args.input_file, editor.deprecated, append=append
+            )
+            plugin, _ = prefetch_plugin(
+                pdesc,
+            )
             autocommit = not args.no_commit
             if autocommit:
                 commit(
                     editor.nixpkgs_repo,
                     "{drv_name}: init at {version}".format(
                         drv_name=editor.get_drv_name(plugin.normalized_name),
-                        version=plugin.version
+                        version=plugin.version,
                     ),
                     [args.outfile, args.input_file],
                 )
 
     # Expects arguments generated by 'update' subparser
-    def update(self, args ):
-        '''CSV spec'''
+    def update(self, args):
+        """CSV spec"""
         print("the update member function should be overriden in subclasses")
 
-    def get_current_plugins(self) -> List[Plugin]:
+    def get_current_plugins(self, nixpkgs) -> List[Plugin]:
         """To fill the cache"""
-        data = run_nix_expr(self.get_plugins)
+        data = run_nix_expr(self.get_plugins, nixpkgs)
         plugins = []
         for name, attr in data.items():
             p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
@@ -385,15 +417,15 @@ class Editor:
         return plugins
 
     def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
-        '''CSV spec'''
+        """CSV spec"""
         return load_plugins_from_csv(config, plugin_file)
 
     def generate_nix(self, _plugins, _outfile: str):
-        '''Returns nothing for now, writes directly to outfile'''
+        """Returns nothing for now, writes directly to outfile"""
         raise NotImplementedError()
 
     def get_update(self, input_file: str, outfile: str, config: FetchConfig):
-        cache: Cache = Cache(self.get_current_plugins(), self.cache_file)
+        cache: Cache = Cache(self.get_current_plugins(self.nixpkgs), self.cache_file)
         _prefetch = functools.partial(prefetch, cache=cache)
 
         def update() -> dict:
@@ -413,7 +445,6 @@ class Editor:
 
         return update
 
-
     @property
     def attr_path(self):
         return self.name + "Plugins"
@@ -427,15 +458,23 @@ class Editor:
     def create_parser(self):
         common = argparse.ArgumentParser(
             add_help=False,
-            description=(f"""
+            description=(
+                f"""
                 Updates nix derivations for {self.name} plugins.\n
                 By default from {self.default_in} to {self.default_out}"""
-            )
+            ),
+        )
+        common.add_argument(
+            "--nixpkgs",
+            type=str,
+            default=os.getcwd(),
+            help="Adjust log level",
         )
         common.add_argument(
             "--input-names",
             "-i",
             dest="input_file",
+            type=Path,
             default=self.default_in,
             help="A list of plugins in the form owner/repo",
         )
@@ -444,6 +483,7 @@ class Editor:
             "-o",
             dest="outfile",
             default=self.default_out,
+            type=Path,
             help="Filename to save generated nix code",
         )
         common.add_argument(
@@ -463,26 +503,33 @@ class Editor:
             Uses GITHUB_API_TOKEN environment variables as the default value.""",
         )
         common.add_argument(
-            "--no-commit", "-n", action="store_true", default=False,
-            help="Whether to autocommit changes"
+            "--no-commit",
+            "-n",
+            action="store_true",
+            default=False,
+            help="Whether to autocommit changes",
         )
         common.add_argument(
-            "--debug", "-d", choices=LOG_LEVELS.keys(),
+            "--debug",
+            "-d",
+            choices=LOG_LEVELS.keys(),
             default=logging.getLevelName(logging.WARN),
-            help="Adjust log level"
+            help="Adjust log level",
         )
 
         main = argparse.ArgumentParser(
             parents=[common],
-            description=(f"""
+            description=(
+                f"""
                 Updates nix derivations for {self.name} plugins.\n
                 By default from {self.default_in} to {self.default_out}"""
-            )
+            ),
         )
 
         subparsers = main.add_subparsers(dest="command", required=False)
         padd = subparsers.add_parser(
-            "add", parents=[],
+            "add",
+            parents=[],
             description="Add new plugin",
             add_help=False,
         )
@@ -502,33 +549,37 @@ class Editor:
         pupdate.set_defaults(func=self.update)
         return main
 
-    def run(self,):
-        '''
+    def run(
+        self,
+    ):
+        """
         Convenience function
-        '''
+        """
         parser = self.create_parser()
         args = parser.parse_args()
         command = args.command or "update"
         log.setLevel(LOG_LEVELS[args.debug])
         log.info("Chose to run command: %s", command)
+        self.nixpkgs = args.nixpkgs
 
-        if not args.no_commit:
-            self.nixpkgs_repo = git.Repo(self.root, search_parent_directories=True)
+        self.nixpkgs_repo = git.Repo(args.nixpkgs, search_parent_directories=True)
 
         getattr(self, command)(args)
 
 
-
-
 class CleanEnvironment(object):
-    def __enter__(self) -> None:
-        self.old_environ = os.environ.copy()
+    def __init__(self, nixpkgs):
+        self.local_pkgs = nixpkgs
+
+    def __enter__(self) -> str:
+        """
         local_pkgs = str(Path(__file__).parent.parent.parent)
-        os.environ["NIX_PATH"] = f"localpkgs={local_pkgs}"
+        """
+        self.old_environ = os.environ.copy()
         self.empty_config = NamedTemporaryFile()
         self.empty_config.write(b"{}")
         self.empty_config.flush()
-        os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
+        return f"localpkgs={self.local_pkgs}"
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         os.environ.update(self.old_environ)
@@ -570,14 +621,15 @@ def print_download_error(plugin: PluginDesc, ex: Exception):
     ]
     print("\n".join(tb_lines))
 
+
 def check_results(
     results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]]
 ) -> Tuple[List[Tuple[PluginDesc, Plugin]], Redirects]:
-    ''' '''
+    """ """
     failures: List[Tuple[PluginDesc, Exception]] = []
     plugins = []
     redirects: Redirects = {}
-    for (pdesc, result, redirect) in results:
+    for pdesc, result, redirect in results:
         if isinstance(result, Exception):
             failures.append((pdesc, result))
         else:
@@ -594,17 +646,18 @@ def check_results(
     else:
         print(f", {len(failures)} plugin(s) could not be downloaded:\n")
 
-        for (plugin, exception) in failures:
+        for plugin, exception in failures:
             print_download_error(plugin, exception)
 
         sys.exit(1)
 
+
 def make_repo(uri: str, branch) -> Repo:
-    '''Instantiate a Repo with the correct specialization depending on server (gitub spec)'''
+    """Instantiate a Repo with the correct specialization depending on server (gitub spec)"""
     # dumb check to see if it's of the form owner/repo (=> github) or https://...
     res = urlparse(uri)
-    if res.netloc in [ "github.com", ""]:
-        res = res.path.strip('/').split('/')
+    if res.netloc in ["github.com", ""]:
+        res = res.path.strip("/").split("/")
         repo = RepoGitHub(res[0], res[1], branch)
     else:
         repo = Repo(uri.strip(), branch)
@@ -675,7 +728,6 @@ def prefetch(
         return (pluginDesc, e, None)
 
 
-
 def rewrite_input(
     config: FetchConfig,
     input_file: Path,
@@ -684,12 +736,14 @@ def rewrite_input(
     redirects: Redirects = {},
     append: List[PluginDesc] = [],
 ):
-    plugins = load_plugins_from_csv(config, input_file,)
+    plugins = load_plugins_from_csv(
+        config,
+        input_file,
+    )
 
     plugins.extend(append)
 
     if redirects:
-
         cur_date_iso = datetime.now().strftime("%Y-%m-%d")
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
@@ -709,8 +763,8 @@ def rewrite_input(
     with open(input_file, "w") as f:
         log.debug("Writing into %s", input_file)
         # fields = dataclasses.fields(PluginDesc)
-        fieldnames = ['repo', 'branch', 'alias']
-        writer = csv.DictWriter(f, fieldnames, dialect='unix', quoting=csv.QUOTE_NONE)
+        fieldnames = ["repo", "branch", "alias"]
+        writer = csv.DictWriter(f, fieldnames, dialect="unix", quoting=csv.QUOTE_NONE)
         writer.writeheader()
         for plugin in sorted(plugins):
             writer.writerow(asdict(plugin))
@@ -726,9 +780,9 @@ def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
         print("no changes in working tree to commit")
 
 
-
 def update_plugins(editor: Editor, args):
-    """The main entry function of this module. All input arguments are grouped in the `Editor`."""
+    """The main entry function of this module.
+    All input arguments are grouped in the `Editor`."""
 
     log.info("Start updating plugins")
     fetch_config = FetchConfig(args.proc, args.github_token)
@@ -740,8 +794,16 @@ def update_plugins(editor: Editor, args):
     autocommit = not args.no_commit
 
     if autocommit:
-        editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        commit(editor.nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
+        try:
+            repo = git.Repo(os.getcwd())
+            updated = datetime.now(tz=UTC).strftime('%Y-%m-%d')
+            print(args.outfile)
+            commit(repo,
+                   f"{editor.attr_path}: update on {updated}", [args.outfile]
+                   )
+        except git.InvalidGitRepositoryError as e:
+            print(f"Not in a git repository: {e}", file=sys.stderr)
+            sys.exit(1)
 
     if redirects:
         update()
@@ -751,4 +813,3 @@ def update_plugins(editor: Editor, args):
                 f"{editor.attr_path}: resolve github repository redirects",
                 [args.outfile, args.input_file, editor.deprecated],
             )
-

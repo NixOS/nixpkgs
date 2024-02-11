@@ -2,7 +2,7 @@
 
 Sage is a pretty complex package that depends on many other complex packages and patches some of those. As a result, the sage nix package is also quite complex.
 
-Don't feel discouraged to fix, simplify or improve things though. The individual files have comments explaining their purpose. The most importent ones are `default.nix` linking everything together, `sage-src.nix` adding patches and `sagelib.nix` building the actual sage package.
+Don't feel discouraged to fix, simplify or improve things though. The individual files have comments explaining their purpose. The most important ones are `default.nix` linking everything together, `sage-src.nix` adding patches and `sagelib.nix` building the actual sage package.
 
 ## The sage build is broken
 

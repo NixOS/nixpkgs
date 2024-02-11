@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "4.7.1";
+  version = "4.7.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-W5iqRWAB6D1Dnxz0Iyl7ZmP3yrXvLyV7BdBdIgFCiQY=";
+    hash = "sha256-4nXZPZFu9L+Okha3qvPil1KvLGO1EbrzotQjqQ8r9l8=";
   };
 
   nativeBuildInputs = [
@@ -87,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
+    changelog = "https://github.com/qutip/qutip/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fabiangd ];
   };

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vaapi";
-  version = "0.3.1";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = pname;
     rev = version;
-    hash = "sha256-lKDZ0YJjcbfHr1MoTbdOaYk6Dhl2bUVUImuoWWwFC1U=";
+    hash = "sha256-PpGNLIOz+fCpcP/nvjcJ+1fkduxjcbZjb7yx8TUO25s=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];

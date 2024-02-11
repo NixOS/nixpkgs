@@ -1,6 +1,8 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index f6d5b6c..a631bbf 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2534,6 +2534,7 @@ dependencies = [
+@@ -2544,6 +2544,7 @@ dependencies = [
   "typetag",
   "winres",
   "yaml-rust",
@@ -8,15 +10,11 @@
  ]
  
  [[package]]
-@@ -4113,4 +4114,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
- dependencies = [
-  "cc",
-  "libc",
-+ "pkg-config",
- ]
+diff --git a/Cargo.toml b/Cargo.toml
+index b77f70d..861f1ac 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -51,6 +51,7 @@ tokei = "12.1.2"
+@@ -65,6 +65,7 @@ tokei = "12.1.2"
  typetag = "0.2"
  yaml-rust = "0.4.5"
  parking_lot = "0.12"

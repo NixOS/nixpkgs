@@ -11,7 +11,9 @@
 , hypothesis
 , pytestCheckHook
 , pytest-subtesthack
+, setuptools
 , setuptools-scm
+, wheel
 , aiostream
 , aiohttp-oauthlib
 , aiohttp
@@ -20,23 +22,35 @@
 , aioresponses
 , vdirsyncer
 , testers
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.19.1";
+  version = "0.19.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qnbHclqlpxH2N0vFzYO+eKrmjHSCljWp7Qc81MCfA64=";
+    hash = "sha256-/QWM7quCk0WaBGbNmw5Ks7OUYsbgiaDwrDfDB0INgro=";
   };
 
   postPatch = ''
     sed -i -e '/--cov/d' -e '/--no-cov/d' pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "aiostream"
+  ];
 
   propagatedBuildInputs = [
     atomicwrites
@@ -72,9 +86,11 @@ buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
   meta = with lib; {
-    homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
-    license = licenses.mit;
+    homepage = "https://github.com/pimutils/vdirsyncer";
+    changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ loewenheim ];
+    mainProgram = "vdirsyncer";
   };
 }

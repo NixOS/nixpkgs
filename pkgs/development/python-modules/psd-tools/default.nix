@@ -2,9 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, attrs
 , docopt
 , pillow
 , scikit-image
+, scipy
+, numpy
 , aggdraw
 , pytestCheckHook
 , ipython
@@ -13,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.26";
+  version = "1.9.28";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +25,7 @@ buildPythonPackage rec {
     owner = "psd-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fwUFBqr397l6vLBc4xF78EdnXzc83Gqn5nu/9M19ZW8=";
+    hash = "sha256-+oxXuZaHkLPuMIsiFOkvW6VLuGxpV7YKs6Gxp/lexVQ=";
   };
 
   nativeBuildInputs = [
@@ -31,10 +34,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aggdraw
+    attrs
     docopt
     ipython
+    numpy
     pillow
     scikit-image
+    scipy
   ];
 
   nativeCheckInputs = [

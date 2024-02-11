@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "The-Compiler";
     repo = pname;
     rev = "v${version}";
-    sha512 = "11g2f1w9lfqw6zxxyg7qrqpb914s6w71j0gnpw7qr7cak2l5jlf2l39dlg30y55rw7jgmf0yg77wwzd0c430mq1n6q1v8w86g1rwkzb";
+    hash = "sha512-60+ewzOIox2wsQFXMAgD7XN+zvPA1ScPz6V4MB5taVDhqCxUTMVOxodf+4AMhxtNQloXZ3ye7/0bjh1NPDjxQg==";
   };
 
   # can be removed post 1.1.0
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
-    description = "journalwatch is a tool to find error messages in the systemd journal.";
+    description = "A tool to find error messages in the systemd journal";
     homepage = "https://github.com/The-Compiler/journalwatch";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ florianjacob ];

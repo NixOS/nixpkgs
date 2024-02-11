@@ -1,17 +1,17 @@
 { lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang, useIcon ? true }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "noweb";
-  version = "2.12";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "nrnrnr";
     repo = "noweb";
-    rev = "v${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "1160i2ghgzqvnb44kgwd6s3p4jnk9668rmc15jlcwl7pdf3xqm95";
+    rev = "v${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
+    sha256 = "sha256-COcWyrYkheRaSr2gqreRRsz9SYRTX2PSl7km+g98ljs=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   patches = [
     # Remove FAQ
@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   postPatch = ''
     substituteInPlace Makefile --replace 'strip' '${stdenv.cc.targetPrefix}strip'
+    substituteInPlace Makefile --replace '`./gitversion`' '${finalAttrs.src.rev}'
   '';
 
   nativeBuildInputs = [ groff ] ++ lib.optionals useIcon [ icon-lang ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     rev = "tags/release/${version}";
     hash = "sha256-2xgb9l0Eko39HJVROAWEIP3qLg5t/5h/rm2MoXoKnJI=";
   };
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   buildInputs = [ libmd ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   passthru.tests.version = testers.testVersion { package = donkey; };
 
   meta = with lib; {
-    description = "an alternative for S/KEY's 'key' command.";
+    description = "An alternative for S/KEY's 'key' command";
     longDescription = ''
 Donkey is an alternative for S/KEY's "key" command.  The new feature that
 the original key doesn't have is print an entry for skeykeys as

@@ -3,8 +3,10 @@
 , lib
 , mkDerivation
 , antiword
+, aspell
 , bison
 , catdoc
+, catdvi
 , chmlib
 , djvulibre
 , file
@@ -26,6 +28,7 @@
 , poppler_utils
 , python3Packages
 , qtbase
+, qttools
 , unrtf
 , untex
 , unzip
@@ -43,6 +46,7 @@ let filters = {
       awk = gawk;
       antiword = antiword;
       catppt = catdoc;
+      catdvi = catdvi;
       djvused = djvulibre;
       djvutxt = djvulibre;
       egrep = gnugrep;
@@ -66,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.33.4";
+  version = "1.37.2";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ffD49sGYWYEWAFPRtpyDU/CYFvkrEDL21Ddq3QsXCvc=";
+    hash = "sha256-xLdk3pJSV1YaloSV3TuTdJhujXsxUGrDru+mu86YBTU=";
   };
 
   configureFlags = [
@@ -93,25 +97,29 @@ mkDerivation rec {
     (lib.withFeature stdenv.isLinux "inotify")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DNIXPKGS"
+    "-fpermissive" # libxml2-2.12 changed const qualifiers
+  ];
 
   patches = [
     # fix "No/bad main configuration file" error
     ./fix-datadir.patch
   ];
 
-  nativeBuildInputs = lib.optionals withGui [
-    qtbase
-  ] ++ [
+  nativeBuildInputs = [
+    makeWrapper
     pkg-config
+    which
+  ] ++ lib.optionals withGui [
+    qtbase
+    qttools
   ] ++ lib.optionals withPython [
     python3Packages.setuptools
-  ] ++ [
-    makeWrapper
-    which
   ];
 
   buildInputs = [
+    aspell
     bison
     chmlib
   ] ++ lib.optionals withPython [
@@ -164,7 +172,7 @@ mkDerivation rec {
       members, email attachments.
     '';
     homepage = "https://www.lesbonscomptes.com/recoll/";
-    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
+    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${versions.majorMinor version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];

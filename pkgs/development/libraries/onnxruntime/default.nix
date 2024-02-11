@@ -1,80 +1,137 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, fetchurl
-, pkg-config
-, cmake
-, python3Packages
-, libpng
-, zlib
-, eigen
-, protobuf
-, howard-hinnant-date
-, nlohmann_json
-, boost
-, oneDNN_2
+, fetchFromGitLab
+, Foundation
 , abseil-cpp
+, cmake
+, eigen
 , gtest
-, pythonSupport ? false
+, libpng
+, nlohmann_json
 , nsync
-, flatbuffers
+, pkg-config
+, python3Packages
+, re2
+, zlib
+, microsoft-gsl
+, iconv
+, protobuf_21
+, pythonSupport ? true
 }:
 
-# Python Support
-#
-# When enabling Python support a wheel is made and stored in a `dist` output.
-# This wheel is then installed in a separate derivation.
 
-assert pythonSupport -> lib.versionOlder protobuf.version "3.20";
+let
+  howard-hinnant-date = fetchFromGitHub {
+    owner = "HowardHinnant";
+    repo = "date";
+    rev = "v2.4.1";
+    sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
+  };
 
+  mp11 = fetchFromGitHub {
+    owner = "boostorg";
+    repo = "mp11";
+    rev = "boost-1.79.0";
+    hash = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
+  };
+
+  safeint = fetchFromGitHub {
+    owner = "dcleblanc";
+    repo = "safeint";
+    rev = "ff15c6ada150a5018c5ef2172401cb4529eac9c0";
+    hash = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
+  };
+
+  pytorch_cpuinfo = fetchFromGitHub {
+    owner = "pytorch";
+    repo = "cpuinfo";
+    # There are no tags in the repository
+    rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
+    hash = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
+  };
+
+  flatbuffers = fetchFromGitHub {
+    owner = "google";
+    repo = "flatbuffers";
+    rev = "v1.12.0";
+    hash = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
+  };
+
+  gtest' = gtest.overrideAttrs (oldAttrs: rec {
+    version = "1.13.0";
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = "googletest";
+      rev = "v${version}";
+      hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
+    };
+  });
+
+  onnx = fetchFromGitHub {
+    owner = "onnx";
+    repo = "onnx";
+    rev = "refs/tags/v1.14.1";
+    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.13.1";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
-    rev = "v${version}";
-    sha256 = "sha256-paaeq6QeiOzwiibbz0GkYZxEI/V80lvYNYTm6AuyAXQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bTW9Pc3rvH+c8VIlDDEtAXyA3sajVyY5Aqr6+SxaMF4=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Use dnnl from nixpkgs instead of submodules
-    (fetchpatch {
-      name = "system-dnnl.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-dnnl.diff?h=python-onnxruntime&id=9c392fb542979981fe0026e0fe3cc361a5f00a36";
-      sha256 = "sha256-+kedzJHLFU1vMbKO9cn8fr+9A5+IxIuiqzOfR2AfJ0k=";
-    })
+    # If you stumble on these patches trying to update onnxruntime, check
+    # `git blame` and ping the introducers.
+
+    # Context: we want the upstream to
+    # - always try find_package first (FIND_PACKAGE_ARGS),
+    # - use MakeAvailable instead of the low-level Populate,
+    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
+    ./0001-eigen-allow-dependency-injection.patch
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.python
-    gtest
+    protobuf_21
   ] ++ lib.optionals pythonSupport (with python3Packages; [
+    pip
+    python
+    pythonOutputDistHook
     setuptools
     wheel
-    pip
-    pythonOutputDistHook
   ]);
 
   buildInputs = [
+    eigen
     libpng
     zlib
-    howard-hinnant-date
     nlohmann_json
-    boost
-    oneDNN_2
-    protobuf
-  ] ++ lib.optionals pythonSupport [
-    nsync
-    python3Packages.numpy
-    python3Packages.pybind11
-    python3Packages.packaging
+    microsoft-gsl
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
+    numpy
+    pybind11
+    packaging
+  ]) ++ lib.optionals stdenv.isDarwin [
+    Foundation
+    iconv
   ];
+
+  nativeCheckInputs = lib.optionals pythonSupport (with python3Packages; [
+    gtest'
+    pytest
+    sympy
+    onnx
+  ]);
 
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
@@ -85,28 +142,46 @@ stdenv.mkDerivation rec {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
-    "-Donnxruntime_PREFER_SYSTEM_LIB=ON"
-    "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    "-Donnxruntime_ENABLE_LTO=ON"
-    "-Donnxruntime_BUILD_UNIT_TESTS=ON"
-    "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
-    "-Donnxruntime_USE_MPI=ON"
-    "-Deigen_SOURCE_PATH=${eigen.src}"
+    "-DABSL_ENABLE_INSTALL=ON"
+    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+    "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
-    "-Donnxruntime_USE_DNNL=YES"
+    "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
+    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers}"
+    "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
+    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
+    "-DFETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO=${pytorch_cpuinfo}"
+    "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
+    "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
+    "-Donnxruntime_BUILD_SHARED_LIB=ON"
+    "-Donnxruntime_BUILD_UNIT_TESTS=ON"
+    "-Donnxruntime_ENABLE_LTO=ON"
+    "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=unused-but-set-variable"
+    ];
+  };
 
   doCheck = true;
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+  '' + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
+    # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
+    rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
   '';
 
   postBuild = lib.optionalString pythonSupport ''
-    python ../setup.py bdist_wheel
+    ${python3Packages.python.interpreter} ../setup.py bdist_wheel
   '';
 
   postInstall = ''
@@ -118,7 +193,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit protobuf;
+    protobuf = protobuf_21;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
     };
@@ -140,6 +215,6 @@ stdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer puffnfresh ck3d ];
+    maintainers = with maintainers; [ jonringer puffnfresh ck3d cbourjau ];
   };
 }

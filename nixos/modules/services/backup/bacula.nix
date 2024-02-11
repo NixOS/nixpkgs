@@ -15,16 +15,16 @@ let
       Client {
         Name = "${fd_cfg.name}";
         FDPort = ${toString fd_cfg.port};
-        WorkingDirectory = "${libDir}";
-        Pid Directory = "/run";
+        WorkingDirectory = ${libDir};
+        Pid Directory = /run;
         ${fd_cfg.extraClientConfig}
       }
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
-        Password = "${value.password}";
-        Monitor = "${value.monitor}";
+        Password = ${value.password};
+        Monitor = ${value.monitor};
       }
       '') fd_cfg.director)}
 
@@ -41,8 +41,8 @@ let
       Storage {
         Name = "${sd_cfg.name}";
         SDPort = ${toString sd_cfg.port};
-        WorkingDirectory = "${libDir}";
-        Pid Directory = "/run";
+        WorkingDirectory = ${libDir};
+        Pid Directory = /run;
         ${sd_cfg.extraStorageConfig}
       }
 
@@ -50,8 +50,8 @@ let
       Autochanger {
         Name = "${name}";
         Device = ${concatStringsSep ", " (map (a: "\"${a}\"") value.devices)};
-        Changer Device =  "${value.changerDevice}";
-        Changer Command = "${value.changerCommand}";
+        Changer Device =  ${value.changerDevice};
+        Changer Command = ${value.changerCommand};
         ${value.extraAutochangerConfig}
       }
       '') sd_cfg.autochanger)}
@@ -59,8 +59,8 @@ let
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Device {
         Name = "${name}";
-        Archive Device = "${value.archiveDevice}";
-        Media Type = "${value.mediaType}";
+        Archive Device = ${value.archiveDevice};
+        Media Type = ${value.mediaType};
         ${value.extraDeviceConfig}
       }
       '') sd_cfg.device)}
@@ -68,8 +68,8 @@ let
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
       Director {
         Name = "${name}";
-        Password = "${value.password}";
-        Monitor = "${value.monitor}";
+        Password = ${value.password};
+        Monitor = ${value.monitor};
       }
       '') sd_cfg.director)}
 
@@ -85,18 +85,18 @@ let
     ''
     Director {
       Name = "${dir_cfg.name}";
-      Password = "${dir_cfg.password}";
+      Password = ${dir_cfg.password};
       DirPort = ${toString dir_cfg.port};
-      Working Directory = "${libDir}";
-      Pid Directory = "/run/";
-      QueryFile = "${pkgs.bacula}/etc/query.sql";
+      Working Directory = ${libDir};
+      Pid Directory = /run/;
+      QueryFile = ${pkgs.bacula}/etc/query.sql;
       ${dir_cfg.extraDirectorConfig}
     }
 
     Catalog {
-      Name = "PostgreSQL";
-      dbname = "bacula";
-      user = "bacula";
+      Name = PostgreSQL;
+      dbname = bacula;
+      user = bacula;
     }
 
     Messages {
@@ -533,7 +533,7 @@ in {
       };
     };
 
-    services.postgresql.enable = dir_cfg.enable == true;
+    services.postgresql.enable = lib.mkIf dir_cfg.enable true;
 
     systemd.services.bacula-dir = mkIf dir_cfg.enable {
       after = [ "network.target" "postgresql.service" ];

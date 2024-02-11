@@ -7,13 +7,13 @@
 , fsuae
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae-launcher";
-  version = "3.0.5";
+  version = "3.1.68";
 
   src = fetchurl {
-    url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1dknra4ngz7bpppwqghmza1q68pn1yaw54p9ba0f42zwp427ly97";
+    url = "https://fs-uae.net/files/FS-UAE-Launcher/Stable/${finalAttrs.version}/fs-uae-launcher-${finalAttrs.version}.tar.xz";
+    hash = "sha256-42EERC2yeODx0HPbwr4vmpN80z6WSWi3WzJMOT+OwDA=";
   };
 
   nativeBuildInputs = [
@@ -33,16 +33,22 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   preFixup = ''
-      wrapQtApp "$out/bin/fs-uae-launcher" --set PYTHONPATH "$PYTHONPATH" \
-        --prefix PATH : ${lib.makeBinPath [ fsuae ]}
+    wrapQtApp "$out/bin/fs-uae-launcher" \
+      --set PYTHONPATH "$PYTHONPATH"
+
+    # fs-uae-launcher search side by side for executables and shared files
+    # see $src/fsgs/plugins/pluginexecutablefinder.py#find_executable
+    ln -s ${fsuae}/bin/fs-uae $out/bin
+    ln -s ${fsuae}/bin/fs-uae-device-helper $out/bin
+    ln -s ${fsuae}/share/fs-uae $out/share/fs-uae
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fs-uae.net";
     description = "Graphical front-end for the FS-UAE emulator";
-    license = licenses.gpl2Plus;
-    maintainers = with  maintainers; [ sander AndersonTorres ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sander AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
-}
+})
 

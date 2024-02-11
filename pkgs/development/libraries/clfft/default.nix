@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-yp7u6qhpPYQpBw3d+VLg0GgMyZONVII8BsBCEoRZm4w=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     sed -i '/-m64/d;/-m32/d' CMakeLists.txt

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "buildkit-nix";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gKTCBz7om1M7UBzyMJDetNGcKLkQKMyuzwrHBbuuifM=";
+    sha256 = "sha256-i8KQLLL36iP26jIj10fZLtYpS57Xni4eIQEJG4ixWy8=";
   };
 
-  vendorSha256 = "sha256-1H5oWgcaamf+hocABWWnzJUjWiqwk1ZZtbBjF6EKzzU=";
+  vendorHash = "sha256-SFsf2QOIuUQY5Zzshb2190pQtOBGEsELBRihOvHYVGA=";
 
   CGO_ENABLED = 0;
 
@@ -23,5 +23,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lesuisse ];
+    mainProgram = "buildkit-nix";
   };
 }

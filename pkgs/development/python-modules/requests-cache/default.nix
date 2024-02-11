@@ -1,23 +1,28 @@
 { lib
-, appdirs
 , attrs
 , buildPythonPackage
 , bson
 , boto3
 , botocore
 , cattrs
-, exceptiongroup
 , fetchFromGitHub
 , itsdangerous
+, platformdirs
 , poetry-core
+, psutil
 , pymongo
 , pytestCheckHook
+, pytest-rerunfailures
+, pytest-xdist
 , pythonOlder
 , pyyaml
 , redis
 , requests
 , requests-mock
+, responses
 , rich
+, tenacity
+, time-machine
 , timeout-decorator
 , ujson
 , urllib3
@@ -26,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.9.8";
+  version = "1.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +40,7 @@ buildPythonPackage rec {
     owner = "requests-cache";
     repo = "requests-cache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xbzbwz80xY8IDPDhZEUhmmiCFJZvSQMQ6EmE4EL7QGo=";
+    hash = "sha256-0KBx6nplD/l8GZfMbyUtgHj2e4/vH9EAgdyNFm+kPyM=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +48,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
     attrs
     cattrs
-    exceptiongroup
+    platformdirs
     requests
     urllib3
     url-normalize
@@ -78,9 +82,15 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    psutil
     pytestCheckHook
+    pytest-rerunfailures
+    pytest-xdist
     requests-mock
+    responses
     rich
+    tenacity
+    time-machine
     timeout-decorator
   ]
   ++ passthru.optional-dependencies.json
@@ -98,6 +108,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests are flaky in the sandbox
     "test_remove_expired_responses"
+    # Tests that broke with urllib 2.0.5
+    "test_request_only_if_cached__stale_if_error__expired"
+    "test_stale_if_error__error_code"
   ];
 
   pythonImportsCheck = [

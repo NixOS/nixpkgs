@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , cmake
+, bash
 , coreutils
 , gnugrep
 , perl
@@ -133,7 +134,8 @@ let
     sed < '${clang}/bin/clang' > "$targetFile" \
       -e 's|^\s*exec|exec -a "$0"|g' \
       -e 's|^\[\[ "${clang.cc}/bin/clang" = \*++ ]]|[[ "$0" = *++ ]]|' \
-      -e "s|${clang.cc}/bin/clang|$unwrappedClang|g"
+      -e "s|${clang.cc}/bin/clang|$unwrappedClang|g" \
+      -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|"
     chmod a+x "$targetFile"
   '';
 
@@ -307,6 +309,13 @@ in stdenv.mkDerivation {
       name = "clang-cmake-fix-interpreter.patch";
       url = "https://github.com/llvm/llvm-project/commit/b5eaf500f2441eff2277ea2973878fb1f171fd0a.patch";
       sha256 = "1rma1al0rbm3s3ql6bnvbcighp74lri1lcrwbyacgdqp80fgw1b6";
+    }}
+
+   # gcc-13 build fixes
+    patch -p2 -d llvm-project/llvm -i ${fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
+      hash = "sha256-nkRPWx8gNvYr7mlvEUiOAb1rTrf+skCZjAydJVUHrcI=";
     }}
 
     ${lib.optionalString stdenv.isLinux ''

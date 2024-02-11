@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "btcd";
-  version = "0.23.3";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "btcsuite";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LdK68Ianiyrs+HVMwrkiX2ruCWKkdpuY8ylxhNbm9qI=";
+    hash = "sha256-TLnJZW2CkvAqPTnJKfBY41siHtdZ+HRABsc+4vnQ9/w=";
   };
 
-  vendorSha256 = "sha256-3w8rb0sfAIFCXqPXOKb4QwoLd7WsbFv3phu/rJCEjeY=";
+  vendorHash = "sha256-quJEpSDltXhJcgI9H707p3HeLj1uuLzaMplT+YXzh/4=";
 
   subPackages = [ "." "cmd/*" ];
 

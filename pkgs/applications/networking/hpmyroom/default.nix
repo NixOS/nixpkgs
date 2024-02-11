@@ -55,5 +55,6 @@ mkDerivation rec {
     homepage = "https://myroom.hpe.com";
     # TODO: A Darwin binary is available upstream
     platforms = [ "x86_64-linux" ];
+    mainProgram = "hpmyroom";
   };
 }

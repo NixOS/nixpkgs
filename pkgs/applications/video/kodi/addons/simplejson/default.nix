@@ -3,11 +3,11 @@
 buildKodiAddon rec {
   pname = "simplejson";
   namespace = "script.module.simplejson";
-  version = "3.17.0+matrix.2";
+  version = "3.19.1+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-XLE4x0qr3CFwWqh1BfSg9q+w6pWgFBXG7TyVJWeGQIs=";
+    sha256 = "sha256-RJy75WAr0XmXnSrPjqKhFjWJnWo3c5IEtUGumcE/mRo=";
   };
 
   passthru = {

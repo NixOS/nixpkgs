@@ -97,12 +97,16 @@ crystal.buildCrystalPackage rec {
     cp -r config/sql $out/share/invidious/config
   '';
 
-  # Invidious tries to open config/config.yml and connect to the database, even
-  # when running --help. This specifies a minimal configuration in an
-  # environment variable. Even though the database is bogus, --help still
-  # works.
+  # Invidious tries to open and validate config/config.yml, even when
+  # running --help. This specifies a minimal configuration in an
+  # environment variable. Even though the database and hmac_key are
+  # bogus, --help still works.
   installCheckPhase = ''
-    INVIDIOUS_CONFIG="database_url: sqlite3:///dev/null" $out/bin/invidious --help
+    INVIDIOUS_CONFIG="$(cat <<EOF
+    database_url: sqlite3:///dev/null
+    hmac_key: "this-is-required"
+    EOF
+    )" $out/bin/invidious --help
   '';
 
   passthru = {

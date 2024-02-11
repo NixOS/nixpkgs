@@ -2,11 +2,9 @@
 , stdenv
 , autoconf
 , automake
-, bash
 , curl
 , fetchFromGitHub
 , fetchMavenArtifact
-, fetchurl
 , fetchpatch
 , git
 , jdk8
@@ -349,5 +347,6 @@ in stdenv.mkDerivation rec {
       binaryBytecode  # maven dependencies
     ];
     maintainers = [ ];
+    mainProgram = "tsdb";
   };
 }

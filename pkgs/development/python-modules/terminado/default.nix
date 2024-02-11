@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "terminado";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bMu806T4olpewEmR85oLjbUt/NSH6g5XjZd+Z1I4AzM=";
+    hash = "sha256-HqCKibg13RuMDJANkoSBR87yU3JDNhsuP03BXfm2/e0=";
   };
 
   nativeBuildInputs = [
@@ -31,11 +31,12 @@ buildPythonPackage rec {
     "terminado"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Terminals served by Tornado websockets";

@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, lib, dtc }:
+{ stdenv, fetchzip, lib, dtc }:
 
 stdenv.mkDerivation {
   pname = "kvmtool";
-  version = "unstable-2023-04-06";
+  version = "unstable-2023-07-12";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git";
-    rev = "77b108c6a6f1c66fb7f60a80d17596bb80bda8ad";
-    sha256 = "sha256-wPhqjVpc6I9UOdb6lmzGh797sdvJ5q4dap2ssg8OY5E=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/snapshot/kvmtool-106e2ea7756d980454d68631b87d5e25ba4e4881.tar.gz";
+    hash = "sha256-wpc5DfHnui0lBVH4uOq6a7pXVUZStjNLRvauu6QpRvE=";
   };
+
+  patches = [ ./strlcpy-glibc-2.38-fix.patch ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isAarch64 [ dtc ];
 
@@ -27,7 +28,8 @@ stdenv.mkDerivation {
     description = "A lightweight tool for hosting KVM guests";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [ astro mfrw ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "lkvm";
   };
 }

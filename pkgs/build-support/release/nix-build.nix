@@ -154,8 +154,8 @@ stdenv.mkDerivation (
 
   //
 
-  (if buildOutOfSourceTree
-   then {
+  (lib.optionalAttrs buildOutOfSourceTree
+   {
      preConfigure =
        # Build out of source tree and make the source tree read-only.  This
        # helps catch violations of the GNU Coding Standards (info
@@ -170,5 +170,5 @@ stdenv.mkDerivation (
           ${lib.optionalString (preConfigure != null) preConfigure}
        '';
    }
-   else {})
+  )
 )

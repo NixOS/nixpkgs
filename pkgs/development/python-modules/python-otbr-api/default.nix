@@ -4,6 +4,7 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -12,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
-  version = "2.2.0";
-  format = "pyproject";
+  version = "2.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "python-otbr-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-jozMYrmXHSykv5npboyySuVDs1Lamlee15ZPYI4zmO4=";
+    hash = "sha256-RMj4NdEbMIxh2PDzbhUWgmcdzRXY8RxcQNN/bbGOW5Q=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 

@@ -12,30 +12,35 @@
 , lua
 , luajit
 , zlib
+, jsoncpp
+, libpng
 , Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
-  version = "unstable-2022-08-30";
+  version = "97.0.352";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
-    rev = "9e712eba080e194fc162b475f58aaed8f4ea008e";
-    sha256 = "sha256-44xUfif1E+T9jzixWgnBxOWmzPPuVZy7rf62ig/CczA=";
+    rev = "v${version}";
+    sha256 = "sha256-LYohsqFU9LBgTXMaV6cf8/zf3fBvT+s5A1JBpPHekH8=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];
 
-  buildInputs = [ SDL2 bzip2 curl fftwFloat lua luajit zlib ]
+  buildInputs = [ SDL2 bzip2 curl fftwFloat lua luajit zlib jsoncpp libpng ]
   ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
 
   installPhase = ''
     install -Dm 755 powder $out/bin/powder
 
     mkdir -p $out/share/applications
-    mv ../resources/powder.desktop $out/share/applications
     mv ../resources $out/share
+  '' + lib.optionalString stdenv.isLinux ''
+    mv ./resources/powder.desktop $out/share/applications
   '';
 
   meta = with lib; {

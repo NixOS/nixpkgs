@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config
-, uilib, SDL
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, pkg-config
 , buildsystem
+, uilib
 }:
 
-stdenv.mkDerivation rec {
-  pname = "netsurf-${libname}";
-  libname = "libnsfb";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "netsurf-libnsfb";
   version = "0.2.2";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "sha256-vkRso+tU35A/LamDEdEH11dM0R9awHE+YZFW1NGeo5o=";
+    url = "http://download.netsurf-browser.org/libs/releases/libnsfb-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-vkRso+tU35A/LamDEdEH11dM0R9awHE+YZFW1NGeo5o=";
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ SDL buildsystem ];
 
   makeFlags = [
@@ -22,11 +26,10 @@ stdenv.mkDerivation rec {
     "TARGET=${uilib}"
   ];
 
-  meta = with lib; {
-    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
+  meta = {
+    homepage = "https://www.netsurf-browser.org/projects/libnsfb/";
     description = "Netsurf framebuffer abstraction library";
-    license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    inherit (buildsystem.meta) maintainers platforms;
   };
-}
+})

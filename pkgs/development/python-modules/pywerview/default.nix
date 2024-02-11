@@ -9,21 +9,26 @@
 , pyasn1
 , pycryptodome
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pywerview";
-  version = "0.5.1";
-  format = "setuptools";
+  version = "0.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "the-useless-one";
-    repo = pname;
+    repo ="pywerview";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0vL1kMg4XRFq1CWR/2x5YYyfjm8YzjJaXkezehsT4hg=";
+    hash = "sha256-WZE6qWq9v4A78YELMEcbgyufBRrVFRTqlhGmknpKn1Y=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p
+#!nix-shell -i python3 -p python3
 
 import collections.abc
 import fileinput
@@ -39,6 +39,25 @@ def remove(attr):
                     in_attr = False
             else:
                 if re.fullmatch(rf'  (?:{safe_attr}|"{safe_attr}") = nodeEnv\.buildNodePackage \{{\n', line):
+                    in_attr = True
+                else:
+                    sys.stdout.write(line)
+
+    with fileinput.input(os.path.join(os.path.dirname(__file__), 'main-programs.nix'), inplace=1) as main_programs:
+        safe_attr = re.escape(attr)
+        for line in main_programs:
+            if not re.fullmatch(rf'  "?{safe_attr}"? = ".*";\n', line):
+                sys.stdout.write(line)
+
+    with fileinput.input(os.path.join(os.path.dirname(__file__), 'overrides.nix'), inplace=1) as overrides:
+        safe_attr = re.escape(attr)
+        in_attr = False
+        for line in overrides:
+            if in_attr:
+                if re.fullmatch(r'  \}\)?;\n', line):
+                    in_attr = False
+            else:
+                if re.fullmatch(rf'  (?:{safe_attr}|"{safe_attr}") = .* \{{\n', line):
                     in_attr = True
                 else:
                     sys.stdout.write(line)

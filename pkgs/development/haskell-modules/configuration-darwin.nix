@@ -35,7 +35,6 @@ self: super: ({
   double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
 
   streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
-  streamly_0_9_0 = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly_0_9_0;
 
   apecs-physics = addPkgconfigDepends [
     darwin.apple_sdk.frameworks.ApplicationServices
@@ -123,6 +122,14 @@ self: super: ({
     # run tests that access localhost.
     __darwinAllowLocalNetworking = true;
   });
+
+  hidapi =
+    addExtraLibraries [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.CoreFoundation
+    ]
+    (super.hidapi.override { systemd = null; });
 
   hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
@@ -301,6 +308,15 @@ self: super: ({
     '' + drv.postPatch or "";
   }) super.foldl;
 
+  # https://hydra.nixos.org/build/230964714/nixlog/1
+  inline-c-cpp = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/fpco/inline-c/commit/e8dc553b13bb847409fdced649a6a863323cff8a.patch";
+    name = "revert-use-system-cxx-std-lib.patch";
+    sha256 = "sha256-ql1/+8bvmWexyCdFR0VS4M4cY2lD0Px/9dHYLqlKyNA=";
+    revert = true;
+    stripLen = 1;
+  }) super.inline-c-cpp;
+
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87
@@ -329,7 +345,7 @@ self: super: ({
   }) (disableCabalFlag "fixity-th" super.fourmolu);
 
   # https://github.com/NixOS/nixpkgs/issues/149692
-  Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
+  Agda = disableCabalFlag "optimise-heavily" super.Agda;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

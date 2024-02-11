@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, which }:
+{ lib, stdenv, fetchFromGitHub, which, squawk }:
 
 stdenv.mkDerivation rec {
   pname = "libpg_query";
-  version = "15-4.2.1";
+  version = "16-5.1.0";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
     rev = version;
-    hash = "sha256-wbWW2r8Ai4Y+JBI5DbMuVx326bAxmEgQlTd6nnzqDXw=";
+    hash = "sha256-X48wjKdgkAc4wUubQ5ip1zZYiCKzQJyQTgGvO/pOY3I=";
   };
 
   nativeBuildInputs = [ which ];
@@ -24,10 +24,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+  passthru.tests = {
+    inherit squawk;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/pganalyze/libpg_query";
     description = "C library for accessing the PostgreSQL parser outside of the server environment";
-    changelog = "https://github.com/pganalyze/libpg_query/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pganalyze/libpg_query/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.marsam ];

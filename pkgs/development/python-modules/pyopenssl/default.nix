@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "23.1.1";
+  version = "23.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
+    hash = "sha256-ayy6XMRugidQ7D5age4SgZhQsRMDYw1XXpgQigecKxI=";
   };
 
   outputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # remove cryptography pin
-    sed "/cryptography/ s/,<[0-9]*//g" setup.py
+    sed -i "/cryptography/ s/,<[0-9]*//g" setup.py
   '';
 
   propagatedBuildInputs = [
@@ -95,6 +95,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyca/pyopenssl";
     changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

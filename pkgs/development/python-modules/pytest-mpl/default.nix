@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "pytest-mpl";
   version = "0.16.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,8 +27,6 @@ buildPythonPackage rec {
   buildInputs = [
     pytest
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION=version;
 
   propagatedBuildInputs = [
     jinja2
@@ -63,6 +62,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to help with testing figures output from Matplotlib";
     homepage = "https://github.com/matplotlib/pytest-mpl";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

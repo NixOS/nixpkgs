@@ -72,7 +72,7 @@ let
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };
@@ -174,8 +174,8 @@ let
       darwin = pkgs.darwin.basic_cmds;
     };
     xxd = {
-      linux = pkgs.vim;
-      darwin = pkgs.vim;
+      linux = pkgs.vim.xxd;
+      darwin = pkgs.vim.xxd;
     };
   };
 
