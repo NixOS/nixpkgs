@@ -76,7 +76,7 @@ in
         These settings will override settings made by the module config.
       '';
       default = { };
-      type =  types.submodule {
+      type = types.submodule {
         freeformType = format.type;
         options = {
           #region Readonly settings - these settings are not configurable
@@ -99,7 +99,13 @@ in
               `pantalaimon` settings (enables E2E Encryption support).
               This property is read-only, please configure `services.draupnir.pantalaimon` instead!
             '';
-            type =  types.submodule {
+            default = if cfg.pantalaimon.enable then {
+              use = true;
+              username = cfg.pantalaimon.username;
+            } else {
+              use = false;
+            };
+            type = types.submodule {
               freeformType = format.type;
               options = {
                 use = mkOption {
