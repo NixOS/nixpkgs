@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "nightly-2024-02-09";
+  version = "0-unstable-2024-02-09";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
@@ -35,17 +35,17 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp ols $out/bin
+    install -Dm755 ols -o $out/bin/
     wrapProgram $out/bin/ols --set-default ODIN_ROOT ${odin}/share
 
     runHook postInstall
   '';
 
   meta = with lib; {
+    inherit (odin.meta) platforms;
     description = "Language server for the Odin programming language";
     homepage = "https://github.com/DanielGavin/ols";
     license = licenses.mit;
     maintainers = with maintainers; [ astavie znaniye ];
-    platforms = odin.meta.platforms;
   };
 }
