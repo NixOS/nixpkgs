@@ -28,6 +28,8 @@ builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: 
   };
 }) {
   calico-apiserver = {
+    # integration tests require network
+    doCheck = false;
     mainProgram = "apiserver";
     subPackages = [
       "apiserver/cmd/..."
@@ -42,6 +44,8 @@ builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: 
     ];
   };
   calico-cni-plugin = {
+    # integration tests require network
+    doCheck = false;
     mainProgram = "calico";
     subPackages = [
       "cni-plugin/cmd/..."
@@ -64,16 +68,22 @@ builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: 
     ];
   };
   calico-typha = {
+    # integration tests require network
+    doCheck = false;
     subPackages = [
       "typha/cmd/..."
     ];
   };
   calicoctl = {
+    # integration tests require network
+    doCheck = false;
     subPackages = [
       "calicoctl/calicoctl"
     ];
   };
   confd-calico = {
+    # integration tests require network
+    doCheck = false;
     mainProgram = "confd";
     subPackages = [
       "confd"
