@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "sesh";
-  version = "be2badd29206f66803b76b62b23f6f5e05befe08";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "joshmedeski";
