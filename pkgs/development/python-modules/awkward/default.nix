@@ -1,4 +1,5 @@
 { lib
+, fsspec
 , stdenv
 , buildPythonPackage
 , pythonOlder
@@ -10,7 +11,6 @@
 , numpy
 , packaging
 , typing-extensions
-, fsspec
 , jax
 , jaxlib
 , numba
@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     awkward-cpp
+    fsspec
     importlib-metadata
     numpy
     packaging
