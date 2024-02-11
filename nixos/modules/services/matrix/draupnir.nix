@@ -11,7 +11,7 @@ in
   options.services.draupnir = {
     enable = lib.mkEnableOption ("Draupnir, a moderation tool for Matrix");
 
-    accessTokenFile = mkOption {
+    accessTokenFile = lib.mkOption {
       type = with types; nullOr path;
       default = null;
       description = ''
@@ -20,7 +20,7 @@ in
     };
 
     #region Pantalaimon options
-    pantalaimon = mkOption {
+    pantalaimon = lib.mkOption {
       description = ''
         `pantalaimon` options (enables E2E Encryption support).
 
@@ -35,21 +35,21 @@ in
             used instead. The access token of the bot will be stored in /var/lib/draupnir.
           '');
 
-          homeserver = mkOption {
+          homeserver = lib.mkOption {
             type = types.str;
             description = ''
               Account name on the Matrix homeserver.
             '';
           };
 
-          username = mkOption {
+          username = lib.mkOption {
             type = types.str;
             description = ''
               Account name on the Matrix homeserver.
             '';
           };
 
-          passwordFile = mkOption {
+          passwordFile = lib.mkOption {
             type = with types; nullOr path;
             default = null;
             description = ''
@@ -57,7 +57,7 @@ in
             '';
           };
 
-          options = mkOption {
+          options = lib.mkOption {
             type = types.submodule (import ./pantalaimon-options.nix);
             default = { };
             description = ''
@@ -70,7 +70,7 @@ in
     #endregion
 
     #region Draupnir settings
-    settings = mkOption {
+    settings = lib.mkOption {
       example = literalExpression ''
         {
           autojoinOnlyIfManager = true;
@@ -86,7 +86,7 @@ in
         freeformType = format.type;
         options = {
           #region Readonly settings - these settings are not configurable
-          dataPath = mkOption {
+          dataPath = lib.mkOption {
             type = types.str;
             default = "/var/lib/draupnir";
             readOnly = true;
@@ -99,7 +99,7 @@ in
             '';
           };
 
-          pantalaimon = mkOption {
+          pantalaimon = lib.mkOption {
             readOnly = true;
             description = ''
               `pantalaimon` settings (enables E2E Encryption support).
@@ -109,7 +109,7 @@ in
             type = types.submodule {
               freeformType = format.type;
               options = {
-                use = mkOption {
+                use = lib.mkOption {
                   type = types.bool;
                   default = if cfg.pantalaimon.enable then true else false;
                   readOnly = true;
@@ -117,7 +117,7 @@ in
                     Whether to use `pantalaimon` for E2E encryption. Enabled if `services.draupnir.pantalaimon.enable` is `true`.
                   '';
                 };
-                username = mkOption {
+                username = lib.mkOption {
                   type = types.str;
                   default = cfg.pantalaimon.username;
                   readOnly = true;
@@ -131,7 +131,7 @@ in
           #endregion
 
           #region Base settings
-          homeserverUrl = mkOption {
+          homeserverUrl = lib.mkOption {
             type = types.str;
             default = if cfg.pantalaimon.enable 
               then "http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${toString config.services.pantalaimon-headless.instances."draupnir".listenPort}/"
@@ -147,7 +147,7 @@ in
           #endregion
 
           #region Common settings
-          autojoinOnlyIfManager = mkOption {
+          autojoinOnlyIfManager = lib.mkOption {
             type = types.bool;
             default = false;
             description = ''
@@ -155,14 +155,14 @@ in
             '';
           };
 
-          automaticallyRedactForReasons = mkOption {
+          automaticallyRedactForReasons = lib.mkOption {
             type = types.listOf types.str;
             default = [ ];
             description = ''
               A list of reasons for which the bot will automatically redact messages.
             '';
           };
-          managementRoom = mkOption {
+          managementRoom = lib.mkOption {
             type = types.str;
             default = "#moderators:example.org";
             description = ''
@@ -175,7 +175,7 @@ in
             '';
           };
 
-          protectedRooms = mkOption {
+          protectedRooms = lib.mkOption {
             type = types.listOf types.str;
             default = [ ];
             example = literalExpression ''
