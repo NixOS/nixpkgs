@@ -10,7 +10,6 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
-, pythonRelaxDepsHook
 , redis
 , starlette
 }:
@@ -18,29 +17,19 @@
 buildPythonPackage rec {
   pname = "slowapi";
   version = "0.1.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laurentS";
-    repo = pname;
+    repo = "slowapi";
     rev = "refs/tags/v${version}";
     hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
   };
 
-  pythonRelaxDeps = [
-    "limits"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '["redis^3.4.1"]' '["redis"]'
-  '';
-
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
