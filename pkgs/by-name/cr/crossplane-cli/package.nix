@@ -27,6 +27,10 @@ buildGoModule rec {
 
   subPackages = [ "cmd/crank" ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
   postInstall = ''
     mv $out/bin/crank $out/bin/crossplane
   '';
