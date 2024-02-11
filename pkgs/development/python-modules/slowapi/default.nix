@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.8";
+  version = "0.1.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "laurentS";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xgHz8b95SXf/GwzKPfQ/RHbUNJfCx6+7a2HB8+6hjsw=";
+    hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
   };
 
   pythonRelaxDeps = [
