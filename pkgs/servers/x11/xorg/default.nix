@@ -1756,19 +1756,18 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, hwdata, zlib, testers }: stdenv.mkDerivation (finalAttrs: {
+  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libpciaccess";
-    version = "0.17";
+    version = "0.18";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libpciaccess-0.17.tar.xz";
-      sha256 = "0wsvv5d05maqbidvnavka7n0fnql55m4jix5wwlk14blr6ikna3l";
+      url = "mirror://xorg/individual/lib/libpciaccess-0.18.tar.xz";
+      sha256 = "1ab2qbksf15jrpzd6x9ncri64d2bnhlw7aajdws58lj9gljv0qal";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ hwdata zlib ];
-    configureFlags = [ "--with-pciids-path=${hwdata}/share/hwdata" ];
+    buildInputs = [ ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ "pciaccess" ];
