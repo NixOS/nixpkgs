@@ -35,13 +35,6 @@ in
             used instead. The access token of the bot will be stored in /var/lib/draupnir.
           '');
 
-          homeserver = lib.mkOption {
-            type = lib.types.str;
-            description = ''
-              Account name on the Matrix homeserver.
-            '';
-          };
-
           username = lib.mkOption {
             type = lib.types.str;
             description = ''
@@ -215,9 +208,7 @@ in
     ];
 
     services.pantalaimon-headless.instances."draupnir" = lib.mkIf cfg.pantalaimon.enable
-      {
-        homeserver = cfg.pantalaimon.homeserverUrl;
-      } // cfg.pantalaimon.options;
+      {} // cfg.pantalaimon.options;
 
     systemd.services.draupnir = {
       description = "Draupnir - a moderation tool for Matrix";
