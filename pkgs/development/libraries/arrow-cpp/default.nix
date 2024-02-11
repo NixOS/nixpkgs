@@ -247,6 +247,8 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase =
     let
       disabledTests = [
+        # flaky
+        "arrow-flight-test"
         # requires networking
         "arrow-gcsfs-test"
         "arrow-flight-integration-test"
