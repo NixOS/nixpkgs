@@ -110,5 +110,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ iwanb ];
     platforms = platforms.linux;
+    mainProgram = "transcribe";
   };
 }

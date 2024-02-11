@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/natesales/q";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.das_j ];
+    mainProgram = "q";
   };
 }

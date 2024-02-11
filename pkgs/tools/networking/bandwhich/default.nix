@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne figsoda ];
     platforms = platforms.unix;
+    mainProgram = "bandwhich";
   };
 }

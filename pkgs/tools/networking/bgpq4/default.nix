@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ vincentbernat ];
     platforms = with platforms; unix;
+    mainProgram = "bgpq4";
   };
 }

@@ -62,5 +62,6 @@ buildGoModule rec {
     changelog = "https://github.com/F1bonacc1/process-compose/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ thenonameguy ];
+    mainProgram = "process-compose";
   };
 }

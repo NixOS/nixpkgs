@@ -39,5 +39,6 @@ buildGoModule rec {
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ roberth ];
+    mainProgram = "ghostunnel";
   };
 }

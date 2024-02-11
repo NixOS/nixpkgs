@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ doriath ];
     platforms = platforms.linux;
+    mainProgram = "grpc_cli";
   };
 }

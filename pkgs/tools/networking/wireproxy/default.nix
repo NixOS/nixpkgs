@@ -35,5 +35,6 @@ buildGo120Module rec {
     homepage = "https://github.com/octeep/wireproxy";
     license = licenses.isc;
     maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    mainProgram = "wireproxy";
   };
 }

@@ -47,5 +47,6 @@ rustPlatform.buildRustPackage rec {
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ totoroot tuxinaut ];
+    mainProgram = "lychee";
   };
 }

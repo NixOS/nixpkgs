@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nelsonjchen/speedtest-rs/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ GaetanLepage ];
+    mainProgram = "speedtest-rs";
   };
 }

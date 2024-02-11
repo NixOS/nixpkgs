@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;
+    mainProgram = "aardvark-dns";
   };
 }
