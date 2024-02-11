@@ -92,7 +92,7 @@ let
     luarocks
   ];
 
-  inherit doCheck extraVariables rockspecFilename knownRockspec externalDeps nativeCheckInputs;
+  inherit doCheck extraConfig extraVariables rockspecFilename knownRockspec externalDeps nativeCheckInputs;
 
   buildInputs = let
     # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
@@ -131,7 +131,7 @@ let
     in
       ''
       ${generatedConfig}
-      ${extraConfig}
+      ${self.extraConfig}
       '';
 
   configurePhase = ''
