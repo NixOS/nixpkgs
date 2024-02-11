@@ -16,13 +16,6 @@ let
     hash = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
   };
 
-  tinydir = fetchFromGitHub {
-    owner = "cxong";
-    repo = "tinydir";
-    rev = "1.2.5";
-    hash = "sha256-qQhvLzpCYMAafBNRWlY5yklHrILM8BYD+xxF0l17+do=";
-  };
-
   # https://github.com/draios/sysdig/blob/0.35.1/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
@@ -94,7 +87,6 @@ stdenv.mkDerivation rec {
     "-DUSE_BUNDLED_JSONCPP=OFF"
     "-DCREATE_TEST_TARGETS=OFF"
     "-DVALIJSON_INCLUDE=${valijson}/include"
-    "-DTINYDIR_INCLUDE=${tinydir}"
     "-DUTHASH_INCLUDE=${uthash}/include"
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
