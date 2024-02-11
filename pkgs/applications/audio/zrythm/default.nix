@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchFromSourcehut
+, fetchFromGitLab
 , SDL2
 , alsa-lib
 , appstream
@@ -60,6 +60,7 @@
 , serd
 , sord
 , sox
+, soxr
 , sratom
 , texi2html
 , vamp-plugin-sdk
@@ -71,30 +72,30 @@
 }:
 
 let
-  # As of zrythm-1.0.0-beta.4.5.62, Zrythm needs clap
-  # https://github.com/falktx/carla/tree/main/source/includes/clap, which is
-  # only available on Carla unstable as of 2023-02-24.
+  # Error: Dependency carla-host-plugin found: NO found 2.5.6 but need: '>=2.6.0'
+  # So we need Carla unstable
   carla-unstable = carla.overrideAttrs (oldAttrs: rec {
     pname = "carla";
-    version = "unstable-2023-05-12";
+    version = "unstable-2023-08-27";
 
     src = fetchFromGitHub {
       owner = "falkTX";
       repo = pname;
-      rev = "0175570f1d41285f39efe0ee32234458e0ed941c";
-      hash = "sha256-yfVzZV8G4AUDM8+yS9finzobpOb1PUEPgBWFhEY4nFQ=";
+      rev = "be784fcbe29f9f7eb52298023dcbdb11c0b8604a";
+      hash = "sha256-3TIXGvZpfZD4AmsRIEDd3BpeMusL9NTSVtPfs3ng6eY=";
     };
   });
 in
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-beta.4.9.1";
+  version = "1.0.0-beta.4.12.5";
 
-  src = fetchFromSourcehut {
-    owner = "~alextee";
+  src = fetchFromGitLab {
+    domain = "gitlab.zrythm.org";
+    owner = "zrythm";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-U3IUqNbHu20uyWfkTsLOOlUZjcUL4QdHilB3srSsebw=";
+    hash = "sha256-Ldj9qQxHewM3ecbf9AQ8VUkreJdi6MCv7KwrT2xpqKc=";
   };
 
   nativeBuildInputs = [
@@ -162,6 +163,7 @@ stdenv.mkDerivation rec {
     serd
     sord
     sox
+    soxr
     sratom
     vamp-plugin-sdk
     xdg-utils
