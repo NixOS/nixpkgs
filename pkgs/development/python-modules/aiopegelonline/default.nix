@@ -6,12 +6,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiopegelonline";
   version = "0.0.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-Z/3IF5AwiNB+h8wug+57OVdLpFxGoiUe2xG4euHT1Bw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
