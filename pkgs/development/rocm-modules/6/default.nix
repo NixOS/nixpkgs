@@ -249,7 +249,7 @@ in rec {
   };
 
   miopen = callPackage ./miopen {
-    inherit rocmUpdateScript rocm-cmake rocblas clang-ocl composable_kernel rocm-comgr clr rocm-docs-core half;
+    inherit rocmUpdateScript rocm-cmake rocblas clang-ocl composable_kernel rocm-comgr clr rocm-docs-core half roctracer;
     inherit (llvm) clang-tools-extra;
     stdenv = llvm.rocmClangStdenv;
     rocmlir = rocmlir-rock;
