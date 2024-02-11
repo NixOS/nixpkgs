@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bx-python";
-  version = "0.10.0";
+  version = "0.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bxlab";
     repo = "bx-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j2GKj2IGDBk4LBnISRx6ZW/lh5VSdQBasC0gCRj0Fiw=";
+    hash = "sha256-evhxh/cCZFSK6EgMu7fC9/ZrPd2S1fZz89ItGYrHQck=";
   };
 
   nativeBuildInputs = [
