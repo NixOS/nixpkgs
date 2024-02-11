@@ -185,6 +185,19 @@ in
           can be loaded using "nft -f".  The ruleset is updated atomically.
         '';
     };
+
+    networking.nftables.flattenRulesetFile = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Use `builtins.readFile` rather than `include` to handle {option}`networking.nftables.rulesetFile`. It is useful when you want to apply {option}`networking.nftables.preCheckRuleset` to {option}`networking.nftables.rulesetFile`.
+
+        ::: {.note}
+        It is expected that {option}`networking.nftables.rulesetFile` can be accessed from the build sandbox.
+        :::
+      '';
+    };
+
     networking.nftables.tables = mkOption {
       type = types.attrsOf (types.submodule tableSubmodule);
 
@@ -295,9 +308,13 @@ in
               }
             '') enabledTables)}
             ${cfg.ruleset}
-            ${lib.optionalString (cfg.rulesetFile != null) ''
-              include "${cfg.rulesetFile}"
-            ''}
+            ${if cfg.rulesetFile != null then
+              if cfg.flattenRulesetFile then
+                builtins.readFile cfg.rulesetFile
+                else ''
+                  include "${cfg.rulesetFile}"
+                ''
+              else ""}
           '';
           checkPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf

@@ -485,7 +485,7 @@ in python.pkgs.buildPythonApplication rec {
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
     # Follow symlinks in /var/lib/hass/www
-    ./patches/static-symlinks.patch
+    ./patches/static-follow-symlinks.patch
 
     # Patch path to ffmpeg binary
     (substituteAll {

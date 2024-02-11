@@ -738,7 +738,7 @@ in
             See the [QEMU Wiki on Networking](https://wiki.qemu.org/Documentation/Networking) for details.
 
             If you override this option, be advised to keep
-            ''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} (as seen in the example)
+            `''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}` (as seen in the example)
             to keep the default runtime behaviour.
           '';
         };
@@ -813,14 +813,19 @@ in
           defaultText = "!cfg.useBootLoader";
           description =
             lib.mdDoc ''
-              If enabled, the virtual machine will boot directly into the kernel instead of through a bootloader. Other relevant parameters such as the initrd are also passed to QEMU.
+              If enabled, the virtual machine will boot directly into the kernel instead of through a bootloader.
+              Read more about this feature in the [QEMU documentation on Direct Linux Boot](https://qemu-project.gitlab.io/qemu/system/linuxboot.html)
 
+              This is enabled by default.
               If you want to test netboot, consider disabling this option.
+              Enable a bootloader with {option}`virtualisation.useBootLoader` if you need.
 
-              This will not boot / reboot correctly into a system that has switched to a different configuration on disk.
+              Relevant parameters such as those set in `boot.initrd` and `boot.kernelParams` are also passed to QEMU.
+              Additional parameters can be supplied on invocation through the environment variable `$QEMU_KERNEL_PARAMS`.
+              They are added to the `-append` option, see [QEMU User Documentation](https://www.qemu.org/docs/master/system/qemu-manpage) for details
+              For example, to let QEMU use the parent terminal as the serial console, set `QEMU_KERNEL_PARAMS="console=ttyS0"`.
 
-              This is enabled by default if you don't enable bootloaders, but you can still enable a bootloader if you need.
-              Read more about this feature: <https://qemu-project.gitlab.io/qemu/system/linuxboot.html>.
+              This will not (re-)boot correctly into a system that has switched to a different configuration on disk.
             '';
         };
       initrd =
@@ -850,6 +855,8 @@ in
 
             If disabled, the kernel and initrd are directly booted,
             forgoing any bootloader.
+
+            Check the documentation on {option}`virtualisation.directBoot.enable` for details.
           '';
       };
 

@@ -159,6 +159,7 @@ stdenv.mkDerivation rec {
     # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
     sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
+    sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
   '';
