@@ -1,8 +1,36 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
-with lib;
 
 let
+  inherit (lib)
+    attrNames
+    concatMapStrings
+    concatMapStringsSep
+    concatStrings
+    concatStringsSep
+    elem
+    filter
+    flip
+    hasAttr
+    hasPrefix
+    isAttrs
+    isBool
+    isDerivation
+    isList
+    mapAttrsToList
+    mkChangedOptionModule
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    optionals
+    types
+  ;
+
+  inherit (utils)
+    escapeSystemdExecArgs
+  ;
+
   cfg = config.services.knot;
 
   yamlConfig = let
@@ -141,7 +169,7 @@ let
 in {
   options = {
     services.knot = {
-      enable = mkEnableOption (lib.mdDoc "Knot authoritative-only DNS server");
+      enable = mkEnableOption "Knot authoritative-only DNS server";
 
       enableXDP = mkOption {
         type = types.bool;
@@ -179,7 +207,7 @@ in {
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of additional command line parameters for knotd
         '';
       };
@@ -187,7 +215,7 @@ in {
       keyFiles = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           A list of files containing additional configuration
           to be included using the include directive. This option
           allows to include configuration like TSIG keys without
@@ -200,7 +228,7 @@ in {
       settings = mkOption {
         type = types.attrs;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration as nix values.
         '';
       };
@@ -208,7 +236,7 @@ in {
       settingsFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           As alternative to ``settings``, you can provide whole configuration
           directly in the almost-YAML format of Knot DNS.
           You might want to utilize ``pkgs.writeText "knot.conf" "longConfigString"`` for this.
@@ -254,8 +282,14 @@ in {
         ];
       in {
         Type = "notify";
-        ExecStart = "${cfg.package}/bin/knotd --config=${configFile} --socket=${socketFile} ${concatStringsSep " " cfg.extraArgs}";
-        ExecReload = "${knot-cli-wrappers}/bin/knotc reload";
+        ExecStart = escapeSystemdExecArgs ([
+          (lib.getExe cfg.package)
+          "--config=${configFile}"
+          "--socket=${socketFile}"
+        ] ++ cfg.extraArgs);
+        ExecReload = escapeSystemdExecArgs [
+          "${knot-cli-wrappers}/bin/knotc" "reload"
+        ];
         User = "knot";
         Group = "knot";
 
@@ -289,7 +323,7 @@ in {
           "AF_INET"
           "AF_INET6"
           "AF_UNIX"
-        ] ++ lib.optionals (cfg.enableXDP) [
+        ] ++ optionals (cfg.enableXDP) [
           "AF_NETLINK"
           "AF_XDP"
         ];
