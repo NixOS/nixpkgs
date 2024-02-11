@@ -65,6 +65,7 @@ in buildGoModule rec {
     "log"
     "secrets"
     "zlib"
+    "kubeapiserver"
   ]
   ++ lib.optionals withSystemd [ "systemd" ]
   ++ extraTags;
