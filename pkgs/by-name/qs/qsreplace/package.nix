@@ -1,13 +1,11 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "qsreplace";
   version = "0.0.3";
-
-  goPackagePath = "github.com/tomnomnom/qsreplace";
 
   src = fetchFromGitHub {
     owner = "tomnomnom";
@@ -15,6 +13,10 @@ buildGoPackage rec {
     rev = "v${version}";
     hash = "sha256-j9bqO2gp4RUxZHGBCIxI5nA3nD1dG4nCpJ1i4TM/fbo=";
   };
+
+  vendorHash = null;
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/tomnomnom/qsreplace";

@@ -6,12 +6,13 @@
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aioecowitt";
-  version = "2024.2.0";
-  format = "setuptools";
+  version = "2024.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -19,8 +20,12 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vKpzD6m0zG8yAghmoNKcufqoJUYOTxN3w+ix1ObuLpw=";
+    hash = "sha256-PBV5jk0oItelCDFZsk8et0raIGEWxOaNdHuAViQ6LZc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

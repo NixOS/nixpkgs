@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "21.0.1";
+  version = "21.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HPnyFHHx1BahqzvRChT85BaG4eJM3qvTq2Tpbqb3SDI=";
+    hash = "sha256-uNVf0wnqVntjTxkNTilvb0v6h3VBCjd91wbLQJ6q71g=";
   };
 
   nativeBuildInputs = [
