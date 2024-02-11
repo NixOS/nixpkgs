@@ -94,28 +94,30 @@ in
           };
 
           pantalaimon = mkOption {
-            freeformType = format.type;
             readOnly = true;
             description = lib.mdDoc ''
               `pantalaimon` settings (enables E2E Encryption support).
               This property is read-only, please configure `services.draupnir.pantalaimon` instead!
             '';
-            options = {
-              use = mkOption {
-                type = types.bool;
-                default = if cfg.pantalaimon.enable then true else false;
-                readOnly = true;
-                description = lib.mdDoc ''
-                  Whether to use `pantalaimon` for E2E encryption. Enabled if `services.draupnir.pantalaimon.enable` is `true`.
-                '';
-              };
-              username = mkOption {
-                type = types.str;
-                default = cfg.pantalaimon.username;
-                readOnly = true;
-                description = lib.mdDoc ''
-                  Account name on the Matrix homeserver. Configured in `services.draupnir.pantalaimon.username`.
-                '';
+            type =  types.submodule {
+              freeformType = format.type;
+              options = {
+                use = mkOption {
+                  type = types.bool;
+                  default = if cfg.pantalaimon.enable then true else false;
+                  readOnly = true;
+                  description = lib.mdDoc ''
+                    Whether to use `pantalaimon` for E2E encryption. Enabled if `services.draupnir.pantalaimon.enable` is `true`.
+                  '';
+                };
+                username = mkOption {
+                  type = types.str;
+                  default = cfg.pantalaimon.username;
+                  readOnly = true;
+                  description = lib.mdDoc ''
+                    Account name on the Matrix homeserver. Configured in `services.draupnir.pantalaimon.username`.
+                  '';
+                };
               };
             };
           };
