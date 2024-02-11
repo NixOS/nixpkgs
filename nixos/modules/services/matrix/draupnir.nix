@@ -215,10 +215,7 @@ in
       }
     ];
 
-    services.pantalaimon-headless.instances."draupnir" = mkIf cfg.pantalaimon.enable
-      {
-        homeserver = cfg.pantalaimon.homeserverUrl;
-      } // cfg.pantalaimon.options;
+    services.pantalaimon-headless.instances."draupnir" = mkIf cfg.pantalaimon.enable cfg.pantalaimon.options;
 
     systemd.services.draupnir = {
       description = "Draupnir - a moderation tool for Matrix";
