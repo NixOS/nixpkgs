@@ -379,17 +379,9 @@ in
       in ''
         ${optionalString (!isMariaDB) ''
           # Wait until the MySQL server is available for use
-          count=0
           while [ ! -e /run/mysqld/mysqld.sock ]
           do
-              if [ $count -eq 30 ]
-              then
-                  echo "Tried 30 times, giving up..."
-                  exit 1
-              fi
-
               echo "MySQL daemon not yet started. Waiting for 1 second..."
-              count=$((count++))
               sleep 1
           done
         ''}
