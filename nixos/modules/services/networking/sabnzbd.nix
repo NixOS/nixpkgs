@@ -51,17 +51,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    users.users.sabnzbd = {
-          uid = config.ids.uids.sabnzbd;
-          group = "sabnzbd";
-          description = "sabnzbd user";
-          home = "/var/lib/sabnzbd/";
-          createHome = true;
+    users.users = mkIf (cfg.user == "sabnzbd") {
+      sabnzbd = {
+        uid = config.ids.uids.sabnzbd;
+        group = cfg.group;
+        description = "sabnzbd user";
+      };
     };
 
-    users.groups.sabnzbd = {
-      gid = config.ids.gids.sabnzbd;
+    users.groups = mkIf (cfg.group == "sabnzbd") {
+      sabnzbd.gid = config.ids.gids.sabnzbd;
     };
 
     systemd.services.sabnzbd = {
@@ -71,8 +70,9 @@ in
         serviceConfig = {
           Type = "forking";
           GuessMainPID = "no";
-          User = "${cfg.user}";
-          Group = "${cfg.group}";
+          User = cfg.user;
+          Group = cfg.group;
+          StateDirectory = "sabnzbd";
           ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
         };
     };
