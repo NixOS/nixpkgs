@@ -5,6 +5,16 @@
 , fixDarwinDylibNames
 , autoconf
 , aws-sdk-cpp
+, aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
+    apis = [
+      "cognito-identity"
+      "config"
+      "identity-management"
+      "s3"
+      "sts"
+      "transfer"
+    ];
+  }
 , boost
 , brotli
 , c-ares
@@ -62,17 +72,6 @@ let
     repo = "parquet-testing";
     rev = "d69d979223e883faef9dc6fe3cf573087243c28a";
     hash = "sha256-CUckfNjfDW05crWigzMP5b9UynviXKGZUlIr754OoGU=";
-  };
-
-  aws-sdk-cpp-arrow = aws-sdk-cpp.override {
-    apis = [
-      "cognito-identity"
-      "config"
-      "identity-management"
-      "s3"
-      "sts"
-      "transfer"
-    ];
   };
 
 in
