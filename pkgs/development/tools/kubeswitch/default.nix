@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, kubeswitch }:
+{ lib, buildGoModule, fetchFromGitHub, testers, kubeswitch, installShellFiles }:
 
 buildGoModule rec {
   pname = "kubeswitch";
@@ -26,8 +26,14 @@ buildGoModule rec {
     package = kubeswitch;
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall = ''
-    mv $out/bin/main $out/bin/switch
+    mv $out/bin/main $out/bin/switcher
+    for shell in bash zsh fish; do
+      $out/bin/switcher --cmd switcher  completion $shell > switcher.$shell
+      installShellCompletion --$shell switcher.$shell
+    done
   '';
 
   meta = with lib; {
@@ -35,6 +41,6 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/danielfoehrKn/kubeswitch";
     maintainers = with maintainers; [ bryanasdev000 ];
-    mainProgram = "switch";
+    mainProgram = "switcher";
   };
 }
