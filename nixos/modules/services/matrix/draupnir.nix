@@ -141,7 +141,7 @@ in
             description = lib.mdDoc ''
               Base URL of the Matrix homeserver, that provides the Client-Server API.
 
-              If `pantalaimon.enable` is `true`, this option will become read only. Configure `pantalaimon.homeserver` instead in that case.
+              If `pantalaimon.enable` is `true`, this option will become read only. Configure `pantalaimon.options.homeserver` instead in that case.
               The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
             '';
           };
