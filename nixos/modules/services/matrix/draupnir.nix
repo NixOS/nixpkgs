@@ -275,6 +275,6 @@ in
 
   meta = {
     doc = ./draupnir.md;
-    maintainers = with maintainers; [ Rory ];
+    maintainers = with lib.maintainers; [ Rory ];
   };
 }
