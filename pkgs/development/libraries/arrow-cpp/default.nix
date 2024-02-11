@@ -46,6 +46,7 @@
 , which
 , zlib
 , zstd
+, testers
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
 , enableJemalloc ? !stdenv.isDarwin
@@ -267,8 +268,24 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
+    pkgConfigModules = [
+      "arrow"
+      "arrow-acero"
+      "arrow-compute"
+      "arrow-csv"
+      "arrow-dataset"
+      "arrow-filesystem"
+      "arrow-flight"
+      "arrow-flight-sql"
+      "arrow-flight-testing"
+      "arrow-json"
+      "arrow-substrait"
+      "arrow-testing"
+      "parquet"
+    ];
   };
   passthru = {
     inherit enableFlight enableJemalloc enableS3 enableGcs;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 })
