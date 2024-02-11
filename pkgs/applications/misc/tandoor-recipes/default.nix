@@ -3,6 +3,8 @@
 , python3
 , fetchFromGitHub
 , fetchpatch
+, runCommand
+, tandoor-recipes
 }:
 let
   python = python3.override {
@@ -55,6 +57,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-cors-headers
     django-crispy-forms
     django-crispy-bootstrap4
+    django-debug-toolbar
     django-hcaptcha
     django-js-reverse
     django-oauth-toolkit
@@ -150,6 +153,9 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
 
     tests = {
       inherit (nixosTests) tandoor-recipes;
+      runTandoorRecipes = runCommand "run-${pname}" {} ''
+        ${tandoor-recipes}/bin/tandoor-recipes > $out
+      '';
     };
   };
 
