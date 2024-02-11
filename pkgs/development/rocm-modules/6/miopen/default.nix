@@ -27,6 +27,7 @@
 , zlib
 , gtest
 , rocm-comgr
+, roctracer
 , python3Packages
 , buildDocs ? false # Needs internet because of rocm-docs-core
 , buildTests ? false
@@ -145,6 +146,7 @@ in stdenv.mkDerivation (finalAttrs: {
     bzip2
     nlohmann_json
     frugally-deep
+    roctracer
   ] ++ lib.optionals buildDocs [
     latex
     doxygen
