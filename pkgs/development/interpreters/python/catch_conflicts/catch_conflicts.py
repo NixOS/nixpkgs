@@ -3,22 +3,25 @@ from pathlib import Path
 import collections
 import sys
 import os
-
-
+from typing import Dict, List, Tuple
 do_abort: bool = False
-packages: dict[str, dict[str, list[dict[str, list[str]]]]] = collections.defaultdict(list)
+packages: Dict[str, Dict[str, List[Dict[str, List[str]]]]] = collections.defaultdict(list)
 out_path: Path = Path(os.getenv("out"))
-version: tuple[int, int] = sys.version_info
+version: Tuple[int, int] = sys.version_info
 site_packages_path: str = f'lib/python{version[0]}.{version[1]}/site-packages'
+
+
+def get_name(dist: PathDistribution) -> str:
+    return dist.metadata['name'].lower().replace('-', '_')
 
 
 # pretty print a package
 def describe_package(dist: PathDistribution) -> str:
-    return f"{dist._normalized_name} {dist.version} ({dist._path})"
+    return f"{get_name(dist)} {dist.version} ({dist._path})"
 
 
 # pretty print a list of parents (dependency chain)
-def describe_parents(parents: list[str]) -> str:
+def describe_parents(parents: List[str]) -> str:
     if not parents:
         return ""
     return \
@@ -27,7 +30,7 @@ def describe_parents(parents: list[str]) -> str:
 
 
 # inserts an entry into 'packages'
-def add_entry(name: str, version: str, store_path: str, parents: list[str]) -> None:
+def add_entry(name: str, version: str, store_path: str, parents: List[str]) -> None:
     if name not in packages:
         packages[name] = {}
     if store_path not in packages[name]:
@@ -39,7 +42,7 @@ def add_entry(name: str, version: str, store_path: str, parents: list[str]) -> N
 
 
 # transitively discover python dependencies and store them in 'packages'
-def find_packages(store_path: Path, site_packages_path: str, parents: list[str]) -> None:
+def find_packages(store_path: Path, site_packages_path: str, parents: List[str]) -> None:
     site_packages: Path = (store_path / site_packages_path)
     propagated_build_inputs: Path = (store_path / "nix-support/propagated-build-inputs")
 
@@ -47,12 +50,12 @@ def find_packages(store_path: Path, site_packages_path: str, parents: list[str])
     if site_packages.exists():
         for dist_info in site_packages.glob("*.dist-info"):
             dist: PathDistribution = PathDistribution(dist_info)
-            add_entry(dist._normalized_name, dist.version, store_path, parents)
+            add_entry(get_name(dist), dist.version, store_path, parents)
 
     # recursively add dependencies
     if propagated_build_inputs.exists():
         with open(propagated_build_inputs, "r") as f:
-            build_inputs: list[str] = f.read().strip().split(" ")
+            build_inputs: List[str] = f.read().strip().split(" ")
             for build_input in build_inputs:
                 find_packages(Path(build_input), site_packages_path, parents + [build_input])
 
