@@ -71,7 +71,7 @@ in
 
     #region Draupnir settings
     settings = lib.mkOption {
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           autojoinOnlyIfManager = true;
           automaticallyRedactForReasons = [ "spam" "advertising" ];
@@ -178,7 +178,7 @@ in
           protectedRooms = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = [ ];
-            example = literalExpression ''
+            example = lib.literalExpression ''
               [
                 "https://matrix.to/#/#yourroom:example.org"
                 "https://matrix.to/#/#anotherroom:example.org"
