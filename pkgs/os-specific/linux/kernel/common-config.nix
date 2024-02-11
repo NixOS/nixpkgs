@@ -590,6 +590,15 @@ let
       CRYPTO_DRBG_HASH                 = yes;
       CRYPTO_DRBG_CTR                  = yes;
 
+      # Set ARCH_MMAP_RND_{COMPAT_,}BITS to the maximum to regain ASLR entropy
+      # https://zolutal.github.io/aslrnt/
+      # https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/noble/commit/?h=master-next&id=760c2b1fa1f5e95be1117bc7b80afb8441d4b002
+      ARCH_MMAP_RND_BITS = whenAtLeast "5.18" (mkMerge (with stdenv.hostPlatform; [
+        (mkIf isAarch64 (freeform "33"))
+        (mkIf isPower64 (freeform "32"))
+        (mkIf isRiscV64 (freeform "24"))
+        (mkIf isx86_64 (freeform "32"))
+      ]));
     } // optionalAttrs stdenv.hostPlatform.isx86_64 {
       # Enable Intel SGX
       X86_SGX     = whenAtLeast "5.11" yes;
