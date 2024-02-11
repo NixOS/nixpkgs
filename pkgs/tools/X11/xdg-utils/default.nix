@@ -36,14 +36,16 @@ let
     {
       scripts = [ "bin/xdg-desktop-icon" ];
       interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ xdg-user-dirs ];
-      execer = [
+      inputs = commonDeps ++ lib.optionals (!stdenv.isDarwin) [ xdg-user-dirs ];
+      execer = lib.optionals (!stdenv.isDarwin) [
         "cannot:${xdg-user-dirs}/bin/xdg-user-dir"
       ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
       fake.external = commonFakes ++ [
         "gconftool-2"   # GNOME2
+      ] ++ lib.optionals stdenv.isDarwin [
+        "xdg-user-dir"
       ];
       keep."$KDE_SESSION_VERSION" = true;
       prologue = commonPrologue;
