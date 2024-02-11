@@ -52,6 +52,12 @@ buildGoModule rec {
     runHook postBuild
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    make test
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
     make install PREFIX="$out" PKG_FILE_DIR=$out/lib/pkgconfig PAM_MODULE_DIR=$out/etc/pam.d
