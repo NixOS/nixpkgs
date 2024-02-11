@@ -17,6 +17,7 @@
   }
 , boost
 , brotli
+, bzip2
 , c-ares
 , cmake
 , crc32c
@@ -128,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     brotli
+    bzip2
     flatbuffers
     gflags
     glog
@@ -187,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DARROW_USE_GLOG=ON"
     "-DARROW_WITH_BACKTRACE=ON"
     "-DARROW_WITH_BROTLI=ON"
+    "-DARROW_WITH_BZ2=ON"
     "-DARROW_WITH_LZ4=ON"
     "-DARROW_WITH_NLOHMANN_JSON=ON"
     "-DARROW_WITH_SNAPPY=ON"
