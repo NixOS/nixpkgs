@@ -87,6 +87,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs mlir
+    patchShebangs external/llvm-project/mlir/lib/Dialect/GPU/AmdDeviceLibsIncGen.py
 
     substituteInPlace mlir/utils/performance/common/CMakeLists.txt \
       --replace "/opt/rocm" "${clr}"
