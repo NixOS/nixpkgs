@@ -205,6 +205,19 @@ let
         echo "''${filteredPkgs[@]}"
       }
 
+      collectFlags() {
+        . $TMPDIR/buildFlagsArray
+        declare -a flags
+        flags+=($buildFlags "''${buildFlagsArray[@]}")
+        flags+=("''${tags:+-tags=''${tags// /,}}")
+        flags+=("''${ldflags:+-ldflags="$ldflags"}")
+        flags+=("-p=$NIX_BUILD_CORES")
+        for flag in "''${flags[@]}"; do
+          echo "$flag" >&2
+          echo "$flag"
+        done
+      }
+
       buildGoDirs() {
         local cmd="$1"
         shift
@@ -212,13 +225,10 @@ let
 
         read -ra pkgs < <(filterExcluded "''${pkgs[@]}")
 
-        . $TMPDIR/buildFlagsArray
-
-        declare -a flags
-        flags+=($buildFlags "''${buildFlagsArray[@]}")
-        flags+=(''${tags:+-tags=''${tags// /,}})
-        flags+=(''${ldflags:+-ldflags="$ldflags"})
-        flags+=("-p" "$NIX_BUILD_CORES")
+        read -ra flags < <(collectFlags)
+        for flag in "''${flags[@]}"; do
+          echo "$flag" >&2
+        done
 
         if [ "$cmd" = "test" ]; then
           flags+=(-vet=off)
@@ -239,17 +249,21 @@ let
       }
 
       getPackagesToBuild() {
+        read -ra flags < <(collectFlags)
         if [[ -n "$subPackages" ]]; then
           local subPkgs
           read -ra subPkgs < <(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
           go list \
               -f '{{ .Dir }}' \
-              ''${subPkgs[@]} | \
+              "''${flags[@]}" \
+              "''${subPkgs[@]}" | \
               xargs echo
         else
           # Make Go recurse all packages of the module.
           go list \
-            -f '{{ .Dir }}' ./... | \
+            -f '{{ .Dir }}' \
+            "''${flags[@]}" \
+            ./... | \
             xargs echo
         fi
       }
@@ -290,6 +304,7 @@ let
       export GOFLAGS=''${GOFLAGS//-trimpath/}
 
       getPackagesToTest() {
+        read -ra flags < <(collectFlags)
         if [[ -n "$subPackages" ]]; then
           # Find all packages belonging to this Go module that are dependencies
           # of the targeted subPackages.
@@ -297,12 +312,16 @@ let
           read -ra subPkgs < <(echo "$subPackages" | sed "s,\(^\| \),\1./,g")
           go list \
               -f '{{ if ne .Module nil }}{{ if .Module.Main }}{{ .Dir }}{{ end }}{{ end }}' \
-              -deps ''${subPkgs[@]} | \
+              -deps \
+              "''${flags[@]}" \
+              "''${subPkgs[@]}" | \
               xargs echo
         else
           # Make Go recurse all packages of the module.
           go list \
-            -f '{{ .Dir }}' ./... | \
+            -f '{{ .Dir }}' \
+            "''${flags[@]}"  \
+            ./... | \
             xargs echo
         fi
       }
@@ -328,7 +347,7 @@ let
     disallowedReferences = lib.optional (!allowGoReference) go;
 
     passthru = passthru // { inherit go goModules vendorHash; }
-                        // lib.optionalAttrs (args' ? vendorSha256 ) { inherit (args') vendorSha256; };
+      // lib.optionalAttrs (args' ? vendorSha256) { inherit (args') vendorSha256; };
 
     meta = {
       # Add default meta information
@@ -337,7 +356,9 @@ let
   });
 in
 lib.warnIf (args' ? vendorSha256) "`vendorSha256` is deprecated. Use `vendorHash` instead"
-lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+  lib.warnIf
+  (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
-lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
+  lib.warnIf
+  (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
   package
