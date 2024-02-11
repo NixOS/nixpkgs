@@ -21362,17 +21362,6 @@ with pkgs;
     patches = [];
   };
 
-  libgit2_1_6 = libgit2.overrideAttrs rec {
-    version = "1.6.5";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      hash = "sha256-2tgXnrB85dEfxu7giETqMuFxfm0RH5MicHZqO3ezGu0=";
-    };
-    patches = [ ];
-  };
-
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
 
   libhsts = callPackage ../development/libraries/libhsts { };
