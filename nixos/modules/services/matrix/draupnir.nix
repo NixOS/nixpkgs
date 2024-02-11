@@ -1,6 +1,5 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
 let
   cfg = config.services.draupnir;
 
@@ -10,19 +9,19 @@ in
 {
   #region Options
   options.services.draupnir = {
-    enable = mkEnableOption (lib.mdDoc "Draupnir, a moderation tool for Matrix");
+    enable = mkEnableOption ("Draupnir, a moderation tool for Matrix");
 
     accessTokenFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File containing the access token for Draupnir's Matrix account.
       '';
     };
 
     #region Pantalaimon options
     pantalaimon = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         `pantalaimon` options (enables E2E Encryption support).
 
         This will create a `pantalaimon` instance with the name "draupnir".
@@ -30,7 +29,7 @@ in
       default = { };
       type = types.submodule {
         options = {
-          enable = mkEnableOption (lib.mdDoc ''
+          enable = mkEnableOption (''
             pantalaimon, in order to enable E2EE support.
             If `true`, accessToken is ignored and the username/password below will be
             used instead. The access token of the bot will be stored in /var/lib/draupnir.
@@ -38,14 +37,14 @@ in
 
           homeserver = mkOption {
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               Account name on the Matrix homeserver.
             '';
           };
 
           username = mkOption {
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               Account name on the Matrix homeserver.
             '';
           };
@@ -53,7 +52,7 @@ in
           passwordFile = mkOption {
             type = with types; nullOr path;
             default = null;
-            description = lib.mdDoc ''
+            description = ''
               File containing the password for the Matrix account.
             '';
           };
@@ -61,7 +60,7 @@ in
           options = mkOption {
             type = types.submodule (import ./pantalaimon-options.nix);
             default = { };
-            description = lib.mdDoc ''
+            description = ''
               Pass through additional options to the `pantalaimon` service.
             '';
           };
@@ -78,7 +77,7 @@ in
           automaticallyRedactForReasons = [ "spam" "advertising" ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Draupnir settings (see [Draupnir's default configuration](https://github.com/the-draupnir-project/Draupnir/blob/main/config/default.yaml) for available settings).
         These settings will override settings made by the module config.
       '';
@@ -91,7 +90,7 @@ in
             type = types.str;
             default = "/var/lib/draupnir";
             readOnly = true;
-            description = lib.mdDoc ''
+            description = ''
               The path where Draupnir stores its data.
 
               ::: {.note}
@@ -102,7 +101,7 @@ in
 
           pantalaimon = mkOption {
             readOnly = true;
-            description = lib.mdDoc ''
+            description = ''
               `pantalaimon` settings (enables E2E Encryption support).
               This property is read-only, please configure `services.draupnir.pantalaimon` instead!
             '';
@@ -114,7 +113,7 @@ in
                   type = types.bool;
                   default = if cfg.pantalaimon.enable then true else false;
                   readOnly = true;
-                  description = lib.mdDoc ''
+                  description = ''
                     Whether to use `pantalaimon` for E2E encryption. Enabled if `services.draupnir.pantalaimon.enable` is `true`.
                   '';
                 };
@@ -122,7 +121,7 @@ in
                   type = types.str;
                   default = cfg.pantalaimon.username;
                   readOnly = true;
-                  description = lib.mdDoc ''
+                  description = ''
                     Account name on the Matrix homeserver. Configured in `services.draupnir.pantalaimon.username`.
                   '';
                 };
@@ -138,7 +137,7 @@ in
               then "http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${toString config.services.pantalaimon-headless.instances."draupnir".listenPort}/"
               else "https://matrix.org";
             readOnly = if cfg.pantalaimon.enable then true else false;
-            description = lib.mdDoc ''
+            description = ''
               Base URL of the Matrix homeserver, that provides the Client-Server API.
 
               If `pantalaimon.enable` is `true`, this option will become read only. Configure `pantalaimon.options.homeserver` instead in that case.
@@ -151,7 +150,7 @@ in
           autojoinOnlyIfManager = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               If `true`, the bot will only autojoin rooms if the user is a manager.
             '';
           };
@@ -159,14 +158,14 @@ in
           automaticallyRedactForReasons = mkOption {
             type = types.listOf types.str;
             default = [ ];
-            description = lib.mdDoc ''
+            description = ''
               A list of reasons for which the bot will automatically redact messages.
             '';
           };
           managementRoom = mkOption {
             type = types.str;
             default = "#moderators:example.org";
-            description = lib.mdDoc ''
+            description = ''
               The room ID or alias where moderators can use the bot's functionality.
 
               The bot has no access controls, so anyone in this room can use the bot - secure this room!
@@ -185,7 +184,7 @@ in
                 "https://matrix.to/#/#anotherroom:example.org"
               ]
             '';
-            description = lib.mdDoc ''
+            description = ''
               A list of rooms to protect (matrix.to URLs).
               These can also be configured interactively.
             '';
@@ -215,7 +214,10 @@ in
       }
     ];
 
-    services.pantalaimon-headless.instances."draupnir" = mkIf cfg.pantalaimon.enable cfg.pantalaimon.options;
+    services.pantalaimon-headless.instances."draupnir" = mkIf cfg.pantalaimon.enable
+      {
+        homeserver = cfg.pantalaimon.homeserverUrl;
+      } // cfg.pantalaimon.options;
 
     systemd.services.draupnir = {
       description = "Draupnir - a moderation tool for Matrix";
