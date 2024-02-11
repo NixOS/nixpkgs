@@ -25,15 +25,12 @@ ocamlPackages.buildDunePackage rec {
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
-      Interactive grep, but word/token/phrase based rather than regex
-      and line based, so you can search across multiple lines (simlar to
-      Recoll but TUI).
-      Aims to provide a good UX via text editor and PDF viewer integration.
-      When opening a text file, Docfd opens file at first line of search
-      result. If PDF, then Docfd opens file at first page of the search
-      result and starts a text search of the most unique word of the matched
-      phrase within the same page.
-      Main intended use case: navigating directories of notes and PDFs.
+      TUI multiline fuzzy document finder.
+      Think interactive grep for both text files and PDFs, but word/token based
+      instead of regex and line based, so you can search across lines easily.
+      Docfd aims to provide good UX via integration with common text editors
+      and PDF viewers, so you can jump directly to a search result with a
+      single key press.
     '';
     homepage = "https://github.com/darrenldl/docfd";
     license = licenses.mit;
