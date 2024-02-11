@@ -1,6 +1,6 @@
 { version, hash, extraPatches ? [] }:
 
-{ lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, yasm
 
 , ffmpegVariant ? "small" # Decides which dependencies are enabled by default
 
@@ -577,7 +577,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
+  nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config texinfo yasm ]
   ++ optionals withCudaLLVM [ clang ];
 
   buildInputs = optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
@@ -703,10 +703,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # See the explanation in addDriverRunpath.
   postFixup = optionalString (stdenv.isLinux && withLib) ''
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
   '';
 
   enableParallelBuilding = true;

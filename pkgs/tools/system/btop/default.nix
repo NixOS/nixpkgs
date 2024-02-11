@@ -8,7 +8,7 @@
 , btop
 , testers
 , cudaSupport ? config.cudaSupport
-, cudaPackages
+, autoAddDriverRunpathHook
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [

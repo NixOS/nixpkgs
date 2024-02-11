@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchzip
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , glibc_multi
 , glibc
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     git
     pkg-config
   ] ++ lib.optionals withCuda [
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   buildInputs = [ hwloc ] ++ (if withCuda then
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString withCuda ''
-    addOpenGLRunpath $out/bin/FIRESTARTER_CUDA
+    addDriverRunpath $out/bin/FIRESTARTER_CUDA
   '';
 
   meta = with lib; {

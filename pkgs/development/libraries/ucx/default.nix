@@ -3,6 +3,7 @@
 , config
 , enableCuda ? config.cudaSupport
 , cudaPackages
+, autoAddDriverRunpathHook
 , enableRocm ? config.rocmSupport
 , rocmPackages
 }:
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = [

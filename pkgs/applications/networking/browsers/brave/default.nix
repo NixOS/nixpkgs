@@ -62,7 +62,7 @@
 
 # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
 , vulkanSupport ? false
-, addOpenGLRunpath
+, addDriverRunpath
 , enableVulkan ? vulkanSupport
 }:
 
@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       ${optionalString vulkanSupport ''
-      --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
+      --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
       ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )

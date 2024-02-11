@@ -58,6 +58,8 @@ mapAliases ({
 
   AusweisApp2 = ausweisapp; # Added 2023-11-08
   a4term = a4; # Added 2023-10-06
+  # Post 24.11 branch-off, this should throw an error in aliases.nix.
+  addOpenGLRunpath = lib.warn "addOpenGLRunpath has been deprecated in favor of addDriverRunpath" addDriverRunpath; # Added 2023-12-24
   aether = throw "aether has been removed from nixpkgs; upstream unmaintained, security issues"; # Added 2023-10-03
   airfield = throw "airfield has been removed due to being unmaintained"; # Added 2023-05-19
   alertmanager-bot = throw "alertmanager-bot is broken and has been archived by upstream"; # Added 2023-07-28
@@ -84,6 +86,8 @@ mapAliases ({
   atom-beta = throw "'atom-beta' has been removed because discontinued and deprecated. Consider using 'pulsar', a maintained fork"; # Added 2023-10-01
   atomEnv = throw "'atomEnv' has been removed because 'atom' is discontinued and deprecated. Consider using 'pulsar', a maintained fork"; # Added 2023-10-01
   atomPackages = throw "'atomPackages' has been removed because 'atom' is discontinued and deprecated. Consider using 'pulsar', a maintained fork"; # Added 2023-10-01
+  # Post 24.11 branch-off, this should throw an error in aliases.nix.
+  autoAddOpenGLRunpathHook = autoAddDriverRunpathHook; # Added 2024-02-10
   avldrums-lv2 = x42-avldrums; # Added 2020-03-29
   awesome-4-0 = awesome; # Added 2022-05-05
 

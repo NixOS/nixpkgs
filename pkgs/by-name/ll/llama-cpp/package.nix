@@ -8,6 +8,7 @@
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
+, autoAddDriverRunpathHook
 
 , rocmSupport ? config.rocmSupport
 , rocmPackages ? { }
@@ -48,9 +49,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ] ++ lib.optionals blasSupport [ pkg-config ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
 
-    # TODO: Replace with autoAddDriverRunpath
-    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpathHook
   ];
 
   buildInputs = lib.optionals effectiveStdenv.isDarwin

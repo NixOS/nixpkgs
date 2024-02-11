@@ -17,7 +17,7 @@ nvidia_x11: sha256:
 , libvdpau
 , librsvg
 , wrapGAppsHook
-, addOpenGLRunpath
+, addDriverRunpath
 , withGtk2 ? false
 , withGtk3 ? true
 }:
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  nativeBuildInputs = [ pkg-config m4 addOpenGLRunpath ];
+  nativeBuildInputs = [ pkg-config m4 addDriverRunpath ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
     ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
@@ -125,7 +125,7 @@ stdenv.mkDerivation {
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
       $out/bin/$binaryName
 
-    addOpenGLRunpath $out/bin/$binaryName
+    addDriverRunpath $out/bin/$binaryName
   '';
 
   passthru = {

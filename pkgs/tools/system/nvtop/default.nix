@@ -9,7 +9,7 @@
 , nvtop
 , testers
 , udev
-, addOpenGLRunpath
+, addDriverRunpath
 , amd ? true
 , intel ? true
 , msm ? true
@@ -17,7 +17,7 @@
 }:
 
 let
-  nvidia-postFixup = "addOpenGLRunpath $out/bin/nvtop";
+  nvidia-postFixup = "addDriverRunpath $out/bin/nvtop";
   libPath = lib.makeLibraryPath [ libdrm ncurses udev ];
   drm-postFixup = ''
     patchelf \
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ++ optional (!nvidia) "-DNVIDIA_SUPPORT=OFF"
   ++ optional (amd || msm) "-DLibdrm_INCLUDE_DIRS=${libdrm}/lib/stubs/libdrm.so.2"
   ;
-  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addOpenGLRunpath;
+  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addDriverRunpath;
   buildInputs = with lib; [ ncurses udev ]
     ++ optional nvidia cudatoolkit
     ++ optional (amd || msm) libdrm

@@ -3,7 +3,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addDriverRunpath
 , bash
 , docutils
 , meson
@@ -149,7 +149,7 @@ in stdenv'.mkDerivation (finalAttrs: {
   mesonAutoFeatures = "auto";
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     docutils # for rst2man
     meson
     ninja
@@ -230,9 +230,9 @@ in stdenv'.mkDerivation (finalAttrs: {
   '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
+  # See the explanation in addDriverRunpath.
   postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/bin/mpv
+    addDriverRunpath $out/bin/mpv
     patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';
 
