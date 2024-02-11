@@ -20459,8 +20459,6 @@ with pkgs;
     cudaPackages = cudaPackages_12;
   };
 
-  arrow-cpp = callPackage ../development/libraries/arrow-cpp { };
-
   arrow-glib = callPackage ../development/libraries/arrow-glib { };
 
   arsenal = callPackage ../tools/security/arsenal { };
