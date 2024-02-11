@@ -177,7 +177,7 @@ in
 
     services.pantalaimon-headless.instances."draupnir" = mkIf cfg.pantalaimon.enable
       {
-        homeserver = cfg.homeserverUrl;
+        homeserver = cfg.settings.homeserverUrl;
       } // cfg.pantalaimon.options;
 
     systemd.services.draupnir = {
@@ -221,7 +221,6 @@ in
         PrivateDevices = true;
         Restart = "on-failure";
 
-        /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME" */
         DynamicUser = true;
         LoadCredential =
           optionals (cfg.accessTokenFile != null) [
