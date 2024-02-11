@@ -18,6 +18,7 @@ buildGoModule rec {
     homepage = "https://github.com/joshmedeski/sesh";
     license = licenses.mit;
     maintainers = with maintainers; [ Meliketoaste ];
+    mainProgram = "sesh";
   };
 
 }
