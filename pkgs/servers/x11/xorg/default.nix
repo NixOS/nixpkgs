@@ -1937,18 +1937,18 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  makedepend = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
+  makedepend = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "makedepend";
-    version = "1.0.8";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/makedepend-1.0.8.tar.xz";
-      sha256 = "0nxs5ibrghym3msbnh0b8i3yd3xgqandmrkc500jm6qq4n06zcmz";
+      url = "mirror://xorg/individual/util/makedepend-1.0.9.tar.xz";
+      sha256 = "1m1dg32z22fw9shg0wsxw7dvdcnfm16gq9qxpkfxixpzb6vdxl4j";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto ];
+    buildInputs = [ ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
