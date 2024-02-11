@@ -12,6 +12,7 @@
 , pyopenssl
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , urllib3
 }:
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -50,6 +52,10 @@ buildPythonPackage rec {
     callee
     mock
     pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "cryptography"
   ];
 
   disabledTests = [
