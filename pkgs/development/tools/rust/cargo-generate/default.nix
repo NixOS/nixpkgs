@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2_1_6
+, libgit2
 , openssl
 , stdenv
 , darwin
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2_1_6 openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -47,6 +47,10 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "--skip=git::utils::should_canonicalize"
   ];
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
     description = "A tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
