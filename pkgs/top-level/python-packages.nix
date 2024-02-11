@@ -11771,6 +11771,8 @@ self: super: with self; {
 
   python-box = callPackage ../development/python-modules/python-box { };
 
+  python-bring-api = callPackage ../development/python-modules/python-bring-api { };
+
   python-bsblan = callPackage ../development/python-modules/python-bsblan { };
 
   python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
