@@ -90,7 +90,7 @@ let
           hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
         };
         postPatch = ''
-          substituteInPlace pyproject.toml --replace \
+          substituteInPlace pyproject.toml --replace-fail \
             '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
             '"poetry-core"'
         '';
@@ -125,19 +125,10 @@ let
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
         };
         postPatch = ''
-          substituteInPlace pyproject.toml --replace \
+          substituteInPlace pyproject.toml --replace-fail \
             '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
             '"poetry-core"'
         '';
-      });
-
-      amberelectric = super.amberelectric.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.4";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-5SWJnTxRm6mzP0RxrgA+jnV+Gp23WjqQA57wbT2V9Dk=";
-        };
       });
 
       anova-wifi = super.anova-wifi.overridePythonAttrs (old: rec {
@@ -159,8 +150,8 @@ let
         };
         postPatch = ''
           substituteInPlace pyproject.toml \
-            --replace "poetry>=1.0.0b1" "poetry-core" \
-            --replace "poetry.masonry" "poetry.core.masonry"
+            --replace-fail "poetry>=1.0.0b1" "poetry-core" \
+            --replace-fail "poetry.masonry" "poetry.core.masonry"
         '';
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
           self.pytz
@@ -216,14 +207,25 @@ let
         };
       });
 
-      justnimbus = super.justnimbus.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.0";
+      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.0";
+        pyprojet = true;
+
         src = fetchFromGitHub {
-          owner = "kvanzuijlen";
-          repo = "justnimbus";
-          rev = "refs/tags/${version}";
-          hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
+          owner = "lxml";
+          repo = "lxml";
+          rev = "refs/tags/lxml-${version}";
+          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
         };
+
+        nativeBuildInputs = with self; [
+          cython_3
+          setuptools
+          libxml2.dev
+          libxslt.dev
+        ];
+
+        patches = [];
       });
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
@@ -321,16 +323,6 @@ let
         };
       });
 
-      pydrawise = super.pydrawise.overridePythonAttrs (oldAttrs: rec {
-        version = "2023.11.0";
-        src = fetchFromGitHub {
-          owner = "dknowles2";
-          repo = "pydrawise";
-          rev = "refs/tags/${version}";
-          hash = "sha256-gKOyTvdETGzKlpU67UKaHYTIvnAX9znHIynP3BiVbt4=";
-        };
-      });
-
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
         version = "1.0.1";
         src = fetchFromGitHub {
@@ -350,35 +342,6 @@ let
         };
       });
 
-      python-kasa = super.python-kasa.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.4";
-        src = fetchFromGitHub {
-          owner = "python-kasa";
-          repo = "python-kasa";
-          rev = "refs/tags/${version}";
-          hash = "sha256-wGPMrYaTtKkkNW88eyiiciFcBSTRqqChYi6e15WUCHo=";
-        };
-      });
-
-      python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
-        version = "0.38.0";
-        src = fetchFromGitHub {
-          owner = "humbertogontijo";
-          repo = "python-roborock";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-jYESUMhLb5oiM3PWIIIU4dn/waGUnCAaXe0URnIq0C8=";
-        };
-      });
-
-      python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
-        pname = "python-slugify";
-        version = "4.0.1";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
-        };
-      });
-
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.1";
         src = fetchFromGitHub {
@@ -386,16 +349,6 @@ let
           repo = "pytradfri";
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
-        };
-      });
-
-      tesla-powerwall = super.tesla-powerwall.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.19";
-        src = fetchFromGitHub {
-          owner = "jrester";
-          repo = "tesla_powerwall";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ClrMgPAMBtDMfD6hCJIN1u4mp75QW+c3re28v3FreQg=";
         };
       });
 
@@ -483,7 +436,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.1.6";
+  hassVersion = "2024.2.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -501,13 +454,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-zCpdOl16ZkO9mr0nYZg1mlnGNaPaX0RALFEDRHGfKvM=";
+    hash = "sha256-PtBDSxl0744rytMeMOTAj60eERzANzD2dyd4sPivgqQ=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-ipAw+vqePa5KA/Gqhl3WsQbzmzMXjmVx0NvbrM84SKg=";
+    hash = "sha256-iLCHoDfZ1gz+LxNxIiKNsSDaL2Taq8B3Huu000eXSxc=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -516,19 +469,12 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "awesomeversion"
+    "attrs"
     "ciso8601"
-    "cryptography"
-    "home-assistant-bluetooth"
-    "httpx"
-    "jinja2"
-    "lru-dict"
     "orjson"
     "pyopenssl"
     "typing-extensions"
     "urllib3"
-    "voluptuous"
-    "yarl"
   ];
 
   # extract translations from pypi sdist
@@ -549,7 +495,7 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+    substituteInPlace tests/test_config.py --replace-fail '"/usr"' '"/build/media"'
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
     sed -i 's/wheel[~=]/wheel>/' pyproject.toml
