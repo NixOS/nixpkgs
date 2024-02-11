@@ -99,12 +99,7 @@ in
               `pantalaimon` settings (enables E2E Encryption support).
               This property is read-only, please configure `services.draupnir.pantalaimon` instead!
             '';
-            default = if cfg.pantalaimon.enable then {
-              use = true;
-              username = cfg.pantalaimon.username;
-            } else {
-              use = false;
-            };
+            default = {};
             type = types.submodule {
               freeformType = format.type;
               options = {
