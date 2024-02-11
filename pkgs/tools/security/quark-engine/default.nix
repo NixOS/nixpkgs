@@ -18,6 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -34,6 +35,10 @@ python3.pkgs.buildPythonApplication rec {
     rzpipe
     setuptools
     tqdm
+  ];
+
+  pythonRelaxDeps = [
+    "r2pipe"
   ];
 
   # Project has no tests

@@ -9617,6 +9617,10 @@ with pkgs;
 
   go-jira = callPackage ../applications/misc/go-jira { };
 
+  jogl = callPackage ../by-name/jo/jogl/package.nix {
+    stdenv = if stdenv.isDarwin && stdenv.isx86_64 then overrideSDK stdenv "11.0" else stdenv;
+  };
+
   john = callPackage ../tools/security/john { };
 
   joomscan = callPackage ../tools/security/joomscan { };
@@ -26687,7 +26691,7 @@ with pkgs;
 
   openxr-loader = callPackage ../development/libraries/openxr-loader { };
 
-  osrm-backend = disable-warnings-if-gcc13 (callPackage ../servers/osrm-backend { });
+  osrm-backend = callPackage ../servers/osrm-backend { };
 
   oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
 
@@ -40413,12 +40417,11 @@ with pkgs;
 
   networkd-dispatcher = callPackage ../tools/networking/networkd-dispatcher { };
 
-  nixVersions = builtins.mapAttrs (_: disable-warnings-if-gcc13)
-    (recurseIntoAttrs (callPackage ../tools/package-management/nix {
-      storeDir = config.nix.storeDir or "/nix/store";
-      stateDir = config.nix.stateDir or "/nix/var";
-      inherit (darwin.apple_sdk.frameworks) Security;
-    }));
+  nixVersions = recurseIntoAttrs (callPackage ../tools/package-management/nix {
+    storeDir = config.nix.storeDir or "/nix/store";
+    stateDir = config.nix.stateDir or "/nix/var";
+    inherit (darwin.apple_sdk.frameworks) Security;
+  });
 
   nix = nixVersions.stable;
 
