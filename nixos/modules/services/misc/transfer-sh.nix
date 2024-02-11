@@ -14,7 +14,7 @@ in
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "Environment file as defined in {manpage}`systemd.exec(5)`.";
+        description = "Environment file as defined in {manpage}`systemd.exec(5)`.";
       };
 
       user = mkOption {
