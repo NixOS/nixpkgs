@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
 
   postPatch = ''
+    # Fix gcc-13 build failure due to missing includes:
+    sed -e '1i #include <cstdint>' -i \
+      include/compound-config/compound-config.hpp
+
     # use nix ar/ranlib
     substituteInPlace ./SConstruct \
       --replace "env.Replace(AR = \"gcc-ar\")" "" \
