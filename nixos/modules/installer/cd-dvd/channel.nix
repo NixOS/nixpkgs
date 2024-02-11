@@ -55,7 +55,9 @@ in
             -i ${channelSources} --quiet --option build-use-substitutes false \
             ${lib.optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
           mkdir -m 0700 -p /root/.nix-defexpr
-          ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
+          # We do not want to ship broken channels.
+          unlink /root/.nix-defexpr/channels
+          ln -sf /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels || fail
           mkdir -m 0755 -p /var/lib/nixos
           touch /var/lib/nixos/did-channel-init
         fi
