@@ -72,6 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://osm2pgsql.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jglukasik das-g ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ jglukasik das-g ];
   };
 })
