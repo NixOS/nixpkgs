@@ -26,6 +26,20 @@
   '';
 
   # Network
-  networking.useDHCP = false;
-  networking.interfaces.enp5s0.useDHCP = true;
+  networking = {
+    dhcdpcd.enable = false;
+    useDHCP = false;
+  };
+
+  systemd.network = {
+    enable = true;
+    networks."50-enp5s0" = {
+      matchConfig.Name = "enp5s0";
+      networkConfig = {
+        DHCP = "ipv4";
+        IPv6AcceptRA = true;
+      };
+      linkConfig.RequiredForOnline = "routable";
+    };
+  };
 }
