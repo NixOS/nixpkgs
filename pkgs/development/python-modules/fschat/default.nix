@@ -16,6 +16,7 @@
 , tiktoken
 , uvicorn
 , anthropic
+, pythonRelaxDepsHook
 , openai
 , ray
 , wandb
@@ -34,7 +35,7 @@ in
 buildPythonPackage {
   pname = "fschat";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lm-sys";
@@ -44,8 +45,13 @@ buildPythonPackage {
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
+
+   pythonRelaxDeps = [
+    "pydantic"
+   ];
 
   propagatedBuildInputs = [
     aiohttp
