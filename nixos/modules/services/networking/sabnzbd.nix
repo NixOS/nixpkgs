@@ -36,6 +36,14 @@ in
         default = "sabnzbd";
         description = lib.mdDoc "Group to run the service as";
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Open ports in the firewall for the sabnzbd web interface
+        '';
+      };
     };
   };
 
@@ -67,6 +75,10 @@ in
           Group = "${cfg.group}";
           ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
         };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 8080 ];
     };
   };
 }
