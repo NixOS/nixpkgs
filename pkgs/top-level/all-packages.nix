@@ -34594,8 +34594,6 @@ with pkgs;
 
   pop-launcher = callPackage ../applications/misc/pop-launcher { };
 
-  popcorntime = callPackage ../applications/video/popcorntime { };
-
   pot = callPackage ../applications/misc/pot { };
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
