@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , curl
 , pkg-config
-, libgit2_1_5
+, libgit2
 , openssl
 , zlib
 , stdenv
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     curl
-    libgit2_1_5
+    libgit2
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
@@ -39,6 +39,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "-p=cargo-codspeed" ];
   cargoTestFlags = cargoBuildFlags;
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
     description = "Cargo extension to build & run your codspeed benchmarks";
