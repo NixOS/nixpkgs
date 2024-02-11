@@ -221,7 +221,7 @@ in
 
     systemd.services.draupnir = {
       description = "Draupnir - a moderation tool for Matrix";
-      requires = optionals (cfg.pantalaimon.enable) [
+      requires = lib.optionals (cfg.pantalaimon.enable) [
         "pantalaimon-draupnir.service"
       ];
       wants = [
@@ -242,10 +242,10 @@ in
         ExecStart = utils.escapeSystemdExecArgs ([
           (lib.getExe pkgs.draupnir)
           "--draupnir-config" "${configFile}"
-        ] ++ optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
+        ] ++ lib.optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
           "--pantalaimon-password-file"
           "$CREDENTIALS_DIRECTORY/pantalaimon_password"
-        ] ++ optionals (cfg.accessTokenFile != null) [
+        ] ++ lib.optionals (cfg.accessTokenFile != null) [
           "--access-token-file"
           "$CREDENTIALS_DIRECTORY/access_token"
         ]);
@@ -262,10 +262,10 @@ in
 
         DynamicUser = true;
         LoadCredential =
-          optionals (cfg.accessTokenFile != null) [
+          lib.optionals (cfg.accessTokenFile != null) [
             "access_token:${cfg.accessTokenFile}"
           ]
-          ++ optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
+          ++ lib.optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
             "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
           ];
       };
