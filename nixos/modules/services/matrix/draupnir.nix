@@ -135,7 +135,7 @@ in
           homeserverUrl = mkOption {
             type = types.str;
             default = if cfg.pantalaimon.enable 
-              then "http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${config.services.pantalaimon-headless.instances."draupnir".listenPort}/"
+              then "http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${toString config.services.pantalaimon-headless.instances."draupnir".listenPort}/"
               else "https://matrix.org";
             readOnly = if cfg.pantalaimon.enable then true else false;
             description = lib.mdDoc ''
