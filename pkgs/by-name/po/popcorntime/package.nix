@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "popcorntime";
-  version = "0.4.9";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://github.com/popcorn-official/popcorn-desktop/releases/download/v${version}/Popcorn-Time-${version}-linux64.zip";
-    sha256 = "sha256-cbKL5bgweZD/yfi/8KS0L7Raha8PTHqIm4qSPFidjUc=";
+    hash = "sha256-A5G66KkCQ1AiOOO02dZFAVz6dqvComrd5lXQ4Wc1S0s=";
   };
 
   nativeBuildInputs = [

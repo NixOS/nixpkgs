@@ -5055,6 +5055,8 @@ self: super: with self; {
     inherit (pkgs) h3;
   };
 
+  h5io = callPackage ../development/python-modules/h5io { };
+
   h5netcdf = callPackage ../development/python-modules/h5netcdf { };
 
   h5py = callPackage ../development/python-modules/h5py { };
@@ -10813,6 +10815,8 @@ self: super: with self; {
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
+  pymatreader = callPackage ../development/python-modules/pymatreader { };
+
   pymatting = callPackage ../development/python-modules/pymatting { };
 
   pymaven-patch = callPackage ../development/python-modules/pymaven-patch { };
@@ -11584,6 +11588,8 @@ self: super: with self; {
   pytest-golden = callPackage ../development/python-modules/pytest-golden { };
 
   pytest-grpc = callPackage ../development/python-modules/pytest-grpc { };
+
+  pytest-harvest = callPackage ../development/python-modules/pytest-harvest { };
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
