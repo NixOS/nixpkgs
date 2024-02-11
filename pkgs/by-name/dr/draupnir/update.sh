@@ -1,8 +1,10 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl common-updater-scripts coreutils jq prefetch-yarn-deps
+#!nix-shell -i bash -p curl common-updater-scripts coreutils jq prefetch-yarn-deps git
 
 set -euo pipefail
 set -x
+
+cd  "$(git rev-parse --show-toplevel)"
 
 TMPDIR=$(mktemp -d)
 
