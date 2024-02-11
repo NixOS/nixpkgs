@@ -7,8 +7,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "joshmedeski";
     repo = "sesh";
-    rev = "be2badd29206f66803b76b62b23f6f5e05befe08";
-    sha256 = "sha256-8gn4YdKHurPbPuJ+AeCB7x9IDxTtHGpYUZCKlSdujcs=";
+    rev = "v${version}";
+    sha256 = "sha256-m/EcWh4wfna9PB/NN+MCRUsz5Er0OZ70AAumlKdrm/s=";
   };
 
   vendorHash = "sha256-zt1/gE4bVj+3yr9n0kT2FMYMEmiooy3k1lQ77rN6sTk=";
