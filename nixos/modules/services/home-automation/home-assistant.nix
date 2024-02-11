@@ -533,6 +533,7 @@ in {
           "inkbird"
           "improv_ble"
           "keymitt_ble"
+          "leaone-ble"
           "led_ble"
           "medcom_ble"
           "melnor"

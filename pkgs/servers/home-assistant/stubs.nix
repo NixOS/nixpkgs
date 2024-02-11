@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
-  version = "2024.1.6";
+  version = "2024.2.1";
   format = "pyproject";
 
   disabled = python.version != home-assistant.python.version;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "KapJI";
     repo = "homeassistant-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-htFz3Cw5AvI1h2YvECOJdMA4N3JAQRRRhx1tfR4h5co=";
+    hash = "sha256-1a2iwyRyXOD8iaTzdnEGfwCgw6dU2bV1iWpoD7s35QI=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Relax constraint to year and month
-    substituteInPlace pyproject.toml --replace \
+    substituteInPlace pyproject.toml --replace-fail \
       'homeassistant = "${version}"' \
       'homeassistant = "~${lib.versions.majorMinor home-assistant.version}"'
   '';
