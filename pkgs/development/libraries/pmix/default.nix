@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ libevent hwloc munge zlib ];
+  buildInputs = [ libevent hwloc munge zlib python3 ];
 
   configureFlags = [
     "--with-libevent=${lib.getDev libevent}"

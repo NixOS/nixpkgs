@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchurl, gfortran, perl, libnl
+{ lib, stdenv, fetchurl, gfortran, perl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx, ucc
 , config
+
 # Enable CUDA support
 , cudaSupport ? config.cudaSupport, cudaPackages
 
@@ -16,34 +17,54 @@
 
 # Enable Fortran support
 , fortranSupport ? true
+
+# AVX/SSE options
+, enableSse3 ? stdenv.hostPlatform.sse3Support
+, enableSse4_1 ? stdenv.hostPlatform.sse4_1Support
+, enableAvx ? true #stdenv.hostPlatform.avxSupport
+, enableAvx2 ? stdenv.hostPlatform.avx2Support
+, enableAvx512 ? stdenv.hostPlatform.avx512Support
 }:
 
 stdenv.mkDerivation rec {
   pname = "openmpi";
-  version = "4.1.6";
+  version = "5.0.1";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-90CZRIVRbetjtTEa8SLCZRefUyig2FelZ7hdsAsR5BU=";
+    sha256 = "sha256-41cEPmX9G5VqR9Da5hVqkM8ON433WTZJNsF4Hxol74A=";
   };
 
   postPatch = ''
     patchShebangs ./
 
-    # Ensure build is reproducible
-    ts=`date -d @$SOURCE_DATE_EPOCH`
-    sed -i 's/OPAL_CONFIGURE_USER=.*/OPAL_CONFIGURE_USER="nixbld"/' configure
-    sed -i 's/OPAL_CONFIGURE_HOST=.*/OPAL_CONFIGURE_HOST="localhost"/' configure
-    sed -i "s/OPAL_CONFIGURE_DATE=.*/OPAL_CONFIGURE_DATE=\"$ts\"/" configure
-    find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
+    # This is dynamically detected. Configure does not provide fine grained options
+    # We just disable the check in the configure script for now
+    ${lib.optionalString (!enableSse3)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_sse3=yes' 'ompi_cv_op_avx_check_sse3=no'"}
+    ${lib.optionalString (!enableSse4_1)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_sse41=yes' 'ompi_cv_op_avx_check_sse41=no'"}
+    ${lib.optionalString (!enableAvx)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_avx=yes' 'ompi_cv_op_avx_check_avx=no'"}
+    ${lib.optionalString (!enableAvx2)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_avx2=yes' 'ompi_cv_op_avx_check_avx2=no'"}
+    ${lib.optionalString (!enableAvx512)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_avx512=yes' 'ompi_cv_op_avx_check_av512=no'"}
+  '';
+
+  preConfigure = ''
+    # Ensure build is reproducible according to manual
+    # https://docs.open-mpi.org/en/v5.0.x/release-notes/general.html#general-notes
+    export USER=nixbld
+    export HOSTNAME=localhost
+    export SOURCE_DATE_EPOCH=0
   '';
 
   outputs = [ "out" "man" ];
 
-  buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ucc ]
+  buildInputs = [ zlib libevent hwloc ]
+    ++ lib.optionals stdenv.isLinux [ numactl pmix ucx ucc ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
 
@@ -53,19 +74,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
-    ++ lib.optionals stdenv.isLinux  [
-      "--with-libnl=${lib.getDev libnl}"
-      "--with-pmix=${lib.getDev pmix}"
-      "--with-pmix-libdir=${pmix}/lib"
-      "--enable-mpi-cxx"
-    ] ++ lib.optional enableSGE "--with-sge"
+    ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudaPackages.cuda_cudart}" "--enable-dlopen" ]
-    ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
-    ;
+    ++ lib.optionals fabricSupport [
+      "--with-psm2=${lib.getDev libpsm2}"
+      "--with-libfabric=${lib.getDev libfabric}"
+      "--with-libfabric-libdir=${lib.getLib libfabric}/lib"
+    ];
 
   enableParallelBuilding = true;
 
@@ -77,18 +96,20 @@ stdenv.mkDerivation rec {
     # default compilers should be indentical to the
     # compilers at build time
 
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-      $out/share/openmpi/mpicc-wrapper-data.txt
+    for cfg in mpicc shmemcc; do
+      sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
+        "$out/share/openmpi/$cfg-wrapper-data.txt"
+    done
 
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-       $out/share/openmpi/ortecc-wrapper-data.txt
-
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
-       $out/share/openmpi/mpic++-wrapper-data.txt
+    for cfg in mpic++ shmemc++; do
+      sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
+        "$out/share/openmpi/$cfg-wrapper-data.txt"
+    done
   '' + lib.optionalString fortranSupport ''
-
-    sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
-       $out/share/openmpi/mpifort-wrapper-data.txt
+    for cfg in mpifort shmemfort; do
+      sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
+         "$out/share/openmpi/$cfg-wrapper-data.txt"
+    done
   '';
 
   doCheck = true;
