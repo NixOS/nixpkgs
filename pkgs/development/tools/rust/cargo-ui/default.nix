@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
-, libgit2_1_5
+, libgit2
 , openssl
 , stdenv
 , expat
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2_1_5
+    libgit2
     openssl
   ] ++ lib.optionals stdenv.isLinux [
     expat
@@ -47,6 +47,10 @@ rustPlatform.buildRustPackage rec {
     patchelf $out/bin/cargo-ui \
       --add-rpath ${lib.makeLibraryPath [ fontconfig libGL ]}
   '';
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
     description = "A GUI for Cargo";
