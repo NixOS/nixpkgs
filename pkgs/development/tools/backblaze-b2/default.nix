@@ -14,6 +14,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-10c2zddALy7+CGxhjUC6tMLQcZ3WmLeRY1bNKWunAys=";
   };
 
+  patches = [
+    ./help.patch
+  ];
+
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace 'phx-class-registry==4.0.5' 'phx-class-registry'
