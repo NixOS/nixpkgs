@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-n0/NVClZz6ANgEdPCtdZxsEvllIl32vwDjC2nq5R8Z4=";
   };
 
+  postPatch = ''
+    find | fgrep crc.cpp
+    # Fix gcc-13 build failures due to missing includes
+    sed -e '1i #include <cstdint>' -i \
+      blockalign_src/crc.cpp
+  '';
+
   buildInputs = [
     wxGTK32
     zlib
