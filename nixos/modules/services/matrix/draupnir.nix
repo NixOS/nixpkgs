@@ -12,7 +12,7 @@ in
     enable = lib.mkEnableOption ("Draupnir, a moderation tool for Matrix");
 
     accessTokenFile = lib.mkOption {
-      type = with types; nullOr path;
+      type = with lib.types; nullOr path;
       default = null;
       description = ''
         File containing the access token for Draupnir's Matrix account.
@@ -27,7 +27,7 @@ in
         This will create a `pantalaimon` instance with the name "draupnir".
       '';
       default = { };
-      type = types.submodule {
+      type = lib.types.submodule {
         options = {
           enable = lib.mkEnableOption (''
             pantalaimon, in order to enable E2EE support.
@@ -36,21 +36,21 @@ in
           '');
 
           homeserver = lib.mkOption {
-            type = types.str;
+            type = lib.types.str;
             description = ''
               Account name on the Matrix homeserver.
             '';
           };
 
           username = lib.mkOption {
-            type = types.str;
+            type = lib.types.str;
             description = ''
               Account name on the Matrix homeserver.
             '';
           };
 
           passwordFile = lib.mkOption {
-            type = with types; nullOr path;
+            type = with lib.types; nullOr path;
             default = null;
             description = ''
               File containing the password for the Matrix account.
@@ -58,7 +58,7 @@ in
           };
 
           options = lib.mkOption {
-            type = types.submodule (import ./pantalaimon-options.nix);
+            type = lib.types.submodule (import ./pantalaimon-options.nix);
             default = { };
             description = ''
               Pass through additional options to the `pantalaimon` service.
@@ -82,12 +82,12 @@ in
         These settings will override settings made by the module config.
       '';
       default = { };
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = format.type;
         options = {
           #region Readonly settings - these settings are not configurable
           dataPath = lib.mkOption {
-            type = types.str;
+            type = lib.types.str;
             default = "/var/lib/draupnir";
             readOnly = true;
             description = ''
@@ -106,11 +106,11 @@ in
               This property is read-only, please configure `services.draupnir.pantalaimon` instead!
             '';
             default = {};
-            type = types.submodule {
+            type = lib.types.submodule {
               freeformType = format.type;
               options = {
                 use = lib.mkOption {
-                  type = types.bool;
+                  type = lib.types.bool;
                   default = if cfg.pantalaimon.enable then true else false;
                   readOnly = true;
                   description = ''
@@ -118,7 +118,7 @@ in
                   '';
                 };
                 username = lib.mkOption {
-                  type = types.str;
+                  type = lib.types.str;
                   default = cfg.pantalaimon.username;
                   readOnly = true;
                   description = ''
@@ -132,7 +132,7 @@ in
 
           #region Base settings
           homeserverUrl = lib.mkOption {
-            type = types.str;
+            type = lib.types.str;
             default = if cfg.pantalaimon.enable 
               then "http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${toString config.services.pantalaimon-headless.instances."draupnir".listenPort}/"
               else "https://matrix.org";
@@ -148,7 +148,7 @@ in
 
           #region Common settings
           autojoinOnlyIfManager = lib.mkOption {
-            type = types.bool;
+            type = lib.types.bool;
             default = false;
             description = ''
               If `true`, the bot will only autojoin rooms if the user is a manager.
@@ -156,14 +156,14 @@ in
           };
 
           automaticallyRedactForReasons = lib.mkOption {
-            type = types.listOf types.str;
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             description = ''
               A list of reasons for which the bot will automatically redact messages.
             '';
           };
           managementRoom = lib.mkOption {
-            type = types.str;
+            type = lib.types.str;
             default = "#moderators:example.org";
             description = ''
               The room ID or alias where moderators can use the bot's functionality.
@@ -176,7 +176,7 @@ in
           };
 
           protectedRooms = lib.mkOption {
-            type = types.listOf types.str;
+            type = lib.types.listOf lib.types.str;
             default = [ ];
             example = literalExpression ''
               [
