@@ -3,6 +3,8 @@
 , python3
 , fetchFromGitHub
 , fetchpatch
+, runCommand
+, tandoor-recipes
 }:
 let
   python = python3.override {
@@ -155,6 +157,9 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
 
     tests = {
       inherit (nixosTests) tandoor-recipes;
+      runTandoorRecipes = runCommand "run-${pname}" {} ''
+        DEBUG_TOOLBAR=0 ${tandoor-recipes}/bin/tandoor-recipes > $out
+      '';
     };
   };
 
