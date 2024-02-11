@@ -48,11 +48,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "bitmap";
-    version = "1.1.0";
+    version = "1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/bitmap-1.1.0.tar.xz";
-      sha256 = "141nhfmrg14axvix2mc34vfs07gmki3k14qq1vqy7v7f5yf8g1lf";
+      url = "mirror://xorg/individual/app/bitmap-1.1.1.tar.xz";
+      sha256 = "1ri66kxa9m6s3xw25mz85k34qhjyksa4kbs4jfrri0g47yv2xm33";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

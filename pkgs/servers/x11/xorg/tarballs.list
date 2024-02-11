@@ -8,7 +8,7 @@ mirror://xorg/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz
 mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.10.tar.xz
 mirror://xorg/individual/xcb/xcb-util-wm-0.4.2.tar.xz
 mirror://xorg/individual/app/appres-1.0.6.tar.xz
-mirror://xorg/individual/app/bitmap-1.1.0.tar.xz
+mirror://xorg/individual/app/bitmap-1.1.1.tar.xz
 mirror://xorg/individual/app/editres-1.0.8.tar.xz
 mirror://xorg/individual/app/fonttosfnt-1.2.3.tar.xz
 mirror://xorg/individual/app/iceauth-1.0.9.tar.xz
