@@ -5861,6 +5861,8 @@ self: super: with self; {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  jishaku = callPackage ../development/python-modules/jishaku { };
+
   jiwer = callPackage ../development/python-modules/jiwer { };
 
   jmespath = callPackage ../development/python-modules/jmespath { };
