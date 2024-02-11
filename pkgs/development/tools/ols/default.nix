@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "nightly-2023-11-04";
+  version = "nightly-2024-02-10";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "b19c24eb17e7c16bcfb3144665fd405fd5e580f3";
-    hash = "sha256-c8mHVdXbn7aRKI/QBIZvBvl4sCNK49q+crQmTCjptwM=";
+    rev = "7145764020fa463ee393b1f2701b1c151c162cce";
+    hash = "sha256-lhFiSGArklebVbZ14WHexGDM2jqkM32y/kMHniFIXfE=";
   };
 
   nativeBuildInputs = [
