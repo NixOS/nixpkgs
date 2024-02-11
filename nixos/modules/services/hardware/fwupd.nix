@@ -86,6 +86,7 @@ in {
       };
 
       enableTestRemote = mkOption {
+        internal = true;
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
