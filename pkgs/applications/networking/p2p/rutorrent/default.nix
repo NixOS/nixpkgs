@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rutorrent";
-  version = "4.2.10-hotfix";
+  version = "4.2.10";
 
   src = fetchFromGitHub {
     owner = "Novik";
