@@ -1,47 +1,26 @@
-{ version ? "release", lib, fetchFromGitHub, buildGoModule }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+}:
 
-let
-
-  versionSpec = rec {
-    release = rec {
-      pname = "bee";
-      version = "0.5.0";
-      rev = "refs/tags/v${version}";
-      sha256 = "sha256-3Oy9RhgMPRFjUs3Dj8XUhAqoxx5BTi32OiK4Y8YEG2Q=";
-      vendorHash = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
-    };
-    "0.5.0" = release;
-    "0.4.1" = rec {
-      pname = "bee";
-      version = "0.4.1";
-      rev = "refs/tags/v${version}";
-      sha256 = "1bmgbav52pcb5p7cgq9756512fzfqhjybyr0dv538plkqx47mpv7";
-      vendorHash = "sha256-UGxiCXWlIfnhRZZBMYcWXFj77pqvJkb5wOllSdQeaUg=";
-    };
-  }.${version};
-
-in
-
-buildGoModule {
-  inherit (versionSpec) pname version vendorHash;
+buildGoModule rec {
+  pname = "bee";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
-    inherit (versionSpec) rev sha256;
+    rev = "v${version}";
+    sha256 = "sha256-3Oy9RhgMPRFjUs3Dj8XUhAqoxx5BTi32OiK4Y8YEG2Q=";
   };
+
+  vendorHash = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
 
   subPackages = [ "cmd/bee" ];
 
-  # no symbol table, no debug info, and pass the commit for the version string
-  ldflags = lib.optionals ( lib.hasAttr "goVersionString" versionSpec)
-    [ "-s" "-w" "-X=github.com/ethersphere/bee.commit=${versionSpec.goVersionString}" ];
+  ldflags = [ "-s" "-w" ];
 
-  # Mimic the bee Makefile: without disabling CGO, two (transitive and
-  # unused) dependencies would fail to compile.
-  preBuild = ''
-    export CGO_ENABLED=0
-  '';
+  CGO_ENABLED = 0;
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system

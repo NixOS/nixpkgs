@@ -6621,9 +6621,7 @@ with pkgs;
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
-  bee = callPackage ../applications/networking/bee/bee.nix {
-    version = "release";
-  };
+  bee = callPackage ../applications/networking/bee/bee.nix { };
 
   bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
 
