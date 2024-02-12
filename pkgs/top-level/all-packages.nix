@@ -20397,7 +20397,9 @@ with pkgs;
 
   alure2 = callPackage ../development/libraries/alure2 { };
 
-  agg = callPackage ../development/libraries/agg { };
+  agg = callPackage ../development/libraries/agg {
+    stdenv = gccStdenv;
+  };
 
   agkozak-zsh-prompt = callPackage ../shells/zsh/agkozak-zsh-prompt { };
 
