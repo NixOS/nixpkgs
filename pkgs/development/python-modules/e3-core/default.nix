@@ -7,12 +7,14 @@
 , httpretty
 , lib
 , mock
+, packaging
 , psutil
 , pytest
 , pytest-socket
 , python-dateutil
 , pyyaml
 , requests
+, requests-cache
 , requests-toolbelt
 , stdenv
 , setuptools
@@ -25,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "e3-core";
-  version = "22.3.1";
+  version = "22.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
     rev = "v${version}";
-    hash = "sha256-4StHOJldfeqApdF6D14Euzg9HvZ2e7G4/OQ0UrEbEIw=";
+    hash = "sha256-dgEk2/qRfAYwUz+e5TWKUy/aPLpmyWZ32OV1i7QM9Fs=";
   };
 
   patches = [
@@ -46,9 +48,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorama
+    packaging
     pyyaml
     python-dateutil
     requests
+    requests-cache
     requests-toolbelt
     tqdm
     stevedore
