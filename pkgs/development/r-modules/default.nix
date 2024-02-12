@@ -320,6 +320,7 @@ let
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
+    CellBarcode = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [ libtiff libjpeg cairo.dev xorg.libXt.dev fontconfig.lib ];
@@ -524,6 +525,7 @@ let
     chebpol = [ pkgs.pkg-config ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
+    SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
@@ -542,6 +544,7 @@ let
     tesseract = [ pkgs.pkg-config ];
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
+    excursions = [ pkgs.gsl ];
     JMcmprsk = [ pkgs.gsl ];
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];

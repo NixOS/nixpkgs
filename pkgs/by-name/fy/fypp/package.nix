@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication }:
+{ lib, fetchFromGitHub, python3 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "fypp";
   version = "3.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aradi";
@@ -11,6 +11,8 @@ buildPythonApplication rec {
     rev = version;
     hash = "sha256-MgGVlOqOIrIVoDfBMVpFLT26mhYndxans2hfo/+jdoA=";
   };
+
+  nativeBuildInputs = [ python3.pkgs.setuptools ];
 
   meta = with lib; {
     description = "Python powered Fortran preprocessor";
