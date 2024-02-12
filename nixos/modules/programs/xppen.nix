@@ -13,9 +13,7 @@ in
   config = mkIf cfg.enable {
     hardware.uinput.enable = true;
 
-    environment.systemPackages = [
-      cfg.package
-    ];
+    environment.systemPackages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];
 
