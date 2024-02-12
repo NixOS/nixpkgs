@@ -167,6 +167,8 @@ self: super: with self; {
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
+  aioautomower = callPackage ../development/python-modules/aioautomower { };
+
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
   aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
