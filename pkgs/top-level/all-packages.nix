@@ -15375,8 +15375,6 @@ with pkgs;
 
   oh = callPackage ../shells/oh { };
 
-  oil = callPackage ../shells/oil { };
-
   oksh = callPackage ../shells/oksh { };
 
   scponly = callPackage ../shells/scponly { };
