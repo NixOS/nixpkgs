@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "glauth";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
     rev = "v${version}";
-    hash = "sha256-XYNNR3bVLNtAl+vbGRv0VhbLf+em8Ay983jqcW7KDFU=";
+    hash = "sha256-OkkiB1AGO7r7ehpnSJ+cB00crVpZ5Cwy4rAT55LUUdE=";
   };
 
-  vendorHash = "sha256-SFmGgxDokIbVl3ANDPMCqrB0ck8Wyva2kSV2mgNRogo=";
+  vendorHash = "sha256-MfauZRufl3kxr1fqatxTmiIvLJ+5JhbpSnbTHiujME8=";
 
   nativeCheckInputs = [
     oath-toolkit
