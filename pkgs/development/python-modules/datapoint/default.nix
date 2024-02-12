@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "datapoint";
-  version = "0.9.8";
+  version = "0.9.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ejep";
     repo = "datapoint-python";
     rev = "v${version}";
-    hash = "sha256-YC8KFTv6lnCqMfDw1LSova7XBgmKbR3TpPDAAbH9imw=";
+    hash = "sha256-zUvwfBwJe8SaB96/Jz7Qeanz1mHmLVp2JW9qkR2dRnY=";
   };
 
   propagatedBuildInputs = [
