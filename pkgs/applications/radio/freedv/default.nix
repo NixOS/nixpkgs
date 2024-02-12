@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.9.7.2";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "drowe67";
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace "-Wl,-ld_classic" ""
+      --replace-fail "-Wl,-ld_classic" ""
     substituteInPlace src/CMakeLists.txt \
-      --replace "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
+      --replace-fail "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
     sed -i "/codesign/d;/hdiutil/d" src/CMakeLists.txt
   '';
 

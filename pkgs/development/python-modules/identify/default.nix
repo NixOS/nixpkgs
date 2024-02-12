@@ -4,22 +4,27 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , ukkonen
 }:
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.5.33";
-  format = "setuptools";
+  version = "2.5.34";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
-    repo = pname;
+    repo = "identify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v0k+N/E1xzhL2iWM0HQzYCxHfzuP8Za4eupkofN7bAA=";
+    hash = "sha256-q1RVFdDFUkKGaKpcbasXHks+OZhVRZUy3ufuruBZiPA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     editdistance-s

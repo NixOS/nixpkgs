@@ -6977,6 +6977,8 @@ self: super: with self; {
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
+  medpy = callPackage ../development/python-modules/medpy { };
+
   meeko = callPackage ../development/python-modules/meeko { };
 
   meep = callPackage ../development/python-modules/meep { };
@@ -11771,6 +11773,8 @@ self: super: with self; {
 
   python-box = callPackage ../development/python-modules/python-box { };
 
+  python-bring-api = callPackage ../development/python-modules/python-bring-api { };
+
   python-bsblan = callPackage ../development/python-modules/python-bsblan { };
 
   python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
@@ -12127,17 +12131,6 @@ self: super: with self; {
   pytzdata = callPackage ../development/python-modules/pytzdata { };
 
   pyu2f = callPackage ../development/python-modules/pyu2f { };
-
-  pyuavcan = callPackage
-    ../development/python-modules/pyuavcan { # this version pinpoint to anold version is necessary due to a regression
-      nunavut = self.nunavut.overridePythonAttrs (old: rec {
-        version = "0.2.3";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-pZtRUvQMpqrnW5+8umsRcNhF9NJZJZ3I9yILVglMCnU=";
-        };
-      });
-    };
 
   pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) udev;

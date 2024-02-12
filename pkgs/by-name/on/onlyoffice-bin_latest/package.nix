@@ -65,11 +65,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "7.5.1";
+    version = "8.0.0";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      sha256 = "sha256-Hf5CNbUUMuHZHDY3fgD4qpF4UASevscK8DTZlauyHhY=";
+      sha256 = "sha256-YtR2fiARMKw8dOgAPXYM+WFwmhKZRsIIBQYTxppu3F0=";
     };
 
     nativeBuildInputs = [
@@ -156,8 +156,6 @@ let
         # the bundled version of qt does not support wayland
       )
     '';
-
-    passthru.updateScript = ./update.sh;
   };
 
 in
@@ -184,6 +182,8 @@ buildFHSEnv {
     substituteInPlace $out/share/applications/onlyoffice-desktopeditors.desktop \
         --replace "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";
