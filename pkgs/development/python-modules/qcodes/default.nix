@@ -147,6 +147,11 @@ buildPythonPackage rec {
     "qcodes"
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
+
   postInstall = ''
     export HOME="$TMPDIR"
   '';
