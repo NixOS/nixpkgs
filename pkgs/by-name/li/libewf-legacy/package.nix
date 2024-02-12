@@ -9,12 +9,12 @@
 , bzip2
 }:
 
-stdenv.mkDerivation rec {
-  pname = "libewf-ewf";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libewf-legacy";
   version = "20140814";
 
   src = fetchurl {
-    url = "https://github.com/libyal/libewf-legacy/releases/download/${version}/libewf-${version}.tar.gz";
+    url = "https://github.com/libyal/libewf-legacy/releases/download/${finalAttrs.version}/libewf-${finalAttrs.version}.tar.gz";
     hash = "sha256-OM3QXwnaIDeo66UNjzmu6to53SxgCMn/rE9VTPlX5BQ=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
   };
-}
+})
