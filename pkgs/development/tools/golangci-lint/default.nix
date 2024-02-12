@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    hash = "sha256-6mwdDi9ltEKpDNa+GPEHiJdQO8csUg6MnuyiKQ02B80";
+    hash = "sha256-6mwdDi9ltEKpDNa+GPEHiJdQO8csUg6MnuyiKQ02B80=";
   };
 
   vendorHash = "sha256-Y+y3X0pGFYeAMpvRWFgzcWRpHQL+X9J3/ehiO2N2P2o=";
