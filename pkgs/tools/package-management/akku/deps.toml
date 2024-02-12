@@ -1,0 +1,5285 @@
+[ac-d-bus]
+dependencies = ["r6rs-pffi", "chibi-match", "packrat", "loko-srfi"]
+synopsis = "AC/D-Bus - D-Bus wire protocol"
+longdesc = """
+AC/D-Bus is an implementation of the D-Bus wire protocol.
+
+D-Bus is an interprocess communication protocol popular on GNU/Linux systems
+to communicate with a variety of services. Originally designed for desktop
+environments, it is now used by programs like VLC media player, BlueZ,
+NetworkManager, Pulseaudio, systemd (including logind and resolved), Polkit,
+gnome-keyring, and many more.
+
+This version supports Chez Scheme, GNU Guile, Loko Scheme, Sagittarius Scheme
+and Vicare Scheme.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/ac-d-bus_1.0.0-beta.0_repack.tar.xz"
+sha256 = "8Wk0oW++w1uGAzokCobBbgkZSqUxIGw/jL2LITvn4Us="
+version = "1.0.0-beta.0"
+
+[adios]
+dependencies = []
+synopsis = "A simple prototype-based object system for?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/adios_0.1.0_repack.tar.xz"
+sha256 = "fKv0qAJcdoNQmNJjb/yriTdzBUhW6RnhTlHfKZ5xmRY="
+version = "0.1.0"
+
+[aeolus]
+dependencies = ["akku-r7rs"]
+synopsis = "R7RS cryptographic library"
+longdesc = """
+Aeolus is an R7RS cryptographic library. The goal for this library is to
+provide pure R7RS cryptographic library which can be used to implement secure
+protocols such as TLS or SSH.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/aeolus_0.0.0-akku.34.2a43103_repack.tar.xz"
+sha256 = "dLqx39l8f9p1LSvcHhJtR6Pur2NJTdq2ZgYyMKbwfZw="
+version = "0.0.0-akku.34.2a43103"
+
+[agave]
+dependencies = ["dharmalab", "surfage", "xitomatl", "chez-gl"]
+synopsis = "Low-glycemic OpenGL hacking for R6RS Scheme"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/agave_0.0.1-akku.103.f95c7df_repack.tar.xz"
+sha256 = "gr7uzBRtA7D57AWtRW0wFWorTntWZ9ObV9Resgjc0GU="
+version = "0.0.1-akku.103.f95c7df"
+
+[akku]
+dependencies = ["chez-srfi", "industria", "spells", "semver", "spdx", "wak-fmt", "wak-riastreams", "wak-foof-loop", "wak-wt-tree", "hashing", "compression", "laesare", "r6rs-pffi", "chibi-match", "akku-r7rs"]
+synopsis = "Language package manager for Scheme"
+longdesc = """
+Akku.scm is a language package manager for Scheme. It grabs hold of code and
+vigorously shakes it until it behaves properly.
+
+ - No complicated setup to point out where libraries are; Akku finds them!
+
+ - Separately declare dependencies and locked versions for your project.
+
+ - Convert R7RS libraries for use with R6RS Scheme implementations.
+
+ - Numerous R6RS packages as well as R7RS libraries mirrored from Snow.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/akku_1.1.0_repack.tar.xz"
+sha256 = "Ejccyw1QK3ZH6PADU8FScwG02KEA+wb7Pm+sVv2jN0E="
+version = "1.1.0"
+
+[akku-r7rs]
+dependencies = ["chez-srfi", "laesare"]
+synopsis = "R7RS standard library for Akku.scm"
+longdesc = """
+Akku.scm has the ability to convert R7RS define-library forms to R6RS library
+forms. This package provides the R7RS standard library for use with such
+converted libraries.
+
+Chez or Guile is required for full support.
+
+Akku.scm 0.3.0 or later is required. When used with Akku 1.0.0 or later it
+does not conflict with the built-in support in Larceny and Sagittarius.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/akku-r7rs_1.0.1_repack.tar.xz"
+sha256 = "3tzivF7aZzWqWIB0GAKltQi0nDsyfRS0Dp/svfhjU9s="
+version = "1.0.1"
+
+[arew-blake3]
+dependencies = []
+synopsis = "blake3 cryptographic hashing for Chez Sche?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/arew-blake3_0.9.0_repack.tar.xz"
+sha256 = "/m1BvLk4HH7xAt57F3yLVMPfFAsBEq3Uv86OSiHnZUs="
+version = "0.9.0"
+
+[arew-json]
+dependencies = ["chez-srfi"]
+synopsis = "JSON reader and writer for Chez Scheme"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/a/arew-json_1.0.0-alpha.0_repack.tar.xz"
+sha256 = "11RqRHl9brPMLTihNHgiQXKurWmSAM3U0dYXUAlsWCM="
+version = "1.0.0-alpha.0"
+
+[arvyy-interface]
+dependencies = ["akku-r7rs"]
+synopsis = "Interface abstraction for a set of functio?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: Arvydas Silanskas <nma.arvydas.silanskas@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/nma.arvydas.silanskas/arvyy/interface/1.0.0/arvyy-interface-1.0.0.tgz"
+sha256 = "fiLap9Cy5XzDo07QFJos/IVqawbJcI29sLSdp1c+8pA="
+version = "1.0.0"
+
+[arvyy-mustache]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Mustache templating 1.2.1 implementation"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: Arvydas Silanskas <nma.arvydas.silanskas@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/nma.arvydas.silanskas/arvyy/mustache/1.0.2/arvyy-mustache-1.0.2.tgz"
+sha256 = "6oCF9jE4USSdxB6GpcRVIl9z81EEaZQpb+f8YUTwXRY="
+version = "1.0.2"
+
+[bcaine-defstruct]
+dependencies = ["bcaine-format", "bcaine-misc-util", "chez-srfi", "akku-r7rs"]
+synopsis = "A more convenient version of `define-recor?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (meta), (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/defstruct/0.0.1/bcaine-defstruct-0.0.1.tgz"
+sha256 = "qNwPVcmbI/Jgmoy414YUkaizPktFyTz9te1elP+sKvw="
+version = "0.0.1"
+
+[bcaine-format]
+dependencies = ["bcaine-misc-util", "chez-srfi", "chibi-char-set", "akku-r7rs"]
+synopsis = "A `format`, `printf` and `sprintf` somewha?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi), (chibi
+char-set full).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/format/0.0.1/bcaine-format-0.0.1.tgz"
+sha256 = "xWKRhdto5TuvpagsdhXAPCmEmZyZzBCEOxzRbH5CiyU="
+version = "0.0.1"
+
+[bcaine-misc-util]
+dependencies = ["chez-srfi", "akku-r7rs", "chibi-show"]
+synopsis = "A collection of miscellaneous utilities I'?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (meta).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/misc-util/1.0.1/bcaine-misc-util-1.0.1.tgz"
+sha256 = "ypbROvRgLnIwkTfSAGLNsP0j53BorcbyISphnQe41Rs="
+version = "1.0.1"
+
+[bcaine-obj]
+dependencies = ["bcaine-defstruct", "bcaine-format", "bcaine-misc-util", "chez-srfi", "akku-r7rs"]
+synopsis = "An object system very similar to Chicken's?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi ast),
+(chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/obj/0.0.7/bcaine-obj-0.0.7.tgz"
+sha256 = "YlfhaGJu6v2yzJUaLzLLoZ4w3A6hVlepTGvzW4lOYkc="
+version = "0.0.7"
+
+[bcaine-sld-stub-expand]
+dependencies = ["bcaine-format", "bcaine-misc-util", "chibi-match", "chibi-pathname", "chez-srfi", "akku-r7rs"]
+synopsis = "Expands library declarations (`define-unpr?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/sld-stub-expand/0.0.1/bcaine-sld-stub-expand-0.0.1.tgz"
+sha256 = "x7MF4GdGm+fmj0pG2rbb85/0NfxEKSEnT4Tqes4Q3hg="
+version = "0.0.1"
+
+[box2d-lite]
+dependencies = ["chez-gl", "agave", "dharmalab", "surfage"]
+synopsis = "Scheme port of the Box2D Lite physics engi?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/b/box2d-lite_0.0.0-akku.38.56f4ed1_repack.tar.xz"
+sha256 = "8UYgGzhuAVYM4CE5STUKgC1sqLIv7mYF590vqxcAlSY="
+version = "0.0.0-akku.38.56f4ed1"
+
+[chez-cmark]
+dependencies = ["chez-srfi"]
+synopsis = "CommonMark FFI Bindings for Chez"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-cmark_1.0.0-alpha.0_repack.tar.xz"
+sha256 = "tYBKcocUCQAC6FoU0eWuqNbpZ7HVFUgWiRiPccg6IwQ="
+version = "1.0.0-alpha.0"
+
+[chez-csv]
+dependencies = ["chez-srfi"]
+synopsis = "Simple CSV library for Chez Scheme."
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-csv_2.0.1-alpha_repack.tar.xz"
+sha256 = "8s5xKAx25cjcWyAhcofIX7Zgk+rUvX2pe49R9wAd++o="
+version = "2.0.1-alpha"
+
+[chez-docs]
+dependencies = ["chez-srfi"]
+synopsis = "Access Chez Scheme documentation from the ?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-docs_0.3.0_repack.tar.xz"
+sha256 = "KpxqldBkCbx+HsGz0JPvgamXWr2LvGXaQCSE+HOKiOE="
+version = "0.3.0"
+
+[chez-gl]
+dependencies = []
+synopsis = "3D library: GL, GLU and GLUT for Chez Sche?"
+longdesc = """
+Ed Cavazos's Chez port of the GL bindings from Ypsilon.
+
+For examples, see the agave package.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-gl_1.0.0_repack.tar.xz"
+sha256 = "TeWsixQnSUkDkZQckXS6W6LLWwgKs4/a/qufpPOB76k="
+version = "1.0.0"
+
+[chez-matrices]
+dependencies = ["chez-srfi"]
+synopsis = "Implementation of common matrix (tensor) c?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-matrices_0.3.0-alpha.0_repack.tar.xz"
+sha256 = "RHLXJT8GsypOGJ1UcSPy65VY1Lj1kT+BE9N0CDrHROk="
+version = "0.3.0-alpha.0"
+
+[chez-mit]
+dependencies = ["chez-srfi"]
+synopsis = "A MIT/GNU Scheme compatibility library for?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-mit_0.0.0-alpha.0_repack.tar.xz"
+sha256 = "qJG75poY/x3eJnFDbY4Z/D7zZRlEii742J8cJUnEocA="
+version = "0.0.0-alpha.0"
+
+[chez-scmutils]
+dependencies = ["chez-srfi", "chez-mit"]
+synopsis = "A port of the ???MIT Scmutils??? library t?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-scmutils_0.0.0-alpha.0_repack.tar.xz"
+sha256 = "e29wfz4Nj6f91Gt7qed3M5hUQQKUOHD+wwmTSOGAkDU="
+version = "0.0.0-alpha.0"
+
+[chez-sockets]
+dependencies = []
+synopsis = "Full Blown, portable, and extensible socke?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-sockets_0.0.0-akku.13.c3fc663.1_repack.tar.xz"
+sha256 = "8vi7Z/ECAVeQQJB3YdlmfhH0gA5SsM8eMCsI0n/iIsk="
+version = "0.0.0-akku.13.c3fc663.1"
+
+[chez-soop]
+dependencies = ["chez-srfi"]
+synopsis = "SOOP Library fork from Chez Repository"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-soop_1.0.0-alpha.2_repack.tar.xz"
+sha256 = "ttlE9cagRCQRR5po2H7Q8hfgMhV+dKjku8oaV8ZhUak="
+version = "1.0.0-alpha.2"
+
+[chez-srfi]
+dependencies = []
+synopsis = "Portable SRFI collection"
+longdesc = """
+SRFI is short for Scheme Requests for Implementation and its homepage
+describes it as a process to help Scheme users write portable, useful code.
+It is similar to PEPs for Python or JSRs for Java.
+
+This package provides implementations of SRFIs which are primarily targeted
+to Chez Scheme, but they work with several more R6RS Schemes.
+
+If provides SRFIs 0, 1, 2, 4, 5, 6, 8, 9, 11, 13, 14, 15, 16, 17, 19, 23,
+25, 26, 27, 28, 29, 31, 34, 35, 37, 38, 39, 41, 42, 43, 45, 48, 51, 54, 60,
+61, 64, 67, 69, 78, 98, 99, 111, 113, 115, 116, 117, 125, 126, 127, 128, 129,
+130, 131, 132, 133, 134, 141, 143, 145, 146, 151, 152, 156, 158 and 219.
+
+SRFIs are available from several packages, but this one is maintained more
+actively than other ones.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-srfi_0.0.0-akku.209.552cd37_repack.tar.xz"
+sha256 = "8PYg8kpHZbhdMVe2cOMZ1s0wJAv8ePgSrx8Ez2+IBOY="
+version = "0.0.0-akku.209.552cd37"
+
+[chez-stats]
+dependencies = ["chez-srfi"]
+synopsis = "Read and write delimited text files, compu?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-stats_0.1.6_repack.tar.xz"
+sha256 = "aUrTIAqxkns14AbSS4ON7+KLGlikwHUVPPk+CyXLFjk="
+version = "0.1.6"
+
+[chibi-app]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-config", "chibi-edit-distance", "chibi-string", "chibi-test"]
+synopsis = "Unified command-line option parsing and co?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/app/0.9.0/chibi-app-0.9.0.tgz"
+sha256 = "tHfqNwsbC/gF++eowNCRkzDaA2DmFeqJU9D29+Nn870="
+version = "0.9.0"
+
+[chibi-assert]
+dependencies = ["chibi-test"]
+synopsis = "A nice assert macro"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/assert/0.10.0/chibi-assert-0.10.0.tgz"
+sha256 = "s5Ac4jMpdI60I/4/Lc/+1jJT3BNmoXy4J5AlA4E5uSE="
+version = "0.10.0"
+
+[chibi-base64]
+dependencies = ["akku-r7rs", "chibi-string", "chibi-test"]
+synopsis = "RFC 3548 base64 encoding and decoding util?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/base64/0.9.0/chibi-base64-0.9.0.tgz"
+sha256 = "T1njgUJ1lVTcQX57TxMkFKzUCuNFCgSBtXIooQJX/Oo="
+version = "0.9.0"
+
+[chibi-binary-record]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/binary-record/0.9.0/chibi-binary-record-0.9.0.tgz"
+sha256 = "XTOCFbFMmBlUA1urMrm5koL58rGa8QUmbnmgC8oi3fk="
+version = "0.9.0"
+
+[chibi-bytevector]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "Additional bytevector utilities"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/bytevector/0.9.0/chibi-bytevector-0.9.0.tgz"
+sha256 = "e17nwQjQJyze+HuC5sKTH5QcfTZUzhFaUdtuY5hzKX0="
+version = "0.9.0"
+
+[chibi-char-set]
+dependencies = ["chibi-iset"]
+synopsis = "A minimal character set library"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/char-set/0.9.0/chibi-char-set-0.9.0.tgz"
+sha256 = "yIAE+w2KBu+gmT6+hHtNjd1YFdKdf3iNCl7Tj1rl33w="
+version = "0.9.0"
+
+[chibi-char-set-boundary]
+dependencies = []
+synopsis = "Char-sets used for TR29 word boundaries"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (public-domain)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/char-set/boundary/0.9.0/chibi-char-set-boundary-0.9.0.tgz"
+sha256 = "apE66C3lZCSRBJHk0EVv1G+1kUwWNLlz35P7LflrfyU="
+version = "0.9.0"
+
+[chibi-config]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "This is a library for unified configuratio?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/config/0.9.0/chibi-config-0.9.0.tgz"
+sha256 = "yaaz/Zoc+5oPpvz94xlGtJL/Gt6wrKd2YvpMk3os96M="
+version = "0.9.0"
+
+[chibi-crypto-md5]
+dependencies = ["akku-r7rs", "chibi-bytevector", "chibi-test"]
+synopsis = "Implementation of the MD5 (Message Digest)?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/crypto/md5/0.9.0/chibi-crypto-md5-0.9.0.tgz"
+sha256 = "YJ1TjGYhprhINJZ81g7TvP2RDVamfhk+oYnyYGrqfB8="
+version = "0.9.0"
+
+[chibi-crypto-rsa]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-bytevector", "chibi-math-prime", "chibi-crypto-sha2", "chibi-test"]
+synopsis = "RSA public key cryptography implementation"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/crypto/rsa/0.9.0/chibi-crypto-rsa-0.9.0.tgz"
+sha256 = "Tq7laPeJhCnXRKXd2VxNRrOoQC/W3+VxRD54Bq2c55Q="
+version = "0.9.0"
+
+[chibi-crypto-sha2]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "Implementation of the SHA-2 (Secure Hash A?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/crypto/sha2/0.9.0/chibi-crypto-sha2-0.9.0.tgz"
+sha256 = "5dbzxdD1vfty2csvHD0bKsaRrAySgm+0qcW3RQta/4U="
+version = "0.9.0"
+
+[chibi-diff]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-optional", "chibi-term-ansi"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.9.1.3
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/diff/0.9.1.3/chibi-diff-0.9.1.3.tgz"
+sha256 = "B7YqA9KAkk8L1CymN1x1KISkgHeZhN1+mInhUPiS+6w="
+version = "0.9.1"
+
+[chibi-edit-distance]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/edit-distance/0.9.0/chibi-edit-distance-0.9.0.tgz"
+sha256 = "FTQVi6KWPbtKWzeDHpSnowB6+hBacTTAEfcQ8a+/Nrk="
+version = "0.9.0"
+
+[chibi-filesystem]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "Interface to the filesystem and file descr?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/filesystem/0.9.0/chibi-filesystem-0.9.0.tgz"
+sha256 = "2tYIp/vAD+jpkp/2Ek7a0Tvt/cWMwUBCvimzP2TBNIM="
+version = "0.9.0"
+
+[chibi-html-parser]
+dependencies = ["akku-r7rs"]
+synopsis = "A permissive HTML parser supporting scalab?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/html-parser/0.5.7/chibi-html-parser-0.5.7.tgz"
+sha256 = "UJxLS3m951yXufGM3xoMP0/9SCs5Q5d1v9yunE36Kjo="
+version = "0.5.7"
+
+[chibi-irregex]
+dependencies = ["akku-r7rs"]
+synopsis = "A portable and efficient R[4567]RS impleme?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/irregex/0.9.3/chibi-irregex-0.9.3.tgz"
+sha256 = "UPe7ywbW9giq/xeE1jAYrl9dMqYjKeskeFvJIuCpFTg="
+version = "0.9.3"
+
+[chibi-iset]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "A space efficient integer set (iset) imple?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/iset/0.9.0/chibi-iset-0.9.0.tgz"
+sha256 = "M+U20g22A+JPSJ/a/UmWs4Mv8pxyReDxv1nlK6ycld0="
+version = "0.9.0"
+
+[chibi-locale]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "A lightweight library for representing loc?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/locale/0.1/chibi-locale-0.1.tgz"
+sha256 = "E+e3cxif/sD0gDBeFHI2Gp3jEMgTbd/6hEhecoRqpLA="
+version = "0.1.0"
+
+[chibi-match]
+dependencies = ["akku-r7rs"]
+synopsis = "A portable hygienic pattern matcher"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (public-domain)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/match/0.9.1/chibi-match-0.9.1.tgz"
+sha256 = "utz8qRvfwaeDGu1ESp/krzF+FCkhbHJfwbZ+GGQRHKQ="
+version = "0.9.1"
+
+[chibi-math-linalg]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-assert", "chibi-optional", "chibi-test"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.2
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/math/linalg/0.2/chibi-math-linalg-0.2.tgz"
+sha256 = "bxa+hrHVWvYndr58HB5vh1HnMNHMbOEqtkZ6vgK6zM0="
+version = "0.2.0"
+
+[chibi-math-prime]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "Prime and number theoretic utilities"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/math/prime/0.10.0/chibi-math-prime-0.10.0.tgz"
+sha256 = "gmKK8Z7Dfa6Bibc92rVAlY/rpSTGHaDnTwzgYC4ELWE="
+version = "0.10.0"
+
+[chibi-math-stats]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-optional", "chibi-test"]
+synopsis = "Statistics is the branch of mathematics de?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/math/stats/0.1/chibi-math-stats-0.1.tgz"
+sha256 = "hh2cmObFqu3zhdRZyYm22dfd27vZZub0UKbcjcIbWFY="
+version = "0.1.0"
+
+[chibi-mecab]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-assert", "chibi-optional", "chibi-test"]
+synopsis = "A wrapper around MeCab, a part-of-speech a?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/mecab/0.1/chibi-mecab-0.1.tgz"
+sha256 = "FnuI5EFcDlMa6M4jNTbKKmKI/l8aBWuVrLKUd3xijwY="
+version = "0.1.0"
+
+[chibi-mime]
+dependencies = ["akku-r7rs", "chibi-base64", "chibi-quoted-printable", "chibi-string", "chibi-test"]
+synopsis = "A library to parse MIME headers and bodies?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/mime/0.9.0/chibi-mime-0.9.0.tgz"
+sha256 = "PxV0OkEW65U2hEnAcXtHYEDm66ivi89VECOhnH/Lz48="
+version = "0.9.0"
+
+[chibi-monad-environment]
+dependencies = ["akku-r7rs"]
+synopsis = "A Scheme take on the environment (reader) ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/monad/environment/0.9.0/chibi-monad-environment-0.9.0.tgz"
+sha256 = "rkq/84Lb49ttHIpuW8+iN8Fvbdf660XxYDWKz2OgDiI="
+version = "0.9.0"
+
+[chibi-net-dns]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-optional", "chibi-test"]
+synopsis = "Domain Name Service library, with high-lev?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.2
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+These (possibly optional) dependencies are not packaged: (chibi net).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/net/dns/0.2/chibi-net-dns-0.2.tgz"
+sha256 = "8fB9o4AWjpEHYAdgzp3+5eyMH2VvO29/3VGC8TykHgo="
+version = "0.2.0"
+
+[chibi-net-smtp]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-net-dns", "chibi-optional", "chibi-string", "chibi-regexp", "chibi-pathname", "chibi-test"]
+synopsis = "Easy mail interface"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+These (possibly optional) dependencies are not packaged: (chibi
+quoted-printable), (chibi base64), (chibi mime), (chibi time), (chibi
+process), (chibi system), (chibi net).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/net/smtp/0.1/chibi-net-smtp-0.1.tgz"
+sha256 = "tm0xrc4yVYxlj1PX9WQxOCGmmNa72dw67Iiz67w5tzg="
+version = "0.1.0"
+
+[chibi-optional]
+dependencies = ["akku-r7rs"]
+synopsis = "Syntax to support optional and named keywo?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.9.1.3
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/optional/0.9.1.3/chibi-optional-0.9.1.3.tgz"
+sha256 = "MLWMC77L43Vg/CQIZBfSq5CFNrdNh3VnDaVfHraXHpw="
+version = "0.9.1"
+
+[chibi-parse]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "A parser combinator library with optional ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/parse/0.9.0/chibi-parse-0.9.0.tgz"
+sha256 = "Zs0KnRygdVn18cy+8Fk5khv7mWcEnCwmkQMaQ7VuOhc="
+version = "0.9.0"
+
+[chibi-pathname]
+dependencies = ["chibi-string", "akku-r7rs", "chibi-test"]
+synopsis = "A general, non-filesystem-specific pathnam?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/pathname/0.9.0/chibi-pathname-0.9.0.tgz"
+sha256 = "QkqjYFd9fKwM605+bL+JQ//pWIcDONWw/vHCJ4mgcYY="
+version = "0.9.0"
+
+[chibi-quoted-printable]
+dependencies = ["akku-r7rs", "chibi-string", "chibi-test"]
+synopsis = "RFC 2045 quoted printable encoding and dec?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/quoted-printable/0.9.0/chibi-quoted-printable-0.9.0.tgz"
+sha256 = "n3+eMBMTmzYkm1lOUQ/qwaKk/CtqIMGXTrxVn/A3oX0="
+version = "0.9.0"
+
+[chibi-regexp]
+dependencies = ["chibi-char-set-boundary", "chez-srfi", "akku-r7rs", "chibi-string", "chibi-match", "chibi-test"]
+synopsis = "A regular expression engine implementing S?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/regexp/0.9.0/chibi-regexp-0.9.0.tgz"
+sha256 = "e/7WOYLVXHwnLTLdyilZk6YZbDfvQm172Q6v47iFbF4="
+version = "0.9.0"
+
+[chibi-scribble]
+dependencies = ["akku-r7rs", "chibi-string", "chibi-test"]
+synopsis = "A library used for parsing scribble form?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/scribble/0.9.0/chibi-scribble-0.9.0.tgz"
+sha256 = "D5O/ovAmfzVXSZ/fkCPjpNdyopD+lxiY8okyfHHg58E="
+version = "0.9.0"
+
+[chibi-show]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-string", "chibi-monad-environment", "chibi-test"]
+synopsis = "A library of procedures for formatting Sch?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.7.3.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/show/0.7.3.1/chibi-show-0.7.3.1.tgz"
+sha256 = "SixkgCAA7KYtNjIN6XSAvC8zPmJReph6D/CvbZs9QZQ="
+version = "0.7.3"
+
+[chibi-snow-commands]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-bytevector", "chibi-config", "chibi-crypto-md5", "chibi-crypto-rsa", "chibi-crypto-sha2", "chibi-filesystem", "chibi-match", "chibi-pathname", "chibi-regexp", "chibi-show", "chibi-string", "chibi-sxml", "chibi-tar", "chibi-temp-file", "chibi-uri", "chibi-term-edit-line", "chibi-char-set"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi process),
+(chibi net http), (chibi zlib), (chibi net servlet), (chibi log), (chibi io),
+(chibi system), (chibi modules), (chibi doc), (chibi ast).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/pclouds/chibi/snow/commands/0.0.0/./chibi-snow-commands-0.0.0.tgz"
+sha256 = "wzEGuHm3h90oK9bwHTlo5wIkrIj+YbcfygXY+bvqFqg="
+version = "0.0.0"
+
+[chibi-sqlite3]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.7
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/sqlite3/0.7/chibi-sqlite3-0.7.tgz"
+sha256 = "vQrrVMLohWdwfGdeSBpHXWp0MfXhlZt+mewH02G9qS8="
+version = "0.7.0"
+
+[chibi-ssl]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "Basic bindings for establishing SSL connec?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+These (possibly optional) dependencies are not packaged: (chibi io), (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/ssl/0.1/chibi-ssl-0.1.tgz"
+sha256 = "hVMbquBSMUC/2n682XHqMLfiQra6CHShgVzsmnZgoT0="
+version = "0.1.0"
+
+[chibi-string]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "A cursor-oriented string library"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/string/0.9.0/chibi-string-0.9.0.tgz"
+sha256 = "hqc8U7LnpOEgH/EBFaVIiJCZPAAgBRs6vg/HhaB37BE="
+version = "0.9.0"
+
+[chibi-sxml]
+dependencies = ["akku-r7rs"]
+synopsis = "Utilities to convert sxml to xml or plain ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/sxml/0.9.0/chibi-sxml-0.9.0.tgz"
+sha256 = "zsRDhZWXjfzE/6XEG3cXjRRglJCy0dpFUeQs2WAmLMQ="
+version = "0.9.0"
+
+[chibi-tar]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-string", "chibi-binary-record", "chibi-pathname", "chibi-filesystem", "chibi-test"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/tar/0.9.0/chibi-tar-0.9.0.tgz"
+sha256 = "hsUkj4IG1PBZumbJFGDvXrlJfUDW/ZDUJYWDxx9Jz0o="
+version = "0.9.0"
+
+[chibi-temp-file]
+dependencies = ["akku-r7rs", "chibi-filesystem", "chibi-pathname"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/temp-file/0.9.0/chibi-temp-file-0.9.0.tgz"
+sha256 = "xACiXeLEEJpuVp8BTqs2CETjEEEjmubir+1dQOFtH2A="
+version = "0.9.0"
+
+[chibi-term-ansi]
+dependencies = ["akku-r7rs"]
+synopsis = "A library to use ANSI escape codes to form?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/term/ansi/0.9.0/chibi-term-ansi-0.9.0.tgz"
+sha256 = "gF4z1rh8bVQze/DIkALxPDI+bYNikdLoiiUhQNFVJZk="
+version = "0.9.0"
+
+[chibi-term-edit-line]
+dependencies = ["akku-r7rs"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/term/edit-line/0.9.0/chibi-term-edit-line-0.9.0.tgz"
+sha256 = "CvFvgEALXUOCEX0P82FoGVaqli5GiJcrTU3a9IpBs4U="
+version = "0.9.0"
+
+[chibi-test]
+dependencies = ["akku-r7rs", "chibi-diff", "chibi-term-ansi"]
+synopsis = "Simple testing framework adapted from the ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/test/0.9.0/chibi-test-0.9.0.tgz"
+sha256 = "hpl3FL5/tq3hsJTZFyf5yb7NkFGkHRcDmGZD0e0Jhl0="
+version = "0.9.0"
+
+[chibi-uri]
+dependencies = ["chibi-string", "chibi-pathname", "akku-r7rs", "chibi-test"]
+synopsis = "Library for parsing and constructing URI o?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/uri/0.9.0/chibi-uri-0.9.0.tgz"
+sha256 = "z+wFGjmUOUUsh1SrP/dEDpOxUt41UU+k9EB5Jd5Td1A="
+version = "0.9.0"
+
+[chibi-voting]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "Preferential voting utilities to help come?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/voting/0.1/chibi-voting-0.1.tgz"
+sha256 = "p+8hEJGY9HMQ/F84WpKNyvF4rfjl/cUsQUur9TFp7r4="
+version = "0.1.0"
+
+[chibi-xgboost]
+dependencies = ["akku-r7rs", "chibi-string", "chez-srfi", "chibi-test"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/xgboost/0.1/chibi-xgboost-0.1.tgz"
+sha256 = "gsLYMnVDa4/mxogIj+kBk6y8DGSwSwi/xessIK3DSKU="
+version = "0.1.0"
+
+[chibi-xlib]
+dependencies = []
+synopsis = "Minimal xlib bindings"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/xlib/0.1/chibi-xlib-0.1.tgz"
+sha256 = "vDXhgRkJSJ6nsuEhxKK6NOXMpB58nICCv9eDd0ZRrqI="
+version = "0.1.0"
+
+[chrisoei-cint]
+dependencies = ["akku-r7rs"]
+synopsis = "Compute cint coefficients"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: Chris Oei <chris.oei@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/chris.oei/chrisoei/cint/0.1.0/chrisoei-cint-0.1.0.tgz"
+sha256 = "DyuKA6/Avnont6ZOgI7o3302Vw5H3z734mbExjHbmz0="
+version = "0.1.0"
+
+[chrisoei-test]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "Additional testing utilities"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: Chris Oei <chris.oei@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/chris.oei/chrisoei/test/0.0.1/chrisoei-test-0.0.1.tgz"
+sha256 = "Kw98YAd4yIdSz0irb1aFxWdNnkqhXJE2Iuqpvh67zVo="
+version = "0.0.1"
+
+[comparators]
+dependencies = ["akku-r7rs"]
+synopsis = "SRFI 128: Comparators (reduced) reference ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Kevin Wortman <kwortman@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/kwortman/comparators/1.0.0/comparators-1.0.0.tgz"
+sha256 = "1RafbcbC13xBC2Z7Hj7LJ5OSBlX07BM6javfm2ME2LM="
+version = "1.0.0"
+
+[compression]
+dependencies = ["chez-srfi", "hashing", "struct-pack"]
+synopsis = "Decompresses zlib, xz, gzip, lzma, lzma2; ?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/compression_0.1.2_repack.tar.xz"
+sha256 = "aBCaG5XXMalft2ImDkvkEfuXE2PrLYkHXZX+E4AIOV0="
+version = "0.1.2"
+
+[conjure]
+dependencies = ["chez-srfi", "wak-fmt", "wak-irregex", "wak-foof-loop", "spells", "wak-prometheus"]
+synopsis = "Scheme make(1) replacement"
+longdesc = """
+conjure is a library, including a thin domain specific
+
+language layer, that allows expressing build instructions
+
+such as traditionally found in Makefiles.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/c/conjure_0.1.0-akku.84.19f3aae_repack.tar.xz"
+sha256 = "3Hrv+QyP4HKNtMfhLU//GoYRHEqroJ+1pEo1bh7fiDg="
+version = "0.1.0-akku.84.19f3aae"
+
+[cyclone-iset]
+dependencies = ["akku-r7rs", "cyclone-iset-base", "cyclone-iset-iterators", "cyclone-iset-constructors"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.0
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/1.0/cyclone-iset-1.0.tgz"
+sha256 = "wcPy2oqzF7qq1hwTTkB7wpf6MLlZq0Sa8V68kmG4ySI="
+version = "1.0.0"
+
+[cyclone-iset-base]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.0
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/base/1.0/cyclone-iset-base-1.0.tgz"
+sha256 = "07A+t8AWHrcc4kgib2z68W8VQKZubuWDjoYVLXv+8FY="
+version = "1.0.0"
+
+[cyclone-iset-constructors]
+dependencies = ["akku-r7rs", "chez-srfi", "cyclone-iset-base", "cyclone-iset-iterators"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.0
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/constructors/1.0/cyclone-iset-constructors-1.0.tgz"
+sha256 = "tccjcZo0jDEt7efEn69lbHL3kPtlMpafugocmAqde34="
+version = "1.0.0"
+
+[cyclone-iset-iterators]
+dependencies = ["akku-r7rs", "chez-srfi", "cyclone-iset-base"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.0
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/iterators/1.0/cyclone-iset-iterators-1.0.tgz"
+sha256 = "z/ecDFg5xBlSb8wps0f3L49RgUd1GHTi0Rbzhl0cmPQ="
+version = "1.0.0"
+
+[cyclone-iset-optimize]
+dependencies = ["akku-r7rs", "chez-srfi", "cyclone-iset-base", "cyclone-iset-iterators", "cyclone-iset-constructors"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.0
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/optimize/1.0/cyclone-iset-optimize-1.0.tgz"
+sha256 = "wk7phiYvn2EZcVrbguLCGufNAamblDsO0bliZJVfbj8="
+version = "1.0.0"
+
+[dataframe]
+dependencies = ["slib-format", "chez-srfi"]
+synopsis = "A dataframe record type for Chez Scheme wi?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/d/dataframe_0.6.0_repack.tar.xz"
+sha256 = "VZlI5MzrDGPja8bjbDjUwPnkkCdglXLvo1WcN9MPa3Q="
+version = "0.6.0"
+
+[dharmalab]
+dependencies = ["surfage"]
+synopsis = "Experimental libraries"
+longdesc = """
+Currying, records, timing, gen-id, queues, silex, etc.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/d/dharmalab_0.0.0-akku.53.aba65fb_repack.tar.xz"
+sha256 = "reYcmcSWVd0F+m9aX5sofD7TeJ2M2g7tYREPsa2nSuI="
+version = "0.0.0-akku.53.aba65fb"
+
+[dockerfile]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-match", "unpack-assoc", "shell-quote"]
+synopsis = "Scheme DSL to build Dockerfiles"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/dockerfile/0.1/dockerfile-0.1.tgz"
+sha256 = "QWl9hfzICfrpZdW6ETflza4tTIf+4WxKszAEqSWDAoE="
+version = "0.1.0"
+
+[dollar-sign]
+dependencies = []
+synopsis = "Adds dollar sign string interpolation"
+longdesc = """
+dollar-sign provides a macro '$' that adds string interpolation triggered by
+a $ in string.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/d/dollar-sign_1.1.0_repack.tar.xz"
+sha256 = "R/x8Cz/F1ww/T/AyC6jGCazcgTDxFpZT2PExs8ixGSQ="
+version = "1.1.0"
+
+[dorodango]
+dependencies = ["chez-srfi", "wak-foof-loop", "wak-fmt", "wak-irregex", "wak-parscheme", "wak-wt-tree", "spells", "industria", "ocelotl"]
+synopsis = "Package manager for R6RS implementations"
+longdesc = """
+NOTE: this package currently does not work!
+
+dorodango allows convenient installation and distribution of collections
+of R6RS libraries as well as programs using these libraries. It can handle
+dependencies, so when a program requires several libraries, and each of
+those has further dependencies, dorodango allows you to install all the
+prerequisites for that program in one go.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/d/dorodango_0.0.0-akku.268.4344bea_repack.tar.xz"
+sha256 = "o1G7Zj3nmpqySz3pDoOMqxHBqHcXRdThV1A3NGDpCfw="
+version = "0.0.0-akku.268.4344bea"
+
+[edn]
+dependencies = ["akku-r7rs", "chibi-parse", "chibi-test"]
+synopsis = "EDN is a data format from the Clojure ecos?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+"""
+url = "http://snow-fort.org/s/edwinwatkeys.com/edwin/edn/0.2.0/./edn-0.2.0.tgz"
+sha256 = "fI5x7Q0b8kj9Fb0aLqFzr7pBGwCCpY8QesvhVSnKkkk="
+version = "0.2.0"
+
+[fectors]
+dependencies = []
+synopsis = "Functional Vectors for Scheme"
+longdesc = """
+Functional programming needs functional data structures. This is an
+implementation of vectors (also called arrays), a finite map keyed by
+consecutive integers between 0 and n - 1, n being the length of the vector.
+Being functional, the structure is not observably mutatable, and so access to
+any version will always give the correct answer.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/f/fectors_0.1.1-akku.v0.1-5-g6c05617_repack.tar.xz"
+sha256 = "Qzcx2z3XHX1pf6nndkeFRy/PSWf2NootdXgDmyiGqgU="
+version = "0.1.1-akku.v0.1-5-g6c05617"
+
+[fisherro-pipe]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "Pipelining syntax"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/fisher.cx/robert/fisherro/pipe/1.0.0/fisherro-pipe-1.0.0.tgz"
+sha256 = "PhLxNHYGw1MBi/GlaSJtfg16a9UM83qaf0LxVc+yL2U="
+version = "1.0.0"
+
+[fs-fatfs]
+dependencies = ["struct-pack"]
+synopsis = "FAT filesystem library"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/f/fs-fatfs_0.1.0_repack.tar.xz"
+sha256 = "veFfjmctFS0Oe/WyINgTio5kfLHSLJgW5sVnhC8CFX8="
+version = "0.1.0"
+
+[fs-partitions]
+dependencies = ["struct-pack", "hashing"]
+synopsis = "Disk partition table reader (MBR/GPT)"
+longdesc = """
+This package has libraries for reading the disk partition information from
+the MBR or GPT of hard drives.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/f/fs-partitions_1.0.0-beta.0_repack.tar.xz"
+sha256 = "zPF5vp7wv+Q/IWww7OSV+lAYFfvooUDxrORZHdW0Sk0="
+version = "1.0.0-beta.0"
+
+[generators]
+dependencies = ["akku-r7rs"]
+synopsis = "SRFI 121: Generators reference implementat?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Kevin Wortman <kwortman@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/kwortman/generators/1.0.2/generators-1.0.2.tgz"
+sha256 = "Yp/wEnBJkdStNISHkDExQNcdzl/aNgSet/WvmM17eEc="
+version = "1.0.2"
+
+[gnuplot-pipe]
+dependencies = ["chez-srfi"]
+synopsis = "Port of gnuplot-pipe egg for Chicken Schem?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/g/gnuplot-pipe_0.4.0_repack.tar.xz"
+sha256 = "6GVmrc+22si2RiekJT1e1EilVHUegfLtW5xLdjDeBPg="
+version = "0.4.0"
+
+[guile-lib]
+dependencies = []
+synopsis = "Useful code written in Guile Scheme"
+longdesc = """
+Guile-Lib is intended as an accumulation place for pure-scheme Guile modules,
+allowing for people to cooperate integrating their generic Guile modules into
+a coherent library.
+
+Guile-Lib modules are well-documented and well-supported. Particularly good
+modules might migrate from Guile-Lib into Guile itself, at some point.
+
+Think a down-scaled, limited-scope CPAN for Guile.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/g/guile-lib_0.2.6_repack.tar.xz"
+sha256 = "mtaGQLnS+ORCFtRdkZr+Q0R6odsr7r0p/viYLLSe9cY="
+version = "0.2.6"
+
+[hashing]
+dependencies = []
+synopsis = "CRC, HMAC, MD5, SHA-1, SHA-2 (SHA-256, SHA?"
+longdesc = """
+Libraries for CRCs (pre-defined, custom, byte and bit-oriented), HMAC
+signatures, MD5, SHA-1, SHA-2 (SHA-256, SHA-512) and xxHash (XXH32).
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/h/hashing_1.3.0_repack.tar.xz"
+sha256 = "RdwoXtHb/iT8VMJBf+W678QIw8rVAjM4lNPBEfglW+Y="
+version = "1.3.0"
+
+[ijputils]
+dependencies = ["wak-foof-loop", "chez-srfi", "spells", "pfds"]
+synopsis = "A bunch of scheme junk :)"
+longdesc = """
+This is a loose collection of libraries written by the author, or as he
+describes it: a bunch of scheme junk :).
+
+There are libraries for bytevector utilities, macros inspired by Clojure,
+syntax for datatypes, functional programming utilities, list utilities,
+monoids, statistics utilities, stream utilities, and syntax helpers.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/i/ijputils_0.0.0-akku.42.1370c75_repack.tar.xz"
+sha256 = "0eUaZbHVZUpDBDf/Q8GyWm1dfi8SHUxlshVq+xJSKm0="
+version = "0.0.0-akku.42.1370c75"
+
+[in-progress-hash-bimaps]
+dependencies = ["akku-r7rs", "r6rs-hashtables", "in-progress-hash-tables"]
+synopsis = "Bimaps (HashTablesCowan)"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/in-progress/hash/bimaps/0.0.3/in-progress-hash-bimaps-0.0.3.tgz"
+sha256 = "yPDJNhRCM9364DEc3BiLKe5agIA5CXXmYKijKaAJrjQ="
+version = "0.0.3"
+
+[in-progress-hash-tables]
+dependencies = ["akku-r7rs", "r6rs-hashtables", "chez-srfi"]
+synopsis = "Hash tables (HashTablesCowan)"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/in-progress/hash/tables/0.0.3/in-progress-hash-tables-0.0.3.tgz"
+sha256 = "XoGrWosQbQ5Uu9UBYQ7PFdOeTtC0MMcqOjMiCPuD4gw="
+version = "0.0.3"
+
+[independentresearch-xattr]
+dependencies = ["akku-r7rs"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.2
+
+Original license field: (CC0)
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/lockywolf/independentresearch/xattr/0.2/independentresearch-xattr-0.2.tgz"
+sha256 = "tXn2P1Qdajq/tGwEdywwefqvHSFjfB0yoQtVQ/9haXI="
+version = "0.2.0"
+
+[industria]
+dependencies = ["chez-srfi", "hashing", "ip-address", "struct-pack"]
+synopsis = "Eclectic collection of crypto, compression?"
+longdesc = """
+Industria is a collection of portable R6RS Scheme libraries for cryptography.
+It implements low-level algorithms like AES, RSA, DSA, ECDSA, etc and the
+high-level protocols OpenPGP, Off-The-Record messaging, DNS and Secure Shell
+(SSH).
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/i/industria_2.2.0_repack.tar.xz"
+sha256 = "BKNpXLXOHgUW+1QUurBFshXmSsMCoH5HMc3E3iwzAkM="
+version = "2.2.0"
+
+[influx-client]
+dependencies = ["loko-srfi", "r6rs-usocket", "chez-srfi"]
+synopsis = "InfluxDB line protocol and client"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/i/influx-client_1.0.0_repack.tar.xz"
+sha256 = "B2LMRdIZGG6e8qDv2siveF8425P7jdjFCzQx+tMK5ZA="
+version = "1.0.0"
+
+[ip-address]
+dependencies = []
+synopsis = "IP address parsing and formatting"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/i/ip-address_1.1.0_repack.tar.xz"
+sha256 = "IxP92b0wJNZ3atTBq9Ivg4aDjkbN+jFjvseHEiNIOSA="
+version = "1.1.0"
+
+[irc-protocol]
+dependencies = ["industria", "chez-srfi", "struct-pack", "hashing", "TerribleTLS", "chibi-match"]
+synopsis = "IRC protocol utilities"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/i/irc-protocol_1.0.0_repack.tar.xz"
+sha256 = "EJAv1BSnX6uuMplgvG0TaolaxZaPYQHiyRdzSwCVPBQ="
+version = "1.0.0"
+
+[iteratees]
+dependencies = ["monad", "chez-srfi"]
+synopsis = "Functional processing of sequential chunke?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/i/iteratees_0.0.0-akku.9.e298a57_repack.tar.xz"
+sha256 = "fF47fkaNZXRfFrJ1Mr3xRwKVqQeKBhTwM2qJWLTxVgg="
+version = "0.0.0-akku.9.e298a57"
+
+[jkode-sassy]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "A portable assembler for x86 processors"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (public-domain)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/jkode/sassy/0.2.1/jkode-sassy-0.2.1.tgz"
+sha256 = "w+MDhHCYYjjUDOmK1usKB42fuLf3HLJBvCioT7XHnpU="
+version = "0.2.1"
+
+[json-tools]
+dependencies = ["chez-srfi"]
+synopsis = "Collection of JSON utilities"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/j/json-tools_0.1.1-akku.15.7.23_repack.tar.xz"
+sha256 = "oiBDrgq4K6X1UEQ9IbR+Mu+wscgjzjwiqCGmq+GCsYM="
+version = "0.1.1-akku.15.7.23"
+
+[laesare]
+dependencies = []
+synopsis = "Scheme lexer and reader"
+longdesc = """
+This provides a reader with some extra features not found in the standard
+read procedure:
+
+* Source annotations.
+
+* Tolerant mode that continues on errors.
+
+* Compatible mode with support for other RnRS standards.
+
+* Lexer that returns source code tokens, including whitespace.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/l/laesare_1.0.2_repack.tar.xz"
+sha256 = "sMyMzJQJlee/0BzDAZHFVWH4FCGVdJutlFvec7+ioYw="
+version = "1.0.2"
+
+[lassik-dockerfile]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-match", "lassik-unpack-assoc", "lassik-shell-quote"]
+synopsis = "Scheme DSL to build Dockerfiles"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/dockerfile/0.1/lassik-dockerfile-0.1.tgz"
+sha256 = "eFnTnSkoQXxwnE+J8BL6wcGpXyg5oafQrYcLp1nb6pI="
+version = "0.1.0"
+
+[lassik-shell-quote]
+dependencies = ["akku-r7rs", "chibi-match"]
+synopsis = "Little Scheme DSL to build shell command l?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/shell-quote/0.1/lassik-shell-quote-0.1.tgz"
+sha256 = "K7Og+o7zCl7qgPzqhXOSCUs6RFSNlfQAo7vPJ9AzLww="
+version = "0.1.0"
+
+[lassik-string-inflection]
+dependencies = ["akku-r7rs"]
+synopsis = "lisp-case under_score CapsUpper capsLower"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/string-inflection/0.1.1/lassik-string-inflection-0.1.1.tgz"
+sha256 = "2X+Ya9apegkLMHBRyva4MQ4sIqZI5gIxNdtfcIWq9AQ="
+version = "0.1.1"
+
+[lassik-trivial-tar-writer]
+dependencies = ["akku-r7rs"]
+synopsis = "Simplest way to output uncompressed .tar f?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/trivial-tar-writer/0.1/lassik-trivial-tar-writer-0.1.tgz"
+sha256 = "FVKMJEGSOoRCKsJzOAK/s1XZ3/zDPe/1WBXYrKC+o7A="
+version = "0.1.0"
+
+[lassik-unpack-assoc]
+dependencies = ["akku-r7rs"]
+synopsis = "Alist/hash-table destructuring case macros"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/unpack-assoc/0.1/lassik-unpack-assoc-0.1.tgz"
+sha256 = "EJx6ybC+A99hEDuESRv8z3Rg8nNnvVq6xYz0hjAKxjs="
+version = "0.1.0"
+
+[lcs]
+dependencies = []
+synopsis = "Longest Common Subsequence (LCS)"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/l/lcs_0.0.0-akku.3.6f5f5a4_repack.tar.xz"
+sha256 = "QwcGxeX7wJmMjxQ4BCz+FNarjlZYGhQrEusUPh0+wmc="
+version = "0.0.0-akku.3.6f5f5a4"
+
+[lightweight-testing]
+dependencies = ["akku-r7rs", "chibi-test"]
+synopsis = "SRFI-78 implemented as a wrapper around (c?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: N/A
+
+Maintainers: Flynn Liu.
+
+"""
+url = "http://snow-fort.org/s/tutanota.com/flynn16/lightweight-testing/0.1/lightweight-testing-0.1.tgz"
+sha256 = "FylAJc8pq3b0HFHFuFYpYe/ztqOhraL2Iht/OOSkIjw="
+version = "0.1.0"
+
+[linenoise]
+dependencies = ["r6rs-pffi"]
+synopsis = "Readline replacement via PFFI"
+longdesc = """
+A minimal, zero-config, BSD licensed, readline replacement.
+
+* Single and multi line editing mode with the usual key bindings implemented.
+
+* History handling.
+
+* Completion.
+
+* Hints (suggestions at the right of the prompt as you type).
+
+* About 1,100 lines of BSD license source code.
+
+* Only uses a subset of VT100 escapes (ANSI.SYS compatible).
+
+* UTF-8 support.
+
+This package requires Akku.scm >= 0.4.0 and a Scheme compatible with PFFI.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/l/linenoise_1.0.1_repack.tar.xz"
+sha256 = "Q7ptAYVGWAexxdq8+FyxMMXyg0CmbhPhJDjA+xA8RTQ="
+version = "1.0.1"
+
+[loko-srfi]
+dependencies = ["industria", "ip-address", "struct-pack"]
+synopsis = "Extra SRFIs for Loko Scheme"
+longdesc = """
+This package is for SRFIs that create too much entanglement through their
+dependencies to be suitable for either chez-srfi or Loko Scheme proper.
+
+It currently provides SRFI 106 (basic sockets).
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/l/loko-srfi_1.0.1_repack.tar.xz"
+sha256 = "brmw4DkAfH83e4Wvum3W/0Q9lLXKGg+munrNQ3XoP3k="
+version = "1.0.1"
+
+[macduffie-json]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "JSON reader and writer"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (Expat (MIT))
+
+Maintainers: Jason K MacDuffie <taknamay@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/taknamay/macduffie/json/0.9.5/macduffie-json-0.9.5.tgz"
+sha256 = "6NzPjoxj8IjYJrDpI1fbwpmDVvYWtDkEM7Q4smoItOI="
+version = "0.9.5"
+
+[machine-code]
+dependencies = ["struct-pack"]
+synopsis = "Assembler for x86, ELF reader, various dis?"
+longdesc = """
+Includes an assembler for x86 capable of producing ELF binaries.
+
+Disassemblers for arm a64, i8080, m68hc12, mips and x86 (all modes).
+
+And a library for reading ELF files.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/m/machine-code_2.2.0_repack.tar.xz"
+sha256 = "QBLB7Kw7PxFmgQqzmPlNtJCfMcOWwzzmRaDD5aKnPuU="
+version = "2.2.0"
+
+[monad]
+dependencies = ["ijputils"]
+synopsis = "Various monads"
+longdesc = """
+Contains: continuation monad, Maybe monad, reader monad, state monad and a
+writer monad.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/m/monad_0.0.0-akku.12.6f0115f_repack.tar.xz"
+sha256 = "dTrvOiqJOU+cq/MRD4s5o02O5a3kZhPncfmRjksPBFE="
+version = "0.0.0-akku.12.6f0115f"
+
+[mpl]
+dependencies = ["surfage", "dharmalab"]
+synopsis = "Computer Algebra and Symbolic Computation"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/m/mpl_0.0.0-akku.146.3469e3c_repack.tar.xz"
+sha256 = "Ynn96GD06zEbMMLbnLngBHsFF8vzQvtFNbG4kZpgXes="
+version = "0.0.0-akku.146.3469e3c"
+
+[mummel]
+dependencies = ["r6rs-protobuf", "TerribleTLS", "struct-pack"]
+synopsis = "Mumble voice chat protocol"
+longdesc = """
+This is a set of libraries that encode and decode Mumble protocol messages
+(https://www.mumble.info).
+
+This is early work. The messages themselves are working and a demo client is
+included that can set a channel description.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/m/mummel_0.1.0-alpha.0_repack.tar.xz"
+sha256 = "tK/xPmVcgVGadcv6gr9jb6ew+K3UcrdWnRxQ+31AWbQ="
+version = "0.1.0-alpha.0"
+
+[nanopass]
+dependencies = []
+synopsis = "Clean Compiler Creation Language"
+longdesc = """
+The nanopass framework is a DSL for building compilers. It is used in the
+open source rewrite of Chez Scheme.
+
+Currently this library supports Chez Scheme, Vicare Scheme, Ikarus Scheme and
+IronScheme.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/n/nanopass_1.9.2_repack.tar.xz"
+sha256 = "lNX8WIuJOcc6WlfMw3K83ti6JyhxkCmKwC710lh7xno="
+version = "1.9.2"
+
+[nytpu-contracts]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Design by Contracts for R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (MPL-2.0)
+
+"""
+url = "http://snow-fort.org/s/nytpu.com/alex/nytpu/contracts/0.1.1/nytpu-contracts-0.1.1.tgz"
+sha256 = "sHfk51GrpwRtnOZukuijoC1pGyuqdJC4uy6aXU0fKb0="
+version = "0.1.1"
+
+[nytpu-getopt]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "POSIX getopt(3), in compliance with POSIX ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (MPL-2.0)
+
+"""
+url = "http://snow-fort.org/s/nytpu.com/alex/nytpu/getopt/1.2.0/nytpu-getopt-1.2.0.tgz"
+sha256 = "7BOWuIhbt+drKSd9EkhKKpEptrPkfL2rIHnOWC8Q0Ro="
+version = "1.2.0"
+
+[ocelotl]
+dependencies = ["chez-srfi", "spells", "wak-riastreams", "wak-parscheme", "wak-foof-loop", "wak-ssax"]
+synopsis = "Library collection centered around HTTP"
+longdesc = """
+Ocelotl provides the following facilities:
+
+ - An HTTP 1.0 client
+
+ - RFC822-style header parsing
+
+ - Percent-encoding and -decoding
+
+ - An URI abstraction
+
+ - An HTTP server skeleton
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/o/ocelotl_0.0.0-akku.42.0c6aada_repack.tar.xz"
+sha256 = "nCKdaLP4OM1raH5h4be+40c215zd72Bh3IrlYJxSmP0="
+version = "0.0.0-akku.42.0c6aada"
+
+[okmij-ssax]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "Functional XML parsing framework"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 5.4
+
+Original license field: (public-domain)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/okmij/ssax/5.4/okmij-ssax-5.4.tgz"
+sha256 = "mnigmf/0WEwQyURNQbgI/nAptd+i0+Xs5Megjl4zssE="
+version = "5.4.0"
+
+[oleg]
+dependencies = ["chez-srfi"]
+synopsis = "Libraries written by Oleg ported to Chez S?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/o/oleg_0.0.0-akku.2.c682687_repack.tar.xz"
+sha256 = "03j7Zr4nSNM1y2B2BiNtVIb3UgVeMw+oQSIOAX/6wcA="
+version = "0.0.0-akku.2.c682687"
+
+[packrat]
+dependencies = ["chez-srfi"]
+synopsis = "Packrat parser library"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/p/packrat_0.1.1_repack.tar.xz"
+sha256 = "unLWuAgaxatDRN4Caxz/OoZBTHRql5+7QH8q0F/WbIw="
+version = "0.1.1"
+
+[pfds]
+dependencies = []
+synopsis = "Purely Functional Data Structures"
+longdesc = """
+pfds is a set of purely functional data structures written in R6RS Scheme.
+It has been tested with Racket, Guile 2, Vicare Scheme and IronScheme. Right
+now it contains: queues, deques, bbtrees, sets, dlists, priority search
+queues (psqs), finger trees, sequences, heaps, hamts; with more to come, time
+permitting.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/p/pfds_0.3.0_repack.tar.xz"
+sha256 = "KTfgNPkXRkSUEJbAsU18AMN3of3HGouCQpa3QAsZYl4="
+version = "0.3.0"
+
+[pfds-alist]
+dependencies = ["akku-r7rs"]
+synopsis = "Convenience functions for working with ass?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/alist/1.0.0/pfds-alist-1.0.0.tgz"
+sha256 = "6MIn/PPBDzVd+NHCKGDg5sVBA8NWvXB+2RQCizVouS4="
+version = "1.0.0"
+
+[pfds-bitwise]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Bitwise arithmetic utilities"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/bitwise/1.0.0/pfds-bitwise-1.0.0.tgz"
+sha256 = "hlSTD1paZt+RIPOotyds+gyjbmXqRXmWaz5xFCKvq5M="
+version = "1.0.0"
+
+[pfds-bounded-balance-tree]
+dependencies = ["akku-r7rs", "pfds-list-helpers"]
+synopsis = "Bounded balance tree"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/bounded-balance-tree/1.0.0/pfds-bounded-balance-tree-1.0.0.tgz"
+sha256 = "eub2S5xWFO44I4tEWbVY6uvSZ8aCS8ZjVKt8s5sqBNY="
+version = "1.0.0"
+
+[pfds-deque]
+dependencies = ["akku-r7rs", "pfds-lazy-list", "pfds-list-helpers"]
+synopsis = "Purely functional deques"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/deque/1.0.0/pfds-deque-1.0.0.tgz"
+sha256 = "pd7d9IUjwWdklmD8nkGs8sznfxhVJaH21M+pWJ9/hos="
+version = "1.0.0"
+
+[pfds-difference-list]
+dependencies = ["akku-r7rs"]
+synopsis = "Difference lists"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/difference-list/1.0.0/pfds-difference-list-1.0.0.tgz"
+sha256 = "gqnm229jrBqxT9h4NeQ4oKVIZXKkUKZcC47aCHPHKow="
+version = "1.0.0"
+
+[pfds-fector]
+dependencies = ["akku-r7rs"]
+synopsis = "Functional vectors"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/fector/1.0.0/pfds-fector-1.0.0.tgz"
+sha256 = "/wu2HJe0pZtRxA9YnUtIGpd1nAneGXwIkThtaw+jn1M="
+version = "1.0.0"
+
+[pfds-fingertree]
+dependencies = ["akku-r7rs", "pfds-list-helpers"]
+synopsis = "Fingertree: A simple general-purpose data ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/fingertree/1.0.0/pfds-fingertree-1.0.0.tgz"
+sha256 = "0jmMFQ5gsPnFIUKHcg/veLjOC5vOZzP2dJCjiGhYVbI="
+version = "1.0.0"
+
+[pfds-hash-array-mapped-trie]
+dependencies = ["akku-r7rs", "pfds-alist", "pfds-bitwise", "pfds-list-helpers", "pfds-vector", "chez-srfi"]
+synopsis = "Hash array mapped tries"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/hash-array-mapped-trie/1.0.0/pfds-hash-array-mapped-trie-1.0.0.tgz"
+sha256 = "9UnIcV2UuDA3r3hmGLWrCGANdc6f+kCoQcsH6PkYkx0="
+version = "1.0.0"
+
+[pfds-heap]
+dependencies = ["akku-r7rs", "pfds-list-helpers"]
+synopsis = "Heap data structure"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/heap/1.0.0/pfds-heap-1.0.0.tgz"
+sha256 = "W57AL9f5/wIvZ67ubmqkEJ4UuzoNCWszUS09kmX0m7U="
+version = "1.0.0"
+
+[pfds-lazy-list]
+dependencies = ["akku-r7rs"]
+synopsis = "Odd lazy lists"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/lazy-list/1.0.0/pfds-lazy-list-1.0.0.tgz"
+sha256 = "20/MiJVFw0cW3/bAQg+aX87io97o8xQWwbwIRit0JS8="
+version = "1.0.0"
+
+[pfds-list-helpers]
+dependencies = ["akku-r7rs"]
+synopsis = "List utility functions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/list-helpers/1.0.0/pfds-list-helpers-1.0.0.tgz"
+sha256 = "DrRZ4Ft3WpD2sqanQ10ZqmNp+ZcJuNUBqWAUngXiFRc="
+version = "1.0.0"
+
+[pfds-priority-search-queue]
+dependencies = ["akku-r7rs"]
+synopsis = "Priority search queues"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/priority-search-queue/1.0.0/pfds-priority-search-queue-1.0.0.tgz"
+sha256 = "R6kLCYPTyM+cXYemX7oQRnGtzvo4bnb52xsF0CBrONw="
+version = "1.0.0"
+
+[pfds-queue]
+dependencies = ["akku-r7rs", "pfds-list-helpers", "pfds-lazy-list"]
+synopsis = "Purely functional queues"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/queue/1.0.0/pfds-queue-1.0.0.tgz"
+sha256 = "udohMoq/JD/07+khXVcg8P/69OVS9RpJUZmTNHiCxg8="
+version = "1.0.0"
+
+[pfds-sequence]
+dependencies = ["akku-r7rs", "pfds-fingertree", "pfds-list-helpers"]
+synopsis = "Purely functional sequences"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/sequence/1.0.0/pfds-sequence-1.0.0.tgz"
+sha256 = "asUrHgAMQUBsNCIKrpRmKIgkVWwLDY9Lm/R11DMDjMQ="
+version = "1.0.0"
+
+[pfds-set]
+dependencies = ["akku-r7rs", "pfds-bounded-balance-tree", "pfds-list-helpers"]
+synopsis = "Purely functional sets"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/set/1.0.0/pfds-set-1.0.0.tgz"
+sha256 = "xxptqaIcaZS2gBkgURFBqTwYHHQQF9DPsk7CzeUj23s="
+version = "1.0.0"
+
+[pfds-vector]
+dependencies = ["akku-r7rs"]
+synopsis = "Some utility functions for working with ve?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (BSD)
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/vector/1.0.0/pfds-vector-1.0.0.tgz"
+sha256 = "RNy/7CU7Hzjyi0p0LiUaimTa8lI1xSG0C6CtAPdCBYw="
+version = "1.0.0"
+
+[postgresql]
+dependencies = ["akku-r7rs"]
+synopsis = "R7RS portable PostgreSQL binding"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 17.09.26
+
+Original license field: N/A
+
+Maintainers: Takashi Kato<ktakashi@ymail.com>.
+
+"""
+url = "http://snow-fort.org/s/ymail.com/ktakashi/postgresql/17.09.26/postgresql-17.09.26.tgz"
+sha256 = "1tgAsEGuAu8MNBpHvSMxapTcJsq4GcfYQl3fhAZroNE="
+version = "17.9.26"
+
+[quickcheck]
+dependencies = []
+synopsis = "A quickcheck-alike"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/q/quickcheck_0.0.0-akku.10.cc5cc2d_repack.tar.xz"
+sha256 = "5WkXI2J367N+skQzjycc7zRlbBtZv1DHF6pUq8CGc9c="
+version = "0.0.0-akku.10.cc5cc2d"
+
+[r6lint]
+dependencies = []
+synopsis = "Linter for R6RS libraries and programs"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6lint_0.1.0_repack.tar.xz"
+sha256 = "MkDtsEEVVdPLlZGkZDNZ5rPTuxB4YG0aM1HZ2fDFaFQ="
+version = "0.1.0"
+
+[r6rs-arithmetic-fixnums]
+dependencies = ["akku-r7rs", "r6rs-base"]
+synopsis = "Port of (rnrs arithmetic fixnums) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/arithmetic/fixnums/0.0.1/r6rs-arithmetic-fixnums-0.0.1.tgz"
+sha256 = "ooOdlZLyPDhZrOUL0xMtw3wmkXAqOC6HPHYVa3gqY3g="
+version = "0.0.1"
+
+[r6rs-base]
+dependencies = []
+synopsis = "Port of (rnrs base) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/base/0.0.1/r6rs-base-0.0.1.tgz"
+sha256 = "w7I0Rq0tF/83cAbpdWpeJ6idzRq2V5LkngHv1UJKbA0="
+version = "0.0.1"
+
+[r6rs-bytevectors]
+dependencies = []
+synopsis = "Port of (rnrs bytevectors) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/bytevectors/0.0.1/r6rs-bytevectors-0.0.1.tgz"
+sha256 = "QExZk2zRtnu6jdWCGaU1px+jnRi+A0rn6LH6rUHreC8="
+version = "0.0.1"
+
+[r6rs-control]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs control) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/control/0.0.1/r6rs-control-0.0.1.tgz"
+sha256 = "s4+0i6wY1GqahOzUumTKg9Jyq/PXiTB6Sak6QjCWWmo="
+version = "0.0.1"
+
+[r6rs-enums]
+dependencies = []
+synopsis = "Port of (rnrs enums) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/enums/0.0.1/r6rs-enums-0.0.1.tgz"
+sha256 = "+GwqI0p1/ElPCI2DHhfP4jMo9SROpmd72kTcZFGv/L0="
+version = "0.0.1"
+
+[r6rs-eval]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs eval) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/eval/0.0.1/r6rs-eval-0.0.1.tgz"
+sha256 = "sOh/FBiHadIfXxyW5PiltOTdpNV6hQnTE8TaK24S9Xw="
+version = "0.0.1"
+
+[r6rs-exceptions]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs exceptions) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/exceptions/0.0.1/r6rs-exceptions-0.0.1.tgz"
+sha256 = "lVXuB2w3mj9iK5yigSzzMyqdmv7NEV1+Oy3dqKqpuX8="
+version = "0.0.1"
+
+[r6rs-files]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs files) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/files/0.0.1/r6rs-files-0.0.1.tgz"
+sha256 = "a2dL+HNUMeWhzICQGNDRm2/8AspWeBMoKQ3kE9tYKe8="
+version = "0.0.1"
+
+[r6rs-hashtables]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs hashtables) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/hashtables/0.0.1/r6rs-hashtables-0.0.1.tgz"
+sha256 = "2T+F1Wx+rbHhYDv5WYgwK9HhEeMke7Hdun0nEUhjOxI="
+version = "0.0.1"
+
+[r6rs-io-simple]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs io simple) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/io/simple/0.0.1/r6rs-io-simple-0.0.1.tgz"
+sha256 = "f0muKV4/b6Qg4sz9v0RtxGzIFL37Q2BGGRvY4UY0awA="
+version = "0.0.1"
+
+[r6rs-lists]
+dependencies = []
+synopsis = "Port of (rnrs lists) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/lists/0.0.1/r6rs-lists-0.0.1.tgz"
+sha256 = "RlB9qkeyIm7qxuAEGDAdbpxGlAp0Tsnw4HrE77k7tJ4="
+version = "0.0.1"
+
+[r6rs-mutable-pairs]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs mutable-pairs) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/mutable-pairs/0.0.1/r6rs-mutable-pairs-0.0.1.tgz"
+sha256 = "hQw0m0qt7afIxSr88LnyN7C2QfcNl4b3dJDL9LE+i/E="
+version = "0.0.1"
+
+[r6rs-mutable-strings]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs mutable-strings) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/mutable-strings/0.0.1/r6rs-mutable-strings-0.0.1.tgz"
+sha256 = "xfOikOiTFPFXLNfzGrMji9TjyLCIPr8oG1bhdLEwMaE="
+version = "0.0.1"
+
+[r6rs-programs]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs programs) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/programs/0.0.1/r6rs-programs-0.0.1.tgz"
+sha256 = "sQlVVy3pekRSTOaZ2/bHYHx1u2AAuoRQUbHpJ71yNws="
+version = "0.0.1"
+
+[r6rs-r5rs]
+dependencies = ["akku-r7rs"]
+synopsis = "Port of (rnrs r5rs) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/r5rs/0.0.1/r6rs-r5rs-0.0.1.tgz"
+sha256 = "oEnmhyB7dmCESEYLcOylMNC0lag0i/9ZU/qRGr9zdyo="
+version = "0.0.1"
+
+[r6rs-sorting]
+dependencies = []
+synopsis = "Port of (rnrs sorting) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/sorting/0.0.1/r6rs-sorting-0.0.1.tgz"
+sha256 = "dSNbIGxBAWqCX7upjX9sJ+5GpNoInrE+RYV1HP37Xvk="
+version = "0.0.1"
+
+[r6rs-unicode]
+dependencies = []
+synopsis = "Port of (rnrs unicode) to R7RS"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode/0.0.1/r6rs-unicode-0.0.1.tgz"
+sha256 = "DafsrLxT74zpGLc4O8UwnYuxcc+j20Hp8imiZvr0ZlA="
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode0]
+dependencies = ["akku-r7rs"]
+synopsis = "Helper library for (rnrs unicode)"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode0/0.0.1/r6rs-unicode-reference-unicode0-0.0.1.tgz"
+sha256 = "FFCh4976lR5AfUrLkVHcaso6WZO2INx7LAXNUxyJUcQ="
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode1]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0"]
+synopsis = "Helper library for (rnrs unicode)"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode1/0.0.1/r6rs-unicode-reference-unicode1-0.0.1.tgz"
+sha256 = "7WX1d8GSiRjHNEBkMaY7XDEnh5R5PPQPqANcM55nf7k="
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode2]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0", "r6rs-unicode-reference-unicode1"]
+synopsis = "Helper library for (rnrs unicode)"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode2/0.0.1/r6rs-unicode-reference-unicode2-0.0.1.tgz"
+sha256 = "5G0/0XxjBcNVQq54OlePXyMk5n0UC2vYQWjd1CGQskw="
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode3]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0", "r6rs-unicode-reference-unicode1", "r6rs-unicode-reference-unicode2"]
+synopsis = "Helper library for (rnrs unicode)"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode3/0.0.1/r6rs-unicode-reference-unicode3-0.0.1.tgz"
+sha256 = "Yvum27Pd0SOzkqU44Bqh2wv/G4k5UFpwcWGSl/CvF/8="
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode4]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0", "r6rs-unicode-reference-unicode1", "r6rs-unicode-reference-unicode2", "r6rs-unicode-reference-unicode3"]
+synopsis = "Helper library for (rnrs unicode)"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: William D Cinger <will@ccs.neu.edu>.
+
+"""
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode4/0.0.1/r6rs-unicode-reference-unicode4-0.0.1.tgz"
+sha256 = "hdRsKmhsYGqlBCRav1UDbea6rFZ1qAm8p0rEabGnUiI="
+version = "0.0.1"
+
+[r6rs-ad]
+dependencies = []
+synopsis = "Automatic Differentiation and more"
+longdesc = """
+These are some AD (Automatic Differentiation) tools for both forward and
+reverse mode written for R6RS Scheme. Also included are some experimental
+packages to support nondeterministic and stochastic programming, including
+constraint satisfaction problems.
+
+Also from the README: This code is completely unsupported.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-ad_0.0.0-akku.160.a1b8db1_repack.tar.xz"
+sha256 = "5ojiZQVSE9ONHcvi9nBSRhhefJPfRRregcniLu1FfQY="
+version = "0.0.0-akku.160.a1b8db1"
+
+[r6rs-clos]
+dependencies = ["surfage"]
+synopsis = "Tiny CLOS"
+longdesc = """
+Tiny CLOS is an object system with a meta object protocol.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-clos_1.0.0_repack.tar.xz"
+sha256 = "9wp8GMiTbmD5+Uwe0kKXEt4c9dO6mOagTvJhCoWzZOs="
+version = "1.0.0"
+
+[r6rs-coap]
+dependencies = ["ip-address", "packrat"]
+synopsis = "Constrained Application Protocol (CoAP)"
+longdesc = """
+CoAP is an HTTP-alike protocol for constrained devices and networks. It is a
+binary protocol with low overhead and usually runs over UDP or SMS.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-coap_0.1.1_repack.tar.xz"
+sha256 = "ta+fnqFmGI7TtXdYh58Agc3zvj+sugo1CsuI92KVH/k="
+version = "0.1.1"
+
+[r6rs-monads]
+dependencies = []
+synopsis = "Generic syntax for working with monads"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-monads_0.1.0-akku.17.76e857_repack.tar.xz"
+sha256 = "WpojDPEJdWriI775NKl7sWRK/O5Ikrn+99rrjqZ0jw0="
+version = "0.1.0-akku.17.76e857"
+
+[r6rs-mongodb]
+dependencies = ["chez-srfi"]
+synopsis = "MongoDB client and BSON"
+longdesc = """
+This is an R6RS Scheme implementation of the MongoDB wire protocol.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-mongodb_0.0.190423_repack.tar.xz"
+sha256 = "Uw/mHiU9NaenPqbyD/Gbz/hzLvbrou64yyrcJQPOeE8="
+version = "0.0.190423"
+
+[r6rs-msgpack]
+dependencies = []
+synopsis = "MessagePack for R6RS Scheme"
+longdesc = """
+This is an implementation of MessagePack (http://msgpack.org/) for R6RS
+Scheme.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-msgpack_0.5.7_repack.tar.xz"
+sha256 = "oU2E+FltUz3Rmbm/L73+GEu7IPYDv233tJVq34sA9+c="
+version = "0.5.7"
+
+[r6rs-pffi]
+dependencies = ["chez-srfi"]
+synopsis = "Portable Foreign Function Interface"
+longdesc = """
+PFFI is a portable foreign function interface for R6RS Scheme
+implementations.
+
+Supported implementations:
+
+- Sagittarius (0.9.8 or later)
+
+- Racket (plt-r6rs v8.3)
+
+- Guile (3.0.8)
+
+- Chez Scheme (v9.5)
+
+The below implementations are no longer supported due to the inactiveness or
+officially declared to be archived.
+
+- Larceny (v0.98)
+
+- Vicare (0.3d7)
+
+- Mosh (0.2.7)
+
+(The version number is not upstream's. It is a semver version used for Akku.)
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-pffi_1.6.0_repack.tar.xz"
+sha256 = "yj9SAFmNkq+QpNvL59L1xaQpOT11KwkVZ0fRRbvU4Yk="
+version = "1.6.0"
+
+[r6rs-protobuf]
+dependencies = ["chez-srfi"]
+synopsis = "Protocol Buffers for R6RS Scheme"
+longdesc = """
+This project provides a pure Scheme implementation of Protocol Buffers,
+including parsing and code generation.
+
+Visit the Protocol Buffers project page
+(https://developers.google.com/protocol-buffers/) for information about the
+Protocol Buffers description language and the Protocol Buffers wire protocol.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-protobuf_0.9.0_repack.tar.xz"
+sha256 = "WhhvGAZwD7rWqovyT946vXKZ8jKwXodd6T21FF4RqLo="
+version = "0.9.0"
+
+[r6rs-psystem]
+dependencies = ["r6rs-pffi", "chez-srfi"]
+synopsis = "OS name and libc-loading for PFFI"
+longdesc = """
+This package contains (psystem os), which gives the name of the operating
+system and (psystem libc) which loads libc for use with r6rs-pffi.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-psystem_0.0.181217_repack.tar.xz"
+sha256 = "SM6wCK78T5fCSAIwSd9cBmYRqMeWimuJa2OrXZ2uw9k="
+version = "0.0.181217"
+
+[r6rs-redis]
+dependencies = ["chez-srfi", "r6rs-usocket"]
+synopsis = "Client for the Redis key-value store"
+longdesc = """
+This package provides a client to Redis, a non-volatile key-value store.
+
+It uses the r6rs-usocket library, which does not support all R6RS
+implementations at this time.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-redis_0.0.190103_repack.tar.xz"
+sha256 = "ui11qpk+NimiR28uX+kVg53gNKb6TxZur9yJQgqdNLY="
+version = "0.0.190103"
+
+[r6rs-slice]
+dependencies = ["chez-srfi"]
+synopsis = "Slice lists, vectors, strings and bytevect?"
+longdesc = """
+This is the R6RS port of Mario Goulart's 'slice' egg for Chicken Scheme.
+It provides a procedure (slice) for slicing lists, vectors, strings and
+bytevectors. Negative indices may be used for either the 'from' index or the
+'to' index.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-slice_0.0.0-akku.6.5f41a23_repack.tar.xz"
+sha256 = "f34ElTD05MrT9RgB2LDte06UVqDw8LmgePr/vgxOW54="
+version = "0.0.0-akku.6.5f41a23"
+
+[r6rs-thrift]
+dependencies = ["chez-srfi"]
+synopsis = "Implementation of the Apache Thrift framew?"
+longdesc = """
+This project provides a pure Scheme implementation of the Apache Thrift
+framework, including parsing and code generation. Visit the Apache Thrift
+project page (https://thrift.apache.org/) for information about the Thrift
+definition language and the various Thrift transports and wire protocols.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-thrift_0.1.0_repack.tar.xz"
+sha256 = "wUnhMPsBZq71kdrRy58enN7bpeyduSZZp1PwUVcJ6m8="
+version = "0.1.0"
+
+[r6rs-usocket]
+dependencies = ["r6rs-pffi", "r6rs-psystem"]
+synopsis = "portable sockets library"
+longdesc = """
+This package provides TCP and UDP server and client sockets
+
+It also provides SRFI-106 under the name (usocket srfi pffi).
+
+Supports Sagittarius, Chez Scheme and Larceny. Installation requires a C
+build environment, including make, and Akku >=0.4.0 (except for Sagittarius).
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-usocket_0.0.200218_repack.tar.xz"
+sha256 = "VgM8ZgqR0K/X8+D9GagOSewgGuNtldPosPNSXNxMFOo="
+version = "0.0.200218"
+
+[racr]
+dependencies = []
+synopsis = "Reference Attribute Grammar Controlled Rew?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/racr_0.0.0-akku.756.c7d3fe0_repack.tar.xz"
+sha256 = "XrD95v6E1qNEzvRsI0uzalwk28BlBcrZM1qcsKGxubc="
+version = "0.0.0-akku.756.c7d3fe0"
+
+[rapid-analyze-library]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-comparator", "rapid-set", "rapid-mapping", "rapid-syntax", "rapid-read", "rapid-list", "rapid-vicinity", "rapid-test"]
+synopsis = "Analyze R7RS library definitions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/analyze-library/0.1.0/rapid-analyze-library-0.1.0.tgz"
+sha256 = "S7ZFmOtjU12RdCnGeqZ2OxkD494SXytgewfJoF0BmtQ="
+version = "0.1.0"
+
+[rapid-and-let]
+dependencies = ["akku-r7rs", "rapid-test"]
+synopsis = "And with local bindings compatible with SR?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/and-let/0.1.0/rapid-and-let-0.1.0.tgz"
+sha256 = "0RzZ0u7UQG90JvlmH27qcdA0QXcIBFNzsynIOVdc0h0="
+version = "0.1.0"
+
+[rapid-args-fold]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-test"]
+synopsis = "A program argument processor compatible wi?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+These (possibly optional) dependencies are not packaged: (rapid
+runtime-environment).
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/args-fold/0.1.0/rapid-args-fold-0.1.0.tgz"
+sha256 = "mqWFnrAaBwjQFwwee6yg39fZ/UlCX239McVV9hJWxgY="
+version = "0.1.0"
+
+[rapid-assume]
+dependencies = ["akku-r7rs", "rapid-test"]
+synopsis = "Assumptions compatible with SRFI 145"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/assume/0.1.0/rapid-assume-0.1.0.tgz"
+sha256 = "UZ1G/45RfR5KAa3oNVIz2+O++/fwP00/cX3oAul0qKQ="
+version = "0.1.0"
+
+[rapid-box]
+dependencies = ["akku-r7rs", "rapid-test"]
+synopsis = "Boxes compatible with SRFI 111"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/box/0.1.1/rapid-box-0.1.1.tgz"
+sha256 = "oOKJrnQRXHW0DXOHdlVfwdNnkeduB/nrnc53yZi9XTI="
+version = "0.1.1"
+
+[rapid-comparator]
+dependencies = ["akku-r7rs", "rapid-test"]
+synopsis = "Comparators compatible with SRFI 128"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/comparator/0.1.1/rapid-comparator-0.1.1.tgz"
+sha256 = "l2nLU2gOHIoKiZO7Jn2whWuhNRxDdpaCHkU4eHj0RCY="
+version = "0.1.1"
+
+[rapid-eliminate-mutable-variables]
+dependencies = ["akku-r7rs", "rapid-analyze-library", "rapid-receive", "rapid-comparator", "rapid-syntax", "rapid-set", "rapid-test"]
+synopsis = "Eliminate mutable variables"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+These (possibly optional) dependencies are not packaged: (rapid gensym).
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/eliminate-mutable-variables/0.1.0/rapid-eliminate-mutable-variables-0.1.0.tgz"
+sha256 = "U6bBQonJXyR8Tcb/t2HOmQtk86vUPNGWwVwAD033Xv0="
+version = "0.1.0"
+
+[rapid-fix-letrec]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-analyze-library", "rapid-and-let", "rapid-receive", "rapid-comparator", "rapid-syntax", "rapid-mapping", "rapid-set", "rapid-graph", "rapid-test"]
+synopsis = "Fixing letrec"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/fix-letrec/0.1.0/rapid-fix-letrec-0.1.0.tgz"
+sha256 = "jauhI+H8Ifi3XfcjGq4ahobxRu9FwR0oS3AjCHUvEs4="
+version = "0.1.0"
+
+[rapid-format]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-test"]
+synopsis = "Basic format strings compatible with SRFI ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/format/0.1.0/rapid-format-0.1.0.tgz"
+sha256 = "+j3E6hyFaYs66Y92PW7M8CVmxcfaL99J/ZXZ2E52Cu0="
+version = "0.1.0"
+
+[rapid-generator]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-test"]
+synopsis = "Generators compatible with SRFI 121"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/generator/0.1.0/rapid-generator-0.1.0.tgz"
+sha256 = "e/EcdO8KUoVq1Ebmui7eqZPQWMfnA+oc3pBbSxPkHVY="
+version = "0.1.0"
+
+[rapid-graph]
+dependencies = ["akku-r7rs", "rapid-receive", "rapid-list", "rapid-set", "rapid-mapping", "rapid-test", "rapid-comparator"]
+synopsis = "Graph algorithms"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/graph/0.1.0/rapid-graph-0.1.0.tgz"
+sha256 = "NoNCCvFF2ennkv9/DDV0G4Xculpy5eQxuG58NGXo4Zk="
+version = "0.1.0"
+
+[rapid-identity]
+dependencies = ["akku-r7rs", "rapid-box", "rapid-test"]
+synopsis = "Unique identities"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/identity/0.1.0/rapid-identity-0.1.0.tgz"
+sha256 = "gXkk7k7Za3pvhfHcWdiSicvp3FaXNnxjLDMXTKlDSqQ="
+version = "0.1.0"
+
+[rapid-library-definition]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-comparator", "rapid-set", "rapid-mapping", "rapid-syntax", "rapid-read", "rapid-list", "rapid-vicinity", "rapid-test"]
+synopsis = "R7RS library definitions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/library-definition/0.1.2/rapid-library-definition-0.1.2.tgz"
+sha256 = "h8i95A0L8VRp1lr5jKUin//CJHgPvofexc1AvSyfU7w="
+version = "0.1.2"
+
+[rapid-list]
+dependencies = ["akku-r7rs", "rapid-receive", "rapid-test"]
+synopsis = "List library compatible with SRFI 1"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/list/0.1.0/rapid-list-0.1.0.tgz"
+sha256 = "WsOvKF2Fmwu78ulWBZMdIXJyz25qtKpkq5c9yOorIK8="
+version = "0.1.0"
+
+[rapid-mapping]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-receive", "rapid-comparator", "rapid-assume", "rapid-generator", "rapid-rbtree", "rapid-test"]
+synopsis = "Mappings compatible with SRFI 146"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/mapping/0.1.1/rapid-mapping-0.1.1.tgz"
+sha256 = "bACoBQtxh7ouob/XdAVedIJ7qEObr3QqYD/dPcIQb7Y="
+version = "0.1.1"
+
+[rapid-match]
+dependencies = ["akku-r7rs", "rapid-assume"]
+synopsis = "A pattern matcher"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/match/0.1.5/rapid-match-0.1.5.tgz"
+sha256 = "UcaxE5xbkTYEW+Y8/ahq1QBE9RcpZDExX6/xTOzviB4="
+version = "0.1.5"
+
+[rapid-quasiquote]
+dependencies = ["akku-r7rs", "rapid-test"]
+synopsis = "Extended quasiquotation with ellipses"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/quasiquote/0.1.1/rapid-quasiquote-0.1.1.tgz"
+sha256 = "qo/jy5NQuWt5CtLZ+NoqlAw+knBPSFxxvKGDyAHtaIc="
+version = "0.1.1"
+
+[rapid-rbtree]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-test"]
+synopsis = "Red-Black Trees"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/rbtree/0.1.0/rapid-rbtree-0.1.0.tgz"
+sha256 = "hm66wHI/b7I5Nr5Wdcw+JLNAeJzWcF1+4qanew7Q4DI="
+version = "0.1.0"
+
+[rapid-read]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-list", "rapid-format", "rapid-vicinity", "rapid-comparator", "rapid-mapping", "rapid-syntax", "rapid-test"]
+synopsis = "Scheme reader with source-location informa?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/read/0.1.3/rapid-read-0.1.3.tgz"
+sha256 = "1m2xBD69sD94UCKaXAobi+J2R3f4Xp6LRjXK8tE5qpA="
+version = "0.1.3"
+
+[rapid-receive]
+dependencies = ["akku-r7rs", "rapid-test"]
+synopsis = "Binding to multiple values compatible with?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/receive/0.1.0/rapid-receive-0.1.0.tgz"
+sha256 = "MZOky6ZtvVEi2KldTejE57+2NlIVFn4qJOUZx9YLQSw="
+version = "0.1.0"
+
+[rapid-set]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-receive", "rapid-generator", "rapid-comparator", "rapid-assume", "rapid-mapping", "rapid-test"]
+synopsis = "Sets and bags compatible with SRFI 113"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/set/0.1.0/rapid-set-0.1.0.tgz"
+sha256 = "0rz/+eJQI2OuMNEZBSRblcBc1yjub2fbGhA+tXmCMp8="
+version = "0.1.0"
+
+[rapid-syntax]
+dependencies = ["akku-r7rs", "rapid-quasiquote", "rapid-match", "rapid-format", "rapid-list", "rapid-identity", "rapid-comparator", "rapid-assume", "rapid-receive", "rapid-mapping", "rapid-vicinity", "rapid-test"]
+synopsis = "Syntax objects encapsulating Scheme datums?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/syntax/0.1.2/rapid-syntax-0.1.2.tgz"
+sha256 = "uA5kMP4Lc1x2hQzQhdDqun8CFTuAgTSgrRKS37KjOCk="
+version = "0.1.2"
+
+[rapid-test]
+dependencies = ["akku-r7rs"]
+synopsis = "A Scheme API for test suites compatible to?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/test/0.1.3/rapid-test-0.1.3.tgz"
+sha256 = "9MQyZz5+EZk7YC/AS575UIOovETm1t6N4Nb0UDKLgMw="
+version = "0.1.3"
+
+[rapid-vector]
+dependencies = ["akku-r7rs", "rapid-receive", "rapid-test"]
+synopsis = "Vector library compatible with SRFI 133"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/vector/0.1.0/rapid-vector-0.1.0.tgz"
+sha256 = "0ENCOPS8eO599HR94pcBBacCCNdP1/SN+zBGj8dE75I="
+version = "0.1.0"
+
+[rapid-vicinity]
+dependencies = ["akku-r7rs", "rapid-test"]
+synopsis = "Vicinity compatible with SRFI 59"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (gpl3)
+
+Maintainers: Marc Nieper-Wi??kirchen <marc@nieper-wisskirchen.de>.
+
+"""
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/vicinity/0.1.0/rapid-vicinity-0.1.0.tgz"
+sha256 = "h+iT+BazBnMd04uP/oEh/Z1OG6XcL9X3icag1UyNLtE="
+version = "0.1.0"
+
+[read-char-if]
+dependencies = ["akku-r7rs"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: N/A
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/read-char-if/0.1/read-char-if-0.1.tgz"
+sha256 = "HUMrz3dBSzdkn2xWIedNu+e+EM8IHJjPY5/6e+M7pxQ="
+version = "0.1.0"
+
+[rebottled-cl-pdf]
+dependencies = ["akku-r7rs", "slib-format", "rebottled-pregexp", "slib-common-list-functions", "robin-statistics"]
+synopsis = "Low level functions for generating PDF fil?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/cl-pdf/1.0.0/rebottled-cl-pdf-1.0.0.tgz"
+sha256 = "mgqRqb7w8jEcR+6P0McZqvyBuoi/PoAOTpd2CMt6eN8="
+version = "1.0.0"
+
+[rebottled-pregexp]
+dependencies = ["akku-r7rs"]
+synopsis = "Dorai Sitaram's portable regular expressio?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 20050502
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/pregexp/20050502/rebottled-pregexp-20050502.tgz"
+sha256 = "3T5Lbc2/26iIJ/IPLvUXElHZhSbIh2QFH2S/+Ity4Iw="
+version = "0.0.20050502"
+
+[rebottled-pstk]
+dependencies = ["akku-r7rs"]
+synopsis = "Portable Scheme Interface to the Tk GUI To?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/pstk/1.7.0/rebottled-pstk-1.7.0.tgz"
+sha256 = "I3fxlYT51hF9gwCdsHts3h6UftKAslp6y00t/ds4Pg0="
+version = "1.7.0"
+
+[rebottled-schelog]
+dependencies = ["akku-r7rs"]
+synopsis = "Dorai Sitaram's Schelog: logic programming?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 20150602
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/schelog/20150602/rebottled-schelog-20150602.tgz"
+sha256 = "faIuqLkMKKjBgSz2+kOw8wv9+GKdW4p4Y7dm8pfsp8U="
+version = "0.0.20150602"
+
+[retropikzel-scgi]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Portable Simple Common Gateway Interface i?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Retropikzel <Retropikzel@iki.fi>.
+
+"""
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/scgi/0.2.2/retropikzel-scgi-0.2.2.tgz"
+sha256 = "l21E74hXS82sqqh66Jg628NO+OqQOF6xv+X9qH9tGR8="
+version = "0.2.2"
+
+[riastradh]
+dependencies = ["chez-srfi"]
+synopsis = "Libraries by Taylor Campbell ported to Che?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/r/riastradh_0.0.0-akku.16.9714b5c_repack.tar.xz"
+sha256 = "OnHJ3g55Yw9v31Q7d+0ka1MIlA7zNil8/TxY2Ye3m40="
+version = "0.0.0-akku.16.9714b5c"
+
+[robin-abbrev]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Create unique abbreviations for a list of ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/abbrev/1.0.0/robin-abbrev-1.0.0.tgz"
+sha256 = "T0cAMT2+p1hRBRrsfUv/HUs3UdxUgWOQUNt3j6a5+DU="
+version = "1.0.0"
+
+[robin-directory]
+dependencies = ["akku-r7rs", "slib-filename"]
+synopsis = "Some useful directory functions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/directory/1.0.0/robin-directory-1.0.0.tgz"
+sha256 = "EfxYeA3cBvp5eit8E+RcnumcDtPt1vkptplWcMD/uqw="
+version = "1.0.0"
+
+[robin-disjoint-set]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "A disjoint-set data structure"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/disjoint-set/1.0.0/robin-disjoint-set-1.0.0.tgz"
+sha256 = "B0F1BRCWREQqHMRJ3+JGyzQMQe9EGwnWUJP5keD3ACc="
+version = "1.0.0"
+
+[robin-logger]
+dependencies = ["akku-r7rs"]
+synopsis = "A simple logging library for outputting me?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/logger/1.0.0/robin-logger-1.0.0.tgz"
+sha256 = "Zk+FoDrfGy1DDxeGYZwZqmWI0TSF0zy/MQFsIs7ztco="
+version = "1.0.0"
+
+[robin-statistics]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "A library of functions to compute statisti?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/statistics/1.0.0/robin-statistics-1.0.0.tgz"
+sha256 = "g/eX3zhB0k+xyBJmfSuwkoCAvq7JasLxwHqgbv7q+bo="
+version = "1.0.0"
+
+[robin-text]
+dependencies = ["akku-r7rs", "rebottled-pregexp", "robin-statistics", "slib-soundex", "chez-srfi"]
+synopsis = "A collection of functions for working with?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/text/1.0.0/robin-text-1.0.0.tgz"
+sha256 = "Fn4HCFJghL/QVb6IYBrc6Php/EKrZ6l88UjOkOZlxOA="
+version = "1.0.0"
+
+[scheme-bytestructures]
+dependencies = ["akku-r7rs", "r6rs-bytevectors"]
+synopsis = "Structured access to bytevector contents"
+longdesc = """
+This package provides a system that works on bytevectors similarly to how C
+works with structs and unions.
+
+This package requires Akku >= 0.5.2.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-bytestructures_1.0.6-akku.0_repack.tar.xz"
+sha256 = "Mx7X8crcdaHEpiDrzrZxwxcJhLIVC4yi0EoL0huWFEw="
+version = "1.0.6-akku.0"
+
+[scheme-langserver]
+dependencies = ["uuid", "ufo-threaded-function", "chibi-pathname", "ufo-match", "ufo-thread-pool", "arew-json", "slib-string-search", "chez-srfi"]
+synopsis = "This package is a language server protocol?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-langserver_1.1.0_repack.tar.xz"
+sha256 = "hWdxTE/VAcBVzAeRicsjc9AAKnx75C1VNHjUQVH4lw8="
+version = "1.1.0"
+
+[scheme-specs]
+dependencies = ["chez-srfi"]
+synopsis = "Ruby-style spec testing library"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-specs_0.0.3_repack.tar.xz"
+sha256 = "RQ0QwmIdHlptDg8FbYsCJgM5PnshtEWegZ0LsyB5P+c="
+version = "0.0.3"
+
+[sdl2]
+dependencies = ["chibi-bytevector", "akku-r7rs", "chez-srfi"]
+synopsis = "Bindings for SDL2"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2/1.0.4/sdl2-1.0.4.tgz"
+sha256 = "BEwQ65nIYff9+sYXUUaEpY1NUkyKfhpa3aGTfEav9f8="
+version = "1.0.4"
+
+[sdl2-obj]
+dependencies = ["sdl2", "bcaine-obj", "chez-srfi", "chibi-match"]
+synopsis = "OOP bindings for SDL2. Currently a work-in?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2/obj/0.0.2/sdl2-obj-0.0.2.tgz"
+sha256 = "worti0BiK/P0Vd6MO63kQ7MSxoBzSdWLtil9hUU0CG8="
+version = "0.0.2"
+
+[sdl2-image]
+dependencies = ["sdl2", "chez-srfi"]
+synopsis = "Bindings for SDL2_image"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2-image/1.0.1/sdl2-image-1.0.1.tgz"
+sha256 = "OlEGvdTZqolGodnO+z4WBr149Zh+/k8N+u5X0mTbpJg="
+version = "1.0.1"
+
+[sdl2-mixer]
+dependencies = []
+synopsis = "Bindings for SDL2_mixer"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+These (possibly optional) dependencies are not packaged: (chibi).
+
+"""
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2-mixer/1.0.0/sdl2-mixer-1.0.0.tgz"
+sha256 = "MMqBYInfYt12TUHcqnlAxdYs04f98UxWoVTxFMBgcSU="
+version = "1.0.0"
+
+[semver]
+dependencies = ["chez-srfi", "packrat", "chibi-match"]
+synopsis = "Semantic Versioning and ranges"
+longdesc = """
+This package implements Semantic Versioning 2.0.0 (semver.org) and also
+provides a library that implements semver ranges based on npm's semver
+package.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/semver_1.0.4_repack.tar.xz"
+sha256 = "4gBGyHdB169kaEIqRZwwRBOhUrdl+mdKZq3fcyJzJS4="
+version = "1.0.4"
+
+[seq]
+dependencies = []
+synopsis = "This library provides tools for efficientl?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/seq_0.0.1-beta.0_repack.tar.xz"
+sha256 = "Tq6I8SgmkugtTYF7sh9ged1SvuWAXpcgYP4Oa2+muYY="
+version = "0.0.1-beta.0"
+
+[shell-quote]
+dependencies = ["akku-r7rs", "chibi-match"]
+synopsis = "Little Scheme DSL to build shell command l?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/shell-quote/0.1/shell-quote-0.1.tgz"
+sha256 = "c5QBXopw2jw2lIFzbOon6ifIqqG4TRVJZz1PFF4VTY0="
+version = "0.1.0"
+
+[slib-alist]
+dependencies = ["akku-r7rs"]
+synopsis = "Some functions for working with associatio?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/alist/SLIB-3b5-r7rs/slib-alist-SLIB-3b5-r7rs.tgz"
+sha256 = "CaSzE1l6vBRvici8g26cAPMMTMyoVitSbzutmVy6wMw="
+version = "3.1.5"
+
+[slib-array-for-each]
+dependencies = ["akku-r7rs", "slib-common", "chez-srfi"]
+synopsis = "Applicative routines for arrays/matrices"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/array-for-each/SLIB-3b5-r7rs/slib-array-for-each-SLIB-3b5-r7rs.tgz"
+sha256 = "4G9oT6pLQgeoRcJgqUvgis17+ZlJQxngk9jAkqUq7Rs="
+version = "3.1.5"
+
+[slib-array-interpolate]
+dependencies = ["akku-r7rs", "slib-array-for-each", "slib-subarray", "chez-srfi"]
+synopsis = "Interpolated array access"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/array-interpolate/SLIB-3b5-r7rs/slib-array-interpolate-SLIB-3b5-r7rs.tgz"
+sha256 = "h+tjWwWDhZuzpkqeskGOL3DjJNUUT0Ek2cwhU56Q7eQ="
+version = "3.1.5"
+
+[slib-byte]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Arrays of small integers, not necessarily ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/byte/SLIB-3b5-r7rs/slib-byte-SLIB-3b5-r7rs.tgz"
+sha256 = "r0Vgs99aDWY5jdq7z+V20NBzQDwnlTkXGPVchxCsfA8="
+version = "3.1.5"
+
+[slib-byte-number]
+dependencies = ["akku-r7rs", "slib-byte", "slib-common", "chez-srfi"]
+synopsis = "Byte integer and IEEE floating-point conve?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/byte-number/SLIB-3b5-r7rs/slib-byte-number-SLIB-3b5-r7rs.tgz"
+sha256 = "Vug9Fd/ct7xlHvXmCSX90ox+tj41gjXjfWUN7uzPe04="
+version = "3.1.5"
+
+[slib-chapter-order]
+dependencies = ["akku-r7rs"]
+synopsis = "Chapter ordering"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/chapter-order/SLIB-3b5-r7rs/slib-chapter-order-SLIB-3b5-r7rs.tgz"
+sha256 = "8fMh8uAOF3ngatsCwXq0ocUKV7G6uSF21OaLaTN0XTg="
+version = "3.1.5"
+
+[slib-charplot]
+dependencies = ["akku-r7rs", "slib-array-for-each", "slib-common", "slib-printf", "chez-srfi"]
+synopsis = "Plotting histograms/graphs in characters"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/charplot/SLIB-3b5-r7rs/slib-charplot-SLIB-3b5-r7rs.tgz"
+sha256 = "W34Fa+fsPl9YmOh9nOiBi91vQxr2Xq6wuhRAT3oQfos="
+version = "3.1.5"
+
+[slib-coerce]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Implementation of COMMON-LISP COERCE and T?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/coerce/SLIB-3b5-r7rs/slib-coerce-SLIB-3b5-r7rs.tgz"
+sha256 = "Ok3UfVsGEEVHH8jgVaLKQ+RXvJqMuUce8zZNfopbrW0="
+version = "3.1.5"
+
+[slib-color]
+dependencies = ["akku-r7rs", "slib-color-space", "slib-printf", "slib-scanf", "slib-string-case"]
+synopsis = "Color data type"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/color/SLIB-3b5-r7rs/slib-color-SLIB-3b5-r7rs.tgz"
+sha256 = "dum3W8KI5uPJTHYMT/W9jWs3itwHxUQK/IQrlX/w2vI="
+version = "3.1.5"
+
+[slib-color-space]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Color-space conversions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/color-space/SLIB-3b5-r7rs/slib-color-space-SLIB-3b5-r7rs.tgz"
+sha256 = "yyr7spHUTEOJ4+ctgq4eFHlwRUhVqeoAbbUNtKWdi2I="
+version = "3.1.5"
+
+[slib-common]
+dependencies = ["akku-r7rs"]
+synopsis = "SLIB core functions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/common/SLIB-3b5-r7rs/slib-common-SLIB-3b5-r7rs.tgz"
+sha256 = "P0CSPfcCyVF7kGbzBDS8y8bJ+mfZtsEvarNzfqzT6vA="
+version = "3.1.5"
+
+[slib-common-lisp-time]
+dependencies = ["akku-r7rs", "slib-common", "slib-time-core", "slib-time-zone"]
+synopsis = "Common-Lisp time conversion routines"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/common-lisp-time/SLIB-3b5-r7rs/slib-common-lisp-time-SLIB-3b5-r7rs.tgz"
+sha256 = "iqe4Kapn8ZwIGTf9OuaCxRTICd3kbMPkmRbxf5zAdLM="
+version = "3.1.5"
+
+[slib-common-list-functions]
+dependencies = ["akku-r7rs"]
+synopsis = "Some common list functions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/common-list-functions/SLIB-3b5-r7rs/slib-common-list-functions-SLIB-3b5-r7rs.tgz"
+sha256 = "n1jrfs4SeFpOnuH0zHfoWrHbSFTTz9609ly7dnlQFos="
+version = "3.1.5"
+
+[slib-daylight]
+dependencies = ["akku-r7rs", "slib-color-space"]
+synopsis = "Model of sun and sky colors"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/daylight/SLIB-3b5-r7rs/slib-daylight-SLIB-3b5-r7rs.tgz"
+sha256 = "8IuOHtkJ3hmwtifGaTH7L9U3mqaTqIuqN3IY7uRYopI="
+version = "3.1.5"
+
+[slib-determinant]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Matrix Algebra"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/determinant/SLIB-3b5-r7rs/slib-determinant-SLIB-3b5-r7rs.tgz"
+sha256 = "NKHNrrEJf2LmhsrrIHGKndZo+XhW6CzkCc/jJWoYfHw="
+version = "3.1.5"
+
+[slib-directory]
+dependencies = ["akku-r7rs", "slib-common", "slib-filename"]
+synopsis = "Directories"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/directory/SLIB-3b5-r7rs/slib-directory-SLIB-3b5-r7rs.tgz"
+sha256 = "H6fOU91UPrCx7kok5/Cc3HkqlM0DiROE84t3A4DJKUw="
+version = "3.1.5"
+
+[slib-dynamic]
+dependencies = ["akku-r7rs"]
+synopsis = "Dynamic data type"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/dynamic/SLIB-3b5-r7rs/slib-dynamic-SLIB-3b5-r7rs.tgz"
+sha256 = "LfntQt7uF8Y4U30DF5Y1RiJeNBr/g+sBZFhzvpLwsMU="
+version = "3.1.5"
+
+[slib-factor]
+dependencies = ["akku-r7rs", "slib-common", "slib-modular", "chez-srfi"]
+synopsis = "Factorization, prime test and generation"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/factor/SLIB-3b5-r7rs/slib-factor-SLIB-3b5-r7rs.tgz"
+sha256 = "FxLmZWxRq1FT4kDwwRVGme8yI9hNyf+x8H17JrfJjpQ="
+version = "3.1.5"
+
+[slib-filename]
+dependencies = ["akku-r7rs", "slib-common"]
+synopsis = "String matching for filenames (glob, a la ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/filename/SLIB-3b5-r7rs/slib-filename-SLIB-3b5-r7rs.tgz"
+sha256 = "kkrcG60vLy1/hgfKrSQO8FdcWwvMD5+TWkyn5mGVsqE="
+version = "3.1.5"
+
+[slib-format]
+dependencies = ["akku-r7rs", "slib-common", "slib-pretty-print", "slib-string-case", "slib-string-port"]
+synopsis = "Common LISP text output formatter"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/format/SLIB-3b5-r7rs/slib-format-SLIB-3b5-r7rs.tgz"
+sha256 = "X6nptaZq1/uJb803xLl+HEUMcTOyt7kX7j0Zzd99TLs="
+version = "3.1.5"
+
+[slib-fourier-transform]
+dependencies = ["akku-r7rs", "slib-subarray", "chez-srfi"]
+synopsis = "Discrete Fourier Transform"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/fourier-transform/SLIB-3b5-r7rs/slib-fourier-transform-SLIB-3b5-r7rs.tgz"
+sha256 = "VFt0ouYB2IuZYMC8Z3LxyAWw2Od0ryDIMde9O/hZauE="
+version = "3.1.5"
+
+[slib-generic-write]
+dependencies = ["akku-r7rs"]
+synopsis = "Generic write"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/generic-write/SLIB-3b5-r7rs/slib-generic-write-SLIB-3b5-r7rs.tgz"
+sha256 = "MeLBmMZ7QzTUWpUBGRKZC8JhAT42ohHNxRZwNo6ToSk="
+version = "3.1.5"
+
+[slib-line-io]
+dependencies = ["akku-r7rs", "slib-common", "slib-filename"]
+synopsis = "Line oriented input/output functions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/line-io/SLIB-3b5-r7rs/slib-line-io-SLIB-3b5-r7rs.tgz"
+sha256 = "a1pDT0yjXLdJFleAdneKHYYo2+hyA2KsSWtYkl1g5a8="
+version = "3.1.5"
+
+[slib-math-integer]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Mathematical functions restricted to exact?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs-1
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/math-integer/SLIB-3b5-r7rs-1/slib-math-integer-SLIB-3b5-r7rs-1.tgz"
+sha256 = "ryNkLnVms1IvkJEohWkUTIDu8DQ5zjIt0w7CmUhKJAw="
+version = "3.1.5"
+
+[slib-math-real]
+dependencies = ["akku-r7rs", "slib-common"]
+synopsis = "Mathematical functions restricted to real ?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs-1
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/math-real/SLIB-3b5-r7rs-1/slib-math-real-SLIB-3b5-r7rs-1.tgz"
+sha256 = "L/63uGhVGRbUGL358clH55n0iatHn1NPnuW6Ca3ao4A="
+version = "3.1.5"
+
+[slib-minimize]
+dependencies = ["akku-r7rs", "slib-common"]
+synopsis = "Finds minimum value of a function"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/minimize/SLIB-3b5-r7rs/slib-minimize-SLIB-3b5-r7rs.tgz"
+sha256 = "k8o/+u+UzZDW1JXCs8DbdQ4aFoUKqEQ3JcuYEWdUuxQ="
+version = "3.1.5"
+
+[slib-modular]
+dependencies = ["akku-r7rs", "slib-common"]
+synopsis = "Modular fixnum arithmetic"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/modular/SLIB-3b5-r7rs/slib-modular-SLIB-3b5-r7rs.tgz"
+sha256 = "1FpMMrIhY+75O3SuQlKaUhZco96gNL00EMmkb4jVc44="
+version = "3.1.5"
+
+[slib-nbs-iscc]
+dependencies = ["akku-r7rs", "slib-color", "chez-srfi"]
+synopsis = "NBS/ISCC Color System"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/nbs-iscc/SLIB-3b5-r7rs/slib-nbs-iscc-SLIB-3b5-r7rs.tgz"
+sha256 = "xlvo3innKvSHhYPEjodfSNVIMxZ/4Ch3V5eNSxcekcU="
+version = "3.1.5"
+
+[slib-posix-time]
+dependencies = ["akku-r7rs", "slib-time-core", "slib-time-zone"]
+synopsis = "POSIX time conversion routines"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/posix-time/SLIB-3b5-r7rs/slib-posix-time-SLIB-3b5-r7rs.tgz"
+sha256 = "HTchoc1t4uwYO9e8EHBHUkuvRzieSIbt8rpvLrKfccM="
+version = "3.1.5"
+
+[slib-pprint-file]
+dependencies = ["akku-r7rs", "slib-common", "slib-pretty-print"]
+synopsis = "Pretty print a Scheme file"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/pprint-file/SLIB-3b5-r7rs/slib-pprint-file-SLIB-3b5-r7rs.tgz"
+sha256 = "zrolh0CheGUNIdDF9d1gNmxHLPkygaZp8RVWoRHn5Yc="
+version = "3.1.5"
+
+[slib-pretty-print]
+dependencies = ["akku-r7rs", "slib-common", "slib-generic-write"]
+synopsis = "Pretty printing"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/pretty-print/SLIB-3b5-r7rs/slib-pretty-print-SLIB-3b5-r7rs.tgz"
+sha256 = "ynbzCtoNyF6ZrBRCy38v9yvSA8SRfQxIMwjjgCnFY5M="
+version = "3.1.5"
+
+[slib-printf]
+dependencies = ["akku-r7rs", "slib-generic-write"]
+synopsis = "Implementation of standard C functions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/printf/SLIB-3b5-r7rs/slib-printf-SLIB-3b5-r7rs.tgz"
+sha256 = "yGqj7+JvUUy9Ea6wOt4u4bPGrAKNtSxrJFTCDTeKySQ="
+version = "3.1.5"
+
+[slib-queue]
+dependencies = ["akku-r7rs"]
+synopsis = "Queue/Stack data structure"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/queue/SLIB-3b5-r7rs/slib-queue-SLIB-3b5-r7rs.tgz"
+sha256 = "oNA1UC1yucisXuI6JEXPlKMSQIvhHgCdUrIrQ5BGMfQ="
+version = "3.1.5"
+
+[slib-random-inexact]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Pseudo-Random inexact real numbers"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/random-inexact/SLIB-3b5-r7rs/slib-random-inexact-SLIB-3b5-r7rs.tgz"
+sha256 = "rad7knVnGLSGfwpJJeyX9qOcIIk1mHGnfysxdr2d4V0="
+version = "3.1.5"
+
+[slib-rationalize]
+dependencies = ["akku-r7rs"]
+synopsis = "Find simplest number ratios"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/rationalize/SLIB-3b5-r7rs/slib-rationalize-SLIB-3b5-r7rs.tgz"
+sha256 = "rZf0kgkXLqG+DsHrkFm8WTNJ/B9dbhdgW/+lchzmHkA="
+version = "3.1.5"
+
+[slib-resene]
+dependencies = ["akku-r7rs", "slib-color", "chez-srfi"]
+synopsis = "Resene Color System"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/resene/SLIB-3b5-r7rs/slib-resene-SLIB-3b5-r7rs.tgz"
+sha256 = "142D6M6dGtRoH/9ihMuwdobUkX9eW0yPDh49Q1wFj+M="
+version = "3.1.5"
+
+[slib-rev2-procedures]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Implementation of some R2RS procedures eli?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/rev2-procedures/SLIB-3b5-r7rs/slib-rev2-procedures-SLIB-3b5-r7rs.tgz"
+sha256 = "mmW271E98ftsezux8OQ9L2dzaziA05N/aKkF+HttfvE="
+version = "3.1.5"
+
+[slib-saturate]
+dependencies = ["akku-r7rs", "slib-color", "chez-srfi"]
+synopsis = "Saturated Color Dictionary"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/saturate/SLIB-3b5-r7rs/slib-saturate-SLIB-3b5-r7rs.tgz"
+sha256 = "l9WplEanD19xUxGkZPbsw4Lutxjh+bPlKjKGWnhOjZ4="
+version = "3.1.5"
+
+[slib-scanf]
+dependencies = ["akku-r7rs", "slib-common", "slib-string-port"]
+synopsis = "Implementation of POSIX-style formatted in?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/scanf/SLIB-3b5-r7rs/slib-scanf-SLIB-3b5-r7rs.tgz"
+sha256 = "i7tSMwg5XSEJ66TSlDXth9NKe4YeDo6hrpXLaybQZK4="
+version = "3.1.5"
+
+[slib-soundex]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Original Soundex algorithm"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/soundex/SLIB-3b5-r7rs/slib-soundex-SLIB-3b5-r7rs.tgz"
+sha256 = "jYs+GUw5eRrc/LoDR9bRR74+SWmzSFYSnpa9kD+G1EI="
+version = "3.1.5"
+
+[slib-string-case]
+dependencies = ["akku-r7rs", "slib-common"]
+synopsis = "String casing functions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/string-case/SLIB-3b5-r7rs/slib-string-case-SLIB-3b5-r7rs.tgz"
+sha256 = "0egWB70ELvaU/x3bzGHmoR57CvCN1w4ijiOvy0CsJPg="
+version = "3.1.5"
+
+[slib-string-port]
+dependencies = ["akku-r7rs"]
+synopsis = "Portable string ports"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/string-port/SLIB-3b5-r7rs/slib-string-port-SLIB-3b5-r7rs.tgz"
+sha256 = "o22PFkOkHbF/yOnxlxFI2Zf8/E7PdFqe5LwAelbHLIM="
+version = "3.1.5"
+
+[slib-string-search]
+dependencies = ["akku-r7rs", "slib-alist"]
+synopsis = "Functions for working with and searching w?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/string-search/SLIB-3b5-r7rs/slib-string-search-SLIB-3b5-r7rs.tgz"
+sha256 = "sy9Tkyar68CsgWmi3RCFlEziRK6OKe7prnnGqIZmLXw="
+version = "3.1.5"
+
+[slib-subarray]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Accessing parts of arrays"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/subarray/SLIB-3b5-r7rs/slib-subarray-SLIB-3b5-r7rs.tgz"
+sha256 = "ESWkovqUACkcjjpOi2hHFXP1gT6grvwKs6fKTKdd7cc="
+version = "3.1.5"
+
+[slib-time-core]
+dependencies = ["akku-r7rs"]
+synopsis = "Core time conversion routines"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/time-core/SLIB-3b5-r7rs/slib-time-core-SLIB-3b5-r7rs.tgz"
+sha256 = "M4WDnJirmxvGg0e67igLgHHdc7Gu0+49FUcWG5ztNjA="
+version = "3.1.5"
+
+[slib-time-zone]
+dependencies = ["akku-r7rs", "slib-common", "slib-scanf", "slib-time-core", "slib-tzfile"]
+synopsis = "Compute timezones and DST from TZ environm?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/time-zone/SLIB-3b5-r7rs/slib-time-zone-SLIB-3b5-r7rs.tgz"
+sha256 = "YLzdKhJU/0Lto+XASkzBjXEUaYsWOadS7DOORI4dxPc="
+version = "3.1.5"
+
+[slib-topological-sort]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Topological sort"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/topological-sort/SLIB-3b5-r7rs/slib-topological-sort-SLIB-3b5-r7rs.tgz"
+sha256 = "j4A5zQJPNguasYAOQe9msf2x/Fs+mY4wnAxRhqlepbI="
+version = "3.1.5"
+
+[slib-tree]
+dependencies = ["akku-r7rs"]
+synopsis = "Implementation of COMMON LISP tree functio?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/tree/SLIB-3b5-r7rs/slib-tree-SLIB-3b5-r7rs.tgz"
+sha256 = "IVkA1uXG//Tp93AAxgYbPcEmy5rCxkMPNDy1iawHOCc="
+version = "3.1.5"
+
+[slib-tzfile]
+dependencies = ["akku-r7rs", "slib-byte", "slib-common"]
+synopsis = "Read sysV style (binary) timezone file"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/tzfile/SLIB-3b5-r7rs/slib-tzfile-SLIB-3b5-r7rs.tgz"
+sha256 = "b3fJdrpuQbCl1lOD0MIhd4b7D+f9NOu1y8DV9ceEuPM="
+version = "3.1.5"
+
+[slib-uri]
+dependencies = ["akku-r7rs", "slib-coerce", "slib-common", "slib-directory", "slib-printf", "slib-scanf", "slib-string-case", "slib-string-search", "chez-srfi"]
+synopsis = "Construct and decode Uniform Resource Iden?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/uri/SLIB-3b5-r7rs/slib-uri-SLIB-3b5-r7rs.tgz"
+sha256 = "3QCTeaK2Qvq1+0KhMSIWm78EQ0OTDOvwWTABK8Raow8="
+version = "3.1.5"
+
+[slib-wt-tree]
+dependencies = ["akku-r7rs"]
+synopsis = "Weight balanced trees"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs-1
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/wt-tree/SLIB-3b5-r7rs-1/slib-wt-tree-SLIB-3b5-r7rs-1.tgz"
+sha256 = "LCTXRklrIS1ZAhfDXgKqLPcNoTre48LiJ4AUnB7WDYM="
+version = "3.1.5"
+
+[slib-xml-parse]
+dependencies = ["akku-r7rs", "slib-common", "slib-rev2-procedures", "slib-string-search", "chez-srfi"]
+synopsis = "XML parsing and conversion to SXML"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: SLIB-3b5-r7rs
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/xml-parse/SLIB-3b5-r7rs/slib-xml-parse-SLIB-3b5-r7rs.tgz"
+sha256 = "FPUUATwyz6gvO5dsKkC31UUPd3NJ3tMUxK64LKnOspE="
+version = "3.1.5"
+
+[spdx]
+dependencies = ["chez-srfi", "packrat"]
+synopsis = "SPDX license expressions and such"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/spdx_1.0.0_repack.tar.xz"
+sha256 = "XmIctER8n7UTYAKqAfVgDehPRM0yF4YmKvad5MY3nGY="
+version = "1.0.0"
+
+[spells]
+dependencies = ["chez-srfi", "wak-irregex", "wak-foof-loop", "wak-fmt"]
+synopsis = "Portability and utility library"
+longdesc = """
+A portability library. It offers a single interface to functionality commonly
+present, but not standardized, in various Scheme implementations.
+
+Spells currently offers:
+
+ - A filesystem interface
+
+ - A pathname facility
+
+ - An interface to OS processes
+
+ - A simple interface to TCP sockets
+
+ - Weak cells
+
+ - An implementation of the zipper data structure
+
+ - Extensible vectors
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/spells_0.0.0-akku.509.1bfe3b8_repack.tar.xz"
+sha256 = "A9jBuxXgoxz7rV8wxfIxRuoIJpR/EJPTiQ68RPZrwPc="
+version = "0.0.0-akku.509.1bfe3b8"
+
+[srfi-156]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+synopsis = "Reference implementation of SRFI-156: Synt?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Robert Fisher.
+
+"""
+url = "http://snow-fort.org/s/fisher.cx/robert/srfi/156/1.0.0/srfi-156-1.0.0.tgz"
+sha256 = "c/U8x1fi++We9IOVwtKrlMrWsqf+vY0NtTEQ4o5mT9E="
+version = "1.0.0"
+
+[srfi-166]
+dependencies = ["chez-srfi", "akku-r7rs", "chibi-optional"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/srfi/166/0.8.0/srfi-166-0.8.0.tgz"
+sha256 = "4TKmjAcMFX6/yCkbC+j4T0XuhbkuT4CsEvqr0MOHJSM="
+version = "0.8.0"
+
+[srfi-175]
+dependencies = ["akku-r7rs"]
+synopsis = "SRFI 175: ASCII character library"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.1
+
+Original license field: (MIT)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/srfi/175/1.1/srfi-175-1.1.tgz"
+sha256 = "bZbP5UdPR9G9JJSa5wV8OTdG7WYkqWkckummB9qHfBw="
+version = "1.1.0"
+
+[srfi-179]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-assert", "chibi-test"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (bsd)
+
+Maintainers: Alex Shinn <alexshinn@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/alexshinn/srfi/179/0.10.0/srfi-179-0.10.0.tgz"
+sha256 = "OFqGlOYCd9memrlgXMs4YWFm7tuUpgvtmjjOsdSCtaE="
+version = "0.10.0"
+
+[srfi-19]
+dependencies = ["akku-r7rs"]
+synopsis = "Implementation of SRFI 19 'Time Data Types?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (mit)
+
+Maintainers: Geoff Taylor <srfi-19@opinionatedgeek.com>.
+
+"""
+url = "http://snow-fort.org/s/opinionatedgeek.com/snow-fort.org/srfi/19/1.0.1/srfi-19-1.0.1.tgz"
+sha256 = "CLWgNA6xU7gAXezEzaCgsqKWdlP1HS2LfX5bIkXwjGo="
+version = "1.0.1"
+
+[srfi-197]
+dependencies = ["akku-r7rs"]
+synopsis = "SRFI 197: Pipeline Operators"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.3
+
+Original license field: N/A
+
+Maintainers: Jantony Velazquez Gauthier <jantony.velazquez@upr.edu>.
+
+"""
+url = "http://snow-fort.org/s/upr.edu/jantony.velazquez/srfi/197/1.3/srfi-197-1.3.tgz"
+sha256 = "qDqWp9sz9R9sp0fBz8EJAQuWspcsCcijrMZpa/TbpU0="
+version = "1.3.0"
+
+[srfi-235]
+dependencies = ["akku-r7rs"]
+synopsis = "SRFI 235: Combinators"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 1.0
+
+Original license field: N/A
+
+Maintainers: Jantony Velazquez Gauthier <jantony.velazquez@upr.edu>.
+
+"""
+url = "http://snow-fort.org/s/upr.edu/jantony.velazquez/srfi/235/1.0/srfi-235-1.0.tgz"
+sha256 = "xcS9MSHUfeHri26qKfdUu/nO50obNxkXOhiRn0Xy1Go="
+version = "1.0.0"
+
+[srfi-28]
+dependencies = ["akku-r7rs"]
+synopsis = "SRFI 28: Basic Format Strings"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.9
+
+Original license field: (MIT)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/srfi/28/0.9/srfi-28-0.9.tgz"
+sha256 = "lFJ5HmeoBq+xDvogLUWKaykZYTAI5rKT6X/4+kEpALA="
+version = "0.9.0"
+
+[srfi-42]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (CC0)
+
+"""
+url = "http://snow-fort.org/s/gmail.com/lockywolf/srfi/42/0.1/srfi-42-0.1.tgz"
+sha256 = "gJytItFSIY0rrW7jFuMCCWjEj1hpvq2qP8PQu3g/qoc="
+version = "0.1.0"
+
+[srfi-60]
+dependencies = ["akku-r7rs"]
+synopsis = "Bit access and operations"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/srfi/60/1.0.0/srfi-60-1.0.0.tgz"
+sha256 = "6euadivWbQny1jNDVx50kpZboKnEi7+0UAaTJBnjFjE="
+version = "1.0.0"
+
+[srfi-63]
+dependencies = ["akku-r7rs"]
+synopsis = "Homogeneous and Heterogeneous Arrays"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Peter Lane <peter@peterlane.info>.
+
+"""
+url = "http://snow-fort.org/s/peterlane.info/peter/srfi/63/1.0.0/srfi-63-1.0.0.tgz"
+sha256 = "C4qAXdJCQ4pFrLzpaqPE/Gzn4VynBR6ge9daP4jNQD8="
+version = "1.0.0"
+
+[srfi-64]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Reference implementation of SRFI-54: A Sch?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Robert Fisher.
+
+"""
+url = "http://snow-fort.org/s/fisher.cx/robert/srfi/64/0.1.0/srfi-64-0.1.0.tgz"
+sha256 = "rgcUX+XSL+g5VK9Mfjb4bh6W+I1GWIpLxDhEoAk1p/I="
+version = "0.1.0"
+
+[srfi-78]
+dependencies = ["chez-srfi", "akku-r7rs"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (CC0)
+
+"""
+url = "http://snow-fort.org/s/gmail.com/lockywolf/srfi/78/0.1/srfi-78-0.1.tgz"
+sha256 = "g8t58Os9qgBCAsI7TR9p8benbEA/CftPN6/qZmA3oys="
+version = "0.1.0"
+
+[string-inflection]
+dependencies = ["akku-r7rs"]
+synopsis = "lisp-case under_score CapsUpper capsLower"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/string-inflection/0.1.1/string-inflection-0.1.1.tgz"
+sha256 = "HzJzyi/3uKoUxuCrobM5x5icIBoHNQje58rYNZalcZI="
+version = "0.1.1"
+
+[struct-pack]
+dependencies = []
+synopsis = "Pack/unpack syntax for byte structures"
+longdesc = """
+This is a library for working with packed byte structures. It is similar to
+`struct` in Python or `pack` and `unpack` in Perl.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/struct-pack_1.1.1_repack.tar.xz"
+sha256 = "QtNKTXBSvdob3ewN/d2PHldr0KUbSDIVpMo6jte1bQk="
+version = "1.1.1"
+
+[surfage]
+dependencies = []
+synopsis = "SRFI collection: (surfage s1 lists), etc"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/surfage_0.0.0-akku.12.895f16a_repack.tar.xz"
+sha256 = "p1Uqc6XgFfhISlFb2t6amTYGgcfNHNkzGwxl5VamNTk="
+version = "0.0.0-akku.12.895f16a"
+
+[swish]
+dependencies = []
+synopsis = "Swish Concurrency Engine (like Erlang/Node)"
+longdesc = """
+The Swish Concurrency Engine is a framework used to write fault-tolerant
+programs with message-passing concurrency. It uses the Chez Scheme
+programming language and embeds concepts from the Erlang programming
+language. Swish also provides a web server.
+
+This package provides swish, swish-build and swish-test. Try running swish
+with and enter this expression to start up a web server that serves files
+from the ./web directory:
+
+  (parameterize ((http-port-number 8080)) (http-sup:start&link))
+
+More information, including a manual, is available on the homepage.
+
+This package requires Akku 0.4.0+ and Chez Scheme 9.5.2+. It is quite
+experimental and unlike any other Akku package. Any problems or requests for
+the packaging go to Akku's bug tracker! If installation doesn't work then try
+to debug it with env AKKU_LOG_LEVEL=debug akku install.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/s/swish_0.0.0-akku.259.842f51f_repack.tar.xz"
+sha256 = "RfR/Jhn6rzGTopvPyG9GcB1kbz4ORuQqFrEaGX4njRg="
+version = "0.0.0-akku.259.842f51f"
+
+[TerribleTLS]
+dependencies = ["hashing", "industria", "struct-pack", "chez-srfi"]
+synopsis = "Inadvisible pure-Scheme TLS client"
+longdesc = """
+This is a TLS 1.0, TLS 1.1 and TLS 1.2 client written purely in R6RS Scheme.
+
+Using it in its current version is inadvisible. Dozens of new pitfalls in the
+implementation techniques of TLS have been discovered since it was written.
+
+??? This will be the last version to support TLS 1.0 and TLS 1.1.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/t/TerribleTLS_1.0.0_repack.tar.xz"
+sha256 = "+EXHo2MEIZn9HxhaQVYPW8VjoA1R2JYmMnkxU6Whj0Q="
+version = "1.0.0"
+
+[tex-parser]
+dependencies = ["akku-r7rs", "read-char-if"]
+synopsis = "-"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: N/A
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/tex-parser/0.1/tex-parser-0.1.tgz"
+sha256 = "UH49wNBEEfnwDbfYNbUnDIIQPJChAEDUQz3jTEQ0DLs="
+version = "0.1.0"
+
+[text-mode]
+dependencies = ["struct-pack", "r6rs-pffi", "chez-srfi"]
+synopsis = "Text-mode console library (like curses)"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/t/text-mode_1.0.0_repack.tar.xz"
+sha256 = "o5Gi6whiLdl9nSSSC95yZ6DMKthSkjC+RhMjutAsv/U="
+version = "1.0.0"
+
+[thunderchez]
+dependencies = []
+synopsis = "Monorepo of various libraries for Chez Sch?"
+longdesc = """
+Big collection of libraries for Chez Scheme: base64, gettext, irregex, json,
+Alex Shinn's match, the Indiana University flavor of match, SRFIs under the
+(srfi s*) namespace, SXML, sockets and more.
+
+Also includes bindings for cairo, curl, gl, glu, glut, lmdb, nanomsg, libusb,
+sdl2 and sqlite3.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/t/thunderchez_0.0.0-akku.121.9d6344a_repack.tar.xz"
+sha256 = "5NmhW+5AqmYbHSUK1dG7GQp65FK/qGVeJ/l7OiFOUYw="
+version = "0.0.0-akku.121.9d6344a"
+
+[thunknyc-expand-braces]
+dependencies = ["akku-r7rs", "chez-srfi"]
+synopsis = "Expand UNIX-shell style brace expressions"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/poseur.com/edw/thunknyc/expand-braces/0.1.1/thunknyc-expand-braces-0.1.1.tgz"
+sha256 = "7/Swyr7lYI99j3BqTrfSQfgWrx6RtyQBCdH0dOaaGko="
+version = "0.1.1"
+
+[thunknyc-json]
+dependencies = ["akku-r7rs", "chibi-parse"]
+synopsis = "Simple JSON parsing library"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+"""
+url = "http://snow-fort.org/s/poseur.com/edw/thunknyc/json/0.1.3/thunknyc-json-0.1.3.tgz"
+sha256 = "s9HQG2p2h149H3uygOmLa/2HjlNpfpJjUn0ZlpYXrPg="
+version = "0.1.3"
+
+[trivial-tar-writer]
+dependencies = ["akku-r7rs"]
+synopsis = "Simplest way to output uncompressed .tar f?"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/trivial-tar-writer/0.1/trivial-tar-writer-0.1.tgz"
+sha256 = "jquX5fkgXtEpFbFCBfZbhUQ+lidGOGZDbeefXsIL9Bo="
+version = "0.1.0"
+
+[ufo-coroutines]
+dependencies = ["chez-srfi"]
+synopsis = "This package is a dependable coroutine poo?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-coroutines_1.0.3_repack.tar.xz"
+sha256 = "FriqOkSbpMyRvUNa0Kl76XdsncokMjsx9/ZOH2jEs0I="
+version = "1.0.3"
+
+[ufo-match]
+dependencies = ["chez-srfi"]
+synopsis = "This package is a dependable match macro l?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-match_1.0.0_repack.tar.xz"
+sha256 = "MgDr62ahsDC6JE7gSMHtfGolbW8JESmjYu8a9T3hY4M="
+version = "1.0.0"
+
+[ufo-thread-pool]
+dependencies = ["slib-queue", "chez-srfi"]
+synopsis = "This package is a dependable thread pool p?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-thread-pool_1.0.1_repack.tar.xz"
+sha256 = "f8Blmy3iZeUFujC3qhoVY8b4auhZD1dXGy3l4hTO1mo="
+version = "1.0.1"
+
+[ufo-threaded-function]
+dependencies = ["ufo-thread-pool", "chez-srfi"]
+synopsis = "This package contains threaded-map, thread?"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-threaded-function_1.0.2_repack.tar.xz"
+sha256 = "ZGFOCUoE7Sb8/4RWkcc9WxaA/SsCB6SqSesZsw7zuMs="
+version = "1.0.2"
+
+[unpack-assoc]
+dependencies = ["akku-r7rs"]
+synopsis = "Alist/hash-table destructuring case macros"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original version number: 0.1
+
+Original license field: (ISC)
+
+Maintainers: Lassi Kortela <lassi@lassi.io>.
+
+"""
+url = "http://snow-fort.org/s/lassi.io/lassi/unpack-assoc/0.1/unpack-assoc-0.1.tgz"
+sha256 = "XEHvB9IQ3dFCTBLNOLREJK/sDTdhjHRuzjHyo4Mdnpo="
+version = "0.1.0"
+
+[uuid]
+dependencies = ["hashing", "industria", "struct-pack", "chez-srfi"]
+synopsis = "Generate and analyze UUIDs"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/u/uuid_1.0.0-beta.0_repack.tar.xz"
+sha256 = "A6BY51IpM8H3R1zSCrBRUBa/u9jEBtPHMClGsgZkQx0="
+version = "1.0.0-beta.0"
+
+[wak-common]
+dependencies = []
+synopsis = "Common infrastructure for the Wak ports"
+longdesc = """
+This package contains common infrastructure that is needed by all, or most,
+packages produced by the Wak porting effort. Other packages should not use it
+and not depend on it.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-common_0.1.0-akku.15.6d495fc_repack.tar.xz"
+sha256 = "nFFwyFyIXZ41zmLc+ClZfTHMCzaXt5/lRGQL+CjFoi0="
+version = "0.1.0-akku.15.6d495fc"
+
+[wak-fmt]
+dependencies = ["chez-srfi", "wak-common"]
+synopsis = "Combinator Formatting Library"
+longdesc = """
+A library of procedures for formatting Scheme objects to text in various
+ways, and for easily concatenating, composing and extending these formatters
+efficiently without resorting to capturing and manipulating intermediate
+strings.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-fmt_0.8.0-akku.10.d5b2a5a_repack.tar.xz"
+sha256 = "gHw7eKLF1KiQF6ioEaX1j+OiyBSUEHyrcQsj2fGjo08="
+version = "0.8.0-akku.10.d5b2a5a"
+
+[wak-foof-loop]
+dependencies = ["chez-srfi", "wak-common", "wak-syn-param", "wak-riastreams"]
+synopsis = "Extensible looping library"
+longdesc = """
+foof-loop allows for convenient expression of loops.
+
+It contains built-in iterators for numeric ranges, lists, vectors and ports.
+It is extensible by adding new iterators, for example for traversing other
+data structures.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-foof-loop_0.0.0-akku.4.a7b9cd8_repack.tar.xz"
+sha256 = "RhKgBgSA0SjLANew9n50VfV2WWC8my6Vw0cd0U6/AaQ="
+version = "0.0.0-akku.4.a7b9cd8"
+
+[wak-htmlprag]
+dependencies = ["chez-srfi", "wak-common"]
+synopsis = "pragmatic parsing and emitting of HTML usi?"
+longdesc = """
+HtmlPrag provides permissive HTML parsing and emitting capability to Scheme
+programs. The parser is useful for software agent extraction of information
+from Web pages, for programmatically transforming HTML files, and for
+implementing interactive Web browsers.
+
+HtmlPrag emits 'SHTML,' which is an encoding of HTML in SXML, so that
+conventional HTML may be processed with XML tools such as SXPath. Like Oleg
+Kiselyov's SSAX-based HTML parser, HtmlPrag provides a permissive tokenizer,
+but also attempts to recover structure. HtmlPrag also includes procedures for
+encoding SHTML in HTML syntax.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-htmlprag_0.19.0_repack.tar.xz"
+sha256 = "4UMjAbCiuOL6z6sPPhlR3dLOHwDXVcjj5YfF+/EJGbo="
+version = "0.19.0"
+
+[wak-irregex]
+dependencies = ["wak-common"]
+synopsis = "Portable regular expressions"
+longdesc = """
+A fully portable and efficient implementation of regular expressions,
+supporting both POSIX syntax with various (irregular) PCRE extensions, as
+well as SCSH's SRE syntax, with various aliases for commonly used patterns.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-irregex_0.8.1_repack.tar.xz"
+sha256 = "CXZ3/NDTp6dBcp1LO60E6gg//w/CzZsDMrRNHgZ6nso="
+version = "0.8.1"
+
+[wak-parscheme]
+dependencies = ["chez-srfi", "wak-common", "wak-riastreams"]
+synopsis = "Parser combinator library"
+longdesc = """
+This is Parscheme, a library for writing parsers in portable Scheme.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-parscheme_0.0.0-akku.7.e9e25f9_repack.tar.xz"
+sha256 = "XJwmb+SMPJigodK35DU0dJRTCpc0Os/G0HrYMfeNZnI="
+version = "0.0.0-akku.7.e9e25f9"
+
+[wak-prometheus]
+dependencies = ["chez-srfi", "wak-common"]
+synopsis = "Prototype-based message-passing object sys?"
+longdesc = """
+Prometheus is a prototype-based message-passing object system for Scheme
+similar to the Self language.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-prometheus_2.0.0-akku.6.965fc7e_repack.tar.xz"
+sha256 = "v5n4XmaZ+y45Y50ub8VuWSdoMxawPmvNVAu7Nxh4i8Y="
+version = "2.0.0-akku.6.965fc7e"
+
+[wak-riastreams]
+dependencies = ["chez-srfi", "wak-common"]
+synopsis = "Lazy streams"
+longdesc = """
+Riastreams is a small library implementing lazy streams based on the SRFI 45
+primitives.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-riastreams_0.0.0-akku.5.b444645_repack.tar.xz"
+sha256 = "nTGm9QXba4vN2NM4fDAghOfvqXun+t7Zh/vrLC9mbeg="
+version = "0.0.0-akku.5.b444645"
+
+[wak-ssax]
+dependencies = ["chez-srfi", "wak-common"]
+synopsis = "Functional XML parsing framework"
+longdesc = """
+SSAX includes SAX/DOM and SXML parsers with support for XML Namespaces and
+validation. It also provides tools for transforming the parsed SXML in way
+similar to XSLT.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-ssax_5.1.0-akku.4.1f7fad4_repack.tar.xz"
+sha256 = "26XQZajc6oFVuURPvllJ0uum/+glSboruSHZMUxZ0E0="
+version = "5.1.0-akku.4.1f7fad4"
+
+[wak-sxml-tools]
+dependencies = ["chez-srfi", "wak-common", "wak-ssax"]
+synopsis = "Tools for manipulating SXML"
+longdesc = """
+This package provides the following tools:
+
+ - SXPath, an XPath implementation for SXML
+
+ - SXML serialization to XML and HTML
+
+ - XLink parsing and processing
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-sxml-tools_0.0.0-akku.1.5c14730_repack.tar.xz"
+sha256 = "gov8KY1tJtxrm10uWbUcH6y60D9KxI2AXRN4bmTPiBM="
+version = "0.0.0-akku.1.5c14730"
+
+[wak-syn-param]
+dependencies = ["wak-common"]
+synopsis = "Operators with extended parameter syntax"
+longdesc = """
+This package provides a form that allows to create macros that accept
+arguments by position or by a named pattern.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-syn-param_0.0.0-akku.4.8ca3272_repack.tar.xz"
+sha256 = "+BJQtX+IM2gFtDxy9JHVplL+giGg9VKTYdNAG81g7Hw="
+version = "0.0.0-akku.4.8ca3272"
+
+[wak-testeez]
+dependencies = ["spells", "wak-common"]
+synopsis = "Lightweight Unit Test Mechanism"
+longdesc = """
+Testeez is a simple lightweight unit test mechanism for R5RS Scheme. It was
+written to support regression test suites embedded within the source code
+files of the author's portable Scheme libraries.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-testeez_0.2.0_repack.tar.xz"
+sha256 = "PL7qyl35hENYn+8Nb9fJ/dv2X0t56x9PdZSNdLdp0iE="
+version = "0.2.0"
+
+[wak-trc-testing]
+dependencies = ["chez-srfi", "wak-common", "wak-syn-param", "wak-fmt", "wak-foof-loop"]
+synopsis = "Simple testing facility"
+longdesc = """
+TRC-Testing is a simple, portable testing utility for Scheme. It makes no
+pretenses to be a comprehensive framework for building complex test suites;
+it is merely a simple tool to express simple test suites, which requires very
+little cognitive overhead.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-trc-testing_0.0.0-akku.6.8168507_repack.tar.xz"
+sha256 = "laxwX+4eaB/F5YDUK/UfNM51QaBDFcgzmgu0JQ3B2Wk="
+version = "0.0.0-akku.6.8168507"
+
+[wak-wt-tree]
+dependencies = []
+synopsis = "Weight-balanced trees"
+longdesc = """
+Functional implementation of weight-balanced trees, suitable for use as
+discrete sets or discrete maps, as well as priority queues.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-wt-tree_0.0.0-akku.5.2a2c933_repack.tar.xz"
+sha256 = "BJhxdDUY/FW8Y+a6naZR541OyJLIUs7yYH/GQDP8Cns="
+version = "0.0.0-akku.5.2a2c933"
+
+[xitomatl]
+dependencies = ["chez-srfi"]
+synopsis = "Monorepo with various libraries"
+longdesc = """
+Derick Eddington's personal collection of various R6RS source code.
+
+Includes: file system utilities, gensym, match macros, SSAX, SXML tools,
+string utilities, vector utilities, bytevector utilities, port utilities,
+record utilities, coroutines, R6RS language utilities, include syntax,
+htmlprag, fmt, irregex, logic programming, Alex Shinn's match, the Indiana
+University match, queues, a stack language, a profiler, zippers, etc.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/x/xitomatl_0.0.0-akku.208.62a8243_repack.tar.xz"
+sha256 = "CQpiVxxCTdS7TxOk9G1XpPZDSWCrPnHYcnsLjq97zk4="
+version = "0.0.0-akku.208.62a8243"
+
+[xunit]
+dependencies = []
+synopsis = "xUnit test utility"
+longdesc = """
+We propose an xUnit test utility (xunit) in which you can assert and
+investigate if a testee program's behaviour satisfies expected requirements.
+The way we recommend to specify expected requirements in terms of predicates,
+especially equivalence relations, because they are suitable to detect
+fundamental properties of the dynamic environment of, and by, Scheme
+programs.
+
+(xunit) offers you useful macros which contain:
+
+* assertions for standard predicates and equivalence relations,
+
+* 'define-assert-equivalence', defining a custom assertion on some
+equivalence relation, and
+
+* 'define-assert-predicate', defining a custom assertion on some predicate.
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/x/xunit_0.0.0-akku.21.0b4ede2_repack.tar.xz"
+sha256 = "ulNpj7DUaK7bUGLUkIkAKSS6exxiKxbtgXCBBBL09NM="
+version = "0.0.0-akku.21.0b4ede2"
+
+[yasos]
+dependencies = ["akku-r7rs"]
+synopsis = "simple objects"
+longdesc = """
+This Snow package is federated from http://snow-fort.org/. Installation
+requires Akku >=0.5.0.
+
+Original license field: N/A
+
+Maintainers: Jason K MacDuffie <taknamay@gmail.com>.
+
+"""
+url = "http://snow-fort.org/s/gmail.com/taknamay/yasos/1.0.1/yasos-1.0.1.tgz"
+sha256 = "WnxNgXH5jjfkC086+bX+PSqyTf1qc/KAFPC6h6v8by0="
+version = "1.0.1"
+
+[yxskaft]
+dependencies = ["r6rs-pffi", "struct-pack"]
+synopsis = "Tiny X client library"
+longdesc = """
+This is an X client library with the KISS philosophy. The intent is to
+provide a simple framebuffer along with keyboard and mouse input. It's not a
+complete X client.
+
+Tested with Loko >0.11.0. Porting to other R6RS Schemes is fairly simple, but
+not yet done
+
+"""
+url = "https://archive.akkuscm.org/archive/pkg/y/yxskaft_0.2.0_repack.tar.xz"
+sha256 = "pJ2DxQMIjV0isEWP+oX6ZJlftl8mh6h8CfEkvLO3MZ8="
+version = "0.2.0"
+
+[zabavno]
+dependencies = ["machine-code"]
+synopsis = "80386 real-mode CPU and PC emulator"
+longdesc = """
+"""
+url = "https://archive.akkuscm.org/archive/pkg/z/zabavno_0.2.0_repack.tar.xz"
+sha256 = "i2Y+ULev4+WZYPy+Xdpp4eVulACEeJ3LLabu/JNNOU4="
+version = "0.2.0"
+
