@@ -19,6 +19,9 @@
 , filelock
 , torchWithRocm
 , python
+
+, runCommand
+
 , cudaPackages
 , cudaSupport ? config.cudaSupport
 }:
@@ -158,7 +161,18 @@ buildPythonPackage rec {
   # ];
 
   # Ultimately, torch is our test suite:
-  passthru.tests = { inherit torchWithRocm; };
+  passthru.tests = {
+    inherit torchWithRocm;
+    # Implemented as alternative to pythonImportsCheck, in case if circular dependency on torch occurs again,
+    # and pythonImportsCheck is commented back.
+    import-triton = runCommand "import-triton" { nativeBuildInputs = [(python.withPackages (ps: [ps.openai-triton]))]; } ''
+      python << \EOF
+      import triton
+      import triton.language
+      EOF
+      touch "$out"
+    '';
+  };
 
   pythonRemoveDeps = [
     # Circular dependency, cf. https://github.com/openai/triton/issues/1374
