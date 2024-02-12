@@ -3,6 +3,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, installShellFiles
 , udev
 , stdenv
 , Security
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   # Needed to get openssl-sys to use pkg-config.
@@ -37,6 +39,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoHash = "sha256-Xj5FVTssC3e+mMhDHmKqV6lUQgaIv3aVc1yewbQSy9E=";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd espflash \
+      --bash <($out/bin/espflash completions bash) \
+      --zsh <($out/bin/espflash completions zsh) \
+      --fish <($out/bin/espflash completions fish)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
