@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "cairosvg";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "CairoSVG";
     inherit version;
-    hash = "sha256-rE3HwdOLOhVxfbJjOjo4MBLgvmZMcnyRFjfmr2pJKTw=";
+    hash = "sha256-QyUx1yNHKRuanr+2d3AmtgdWP9hxnEbudC2wrvcnG6A=";
   };
 
   nativeBuildInputs = [ setuptools ];
