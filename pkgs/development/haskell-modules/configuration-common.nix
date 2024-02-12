@@ -496,17 +496,12 @@ self: super: {
   storablevector = doJailbreak super.storablevector;
 
   # Need following changes from develop branch:
-  # - crypton-connection over connection (abandoned)
   # - vty >= 6 (& pals) support
   # Unreasonably difficult to apply as patches
   matterhorn = lib.pipe
-    (super.matterhorn.override {
-        connection = self.crypton-connection;
-    })
+    super.matterhorn
     [
       doJailbreak
-      # vty >= 6 support
-      (addBuildDepends [ self.vty-crossplatform ])
       (overrideSrc {
         version = "unstable-2024-01-11";
         src = pkgs.fetchFromGitHub {
