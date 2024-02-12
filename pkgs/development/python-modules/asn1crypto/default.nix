@@ -1,13 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# build system
+, setuptools
+
+# tests
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "asn1crypto";
   version = "1.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   # Pulling from Github to run tests
   src = fetchFromGitHub {
@@ -16,6 +21,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-M8vASxhaJPgkiTrAckxz7gk/QHkrFlNz7fFbnLEBT+M=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
