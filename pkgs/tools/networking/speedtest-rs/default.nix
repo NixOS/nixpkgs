@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "speedtest-rs";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nelsonjchen";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/d6A+Arlcc3SCKPSkYXwvqY2BRyAbA33Ah+GddHcc5M=";
+    hash = "sha256-JKthXrosqDZh6CWEqT08h3ySPZulitDol7lX3Eo7orM=";
   };
 
   buildInputs = [ openssl ] ++
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "sha256-4TJEM+oMjx/aaZgY2Y679pYFTdEWWFpWDYrK/o2b5UM=";
+  cargoHash = "sha256-kUXHC/qXgukaUqaBykXB2ZWmfQEjzJuIyemr1ogVX1U=";
 
   meta = with lib; {
     description = "Command line internet speedtest tool written in rust";
