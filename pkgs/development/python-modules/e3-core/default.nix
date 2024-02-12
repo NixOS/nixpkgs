@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ autoPatchelfHook
+, buildPythonPackage
 , colorama
 , coverage
 , distro
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     setuptools
   ];
 
