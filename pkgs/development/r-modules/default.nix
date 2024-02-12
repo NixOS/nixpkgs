@@ -543,6 +543,7 @@ let
     tesseract = [ pkgs.pkg-config ];
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
+    excursions = [ pkgs.gsl ];
     JMcmprsk = [ pkgs.gsl ];
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];
