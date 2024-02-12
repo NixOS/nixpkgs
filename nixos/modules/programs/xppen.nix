@@ -6,7 +6,7 @@ in
 
 {
   options.programs.xppen = {
-    enable = mkEnableOption (lib.mdDoc "XPPen PenTablet application");
+    enable = mkEnableOption "XPPen PenTablet application";
     package = mkPackageOption pkgs "xppen" { };
   };
 
