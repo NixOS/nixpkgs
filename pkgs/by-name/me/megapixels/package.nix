@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.7.0";
 
   src = fetchFromGitLab {
-    owner = "postmarketOS";
-    repo = "megapixels";
+    owner = "megapixels-org";
+    repo = "Megapixels";
     rev = finalAttrs.version;
     hash = "sha256-ejTCYZMDkqz8P3vroq8XAl+pUGgcS56cm3tzOTE3rfc=";
   };
@@ -68,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "GTK4 camera application that knows how to deal with the media request api";
-    homepage = "https://gitlab.com/postmarketOS/megapixels";
-    changelog = "https://gitlab.com/postmarketOS/megapixels/-/tags/${finalAttrs.version}";
+    homepage = "https://gitlab.com/megapixels-org/Megapixels";
+    changelog = "https://gitlab.com/megapixels-org/Megapixels/-/tags/${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda Luflosi ];
     platforms = platforms.linux;
