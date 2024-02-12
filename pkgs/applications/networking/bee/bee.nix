@@ -3,14 +3,6 @@
 let
 
   versionSpec = rec {
-    unstable = rec {
-      pname = "bee-unstable";
-      version = "2021-01-30";
-      rev = "824636a2c2629c329ab10275cef6a0b7395343ad";
-      goVersionString = "g" + builtins.substring 0 7 rev;     # this seems to be some kind of standard of git describe...
-      sha256 = "0ly1yqjq29arbak8lchdradf39l5bmxpbfir6ljjc7nyqdxz0sxg";
-      vendorHash = "sha256-w5ZijaK8Adt1ZHPMmXqRWq0v0jdprRKRu03rePtZLXA=";
-    };
     release = rec {
       pname = "bee";
       version = "0.5.0";

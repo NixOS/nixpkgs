@@ -6625,10 +6625,6 @@ with pkgs;
     version = "release";
   };
 
-  bee-unstable = bee.override {
-    version = "unstable";
-  };
-
   bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
 
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
