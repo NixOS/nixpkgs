@@ -162,6 +162,12 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
   # `installBootLoader` and `configFile`.
   onlyNixStore ? false
 
+, # Ensure that no "new" Nix store is written to the root of the image
+  # by symlinking the host Nix store.
+  # This saves a lot of disk space if you don't need an isolated Nix store.
+  # Incompatible with `additionalPaths`
+  noNixStore ? true
+
 , name ? "nixos-disk-image"
 
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
@@ -198,8 +204,9 @@ assert (lib.assertMsg (fsType == "ext4" && deterministic -> rootFSUID != null) "
   # We use -E offset=X below, which is only supported by e2fsprogs
 assert (lib.assertMsg (partitionTableType != "none" -> fsType == "ext4") "to produce a partition table, we need to use -E offset flag which is support only for fsType = ext4");
 assert (lib.assertMsg (touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt") "EFI variables can be used only with a partition table of type: hybrid, efi or legacy+gpt.");
-  # If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
+# If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
 assert (lib.assertMsg (onlyNixStore -> contents == [] && configFile == null && !installBootLoader) "In a only Nix store image, the contents must be empty, no configuration must be provided and no bootloader should be installed.");
+assert (lib.assertMsg (noNixStore -> additionalPaths == []) "Without a Nix store in the rootfs, additional paths cannot be copied otherwise you would end up again with a Nix store.");
 # Either both or none of {user,group} need to be set
 assert (lib.assertMsg (lib.all
          (attrs: ((attrs.user  or null) == null)
@@ -421,6 +428,15 @@ let format' = format; in let
     # Provide a Nix database so that nixos-install can copy closures.
     export NIX_STATE_DIR=$TMPDIR/state
     nix-store --load-db < ${closureInfo}/registration
+
+    ${optionalString noNixStore ''
+      # Ensure host Nix store is available so that `nixos-install` performs
+      # no extra operations.
+      mkdir -p $root/nix
+      # TODO: this needs to be made persistent or you need to run the nixos-install inside the namespace.
+      # then, we need to unmount.
+      unshare --mount --map-root-user mount --rbind ${builtins.storeDir} $root/nix
+    ''}
 
     chmod 755 "$TMPDIR"
     echo "running nixos-install..."
