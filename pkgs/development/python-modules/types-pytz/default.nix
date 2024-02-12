@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-pytz";
-  version = "2023.4.0.20240130";
+  version = "2024.1.0.20240203";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M2dqkL8EsZ+Swz7shYETa+ovNd3RJ1nleaYkoAb9OHo=";
+    hash = "sha256-yTdR7iDfxuBUoBSPj1InuaALeckKTTyfRkcRpzF5yJ4=";
   };
 
   nativeBuildInputs = [
