@@ -24049,10 +24049,16 @@ with pkgs;
   nuspell = callPackage ../development/libraries/nuspell { };
   nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
-  nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
-  nv-codec-headers-10 = callPackage ../development/libraries/nv-codec-headers/10_x.nix { };
-  nv-codec-headers-11 = callPackage ../development/libraries/nv-codec-headers/11_x.nix { };
-  nv-codec-headers-12 = callPackage ../development/libraries/nv-codec-headers/12_x.nix { };
+  # splicing magic
+  nv-codec-headers-versions = callPackages ../development/libraries/nv-codec-headers { };
+  inherit (nv-codec-headers-versions)
+    nv-codec-headers-9
+    nv-codec-headers-10
+    nv-codec-headers-11
+    nv-codec-headers-12
+  ;
+  # A default nv-codec-headers to make people happy
+  nv-codec-headers = nv-codec-headers-versions.nv-codec-headers-9;
 
   nvidiaCtkPackages =
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix
