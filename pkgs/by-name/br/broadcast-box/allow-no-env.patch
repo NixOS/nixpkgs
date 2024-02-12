@@ -1,0 +1,14 @@
+diff --git a/main.go b/main.go
+index 1859e22..6e74ae8 100644
+--- a/main.go
++++ b/main.go
+@@ -174,7 +174,8 @@ func main() {
+ 		if err := godotenv.Load(envFileDev); err != nil {
+ 			log.Fatal(err)
+ 		}
+-	} else {
++	} else if os.Getenv("APP_ENV") == "nixos" {
++    } else {
+ 		log.Println("Loading `" + envFileProd + "`")
+ 
+ 		if err := godotenv.Load(envFileProd); err != nil {
