@@ -1,23 +1,23 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, electron_25
+, electron_27
 }:
 
 let
-  electron = electron_25;
+  electron = electron_27;
 in buildNpmPackage rec {
   pname = "feishin";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7L1KufMiwqWgTvv7E1bDNL+epvNb5iLXI4Gee8w17qs=";
+    hash = "sha256-yzaWOucz1lPWFlknPc8g74LfX/pFFQ2JRYSgauNGMRQ=";
   };
 
-  npmDepsHash = "sha256-TuNkVhNNOB23QnMXiGBWhDI0JXWnWdfI9MLvMq5xzJ8=";
+  npmDepsHash = "sha256-Fa59nwkkMHp9GNY8piAz3usNU4lhTzwonlmowFf5qqY=";
 
   postPatch = ''
     substituteInPlace package.json \
