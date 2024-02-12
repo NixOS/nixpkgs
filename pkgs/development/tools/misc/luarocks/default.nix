@@ -19,23 +19,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-G6HDap3pspeQtGDBq+ukN7kftDaT/CozMVdYM60F6HI=";
+    hash = "sha256-D5jH7QuPayDNskIhiPeqKzI9m33MjRjQ8ReghFIUlPo=";
   };
 
   patches = [
     ./darwin-3.7.0.patch
-    # follow standard environmental variables
-    # https://github.com/luarocks/luarocks/pull/1433
-    (fetchpatch {
-      url = "https://github.com/luarocks/luarocks/commit/d719541577a89909185aa8de7a33cf73b7a63ac3.diff";
-      sha256 = "sha256-rMnhZFqLEul0wnsxvw9nl6JXVanC5QgOZ+I/HJ0vRCM=";
-    })
   ];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
