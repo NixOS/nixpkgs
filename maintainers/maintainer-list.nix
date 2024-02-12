@@ -241,6 +241,12 @@
       fingerprint = "DBF4 E6D0 90B8 BEA4 4BFE  1F1C 3442 4321 39B5 0691";
     }];
   };
+  _9R = {
+    email = "nix@9-r.net";
+    github = "9R";
+    githubId = 381298;
+    name = "9R";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
