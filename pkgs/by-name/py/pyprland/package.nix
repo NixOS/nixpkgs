@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "1.8.7";
+  version = "1.10.2";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     owner = "hyprland-community";
     repo = "pyprland";
     rev = "refs/tags/${version}";
-    hash = "sha256-6ne1wohpknxXpaLg29COM84pXUBKXBVH0jaLfypLtUo=";
+    hash = "sha256-ZbxrfxgURs+XHegsdZ7Z42o7flQ8Jt2rfR2RwDmGpls=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
