@@ -6623,8 +6623,6 @@ with pkgs;
 
   bee = callPackage ../applications/networking/bee/bee.nix { };
 
-  bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
-
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
 
