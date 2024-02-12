@@ -23,6 +23,8 @@ let
   cfg = config.services.armagetronad;
   enabledServers = lib.filterAttrs (n: v: v.enable) cfg.servers;
   nameToId = serverName: "armagetronad-${serverName}";
+  getStateDirectory = serverName: "armagetronad/${serverName}";
+  getServerRoot = serverName: "/var/lib/${getStateDirectory serverName}";
 in
 {
   options = {
@@ -33,38 +35,45 @@ in
         type = types.attrsOf (types.submodule {
           options = {
             enable = mkEnableOption (lib.mdDoc "armagetronad");
+
             package = lib.mkPackageOptionMD pkgs "armagetronad-dedicated" {
               example = ''
                 pkgs.armagetronad."0.2.9-sty+ct+ap".dedicated
               '';
               extraDescription = ''
-                Ensure that you use a derivation whose evaluation contains the path `bin/armagetronad-dedicated`.
+                Ensure that you use a derivation which contains the path `bin/armagetronad-dedicated`.
               '';
             };
+
             host = mkOption {
               type = types.str;
               default = "0.0.0.0";
               description = lib.mdDoc "Host to listen on. Used for SERVER_IP.";
             };
+
             port = mkOption {
               type = types.port;
               default = 4534;
               description = lib.mdDoc "Port to listen on. Used for SERVER_PORT.";
             };
+
             dns = mkOption {
               type = types.nullOr types.str;
               default = null;
               description = lib.mdDoc "DNS address to use for this server. Optional.";
             };
+
             openFirewall = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc "Set to true to open a UDP port for Armagetron Advanced.";
+              description = lib.mdDoc "Set to true to open the configured UDP port for Armagetron Advanced.";
             };
+
             name = mkOption {
               type = types.str;
               description = "The name of this server.";
             };
+
             settings = mkOption {
               type = settingsFormat.type;
               default = { };
@@ -82,6 +91,7 @@ in
                 }
               '';
             };
+
             roundSettings = mkOption {
               type = settingsFormat.type;
               default = { };
@@ -110,19 +120,17 @@ in
   };
 
   config = mkIf (enabledServers != { }) {
-    systemd.services = mkMerge (mapAttrsToList
+    systemd.tmpfiles.settings = mkMerge (mapAttrsToList
       (serverName: serverCfg:
         let
           serverId = nameToId serverName;
+          serverRoot = getServerRoot serverName;
           serverInfo = (
             {
               SERVER_IP = serverCfg.host;
               SERVER_PORT = serverCfg.port;
               SERVER_NAME = serverCfg.name;
-            } // (
-              if serverCfg.dns != null then { SERVER_DNS = serverCfg.dns; }
-              else { }
-            )
+            } // (lib.optionalAttrs (serverCfg.dns != null) { SERVER_DNS = serverCfg.dns; })
           );
           customSettings = serverCfg.settings;
           everytimeSettings = serverCfg.roundSettings;
@@ -132,43 +140,82 @@ in
           everytimeSettingsCfg = settingsFormat.generate "everytime.${serverName}.cfg" everytimeSettings;
         in
         {
-          "armagetronad@${serverName}" = {
+          "10-armagetronad-${serverId}" = {
+            "${serverRoot}/data" = {
+              d = {
+                group = serverId;
+                user = serverId;
+                mode = "0750";
+              };
+            };
+            "${serverRoot}/settings" = {
+              d = {
+                group = serverId;
+                user = serverId;
+                mode = "0750";
+              };
+            };
+            "${serverRoot}/var" = {
+              d = {
+                group = serverId;
+                user = serverId;
+                mode = "0750";
+              };
+            };
+            "${serverRoot}/resource" = {
+              d = {
+                group = serverId;
+                user = serverId;
+                mode = "0750";
+              };
+            };
+            "${serverRoot}/input" = {
+              "f+" = {
+                group = serverId;
+                user = serverId;
+                mode = "0640";
+              };
+            };
+            "${serverRoot}/settings/server_info.cfg" = {
+              "L+" = {
+                argument = "${serverInfoCfg}";
+              };
+            };
+            "${serverRoot}/settings/settings_custom.cfg" = {
+              "L+" = {
+                argument = "${customSettingsCfg}";
+              };
+            };
+            "${serverRoot}/settings/everytime.cfg" = {
+              "L+" = {
+                argument = "${everytimeSettingsCfg}";
+              };
+            };
+          };
+        }
+      )
+      enabledServers
+    );
+
+    systemd.services = mkMerge (mapAttrsToList
+      (serverName: serverCfg:
+        let
+          serverId = nameToId serverName;
+        in
+        {
+          "armagetronad-${serverName}" = {
             description = "Armagetron Advanced Dedicated Server for ${serverName}";
             wants = [ "basic.target" ];
-            after = [ "basic.target" "network.target" ];
+            after = [ "basic.target" "network.target" "multi-user.target" ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig =
               let
-                stateDirectory = "armagetronad/${serverName}";
-                serverRoot = "/var/lib/${stateDirectory}";
-                preStart = pkgs.writeShellScript "armagetronad-${serverName}-prestart.sh" ''
-                  owner="${serverId}:${serverId}"
-
-                  # Create the config directories.
-                  for dirname in data settings var resource; do
-                    dir="${serverRoot}/$dirname"
-                    mkdir -p "$dir"
-                    chmod u+rwx,g+rx,o-rwx "$dir"
-                    chown "$owner" "$dir"
-                  done
-
-                  # Link in the config files if present and non-trivial.
-                  ln -sf ${serverInfoCfg}        "${serverRoot}/settings/server_info.cfg"
-                  ln -sf ${customSettingsCfg}    "${serverRoot}/settings/settings_custom.cfg"
-                  ln -sf ${everytimeSettingsCfg} "${serverRoot}/settings/everytime.cfg"
-
-                  # Create an input file for sending commands to the server.
-                  input="${serverRoot}/input"
-                  truncate -s0 "$input"
-                  chmod u+rw,g+r,o-rwx "$input"
-                  chown "$owner" "$input"
-                '';
+                serverRoot = getServerRoot serverName;
               in
               {
                 Type = "simple";
-                StateDirectory = stateDirectory;
-                ExecStartPre = preStart;
-                ExecStart = "${serverCfg.package}/bin/armagetronad-dedicated --daemon --input ${serverRoot}/input --userdatadir ${serverRoot}/data --userconfigdir ${serverRoot}/settings --vardir ${serverRoot}/var --autoresourcedir ${serverRoot}/resource";
+                StateDirectory = getStateDirectory serverName;
+                ExecStart = "${lib.getExe serverCfg.package} --daemon --input ${serverRoot}/input --userdatadir ${serverRoot}/data --userconfigdir ${serverRoot}/settings --vardir ${serverRoot}/var --autoresourcedir ${serverRoot}/resource";
                 Restart = "on-failure";
                 CapabilityBoundingSet = "";
                 LockPersonality = true;

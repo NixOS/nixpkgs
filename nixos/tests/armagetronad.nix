@@ -138,7 +138,7 @@ in {
       # Wait for the servers to come up.
       start_all()
       for srv in servers:
-        srv.node.wait_for_unit(f"armagetronad@{srv.name}")
+        srv.node.wait_for_unit(f"armagetronad-{srv.name}")
         srv.node.wait_until_succeeds(f"ss --numeric --udp --listening | grep -q {srv.port}")
 
       # Make sure console commands work through the named pipe we created.
@@ -150,10 +150,10 @@ in {
           f"echo 'say Testing again!' >> /var/lib/armagetronad/{srv.name}/input"
         )
         srv.node.wait_until_succeeds(
-          f"journalctl -u armagetronad@{srv.name} -e | grep -q 'Admin: Testing!'"
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q 'Admin: Testing!'"
         )
         srv.node.wait_until_succeeds(
-          f"journalctl -u armagetronad@{srv.name} -e | grep -q 'Admin: Testing again!'"
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q 'Admin: Testing again!'"
         )
 
       """
@@ -220,18 +220,18 @@ in {
         # Wait for clients to connect
         for client in clients:
           srv.node.wait_until_succeeds(
-            f"journalctl -u armagetronad@{srv.name} -e | grep -q '{client.name}.*entered the game'"
+            f"journalctl -u armagetronad-{srv.name} -e | grep -q '{client.name}.*entered the game'"
           )
 
         # Wait for the match to start
         srv.node.wait_until_succeeds(
-          f"journalctl -u armagetronad@{srv.name} -e | grep -q 'Admin: {srv.welcome}'"
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q 'Admin: {srv.welcome}'"
         )
         srv.node.wait_until_succeeds(
-          f"journalctl -u armagetronad@{srv.name} -e | grep -q 'Admin: https://nixos.org'"
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q 'Admin: https://nixos.org'"
         )
         srv.node.wait_until_succeeds(
-          f"journalctl -u armagetronad@{srv.name} -e | grep -q 'Go (round 1 of 10)'"
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q 'Go (round 1 of 10)'"
         )
 
         # Wait a bit
@@ -245,7 +245,7 @@ in {
 
         # Wait for coredump.
         srv.node.wait_until_succeeds(
-          f"journalctl -u armagetronad@{srv.name} -e | grep -q '{attacker.name} core dumped {victim.name}'"
+          f"journalctl -u armagetronad-{srv.name} -e | grep -q '{attacker.name} core dumped {victim.name}'"
         )
         screenshot_idx = take_screenshots(screenshot_idx)
 
@@ -254,7 +254,7 @@ in {
           client.send('esc')
           client.send_on('Menu', 'up', 'up', 'ret')
           srv.node.wait_until_succeeds(
-            f"journalctl -u armagetronad@{srv.name} -e | grep -q '{client.name}.*left the game'"
+            f"journalctl -u armagetronad-{srv.name} -e | grep -q '{client.name}.*left the game'"
           )
 
         # Next server.
@@ -264,7 +264,7 @@ in {
       # Stop the servers
       for srv in servers:
         srv.node.succeed(
-          f"systemctl stop armagetronad@{srv.name}"
+          f"systemctl stop armagetronad-{srv.name}"
         )
         srv.node.wait_until_fails(f"ss --numeric --udp --listening | grep -q {srv.port}")
     '';
