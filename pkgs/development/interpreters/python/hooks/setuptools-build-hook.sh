@@ -3,7 +3,7 @@ echo "Sourcing setuptools-build-hook"
 
 setuptoolsBuildPhase() {
     echo "Executing setuptoolsBuildPhase"
-    local args
+    local args setuptools_has_parallel=@setuptools_has_parallel@
     runHook preBuild
 
     cp -f @setuppy@ nix_run_setup
@@ -12,7 +12,9 @@ setuptoolsBuildPhase() {
         args+="$setupPyGlobalFlags"
     fi
     if [ -n "$enableParallelBuilding" ]; then
-        setupPyBuildFlags+=" --parallel $NIX_BUILD_CORES"
+        if [ -n "$setuptools_has_parallel" ]; then
+            setupPyBuildFlags+=" --parallel $NIX_BUILD_CORES"
+        fi
     fi
     if [ -n "$setupPyBuildFlags" ]; then
         args+=" build_ext $setupPyBuildFlags"
