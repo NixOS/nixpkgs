@@ -1,24 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
 , cairocffi
 , cssselect2
 , defusedxml
+, fetchPypi
 , pillow
-, tinycss2
 , pytestCheckHook
+, setuptools
+, tinycss2
 }:
 
 buildPythonPackage rec {
-  pname = "CairoSVG";
+  pname = "cairosvg";
   version = "2.7.0";
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "CairoSVG";
+    inherit version;
     hash = "sha256-rE3HwdOLOhVxfbJjOjo4MBLgvmZMcnyRFjfmr2pJKTw=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
 
@@ -44,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://cairosvg.org";
+    changelog = "https://github.com/Kozea/CairoSVG/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
     maintainers = with maintainers; [ ];
