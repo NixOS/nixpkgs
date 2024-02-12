@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.40.0";
+  version = "4.41.0";
 
   src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "bitbox-wallet-app";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-kvkfz9zwleZNB+leefx+cciJCPkFSSRDxBNRKNqeODc=";
+    hash = "sha256-46PUpH7RGmtbAqScPdHAxK5aBNf1Hz0iP1IRtBcWUCA=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "source/frontends/web";
-    npmDepsHash = "sha256-bnMmeSX8UZpndHK0NMLQhX1GSunO0JSyZdUTfG+rSpY=";
+    npmDepsHash = "sha256-z/F78ahVajtqIcfWmoKHKxapAJjwg8muNKUxqrPd2wE=";
     installPhase = "cp -r build $out";
   };
 
