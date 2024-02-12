@@ -33404,8 +33404,6 @@ with pkgs;
 
   mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-20; };
 
-  megapixels = callPackage ../applications/graphics/megapixels { };
-
   meteo = callPackage ../applications/networking/weather/meteo { };
 
   meld = callPackage ../applications/version-management/meld { };
