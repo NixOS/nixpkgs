@@ -28,13 +28,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "2023.06.15";
+    version = "2023.09.19";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "sha256-dBrnUIG3EuEgDZBbzrspP5UReiUKjrMSYIe5QtZ0/tU=";
+      sha256 = "sha256-mooFDJmOHVJe98yuDGCrSzuOE6O6eOoAnGumRXILJPs=";
       fetchSubmodules = true;
     };
 
