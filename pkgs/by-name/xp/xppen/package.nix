@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
     substituteInPlace $out/share/applications/xppentablet.desktop \
       --replace-fail "/usr/lib/pentablet/PenTablet.sh" "PenTablet" \
-      --replace "/usr/share/icons/hicolor/256x256/apps/xppentablet.png" "xppentablet"
+      --replace-fail "/usr/share/icons/hicolor/256x256/apps/xppentablet.png" "xppentablet"
   '';
 
   meta = with lib; {
