@@ -34428,8 +34428,6 @@ with pkgs;
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 
-  pcloud = callPackage ../applications/networking/pcloud { };
-
   jpsxdec = callPackage ../tools/games/jpsxdec { };
 
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
