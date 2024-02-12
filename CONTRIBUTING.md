@@ -269,7 +269,7 @@ This is not a bulletproof method though, as OfBorg still does review requests ev
 ## How to backport pull requests
 [pr-backport]: #how-to-backport-pull-requests
 
-Once a pull request has been merged into `master`, a backport pull request to the corresponding `release-YY.MM` branch can be created either automatically or manually.
+Once a pull request has been merged into `master`, a backport pull request to the corresponding `(release|staging)-YY.MM` branch can be created either automatically or manually.
 
 ### Automatically backporting changes
 
@@ -298,7 +298,7 @@ To manually create a backport pull request, follow [the standard pull request pr
 > In the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
 
 - In the pull request description, link to the original pull request to `master`.
-  The pull request title should include `[YY.MM]` matching the release you're backporting to.
+  The pull request title should include `[Backport (release|staging)-YY.MM]` matching the release you're backporting to.
 
 - When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request.
   This way maintainers can keep track of missing backports easier.
