@@ -19,9 +19,12 @@
 , ApplicationServices
 , Foundation
 , python3
-, fltk
-, exiv2
 , withXorg ? true
+
+# for passthru.tests
+, exiv2
+, fltk
+, graphicsmagick
 }:
 
 let
@@ -88,8 +91,17 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) pygraphviz;
-    inherit fltk exiv2;
+    inherit (python3.pkgs)
+      graphviz
+      pydot
+      pygraphviz
+      xdot
+    ;
+    inherit
+      exiv2
+      fltk
+      graphicsmagick
+    ;
   };
 
   meta = with lib; {
