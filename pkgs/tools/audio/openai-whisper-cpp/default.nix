@@ -14,6 +14,8 @@
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
+
+, withSDL ? true
 }:
 
 let
@@ -50,7 +52,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       autoAddOpenGLRunpathHook
     ]);
 
-  buildInputs = [
+  buildInputs = lib.optionals withSDL [
       SDL2
     ] ++ lib.optionals stdenv.isDarwin [
       Accelerate
