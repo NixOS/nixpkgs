@@ -34,16 +34,27 @@ buildPythonPackage rec {
     hash = "sha256-4StHOJldfeqApdF6D14Euzg9HvZ2e7G4/OQ0UrEbEIw=";
   };
 
-  patches = [ ./0001-use-distro-over-ld.patch ];
+  patches = [
+    ./0001-use-distro-over-ld.patch
+  ];
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
-    colorama pyyaml python-dateutil requests requests-toolbelt tqdm stevedore
+    colorama
+    pyyaml
+    python-dateutil
+    requests
+    requests-toolbelt
+    tqdm
+    stevedore
   ] ++ lib.optional stdenv.isLinux [
     # See setup.py:24. These are required only on Linux. Darwin has its own set
     # of requirements.
-    psutil distro
+    psutil
+    distro
   ];
 
   pythonImportsCheck = [ "e3" ];
