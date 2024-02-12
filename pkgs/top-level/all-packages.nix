@@ -14545,8 +14545,6 @@ with pkgs;
 
   wifish = callPackage ../tools/networking/wifish { };
 
-  wifite2 = callPackage ../tools/networking/wifite2 { };
-
   wimboot = callPackage ../tools/misc/wimboot { };
 
   wit-bindgen = callPackage ../tools/misc/wit-bindgen { };
@@ -15376,8 +15374,6 @@ with pkgs;
   murex = callPackage ../shells/murex { };
 
   oh = callPackage ../shells/oh { };
-
-  oil = callPackage ../shells/oil { };
 
   oksh = callPackage ../shells/oksh { };
 

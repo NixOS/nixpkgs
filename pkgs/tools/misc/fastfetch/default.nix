@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.7.1";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-s0N3Rt3lLOCyaeXeNYu6hlGtNtGR+YC7Aj4/3SeVMpQ=";
+    hash = "sha256-W6SmKyTBR0cXAkgcbbM1lEiHFanqCaa2lhAb+zQP/mg=";
   };
 
   outputs = [ "out" "man" ];
@@ -95,11 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXau
     xorg.libXdmcp
     xorg.libXext
-  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin))  [
+  ] ++ lib.optionals (x11Support && (!stdenv.isDarwin)) [
     xfce.xfconf
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Apple80211
     AppKit
+    AVFoundation
     Cocoa
     CoreDisplay
     CoreVideo
