@@ -495,26 +495,7 @@ self: super: {
   # 2023-04-20: Restrictive bytestring bound in tests.
   storablevector = doJailbreak super.storablevector;
 
-  # Need following changes from develop branch:
-  # - vty >= 6 (& pals) support
-  # Unreasonably difficult to apply as patches
-  matterhorn = lib.pipe
-    super.matterhorn
-    [
-      doJailbreak
-      (overrideSrc {
-        version = "unstable-2024-01-11";
-        src = pkgs.fetchFromGitHub {
-          owner = "matterhorn-chat";
-          repo = "matterhorn";
-          rev = lib.warnIf
-            (super.matterhorn.version != "50200.19.0")
-            "matterhorn on Hackage may have caught up with our pinned commit"
-            "66d23291a1c748e568908b91b1109ed17b6d86e9";
-          sha256 = "0djawpp0zvvc2v020k6p4chvd1dlmcs0fa3d4wlr0cmkha40flpb";
-        };
-      })
-    ];
+  matterhorn = doJailbreak super.matterhorn;
 
   # Too strict bounds on transformers and resourcet
   # https://github.com/alphaHeavy/lzma-conduit/issues/23
