@@ -46,24 +46,6 @@ let
         ];
       });
 
-      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
-        version = "3.9.3";
-        src = fetchFromGitHub {
-          owner = "aio-libs";
-          repo = "aiohttp";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-dEeMHruFJ1o0J6VUJcpUk7LhEC8sV8hUKXoKcd618lE=";
-        };
-        nativeCheckInputs = with self; [
-          freezegun
-          gunicorn
-          pytest-mock
-          pytestCheckHook
-          python-on-whales
-          re-assert
-        ];
-      });
-
       aionotion = super.aionotion.overridePythonAttrs (oldAttrs: rec {
         version = "2023.05.5";
         src = fetchFromGitHub {
@@ -339,6 +321,16 @@ let
           repo = "pysnooz";
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
+        };
+      });
+
+      python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
+        version = "8.0.1";
+        src = fetchFromGitHub {
+          owner = "un33k";
+          repo =  "python-slugify";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-MJac63XjgWdUQdyyEm8O7gAGVszmHxZzRF4frJtR0BU=";
         };
       });
 

@@ -7,6 +7,7 @@
 , setuptools
 , setuptools-scm
 , wheel
+, packaging
 , pybind11
 , pydantic
 , rich
@@ -28,11 +29,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    numpy
     scikit-build
     setuptools
     setuptools-scm
-    wheel
     pybind11
   ];
 
@@ -41,6 +40,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    numpy
+    packaging
     pydantic
     rich
   ];

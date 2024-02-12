@@ -13,18 +13,18 @@
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qg2KAzjSV7yQTpRHmNMkHRwOJSbfsgcdT0RHQru2lBI=";
+    hash = "sha256-z9Vu9mj82hwuPva56tmav4jN9RCoNIZxL+C3GYtYsOo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ZJ5eYof9RZ07iP0YowIBorHuNUntQVW9JWcSVe2emig=";
+    hash = "sha256-2or419evNxi99HIvL2TlSWFFh4BCky8qI/dVQbq/X38=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
