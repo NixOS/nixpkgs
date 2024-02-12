@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     sed -i 's#/usr/lib/pentablet#/var/lib/pentablet#g' $out/bin/PenTablet
 
     substituteInPlace $out/share/applications/xppentablet.desktop \
-      --replace "/usr/lib/pentablet/PenTablet.sh" "PenTablet" \
+      --replace-fail "/usr/lib/pentablet/PenTablet.sh" "PenTablet" \
       --replace "/usr/share/icons/hicolor/256x256/apps/xppentablet.png" "xppentablet"
   '';
 
