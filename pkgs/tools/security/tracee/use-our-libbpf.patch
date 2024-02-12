@@ -1,0 +1,48 @@
+diff --git a/Makefile b/Makefile
+index d7596a1a..dd7b97b6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -50,6 +50,7 @@ CMD_STATICCHECK ?= staticcheck
+ # libs
+ #
+ 
++LIB_BPF ?= libbpf
+ LIB_ELF ?= libelf
+ LIB_ZLIB ?= zlib
+ 
+@@ -279,8 +280,6 @@ OUTPUT_DIR = ./dist
+ $(OUTPUT_DIR):
+ #
+ 	@$(CMD_MKDIR) -p $@
+-	@$(CMD_MKDIR) -p $@/libbpf
+-	@$(CMD_MKDIR) -p $@/libbpf/obj
+ 
+ #
+ # embedded btfhub
+@@ -418,7 +417,6 @@ TRACEE_EBPF_OBJ_CORE_HEADERS = $(shell find pkg/ebpf/c -name *.h)
+ bpf-core: $(OUTPUT_DIR)/tracee.bpf.core.o
+ 
+ $(OUTPUT_DIR)/tracee.bpf.core.o: \
+-	$(OUTPUT_DIR)/libbpf/libbpf.a \
+ 	$(TRACEE_EBPF_OBJ_SRC) \
+ 	$(TRACEE_EBPF_OBJ_CORE_HEADERS)
+ #
+@@ -453,8 +451,8 @@ ifeq ($(STATIC), 1)
+     GO_TAGS_EBPF := $(GO_TAGS_EBPF),netgo
+ endif
+ 
+-CUSTOM_CGO_CFLAGS = "-I$(abspath $(OUTPUT_DIR)/libbpf)"
+-CUSTOM_CGO_LDFLAGS = "$(shell $(call pkg_config, $(LIB_ELF))) $(shell $(call pkg_config, $(LIB_ZLIB))) $(abspath $(OUTPUT_DIR)/libbpf/libbpf.a)"
++CUSTOM_CGO_CFLAGS = ""
++CUSTOM_CGO_LDFLAGS = "$(shell $(call pkg_config, $(LIB_BPF))) $(shell $(call pkg_config, $(LIB_ELF))) $(shell $(call pkg_config, $(LIB_ZLIB)))"
+ 
+ GO_ENV_EBPF =
+ GO_ENV_EBPF += GOOS=linux
+@@ -474,6 +472,7 @@ $(OUTPUT_DIR)/tracee-ebpf: \
+ 	$(TRACEE_EBPF_SRC) \
+ 	./embedded-ebpf.go \
+ 	| .checkver_$(CMD_GO) \
++	.checklib_$(LIB_BPF) \
+ 	.checklib_$(LIB_ELF) \
+ 	.checklib_$(LIB_ZLIB) \
+ 	btfhub

@@ -1,0 +1,26 @@
+diff --git a/setup.py b/setup.py
+index 337e4be..55ef9a6 100644
+--- a/setup.py
++++ b/setup.py
+@@ -38,7 +38,7 @@ _apple_devices = ("appletv", "iphone", "ipod", "ipad", "watch")
+ is_macos = sys.platform == "darwin" and not machine().lower().startswith(_apple_devices)
+ 
+ ext_modules = []
+-if is_macos or os.getenv("FORCE_MACOS_MACHINE", "0") == "1":
++if False:
+     ext_modules = [
+         Extension(
+             name="_watchdog_fsevents",
+diff --git a/tests/utils.py b/tests/utils.py
+index 00dcf40..9fbc42a 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -15,8 +15,6 @@ Emitter: Type[EventEmitter]
+ if sys.platform.startswith("linux"):
+     from watchdog.observers.inotify import InotifyEmitter as Emitter
+     from watchdog.observers.inotify import InotifyFullEmitter
+-elif sys.platform.startswith("darwin"):
+-    from watchdog.observers.fsevents import FSEventsEmitter as Emitter
+ elif sys.platform.startswith("win"):
+     from watchdog.observers.read_directory_changes import WindowsApiEmitter as Emitter
+ elif sys.platform.startswith(("dragonfly", "freebsd", "netbsd", "openbsd", "bsd")):

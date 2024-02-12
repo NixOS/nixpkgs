@@ -1,0 +1,21 @@
+Index: source/src/MEGASync/MEGASync.pro
+===================================================================
+--- source.orig/src/MEGASync/MEGASync.pro
++++ source/src/MEGASync/MEGASync.pro
+@@ -28,11 +28,11 @@ unix:!macx {
+     TARGET = megasync
+ 
+ #    Uncomment the following if "make install" doesn't copy megasync in /usr/bin directory
+-#    isEmpty(PREFIX) {
+-#        PREFIX = /usr
+-#    }
+-#    target.path = $$PREFIX/bin
+-#    INSTALLS += target
++    isEmpty(PREFIX) {
++        PREFIX = /usr
++    }
++    target.path = $$PREFIX/bin
++    INSTALLS += target
+ }
+ else {
+     TARGET = MEGAsync
