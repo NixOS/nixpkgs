@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chirp";
-  version = "unstable-2023-06-02";
+  version = "unstable-2024-02-08";
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "72789c3652c332dc68ba694f8f8f005913fe5c95";
-    hash = "sha256-WQwCX7h9BFLdYOBVVntxQ6g4t3j7QLfNmlHVLzlRh7U=";
+    rev = "902043a937ee3611744f2a4e35cd902c7b0a8d0b";
+    hash = "sha256-oDUtR1xD73rfBRKkbE1f68siO/4oxoLxw16w1qa9fEo=";
   };
   buildInputs = [
     glib
