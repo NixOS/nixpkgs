@@ -838,6 +838,11 @@
      githubId = 49982580;
      name = "Alexander Fuchs";
   };
+  alexkireeff = {
+    name = "alex kireeff";
+    github = "alexkireeff";
+    githubId = 63164030;
+  };
   alexnortung = {
     name = "alexnortung";
     email = "alex_nortung@live.dk";
