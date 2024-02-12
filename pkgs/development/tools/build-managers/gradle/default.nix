@@ -135,9 +135,9 @@ rec {
   };
 
   gradle_7 = gen {
-    version = "7.6.3";
+    version = "7.6.4";
     nativeVersion = "0.22-milestone-25";
-    sha256 = "1b6gk0yiyvf86vigd05mz7ryqs8yrpswk9bmpwrnqcp45r3jw33l";
+    sha256 = "1ccvmy09n0siw09x3527kq8qhwxnigrpf7392fmmgxd0rhrxmldy";
     defaultJava = jdk17;
   };
 
