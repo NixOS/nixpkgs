@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
+, gitMinimal
 , pkg-config
 , alsa-lib
 , freetype
@@ -22,12 +23,15 @@ stdenv.mkDerivation rec {
     owner = "surge-synthesizer";
     repo = "surge";
     rev = "release_xt_${version}";
+    branchName = "release-xt/${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-xcbZ5TC2W2PVzAkpoKPFIgW1oRGaC+ynQYot3cb5NAQ=";
+    leaveDotGit = true;
+    sha256 = "sha256-q6qs/OhIakF+Gc8Da3pnfkUGYDUoJbvee0o8dfrRI2U=";
   };
 
   nativeBuildInputs = [
     cmake
+    gitMinimal
     pkg-config
   ];
 
