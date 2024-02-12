@@ -520,24 +520,6 @@ self: super: {
         };
       })
     ];
-  # Switch to crypton-connection over abandoned connection
-  # To add insult to injury, mattermost-api had a breaking change on its develop
-  # branch, so we also need to bump it to an unstable commit. Luckily, matterhorn
-  # is its only consumer on Hackage.
-  mattermost-api = overrideSrc {
-    version = lib.warnIf
-      (super.mattermost-api.version != "50200.15.0")
-      "mattermost-api on Hackage may have caught up with our pinned commit"
-      "unstable-2024-01-11";
-    src = pkgs.fetchFromGitHub {
-      owner = "matterhorn-chat";
-      repo = "mattermost-api";
-      rev = "8df809df4d96930cf8b39d0d8f54cdb6d8f42b59";
-      sha256 = "154p4yi941l9ga2c3vw8yhgq0g1wn4jhmg3yhzgwgca1c5d1vydi";
-    };
-  } (super.mattermost-api.override {
-    connection = self.crypton-connection;
-  });
 
   # Too strict bounds on transformers and resourcet
   # https://github.com/alphaHeavy/lzma-conduit/issues/23
