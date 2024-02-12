@@ -57,8 +57,6 @@
 
 # relative to srcRoot, path to the rockspec to use when using rocks
 , rockspecFilename ? null
-# relative to srcRoot, path to folder that contains the expected rockspec
-, rockspecDir ?  "."
 
 # must be set for packages that don't have a rock
 , knownRockspec ? null
@@ -87,7 +85,7 @@ let
     LUAROCKS_CONFIG = self.configFile;
   } // attrs.env or {};
 
-  generatedRockspecFilename = "${rockspecDir}/${pname}-${rockspecVersion}.rockspec";
+  generatedRockspecFilename = "./${self.pname}-${self.rockspecVersion}.rockspec";
 
   nativeBuildInputs = [
     wrapLua
