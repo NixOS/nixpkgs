@@ -35322,6 +35322,10 @@ with pkgs;
     plasmoidSupport = false;
     systemdSupport = true;
   };
+  syncthingtray-qt6 = kdePackages.callPackage ../applications/misc/syncthingtray {
+    # renamed in KF5 -> KF6
+    plasma-framework = kdePackages.libplasma;
+  };
 
   synergy = libsForQt5.callPackage ../applications/misc/synergy {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
