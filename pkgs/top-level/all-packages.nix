@@ -12349,6 +12349,8 @@ with pkgs;
 
   pulumictl = callPackage ../development/tools/pulumictl { };
 
+  pstack = callPackage ../development/tools/pstack { };
+
   pure-prompt = callPackage ../shells/zsh/pure-prompt { };
 
   pv = callPackage ../tools/misc/pv { };
