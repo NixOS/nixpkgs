@@ -12714,6 +12714,8 @@ self: super: with self; {
 
   rlax = callPackage ../development/python-modules/rlax { };
 
+  rlcard = callPackage ../development/python-modules/rlcard { };
+
   rlp = callPackage ../development/python-modules/rlp { };
 
   rmcl = callPackage ../development/python-modules/rmcl { };
