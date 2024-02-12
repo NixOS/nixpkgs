@@ -24,6 +24,7 @@
 , qtdeclarative
 , qtfeedback
 , qtgraphicaleffects
+, validatePkgConfig
 , wrapGAppsHook
 , xvfb-run
 }:
@@ -83,15 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace import/*/Content/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # Look for peer files in running system
     substituteInPlace src/com/lomiri/content/service/registry-updater.cpp \
-      --replace '/usr' '/run/current-system/sw'
+      --replace-fail '/usr' '/run/current-system/sw'
 
     # Don't override default theme search path (which honours XDG_DATA_DIRS) with a FHS assumption
     substituteInPlace import/Lomiri/Content/contenthubplugin.cpp \
-      --replace 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
+      --replace-fail 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
   '';
 
   strictDeps = true;
@@ -101,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
     qtdeclarative # qmlplugindump
+    validatePkgConfig
     wrapGAppsHook
   ];
 
@@ -179,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
       even if they are not running at the same time.
     '';
     homepage = "https://gitlab.com/ubports/development/core/content-hub";
+    changelog = "https://gitlab.com/ubports/development/core/content-hub/-/blob/${finalAttrs.version}/ChangeLog";
     license = with licenses; [ gpl3Only lgpl3Only ];
     mainProgram = "content-hub-service";
     maintainers = teams.lomiri.members;
