@@ -6,7 +6,7 @@ Docker itself is not used to perform any of the operations done by these functio
 ## buildImage {#ssec-pkgs-dockerTools-buildImage}
 
 This function builds a Docker-compatible repository tarball containing a single image.
-As such, the result is suitable for being loaded in Docker with `docker load` (see [](#ex-dockerTools-buildImage) for how to do this).
+As such, the result is suitable for being loaded in Docker with `docker image load` (see [](#ex-dockerTools-buildImage) for how to do this).
 
 This function will create a single layer for all files (and dependencies) that are specified in its argument.
 Only new dependencies that are not already in the existing layers will be copied.
@@ -43,7 +43,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 `fromImage` (Path or Null; _optional_)
 
 : The repository tarball of an image to be used as the base for the generated image.
-  It must be a valid Docker image, such as one exported by `docker save`, or another image built with the `dockerTools` utility functions.
+  It must be a valid Docker image, such as one exported by `docker image save`, or another image built with the `dockerTools` utility functions.
   This can be seen as an equivalent of `FROM fromImage` in a `Dockerfile`.
   A value of `null` can be seen as an equivalent of `FROM scratch`.
 
@@ -123,7 +123,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
   _Default value:_ `""`.
 
-`config` (Attribute Set; _optional_)
+`config` (Attribute Set or Null; _optional_)
 
 : Used to specify the configuration of the containers that will be started off the generated image.
   Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
@@ -247,7 +247,7 @@ Cooking the image...
 Finished.
 /nix/store/p4dsg62inh9d2ksy3c7bv58xa851dasr-docker-image-redis.tar.gz
 
-$ docker load -i /nix/store/p4dsg62inh9d2ksy3c7bv58xa851dasr-docker-image-redis.tar.gz
+$ docker image load -i /nix/store/p4dsg62inh9d2ksy3c7bv58xa851dasr-docker-image-redis.tar.gz
 (some output removed for clarity)
 Loaded image: redis:latest
 ```
@@ -345,8 +345,8 @@ dockerTools.buildImage {
 
 After importing the generated repository tarball with Docker, its CLI will display a reasonable date and sort the images as expected:
 
-```ShellSession
-$ docker images
+```shell
+$ docker image ls
 REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ```
@@ -364,7 +364,7 @@ Despite the similar name, [`buildImage`](#ssec-pkgs-dockerTools-buildImage) work
 Even though some of the arguments may seem related, they cannot be interchanged.
 :::
 
-You can use this function to load an image in Docker with `docker load`.
+You can load the result of this function in Docker with `docker image load`.
 See [](#ex-dockerTools-buildLayeredImage-hello) to see how to do that.
 
 ### Examples {#ssec-pkgs-dockerTools-buildLayeredImage-examples}
@@ -404,7 +404,7 @@ Adding manifests...
 Done.
 /nix/store/hxcz7snvw7f8rzhbh6mv8jq39d992905-hello.tar.gz
 
-$ docker load -i /nix/store/hxcz7snvw7f8rzhbh6mv8jq39d992905-hello.tar.gz
+$ docker image load -i /nix/store/hxcz7snvw7f8rzhbh6mv8jq39d992905-hello.tar.gz
 (some output removed for clarity)
 Loaded image: hello:latest
 ```
@@ -415,7 +415,7 @@ Loaded image: hello:latest
 `streamLayeredImage` builds a **script** which, when run, will stream to stdout a Docker-compatible repository tarball containing a single image, using multiple layers to improve sharing between images.
 This means that `streamLayeredImage` does not output an image into the Nix store, but only a script that builds the image, saving on IO and disk/cache space, particularly with large images.
 
-You can use this function to load an image in Docker with `docker load`.
+You can load the result of this function in Docker with `docker image load`.
 See [](#ex-dockerTools-streamLayeredImage-hello) to see how to do that.
 
 For this function, you specify a [store path](https://nixos.org/manual/nix/stable/store/store-path) or a list of store paths to be added to the image, and the functions will automatically include any dependencies of those paths in the image.
@@ -440,7 +440,7 @@ This allows the function to produce reproducible images.
 
 : The name of the generated image.
 
-`tag` (String; _optional_)
+`tag` (String or Null; _optional_)
 
 : Tag of the generated image.
   If `null`, the hash of the nix derivation will be used as the tag.
@@ -450,7 +450,7 @@ This allows the function to produce reproducible images.
 `fromImage`(Path or Null; _optional_)
 
 : The repository tarball of an image to be used as the base for the generated image.
-  It must be a valid Docker image, such as one exported by `docker save`, or another image built with the `dockerTools` utility functions.
+  It must be a valid Docker image, such as one exported by `docker image save`, or another image built with the `dockerTools` utility functions.
   This can be seen as an equivalent of `FROM fromImage` in a `Dockerfile`.
   A value of `null` can be seen as an equivalent of `FROM scratch`.
 
@@ -470,7 +470,7 @@ This allows the function to produce reproducible images.
 
   _Default value:_ `[]`
 
-`config` (Attribute Set; _optional_) []{#dockerTools-buildLayeredImage-arg-config}
+`config` (Attribute Set or Null; _optional_) []{#dockerTools-buildLayeredImage-arg-config}
 
 : Used to specify the configuration of the containers that will be started off the generated image.
   Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
@@ -594,7 +594,7 @@ dockerTools.streamLayeredImage {
 ```
 
 The result of building this package is a script.
-Running this script and piping it into `docker load` gives you the same image that was built in [](#ex-dockerTools-buildLayeredImage-hello).
+Running this script and piping it into `docker image load` gives you the same image that was built in [](#ex-dockerTools-buildLayeredImage-hello).
 Note that in this case, the image is never added to the Nix store, but instead streamed directly into Docker.
 
 ```shell
@@ -602,7 +602,7 @@ $ nix-build
 (output removed for clarity)
 /nix/store/wsz2xl8ckxnlb769irvq6jv1280dfvxd-stream-hello
 
-$ /nix/store/wsz2xl8ckxnlb769irvq6jv1280dfvxd-stream-hello | docker load
+$ /nix/store/wsz2xl8ckxnlb769irvq6jv1280dfvxd-stream-hello | docker image load
 No 'fromImage' provided
 Creating layer 1 from paths: ['/nix/store/i93s7xxblavsacpy82zdbn4kplsyq48l-libunistring-1.1']
 Creating layer 2 from paths: ['/nix/store/ji01n9vinnj22nbrb86nx8a1ssgpilx8-libidn2-2.3.4']
@@ -718,7 +718,7 @@ dockerTools.streamLayeredImage {
 []{#ssec-pkgs-dockerTools-fetchFromRegistry}
 ## pullImage {#ssec-pkgs-dockerTools-pullImage}
 
-This function is similar to the `docker pull` command, which means it can be used to pull a Docker image from a registry that implements the [Docker Registry HTTP API V2](https://distribution.github.io/distribution/spec/api/).
+This function is similar to the `docker image pull` command, which means it can be used to pull a Docker image from a registry that implements the [Docker Registry HTTP API V2](https://distribution.github.io/distribution/spec/api/).
 By default, the `docker.io` registry is used.
 
 The image will be downloaded as an uncompressed Docker-compatible repository tarball, which is suitable for use with other `dockerTools` functions such as [`buildImage`](#ssec-pkgs-dockerTools-buildImage), [`buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage), and [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage).
@@ -1105,7 +1105,7 @@ This is currently implemented by linking to the `env` binary from the `coreutils
 ### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
 
 This provides a `/bin/sh` link to the `bash` binary from the `bashInteractive` package.
-Because of this, it supports cases such as running a command interactively in a container (for example by running `docker run -it <image_name>`).
+Because of this, it supports cases such as running a command interactively in a container (for example by running `docker container run -it <image_name>`).
 
 ### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
 
@@ -1169,9 +1169,9 @@ This is made possible by `binSh`.
 $ nix-build
 (some output removed for clarity)
 /nix/store/2p0i3i04cgjlk71hsn7ll4kxaxxiv4qg-docker-image-env-helpers.tar.gz
-$ docker load -i /nix/store/2p0i3i04cgjlk71hsn7ll4kxaxxiv4qg-docker-image-env-helpers.tar.gz
+$ docker image load -i /nix/store/2p0i3i04cgjlk71hsn7ll4kxaxxiv4qg-docker-image-env-helpers.tar.gz
 (output removed for clarity)
-$ docker run --rm -it env-helpers:latest /bin/sh
+$ docker container run --rm -it env-helpers:latest /bin/sh
 sh-5.2# help
 GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
 (rest of output removed for clarity)
@@ -1209,9 +1209,9 @@ This is made possible by `binSh`.
 $ nix-build
 (some output removed for clarity)
 /nix/store/rpf47f4z5b9qr4db4ach9yr4b85hjhxq-env-helpers.tar.gz
-$ docker load -i /nix/store/rpf47f4z5b9qr4db4ach9yr4b85hjhxq-env-helpers.tar.gz
+$ docker image load -i /nix/store/rpf47f4z5b9qr4db4ach9yr4b85hjhxq-env-helpers.tar.gz
 (output removed for clarity)
-$ docker run --rm -it env-helpers:latest /bin/sh
+$ docker container run --rm -it env-helpers:latest /bin/sh
 sh-5.2# help
 GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
 (rest of output removed for clarity)
@@ -1315,7 +1315,7 @@ $ nix-build
 (some output removed for clarity)
 /nix/store/pkj1sgzaz31wl0pbvbg3yp5b3kxndqms-hello-2.12.1-env.tar.gz
 
-$ docker load -i /nix/store/pkj1sgzaz31wl0pbvbg3yp5b3kxndqms-hello-2.12.1-env.tar.gz
+$ docker image load -i /nix/store/pkj1sgzaz31wl0pbvbg3yp5b3kxndqms-hello-2.12.1-env.tar.gz
 (some output removed for clarity)
 Loaded image: hello-2.12.1-env:latest
 ```
@@ -1323,7 +1323,7 @@ Loaded image: hello-2.12.1-env:latest
 After starting an interactive container, the derivation can be built by running `buildDerivation`, and the output can be executed as expected:
 
 ```shell
-$ docker run -it hello-2.12.1-env:latest
+$ docker container run -it hello-2.12.1-env:latest
 [nix-shell:~]$ buildDerivation
 Running phase: unpackPhase
 unpacking source archive /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
@@ -1443,14 +1443,14 @@ dockerTools.streamNixShellImage {
 ```
 
 The result of building this package is a script.
-Running this script and piping it into `docker load` gives you the same image that was built in [](#ex-dockerTools-buildNixShellImage-hello).
+Running this script and piping it into `docker image load` gives you the same image that was built in [](#ex-dockerTools-buildNixShellImage-hello).
 
 ```shell
 $ nix-build
 (some output removed for clarity)
 /nix/store/8vhznpz2frqazxnd8pgdvf38jscdypax-stream-hello-2.12.1-env
 
-$ /nix/store/8vhznpz2frqazxnd8pgdvf38jscdypax-stream-hello-2.12.1-env | docker load
+$ /nix/store/8vhznpz2frqazxnd8pgdvf38jscdypax-stream-hello-2.12.1-env | docker image load
 (some output removed for clarity)
 Loaded image: hello-2.12.1-env:latest
 ```
@@ -1458,7 +1458,7 @@ Loaded image: hello-2.12.1-env:latest
 After starting an interactive container, the derivation can be built by running `buildDerivation`, and the output can be executed as expected:
 
 ```shell
-$ docker run -it hello-2.12.1-env:latest
+$ docker container run -it hello-2.12.1-env:latest
 [nix-shell:~]$ buildDerivation
 Running phase: unpackPhase
 unpacking source archive /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
@@ -1497,14 +1497,14 @@ dockerTools.streamNixShellImage {
 }
 ```
 
-The result of building this package is a script which can be run and piped into `docker load` to load the generated image.
+The result of building this package is a script which can be run and piped into `docker image load` to load the generated image.
 
 ```shell
 $ nix-build
 (some output removed for clarity)
 /nix/store/h5abh0vljgzg381lna922gqknx6yc0v7-stream-hello-2.12.1-env
 
-$ /nix/store/h5abh0vljgzg381lna922gqknx6yc0v7-stream-hello-2.12.1-env | docker load
+$ /nix/store/h5abh0vljgzg381lna922gqknx6yc0v7-stream-hello-2.12.1-env | docker image load
 (some output removed for clarity)
 Loaded image: hello-2.12.1-env:latest
 ```
@@ -1512,7 +1512,7 @@ Loaded image: hello-2.12.1-env:latest
 After starting an interactive container, we can verify the extra package is available by running `cowsay`:
 
 ```shell
-$ docker run -it hello-2.12.1-env:latest
+$ docker container run -it hello-2.12.1-env:latest
 [nix-shell:~]$ cowsay "Hello, world!"
  _______________
 < Hello, world! >
@@ -1546,14 +1546,14 @@ dockerTools.streamNixShellImage {
 }
 ```
 
-The result of building this package is a script which can be run and piped into `docker load` to load the generated image.
+The result of building this package is a script which can be run and piped into `docker image load` to load the generated image.
 
 ```shell
 $ nix-build
 (some output removed for clarity)
 /nix/store/iz4dhdvgzazl5vrgyz719iwjzjy6xlx1-stream-hello-2.12.1-env
 
-$ /nix/store/iz4dhdvgzazl5vrgyz719iwjzjy6xlx1-stream-hello-2.12.1-env | docker load
+$ /nix/store/iz4dhdvgzazl5vrgyz719iwjzjy6xlx1-stream-hello-2.12.1-env | docker image load
 (some output removed for clarity)
 Loaded image: hello-2.12.1-env:latest
 ```
@@ -1561,7 +1561,7 @@ Loaded image: hello-2.12.1-env:latest
 After starting an interactive container, we can see the result of the `shellHook`:
 
 ```shell
-$ docker run -it hello-2.12.1-env:latest
+$ docker container run -it hello-2.12.1-env:latest
 Hello, world!
 
 [nix-shell:~]$
