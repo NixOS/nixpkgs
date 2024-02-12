@@ -90,9 +90,9 @@
     ]
   },
   "forms": {
-    "sha256": "0rx3kcbachs3pk56cmzrc2iy5wg5cwvs8n6myxbgz86qm0pbxmzk",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v3.4.4/forms-v3.4.4.tar.gz",
-    "version": "3.4.4",
+    "sha256": "143paalwm44vd9sa9ql30q986bm9z8kr39ky5hvcfai52w1ysrjq",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v3.4.5/forms-v3.4.5.tar.gz",
+    "version": "3.4.5",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -125,6 +125,16 @@
     "version": "1.14.0",
     "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.\n- You can limit which users/groups can use impersonation in Administration settings > Additional settings.",
     "homepage": "https://github.com/nextcloud/impersonate",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "integration_openai": {
+    "sha256": "1cb5csdn85y5fkwhbxxl9i1qy92iqx9v9ccavcp66xfpyk4dlf22",
+    "url": "https://github.com/nextcloud-releases/integration_openai/releases/download/v1.1.5/integration_openai-v1.1.5.tar.gz",
+    "version": "1.1.5",
+    "description": "This app includes 3 custom smart pickers for Nextcloud:\n* ChatGPT-like answers\n* Image generation (with DALL·E 2 or LocalAI)\n* Whisper dictation\n\nIt also implements\n\n* A Translation provider (using any available language model)\n* A SpeechToText provider (using Whisper)\n\nInstead of connecting to the OpenAI API for these, you can also connect to a self-hosted [LocalAI](https://localai.io) instance.\n\n## Ethical AI Rating\n### Rating for Text generation using ChatGPT via OpenAI API: 🔴\n\nNegative:\n* the software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be run on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n\n### Rating for Translation using ChatGPT via OpenAI API: 🔴\n\nNegative:\n* the software for training and inference of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be run on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model's performance and CO2 usage.\n\n### Rating for Image generation using DALL·E via OpenAI API: 🔴\n\nNegative:\n* the software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be ran on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via OpenAI API: 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* The trained model is freely available, and thus can run on-premise\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n### Rating for Text generation via LocalAI: 🟢\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n* the training data is freely available, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n\n### Rating for Image generation using Stable Diffusion via LocalAI : 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\n\n### Rating for Speech-To-Text using Whisper via LocalAI: 🟡\n\nPositive:\n* the software for training and inferencing of this model is open source\n* the trained model is freely available, and thus can be ran on-premises\n\nNegative:\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
+    "homepage": "https://github.com/nextcloud/integration_openai",
     "licenses": [
       "agpl"
     ]
@@ -220,9 +230,9 @@
     ]
   },
   "polls": {
-    "sha256": "1dmws4ybv3pzxz5g9c7ghblx0nfal2ssmsg7hjcs1n4xcjc6585p",
-    "url": "https://github.com/nextcloud/polls/releases/download/v5.4.2/polls.tar.gz",
-    "version": "5.4.2",
+    "sha256": "1y6908yp327j6v9caawylah5zayh4m1d7658j3yh0r5siml9lq94",
+    "url": "https://github.com/nextcloud/polls/releases/download/v5.4.3/polls.tar.gz",
+    "version": "5.4.3",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
