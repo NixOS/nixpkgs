@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = "ariadne";
-    rev = "refs/tags/${version}";
-    hash = "sha256-T5J0xAF33PDkC8sDOzHADpQJxwdXwKary0y/jaUJ9Fk=";
+    # https://github.com/mirumee/ariadne/issues/1157
+    #rev = "refs/tags/${version}";
+    rev = "refs/tags/022.0";
+    hash = "sha256-GMBtW2gZbF1m0BrKhYEkSaZYt5tIGmP/ipy6WC1H1pg=";
   };
 
   patches = [
@@ -57,6 +59,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "ariadne"
+  ];
+
+  pytestFlagsArray = [
+    "--snapshot-update"
   ];
 
   disabledTests = [
