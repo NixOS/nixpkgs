@@ -3554,6 +3554,8 @@ self: super: with self; {
 
   e3-core = callPackage ../development/python-modules/e3-core { };
 
+  e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
+
   eagle100 = callPackage ../development/python-modules/eagle100 { };
 
   easydict = callPackage ../development/python-modules/easydict { };
