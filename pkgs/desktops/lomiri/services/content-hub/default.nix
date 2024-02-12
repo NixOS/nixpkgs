@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "content-hub";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/content-hub";
     rev = finalAttrs.version;
-    hash = "sha256-IntEpgPCBmOL6K6TU+UhgGb6OHVA9pYurK5VN3woIIw=";
+    hash = "sha256-sQeyJV+Wc6PHKGIefl/dfU06XqTdICsn+Xamjx3puiI=";
   };
 
   outputs = [
