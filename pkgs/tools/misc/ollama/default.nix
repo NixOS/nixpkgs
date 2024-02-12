@@ -2,13 +2,42 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch
+, buildEnv
+, linkFarm
+, overrideCC
+, makeWrapper
+, stdenv
 
 , cmake
+, gcc12
+, clblast
+, libdrm
+, rocmPackages
+, cudaPackages
+, linuxPackages
+, darwin
+
+, enableRocm ? false
+, enableCuda ? false
 }:
 
 let
   pname = "ollama";
   version = "0.1.24";
+
+  warnIfNotLinux = warning: (lib.warnIfNot stdenv.isLinux warning stdenv.isLinux);
+  gpuWarning = api: "building ollama with ${api} is only supported on linux; falling back to cpu";
+  rocmIsEnabled = enableRocm && (warnIfNotLinux (gpuWarning "rocm"));
+  cudaIsEnabled = enableCuda && (warnIfNotLinux (gpuWarning "cuda"));
+  enableLinuxGpu = rocmIsEnabled || cudaIsEnabled;
+
+  appleFrameworks = darwin.apple_sdk_11_0.frameworks;
+  metalFrameworks = [
+    appleFrameworks.Accelerate
+    appleFrameworks.Metal
+    appleFrameworks.MetalKit
+    appleFrameworks.MetalPerformanceShaders
+  ];
 
   src = fetchFromGitHub {
     owner = "jmorganca";
@@ -28,7 +57,12 @@ let
     inherit pname version src;
     vendorHash = "sha256-wXRbfnkbeXPTOalm7SFLvHQ9j46S/yLNbFy+OWNSamQ=";
 
-    nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [
+      cmake
+    ] ++ lib.optionals enableLinuxGpu [
+      makeWrapper
+    ] ++ lib.optionals stdenv.isDarwin
+      metalFrameworks;
 
     patches = [
       # remove uses of `git` in the `go generate` script
@@ -74,5 +108,75 @@ let
       maintainers = with maintainers; [ abysssol dit7ya elohmeier ];
     };
   };
+
+
+  rocmClang = linkFarm "rocm-clang" {
+    llvm = rocmPackages.llvm.clang;
+  };
+  rocmPath = buildEnv {
+    name = "rocm-path";
+    paths = [
+      rocmPackages.rocm-device-libs
+      rocmClang
+    ];
+  };
+  rocmVars = {
+    ROCM_PATH = rocmPath;
+    CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
+  };
+
+  cudaToolkit = buildEnv {
+    name = "cuda-toolkit";
+    ignoreCollisions = true; # FIXME: find a cleaner way to do this without ignoring collisions
+    paths = [
+      cudaPackages.cudatoolkit
+      cudaPackages.cuda_cudart
+    ];
+  };
+  cudaVars = {
+    CUDA_LIB_DIR = "${cudaToolkit}/lib";
+    CUDACXX = "${cudaToolkit}/bin/nvcc";
+    CUDAToolkit_ROOT = cudaToolkit;
+  };
+
+  linuxGpuLibs = {
+    buildInputs = lib.optionals rocmIsEnabled [
+      rocmPackages.clr
+      rocmPackages.hipblas
+      rocmPackages.rocblas
+      rocmPackages.rocsolver
+      rocmPackages.rocsparse
+      libdrm
+    ] ++ lib.optionals cudaIsEnabled [
+      cudaPackages.cuda_cudart
+    ];
+  };
+
+  appleGpuLibs = { buildInputs = metalFrameworks; };
+
+  runtimeLibs = lib.optionals rocmIsEnabled [
+    rocmPackages.rocm-smi
+  ] ++ lib.optionals cudaIsEnabled [
+    linuxPackages.nvidia_x11
+  ];
+  runtimeLibWrapper = {
+    postFixup = ''
+      mv "$out/bin/${pname}" "$out/bin/.${pname}-unwrapped"
+      makeWrapper "$out/bin/.${pname}-unwrapped" "$out/bin/${pname}" \
+        --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath runtimeLibs}'
+    '';
+  };
+
+  goBuild =
+    if cudaIsEnabled then
+      buildGoModule.override { stdenv = overrideCC stdenv gcc12; }
+    else
+      buildGoModule;
 in
-buildGoModule ollama
+goBuild (ollama
+  // (lib.optionalAttrs rocmIsEnabled rocmVars)
+  // (lib.optionalAttrs cudaIsEnabled cudaVars)
+  // (lib.optionalAttrs enableLinuxGpu linuxGpuLibs)
+  // (lib.optionalAttrs enableLinuxGpu runtimeLibWrapper)
+
+  // (lib.optionalAttrs stdenv.isDarwin appleGpuLibs))
