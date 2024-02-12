@@ -1,5 +1,4 @@
 { lib
-, aiounittest
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aiounittest
     pytestCheckHook
   ];
 
