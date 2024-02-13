@@ -7,7 +7,7 @@ let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
   src = if lib.isAttrs zipHash then
     fetchurl {
       name = "${pname}-${version}-${plat}.zip";
-      hash = zipHash.${plat} or (throw "unsupported system");
+      sha256 = zipHash.${plat} or (throw "unsupported system");
       url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download" + {
         x86_64-linux = "?os=linux&arch=amd64";
         aarch64-linux = "?os=linux&arch=arm64";
@@ -18,7 +18,7 @@ let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
   else
     fetchurl {
       name = "${pname}-${version}.zip";
-      hash = zipHash;
+      sha256 = zipHash;
       url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download";
     }
   ;
@@ -32,10 +32,12 @@ let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
   '';
 
   passthru = {
-    updateScript = [ ./update-grafana-plugin.sh pname ];
+    updateScript = ./update-grafana-plugins.sh;
   } // passthru;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://grafana.com/grafana/plugins/${pname}";
+    license = licenses.asl20;
+    platforms = if isAttrs zipHash then attrNames zipHash else platforms.unix;
   } // meta;
 } // (builtins.removeAttrs args [ "zipHash" "pname" "version" "sha256" "meta" ]))
