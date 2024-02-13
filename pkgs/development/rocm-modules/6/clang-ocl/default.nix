@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-ocl";
-  version = "5.7.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";

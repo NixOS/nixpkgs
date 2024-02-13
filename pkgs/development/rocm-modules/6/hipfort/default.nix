@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "5.7.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipfort";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-DRjUWhdinDKP7CZgq2SmU3lGmmodCuXvco9aEeMLSZ4=";
+    hash = "sha256-3PIqSDyDlY0oVSEx20EPlKGYNkc9xPZtIG3Sbw69esE=";
   };
 
   nativeBuildInputs = [

@@ -15,13 +15,13 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
-  version = "5.7.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-QB3G0V92UTW67hD6+zSuExN1+eMT820iYSlMyZeWSFw=";
+    hash = "sha256-9HuNU/k+kPJMlzqOTM20gm6SAOWJe9tpAZXEj4erdmI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib/comgr";

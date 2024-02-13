@@ -26,7 +26,7 @@ let
       ((patch++))
       extVersion="$(echo "$deb" | grep -o -P "(?<=\.....).*(?=\..*-)")"
 
-      if (( ''${#extVersion} == 5 )) && (( $extVersion <= ${extVersion} )); then
+      if (( ''${#extVersion} == 6 )) && (( $extVersion <= ${extVersion} )); then
         url="https://repo.radeon.com/rocm/apt/${major}.${minor}.$patch/pool/main/h/${prefix}/"
         res="$(curl -sL "$url")"
         deb="${prefix}$(echo "$res" | grep -o -P "(?<=href=\"${prefix}).*(?=\">)" | tail -1)"

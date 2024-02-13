@@ -48,7 +48,7 @@ let
   ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "5.7.1";
+  version = "6.0.2";
 
   outputs = [
     "out"
@@ -62,7 +62,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-lg3pxHBpwqxBvdOQgE44YKLuumhkVF6b3Xx4+cw7jNQ=";
+    hash = "sha256-AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE=";
   };
 
   nativeBuildInputs = [
