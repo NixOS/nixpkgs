@@ -568,7 +568,8 @@
     "brel_home" = ps: with ps; [
     ];
     "bring" = ps: with ps; [
-    ]; # missing inputs: python-bring-api
+      python-bring-api
+    ];
     "broadlink" = ps: with ps; [
       broadlink
     ];
@@ -5895,6 +5896,7 @@
     "bond"
     "bosch_shc"
     "braviatv"
+    "bring"
     "broadlink"
     "brother"
     "brottsplatskartan"
