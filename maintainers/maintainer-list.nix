@@ -5304,6 +5304,12 @@
     githubId = 7875;
     name = "Rommel Martinez";
   };
+  ecklf = {
+    email = "ecklf@icloud.com";
+    github = "ecklf";
+    githubId = 8146736;
+    name = "Florentin Eckl";
+  };
   eclairevoyant = {
     github = "eclairevoyant";
     githubId = 848000;
