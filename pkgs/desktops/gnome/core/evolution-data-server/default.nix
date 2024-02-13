@@ -50,13 +50,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.50.4";
+  version = "3.51.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1+3/vgOgu87L7mc5MhS4McexjNiVuExNv+E4d3biV8U=";
+    sha256 = "sha256-9lgh9xNzvJ6wfe6l7tqsiqWJVcGN80IJz+IK0Vu/U5c=";
   };
 
   patches = [
@@ -147,10 +147,6 @@ stdenv.mkDerivation rec {
       --replace "-Wl,--no-undefined" ""
     substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
       --replace "G_OS_WIN32" "__APPLE__"
-  '' + lib.optionalString stdenv.cc.isClang ''
-    # https://gitlab.gnome.org/GNOME/evolution-data-server/-/issues/513
-    substituteInPlace src/addressbook/libebook-contacts/e-phone-number-private.cpp \
-      --replace "std::auto_ptr" "std::unique_ptr"
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
