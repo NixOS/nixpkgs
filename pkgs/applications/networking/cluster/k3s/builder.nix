@@ -187,7 +187,7 @@ let
 
     patches =
       # Disable: Add runtime checking of golang version
-      lib.optional (lib.versionAtLeast k3sVersion "1.29")
+      lib.optional (lib.versionAtLeast k3sVersion "1.28")
         (fetchpatch {
           # https://github.com/k3s-io/k3s/pull/9054
           url = "https://github.com/k3s-io/k3s/commit/b297996b9252b02e56e9425f55f6becbf6bb7832.patch";
