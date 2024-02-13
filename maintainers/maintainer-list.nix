@@ -10881,6 +10881,12 @@
     githubId = 1769386;
     name = "Liam Diprose";
   };
+  liammurphy14 = {
+    email = "liam.murphy137@gmail.com";
+    github = "liam-murphy14";
+    githubId = 54590679;
+    name = "Liam Murphy";
+  };
   liassica = {
     email = "git-commit.jingle869@aleeas.com";
     github = "Liassica";
