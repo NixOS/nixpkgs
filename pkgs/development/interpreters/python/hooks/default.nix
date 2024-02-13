@@ -108,7 +108,7 @@ in {
     makePythonHook {
       name = "python-catch-conflicts-hook";
       substitutions = let
-        useLegacyHook = lib.versionOlder python.pythonVersion "3.10";
+        useLegacyHook = lib.versionOlder python.pythonVersion "3";
       in {
         inherit pythonInterpreter pythonSitePackages;
         catchConflicts = if useLegacyHook then
@@ -117,6 +117,10 @@ in {
           ../catch_conflicts/catch_conflicts.py;
       } // lib.optionalAttrs useLegacyHook {
         inherit setuptools;
+      };
+      passthru.tests = import ./python-catch-conflicts-hook-tests.nix {
+        inherit pythonOnBuildForHost runCommand;
+        inherit (pkgs) coreutils gnugrep writeShellScript;
       };
     } ./python-catch-conflicts-hook.sh) {};
 
