@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, nix-update-script }:
 buildGoModule rec {
   pname = "bbolt";
   version = "1.3.8";
@@ -13,6 +13,8 @@ buildGoModule rec {
   subPackages = [ "cmd/bbolt" ];
 
   vendorHash = "sha256-QZcNDGFmEDWivIxGcgM8K4DjpETJmhWpNT7oDlfV2pc=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/etcd-io/${pname}";
