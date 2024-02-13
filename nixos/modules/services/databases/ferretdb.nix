@@ -33,6 +33,12 @@ in
               default = "file:/var/lib/ferretdb/";
               description = "SQLite URI (directory) for 'sqlite' handler";
             };
+
+            FERRETDB_POSTGRESQL_URL = lib.mkOption {
+              type = lib.types.str;
+              default = "postgres://ferretdb@localhost/ferretdb?host=/run/postgresql";
+              description = "PostgreSQL URL for 'pg' handler";
+            };
           };
         };
         example = {
