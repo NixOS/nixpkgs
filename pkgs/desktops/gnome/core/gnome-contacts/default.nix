@@ -11,7 +11,6 @@
 , gtk4
 , glib
 , libportal-gtk4
-, gnome-desktop
 , gnome-online-accounts
 , qrencode
 , wrapGAppsHook4
@@ -27,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "45.0";
+  version = "46.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "vR/fKm9kzdnyq7/tB+ZPKmmuNTb3T0gZjMN7rZ/NlD4=";
+    sha256 = "mSGGcglrgAxkgK8OxHP73F+1MWhwiqev6nLA1HTzuZ8=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
     evolution-data-server-gtk4
     gsettings-desktop-schemas
     folks
-    gnome-desktop
     libadwaita
     libxml2
     gnome-online-accounts
