@@ -383,9 +383,9 @@
     "nestopia": {
         "owner": "libretro",
         "repo": "nestopia",
-        "rev": "8050c38e5a1db6927b03510651809e8ef932b888",
+        "rev": "407df997b65cddbff9b25abae0510e6645205677",
         "hash": "sha256-Vlz69ZpXwawdE+bfjlKNrQNmFHhB53FOKhfMgq4viE0=",
-        "date": "unstable-2024-02-03"
+        "date": "unstable-2024-02-13"
     },
     "np2kai": {
         "owner": "AZO234",
