@@ -206,8 +206,8 @@
     "flycast": {
         "owner": "flyinghead",
         "repo": "flycast",
-        "rev": "7029e1615a215bc43e51f8eac605f31dd01ba8cd",
-        "hash": "sha256-JUXKlUNIg+1vvOfUQpysxUMYIRJqIzj9UNIwb+8HRPo=",
+        "rev": "44fa364f36c43bed19b055096600f075c656f78c",
+        "hash": "sha256-UfASq8OXtsfubMUfke7P6HTygM/9fP421IoLQeJvPgY=",
         "fetchSubmodules": true,
         "date": "unstable-2024-02-09"
     },
