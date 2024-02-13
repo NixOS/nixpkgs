@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     rev    = version;
     sha256 = "1yg2v4wmswh1sigk47drwsxyayr472mf4i47lqmlcgn9hhbx1q87";
   };
+  patches = [
+    # Fix missing type declaration
+    # due to undeterminisitic compilation
+    # of circularly dependent headers
+    ./stdint.patch
+  ];
 
   postPatch = ''
     # Upstream fix for gcc-13 support:
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple Theorem Prover";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ McSinyx ];
     platforms = platforms.linux;
     license = licenses.mit;
   };
