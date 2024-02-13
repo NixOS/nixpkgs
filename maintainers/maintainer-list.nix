@@ -10370,6 +10370,12 @@
     githubId = 894884;
     name = "Jakub Kozłowski";
   };
+  kud = {
+    email = "kasa7qi@gmail.com";
+    github = "KUD-00";
+    githubId = 70764075;
+    name = "kud";
+  };
   kupac = {
     github = "Kupac";
     githubId = 8224569;
