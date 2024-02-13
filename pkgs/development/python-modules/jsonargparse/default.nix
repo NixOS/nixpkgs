@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.27.4";
+  version = "4.27.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "omni-us";
     repo = "jsonargparse";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MzcFsH1PyDAnPBEELHLRKfD3TR01INDFIvHc1y3dbng=";
+    hash = "sha256-MSvgOF/5X78HSSRvv1TBmaYZgcUVMKGaHfzXu3lIGVY=";
   };
 
   nativeBuildInputs = [
