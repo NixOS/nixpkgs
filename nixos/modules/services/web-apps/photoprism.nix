@@ -12,17 +12,14 @@ let
     lib.mapAttrs (_: toString) cfg.settings
   );
 
-  manage =
-    let
-      setupEnv = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: val: "export ${name}=${lib.escapeShellArg val}") env);
-    in
-    pkgs.writeShellScript "manage" ''
-      ${setupEnv}
-      eval "$(${config.systemd.package}/bin/systemctl show -pUID,MainPID photoprism.service | ${pkgs.gnused}/bin/sed "s/UID/ServiceUID/")"
-      exec ${pkgs.util-linux}/bin/nsenter \
-        -t $MainPID -m -S $ServiceUID -G $ServiceUID --wdns=${cfg.storagePath} \
-        ${cfg.package}/bin/photoprism "$@"
-    '';
+  manage = pkgs.writeShellScript "manage" ''
+    set -o allexport # Export the following env vars
+    ${lib.toShellVars env}
+    eval "$(${config.systemd.package}/bin/systemctl show -pUID,MainPID photoprism.service | ${pkgs.gnused}/bin/sed "s/UID/ServiceUID/")"
+    exec ${pkgs.util-linux}/bin/nsenter \
+      -t $MainPID -m -S $ServiceUID -G $ServiceUID --wdns=${cfg.storagePath} \
+      ${cfg.package}/bin/photoprism "$@"
+  '';
 in
 {
   meta.maintainers = with lib.maintainers; [ stunkymonkey ];
