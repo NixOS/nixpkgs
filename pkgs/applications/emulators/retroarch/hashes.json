@@ -361,10 +361,10 @@
     "mrboom": {
         "owner": "Javanaise",
         "repo": "mrboom-libretro",
-        "rev": "865be65118ef70e9a486f872948f4fc805edf643",
-        "hash": "sha256-jdOthryC1QvVvuPZUh/YyZhJeFWk1XhBuCm4hmAy8+Q=",
+        "rev": "f688664f024723e00c0d2926e51b45754a25e2da",
+        "hash": "sha256-t6ArMkyGvHJ9hLc+FFoH2wTk0wRFn5etzdLipTQnGyc=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-02-05"
+        "date": "unstable-2024-02-09"
     },
     "mupen64plus": {
         "owner": "libretro",
