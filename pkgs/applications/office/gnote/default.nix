@@ -5,6 +5,7 @@
 , gettext
 , gtkmm4
 , itstool
+, libadwaita
 , libsecret
 , libuuid
 , libxml2
@@ -18,15 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnote";
-  version = "45.1";
+  version = "46.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-nuwn+MsKENL9uRSkUei4QYwmDni/BzYHgaeKXkGM+UE=";
+    hash = "sha256-D1z1cq9CpB1TTKd+a6MxVp8hATHKscm9B4J7NSp13yY=";
   };
 
   buildInputs = [
     gtkmm4
+    libadwaita
     libsecret
     libuuid
     libxml2
