@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grocy";
-  version = "4.0.3";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
-    hash = "sha256-KBTsi634SolgA01eRthMuWx7DIF7rhvJSPxiHyuKSR8=";
+    hash = "sha256-Y4rHFgPmFHcNrETlvMLXSr0v07p2GzfjJ1JjH2YGXoU=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./0001-Define-configs-with-env-vars.patch
     ./0002-Remove-check-for-config-file-as-it-s-stored-in-etc-g.patch
   ];
-  patchFlags = [ "--binary" "-p1" ];
+  patchFlags = [ "--binary" "-p1" "-l" ];
 
   dontBuild = true;
 
