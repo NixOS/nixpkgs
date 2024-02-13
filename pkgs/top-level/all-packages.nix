@@ -8844,11 +8844,11 @@ with pkgs;
   );
 
   graphviz = callPackage ../tools/graphics/graphviz {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   };
 
   graphviz-nox = callPackage ../tools/graphics/graphviz {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
     withXorg = false;
   };
 
