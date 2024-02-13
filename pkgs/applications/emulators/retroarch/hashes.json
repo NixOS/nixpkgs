@@ -605,9 +605,9 @@
     "vecx": {
         "owner": "libretro",
         "repo": "libretro-vecx",
-        "rev": "a401c268e425dc8ae6a301e7fdb9a9e96f39b8ea",
-        "hash": "sha256-24/bcQ5mgLl7zKvpnnSYr5SoLG02al6dP27KoOtnua4=",
-        "date": "unstable-2023-06-01"
+        "rev": "56a99fa08a7601b304d752188ca573febf26faeb",
+        "hash": "sha256-9/d6qzsUJZYZewAbFI4LU2FVpv09uby/5mxCZU7rVzo=",
+        "date": "unstable-2024-02-10"
     },
     "virtualjaguar": {
         "owner": "libretro",
