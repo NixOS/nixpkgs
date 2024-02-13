@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
       patch = "ffs_no_check_updates.patch";
       hash = "sha256-lPyHpxhZz8BSnDI8QfAzKpKwVkp2jiF49RWjKNuZGII=";
     })
+    # Fix build with curl 8.6.0
+    ./curl-8.6.0.patch
   ];
 
   nativeBuildInputs = [
