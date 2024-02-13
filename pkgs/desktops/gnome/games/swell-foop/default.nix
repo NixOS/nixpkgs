@@ -6,26 +6,26 @@
 , pkg-config
 , vala
 , glib
-, gtk3
-, libgnome-games-support
+, gtk4
+, libgee
+, libgnome-games-support_2_0
+, pango
 , gnome
 , desktop-file-utils
-, clutter
-, clutter-gtk
 , gettext
 , itstool
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "swell-foop";
-  version = "41.1";
+  version = "46.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "JD96VeXnU6UQhu7CVoMg12ktWxWmanI6tZFwXg2O9t0=";
+    sha256 = "bLlVidWY5LN2bqVcImYfiK85B4phh9eoqo/c8931EuM=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
     itstool
     gettext
@@ -43,15 +43,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk3
-    libgnome-games-support
-    clutter
-    clutter-gtk
+    gtk4
+    libgee
+    libgnome-games-support_2_0
+    pango
   ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
+
+    substituteInPlace meson_post_install.py \
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   passthru = {
