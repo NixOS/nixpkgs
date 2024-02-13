@@ -8,19 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rwpspread";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
     rev = "v${version}";
-    hash = "sha256-slxsicASZ7JoUnnQf4R3xFB4zgtt4ZOZCU0NcbgBneM=";
+    hash = "sha256-oZgHMklHMKUpVY3g7wS2rna+5+ePEbcvdVJc9jPTeoI=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-client-toolkit-0.18.0" = "sha256-6y5abqVHPJmh8p8yeNgfTRox1u/2XHwRo3+T19I1Ksk=";
+      "smithay-client-toolkit-0.18.0" = "sha256-7s5XPmIflUw2qrKRAZUz30cybYKvzD5Hu4ViDpzGC3s=";
     };
   };
 
