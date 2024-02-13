@@ -965,6 +965,7 @@ dont-distribute-packages:
  - copilot-libraries
  - copilot-sbv
  - copilot-theorem
+ - copilot-verifier
  - corenlp-parser
  - coroutine-enumerator
  - coroutine-iteratee
@@ -991,6 +992,11 @@ dont-distribute-packages:
  - crf-chain2-generic
  - crf-chain2-tiers
  - cron-compat
+ - crucible
+ - crucible-llvm
+ - crucible-symio
+ - crux
+ - crux-llvm
  - crypto-classical
  - crypto-conduit
  - crypto-pubkey
@@ -1346,7 +1352,6 @@ dont-distribute-packages:
  - fixed-point-vector-space
  - fixhs
  - flashblast
- - flatbuffers
  - flexiwrap
  - flexiwrap-smallcheck
  - flite
@@ -2226,7 +2231,6 @@ dont-distribute-packages:
  - ihaskell-rlangqq
  - ihttp
  - imap
- - imbib
  - imgurder
  - imj-animation
  - imj-base
@@ -3142,6 +3146,7 @@ dont-distribute-packages:
  - qtah-generator
  - qtah-qt5
  - quantfin
+ - quantification-aeson
  - quantum-random
  - queryparser
  - queryparser-demo
@@ -4002,7 +4007,6 @@ dont-distribute-packages:
  - wahsp
  - wai-devel
  - wai-dispatch
- - wai-handler-hal
  - wai-handler-snap
  - wai-hastache
  - wai-middleware-brotli
