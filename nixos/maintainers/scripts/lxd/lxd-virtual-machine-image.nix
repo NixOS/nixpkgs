@@ -27,8 +27,9 @@
 
   # Network
   networking = {
-    dhcdpcd.enable = false;
+    dhcpcd.enable = false;
     useDHCP = false;
+    useHostResolvConf = false;
   };
 
   systemd.network = {
