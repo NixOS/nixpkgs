@@ -1,24 +1,20 @@
 { lib
 , pkg-config
 , fetchurl
-, buildPythonApplication
-, autoreconfHook
+, meson
+, ninja
 , wrapGAppsHook
 , gobject-introspection
 , gettext
 , yelp-tools
 , itstool
-, python
-, pygobject3
+, python3
 , gtk3
 , gnome
 , substituteAll
 , at-spi2-atk
 , at-spi2-core
-, pyatspi
 , dbus
-, dbus-python
-, pyxdg
 , xkbcomp
 , procps
 , lsof
@@ -27,20 +23,18 @@
 , speechd
 , brltty
 , liblouis
-, setproctitle
 , gst_all_1
-, gst-python
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "45.2";
+  version = "46.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "8PLFeaW+7f5WU7x/4kSBxNaqxd0fccHnoghZXzx473Y=";
+    hash = "sha256-z2deNQwYrA+ilDbGVZ0dqXX3///vqAjr5HbY+enRERQ=";
   };
 
   patches = [
@@ -54,7 +48,8 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     wrapGAppsHook
     pkg-config
     gettext
@@ -63,13 +58,13 @@ buildPythonApplication rec {
     gobject-introspection
   ];
 
-  pythonPath = [
+  pythonPath = with python3.pkgs; [
     pygobject3
-    pyatspi
     dbus-python
     pyxdg
     brltty
     liblouis
+    psutil
     speechd
     gst-python
     setproctitle
@@ -78,7 +73,7 @@ buildPythonApplication rec {
   strictDeps = false;
 
   buildInputs = [
-    python
+    python3
     gtk3
     at-spi2-atk
     at-spi2-core
@@ -88,6 +83,12 @@ buildPythonApplication rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
   ];
+
+  dontWrapGApps = true; # Prevent double wrapping
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
