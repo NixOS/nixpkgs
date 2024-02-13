@@ -1,17 +1,15 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
 , atpublic
 , bidict
 , black
+, buildPythonPackage
 , clickhouse-connect
 , dask
 , datafusion
 , db-dtypes
 , duckdb
 , duckdb-engine
+, fetchFromGitHub
 , filelock
 , geoalchemy2
 , geopandas
@@ -25,12 +23,14 @@
 , packaging
 , pandas
 , parsy
+, pins
 , poetry-core
 , poetry-dynamic-versioning
 , polars
 , pooch
 , psycopg2
 , pyarrow
+, pyarrow-hotfix
 , pydata-google-auth
 , pydruid
 , pymysql
@@ -41,7 +41,9 @@
 , pytest-randomly
 , pytest-snapshot
 , pytest-xdist
+, pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pytz
 , regex
 , rich
@@ -71,8 +73,8 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "7.1.0";
-  format = "pyproject";
+  version = "8.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -81,8 +83,15 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = "refs/tags/${version}";
-    hash = "sha256-E7jryoidw6+CjTIex4wcTXcU+8Kg8LDwg7wJvcwj+7Q=";
+    hash = "sha256-KcNZslqmSbu8uPYKpkyvd7d8Fsf0nQt80y0auXsI8fs=";
   };
+
+  # patch out tests that check formatting with black
+  postPatch = ''
+    find ibis/tests -type f -name '*.py' -exec sed -i \
+      -e '/^ *assert_decompile_roundtrip/d' \
+      -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -101,6 +110,7 @@ buildPythonPackage rec {
     parsy
     pooch
     pyarrow
+    pyarrow-hotfix
     python-dateutil
     pytz
     rich
@@ -112,6 +122,7 @@ buildPythonPackage rec {
   ++ pooch.optional-dependencies.xxhash;
 
   nativeCheckInputs = [
+    black
     pytestCheckHook
     hypothesis
     pytest-benchmark
@@ -126,44 +137,29 @@ buildPythonPackage rec {
     "--dist=loadgroup"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
-    # breakage from sqlalchemy2 truediv changes
-    "--deselect=ibis/tests/sql/test_sqlalchemy.py::test_tpc_h17"
-    # tries to download duckdb extensions
-    "--deselect=ibis/backends/duckdb/tests/test_register.py::test_register_sqlite"
-    "--deselect=ibis/backends/duckdb/tests/test_register.py::test_read_sqlite"
-
-    # duckdb does not respect sample_size=2 (reads 3 lines of csv).
-    "--deselect=ibis/backends/tests/test_register.py::test_csv_reregister_schema"
-
-    # duckdb fails with:
-    # "This function can not be called with an active transaction!, commit or abort the existing one first"
-    "--deselect=ibis/backends/tests/test_udf.py::test_vectorized_udf"
-    "--deselect=ibis/backends/tests/test_udf.py::test_map_merge_udf"
-    "--deselect=ibis/backends/tests/test_udf.py::test_udf"
-    "--deselect=ibis/backends/tests/test_udf.py::test_map_udf"
-
-    # pyarrow13 is not supported yet.
-    "--deselect=ibis/backends/tests/test_temporal.py::test_date_truncate"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_interval_add_cast_column"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_filter_before_window"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
-    "--deselect=ibis/backends/tests/test_aggregation.py::test_aggregate_grouped"
   ];
 
-  # patch out tests that check formatting with black
-  postPatch = ''
-    find ibis/tests -type f -name '*.py' -exec sed -i \
-      -e '/^ *assert_decompile_roundtrip/d' \
-      -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
-    substituteInPlace pyproject.toml --replace 'sqlglot = ">=10.4.3,<12"' 'sqlglot = "*"'
-  '';
+  disabledTests = [
+    # breakage from sqlalchemy2 truediv changes
+    "test_tpc_h17"
+    # tries to download duckdb extensions
+    "test_register_sqlite"
+    "test_read_sqlite"
+    # duckdb does not respect sample_size=2 (reads 3 lines of csv).
+    "test_csv_reregister_schema"
+    # duckdb fails with:
+    # "This function can not be called with an active transaction!, commit or abort the existing one first"
+    "test_vectorized_udf"
+    "test_s3_403_fallback"
+    "test_map_merge_udf"
+    "test_udf"
+    "test_map_udf"
+    # DataFusion error
+    "datafusion"
+    # pluggy.PluggyTeardownRaisedWarning
+    "test_repr_png_is_not_none_in_not_interactive"
+    "test_interval_arithmetic"
+  ];
 
   preCheck = ''
     HOME="$TMPDIR"
@@ -202,6 +198,8 @@ buildPythonPackage rec {
       trino = [ trino-python-client sqlalchemy sqlalchemy-views ];
       visualization = [ graphviz-nox ];
       decompiler = [ black ];
+      # deltalake = [ deltalake ];  # Dependency missing in Nixpkgs
+      examples = [ pins ];
     };
   };
 
