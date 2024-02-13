@@ -1,8 +1,9 @@
 { lib
+, clangStdenv
 , cargo
 , copyDesktopItems
 , fetchFromGitHub
-, flutter313
+, flutter316
 , gst_all_1
 , libXtst
 , libaom
@@ -22,7 +23,7 @@
 
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/0cf4711515077e400827c3ec92c8102f11b4a69c/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/16db977fd81e14af62ec5ac7760a7661a5c24be8/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -36,21 +37,23 @@
     doCheck = false;
   };
 
-in flutter313.buildFlutterApplication rec {
+  sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
+
+in flutter316.buildFlutterApplication {
   pname = "rustdesk";
-  version = "unstable-2024-02-03";
+  version = "1.2.3-unstable-2024-02-11";
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
-    rev = "0cf4711515077e400827c3ec92c8102f11b4a69c";
-    hash = "sha256-jqtOCrmFNpFEGAZU8LBH3ge5S++nK/dVpaszMbwdIOw=";
+    rev = "16db977fd81e14af62ec5ac7760a7661a5c24be8";
+    hash = "sha256-k4gNuA/gZ58S0selOn9+K7+s5AQLkpz+DPI84Fuw414=";
   };
 
   strictDeps = true;
-  strucutedAttrs = true;
 
   # Configure the Flutter/Dart build
   sourceRoot = "source/flutter";
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/16db977fd81e14af62ec5ac7760a7661a5c24be8/flutter/pubspec.lock | yq
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {
     dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
@@ -67,15 +70,17 @@ in flutter313.buildFlutterApplication rec {
   # Configure the Rust build
   cargoRoot = "..";
   cargoDeps = rustPlatform.importCargoLock {
+    # Upstream lock file after running `cargo generate-lockfile --offline` and
+    # removing the git variant of core-foundation-sys
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "amf-0.1.0" = "sha256-4xZIp0Zs1VJQixChxC4b6ac108DGqgzZ/O/+94d2jKI=";
+      "amf-0.1.0" = "sha256-j9w3bB1Nd8GuHyMHxjcTGBy3JJ26g/GiBg2OQgrdqLw=";
       "android-wakelock-0.1.0" = "sha256-09EH/U1BBs3l4galQOrTKmPUYBgryUjfc/rqPZhdYc4=";
       "cacao-0.4.0-beta2" = "sha256-U5tCLeVxjmZCm7ti1u71+i116xmozPaR69pCsA4pxrM=";
       "confy-0.4.0-2" = "sha256-r5VeggXrIq5Cwxc2WSrxQDI5Gvbw979qIUQfMKHgBUI=";
       "core-foundation-0.9.3" = "sha256-iB4OVmWZhuWbs9RFWvNc+RNut6rip2/50o5ZM6c0c3g=";
       "evdev-0.11.5" = "sha256-aoPmjGi/PftnH6ClEWXHvIj0X3oh15ZC1q7wPC1XPr0=";
-      "hwcodec-0.2.0" = "sha256-PMDynyMAf4E314HEZ7loqANucshXc+R6sCH8dwUY+oU=";
+      "hwcodec-0.2.0" = "sha256-yw3cmC74u6oLfJD6ouqACUZynHRujT/KJMtLOtzg7f4=";
       "impersonate_system-0.1.0" = "sha256-pIV7s2qGoCIUrhaRovBDCJaGQ/pMdJacDXJmeBpkcyI=";
       "keepawake-0.4.3" = "sha256-wDLjjhKWbCeaWbA896a5E5UMB0B/xI/84QRCUYNKX7I=";
       "machine-uid-0.3.0" = "sha256-rEOyNThg6p5oqE9URnxSkPtzyW8D4zKzLi9pAnzTElE=";
@@ -134,8 +139,12 @@ in flutter313.buildFlutterApplication rec {
     xdotool
   ];
 
-  postPatch = ''
+  prePatch = ''
     chmod -R +w ..
+  '';
+  patchFlags = [ "-p1" "-d" ".." ];
+
+  postPatch = ''
     substituteInPlace ../Cargo.toml --replace ", \"staticlib\", \"rlib\"" ""
     # The supplied Cargo.lock doesn't work with our fetcher so copy over the fixed version
     cp ${./Cargo.lock} ../Cargo.lock
@@ -150,17 +159,17 @@ in flutter313.buildFlutterApplication rec {
     dart_output:
       - "./lib/generated_bridge.dart"
     llvm_path:
-      - "${rustc.llvmPackages.libclang.lib}"
+      - "${lib.getLib clangStdenv.cc.cc}"
     dart_format_line_length: 80
-    llvm_compiler_opts: "-I ${rustc.llvmPackages.clang-unwrapped.lib}/lib/clang/${lib.versions.major rustc.llvmPackages.clang-unwrapped.version}/include -I ${rustc.unwrapped.stdenv.cc.libc_dev}/include"
+    llvm_compiler_opts: "-I ${lib.getLib clangStdenv.cc.cc}/lib/clang/${lib.versions.major clangStdenv.cc.version}/include -I ${clangStdenv.cc.libc_dev}/include"
     EOF
     RUST_LOG=info ${flutterRustBridge}/bin/flutter_rust_bridge_codegen bridge.yml
 
     # Build the Rust shared library
     cd ..
     preBuild=() # prevent loops
-    runHook cargoBuildHook
-    mv ./target/*/release/liblibrustdesk.so ./target/release/liblibrustdesk.so
+    cargoBuildHook
+    mv ./target/*/release/liblibrustdesk${sharedLibraryExt} ./target/release/liblibrustdesk${sharedLibraryExt}
     cd flutter
   '';
 
@@ -176,8 +185,8 @@ in flutter313.buildFlutterApplication rec {
       name = "rustdesk";
       desktopName = "RustDesk";
       genericName = "Remote Desktop";
-      comment = meta.description;
-      exec = "${meta.mainProgram} %u";
+      comment = "Remote Desktop";
+      exec = "rustdesk %u";
       icon = "rustdesk";
       terminal = false;
       type = "Application";
@@ -186,7 +195,7 @@ in flutter313.buildFlutterApplication rec {
       keywords = [ "internet" ];
       actions.new-window = {
         name = "Open a New Window";
-        exec = "${meta.mainProgram} %u";
+        exec = "rustdesk %u";
       };
     })
     (makeDesktopItem {
@@ -195,7 +204,7 @@ in flutter313.buildFlutterApplication rec {
       noDisplay = true;
       mimeTypes = [ "x-scheme-handler/rustdesk" ];
       tryExec = "rustdesk";
-      exec = "${meta.mainProgram} %u";
+      exec = "rustdesk %u";
       icon = "rustdesk";
       terminal = false;
       type = "Application";
