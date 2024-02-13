@@ -12,8 +12,7 @@
 , python3
 , polkit
 , networkmanager
-, gtk-doc
-, docbook-xsl-nons
+, gi-docgen
 , at-spi2-core
 , libstartup_notification
 , unzip
@@ -23,7 +22,6 @@
 , webp-pixbuf-loader
 , geoclue2
 , perl
-, docbook_xml_dtd_45
 , desktop-file-utils
 , libpulseaudio
 , libical
@@ -67,13 +65,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "45.4";
+  version = "46.rc";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    sha256 = "W/6jeeEgscfyN/PsNprSfvXC9ZMMffFjs5J4LYWCCQ0=";
+    sha256 = "sha256-LdXDTAcBcUTpAHx+czpZZkZgmQHbFWdZCbRSRg76z38=";
   };
 
   patches = [
@@ -110,9 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    gtk-doc
+    gi-docgen
     perl
     wrapGAppsHook4
     sassc
@@ -211,6 +207,9 @@ stdenv.mkDerivation (finalAttrs: {
     for svc in org.gnome.ScreenSaver org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
       wrapGApp $out/share/gnome-shell/$svc
     done
+
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   separateDebugInfo = true;
