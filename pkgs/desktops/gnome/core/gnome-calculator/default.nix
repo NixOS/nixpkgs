@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, appstream
 , meson
 , ninja
 , vala
@@ -24,14 +25,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "45.0.2";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "fcvzI4SJcXHL5Ug+xmTZlOXnVekSrh35EWJPA8kIZ8I=";
+    sha256 = "sha256-veU6+VW3sm21HIppBJwdm79RHNXzp0cSWKwFAkKPfXY=";
   };
 
   nativeBuildInputs = [
+    appstream
     meson
     ninja
     pkg-config
