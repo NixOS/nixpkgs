@@ -150,7 +150,8 @@ in
     icon = "vs${executableName}";
     startupNotify = true;
     categories = [ "Utility" "TextEditor" "Development" "IDE" ];
-    mimeTypes = [ "x-scheme-handler/vscode" ];
+    mimeTypes = [ "x-scheme-handler/vscode"
+    ] ++ lib.optional (executableName != "code") "x-scheme-handler/vs${executableName}";
     keywords = [ "vscode" ];
     noDisplay = true;
   };
