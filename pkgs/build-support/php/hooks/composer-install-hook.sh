@@ -83,28 +83,7 @@ composerInstallBuildHook() {
 
     # Since this file cannot be generated in the composer-repository-hook.sh
     # because the file contains hardcoded nix store paths, we generate it here.
-    composer-local-repo-plugin --no-ansi build-local-repo -m "${composerRepository}" .
-
-    # Remove all the repositories of type "composer" and "vcs"
-    # from the composer.json file.
-    jq -r -c 'del(try .repositories[] | select(.type == "composer" or .type == "vcs"))' composer.json | sponge composer.json
-
-    # Configure composer to disable packagist and avoid using the network.
-    composer config repo.packagist false
-    # Configure composer to use the local repository.
-    composer config repo.composer composer file://"$PWD"/packages.json
-
-    # Since the composer.json file has been modified in the previous step, the
-    # composer.lock file needs to be updated.
-    composer \
-      --lock \
-      --no-ansi \
-      --no-install \
-      --no-interaction \
-      ${composerNoDev:+--no-dev} \
-      ${composerNoPlugins:+--no-plugins} \
-      ${composerNoScripts:+--no-scripts} \
-      update
+    composer-local-repo-plugin --no-ansi build-local-repo-lock -m "${composerRepository}" .
 
     echo "Finished composerInstallBuildHook"
 }
@@ -150,9 +129,6 @@ composerInstallInstallHook() {
       ${composerNoPlugins:+--no-plugins} \
       ${composerNoScripts:+--no-scripts} \
       install
-
-    # Remove packages.json, we don't need it in the store.
-    rm packages.json
 
     # Copy the relevant files only in the store.
     mkdir -p "$out"/share/php/"${pname}"
