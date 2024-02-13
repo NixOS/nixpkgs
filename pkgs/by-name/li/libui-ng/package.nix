@@ -7,6 +7,7 @@
 , meson
 , ninja
 , pkg-config
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +46,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonBool "examples" (!stdenv.isDarwin))
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "A portable GUI library for C";
