@@ -33,7 +33,7 @@ let
   # Paper Plane requires a patch to the gtk4, but may be removed later
   # https://github.com/paper-plane-developers/paper-plane/tree/main?tab=readme-ov-file#prerequisites
   gtk4-paperplane = gtk4.overrideAttrs (prev: {
-    patches = prev.patches ++ [ "${src}/build-aux/gtk-reversed-list.patch" ];
+    patches = (prev.patches or []) ++ [ "${src}/build-aux/gtk-reversed-list.patch" ];
   });
   wrapPaperPlaneHook = wrapGAppsHook.override {
     gtk3 = gtk4-paperplane;

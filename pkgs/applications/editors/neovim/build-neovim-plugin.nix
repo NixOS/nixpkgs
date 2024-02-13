@@ -25,7 +25,7 @@ in
           lua_modules_path = "lua"
         '';
         })).overrideAttrs (drv: {
-        version = attrs.version;
+        version = attrs.version or drv.version;
         rockspecVersion = drv.rockspecVersion;
       });
 
