@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "aiohttp_client_cache";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FXU4QNqa8B8ZADmoEyJfd8gsUDI0HEjIR9B2CBP55wU=";
+    sha256 = "sha256-B2b/9O2gVJjHUlN0pYeBDcwsy3slaAnd5SroeQqEU+s=";
   };
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
