@@ -7,19 +7,22 @@
 , pkg-config
 , vala
 , gobject-introspection
+, gperf
 , glib
 , cairo
 , sqlite
 , libsoup_3
 , gtk4
 , libsysprof-capture
+, json-glib
+, protobufc
 , xvfb-run
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.1.3";
+  version = "1.2.rc";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
-    sha256 = "+h0dKLECtvfsxwD5aRTIgiNI9jG/tortUJYFiYMe60g=";
+    sha256 = "sha256-BVEs4ONoKnb6lFE6eI5DzjtcbxUo094a5+oz3N8OxmU=";
   };
 
   depsBuildBuild = [
@@ -44,6 +47,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     gobject-introspection
+    gperf
   ];
 
   buildInputs = [
@@ -53,6 +57,8 @@ stdenv.mkDerivation rec {
     libsoup_3
     gtk4
     libsysprof-capture
+    json-glib
+    protobufc
   ];
 
   nativeCheckInputs = [
