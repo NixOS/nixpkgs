@@ -66,6 +66,56 @@ rec {
         __spliced = {} // (mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
       });
 
+  makeOverridableGeneric =
+    {
+      name,
+      inner,
+      wrap ? [],
+    }:
+    let
+      # Creates a functor with the same arguments as f
+      mirrorArgs = mirrorFunctionArgs inner;
+      partial = inner': makeOverridableGeneric { inherit name wrap; inner = inner'; };
+      transform = origArgs:
+        let
+          result = inner origArgs;
+
+          # Changes the original arguments with (potentially a function that returns) a set of new attributes
+          overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
+
+          # Re-call the function but with different arguments
+          overrideArgs = mirrorArgs (newArgs: partial inner (overrideWith newArgs));
+          # Change the result of the function call by applying `outer` to it
+          overrideResult = outer: partial (mirrorArgs (newArgs: outer (inner newArgs))) origArgs;
+        in
+          if isAttrs result then
+            result // {
+              ${name} = overrideArgs;
+            } // (
+              lib.pipe wrap [
+                (builtins.filter (attr: result ? attr))
+                (builtins.map (attr: lib.nameValuePair attr (newArgs: overrideResult (x: x.${attr} newArgs))))
+                builtins.listToAttrs
+              ]
+            )
+          else if isFunction result then
+            # Note: `lib.mirrorFunctionArgs result result` transforms into a
+            # functor while propagating its arguments.
+            mirrorFunctionArgs result result // {
+              ${name} = overrideArgs;
+            }
+          else result;
+
+      final = mirrorArgs transform //
+        (lib.pipe wrap [
+          (builtins.filter (attr: inner ? attr))
+          (builtins.map (attr: lib.nameValuePair attr
+                          (newArgs: origArgs: final (inner.${attr} newArgs) origArgs)))
+          builtins.listToAttrs
+        ]);
+
+    in final;
+
 
   /* `makeOverridable` takes a function from attribute set to attribute set and
      injects `override` attribute which can be used to override arguments of
