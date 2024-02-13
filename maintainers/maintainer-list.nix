@@ -4800,6 +4800,11 @@
     githubId = 32810399;
     name = "Diffumist";
   };
+  DimitarNestorov = {
+    name = "Dimitar Nestorov";
+    github = "DimitarNestorov";
+    githubId = 8790386;
+  };
   diogotcorreia = {
     name = "Diogo Correia";
     email = "me@diogotc.com";

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.7.0";
+  version = "2.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xbplBcoW78Dh5uyhaPicjs74YQfAgTc746Srxa4vu7M=";
+    hash = "sha256-3OqF4xgRWzX4m4WW2B+cUuHJpNzf2L033ZXwGH0K4b0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
