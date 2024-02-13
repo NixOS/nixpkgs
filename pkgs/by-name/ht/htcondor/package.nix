@@ -14,7 +14,7 @@
 , munge
 , voms
 , perl
-, scitoken-cpp
+, scitokens-cpp
 , openssl
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     munge
     voms
     perl
-    scitoken-cpp
+    scitokens-cpp
   ];
 
 
