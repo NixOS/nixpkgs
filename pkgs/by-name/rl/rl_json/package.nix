@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       values, and comparable in speed.
     '';
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.all;
+    platforms = tcl.meta.platforms;
     # From version 0.15.1: 'endian.h' file not found
     broken = stdenv.isDarwin;
   };
