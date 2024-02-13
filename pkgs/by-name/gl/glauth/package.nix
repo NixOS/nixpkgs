@@ -28,10 +28,6 @@ buildGoModule rec {
   # Disable go workspaces to fix build.
   env.GOWORK = "off";
 
-  # Fix this build error:
-  #   main module (github.com/glauth/glauth/v2) does not contain package github.com/glauth/glauth/v2/vendored/toml
-  excludedPackages = [ "vendored/toml" ];
-
   # Based on ldflags in <glauth>/Makefile.
   ldflags = [
     "-s"

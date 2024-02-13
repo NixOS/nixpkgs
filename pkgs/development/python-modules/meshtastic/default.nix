@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.2.20";
+  version = "2.2.21";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-0q8omX306iM3p52u39Dc7m6oxAPo9Fs6CEVicYdIMT4=";
+    hash = "sha256-qmzPtHAw4hzHDOLA8RT1VqAOjI287oxYNVT2t8sspVw=";
   };
 
   nativeBuildInputs = [

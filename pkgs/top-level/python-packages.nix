@@ -169,6 +169,8 @@ self: super: with self; {
 
   aioasuswrt = callPackage ../development/python-modules/aioasuswrt { };
 
+  aioautomower = callPackage ../development/python-modules/aioautomower { };
+
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
   aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
@@ -5230,6 +5232,8 @@ self: super: with self; {
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
+
+  homeassistant-bring-api = callPackage ../development/python-modules/homeassistant-bring-api { };
 
   home-assistant-chip-clusters = callPackage ../development/python-modules/home-assistant-chip-clusters { };
 

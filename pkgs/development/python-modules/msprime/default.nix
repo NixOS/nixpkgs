@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "msprime";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eYjGHvlJXDZ+gu/J+52AI8PbKiB6ZEXUORlTrzxCbCk=";
+    hash = "sha256-s/Ys1RatLkPIQS6h8kKsrRvJOTkc/pyqGWJYdOLjSDU=";
   };
 
   nativeBuildInputs = [
