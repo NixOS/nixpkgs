@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management.";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ryota-ka thehedgeh0g ];
+    maintainers = with maintainers; [ ryota-ka thehedgeh0g DimitarNestorov ];
     platforms = platforms.unix;
     mainProgram = "yarn";
   };
