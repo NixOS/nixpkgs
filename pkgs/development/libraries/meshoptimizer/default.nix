@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, nix-update-script }:
 
 let
   basis_universal = fetchFromGitHub {
@@ -26,6 +26,8 @@ in stdenv.mkDerivation rec {
     "-DMESHOPT_BASISU_PATH=${basis_universal}"
   ] ++ lib.optional (!stdenv.hostPlatform.isStatic)
     "-DMESHOPT_BUILD_SHARED_LIBS:BOOL=ON";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Mesh optimization library that makes meshes smaller and faster to render";
