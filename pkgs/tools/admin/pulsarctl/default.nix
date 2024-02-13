@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "pulsarctl";
-  version = "2.11.1.3";
+  version = "3.3.0-SNAPSHOT";
 
   src = fetchFromGitHub {
     owner = "streamnative";
     repo = "pulsarctl";
     rev = "v${version}";
-    hash = "sha256-sztjHw3su8KAV/zZcJqPWhjblINa8nYCN5Dzhn6X07w=";
+    hash = "sha256-3Eqjhypmr+HySn5wyQBjQLqXJxV1ZjtLQP+tJYXEm5Q=";
   };
 
-  vendorHash = "sha256-NQ8zvrW6lBF1js+WI2PPvXhv4YRS2IBT6S4vDoE1BFc=";
+  vendorHash = "sha256-iC0+a+1YV6yDwBnA40l2yNzAa8uSkqVJF9Xzp7STmkk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
