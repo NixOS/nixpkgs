@@ -2731,7 +2731,8 @@
       limitlessled
     ];
     "linear_garage_door" = ps: with ps; [
-    ]; # missing inputs: linear-garage-door
+      linear-garage-door
+    ];
     "linksys_smart" = ps: with ps; [
     ];
     "linode" = ps: with ps; [
@@ -6180,6 +6181,7 @@
     "life360"
     "lifx"
     "light"
+    "linear_garage_door"
     "litterrobot"
     "livisi"
     "local_calendar"
