@@ -70,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.37.2";
+  version = "1.37.4";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-xLdk3pJSV1YaloSV3TuTdJhujXsxUGrDru+mu86YBTU=";
+    hash = "sha256-MQnXamW7L4hyMbZDmU7XAcLv5roHcfhFGzni8YbDtq0=";
   };
 
   configureFlags = [
