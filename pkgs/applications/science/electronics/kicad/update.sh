@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils git nix curl jq
+#!nix-shell -i bash -p coreutils git nix-prefetch curl jq
 # shellcheck shell=bash enable=all
 
 set -e
@@ -8,13 +8,6 @@ shopt -s inherit_errexit
 # this script will generate versions.nix in the right location
 # this should contain the versions' revs and hashes
 # the stable revs are stored only for ease of skipping
-
-# by default nix-prefetch-url uses XDG_RUNTIME_DIR as tmp
-# which is /run/user/1000, which defaults to 10% of your RAM
-# unless you have over 64GB of ram that'll be insufficient
-# resulting in "tar: no space left on device" for packages3d
-# hence:
-export TMPDIR=/tmp
 
 # if something goes unrepairably wrong, run 'update.sh all clean'
 
@@ -25,7 +18,7 @@ export TMPDIR=/tmp
 # if there is, default to commiting?
 #   won't work when running in parallel?
 # remove items left in /nix/store?
-# reuse hashes of already checked revs (to avoid redownloading testing's packages3d)
+# reuse hashes of revs already checked elsewhere (to avoid redownloading testing's packages3d)
 
 # nixpkgs' update.nix passes in UPDATE_NIX_PNAME to indicate which package is being updated
 # assigning a default value to that as shellcheck doesn't like the use of unassigned variables
@@ -54,7 +47,10 @@ testing_branch="$(cut -d '/' -f 3 <<< "${scratch}")"
 # "testing" uses "testing_branch" found above
 all_versions=( "${latest_tag}" testing master )
 
-prefetch="nix-prefetch-url --unpack --quiet"
+prefetch() {
+  # make sure we're using the updated nixpkgs' fetcher implementation
+  nix-prefetch -s -I nixpkgs="${here}/../../../../../." "$@"
+};
 
 clean=""
 check_stable=""
@@ -70,7 +66,8 @@ for arg in "$@" "${UPDATE_NIX_PNAME}"; do
     *unstable|*unstable-small|master|main) check_unstable=1; check_testing="" ;;
     latest|now|today) check_unstable=1; check_testing=1 ;;
     all|both|full) check_stable=1; check_testing=1; check_unstable=1 ;;
-    clean|fix|*fuck) check_stable=1; check_testing=1; check_unstable=1; clean=1 ;;
+    clean|fix) clean=1 ;;
+    *fuck) check_stable=1; check_testing=1; check_unstable=1; clean=1 ;;
     commit) commit=1 ;;
     *) ;;
   esac
@@ -88,16 +85,6 @@ file="${here}/versions.nix"
 tmp="${here}/,versions.nix.${RANDOM}"
 
 libs=( symbols templates footprints packages3d )
-
-get_rev() {
-    git ls-remote "$@"
-}
-
-gitlab="https://gitlab.com/kicad"
-# append commit hash or tag
-src_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad/repository/archive.tar.gz?sha="
-lib_pre="https://gitlab.com/api/v4/projects/kicad%2Flibraries%2Fkicad-"
-lib_mid="/repository/archive.tar.gz?sha="
 
 # number of items updated
 count=0
@@ -163,20 +150,20 @@ for version in "${all_versions[@]}"; do
         printf "%6ssrc = {\n" ""
 
     echo "Checking src" >&2
-    scratch="$(get_rev "${gitlab}"/code/kicad.git "${src_version}")"
+    scratch="$(git ls-remote https://gitlab.com/kicad/code/kicad.git "${src_version}")"
     src_rev="$(cut -f1 <<< "${scratch}")"
     has_rev="$(grep -sm 1 "\"${pname}\"" -A 4 "${file}" | grep -sm 1 "${src_rev}" || true)"
-    has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256" || true)"
+    has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "hash" || true)"
     old_version="$(grep -sm 1 "\"${pname}\"" -A 3 "${file}" | grep -sm 1 "version" | awk -F "\"" '{print $2}' || true)"
 
     if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
-      echo "Reusing old ${pname}.src.sha256, already latest .rev at ${old_version}" >&2
+      echo "Reusing old ${pname}.src.hash, already latest .rev at ${old_version}" >&2
       scratch=$(grep -sm 1 "\"${pname}\"" -A 5 "${file}")
       grep -sm 1 "rev" -A 1 <<< "${scratch}"
     else
-          prefetched="$(${prefetch} "${src_pre}${src_rev}")"
+          prefetched="$(prefetch "${pname}.base.src" --rev "${src_rev}")"
           printf "%8srev =\t\t\t\"%s\";\n" "" "${src_rev}"
-          printf "%8ssha256 =\t\t\"%s\";\n" "" "${prefetched}"
+          printf "%8shash =\t\t\t\"%s\";\n" "" "${prefetched}"
           count=$((count+1))
     fi
         printf "%6s};\n" ""
@@ -188,24 +175,28 @@ for version in "${all_versions[@]}"; do
 
           for lib in "${libs[@]}"; do
             echo "Checking ${lib}" >&2
-            url="${gitlab}/libraries/kicad-${lib}.git"
-            scratch="$(get_rev "${url}" "${lib_version}")"
+            url="https://gitlab.com/kicad/libraries/kicad-${lib}.git"
+            scratch="$(git ls-remote "${url}" "${lib_version}")"
             scratch="$(cut -f1 <<< "${scratch}")"
             lib_rev="$(tail -n1 <<< "${scratch}")"
             has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
-            has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256" || true)"
+            has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.hash" || true)"
             if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
-              echo "Reusing old kicad-${lib}-${new_version}.src.sha256, already latest .rev" >&2
+              echo "Reusing old kicad-${lib}-${new_version}.src.hash, already latest .rev" >&2
               scratch="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}")"
               grep -sm 1 "${lib}" -A 1 <<< "${scratch}"
             else
-              prefetched="$(${prefetch} "${lib_pre}${lib}${lib_mid}${lib_rev}")"
+              prefetched="$(prefetch "${pname}.libraries.${lib}.src" --rev "${lib_rev}")"
               printf "%8s%s.rev =\t" "" "${lib}"
               case "${lib}" in
                 symbols|templates) printf "\t" ;; *) ;;
               esac
               printf "\"%s\";\n" "${lib_rev}"
-              printf "%8s%s.sha256 =\t\"%s\";\n" "" "${lib}" "${prefetched}"
+              printf "%8s%s.hash =\t" "" "${lib}"
+              case "${lib}" in
+                symbols) printf "\t" ;; *) ;;
+              esac
+              printf "\"%s\";\n" "${prefetched}"
               count=$((count+1))
             fi
           done
