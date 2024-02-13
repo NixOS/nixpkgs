@@ -61,8 +61,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "wandb";
+    repo = "wandb";
     rev = "refs/tags/v${version}";
     hash = "sha256-YIL/tBUTwt/bkEjlVTRmcWV3XL+l8GZ3TejkPSLcMlM=";
   };
