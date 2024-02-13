@@ -56,7 +56,7 @@
 buildPythonPackage rec {
   pname = "wandb";
   version = "0.16.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
