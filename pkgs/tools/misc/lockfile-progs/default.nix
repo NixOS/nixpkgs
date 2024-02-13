@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/man/man1
-    install -s bin/* $out/bin
+    install bin/* $out/bin
     install man/*.1 $out/man/man1
     runHook postInstall
   '';
