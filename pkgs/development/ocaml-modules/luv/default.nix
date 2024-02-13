@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, ocaml, fetchurl
+{ lib, buildDunePackage, ocaml, fetchurl, libuv
 , ctypes, result
 , alcotest
 , file
@@ -21,7 +21,10 @@ buildDunePackage rec {
     done
   '';
 
+  env.LUV_USE_SYSTEM_LIBUV = "yes";
+
   nativeBuildInputs = [ file ];
+  buildInputs = [ libuv ];
   propagatedBuildInputs = [ ctypes result ];
   checkInputs = [ alcotest ];
   # Alcotest depends on fmt that needs 4.08 or newer
