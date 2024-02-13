@@ -1,16 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with lib; let
+let
   cfg = config.programs.xppen;
 in
 
 {
   options.programs.xppen = {
-    enable = mkEnableOption "XPPen PenTablet application";
-    package = mkPackageOption pkgs "xppen" { };
+    enable = lib.mkEnableOption "XPPen PenTablet application";
+    package = lib.mkPackageOption pkgs "xppen" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     hardware.uinput.enable = true;
 
     environment.systemPackages = [ cfg.package ];
