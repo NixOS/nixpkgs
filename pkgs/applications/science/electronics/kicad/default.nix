@@ -99,6 +99,8 @@ let
     repo = "kicad-${name}";
     rev = versionsImport.${baseName}.libVersion.libSources.${name}.rev;
     sha256 = versionsImport.${baseName}.libVersion.libSources.${name}.sha256;
+    name = if (name == "packages3d") then "source.tar.gz" else "source";
+    repack = (name == "packages3d");
   };
 
   # only override `src` or `version` if building `kicad-unstable` with
