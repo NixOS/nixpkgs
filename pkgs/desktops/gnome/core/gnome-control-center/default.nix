@@ -13,7 +13,7 @@
 , gettext
 , glib
 , glib-networking
-, gcr
+, gcr_4
 , glibc
 , gnome-bluetooth
 , gnome-color-manager
@@ -36,6 +36,7 @@
 , librsvg
 , webp-pixbuf-loader
 , libsecret
+, libsoup_3
 , libwacom
 , libxml2
 , libxslt
@@ -68,11 +69,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "45.3";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-selJxOhsBiTsam7Q3wnJ+uKyKYPB3KYO2GrsjvCyQAQ=";
+    sha256 = "sha256-iiZkjhQA3Q9EnwQHI4pPhd+PtDh1c36Vro62Wcp/dsw=";
   };
 
   patches = [
@@ -106,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     glib
     glib-networking
-    gcr
+    gcr_4
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
@@ -127,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpwquality
     librsvg
     libsecret
+    libsoup_3
     libwacom
     libxml2
     modemmanager
