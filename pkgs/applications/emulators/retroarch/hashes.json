@@ -456,10 +456,10 @@
     "ppsspp": {
         "owner": "hrydgard",
         "repo": "ppsspp",
-        "rev": "25689c36d9c2f3f1b7aa612d89b86caf1809e376",
-        "hash": "sha256-hXknMyBNo1vJ49gJsuNef+sccolAovg1I8Wzuw/BnE8=",
+        "rev": "d832f96010fa378ef0a7f7980524a61803110ad7",
+        "hash": "sha256-LkngiwjRoYw+N+DCdbbWnTokDAYXbqOMJX+DQGAUl2g=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-02-09"
+        "date": "unstable-2024-02-13"
     },
     "prboom": {
         "owner": "libretro",
