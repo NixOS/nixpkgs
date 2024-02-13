@@ -32,11 +32,14 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
+  passthru.optional-dependencies = {
+    tool = [ click ];
+  };
+
   nativeCheckInputs = [
-    click
     mock
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.tool;
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
