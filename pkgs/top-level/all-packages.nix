@@ -34114,10 +34114,6 @@ with pkgs;
 
   oranda = callPackage ../applications/misc/oranda { };
 
-  orca = python3Packages.callPackage ../applications/misc/orca {
-    inherit pkg-config;
-  };
-
   orca-c = callPackage ../applications/audio/orca-c { };
 
   organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
