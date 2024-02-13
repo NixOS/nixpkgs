@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, darwin, ocaml-lsp }:
+{ lib, stdenv, fetchurl, ocaml, findlib, darwin, ocaml-lsp, dune-release }:
 
 if lib.versionOlder ocaml.version "4.08"
 then throw "dune 3 is not available for OCaml ${ocaml.version}"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=${placeholder "out"}" "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 
   passthru.tests = {
-    inherit ocaml-lsp;
+    inherit ocaml-lsp dune-release;
   };
 
   meta = {
