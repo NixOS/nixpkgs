@@ -105,6 +105,8 @@ self: super: with self; {
 
   aesedb = callPackage ../development/python-modules/aesedb { };
 
+  aetcd = callPackage ../development/python-modules/aetcd { };
+
   afdko = callPackage ../development/python-modules/afdko { };
 
   affine = callPackage ../development/python-modules/affine { };
