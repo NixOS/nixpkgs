@@ -11,8 +11,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-HBJvTDhp1CA96gRU2Q+lMxcFaZ+txXcmNb8Cg1BFiH4=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     pkg-config
+  ];
+
+  buildInputs = [
     ncurses
   ];
 
