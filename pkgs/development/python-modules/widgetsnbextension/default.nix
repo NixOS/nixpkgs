@@ -19,6 +19,10 @@ buildPythonPackage rec {
     jupyter-packaging
   ];
 
+  pythonImportsCheck = [
+    "widgetsnbextension"
+  ];
+
   # No tests in archive
   doCheck = false;
 
