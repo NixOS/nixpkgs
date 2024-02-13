@@ -277,9 +277,9 @@
     "mame": {
         "owner": "libretro",
         "repo": "mame",
-        "rev": "f55fe47b0997d24048700898195cb66bc0bccfb6",
-        "hash": "sha256-JUL4ha7UL+hNG5oi178nLT1aUuxqfev0/bRU6y/Mg7A=",
-        "date": "unstable-2024-02-05"
+        "rev": "8ebaec4073703f5050dac3f6c8da408943e15938",
+        "hash": "sha256-CFCem9MiaHW2flEZyJkcC9JEGzx7Ox/uqrTY3jue+Pk=",
+        "date": "unstable-2024-02-13"
     },
     "mame2000": {
         "owner": "libretro",
