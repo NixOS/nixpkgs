@@ -30,13 +30,13 @@
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "45.0";
+  version = "46.rc";
 
   outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "cG0v/KysOFU6PAGFeT9aK0qslAu154nZU8mAgWO+8vE=";
+    sha256 = "sha256-euXtzr7Y6/qhPoGdbPcC38eaqEeBz4o6P5zXI+vkml4=";
   };
 
   patches = [
@@ -74,11 +74,6 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     systemd
     libepoxy
-  ];
-
-  mesonFlags = [
-    "-Dsystemd=true"
-    "-Dsystemd_session=default"
   ];
 
   postPatch = ''
