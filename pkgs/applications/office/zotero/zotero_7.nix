@@ -125,8 +125,8 @@ stdenv.mkDerivation rec {
     # install desktop file and icons.
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications/
-    for size in 16 32 48 256; do
-      install -Dm444 chrome/icons/default/default$size.png \
+    for size in 32 64 128; do
+      install -Dm444 icons/icon$size.png \
         $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
     done
 
