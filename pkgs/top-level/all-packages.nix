@@ -36440,8 +36440,6 @@ with pkgs;
 
   picom = callPackage ../applications/window-managers/picom { };
 
-  picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
-
   xd = callPackage ../applications/networking/p2p/xd { };
 
   xdaliclock = callPackage ../tools/misc/xdaliclock { };
