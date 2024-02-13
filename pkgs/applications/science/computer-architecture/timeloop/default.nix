@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeloop";
-  version = "unstable-2022-11-29";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "NVlabs";
     repo = "timeloop";
-    rev = "905ba953432c812772de935d57fd0a674a89d3c1";
-    hash = "sha256-EXiWXf8hdX4vFRNk9wbFSOsix/zVkwrafGUtFrsoAN0=";
+    rev = "v${version}";
+    hash = "sha256-CGPhrBNzFdERAA/Eym2v0+FvFUe+VkBLnwYEqEMHE9k=";
   };
 
   nativeBuildInputs = [ scons ];
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
 
     # use nix ar/ranlib
     substituteInPlace ./SConstruct \
-      --replace "env.Replace(AR = \"gcc-ar\")" "" \
-      --replace "env.Replace(RANLIB = \"gcc-ranlib\")" ""
+      --replace-fail "env.Replace(AR = \"gcc-ar\")" "pass" \
+      --replace-fail "env.Replace(RANLIB = \"gcc-ranlib\")" "pass"
     '' + lib.optionalString stdenv.isDarwin ''
     # prevent clang from dying on errors that gcc is fine with
     substituteInPlace ./src/SConscript --replace "-Werror" "-Wno-inconsistent-missing-override"
