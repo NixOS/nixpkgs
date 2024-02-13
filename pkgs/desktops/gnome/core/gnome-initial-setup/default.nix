@@ -16,14 +16,11 @@
 , geocode-glib_2
 , glib
 , gnome-desktop
-, gnome-online-accounts
-, gtk3
 , gtk4
 , libgweather
 , json-glib
 , krb5
 , libpwquality
-, librest_1_0
 , libsecret
 , networkmanager
 , pango
@@ -39,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "45.4.1";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Nj4JqjMI5/QHTgZiU6AYKzIqtgN2dD3heLu0AOVLqO4=";
+    sha256 = "sha256-0kxgILcAXcXwSRNjpUsCf1yMFeQFTYKP5u9kgOxB42o=";
   };
 
   patches = [
@@ -72,9 +69,7 @@ stdenv.mkDerivation rec {
     geocode-glib_2
     glib
     gnome-desktop
-    gnome-online-accounts
     gsettings-desktop-schemas
-    gtk3
     gtk4
     json-glib
     krb5
@@ -82,7 +77,6 @@ stdenv.mkDerivation rec {
     libadwaita
     libnma-gtk4
     libpwquality
-    librest_1_0
     libsecret
     networkmanager
     pango
