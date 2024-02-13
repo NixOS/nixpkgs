@@ -249,9 +249,9 @@
     "gpsp": {
         "owner": "libretro",
         "repo": "gpsp",
-        "rev": "85a2ac6c911ffcc77cf1bab418c78fe5218c0b1a",
-        "hash": "sha256-iHfdsI6E2LQTC9HjqVRBHihVUpagtB8326M8Crll2iY=",
-        "date": "unstable-2024-02-04"
+        "rev": "4caf7a167d159866479ea94d6b2d13c26ceb3e72",
+        "hash": "sha256-1hkxeTjY52YuphQuDMCITn/dIcNx/8w4FkhQjL8DWz8=",
+        "date": "unstable-2024-02-10"
     },
     "gw": {
         "owner": "libretro",
