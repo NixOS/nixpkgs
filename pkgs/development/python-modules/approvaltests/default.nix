@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.3.0";
+  version = "10.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1f0iTwLREF20Khkd4/xEfxXINJIpc4LfszsvCblS/yM=";
+    hash = "sha256-/UsrUzCd4aYEQ4epZggk2O2esJCUG0DxRseK+s6yJd4=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_docstrings"
     # Tests expects paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"
