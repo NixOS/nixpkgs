@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management.";
