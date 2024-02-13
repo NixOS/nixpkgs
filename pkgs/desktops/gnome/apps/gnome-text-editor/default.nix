@@ -18,21 +18,19 @@
 , libadwaita
 , editorconfig-core-c
 , libxml2
-, appstream-glib
 , desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
-  version = "45.3";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8//LEakt/QS6PDs9DmZ4R9REmiHgEq428H3aBax9OlI=";
+    sha256 = "sha256-SK0Oipo2Aa+yIoANwjbfTvy+mKdOnLQ4R8g2NnwfwoQ=";
   };
 
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     itstool
     libxml2 # for xmllint
