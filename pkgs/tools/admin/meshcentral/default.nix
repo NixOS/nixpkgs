@@ -21,7 +21,7 @@ yarn2nix-moretea.mkYarnPackage {
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    hash = "sha256-zLbD0UhCRQNTka1WUjDuZLseS1PMURQSPFEa0SvwS7E=";
+    hash = "sha256-t4gY6lOyriHpQ56pAjdZHCzlUVO+Ds61zKflD04cY3g=";
   };
 
   # Tarball has CRLF line endings. This makes patching difficult, so let's convert them.
