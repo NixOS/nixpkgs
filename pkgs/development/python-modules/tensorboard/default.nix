@@ -80,6 +80,7 @@ buildPythonPackage rec {
     description = "TensorFlow's Visualization Toolkit";
     homepage = "https://www.tensorflow.org/";
     license = licenses.asl20;
+    mainProgram = "tensorboard";
     maintainers = with maintainers; [ abbradar ];
   };
 }
