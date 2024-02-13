@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchCrate
+, nix-update-script
 , nodejs
 , pkg-config
 , openssl
@@ -28,6 +29,8 @@ rustPlatform.buildRustPackage rec {
 
   # tests require it to be ran in the wasm-bindgen monorepo
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://rustwasm.github.io/docs/wasm-bindgen/";
