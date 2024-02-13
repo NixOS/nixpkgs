@@ -8958,8 +8958,6 @@ with pkgs;
 
   gtdialog = callPackage ../development/libraries/gtdialog { };
 
-  gtkclipblock = callPackage ../by-name/gt/gtkclipblock/package.nix { stdenv = gcc13Stdenv; };
-
   gtkd = callPackage ../development/libraries/gtkd { dcompiler = ldc; };
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
