@@ -39,6 +39,16 @@ in
               default = "postgres://ferretdb@localhost/ferretdb?host=/run/postgresql";
               description = "PostgreSQL URL for 'pg' handler";
             };
+
+            FERRETDB_TELEMETRY = lib.mkOption {
+              type = lib.types.enum [ "enable" "disable" ];
+              default = "disable";
+              description = ''
+                Enable or disable basic telemetry.
+
+                See <https://docs.ferretdb.io/telemetry/> for more information.
+              '';
+            };
           };
         };
         example = {
