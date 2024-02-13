@@ -8,6 +8,7 @@
 , libdrm
 , libev
 , libGL
+, libepoxy
 , libX11
 , libxcb
 , libxdg_basedir
@@ -32,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picom";
-  version = "11.1";
+  version = "11.2";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vdR3HzBZxtth3zJD3vMSlrnBTbopidw7FGKOk69S0R0=";
+    hash = "sha256-7ohtI890CutwprPEY5njqWou0fD6T9eu51EBSQ2/lWs=";
     fetchSubmodules = true;
   };
 
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libev
     libGL
+    libepoxy
     libX11
     libxcb
     libxdg_basedir
