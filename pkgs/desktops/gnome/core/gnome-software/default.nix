@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , substituteAll
 , pkg-config
 , meson
@@ -46,28 +45,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "45.3";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1rkkWyIjfae9FzndKMI8yPODX5n6EMEDfZ3XY1M1JRw=";
+    sha256 = "sha256-8oPQvU+/SKq+j8nHYX64dyKK1aZb4hvfHvzJ6hkdL10=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit isocodes;
-    })
-
-    # Add support for AppStream 1.0.
-    # https://gitlab.gnome.org/GNOME/gnome-software/-/issues/2393
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-software/-/commit/0655f358ed0e8455e12d9634f60bc4dbaee434e3.patch";
-      hash = "sha256-8IXXUfNeha5yRlRLuxQV8whwQmyNw7Aoi/r5NNFS/zA=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-software/-/commit/e431ab003f3fabf616b6eb7dc93f8967bc9473e5.patch";
-      hash = "sha256-Y5GcC1XMbb9Bl2/VKFnrV1B/ipLKxY4guse25LhxhKM=";
     })
   ];
 
