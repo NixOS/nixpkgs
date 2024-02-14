@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
-  version = "0.1-6283";
+  version = "0.1-6292";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = "duckstation";
-    rev = "1d751d33f1fce0f0d2b9e00b3a4fb4ec76e77f8f";
-    hash = "sha256-nrdsywg1Sn/YPLaidquePX45+3AxncxTxm+sGDDhL2c=";
+    rev = "0bc42c38aab49030118f507c9783de047769148b";
+    hash = "sha256-8OavixSwEWihFY2fEdsepR1lqWlTH+//xZRKwb7lFCQ=";
   };
 
   patches = [
@@ -41,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./002-hardcode-vars.diff;
       gitHash = finalAttrs.src.rev;
       gitBranch = "master";
-      gitTag = "${finalAttrs.version}-g1d751d33";
-      gitDate = "2024-01-08T15:49:05+10:00";
+      gitTag = "${finalAttrs.version}-g0bc42c38";
+      gitDate = "2024-02-06T22:47:47+09:00";
     })
   ];
 
