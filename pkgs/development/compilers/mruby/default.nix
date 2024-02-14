@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mruby";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
     rev     = version;
-    sha256  = "sha256-MmrbWeg/G29YBvVrOtceTOZChrQ2kx9+apl7u7BiGjA=";
+    sha256  = "sha256-rCoEC1ioX6bOocPoPi+Lsn4PM8gY0DjKja1/MJvJ1n8=";
   };
 
   nativeBuildInputs = [ rake ];
