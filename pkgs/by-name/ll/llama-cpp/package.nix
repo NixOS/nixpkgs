@@ -2,10 +2,8 @@
 , cmake
 , darwin
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , stdenv
-, symlinkJoin
 
 , config
 , cudaSupport ? config.cudaSupport
@@ -17,71 +15,72 @@
 , openclSupport ? false
 , clblast
 
-, openblasSupport ? true
+, blasSupport ? !rocmSupport && !cudaSupport
 , openblas
 , pkg-config
+, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, patchelf
+, static ? true # if false will build the shared objects as well
 }:
 
 let
-  cudatoolkit_joined = symlinkJoin {
-    name = "${cudaPackages.cudatoolkit.name}-merged";
-    paths = [
-      cudaPackages.cudatoolkit.lib
-      cudaPackages.cudatoolkit.out
-    ] ++ lib.optionals (lib.versionOlder cudaPackages.cudatoolkit.version "11") [
-      # for some reason some of the required libs are in the targets/x86_64-linux
-      # directory; not sure why but this works around it
-      "${cudaPackages.cudatoolkit}/targets/${stdenv.system}"
-    ];
-  };
-  metalSupport = stdenv.isDarwin && stdenv.isAarch64;
+  # It's necessary to consistently use backendStdenv when building with CUDA support,
+  # otherwise we get libstdc++ errors downstream.
+  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-stdenv.mkDerivation (finalAttrs: {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1538";
+  version = "2105";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-3JPGKJbO7Z3Jxz9KNSLYBAM7zQ+RJwBqsfRtpK6JS48=";
+    hash = "sha256-Xq/P7EN6dz2oW++bXhIMY7AhWgVk6hmuf4PmEaoVgMM=";
   };
-
-  patches = [
-    # openblas > v0.3.21 64-bit pkg-config file is now named openblas64.pc
-    # can remove when patch is accepted upstream
-    # https://github.com/ggerganov/llama.cpp/pull/4134
-    (fetchpatch {
-      name = "openblas64-pkg-config.patch";
-      url = "https://github.com/ggerganov/llama.cpp/commit/c885cc9f76c00557601b877136191b0f7aadc320.patch";
-      hash = "sha256-GBTxCiNrCazYRvcHwbqVMAALuJ+Svzf5BE7+nkxw064=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace ./ggml-metal.m \
       --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals openblasSupport [ pkg-config ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals blasSupport [ pkg-config ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
 
-  buildInputs = lib.optionals metalSupport
+    # TODO: Replace with autoAddDriverRunpath
+    # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
+
+  buildInputs = lib.optionals effectiveStdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [
       Accelerate
       CoreGraphics
       CoreVideo
       Foundation
-      MetalKit
     ])
-  ++ lib.optionals cudaSupport [
-    cudatoolkit_joined
-  ] ++ lib.optionals rocmSupport [
+  ++ lib.optionals metalSupport (with darwin.apple_sdk.frameworks; [
+    MetalKit
+  ])
+  ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cccl.dev # <nv/target>
+
+    # A temporary hack for reducing the closure size, remove once cudaPackages
+    # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
+    cuda_cudart.dev
+    cuda_cudart.lib
+    cuda_cudart.static
+    libcublas.dev
+    libcublas.lib
+    libcublas.static
+  ]) ++ lib.optionals rocmSupport [
     rocmPackages.clr
     rocmPackages.hipblas
     rocmPackages.rocblas
   ] ++ lib.optionals openclSupport [
     clblast
-  ] ++ lib.optionals openblasSupport [
+  ] ++ lib.optionals blasSupport [
     openblas
   ];
 
@@ -105,18 +104,29 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals openclSupport [
     "-DLLAMA_CLBLAST=ON"
   ]
-  ++ lib.optionals openblasSupport [
+  ++ lib.optionals blasSupport [
     "-DLLAMA_BLAS=ON"
     "-DLLAMA_BLAS_VENDOR=OpenBLAS"
+  ]
+  ++ lib.optionals (!static) [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+    ${lib.optionalString (!static) ''
+      mkdir $out/lib
+      cp libggml_shared.so $out/lib
+      cp libllama.so $out/lib
+    ''}
 
     for f in bin/*; do
       test -x "$f" || continue
+      ${lib.optionalString (!static) ''
+        ${patchelf}/bin/patchelf "$f" --set-rpath "$out/lib"
+      ''}
       cp "$f" $out/bin/llama-cpp-"$(basename "$f")"
     done
 
@@ -136,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "llama-cpp-main";
     maintainers = with maintainers; [ dit7ya elohmeier ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = (effectiveStdenv.isDarwin && effectiveStdenv.isx86_64) || lib.count lib.id [openclSupport blasSupport rocmSupport cudaSupport] == 0;
     platforms = platforms.unix;
   };
 })
