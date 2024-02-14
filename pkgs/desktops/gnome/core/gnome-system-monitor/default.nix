@@ -3,13 +3,13 @@
 , gettext
 , fetchurl
 , pkg-config
-, gtkmm3
+, gtkmm4
 , libxml2
 , bash
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
 , glib
-, wrapGAppsHook
+, wrapGAppsHook4
 , meson
 , ninja
 , gsettings-desktop-schemas
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "45.0.2";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "xeJy2Qv5mGo/hhPXbg0n+kLfrO5cAZLnOSG7lLGGii4=";
+    sha256 = "sha256-GxebJawuWHKiwMwDo92UUrqI18Qzanc04GBh86b9w+I=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
     meson
     ninja
     glib
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     glib
     libxml2
-    gtkmm3
+    gtkmm4
     libgtop
     gdk-pixbuf
     gnome.adwaita-icon-theme
