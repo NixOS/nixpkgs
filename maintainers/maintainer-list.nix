@@ -4800,6 +4800,11 @@
     githubId = 32810399;
     name = "Diffumist";
   };
+  DimitarNestorov = {
+    name = "Dimitar Nestorov";
+    github = "DimitarNestorov";
+    githubId = 8790386;
+  };
   diogotcorreia = {
     name = "Diogo Correia";
     email = "me@diogotc.com";
@@ -10369,6 +10374,12 @@
     github = "kubukoz";
     githubId = 894884;
     name = "Jakub Kozłowski";
+  };
+  kud = {
+    email = "kasa7qi@gmail.com";
+    github = "KUD-00";
+    githubId = 70764075;
+    name = "kud";
   };
   kupac = {
     github = "Kupac";

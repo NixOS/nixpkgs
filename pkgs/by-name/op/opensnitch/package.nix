@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
-    rev = "v${version}";
-    hash = "sha256-fkRykhcjWZ4MDl2HZ1ZFaQmEeRYhiCBeUxG/Eu7D8NA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2HHyecgiodWhQkkn3eo0RJNroD7HaK6Je/+x9IqZfWE=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ buildGoModule rec {
     protoc-gen-go-grpc
   ];
 
-  vendorHash = "sha256-bUzGWpQxeXzvkzQ7G53ljQJq6wwqiXqbi6bgeFlNvvM=";
+  vendorHash = "sha256-PX41xeUJb/WKv3+z5kbRmJNP1vFu8x35NZvN2Dgp4CQ=";
 
   preBuild = ''
     # Fix inconsistent vendoring build error
@@ -64,13 +64,18 @@ buildGoModule rec {
     cp system-fw.json $out/etc/opensnitchd/
     substitute default-config.json $out/etc/opensnitchd/default-config.json \
       --replace "/var/log/opensnitchd.log" "/dev/stdout"
+    # Do not mkdir rules path
+    sed -i '8d' opensnitchd.service
+    # Fixup hardcoded paths
     substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
-      --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd" \
-      --replace "/etc/opensnitchd/rules" "/var/lib/opensnitch/rules" \
-      --replace "/bin/mkdir" "${coreutils}/bin/mkdir"
+      --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
   '';
 
-  ldflags = [ "-s" "-w" "-X github.com/evilsocket/opensnitch/daemon/core.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/evilsocket/opensnitch/daemon/core.Version=${version}"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/opensnitchd \

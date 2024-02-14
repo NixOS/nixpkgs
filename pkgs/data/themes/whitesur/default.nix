@@ -19,6 +19,8 @@
 , panelOpacity ? null # default: 15%
 , panelSize ? null # default: 32px
 , roundedMaxWindow ? false # default: false
+, nordColor ? false # default = false
+, darkerColor ? false # default = false
 }:
 
 let
@@ -90,6 +92,8 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (panelOpacity != null) ("--panel-opacity " + panelOpacity)} \
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
       ${lib.optionalString (roundedMaxWindow == true) "--roundedmaxwindow"} \
+      ${lib.optionalString (nordColor == true) "--nordcolor"} \
+      ${lib.optionalString (darkerColor == true) "--darkercolor"} \
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share
@@ -100,7 +104,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "MacOS Big Sur like theme for Gnome desktops";
+    description = "MacOS BigSur like Gtk+ theme based on Elegant Design";
     homepage = "https://github.com/vinceliuice/WhiteSur-gtk-theme";
     license = licenses.mit;
     platforms = platforms.unix;
