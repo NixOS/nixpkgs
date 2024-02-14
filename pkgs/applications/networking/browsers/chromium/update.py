@@ -243,11 +243,16 @@ with urlopen(RELEASES_URL) as resp:
 
         try:
             version = release["version"]
+            existing_releases = dict(map(lambda channel: (channel[1]['version'], channel[1]['hash']), last_channels.items()))
 
             if version in src_hash_cache:
                 print(f'Already got hash {src_hash_cache[version]} for {version}, skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
 
                 channel["hash"] = src_hash_cache[version]
+            elif version in existing_releases:
+                print(f'Already got hash {existing_releases[version]} for {version} (from upstream-info.nix), skipping FOD prefetch for {channel_name_to_attr_name(channel_name)}')
+
+                channel["hash"] = existing_releases[version]
             else:
                 channel["hash"] = prefetch_src_sri_hash(
                     channel_name_to_attr_name(channel_name),
