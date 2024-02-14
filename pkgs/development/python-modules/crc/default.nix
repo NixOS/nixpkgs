@@ -9,13 +9,13 @@
 buildPythonPackage rec {
   pname = "crc";
   version = "6.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Nicoretti";
-    repo = pname;
+    repo = "crc";
     rev = "refs/tags/${version}";
     hash = "sha256-GlXDDG8NZ3Lp0IwYKS0+fZG85uVdo4V8mZnCa+za02U=";
   };
