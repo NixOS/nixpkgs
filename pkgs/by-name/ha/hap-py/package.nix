@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     curl
     htslib
     my-python
+    rtg-tools
     xz
     zlib
   ];
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/hap.py \
       --set PATH ${lib.makeBinPath runtime}
+       --add-flags "--engine-vcfeval-path=${rtg-tools}/bin/rtg
   '';
 
   meta = with lib; {
