@@ -1,6 +1,6 @@
 { lib
 , runCommand
-, gsettings-desktop-schemas
+, gsettings-desktop-schemas_46
 , gnome-shell
 , glib
 , gnome-flashback
@@ -18,7 +18,7 @@ let
   inherit (lib) concatMapStringsSep;
 
   gsettingsOverridePackages = [
-    gsettings-desktop-schemas
+    gsettings-desktop-schemas_46
     gnome-shell
   ] ++ lib.optionals flashbackEnabled [
     gnome-flashback
