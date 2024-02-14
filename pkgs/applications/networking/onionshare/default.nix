@@ -25,6 +25,7 @@
 , tor
 , obfs4
 , snowflake
+, setuptools
 }:
 
 let
@@ -92,6 +93,7 @@ rec {
       pynacl
       requests
       unidecode
+      setuptools
     ];
 
     buildInputs = [
