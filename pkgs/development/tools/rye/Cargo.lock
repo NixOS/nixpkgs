@@ -1219,7 +1219,7 @@ dependencies = [
 [[package]]
 name = "monotrail-utils"
 version = "0.0.1"
-source = "git+https://github.com/konstin/poc-monotrail?rev=136807e1fe87e9319e0223f76b602ba5db881322#136807e1fe87e9319e0223f76b602ba5db881322"
+source = "git+https://github.com/konstin/poc-monotrail?rev=e0251f68c254f834180198b8677fcf85d4b6a844#e0251f68c254f834180198b8677fcf85d4b6a844"
 dependencies = [
  "anyhow",
  "cpufeatures",
@@ -1383,9 +1383,9 @@ dependencies = [
 
 [[package]]
 name = "pep508_rs"
-version = "0.2.4"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aa9d1320b78f4a5715b3ec914f32b5e85a50287ad923730e3cbf0255259432eb"
+checksum = "910c513bea0f4f833122321c0f20e8c704e01de98692f6989c2ec21f43d88b1e"
 dependencies = [
  "once_cell",
  "pep440_rs",
@@ -1792,7 +1792,7 @@ dependencies = [
 
 [[package]]
 name = "rye"
-version = "0.22.0"
+version = "0.23.0"
 dependencies = [
  "age",
  "anyhow",
