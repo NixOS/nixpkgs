@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -16,18 +17,17 @@
 , libunwind
 , appstream
 , nixosTests
-, fetchpatch
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tilix";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
-    rev = version;
-    sha256 = "sha256-sPVL5oYDOmloRVm/nONKkC20vZc907c7ixBF6E2PQ8Y=";
+    rev = finalAttrs.version;
+    hash = "sha256-KP0ojwyZ5FaYKW0nK9mGGAiz1h+gTbfjCUDCgN2LAO8=";
   };
 
   # Default upstream else LDC fails to link
@@ -56,15 +56,6 @@ stdenv.mkDerivation rec {
     libunwind
   ];
 
-  patches = [
-    # https://github.com/gnunn1/tilix/issues/2151
-    (fetchpatch {
-      name = "tilix-replace-std-xml-with-gmarkup.patch";
-      url = "https://github.com/gnunn1/tilix/commit/b02779737997a02b98b690e6f8478d28d5e931a5.patch";
-      hash = "sha256-6p+DomJEZ/hCW8RTjttKsTDsgHZ6eFKj/71TU5O/Ysg=";
-    })
-  ];
-
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
@@ -81,8 +72,8 @@ stdenv.mkDerivation rec {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
     homepage = "https://gnunn1.github.io/tilix-web";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [ midchildan jtbx ];
     platforms = platforms.linux;
     mainProgram = "tilix";
   };
-}
+})
