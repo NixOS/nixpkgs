@@ -1,0 +1,20 @@
+diff --git a/Modules/GNUInstallDirs.cmake b/Modules/GNUInstallDirs.cmake
+index 97968549dc..55723afc3c 100644
+--- a/Modules/GNUInstallDirs.cmake
++++ b/Modules/GNUInstallDirs.cmake
+@@ -263,15 +263,6 @@ if(NOT DEFINED CMAKE_INSTALL_LIBDIR OR (_libdir_set
+         set(__system_type_for_install "conda")
+       endif()
+     endif()
+-    if(NOT __system_type_for_install)
+-      if (EXISTS "/etc/alpine-release")
+-        set(__system_type_for_install "alpine")
+-      elseif (EXISTS "/etc/arch-release")
+-        set(__system_type_for_install "arch linux")
+-      elseif (EXISTS "/etc/debian_version")
+-        set(__system_type_for_install "debian")
+-      endif()
+-    endif()
+ 
+     if(__system_type_for_install STREQUAL "debian")
+       if(CMAKE_LIBRARY_ARCHITECTURE)

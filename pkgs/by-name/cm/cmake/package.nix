@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./002-application-services.diff
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./003-libuv-application-services.diff
+    # Fix impurity without sandbox (CMake thinking we are e.g. on Debian)
+    ./007-fix-impurity-without-sandbox.diff
   ]
   ++ lib.optional stdenv.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
