@@ -89,12 +89,11 @@ buildBazelPackage {
     })
     (fetchurl rec {
       name = "jawiki";
-      url = "https://dumps.wikimedia.org/${name}/20230820/${name}-20230820-all-titles-in-ns0.gz";
+      url = "https://dumps.wikimedia.org/${name}/20240120/${name}-20240120-all-titles-in-ns0.gz";
       recursiveHash = true;
-      hash = "sha256-pOK4ThhOaup4t896Wx9jfsKSmWlQYn4Yy4pTiiwAFIs=";
+      hash = "sha256-Mp7ya2tM6E0IKE6kOYSlRx6gZBS/DK1zAwyT6jvZxrY=";
       downloadToTemp = true;
       postFetch = ''
-        mkdir -p $out
         mv $downloadedFile $out/${name}.gz
       '';
     })
