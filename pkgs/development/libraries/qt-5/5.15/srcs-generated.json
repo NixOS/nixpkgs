@@ -16,8 +16,8 @@
   },
   "qtbase": {
     "url": "https://invent.kde.org/qt/qt/qtbase.git",
-    "rev": "8907dedc858cc344d770a2e826d6acc516429540",
-    "sha256": "185fmglzb3blfpk6vjd716xr4cx4grxpbqji5idddl4887w18s91"
+    "rev": "f2e586366678383a0fe25fbcd4ecd5d55e7b61cd",
+    "sha256": "1f1r7n2aa5wdhfgqplz05l84x59ykim2i8z15apqdyq0cas278rg"
   },
   "qtcharts": {
     "url": "https://invent.kde.org/qt/qt/qtcharts.git",
@@ -161,8 +161,8 @@
   },
   "qtwayland": {
     "url": "https://invent.kde.org/qt/qt/qtwayland.git",
-    "rev": "c84d171fa84065fb3b4b6b3d33e7707676d87e47",
-    "sha256": "0vxqp5577xig4m0x9pmc04svjy58pi5f0wvc1b4sk61jhj8vib23"
+    "rev": "c8b37a1bda9b8f29d56775ed6556d56ac5d3ea1d",
+    "sha256": "15spjyc6gq1r5vdryhm21mhaim1iw24y80p0srp58qm9jwqg9dys"
   },
   "qtwebchannel": {
     "url": "https://invent.kde.org/qt/qt/qtwebchannel.git",
