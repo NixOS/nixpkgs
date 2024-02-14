@@ -217,16 +217,15 @@ buildBazelPackage {
     description = "The Open Source edition of Google Japanese Input bundled with the UT dictionary";
     homepage = "https://github.com/google/mozc";
     license = with licenses; [
-      asl20
-      bsd2
-      bsd3
-      cc-by-sa-30
-      cc-by-sa-40
-      gpl2Only
-      ipa
-      mit
-      mspl
-      publicDomain
+      asl20 # abseil-cpp, merge-ut-dictionaries, mozcdic-ut-alt-cannadic, mozcdic-ut-edict2, mozcdic-ut-jawiki, mozcdic-ut-neologd, mozcdic-ut-personal-names, mozcdic-ut-place-names, mozcdic-ut-skk-jisyo, mozcdic-ut-sudachidict
+      bsd2 # japanese-usage-dictionary
+      bsd3 # mozc, breakpad, gtest, gyp, japanese-usage-dictionary, protobuf, id.def
+      cc-by-sa-30 # jawiki-latest-all-titles, mozcdic-ut-jawiki.txt, jawiki
+      cc-by-sa-40 # mozcdic-ut-edict2.txt
+      gpl2Only # mozcdic-ut-alt-cannadic.txt
+      gpl2Plus # mozcdic-ut-skk-jisyo.txt
+      mit # wil
+      publicDomain # src/data/test/stress_test, mozcdic-ut-place-names.txt, jp-zip-codes
     ];
     maintainers = with maintainers; [ musjj ];
     platforms = platforms.linux;
