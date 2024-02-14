@@ -54,7 +54,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "QCoDeS";
+    owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
     hash = "sha256-AggAVq/yfJUZRwoQb29QoIbVIAdV3solKCjivqucLZk=";
@@ -146,6 +146,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "qcodes"
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   postInstall = ''
     export HOME="$TMPDIR"
