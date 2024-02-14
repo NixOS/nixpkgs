@@ -17,6 +17,10 @@ end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
+# We want readFile .version to return the version without a newline.
+[.version]
+insert_final_newline = false
+
 # see https://nixos.org/nixpkgs/manual/#chap-conventions
 
 # Match json/lockfiles/markdown/nix/perl/python/ruby/shell/docbook files, set indent to spaces
