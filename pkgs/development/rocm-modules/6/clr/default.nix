@@ -89,6 +89,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    patchShebangs hipamd/*.sh
     patchShebangs hipamd/src
 
     # We're not on Windows so these are never installed to hipcc...

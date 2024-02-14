@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs image/blit_src/create_hsaco_ascii_file.sh
     patchShebangs core/runtime/trap_handler/create_trap_handler_header.sh
+    patchShebangs image/blit_src/create_hsaco_ascii_file.sh
+    patchShebangs core/runtime/blit_shaders/create_blit_shader_header.sh
 
     substituteInPlace CMakeLists.txt \
       --replace 'hsa/include/hsa' 'include/hsa'
@@ -54,11 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace image/blit_src/CMakeLists.txt \
       --replace '-cl-denorms-are-zero' '-cl-denorms-are-zero --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode' \
       --replace '-mcode-object-version=4' '-mcode-object-version=5'
-  '';
-
-  fixupPhase = ''
-    rm -rf $out/hsa/*
-    ln -s $out/{include,lib} $out/hsa
   '';
 
   passthru.updateScript = rocmUpdateScript {
