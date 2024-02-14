@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuuid, curl, sqlite, openssl }:
 
 stdenv.mkDerivation rec {
-  pname = "scitoken-cpp";
+  pname = "scitokens-cpp";
   version = "1.1.0";
 
   src = fetchFromGitHub {

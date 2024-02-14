@@ -45,7 +45,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     black
-    ruff
   ];
 
   nativeCheckInputs = [
