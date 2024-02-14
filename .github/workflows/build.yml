@@ -4,112 +4,111 @@ on:
   push:
   schedule:
     # Every week
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
 jobs:
   build:
     strategy:
       matrix:
-        platform: [ubuntu-latest, windows-latest, macos-latest]
+        platform: [ubuntu-latest, windows-latest, macos-13]
         include:
           - platform: ubuntu-latest
-            configure_preset: 'static'
-            build_preset: 'static-release'
-            release_name: 'linux-x86-64'
-            cc: 'gcc-11'
-            cxx: 'g++-11'
+            configure_preset: "static"
+            build_preset: "static-release"
+            release_name: "linux-x86-64"
+            cc: "gcc-13"
+            cxx: "g++-13"
 
           - platform: windows-latest
-            configure_preset: 'windows-static'
-            build_preset: 'windows-static-release'
-            release_name: 'windows-x64'
+            configure_preset: "windows-static"
+            build_preset: "windows-static-release"
+            release_name: "windows-x64"
 
-          - platform: macos-latest
-            configure_preset: 'default'
-            build_preset: 'release'
-            release_name: 'macos-x64'
-            cc: '/usr/local/opt/llvm/bin/clang'
-            cxx: '/usr/local/opt/llvm/bin/clang++'
+          - platform: macos-13
+            configure_preset: "default"
+            build_preset: "release"
+            release_name: "macos-x64"
+            cc: "/usr/local/opt/llvm/bin/clang"
+            cxx: "/usr/local/opt/llvm/bin/clang++"
 
     runs-on: ${{matrix.platform}}
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'true'
+      - uses: actions/checkout@v2
+        with:
+          submodules: "true"
 
-    - uses: lukka/get-cmake@latest
+      - uses: lukka/get-cmake@latest
 
-    - name: Run vcpkg
-      uses: lukka/run-vcpkg@v10
-      with:
-        vcpkgJsonGlob: 'vcpkg.json'
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v10
+        with:
+          vcpkgJsonGlob: "vcpkg.json"
 
-    - name: Install requirements
-      run: sudo apt install libfuse-dev
-      if: matrix.platform == 'ubuntu-latest'
+      - name: Install requirements
+        run: sudo apt install libfuse-dev gcc-13 g++-13
+        if: matrix.platform == 'ubuntu-latest'
 
-    - name: Install requirements (MacOS)
-      run: |
-           brew update
-           # Temporary fix, see https://github.com/actions/setup-python/issues/577
-           rm /usr/local/bin/2to3 || true
-           rm /usr/local/bin/idle3 || true
-           rm /usr/local/bin/pydoc3 || true
-           rm /usr/local/bin/python3 || true
-           rm /usr/local/bin/python3-config || true
-           brew install llvm
-           brew install macfuse
-           echo "LDFLAGS=-L/usr/local/opt/llvm/lib" >> $GITHUB_ENV
-           echo "CXXFLAGS=-isystem /usr/local/opt/llvm/include" >> $GITHUB_ENV
-      shell: bash
-      if: matrix.platform == 'macos-latest'
+      - name: Install requirements (MacOS)
+        run: |
+          brew update
+          # Temporary fix, see https://github.com/actions/setup-python/issues/577
+          rm /usr/local/bin/2to3 || true
+          rm /usr/local/bin/idle3 || true
+          rm /usr/local/bin/pydoc3 || true
+          rm /usr/local/bin/python3 || true
+          rm /usr/local/bin/python3-config || true
+          brew install llvm
+          brew install macfuse
+          echo "LDFLAGS=-L/usr/local/opt/llvm/lib" >> $GITHUB_ENV
+          echo "CXXFLAGS=-isystem /usr/local/opt/llvm/include" >> $GITHUB_ENV
+        shell: bash
+        if: matrix.platform == 'macos-13'
 
-    - name: Set compiler
-      run: |
-           echo "CC=${{matrix.cc}}" >> $GITHUB_ENV
-           echo "CXX=${{matrix.cxx}}" >> $GITHUB_ENV
-      shell: bash
-      if: matrix.cc != ''
+      - name: Set compiler
+        run: |
+          echo "CC=${{matrix.cc}}" >> $GITHUB_ENV
+          echo "CXX=${{matrix.cxx}}" >> $GITHUB_ENV
+        shell: bash
+        if: matrix.cc != ''
 
-    - name: Run cmake
-      uses: lukka/run-cmake@v10
-      with:
-        configurePreset: ${{matrix.configure_preset}}
-        buildPreset: ${{matrix.build_preset}}
+      - name: Run cmake
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: ${{matrix.configure_preset}}
+          buildPreset: ${{matrix.build_preset}}
 
-    - name: Upload wfs-extract
-      uses: actions/upload-artifact@v2
-      with:
-        name: wfs-extract-${{matrix.release_name}}
-        path: build/${{matrix.configure_preset}}/wfs-extract/Release
-    - name: Upload wfs-file-injector
-      uses: actions/upload-artifact@v2
-      with:
-        name: wfs-file-injector-${{matrix.release_name}}
-        path: build/${{matrix.configure_preset}}/wfs-file-injector/Release
-    - name: Upload wfs-fuse
-      uses: actions/upload-artifact@v2
-      with:
-        name: wfs-fuse-${{matrix.release_name}}
-        path: build/${{matrix.configure_preset}}/wfs-fuse/Release
-      if: matrix.platform != 'windows-latest'
-    - name: Upload wfs-info
-      uses: actions/upload-artifact@v2
-      with:
-        name: wfs-info-${{matrix.release_name}}
-        path: build/${{matrix.configure_preset}}/wfs-info/Release
+      - name: Upload wfs-extract
+        uses: actions/upload-artifact@v2
+        with:
+          name: wfs-extract-${{matrix.release_name}}
+          path: build/${{matrix.configure_preset}}/wfs-extract/Release
+      - name: Upload wfs-file-injector
+        uses: actions/upload-artifact@v2
+        with:
+          name: wfs-file-injector-${{matrix.release_name}}
+          path: build/${{matrix.configure_preset}}/wfs-file-injector/Release
+      - name: Upload wfs-fuse
+        uses: actions/upload-artifact@v2
+        with:
+          name: wfs-fuse-${{matrix.release_name}}
+          path: build/${{matrix.configure_preset}}/wfs-fuse/Release
+        if: matrix.platform != 'windows-latest'
+      - name: Upload wfs-info
+        uses: actions/upload-artifact@v2
+        with:
+          name: wfs-info-${{matrix.release_name}}
+          path: build/${{matrix.configure_preset}}/wfs-info/Release
 
-    - name: Prepare Release Windows
-      run: powershell Compress-Archive -Path build\${{matrix.configure_preset}}\wfs-file-injector\Release\wfs-file-injector.exe, build\${{matrix.configure_preset}}\wfs-extract\Release\wfs-extract.exe, build\${{matrix.configure_preset}}\wfs-info\Release\wfs-info.exe -DestinationPath wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip
-      if: startsWith(github.ref, 'refs/tags/') && matrix.platform == 'windows-latest'
-    - name: Prepare Release Linux & MacOS
-      run: zip -r -j wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip build/${{matrix.configure_preset}}/wfs-file-injector/Release/wfs-file-injector build/${{matrix.configure_preset}}/wfs-extract/Release/wfs-extract build/${{matrix.configure_preset}}/wfs-fuse/Release/wfs-fuse build/${{matrix.configure_preset}}/wfs-extract/Release/wfs-info
-      if: startsWith(github.ref, 'refs/tags/') && matrix.platform != 'windows-latest'
+      - name: Prepare Release Windows
+        run: powershell Compress-Archive -Path build\${{matrix.configure_preset}}\wfs-file-injector\Release\wfs-file-injector.exe, build\${{matrix.configure_preset}}\wfs-extract\Release\wfs-extract.exe, build\${{matrix.configure_preset}}\wfs-info\Release\wfs-info.exe -DestinationPath wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip
+        if: startsWith(github.ref, 'refs/tags/') && matrix.platform == 'windows-latest'
+      - name: Prepare Release Linux & MacOS
+        run: zip -r -j wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip build/${{matrix.configure_preset}}/wfs-file-injector/Release/wfs-file-injector build/${{matrix.configure_preset}}/wfs-extract/Release/wfs-extract build/${{matrix.configure_preset}}/wfs-fuse/Release/wfs-fuse build/${{matrix.configure_preset}}/wfs-extract/Release/wfs-info
+        if: startsWith(github.ref, 'refs/tags/') && matrix.platform != 'windows-latest'
 
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip
-
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip

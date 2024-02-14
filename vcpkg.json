@@ -5,7 +5,6 @@
     "boost-algorithm",
     "boost-dynamic-bitset",
     "boost-endian",
-    "boost-format",
     "boost-iostreams",
     "boost-program-options",
     "cryptopp"

@@ -10,6 +10,7 @@
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -17,7 +18,7 @@
 
 #include <wfslib/wfslib.h>
 
-std::string inline pretify_path(const std::filesystem::path& path) {
+std::string inline prettify_path(const std::filesystem::path& path) {
   return "/" + path.generic_string();
 }
 
@@ -34,14 +35,15 @@ void dumpdir(const std::filesystem::path& target,
       return;
     }
   }
-  try {
-    for (auto item : *dir) {
-      auto const npath = path / item->GetRealName();
+  for (auto [name, item_or_error] : *dir) {
+    auto const npath = path / name;
+    try {
+      auto item = throw_if_error(item_or_error);
       if (verbose)
         std::cout << "Dumping /" << npath.generic_string() << std::endl;
-      if (item->IsDirectory())
+      if (item->IsDirectory()) {
         dumpdir(target, std::dynamic_pointer_cast<Directory>(item), npath, verbose);
-      else if (item->IsFile()) {
+      } else if (item->IsFile()) {
         auto file = std::dynamic_pointer_cast<File>(item);
         std::ofstream output_file((target / npath).string(), std::ios::binary | std::ios::out);
         size_t to_read = file->Size();
@@ -59,9 +61,9 @@ void dumpdir(const std::filesystem::path& target,
         }
         output_file.close();
       }
+    } catch (const WfsException& e) {
+      std::cout << std::format("Error: Failed to dump {} ({})\n", prettify_path(npath), e.what());
     }
-  } catch (std::exception&) {
-    std::cerr << "Error: Failed to dump folder /" << path.generic_string() << std::endl;
   }
 }
 

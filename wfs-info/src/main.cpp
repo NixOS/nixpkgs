@@ -10,6 +10,7 @@
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -19,30 +20,26 @@
 #include "../../wfslib/src/area.h"                   // TOOD: Public header?
 #include "../../wfslib/src/free_blocks_allocator.h"  // TOOD: Public header?
 
-std::string inline pretify_path(const std::filesystem::path& path) {
+std::string inline prettify_path(const std::filesystem::path& path) {
   return "/" + path.generic_string();
 }
 
 constexpr int blocks_counts[] = {0, 3, 6, 10, 14, 18, 22, 26};
 
 void dumpArea(int depth, const std::filesystem::path& path, const std::shared_ptr<const Area>& area) {
-  std::cout << std::setw(depth) << std::setfill('\t') << ""
-            << "Area " << pretify_path(path) << " [0x" << std::hex << std::setw(8) << std::setfill('0')
-            << area->BlockNumber() << "-0x" << std::hex << std::setw(8) << std::setfill('0')
-            << area->AbsoluteBlockNumber(area->BlocksCount()) << "]:" << std::endl;
-  auto allocator = area->GetFreeBlocksAllocator();
-  std::cout << std::setw(depth + 1) << std::setfill('\t') << ""
-            << "Free blocks: " << std::hex << std::setw(8) << std::setfill('0')
-            << allocator->header()->free_blocks_count.value() << std::endl;
-  std::cout << std::setw(depth + 1) << std::setfill('\t') << ""
-            << "Free metadata blocks: " << std::hex << std::setw(8) << std::setfill('0')
-            << allocator->header()->free_metadata_blocks_count.value() << std::endl;
-  std::cout << std::setw(depth + 1) << std::setfill('\t') << ""
-            << "Free metadata block: " << std::hex << std::setw(8) << std::setfill('0')
-            << area->AbsoluteBlockNumber(allocator->header()->free_metadata_block.value()) << std::endl;
-  std::cout << std::setw(depth + 1) << std::setfill('\t') << ""
-            << "Unknown: " << std::hex << std::setw(8) << std::setfill('0') << allocator->header()->unknown.value()
-            << std::endl;
+  std::string padding(depth, '\t');
+  std::cout << std::format("{}Area {} [0x{:08x}-0x{:08x}]:\n", padding, prettify_path(path), area->BlockNumber(),
+                           area->AbsoluteBlockNumber(area->BlocksCount()));
+
+  padding += '\t';
+  auto allocator = throw_if_error(area->GetFreeBlocksAllocator());
+  std::cout << std::format("{}Free blocks: 0x{:08x}\n", padding, allocator->header()->free_blocks_count.value());
+  std::cout << std::format("{}Free metadata blocks: 0x{:08x}\n", padding,
+                           allocator->header()->free_metadata_blocks_count.value());
+  std::cout << std::format("{}Free metadata block: 0x{:08x}\n", padding,
+                           area->AbsoluteBlockNumber(allocator->header()->free_metadata_block.value()));
+  std::cout << std::format("{}Unknown: 0x{:08x}\n", padding, allocator->header()->unknown.value());
+
   std::map<uint32_t, uint32_t> free_ranges;
   for (const auto& [tree_block_number, free_tree] : allocator->tree()) {
     int size = 0;
@@ -68,28 +65,27 @@ void dumpArea(int depth, const std::filesystem::path& path, const std::shared_pt
       ++current;
     }
   }
-  std::cout << std::setw(depth + 1) << std::setfill('\t') << ""
-            << "Free ranges:" << std::endl;
+  std::cout << std::format("{}Free ranges:\n", padding);
+  padding += '\t';
   for (const auto& [start_block, end_block] : free_ranges) {
-    std::cout << std::setw(depth + 2) << std::setfill('\t') << ""
-              << "[0x" << std::hex << std::setw(8) << std::setfill('0') << start_block << "-0x" << std::hex
-              << std::setw(8) << std::setfill('0') << end_block << "]" << std::endl;
+    std::cout << std::format("{}[0x{:08x}-0x{:08x}]\n", padding, start_block, end_block);
   }
 }
 
 void dumpdir(int depth, const std::shared_ptr<Directory>& dir, const std::filesystem::path& path) {
-  if (dir->area()->GetRootDirectory()->GetName() == dir->GetName()) {  // TODO: Better check
+  if ((*dir->area()->GetRootDirectory())->GetName() == dir->GetName()) {  // TODO: Better check
     dumpArea(depth, path, dir->area());
     depth += 1;
   }
-  try {
-    for (auto item : *dir) {
-      auto const npath = path / item->GetRealName();
+  for (auto [name, item_or_error] : *dir) {
+    auto const npath = path / name;
+    try {
+      auto item = throw_if_error(item_or_error);
       if (item->IsDirectory())
         dumpdir(depth, std::dynamic_pointer_cast<Directory>(item), npath);
+    } catch (const WfsException& e) {
+      std::cout << std::format("Error: Failed to dump {} ({})\n", prettify_path(npath), e.what());
     }
-  } catch (std::exception&) {
-    std::cerr << "Error: Failed to dump folder " << pretify_path(path) << std::endl;
   }
 }
 
@@ -159,7 +155,7 @@ int main(int argc, char* argv[]) {
     auto device = std::make_shared<FileDevice>(vm["input"].as<std::string>(), 9);
     Wfs::DetectDeviceSectorSizeAndCount(device, key);
     std::cout << "Allocator state:" << std::endl;
-    dumpdir(0, Wfs(device, key).GetRootArea()->GetRootDirectory(), {});
+    dumpdir(0, throw_if_error(Wfs(device, key).GetRootArea()->GetRootDirectory()), {});
     std::cout << "Done!" << std::endl;
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;
