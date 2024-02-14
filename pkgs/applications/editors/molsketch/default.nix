@@ -38,7 +38,7 @@ mkDerivation rec {
   '';
 
   postFixup = ''
-    mv $out/lib/molsketch/* $out/lib
+    ln -s $out/lib/molsketch/* $out/lib/.
   '';
 
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
