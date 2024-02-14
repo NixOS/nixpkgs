@@ -8189,6 +8189,8 @@ self: super: with self; {
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
+  myuplink = callPackage ../development/python-modules/myuplink { };
+
   n3fit = callPackage ../development/python-modules/n3fit { };
 
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
@@ -11720,6 +11722,8 @@ self: super: with self; {
   pytest-testinfra = callPackage ../development/python-modules/pytest-testinfra { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
+
+  pytest-textual-snapshot = callPackage ../development/python-modules/pytest-textual-snapshot { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 

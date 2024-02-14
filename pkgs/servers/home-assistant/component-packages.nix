@@ -3269,9 +3269,10 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       fnv-hash-fast
+      myuplink
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: myuplink
+    ];
     "nad" = ps: with ps; [
       nad-receiver
     ];
@@ -6250,6 +6251,7 @@
     "mysensors"
     "mystrom"
     "mythicbeastsdns"
+    "myuplink"
     "nam"
     "namecheapdns"
     "nanoleaf"
