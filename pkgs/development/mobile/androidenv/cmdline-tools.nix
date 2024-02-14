@@ -1,6 +1,8 @@
-{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, stdenv, postInstall}:
+{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, stdenv, postInstall, licenseCheck}:
 
-deployAndroidPackage {
+# This will check the license only when evaluating drvPath or outPath
+lib.extendDerivation licenseCheck {}
+(deployAndroidPackage {
   name = "androidsdk";
   inherit package os;
   nativeBuildInputs = [ makeWrapper ]
@@ -36,4 +38,4 @@ deployAndroidPackage {
   '';
 
   meta.license = lib.licenses.unfree;
-}
+})
