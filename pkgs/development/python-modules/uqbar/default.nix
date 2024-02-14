@@ -50,10 +50,12 @@ buildPythonPackage rec {
     # assert not ["\x1b[91mWARNING: dot command 'dot' cannot be run (needed for
     # graphviz output), check the graphviz_dot setting\x1b[39;49;00m"]
     "test_sphinx_style_latex"
-  ]
-  # assert not '\x1b[91m/build/uqbar-0.7.0/tests/fake_package/enums.py:docstring
-  ++ lib.optional (pythonAtLeast "3.11") [
+  ] ++ lib.optional (pythonAtLeast "3.11") [
+    # assert not '\x1b[91m/build/uqbar-0.7.0/tests/fake_package/enums.py:docstring
     "test_sphinx_style"
+  ] ++ lib.optional (pythonAtLeast "3.12") [
+    # https://github.com/josiah-wolf-oberholtzer/uqbar/issues/93
+    "objects.get_vars"
   ];
 
   pythonImportsCheck = [
