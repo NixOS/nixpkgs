@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchFromSourcehut
+, fetchpatch
 , SDL2
 , alsa-lib
 , appstream
@@ -168,6 +169,15 @@ stdenv.mkDerivation rec {
     xxHash
     zix
     zstd
+  ];
+
+  patches = [
+    # Fix gcc-13 build failure
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://gitlab.zrythm.org/zrythm/zrythm/-/commit/cbc2b3715b939718479631841f2d9703fb28e6da.diff";
+      hash = "sha256-2ZTSaCtSO3yynJVFe5B1AEjWhjRa5YyA26ergAfdL5Y=";
+    })
   ];
 
   # Zrythm uses meson to build, but requires cmake for dependency detection.
