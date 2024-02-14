@@ -103,15 +103,6 @@ self: super: {
       })
     ] (super.hourglass);
 
-  # Patch 0.17.1 for support of mtl-2.3
-  xmonad-contrib = appendPatch
-    (pkgs.fetchpatch {
-      name = "xmonad-contrib-mtl-2.3.patch";
-      url = "https://github.com/xmonad/xmonad-contrib/commit/8cb789af39e93edb07f1eee39c87908e0d7c5ee5.patch";
-      sha256 = "sha256-ehCvVy0N2Udii/0K79dsRSBP7/i84yMoeyupvO8WQz4=";
-    })
-    (doJailbreak super.xmonad-contrib);
-
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
