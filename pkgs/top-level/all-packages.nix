@@ -27660,6 +27660,8 @@ with pkgs;
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
+  elegant-sddm = libsForQt5.callPackage ../data/themes/elegant-sddm { };
+
   error-inject = callPackages ../os-specific/linux/error-inject { };
 
   extrace = callPackage ../os-specific/linux/extrace { };
