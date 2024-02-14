@@ -6,7 +6,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "AdguardTeam";
-    repo = pname;
+    repo = "dnsproxy";
     rev = "v${version}";
     hash = "sha256-TE33gwEfOLWa32lHM7gWsrtUsVX0B5pWtxMfyD36AyQ=";
   };
