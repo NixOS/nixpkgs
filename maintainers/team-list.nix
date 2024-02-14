@@ -176,7 +176,7 @@ with lib.maintainers; {
 
   cosmopolitan = {
     members = [
-      lourkeur
+      bbjubjub
       tomberek
     ];
     scope = "Maintain the Cosmopolitan LibC and related programs.";

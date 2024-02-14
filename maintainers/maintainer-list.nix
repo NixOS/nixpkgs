@@ -2250,6 +2250,12 @@
     githubId = 24027;
     name = "Bruno Bigras";
   };
+  bbjubjub = {
+    name = "Julie B.";
+    email = "julie+nixpkgs@bbjubjub.fr";
+    github = "bbjubjub2494";
+    githubId = 15657735;
+  };
   bburdette = {
     email = "bburdette@protonmail.com";
     github = "bburdette";
@@ -11066,15 +11072,6 @@
     github = "LouisDK1";
     githubId = 4969294;
     name = "Louis Tim Larsen";
-  };
-  lourkeur = {
-    name = "Louis Bettens";
-    email = "louis@bettens.info";
-    github = "lourkeur";
-    githubId = 15657735;
-    keys = [{
-      fingerprint = "5B93 9CFA E8FC 4D8F E07A  3AEA DFE1 D4A0 1733 7E2A";
-    }];
   };
   loveisgrief = {
     name = "LoveIsGrief";
