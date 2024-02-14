@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyrisco";
-  version = "0.5.8";
+  version = "0.5.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "OnFreund";
     repo = "pyrisco";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PQ1h9UVQ2DQMInxdAaLES7uDWAxwDra+YfAmz5jjV6g=";
+    hash = "sha256-qapJcYesOddXFChApFT7hvxLblUigDW40zRe6CYWx+s=";
   };
 
   nativeBuildInputs = [
