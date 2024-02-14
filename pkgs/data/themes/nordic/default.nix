@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     mv -v $out/share/themes/Nordic/kde/colorschemes/* $out/share/color-schemes/
     mv -v $out/share/themes/Nordic/kde/konsole $out/share/
     mv -v $out/share/themes/Nordic/kde/kvantum/* $out/share/Kvantum/
-    mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
+    mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/desktoptheme/
     mv -v $out/share/themes/Nordic/kde/folders/* $out/share/icons/
     mv -v $out/share/themes/Nordic/kde/cursors/*-cursors $out/share/icons/
 
