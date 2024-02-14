@@ -1195,6 +1195,8 @@ let
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
+    ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
+
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
     note = callPackage ../development/ocaml-modules/note { };
