@@ -4169,6 +4169,8 @@ self: super: with self; {
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
 
+  flask-multipass = callPackage ../development/python-modules/flask-multipass { };
+
   flask-mysqldb = callPackage ../development/python-modules/flask-mysqldb { };
 
   flask-openid = callPackage ../development/python-modules/flask-openid { };
@@ -4176,6 +4178,8 @@ self: super: with self; {
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
   flask-paranoid = callPackage ../development/python-modules/flask-paranoid { };
+
+  flask-pluginengine = callPackage ../development/python-modules/flask-pluginengine { };
 
   flask-principal = callPackage ../development/python-modules/flask-principal { };
 
@@ -4220,6 +4224,8 @@ self: super: with self; {
   flask-themes2 = callPackage ../development/python-modules/flask-themes2 { };
 
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
+
+  flask-webpackext = callPackage ../development/python-modules/flask-webpackext { };
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
 
@@ -5561,6 +5567,8 @@ self: super: with self; {
   indexed-gzip = callPackage ../development/python-modules/indexed-gzip { inherit (pkgs) zlib; };
 
   indexed-zstd = callPackage ../development/python-modules/indexed-zstd { inherit (pkgs) zstd; };
+
+  indico-fonts = callPackage ../development/python-modules/indico-fonts { };
 
   infinity = callPackage ../development/python-modules/infinity { };
 
@@ -9548,6 +9556,8 @@ self: super: with self; {
 
   pynobo = callPackage ../development/python-modules/pynobo { };
 
+  pynpm = callPackage ../development/python-modules/pynpm { };
+
   pynuki = callPackage ../development/python-modules/pynuki { };
 
   pynut2 = callPackage ../development/python-modules/pynut2 { };
@@ -12229,6 +12239,8 @@ self: super: with self; {
   pyweatherflowrest = callPackage ../development/python-modules/pyweatherflowrest { };
 
   pyweatherflowudp = callPackage ../development/python-modules/pyweatherflowudp { };
+
+  pywebpack = callPackage ../development/python-modules/pywebpack { };
 
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
@@ -16300,6 +16312,10 @@ self: super: with self; {
   wtforms = callPackage ../development/python-modules/wtforms { };
 
   wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
+
+  wtforms-dateutil = callPackage ../development/python-modules/wtforms-dateutil { };
+
+  wtforms-sqlalchemy = callPackage ../development/python-modules/wtforms-sqlalchemy { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 

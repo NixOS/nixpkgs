@@ -19293,6 +19293,8 @@ with pkgs;
 
   indent = callPackage ../development/tools/misc/indent { };
 
+  indico = callPackage ../development/python-modules/indico { };
+
   inotify-tools = callPackage ../development/tools/misc/inotify-tools { };
 
   intel-gpu-tools = callPackage ../development/tools/misc/intel-gpu-tools { };
