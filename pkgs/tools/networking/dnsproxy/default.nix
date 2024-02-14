@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "AdguardTeam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TE33gwEfOLWa32lHM7gWsrtUsVX0B5pWtxMfyD36AyQ=";
+    hash = "sha256-TE33gwEfOLWa32lHM7gWsrtUsVX0B5pWtxMfyD36AyQ=";
   };
 
   vendorHash = null;
