@@ -17,7 +17,7 @@ callPackage ./generic.nix args {
   # check the release notes for compatible kernels
   kernelCompatible =
     if stdenv'.isx86_64 || removeLinuxDRM
-    then kernel.kernelOlder "6.8"
+    then kernel.kernelOlder "6.9"
     else kernel.kernelOlder "6.2";
 
   latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM
@@ -28,13 +28,13 @@ callPackage ./generic.nix args {
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.2.3-unstable-2024-01-26";
-  rev = "3425484eb907d489c315cced2a1fdea08ef03fc4";
+  version = "2.2.3-unstable-2024-02-12";
+  rev = "4635453d9f06771678b2125d5b45852b4d2eb04f";
 
   isUnstable = true;
   tests = [
     nixosTests.zfs.unstable
   ];
 
-  hash = "sha256-P8PIp0qRHm/fxYdxWKVRX9LR5tKZR7fFUSY90QDE/lU=";
+  hash = "sha256-ch1/R61cn1BtWkkH2IViWjVp22XFz4/WbByquN+vybs=";
 }

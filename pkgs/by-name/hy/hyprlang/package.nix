@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlang";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lm1Bq2AduKFYHdl/q0OLYOdYBTHnKyHGewwQa68q/Wc=";
+    hash = "sha256-JZmXxLHYB7t95B5iJdiZml0APJn4nKrGU8M88e8Dkgs=";
   };
 
   nativeBuildInputs = [cmake];

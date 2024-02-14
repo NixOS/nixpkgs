@@ -621,6 +621,11 @@ in
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
             path inside and out).
+
+            Note that `nixos-rebuild switch` will generate the initrd
+            also for past generations, so if secrets are moved or deleted
+            you will also have to garbage collect the generations that
+            use those secrets.
           '';
         example = literalExpression
           ''

@@ -5,8 +5,19 @@
 , fixDarwinDylibNames
 , autoconf
 , aws-sdk-cpp
+, aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
+    apis = [
+      "cognito-identity"
+      "config"
+      "identity-management"
+      "s3"
+      "sts"
+      "transfer"
+    ];
+  }
 , boost
 , brotli
+, bzip2
 , c-ares
 , cmake
 , crc32c
@@ -36,6 +47,7 @@
 , which
 , zlib
 , zstd
+, testers
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
 , enableJemalloc ? !stdenv.isDarwin
@@ -62,17 +74,6 @@ let
     repo = "parquet-testing";
     rev = "d69d979223e883faef9dc6fe3cf573087243c28a";
     hash = "sha256-CUckfNjfDW05crWigzMP5b9UynviXKGZUlIr754OoGU=";
-  };
-
-  aws-sdk-cpp-arrow = aws-sdk-cpp.override {
-    apis = [
-      "cognito-identity"
-      "config"
-      "identity-management"
-      "s3"
-      "sts"
-      "transfer"
-    ];
   };
 
 in
@@ -128,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     brotli
+    bzip2
     flatbuffers
     gflags
     glog
@@ -187,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DARROW_USE_GLOG=ON"
     "-DARROW_WITH_BACKTRACE=ON"
     "-DARROW_WITH_BROTLI=ON"
+    "-DARROW_WITH_BZ2=ON"
     "-DARROW_WITH_LZ4=ON"
     "-DARROW_WITH_NLOHMANN_JSON=ON"
     "-DARROW_WITH_SNAPPY=ON"
@@ -247,6 +250,8 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase =
     let
       disabledTests = [
+        # flaky
+        "arrow-flight-test"
         # requires networking
         "arrow-gcsfs-test"
         "arrow-flight-integration-test"
@@ -266,8 +271,24 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
+    pkgConfigModules = [
+      "arrow"
+      "arrow-acero"
+      "arrow-compute"
+      "arrow-csv"
+      "arrow-dataset"
+      "arrow-filesystem"
+      "arrow-flight"
+      "arrow-flight-sql"
+      "arrow-flight-testing"
+      "arrow-json"
+      "arrow-substrait"
+      "arrow-testing"
+      "parquet"
+    ];
   };
   passthru = {
     inherit enableFlight enableJemalloc enableS3 enableGcs;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 })

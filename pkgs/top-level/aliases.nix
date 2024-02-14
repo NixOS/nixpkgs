@@ -279,6 +279,7 @@ mapAliases ({
 
   ### F ###
 
+  fancypp = throw "'fancypp' was removed because it and its dependants are unmaintained"; # Added 2024-02-14
   faustStk = faustPhysicalModeling; # Added 2023-05-16
   fastnlo = fastnlo-toolkit; # Added 2021-04-24
   fastnlo_toolkit = fastnlo-toolkit; # Added 2024-01-03
@@ -981,6 +982,7 @@ mapAliases ({
   scitoken-cpp = scitokens-cpp; # Added 2024-02-12
   sdlmame = throw "'sdlmame' has been renamed to/replaced by 'mame'"; # Converted to throw 2023-09-10
   searx = throw "'searx' has been removed as it is unmaintained. Please switch to searxng"; # Added 2023-10-03
+  semver-cpp = throw "'semver-cpp' was removed because no packages in nixpkgs use it anymore"; # Added 2024-02-14
   session-desktop-appimage = session-desktop;
   setupcfg2nix = throw "'setupcfg2nix' has been removed. Please switch to buildPythonPackage"; # Added 2023-12-12
   sequoia = sequoia-sq; # Added 2023-06-26
@@ -1001,6 +1003,7 @@ mapAliases ({
   solr_8 = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
   solr = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
   soundOfSorting = sound-of-sorting; # Added 2023-07-07
+  soundux = throw "'soundux' has been removed, as it is unmaintained."; # Added on 2024-02-14
   spark2 = throw "'spark2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_2_4 = throw "'spark_2_4' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_3_1 = throw "'spark_3_1' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
