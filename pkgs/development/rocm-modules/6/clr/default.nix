@@ -118,6 +118,10 @@ in stdenv.mkDerivation (finalAttrs: {
     # Replace rocm-opencl-icd functionality
     mkdir -p $icd/etc/OpenCL/vendors
     echo "$out/lib/libamdocl64.so" > $icd/etc/OpenCL/vendors/amdocl64.icd
+
+    # add version info to output (downstream rocmPackages look for this)
+    mkdir $out/.info
+    echo "${finalAttrs.version}" > $out/.info/version
   '';
 
   passthru = {
