@@ -6,6 +6,9 @@
 , setuptools
 , igraph
 , texttable
+, cairocffi
+, matplotlib
+, plotly
 , pytestCheckHook
 }:
 
@@ -41,6 +44,13 @@ buildPythonPackage rec {
     texttable
   ];
 
+  passthru.optional-dependencies = {
+    cairo = [ cairocffi ];
+    matplotlib = [ matplotlib ];
+    plotly = [ plotly ];
+    plotting = [ cairocffi ];
+  };
+
   # NB: We want to use our igraph, not vendored igraph, but even with
   # pkg-config on the PATH, their custom setup.py still needs to be explicitly
   # told to do it. ~ C.
@@ -48,6 +58,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    "testAuthorityScore"
+    "test_labels"
   ];
 
   pythonImportsCheck = [ "igraph" ];
