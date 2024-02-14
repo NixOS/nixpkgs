@@ -12000,6 +12000,8 @@ self: super: with self; {
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
+  python-technove = callPackage ../development/python-modules/python-technove { };
+
   python-telegram = callPackage ../development/python-modules/python-telegram { };
 
   python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
