@@ -102,6 +102,7 @@ buildBazelPackage {
       install -Dm644 outlined/properties.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-properties.svg
       install -Dm644 outlined/tool.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-tool.svg
 
+      # These are relative symlinks, they will always resolve to files within $out
       ln -s org.fcitx.Fcitx5.fcitx-mozc.png $out/share/icons/hicolor/128x128/apps/fcitx-mozc.png
       ln -s org.fcitx.Fcitx5.fcitx-mozc-alpha-full.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-alpha-full.svg
       ln -s org.fcitx.Fcitx5.fcitx-mozc-alpha-half.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-alpha-half.svg
