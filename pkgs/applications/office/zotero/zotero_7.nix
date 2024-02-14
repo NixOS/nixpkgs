@@ -44,7 +44,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "7.0.0-beta.58%2B2665090aa";
+  version = "7.0.0-beta.58+2665090aa";
 
   src = fetchurl {
     url = "https://download.zotero.org/client/beta/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
