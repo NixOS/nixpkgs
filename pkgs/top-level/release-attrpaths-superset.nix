@@ -53,6 +53,7 @@ let
     pkgsStatic = true;
     pkgsCross = true;
     pkgsi686Linux = true;
+    pkgsExtraHardening = true;
   };
 
   # No release package attrname may have any of these at a component

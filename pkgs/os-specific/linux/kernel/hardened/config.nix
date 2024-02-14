@@ -60,11 +60,11 @@ assert (versionAtLeast version "4.9");
   PAGE_POISONING_ZERO      = whenOlder "5.11" yes;
 
   # Enable init_on_alloc and init_on_free by default
-  INIT_ON_ALLOC_DEFAULT_ON = yes;
-  INIT_ON_FREE_DEFAULT_ON  = yes;
+  INIT_ON_ALLOC_DEFAULT_ON = whenAtLeast "5.3" yes;
+  INIT_ON_FREE_DEFAULT_ON  = whenAtLeast "5.3" yes;
 
   # Wipe all caller-used registers on exit from a function
-  ZERO_CALL_USED_REGS = yes;
+  ZERO_CALL_USED_REGS = whenAtLeast "5.15" yes;
 
   # Enable the SafeSetId LSM
   SECURITY_SAFESETID = whenAtLeast "5.1" yes;
@@ -86,8 +86,8 @@ assert (versionAtLeast version "4.9");
   # https://www.kernel.org/doc/html/latest/dev-tools/ubsan.html
   # https://developers.redhat.com/blog/2014/10/16/gcc-undefined-behavior-sanitizer-ubsan
   UBSAN      = yes;
-  UBSAN_TRAP = yes;
-  UBSAN_BOUNDS = yes;
+  UBSAN_TRAP = whenAtLeast "5.7" yes;
+  UBSAN_BOUNDS = whenAtLeast "5.7" yes;
   UBSAN_SANITIZE_ALL = yes;
   UBSAN_LOCAL_BOUNDS = option yes; # clang only
   CFI_CLANG = option yes; # clang only Control Flow Integrity since 6.1

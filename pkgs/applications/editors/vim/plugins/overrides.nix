@@ -670,6 +670,10 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  haskell-snippets-nvim = super.haskell-snippets-nvim.overrideAttrs {
+    dependencies = [ self.luasnip ];
+  };
+
   haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter ];
   };

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "qrcp";
-  version = "0.10.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "claudiodangelis";
     repo = "qrcp";
     rev = version;
-    sha256 = "sha256-3GPZ6+gx5i/xULM3lq7D+b0onBC6clgeZsI1CvZ943s=";
+    hash = "sha256-BuZn+7gTjsHTUDu33JXTrntb5LUzcq3ZsmgFg+6ivZg=";
   };
 
-  vendorHash = "sha256-XVBDPhQsnUdftS+jZ1zWZlfSbFXxXrKSqiGTPpLq5i0=";
+  vendorHash = "sha256-lqGPPyoSO12MyeYIuYcqDVHukj7oR3zmHgsS6SxY3yo=";
 
   subPackages = [ "." ];
 

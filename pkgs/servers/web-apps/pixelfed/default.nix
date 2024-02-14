@@ -2,44 +2,43 @@
 , stdenv
 , fetchFromGitHub
 , php
-, pkgs
 , nixosTests
+, nix-update-script
 , dataDir ? "/var/lib/pixelfed"
 , runtimeDir ? "/run/pixelfed"
 }:
 
-let
-  package = (import ./composition.nix {
-    inherit pkgs;
-    inherit (stdenv.hostPlatform) system;
-    noDev = true; # Disable development dependencies
-  }).overrideAttrs (attrs : {
-    installPhase = attrs.installPhase + ''
-      rm -R $out/bootstrap/cache
-      # Move static contents for the NixOS module to pick it up, if needed.
-      mv $out/bootstrap $out/bootstrap-static
-      mv $out/storage $out/storage-static
-      ln -s ${dataDir}/.env $out/.env
-      ln -s ${dataDir}/storage $out/
-      ln -s ${dataDir}/storage/app/public $out/public/storage
-      ln -s ${runtimeDir} $out/bootstrap
-      chmod +x $out/artisan
-    '';
-  });
-in package.override rec {
+php.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.11.8";
+  version = "0.11.11";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-du+xwSrMqt4KIzQRUos6EmVBRp+39gHuoLSRsgLe1CQ=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ytE1ZCKQvoigC8jKPfQ/17jYA0XYOzospq7wY18o2Nk=";
   };
+
+  vendorHash = "sha256-nRCrmF1p+fZI+iyrM5I3bVCSwjQdn8BSW8Jj62lpn8E=";
+  # Needed because buzz/laravel-h-captcha is pinned to 1.0.4 in composer.json
+  composerStrictValidation = false;
+
+  postInstall = ''
+    mv "$out/share/php/${finalAttrs.pname}"/* $out
+    rm -R $out/bootstrap/cache
+    # Move static contents for the NixOS module to pick it up, if needed.
+    mv $out/bootstrap $out/bootstrap-static
+    mv $out/storage $out/storage-static
+    ln -s ${dataDir}/.env $out/.env
+    ln -s ${dataDir}/storage $out/
+    ln -s ${dataDir}/storage/app/public $out/public/storage
+    ln -s ${runtimeDir} $out/bootstrap
+    chmod +x $out/artisan
+  '';
 
   passthru = {
     tests = { inherit (nixosTests) pixelfed; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -49,4 +48,4 @@ in package.override rec {
     maintainers = with maintainers; [ raitobezarius ];
     platforms = php.meta.platforms;
   };
-}
+})

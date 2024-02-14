@@ -9,6 +9,7 @@
 , pyjwt
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , typing-extensions
 }:
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-nPXs6thXAshDojgHSNyEeBN/jNJkfFECSuY5f51Zozo=";
   };
 
+  pythonRelaxDeps = [
+    "hishel"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov=githubkit --cov-append --cov-report=term-missing" ""
@@ -33,6 +38,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

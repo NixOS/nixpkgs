@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.6.2";
+  version = "0.6.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-ka7fVveqX61XGmX43S/eB939dfqoEDh8eX1cw7hGE7U=";
+    hash = "sha256-iCqJY3qkA3ZVXTCfxvQoaZsaqGui8PwKGAmLXKZgLJs=";
   };
 
   nativeBuildInputs = [

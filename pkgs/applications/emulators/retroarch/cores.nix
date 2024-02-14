@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, gcc12Stdenv
 , alsa-lib
 , boost
 , bzip2
@@ -44,17 +45,33 @@
 let
   hashesFile = lib.importJSON ./hashes.json;
 
-  getCoreSrc = core:
-    fetchFromGitHub (builtins.getAttr core hashesFile);
+  getCore = repo: (lib.getAttr repo hashesFile);
+
+  getCoreSrc = repo:
+    (lib.pipe repo [
+      getCore
+      (x: builtins.removeAttrs x [ "date" ])
+      fetchFromGitHub
+    ]);
+
+  getCoreDate = repo: (getCore repo).date or "unstable-1970-01-01";
 
   mkLibretroCore =
+    # Sometimes core name != repo name, so you may need to set them differently
+    # when necessary:
+    # - core: used by the resulting core library name, e.g.:
+    #   `${core}_libretro.so`. Needs to match their respectful core info file
+    #   (see https://github.com/libretro/libretro-core-info/)
+    # - repo: the repository name on GitHub
+    # See `update_cores.py` for instruction on how to add a new core.
     { core
-    , src ? (getCoreSrc core)
-    , version ? "unstable-2023-09-24"
+    , repo ? core
+    , src ? (getCoreSrc repo)
+    , version ? (getCoreDate repo)
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
-      inherit lib stdenv core src version makeWrapper retroarch zlib;
+      inherit lib stdenv core repo src version makeWrapper retroarch zlib;
     } // args);
 in
 {
@@ -72,7 +89,7 @@ in
 
   beetle-gba = mkLibretroCore {
     core = "mednafen-gba";
-    src = getCoreSrc "beetle-gba";
+    repo = "beetle-gba";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's GameBoy Advance core to libretro";
@@ -82,7 +99,7 @@ in
 
   beetle-lynx = mkLibretroCore {
     core = "mednafen-lynx";
-    src = getCoreSrc "beetle-lynx";
+    repo = "beetle-lynx";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's Lynx core to libretro";
@@ -92,7 +109,7 @@ in
 
   beetle-ngp = mkLibretroCore {
     core = "mednafen-ngp";
-    src = getCoreSrc "beetle-ngp";
+    repo = "beetle-ngp";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's NeoGeo Pocket core to libretro";
@@ -102,7 +119,7 @@ in
 
   beetle-pce = mkLibretroCore {
     core = "mednafen-pce";
-    src = getCoreSrc "beetle-pce";
+    repo = "beetle-pce";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's PC Engine core to libretro";
@@ -112,7 +129,7 @@ in
 
   beetle-pce-fast = mkLibretroCore {
     core = "mednafen-pce-fast";
-    src = getCoreSrc "beetle-pce-fast";
+    repo = "beetle-pce-fast";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's PC Engine fast core to libretro";
@@ -122,7 +139,7 @@ in
 
   beetle-pcfx = mkLibretroCore {
     core = "mednafen-pcfx";
-    src = getCoreSrc "beetle-pcfx";
+    repo = "beetle-pcfx";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's PCFX core to libretro";
@@ -132,7 +149,7 @@ in
 
   beetle-psx = mkLibretroCore {
     core = "mednafen-psx";
-    src = getCoreSrc "beetle-psx";
+    repo = "beetle-psx";
     makefile = "Makefile";
     makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
     meta = {
@@ -143,7 +160,7 @@ in
 
   beetle-psx-hw = mkLibretroCore {
     core = "mednafen-psx-hw";
-    src = getCoreSrc "beetle-psx";
+    repo = "beetle-psx";
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
@@ -155,7 +172,7 @@ in
 
   beetle-saturn = mkLibretroCore {
     core = "mednafen-saturn";
-    src = getCoreSrc "beetle-saturn";
+    repo = "beetle-saturn";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's Saturn core to libretro";
@@ -166,7 +183,7 @@ in
 
   beetle-supafaust = mkLibretroCore {
     core = "mednafen-supafaust";
-    src = getCoreSrc "beetle-supafaust";
+    repo = "beetle-supafaust";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's experimental snes_faust core to libretro";
@@ -176,7 +193,7 @@ in
 
   beetle-supergrafx = mkLibretroCore {
     core = "mednafen-supergrafx";
-    src = getCoreSrc "beetle-supergrafx";
+    repo = "beetle-supergrafx";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's SuperGrafx core to libretro";
@@ -186,7 +203,7 @@ in
 
   beetle-vb = mkLibretroCore {
     core = "mednafen-vb";
-    src = getCoreSrc "beetle-vb";
+    repo = "beetle-vb";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's VirtualBoy core to libretro";
@@ -196,7 +213,7 @@ in
 
   beetle-wswan = mkLibretroCore {
     core = "mednafen-wswan";
-    src = getCoreSrc "beetle-wswan";
+    repo = "beetle-wswan";
     makefile = "Makefile";
     meta = {
       description = "Port of Mednafen's WonderSwan core to libretro";
@@ -232,7 +249,7 @@ in
 
   bsnes-hd = mkLibretroCore {
     core = "bsnes-hd-beta";
-    src = getCoreSrc "bsnes-hd";
+    repo = "bsnes-hd";
     makefile = "GNUmakefile";
     makeFlags =
       let
@@ -256,7 +273,7 @@ in
 
   bsnes-mercury = mkLibretroCore {
     core = "bsnes-mercury-accuracy";
-    src = getCoreSrc "bsnes-mercury";
+    repo = "bsnes-mercury";
     makefile = "Makefile";
     makeFlags = [ "PROFILE=accuracy" ];
     meta = {
@@ -267,7 +284,7 @@ in
 
   bsnes-mercury-balanced = mkLibretroCore {
     core = "bsnes-mercury-balanced";
-    src = getCoreSrc "bsnes-mercury";
+    repo = "bsnes-mercury";
     makefile = "Makefile";
     makeFlags = [ "PROFILE=balanced" ];
     meta = {
@@ -278,7 +295,7 @@ in
 
   bsnes-mercury-performance = mkLibretroCore {
     core = "bsnes-mercury-performance";
-    src = getCoreSrc "bsnes-mercury";
+    repo = "bsnes-mercury";
     makefile = "Makefile";
     makeFlags = [ "PROFILE=performance" ];
     meta = {
@@ -287,15 +304,21 @@ in
     };
   };
 
-  citra = mkLibretroCore {
+  citra = mkLibretroCore rec {
     core = "citra";
     extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
     makeFlags = [
       "HAVE_FFMPEG_STATIC=0"
-      # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L90
+      # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L87-L90
+      "GIT_REV=${(getCoreSrc core).rev}"
+      "GIT_DESC=${lib.substring 0 8 (getCoreSrc core).rev}"
+      "GIT_BRANCH=master"
       "BUILD_DATE=01/01/1970_00:00"
     ];
+    # FIXME: build fail with GCC13:
+    # error: 'mic_device_name' has incomplete type
+    stdenv = gcc12Stdenv;
     meta = {
       description = "Port of Citra to libretro";
       license = lib.licenses.gpl2Plus;
@@ -377,7 +400,7 @@ in
 
   eightyone = mkLibretroCore {
     core = "81";
-    src = getCoreSrc "eightyone";
+    repo = "eightyone";
     meta = {
       description = "Port of EightyOne to libretro";
       license = lib.licenses.gpl3Only;
@@ -571,7 +594,8 @@ in
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makefile = "Makefile";
-    enableParallelBuilding = false;
+    # Build failures when this is set to a bigger number
+    NIX_BUILD_CORES = 8;
     meta = {
       description = "Port of MAME ~2015 to libretro, compatible with MAME 0.160 sets";
       # MAME license, non-commercial clause
@@ -585,7 +609,10 @@ in
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-    enableParallelBuilding = false;
+    # Build failures when this is set to a bigger number
+    NIX_BUILD_CORES = 8;
+    # Fix build errors in GCC13
+    NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
     meta = {
       description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
@@ -641,9 +668,18 @@ in
     };
   };
 
+  mrboom = mkLibretroCore {
+    core = "mrboom";
+    makefile = "Makefile";
+    meta = {
+      description = "Port of Mr.Boom to libretro";
+      license = lib.licenses.mit;
+    };
+  };
+
   mupen64plus = mkLibretroCore {
     core = "mupen64plus-next";
-    src = getCoreSrc "mupen64plus";
+    repo = "mupen64plus";
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
     makeFlags = [
@@ -653,11 +689,6 @@ in
       "LLE=1"
       "WITH_DYNAREC=${stdenv.hostPlatform.parsed.cpu.name}"
     ];
-    # This CXXFLAGS hack works around the GCC 13 error:
-    # 'uint32_t' was not declared in this scope
-    # It can be removed if the issue filed upstream is resolved:
-    # https://github.com/libretro/mupen64plus-libretro-nx/issues/515
-    env.CXXFLAGS = "-include cstdint";
     meta = {
       description = "Libretro port of Mupen64 Plus, GL only";
       license = lib.licenses.gpl3Only;
@@ -694,11 +725,10 @@ in
 
   np2kai = mkLibretroCore rec {
     core = "np2kai";
-    src = getCoreSrc core;
     makeFlags = [
       # See https://github.com/AZO234/NP2kai/tags
       "NP2KAI_VERSION=rev.22"
-      "NP2KAI_HASH=${src.rev}"
+      "NP2KAI_HASH=${(getCoreSrc core).rev}"
     ];
     preBuild = "cd sdl";
     meta = {
@@ -764,18 +794,18 @@ in
       xxd
     ];
     makefile = "Makefile";
-    cmakeFlags = [
-      "-DLIBRETRO=ON"
-    ];
+    cmakeFlags = [ "-DLIBRETRO=ON" ];
+    # remove ccache
     postPatch = ''
-      # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
-
+    postBuild = "cd pcsx2";
     # causes redefinition of _FORTIFY_SOURCE
     hardeningDisable = [ "fortify3" ];
-
-    postBuild = "cd pcsx2";
+    # FIXME: multiple build errors with GCC13.
+    # Unlikely to be fixed until we switch to libretro/pcsx2 that is a more
+    # up-to-date port (but still WIP).
+    stdenv = gcc12Stdenv;
     meta = {
       description = "Port of PCSX2 to libretro";
       license = lib.licenses.gpl3Plus;
@@ -809,6 +839,9 @@ in
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF" "-DBUILD_LIBRETRO_CORE=ON" ];
     postBuild = "cd Source/ui_libretro";
+    # FIXME: workaround the following GCC 13 error:
+    # error: 'printf' was not declared in this scop
+    CXXFLAGS = "-include cstdio";
     meta = {
       description = "Port of Play! to libretro";
       license = lib.licenses.bsd2;
@@ -885,6 +918,9 @@ in
     core = "same_cdi";
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib libGLU libGL portaudio xorg.libX11 ];
+    # FIXME: build fail with GCC13:
+    # error: 'uint8_t' in namespace 'std' does not name a type; did you mean 'wint_t'?
+    stdenv = gcc12Stdenv;
     meta = {
       description = "SAME_CDI is a libretro core to play CD-i games";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
@@ -904,7 +940,7 @@ in
 
   smsplus-gx = mkLibretroCore {
     core = "smsplus";
-    src = getCoreSrc "smsplus-gx";
+    repo = "smsplus-gx";
     meta = {
       description = "SMS Plus GX libretro port";
       license = lib.licenses.gpl2Plus;
@@ -944,7 +980,7 @@ in
 
   snes9x2005-plus = mkLibretroCore {
     core = "snes9x2005-plus";
-    src = getCoreSrc "snes9x2005";
+    repo = "snes9x2005";
     makefile = "Makefile";
     makeFlags = [ "USE_BLARGG_APU=1" ];
     meta = {
@@ -1046,7 +1082,7 @@ in
 
   vba-m = mkLibretroCore {
     core = "vbam";
-    src = getCoreSrc "vba-m";
+    repo = "vba-m";
     makefile = "Makefile";
     preBuild = "cd src/libretro";
     meta = {

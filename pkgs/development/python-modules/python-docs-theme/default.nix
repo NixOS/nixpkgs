@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-docs-theme";
-  version = "2024.1";
+  version = "2024.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "python-docs-theme";
     rev = "refs/tags/${version}";
-    hash = "sha256-nU8KQu89/xWvR6xoIOKsGrOqDjFhA3TgHROHfbAqCRU=";
+    hash = "sha256-5qn/bROc3wekTyYq+e7rLpJjeI8IBByKvrOE4Kw0fjQ=";
   };
 
   nativeBuildInputs = [

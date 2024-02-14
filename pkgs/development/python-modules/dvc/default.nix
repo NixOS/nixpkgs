@@ -17,7 +17,6 @@
 , dvc-studio-client
 , dvc-task
 , fetchFromGitHub
-, fetchpatch
 , flatten-dict
 , flufl_lock
 , funcy
@@ -67,7 +66,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     rev = "refs/tags/${version}";
-    hash = "sha256-i9hIsn5rybDaWSzAFKazwB5wgpL0DAyUrqnxqCGLiR0=";
+    hash = "sha256-9JS8N4BWikmXoo5TtpUD5El2vHST80NEOBdxkHfK4ME=";
   };
 
   pythonRelaxDeps = [

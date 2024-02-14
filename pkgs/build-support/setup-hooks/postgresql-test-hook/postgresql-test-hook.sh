@@ -56,6 +56,8 @@ EOF
   echo 'initializing postgresql'
   initdb -U postgres
 
+  echo "$postgresqlExtraSettings" >>"$PGDATA/postgresql.conf"
+
   # Move the socket
   echo "unix_socket_directories = '$NIX_BUILD_TOP/run/postgresql'" >>"$PGDATA/postgresql.conf"
 

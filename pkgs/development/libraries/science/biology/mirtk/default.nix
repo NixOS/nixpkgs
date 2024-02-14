@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     install -Dm644 -t "$out/share/bash-completion/completions/mirtk" share/completion/bash/mirtk
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-changes-meaning";
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     boost

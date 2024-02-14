@@ -4,6 +4,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , installShellFiles
+, docutils
 , ansible
 , cryptography
 , importlib-resources
@@ -28,11 +29,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.16.2";
+  version = "2.16.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5KtVnn5SWxxvmQhPyoc7sBR3XV7L6EW3wHuOnWycBIs=";
+    hash = "sha256-dqh2WoWGBk7wc6KZVi4wj6LBgKdbX3Vpu9D2HUFxzbM=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -41,10 +42,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
+
+    patchShebangs --build packaging/cli-doc/build.py
   '';
 
   nativeBuildInputs = [
     installShellFiles
+    docutils
   ] ++ lib.optionals (pythonOlder "3.10") [
     pythonRelaxDepsHook
   ];
@@ -82,7 +86,9 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    installManPage docs/man/man1/*.1
+    export HOME="$(mktemp -d)"
+    packaging/cli-doc/build.py man --output-dir=man
+    installManPage man/*
   '';
 
   # internal import errors, missing dependencies

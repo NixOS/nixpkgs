@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-9u1CKxWohGj7Gm3BrC2tpoQAY1r3cpP8OIePo+g7ETo=";
+    hash = "sha256-jAZozcCHgKFTPCRktajrI77iH/GBbzhWa+QKZz1w62Y=";
   };
 
   buildInputs = [

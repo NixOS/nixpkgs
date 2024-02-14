@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stunnel";
-  version = "5.71";
+  version = "5.72";
 
   outputs = [ "out" "doc" "man" ];
 
   src = fetchurl {
     url = "https://www.stunnel.org/archive/${lib.versions.major finalAttrs.version}.x/stunnel-${finalAttrs.version}.tar.gz";
-    hash = "sha256-8COq6DfC0y3rkggxpe4QgeEceKXVc0D45vCCnwMQF/U=";
+    hash = "sha256-PVMpQSga41MxlzUUTkrbmuSJoQt+MJxYpIFX8I9C6Uk=";
     # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };

@@ -17,13 +17,13 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-1+TqIExvZHE3X38Fh43CasmTyjIr2WcEw07ZJEFrcBw=";
+    hash = "sha256-dfyyxE2U5rSSoTY2L5bKsnjQ8u53GgAXa+V+idDr51Q=";
   };
 
   offlineCache = fetchYarnDeps {

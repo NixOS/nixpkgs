@@ -103,4 +103,5 @@ in
     # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
+  meta.maintainers = with maintainers; [ arianvp ];
 }

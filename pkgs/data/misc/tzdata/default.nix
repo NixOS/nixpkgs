@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, buildPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2023d";
+  version = "2024a";
 
   srcs = [
     (fetchurl {
-      url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-      hash = "sha256-28ohlwsKi4wM7O7B17kfqQO+D27KWucytTKWciMqCPM=";
+      url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
+      hash = "sha256-DQQ0RZrL0gWaeo2h8zBKhKhlkfbtacYkj/+lArbt/+M=";
     })
     (fetchurl {
-      url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-      hash = "sha256-6aX54RiIbS3pK2K7BVEKKMxsBY15HJO9a4TTKSw8Fh4=";
+      url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
+      hash = "sha256-gAcolK3/WkWPHRQ+FuTKHYsqEiycU5naSCy2jLpqH/g=";
     })
   ];
 
@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
   propagatedBuildOutputs = [ ];
 
   makeFlags = [
-    "TOPDIR=$(out)"
-    "TZDIR=$(out)/share/zoneinfo"
-    "BINDIR=$(bin)/bin"
-    "ZICDIR=$(bin)/bin"
+    "TOPDIR=${placeholder "out"}"
+    "TZDIR=${placeholder "out"}/share/zoneinfo"
+    "BINDIR=${placeholder "bin"}/bin"
+    "ZICDIR=${placeholder "bin"}/bin"
     "ETCDIR=$(TMPDIR)/etc"
     "TZDEFAULT=tzdefault-to-remove"
-    "LIBDIR=$(dev)/lib"
-    "MANDIR=$(man)/share/man"
+    "LIBDIR=${placeholder "dev"}/lib"
+    "MANDIR=${placeholder "man"}/share/man"
     "AWK=awk"
     "CFLAGS=-DHAVE_LINK=0"
     "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
@@ -45,7 +45,9 @@ stdenv.mkDerivation rec {
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ];
 
-  doCheck = false; # needs more tools
+  doCheck = true;
+  # everything except for check_web, because that needs curl and wants to talk to https://validator.w3.org
+  checkTarget = "check_back check_character_set check_white_space check_links check_name_lengths check_now check_slashed_abbrs check_sorted check_tables check_ziguard check_zishrink check_tzs";
 
   installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "zic=${buildPackages.tzdata.bin}/bin/zic"
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
-    changelog = "https://github.com/eggert/tz/blob/${version}/NEWS";
+    changelog = "https://github.com/eggert/tz/blob/${finalAttrs.version}/NEWS";
     license = with licenses; [
       bsd3 # tzcode
       publicDomain # tzdata
@@ -78,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ajs124 fpletz ];
   };
-}
+})

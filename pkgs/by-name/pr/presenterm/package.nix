@@ -9,20 +9,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "presenterm";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VAcK02dbtuTGn+lPu1vb/wAkroHuHqsU2KYHBiP2Org=";
+    hash = "sha256-+XESFDseRScWYOry58JLknGv+xhewTKx38lrzQu2mQ4=";
   };
 
   buildInputs = [
     libsixel
   ];
 
-  cargoHash = "sha256-bufFiyqRsn4eG57bKn42p5cyX+Z7oiz/USZvg9YOvHA=";
+  cargoHash = "sha256-xZLGm+tGAmmo/OzDMrgQK0uH7GMG6fTkpPsXwLe94VM=";
 
   # Crashes at runtime on darwin with:
   # Library not loaded: .../out/lib/libsixel.1.dylib

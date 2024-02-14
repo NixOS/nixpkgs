@@ -137,7 +137,7 @@ in
   config = lib.mkIf cfg.enable {
     warnings = lib.optional (lib.versions.major cfg.package.version <= "2022")
       "YouTrack 2022.x is deprecated. See https://nixos.org/manual/nixos/unstable/index.html#module-services-youtrack for details on how to upgrade."
-    ++ lib.optional (cfg.extraParams != "" && (lib.versions.major cfg.package.version >= "2023"))
+    ++ lib.optional (cfg.extraParams != {} && (lib.versions.major cfg.package.version >= "2023"))
       "'services.youtrack.extraParams' is deprecated and has no effect on YouTrack 2023.x and newer. Please migrate to 'services.youtrack.generalParameters'"
     ++ lib.optional (cfg.jvmOpts != "" && (lib.versions.major cfg.package.version >= "2023"))
       "'services.youtrack.jvmOpts' is deprecated and has no effect on YouTrack 2023.x and newer. Please migrate to 'services.youtrack.generalParameters'";
@@ -231,7 +231,7 @@ in
     users.groups.youtrack = {};
 
     services.nginx = lib.mkIf (cfg.virtualHost != null) {
-      upstreams.youtrack.servers."${cfg.address}:${toString cfg.port}" = {};
+      upstreams.youtrack.servers."${cfg.address}:${toString cfg.environmentalParameters.listen-port}" = {};
       virtualHosts.${cfg.virtualHost}.locations = {
         "/" = {
           proxyPass = "http://youtrack";

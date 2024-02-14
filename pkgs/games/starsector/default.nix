@@ -1,6 +1,5 @@
 { lib
 , fetchzip
-, libXxf86vm
 , libGL
 , makeWrapper
 , openal
@@ -14,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.96a-RC10";
+  version = "0.97a-RC9";
 
   src = fetchzip {
     url = "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-${version}.zip";
-    sha256 = "sha256-RBSnms+QlKgTOhm3t2hDfv7OcMrQCk1rfkz9GaM74WM=";
+    sha256 = "sha256-xX4QVr7vmVX+/qvKALYZOE/Wy+d+zpNWCnpQE1kBd7M=";
   };
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
     cp -r ./* $out/share/starsector
 
     mkdir -p $out/share/icons/hicolor/64x64/apps
-    ln -s $out/graphics/ui/s_icon64.png $out/share/icons/hicolor/64x64/apps/starsector.png
+    ln -s $out/share/starsector/graphics/ui/s_icon64.png \
+      $out/share/icons/hicolor/64x64/apps/starsector.png
 
     wrapProgram $out/share/starsector/starsector.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk xorg.xrandr ]} \
@@ -63,12 +63,22 @@ stdenv.mkDerivation rec {
   # it tries to run everything with relative paths, which makes it CWD dependent
   # also point mod, screenshot, and save directory to $XDG_DATA_HOME
   # additionally, add some GC options to improve performance of the game
+  # and remove flags "PermSize" and "MaxPermSize" that were removed with Java 8
   postPatch = ''
     substituteInPlace starsector.sh \
-      --replace "./jre_linux/bin/java" "${openjdk}/bin/java" \
-      --replace "./native/linux" "$out/share/starsector/native/linux" \
-      --replace "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
-      --replace "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC"
+      --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
+      --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
+      --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
+      --replace-warn "-XX:+CompilerThreadHintNoPreempt" "-XX:+UnlockDiagnosticVMOptions -XX:-BytecodeVerificationRemote -XX:+CMSConcurrentMTEnabled -XX:+DisableExplicitGC" \
+      --replace-quiet " -XX:PermSize=192m -XX:MaxPermSize=192m" ""
+  '';
+
+  passthru.updateScript = writeScript "starsector-update-script" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
+    set -eou pipefail;
+    version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-\K.*?(?=\.zip)" | head -1)
+    update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
   '';
 
   meta = with lib; {
@@ -78,12 +88,4 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ bbigras rafaelrc ];
   };
-
-  passthru.updateScript = writeScript "starsector-update-script" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl gnugrep common-updater-scripts
-    set -eou pipefail;
-    version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-\K.*?(?=\.zip)" | head -1)
-    update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
-  '';
 }

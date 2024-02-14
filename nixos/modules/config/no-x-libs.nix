@@ -30,6 +30,7 @@ with lib;
       beam = super.beam_nox;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
+      fastfetch = super.fastfetch.override { vulkanSupport = false; waylandSupport = false; x11Support = false; };
       ffmpeg_4 = super.ffmpeg_4.override { ffmpegVariant = "headless"; };
       ffmpeg_5 = super.ffmpeg_5.override { ffmpegVariant = "headless"; };
       # dep of graphviz, libXpm is optional for Xpm support

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.1.2";
+  version = "2.2.0";
   format = "wheel";
 
   src =

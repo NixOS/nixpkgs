@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 
 # for passthru.tests
@@ -13,21 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cpio";
-  version = "2.14";
+  version = "2.15";
 
   src = fetchurl {
     url = "mirror://gnu/cpio/cpio-${version}.tar.bz2";
-    sha256 = "/NwV1g9yZ6b8fvzWudt7bIlmxPL7u5ZMJNQTNv0/LBI=";
+    hash = "sha256-k3YQuXwymh7JJoVT+3gAN7z/8Nz/6XJevE/ZwaqQdds=";
   };
-
-  patches = [
-    # Pull upstream fix for clang-16 and gcc-14.
-    (fetchpatch {
-      name = "major-decl.patch";
-      url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/?id=8179be21e664cedb2e9d238cc2f6d04965e97275";
-      hash = "sha256-k5Xiv3xuPU8kPT6D9B6p+V8SK55ybFgrIIPDgHuorpM=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

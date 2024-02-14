@@ -230,7 +230,7 @@ in {
        else if lib.pathExists revisionFile then lib.fileContents revisionFile
        else default;
 
-  nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
+  nixpkgsVersion = warn "lib.nixpkgsVersion is a deprecated alias of lib.version." version;
 
   /* Determine whether the function is being called from inside a Nix
      shell.

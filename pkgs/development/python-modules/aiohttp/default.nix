@@ -18,18 +18,18 @@
 , aiodns
 , brotli
 # tests_require
+, freezegun
 , gunicorn
 , pytest-mock
 , pytestCheckHook
 , python-on-whales
 , re-assert
-, time-machine
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.9.1";
+  version = "3.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uiqBUDbmROrhkanfBz4avvTSrnKxgVqw54k4jKhfRGY=";
+    hash = "sha256-dEeMHruFJ1o0J6VUJcpUk7LhEC8sV8hUKXoKcd618lE=";
   };
 
   patches = [
@@ -79,12 +79,12 @@ buildPythonPackage rec {
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
+    freezegun
     gunicorn
     pytest-mock
     pytestCheckHook
     python-on-whales
     re-assert
-    time-machine
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
     # Optional test dependency. Depends indirectly on pyopenssl, which is
     # broken on aarch64-darwin.

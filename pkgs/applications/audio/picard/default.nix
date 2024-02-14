@@ -20,14 +20,14 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.10";
+  version = "2.11";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-wgIJ813mOSpFzFJESDwNvRSZcX42MTtOyFgSeeRR28g=";
+    hash = "sha256-2RGKHJKJ/QXR6Rehch4r1UtI+frRXa4G+n0bUmCGSu8=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
     description = "The official MusicBrainz tagger";
-    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

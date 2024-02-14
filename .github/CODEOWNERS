@@ -52,6 +52,7 @@
 /pkgs/pkgs-lib                                   @infinisil
 ## Format generators/serializers
 /pkgs/pkgs-lib/formats/libconfig                 @ckiee @h7x4
+/pkgs/pkgs-lib/formats/hocon                     @h7x4
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
@@ -67,8 +68,8 @@
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nix, the package manager
-pkgs/tools/package-management/nix/                    @raitobezarius
-nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
+pkgs/tools/package-management/nix/                    @raitobezarius @ma27
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -195,6 +196,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
+
+# Linux kernel
+/pkgs/os-specific/linux/kernel    @raitobezarius
+/pkgs/top-level/linux-kernels.nix @raitobezarius
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix @joachifm

@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
-, fetchpatch
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
@@ -39,15 +38,15 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20230629";
-  kodiVersion = "20.2";
+  kodiReleaseDate = "20240109";
+  kodiVersion = "20.3";
   rel = "Nexus";
 
   kodi_src = fetchFromGitHub {
     owner = "xbmc";
     repo = "xbmc";
     rev = "${kodiVersion}-${rel}";
-    hash = "sha256-nNdBjqY9gkpv3g/hcyjWPENHFwOlxrKs2cT4IvRPuXs=";
+    hash = "sha256-OMm8WhTQiEZvu8jHOUp2zT4Xd4NU3svMobW2k8AAtNI=";
   };
 
   # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
@@ -111,15 +110,6 @@ in stdenv.mkDerivation {
     version = kodiVersion;
 
     src = kodi_src;
-    patches = [
-      # Fix compatiblity with fmt 10.0 (from spdlog).
-      # Remove with the next release: https://github.com/xbmc/xbmc/pull/23453
-      (fetchpatch {
-        name = "Fix fmt10 compat";
-        url = "https://github.com/xbmc/xbmc/compare/acca69baa2eae65123e78ee2f77249181725ef5d...26c164a28cfd18ceef7a1f2bbba5bf8a4a5a750c.patch";
-        hash = "sha256-zMUparbQ8gfgeXj8W3MDmPi5OgLNz/zGCJINU7H6Rx0=";
-      })
-    ];
     buildInputs = [
       gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python

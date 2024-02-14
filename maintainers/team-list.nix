@@ -339,7 +339,6 @@ with lib.maintainers; {
 
   geospatial = {
     members = [
-      das-g
       imincik
       nh2
       nialov

@@ -1373,6 +1373,18 @@ final: prev:
     meta.homepage = "https://github.com/ekickx/clipboard-image.nvim/";
   };
 
+  cloak-nvim = buildVimPlugin {
+    pname = "cloak.nvim";
+    version = "2024-02-02";
+    src = fetchFromGitHub {
+      owner = "laytan";
+      repo = "cloak.nvim";
+      rev = "9abe4e986e924fc54a972c1b0ff52b65a0622624";
+      sha256 = "0jnhxxq2c7bprkicqxqi17fybfgpzv0z1jxrqm346hmnmm8amgvw";
+    };
+    meta.homepage = "https://github.com/laytan/cloak.nvim/";
+  };
+
   close-buffers-vim = buildVimPlugin {
     pname = "close-buffers.vim";
     version = "2020-09-23";
@@ -4162,6 +4174,18 @@ final: prev:
     meta.homepage = "https://github.com/kiyoon/haskell-scope-highlighting.nvim/";
   };
 
+  haskell-snippets-nvim = buildVimPlugin {
+    pname = "haskell-snippets.nvim";
+    version = "2024-01-15";
+    src = fetchFromGitHub {
+      owner = "mrcjkb";
+      repo = "haskell-snippets.nvim";
+      rev = "c26279d568452f5474f26470aff6549f94ff7cd3";
+      sha256 = "1rl9g25afaqiw16i582hbnnag0v6xcn28f09cy8vfddj696ygzg6";
+    };
+    meta.homepage = "https://github.com/mrcjkb/haskell-snippets.nvim/";
+  };
+
   haskell-tools-nvim = buildNeovimPlugin {
     pname = "haskell-tools.nvim";
     version = "2024-01-21";
@@ -6068,6 +6092,18 @@ final: prev:
       sha256 = "0h642cscysznr4rxzch4kq99l7f2kgdxyiibws844w1wsail1zqx";
     };
     meta.homepage = "https://github.com/folke/neoconf.nvim/";
+  };
+
+  neocord = buildVimPlugin {
+    pname = "neocord";
+    version = "2024-02-10";
+    src = fetchFromGitHub {
+      owner = "IogaMaster";
+      repo = "neocord";
+      rev = "d5f51d466644fe3c62eda4c41e373ecdc299a367";
+      sha256 = "1gv7lkqgiljgazzm0r5nbnvj3rj0l376bcz3hf2d881h4xi2lq3l";
+    };
+    meta.homepage = "https://github.com/IogaMaster/neocord";
   };
 
   neodark-vim = buildVimPlugin {
@@ -10543,6 +10579,18 @@ final: prev:
       sha256 = "092cihsphaxvpimmpzfys64pakrvh23l3zc2r0f3pjzhf69vdsvr";
     };
     meta.homepage = "https://github.com/kaarmu/typst.vim/";
+  };
+
+  ultimate-autopair = buildVimPlugin {
+    pname = "ultimate-autopair.nvim";
+    version = "2024-02-10";
+    src = fetchFromGitHub {
+      owner = "altermo";
+      repo = "ultimate-autopair.nvim";
+      rev = "25c13e0ce167db0255456cac10158b27d2be30c0";
+      sha256 = "16aizsf86cg5l131y2lszlfkdz1b998js89fja8yk25mwa79lsaf";
+    };
+    meta.homepage = "https://github.com/altermo/ultimate-autopair.nvim.git";
   };
 
   ultisnips = buildVimPlugin {
