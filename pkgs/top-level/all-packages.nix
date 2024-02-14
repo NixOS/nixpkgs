@@ -5769,6 +5769,8 @@ with pkgs;
 
   jwx = callPackage ../tools/security/jwx { } ;
 
+  k5prog = callPackage ../applications/radio/k5prog { };
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   karma = callPackage ../servers/monitoring/karma { };
