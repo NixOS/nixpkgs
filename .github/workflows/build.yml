@@ -126,7 +126,7 @@ jobs:
         run: powershell Compress-Archive -Path build\${{matrix.configure_preset}}\wfs-file-injector\Release\wfs-file-injector.exe, build\${{matrix.configure_preset}}\wfs-extract\Release\wfs-extract.exe, build\${{matrix.configure_preset}}\wfs-info\Release\wfs-info.exe -DestinationPath wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && matrix.platform == 'windows-latest'
       - name: Prepare Release Linux & MacOS
-        run: zip -r -j wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip build/${{matrix.configure_preset}}/wfs-file-injector/Release/wfs-file-injector build/${{matrix.configure_preset}}/wfs-extract/Release/wfs-extract build/${{matrix.configure_preset}}/wfs-fuse/Release/wfs-fuse build/${{matrix.configure_preset}}/wfs-extract/Release/wfs-info
+        run: zip -r -j wfs-tools-${{github.ref_name}}-${{matrix.release_name}}.zip build/${{matrix.configure_preset}}/wfs-file-injector/Release/wfs-file-injector build/${{matrix.configure_preset}}/wfs-extract/Release/wfs-extract build/${{matrix.configure_preset}}/wfs-fuse/Release/wfs-fuse build/${{matrix.configure_preset}}/wfs-info/Release/wfs-info
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && matrix.platform != 'windows-latest'
 
       - name: Release
