@@ -18,13 +18,13 @@
 
 buildPythonApplication rec {
   pname = "persepolis";
-  version = "3.2.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
-    rev = version;
-    sha256 = "1rh7q432ynbysapsd075nif975ync71icpb71x2mb4j8jx1vzs45";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-2S6s/tWhI9RBFA26jkwxYTGeaok8S8zv/bY+Zr8TOak=";
   };
 
   # see: https://github.com/persepolisdm/persepolis/blob/3.2.0/setup.py#L130
