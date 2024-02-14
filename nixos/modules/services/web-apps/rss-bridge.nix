@@ -112,10 +112,16 @@ in
         };
       };
     };
-    systemd.tmpfiles.rules = [
-      "d '${configAttr.FileCache.path}' 0750 ${cfg.user} ${cfg.group} - -"
-      "z '${cfg.dataDir}/config.ini.php' 0750 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings.rss-bridge = let
+      perm = {
+        mode = "0750";
+        user = cfg.user;
+        group = cfg.group;
+      };
+    in {
+      "${configAttr.FileCache.path}".d = perm;
+      "${cfg.dataDir}/config.ini.php".z = perm;
+    };
 
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
