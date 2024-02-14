@@ -6322,6 +6322,10 @@ with pkgs;
 
   snowcat = callPackage ../tools/security/snowcat { };
 
+  socket_vmnet = callPackage ../by-name/so/socket_vmnet/package.nix {
+    inherit (darwin.apple_sdk.frameworks) vmnet;
+  };
+
   socklog = callPackage ../tools/system/socklog { };
 
   soju = callPackage ../applications/networking/soju { };
