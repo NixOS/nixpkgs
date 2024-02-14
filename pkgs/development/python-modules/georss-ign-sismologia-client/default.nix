@@ -4,12 +4,13 @@
 , georss-client
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "georss-ign-sismologia-client";
   version = "0.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-OLX6Megl5l8KDnd/G16QJ/wQn5AQc2cZ+LCbjuHFbwo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     georss-client
