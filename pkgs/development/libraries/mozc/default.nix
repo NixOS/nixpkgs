@@ -157,7 +157,7 @@ buildBazelPackage {
       rm -rf $bazelOut/external/qt_linux
     '';
 
-    sha256 = "sha256-TNeU39pmUXBn0NC5Zwu9p4I86LhT432whrhM63UPQ7U=";
+    sha256 = "sha256-qvUkld0DJePrXFX5OJ/ZOp2KIF1AjU0I8EbOeSiZLEY=";
   };
 
   buildAttrs = {
