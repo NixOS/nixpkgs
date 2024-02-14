@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub, jq }:
+{ lib, buildNpmPackage, fetchFromGitHub, jq, quicktype, testers }:
 
 buildNpmPackage rec {
   pname = "quicktype";
@@ -20,6 +20,10 @@ buildNpmPackage rec {
   postInstall = ''
     mv packages/ $out/lib/node_modules/quicktype/
   '';
+
+  passthru.tests = {
+    version = testers.testVersion { package = quicktype; };
+  };
 
   meta = with lib; {
     description = "Generate types and converters from JSON, Schema, and GraphQL";
