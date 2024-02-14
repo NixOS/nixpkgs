@@ -11648,6 +11648,8 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };
+
   oq = callPackage ../development/tools/oq { };
 
   out-of-tree = callPackage ../development/tools/out-of-tree { };
