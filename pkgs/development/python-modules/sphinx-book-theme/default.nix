@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "1.1.1";
+  version = "1.1.2";
 
   format = "wheel";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    hash = "sha256-zk3xqqs4WjqWM/p5coGTfqEgpRcJaLbrgXsR8+CKvAc=";
+    hash = "sha256-zudERm/eSPUDArhRKRsgiqZ+cmyjG3o7+5tuahRWY+A=";
   };
 
   propagatedBuildInputs = [
