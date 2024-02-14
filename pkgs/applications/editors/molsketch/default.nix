@@ -19,6 +19,10 @@ mkDerivation rec {
     hash = "sha256-Mpx4fHktxqBAkmdwqg2pXvEgvvGUQPbgqxKwXKjhJuQ=";
   };
 
+  patches = [
+    ./openbabel.patch
+  ];
+
   # uses C++17 APIs like std::transform_reduce
   postPatch = ''
     substituteInPlace molsketch/CMakeLists.txt \
