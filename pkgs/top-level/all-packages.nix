@@ -5664,7 +5664,6 @@ with pkgs;
   hyprdim = callPackage ../applications/misc/hyprdim { };
 
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
-    stdenv = gcc13Stdenv;
     wlroots = callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
     udis86 = callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
   };
@@ -5675,15 +5674,9 @@ with pkgs;
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
 
-  hyprlang = callPackage ../by-name/hy/hyprlang/package.nix {
-    stdenv = gcc13Stdenv;
-  };
-
   hyprnome = callPackage ../applications/misc/hyprnome { };
 
-  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper {
-    stdenv = gcc13Stdenv;
-  };
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
     wlroots = wlroots_0_16;
@@ -8964,8 +8957,6 @@ with pkgs;
   gtkdatabox = callPackage ../development/libraries/gtkdatabox { };
 
   gtdialog = callPackage ../development/libraries/gtdialog { };
-
-  gtkclipblock = callPackage ../by-name/gt/gtkclipblock/package.nix { stdenv = gcc13Stdenv; };
 
   gtkd = callPackage ../development/libraries/gtkd { dcompiler = ldc; };
 
@@ -36447,7 +36438,6 @@ with pkgs;
   xdg-desktop-portal-gtk = callPackage ../development/libraries/xdg-desktop-portal-gtk { };
 
   xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland {
-    stdenv = gcc13Stdenv;
     inherit (qt6) qtbase qttools qtwayland wrapQtAppsHook;
   };
 

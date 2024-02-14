@@ -1,13 +1,13 @@
 { lib
 , callPackage
 , pkg-config
-, gcc13Stdenv
+, stdenv
 , hyprland
 }:
 let
   mkHyprlandPlugin =
     args@{ pluginName, ... }:
-    gcc13Stdenv.mkDerivation (args // {
+    stdenv.mkDerivation (args // {
       pname = "${pluginName}";
       nativeBuildInputs = [ pkg-config ] ++ args.nativeBuildInputs or [ ];
       buildInputs = [ hyprland ]
