@@ -126,14 +126,14 @@ in
           #region Base settings
           homeserverUrl = lib.mkOption {
             type = lib.types.str;
-            default = if cfg.pantalaimon.enable 
+            default = if cfg.pantalaimon.enable
               then "http://${config.services.pantalaimon-headless.instances."draupnir".listenAddress}:${toString config.services.pantalaimon-headless.instances."draupnir".listenPort}/"
               else "https://matrix.org";
-            readOnly = if cfg.pantalaimon.enable then true else false;
+            readOnly = cfg.pantalaimon.enable;
             description = ''
               Base URL of the Matrix homeserver, that provides the Client-Server API.
 
-              If `pantalaimon.enable` is `true`, this option will become read only. Configure `pantalaimon.options.homeserver` instead in that case.
+              If `services.draupnir.pantalaimon.enable` is `true`, this option will become read only. Configure `services.draupnir.pantalaimon.options.homeserver` instead in that case.
               The listen address of `pantalaimon` will then become the `homeserverUrl` of `draupnir`.
             '';
           };
@@ -207,8 +207,7 @@ in
       }
     ];
 
-    services.pantalaimon-headless.instances."draupnir" = lib.mkIf cfg.pantalaimon.enable
-      {} // cfg.pantalaimon.options;
+    services.pantalaimon-headless.instances."draupnir" = lib.mkIf cfg.pantalaimon.enable (cfg.pantalaimon.options);
 
     systemd.services.draupnir = {
       description = "Draupnir - a moderation tool for Matrix";
