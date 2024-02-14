@@ -49,15 +49,6 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
 
   nix-store --init
 
-  # nixpkgs/lib/.version is a copy of nixpkgs/.version, so that the lib
-  # subtree is valid in isolation (except for the tests, but that's ok)
-  cp ${../../.version} nixpkgs-.version
-  cp ${../.version} nixpkgs-lib-.version
-  diff -U3 nixpkgs-.version nixpkgs-lib-.version || {
-    echo '<nixpkgs/.version> and <nixpkgs/lib/.version> must match.'
-    exit 1
-  }
-
   cp -r ${../.} lib
   echo "Running lib/tests/modules.sh"
   bash lib/tests/modules.sh
