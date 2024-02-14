@@ -21,8 +21,19 @@ let
           zip
         ];
 
+      # stepreduce and zip the .step files (required to make packages3d fit on hydra)
+      # exclude the 1 step file that is directly referenced by a footprint (on 2024-02-14)
+      # can't compress the .wrl files because the footprints references include the extension
+      # .stpZ only works because KiCad implicitly looks for a step file when doing a step export
+      # and apparently can handle the .stpZ extension and compression in that export
+
+      # and stepreduce that one step file (can't zip this as the footprint doesn't refer to .stpZ)
+
       postInstall = lib.optional (name == "packages3d") ''
-        find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
+        find $out -type f -name '*.step' -not -name 'EasterEgg_EWG1308-2013_ClassA.step' \
+        | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
+
+        find $out -type f -name 'EasterEgg_EWG1308-2013_ClassA.step' -exec stepreduce {} {} \;
       '';
 
       meta = rec {
