@@ -5579,7 +5579,7 @@ with pkgs;
 
   joystickwake = callPackage ../tools/games/joystickwake { };
 
-  juce = callPackage ../development/misc/juce {
+  juce = callPackage ../by-name/ju/juce/package.nix {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
