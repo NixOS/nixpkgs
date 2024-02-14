@@ -8189,6 +8189,8 @@ self: super: with self; {
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
+  myuplink = callPackage ../development/python-modules/myuplink { };
+
   n3fit = callPackage ../development/python-modules/n3fit { };
 
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
