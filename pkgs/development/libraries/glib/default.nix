@@ -2,14 +2,14 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
 , pkg-config
 , perl
 , python3
-, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+, python3Packages
+, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt, docutils
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -51,11 +51,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.78.4";
+  version = "2.80.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-JLjgZy3KEgzDLTlLzLhYROcy4E/nXRi7BXOy28dUj2M=";
+    sha256 = "sha256-giipL5KkEhYLE5rmi2NFvSjyRDSnta8VDr4h/1h6Vh0=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -64,12 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
-    (fetchpatch {
-      name = "GLib-against-PCRE2-10.43.patch";
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/cce3ae98a2c1966719daabff5a4ec6cf94a846f6.patch";
-      hash = "sha256-vgKzb5hQmFQGD8zxRrXnuX9Gpg/TeSrzehlOH2vA1xU=";
-    })
-
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 
@@ -99,13 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
-
-    # Disable flaky test.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/820
-    ./skip-timer-test.patch
   ];
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" "doc" ];
 
   setupHook = ./setup-hook.sh;
 
@@ -141,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     python3
+    python3Packages.packaging
     gettext
     libxslt
     docbook_xsl
@@ -148,9 +139,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook_xml_dtd_45
     libxml2
+    docutils
   ];
 
-  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
+  propagatedBuildInputs = [ zlib libffi gettext libiconv
+    python3
+    python3Packages.packaging
+  ];
 
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
@@ -158,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
+    "-Dintrospection=disabled"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
   ] ++ lib.optionals stdenv.isFreeBSD [
@@ -173,10 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    chmod +x gio/tests/gengiotypefuncs.py
-    patchShebangs gio/tests/gengiotypefuncs.py
-    chmod +x docs/reference/gio/concat-files-helper.py
-    patchShebangs docs/reference/gio/concat-files-helper.py
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs glib/tests/gen-casefold-txt.py
     patchShebangs glib/tests/gen-casemap-txt.py
