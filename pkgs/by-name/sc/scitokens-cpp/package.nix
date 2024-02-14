@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/scitokens/scitokens-cpp/";
     description =
       "A C++ implementation of the SciTokens library with a C library interface";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ evey ];
   };
