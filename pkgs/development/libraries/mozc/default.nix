@@ -124,8 +124,9 @@ buildBazelPackage {
     cd mozc/src
   '';
 
-  LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-  LC_ALL = "en_US.UTF-8";
+  # Required so that the ruby scripts can work
+  env.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  env.LC_ALL = "en_US.UTF-8";
 
   inherit bazel;
   removeRulesCC = false;
