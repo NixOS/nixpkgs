@@ -14,8 +14,8 @@ let
     sha256Hash = "sha256-E50Nu0kJNTto+/VcCbbTGjRRIESp1PAs4PGprMyhKPk=";
   };
   betaVersion = {
-    version = "2023.2.1.21"; # "Android Studio Iguana | 2023.2.1 RC 1"
-    sha256Hash = "sha256-TgBrgwsjJKBi4DfTMbcgmtoYfzQ3KGwn1zdEfKO9Q8k=";
+    version = "2023.2.1.22"; # "Android Studio Iguana | 2023.2.1 RC 2"
+    sha256Hash = "sha256-sy4Cfg+d4DuIUCrP4/Fp6mnsn5bWSy6PQ42kw3NpH/o=";
   };
   latestVersion = {
     version = "2023.3.1.8"; # "Android Studio Jellyfish | 2023.3.1 Canary 8"
