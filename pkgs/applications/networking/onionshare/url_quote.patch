@@ -1,0 +1,23 @@
+--- a/onionshare_cli/web/send_base_mode.py
++++ b/onionshare_cli/web/send_base_mode.py
+@@ -25,8 +25,7 @@ import mimetypes
+ import gzip
+ from flask import Response, request
+ from unidecode import unidecode
+-from werkzeug.urls import url_quote
+-
++from urllib.parse import quote as url_quote
+ 
+ class SendBaseModeWeb:
+     """
+--- a/onionshare_cli/web/share_mode.py
++++ b/onionshare_cli/web/share_mode.py
+@@ -29,7 +29,7 @@ from datetime import datetime, timezone
+ from flask import Response, request, render_template, make_response, abort
+ from unidecode import unidecode
+ from werkzeug.http import parse_date, http_date
+-from werkzeug.urls import url_quote
++from urllib.parse import quote as url_quote
+ 
+ from .send_base_mode import SendBaseModeWeb
+ 

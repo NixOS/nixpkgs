@@ -77,6 +77,7 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+      ./url_quote.patch
     ];
     propagatedBuildInputs = [
       colorama
