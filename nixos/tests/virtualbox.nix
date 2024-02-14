@@ -340,7 +340,7 @@ let
     testExtensionPack.vmFlags = enableExtensionPackVMFlags;
   };
 
-  mkVBoxTest = useExtensionPack: vms: name: testScript: makeTest {
+  mkVBoxTest = vboxHostConfig: vms: name: testScript: makeTest {
     name = "virtualbox-${name}";
 
     nodes.machine = { lib, config, ... }: {
@@ -350,13 +350,16 @@ let
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
       virtualisation.qemu.options = ["-cpu" "kvm64,svm=on,vmx=on"];
-      virtualisation.virtualbox.host.enable = true;
       test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
-      in lib.mkIf enableHardening (lib.singleton "vboxusers");
-      virtualisation.virtualbox.host.enableExtensionPack = useExtensionPack;
-      nixpkgs.config.allowUnfree = useExtensionPack;
+      in lib.mkIf enableHardening [ "vboxusers" ];
+
+      virtualisation.virtualbox.host = {
+        enable = true;
+      } // vboxHostConfig;
+
+      nixpkgs.config.allowUnfree = config.virtualisation.virtualbox.host.enableExtensionPack;
     };
 
     testScript = ''
@@ -390,7 +393,7 @@ let
     };
   };
 
-  unfreeTests = mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
+  unfreeTests = mapAttrs (mkVBoxTest { enableExtensionPack = true; } vboxVMsWithExtpack) {
     enable-extension-pack = ''
       create_vm_testExtensionPack()
       vbm("startvm testExtensionPack")
@@ -409,7 +412,7 @@ let
     '';
   };
 
-in mapAttrs (mkVBoxTest false vboxVMs) {
+in mapAttrs (mkVBoxTest {} vboxVMs) {
   simple-gui = ''
     # Home to select Tools, down to move to the VM, enter to start it.
     def send_vm_startup():
