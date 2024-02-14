@@ -94,7 +94,8 @@ buildBazelPackage {
       hash = "sha256-Mp7ya2tM6E0IKE6kOYSlRx6gZBS/DK1zAwyT6jvZxrY=";
       downloadToTemp = true;
       postFetch = ''
-        mv $downloadedFile $out/${name}.gz
+        mkdir -p "$out"
+        install -Dm444 "$downloadedFile" "$out/${name}.gz"
       '';
     })
     (fetchFromGitHub rec {
@@ -200,13 +201,11 @@ buildBazelPackage {
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/share/licenses/mozc
-      cp ../LICENSE $out/share/licenses/mozc/LICENSE
-      cp data/installer/credits_en.html $out/share/licenses/mozc/Submodules
+      install -Dm444 -t $out/share/licenses/mozc ../LICENSE
+      install -Dm444 -t $out/share/licenses/mozc/Submodules data/installer/credits_en.html
 
-      mkdir -p $out/lib/mozc
-      cp bazel-bin/server/mozc_server $out/lib/mozc/mozc_server
-      cp bazel-bin/gui/tool/mozc_tool $out/lib/mozc/mozc_tool
+      install -Dm555 -t $out/lib/mozc bazel-bin/server/mozc_server
+      install -Dm555 -t $out/lib/mozc bazel-bin/gui/tool/mozc_tool
 
       runHook postInstall
     '';
