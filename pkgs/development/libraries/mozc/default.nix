@@ -7,6 +7,7 @@
 , pkg-config
 , python3
 , qtbase
+, qtwayland
 , ruby
 , wrapQtAppsHook
 }:
@@ -117,7 +118,7 @@ buildBazelPackage {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qtbase qtwayland ];
 
   preBuild = ''
     cd mozc/src
