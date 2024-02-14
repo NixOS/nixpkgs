@@ -206,8 +206,8 @@
     "flycast": {
         "owner": "flyinghead",
         "repo": "flycast",
-        "rev": "7029e1615a215bc43e51f8eac605f31dd01ba8cd",
-        "hash": "sha256-JUXKlUNIg+1vvOfUQpysxUMYIRJqIzj9UNIwb+8HRPo=",
+        "rev": "44fa364f36c43bed19b055096600f075c656f78c",
+        "hash": "sha256-UfASq8OXtsfubMUfke7P6HTygM/9fP421IoLQeJvPgY=",
         "fetchSubmodules": true,
         "date": "unstable-2024-02-09"
     },
@@ -249,9 +249,9 @@
     "gpsp": {
         "owner": "libretro",
         "repo": "gpsp",
-        "rev": "85a2ac6c911ffcc77cf1bab418c78fe5218c0b1a",
-        "hash": "sha256-iHfdsI6E2LQTC9HjqVRBHihVUpagtB8326M8Crll2iY=",
-        "date": "unstable-2024-02-04"
+        "rev": "4caf7a167d159866479ea94d6b2d13c26ceb3e72",
+        "hash": "sha256-1hkxeTjY52YuphQuDMCITn/dIcNx/8w4FkhQjL8DWz8=",
+        "date": "unstable-2024-02-10"
     },
     "gw": {
         "owner": "libretro",
@@ -277,9 +277,9 @@
     "mame": {
         "owner": "libretro",
         "repo": "mame",
-        "rev": "f55fe47b0997d24048700898195cb66bc0bccfb6",
-        "hash": "sha256-JUL4ha7UL+hNG5oi178nLT1aUuxqfev0/bRU6y/Mg7A=",
-        "date": "unstable-2024-02-05"
+        "rev": "8ebaec4073703f5050dac3f6c8da408943e15938",
+        "hash": "sha256-CFCem9MiaHW2flEZyJkcC9JEGzx7Ox/uqrTY3jue+Pk=",
+        "date": "unstable-2024-02-13"
     },
     "mame2000": {
         "owner": "libretro",
@@ -298,9 +298,9 @@
     "mame2003-plus": {
         "owner": "libretro",
         "repo": "mame2003-plus-libretro",
-        "rev": "debcb547ea7ae197433142810e99e1313c58cb14",
-        "hash": "sha256-l9YmDiUJ+CQP4i8O8W+E9uTLPZZgLqLR9v7e5hFgJhE=",
-        "date": "unstable-2024-02-09"
+        "rev": "a4d62997d332acc709c9644641863c5498e01eb0",
+        "hash": "sha256-9+pxx/fhNsvAMYDqalkkdljaR8/XxuMMSrrz7KeJtDU=",
+        "date": "unstable-2024-02-13"
     },
     "mame2010": {
         "owner": "libretro",
@@ -361,10 +361,10 @@
     "mrboom": {
         "owner": "Javanaise",
         "repo": "mrboom-libretro",
-        "rev": "865be65118ef70e9a486f872948f4fc805edf643",
-        "hash": "sha256-jdOthryC1QvVvuPZUh/YyZhJeFWk1XhBuCm4hmAy8+Q=",
+        "rev": "f688664f024723e00c0d2926e51b45754a25e2da",
+        "hash": "sha256-t6ArMkyGvHJ9hLc+FFoH2wTk0wRFn5etzdLipTQnGyc=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-02-05"
+        "date": "unstable-2024-02-09"
     },
     "mupen64plus": {
         "owner": "libretro",
@@ -383,9 +383,9 @@
     "nestopia": {
         "owner": "libretro",
         "repo": "nestopia",
-        "rev": "8050c38e5a1db6927b03510651809e8ef932b888",
+        "rev": "407df997b65cddbff9b25abae0510e6645205677",
         "hash": "sha256-Vlz69ZpXwawdE+bfjlKNrQNmFHhB53FOKhfMgq4viE0=",
-        "date": "unstable-2024-02-03"
+        "date": "unstable-2024-02-13"
     },
     "np2kai": {
         "owner": "AZO234",
@@ -456,10 +456,10 @@
     "ppsspp": {
         "owner": "hrydgard",
         "repo": "ppsspp",
-        "rev": "25689c36d9c2f3f1b7aa612d89b86caf1809e376",
-        "hash": "sha256-hXknMyBNo1vJ49gJsuNef+sccolAovg1I8Wzuw/BnE8=",
+        "rev": "d832f96010fa378ef0a7f7980524a61803110ad7",
+        "hash": "sha256-LkngiwjRoYw+N+DCdbbWnTokDAYXbqOMJX+DQGAUl2g=",
         "fetchSubmodules": true,
-        "date": "unstable-2024-02-09"
+        "date": "unstable-2024-02-13"
     },
     "prboom": {
         "owner": "libretro",
@@ -605,9 +605,9 @@
     "vecx": {
         "owner": "libretro",
         "repo": "libretro-vecx",
-        "rev": "a401c268e425dc8ae6a301e7fdb9a9e96f39b8ea",
-        "hash": "sha256-24/bcQ5mgLl7zKvpnnSYr5SoLG02al6dP27KoOtnua4=",
-        "date": "unstable-2023-06-01"
+        "rev": "56a99fa08a7601b304d752188ca573febf26faeb",
+        "hash": "sha256-9/d6qzsUJZYZewAbFI4LU2FVpv09uby/5mxCZU7rVzo=",
+        "date": "unstable-2024-02-10"
     },
     "virtualjaguar": {
         "owner": "libretro",
