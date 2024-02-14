@@ -21,6 +21,7 @@
 , pythonOlder
 , queuelib
 , service-identity
+, setuptools
 , sybil
 , testfixtures
 , tldextract
@@ -32,7 +33,7 @@
 buildPythonPackage rec {
   pname = "scrapy";
   version = "2.11.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -44,6 +45,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+    setuptools
   ];
 
   propagatedBuildInputs = [
