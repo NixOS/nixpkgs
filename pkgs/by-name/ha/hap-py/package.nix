@@ -1,22 +1,46 @@
-{ pkgs, stdenv, fetchFromGitHub, boost, zlib, lib, makeWrapper }:
+{
+  autoconf,
+  bcftools,
+  boost,
+  bzip2,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  htslib,
+  lib,
+  makeWrapper,
+  perl,
+  python3,
+  rtg-tools,
+  samtools,
+  stdenv,
+  xz,
+  zlib,
+}:
 
 let
   # Bcftools needs perl
-  runtime = with pkgs; [ bcftools htslib my-python perl samtools ];
-  my-python-packages = p: with p; [
-    bx-python
-    pysam
-    cython
-    pandas
-    psutil
-    nose
-    scipy
+  runtime =  [
+    bcftools
+    htslib
+    my-python
+    perl
+    samtools
   ];
-  my-python = pkgs.python3.withPackages my-python-packages;
+  my-python-packages =
+    p: with p; [
+      bx-python
+      pysam
+      pandas
+      psutil
+      scipy
+    ];
+  my-python = python3.withPackages my-python-packages;
 in
 stdenv.mkDerivation rec {
   pname = "hap.py";
-  version  = "0.3.15";
+  version = "0.3.15";
+
   src = fetchFromGitHub {
     owner = "Illumina";
     repo = pname;
@@ -29,26 +53,33 @@ stdenv.mkDerivation rec {
   # For cmake : boost lib and includedir are in differernt location
   BOOST_LIBRARYDIR = "${boost.out}/lib";
   BOOST_INCLUDEDIR = "${boost.dev}/include";
+
   patches = [
-    ./hap-py.patch
-    ./cmake.patch
+    # Compatibility with nix for boost and library flags : zlib, bzip2, curl, crypto, lzma
+    ./boost-library-flags.patch
+    # Update to python3
+    ./python3.patch
   ];
-  buildInputs = with pkgs; [
+  nativeBuildInputs = [
     autoconf
+    cmake
+    makeWrapper
+  ];
+  buildInputs = [
     boost
     bzip2
-    cmake
     curl
     htslib
     my-python
+    rtg-tools
     xz
     zlib
   ];
-  nativeBuildInputs = [ pkgs.makeWrapper ];
-  propagatedBuildInputs = runtime;
+
   postFixup = ''
     wrapProgram $out/bin/hap.py \
-      --set PATH ${lib.makeBinPath runtime}
+       --set PATH ${lib.makeBinPath runtime} \
+       --add-flags "--engine-vcfeval-path=${rtg-tools}/bin/rtg"
   '';
 
   meta = with lib; {
