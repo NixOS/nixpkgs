@@ -1,13 +1,13 @@
 { lib, stdenv, ruby, rake, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mruby";
   version = "3.3.0";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
-    rev     = version;
+    rev     = finalAttrs.version;
     sha256  = "sha256-rCoEC1ioX6bOocPoPi+Lsn4PM8gY0DjKja1/MJvJ1n8=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
   };
-}
+})
