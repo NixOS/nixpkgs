@@ -1,4 +1,4 @@
-{ lib, stdenv, ruby, rake, fetchFromGitHub }:
+{ lib, stdenv, ruby, rake, fetchFromGitHub, testers }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mruby";
@@ -28,11 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "test";
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     description = "An embeddable implementation of the Ruby language";
     homepage = "https://mruby.org";
     maintainers = with maintainers; [ nicknovitski marsam ];
     license = licenses.mit;
     platforms = platforms.all;
+    mainProgram = "mruby";
   };
 })
