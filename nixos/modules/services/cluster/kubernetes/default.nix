@@ -290,7 +290,7 @@ in {
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
         "d /run/kubernetes 0755 kubernetes kubernetes -"
-        "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
+        "d ${cfg.dataDir} 0755 kubernetes kubernetes -"
       ];
 
       users.users.kubernetes = {
@@ -299,6 +299,7 @@ in {
         group = "kubernetes";
         home = cfg.dataDir;
         createHome = true;
+        homeMode = "755";
       };
       users.groups.kubernetes.gid = config.ids.gids.kubernetes;
 
