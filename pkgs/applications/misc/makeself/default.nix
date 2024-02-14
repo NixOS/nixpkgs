@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   fixupPhase = ''
-    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i $out/bin/makeself
+    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}/makeself-header.sh|" -i $out/bin/makeself
   '';
 
   meta = with lib; {
