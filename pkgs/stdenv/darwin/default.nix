@@ -327,7 +327,11 @@ in
               '';
               passthru = {
                 isFromBootstrapFiles = true;
-                hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" ];
+                hardeningUnsupportedFlags = [
+                  "fortify3"
+                  "stackclashprotection"
+                  "zerocallusedregs"
+                ];
               };
             };
             clang-unwrapped = selfTools.libclang;
