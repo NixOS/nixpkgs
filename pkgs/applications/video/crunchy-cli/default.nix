@@ -1,45 +1,49 @@
 { lib
 , stdenv
-, clangStdenv
 , darwin
-, xcbuild
+, fetchFromGitHub
 , openssl
 , pkg-config
 , rustPlatform
-, fetchFromGitHub
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
+rustPlatform.buildRustPackage rec {
   pname = "crunchy-cli";
-  version = "3.0.0-dev.10";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "crunchy-labs";
-    repo = pname;
+    repo = "crunchy-cli";
     rev = "v${version}";
-    hash = "sha256-uc19SmVfa5BZYDidlEgV6GNvcm9Dj0mSjdwHP5S+O4A=";
+    hash = "sha256-hzmTwUd+bQwr+5UtXKMalJZUDxOC5nhXNTXbYZN8xtA=";
   };
 
-  cargoHash = "sha256-H3D55qMUAF6t45mRbGZl+DORAl1H1a7AOe+lQP0WUUQ=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "native-tls-0.2.11" = "sha256-+NeXsxuThKNOzVLBItKcuTAM/0zR/BzJGMKkuq99gBM=";
+    };
+  };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
+
   meta = with lib; {
-    description = "A pure Rust written Crunchyroll cli client and downloader";
+    description = "Command-line downloader for Crunchyroll";
     homepage = "https://github.com/crunchy-labs/crunchy-cli";
-    license = with licenses; [ gpl3 ];
+    license = licenses.mit;
     maintainers = with maintainers; [ stepbrobd ];
     mainProgram = "crunchy-cli";
   };
 }
-
