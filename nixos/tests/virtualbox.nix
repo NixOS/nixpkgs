@@ -3,6 +3,7 @@
   pkgs ? import ../.. { inherit system config; },
   debug ? false,
   enableUnfree ? false,
+  enableKvm ? false,
   use64bitGuest ? true
 }:
 
@@ -349,7 +350,13 @@ let
         vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
-      virtualisation.qemu.options = ["-cpu" "kvm64,svm=on,vmx=on"];
+
+      virtualisation.qemu.options = let
+        # IvyBridge is reasonably ancient to be compatible with recent
+        # Intel/AMD hosts and sufficient for the KVM flavor.
+        guestCpu = if config.virtualisation.virtualbox.host.enableKvm then "IvyBridge" else "kvm64";
+      in ["-cpu" "${guestCpu},svm=on,vmx=on"];
+
       test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
@@ -409,6 +416,23 @@ let
 
       shutdown_vm_testExtensionPack()
       destroy_vm_testExtensionPack()
+    '';
+  };
+
+  kvmTests = mapAttrs (mkVBoxTest {
+    enableKvm = true;
+
+    # Once the KVM version supports these, we can enable them.
+    addNetworkInterface = false;
+    enableHardening = false;
+  } vboxVMs) {
+    kvm-headless = ''
+      create_vm_headless()
+      machine.succeed(ru("VBoxHeadless --startvm headless >&2 & disown %1"))
+      wait_for_startup_headless()
+      wait_for_vm_boot_headless()
+      shutdown_vm_headless()
+      destroy_vm_headless()
     '';
   };
 
@@ -522,4 +546,6 @@ in mapAttrs (mkVBoxTest {} vboxVMs) {
     destroy_vm_test1()
     destroy_vm_test2()
   '';
-} // (optionalAttrs enableUnfree unfreeTests)
+}
+// (optionalAttrs enableKvm kvmTests)
+// (optionalAttrs enableUnfree unfreeTests)
