@@ -29,7 +29,7 @@
 , libmtp
 , gnomeSupport ? false
 , gnome
-, gcr
+, gcr_4
 , glib-networking
 , gnome-online-accounts
 , wrapGAppsHook
@@ -40,17 +40,19 @@
 , openssh
 , libsecret
 , libgdata
+, libmsgraph
 , python3
+, python3Packages
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.52.2";
+  version = "1.53.91";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
-    hash = "sha256-pkOs6qBTyqwNjv+aAV9jbkvRuwnP4nhk40fbZ0YOe5E=";
+    hash = "sha256-R3uqISUQx+r7jGq3l3/rRg8T8PAz0QIXkY2gRNRxbkY=";
   };
 
   patches = [
@@ -100,11 +102,12 @@ stdenv.mkDerivation rec {
     polkit
     libcdio-paranoia
   ] ++ lib.optionals gnomeSupport [
-    gcr
+    gcr_4
     glib-networking # TLS support
     gnome-online-accounts
     libsecret
     libgdata
+    libmsgraph
   ];
 
   mesonFlags = [
@@ -126,6 +129,7 @@ stdenv.mkDerivation rec {
     "-Dgoa=false"
     "-Dkeyring=false"
     "-Dgoogle=false"
+    "-Donedrive=false"
   ] ++ lib.optionals (avahi == null) [
     "-Ddnssd=false"
   ] ++ lib.optionals (samba == null) [
