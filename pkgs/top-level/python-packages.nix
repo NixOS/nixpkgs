@@ -4392,6 +4392,8 @@ self: super: with self; {
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
+  fsspec-xrootd = callPackage ../development/python-modules/fsspec-xrootd { };
+
   fst-pso = callPackage ../development/python-modules/fst-pso { };
 
   ftfy = callPackage ../development/python-modules/ftfy { };
