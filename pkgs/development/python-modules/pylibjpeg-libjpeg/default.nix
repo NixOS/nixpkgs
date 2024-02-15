@@ -3,14 +3,16 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, cython
+, cython_3
+, poetry-core
+, setuptools
 , numpy
 }:
 
 buildPythonPackage rec {
   pname = "pylibjpeg-libjpeg";
-  version = "1.3.4";
-  format = "setuptools";
+  version = "2.02";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,12 +20,14 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-VmqeoMU8riLpWyC+yKqq56TkruxOie6pjbg+ozivpBk=";
+    hash = "sha256-mGwku19Xe605fF3UU59712rYp+s/pP79lBRl79fhhTI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
+    poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
