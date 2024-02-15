@@ -234,10 +234,10 @@ in
           "--draupnir-config" "${configFile}"
         ] ++ lib.optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
           "--pantalaimon-password-path"
-          "$CREDENTIALS_DIRECTORY/pantalaimon_password"
+          "/run/credentials/draupnir.service/pantalaimon_password"
         ] ++ lib.optionals (cfg.accessTokenFile != null) [
           "--access-token-path"
-          "$CREDENTIALS_DIRECTORY/access_token"
+          "/run/credentials/draupnir.service/access_token"
         ]);
 
         WorkingDirectory = "/var/lib/draupnir";
