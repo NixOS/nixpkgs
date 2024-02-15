@@ -73,7 +73,7 @@ void dumpArea(int depth, const std::filesystem::path& path, const std::shared_pt
 }
 
 void dumpdir(int depth, const std::shared_ptr<Directory>& dir, const std::filesystem::path& path) {
-  if ((*dir->area()->GetRootDirectory())->GetName() == dir->GetName()) {  // TODO: Better check
+  if (dir->IsQuota()) {
     dumpArea(depth, path, dir->area());
     depth += 1;
   }

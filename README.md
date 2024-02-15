@@ -42,7 +42,23 @@ Allowed options:
   --usb                 device is usb
 ```
 
-### wfs-fuse (Linux only)
+### wfs-reencryptor
+A tool reencrypt a disk with a new key.
+```
+Usage: wfs-reencryptor --input <input file> --output <output file> --input-otp <input otp path> --output-otp <output otp path> [--input-seeprom <input seeprom path> --output-seeprom <outpu seeprom path>] [--mlc] [--usb]
+Allowed options:
+  --help                produce help message
+  --input arg           input file
+  --output arg          output file
+  --input-otp arg       input otp file
+  --input-seeprom arg   input seeprom file (required if usb)
+  --output-otp arg      output otp file
+  --output-seeprom arg  output seeprom file (required if usb)
+  --mlc                 device is mlc (default: device is usb)
+  --usb                 device is usb
+```
+
+### wfs-fuse (Linux/MacOS only)
 ```
 wfs-fuse --help
 ```

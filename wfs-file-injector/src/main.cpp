@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
     size_t file_size = static_cast<size_t>(input_file.tellg());
     input_file.seekg(0, std::ios::beg);
 
-    auto device = std::make_shared<FileDevice>(vm["image"].as<std::string>(), 9, false);
+    auto device = std::make_shared<FileDevice>(vm["image"].as<std::string>(), 9, 0, false);
     Wfs::DetectDeviceSectorSizeAndCount(device, key);
     auto file = Wfs(device, key).GetFile(boost::to_lower_copy(vm["inject-path"].as<std::string>()));
     if (!file) {
