@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dfranx/SHADERed";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ Scriptkiddi ];
+    broken = true;
   };
 }

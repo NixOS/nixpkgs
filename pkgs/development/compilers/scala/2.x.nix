@@ -18,14 +18,14 @@ let
     };
 
     "2.12" = {
-      version = "2.12.15";
-      sha256 = "F5RePKlHjQaoQ2BWqsa5r99g3q/cPjgsbAi2A5IberY=";
+      version = "2.12.18";
+      sha256 = "naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
       pname = "scala_2_12";
     };
 
     "2.13" = {
-      version = "2.13.10";
-      sha256 = "sha256-sBRhWZzQeGBCxktTN5D0XlG6u5HFLcRl2EaDjpcBnMQ=";
+      version = "2.13.12";
+      sha256 = "r+fm+1njyIRX6Z9wGHMOUvuifI0V49cVT3KWggbKhxk=";
       pname = "scala_2_13";
     };
   };
@@ -114,6 +114,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     branch = versions.majorMinor version;
-    maintainers = [ maintainers.nequissimus ];
+    maintainers = with maintainers; [ nequissimus kashw2 ];
   };
 }

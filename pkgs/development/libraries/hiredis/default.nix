@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "hiredis";
-  version = "1.1.0";
+  version = "1.2.0";
+  nativeBuildInputs = [openssl];
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis";
     rev = "v${version}";
-    sha256 = "sha256-0ESRnZTL6/vMpek+2sb0YQU3ajXtzj14yvjfOSQYjf4=";
+    sha256 = "sha256-ZxUITm3OcbERcvaNqGQU46bEfV+jN6safPalG0TVfBg=";
   };
 
   PREFIX = "\${out}";
+  USE_SSL = 1;
 
   meta = with lib; {
     homepage = "https://github.com/redis/hiredis";

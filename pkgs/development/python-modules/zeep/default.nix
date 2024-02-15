@@ -3,10 +3,8 @@
 , aioresponses
 , attrs
 , buildPythonPackage
-, cached-property
 , defusedxml
 , fetchFromGitHub
-, fetchpatch
 , freezegun
 , httpx
 , isodate
@@ -29,6 +27,7 @@
 buildPythonPackage rec {
   pname = "zeep";
   version = "4.2.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -41,9 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    cached-property
     defusedxml
-    httpx
     isodate
     lxml
     platformdirs
@@ -51,7 +48,19 @@ buildPythonPackage rec {
     requests
     requests-file
     requests-toolbelt
-    xmlsec
+  ];
+
+  passthru.optional-dependencies = {
+    async_require = [
+      httpx
+    ];
+    xmlsec_require = [
+      xmlsec
+    ];
+  };
+
+  pythonImportsCheck = [
+    "zeep"
   ];
 
   nativeCheckInputs = [
@@ -64,29 +73,26 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
+  ]
+  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    # Failed: External connections not allowed during tests.
+    "test_has_expired"
+    "test_has_not_expired"
+    "test_memory_cache_timeout"
+    "test_bytes_like_password_digest"
+    "test_password_digest"
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d);
+    export HOME=$TMPDIR
   '';
 
-  disabledTests = [
-    # lxml.etree.XMLSyntaxError: Extra content at the end of the document, line 2, column 64
-    "test_mime_content_serialize_text_xml"
-    # Tests are outdated
-    "test_load"
-    "test_load_cache"
-    "test_post"
-  ];
-
-  pythonImportsCheck = [
-    "zeep"
-  ];
-
   meta = with lib; {
+    changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvl ];
   };
 }

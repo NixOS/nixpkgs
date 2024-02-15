@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
 , gsaslSupport ? false, gsasl
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
-    # disable gss becuase of: undefined reference to `k5_bcmp'
+    # disable gss because of: undefined reference to `k5_bcmp'
     # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
     !isStatic &&
     # the "mig" tool does not configure its compiler correctly. This could be
@@ -15,6 +15,7 @@
   ), libkrb5
 , http2Support ? true, nghttp2
 , http3Support ? false, nghttp3, ngtcp2
+, websocketSupport ? false
 , idnSupport ? false, libidn2
 , ldapSupport ? false, openldap
 , opensslSupport ? zlibSupport, openssl
@@ -22,6 +23,7 @@
 , rtmpSupport ? false, rtmpdump
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2
 , wolfsslSupport ? false, wolfssl
+, rustlsSupport ? false, rustls-ffi
 , zlibSupport ? true, zlib
 , zstdSupport ? false, zstd
 
@@ -31,6 +33,7 @@
 , haskellPackages
 , ocamlPackages
 , phpExtensions
+, pkgsStatic
 , python3
 , tests
 , testers
@@ -42,25 +45,23 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-assert !(gnutlsSupport && opensslSupport);
-assert !(gnutlsSupport && wolfsslSupport);
-assert !(opensslSupport && wolfsslSupport);
+assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsSupport ]) > 1);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.88.1";
+  version = "8.6.0";
 
   src = fetchurl {
     urls = [
-      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
-      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
+      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
+      "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-giS0XM4Sq94DnBLcBxG36oWxBLmtU01uTFtOGIphyQc=";
+    hash = "sha256-PM1V2Rr5UWU534BiX4GMc03G8uz5utozx2dl6ZEh2xU=";
   };
 
-  patches = [
-    ./7.79.1-darwin-no-systemconfiguration.patch
-  ];
+  postPatch = ''
+    patchShebangs scripts
+  '';
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
@@ -89,13 +90,24 @@ stdenv.mkDerivation (finalAttrs: {
     optional rtmpSupport rtmpdump ++
     optional scpSupport libssh2 ++
     optional wolfsslSupport wolfssl ++
+    optional rustlsSupport rustls-ffi ++
     optional zlibSupport zlib ++
-    optional zstdSupport zstd;
+    optional zstdSupport zstd ++
+    optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreFoundation
+      CoreServices
+      SystemConfiguration
+    ]);
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
+  '' + lib.optionalString (pslSupport && stdenv.hostPlatform.isStatic) ''
+    # curl doesn't understand that libpsl2 has deps because it doesn't use
+    # pkg-config.
+    # https://github.com/curl/curl/pull/12919
+    configureFlagsArray+=("LIBS=-lidn2 -lunistring")
   '';
 
   configureFlags = [
@@ -104,12 +116,15 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
-      # The build fails when using wolfssl with --with-ca-fallback
-      (lib.withFeature (!wolfsslSupport) "ca-fallback")
+      (lib.enableFeature websocketSupport "websockets")
+      # --with-ca-fallback is only supported for openssl and gnutls https://github.com/curl/curl/blame/curl-8_0_1/acinclude.m4#L1640
+      (lib.withFeature (opensslSupport || gnutlsSupport) "ca-fallback")
       (lib.withFeature http3Support "nghttp3")
       (lib.withFeature http3Support "ngtcp2")
       (lib.withFeature rtmpSupport "librtmp")
+      (lib.withFeature rustlsSupport "rustls")
       (lib.withFeature zstdSupport "zstd")
+      (lib.withFeature pslSupport "libpsl")
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
       (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
       (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
@@ -129,6 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
       "--without-ca-bundle"
       "--without-ca-path"
+    ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
+      "--without-ssl"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
@@ -168,7 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit opensslSupport openssl;
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
-      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = fetchpatch.override { fetchurl = useThisCurl fetchurl; }; };
       curlpp = useThisCurl curlpp;
       coeurl = useThisCurl coeurl;
       haskell-curl = useThisCurl haskellPackages.curl;
@@ -180,6 +196,9 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      static = pkgsStatic.curl;
+    } // lib.optionalAttrs (!stdenv.isDarwin) {
+      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
     };
   };
 
@@ -193,5 +212,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
+    mainProgram = "curl";
   };
 })

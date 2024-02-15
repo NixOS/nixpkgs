@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , gdb
 , django
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.6";
+  version = "1.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GanRWzGyg0Efa+kuU7Q0IOmO0ohXZIjuz8RZYERTpzo=";
+    hash = "sha256-FW1RDmj4sDBS0q08C82ErUd16ofxJxgVaxfykn/wVBA=";
   };
 
   patches = [
@@ -36,12 +35,6 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./hardcode-version.patch;
       inherit version;
-    })
-
-    # https://github.com/microsoft/debugpy/issues/1230
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/microsoft/debugpy/pull/1232.patch";
-      sha256 = "sha256-m5p+xYiJ4w4GcaFIaPmlnErp/7WLwcvJmaCqa2SeSxU=";
     })
 
     # Fix importing debugpy in:
@@ -94,7 +87,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preCheck = ''
+    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
+    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';
@@ -107,12 +103,13 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--timeout=0"
   ];
+
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # https://github.com/microsoft/debugpy/issues/1241
-    "test_flask_breakpoint_multiproc"
+    # testsuite gets stuck at this one
+    "test_attach_pid_client"
   ];
 
   pythonImportsCheck = [

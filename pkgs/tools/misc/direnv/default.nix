@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.32.2";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "sha256-Ql/Q9SoCNy2JKt/32RIMx08rbGvrthdgTpFIFx4m1p4=";
+    sha256 = "sha256-/xOqJ3dr+3S502rXHVBcHhgBCctoMYnWpfLqgrxIoN8=";
   };
 
-  vendorSha256 = "sha256-eQaQ77pOYC8q+IA26ArEhHQ0DCU093TbzaYhdV3UydE=";
+  vendorHash = "sha256-QGPcNgA/iiGt0CdFs2kR3zLL5/SWulSyyf/pW212JpU=";
 
   # we have no bash at the moment for windows
   BASH_PATH =
@@ -49,6 +49,7 @@ buildGoModule rec {
     '';
     homepage = "https://direnv.net";
     license = licenses.mit;
-    maintainers = teams.numtide.members;
+    maintainers = [ maintainers.zimbatm ];
+    mainProgram = "direnv";
   };
 }

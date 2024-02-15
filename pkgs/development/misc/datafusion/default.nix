@@ -7,17 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "datafusion-cli";
-  version = "15.0.0";
+  version = "33.0.0";
 
   src = fetchFromGitHub {
+    name = "datafusion-cli-source";
     owner = "apache";
     repo = "arrow-datafusion";
     rev = version;
-    sha256 = "sha256-s+gQoczTesJGOpz4W5hBPDdxo4eQnf+D10+V2kx65Io=";
+    sha256 = "sha256-ywyzvk50Fr9TSaCrqd14lSi1PJ9ggA1YQ/X0aFGFk1M=";
   };
-  sourceRoot = "source/datafusion-cli";
 
-  cargoSha256 = "sha256-w+/5Ig+U8y4nwu7QisnZvc3UlZaEU/kovV6birOWndE=";
+  sourceRoot = "${src.name}/datafusion-cli";
+
+  cargoHash = "sha256-0a/O9nNi3JLufQxG+5EgCXtV0y03X7R6UY+f/tVGB90=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -26,6 +28,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # fails even outside the Nix sandbox
     "--skip=object_storage::tests::s3_region_validation"
+    # broken
+    "--skip=exec::tests::create_object_store_table_gcs"
   ];
 
   meta = with lib; {

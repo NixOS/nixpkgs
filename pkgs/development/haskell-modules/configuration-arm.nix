@@ -38,8 +38,16 @@ self: super: {
   happy = dontCheck super.happy;
   happy_1_19_12 = doDistribute (dontCheck super.happy_1_19_12);
 
+  # add arm specific library
+  wiringPi = overrideCabal ({librarySystemDepends ? [], ...}: {
+    librarySystemDepends = librarySystemDepends ++ [pkgs.wiringpi];
+  }) super.wiringPi;
+
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
+
+  # Corrupted store path https://github.com/NixOS/nixpkgs/pull/272097#issuecomment-1848414265
+  cachix = triggerRebuild 1 super.cachix;
 
   # Doctests fail on aarch64 due to a GHCi linking bug
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437

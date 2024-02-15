@@ -1,11 +1,16 @@
-{ lib, mkXfceDerivation, libxfce4util, gobject-introspection, vala }:
+{ lib
+, mkXfceDerivation
+, libxfce4util
+, gobject-introspection
+, vala
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfconf";
-  version = "4.18.0";
+  version = "4.18.3";
 
-  sha256 = "sha256-8zl2EWV1DRHsH0QUNa13OKvfIVDVOhIO0FCMbU978Js=";
+  sha256 = "sha256-Iu/LHyk/lOvu8uJuJRDxIkabiX0vZB4H99vVKRiugVo=";
 
   nativeBuildInputs = [ gobject-introspection vala ];
 

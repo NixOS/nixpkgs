@@ -8,9 +8,12 @@
 
 buildPythonPackage rec {
   pname = "certbot-dns-cloudflare";
+  format = "setuptools";
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";
+
+  sourceRoot = "${src.name}/certbot-dns-cloudflare";
 
   propagatedBuildInputs = [
     acme
@@ -22,9 +25,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+  pytestFlagsArray = [
+    "-o cache_dir=$(mktemp -d)"
 
-  sourceRoot = "source/certbot-dns-cloudflare";
+    # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
+    "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
+  ];
 
   meta = certbot.meta // {
     description = "Cloudflare DNS Authenticator plugin for Certbot";

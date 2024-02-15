@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-daemon";
-  version = "2.3.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bda993f1623b1197699716d68d983bb580043cf2b8a66a01274d9b8297b0aeaf";
+    sha256 = "sha256-bFdFI3L36v9Ak0ocA60YJr9eeTVY6H/vSRMeZGS02uU=";
   };
 
   nativeBuildInputs = [
@@ -37,23 +37,6 @@ buildPythonPackage rec {
     pytestCheckHook
     testscenarios
     testtools
-  ];
-
-  patches = [
-    # Should be fixed in the next release
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/python-daemon/raw/rawhide/f/python-daemon-safe_hasattr.patch";
-      hash = "sha256-p5epAlM/sdel01oZkSI1vahUZYX8r90WCJuvBnfMaus=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/python-daemon/raw/rawhide/f/tests-remove-duplicate-mocking.patch";
-      hash = "sha256-5b/dFR3Z8xaPw8AZU95apDZd4ZfmMQhAmavWkVaJog8=";
-    })
-  ];
-
-  disabledTestPaths = [
-    # requires removed distutils.command
-    "test_version.py"
   ];
 
   disabledTests = [
@@ -77,7 +60,6 @@ buildPythonPackage rec {
     "daemon"
     "daemon.daemon"
     "daemon.pidfile"
-    "daemon.runner"
   ];
 
   meta = with lib; {

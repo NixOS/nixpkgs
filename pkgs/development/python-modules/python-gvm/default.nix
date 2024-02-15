@@ -6,22 +6,23 @@
 , lxml
 , paramiko
 , poetry-core
+, pontos
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "23.2.0";
-  format = "pyproject";
+  version = "24.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "python-gvm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6EmmiJjadC6zJM4+HhL8w2Xw1p7pG5LI0TS53bH61Tc=";
+    hash = "sha256-1MJajawm/QdioZM+/efnXOAFcuDOk/xJ1acPrxKp700=";
   };
 
   nativeBuildInputs = [
@@ -35,12 +36,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pontos
     pytestCheckHook
   ];
 
   disabledTests = [
     # No running SSH available
     "test_connect_error"
+    "test_feed_xml_error"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_feed_xml_error"
   ];
@@ -52,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/python-gvm";
+    changelog = "https://github.com/greenbone/python-gvm/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

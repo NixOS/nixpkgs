@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchFromSourcehut
+, fetchpatch
 , SDL2
 , alsa-lib
 , appstream
@@ -76,24 +77,25 @@ let
   # only available on Carla unstable as of 2023-02-24.
   carla-unstable = carla.overrideAttrs (oldAttrs: rec {
     pname = "carla";
-    version = "unstable-2023-02-24";
+    version = "unstable-2023-05-12";
 
     src = fetchFromGitHub {
       owner = "falkTX";
       repo = pname;
-      rev = "33a142f447925f55d00532933a1f28e9745c13eb";
-      hash = "sha256-hQj0HlcOYfwsxG05pq/qcuKcOwDMV1ED+YdxBToBzvk=";
+      rev = "0175570f1d41285f39efe0ee32234458e0ed941c";
+      hash = "sha256-yfVzZV8G4AUDM8+yS9finzobpOb1PUEPgBWFhEY4nFQ=";
     };
   });
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-beta.4.6.3";
+  version = "1.0.0-beta.4.9.1";
 
   src = fetchFromSourcehut {
     owner = "~alextee";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5GBr8N+GzbptrvP/NisBXT0dsl9vn537B4InB00/N+A=";
+    hash = "sha256-U3IUqNbHu20uyWfkTsLOOlUZjcUL4QdHilB3srSsebw=";
   };
 
   nativeBuildInputs = [
@@ -169,8 +171,19 @@ in stdenv.mkDerivation rec {
     zstd
   ];
 
+  patches = [
+    # Fix gcc-13 build failure
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://gitlab.zrythm.org/zrythm/zrythm/-/commit/cbc2b3715b939718479631841f2d9703fb28e6da.diff";
+      hash = "sha256-2ZTSaCtSO3yynJVFe5B1AEjWhjRa5YyA26ergAfdL5Y=";
+    })
+  ];
+
   # Zrythm uses meson to build, but requires cmake for dependency detection.
   dontUseCmakeConfigure = true;
+
+  dontWrapQtApps = true;
 
   mesonFlags = [
     "-Db_lto=false"

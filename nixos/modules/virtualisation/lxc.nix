@@ -2,21 +2,19 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-
   cfg = config.virtualisation.lxc;
-
 in
 
 {
-  ###### interface
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   options.virtualisation.lxc = {
     enable =
-      mkOption {
-        type = types.bool;
+      lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description =
           lib.mdDoc ''
@@ -27,8 +25,8 @@ in
       };
 
     systemConfig =
-      mkOption {
-        type = types.lines;
+      lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description =
           lib.mdDoc ''
@@ -38,8 +36,8 @@ in
       };
 
     defaultConfig =
-      mkOption {
-        type = types.lines;
+      lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description =
           lib.mdDoc ''
@@ -49,8 +47,8 @@ in
       };
 
     usernetConfig =
-      mkOption {
-        type = types.lines;
+      lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description =
           lib.mdDoc ''
@@ -62,7 +60,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.lxc ];
     environment.etc."lxc/lxc.conf".text = cfg.systemConfig;
     environment.etc."lxc/lxc-usernet".text = cfg.usernetConfig;

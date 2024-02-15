@@ -1,0 +1,12 @@
+[package]
+name = "convert-to-import-cargo-lock"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = { version = "1.0.69" }
+basic-toml = "0.1.1"
+serde = { version = "1.0.152", features = ["derive"] }
+serde_json = "1.0.93"

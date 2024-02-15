@@ -1,4 +1,4 @@
-{ buildVersion, x64sha256, dev ? false }:
+{ buildVersion, aarch64sha256, x64sha256, dev ? false }:
 
 { fetchurl, lib, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
@@ -8,14 +8,23 @@
 let
   pnameBase = "sublime-merge";
   packageAttribute = "sublime-merge${lib.optionalString dev "-dev"}";
-  binaries = [ "sublime_merge" "crash_reporter" "git-credential-sublime" "ssh-askpass-sublime" ];
+  binaries = [ "sublime_merge" crashHandlerBinary "git-credential-sublime" "ssh-askpass-sublime" ];
   primaryBinary = "sublime_merge";
   primaryBinaryAliases = [ "smerge" ];
+  crashHandlerBinary = if lib.versionAtLeast buildVersion "2086" then "crash_handler" else "crash_reporter";
   downloadUrl = arch: "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
   versionFile = builtins.toString ./default.nix;
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango curl ];
+  neededLibraries = [
+    xorg.libX11
+    glib
+    gtk3
+    cairo
+    pango
+    curl
+  ];
+
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
 in let
   binaryPackage = stdenv.mkDerivation rec {
@@ -35,7 +44,7 @@ in let
       for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
           $binary
       done
 
@@ -76,6 +85,10 @@ in let
 
     passthru = {
       sources = {
+        "aarch64-linux" = fetchurl {
+          url = downloadUrl "arm64";
+          sha256 = aarch64sha256;
+        };
         "x86_64-linux" = fetchurl {
           url = downloadUrl "x64";
           sha256 = x64sha256;
@@ -109,7 +122,7 @@ in stdenv.mkDerivation (rec {
   passthru = {
     updateScript =
       let
-        script = writeShellScript "${pnameBase}-update-script" ''
+        script = writeShellScript "${packageAttribute}-update-script" ''
           set -o errexit
           PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
@@ -137,6 +150,6 @@ in stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ zookatron ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 })

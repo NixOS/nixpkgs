@@ -3,7 +3,7 @@
 , buildPythonPackage
 , django
 , djangorestframework
-, fetchFromGitHub
+, fetchPypi
 , phonenumbers
 , python
 , pythonOlder
@@ -12,19 +12,15 @@
 
 buildPythonPackage rec {
   pname = "django-phonenumber-field";
-  version = "7.0.2";
+  version = "7.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "stefanfoulis";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-y5eVyF6gBgkH+uQ2424kCe+XRB/ttbnJPkg6ToRxAmI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-+c2z3ghfmcJJMoKTo7k9Tl+kQMDI47mesND1R0hil5c=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -32,11 +28,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    phonenumbers
-    babel
-  ];
+  ] ++ passthru.optional-dependencies.phonenumbers;
 
   nativeCheckInputs = [
+    babel
     djangorestframework
   ];
 
@@ -47,6 +42,10 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m django test --settings tests.settings
   '';
+
+  passthru.optional-dependencies = {
+    phonenumbers = [ phonenumbers ];
+  };
 
   meta = with lib; {
     description = "A django model and form field for normalised phone numbers using python-phonenumbers";

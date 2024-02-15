@@ -42,6 +42,7 @@ in
 {
   imports = [
     (lib.mkRenamedOptionModule [ "services" "avahi" "interfaces" ] [ "services" "avahi" "allowInterfaces" ])
+    (lib.mkRenamedOptionModule [ "services" "avahi" "nssmdns" ] [ "services" "avahi" "nssmdns4" ])
   ];
 
   options.services.avahi = {
@@ -55,6 +56,8 @@ in
         (through the mDNS responder implemented by `avahi-daemon`).
       '';
     };
+
+    package = mkPackageOption pkgs "avahi" { };
 
     hostName = mkOption {
       type = types.str;
@@ -91,8 +94,7 @@ in
 
     ipv6 = mkOption {
       type = types.bool;
-      default = config.networking.enableIPv6;
-      defaultText = literalExpression "config.networking.enableIPv6";
+      default = false;
       description = lib.mdDoc "Whether to use IPv6.";
     };
 
@@ -216,13 +218,28 @@ in
       };
     };
 
-    nssmdns = mkOption {
+    nssmdns4 = mkOption {
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Whether to enable the mDNS NSS (Name Service Switch) plug-in.
+        Whether to enable the mDNS NSS (Name Service Switch) plug-in for IPv4.
         Enabling it allows applications to resolve names in the `.local`
         domain by transparently querying the Avahi daemon.
+      '';
+    };
+
+    nssmdns6 = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to enable the mDNS NSS (Name Service Switch) plug-in for IPv6.
+        Enabling it allows applications to resolve names in the `.local`
+        domain by transparently querying the Avahi daemon.
+
+        ::: {.note}
+        Due to the fact that most mDNS responders only register local IPv4 addresses,
+        most user want to leave this option disabled to avoid long timeouts when applications first resolve the none existing IPv6 address.
+        :::
       '';
     };
 
@@ -254,13 +271,22 @@ in
 
     users.groups.avahi = { };
 
-    system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
-    system.nssDatabases.hosts = optionals cfg.nssmdns (mkMerge [
-      (mkBefore [ "mdns_minimal [NOTFOUND=return]" ]) # before resolve
-      (mkAfter [ "mdns" ]) # after dns
+    system.nssModules = optional (cfg.nssmdns4 || cfg.nssmdns6) pkgs.nssmdns;
+    system.nssDatabases.hosts = let
+      mdns = if (cfg.nssmdns4 && cfg.nssmdns6) then
+        "mdns"
+      else if (!cfg.nssmdns4 && cfg.nssmdns6) then
+        "mdns6"
+      else if (cfg.nssmdns4 && !cfg.nssmdns6) then
+        "mdns4"
+      else
+        "";
+    in optionals (cfg.nssmdns4 || cfg.nssmdns6) (mkMerge [
+      (mkBefore [ "${mdns}_minimal [NOTFOUND=return]" ]) # before resolve
+      (mkAfter [ "${mdns}" ]) # after dns
     ]);
 
-    environment.systemPackages = [ pkgs.avahi ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc = (mapAttrs'
       (n: v: nameValuePair
@@ -286,19 +312,19 @@ in
       # return a sensible value.
       environment.LD_LIBRARY_PATH = config.system.nssModules.path;
 
-      path = [ pkgs.coreutils pkgs.avahi ];
+      path = [ pkgs.coreutils cfg.package ];
 
       serviceConfig = {
         NotifyAccess = "main";
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
-        ExecStart = "${pkgs.avahi}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
         ConfigurationDirectory = "avahi/services";
       };
     };
 
     services.dbus.enable = true;
-    services.dbus.packages = [ pkgs.avahi ];
+    services.dbus.packages = [ cfg.package ];
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 5353 ];
   };

@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , gettext
 , kdoctools
@@ -19,6 +18,7 @@
 , kdeclarative
 , plasma-framework
 , plasma-wayland-protocols
+, plasma-workspace
 , kio
 , qtbase
 }:
@@ -45,5 +45,6 @@ mkDerivation {
     kdeclarative
     plasma-framework
     plasma-wayland-protocols
+    plasma-workspace
   ];
 }

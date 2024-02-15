@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "kubedog";
-  version = "0.9.9";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "kubedog";
     rev = "v${version}";
-    hash = "sha256-j7LR6+c2ZZJCqmHihXodtiF5bJhNR8eizDEqwm9IUn0=";
+    hash = "sha256-dk6ieIUoS1N2UtiLig5dFq0476xh69bjueN05ZKjcLg=";
   };
 
-  vendorHash = "sha256-UPfB3nOzJpqh14xLKZP2mLfg7C55nQivrkmh3B7aKzo=";
+  vendorHash = "sha256-lLyIVA7Mkj1bfA/u8VMTwmKmhNfibYpT+dgIWFdOiPs=";
 
   subPackages = [ "cmd/kubedog" ];
 

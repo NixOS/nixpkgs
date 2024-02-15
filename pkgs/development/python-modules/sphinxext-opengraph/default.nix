@@ -11,33 +11,36 @@
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.8.1";
+  version = "0.9.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3q/OKkLtyA1Dw2PfTT4Fmzyn5qPbjprekpE7ItnFNUo=";
+    hash = "sha256-B+bJ1tKqTTlbNeJLxk56o2a21n3Yg6OHwJiFfCx46aw=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
+  passthru.optional-dependencies = {
+    social_cards_generation = [
+      matplotlib
+    ];
+  };
+
   propagatedBuildInputs = [
     sphinx
-    matplotlib
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
-  ];
+  ] ++ passthru.optional-dependencies.social_cards_generation;
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 

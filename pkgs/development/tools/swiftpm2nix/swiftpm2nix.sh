@@ -12,7 +12,8 @@ if [[ ! -f "$stateFile" ]]; then
   exit 1
 fi
 
-if [[ "$(jq .version $stateFile)" != "5" ]]; then
+stateVersion="$(jq .version $stateFile)"
+if [[ $stateVersion -lt 5 || $stateVersion -gt 6 ]]; then
   echo >&2 "Unsupported $stateFile version"
   exit 1
 fi
@@ -22,7 +23,7 @@ hashes=""
 jq -r '.object.dependencies[] | "\(.subpath) \(.packageRef.location) \(.state.checkoutState.revision)"' $stateFile \
 | while read -r name url rev; do
   echo >&2 "-- Fetching $name"
-  sha256="$(nix-prefetch-git $url $rev | jq -r .sha256)"
+  sha256="$(nix-prefetch-git --fetch-submodules $url $rev | jq -r .sha256)"
   hashes+="
     \"$name\" = \"$sha256\";"
   echo >&2

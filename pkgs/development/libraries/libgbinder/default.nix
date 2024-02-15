@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgbinder";
-  version = "1.1.32";
+  version = "1.1.36";
 
   src = fetchFromGitHub {
     owner = "mer-hybris";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/sOshlPcqKEdH5muusXg6Q9QfSgRYyCJMmtRM5mT/kQ=";
+    sha256 = "sha256-QTlOiZG6qpNeicMJpOTMSTk2WwKbOzkaLulgmsxYaVI=";
   };
 
   outputs = [ "out" "dev" ];
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     sed -i -e "s@Cflags: @Cflags: $($PKG_CONFIG --cflags libglibutil) @g" $dev/lib/pkgconfig/$pname.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GLib-style interface to binder";
     homepage = "https://github.com/mer-hybris/libgbinder";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mcaju ];
   };
 }

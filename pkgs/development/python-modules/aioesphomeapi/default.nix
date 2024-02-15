@@ -1,19 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, mock
+, pythonOlder
+
+# build-system
+, cython_3
+, setuptools
+
+# dependencies
+, aiohappyeyeballs
+, async-timeout
+, chacha20poly1305-reuseable
 , noiseprotocol
 , protobuf
+, zeroconf
+
+# tests
+, mock
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
-, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "13.5.1";
-  format = "setuptools";
+  version = "21.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,13 +32,22 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ifk1psowUGVG7XafipLq5T2+5K5+psDDsX/u/GYDXdU=";
+    hash = "sha256-uNVf0wnqVntjTxkNTilvb0v6h3VBCjd91wbLQJ6q71g=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    cython_3
+  ];
+
   propagatedBuildInputs = [
+    aiohappyeyeballs
+    chacha20poly1305-reuseable
     noiseprotocol
     protobuf
     zeroconf
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [

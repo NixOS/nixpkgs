@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "CairoSVG";
-  version = "2.6.0";
+  version = "2.7.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1eyT6QEBs7boKqJF0FRu6bAWz9oLY0RnUVmDDYU9XQQ=";
+    hash = "sha256-rE3HwdOLOhVxfbJjOjo4MBLgvmZMcnyRFjfmr2pJKTw=";
   };
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://cairosvg.org";
     license = licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

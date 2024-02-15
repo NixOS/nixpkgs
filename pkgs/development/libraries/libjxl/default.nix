@@ -8,10 +8,9 @@
 , libjpeg
 , libpng
 , libwebp
-, openexr
+, openexr_3
 , pkg-config
 , zlib
-, buildDocs ? true
 , asciidoc
 , graphviz
 , doxygen
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.8.1";
+  version = "0.9.1";
 
   outputs = [ "out" "dev" ];
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    hash = "sha256-WWuvUTMrlR6ePbEs01ulLnuMiUqGrh4qELWFh0QMaGU=";
+    hash = "sha256-n5KNbbw6NQRROEM7Cojla/igRCFNawUq7nfhzJlMlPI=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -37,13 +36,12 @@ stdenv.mkDerivation rec {
     cmake
     gtest
     pkg-config
-  ] ++ lib.optionals buildDocs [
     asciidoc
     doxygen
     python3
   ];
 
-  depsBuildBuild = lib.optionals buildDocs [
+  depsBuildBuild = [
     graphviz
   ];
 
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libwebp
-    openexr
+    openexr_3
     zlib
   ];
 
@@ -107,7 +105,6 @@ stdenv.mkDerivation rec {
     "-DJPEGXL_FORCE_NEON=ON"
   ];
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
 
   # FIXME x86_64-darwin:

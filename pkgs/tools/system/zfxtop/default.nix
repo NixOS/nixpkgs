@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "zfxtop";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ssleert";
     repo = "zfxtop";
     rev = version;
-    hash = "sha256-auq5NvpI7De9/QBUDPFtXwsAeX/D2RmlVaKe/lrs1MQ=";
+    hash = "sha256-7qeTC9CIx4K2fLRM/pYrSU1NHv9TFMsl7TT0W5Uph60=";
   };
 
   vendorHash = "sha256-VKBRgDu9xVbZrC5fadkdFjd1OETNwaxgraRnA34ETzE=";
@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/ssleert/zfxtop";
     license = licenses.bsd2;
     maintainers = with maintainers; [ wozeparrot ];
+    mainProgram = "zfxtop";
   };
 }

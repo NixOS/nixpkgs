@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bazelisk";
-  version = "1.16.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ijw0JVU9jUhpIJQjcjgzAVPJDxD7WSZYiLV0OvOyS5g=";
+    sha256 = "sha256-no1+sQ+8Ead1diCYytC3MXVA68SuWWxt40OFVrGWYdQ=";
   };
 
-  vendorHash = "sha256-Hg8rMknanHQOgVLJ58QM9JOgrUYMqL7WvaHuiv9xVYw=";
+  vendorHash = "sha256-hjV7Pc3DFExSCsA0jKVxb1GxoXQ7LRFGuot3V0IHG58=";
 
   doCheck = false;
 
@@ -23,6 +23,7 @@ buildGoModule rec {
       BEWARE: This package does not work on NixOS.
     '';
     homepage = "https://github.com/bazelbuild/bazelisk";
+    changelog = "https://github.com/bazelbuild/bazelisk/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ elasticdog ];
   };

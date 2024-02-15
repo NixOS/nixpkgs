@@ -11,6 +11,7 @@
 , libGL
 , libpng
 , physfs
+, unstableGitUpdater
 }:
 
 let
@@ -22,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dxx-rebirth";
-  version = "unstable-2022-09-17";
+  version = "0-unstable-2024-01-13";
 
   src = fetchFromGitHub {
     owner = "dxx-rebirth";
     repo = "dxx-rebirth";
-    rev = "ad46235b67a24a38dec4734f94a59eba149ad94a";
-    hash = "sha256-vIAY1O4VnOsV617J5yjg09JIL/vK4Fb/lopnX17g+uY=";
+    rev = "5c710857a9312e1b2f3249c51c12b55f9390a2b1";
+    hash = "sha256-nEPMJiTeePAmourAksUNqyy5whs+8+qy/qrycfNw2lo=";
   };
 
   nativeBuildInputs = [ pkg-config scons ];
@@ -48,6 +49,8 @@ stdenv.mkDerivation rec {
     install -Dm644 ${music} $out/share/games/dxx-rebirth/${music.name}
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
   '';
+
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
     description = "Source Port of the Descent 1 and 2 engines";

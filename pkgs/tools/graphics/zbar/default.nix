@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , imagemagickBig
 , pkg-config
 , withXorg ? true
@@ -24,11 +25,14 @@
 , libintl
 , libiconv
 , Foundation
+, bash
+, python3
+, argp-standalone
 }:
 
 stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.23.90";
+  version = "0.23.92";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -36,8 +40,21 @@ stdenv.mkDerivation rec {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
+    sha256 = "sha256-VhVrngAX7pXZp+szqv95R6RGAJojp3svdbaRKigGb0w=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-40889.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0003-CVE-2023-40889-qrdec.c-Fix-array-out-of-bounds-acces.patch";
+      hash = "sha256-z0IADJwUt9PBoox5xJJN//5vrcRbIrWB9H7wtxNVUZU=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-40890.patch";
+      url = "https://salsa.debian.org/debian/zbar/-/raw/debian/0.23.92-9/debian/patches/0004-Add-bounds-check-for-CVE-2023-40890.patch";
+      hash = "sha256-YgiptwXpRpz0qIcXBpARfIzSB8KYmksZR58o5yFPahs=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -47,6 +64,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableVideo [
     wrapGAppsHook
     wrapQtAppsHook
+    qtbase
   ];
 
   buildInputs = [
@@ -66,6 +84,22 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
+  nativeCheckInputs = [
+    bash
+    python3
+  ];
+
+  checkInputs = lib.optionals stdenv.isDarwin [
+    argp-standalone
+  ];
+
+  # Note: postConfigure instead of postPatch in order to include some
+  # autoconf-generated files. The template files for the autogen'd scripts are
+  # not chmod +x, so patchShebangs misses them.
+  postConfigure = ''
+    patchShebangs test
+  '';
+
   # Disable assertions which include -dev QtBase file paths.
   env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
@@ -82,6 +116,12 @@ stdenv.mkDerivation rec {
     "--without-gtk"
     "--without-qt"
   ]);
+
+  doCheck = true;
+
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -largp"
+  '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;

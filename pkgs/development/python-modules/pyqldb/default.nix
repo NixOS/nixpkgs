@@ -2,13 +2,14 @@
 
 buildPythonPackage rec {
   pname = "pyqldb";
-  version = "3.2.2";
+  version = "3.2.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-qldb-driver-python";
-    rev = "v${version}";
-    hash = "sha256-TKf43+k428h8T6ye6mJrnK9D4J1xpIu0QacM7lWJF7w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TyIXvk3ZJn5J2SBFDTPJpSnGFOFheXIqR2daL5npOk8=";
   };
 
   propagatedBuildInputs = [ boto3 amazon-ion ionhash ];

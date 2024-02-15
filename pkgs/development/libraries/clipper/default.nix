@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "cpp";
 
-  buildInputs = [ ];
-
   nativeBuildInputs = [ cmake ninja unzip ];
 
   meta = with lib; {

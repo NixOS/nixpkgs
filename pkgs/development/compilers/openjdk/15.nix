@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
+, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk15-bootstrap
 , setJavaClassPath
@@ -9,24 +9,30 @@
 }:
 
 let
-  major = "15";
-  update = ".0.1";
-  build = "-ga";
+  version = {
+    major = "15";
+    update = ".0.1";
+    build = "-ga";
+    __toString = self: "${self.major}${self.update}${self.build}";
+  };
 
-  openjdk = stdenv.mkDerivation rec {
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk15-bootstrap.override { gtkSupport = !headless; };
+
+  openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}${build}";
+    inherit version;
 
     src = fetchurl {
-      url = "https://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      url = "https://hg.openjdk.java.net/jdk-updates/jdk${version.major}u/archive/jdk-${version}.tar.gz";
       sha256 = "1h8n5figc9q0k9p8b0qggyhvqagvxanfih1lj5j492c74cd1mx1l";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip zip file which ];
     buildInputs = [
-      cpio perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
+      cpio perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk15-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -53,21 +59,24 @@ let
       patchShebangs --build configure
     '';
 
+    # JDK's build system attempts to specifically detect
+    # and special-case WSL, and we don't want it to do that,
+    # so pass the correct platform names explicitly
+    configurePlatforms = ["build" "host"];
+
     configureFlags = [
-      "--with-boot-jdk=${openjdk15-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-freetype=system"
-      "--with-harfbuzz=system"
       "--with-libjpeg=system"
       "--with-giflib=system"
       "--with-libpng=system"
       "--with-zlib=system"
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
-      ++ lib.optional headless "--enable-headless-only"
+    ] ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
@@ -87,6 +96,12 @@ let
     enableParallelBuilding = false;
 
     buildFlags = [ "all" ];
+
+    postBuild = ''
+      cd build/linux*
+      make images
+      cd -
+    '';
 
     installPhase = ''
       mkdir -p $out/lib
@@ -147,10 +162,10 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk15-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
-    pos = builtins.unsafeGetAttrPos "feature" version;
-    meta = import ./meta.nix lib version;
+    pos = builtins.unsafeGetAttrPos "major" version;
+    meta = import ./meta.nix lib version.major;
 
     passthru = {
       architecture = "";

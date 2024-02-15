@@ -31,6 +31,8 @@
 , warzone2100
 , nixosTests
 
+, gitUpdater
+
 , withVideos ? false
 }:
 
@@ -44,11 +46,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.3.3";
+  version  = "4.4.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-PDy5mIYAoQ9VAJCTRMiBqUlRtKIqVHiMuBiozTtH5Z4=";
+    url = "mirror://sourceforge/project/warzone2100/releases/${version}/warzone2100_src.tar.xz";
+    hash = "sha256-O5Yqxqp1vKYr8uvAZ1SdsI/kocOzg0KRCirCqqvLrN4=";
   };
 
   buildInputs = [
@@ -113,6 +115,10 @@ stdenv.mkDerivation rec {
       command = "(warzone2100 --version || [ $? -eq 1 ])";
     };
     nixosTest = nixosTests.warzone2100;
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/Warzone2100/warzone2100";
   };
 
   meta = with lib; {

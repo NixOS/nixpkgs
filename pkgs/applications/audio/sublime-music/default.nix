@@ -1,6 +1,6 @@
 { lib
-, fetchFromGitLab
-, python3Packages
+, fetchFromGitHub
+, python3
 , gobject-introspection
 , gtk3
 , pango
@@ -15,38 +15,56 @@
 , networkmanager
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      semver = super.semver.overridePythonAttrs (oldAttrs: rec {
+        version = "2.13.0";
+        src = fetchFromGitHub {
+          owner = "python-semver";
+          repo = "python-semver";
+          rev = "refs/tags/${version}";
+          hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
+        };
+      });
+
+      dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.7";
+        src = fetchFromGitHub {
+          owner = "lidatong";
+          repo = "dataclasses-json";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-0tw5Lz+c4ymO+AGpG6THbiALWGBrehC84+yWWk1eafc=";
+        };
+        nativeBuildInputs = [ python3.pkgs.setuptools ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.16";
+  version = "0.12.0";
   format = "pyproject";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "sublime-music";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
+    hash = "sha256-FPzeFqDOcaiariz7qJwz6P3Wd+ZDxNP57uj+ptMtEyM=";
   };
 
   nativeBuildInputs = [
+    python.pkgs.flit-core
     gobject-introspection
-    python3Packages.poetry-core
-    python3Packages.pythonRelaxDepsHook
     wrapGAppsHook
-  ];
-
-  # Can be removed in later versions (probably > 0.11.16)
-  pythonRelaxDeps = [
-    "deepdiff"
-    "python-mpv"
   ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
     sed -i "/--no-cov-on-fail/d" setup.cfg
-    # https://github.com/sublime-music/sublime-music/pull/370
-    # Can be removed in later versions (probably > 0.11.16)
-    substituteInPlace pyproject.toml \
-      --replace 'python-Levenshtein = "^0.12.0"' 'Levenshtein = ">0.12.0"'
+
+    # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
+    sed -i "s/python-mpv/mpv/g" pyproject.toml
   '';
 
   buildInputs = [
@@ -57,25 +75,25 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optional networkSupport networkmanager
   ;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     bleach
+    bottle
     dataclasses-json
     deepdiff
-    fuzzywuzzy
+    levenshtein
     mpv
     peewee
+    pychromecast
     pygobject3
-    levenshtein
     python-dateutil
     requests
     semver
+    thefuzz
   ]
-  ++ lib.optional chromecastSupport pychromecast
   ++ lib.optional keyringSupport keyring
-  ++ lib.optional serverSupport bottle
   ;
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python.pkgs; [
     pytest
   ];
 

@@ -1,17 +1,18 @@
-{ lib, python3
+{ lib, python3, fetchPypi
 , sassc, hyperkitty, postorius
+, nixosTests
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman-web";
-  version = "0.0.5";
+  version = "0.0.8";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9pvs/VATAsMcGNrj58b/LifysEPTNhrAP57sfp4nX6Q=";
+    hash = "sha256-nN/L+X2Rvm6rqkscns4Tn2TAr59O5lCJObvcJp6M0+Q=";
   };
 
   postPatch = ''
@@ -38,7 +39,10 @@ buildPythonPackage rec {
     "--suffix PATH : ${lib.makeBinPath [ sassc ]}"
   ];
 
+  passthru.tests = { inherit (nixosTests) mailman; };
+
   meta = with lib; {
+    homepage = "https://gitlab.com/mailman/mailman-web";
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss m1cr0man ];

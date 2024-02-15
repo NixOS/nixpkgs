@@ -3,7 +3,8 @@
 , profilingLibraries ? false
 , withGd ? false
 , withLibcrypt? false
-, buildPackages
+, pkgsBuildBuild
+, libgcc
 }:
 
 let
@@ -16,7 +17,7 @@ in
 
 (callPackage ./common.nix { inherit stdenv; } {
   inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
-  pname = "glibc" + lib.optionalString withGd "-gd";
+  pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 
     # Note:
@@ -63,48 +64,57 @@ in
             # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
             "-Wno-error=missing-attributes"
           ])
+          (lib.optionals (stdenv.hostPlatform.isPower64) [
+            # Do not complain about the Processor Specific ABI (i.e. the
+            # choice to use IEEE-standard `long double`).  We pass this
+            # flag in order to mute a `-Werror=psabi` passed by glibc;
+            # hopefully future glibc releases will not pass that flag.
+            "-Wno-error=psabi"
+          ])
         ]);
     };
 
-    # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
-    # any program we run, because the gcc will have been placed at a new
-    # store path than that determined when built (as a source for the
-    # bootstrap-tools tarball)
-    # Building from a proper gcc staying in the path where it was installed,
-    # libgcc_s will now be at {gcc}/lib, and gcc's libgcc will be found without
-    # any special hack.
-    # TODO: remove this hack. Things that rely on this hack today:
-    # - dejagnu: during linux bootstrap tcl SIGSEGVs
-    # - clang-wrapper in cross-compilation
-    # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
-    preInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      if [ -f ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
-          mkdir -p $out/lib
-          cp ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
-          # the .so It used to be a symlink, but now it is a script
-          cp -a ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
-          # wipe out reference to previous libc it was built against
-          chmod +w $out/lib/libgcc_s.so.1
-          # rely on default RUNPATHs of the binary and other libraries
-          # Do no force-pull wrong glibc.
-          patchelf --remove-rpath $out/lib/libgcc_s.so.1
-          # 'patchelf' does not remove the string itself. Wipe out
-          # string reference to avoid possible link to bootstrapTools
-          ${buildPackages.nukeReferences}/bin/nuke-refs $out/lib/libgcc_s.so.1
-      fi
-    '';
+    # glibc needs to `dlopen()` `libgcc_s.so` but does not link
+    # against it.  Furthermore, glibc doesn't use the ordinary
+    # `dlopen()` call to do this; instead it uses one which ignores
+    # most paths:
+    #
+    #   https://sourceware.org/legacy-ml/libc-help/2013-11/msg00026.html
+    #
+    # In order to get it to not ignore `libgcc_s.so`, we have to add its path to
+    # `user-defined-trusted-dirs`:
+    #
+    #   https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/Makefile;h=b509b3eada1fb77bf81e2a0ca5740b94ad185764#l1355
+    #
+    # Conveniently, this will also inform Nix of the fact that glibc depends on
+    # gcc.libgcc, since the path will be embedded in the resulting binary.
+    #
+    makeFlags =
+      (previousAttrs.makeFlags or [])
+      ++ lib.optionals (libgcc != null) [
+        "user-defined-trusted-dirs=${libgcc}/lib"
+      ];
 
-    postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+    postInstall = previousAttrs.postInstall + (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
-    '' else lib.optionalString stdenv.buildPlatform.isLinux ''
+    '' else lib.optionalString stdenv.buildPlatform.isLinux
       # This is based on http://www.linuxfromscratch.org/lfs/view/development/chapter06/glibc.html
       # Instead of using their patch to build a build-native localedef,
-      # we simply use the one from buildPackages
+      # we simply use the one from pkgsBuildBuild.
+      #
+      # Note that we can't use pkgsBuildHost (aka buildPackages) here, because
+      # that will cause an eval-time infinite recursion: "buildPackages.glibc
+      # depended on buildPackages.libgcc, which, since it's GCC, depends on the
+      # target's bintools, which depend on the target's glibc, which, again,
+      # depends on buildPackages.glibc, causing an infinute recursion when
+      # evaluating buildPackages.glibc when glibc hasn't come from stdenv
+      # (e.g. on musl)." https://github.com/NixOS/nixpkgs/pull/259964
+    ''
       pushd ../glibc-2*/localedata
       export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
-      mkdir -p $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale
-      ${lib.getBin buildPackages.glibc}/bin/localedef \
+      mkdir -p $NIX_BUILD_TOP/${pkgsBuildBuild.glibc}/lib/locale
+      ${lib.getBin pkgsBuildBuild.glibc}/bin/localedef \
         --alias-file=../intl/locale.alias \
         -i locales/C \
         -f charmaps/UTF-8 \
@@ -114,7 +124,7 @@ in
           else
             "--big-endian"} \
         C.UTF-8
-      cp -r $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale $out/lib
+      cp -r $NIX_BUILD_TOP/${pkgsBuildBuild.glibc}/lib/locale $out/lib
       popd
     '') + ''
 
@@ -144,7 +154,7 @@ in
       ln -sf $out/lib/libpthread.so.0 $out/lib/libpthread.so
       ln -sf $out/lib/librt.so.1 $out/lib/librt.so
       ln -sf $out/lib/libdl.so.2 $out/lib/libdl.so
-      ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
+      test -f $out/lib/libutil.so.1 && ln -sf $out/lib/libutil.so.1 $out/lib/libutil.so
       touch $out/lib/libpthread.a
 
       # Put libraries for static linking in a separate output.  Note
@@ -153,6 +163,8 @@ in
       mkdir -p $static/lib
       mv $out/lib/*.a $static/lib
       mv $static/lib/lib*_nonshared.a $out/lib
+      # If libutil.so.1 is missing, libutil.a is required.
+      test -f $out/lib/libutil.so.1 || mv $static/lib/libutil.a $out/lib
       # Some of *.a files are linker scripts where moving broke the paths.
       sed "/^GROUP/s|$out/lib/lib|$static/lib/lib|g" \
         -i "$static"/lib/*.a
@@ -163,6 +175,12 @@ in
     '';
 
     separateDebugInfo = true;
+
+    passthru =
+      (previousAttrs.passthru or {})
+      // lib.optionalAttrs (libgcc != null) {
+        inherit libgcc;
+      };
 
   meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
 })

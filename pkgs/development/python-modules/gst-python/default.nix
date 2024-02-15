@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.20.0";
+  version = "1.22.8";
 
   format = "other";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    sha256 = "j2e9xWBrozYGxryJbonefc2M9PykWfcTibG2/gdbXlQ=";
+    url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
+    hash = "sha256-1cuPFEBUoqEQ5mcr1RLksV1bG42YecGSuXI1Ne+3C48=";
   };
 
   # Python 2.x is not supported.
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   mesonFlags = [
     "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
     # Exec format error during configure
-    "-Dpython=${python.pythonForBuild.interpreter}"
+    "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
   doCheck = true;
@@ -61,5 +61,6 @@ buildPythonPackage rec {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
     license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

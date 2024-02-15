@@ -1,52 +1,62 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-, authlib
-, requests
-, nose
+, cryptography
+, fetchFromGitHub
+, more-itertools
+, pendulum
+, pyjwt
+, pytestCheckHook
 , pythonOlder
 , pytz
+, requests
 , responses
+, setuptools
 , zeep
 }:
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
-  version = "1.12.3";
-  format = "setuptools";
+  version = "1.12.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "simple-salesforce";
+    repo = "simple-salesforce";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lCZdX+gf9ROU1MIRw/ppTNO8jIGUxE1+gbHh6sK5L2s=";
+    hash = "sha256-mj7lbBGEybsEzWo4TYmPrN3mBXItdo/JomVIYmzIDAY=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    authlib
+    cryptography
+    more-itertools
+    pendulum
+    pyjwt
     requests
     zeep
   ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
     pytz
     responses
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    nosetests -v
-    runHook postCheck
-  '';
+  pythonImportsCheck = [
+    "simple_salesforce"
+  ];
 
   meta = with lib; {
     description = "A very simple Salesforce.com REST API client for Python";
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
+    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/v${version}/CHANGES";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 
 }

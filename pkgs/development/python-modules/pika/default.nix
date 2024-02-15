@@ -1,28 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
 , gevent
-, nose2
-, mock
 , twisted
 , tornado
+
+# tests
+, nose2
+, mock
+
 }:
 
 buildPythonPackage rec {
   pname = "pika";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pika";
     repo = "pika";
     rev = "refs/tags/${version}";
-    hash = "sha256-j+5AF/+MlyMl3JXh+bo7pHxohbso17CJokcDR7uroz8=";
+    hash = "sha256-60Z+y3YXazUghfnOy4e7HzM18iju5m5OEt4I3Wg6ty4=";
   };
 
-  propagatedBuildInputs = [ gevent tornado twisted ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ nose2 mock ];
+  propagatedBuildInputs = [
+    gevent
+    tornado
+    twisted
+  ];
+
+  nativeCheckInputs = [
+    nose2
+    mock
+  ];
 
   postPatch = ''
     # don't stop at first test failure
@@ -45,7 +64,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/pika/pika/releases/tag/${version}";
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
+    downloadPage = "https://github.com/pika/pika";
     homepage = "https://pika.readthedocs.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

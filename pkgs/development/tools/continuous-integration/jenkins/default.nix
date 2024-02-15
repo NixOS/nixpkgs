@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.387.1";
+  version = "2.426.3";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
-    hash = "sha256-wTKh4AtoWvx5luulML5CijJ5xkk5lBf5+jj8vA2+wCc=";
+    hash = "sha256-q0OSQ6agfi54/nw0CMWWCfe+O/JolHrCFGV6+Wq60QY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An extendable open source continuous integration server";
-    homepage = "https://jenkins-ci.org";
+    homepage = "https://jenkins.io/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ coconnor earldouglas nequissimus ajs124 ];
+    maintainers = with maintainers; [ coconnor earldouglas nequissimus ] ++ teams.helsinki-systems.members;
     changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
     mainProgram = "jenkins-cli";
     platforms = platforms.all;

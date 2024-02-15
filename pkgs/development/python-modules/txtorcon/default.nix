@@ -15,19 +15,19 @@
 , pythonOlder
 , service-identity
 , twisted
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
   pname = "txtorcon";
-  version = "23.0.0";
+  version = "23.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AiX/rWdokTeEmtmtNK21abDYj5rwRQMABnpfkB6ZQyU=";
+    hash = "sha256-cfha6T121yZRAFnJ7XTmCLxaXJ99EDhTtJ5BQoBAai8=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     incremental
     twisted
     automat
-    zope_interface
+    zope-interface
   ] ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [

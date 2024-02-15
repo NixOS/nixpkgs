@@ -1,24 +1,56 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, fetchpatch
+, flavour ? [ "frappe" ]
+, accents ? [ "blue" ]
+, winDecStyles ? [ "modern" ]
 }:
+
+let
+  validFlavours = [ "mocha" "macchiato" "frappe" "latte" ];
+  validAccents = [ "rosewater" "flamingo" "pink" "mauve" "red" "maroon" "peach" "yellow" "green" "teal" "sky" "sapphire" "blue" "lavender" ];
+  validWinDecStyles = [ "modern" "classic" ];
+
+  colorScript = ./color.sh;
+in
+
+  lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}" validAccents accents
+  lib.checkListOfEnum "Invalid flavour, valid flavours are ${toString validFlavours}" validFlavours flavour
+  lib.checkListOfEnum "Invalid window decoration style, valid styles are ${toString validWinDecStyles}" validWinDecStyles winDecStyles
 
 stdenvNoCC.mkDerivation rec {
   pname = "kde";
-  version = "unstable-2022-11-26";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = pname;
-    rev = "249df3ec0cdae79af379f4a10b802c50feac89ba";
-    hash = "sha256-CH9GJnFqqdyIzW7VfGb3oB1YPULEZsfK3d1eyFALwKc=";
+    rev = "v${version}";
+    hash = "sha256-w77lzeSisx/PPxctMJKIdRJenq0s8HwR8gLmgNh4SH8=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/michaelBelsanti/catppuccin-kde/commit/81a8edb3c24bd6af896c92b5051e09af97d69c51.patch";
+      hash = "sha256-cb4/dQ52T+H8UqXEgExblmnMfxwO0Y1BrjMCay/EAkI=";
+    })
+  ];
+
   installPhase = ''
-    mkdir -p $out/share/{plasma/look-and-feel,color-schemes}
-    find . -type f -name "Catppuccin*.colors" -exec cp "{}" $out/share/color-schemes \;
-    find . -type f -name "*.tar.gz" -exec tar -xzf "{}" \;
-    cp -R Catppuccin-* $out/share/plasma/look-and-feel
+    runHook preInstall
+    patchShebangs .
+
+    for WINDECSTYLE in ${toString winDecStyles}; do
+      for FLAVOUR in ${toString flavour}; do
+        for ACCENT in ${toString accents}; do
+          source ${colorScript}
+          ./install.sh $FLAVOUR $ACCENT $WINDECSTYLE
+        done;
+      done;
+    done;
+
+    runHook postInstall
   '';
 
   meta = with lib; {

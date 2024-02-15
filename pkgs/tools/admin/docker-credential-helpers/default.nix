@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "docker-credential-helpers";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KtDWrtd88s4Al3iWxIYE+YlhZTzf8/YDVYE2AwxH8ho=";
+    sha256 = "sha256-Q1SdDfTT0W+eG/F5HX+pk4B06IG5ZoeZxe36l71gMc8=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 

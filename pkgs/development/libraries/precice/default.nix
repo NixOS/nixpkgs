@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
     "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-D_GNU_SOURCE" ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [ "-D_GNU_SOURCE" ]
+    # libxml2-2.12 changed const qualifiers
+    ++ [ "-fpermissive" ]
+  );
 
   nativeBuildInputs = [ cmake gcc ];
   buildInputs = [ boost eigen libxml2 mpi python3 python3.pkgs.numpy ];

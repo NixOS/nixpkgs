@@ -1,45 +1,54 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
-, fetchpatch
+, fetchFromGitHub
+, substituteAll
+, ruff
 , click
 , click-default-group
 , docformatter
 , jinja2
 , toposort
+, typing-extensions
 , lxml
 , requests
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "22.12";
+  version = "24.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  format = "setuptools";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-o9Xxt7b/+MkW94Jcg26ihaTn0/OpTcu+0OY7oV3JRGY=";
+  src = fetchFromGitHub {
+    owner = "tefra";
+    repo = "xsdata";
+    rev = "v${version}";
+    hash = "sha256-vdcCTJqvaRehGWfTd9GR/DypF9ftY4ite7SDMPc2Ups=";
   };
 
   patches = [
-    # https://github.com/tefra/xsdata/pull/741
-    (fetchpatch {
-      name = "use-docformatter-1.5.1.patch";
-      url = "https://github.com/tefra/xsdata/commit/040692db47e6e51028fd959c793e757858c392d7.patch";
-      excludes = [ "setup.cfg" ];
-      hash = "sha256-ncecMJLJUiUb4lB8ys+nyiGU/UmayK++o89h3sAwREQ=";
+    (substituteAll {
+      src = ./paths.patch;
+      ruff = lib.getExe ruff;
     })
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "--benchmark-skip" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   passthru.optional-dependencies = {
     cli = [
@@ -83,9 +92,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Python XML Binding";
+    description = "Naive XML & JSON bindings for Python";
     homepage = "https://github.com/tefra/xsdata";
-    changelog = "https://github.com/tefra/xsdata/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

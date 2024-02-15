@@ -7,37 +7,40 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , electron
 , libpulseaudio
 , pipewire
 , alsa-utils
+, which
+, testers
+, teams-for-linux
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.0.53";
+  version = "1.4.10";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-zigcOshtRQuQxJBXPWVmTjj5+4AorR5WW8lHVInUKFg=";
+    repo = "teams-for-linux";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dR9YJJBBxvnJkD42+MwIql3B1dlA6WUSLJ//lW22mmc=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-3zjmVIPQ+F2jPQ2xkAv5hQUjr8k5jIHTsa73J+IMayw=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-Z2vnLr14F/Etuq9yWH7ygQwa54an7v99LbU3gPcEuII=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -71,7 +74,7 @@ stdenv.mkDerivation rec {
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
-        --prefix PATH : ${lib.makeBinPath [ alsa-utils ]} \
+        --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \
@@ -81,20 +84,26 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItems = [(makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
+    name = finalAttrs.pname;
+    exec = finalAttrs.pname;
+    icon = finalAttrs.pname;
     desktopName = "Microsoft Teams for Linux";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
   })];
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion rec {
+    package = teams-for-linux;
+    command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
+  };
+
+  meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ muscaln lilyinstarlight ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})

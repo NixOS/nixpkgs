@@ -2,9 +2,9 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
-, substituteAll, removeReferencesTo, gd, geoip, perl
+, installShellFiles, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
-, withKTLS ? false
+, withKTLS ? true
 , withStream ? true
 , withMail ? false
 , withPerl ? true
@@ -17,7 +17,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , version
 , nginxVersion ? version
 , src ? null # defaults to upstream nginx ${version}
-, sha256 ? null # when not specifying src
+, hash ? null # when not specifying src
 , configureFlags ? []
 , nativeBuildInputs ? []
 , buildInputs ? []
@@ -25,6 +25,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , fixPatch ? p: p
 , postPatch ? ""
 , preConfigure ? ""
+, preInstall ? ""
 , postInstall ? ""
 , meta ? null
 , nginx-doc ? outer.nginx-doc
@@ -51,21 +52,24 @@ assert lib.assertMsg (lib.unique moduleNames == moduleNames)
 stdenv.mkDerivation {
   inherit pname version nginxVersion;
 
-  outputs = ["out" "doc"];
+  outputs = [ "out" "doc" ];
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
-  nativeBuildInputs = [ removeReferencesTo ]
-    ++ nativeBuildInputs;
+  nativeBuildInputs = [
+    installShellFiles
+    removeReferencesTo
+  ] ++ nativeBuildInputs;
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ]
     ++ buildInputs
     ++ mapModules "inputs";
 
   configureFlags = [
+    "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
     "--with-http_realip_module"
@@ -122,7 +126,11 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11
     "-Wno-error=stringop-overread"
-  ] ++ lib.optional stdenv.isDarwin "-Wno-error=deprecated-declarations");
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=gnu-folding-constant"
+    "-Wno-error=unused-but-set-variable"
+  ]);
 
   configurePlatforms = [];
 
@@ -166,19 +174,25 @@ stdenv.mkDerivation {
   preInstall = ''
     mkdir -p $doc
     cp -r ${nginx-doc}/* $doc
-  '';
+
+    # TODO: make it unconditional when `openresty` and `nginx` are not
+    # sharing this code.
+    if [[ -e man/nginx.8 ]]; then
+      installManPage man/nginx.8
+    fi
+  '' + preInstall;
 
   disallowedReferences = map (m: m.src) modules;
 
   postInstall =
     let
-      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/sbin/nginx\n") modules;
+      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/bin/nginx\n") modules;
     in noSourceRefs + postInstall;
 
   passthru = {
-    modules = modules;
+    inherit modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-etag-compression nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;
@@ -187,8 +201,9 @@ stdenv.mkDerivation {
   meta = if meta != null then meta else with lib; {
     description = "A reverse proxy and lightweight webserver";
     homepage    = "http://nginx.org";
-    license     = licenses.bsd2;
+    license     = [ licenses.bsd2 ]
+      ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
+    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members;
   };
 }

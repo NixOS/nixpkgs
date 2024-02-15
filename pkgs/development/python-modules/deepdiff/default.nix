@@ -8,14 +8,16 @@
 , jsonpickle
 , numpy
 , pytestCheckHook
+, python-dateutil
 , pyyaml
 , toml
+, tomli-w
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "6.2.3";
+  version = "6.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-rlMksUi+R48fIEjVv2E3yOETDezTghZ8+Zsypu8fAnQ=";
+    hash = "sha256-YGYprSC5j06Ozg0dUJN5xnba0HUgiXa+d9Ci3czGWoY=";
   };
 
   postPatch = ''
@@ -50,7 +52,15 @@ buildPythonPackage rec {
     jsonpickle
     numpy
     pytestCheckHook
+    python-dateutil
+    tomli-w
   ] ++ passthru.optional-dependencies.cli;
+
+  disabledTests = [
+    # not compatible with pydantic 2.x
+    "test_pydantic1"
+    "test_pydantic2"
+  ];
 
   pythonImportsCheck = [
     "deepdiff"

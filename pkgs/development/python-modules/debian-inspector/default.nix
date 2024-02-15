@@ -22,8 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-RglPlTRksmm7CYVere7jySy2tIegv6JuulN7Usw9a0c=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   dontConfigure = true;
 
   nativeBuildInputs = [
@@ -48,6 +46,6 @@ buildPythonPackage rec {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
     license = with licenses; [ asl20 bsd3 mit ];
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

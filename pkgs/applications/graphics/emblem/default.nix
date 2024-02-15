@@ -2,63 +2,64 @@
 , stdenv
 , fetchFromGitLab
 , rustPlatform
-, pkg-config
+, appstream-glib
+, cargo
+, desktop-file-utils
+, glib
 , meson
 , ninja
-, glib
-, gobject-introspection
+, pkg-config
+, rustc
+, wrapGAppsHook4
+, gtk4
 , libadwaita
 , libxml2
-, librsvg
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "emblem";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "World/design";
-    repo = pname;
+    group = "World";
+    owner = "design";
+    repo = "emblem";
     rev = version;
-    sha256 = "sha256-kNPV1SHkNTBXbMzDJGuDbaGz1WkBqMpVgZKjsh7ejmo=";
+    sha256 = "sha256-VA4KZ8x/MMAA/g/x59h1CyHhlj0vbZqwAFdsfTPA2Ds=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-yhXxlUOe+mWVpAEB0yN9m5S5yfNRrHnx7XHLXbbf1hc=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
   nativeBuildInputs = [
     appstream-glib
+    desktop-file-utils
     glib
-    gobject-introspection
     meson
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
-    desktop-file-utils
+    gtk4
     libadwaita
-    librsvg
     libxml2
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   meta = with lib; {
     description = "Generate project icons and avatars from a symbolic icon";
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ figsoda foo-dogsquared ];
   };
 }

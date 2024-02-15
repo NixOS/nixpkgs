@@ -7,15 +7,19 @@
 , libxfce4util
 , xfce4-panel
 , xfconf
+, curl
+, gnome
+, jq
+, xclip
 }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
-  version = "1.10.3";
+  version = "1.10.5";
   odd-unstable = false;
 
-  sha256 = "sha256-L+qlxzNgjsoMi+VsbOFG7L/IITbF1iqMWqujhk0rAcA=";
+  sha256 = "sha256-x1uQIfiUNMYowrCLpwdt1IsHfJLn81f8I/4NBwX/z9k=";
 
   buildInputs = [
     exo
@@ -26,6 +30,14 @@ mkXfceDerivation {
     xfce4-panel
     xfconf
   ];
+
+  preFixup = ''
+    # For Imgur upload action
+    # https://gitlab.xfce.org/apps/xfce4-screenshooter/-/merge_requests/51
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ curl gnome.zenity jq xclip ]}
+    )
+  '';
 
   meta = with lib; {
     description = "Screenshot utility for the Xfce desktop";

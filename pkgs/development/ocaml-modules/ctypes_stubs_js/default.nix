@@ -9,6 +9,7 @@ buildDunePackage rec {
   pname = "ctypes_stubs_js";
   version = "0.1";
 
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitLab {

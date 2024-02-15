@@ -2,21 +2,28 @@
 
 buildGoModule rec {
   pname = "xc";
-  version = "0.1.181";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "joerdav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-C6qZdO6+n9BWm69y09kvnEBF45sB6bfOfmteNO2x68I=";
+    sha256 = "sha256-vTyCS85xbJnAgbasWD6LFxij9EezzlJ1pyvCJptqmOU=";
   };
 
-  vendorHash = "sha256-cySflcTuAzbFZbtXmzZ98nfY8HUq1UedONTtKP4EICs=";
+  vendorHash = "sha256-EbIuktQ2rExa2DawyCamTrKRC1yXXMleRB8/pcKFY5c=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
 
   meta = with lib; {
-    homepage = "https://xcfile.dev/";
     description = "Markdown defined task runner";
+    homepage = "https://xcfile.dev/";
+    changelog = "https://github.com/joerdav/xc/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ joerdav ];
+    maintainers = with maintainers; [ figsoda joerdav ];
   };
 }

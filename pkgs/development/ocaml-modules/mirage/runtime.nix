@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchurl, ipaddr, functoria-runtime
-, fmt, logs, lwt
+, logs, lwt
 , alcotest
 }:
 
@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [ ipaddr functoria-runtime fmt logs lwt ];
+  propagatedBuildInputs = [ ipaddr functoria-runtime logs lwt ];
   checkInputs = [ alcotest ];
   doCheck = true;
 

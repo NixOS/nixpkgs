@@ -1,93 +1,76 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, canonicalize-jars-hook
 , cmake
-, jdk8
+, cmark
+, Cocoa
+, ninja
 , jdk17
 , zlib
-, file
-, wrapQtAppsHook
-, xorg
-, libpulseaudio
 , qtbase
-, qtsvg
-, qtwayland
-, libGL
 , quazip
-, glfw
-, openal
 , extra-cmake-modules
 , tomlplusplus
 , ghc_filesystem
-, msaClientID ? ""
-, jdks ? [ jdk17 jdk8 ]
+, gamemode
+, msaClientID ? null
+, gamemodeSupport ? stdenv.isLinux
+,
 }:
-
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
-    rev = "2203af7eeb48c45398139b583615134efd8d407f";
-    sha256 = "sha256-TvVOjkUobYJD9itQYueELJX3wmecvEdCbJ0FinW2mL4=";
+    rev = "a5e8fd52b8bf4ab5d5bcc042b2a247867589985f";
+    hash = "sha256-A5kTgICnx+Qdq3Fir/bKTfdTt/T1NQP2SC+nhN1ENug=";
   };
 in
 
-stdenv.mkDerivation rec {
-  pname = "prismlauncher";
-  version = "6.3";
+assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is only available on Linux";
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "prismlauncher-unwrapped";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
-    rev = version;
-    sha256 = "sha256-7tptHKWkbdxTn6VIPxXE1K3opKRiUW2zv9r6J05dcS8=";
+    rev = finalAttrs.version;
+    hash = "sha256-WBajtfj3qAMq8zd2S53CQyHiyqtvffLOHOjmOpdALAA=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 wrapQtAppsHook ];
-  buildInputs = [
-    qtbase
-    qtsvg
-    zlib
-    quazip
-    ghc_filesystem
-    tomlplusplus
-  ] ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
+  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja canonicalize-jars-hook ];
+  buildInputs =
+    [
+      qtbase
+      zlib
+      quazip
+      ghc_filesystem
+      tomlplusplus
+      cmark
+    ]
+    ++ lib.optional gamemodeSupport gamemode
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
-    ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
+  hardeningEnable = lib.optionals stdenv.isLinux [ "pie" ];
+
+  cmakeFlags = [
+    # downstream branding
+    "-DLauncher_BUILD_PLATFORM=nixpkgs"
+  ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
+  ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
+  ++ lib.optionals stdenv.isDarwin [ "-DINSTALL_BUNDLE=nodeps" "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''" ];
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
-    mkdir source/libraries/libnbtplusplus
-    ln -s ${libnbtplusplus}/* source/libraries/libnbtplusplus
-    chmod -R +r+w source/libraries/libnbtplusplus
-    chown -R $USER: source/libraries/libnbtplusplus
+    ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
 
-  qtWrapperArgs =
-    let
-      libpath = with xorg;
-        lib.makeLibraryPath [
-          libX11
-          libXext
-          libXcursor
-          libXrandr
-          libXxf86vm
-          libpulseaudio
-          libGL
-          glfw
-          openal
-          stdenv.cc.cc.lib
-        ];
-    in
-    [
-      "--set LD_LIBRARY_PATH /run/opengl-driver/lib:${libpath}"
-      "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}"
-      # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-      "--prefix PATH : ${lib.makeBinPath [xorg.xrandr]}"
-    ];
+  dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
+    mainProgram = "prismlauncher";
     homepage = "https://prismlauncher.org/";
     description = "A free, open source launcher for Minecraft";
     longDescription = ''
@@ -95,9 +78,9 @@ stdenv.mkDerivation rec {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = platforms.linux;
-    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minion3665 Scrumplex ];
+    platforms = with lib.platforms; linux ++ darwin;
+    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ minion3665 Scrumplex getchoo ];
   };
-}
+})

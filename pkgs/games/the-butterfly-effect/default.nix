@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, qt5, box2d, which, cmake, gettext }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, wrapQtAppsHook, qtbase, qtsvg }:
 
 mkDerivation rec {
   pname = "tbe";
@@ -11,13 +11,16 @@ mkDerivation rec {
     sha256 = "1ag2cp346f9bz9qy6za6q54id44d2ypvkyhvnjha14qzzapwaysj";
   };
 
-  postPatch = "sed '1i#include <vector>' -i src/model/World.h";
+  postPatch = ''
+    sed '1i#include <vector>' -i src/model/World.h
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    qt5.qtbase qt5.qtsvg qt5.qttranslations box2d which
-    gettext
-  ];
+    # fix translations not building: https://gitlab.kitware.com/cmake/cmake/-/issues/21931
+    substituteInPlace i18n/CMakeLists.txt --replace qt5_create_translation qt_add_translation
+  '';
+
+  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  buildInputs = [ qtbase qtsvg ];
+  strictDeps = true;
 
   installPhase = ''
     make DESTDIR=.. install

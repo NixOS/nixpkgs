@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "sha256-biHsB49Ym9NU4tMOVnUNuIxPtpcIi6oCAS7JBPhxwec=";
+    sha256 = "sha256-/G9tvJ4AcBSTmo44xDDKf6et1nSn/FV5m27ztDu10kI=";
     fetchSubmodules = true;
   };
 
@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ cmake pkg-config ];
 
+  # Fix missing include
+  patches = [./gcc13.patch];
+
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
 
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/zenity' '${gnome.zenity}/bin/zenity'
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DSFIZZ_TESTS=ON" ];
+  cmakeFlags = [ "-DSFIZZ_TESTS=ON" ];
 
   doCheck = true;
 

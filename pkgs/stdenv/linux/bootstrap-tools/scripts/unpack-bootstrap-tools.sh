@@ -30,6 +30,13 @@ LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/mv $out/lib/libstdc++.* $LIBSTDCXX_
 # use a copy of patchelf.
 LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/bin/patchelf .
 
+# Older versions of the bootstrap-files did not compile their
+# patchelf with -static-libgcc, so we have to be very careful not to
+# run patchelf on the same copy of libgcc_s that it links against.
+LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/lib/libgcc_s.so.1 .
+LD_LIBRARY_PATH=.:$out/lib:$LIBSTDCXX_SO_DIR $LD_BINARY \
+  ./patchelf --set-rpath $out/lib --force-rpath $out/lib/libgcc_s.so.1
+
 for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     if [ -L "$i" ]; then continue; fi
     if [ -z "${i##*/liblto*}" ]; then continue; fi

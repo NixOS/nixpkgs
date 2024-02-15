@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , removeReferencesTo
 , zlib
@@ -24,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.2";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
+    sha256 = "sha256-3VQijdkDUmQozn43lhr67SMK0xB4gUHadc66oINiz2w=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -41,6 +40,9 @@ stdenv.mkDerivation rec {
       # service would stop the socket and break subsequent socket activations.
       # See https://github.com/apple/cups/issues/6005
       sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12") ''
+    substituteInPlace backend/usb-darwin.c \
+      --replace "kIOMainPortDefault" "kIOMasterPortDefault"
   '';
 
   nativeBuildInputs = [ pkg-config removeReferencesTo ];
@@ -134,7 +136,12 @@ stdenv.mkDerivation rec {
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
-  passthru.tests.nixos = nixosTests.printing;
+  passthru.tests = {
+    inherit (nixosTests)
+      printing-service
+      printing-socket
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";

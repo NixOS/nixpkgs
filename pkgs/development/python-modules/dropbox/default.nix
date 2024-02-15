@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.36.0";
+  version = "11.36.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J2AaGkD4TMDcVzTtdcNH0bgy6de+BRjYdtTaRL3lYrs=";
+    hash = "sha256-d++lxsbwPxnz1JPguWkImHXB+GQpMa9Uo3JNIxIe2ok=";
   };
 
   propagatedBuildInputs = [
@@ -42,10 +42,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace ">= 2.*" ">= 2.0" \
       --replace "'pytest-runner == 5.2.0'," ""
-    substituteInPlace test/requirements.txt \
-      --replace ">=2.*" ">=2.0"
   '';
 
   doCheck = true;
@@ -53,6 +50,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "dropbox"
   ];
+
   nativeBuildInputs = [ sphinxHook ];
 
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.

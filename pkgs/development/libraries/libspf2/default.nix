@@ -1,23 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libspf2";
-  version = "2.2.12";
+  version = "2.2.13";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "libspf2";
     rev = "v${version}";
-    sha256 = "03iiaafdcwh220pqignk407h6klrakwz0zkb8iwk6nkwipkwvhsx";
+    hash = "sha256-tkCHP3B1sBb0+scHBjX5lCvaeSrZryfaGKye02LFlYs=";
   };
 
-  patches = [
-    # glibc-2.34 compat
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/dbb8a5c9f749cc11e61cfe558f164b165cbc30cb/mail-filter/libspf2/files/libspf2-1.2.11-undefined-dn_.patch";
-      sha256 = "sha256-6JVVkVGCcFJsNeBdVTPcLhW4KoHLY4ai/KXDMliXgPA=";
-    })
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
+  strictDeps = true;
 
   postPatch = ''
     # disable static bins compilation
@@ -28,9 +23,6 @@ stdenv.mkDerivation rec {
       -e '/bin_PROGRAMS/s/spf_example_static//' src/spf_example/Makefile.am
   '';
 
-  # autoreconf necessary because we modified automake files
-  nativeBuildInputs = [ autoreconfHook ];
-
   doCheck = true;
 
   meta = with lib; {
@@ -38,7 +30,7 @@ stdenv.mkDerivation rec {
                   "authorization (Helsinki Systems fork)";
     homepage = "https://github.com/helsinki-systems/libspf2";
     license = with licenses; [ lgpl21Plus bsd2 ];
-    maintainers = with maintainers; [ pacien ajs124 das_j ];
+    maintainers = with maintainers; [ pacien ] ++ teams.helsinki-systems.members;
     platforms = platforms.all;
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 let
@@ -8,7 +9,7 @@ let
       # tvdb_api v3.1.0 has a hard requirement on requests-cache < 0.6
       requests-cache = prev.requests-cache.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.2";
-        src = final.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           sha256 = "sha256-gTAjJpaGBF+OAeIonMHn6a5asi3dHihJqQk6s6tycOs=";
@@ -32,20 +33,21 @@ pypkgs.buildPythonApplication rec {
   pname = "tvnamer";
   version = "3.0.4";
 
-  src = pypkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "dc2ea8188df6ac56439343630466b874c57756dd0b2538dd8e7905048f425f04";
   };
 
-  propagatedBuildInputs = with pypkgs; [ tvdb_api ];
+  propagatedBuildInputs = with pypkgs; [ tvdb-api ];
 
   # no tests from pypi
   doCheck = false;
 
   meta = with lib; {
-    description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
+    description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api";
     homepage = "https://github.com/dbr/tvnamer";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "tvnamer";
   };
 }

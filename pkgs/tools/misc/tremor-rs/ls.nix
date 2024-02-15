@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, llvmPackages
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-odYhpb3FkbIF1dc2DSpz3Lg+r39lhDKml9KGmbqJAtA=";
   };
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   cargoSha256 = "sha256-/RKwmslhMm30QxviVV7HthDHSmTmaGZn1hdt6bNF3d4=";
 
@@ -23,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     description = "Tremor Language Server (Trill)";
     homepage = "https://www.tremor.rs/docs/next/getting-started/tooling";
     license = licenses.asl20;
-    platforms = platforms.x86_64;
     maintainers = with maintainers; [ happysalada ];
   };
 }

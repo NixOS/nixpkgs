@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/micheles/decorator";
     description = "Better living through Python with decorators";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

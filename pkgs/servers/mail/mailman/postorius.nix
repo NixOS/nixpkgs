@@ -1,28 +1,28 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi, nixosTests }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "postorius";
-  # Note: Mailman core must be on the latest version before upgrading Postorious.
-  # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
-  version = "1.3.6";
+  version = "1.3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KwzEU9IfcQ6YPZu3jPuFrd6ux/3e2pzoLfTrak/aGmg=";
+    hash = "sha256-GmbIqO+03LgbUxJ1nTStXrYN3t2MfvzbeYRAipfTW1o=";
   };
 
-  propagatedBuildInputs = [ django-mailman3 readme_renderer ];
+  propagatedBuildInputs = [ django-mailman3 readme-renderer ];
   nativeCheckInputs = [ beautifulsoup4 vcrpy mock ];
 
   # Tries to connect to database.
   doCheck = false;
 
+  passthru.tests = { inherit (nixosTests) mailman; };
+
   meta = with lib; {
     homepage = "https://docs.mailman3.org/projects/postorius";
     description = "Web-based user interface for managing GNU Mailman";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin qyliss ];
+    maintainers = with maintainers; [ qyliss ];
   };
 }

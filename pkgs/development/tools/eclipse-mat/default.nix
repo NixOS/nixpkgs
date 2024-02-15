@@ -4,7 +4,7 @@
 , glib
 , gsettings-desktop-schemas
 , gtk3
-, jdk11
+, jdk17
 , lib
 , libX11
 , libXrender
@@ -19,13 +19,13 @@
 }:
 
 let
-  pVersion = "1.13.0.20220615";
+  pVersion = "1.14.0.20230315";
   pVersionTriple = lib.splitVersion pVersion;
   majorVersion = lib.elemAt pVersionTriple 0;
   minorVersion = lib.elemAt pVersionTriple 1;
   patchVersion = lib.elemAt pVersionTriple 2;
   baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}";
-  jdk = jdk11;
+  jdk = jdk17;
 in
 stdenv.mkDerivation rec {
   pname = "eclipse-mat";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-LwtP76kb9xgdcsWCSCXeRbhFVyFS3xkl15F075Cq4Os=";
+    sha256 = "sha256-9YFJILMRhIln4vo99noRxYARh1M/mjwg7t8RdAJCoW4=";
   };
 
   desktopItem = makeDesktopItem {

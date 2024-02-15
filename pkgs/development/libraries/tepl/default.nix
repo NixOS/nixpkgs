@@ -1,13 +1,15 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
-, amtk
 , gnome
 , gobject-introspection
 , gtk3
-, gtksourceview4
 , icu
+, libgedit-amtk
+, libgedit-gtksourceview
 , pkg-config
 , gtk-doc
 , docbook-xsl-nons
@@ -15,15 +17,16 @@
 
 stdenv.mkDerivation rec {
   pname = "tepl";
-  version = "6.4.0";
+  version = "6.8.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "XlayBmnQzwX6HWS1jIw0LFkVgSLcUYEA0JPVnfm4cyE=";
+    sha256 = "Rubl8b/bxS5ZVvBq3VdenHaXxnPVPTgD3+do9JC1YPA=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -31,6 +34,8 @@ stdenv.mkDerivation rec {
     pkg-config
     gtk-doc
     docbook-xsl-nons
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -38,9 +43,9 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    amtk
-    gtksourceview4
     gtk3
+    libgedit-amtk
+    libgedit-gtksourceview
   ];
 
   doCheck = false;
@@ -58,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
-    maintainers = teams.gnome.members ++ [ maintainers.manveru ];
+    maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
   };

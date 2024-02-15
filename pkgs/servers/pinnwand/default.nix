@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 }:
 
@@ -19,12 +18,13 @@ with python3.pkgs; buildPythonApplication rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'sqlalchemy = "^1.4"' 'sqlalchemy = "*"'
-  '';
+  pythonRelaxDeps = [
+    "docutils"
+    "sqlalchemy"
+  ];
 
   propagatedBuildInputs = [
     click
@@ -51,6 +51,7 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = "https://supakeen.com/project/pinnwand/";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "pinnwand";
   };
 }
 

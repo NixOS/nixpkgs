@@ -1,24 +1,17 @@
-{ lib, stdenv, fetchurl, emacs }:
+{ lib, trivialBuild, fetchurl, haskell-mode }:
 
-# this package installs the emacs-mode which
-# resides in the hsc3 sources.
-
-let version = "0.15";
-
-in stdenv.mkDerivation {
+trivialBuild rec {
   pname = "hsc3-mode";
-  inherit version;
+  version = "0.15";
+
   src = fetchurl {
-    url = "mirror://hackage/hsc3-0.15/hsc3-0.15.tar.gz";
+    url = "mirror://hackage/hsc3-${version}/hsc3-${version}.tar.gz";
     sha256 = "2f3b15655419cf8ebe25ab1c6ec22993b2589b4ffca7c3a75ce478ca78a0bde6";
   };
 
-  buildInputs = [ emacs ];
+  packageRequires = [ haskell-mode ];
 
-  installPhase = ''
-    mkdir -p "$out/share/emacs/site-lisp"
-    cp "emacs/hsc3.el" "$out/share/emacs/site-lisp"
-  '';
+  sourceRoot = "hsc3-${version}/emacs";
 
   meta = {
     homepage = "http://rd.slavepianos.org/?t=hsc3";

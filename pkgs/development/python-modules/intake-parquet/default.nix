@@ -9,13 +9,14 @@
 
 buildPythonPackage rec {
   pname = "intake-parquet";
-  version = "0.2.3";
+  version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = pname;
     rev = version;
-    sha256 = "037jd3qkk6dybssp570kzvaln2c6pk2avd2b5mll42gaxdxxnp02";
+    sha256 = "sha256-zSwylXBKOM/tG5mwYtc0FmxwcKJ6j+lw1bxJqf57NY8=";
   };
 
   propagatedBuildInputs = [

@@ -1,36 +1,28 @@
-{ dotnetPackages, lib, xml2, stdenvNoCC }:
+{ lib, python3, stdenvNoCC }:
 
 { name
 , description ? ""
 , deps ? []
-}:
+, ...
+}@args:
 
-let
-  nuget-source = stdenvNoCC.mkDerivation rec {
-    inherit name;
+stdenvNoCC.mkDerivation (lib.recursiveUpdate {
+  inherit name;
 
-    meta.description = description;
-    nativeBuildInputs = [ dotnetPackages.Nuget xml2 ];
+  nativeBuildInputs = [ python3 ];
 
-    buildCommand = ''
-      export HOME=$(mktemp -d)
-      mkdir -p $out/{lib,share}
+  buildCommand = ''
+    mkdir -p $out/{lib,share}
 
-      ${lib.concatMapStringsSep "\n" (dep: ''
-        nuget init "${dep}" "$out/lib"
-      '') deps}
+    # use -L to follow symbolic links. When `projectReferences` is used in
+    # buildDotnetModule, one of the deps will be a symlink farm.
+    find -L ${lib.concatStringsSep " " deps} -type f -name '*.nupkg' -exec \
+      ln -s '{}' -t $out/lib ';'
 
-      # Generates a list of all licenses' spdx ids, if available.
-      # Note that this currently ignores any license provided in plain text (e.g. "LICENSE.txt")
-      find "$out/lib" -name "*.nuspec" -exec sh -c \
-        "NUSPEC=\$(xml2 < {}) && echo "\$NUSPEC" | grep license/@type=expression | tr -s \  '\n' | grep "license=" | cut -d'=' -f2" \
-      \; | sort -u > $out/share/licenses
-    '';
-  } // { # We need data from `$out` for `meta`, so we have to use overrides as to not hit infinite recursion.
-    meta.licence = let
-      depLicenses = lib.splitString "\n" (builtins.readFile "${nuget-source}/share/licenses");
-    in (lib.flatten (lib.forEach depLicenses (spdx:
-      lib.optionals (spdx != "") (lib.getLicenseFromSpdxId spdx)
-    )));
-  };
-in nuget-source
+    # Generates a list of all licenses' spdx ids, if available.
+    # Note that this currently ignores any license provided in plain text (e.g. "LICENSE.txt")
+    python ${./extract-licenses-from-nupkgs.py} $out/lib > $out/share/licenses
+  '';
+
+  meta.description = description;
+} (removeAttrs args [ "name" "description" "deps" ]))

@@ -1,6 +1,6 @@
 # This test verifies that we can request and assign IPv6 prefixes from upstream
 # (e.g. ISP) routers.
-# The setup consits of three VMs. One for the ISP, as your residential router
+# The setup consists of three VMs. One for the ISP, as your residential router
 # and the third as a client machine in the residential network.
 #
 # There are two VLANs in this test:
@@ -67,14 +67,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             interfaces-config.interfaces = [ "eth1" ];
             subnet6 = [ {
               interface = "eth1";
-              subnet = "2001:DB8:F::/36";
+              subnet = "2001:DB8::/32";
               pd-pools = [ {
-                prefix = "2001:DB8:F::";
+                prefix = "2001:DB8:1000::";
                 prefix-len = 36;
                 delegated-len = 48;
               } ];
               pools = [ {
-                pool = "2001:DB8:0000:0000:FFFF::-2001:DB8:0000:0000:FFFF::FFFF";
+                pool = "2001:DB8:0000:0000::-2001:DB8:0FFF:FFFF::FFFF";
               } ];
             } ];
 
@@ -263,12 +263,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           };
         };
       };
-
-      # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
 
-    # This is the client behind the router. We should be receving router
+    # This is the client behind the router. We should be receiving router
     # advertisements for both the ULA and the delegated prefix.
     # All we have to do is boot with the default (networkd) configuration.
     client = {
@@ -278,9 +275,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         useNetworkd = true;
         useDHCP = false;
       };
-
-      # make the network-online target a requirement, we wait for it in our test script
-      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
   };
 
@@ -294,6 +288,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Since we only care about IPv6 that should not involve waiting for legacy
     # IP leases.
     client.start()
+    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
 
     # the static address on the router should not be reachable
@@ -312,6 +307,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     isp.wait_for_unit("multi-user.target")
 
     # wait until the uplink interface has a good status
+    router.systemctl("start network-online.target")
     router.wait_for_unit("network-online.target")
     router.wait_until_succeeds("ping -6 -c1 2001:DB8::1")
 

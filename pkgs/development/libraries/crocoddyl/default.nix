@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , example-robot-data
 , pinocchio
@@ -8,16 +9,16 @@
 , python3Packages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
-  version = "1.9.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-IQ+8ZZXVTTRFa4uGetpylRab4P9MSTU2YtytYA3z6ys=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-MsAXHfxLNlIK/PbtVTjvBN1Jk3dyGEkfpj3/98nExj4=";
   };
 
   strictDeps = true;
@@ -39,11 +40,26 @@ stdenv.mkDerivation rec {
     "-DBUILD_PYTHON_INTERFACE=OFF"
   ];
 
+  prePatch = ''
+    substituteInPlace \
+      examples/CMakeLists.txt \
+      examples/log/check_logfiles.sh \
+      --replace /bin/bash ${stdenv.shell}
+  '';
+
+  doCheck = true;
+  pythonImportsCheck = [
+    "crocoddyl"
+  ];
+  checkInputs = lib.optionals (pythonSupport) [
+    python3Packages.scipy
+  ];
+
   meta = with lib; {
     description = "Crocoddyl optimal control library";
     homepage = "https://github.com/loco-3d/crocoddyl";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wegank ];
+    maintainers = with maintainers; [ nim65s wegank ];
     platforms = platforms.unix;
   };
-}
+})

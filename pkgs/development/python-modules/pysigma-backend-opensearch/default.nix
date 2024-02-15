@@ -6,13 +6,14 @@
 , pysigma-backend-elasticsearch
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
-  version = "0.1.5";
-  format = "pyproject";
+  version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,11 +21,21 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j8BiO/7wp1TRSK+C5cPSgF72CuBpb2jLhJXRJLHgh5I=";
+    hash = "sha256-g3kGaNq07yMu3mnRDeZB3Ck8wwzK3HcOIzkl36cNOs8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
+  '';
+
+  pythonRelaxDeps = [
+    "pysigma"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

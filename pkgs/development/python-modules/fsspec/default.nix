@@ -13,8 +13,6 @@
 , requests
 , smbprotocol
 , tqdm
-
-# optionals
 , adlfs
 , dask
 , distributed
@@ -31,16 +29,16 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2022.10.0";
+  version = "2023.10.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "filesystem_spec";
-    rev = version;
-    hash = "sha256-+lPt/zqI3Mkt+QRNXq+Dxm3h/ryZJsfrmayVi/BTtbg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cLkCQQbb/AakDSz1NTrVlHh8LdgoqtjX8OPT+Nb1NA4=";
   };
 
   propagatedBuildInputs = [
@@ -137,12 +135,20 @@ buildPythonPackage rec {
     # test accesses this remote ftp server:
     # https://ftp.fau.de/debian-cd/current/amd64/log/success
     "test_find"
+    # Tests want to access S3
+    "test_urlpath_inference_errors"
+    "test_mismatch"
   ] ++ lib.optionals (stdenv.isDarwin) [
     # works locally on APFS, fails on hydra with AssertionError comparing timestamps
     # darwin hydra builder uses HFS+ and has only one second timestamp resolution
     # this two tests however, assume nanosecond resolution
     "test_modified"
     "test_touch"
+  ];
+
+  disabledTestPaths = [
+    # JSON decoding issues
+    "fsspec/implementations/tests/test_dbfs.py"
   ];
 
   pythonImportsCheck = [
@@ -154,6 +160,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fsspec/filesystem_spec";
     changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

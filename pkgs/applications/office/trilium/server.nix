@@ -1,11 +1,11 @@
-{ stdenv, lib, autoPatchelfHook, fetchurl, nixosTests
+{ stdenv, autoPatchelfHook, fetchurl, nixosTests
 , metaCommon }:
 
 let
   serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-  serverSource.sha256 = "1i7rrzj40ixi4l4hhxdn9n0b8zmm40ycprhaklh9kk39v38rai3y";
-  version = "0.59.2";
-in stdenv.mkDerivation rec {
+  serverSource.sha256 = "1s0pfb3virhxsh5kkgq4yfhdnv1lq2z0zdcikilnayzp0lpjskhb";
+  version = "0.62.5";
+in stdenv.mkDerivation {
   pname = "trilium-server";
   inherit version;
   meta = metaCommon // {

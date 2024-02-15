@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 
-with lib;
-
 {
   name = "xautolock";
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes.machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

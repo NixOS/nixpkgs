@@ -6,16 +6,16 @@ This contains instructions on how to package javascript applications.
 
 The various tools available will be listed in the [tools-overview](#javascript-tools-overview). Some general principles for packaging will follow. Finally some tool specific instructions will be given.
 
-## Getting unstuck / finding code examples
+## Getting unstuck / finding code examples {#javascript-finding-examples}
 
 If you find you are lacking inspiration for packing javascript applications, the links below might prove useful. Searching online for prior art can be helpful if you are running into solved problems.
 
-### Github
+### Github {#javascript-finding-examples-github}
 
 - Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
-- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
+- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+path%3A**%2Fflake.nix&type=code>
 
-### Gitlab
+### Gitlab {#javascript-finding-examples-gitlab}
 
 - Searching Nix files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+extension%3Anix>
 - Searching just `flake.nix` files for `mkYarnPackage`: <https://gitlab.com/search?scope=blobs&search=mkYarnPackage+filename%3Aflake.nix>
@@ -105,7 +105,7 @@ After you have identified the correct system, you need to override your package 
     });
 ```
 
-### Adding and Updating Javascript packages in nixpkgs
+### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
 
 To add a package from NPM to nixpkgs:
 
@@ -140,10 +140,10 @@ To update NPM packages in nixpkgs, run the same `generate.sh` script:
 ./pkgs/development/node-packages/generate.sh
 ```
 
-#### Git protocol error
+#### Git protocol error {#javascript-git-error}
 
 Some packages may have Git dependencies from GitHub specified with `git://`.
-GitHub has [disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
+GitHub has [disabled unencrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
 
 ```
 The unauthenticated git protocol on port 9418 is no longer supported
@@ -160,6 +160,8 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 ### buildNpmPackage {#javascript-buildNpmPackage}
 
 `buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
+
+Here's an example:
 
 ```nix
 { lib, buildNpmPackage, fetchFromGitHub }:
@@ -191,19 +193,28 @@ buildNpmPackage rec {
 }
 ```
 
+In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`. Additionally, the `bin` and `man` keys in the source's `package.json` are used to decide what binaries and manpages are supposed to be installed. If these are not defined, `npm pack` may miss some files, and no binaries will be produced.
+
 #### Arguments {#javascript-buildNpmPackage-arguments}
 
 * `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
 * `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 * `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+* `npmWorkspace`: The workspace directory within the project to build and install.
+* `dontNpmBuild`: Option to disable running the build script. Set to `true` if the package does not have a build script. Defaults to `false`. Alternatively, setting `buildPhase` explicitly also disables this.
+* `dontNpmInstall`: Option to disable running `npm install`. Defaults to `false`. Alternatively, setting `installPhase` explicitly also disables this.
 * `npmFlags`: Flags to pass to all npm commands.
-* `npmInstallFlags`: Flags to pass to `npm ci` and `npm prune`.
+* `npmInstallFlags`: Flags to pass to `npm ci`.
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
 * `npmPackFlags`: Flags to pass to `npm pack`.
+* `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
+* `makeWrapperArgs`: Flags to pass to `makeWrapper`, added to executable calling the generated `.js` with `node` as an interpreter. These scripts are defined in `package.json`.
+* `nodejs`: The `nodejs` package to build against, using the corresponding `npm` shipped with that version of `node`. Defaults to `pkgs.nodejs`.
+* `npmDeps`: The dependencies used to build the npm package. Especially useful to not have to recompute workspace depedencies.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
-`prefetch-npm-deps` can calculate the hash of the dependencies of an npm project ahead of time.
+`prefetch-npm-deps` is a Nixpkgs package that calculates the hash of the dependencies of an npm project ahead of time.
 
 ```console
 $ ls
@@ -212,6 +223,19 @@ $ prefetch-npm-deps package-lock.json
 ...
 sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 ```
+
+#### fetchNpmDeps {#javascript-buildNpmPackage-fetchNpmDeps}
+
+`fetchNpmDeps` is a Nix function that requires the following mandatory arguments:
+
+- `src`: A directory / tarball with `package-lock.json` file
+- `hash`: The output hash of the node dependencies defined in `package-lock.json`.
+
+It returns a derivation with all `package-lock.json` dependencies downloaded into `$out/`, usable as an npm cache.
+
+### corepack {#javascript-corepack}
+
+This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
 
 ### node2nix {#javascript-node2nix}
 
@@ -229,7 +253,7 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 #### Pitfalls {#javascript-node2nix-pitfalls}
 
 - If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
-- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs-16_x`.
+- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from NPM distributed with `nodejs_16`.
 - `node2nix` does not like missing packages from NPM. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of NPM.
 
 ### yarn2nix {#javascript-yarn2nix}
@@ -288,7 +312,7 @@ configurePhase = ''
 This will generate a derivation including the `node_modules` directory.
 If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
 
-#### Overriding dependency behavior
+#### Overriding dependency behavior {#javascript-mkYarnPackage-overriding-dependencies}
 
 In the `mkYarnPackage` record the property `pkgConfig` can be used to override packages when you encounter problems building.
 
@@ -330,6 +354,7 @@ mkYarnPackage rec {
 
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
+- `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
 
 ## Outside Nixpkgs {#javascript-outside-nixpkgs}
 

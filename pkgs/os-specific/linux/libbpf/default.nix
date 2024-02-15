@@ -4,18 +4,23 @@
 , stdenv
 , zlib
 , lib
+
+# for passthru.tests
+, knot-dns
 , nixosTests
+, systemd
+, tracee
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    sha256 = "sha256-/vt6IA1o0gjFtXUWhEKIZ1DUWIN2LOvrhLfFzJBACGY=";
+    sha256 = "sha256-wVCBLJK9nlS1N9/DrQtogoZmgWW4ECqInSeQTjUFhcY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,7 +30,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "-C src" ];
 
   passthru.tests = {
+    inherit knot-dns tracee;
     bpf = nixosTests.bpf;
+    systemd = systemd.override { withLibBPF = true; };
   };
 
   postInstall = ''

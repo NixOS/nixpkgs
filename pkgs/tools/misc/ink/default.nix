@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.freebsd;
     maintainers = with maintainers; [ samb96 ];
+    mainProgram = "ink";
   };
 }

@@ -1,25 +1,36 @@
-{ buildPythonApplication, click, fetchPypi, hypothesis, mypy, pytest
-, pytest-cov, pytest-runner, lib, stringcase
+{ buildPythonApplication
+, click
+, fetchPypi
+, hypothesis
+, lib
+, poetry-core
+, pytest
+, pytestCheckHook
+, stringcase
 }:
 
 buildPythonApplication rec {
-  pname = "zfs-replicate";
-  version = "1.2.3";
+  pname = "zfs_replicate";
+  version = "3.2.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2cb9d4670a6e12d14a446c10d857862e91af6e4526f607e08b41bde89953bb8";
+    hash = "sha256-K+OCJmx0KfFTuaP3c5oFJqWa+zqYJtoruO2v/F0FtfA=";
   };
 
-  nativeCheckInputs = [
-    hypothesis
-    mypy
-    pytest
-    pytest-cov
+  postPatch = ''
+    sed -i pyproject.toml -e '/--cov[^"]*/d'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  buildInputs = [
-    pytest-runner
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+    pytest
   ];
 
   propagatedBuildInputs = [
@@ -28,10 +39,6 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-
-  checkPhase = ''
-    pytest --doctest-modules
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/alunduil/zfs-replicate";

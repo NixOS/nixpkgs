@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "oss2";
-  version = "2.16.0";
+  version = "2.18.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-oss-python-sdk";
-    rev = version;
-    hash = "sha256-Q8U7zMlqpKSoW99MBm9p0AnrGZY7M9oRNImMNJaEjSw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jDSXPVyy8XvPgsGZXsdfavFPptq28pCwr9C63OZvNrY=";
   };
 
   nativeBuildInputs = [
@@ -57,10 +57,15 @@ buildPythonPackage rec {
     # Tests require network access
     "tests/test_api_base.py"
     "tests/test_async_fetch_task.py"
+    "tests/test_bucket_access_monitor.py"
+    "tests/test_bucket_callback_policy.py"
     "tests/test_bucket_cname.py"
+    "tests/test_bucket_describe_regions.py"
     "tests/test_bucket_inventory.py"
     "tests/test_bucket_meta_query.py"
     "tests/test_bucket_replication.py"
+    "tests/test_bucket_resource_group.py"
+    "tests/test_bucket_style.py"
     "tests/test_bucket_transfer_acceleration.py"
     "tests/test_bucket_versioning.py"
     "tests/test_bucket_worm.py"
@@ -72,6 +77,7 @@ buildPythonPackage rec {
     "tests/test_crypto_object.py"
     "tests/test_crypto.py"
     "tests/test_download.py"
+    "tests/test_exception_ec.py"
     "tests/test_headers.py"
     "tests/test_image.py"
     "tests/test_init.py"
@@ -100,11 +106,16 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_crypto_get_compact_deprecated_kms"
+    # RuntimeError
+    "test_crypto_put"
+    # Tests require network access
+    "test_write_get_object_response"
   ];
 
   meta = with lib; {
     description = "Alibaba Cloud OSS SDK for Python";
     homepage = "https://github.com/aliyun/aliyun-oss-python-sdk";
+    changelog = "https://github.com/aliyun/aliyun-oss-python-sdk/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

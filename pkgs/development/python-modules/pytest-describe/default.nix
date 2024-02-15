@@ -6,13 +6,12 @@
 , pytest
 
 # tests
-, py
 , pytestCheckHook
 }:
 
 let
   pname = "pytest-describe";
-  version = "2.0.1";
+  version = "2.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -20,7 +19,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5cuqMRafAGA0itXKAZECfl8fQfPyf97vIINl4JxV65o=";
+    hash = "sha256-ObsF65DySX2co0Lvmgt/pbraflhQWuwz9m1mHWMZVbc=";
   };
 
   buildInputs = [
@@ -28,7 +27,6 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
-    py
     pytestCheckHook
   ];
 

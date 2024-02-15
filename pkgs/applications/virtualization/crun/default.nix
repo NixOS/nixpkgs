@@ -23,6 +23,7 @@ let
     "test_exec.py"
     "test_hooks.py"
     "test_hostname.py"
+    "test_oci_features"
     "test_paths.py"
     "test_pid.py"
     "test_pid_file.py"
@@ -38,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.8.2";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    hash = "sha256-3L+rhDfvxu9MhU/VvyJTIkDV+1h4Y56PbZRLS2a5rjY=";
+    hash = "sha256-IEfHww+kAPKcTe5bWM+YuDe6PHlSdZQVEunlBMQ29Ic=";
     fetchSubmodules = true;
   };
 
@@ -79,5 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
+    mainProgram = "crun";
   };
 }

@@ -9,7 +9,7 @@ let
   # unsupported platform problems.
   allPkgs = import ../default.nix {
     system = stdenv.hostPlatform.system;
-    localSystem = stdenv.hostPlatform.system;
+    localSystem = stdenv.buildPlatform.system;
     config = {
       allowUnsupportedSystem = true;
     };
@@ -17,5 +17,5 @@ let
   };
 in
 lib.recurseIntoAttrs {
-  defaultPkgConfigPackages = allPkgs.callPackage ./test-defaultPkgConfigPackages.nix { };
+  defaultPkgConfigPackages = allPkgs.callPackage ./test-defaultPkgConfigPackages.nix { } // { __recurseIntoDerivationForReleaseJobs = true; };
 }

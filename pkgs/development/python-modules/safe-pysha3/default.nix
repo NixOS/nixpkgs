@@ -2,26 +2,23 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, python
 }:
 
 buildPythonPackage rec {
   pname = "safe-pysha3";
-  version = "1.0.3";
+  version = "1.0.4";
   format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kd+lb9t5ney50BvdfbwPKAb0Ro0sKW+DtuN9hlMZF8I=";
+    hash = "sha256-5CkUax7dGYssqTSiBGplZWxdMbDsiUu9YFUSf03q/xc=";
   };
 
-  checkPhase = ''
-    runHook preCheck
-
-    ${python.interpreter} tests.py
-
-    runHook postCheck
+  # AttributeError: 'Keccak_224Tests' object has no attribute 'failIf'.
+  postPatch = ''
+    substituteInPlace tests.py \
+      --replace "failIf" "assertFalse"
   '';
 
   pythonImportsCheck = [

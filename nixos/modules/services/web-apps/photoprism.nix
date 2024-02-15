@@ -18,7 +18,10 @@ let
     in
     pkgs.writeShellScript "manage" ''
       ${setupEnv}
-      exec ${cfg.package}/bin/photoprism "$@"
+      eval "$(${config.systemd.package}/bin/systemctl show -pUID,MainPID photoprism.service | ${pkgs.gnused}/bin/sed "s/UID/ServiceUID/")"
+      exec ${pkgs.util-linux}/bin/nsenter \
+        -t $MainPID -m -S $ServiceUID -G $ServiceUID --wdns=${cfg.storagePath} \
+        ${cfg.package}/bin/photoprism "$@"
     '';
 in
 {
@@ -77,7 +80,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOptionMD pkgs "photoprism" { };
+    package = lib.mkPackageOption pkgs "photoprism" { };
 
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
@@ -123,7 +126,7 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
+        SystemCallFilter = [ "@system-service" "~@setuid @keyring" ];
         UMask = "0066";
       } // lib.optionalAttrs (cfg.port < 1024) {
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

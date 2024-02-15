@@ -1,6 +1,10 @@
-{ stdenv, lib, fetchFromGitLab, fetchpatch, nasm
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, nasm
 , enableShared ? !stdenv.hostPlatform.isStatic
- }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "x264";
@@ -28,13 +32,17 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+  ''
+  # Darwin uses `llvm-strip`, which results in a crash at runtime in assembly-based routines when `-x` is specified.
+  + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
   '';
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "lib" "dev" ];
 
-  preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isx86 ''
     # `AS' is set to the binutils assembler, but we need nasm
     unset AS
   '' + lib.optionalString stdenv.hostPlatform.isAarch ''
@@ -49,9 +57,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for encoding H264/AVC video streams";
-    homepage    = "http://www.videolan.org/developers/x264.html";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ spwhitt tadeokondrak ];
+    homepage = "http://www.videolan.org/developers/x264.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with maintainers; [ tadeokondrak ];
   };
 }

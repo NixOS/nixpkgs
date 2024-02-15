@@ -1,10 +1,10 @@
-{ lib, python3, git, mercurial}:
+{ lib, python3, fetchPypi, git, mercurial }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
   version = "2021.1110";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "b6a0ddb78db7e00ae7ffe895bf8ef97f91e6310dfc1c4721896bdfd044b1cb03";
   };
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [ pathlib2 click toml lexid colorama setuptools ];
 
-  nativeCheckInputs = [ python3.pkgs.pytestCheckHook git mercurial];
+  nativeCheckInputs = [ python3.pkgs.pytestCheckHook git mercurial ];
 
   disabledTests = [
     # fails due to more aggressive setuptools version specifier validation
@@ -30,5 +30,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://pypi.org/project/bumpver/";
     license = licenses.mit;
     maintainers = with maintainers; [ kfollesdal ];
+    mainProgram = "bumpver";
   };
 }

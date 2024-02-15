@@ -1,5 +1,4 @@
 { lib
-, babel
 , buildPythonPackage
 , cliff
 , fetchPypi
@@ -22,18 +21,17 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "3.2.0";
+  version = "3.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LYjRjDeZp7LQeQFXLogyGy4LEgawTQED+5qRu799tWM=";
+    hash = "sha256-ggfhDJW2qn0o4Wi5cdPsEpoHb9miZbr4Ba8mgLkStvI=";
   };
 
   propagatedBuildInputs = [
-    babel
     cliff
     iso8601
     keystoneauth1

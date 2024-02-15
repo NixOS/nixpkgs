@@ -1,6 +1,6 @@
-{ lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, fetchgit
+{ lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch
 , python3Packages, ninja, pkg-config, protobuf, zinnia, qt5, fcitx5
-, jsoncpp, gtest, which, gtk2, unzip, abseil-cpp, breakpad }:
+, jsoncpp, gtest, which, gtk2, unzip, abseil-cpp, breakpad, nixosTests }:
 let
   inherit (python3Packages) python gyp six;
   utdic = fetchurl {
@@ -24,7 +24,7 @@ let
     sha256 = "ExS0Cg3rs0I9IOVbZHLt8UEfk8/LmY9oAHPVVlYuTPw=";
   };
 
-in clangStdenv.mkDerivation rec {
+in clangStdenv.mkDerivation {
   pname = "fcitx5-mozc";
   version = "2.26.4220.102";
 
@@ -84,13 +84,19 @@ in clangStdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     python build_mozc.py build -c Release \
       server/server.gyp:mozc_server \
       gui/gui.gyp:mozc_tool \
       unix/fcitx5/fcitx5.gyp:fcitx5-mozc
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     export PREFIX=$out
     export _bldtype=Release
     ../scripts/install_server
@@ -101,7 +107,17 @@ in clangStdenv.mkDerivation rec {
     install -d $out/share/fcitx5/inputmethod
     install -d $out/lib/fcitx5
     ../scripts/install_fcitx5
+
+    runHook postInstall
   '';
+
+  preFixup = ''
+    wrapQtApp $out/lib/mozc/mozc_tool
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) fcitx5;
+  };
 
   meta = with lib; {
     description = "Fcitx5 Module of A Japanese Input Method for Chromium OS, Windows, Mac and Linux (the Open Source Edition of Google Japanese Input)";

@@ -17,9 +17,9 @@
 , qtbase ? null
 , pythonSupport ? false
 , swig2 ? null
-, python ? null
 # only for passthru.tests
 , libsForQt5
+, qt6Packages
 , python3
 }:
 let
@@ -27,36 +27,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.18.0";
+  version = "1.23.2";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    hash = "sha256-Nh1OrkfOkl26DqVpr0DntSxkXEri5l5WIb8bbN2LDp4=";
+    hash = "sha256-lJnosfM8zLaBVSehvBYEnTWmGYpsX64BhfK9VhvOUiQ=";
   };
 
   patches = [
-    # Fix compilation on i686, would not be needed after 1.18.1 releases, https://dev.gnupg.org/T5522
-    ./t-addexistingsubkey-i686.patch
-    # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
-    ./fix_gpg_list_keys.diff
-    # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
-    (fetchpatch {
-      name = "0001-Fix-python-tests-on-non-Linux.patch";
-      url = "https://lists.gnupg.org/pipermail/gnupg-devel/attachments/20200415/f7be62d1/attachment.obj";
-      sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
-    })
     # Support Python 3.10 version detection without distutils, https://dev.gnupg.org/D545
     ./python-310-detection-without-distutils.patch
-    # Find correct version string for Python >= 3.10, https://dev.gnupg.org/D546
-    ./python-find-version-string-above-310.patch
     # Fix a test after disallowing compressed signatures in gpg (PR #180336)
     ./test_t-verify_double-plaintext.patch
-
-    # Disable python tests on Darwin as they use gpg (see configureFlags below)
-  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
-  # Fix _AC_UNDECLARED_WARNING for autoconf>=2.70
-  # See https://lists.gnupg.org/pipermail/gnupg-devel/2020-November/034643.html
-  ++ lib.optional stdenv.cc.isClang ./fix-clang-autoconf-undeclared-warning.patch;
+  ];
 
   outputs = [ "out" "dev" "info" ];
 
@@ -68,10 +51,14 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ] ++ lib.optionals pythonSupport [
+    python3.pythonOnBuildForHost
     ncurses
-    python
     swig2
     which
+  ];
+
+  buildInputs = lib.optionals pythonSupport [
+    python3
   ];
 
   propagatedBuildInputs = [
@@ -112,6 +99,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
+  enableParallelBuilding = true;
+
   # prevent tests from being run during the buildPhase
   makeFlags = [ "tests=" ];
 
@@ -121,7 +110,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     python = python3.pkgs.gpgme;
-    qt = libsForQt5.qgpgme;
+    qt5 = libsForQt5.qgpgme;
+    qt6 = qt6Packages.qgpgme;
   };
 
   meta = with lib; {

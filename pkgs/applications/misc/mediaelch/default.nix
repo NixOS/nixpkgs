@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 , cmake
 , qttools
@@ -23,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.10.0";
+  version = "2.10.6";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "sha256-hipOOG+ibfsJZKLcnB6a5+OOvSs4WUdpEY+RiVKJc+k=";
+    hash = "sha256-qc7HaCMAmALY9MoIKmaCWF0cnwBBFDAXwqiBzwzu2bU=";
     fetchSubmodules = true;
   };
 

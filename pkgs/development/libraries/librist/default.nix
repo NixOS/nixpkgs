@@ -11,15 +11,20 @@
 
 stdenv.mkDerivation rec {
   pname = "librist";
-  version = "0.2.7";
+  version = "0.2.10";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
     rev = "v${version}";
-    sha256 = "sha256-qQG2eRAPAQgxghMeUZk3nwyacX6jDl33F8BWW63nM3c=";
+    hash = "sha256-8N4wQXxjNZuNGx/c7WVAV5QS48Bff5G3t11UkihT+K0=";
   };
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/257020
+    ./darwin.patch
+  ];
 
   nativeBuildInputs = [
     meson

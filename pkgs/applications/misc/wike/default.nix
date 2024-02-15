@@ -1,23 +1,31 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, ninja
+{ lib
+, fetchFromGitHub
 , python3
-, glib, appstream-glib , desktop-file-utils
-, gobject-introspection, gtk3
-, wrapGAppsHook
-, libhandy, webkitgtk, glib-networking
-, gnome, dconf
+, meson
+, ninja
+, pkg-config
+, appstream-glib
+, desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook4
+, glib
+, gtk4
+, librsvg
+, libadwaita
+, glib-networking
+, webkitgtk_6_0
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wike";
-  version = "1.7.1";
+  version = "2.1.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
     rev = version;
-    sha256 = "sha256-QLhfzGRrc2En0Hu+UdtPM572PdtXqOFL0W3LoAki4jI=";
+    hash = "sha256-BXmLZhotQK6L4c2D8F8qF3zmOlSuzXycEN2FaC1K6/g=";
   };
 
   nativeBuildInputs = [
@@ -27,17 +35,16 @@ python3.pkgs.buildPythonApplication rec {
     appstream-glib
     desktop-file-utils
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
-    libhandy
-    webkitgtk
+    gtk4
+    librsvg
+    libadwaita
     glib-networking
-    gnome.adwaita-icon-theme
-    dconf
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -47,13 +54,21 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
+  '';
+
+  # prevent double wrapping
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
     description = "Wikipedia Reader for the GNOME Desktop";
     homepage = "https://github.com/hugolabe/Wike";
     license = licenses.gpl3Plus;
-    platforms = webkitgtk.meta.platforms;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ samalws ];
   };
 }

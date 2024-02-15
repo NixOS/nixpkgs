@@ -2,8 +2,10 @@
 , lib
 , fetchFromGitLab
 , rustPlatform
+, cargo
 , pkg-config
 , meson
+, rustc
 , wrapGAppsHook4
 , desktop-file-utils
 , blueprint-compiler
@@ -11,25 +13,25 @@
 , gtk4
 , libadwaita
 , gst_all_1
-, ffmpeg-full
+, ffmpeg-headless
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "video-trimmer";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0zhQoxzU1GikYP5OwqMl34RsnefJtdZox5EuTqOFnas=";
+    repo = "video-trimmer";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-nr0PAvp4wlswQBNN2LLyYQMpk3IIleHf3+978XhUGGQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-kH9AfEskh7TTXF+PZwOZNWVJmnEeMJrSEEuDGyP5A5o=";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-YFbLMpQbHUtxRrBVarcoIeDsvc26NWc1YhMeCaLgJAc=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +45,10 @@ stdenv.mkDerivation rec {
     # `gtk4-update-icon-cache` during installPhase, thanks to:
     # https://gitlab.gnome.org/YaLTeR/video-trimmer/-/merge_requests/12
     gtk4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk4
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg-full ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
     )
   '';
 
@@ -72,5 +73,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "video-trimmer";
   };
-}
+})

@@ -18,6 +18,13 @@ in
           <http://bird.network.cz/>
         '';
       };
+      autoReload = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether bird2 should be automatically reloaded when the configuration changes.
+        '';
+      };
       checkConfig = mkOption {
         type = types.bool;
         default = true;
@@ -61,14 +68,14 @@ in
       checkPhase = optionalString cfg.checkConfig ''
         ln -s $out bird2.conf
         ${cfg.preCheckConfig}
-        ${pkgs.bird}/bin/bird -d -p -c bird2.conf
+        ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf
       '';
     };
 
     systemd.services.bird2 = {
       description = "BIRD Internet Routing Daemon";
       wantedBy = [ "multi-user.target" ];
-      reloadTriggers = [ config.environment.etc."bird/bird2.conf".source ];
+      reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird2.conf".source;
       serviceConfig = {
         Type = "forking";
         Restart = "on-failure";

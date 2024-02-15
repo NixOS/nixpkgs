@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "hpack";
   version = "4.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     description = "Pure-Python HPACK header compression";
     homepage = "https://github.com/python-hyper/hpack";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

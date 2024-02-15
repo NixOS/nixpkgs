@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-pomodoro";
-  version = "0.22.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-VsrguYU1rfYWse7FuA4uYASfqET0Q3RBeU7i+HOWFBw=";
+    hash = "sha256-Ml3znMz1Q9593rMgfAST8k9QglxMG9ocFD7W8kaFWCw=";
   };
 
   patches = [

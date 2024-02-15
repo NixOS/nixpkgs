@@ -13,8 +13,9 @@
 , lpcnetfreedv
 , portaudio
 , speexdsp
-, hamlib
+, hamlib_4
 , wxGTK32
+, sioclient
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , AppKit
 , AVFoundation
@@ -24,19 +25,21 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.7";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-N9LZCf2YAhVgxnQWgCB9TqGNpUGP1ZqpLmbYIaQsn08=";
+    hash = "sha256-JbLP65fC6uHrHXpSUwtgYHB+VLfheo5RU3C44lx8QlQ=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-Wl,-ld_classic" ""
     substituteInPlace src/CMakeLists.txt \
-      --replace "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
-    sed -i "/hdiutil/d" src/CMakeLists.txt
+      --replace-fail "\''${CMAKE_SOURCE_DIR}/macdylibbundler/dylibbundler" "dylibbundler"
+    sed -i "/codesign/d;/hdiutil/d" src/CMakeLists.txt
   '';
 
   nativeBuildInputs = [
@@ -53,8 +56,9 @@ stdenv.mkDerivation rec {
     libsndfile
     lpcnetfreedv
     speexdsp
-    hamlib
+    hamlib_4
     wxGTK32
+    sioclient
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
   ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -67,7 +71,8 @@ stdenv.mkDerivation rec {
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
     "-DUNITTEST=ON"
-  ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
+    "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     "-DAPPLE_OLD_XCODE"
@@ -87,5 +92,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ mvs wegank ];
     platforms = platforms.unix;
+    mainProgram = "freedv";
   };
 }

@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gmp, coreutils }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gmp, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "lean";
-  version = "3.50.3";
+  version = "3.51.0";
 
   src = fetchFromGitHub {
     owner  = "leanprover-community";
@@ -11,9 +11,18 @@ stdenv.mkDerivation rec {
     # from. this is then used to check whether an olean file should be
     # rebuilt. don't use a tag as rev because this will get replaced into
     # src/githash.h.in in preConfigure.
-    rev    = "855e5b74e3a52a40552e8f067169d747d48743fd";
-    sha256 = "sha256-RH4w7PpzC+fhqCHikXQO2pUUvWD2qrA0mVMUGxpauwE=";
+    rev    = "9fc1dee97a72a3e34d658aefb4b8a95ecd3d477c";
+    hash   = "sha256-Vcsph4dTNLafeaTtVwJS8tWoWCgcP6pxF0ssZDE/YfM=";
   };
+
+  patches = [
+    # Fix gcc-13 build failure
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/leanprover-community/lean/commit/21d264a66d53b0a910178ae7d9529cb5886a39b6.patch";
+      hash = "sha256-hBm2QNFS1jdoR6LUQHLReKxMKv7kbkrkrTGJ43YnvfA=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gmp ];

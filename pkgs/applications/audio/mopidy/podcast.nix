@@ -1,13 +1,13 @@
-{ lib, python3Packages, mopidy }:
+{ lib, python3Packages, fetchPypi, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-podcast";
-  version = "3.0.0";
+  version = "3.0.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "Mopidy-Podcast";
-    sha256 = "1z2b523yvdpcf8p7m7kczrvaw045lmxzhq4qj00dflxa2yw61qxr";
+    sha256 = "sha256-grNPVEVM2PlpYhBXe6sabFjWVB9+q+apIRjcHUxH52A=";
   };
 
   propagatedBuildInputs = [

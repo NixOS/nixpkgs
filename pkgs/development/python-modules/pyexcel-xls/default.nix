@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pyexcel-xls";
   version = "0.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,6 +41,6 @@ buildPythonPackage rec {
     description = "A wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

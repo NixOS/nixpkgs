@@ -13,12 +13,24 @@ merging is handled.
 `types.bool`
 
 :   A boolean, its values can be `true` or `false`.
+    All definitions must have the same value, after priorities. An error is thrown in case of a conflict.
+
+`types.boolByOr`
+
+:   A boolean, its values can be `true` or `false`.
+    The result is `true` if _any_ of multiple definitions is `true`.
+    In other words, definitions are merged with the logical _OR_ operator.
 
 `types.path`
 
 :   A filesystem path is anything that starts with a slash when
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
+
+`types.pathInStore`
+
+:   A path that is contained in the Nix store. This can be a top-level store
+    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
 
 `types.package`
 
@@ -36,7 +48,7 @@ merging is handled.
     together. This type is recommended when the option type is unknown.
 
     ::: {#ex-types-anything .example}
-    **Example: `types.anything` Example**
+    ### `types.anything`
 
     Two definitions of this type like
 
@@ -98,6 +110,10 @@ merging is handled.
     `types.attrsOf types.anything` instead which doesn't have these
     problems.
     :::
+
+`types.pkgs`
+
+:   A type for the top level Nixpkgs package set.
 
 ### Numeric types {#sec-option-types-numeric}
 
@@ -310,7 +326,7 @@ Composed types are types that take a type as parameter. `listOf
 `types.uniq` *`t`*
 
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
-    definitions are declared only once.
+    definitions are provided only once.
 
 `types.unique` `{ message = m }` *`t`*
 
@@ -356,7 +372,7 @@ you will still need to provide a default value (e.g. an empty attribute set)
 if you want to allow users to leave it undefined.
 
 ::: {#ex-submodule-direct .example}
-**Example: Directly defined submodule**
+### Directly defined submodule
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -375,7 +391,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-reference .example}
-**Example: Submodule defined as a reference**
+### Submodule defined as a reference
 ```nix
 let
   modOptions = {
@@ -403,7 +419,7 @@ multiple definitions of the submodule option set
 ([Example: Definition of a list of submodules](#ex-submodule-listof-definition)).
 
 ::: {#ex-submodule-listof-declaration .example}
-**Example: Declaration of a list of submodules**
+### Declaration of a list of submodules
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -422,7 +438,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-listof-definition .example}
-**Example: Definition of a list of submodules**
+### Definition of a list of submodules
 ```nix
 config.mod = [
   { foo = 1; bar = "one"; }
@@ -437,7 +453,7 @@ multiple named definitions of the submodule option set
 ([Example: Definition of attribute sets of submodules](#ex-submodule-attrsof-definition)).
 
 ::: {#ex-submodule-attrsof-declaration .example}
-**Example: Declaration of attribute sets of submodules**
+### Declaration of attribute sets of submodules
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -456,7 +472,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-attrsof-definition .example}
-**Example: Definition of attribute sets of submodules**
+### Definition of attribute sets of submodules
 ```nix
 config.mod.one = { foo = 1; bar = "one"; };
 config.mod.two = { foo = 2; bar = "two"; };
@@ -476,7 +492,7 @@ Types are mainly characterized by their `check` and `merge` functions.
     ([Example: Overriding a type check](#ex-extending-type-check-2)).
 
     ::: {#ex-extending-type-check-1 .example}
-    **Example: Adding a type check**
+    ### Adding a type check
 
     ```nix
     byte = mkOption {
@@ -487,7 +503,7 @@ Types are mainly characterized by their `check` and `merge` functions.
     :::
 
     ::: {#ex-extending-type-check-2 .example}
-    **Example: Overriding a type check**
+    ### Overriding a type check
 
     ```nix
     nixThings = mkOption {
@@ -519,7 +535,7 @@ The only required parameter is `name`.
 
 :   A string representation of the type function name.
 
-`definition`
+`description`
 
 :   Description of the type used in documentation. Give information of
     the type and any of its arguments.

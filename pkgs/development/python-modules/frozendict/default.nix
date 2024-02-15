@@ -8,22 +8,28 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.3.5";
+  version = "2.4.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IlKhqQvNaYz4+U8UJ/fGUNNTC3RjyGKCJUzJ6J431Vw=";
+    hash = "sha256-mC5udKWez1s9JiVthtzCwEUPLheJpxRmcL3KdRiYP18=";
   };
 
-  postPatch = ''
-    # https://github.com/Marco-Sulla/python-frozendict/pull/69
-    substituteInPlace setup.py \
-      --replace 'if impl == "PyPy":' 'if impl == "PyPy" or not src_path.exists():'
+  # build C version if it exists
+  preBuild = ''
+    version_str=$(python -c 'import sys; print("_".join(map(str, sys.version_info[:2])))')
+    if test -f src/frozendict/c_src/$version_str/frozendictobject.c; then
+      export CIBUILDWHEEL=1
+      export FROZENDICT_PURE_PY=0
+    else
+      export CIBUILDWHEEL=0
+      export FROZENDICT_PURE_PY=1
+    fi
   '';
 
   nativeCheckInputs = [
@@ -34,20 +40,11 @@ buildPythonPackage rec {
     "frozendict"
   ];
 
-  preCheck = ''
-    pushd test
-  '';
-
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # https://github.com/Marco-Sulla/python-frozendict/issues/68
-    "test_c_extension"
-  ];
-
   meta = with lib; {
     description = "Module for immutable dictionary";
     homepage = "https://github.com/Marco-Sulla/python-frozendict";
     changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pbsds ];
   };
 }

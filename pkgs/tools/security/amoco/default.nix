@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
       prompt-toolkit
       pygments
       # pyside6
-      z3
+      z3-solver
     ];
   };
 

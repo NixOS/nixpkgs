@@ -4,12 +4,12 @@ let
   majorVersion = "1";
   minorVersion = "00";
 in
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nacelle";
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/${self.pname}_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/download/fonts/${finalAttrs.pname}_${majorVersion}${minorVersion}.zip";
     hash = "sha256-e4QsPiyfWEAYHWdwR3CkGc2UzuA3hZPYYlWtIubY0Oo=";
     stripRoot = false;
   };
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (self: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${self.pname}/";
+    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
     description = "A improved version of the Aileron font";
     platforms = platforms.all;
     maintainers = with maintainers; [ minijackson ];

@@ -8,7 +8,7 @@ let
       ${parted}/bin/parted --script /dev/vda mklabel msdos
       ${parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
       mkdir /mnt
-      ${e2fsprogs}/bin/mkfs.ext4 /dev/vda1
+      ${e2fsprogs}/bin/mkfs.ext4 -O '^metadata_csum_seed' /dev/vda1
       ${util-linux}/bin/mount -t ext4 /dev/vda1 /mnt
 
       if test -e /mnt/.debug; then
@@ -76,6 +76,7 @@ in {
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
         [
+          bintools
           brotli
           brotli.dev
           brotli.lib
@@ -83,6 +84,8 @@ in {
           docbook5
           docbook_xsl_ns
           grub2
+          kbd
+          kbd.dev
           kmod.dev
           libarchive
           libarchive.dev
@@ -92,7 +95,7 @@ in {
           ntp
           perlPackages.ListCompare
           perlPackages.XMLLibXML
-          python3Minimal
+          python3
           shared-mime-info
           stdenv
           sudo

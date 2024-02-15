@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.28.0";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-8OW0n6aS7bDDbzbrMfJLL8Yvq3vJg47qHQB4zY0xxAw=";
+    sha256 = "sha256-/o0UzjIUlRP936YG7fgfonPHc86z1WFCBcELor2frqE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}" ];
 

@@ -16,19 +16,20 @@
 
 mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    sha256 = "aHN17sugIoH5UfbOn11mDofq2EY7KByYCWE5NJRJWbo=";
+    hash = "sha256-8pfUpyjn01D8CL+2PjGkZqyHu+lpHZIXlXn67rZoxMY=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
@@ -37,7 +38,6 @@ mkDerivation rec {
     libfm-qt
     menu-cache
     qtbase
-    qttools
     qtx11extras
   ];
 

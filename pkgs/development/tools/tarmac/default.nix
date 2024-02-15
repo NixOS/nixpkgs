@@ -1,9 +1,9 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , rustPlatform
+, fetchFromGitHub
 , pkg-config
-, openssl_1_1
+, openssl
+, stdenv
 , Security
 }:
 
@@ -18,17 +18,24 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-O6qrAzGiAxiE56kpuvH/jDKHRXxHZ2SlDL5nwOOd4EU=";
   };
 
-  cargoSha256 = "sha256-QnpowYv/TBXjPHK8z6KAzN3gSsfNOf9POybqsyugeWc=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    openssl_1_1
+    openssl
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
+
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
     description = "Resource compiler and asset manager for Roblox";

@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -24,17 +23,12 @@
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
-# TODO:
-# * Make it build without python
-#     Problem: an example (test?) program needs it.
-#     Possible solution: disable compilation of this example somehow
-#     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
-#       $out/bin/gtester-report' to postInstall if this is solved
 /*
+  * TODO:
   * Use --enable-installed-tests for GNOME-related packages,
       and use them as a separately installed tests run by Hydra
       (they should test an already installed package)
-      https://wiki.gnome.org/GnomeGoals/InstalledTests
+      https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
@@ -56,11 +50,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.5";
+  version = "2.78.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "zrqDpZmc6zGkxPyZISB8uf//0qsdbsA8Fi0/YIpcFMg=";
+    sha256 = "sha256-JLjgZy3KEgzDLTlLzLhYROcy4E/nXRi7BXOy28dUj2M=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -68,27 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
-
-    # Fix error about missing sentinel in glib/tests/cxx.cpp
-    # These two commits are part of already merged glib MRs 3033 and 3031:
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3033
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/0ca5254c5d92aec675b76b4bfa72a6885cde6066.patch";
-      sha256 = "OfD5zO/7JIgOMLc0FAgHV9smWugFJuVPHCn9jTsMQJg=";
-    })
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3031
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/7dc19632f3115e3f517c6bc80436fe72c1dcdeb4.patch";
-      sha256 = "v28Yk+R0kN9ssIcvJudRZ4vi30rzQEE8Lsd1kWp5hbM=";
-    })
   ] ++ [
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 
-    # Add support for the GNOME’s default terminal emulator.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
-    ./gnome-console-support.patch
-    # Do the same for Pantheon’s terminal emulator.
+    # Add support for Pantheon’s terminal emulator.
     ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
@@ -195,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs glib/tests/gen-casefold-txt.py
     patchShebangs glib/tests/gen-casemap-txt.py
+    patchShebangs tools/gen-visibility-macros.py
 
     # Needs machine-id, comment the test
     sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
@@ -245,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
@@ -301,7 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
       "gobject-2.0"
       "gthread-2.0"
     ];
-    platforms   = platforms.unix;
+    platforms   = platforms.unix ++ platforms.windows;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "hdfs";
-  # See https://github.com/mtth/hdfs/issues/176.
-  version = "2.5.8";
+  version = "2.7.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mtth";
     repo = pname;
-    rev = version;
-    hash = "sha256-94Q3IUoX1Cb+uRqvsfpVZJ1koJSx5cQ3/XpYJ0gkQNU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Pm2E8hB0wbu7npi/sLt9D8jQsH69qNOHLji9CYqST/8=";
   };
 
   propagatedBuildInputs = [ docopt requests six ];
@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API and command line interface for HDFS";
     homepage = "https://github.com/mtth/hdfs";
+    changelog = "https://github.com/mtth/hdfs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

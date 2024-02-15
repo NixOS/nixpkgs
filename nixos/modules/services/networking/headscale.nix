@@ -17,14 +17,7 @@ in {
     services.headscale = {
       enable = mkEnableOption (lib.mdDoc "headscale, Open Source coordination server for Tailscale");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.headscale;
-        defaultText = literalExpression "pkgs.headscale";
-        description = lib.mdDoc ''
-          Which headscale package to use for the running server.
-        '';
-      };
+      package = mkPackageOption pkgs "headscale" { };
 
       user = mkOption {
         default = "headscale";
@@ -292,7 +285,7 @@ in {
               };
 
               client_secret_path = mkOption {
-                type = types.nullOr types.path;
+                type = types.nullOr types.str;
                 default = null;
                 description = lib.mdDoc ''
                   Path to OpenID Connect client secret file. Expands environment variables in format ''${VAR}.
@@ -393,7 +386,7 @@ in {
               type = types.nullOr types.path;
               default = null;
               description = lib.mdDoc ''
-                Path to a file containg ACL policies.
+                Path to a file containing ACL policies.
               '';
             };
           };
@@ -451,10 +444,14 @@ in {
       tls_letsencrypt_cache_dir = "${dataDir}/.cache";
     };
 
-    # Setup the headscale configuration in a known path in /etc to
-    # allow both the Server and the Client use it to find the socket
-    # for communication.
-    environment.etc."headscale/config.yaml".source = configFile;
+    environment = {
+      # Setup the headscale configuration in a known path in /etc to
+      # allow both the Server and the Client use it to find the socket
+      # for communication.
+      etc."headscale/config.yaml".source = configFile;
+
+      systemPackages = [ cfg.package ];
+    };
 
     users.groups.headscale = mkIf (cfg.group == "headscale") {};
 
@@ -467,6 +464,7 @@ in {
 
     systemd.services.headscale = {
       description = "headscale coordination server for Tailscale";
+      wants = [ "network-online.target" ];
       after = ["network-online.target"];
       wantedBy = ["multi-user.target"];
       restartTriggers = [configFile];

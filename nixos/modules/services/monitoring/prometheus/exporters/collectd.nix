@@ -58,10 +58,10 @@ in
     };
   };
   serviceOpts = let
-    collectSettingsArgs = if (cfg.collectdBinary.enable) then ''
+    collectSettingsArgs = optionalString (cfg.collectdBinary.enable) ''
       --collectd.listen-address ${cfg.collectdBinary.listenAddress}:${toString cfg.collectdBinary.port} \
       --collectd.security-level ${cfg.collectdBinary.securityLevel} \
-    '' else "";
+    '';
   in {
     serviceConfig = {
       ExecStart = ''

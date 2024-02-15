@@ -1,29 +1,22 @@
 { lib
 , babel
 , buildPythonPackage
-, colorama
-, cssselect
-, feedparser
 , fetchFromGitLab
 , fetchpatch
-, gdata
 , gnupg
-, google-api-python-client
 , html2text
 , libyaml
 , lxml
-, mechanize
 , nose
 , packaging
-, pdfminer-six
 , pillow
 , prettytable
-, pyqt5
+, pycountry
 , python-dateutil
 , pythonOlder
 , pyyaml
 , requests
-, simplejson
+, rich
 , termcolor
 , testers
 , unidecode
@@ -32,8 +25,8 @@
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.3.1";
-  format = "setuptools";
+  version = "3.6";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -41,44 +34,29 @@ buildPythonPackage rec {
     owner = "woob";
     repo = pname;
     rev = version;
-    hash = "sha256-aPkMfPRDjPfHIlGDEvorGwk09yQuEWwOkJJUST0vLAs=";
+    hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 
   nativeBuildInputs = [
     packaging
-    pyqt5
   ];
 
   propagatedBuildInputs = [
     babel
-    colorama
-    cssselect
     python-dateutil
-    feedparser
-    gdata
     gnupg
-    google-api-python-client
     html2text
     libyaml
     lxml
-    mechanize
     packaging
-    pdfminer-six
     pillow
     prettytable
-    pyqt5
+    pycountry
     pyyaml
     requests
-    simplejson
+    rich
     termcolor
     unidecode
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/woob/woob/-/commit/861b1bb92be53998d8174dcca6fa643d1c7cde12.patch";
-      sha256 = "sha256-IXcE59pMFtPLTOYa2inIvuA14USQvck6Q4hrKZTC0DE=";
-    })
   ];
 
   nativeCheckInputs = [

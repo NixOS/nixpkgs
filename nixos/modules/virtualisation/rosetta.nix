@@ -50,11 +50,19 @@ in
       }
     ];
 
-    fileSystems."${cfg.mountPoint}" =  {
+    fileSystems."${cfg.mountPoint}" = {
       device = cfg.mountTag;
       fsType = "virtiofs";
     };
 
+
+    nix.settings = {
+      extra-platforms = [ "x86_64-linux" ];
+      extra-sandbox-paths =  [
+        "/run/binfmt"
+        cfg.mountPoint
+      ];
+    };
     boot.binfmt.registrations.rosetta = {
       interpreter = "${cfg.mountPoint}/rosetta";
 

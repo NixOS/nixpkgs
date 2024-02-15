@@ -14,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.8.9"; # ensure that jellyfin-web has matching version
+  version = "10.8.13"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "kvtC9qtVuewR9W6sq963/tNgZbWSpygpBqcXnHuvX0Q=";
+    sha256 = "sha256-UtcrJRqDIPyewCNfI89E/IYrgLUhWx1me6MtPX+aeFU=";
   };
 
   patches = [
@@ -63,6 +63,7 @@ buildDotnetModule rec {
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
+    mainProgram = "jellyfin";
     platforms = dotnet-runtime.meta.platforms;
   };
 }

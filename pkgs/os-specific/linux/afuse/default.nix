@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "afuse";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "pcarrier";
     repo = "afuse";
     rev = "v${version}";
-    sha256 = "06i855h8a1w2jfly2gfy7vwhb2fp74yxbf3r69s28lki2kzwjar6";
+    sha256 = "sha256-KpysJRvDx+12BSl9pIGRqbJAM4W1NbzxMgDycGCr2RM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

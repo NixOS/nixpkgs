@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ zowoq ];
     platforms = [ "aarch64-darwin" "x86_64-darwin" ];
+    broken = stdenv.isx86_64; # https://hydra.nixos.org/build/219354133/nixlog/3
   };
 }

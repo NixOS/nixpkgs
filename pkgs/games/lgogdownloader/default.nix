@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lgogdownloader";
-  version = "3.9";
+  version = "3.12";
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
     rev = "v${version}";
-    sha256 = "sha256-Qt9uTKsD0kQ6b9Y5+eC+YWpCHMIJGzP+pMfuUBt/fME=";
+    hash = "sha256-IjZizO0HWDqtviY3TZ3AYYm5A0sU74YXjfFEtvQvv04=";
   };
 
   nativeBuildInputs = [

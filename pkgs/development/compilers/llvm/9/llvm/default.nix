@@ -15,6 +15,8 @@
 , zlib
 , buildLlvmTools
 , debugVersion ? false
+, doCheck ? stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isRiscV)
+  && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
@@ -29,6 +31,29 @@ let
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
+
+  # Ordinarily we would just the `doCheck` and `checkDeps` functionality
+  # `mkDerivation` gives us to manage our test dependencies (instead of breaking
+  # out `doCheck` as a package level attribute).
+  #
+  # Unfortunately `lit` does not forward `$PYTHONPATH` to children processes, in
+  # particular the children it uses to do feature detection.
+  #
+  # This means that python deps we add to `checkDeps` (which the python
+  # interpreter is made aware of via `$PYTHONPATH` – populated by the python
+  # setup hook) are not picked up by `lit` which causes it to skip tests.
+  #
+  # Adding `python3.withPackages (ps: [ ... ])` to `checkDeps` also doesn't work
+  # because this package is shadowed in `$PATH` by the regular `python3`
+  # package.
+  #
+  # So, we "manually" assemble one python derivation for the package to depend
+  # on, taking into account whether checks are enabled or not:
+  python = if doCheck then
+    let
+      checkDeps = ps: with ps; [ psutil ];
+    in python3.withPackages checkDeps
+  else python3;
 
 in stdenv.mkDerivation (rec {
   pname = "llvm";
@@ -48,7 +73,7 @@ in stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
-  nativeBuildInputs = [ cmake python3 ]
+  nativeBuildInputs = [ cmake python ]
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
@@ -83,7 +108,24 @@ in stdenv.mkDerivation (rec {
       sha256 = "0zjfjgavqzi2ypqwqnlvy6flyvdz8hi1anwv0ybwnm2zqixg7za3";
       stripLen = 1;
     })
-  ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
+
+    # Fix musl build.
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+      relative = "llvm";
+      hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+    })
+  ] ++ lib.optionals enablePolly [
+    ./gnu-install-dirs-polly.patch
+    # Add missing isl header includess required to build LLVM 9 + Polly with clang 16.
+    (fetchpatch {
+      name = "polly-ppcg-isl-headers.patch";
+      url = "https://repo.or.cz/ppcg.git/patch/098ba285306114dc71497f7b51c357f69c9b4472";
+      hash = "sha256-c9L30rDROYAMbUSuaK9U/ixyFMlH/Sa1n+VgLODzSCQ=";
+      extraPrefix = "tools/polly/lib/External/ppcg/";
+      stripLen = 1;
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -161,6 +203,8 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
+  cmakeBuildType = if debugVersion then "Debug" else "Release";
+
   cmakeFlags = with stdenv; let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
@@ -176,7 +220,6 @@ in stdenv.mkDerivation (rec {
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
   in flagsForLlvmConfig ++ [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
@@ -194,7 +237,7 @@ in stdenv.mkDerivation (rec {
   ] ++ optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (
@@ -252,8 +295,7 @@ in stdenv.mkDerivation (rec {
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isRiscV)
-    && (stdenv.hostPlatform == stdenv.buildPlatform);
+  inherit doCheck;
 
   checkTarget = "check-all";
 

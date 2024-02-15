@@ -4,7 +4,7 @@
 
   # Build-time dependencies:
 , addOpenGLRunpath
-, bazel_5
+, bazel_6
 , binutils
 , buildBazelPackage
 , buildPythonPackage
@@ -21,11 +21,13 @@
 , setuptools
 , symlinkJoin
 , wheel
+, build
 , which
 
   # Python dependencies:
 , absl-py
 , flatbuffers
+, ml-dtypes
 , numpy
 , scipy
 , six
@@ -33,26 +35,25 @@
   # Runtime dependencies:
 , double-conversion
 , giflib
-, grpc
 , libjpeg_turbo
-, protobuf
 , python
 , snappy
 , zlib
 
+, config
   # CUDA flags:
-, cudaSupport ? false
-, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport
+, cudaPackagesGoogle
 
   # MKL:
 , mklSupport ? true
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
+  inherit (cudaPackagesGoogle) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.3.22";
+  version = "0.4.24";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -63,7 +64,8 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    broken = stdenv.isAarch64;
+    # NOTE: We always build with NCCL; if it is unsupported, then our build is broken.
+    broken = stdenv.isDarwin || nccl.meta.unsupported;
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -81,21 +83,75 @@ let
   cudatoolkit_cc_joined = symlinkJoin {
     name = "${cudatoolkit.cc.name}-merged";
     paths = [
-      cudatoolkit.cc
+      backendStdenv.cc
       binutils.bintools # for ar, dwp, nm, objcopy, objdump, strip
     ];
   };
 
-  bazel-build = buildBazelPackage {
+  # Copy-paste from TF derivation.
+  # Most of these are not really used in jaxlib compilation but it's simpler to keep it
+  # 'as is' so that it's more compatible with TF derivation.
+  tf_system_libs = [
+    "absl_py"
+    "astor_archive"
+    "astunparse_archive"
+    # Not packaged in nixpkgs
+    # "com_github_googleapis_googleapis"
+    # "com_github_googlecloudplatform_google_cloud_cpp"
+    # Issue with transitive dependencies after https://github.com/grpc/grpc/commit/f1d14f7f0b661bd200b7f269ef55dec870e7c108
+    # "com_github_grpc_grpc"
+    # ERROR: /build/output/external/bazel_tools/tools/proto/BUILD:25:6: no such target '@com_google_protobuf//:cc_toolchain':
+    # target 'cc_toolchain' not declared in package '' defined by /build/output/external/com_google_protobuf/BUILD.bazel
+    # "com_google_protobuf"
+    # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
+    # "com_googlesource_code_re2"
+    "curl"
+    "cython"
+    "dill_archive"
+    "double_conversion"
+    "flatbuffers"
+    "functools32_archive"
+    "gast_archive"
+    "gif"
+    "hwloc"
+    "icu"
+    "jsoncpp_git"
+    "libjpeg_turbo"
+    "lmdb"
+    "nasm"
+    "opt_einsum_archive"
+    "org_sqlite"
+    "pasta"
+    "png"
+    # ERROR: /build/output/external/pybind11/BUILD.bazel: no such target '@pybind11//:osx':
+    # target 'osx' not declared in package '' defined by /build/output/external/pybind11/BUILD.bazel
+    # "pybind11"
+    "six_archive"
+    "snappy"
+    "tblib_archive"
+    "termcolor_archive"
+    "typing_extensions_archive"
+    "wrapt"
+    "zlib"
+  ];
+
+  arch =
+    # KeyError: ('Linux', 'arm64')
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.linuxArch == "arm64" then "aarch64"
+    else stdenv.hostPlatform.linuxArch;
+
+  bazel-build = buildBazelPackage rec {
     name = "bazel-build-${pname}-${version}";
 
-    bazel = bazel_5;
+    # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
+    bazel = bazel_6;
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jax";
-      rev = "${pname}-v${version}";
-      hash = "sha256-bnczJ8ma/UMKhA5MUQ6H4az+Tj+By14ZTG6lQQwptQs=";
+      # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
+      rev = "refs/tags/${pname}-v${version}";
+      hash = "sha256-hmx7eo3pephc6BQfoJ3U0QwWBWmhkAc+7S4QmW32qQs=";
     };
 
     nativeBuildInputs = [
@@ -104,6 +160,7 @@ let
       git
       setuptools
       wheel
+      build
       which
     ] ++ lib.optionals stdenv.isDarwin [
       cctools
@@ -113,13 +170,12 @@ let
       curl
       double-conversion
       giflib
-      grpc
       jsoncpp
       libjpeg_turbo
       numpy
       openssl
       pkgs.flatbuffers
-      protobuf
+      pkgs.protobuf
       pybind11
       scipy
       six
@@ -138,12 +194,22 @@ let
       rm -f .bazelversion
     '';
 
-    bazelTarget = "//build:build_wheel";
+    bazelRunTarget = "//jaxlib/tools:build_wheel";
+    runTargetFlags = [
+      "--output_path=$out"
+      "--cpu=${arch}"
+      # This has no impact whatsoever...
+      "--jaxlib_git_hash='12345678'"
+    ];
 
     removeRulesCC = false;
 
     GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
     GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/gcc";
+
+    # The version is automatically set to ".dev" if this variable is not set.
+    # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
+    JAXLIB_RELEASE = "1";
 
     preConfigure = ''
       # dummy ldconfig
@@ -157,7 +223,11 @@ let
       build --action_env=PYENV_ROOT
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
-      build --define PROTOBUF_INCLUDE_PATH="${protobuf}/include"
+      build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
+    '' + lib.optionalString (stdenv.hostPlatform.avxSupport && stdenv.hostPlatform.isUnix) ''
+      build --config=avx_posix
+    '' + lib.optionalString mklSupport ''
+      build --config=mkl_open_source_only
     '' + lib.optionalString cudaSupport ''
       build --action_env CUDA_TOOLKIT_PATH="${cudatoolkit_joined}"
       build --action_env CUDNN_INSTALL_PATH="${cudnn}"
@@ -169,61 +239,10 @@ let
       CFG
     '';
 
-    # Copy-paste from TF derivation.
-    # Most of these are not really used in jaxlib compilation but it's simpler to keep it
-    # 'as is' so that it's more compatible with TF derivation.
-    TF_SYSTEM_LIBS = lib.concatStringsSep "," ([
-      "absl_py"
-      "astor_archive"
-      "astunparse_archive"
-      "boringssl"
-      # Not packaged in nixpkgs
-      # "com_github_googleapis_googleapis"
-      # "com_github_googlecloudplatform_google_cloud_cpp"
-      "com_github_grpc_grpc"
-      "com_google_protobuf"
-      # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
-      # "com_googlesource_code_re2"
-      "curl"
-      "cython"
-      "dill_archive"
-      "double_conversion"
-      "flatbuffers"
-      "functools32_archive"
-      "gast_archive"
-      "gif"
-      "hwloc"
-      "icu"
-      "jsoncpp_git"
-      "libjpeg_turbo"
-      "lmdb"
-      "nasm"
-      "opt_einsum_archive"
-      "org_sqlite"
-      "pasta"
-      "png"
-      "pybind11"
-      "six_archive"
-      "snappy"
-      "tblib_archive"
-      "termcolor_archive"
-      "typing_extensions_archive"
-      "wrapt"
-      "zlib"
-    ] ++ lib.optionals (!stdenv.isDarwin) [
-      "nsync" # fails to build on darwin
-    ]);
-
     # Make sure Bazel knows about our configuration flags during fetching so that the
     # relevant dependencies can be downloaded.
     bazelFlags = [
       "-c opt"
-    ] ++ lib.optionals (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) [
-      "--config=avx_posix"
-    ] ++ lib.optionals cudaSupport [
-      "--config=cuda"
-    ] ++ lib.optionals mklSupport [
-      "--config=mkl_open_source_only"
     ] ++ lib.optionals stdenv.cc.isClang [
       # bazel depends on the compiler frontend automatically selecting these flags based on file
       # extension but our clang doesn't.
@@ -231,32 +250,44 @@ let
       "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++"
     ];
 
+    # We intentionally overfetch so we can share the fetch derivation across all the different configurations
     fetchAttrs = {
-      sha256 =
-        if cudaSupport then
-          "sha256-n8wo+hD9ZYO1SsJKgyJzUmjRlsz45WT6tt5ZLleGvGY="
-        else {
-          x86_64-linux = "sha256-A0A18kxgGNGHNQ67ZPUzh3Yq2LEcRV7CqR9EfP80NQk=";
-          aarch64-linux = "sha256-mU2jzuDu89jVmaG/M5bA3jSd7n7lDi+h8sdhs1z8p1A=";
-          x86_64-darwin = "sha256-9nNTpetvjyipD/l8vKlregl1j/OnZKAcOCoZQeRBvts=";
-          aarch64-darwin = "sha256-dOGUsdFImeOLcZ3VtgrNnd8A/HgIs/LYuH9GQV7A+78=";
-        }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+      TF_SYSTEM_LIBS = lib.concatStringsSep "," tf_system_libs;
+      # we have to force @mkl_dnn_v1 since it's not needed on darwin
+      bazelTargets = [ bazelRunTarget "@mkl_dnn_v1//:mkl_dnn" ];
+      bazelFlags = bazelFlags ++ [
+        "--config=avx_posix"
+      ] ++ lib.optionals cudaSupport [
+        # ideally we'd add this unconditionally too, but it doesn't work on darwin
+        # we make this conditional on `cudaSupport` instead of the system, so that the hash for both
+        # the cuda and the non-cuda deps can be computed on linux, since a lot of contributors don't
+        # have access to darwin machines
+        "--config=cuda"
+      ] ++ [
+        "--config=mkl_open_source_only"
+      ];
+
+      sha256 = (if cudaSupport then {
+        x86_64-linux = "sha256-c0avcURLAYNiLASjIeu5phXX3ze5TR812SW5SCG/iwk=";
+      } else {
+        x86_64-linux = "sha256-1hrQ9ehFy3vBJxKNUzi/T0l+eZxo26Th7i5VRd/9U+0=";
+        aarch64-linux = "sha256-3QVYJOj1lNHgYVV9rOzVdfhq5q6GDwpcWCjKNrSZ4aU=";
+      }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
     };
 
     buildAttrs = {
       outputs = [ "out" ];
 
+      TF_SYSTEM_LIBS = lib.concatStringsSep "," (tf_system_libs ++ lib.optionals (!stdenv.isDarwin) [
+        "nsync" # fails to build on darwin
+      ]);
+
       # Note: we cannot do most of this patching at `patch` phase as the deps are not available yet.
-      # 1) Fix pybind11 include paths.
-      # 2) Link protobuf from nixpkgs (through TF_SYSTEM_LIBS when using gcc) to prevent crashes on
+      # 1) Link protobuf from nixpkgs (through TF_SYSTEM_LIBS when using gcc) to prevent crashes on
       #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
-      # 3) Patch python path in the compiler driver.
-      preBuild = ''
-        for src in ./jaxlib/*.{cc,h} ./jaxlib/cuda/*.{cc,h}; do
-          sed -i 's@include/pybind11@pybind11@g' $src
-        done
-      '' + lib.optionalString cudaSupport ''
-        patchShebangs ../output/external/org_tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+      # 2) Patch python path in the compiler driver.
+      preBuild = lib.optionalString cudaSupport ''
+        patchShebangs ../output/external/xla/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook
         # https://github.com/NixOS/nixpkgs/pull/41914
@@ -265,29 +296,19 @@ let
           --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
           --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
-      '' + (if stdenv.cc.isGNU then ''
-        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
-      '' else if stdenv.cc.isClang then ''
-        sed -i 's@-lprotobuf@${protobuf}/lib/libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@${protobuf}/lib/libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
-      '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
-
-      installPhase = ''
-        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${stdenv.targetPlatform.linuxArch}
       '';
     };
 
     inherit meta;
   };
   platformTag =
-    if stdenv.targetPlatform.isLinux then
-      "manylinux2014_${stdenv.targetPlatform.linuxArch}"
+    if stdenv.hostPlatform.isLinux then
+      "manylinux2014_${arch}"
     else if stdenv.system == "x86_64-darwin" then
-      "macosx_10_9_${stdenv.targetPlatform.linuxArch}"
+      "macosx_10_9_${arch}"
     else if stdenv.system == "aarch64-darwin" then
-      "macosx_11_0_${stdenv.targetPlatform.linuxArch}"
-    else throw "Unsupported target platform: ${stdenv.targetPlatform}";
+      "macosx_11_0_${arch}"
+    else throw "Unsupported target platform: ${stdenv.hostPlatform}";
 
 in
 buildPythonPackage {
@@ -319,16 +340,21 @@ buildPythonPackage {
     double-conversion
     flatbuffers
     giflib
-    grpc
     jsoncpp
     libjpeg_turbo
+    ml-dtypes
     numpy
     scipy
     six
     snappy
   ];
 
-  pythonImportsCheck = [ "jaxlib" ];
+  pythonImportsCheck = [
+    "jaxlib"
+    # `import jaxlib` loads surprisingly little. These imports are actually bugs that appeared in the 0.4.11 upgrade.
+    "jaxlib.cpu_feature_guard"
+    "jaxlib.xla_client"
+  ];
 
   # Without it there are complaints about libcudart.so.11.0 not being found
   # because RPATH path entries added above are stripped.

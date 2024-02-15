@@ -1,27 +1,27 @@
 { lib
-, asynctest
 , bleak
 , click
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
 , pytest-mock
+, pythonAtLeast
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyzerproc";
-  version = "0.4.11";
+  version = "0.4.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
-    rev = version;
-    hash = "sha256-FNiq/dbh5PMTxnKCKDSHEvllehAEUYvWZS+OyP3lSW8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
 
   postPatch = ''
@@ -37,8 +37,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
+    # unittest.mock.InvalidSpecError: Cannot spec a Mock object.
+    "tests/test_light.py"
   ];
 
   pythonImportsCheck = [

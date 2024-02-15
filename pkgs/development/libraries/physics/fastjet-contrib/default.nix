@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
-  version = "1.049";
+  version = "1.053";
 
   src = fetchurl {
     url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
-    sha256 = "sha256-ri7WIGvGJ4tl6ZpPeN8O6ykR8wGij7V7UMVzwNWGmYc=";
+    sha256 = "sha256-sSokjgsUOTTJnjt8jdgyZRIvbGwJUzwqA99E9e/x5vo=";
   };
 
   buildInputs = [ fastjet ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     for f in Makefile.in */Makefile; do
       substituteInPlace "$f" --replace "CXX=g++" ""
     done
-    patchShebangs ./configure ./utils/check.sh ./utils/install-sh
+    patchShebangs ./utils/check.sh ./utils/install-sh
   '';
 
   # Written in shell manually, does not support autoconf-style

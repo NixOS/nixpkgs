@@ -9,13 +9,16 @@
 # propagates
 , aiohttp
 , aiorun
+, async-timeout
 , coloredlogs
 , dacite
 , orjson
 , home-assistant-chip-clusters
 
 # optionals
+, cryptography
 , home-assistant-chip-core
+, zeroconf
 
 # tests
 , python
@@ -26,17 +29,22 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "3.1.0";
+  version = "5.5.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-nNf0Q3J5nrYDinMnl+p3HC4FYMX+GubYmtchfuATWms=";
+    hash = "sha256-8daAABR5l8ZEX+PR4XrxRHlLllgnOVE4Q9yY/7UQXHw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -45,6 +53,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     aiorun
+    async-timeout
     coloredlogs
     dacite
     orjson
@@ -53,7 +62,9 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     server = [
+      cryptography
       home-assistant-chip-core
+      zeroconf
     ];
   };
 
@@ -61,7 +72,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = let
     pythonEnv = python.withPackages (_: propagatedBuildInputs ++ nativeCheckInputs ++ [ pytest ]);

@@ -1,4 +1,10 @@
 {
+  "1.20": {
+    "sha1": "8dd1a28015f51b1803213892b50b7b4fc76e594d",
+    "url": "https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar",
+    "version": "1.20.4",
+    "javaVersion": 17
+  },
   "1.19": {
     "url": "https://piston-data.mojang.com/v1/objects/8f3112a1049751cc472ec13e397eade5336ca7ae/server.jar",
     "sha1": "8f3112a1049751cc472ec13e397eade5336ca7ae",
@@ -6,61 +12,61 @@
     "javaVersion": 17
   },
   "1.18": {
-    "url": "https://launcher.mojang.com/v1/objects/c8f83c5655308435b3dcf03c06d9fe8740a77469/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/c8f83c5655308435b3dcf03c06d9fe8740a77469/server.jar",
     "sha1": "c8f83c5655308435b3dcf03c06d9fe8740a77469",
     "version": "1.18.2",
     "javaVersion": 17
   },
   "1.17": {
-    "url": "https://launcher.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/a16d67e5807f57fc4e550299cf20226194497dc2/server.jar",
     "sha1": "a16d67e5807f57fc4e550299cf20226194497dc2",
     "version": "1.17.1",
     "javaVersion": 16
   },
   "1.16": {
-    "url": "https://launcher.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/1b557e7b033b583cd9f66746b7a9ab1ec1673ced/server.jar",
     "sha1": "1b557e7b033b583cd9f66746b7a9ab1ec1673ced",
     "version": "1.16.5",
     "javaVersion": 8
   },
   "1.15": {
-    "url": "https://launcher.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/bb2b6b1aefcd70dfd1892149ac3a215f6c636b07/server.jar",
     "sha1": "bb2b6b1aefcd70dfd1892149ac3a215f6c636b07",
     "version": "1.15.2",
     "javaVersion": 8
   },
   "1.14": {
-    "url": "https://launcher.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar",
     "sha1": "3dc3d84a581f14691199cf6831b71ed1296a9fdf",
     "version": "1.14.4",
     "javaVersion": 8
   },
   "1.13": {
-    "url": "https://launcher.mojang.com/v1/objects/3737db93722a9e39eeada7c27e7aca28b144ffa7/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/3737db93722a9e39eeada7c27e7aca28b144ffa7/server.jar",
     "sha1": "3737db93722a9e39eeada7c27e7aca28b144ffa7",
     "version": "1.13.2",
     "javaVersion": 8
   },
   "1.12": {
-    "url": "https://launcher.mojang.com/v1/objects/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/886945bfb2b978778c3a0288fd7fab09d315b25f/server.jar",
     "sha1": "886945bfb2b978778c3a0288fd7fab09d315b25f",
     "version": "1.12.2",
     "javaVersion": 8
   },
   "1.11": {
-    "url": "https://launcher.mojang.com/v1/objects/f00c294a1576e03fddcac777c3cf4c7d404c4ba4/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/f00c294a1576e03fddcac777c3cf4c7d404c4ba4/server.jar",
     "sha1": "f00c294a1576e03fddcac777c3cf4c7d404c4ba4",
     "version": "1.11.2",
     "javaVersion": 8
   },
   "1.10": {
-    "url": "https://launcher.mojang.com/v1/objects/3d501b23df53c548254f5e3f66492d178a48db63/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/3d501b23df53c548254f5e3f66492d178a48db63/server.jar",
     "sha1": "3d501b23df53c548254f5e3f66492d178a48db63",
     "version": "1.10.2",
     "javaVersion": 8
   },
   "1.9": {
-    "url": "https://launcher.mojang.com/v1/objects/edbb7b1758af33d365bf835eb9d13de005b1e274/server.jar",
+    "url": "https://piston-data.mojang.com/v1/objects/edbb7b1758af33d365bf835eb9d13de005b1e274/server.jar",
     "sha1": "edbb7b1758af33d365bf835eb9d13de005b1e274",
     "version": "1.9.4",
     "javaVersion": 8
@@ -72,9 +78,9 @@
     "javaVersion": 8
   },
   "1.7": {
-    "url": "https://launcher.mojang.com/v1/objects/4cec86a928ec171fdc0c6b40de2de102f21601b5/server.jar",
-    "sha1": "4cec86a928ec171fdc0c6b40de2de102f21601b5",
-    "version": "1.7.9",
+    "url": "https://launcher.mojang.com/v1/objects/952438ac4e01b4d115c5fc38f891710c4941df29/server.jar",
+    "sha1": "952438ac4e01b4d115c5fc38f891710c4941df29",
+    "version": "1.7.10",
     "javaVersion": 8
   },
   "1.6": {

@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, gitUpdater
 , gnome-themes-extra
 , gtk-engine-murrine
 , jdupes
@@ -19,17 +18,17 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dracula" "rimless" "normal" ] tweaks
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "dracula" "gruvbox" "all" "black" "rimless" "normal" "float" ] tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-07-18";
+  version = "2023-10-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-dWYRTwfQRMBdg+htxpWatF325rToaovF/43LxX6I1GI=";
+    hash = "sha256-NxIWH3qLW8sEguovAv9wfgnlnmPlTipRJTmMo3rSHNY=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +45,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs install.sh clean-old-theme.sh
+    patchShebangs install.sh
   '';
 
   installPhase = ''
@@ -59,12 +58,10 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
       --dest $out/share/themes
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
-
-  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A modern and clean Gtk theme";

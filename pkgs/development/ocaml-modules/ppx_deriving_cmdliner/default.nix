@@ -14,6 +14,7 @@ buildDunePackage rec {
   version = "0.6.1";
 
   minimalOCamlVersion = "4.11";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "hammerlab";

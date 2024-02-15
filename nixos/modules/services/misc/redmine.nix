@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkBefore mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
+  inherit (lib) mkBefore mkDefault mkEnableOption mkPackageOption
+                mkIf mkOption mkRemovedOptionModule types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
   inherit (lib) optional optionalAttrs optionalString;
 
@@ -51,12 +52,8 @@ in
     services.redmine = {
       enable = mkEnableOption (lib.mdDoc "Redmine");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.redmine;
-        defaultText = literalExpression "pkgs.redmine";
-        description = lib.mdDoc "Which Redmine package to use.";
-        example = literalExpression "pkgs.redmine.override { ruby = pkgs.ruby_2_7; }";
+      package = mkPackageOption pkgs "redmine" {
+        example = "redmine.override { ruby = pkgs.ruby_3_2; }";
       };
 
       user = mkOption {
@@ -270,6 +267,9 @@ in
       { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
       }
+      { assertion = pgsqlLocal -> cfg.database.user == cfg.database.name;
+        message = "services.redmine.database.user and services.redmine.database.name must be the same when using a local postgresql database";
+      }
       { assertion = cfg.database.createLocally -> cfg.database.socket != null;
         message = "services.redmine.database.socket must be set if services.redmine.database.createLocally is set to true";
       }
@@ -283,13 +283,13 @@ in
 
     services.redmine.settings = {
       production = {
-        scm_subversion_command = if cfg.components.subversion then "${pkgs.subversion}/bin/svn" else "";
-        scm_mercurial_command = if cfg.components.mercurial then "${pkgs.mercurial}/bin/hg" else "";
-        scm_git_command = if cfg.components.git then "${pkgs.git}/bin/git" else "";
-        scm_cvs_command = if cfg.components.cvs then "${pkgs.cvs}/bin/cvs" else "";
-        scm_bazaar_command = if cfg.components.breezy then "${pkgs.breezy}/bin/bzr" else "";
-        imagemagick_convert_command = if cfg.components.imagemagick then "${pkgs.imagemagick}/bin/convert" else "";
-        gs_command = if cfg.components.ghostscript then "${pkgs.ghostscript}/bin/gs" else "";
+        scm_subversion_command = optionalString cfg.components.subversion "${pkgs.subversion}/bin/svn";
+        scm_mercurial_command = optionalString cfg.components.mercurial "${pkgs.mercurial}/bin/hg";
+        scm_git_command = optionalString cfg.components.git "${pkgs.git}/bin/git";
+        scm_cvs_command = optionalString cfg.components.cvs "${pkgs.cvs}/bin/cvs";
+        scm_bazaar_command = optionalString cfg.components.breezy "${pkgs.breezy}/bin/bzr";
+        imagemagick_convert_command = optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
+        gs_command = optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
         minimagick_font_path = "${cfg.components.minimagick_font_path}";
       };
     };
@@ -315,7 +315,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -419,7 +419,7 @@ in
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
-        ExecStart="${bundle} exec rails server webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+        ExecStart="${bundle} exec rails server -u webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
       };
 
     };

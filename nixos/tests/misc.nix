@@ -1,21 +1,19 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test-python.nix ({ pkgs, ...} : let
+import ./make-test-python.nix ({ lib, pkgs, ...} : let
   foo = pkgs.writeText "foo" "Hello World";
 in {
   name = "misc";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
-  };
+  meta.maintainers = with lib.maintainers; [ eelco ];
 
   nodes.machine =
     { lib, ... }:
-    with lib;
-    { swapDevices = mkOverride 0
+    { swapDevices = lib.mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
-      environment.variables.EDITOR = mkOverride 0 "emacs";
-      documentation.nixos.enable = mkOverride 0 true;
+      environment.variables.EDITOR = lib.mkOverride 0 "emacs";
+      documentation.nixos.enable = lib.mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
+      systemd.tmpfiles.settings."10-test"."/tmp/somefile".d = {};
       virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
           options = [ "mode=1777" "noauto" ];
@@ -32,7 +30,7 @@ in {
           options = [ "bind" "rw" "noauto" ];
         };
       };
-      systemd.automounts = singleton
+      systemd.automounts = lib.singleton
         { wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };
@@ -119,6 +117,9 @@ in {
               "systemctl start systemd-tmpfiles-clean",
           )
           machine.fail("[ -e /tmp/foo ]")
+
+      with subtest("whether systemd-tmpfiles settings works"):
+          machine.succeed("[ -e /tmp/somefile ]")
 
       with subtest("whether automounting works"):
           machine.fail("grep '/tmp2 tmpfs' /proc/mounts")

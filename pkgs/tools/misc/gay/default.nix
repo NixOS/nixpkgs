@@ -1,12 +1,13 @@
 { lib,
   python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gay";
   version = "1.2.9";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-x+RVVgQvJwV5j7DLYS7AnXb4OMJ4v+l0awUuonQIgzY=";
   };
@@ -16,5 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Colour your text / terminal to be more gay";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres CodeLongAndProsper90 ];
+    mainProgram = "gay";
   };
 }

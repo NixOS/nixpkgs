@@ -125,7 +125,7 @@ let
         ligo-mode =
           if super.ligo-mode.version == "0.3"
           then markBroken super.ligo-mode
-          else super.ligo-mode;
+          else null; # auto-updater is failing; use manual one
 
         # upstream issue: missing file header
         link = markBroken super.link;
@@ -281,6 +281,20 @@ let
           packageRequires = [ self.haskell-mode ];
         });
 
+        hotfuzz = super.hotfuzz.overrideAttrs (old: {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
+
+          dontUseCmakeBuildDir = true;
+
+          preBuild = ''
+            make -j$NIX_BUILD_CORES
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            install source/hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
+          '';
+        });
+
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
@@ -313,6 +327,57 @@ let
         });
 
         ivy-rtags = fix-rtags super.ivy-rtags;
+
+        jinx = super.jinx.overrideAttrs (old: let
+          libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+        in {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.pkg-config
+          ];
+
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+
+          postBuild = ''
+            pushd working/jinx
+            NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+            $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
+            install -m444 --target-directory=$outd jinx-mod${libExt}
+            rm $outd/jinx-mod.c $outd/emacs-module.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
+
+        sqlite3 = super.sqlite3.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            pushd working/sqlite3
+            make
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$out/share/emacs/site-lisp/elpa/sqlite3-*
+            install -m444 -t $outd sqlite3-api.so
+            rm $outd/*.c $outd/*.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
 
         libgit = super.libgit.overrideAttrs(attrs: {
           nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
@@ -410,6 +475,15 @@ let
 
         orgit-forge = buildWithGit super.orgit-forge;
 
+        ox-rss = buildWithGit super.ox-rss;
+
+        python-isort = super.python-isort.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace python-isort.el \
+              --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+          '';
+        });
+
         # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
@@ -420,6 +494,13 @@ let
 
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
+
+        pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace pikchr-mode.el \
+              --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+          '';
+        });
 
         rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
@@ -469,10 +550,24 @@ let
           '';
         });
 
+        tokei = super.tokei.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace tokei.el \
+              --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
+          '';
+        });
+
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
+        });
+
+        typst-mode = super.typst-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace typst-mode.el \
+              --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+          '';
         });
 
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
@@ -614,9 +709,31 @@ let
               --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
           '';
         });
+
+        # Build a helper executable that interacts with the macOS Dictionary.app
+        osx-dictionary =
+          if pkgs.stdenv.isDarwin
+          then super.osx-dictionary.overrideAttrs (old: {
+            buildInputs =
+              old.buildInputs ++
+              (with pkgs.darwin.apple_sdk.frameworks; [CoreServices Foundation]);
+            dontUnpack = false;
+            buildPhase = (old.buildPhase or "") + ''
+              cd source
+              $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
+            '';
+            postInstall = (old.postInstall or "") + "\n" + ''
+              outd=$out/share/emacs/site-lisp/elpa/osx-dictionary-*
+              mkdir -p $out/bin
+              install -m444 -t $out/bin osx-dictionary-cli
+              rm $outd/osx-dictionary.m
+            '';
+          })
+          else super.osx-dictionary;
       };
 
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
-generateMelpa { }
+(generateMelpa { })
+// { __attrsFailEvaluation = true; }

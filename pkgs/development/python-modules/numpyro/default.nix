@@ -1,37 +1,43 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , jax
 , jaxlib
 , multipledispatch
 , numpy
-, pytestCheckHook
-, pythonOlder
 , tqdm
+, funsor
+, pytestCheckHook
+# TODO: uncomment when tensorflow-probability gets fixed.
+# , tensorflow-probability
 }:
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.11.0";
+  version = "0.13.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-01fdGgFZ+G1FwjNwitM6PT1TQx0FtLvs4dBorkFoqo4=";
+    hash = "sha256-Um8LFVGAlMeOaN9uMwycHJzqEnTaxp8FYXIk+m2VTug=";
   };
 
   propagatedBuildInputs = [
     jax
     jaxlib
-    numpy
     multipledispatch
+    numpy
     tqdm
   ];
 
   nativeCheckInputs = [
+    funsor
     pytestCheckHook
+    # TODO: uncomment when tensorflow-probability gets fixed.
+    # tensorflow-probability
   ];
 
   pythonImportsCheck = [
@@ -46,11 +52,24 @@ buildPythonPackage rec {
     "test_gamma_poisson"
     "test_gof"
     "test_hpdi"
+    "test_kl_dirichlet_dirichlet"
     "test_kl_univariate"
     "test_mean_var"
     # Tests want to download data
     "data_load"
     "test_jsb_chorales"
+    # RuntimeWarning: overflow encountered in cast
+    "test_zero_inflated_logits_probs_agree"
+    # NameError: unbound axis name: _provenance
+    "test_model_transformation"
+    # Using deprecated (removed in jax==0.4.24) jax.core.safe_map
+    # https://github.com/pyro-ppl/numpyro/issues/1733
+    "test_beta_bernoulli"
+  ];
+
+  # TODO: remove when tensorflow-probability gets fixed.
+  disabledTestPaths = [
+    "test/test_distributions.py"
   ];
 
   meta = with lib; {

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
-, sconsPackages
+, scons
 , rubberband
 , boost
 , libjack2
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     rubberband
-    sconsPackages.scons_latest
+    scons
   ];
   buildInputs = [ libsamplerate libsndfile liblo libjack2 boost ];
   prefixKey = "PREFIX=";
@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     description = "Advanced command-line metronome for JACK";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "klick";
   };
 }

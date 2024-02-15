@@ -1,31 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , importlib-metadata
-, mitogen
 , pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.7.5";
-  format = "pyproject";
+  version = "0.7.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Husvo+JUM1ffCpN6cAxbZ2GyqlKEQArtRiBkcP5cC+U=";
+  src = fetchFromGitHub {
+    owner = "svinota";
+    repo = "pyroute2";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rX/aUmL9H4dSoRngxVVX1olfGtxK93g76E6Z0CYNr2M=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    mitogen
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
@@ -34,21 +33,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pyroute2"
-    "pr2modules.common"
-    "pr2modules.config"
-    "pr2modules.ethtool"
-    "pr2modules.ipdb"
-    "pr2modules.ipset"
-    "pr2modules.ndb"
-    "pr2modules.nftables"
-    "pr2modules.nslink"
-    "pr2modules.protocols"
+    "pyroute2.common"
+    "pyroute2.config"
+    "pyroute2.ethtool"
+    "pyroute2.ipdb"
+    "pyroute2.ipset"
+    "pyroute2.ndb"
+    "pyroute2.nftables"
+    "pyroute2.nslink"
+    "pyroute2.protocols"
   ];
 
   meta = with lib; {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
-    license = licenses.asl20;
+    changelog = "https://github.com/svinota/pyroute2/blob/${version}/CHANGELOG.rst";
+    license = with licenses; [ asl20 /* or */ gpl2Plus ];
     maintainers = with maintainers; [ fab mic92 ];
     platforms = platforms.unix;
   };

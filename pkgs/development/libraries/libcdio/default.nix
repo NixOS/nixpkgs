@@ -10,19 +10,18 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fixes test failure of realpath test with glibc-2.36
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/libcdio/raw/d49ccdd9c8b4e9d57c01539f4c8948f28ce82bca/f/realpath-test-fix.patch";
+      sha256 = "sha256-ldAGlcf79uQ8QAt4Au8Iv6jsI6ICZXtXOKZBpyELtN8=";
+    })
+
     # pull pending upstream patch to fix build on ncurses-6.3:
     #  https://savannah.gnu.org/patch/index.php?10130
     (fetchpatch {
       name = "ncurses-6.3.patch";
       url = "https://savannah.gnu.org/patch/download.php?file_id=52179";
       sha256 = "1v15gxhpi4bgcr12pb3d9c3hiwj0drvc832vic7sham34lhjmcbb";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    (fetchpatch {
-      name = "musl-realpath-test.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/libcdio/disable-broken-test.patch?id=058a8695c12ae13b40c981ee98809352490b6155";
-      includes = [ "test/driver/realpath.c" ];
-      sha256 = "sha256-6j2bjMed2l+TFZ5emjCcozzF/kkGA8FVifJB8U7QceU=";
     })
   ];
 

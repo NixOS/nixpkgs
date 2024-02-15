@@ -5,7 +5,7 @@
 , doxygen
 , graphviz
 , makeWrapper
-, boost17x
+, boost179
 , SDL2
 , python3
 , freetype
@@ -24,17 +24,17 @@
 
 stdenv.mkDerivation rec {
   pname = "freeorion";
-  version = "0.4.10.2";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "freeorion";
     repo = "freeorion";
     rev = "v${version}";
-    sha256 = "sha256-k/YwTg0N2b70igfqRuFl/zwxMQhD2QjbapsazYbi0Ik=";
+    sha256 = "sha256-uJRDU0Xd+sHL2IDvMiElUSOhvchVMW9wYMSLSN7pYtQ=";
   };
 
   buildInputs = [
-    (boost17x.override { enablePython = true; python = python3; })
+    (boost179.override { enablePython = true; python = python3; })
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  # as of 0.4.10.2 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
+  # as of 0.5 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
   cmakeFlags = [ "-DOpenGL_GL_PREFERENCE=LEGACY" ];
 
   postInstall = ''

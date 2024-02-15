@@ -16,6 +16,7 @@
 , rich
 , pysocks
 # CheckInputs
+, pip
 , pytest-httpbin
 , pytest-lazy-fixture
 , pytest-mock
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "httpie";
-  version = "3.2.1";
+  version = "3.2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = version;
-    hash = "sha256-WEe8zSlNckl7bPBi6u8mHQ1/xPw3kE81F8Xr15TchgM=";
+    hash = "sha256-hPsjEpvT6tnPm68AUB2Tv3Gon4DfSzO2VYCGqP8ozSI=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +53,10 @@ buildPythonPackage rec {
     rich
   ] ++ requests.optional-dependencies.socks;
 
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pip
     pytest-httpbin
     pytest-lazy-fixture
     pytest-mock
@@ -103,6 +106,11 @@ buildPythonPackage rec {
     "test_valid_xml"
     "test_xml_format_options"
     "test_xml_xhtm"
+    # httpbin compatibility issues
+    "test_compress_form"
+    "test_binary_suppresses_when_terminal"
+    "test_binary_suppresses_when_not_terminal_but_pretty"
+    "test_binary_included_and_correct_when_suitable"
   ] ++ lib.optionals stdenv.isDarwin [
     # flaky
     "test_daemon_runner"

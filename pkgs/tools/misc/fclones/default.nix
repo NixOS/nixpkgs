@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.30.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eFWFXUARXy3VA53VPSZkJdw6ZvI+FtFnCCGHmCAdTto=";
+    hash = "sha256-JgeajCubRz9hR6uvRAw1HXdKa6Ua+l/Im/bYXdx1gL0=";
   };
 
-  cargoHash = "sha256-C7DKwEMYdypfItflMOL7rjbAdXDRsXDNoPlc9j6aBRA=";
+  cargoHash = "sha256-mEgFfg8I+JJuUEvj+sia2aL3BVg3HteQorZ2EOiLo64=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
@@ -33,7 +33,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Efficient Duplicate File Finder and Remover";
     homepage = "https://github.com/pkolaczk/fclones";
+    changelog = "https://github.com/pkolaczk/fclones/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ cyounkins msfjarvis ];
+    maintainers = with maintainers; [ cyounkins figsoda msfjarvis ];
+    mainProgram = "fclones";
   };
 }

@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "screed";
-  version = "1.1.2";
+  version = "1.1.3";
+  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c0/6eopkUoZJbYlbc2+R1rKYiVbi/UI1gSPZPshRm2o=";
+    hash = "sha256-N+gWl8fbqVoFNVTltahq/zKXBeHPXfxee42lht7gcrg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonImportsCheck = [ "screed" ];
   checkInputs = [ pytestCheckHook ];

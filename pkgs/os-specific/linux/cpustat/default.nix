@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cpustat";
-  version = "0.02.17";
+  version = "0.02.19";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-4HDXRtklzQSsywCGCTKdz6AtZta9R1mx7qkT7skX6Kc=";
+    hash = "sha256-MujdgA+rFLrRc/N9yN7udnarA1TCzX//95hoXTUHG8Q=";
   };
 
   buildInputs = [ ncurses ];

@@ -1,187 +1,266 @@
-{ stdenv
-, buildPythonApplication
-, lib
-, python
-, fetchurl
+{ lib
+, stdenv
+
+, buildEnv
+, cargo
 , fetchFromGitHub
-, fetchpatch
+, fetchYarnDeps
+, installShellFiles
 , lame
 , mpv-unwrapped
-, libpulseaudio
-, pyqtwebengine
-, decorator
-, beautifulsoup4
-, sqlalchemy
-, pyaudio
-, requests
-, markdown
-, matplotlib
-, mock
-, pytest
-, glibcLocales
-, nose
-, jsonschema
-, setuptools
-, send2trash
+, ninja
+, nixosTests
+, nodejs
+, nodejs-slim
+, prefetch-yarn-deps
+, protobuf
+, python3
+, qt6
+, rsync
+, rustPlatform
+, writeShellScriptBin
+, yarn
+
+, AVKit
 , CoreAudio
-  # This little flag adds a huge number of dependencies, but we assume that
-  # everyone wants Anki to draw plots with statistics by default.
-, plotsSupport ? true
-  # manual
-, asciidoc
+, swift
 }:
 
 let
-  # when updating, also update rev-manual to a recent version of
-  # https://github.com/ankitects/anki-docs
-  # The manual is distributed independently of the software.
-  version = "2.1.15";
-  sha256-pkg = "12dvyf3j9df4nrhhnqbzd9b21rpzkh4i6yhhangn2zf7ch0pclss";
-  rev-manual = "8f6387867ac37ef3fe9d0b986e70f898d1a49139";
-  sha256-manual = "0pm5slxn78r44ggvbksz7rv9hmlnsvn9z811r6f63dsc8vm6mfml";
+  pname = "anki";
+  version = "23.12.1";
+  rev = "1a1d4d5419c6b57ef3baf99c9d2d9cf85d36ae0a";
 
-  manual = stdenv.mkDerivation {
-    pname = "anki-manual";
-    inherit version;
-    src = fetchFromGitHub {
-      owner = "ankitects";
-      repo = "anki-docs";
-      rev = rev-manual;
-      sha256 = sha256-manual;
+  src = fetchFromGitHub {
+    owner = "ankitects";
+    repo = "anki";
+    rev = version;
+    hash = "sha256-K38bhfU1076PxdKJFvnFb2w6Q9Q2MUmL+j8be3RZQYk=";
+    fetchSubmodules = true;
+  };
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "fsrs-0.1.0" = "sha256-KJgT01OmMbqgYFE5Fu8nblZl9rL5QVVMa2DNFsw6cdk=";
+      "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
+      "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
-    dontInstall = true;
-    nativeBuildInputs = [ asciidoc ];
-    patchPhase = ''
-      # rsync isnt needed
-      # WEB is the PREFIX
-      # We remove any special ankiweb output generation
-      # and rename every .mako to .html
-      sed -e 's/rsync -a/cp -a/g' \
-          -e "s|\$(WEB)/docs|$out/share/doc/anki/html|" \
-          -e '/echo asciidoc/,/mv $@.tmp $@/c \\tasciidoc -b html5 -o $@ $<' \
-          -e 's/\.mako/.html/g' \
-          -i Makefile
-      # patch absolute links to the other language manuals
-      sed -e 's|https://apps.ankiweb.net/docs/|link:./|g' \
-          -i {manual.txt,manual.*.txt}
-      # there’s an artifact in most input files
-      sed -e '/<%def.*title.*/d' \
-          -i *.txt
-      mkdir -p $out/share/doc/anki/html
+  };
+  cargoDeps = rustPlatform.importCargoLock cargoLock;
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-tOl+gLBE6SNPQvVWT/N7RKFaaP9SnpCBJf5dq2wCPuM=";
+  };
+
+  anki-build-python = python3.withPackages (ps: with ps; [
+    mypy-protobuf
+  ]);
+
+  # anki shells out to git to check its revision, and also to update submodules
+  # We don't actually need the submodules, so we stub that out
+  fakeGit = writeShellScriptBin "git" ''
+    case "$*" in
+      "rev-parse --short=8 HEAD")
+        echo ${builtins.substring 0 8 rev}
+      ;;
+      *"submodule update "*)
+        exit 0
+      ;;
+      *)
+        echo "Unrecognized git: $@"
+        exit 1
+      ;;
+    esac
+  '';
+
+  # We don't want to run pip-sync, it does network-io
+  fakePipSync = writeShellScriptBin "pip-sync" ''
+    exit 0
+  '';
+
+  offlineYarn = writeShellScriptBin "yarn" ''
+    [[ "$1" == "install" ]] && exit 0
+    exec ${yarn}/bin/yarn --offline "$@"
+  '';
+
+  pyEnv = buildEnv {
+    name = "anki-pyenv-${version}";
+    paths = with python3.pkgs; [
+      pip
+      fakePipSync
+      anki-build-python
+    ];
+    pathsToLink = [ "/bin" ];
+  };
+
+  # https://discourse.nixos.org/t/mkyarnpackage-lockfile-has-incorrect-entry/21586/3
+  anki-nodemodules = stdenv.mkDerivation {
+    pname = "anki-nodemodules";
+
+    inherit version src yarnOfflineCache;
+
+    nativeBuildInputs = [
+      nodejs-slim
+      prefetch-yarn-deps
+      yarn
+    ];
+
+    configurePhase = ''
+      export HOME=$NIX_BUILD_TOP
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
+      fixup-yarn-lock yarn.lock
+      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+      patchShebangs node_modules/
+    '';
+
+    installPhase = ''
+      mv node_modules $out
     '';
   };
-
 in
-buildPythonApplication rec {
-  pname = "anki";
-  inherit version;
-  format = "other";
-
-  src = fetchurl {
-    urls = [
-      "https://apps.ankiweb.net/downloads/current/${pname}-${version}-source.tgz"
-      # "https://apps.ankiweb.net/downloads/current/${name}-source.tgz"
-      # "http://ankisrs.net/download/mirror/${name}.tgz"
-      # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
-    ];
-    sha256 = sha256-pkg;
-  };
+python3.pkgs.buildPythonApplication {
+  inherit pname version;
 
   outputs = [ "out" "doc" "man" ];
 
-  propagatedBuildInputs = [
-    pyqtwebengine
-    sqlalchemy
-    beautifulsoup4
-    send2trash
-    pyaudio
-    requests
-    decorator
-    markdown
-    jsonschema
-    setuptools
-  ]
-  ++ lib.optional plotsSupport matplotlib
-  ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
-  ;
-
-  nativeCheckInputs = [ pytest glibcLocales mock nose ];
-
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
-  buildInputs = [ lame mpv-unwrapped libpulseaudio ];
+  inherit src;
 
   patches = [
-    # Disable updated version check.
-    ./no-version-check.patch
-    (fetchpatch {
-      name = "fix-mpv-args.patch";
-      url = "https://sources.debian.org/data/main/a/anki/2.1.15+dfsg-3/debian/patches/fix-mpv-args.patch";
-      sha256 = "1dimnnawk64m5bbdbjrxw5k08q95l728n94cgkrrwxwavmmywaj2";
-    })
-    (fetchpatch {
-      name = "anki-2.1.15-unescape.patch";
-      url = "https://795309.bugs.gentoo.org/attachment.cgi?id=715200";
-      sha256 = "14rz864kdaba4fd1marwkyz9n1jiqnbjy4al8bvwlhpvp0rm1qk6";
-    })
+    ./patches/disable-auto-update.patch
+    ./patches/remove-the-gl-library-workaround.patch
+    ./patches/skip-formatting-python-code.patch
   ];
 
-  # Anki does not use setup.py
-  dontBuild = true;
+  inherit cargoDeps yarnOfflineCache;
 
-  postPatch = ''
-    # Remove QT translation files. We'll use the standard QT ones.
-    rm "locale/"*.qm
+  nativeBuildInputs = [
+    fakeGit
+    offlineYarn
+    prefetch-yarn-deps
 
-    # hitting F1 should open the local manual
-    substituteInPlace anki/consts.py \
-      --replace 'HELP_SITE="http://ankisrs.net/docs/manual.html"' \
-                'HELP_SITE="${manual}/share/doc/anki/html/manual.html"'
-  '';
+    cargo
+    installShellFiles
+    ninja
+    qt6.wrapQtAppsHook
+    rsync
+    rustPlatform.cargoSetupHook
+  ] ++ lib.optional stdenv.isDarwin swift;
 
-  # UTF-8 locale needed for testing
-  LC_ALL = "en_US.UTF-8";
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg
+  ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
+
+  propagatedBuildInputs = with python3.pkgs; [
+    # This rather long list came from running:
+    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \
+    #      sort | uniq | grep -v "^#$"
+    # in their repo at the git tag for this version
+    # There's probably a more elegant way, but the above extracted all the
+    # names, without version numbers, of their python dependencies. The hope is
+    # that nixpkgs versions are "close enough"
+    # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
+    beautifulsoup4
+    certifi
+    charset-normalizer
+    click
+    colorama
+    decorator
+    distro
+    flask
+    flask-cors
+    idna
+    importlib-metadata
+    itsdangerous
+    jinja2
+    jsonschema
+    markdown
+    markupsafe
+    orjson
+    pep517
+    pyparsing
+    pyqt6
+    pyqt6-sip
+    pyqt6-webengine
+    pyrsistent
+    pysocks
+    python3.pkgs.protobuf
+    requests
+    send2trash
+    six
+    soupsieve
+    urllib3
+    waitress
+    werkzeug
+    zipp
+  ] ++ lib.optionals stdenv.isDarwin [
+    AVKit
+    CoreAudio
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [ pytest mock astroid ];
 
   # tests fail with to many open files
+  # TODO: verify if this is still true (I can't, no mac)
   doCheck = !stdenv.isDarwin;
 
-  # - Anki writes some files to $HOME during tests
-  # - Skip tests using network
-  checkPhase = ''
-    HOME=$TMP pytest --ignore tests/test_sync.py
-  '';
-
-  installPhase = ''
-    pp=$out/lib/${python.libPrefix}/site-packages
-
-    mkdir -p $out/bin
-    mkdir -p $out/share/applications
-    mkdir -p $doc/share/doc/anki
-    mkdir -p $man/share/man/man1
-    mkdir -p $out/share/mime/packages
-    mkdir -p $out/share/pixmaps
-    mkdir -p $pp
-
-    cat > $out/bin/anki <<EOF
-    #!${python}/bin/python
-    import aqt
-    aqt.run()
-    EOF
-    chmod 755 $out/bin/anki
-
-    cp -v anki.desktop $out/share/applications/
-    cp -v README* LICENSE* $doc/share/doc/anki/
-    cp -v anki.1 $man/share/man/man1/
-    cp -v anki.xml $out/share/mime/packages/
-    cp -v anki.{png,xpm} $out/share/pixmaps/
-    cp -rv locale $out/share/
-    cp -rv anki aqt web $pp/
-
-    # copy the manual into $doc
-    cp -r ${manual}/share/doc/anki/html $doc/share/doc/anki
-  '';
-
-  # now wrapPythonPrograms from postFixup will add both python and qt env variables
+  dontUseNinjaInstall = false;
   dontWrapQtApps = true;
+
+  env = {
+    # Activate optimizations
+    RELEASE = true;
+
+    NODE_BINARY = lib.getExe nodejs;
+    PROTOC_BINARY = lib.getExe protobuf;
+    PYTHON_BINARY = lib.getExe python3;
+    YARN_BINARY = lib.getExe offlineYarn;
+  };
+
+  buildPhase = ''
+    export RUST_BACKTRACE=1
+    export RUST_LOG=debug
+
+    mkdir -p out/pylib/anki .git
+
+    echo ${builtins.substring 0 8 rev} > out/buildhash
+    touch out/env
+    touch .git/HEAD
+
+    ln -vsf ${pyEnv} ./out/pyenv
+    rsync --chmod +w -avP ${anki-nodemodules}/ out/node_modules/
+    ln -vsf out/node_modules node_modules
+
+    export HOME=$NIX_BUILD_TOP
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
+    fixup-yarn-lock yarn.lock
+
+    patchShebangs ./ninja
+    PIP_USER=1 ./ninja build wheels
+  '';
+
+  # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
+  checkPhase = ''
+    HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
+      pytest -p no:cacheprovider pylib/tests
+    HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
+      pytest -p no:cacheprovider qt/tests
+  '';
+
+  preInstall = ''
+    mkdir dist
+    mv out/wheels/* dist
+  '';
+
+  postInstall = ''
+    install -D -t $out/share/applications qt/bundle/lin/anki.desktop
+    install -D -t $doc/share/doc/anki README* LICENSE*
+    install -D -t $out/share/mime/packages qt/bundle/lin/anki.xml
+    install -D -t $out/share/pixmaps qt/bundle/lin/anki.{png,xpm}
+    installManPage qt/bundle/lin/anki.1
+  '';
 
   preFixup = ''
     makeWrapperArgs+=(
@@ -191,11 +270,12 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit manual;
+    # cargoLock is reused in anki-sync-server
+    inherit cargoLock;
+    tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
   meta = with lib; {
-    homepage = "https://apps.ankiweb.net/";
     description = "Spaced repetition flashcard program";
     longDescription = ''
       Anki is a program which makes remembering things easy. Because it is a lot
@@ -209,8 +289,11 @@ buildPythonApplication rec {
       people's names and faces, brushing up on geography, mastering long poems,
       or even practicing guitar chords!
     '';
+    homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ oxij Profpatsch ];
+    maintainers = with maintainers; [ euank oxij ];
+    # Reported to crash at launch on darwin (as of 2.1.65)
+    broken = stdenv.isDarwin;
   };
 }

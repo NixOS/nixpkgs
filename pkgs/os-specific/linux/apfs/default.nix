@@ -6,7 +6,7 @@
 }:
 
 let
-  tag = "0.3.0";
+  tag = "0.3.7";
 in
 stdenv.mkDerivation {
   pname = "apfs";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
     rev = "v${tag}";
-    sha256 = "sha256-ABFqkiIJuFapFsUIFHfw8+TujePZm7ZX/qHuFO2KdnQ=";
+    hash = "sha256-LmUaIKZ1Msc4yAXNMzyDhPCPsQYeYnUbRF6pA9WvHYk=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  passthru.tests.test = nixosTests.apfs;
+  passthru.tests.apfs = nixosTests.apfs;
 
   meta = with lib; {
     description = "APFS module for linux";
@@ -44,7 +44,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.9";
     maintainers = with maintainers; [ Luflosi ];
   };
 }

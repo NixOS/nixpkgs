@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='Release'"
     "-DBUILD_EXAMPLES='OFF'"
   ];
 

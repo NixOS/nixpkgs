@@ -7,7 +7,7 @@
 , libpthreadstubs
 , perl
 , readline
-, tex
+, texliveBasic
 , withThread ? true
 }:
 
@@ -15,7 +15,7 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.15.2";
+  version = "2.15.4";
 
   src = fetchurl {
     urls = [
@@ -23,24 +23,15 @@ stdenv.mkDerivation rec {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-sEYoER7iKHZRmksc2vsy/rqjTq+iT56B9Y+NBX++4N0=";
+    hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
   };
-
-  patches = [
-    # https://pari.math.u-bordeaux.fr/cgi-bin/bugreport.cgi?bug=2441
-    (fetchpatch {
-      name = "fix-find_isogenous_from_Atkin.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pari/patches/bug2441.patch?id=9.8.rc0";
-      hash = "sha256-DvOUFlFDnopN+MJY6GYRPNabuoHPFch/nNn+49ygznc=";
-    })
-  ];
 
   buildInputs = [
     gmp
     libX11
     perl
     readline
-    tex
+    texliveBasic
   ] ++ lib.optionals withThread [
     libpthreadstubs
   ];

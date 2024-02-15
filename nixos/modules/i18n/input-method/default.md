@@ -9,7 +9,7 @@ than there are keys on the keyboard.
 The following input methods are available in NixOS:
 
   - IBus: The intelligent input bus.
-  - Fcitx: A customizable lightweight input method.
+  - Fcitx5: The next generation of fcitx, addons (including engines, dictionaries, skins) can be added using `i18n.inputMethod.fcitx5.addons`.
   - Nabi: A Korean input method based on XIM.
   - Uim: The universal input method, is a library with a XIM bridge.
   - Hime: An extremely easy-to-use input method framework.
@@ -67,38 +67,40 @@ application in the Nix store. The `glib` packages must
 match exactly. If they do not, uninstalling and reinstalling the
 application is a likely fix.
 
-## Fcitx {#module-services-input-methods-fcitx}
+## Fcitx5 {#module-services-input-methods-fcitx}
 
-Fcitx is an input method framework with extension support. It has three
+Fcitx5 is an input method framework with extension support. It has three
 built-in Input Method Engine, Pinyin, QuWei and Table-based input methods.
 
 The following snippet can be used to configure Fcitx:
 
 ```
 i18n.inputMethod = {
-  enabled = "fcitx";
-  fcitx.engines = with pkgs.fcitx-engines; [ mozc hangul m17n ];
+  enabled = "fcitx5";
+  fcitx5.addons = with pkgs; [ fcitx5-mozc fcitx5-hangul fcitx5-m17n ];
 };
 ```
 
-`i18n.inputMethod.fcitx.engines` is optional and can be
-used to add extra Fcitx engines.
+`i18n.inputMethod.fcitx5.addons` is optional and can be
+used to add extra Fcitx5 addons.
 
-Available extra Fcitx engines are:
+Available extra Fcitx5 addons are:
 
-  - Anthy (`fcitx-engines.anthy`): Anthy is a system for
+  - Anthy (`fcitx5-anthy`): Anthy is a system for
     Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
-  - Chewing (`fcitx-engines.chewing`): Chewing is an
+  - Chewing (`fcitx5-chewing`): Chewing is an
     intelligent Zhuyin input method. It is one of the most popular input
     methods among Traditional Chinese Unix users.
-  - Hangul (`fcitx-engines.hangul`): Korean input method.
-  - Unikey (`fcitx-engines.unikey`): Vietnamese input method.
-  - m17n (`fcitx-engines.m17n`): m17n is an input method that
+  - Hangul (`fcitx5-hangul`): Korean input method.
+  - Unikey (`fcitx5-unikey`): Vietnamese input method.
+  - m17n (`fcitx5-m17n`): m17n is an input method that
     uses input methods and corresponding icons in the m17n database.
-  - mozc (`fcitx-engines.mozc`): A Japanese input method from
+  - mozc (`fcitx5-mozc`): A Japanese input method from
     Google.
-  - table-others (`fcitx-engines.table-others`): Various
+  - table-others (`fcitx5-table-other`): Various
     table-based input methods.
+  - chinese-addons (`fcitx5-chinese-addons`): Various chinese input methods.
+  - rime (`fcitx5-rime`): RIME support for fcitx5.
 
 ## Nabi {#module-services-input-methods-nabi}
 

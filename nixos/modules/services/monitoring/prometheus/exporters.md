@@ -76,7 +76,7 @@ example:
     directory, which will be called postfix.nix and contains all exporter
     specific options and configuration:
     ```
-    # nixpgs/nixos/modules/services/prometheus/exporters/postfix.nix
+    # nixpkgs/nixos/modules/services/prometheus/exporters/postfix.nix
     { config, lib, pkgs, options }:
 
     with lib;

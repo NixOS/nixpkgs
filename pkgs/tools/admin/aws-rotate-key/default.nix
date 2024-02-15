@@ -24,6 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/Fullscreen/aws-rotate-key";
     license = licenses.mit;
     maintainers = [ maintainers.mbode ];
-    platforms = platforms.unix;
+    mainProgram = "aws-rotate-key";
   };
 }

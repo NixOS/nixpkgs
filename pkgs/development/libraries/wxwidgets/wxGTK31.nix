@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
-, gnome2
+, curl
 , gst_all_1
 , gtk3
 , libGL
@@ -16,8 +15,10 @@
 , compat28 ? false
 , compat30 ? true
 , unicode ? true
+, withCurl ? false
+, withPrivateFonts ? false
 , withEGL ? true
-, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? !stdenv.isDarwin
 , withWebKit ? stdenv.isDarwin
 , webkitgtk
 , setfile
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     libXxf86vm
     xorgproto
   ]
+  ++ lib.optional withCurl curl
   ++ lib.optional withMesa libGLU
   ++ lib.optional (withWebKit && !stdenv.isDarwin) webkitgtk
   ++ lib.optional (withWebKit && stdenv.isDarwin) WebKit
@@ -87,6 +89,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (!withEGL) "--disable-glcanvasegl"
   ++ lib.optional unicode "--enable-unicode"
+  ++ lib.optional withCurl "--enable-webrequest"
+  ++ lib.optional withPrivateFonts "--enable-privatefonts"
   ++ lib.optional withMesa "--with-opengl"
   ++ lib.optionals stdenv.isDarwin [
     "--with-osx_cocoa"
@@ -96,7 +100,7 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
+  SEARCH_LIB = lib.optionalString (!stdenv.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib ";
 
   preConfigure = ''
     substituteInPlace configure --replace \

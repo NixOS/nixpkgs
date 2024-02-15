@@ -76,9 +76,9 @@ let
 in {
   imports = [ ../../resolver.nix ];
 
-  options.test-support.acme = with lib; {
-    caDomain = mkOption {
-      type = types.str;
+  options.test-support.acme = {
+    caDomain = lib.mkOption {
+      type = lib.types.str;
       readOnly = true;
       default = domain;
       description = lib.mdDoc ''
@@ -86,8 +86,8 @@ in {
         identify the CA server.
       '';
     };
-    caCert = mkOption {
-      type = types.path;
+    caCert = lib.mkOption {
+      type = lib.types.path;
       readOnly = true;
       default = testCerts.ca.cert;
       description = lib.mdDoc ''

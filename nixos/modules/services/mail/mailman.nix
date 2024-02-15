@@ -44,11 +44,9 @@ let
     transport_file_type: hash
   '';
 
-  mailmanCfg = lib.generators.toINI {}
-    (recursiveUpdate cfg.settings
-      ((optionalAttrs (cfg.restApiPassFile != null) {
-        webservice.admin_pass = "#NIXOS_MAILMAN_REST_API_PASS_SECRET#";
-      })));
+  mailmanCfg = lib.generators.toINI {} (recursiveUpdate cfg.settings {
+    webservice.admin_pass = "#NIXOS_MAILMAN_REST_API_PASS_SECRET#";
+  });
 
   mailmanCfgFile = pkgs.writeText "mailman-raw.cfg" mailmanCfg;
 
@@ -262,7 +260,7 @@ in {
       };
 
       serve = {
-        enable = mkEnableOption (lib.mdDoc "Automatic nginx and uwsgi setup for mailman-web");
+        enable = mkEnableOption (lib.mdDoc "automatic nginx and uwsgi setup for mailman-web");
 
         virtualRoot = mkOption {
           default = "/";
@@ -316,7 +314,7 @@ in {
         queue_dir = "$var_dir/queue";
         template_dir = "$var_dir/templates";
         log_dir = "/var/log/mailman";
-        lock_dir = "$var_dir/lock";
+        lock_dir = "/run/mailman/lock";
         etc_dir = "/etc";
         pid_file = "/run/mailman/master.pid";
       };
@@ -388,6 +386,7 @@ in {
 
     environment.etc."mailman3/settings.py".text = ''
       import os
+      from configparser import ConfigParser
 
       # Required by mailman_web.settings, but will be overridden when
       # settings_local.json is loaded.
@@ -404,10 +403,10 @@ in {
       with open('/var/lib/mailman-web/settings_local.json') as f:
           globals().update(json.load(f))
 
-      ${optionalString (cfg.restApiPassFile != null) ''
-        with open('${cfg.restApiPassFile}') as f:
-            MAILMAN_REST_API_PASS = f.read().rstrip('\n')
-      ''}
+      with open('/etc/mailman.cfg') as f:
+          config = ConfigParser()
+          config.read_file(f)
+          MAILMAN_REST_API_PASS = config['webservice']['admin_pass']
 
       ${optionalString (cfg.ldap.enable) ''
         import ldap
@@ -494,6 +493,9 @@ in {
           RuntimeDirectory = "mailman";
           LogsDirectory = "mailman";
           PIDFile = "/run/mailman/master.pid";
+          Restart = "on-failure";
+          TimeoutStartSec = 180;
+          TimeoutStopSec = 180;
         };
       };
 
@@ -504,10 +506,14 @@ in {
         path = with pkgs; [ jq ];
         after = optional withPostgresql "postgresql.service";
         requires = optional withPostgresql "postgresql.service";
+        serviceConfig.RemainAfterExit = true;
         serviceConfig.Type = "oneshot";
         script = ''
           install -m0750 -o mailman -g mailman ${mailmanCfgFile} /etc/mailman.cfg
-          ${optionalString (cfg.restApiPassFile != null) ''
+          ${if cfg.restApiPassFile == null then ''
+            sed -i "s/#NIXOS_MAILMAN_REST_API_PASS_SECRET#/$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)/g" \
+              /etc/mailman.cfg
+          '' else ''
             ${pkgs.replace-secret}/bin/replace-secret \
               '#NIXOS_MAILMAN_REST_API_PASS_SECRET#' \
               ${cfg.restApiPassFile} \
@@ -589,10 +595,11 @@ in {
           # Since the mailman-web settings.py obstinately creates a logs
           # dir in the cwd, change to the (writable) runtime directory before
           # starting uwsgi.
-          ExecStart = "${pkgs.coreutils}/bin/env -C $RUNTIME_DIRECTORY ${pkgs.uwsgi.override { plugins = ["python3"]; }}/bin/uwsgi --json ${uwsgiConfigFile}";
+          ExecStart = "${pkgs.coreutils}/bin/env -C $RUNTIME_DIRECTORY ${pkgs.uwsgi.override { plugins = ["python3"]; python3 = webEnv.python; }}/bin/uwsgi --json ${uwsgiConfigFile}";
           User = cfg.webUser;
           Group = "mailman";
           RuntimeDirectory = "mailman-uwsgi";
+          Restart = "on-failure";
         };
       });
 
@@ -617,6 +624,7 @@ in {
           User = cfg.webUser;
           Group = "mailman";
           WorkingDirectory = "/var/lib/mailman-web";
+          Restart = "on-failure";
         };
       };
     } // flip lib.mapAttrs' {
@@ -641,7 +649,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann qyliss ma27 ];
+    maintainers = with lib.maintainers; [ lheckemann qyliss ];
     doc = ./mailman.md;
   };
 

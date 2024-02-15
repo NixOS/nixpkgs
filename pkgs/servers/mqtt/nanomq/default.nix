@@ -1,16 +1,54 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config
-, cyclonedds, libmysqlclient, mariadb, mbedtls, sqlite, zeromq
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, cyclonedds
+, libmysqlclient
+, mariadb
+, mbedtls
+, sqlite
+, zeromq
+, flex
+, bison
+
+# for tests
+, python3
+, mosquitto
+, netcat-gnu
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+
+  # exposing as full package in its own right would be a
+  # bit absurd - repo doesn't even have a license.
+  idl-serial = stdenv.mkDerivation {
+    pname = "idl-serial";
+    version = "unstable-2023-03-29";
+
+    src = fetchFromGitHub {
+      owner = "nanomq";
+      repo = "idl-serial";
+      rev = "908c364dab4c0dcdd77b8de698d29c8a0b6d3830";
+      hash = "sha256-3DS9DuzHN7BevfgiekUmKKH9ej9wKTrt6Fuh427NC4I=";
+    };
+
+    nativeBuildInputs = [ cmake ninja flex bison ];
+
+    # https://github.com/nanomq/idl-serial/issues/36
+    hardeningDisable = [ "fortify3" ];
+  };
+
+in stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.16.3";
+  version = "0.20.8";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     rev = finalAttrs.version;
-    hash = "sha256-9w4afVxuJbYrkagpAe1diftDnjrRjunyhJdJ0BZq3K0=";
+    hash = "sha256-VCKlXQ7qvBab+wRDnJ6EUA5qaQ36gTFfuerN1GU6sW0=";
     fetchSubmodules = true;
   };
 
@@ -19,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "DESTINATION /etc" "DESTINATION $out/etc"
   '';
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config idl-serial ];
 
   buildInputs = [ cyclonedds libmysqlclient mariadb mbedtls sqlite zeromq ];
 
@@ -33,7 +71,34 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNNG_ENABLE_TLS=ON"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type -Wno-implicit-function-declaration -Wno-error=implicit-int";
+
+  # disabled by default - not 100% reliable and making nanomq depend on
+  # mosquitto would annoy people
+  doInstallCheck = false;
+  nativeInstallCheckInputs = [
+    mosquitto
+    netcat-gnu
+    (python3.withPackages (ps: with ps; [ jinja2 requests paho-mqtt ]))
+  ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    (
+      cd ..
+
+      # effectively distable this test because it is slow
+      echo > .github/scripts/fuzzy_test.txt
+
+      PATH="$PATH:$out/bin" python .github/scripts/test.py
+    )
+
+    runHook postInstallCheck
+  '';
+
+  passthru.tests = {
+    withInstallChecks = finalAttrs.finalPackage.overrideAttrs (_: { doInstallCheck = true; });
+  };
 
   meta = with lib; {
     description = "An ultra-lightweight and blazing-fast MQTT broker for IoT edge";

@@ -10,22 +10,19 @@
 , zlib
 , libiconv
 , Security
+, buildPackages
 }:
 
-let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.6.3";
+  version = "0.7.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-XaxxakVwogJlqyZGL275jGSZDLoRLl8SAAg8V+X4cmQ=";
+    sha256 = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
   };
 
-  cargoHash = "sha256-66mVkoqMl+KNCXWsGUbu8nBrazgHP+5dTaT2Ye0btWY=";
-
-  auditable = true; # TODO: remove when this is the default
+  cargoHash = "sha256-VyQ6n2kIJ7OjK6Xlf0T0GNsBvgESRETzKZDZzAn8ZuY=";
 
   depsBuildBuild = [ pkg-config ];
 
@@ -38,14 +35,20 @@ in rustPlatform.buildRustPackage rec {
     Security
   ];
 
+  # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
+  # and linking it with cctools ld64.
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    substituteInPlace build.rs --replace-fail '.arg("-x")' '.arg("-S")'
+  '';
+
   checkType = "debug";
 
-  postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+  postBuild =  ''
+    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   meta = with lib; {
@@ -60,5 +63,6 @@ in rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ ];
+    mainProgram = "rav1e";
   };
 }

@@ -17,19 +17,24 @@
 , pytestCheckHook
 , pythonOlder
 , rich
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.5.0";
-  format = "setuptools";
+  version = "3.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8RVEoh6jVW9w66x7wzj/qKGXkTg07N2IU9F2uHCCOqo=";
+    hash = "sha256-TeyxsL7UoOPA5Yo3ZkbmAC1r58rQOeNGaCLoZlBy6jM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -52,15 +57,17 @@ buildPythonPackage rec {
     rich
   ];
 
-  disabledTests = [
-    # requires credentials
-    "test_write_log_entries"
-  ];
-
   preCheck = ''
-    # prevent google directory from shadowing google imports
+    # Prevent google directory from shadowing google imports
     rm -r google
   '';
+
+  disabledTests = [
+    # Test requires credentials
+    "test_write_log_entries"
+    # No need for a second import check
+    "test_namespace_package_compat"
+  ];
 
   disabledTestPaths = [
     # Tests require credentials
@@ -80,6 +87,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-logging";
     changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

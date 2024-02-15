@@ -32,10 +32,6 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
-    "somafm-internet-radio": [
-      "SomaFm-Radio@alireza6677.gmail.com",
-      "SomaFm-Radio@cajhne.gmail.com"
-    ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
@@ -56,9 +52,13 @@
       "gnome-trash@gnome-trash.b00f.gitlab.com",
       "gnome-trash@b00f.github.io"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@francislavoie.github.io"
     ]
   },
   "40": {
@@ -82,6 +82,10 @@
       "Hide_Activities@shay.shayel.org",
       "hide-activities-button@nmingori.gnome-shell-extensions.org"
     ],
+    "clipboard-indicator": [
+      "clipboard-indicator@tudmotu.com",
+      "clipboard-indicator@Dieg0Js.github.io"
+    ],
     "shutdowntimer": [
       "ShutdownTimer@neumann",
       "shutdown-timer-gnome-shell-extension",
@@ -90,10 +94,6 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
-    ],
-    "somafm-internet-radio": [
-      "SomaFm-Radio@alireza6677.gmail.com",
-      "SomaFm-Radio@cajhne.gmail.com"
     ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
@@ -123,9 +123,13 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
       "floating-panel@aylur",
@@ -177,9 +181,13 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
       "floating-panel@aylur",
@@ -199,6 +207,10 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
+    ],
     "clipboard-indicator": [
       "clipboard-indicator@tudmotu.com",
       "clipboard-indicator@Dieg0Js.github.io"
@@ -206,6 +218,10 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
     ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
@@ -219,9 +235,13 @@
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
     ],
+    "true-color-invert": [
+      "true-color-invert@jackkenney",
+      "true-color-window-invert@lynet101"
+    ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski"
+      "volume_scroller@francislavoie.github.io"
     ],
     "auto-activities": [
       "auto-activities@acedron.github.io",
@@ -241,6 +261,10 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
     "persian-calendar": [
       "PersianCalendar@oxygenws.com",
       "persian-calendar@iamrezamousavi.gmail.com"
@@ -257,17 +281,73 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
+    ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
+    ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
     ],
     "battery-time": [
       "batime@martin.zurowietz.de",
       "batterytime@typeof.pw"
     ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@francislavoie.github.io"
+    ],
     "floating-panel": [
       "floating-panel@aylur",
       "floating-panel-usedbymyself@wpism"
+    ]
+  },
+  "44": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
+    ],
+    "clipboard-indicator": [
+      "clipboard-indicator@tudmotu.com",
+      "clipboard-indicator@Dieg0Js.github.io"
+    ],
+    "virtualbox-applet": [
+      "vbox-applet@gs.eros2.info",
+      "vbox-applet@buba98"
+    ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
+    ]
+  },
+  "45": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
     ]
   }
 }

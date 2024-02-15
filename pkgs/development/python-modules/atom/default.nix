@@ -10,19 +10,17 @@
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.9.0";
-  format = "pyproject";
+  version = "0.10.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nucleic";
-    repo = pname;
+    repo = "atom";
     rev = "refs/tags/${version}";
-    hash = "sha256-zxFYsINlDyGQGGh+u7vwyzAitRXe3OM1//HvCtuZ/p8=";
+    hash = "sha256-HoUKU6z+6PPBUsvI4earZG9UXN0PrugAxu/F7WUfUe8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -47,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Memory efficient Python objects";
     homepage = "https://github.com/nucleic/atom";
+    changelog = "https://github.com/nucleic/atom/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bhipple ];
   };

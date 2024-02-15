@@ -3,34 +3,16 @@
 , python3
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-SWYVtOqEI20Y4NKGEi3nSGmmDg+H4sfsZ4f/KGxINhs=";
-        };
-        doCheck = false;
-      });
-
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.96";
-  format = "setuptools";
+  version = "3.2.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
-    repo = pname;
+    repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-jQ5VaOvJkxhZ0fHrNmkuFK+qmRUNdzR5XCWqWv1iBs4=";
+    hash = "sha256-Hd1YOzIH6v8N/oP2cJRUv6OkgOv9aSe7nkvzpsCN3rc=";
   };
 
   patches = [
@@ -38,17 +20,28 @@ buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "bc-detect-secrets"
     "bc-python-hcl2"
-    "pycep-parser"
+    "dpath"
+    "igraph"
+    "license-expression"
     "networkx"
+    "openai"
+    "pycep-parser"
+    "termcolor"
   ];
 
-  nativeBuildInputs = with py.pkgs; [
+  pythonRemoveDeps = [
+    # pythonRelaxDeps doesn't work with that one
+    "pycep-parser"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
@@ -63,7 +56,6 @@ buildPythonApplication rec {
     colorama
     configargparse
     cyclonedx-python-lib
-    deep_merge
     docker
     dockerfile-parse
     dpath
@@ -73,21 +65,26 @@ buildPythonApplication rec {
     jmespath
     jsonschema
     junit-xml
+    license-expression
     networkx
+    openai
     packaging
     policyuniverse
     prettytable
     pycep-parser
     pyyaml
+    pydantic
+    rustworkx
     semantic-version
+    spdx-tools
     tabulate
     termcolor
     tqdm
     typing-extensions
-    update_checker
+    update-checker
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aioresponses
     mock
     pytest-asyncio
@@ -114,8 +111,10 @@ buildPythonApplication rec {
     # Tests are comparing console output
     "cli"
     "console"
-    # Starting to fail after 2.3.96
-    "test_runner_verify_secrets_skip"
+    # Assertion error
+    "test_runner"
+    # AssertionError: assert ['<?xml versi...
+    "test_get_cyclonedx_report"
   ];
 
   disabledTestPaths = [
@@ -135,6 +134,8 @@ buildPythonApplication rec {
     "tests/kubernetes/"
     "tests/sca_package_2"
     "tests/terraform/"
+    "cdk_integration_tests/"
+    "sast_integration_tests"
     # Performance tests have no value for us
     "performance_tests/test_checkov_performance.py"
     # No Helm

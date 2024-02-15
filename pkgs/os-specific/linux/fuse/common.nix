@@ -1,4 +1,4 @@
-{ version, sha256Hash }:
+{ version, hash }:
 
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, util-linux, gettext, shadow
@@ -17,14 +17,14 @@ in stdenv.mkDerivation rec {
     owner = "libfuse";
     repo = "libfuse";
     rev = "${pname}-${version}";
-    sha256 = sha256Hash;
+    inherit hash;
   };
 
   preAutoreconf = "touch config.rpath";
 
   patches =
     lib.optional
-      (!isFuse3 && stdenv.isAarch64)
+      (!isFuse3 && (stdenv.isAarch64 || stdenv.hostPlatform.isLoongArch64))
       (fetchpatch {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
         sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
@@ -48,6 +48,7 @@ in stdenv.mkDerivation rec {
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
     "-Duseroot=false"
+    "-Dinitscriptdir="
   ];
 
   preConfigure = ''

@@ -23,5 +23,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ equirosa ];
+    mainProgram = "pfetch";
   };
 }

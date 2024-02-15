@@ -1,4 +1,5 @@
 { lib
+, backports-strenum
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -8,20 +9,24 @@
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.2.42";
-  format = "pyproject";
+  version = "9.2.84";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-jDC4nmHg7OCo7mQ7iLeG7OFB1xAQxkKw1WZTyY2FBoY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-drZuQRQ2XukCimH/SG6CRCL4avyMEcKxuj+Rinp7lJQ=";
   };
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
+    backports-strenum
   ];
 
   nativeCheckInputs = [

@@ -14,22 +14,29 @@
 , pytestCheckHook
 , pythonOlder
 , pytz
+, setuptools
+, wheel
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "20.1";
-  format = "setuptools";
+  version = "20.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "python-telegram-bot";
+    repo = "python-telegram-bot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fRvusmf33QFBZc/Sq81Dx/MGBvcK514S5llJO0XbTgc=";
+    hash = "sha256-FvVUl0bV95IDPbG+6N9b3ZIsnLAUwVcdS4cu0I1aNDw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     aiolimiter

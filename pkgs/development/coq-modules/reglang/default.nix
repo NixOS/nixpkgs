@@ -1,19 +1,24 @@
-{ lib, mkCoqDerivation, coq, ssreflect, version ? null }:
+{ lib, mkCoqDerivation, coq, mathcomp, version ? null }:
 
 mkCoqDerivation {
   pname = "reglang";
 
   releaseRev = v: "v${v}";
 
+  release."1.2.1".sha256 = "sha256-giCRK8wzpVVzXAkFAieQDWqSsP7upSJSUUHkwG4QqO4=";
+  release."1.2.0".sha256 = "sha256-gSqQ7D2HLwM4oYopTWkMFYfYXxsH/7VxI3AyrLwNf3o=";
+  release."1.1.3".sha256 = "sha256-kaselYm8K0JBsTlcI6K24m8qpv8CZ9+VNDJrOtFaExg=";
   release."1.1.2".sha256 = "sha256-SEnMilLNxh6a3oiDNGLaBr8quQ/nO2T9Fwdf/1il2Yk=";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.10" "8.16"; out = "1.1.2"; }
+  defaultVersion = with lib.versions; lib.switch [ coq.coq-version mathcomp.version ] [
+    { cases = [ (range "8.16" "8.19") (isGe "2.0.0") ]; out = "1.2.1"; }
+    { cases = [ (range "8.16" "8.18") (range "2.0.0" "2.1.0") ]; out = "1.2.0"; }
+    { cases = [ (range "8.10" "8.19") (isLt "2.0.0") ]; out = "1.1.3"; }
   ] null;
 
 
-  propagatedBuildInputs = [ ssreflect ];
+  propagatedBuildInputs = [ mathcomp.ssreflect ];
 
   meta = with lib; {
     description = "Regular Language Representations in Coq";

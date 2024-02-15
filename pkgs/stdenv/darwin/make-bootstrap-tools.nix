@@ -1,5 +1,21 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath
 , localSystem ? { system = builtins.currentSystem; }
+# Specify the desired LLVM version in an overlay to avoid the use of
+# mismatching versions.
+#
+# The llvmPackages that we take things (clang, libc++ and such) from
+# is specified explicitly to be llvmPackages_11 to keep the
+# bootstrap-tools stable.  However, tools like otool,
+# install_name_tool and strip are taken straight from stdenv.cc,
+# which, after the bump, is a different LLVM version altogether.
+#
+# The original intent was that bootstrap-tools specified LLVM 11
+# exhaustively but it didn't. That should be rectified with this
+# PR. As to why stick with 11? That's just to keep the
+# bootstrap-tools unchanged.
+#
+# https://github.com/NixOS/nixpkgs/pull/267058/files#r1390889848
+, overlays ? [(self: super: { llvmPackages = super.llvmPackages_11; })]
 , crossSystem ? null
 , bootstrapFiles ? null
 }:
@@ -10,26 +26,28 @@ let cross = if crossSystem != null
     custom-bootstrap = if bootstrapFiles != null
       then { stdenvStages = args:
               let args' = args // { bootstrapFiles = bootstrapFiles; };
-              in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
+              in (import "${pkgspath}/pkgs/stdenv/darwin" args');
            }
       else {};
-in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
+in with import pkgspath ({ inherit localSystem overlays; } // cross // custom-bootstrap);
 
-let
-  llvmPackages = llvmPackages_11;
-  storePrefixLen = builtins.stringLength builtins.storeDir;
-in rec {
-  coreutils_ = coreutils.override (args: {
+rec {
+  coreutils_ = (coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
     # Cannot use a single binary build, or it gets dynamically linked against gmp.
     singleBinary = false;
+  })).overrideAttrs (oa: {
+    # Increase header size to be able to inject extra RPATHs. Otherwise
+    # x86_64-darwin build fails as:
+    #    https://cache.nixos.org/log/g5wyq9xqshan6m3kl21bjn1z88hx48rh-stdenv-bootstrap-tools.drv
+    NIX_LDFLAGS = (oa.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
   });
 
   cctools_ = darwin.cctools;
 
   # Avoid debugging larger changes for now.
-  bzip2_ = bzip2.override (args: { linkStatic = true; });
+  bzip2_ = bzip2.override (args: { enableStatic = true; enableShared = false; });
 
   # Avoid messing with libkrb5 and libnghttp2.
   curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
@@ -54,7 +72,7 @@ in rec {
       chmod -R u+w $out/include
       cp -rL ${darwin.ICU}/include* $out/include
       cp -rL ${libiconv}/include/* $out/include
-      cp -rL ${lib.getDev gnugrep.pcre}/include/* $out/include
+      cp -rL ${lib.getDev gnugrep.pcre2}/include/* $out/include
       mv $out/include $out/include-Libsystem
 
       # Copy coreutils, bash, etc.
@@ -86,7 +104,7 @@ in rec {
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
       cp -d ${lib.getLib openssl}/lib/*.dylib $out/lib
 
-      cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
+      cp -d ${gnugrep.pcre2.out}/lib/libpcre2*.dylib $out/lib
       cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
       cp -d ${lib.getLib gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
@@ -151,7 +169,7 @@ in rec {
 
       # Strip executables even further
       for i in $out/bin/*; do
-        if [[ ! -L $i ]]; then
+        if [[ ! -L $i ]] && isMachO "$i"; then
           chmod +w $i
           ${stdenv.cc.targetPrefix}strip $i || true
         fi
@@ -164,7 +182,7 @@ in rec {
       done
 
       for i in $out/bin/*; do
-        if [[ ! -L "$i" ]]; then
+        if [[ ! -L "$i" ]] && isMachO "$i"; then
           ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/../lib' $i
         fi
       done
@@ -207,14 +225,12 @@ in rec {
     '';
   };
 
-  bootstrapLlvmVersion = llvmPackages.llvm.version;
-
   bootstrapFiles = {
     tools = "${build}/pack";
   };
 
   bootstrapTools = derivation {
-    inherit system;
+    inherit (stdenv.hostPlatform) system;
 
     name = "bootstrap-tools";
     builder = "${bootstrapFiles.tools}/bin/bash";
@@ -313,13 +329,16 @@ in rec {
   };
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
+  # TODO: uncomment once https://github.com/NixOS/nixpkgs/issues/222717 is resolved
+  /*
   test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
     localSystem = if crossSystem != null then crossSystem else localSystem;
 
     stdenvStages = args: let
-        args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };
-      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
+        args' = args // { inherit bootstrapFiles; };
+      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
   };
+  */
 }

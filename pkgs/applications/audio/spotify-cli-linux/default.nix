@@ -1,11 +1,11 @@
-{ lib, python3Packages, dbus }:
+{ lib, python3Packages, fetchPypi, dbus }:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
-  version = "1.6.0";
+  version = "1.8.2";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0slyc3jfrj3rwq8rv6p5aqkw487aw7a87kmf1fb6n4vnvcf08v7w";
+    sha256 = "sha256-XJMkiQR1FoeIPfAuJT22kfYJdc/ABuxExELh0EEev8k=";
   };
 
   preBuild = ''

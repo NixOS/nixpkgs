@@ -5,7 +5,6 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -18,9 +17,11 @@
 , json-glib
 , jsonrpc-glib
 , libadwaita
+, libdex
 , libpanel
-, libpeas
+, libpeas2
 , libportal-gtk4
+, libsysprof-capture
 , libxml2
 , meson
 , ninja
@@ -33,7 +34,7 @@
 , template-glib
 , vala
 , vte-gtk4
-, webkitgtk_5_0
+, webkitgtk_6_0
 , wrapGAppsHook4
 , dbus
 , xvfb-run
@@ -41,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "43.6";
+  version = "45.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "m08hPdloyVL75CJoUPXJVk3f1XimoPiT06K2rhmjd6k=";
+    sha256 = "JC2gJZMpPUVuokEIpFk0cwoeMW2NxbGNnfDoZNt7pZY=";
   };
 
   patches = [
@@ -72,7 +73,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    python3.pkgs.wrapPython
     wrapGAppsHook4
   ];
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     editorconfig-core-c
     flatpak
     libgit2-glib
-    libpeas
+    libpeas2
     libportal-gtk4
     vte-gtk4
     enchant
@@ -92,16 +92,17 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libadwaita
+    libdex
     libpanel
+    libsysprof-capture
     libxml2
     ostree
     d-spy
     pcre2
     python3
-    sysprof
     template-glib
     vala
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   nativeCheckInputs = [
@@ -135,12 +136,10 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
-
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
+      # For sysprof-agent
+      --prefix PATH : "${sysprof}/bin"
     )
 
     # Ensure that all plugins get their interpreter paths fixed up.
@@ -174,5 +173,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
+    mainProgram = "gnome-builder";
   };
 }

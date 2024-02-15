@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "A tiny boost library in C++11";
     homepage = "https://github.com/idealvin/coost";
     license = licenses.mit;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
     platforms = platforms.unix;
   };
 }

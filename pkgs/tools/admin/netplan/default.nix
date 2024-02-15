@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "netplan";
-  version = "0.105";
+  version = "0.106.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
     rev = version;
-    hash = "sha256-77vUZU9JG9Dz/5n4DpcAUS77UqfIILXhZHgBogIb400=";
+    hash = "sha256-wQ4gd9+9YU92WGRMjSiF/zLCGxhaSl8s22pH1jr+Mm0=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     systemd
     glib
     libyaml
-    (python3.withPackages (p: with p; [ pyyaml netifaces ]))
+    (python3.withPackages (p: with p; [ pyyaml netifaces dbus-python rich ]))
     libuuid
     bash-completion
   ];
@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
 
     # from upstream https://github.com/canonical/netplan/blob/ee0d5df7b1dfbc3197865f02c724204b955e0e58/rpm/netplan.spec#L81
     sed -e "s/-Werror//g" -i Makefile
+
+    substituteInPlace netplan/cli/utils.py \
+      --replace-fail "/usr/libexec/netplan/generate" "${placeholder "out"}/lib/netplan/generate"
   '';
 
   makeFlags = [
@@ -66,5 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.linux;
+    mainProgram = "netplan";
   };
 }

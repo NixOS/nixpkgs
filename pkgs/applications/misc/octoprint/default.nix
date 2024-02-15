@@ -1,7 +1,9 @@
 { pkgs
 , stdenv
+, callPackage
 , lib
 , fetchFromGitHub
+, fetchPypi
 , python3
 , substituteAll
 , nix-update-script
@@ -16,42 +18,29 @@ let
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
         (
-          # with version 3 of flask-limiter octoprint 1.8.7 fails to start with
-          #  TypeError: Limiter.__init__() got multiple values for argument 'key_func'
+          # Due to flask > 2.3 the login will not work
           self: super: {
-            flask-limiter = super.flask-limiter.overridePythonAttrs (oldAttrs: rec {
-              version = "2.6.2";
-              src = fetchFromGitHub {
-                owner = "alisaifee";
-                repo = "flask-limiter";
-                rev = version;
-                sha256 = "sha256-eWOdJ7m3cY08ASN/X+7ILJK99iLJJwCY8294fwJiDew=";
-              };
-            });
-            flask-babel = super.flask-babel.overridePythonAttrs (oldAttrs: rec {
-              version = "2.0.0";
-              src = super.fetchPypi {
-                pname = "Flask-Babel";
-                inherit version;
-                sha256 = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
-              };
-              nativeBuildInputs = [ ];
+            werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
+              version = "2.2.3";
               format = "setuptools";
-              outputs = [ "out" ];
-              patches = [ ];
-            });
-            # downgrade needed for flask-babel 2.0.0
-            babel = super.babel.overridePythonAttrs (oldAttrs: rec {
-              version = "2.11.0";
-              src = super.fetchPypi {
-                pname = "Babel";
+              src = fetchPypi {
+                pname = "Werkzeug";
                 inherit version;
-                hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+                hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
               };
-              propagatedBuildInputs = [ self.pytz ];
+            });
+            flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+              version = "2.2.5";
+              format = "setuptools";
+              src = fetchPypi {
+                pname = "Flask";
+                inherit version;
+                hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+              };
             });
           }
         )
+
         # Built-in dependency
         (
           self: super: {
@@ -92,14 +81,14 @@ let
           self: super: {
             octoprint-pisupport = self.buildPythonPackage rec {
               pname = "OctoPrint-PiSupport";
-              version = "2022.6.13";
+              version = "2023.5.24";
               format = "setuptools";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-PiSupport";
                 rev = version;
-                hash = "sha256-3z5Btl287W3j+L+MQG8FOWt21smML0vpmu9BP48B9A0=";
+                hash = "sha256-KfkZXJ2f02G2ee+J1w+YQRKz+LSWwxVIIwmdevDGhew=";
               };
 
               # requires octoprint itself during tests
@@ -116,13 +105,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.8.7";
+              version = "1.9.3";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-g4PYB9YbkX0almRPgMFlb8D633Y5fc3H+Boa541suqc=";
+                hash = "sha256-71uE8JvcS++xH8WSVWj5x0+9s3XIwf3A64c6YtxpSRc=";
               };
 
               propagatedBuildInputs = with self; [
@@ -136,7 +125,7 @@ let
                 filetype
                 flask
                 flask-babel
-                flask_assets
+                flask-assets
                 flask-login
                 flask-limiter
                 frozendict
@@ -150,7 +139,6 @@ let
                 netifaces
                 octoprint-filecheck
                 octoprint-firmwarecheck
-                octoprint-pisupport
                 passlib
                 pathvalidate
                 pkginfo
@@ -174,8 +162,12 @@ let
                 wrapt
                 zeroconf
                 zipstream-ng
+                class-doc
+                pydantic_1
               ] ++ lib.optionals stdenv.isDarwin [
                 py.pkgs.appdirs
+              ] ++ lib.optionals (!stdenv.isDarwin) [
+                octoprint-pisupport
               ];
 
               nativeCheckInputs = with self; [
@@ -215,6 +207,7 @@ let
                     "werkzeug"
                     "flask"
                     "Flask-Limiter"
+                    "blinker"
                   ];
                 in
                 ''
@@ -242,9 +235,10 @@ let
               ];
 
               passthru = {
-                python = self.python;
+                inherit (self) python;
                 updateScript = nix-update-script { };
                 tests = {
+                  plugins = (callPackage ./plugins.nix { }) super self;
                   inherit (nixosTests) octoprint;
                 };
               };
@@ -258,7 +252,7 @@ let
             };
           }
         )
-        (import ./plugins.nix { inherit pkgs; })
+        (callPackage ./plugins.nix { })
         packageOverrides
       ]
     );

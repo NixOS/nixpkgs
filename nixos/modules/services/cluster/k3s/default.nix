@@ -15,12 +15,7 @@ in
   options.services.k3s = {
     enable = mkEnableOption (lib.mdDoc "k3s");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.k3s;
-      defaultText = literalExpression "pkgs.k3s";
-      description = lib.mdDoc "Package that should be used for k3s";
-    };
+    package = mkPackageOption pkgs "k3s" { };
 
     role = mkOption {
       description = lib.mdDoc ''
@@ -147,8 +142,8 @@ in
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network.service" "firewall.service" ];
-      wants = [ "network.service" "firewall.service" ];
+      after = [ "firewall.service" "network-online.target" ];
+      wants = [ "firewall.service" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {

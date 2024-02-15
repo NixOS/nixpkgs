@@ -1,17 +1,18 @@
 { lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "22.12";
   pname = "mediainfo";
+  version = "23.11";
+
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "sha256-kyuCc59zjn22A89bsXByBzGp58YdFFwqVKq7PNC3U7w=";
+    hash = "sha256-gByxsNG//MEibeymISoe41Mi6LsSYwozu7B6kqioycM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libzen libmediainfo zlib ];
 
-  sourceRoot = "./MediaInfo/Project/GNU/CLI/";
+  sourceRoot = "MediaInfo/Project/GNU/CLI";
 
   configureFlags = [ "--with-libmediainfo=${libmediainfo}" ];
 
@@ -27,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
+    mainProgram = "mediainfo";
   };
 }

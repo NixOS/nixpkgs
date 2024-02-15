@@ -18,7 +18,11 @@ def load_file(path: str) -> dict[str, Any]:
 def replace_key(
     workspace_manifest: dict[str, Any], table: dict[str, Any], section: str, key: str
 ) -> bool:
-    if "workspace" in table[key] and table[key]["workspace"] is True:
+    if (
+        isinstance(table[key], dict)
+        and "workspace" in table[key]
+        and table[key]["workspace"] is True
+    ):
         print("replacing " + key)
 
         replaced = table[key]
@@ -63,8 +67,16 @@ def replace_dependencies(
 
 
 def main() -> None:
+    top_cargo_toml = load_file(sys.argv[2])
+
+    if "workspace" not in top_cargo_toml:
+        # If top_cargo_toml is not a workspace manifest, then this script was probably
+        # ran on something that does not actually use workspace dependencies
+        print(f"{sys.argv[2]} is not a workspace manifest, doing nothing.")
+        return
+
     crate_manifest = load_file(sys.argv[1])
-    workspace_manifest = load_file(sys.argv[2])["workspace"]
+    workspace_manifest = top_cargo_toml["workspace"]
 
     if "workspace" in crate_manifest:
         return
@@ -83,6 +95,13 @@ def main() -> None:
             changed |= replace_dependencies(
                 workspace_manifest, crate_manifest["target"][key]
             )
+
+    if (
+        "lints" in crate_manifest
+        and "workspace" in crate_manifest["lints"]
+        and crate_manifest["lints"]["workspace"] is True
+    ):
+        crate_manifest["lints"] = workspace_manifest["lints"]
 
     if not changed:
         return

@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "PREFIX=$(out)" ];
   enableParallelBuilding = true;
+  # ...-bash-5.2-p15/bin/bash: line 1: ...-s9fes-20181205/bin/s9help: No such file or directory
+  # make: *** [Makefile:157: install-util] Error 1
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "Scheme 9 From Empty Space, an interpreter for R4RS Scheme";

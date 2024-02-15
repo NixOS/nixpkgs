@@ -3,22 +3,24 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.12.0";
+  version = "0.16.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O3VFs/MzprBwQraLECFBVUya3S6Xnat7D47WN49699c=";
+    hash = "sha256-GtqJzy1usw624Vbu0utUkzV3gpN5ENdDgJGOU8Lq4L8=";
   };
 
   nativeCheckInputs = [
     pytestCheckHook
+    typing-extensions
   ];
 
   pythonImportsCheck = [
@@ -28,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast runtime type checking for Python";
     homepage = "https://github.com/beartype/beartype";
+    changelog = "https://github.com/beartype/beartype/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

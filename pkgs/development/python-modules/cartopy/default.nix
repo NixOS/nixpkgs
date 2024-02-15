@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , cython
 , setuptools-scm
 , geos
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.21.1";
+  version = "0.22.0";
 
   disabled = pythonOlder "3.8";
 
@@ -31,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    hash = "sha256-idVklxLIWCIxxuEYJaBMhfbwzulNu4nk2yPqvKHMJQo=";
+    hash = "sha256-swD5ASCTHUPxHvh8Bk6h2s7BtZpJQKp26/gs8JVIu0k=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,8 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    geos proj
+    geos
+    proj
   ];
 
   propagatedBuildInputs = [
@@ -69,8 +71,10 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "--pyargs" "cartopy"
-    "-m" "'not network and not natural_earth'"
+    "--pyargs"
+    "cartopy"
+    "-m"
+    "'not network and not natural_earth'"
   ];
 
   disabledTests = [

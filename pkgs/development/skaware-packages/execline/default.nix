@@ -2,7 +2,7 @@
 
 with skawarePackages;
 let
-  version = "2.9.1.0";
+  version = "2.9.4.0";
 
   # Maintainer of manpages uses following versioning scheme: for every
   # upstream $version he tags manpages release as ${version}.1, and,
@@ -19,7 +19,7 @@ in buildPackage {
   inherit version;
 
   pname = "execline";
-  sha256 = "tdaOAh+gxGeQidJlEQpsgfTswUEGe/aG3MtL/QYcBAQ=";
+  sha256 = "mrVdVhU536dv9Kl5BvqZX8SiiOPeUiXLGp2PqenrxJs=";
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 

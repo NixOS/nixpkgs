@@ -1,14 +1,18 @@
-{ buildPythonPackage, fetchurl, isPyPy, gmp } :
+{ buildPythonPackage, fetchurl, isPyPy, gmp, pythonAtLeast } :
 
 let
   pname = "gmpy";
   version = "1.17";
+  format = "setuptools";
 in
 
 buildPythonPackage {
   inherit pname version;
 
-  disabled = isPyPy;
+  # Python 3.11 has finally made changes to its C API for which gmpy 1.17,
+  # published in 2013, would require patching. It seems unlikely that any
+  # patches will be forthcoming.
+  disabled = isPyPy || pythonAtLeast "3.11";
 
   src = fetchurl {
     url = "mirror://pypi/g/gmpy/${pname}-${version}.zip";

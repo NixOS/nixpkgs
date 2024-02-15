@@ -1,16 +1,18 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "vulkan-headers";
-  version = "1.3.239.0";
+  version = "1.3.275.0";
 
   nativeBuildInputs = [ cmake ];
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
-    rev = "sdk-${version}";
-    hash = "sha256-mzxT6s4ZHShB9tGyyf8jDtVWVEclHPYW+9oKy7v0bC4=";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-kBOkj7mr4stPXUCBhNJpNL3A+9BebEwrIBEIroxdH8Y=";
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Vulkan Header files and API registry";

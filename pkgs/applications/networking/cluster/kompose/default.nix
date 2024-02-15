@@ -43,6 +43,5 @@ buildGoModule rec {
     homepage = "https://kompose.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ thpham vdemeester ];
-    platforms = platforms.unix;
   };
 }

@@ -1,8 +1,8 @@
-let version = "2.9.8"; in
+let version = "2.9.11"; in
 { stdenv, lib, buildPackages, fetchurl, zlib, gettext
-, wordlists ? [ (fetchurl {
+, lists ? [ (fetchurl {
   url = "https://github.com/cracklib/cracklib/releases/download/v${version}/cracklib-words-${version}.gz";
-  hash = "sha256-WLOCTIDdO6kIsMytUdbhZx4woj/u1gf7jmORR2i8T4U=";
+  hash = "sha256-popxGjE1c517Z+nzYLM/DU7M+b1/rE0XwNXkVqkcUXo=";
 }) ]
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-H500OF6jqnzXwH+jiNwlgQrqnTwz4mDHE6Olhz1w44Y=";
+    hash = "sha256-yosEmjwtOyIloejRXWE3mOvHSOOVA4jtomlN5Qe6YCA=";
   };
 
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.cracklib;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs util
 
   '' + ''
-    ln -vs ${toString wordlists} dicts/
+    ln -vs ${toString lists} dicts/
   '';
 
   postInstall = ''

@@ -12,8 +12,7 @@ runCommand (radian.name + "-wrapper") {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  buildInputs = [ radian ] ++ recommendedPackages ++ packages
-    ++ lib.optional wrapR R;
+  buildInputs = [ R radian ] ++ recommendedPackages ++ packages;
 
   nativeBuildInputs = [ makeWrapper ];
 

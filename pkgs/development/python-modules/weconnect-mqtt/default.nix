@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
-  version = "0.42.3";
+  version = "0.48.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,10 +19,12 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TEB2UtXH73CCJhbuQjnABcG3XLHB6VybDwjhixnpt0w=";
+    hash = "sha256-Pja9BP0gbWXTgOokEngNS364tJp1oWJYNKcTxyYJHGw=";
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "weconnect[Images]~=" "weconnect>="
     substituteInPlace weconnect_mqtt/__version.py \
       --replace "develop" "${version}"
     substituteInPlace pytest.ini \

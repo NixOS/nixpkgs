@@ -1,17 +1,35 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, systemd, nixosTests }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchYarnDeps
+, prefetch-yarn-deps
+, grafana-agent
+, nixosTests
+, nodejs
+, stdenv
+, systemd
+, testers
+, yarn
+}:
 
 buildGoModule rec {
   pname = "grafana-agent";
-  version = "0.30.2";
+  version = "0.39.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "agent";
-    sha256 = "sha256-yexCK4GBA997CShtuQQTs1GBsXoknUnWWO0Uotb9EG8=";
+    rev = "v${version}";
+    hash = "sha256-KwXkCTKnoXHL2RFpJjjwtIolEpqCM6te5wMk9xQNOqE=";
   };
 
-  vendorHash = "sha256-Cl3oygH1RPF+ZdJvkDmr7eyU5daxaZwNE8pQOHK/qP4=";
+  vendorHash = "sha256-aSHO5SoMem14Fc6DirqtYBVWJQtf5mzCT3T33mMyhkc=";
+  proxyVendor = true; # darwin/linux hash mismatch
+
+  frontendYarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/web/ui/yarn.lock";
+    hash = "sha256-rT0UCInISo/p60xzQC7wAJFuKFByIzhNf0RxFFJx+3k=";
+  };
 
   ldflags = let
     prefix = "github.com/grafana/agent/pkg/build";
@@ -25,41 +43,67 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
+  nativeBuildInputs = [ prefetch-yarn-deps nodejs yarn ];
+
   tags = [
+    "builtinassets"
     "nonetwork"
     "nodocker"
     "promtail_journal_enabled"
   ];
 
   subPackages = [
-    "cmd/agent"
-    "cmd/agentctl"
+    "cmd/grafana-agent"
+    "cmd/grafana-agentctl"
+    "web/ui"
   ];
+
+  preBuild = ''
+    export HOME="$TMPDIR"
+
+    pushd web/ui
+    fixup-yarn-lock yarn.lock
+    yarn config --offline set yarn-offline-mirror $frontendYarnOfflineCache
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules
+    yarn --offline run build
+    popd
+  '';
+
+  # do not pass preBuild to go-modules.drv, as it would otherwise fail to build.
+  # but even if it would work, it simply isn't needed in that scope.
+  overrideModAttrs = (_: {
+    preBuild = null;
+  });
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
-
-  # tries to access /sys: https://github.com/grafana/agent/issues/333
-  preBuild = ''
-    rm pkg/integrations/node_exporter/node_exporter_test.go
-  '';
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
-      $out/bin/agent
+      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/grafana-agent)" \
+      $out/bin/grafana-agent
   '';
 
-  passthru.tests.grafana-agent = nixosTests.grafana-agent;
+  passthru.tests = {
+    inherit (nixosTests) grafana-agent;
+    version = testers.testVersion {
+      inherit version;
+      command = "${lib.getExe grafana-agent} --version";
+      package = grafana-agent;
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
-    maintainers = with maintainers; [ flokli ];
+    changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ flokli emilylange ];
+    mainProgram = "grafana-agent";
   };
 }

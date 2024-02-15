@@ -11,6 +11,8 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "Navidrome music server");
 
+      package = mkPackageOption pkgs "navidrome" { };
+
       settings = mkOption rec {
         type = settingsFormat.type;
         apply = recursiveUpdate default;
@@ -26,17 +28,24 @@ in {
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to open the TCP port in the firewall";
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.settings.Port];
+
     systemd.services.navidrome = {
       description = "Navidrome Media Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.navidrome}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+          ${cfg.package}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
         '';
         DynamicUser = true;
         StateDirectory = "navidrome";
@@ -44,6 +53,7 @@ in {
         RuntimeDirectory = "navidrome";
         RootDirectory = "/run/navidrome";
         ReadWritePaths = "";
+        BindPaths = lib.optional (cfg.settings ? DataFolder) cfg.settings.DataFolder;
         BindReadOnlyPaths = [
           # navidrome uses online services to download additional album metadata / covers
           "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"

@@ -1,5 +1,5 @@
-# reason for failure: tests try to open display
 [
+  # reason for failure: tests try to open display
   "test_background_color"
   "test_scene_add_remove"
   "test_Circle"
@@ -46,31 +46,32 @@
   "test_force_window_opengl_render_with_format"
   "test_get_frame_with_preview_disabled"
   "test_get_frame_with_preview_enabled"
-] ++
 
-# reason for failure: tests try to reach network
-[
+  # reason for failure: tests try to reach network
   "test_logging_to_file"
   "test_plugin_function_like"
   "test_plugin_no_all"
   "test_plugin_with_all"
-] ++
 
-# failing with:
-# E           AssertionError:
-# E           Not equal to tolerance rtol=1e-07, atol=1.01
-# E           Frame no -1. You can use --show_diff to visually show the difference.
-# E           Mismatched elements: 18525 / 1639680 (1.13%)
-# E           Max absolute difference: 255
-# E           Max relative difference: 255.
-[
+  # failing with:
+  # E           AssertionError:
+  # E           Not equal to tolerance rtol=1e-07, atol=1.01
+  # E           Frame no -1. You can use --show_diff to visually show the difference.
+  # E           Mismatched elements: 18525 / 1639680 (1.13%)
+  # E           Max absolute difference: 255
+  # E           Max relative difference: 255.
   "test_Text2Color"
   "test_PointCloudDot"
   "test_Torus"
-] ++
 
-# failing with:
-# TypeError: __init__() got an unexpected keyword argument 'msg' - maybe you meant pytest.mark.skipif?
-[
+  # failing with:
+  # TypeError: __init__() got an unexpected keyword argument 'msg' - maybe you meant pytest.mark.skipif?
   "test_force_window_opengl_render_with_movies"
+
+  # mismatching expecation on the new commandline
+  "test_manim_new_command"
+
+  # This tests checks if the manim executable is a python script. In our case it is not.
+  # It is a wrapper shell script instead.
+  "test_manim_checkhealth_subcommand"
 ]

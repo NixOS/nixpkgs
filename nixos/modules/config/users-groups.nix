@@ -18,11 +18,11 @@ let
 
   passwordDescription = ''
     The options {option}`hashedPassword`,
-    {option}`password` and {option}`passwordFile`
+    {option}`password` and {option}`hashedPasswordFile`
     controls what password is set for the user.
     {option}`hashedPassword` overrides both
-    {option}`password` and {option}`passwordFile`.
-    {option}`password` overrides {option}`passwordFile`.
+    {option}`password` and {option}`hashedPasswordFile`.
+    {option}`password` overrides {option}`hashedPasswordFile`.
     If none of these three options are set, no password is assigned to
     the user, and the user will not be able to do password logins.
     If the option {option}`users.mutableUsers` is true, the
@@ -153,7 +153,7 @@ let
           {file}`pam_mount.conf.xml`.
           Useful attributes might include `path`,
           `options`, `fstype`, and `server`.
-          See <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>
+          See <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>
           for more information.
         '';
       };
@@ -169,6 +169,17 @@ let
           forget to enable your shell in
           `programs` if necessary,
           like `programs.zsh.enable = true;`.
+        '';
+      };
+
+      ignoreShellProgramCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          By default, nixos will check that programs.SHELL.enable is set to
+          true if the user has a custom shell specified. If that behavior isn't
+          required and there are custom overrides in place to make sure that the
+          shell is functional, set this to true.
         '';
       };
 
@@ -250,16 +261,24 @@ let
         '';
       };
 
+      hashedPasswordFile = mkOption {
+        type = with types; nullOr str;
+        default = cfg.users.${name}.passwordFile;
+        defaultText = literalExpression "null";
+        description = lib.mdDoc ''
+          The full path to a file that contains the hash of the user's
+          password. The password file is read on each system activation. The
+          file should contain exactly one line, which should be the password in
+          an encrypted form that is suitable for the `chpasswd -e` command.
+          ${passwordDescription}
+        '';
+      };
+
       passwordFile = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
-          The full path to a file that contains the user's password. The password
-          file is read on each system activation. The file should contain
-          exactly one line, which should be the password in an encrypted form
-          that is suitable for the `chpasswd -e` command.
-          ${passwordDescription}
-        '';
+        visible = false;
+        description = lib.mdDoc "Deprecated alias of hashedPasswordFile";
       };
 
       initialHashedPassword = mkOption {
@@ -311,6 +330,31 @@ let
         '';
       };
 
+      expires = mkOption {
+        type = types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
+        default = null;
+        description = lib.mdDoc ''
+          Set the date on which the user's account will no longer be
+          accessible. The date is expressed in the format YYYY-MM-DD, or null
+          to disable the expiry.
+          A user whose account is locked must contact the system
+          administrator before being able to use the system again.
+        '';
+      };
+
+      linger = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to enable lingering for this user. If true, systemd user
+          units will start at boot, rather than starting at login and stopping
+          at logout. This is the declarative equivalent of running
+          `loginctl enable-linger` for this user.
+
+          If false, user units will not be started until the user logs in, and
+          may be stopped on logout depending on the settings in `logind.conf`.
+        '';
+      };
     };
 
     config = mkMerge
@@ -428,15 +472,19 @@ let
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
+  sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
+  sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
+  groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
+  usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
           name uid group description home homeMode createHome isSystemUser
-          password passwordFile hashedPassword
+          password hashedPasswordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
-          initialPassword initialHashedPassword;
+          initialPassword initialHashedPassword expires;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
     groups = attrValues cfg.groups;
@@ -534,12 +582,65 @@ in {
         WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
       '';
     };
+
+    # systemd initrd
+    boot.initrd.systemd.users = mkOption {
+      description = ''
+        Users to include in initrd.
+      '';
+      default = {};
+      type = types.attrsOf (types.submodule ({ name, ... }: {
+        options.uid = mkOption {
+          type = types.int;
+          description = ''
+            ID of the user in initrd.
+          '';
+          defaultText = literalExpression "config.users.users.\${name}.uid";
+          default = cfg.users.${name}.uid;
+        };
+        options.group = mkOption {
+          type = types.singleLineStr;
+          description = ''
+            Group the user belongs to in initrd.
+          '';
+          defaultText = literalExpression "config.users.users.\${name}.group";
+          default = cfg.users.${name}.group;
+        };
+        options.shell = mkOption {
+          type = types.passwdEntry types.path;
+          description = ''
+            The path to the user's shell in initrd.
+          '';
+          default = "${pkgs.shadow}/bin/nologin";
+          defaultText = literalExpression "\${pkgs.shadow}/bin/nologin";
+        };
+      }));
+    };
+
+    boot.initrd.systemd.groups = mkOption {
+      description = ''
+        Groups to include in initrd.
+      '';
+      default = {};
+      type = types.attrsOf (types.submodule ({ name, ... }: {
+        options.gid = mkOption {
+          type = types.int;
+          description = ''
+            ID of the group in initrd.
+          '';
+          defaultText = literalExpression "config.users.groups.\${name}.gid";
+          default = cfg.groups.${name}.gid;
+        };
+      }));
+    };
   };
 
 
   ###### implementation
 
-  config = {
+  config = let
+    cryptSchemeIdPatternGroup = "(${lib.concatStringsSep "|" pkgs.libxcrypt.enabledCryptSchemeIds})";
+  in {
 
     users.users = {
       root = {
@@ -584,7 +685,7 @@ in {
       shadow.gid = ids.gids.shadow;
     };
 
-    system.activationScripts.users = {
+    system.activationScripts.users = if !config.systemd.sysusers.enable then {
       supportsDryActivation = true;
       text = ''
         install -m 0700 -d /root
@@ -593,27 +694,44 @@ in {
         ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
         -w ${./update-users-groups.pl} ${spec}
       '';
-    };
+    } else ""; # keep around for backwards compatibility
+
+    system.activationScripts.update-lingering = let
+      lingerDir = "/var/lib/systemd/linger";
+      lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
+      lingeringUsersFile = builtins.toFile "lingering-users"
+        (concatStrings (map (s: "${s}\n")
+          (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
+    in stringAfter [ "users" ] ''
+      if [ -e ${lingerDir} ] ; then
+        cd ${lingerDir}
+        ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
+        ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
+      fi
+    '';
 
     # Warn about user accounts with deprecated password hashing schemes
-    system.activationScripts.hashes = {
+    # This does not work when the users and groups are created by
+    # systemd-sysusers because the users are created too late then.
+    system.activationScripts.hashes = if !config.systemd.sysusers.enable then {
       deps = [ "users" ];
       text = ''
         users=()
-        while IFS=: read -r user hash tail; do
-          if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+        while IFS=: read -r user hash _; do
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
             users+=("$user")
           fi
         done </etc/shadow
 
         if (( "''${#users[@]}" )); then
           echo "
-        WARNING: The following user accounts rely on password hashes that will
-        be removed in NixOS 23.05. They should be renewed as soon as possible."
+        WARNING: The following user accounts rely on password hashing algorithms
+        that have been removed. They need to be renewed as soon as possible, as
+        they do prevent their users from logging in."
           printf ' - %s\n' "''${users[@]}"
         fi
       '';
-    };
+    } else ""; # keep around for backwards compatibility
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
@@ -633,12 +751,71 @@ in {
 
     environment.profiles = [
       "$HOME/.nix-profile"
+      "\${XDG_STATE_HOME}/nix/profile"
+      "$HOME/.local/state/nix/profile"
       "/etc/profiles/per-user/$USER"
     ];
+
+    # systemd initrd
+    boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
+      contents = {
+        "/etc/passwd".text = ''
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { uid, group, shell }: let
+            g = config.boot.initrd.systemd.groups.${group};
+          in "${n}:x:${toString uid}:${toString g.gid}::/var/empty:${shell}") config.boot.initrd.systemd.users)}
+        '';
+        "/etc/group".text = ''
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { gid }: "${n}:x:${toString gid}:") config.boot.initrd.systemd.groups)}
+        '';
+        "/etc/shells".text = lib.concatStringsSep "\n" (lib.unique (lib.mapAttrsToList (_: u: u.shell) config.boot.initrd.systemd.users)) + "\n";
+      };
+
+      storePaths = [ "${pkgs.shadow}/bin/nologin" ];
+
+      users = {
+        root = { shell = lib.mkDefault "/bin/bash"; };
+        nobody = {};
+      };
+
+      groups = {
+        root = {};
+        nogroup = {};
+        systemd-journal = {};
+        tty = {};
+        dialout = {};
+        kmem = {};
+        input = {};
+        video = {};
+        render = {};
+        sgx = {};
+        audio = {};
+        video = {};
+        lp = {};
+        disk = {};
+        cdrom = {};
+        tape = {};
+        kvm = {};
+      };
+    };
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
+      }
+      { assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
+        message = "systemd initrd UIDs and GIDs must be unique!";
+      }
+      { assertion = usersWithoutExistingGroup == {};
+        message =
+          let
+            errUsers = lib.attrNames usersWithoutExistingGroup;
+            missingGroups = lib.unique (lib.mapAttrsToList (n: u: u.group) usersWithoutExistingGroup);
+            mkConfigHint = group: "users.groups.${group} = {};";
+          in ''
+            The following users have a primary group that is undefined: ${lib.concatStringsSep " " errUsers}
+            Hint: Add this to your NixOS configuration:
+              ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
+          '';
       }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
@@ -655,7 +832,7 @@ in {
             &&
             (allowsLogin cfg.hashedPassword
              || cfg.password != null
-             || cfg.passwordFile != null
+             || cfg.hashedPasswordFile != null
              || cfg.openssh.authorizedKeys.keys != []
              || cfg.openssh.authorizedKeys.keyFiles != [])
           ) cfg.users ++ [
@@ -699,7 +876,24 @@ in {
               users.groups.${user.name} = {};
             '';
           }
-        ]
+        ] ++ (map (shell: {
+            assertion = !user.ignoreShellProgramCheck -> (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
+            message = ''
+              users.users.${user.name}.shell is set to ${shell}, but
+              programs.${shell}.enable is not true. This will cause the ${shell}
+              shell to lack the basic nix directories in its PATH and might make
+              logging in as that user impossible. You can fix it with:
+              programs.${shell}.enable = true;
+
+              If you know what you're doing and you are fine with the behavior,
+              set users.users.${user.name}.ignoreShellProgramCheck = true;
+              instead.
+            '';
+          }) [
+          "fish"
+          "xonsh"
+          "zsh"
+        ])
     ));
 
     warnings =
@@ -716,9 +910,10 @@ in {
         let
           sep = "\\$";
           base64 = "[a-zA-Z0-9./]+";
-          id = "[a-z0-9-]+";
+          id = cryptSchemeIdPatternGroup;
+          name = "[a-z0-9-]+";
           value = "[a-zA-Z0-9/+.-]+";
-          options = "${id}(=${value})?(,${id}=${value})*";
+          options = "${name}(=${value})?(,${name}=${value})*";
           scheme  = "${id}(${sep}${options})?";
           content = "${base64}${sep}${base64}(${sep}${base64})?";
           mcf = "^${sep}${scheme}${sep}${content}$";
@@ -730,9 +925,13 @@ in {
           The password hash of user "${user.name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please
           check the value of option `users.users."${user.name}".hashedPassword`.''
-        else null
-      ));
-
+        else null)
+        ++ flip mapAttrsToList cfg.users (name: user:
+          if user.passwordFile != null then
+            ''The option `users.users."${name}".passwordFile' has been renamed '' +
+            ''to `users.users."${name}".hashedPasswordFile'.''
+          else null)
+      );
   };
 
 }

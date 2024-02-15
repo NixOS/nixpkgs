@@ -3,27 +3,28 @@
 , fetchPypi
 , flask
 , mock
-, pdm-pep517
+, flit-core
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "flask-sqlalchemy";
-  version = "3.0.3";
+  version = "3.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    pname = "Flask-SQLAlchemy";
+    pname = "flask_sqlalchemy";
     inherit version;
-    hash = "sha256-J2QzXzydfr3J7WBEr6+Yqun6UNegdM71Xd4wfslZA+w=";
+    hash = "sha256-5LaLuIGALdoafYeLL8hMBtHuV/tAuHTT3Jfav6NrgxI=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    flit-core
   ];
 
   propagatedBuildInputs = [
@@ -41,6 +42,11 @@ buildPythonPackage rec {
     "test_session_scoping_changing"
     # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
     "test_persist_selectable"
+  ];
+
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
+    # datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version.
+    "-W" "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [

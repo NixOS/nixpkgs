@@ -6,15 +6,15 @@
 , makeWrapper
 , runCommand
 , appimageTools
-, patchelf
+, icu
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "1.27.3.14493";
+  version = "2.1.3.18901";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    sha256 = "sha256-aK5T95Yg8Us8vkznWlDHnPiPAKiUtlU0Eswl9rD01VY=";
+    sha256 = "sha256-XZEpzzFm0DA6iiPGOKbmsuNlpIlt7Qa2A+jEqU6GqgE=";
     stripRoot = false;
   };
 
@@ -54,7 +54,9 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-    makeWrapper ${appimage}/bin/${pname}-${version} $out/bin/${pname} --append-flags "--update-failed"
+    makeWrapper ${appimage}/bin/${pname}-${version} $out/bin/${pname} \
+      --append-flags "--update-failed" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
 
     runHook postInstall
   '';
@@ -70,5 +72,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ AnatolyPopov ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "jetbrains-toolbox";
   };
 }

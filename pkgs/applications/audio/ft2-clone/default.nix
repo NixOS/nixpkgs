@@ -13,19 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.65";
+  version = "1.75";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    sha256 = "sha256-Jo1qs0d8/o9FWR7jboWCJ7ntawBGTlm7yPzxxUnZLsI=";
+    hash = "sha256-K+RUsRr19fc0E9VhZWIawxkGXCTwqXl3a13pRiRxDPg=";
   };
-
-  # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
-  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
@@ -37,13 +32,6 @@ stdenv.mkDerivation rec {
          CoreServices
          Cocoa
        ];
-
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
-    "-framework CoreAudio"
-    "-framework CoreMIDI"
-    "-framework CoreServices"
-    "-framework Cocoa"
-  ];
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;
@@ -57,6 +45,6 @@ stdenv.mkDerivation rec {
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
     platforms = platforms.littleEndian;
+    mainProgram = "ft2-clone";
   };
 }
-

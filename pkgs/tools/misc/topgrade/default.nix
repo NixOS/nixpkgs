@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "10.3.2";
+  version = "14.0.1";
 
   src = fetchFromGitHub {
     owner = "topgrade-rs";
     repo = "topgrade";
     rev = "v${version}";
-    hash = "sha256-yYRKNiX8JvCP44+mdLIOSjpxaVDz1YUNrj/IZ0bC72Y=";
+    hash = "sha256-opTMV+OH8PR9SxBWj1o8xSngK0QdindDcXyd6TRjdvI=";
   };
 
-  cargoHash = "sha256-2b6TOkjoycPA8rwca3nT212Yxl6q2Hmvv0f4Ic9hnWM=";
+  cargoHash = "sha256-pgYrUZAxoyllQp1HuVhbLR3za+Gx0l8Z2/Zq/KCOKZg=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -52,5 +52,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/topgrade-rs/topgrade/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SuperSandro2000 xyenon ];
+    mainProgram = "topgrade";
   };
 }

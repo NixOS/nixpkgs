@@ -11,17 +11,19 @@
 , libapparmor
 , libselinux
 , libseccomp
+, testers
+, buildah
 }:
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.29.0";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-g8Y4ZmQvDbzM7rG1otTxm+SRl/sK3sLM2SOWrBseOPQ=";
+    hash = "sha256-LX7yc2FnCiquHV/tESJV/VkuUYXbRNSxmMzVpSz/F8w=";
   };
 
   outputs = [ "out" "man" ];
@@ -58,11 +60,15 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = buildah;
+  };
+
   meta = with lib; {
     description = "A tool which facilitates building OCI images";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }

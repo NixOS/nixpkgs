@@ -81,9 +81,12 @@ let
         noipv6
       ''}
 
-      ${cfg.extraConfig}
+      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == null && staticIPv6Addresses != [ ]) noIPv6rs}
+      ${optionalString (config.networking.enableIPv6 && cfg.IPv6rs == false) ''
+        noipv6rs
+      ''}
 
-      ${optionalString config.networking.enableIPv6 noIPv6rs}
+      ${cfg.extraConfig}
     '';
 
   exitHook = pkgs.writeText "dhcpcd.exit-hook"
@@ -95,7 +98,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service || true
+          /run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service openntpd.service chronyd.service ntpd-rs.service || true
       fi
 
       ${cfg.runHook}
@@ -160,6 +163,16 @@ in
       '';
     };
 
+    networking.dhcpcd.IPv6rs = mkOption {
+      type = types.nullOr types.bool;
+      default = null;
+      description = lib.mdDoc ''
+        Force enable or disable solicitation and receipt of IPv6 Router Advertisements.
+        This is required, for example, when using a static unique local IPv6 address (ULA)
+        and global IPv6 address auto-configuration with SLAAC.
+      '';
+    };
+
     networking.dhcpcd.runHook = mkOption {
       type = types.lines;
       default = "";
@@ -205,6 +218,8 @@ in
           to set `enablePrivSep = false`.
       '';
     } ];
+
+    environment.etc."dhcpcd.conf".source = dhcpcdConf;
 
     systemd.services.dhcpcd = let
       cfgN = config.networking;

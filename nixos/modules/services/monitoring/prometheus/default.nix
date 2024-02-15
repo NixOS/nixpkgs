@@ -31,7 +31,7 @@ let
     if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
-        { buildInputs = [ cfg.package.cli ]; } ''
+        { nativeBuildInputs = [ cfg.package.cli ]; } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;
@@ -41,12 +41,12 @@ let
   # This becomes the main config file for Prometheus
   promConfig = {
     global = filterValidPrometheus cfg.globalConfig;
-    rule_files = map (promtoolCheck "check rules" "rules") (cfg.ruleFiles ++ [
-      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
-    ]);
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
     remote_write = filterValidPrometheus cfg.remoteWrite;
     remote_read = filterValidPrometheus cfg.remoteRead;
+    rule_files = optionals (!(cfg.enableAgentMode)) (map (promtoolCheck "check rules" "rules") (cfg.ruleFiles ++ [
+      (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
+    ]));
     alerting = {
       inherit (cfg) alertmanagers;
     };
@@ -62,15 +62,20 @@ let
     promtoolCheck "check config ${lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"}" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "--storage.tsdb.path=${workingDir}/data/"
     "--config.file=${
       if cfg.enableReload
       then "/etc/prometheus/prometheus.yaml"
       else prometheusYml
     }"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
-    "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-  ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
+  ] ++ (
+    if (cfg.enableAgentMode) then [
+      "--enable-feature=agent"
+    ] else [
+       "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity }"
+       "--storage.tsdb.path=${workingDir}/data/"
+    ])
+    ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
     ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
     ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
@@ -1430,6 +1435,10 @@ let
       remote_timeout = mkOpt types.str ''
         Timeout for requests to the remote write endpoint.
       '';
+      headers = mkOpt (types.attrsOf types.str) ''
+        Custom HTTP headers to be sent along with each remote write request.
+        Be aware that headers that are set by Prometheus itself can't be overwritten.
+      '';
       write_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
         List of remote write relabel configurations.
       '';
@@ -1525,6 +1534,10 @@ let
       remote_timeout = mkOpt types.str ''
         Timeout for requests to the remote read endpoint.
       '';
+      headers = mkOpt (types.attrsOf types.str) ''
+        Custom HTTP headers to be sent along with each remote read request.
+        Be aware that headers that are set by Prometheus itself can't be overwritten.
+      '';
       read_recent = mkOpt types.bool ''
         Whether reads should be made for queries for time ranges that
         the local storage should have complete data for.
@@ -1564,14 +1577,7 @@ in
 
     enable = mkEnableOption (lib.mdDoc "Prometheus monitoring daemon");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.prometheus;
-      defaultText = literalExpression "pkgs.prometheus";
-      description = lib.mdDoc ''
-        The prometheus package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "prometheus" { };
 
     port = mkOption {
       type = types.port;
@@ -1614,10 +1620,12 @@ in
 
         The following property holds: switching to a configuration
         (`switch-to-configuration`) that changes the prometheus
-        configuration only finishes successully when prometheus has finished
+        configuration only finishes successfully when prometheus has finished
         loading the new configuration.
       '';
     };
+
+    enableAgentMode = mkEnableOption (lib.mdDoc "agent mode");
 
     configText = mkOption {
       type = types.nullOr types.lines;

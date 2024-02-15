@@ -1,30 +1,11 @@
-diff --git a/src/octoprint/plugins/corewizard/templates/corewizard_webcam_wizard.jinja2 b/src/octoprint/plugins/corewizard/templates/corewizard_webcam_wizard.jinja2
-index 79342dcd7..6165a4119 100644
---- a/src/octoprint/plugins/corewizard/templates/corewizard_webcam_wizard.jinja2
-+++ b/src/octoprint/plugins/corewizard/templates/corewizard_webcam_wizard.jinja2
-@@ -29,14 +29,3 @@
-     {% include "snippets/settings/webcam/webcamStreamUrl.jinja2" %}
-     {% include "snippets/settings/webcam/webcamSnapshotUrl.jinja2" %}
- </form>
--
--<h4>{{ _('Timelapse Recordings') }}</h4>
--
--{% trans %}<p>
--    To render the snapshots into timelapse recordings, OctoPrint also needs to
--    know the correct <strong>path to FFMPEG</strong>.
--</p>{% endtrans %}
--
--<form class="form-horizontal" data-bind="with: settingsViewModel" onsubmit="return false;">
--    {% include "snippets/settings/webcam/ffmpegPath.jinja2" %}
--</form>
 diff --git a/src/octoprint/server/api/settings.py b/src/octoprint/server/api/settings.py
 index c3e6cea10..ced2f8fa0 100644
 --- a/src/octoprint/server/api/settings.py
 +++ b/src/octoprint/server/api/settings.py
-@@ -130,7 +130,7 @@ def getSettings():
-             "snapshotUrl": s.get(["webcam", "snapshot"]),
+@@ -130,7 +130,7 @@ data["webcam"] = {
+             "webcamEnabled": s.getBoolean(["webcam", "webcamEnabled"]),
              "snapshotTimeout": s.getInt(["webcam", "snapshotTimeout"]),
-             "snapshotSslValidation": s.getBoolean(["webcam", "snapshotSslValidation"]),
+             "timelapseEnabled": s.getBoolean(["webcam", "timelapseEnabled"]),
 -            "ffmpegPath": s.get(["webcam", "ffmpeg"]),
 +            "ffmpegPath": "@ffmpeg@",
              "ffmpegCommandline": s.get(["webcam", "ffmpegCommandline"]),

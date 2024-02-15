@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "clash-geoip";
-  version = "20230312";
+  version = "20240212";
 
   src = fetchurl {
     url = "https://github.com/Dreamacro/maxmind-geoip/releases/download/${version}/Country.mmdb";
-    sha256 = "sha256-Y/glz6HUfjox9Mn+gPzA8+tUHqV/KkIInUn4SyajUiE=";
+    sha256 = "sha256-cNVEWdIRo2Z2FluZIR0O5o3Aso4tDcVyHAG3DkNmpSQ=";
   };
 
   dontUnpack = true;
@@ -26,6 +26,7 @@ stdenvNoCC.mkDerivation rec {
     description = "A GeoLite2 data created by MaxMind";
     homepage = "https://github.com/Dreamacro/maxmind-geoip";
     license = licenses.unfree;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
+    platforms = platforms.all;
   };
 }

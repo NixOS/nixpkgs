@@ -29,6 +29,7 @@ in {
           };
 
           appservice = rec {
+            id = "facebook";
             address = "http://${hostname}:${toString port}";
             hostname = "localhost";
             port = 29319;
@@ -134,9 +135,7 @@ in {
       ensureDatabases = ["mautrix-facebook"];
       ensureUsers = [{
         name = "mautrix-facebook";
-        ensurePermissions = {
-          "DATABASE \"mautrix-facebook\"" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       }];
     };
 
@@ -144,7 +143,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [
         "network-online.target"
-      ] ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
+      ] ++ optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         ++ optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
@@ -171,7 +170,7 @@ in {
 
     services.mautrix-facebook = {
       registrationData = {
-        id = "mautrix-facebook";
+        id = cfg.settings.appservice.id;
 
         namespaces = {
           users = [

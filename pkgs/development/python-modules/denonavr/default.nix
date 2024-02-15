@@ -5,6 +5,7 @@
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
+, ftfy
 , httpx
 , netifaces
 , pytest-asyncio
@@ -12,26 +13,32 @@
 , pytest-httpx
 , pytest-timeout
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.11.1";
-  format = "setuptools";
+  version = "0.11.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ol-iver";
-    repo = pname;
+    repo = "denonavr";
     rev = "refs/tags/${version}";
-    hash = "sha256-iYekqqhrcN1rbclFVSbJSF5ky19WsBLKlTxAa2HULqY=";
+    hash = "sha256-VxoRK1qeGrIunsiCzeZJUHxW/sxk+PFpntInL+G/yI8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     asyncstdlib
     attrs
     defusedxml
+    ftfy
     httpx
     netifaces
   ] ++ lib.optionals (pythonOlder "3.11") [

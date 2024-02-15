@@ -4,8 +4,9 @@ with lib;
 
 let
   cfg = config.networking.networkmanager;
+  ini = pkgs.formats.ini { };
 
-  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
+  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
 
   enableIwd = cfg.wifi.backend == "iwd";
 
@@ -30,17 +31,15 @@ let
   configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
     (mkSection "main" {
       plugins = "keyfile";
-      dhcp = cfg.dhcp;
-      dns = cfg.dns;
+      inherit (cfg) dhcp dns;
       # If resolvconf is disabled that means that resolv.conf is managed by some other module.
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
-      firewall-backend = cfg.firewallBackend;
     })
     (mkSection "keyfile" {
       unmanaged-devices =
-        if cfg.unmanaged == [] then null
+        if cfg.unmanaged == [ ] then null
         else lib.concatStringsSep ";" cfg.unmanaged;
     })
     (mkSection "logging" {
@@ -103,7 +102,7 @@ let
   };
 
   macAddressOpt = mkOption {
-    type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+    type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" ]);
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = lib.mdDoc ''
@@ -126,7 +125,8 @@ let
     pkgs.wpa_supplicant
   ];
 
-in {
+in
+{
 
   meta = {
     maintainers = teams.freedesktop.members;
@@ -156,7 +156,7 @@ in {
           int
           str
         ]));
-        default = {};
+        default = { };
         description = lib.mdDoc ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
@@ -186,7 +186,7 @@ in {
 
       unmanaged = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = lib.mdDoc ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
@@ -232,15 +232,6 @@ in {
         '';
       };
 
-      firewallBackend = mkOption {
-        type = types.enum [ "iptables" "nftables" "none" ];
-        default = "iptables";
-        description = lib.mdDoc ''
-          Which firewall backend should be used for configuring masquerading with shared mode.
-          If set to none, NetworkManager doesn't manage the configuration at all.
-        '';
-      };
-
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
@@ -251,7 +242,7 @@ in {
 
       appendNameservers = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = lib.mdDoc ''
           A list of name servers that should be appended
           to the ones configured in NetworkManager or received by DHCP.
@@ -260,7 +251,7 @@ in {
 
       insertNameservers = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = lib.mdDoc ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
@@ -336,23 +327,23 @@ in {
             };
           };
         });
-        default = [];
+        default = [ ];
         example = literalExpression ''
-        [ {
-              source = pkgs.writeText "upHook" '''
+          [ {
+            source = pkgs.writeText "upHook" '''
+              if [ "$2" != "up" ]; then
+                logger "exit: event $2 != up"
+                exit
+              fi
 
-                if [ "$2" != "up" ]; then
-                    logger "exit: event $2 != up"
-                    exit
-                fi
-
-                # coreutils and iproute are in PATH too
-                logger "Device $DEVICE_IFACE coming up"
+              # coreutils and iproute are in PATH too
+              logger "Device $DEVICE_IFACE coming up"
             ''';
             type = "basic";
-        } ]'';
+          } ]
+        '';
         description = lib.mdDoc ''
-          A list of scripts which will be executed in response to  network  events.
+          A list of scripts which will be executed in response to network events.
         '';
       };
 
@@ -369,15 +360,93 @@ in {
         '';
       };
 
-      enableFccUnlock = mkOption {
-        type = types.bool;
-        default = false;
+      fccUnlockScripts = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            id = mkOption {
+              type = types.str;
+              description = lib.mdDoc "vid:pid of either the PCI or USB vendor and product ID";
+            };
+            path = mkOption {
+              type = types.path;
+              description = lib.mdDoc "Path to the unlock script";
+            };
+          };
+        });
+        default = [ ];
+        example = literalExpression ''[{ name = "03f0:4e1d"; script = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
         description = lib.mdDoc ''
-          Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
-          automatically performs the FCC unlock procedure by default. See
-          [the docs](https://modemmanager.org/docs/modemmanager/fcc-unlock/)
-          for more details.
+          List of FCC unlock scripts to enable on the system, behaving as described in
+          https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
         '';
+      };
+      ensureProfiles = {
+        profiles = with lib.types; mkOption {
+          type = attrsOf (submodule {
+            freeformType = ini.type;
+
+            options = {
+              connection = {
+                id = lib.mkOption {
+                  type = str;
+                  description = "This is the name that will be displayed by NetworkManager and GUIs.";
+                };
+                type = lib.mkOption {
+                  type = str;
+                  description = "The connection type defines the connection kind, like vpn, wireguard, gsm, wifi and more.";
+                  example = "vpn";
+                };
+              };
+            };
+          });
+          apply = (lib.filterAttrsRecursive (n: v: v != { }));
+          default = { };
+          example = {
+            home-wifi = {
+              connection = {
+                id = "home-wifi";
+                type = "wifi";
+                permissions = "";
+              };
+              wifi = {
+                mac-address-blacklist = "";
+                mode = "infrastructure";
+                ssid = "Home Wi-Fi";
+              };
+              wifi-security = {
+                auth-alg = "open";
+                key-mgmt = "wpa-psk";
+                psk = "$HOME_WIFI_PASSWORD";
+              };
+              ipv4 = {
+                dns-search = "";
+                method = "auto";
+              };
+              ipv6 = {
+                addr-gen-mode = "stable-privacy";
+                dns-search = "";
+                method = "auto";
+              };
+            };
+          };
+          description = lib.mdDoc ''
+            Declaratively define NetworkManager profiles. You can find information about the generated file format [here](https://networkmanager.dev/docs/api/latest/nm-settings-keyfile.html) and [here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/assembly_networkmanager-connection-profiles-in-keyfile-format_configuring-and-managing-networking).
+            You current profiles which are most likely stored in `/etc/NetworkManager/system-connections` and there is [a tool](https://github.com/janik-haag/nm2nix) to convert them to the needed nix code.
+            If you add a new ad-hoc connection via a GUI or nmtui or anything similar it should just work together with the declarative ones.
+            And if you edit a declarative profile NetworkManager will move it to the persistent storage and treat it like a ad-hoc one,
+            but there will be two profiles as soon as the systemd unit from this option runs again which can be confusing since NetworkManager tools will start displaying two profiles with the same name and probably a bit different settings depending on what you edited.
+            A profile won't be deleted even if it's removed from the config until the system reboots because that's when NetworkManager clears it's temp directory.
+          '';
+        };
+        environmentFiles = mkOption {
+          default = [];
+          type = types.listOf types.path;
+          example = [ "/run/secrets/network-manager.env" ];
+          description = lib.mdDoc ''
+            Files to load as environment file. Environment variables from this file
+            will be substituted into the static configuration file using [envsubst](https://github.com/a8m/envsubst).
+          '';
+        };
       };
     };
   };
@@ -387,13 +456,23 @@ in {
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
-    (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
+    (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
+      This option was removed, because using bundled FCC unlock scripts is risky,
+      might conflict with vendor-provided unlock scripts, and should
+      be a conscious decision on a per-device basis.
+      Instead it's recommended to use the
+      `networking.networkmanager.fccUnlockScripts` option.
+    '')
+    (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
       vector. There seem to be very rare cases where this might be useful.
       Consider setting system-wide host entries using networking.hosts, provide
       them via the DNS server in your network, or use environment.etc
       to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
+    '')
+    (mkRemovedOptionModule [ "networking" "networkmanager" "firewallBackend" ] ''
+      This option was removed as NixOS is now using iptables-nftables-compat even when using iptables, therefore Networkmanager now uses the nftables backend unconditionally.
     '')
   ];
 
@@ -403,7 +482,8 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [];
+      {
+        assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [ ];
         message = ''
           You can not use networking.networkmanager with networking.wireless.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
@@ -414,25 +494,29 @@ in {
     hardware.wirelessRegulatoryDatabase = true;
 
     environment.etc = {
-        "NetworkManager/NetworkManager.conf".source = configFile;
-      }
-      // builtins.listToAttrs (map (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
+      "NetworkManager/NetworkManager.conf".source = configFile;
+    }
+    // builtins.listToAttrs (map
+      (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
         source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
-      }) cfg.plugins)
-      // optionalAttrs cfg.enableFccUnlock
-         {
-           "ModemManager/fcc-unlock.d".source =
-             "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
-         }
-      // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
-         {
-           "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
-         }
-      // listToAttrs (lib.imap1 (i: s:
-         {
-            name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-            value = { mode = "0544"; inherit (s) source; };
-         }) cfg.dispatcherScripts);
+      })
+      cfg.plugins)
+    // builtins.listToAttrs (map
+      (e: nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
+        source = e.path;
+      })
+      cfg.fccUnlockScripts)
+    // optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ])
+      {
+        "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
+      }
+    // listToAttrs (lib.imap1
+      (i: s:
+        {
+          name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+          value = { mode = "0544"; inherit (s) source; };
+        })
+      cfg.dispatcherScripts);
 
     environment.systemPackages = packages;
 
@@ -461,6 +545,8 @@ in {
       "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+      # ppp isn't able to mkdir that directory at runtime
+      "d /run/pppd/lock 0700 root root -"
     ];
 
     systemd.services.NetworkManager = {
@@ -479,7 +565,10 @@ in {
       wantedBy = [ "network-online.target" ];
     };
 
-    systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+    systemd.services.ModemManager = {
+      aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+      path = lib.optionals (cfg.fccUnlockScripts != []) [ pkgs.libqmi pkgs.libmbim ];
+    };
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
@@ -488,6 +577,30 @@ in {
       # useful binaries for user-specified hooks
       path = [ pkgs.iproute2 pkgs.util-linux pkgs.coreutils ];
       aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
+    };
+
+    systemd.services.NetworkManager-ensure-profiles = mkIf (cfg.ensureProfiles.profiles != { }) {
+      description = "Ensure that NetworkManager declarative profiles are created";
+      wantedBy = [ "multi-user.target" ];
+      before = [ "network-online.target" ];
+      script = let
+        path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
+      in ''
+        mkdir -p /run/NetworkManager/system-connections
+      '' + lib.concatMapStringsSep "\n"
+        (profile: ''
+          ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
+        '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
+      + ''
+        if systemctl is-active --quiet NetworkManager; then
+          ${pkgs.networkmanager}/bin/nmcli connection reload
+        fi
+      '';
+      serviceConfig = {
+        EnvironmentFile = cfg.ensureProfiles.environmentFiles;
+        UMask = "0177";
+        Type = "oneshot";
+      };
     };
 
     # Turn off NixOS' network management when networking is managed entirely by NetworkManager

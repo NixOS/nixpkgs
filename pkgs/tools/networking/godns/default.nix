@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "godns";
-  version = "2.9.4";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7AIr35vsjI5jamvdA1EwTwkr8MiEOjTntFeeg4b7RCw=";
+    hash = "sha256-7zgvrEVt8xg54NijcqnXoZcXetzOu9h3Ucw7w03YagU=";
   };
 
-  vendorHash = "sha256-+wnaTrY7Mt6bCNTRZbJDFD75RCHyz5gtFi4DN0ng0/M=";
+  vendorHash = "sha256-veDrGB6gjUa8G/UyKzEgH2ItGGEPlXDePahq2XP2nAo=";
 
   # Some tests require internet access, broken in sandbox
   doCheck = false;
@@ -34,5 +34,6 @@ buildGoModule rec {
     changelog = "https://github.com/TimothyYe/godns/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ yinfeng ];
+    mainProgram = "godns";
   };
 }

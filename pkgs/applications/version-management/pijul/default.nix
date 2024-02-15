@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchCrate
 , rustPlatform
+, installShellFiles
 , pkg-config
 , libsodium
 , openssl
@@ -12,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-beta.4";
+  version = "1.0.0-beta.8";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "sha256-Sx+ZbT1EONWiQmC/5f4thfE9mmTulhTmUWeqPkQgJh8=";
+    hash = "sha256-BQic+E+SOfZYHJcYMaUmfjlIfop0YcVcASSjtnRtwD4=";
   };
 
-  cargoSha256 = "sha256-vc7rkLCy489W7MjJYiN8vg4DNS65/ZSIEAcw0vaQJtU=";
+  cargoHash = "sha256-D5P9pizerJiZK4UhCKEY1DXvaBMiWBXGu6Azlv6AjQA=";
 
   doCheck = false;
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl libsodium xxHash ]
     ++ (lib.optionals gitImportSupport [ libgit2 ])
     ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -31,10 +32,18 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional gitImportSupport "git";
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd pijul \
+      --bash <($out/bin/pijul completion bash) \
+      --fish <($out/bin/pijul completion fish) \
+      --zsh <($out/bin/pijul completion zsh)
+  '';
+
   meta = with lib; {
     description = "A distributed version control system";
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];
+    mainProgram = "pijul";
   };
 }

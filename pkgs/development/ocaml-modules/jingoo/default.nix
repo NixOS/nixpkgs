@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub
+{ lib, buildDunePackage, fetchFromGitHub, ocaml
 , menhir, ppxlib, ppx_deriving, re, uutf, uucp, ounit2
 }:
 
@@ -6,9 +6,7 @@ buildDunePackage rec {
   pname = "jingoo";
   version = "1.4.4";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.05";
 
   src = fetchFromGitHub {
     owner = "tategakibunko";
@@ -20,7 +18,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [ ppxlib ppx_deriving re uutf uucp ];
   checkInputs = [ ounit2 ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
 
   meta = with lib; {

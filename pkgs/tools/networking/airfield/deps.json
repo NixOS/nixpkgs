@@ -1,8 +1,0 @@
-[ { "express": "3.0.5" }
-, { "swig": "0.14.0" }
-, { "consolidate": "0.10.0" }
-, "redis"
-, "connect-redis"
-, "async"
-, "request"
-]

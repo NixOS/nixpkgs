@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evscript";
-  version = "unstable-2022-11-20";
+  version = "0.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "valpackett";
     repo = pname;
-    rev = "ba997c9723a91717c683f08e9957d0ecea3da6cd";
-    sha256 = "sha256-wuTPcBUuPK1D4VO8BXexx9AdiPM+X0TkJ3G7b7ofER8=";
+    rev = version;
+    hash = "sha256-lCXDDLovUb5aSOPTyVJL25v1JT1BGrrUlUR0Mu0XX4Q=";
   };
 
-  cargoSha256 = "sha256-5jcb/MajXV9bp0T9Og8d5TEzTwQyiyPTPHeWh8Ewr8Q=";
+  cargoHash = "sha256-KcQZnGFtev4ckhtQ7CNB773fAsExZ9EQl9e4Jf4beGo=";
 
   meta = with lib; {
     homepage = "https://codeberg.org/valpackett/evscript";

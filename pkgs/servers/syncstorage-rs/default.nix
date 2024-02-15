@@ -2,7 +2,6 @@
 , rustPlatform
 , pkg-config
 , python3
-, openssl
 , cmake
 , libmysqlclient
 , makeBinaryWrapper
@@ -21,13 +20,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.13.6";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LCMbhFoxi/fYaivW5gNyDhfytW/avhrrd29fXobSxJU=";
+    hash = "sha256-7lIFHK0XSOtfDEy6N9jcPGOd5Por5i1CBdDZQBiHm8c=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libmysqlclient
-    openssl
   ];
 
   preFixup = ''
@@ -47,9 +45,12 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoHash = "sha256-OPPU1SKR+zNmJ1NNAv4B3C9FOF/Ddg53genUkVwNgSs=";
-
-  buildFeatures = [ "grpcio/openssl" ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "deadpool-0.5.2" = "sha256-V3v03t8XWA6rA8RaNunq2kh2U+6Lc2C2moKdaF2bmEc=";
+    };
+  };
 
   # almost all tests need a DB to test against
   doCheck = false;
@@ -61,5 +62,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ pennae ];
     platforms = lib.platforms.linux;
+    mainProgram = "syncserver";
   };
 }

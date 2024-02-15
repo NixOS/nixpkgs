@@ -3,20 +3,20 @@ let
   bento4 = fetchFromGitHub {
     owner = "xbmc";
     repo = "Bento4";
-    rev = "1.6.0-639-5-${rel}";
-    sha256 = "sha256-jjeBy3LmnN7hPjnbBSPcdtPD+MdbG+0kU8mekM2/ZFw=";
+    rev = "1.6.0-639-7-Omega";
+    sha256 = "sha256-d3znV88dLMbA4oUWsTZ7vS6WHOWzN7lIHgWPkR5Aixo=";
   };
 in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "20.3.2";
+  version = "20.3.16";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     rev = "${version}-${rel}";
-    sha256 = "sha256-QG0qBRbUJJgsRLS2cQIDeTDYLjqVD0dRaZ7pCxpxNcs=";
+    sha256 = "sha256-1OY+3pvpVW8rkj7HL84IECyHpAmWsUQ9mTzuGesH+jI=";
   };
 
   extraCMakeFlags = [

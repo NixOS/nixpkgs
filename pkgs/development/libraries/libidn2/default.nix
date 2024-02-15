@@ -7,18 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libidn2";
-  version = "2.3.2";
+  version = "2.3.7";
 
   src = fetchurl {
-    url = "mirror://gnu/libidn/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dpQM1Od46Ak1eanRlbJf/16Tbp3GJCBoUotDenZ2T5E=";
+    url = "https://ftp.gnu.org/gnu/libidn/${pname}-${version}.tar.gz";
+    hash = "sha256-TCGnkbYQuVGbnQ4SuAl78vNZsS+N2SZHYRqSnmv9fWQ=";
   };
 
   strictDeps = true;
   # Beware: non-bootstrap libidn2 is overridden by ./hack.nix
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
-
-  patches = lib.optional stdenv.isDarwin ./fix-error-darwin.patch;
 
   enableParallelBuilding = true;
 

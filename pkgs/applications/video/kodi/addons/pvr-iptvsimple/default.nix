@@ -6,13 +6,13 @@
 buildKodiBinaryAddon rec {
   pname = "pvr-iptvsimple";
   namespace = "pvr.iptvsimple";
-  version = "20.6.1";
+  version = "20.13.0";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.iptvsimple";
     rev = "${version}-${rel}";
-    sha256 = "sha256-fJDMxNDXDijPL0sg86LB6nYQwjTdInf3dyOr8Lkydmg=";
+    sha256 = "sha256-W/tFM/WpWdSvLEf0iwQoH2JVDjyfr1l8CRQkOG5q4hk=";
   };
 
   extraBuildInputs = [

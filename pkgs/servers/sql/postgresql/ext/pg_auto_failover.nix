@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline, libkrb5 }:
+{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline, libkrb5, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "pg_auto_failover";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CLtLOzKRB9p6+SytMvWCYo7m7s/d+clAGOa2sWi6uZ0=";
+    sha256 = "sha256-OIWykfFbVskrkPG/zSmZtZjc+W956KSfIzK7f5QOqpI=";
   };
 
-  buildInputs = [ postgresql openssl zlib readline libkrb5 ];
+  buildInputs = [ postgresql openssl zlib readline libkrb5 ]
+    ++ lib.optionals (stdenv.isLinux && lib.versionOlder postgresql.version "13") [ libxcrypt ];
 
   installPhase = ''
     install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PostgreSQL extension and service for automated failover and high-availability";
     homepage = "https://github.com/citusdata/pg_auto_failover";
-    changelog = "https://github.com/citusdata/pg_auto_failover/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${version}/CHANGELOG.md";
     maintainers = [ maintainers.marsam ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;

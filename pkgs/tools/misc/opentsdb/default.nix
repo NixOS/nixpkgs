@@ -2,11 +2,10 @@
 , stdenv
 , autoconf
 , automake
-, bash
 , curl
 , fetchFromGitHub
 , fetchMavenArtifact
-, fetchurl
+, fetchpatch
 , git
 , jdk8
 , makeWrapper
@@ -22,8 +21,8 @@ let
       (fetchMavenArtifact {
         groupId = "org.apache.commons";
         artifactId = "commons-math3";
-        version = "3.4.1";
-        hash = "sha256-0QdbFKcQhwOLC/0Zjw992OSbWzUp2OLrqZ59nrhWXks=";
+        version = "3.6.1";
+        hash = "sha256-HlbXsFjSi2Wr0la4RY44hbZ0wdWI+kPNfRy7nH7yswg=";
       })
     ];
     guava = [
@@ -38,14 +37,14 @@ let
       (fetchMavenArtifact {
         groupId = "com.google.gwt";
         artifactId = "gwt-dev";
-        version = "2.6.0";
-        hash = "sha256-4MLdI7q5fkftHTMoN7W3l5zsq1QB2R/8bF86vEqBI+A=";
+        version = "2.6.1";
+        hash = "sha256-iS8VpnMPuxE9L9hkTJVtW5Tqgw2TIYei47zRvkdoK0o=";
       })
       (fetchMavenArtifact {
         groupId = "com.google.gwt";
         artifactId = "gwt-user";
-        version = "2.6.0";
-        hash = "sha256-HR5/aopn605inHeENNHBAqKrjkvIl9wPDM+nOwOpiEg=";
+        version = "2.6.1";
+        hash = "sha256-3IlJ+b6C0Gmuh7aAFg9+ldgvZCdfJmTB8qcdC4HZC9g=";
       })
       (fetchMavenArtifact {
         groupId = "net.opentsdb";
@@ -75,20 +74,20 @@ let
       (fetchMavenArtifact {
         groupId = "com.fasterxml.jackson.core";
         artifactId = "jackson-annotations";
-        version = "2.9.5";
-        hash = "sha256-OKDkUASfZDVwrayZiIqjSA7C3jhXkKcJaQi/Q7/AhdY=";
+        version = "2.14.1";
+        hash = "sha256-0lW0uGP/jscUqPlvpVw0Yh1D27grgtP1dHZJakwJ4ec=";
       })
       (fetchMavenArtifact {
         groupId = "com.fasterxml.jackson.core";
         artifactId = "jackson-core";
-        version = "2.9.5";
-        hash = "sha256-or66oyWtJUVbAhScZ+YFI2en1/wc533gAO7ShKUhTqw=";
+        version = "2.14.1";
+        hash = "sha256-ARQYfilrNMkxwb+eWoQVK2K/q30YL1Yj85gtwto15SY=";
       })
       (fetchMavenArtifact {
         groupId = "com.fasterxml.jackson.core";
         artifactId = "jackson-databind";
-        version = "2.9.5";
-        hash = "sha256-D7TgecEY51LMlMFa0i5ngrDfxdwJFF9IE/s52C5oYEc=";
+        version = "2.14.1";
+        hash = "sha256-QjoMgG3ks/petKKGmDBeOjd3xzHhvPobLzo3YMe253M=";
       })
     ];
     javacc = [
@@ -111,8 +110,8 @@ let
       (fetchMavenArtifact {
         groupId = "commons-logging";
         artifactId = "commons-logging";
-        version = "1.1.1";
-        hash = "sha256-zm+RPK0fDbOq1wGG1lxbx//Mmpnj/o4LE3MSgZ98Ni8=";
+        version = "1.2";
+        hash = "sha256-2t3qHqC+D1aXirMAa4rJKDSv7vvZt+TmMW/KV98PpjY=";
       })
       (fetchMavenArtifact {
         groupId = "org.apache.commons";
@@ -168,14 +167,14 @@ let
       (fetchMavenArtifact {
         groupId = "ch.qos.logback";
         artifactId = "logback-classic";
-        version = "1.0.13";
-        hash = "sha256-EsGTDKkWU0IqxJ/qM/zovhsfzS0iIM6jg8R5SXbHQY8=";
+        version = "1.3.4";
+        hash = "sha256-uGal2myLeOFVxn/M11YoYNC1/Hdric2WjC8/Ljf8OgI=";
       })
       (fetchMavenArtifact {
         groupId = "ch.qos.logback";
         artifactId = "logback-core";
-        version = "1.0.13";
-        hash = "sha256-7NjyT5spQShOmPFU/zND5yDLMcj0e2dVSxRXRfWW87g=";
+        version = "1.3.4";
+        hash = "sha256-R0CgmLtEOnRFVN093wYsaCKHspQGZ1TikuE0bIv1zt0=";
       })
     ];
     mockito = [
@@ -223,14 +222,14 @@ let
       (fetchMavenArtifact {
         groupId = "org.slf4j";
         artifactId = "log4j-over-slf4j";
-        version = "1.7.7";
-        hash = "sha256-LjcWxCtsAm/jzd2pK7oaVZsTZjjcexj7qKQSxBiVecI=";
+        version = "2.0.6";
+        hash = "sha256-QHMpiJioL0KeHr2iNaMUc7G0jDR94ShnNbtnkiUm6uQ=";
       })
       (fetchMavenArtifact {
         groupId = "org.slf4j";
         artifactId = "slf4j-api";
-        version = "1.7.7";
-        hash = "sha256-aZgMA4yhsTGSZWFZFhfZwl+r/Hspgor5FZfKhXDPNf4=";
+        version = "2.0.6";
+        hash = "sha256-LyqS1BCyaBOdfWO3XtJeIZlc/kEAwZvyNXfP28gHe9o=";
       })
     ];
     suasync = [
@@ -276,6 +275,44 @@ in stdenv.mkDerivation rec {
     hash = "sha256-899m1H0UCLsI/bnSrNFnnny4MxSw3XBzf7rgDuEajDs=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "bump-deps.0.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/2f4bbfba2f9a32f9295123e8b90adba022c11ece.patch";
+      hash = "sha256-4LpR4O8mNiJZQ7PUmAzFdkZAaF8i9/ZM5NhQ+8AJgSw=";
+    })
+    (fetchpatch {
+      name = "bump-deps.1.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/8c6a86ddbc367c7e4e2877973b70f77c105c6158.patch";
+      hash = "sha256-LZHqDOhwO/Gfgu870hJ6/uxnmigv7RP8OFe2a7Ug5SM=";
+    })
+    (fetchpatch {
+      name = "bump-deps.2.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/9b62442ba5c006376f57ef250fb7debe1047c3bf.patch";
+      hash = "sha256-2VjI9EkirKj4h7xhUtWdnKxJG0Noz3Hk5njm3pYEU1g=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-25826.prerequisite.0.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/a82a4f85f0fc1af554a104f28cc495451b26b1f6.patch";
+      hash = "sha256-GgoRZUGdKthK+ZwMpgSQQ4V2oHyqi8SwWGZT571gltQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-25826.prerequisite.1.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/22b27ea30a859a6dbdcd65fcdf61190d46e1b677.patch";
+      hash = "sha256-pXo6U7d4iy2squAiFvV2iDAQcNDdrl0pIOQEXfkJ3a8=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-25826.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/07c4641471c6f5c2ab5aab615969e97211eb50d9.patch";
+      hash = "sha256-88gIOhAhLCQC/UesIdYtjf0UgKNfnO0W2icyoMmiC3U=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-25827.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/fa88d3e4b5369f9fb73da384fab0b23e246309ba.patch";
+      hash = "sha256-FJHUiEmGhBIHoyOwNZtUWA36ENbrqDkUT8HfccmMSe8=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
@@ -291,7 +328,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = lib.concatStrings (lib.mapAttrsToList (dir: lib.concatMapStrings (artifact: ''
-    ln -s ${artifact}/share/java/* third_party/${dir}
+    cp ${artifact}/share/java/* third_party/${dir}
   '')) artifacts);
 
   postInstall = ''
@@ -305,6 +342,11 @@ in stdenv.mkDerivation rec {
     homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # maven dependencies
+    ];
     maintainers = [ ];
+    mainProgram = "tsdb";
   };
 }

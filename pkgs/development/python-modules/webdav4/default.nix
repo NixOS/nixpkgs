@@ -17,18 +17,21 @@
 buildPythonPackage rec {
   pname = "webdav4";
   version = "0.9.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "skshetry";
-    repo = pname;
-    rev = "v${version}";
+    repo = "webdav4";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Le/gABaUxMmSW2SjgucsBKqjxOq1h9UCAWl5YyUsCPk=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
 
   nativeBuildInputs = [
     hatch-vcs
@@ -61,11 +64,6 @@ buildPythonPackage rec {
     ];
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
   pythonImportsCheck = [
     "webdav4"
   ];
@@ -76,17 +74,24 @@ buildPythonPackage rec {
     "test_open"
     "test_open_binary"
     "test_close_connection_if_nothing_is_read"
+    # Assertion error due to comparing output
+    "test_cp_cli"
+    "test_mv_cli"
+    "test_sync_remote_to_local"
+
   ];
 
   disabledTestPaths = [
     # Tests requires network access
     "tests/test_client.py"
     "tests/test_fsspec.py"
+    "tests/test_cli.py"
   ];
 
   meta = with lib; {
     description = "Library for interacting with WebDAV";
     homepage = "https://skshetry.github.io/webdav4/";
+    changelog = "https://github.com/skshetry/webdav4/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

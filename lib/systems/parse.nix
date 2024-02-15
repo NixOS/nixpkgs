@@ -29,6 +29,15 @@ let
       assert type.check value;
       setType type.name ({ inherit name; } // value));
 
+  # gnu-config will ignore the portion of a triple matching the
+  # regex `e?abi.*$` when determining the validity of a triple.  In
+  # other words, `i386-linuxabichickenlips` is a valid triple.
+  removeAbiSuffix = x:
+    let match = builtins.match "(.*)e?abi.*" x;
+    in if match==null
+       then x
+       else lib.elemAt match 0;
+
 in
 
 rec {
@@ -91,14 +100,10 @@ rec {
     microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
     microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
 
-    mips          = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsel        = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mipsisa32r6   = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsisa32r6el = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mips64        = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mips64el      = { bits = 64; significantByte = littleEndian; family = "mips"; };
-    mipsisa64r6   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mipsisa64r6el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
@@ -130,6 +135,8 @@ rec {
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
 
     or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
+
+    loongarch64 = { bits = 64; significantByte = littleEndian; family = "loongarch"; };
 
     javascript = { bits = 32; significantByte = littleEndian; family = "javascript"; };
   };
@@ -223,6 +230,8 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+    knuth = {};
+
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = {};
@@ -466,7 +475,7 @@ rec {
         else                     vendors.unknown;
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
                else if hasPrefix "netbsd" args.kernel then getKernel "netbsd"
-               else                                   getKernel args.kernel;
+               else                                   getKernel (removeAbiSuffix args.kernel);
       abi =
         /**/ if args ? abi       then getAbi args.abi
         else if isLinux parsed || isWindows parsed then

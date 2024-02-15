@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "5.4.0";
+  version = "5.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "grantjenks";
     repo = "python-diskcache";
     rev = "v${version}";
-    hash = "sha256-c/k8mx/T4RkseDobJ2gtcuom0A6Ewyw4aP2Bk9pxV+o=";
+    hash = "sha256-1cDpdf+rLaG14TDd1wEHAiYXb69NFTFeOHD1Ib1oOVY=";
   };
 
   nativeCheckInputs = [
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

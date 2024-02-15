@@ -3,21 +3,26 @@
 , fetchzip
 , makeWrapper
 , jre
-, writeText
 , nixosTests
 , callPackage
-
 , confFile ? null
 , plugins ? [ ]
+, extraFeatures ? [ ]
+, disabledFeatures ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+let
+  featuresSubcommand = ''
+    ${lib.optionalString (extraFeatures != [ ]) "--features=${lib.concatStringsSep "," extraFeatures}"} \
+    ${lib.optionalString (disabledFeatures != [ ]) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
+  '';
+in stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "20.0.3";
+  version = "23.0.6";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    sha256 = "sha256-dDB3jG3k3ZkAzsG4p3VHpMBM8nxvxQ2sxGeRXWI1Wm0=";
+    hash = "sha256-Sw+6UloKSvYjkm7qYROmsZxKk/sky4DKvgupo+S61Q8=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -45,7 +50,7 @@ stdenv.mkDerivation rec {
     patchShebangs bin/kc.sh
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
-    bin/kc.sh build
+    bin/kc.sh build ${featuresSubcommand}
 
     runHook postBuild
   '';

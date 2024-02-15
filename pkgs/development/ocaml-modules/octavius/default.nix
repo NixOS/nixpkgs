@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildDunePackage, ocaml }:
 
-buildDunePackage rec {
+buildDunePackage (rec {
   pname = "octavius";
   version = "1.2.2";
 
@@ -11,8 +11,7 @@ buildDunePackage rec {
     sha256 = "sha256-/S6WpIo1c5J9uM3xgtAM/elhnsl0XimnIFsKy3ootbA=";
   };
 
-  minimumOCamlVersion = "4.03";
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  minimalOCamlVersion = "4.03";
 
   doCheck = true;
 
@@ -22,4 +21,6 @@ buildDunePackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [ vbgl ];
   };
-}
+} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
+  duneVersion = "1";
+})

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
+, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk14-bootstrap
 , setJavaClassPath
@@ -13,6 +13,9 @@ let
   update = ".0.2";
   build = "-ga";
 
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk14-bootstrap.override { gtkSupport = !headless; };
+
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "${major}${update}${build}";
@@ -24,9 +27,9 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
+      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk14-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -53,13 +56,17 @@ let
       patchShebangs --build configure
     '';
 
+    # JDK's build system attempts to specifically detect
+    # and special-case WSL, and we don't want it to do that,
+    # so pass the correct platform names explicitly
+    configurePlatforms = ["build" "host"];
+
     configureFlags = [
-      "--with-boot-jdk=${openjdk14-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-freetype=system"
-      "--with-harfbuzz=system"
       "--with-libjpeg=system"
       "--with-giflib=system"
       "--with-libpng=system"
@@ -87,6 +94,12 @@ let
     enableParallelBuilding = false;
 
     buildFlags = [ "all" ];
+
+    postBuild = ''
+      cd build/linux*
+      make images
+      cd -
+    '';
 
     installPhase = ''
       mkdir -p $out/lib
@@ -147,9 +160,9 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk14-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
-    meta = import ./meta.nix lib version;
+    meta = (import ./meta.nix lib version) // { broken = true; };
 
     passthru = {
       architecture = "";

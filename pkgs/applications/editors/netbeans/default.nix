@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "16";
+  version = "20";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha512-k+Zj6TKW0tOSYvM6V1okF4Qz62gZMETC6XG98W23Vtz3+vdiaddd8BC2DBg7p9Z1CofRq8sbwtpeTJM3FaXv0g==";
+    hash = "sha256-hseSusJiUqdnhIyOBtELProeMjrGdKa22h0VkbML80E=";
   };
 
   buildCommand = ''
@@ -68,7 +68,8 @@ stdenv.mkDerivation {
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with lib.maintainers; [ sander rszibele ];
+    maintainers = with lib.maintainers; [ sander rszibele kashw2 ];
     platforms = lib.platforms.unix;
+    mainProgram = "netbeans";
   };
 }

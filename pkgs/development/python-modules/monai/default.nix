@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.1.0";
-  disabled = pythonOlder "3.7";
+  version = "1.3.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     rev = "refs/tags/${version}";
-    hash = "sha256-XTjZhynIiFtFjJSW6rRAnpErZvf6QHkuK4e2L6l3naM=";
+    hash = "sha256-h//igmSV1cPAFifE1woIluSyGwZBRByYMLqeY3oLHnk=";
   };
 
   # Ninja is not detected by setuptools for some reason even though it's present:
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   BUILD_MONAI = 1;
 
-  doCheck = false;  # takes too long; numerous dependencies, some not in Nixpkgs
+  doCheck = false;  # takes too long; tries to download data
 
   pythonImportsCheck = [
     "monai"
@@ -58,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytorch framework (based on Ignite) for deep learning in medical imaging";
     homepage = "https://github.com/Project-MONAI/MONAI";
+    changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.bcdarwin ];
   };

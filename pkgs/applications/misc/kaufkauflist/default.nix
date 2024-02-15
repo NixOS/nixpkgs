@@ -1,51 +1,53 @@
-{ lib, buildPackages, buildGoModule, fetchFromGitHub, esbuild, buildNpmPackage, fetchFromGitea }:
+{ lib
+, buildPackages
+, fetchFromGitHub
+, buildNpmPackage
+, fetchFromGitea
+, nix-update-script
+}:
 
 let
   esbuild' = buildPackages.esbuild.override {
     buildGoModule = args: buildPackages.buildGoModule (args // rec {
-      version = "0.16.15";
+      version = "0.19.11";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-iTAtPHjrBvHweSIiAbkkbBLgjF3v68jipJEzc0I4G04=";
+        hash = "sha256-NUwjzOpHA0Ijuh0E69KXx8YVS5GTnKmob9HepqugbIU=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 in buildNpmPackage rec {
   pname = "kaufkauflist";
-  version = "2.0.0";
+  version = "3.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
-    hash = "sha256-oXrb6n1oD27bHt/zPWP0REQyCyZXI8BB57pdR/q42gY=";
+    hash = "sha256-kqDNA+BALVMrPZleyPxxCyls4VKBzY2MttzO51+Ixo8=";
   };
 
-  npmDepsHash = "sha256-lSnGLK7+ac/wEpAxlpkZS/kgr9F+8WK+nRjCzkrPJt0=";
+  npmDepsHash = "sha256-O2fcmC7Hj9JLStMukyt12aMgntjXT7Lv3vYJp3GqO24=";
 
-  ESBUILD_BINARY_PATH = "${lib.getExe esbuild'}";
+  ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     mkdir -p $out/share/kaufkauflist $out/share/pocketbase
     cp -vr build/* $out/share/kaufkauflist/
     cp -v pb_schema.json $out/share/pocketbase/
-
-    runHook postInstall
   '';
 
-  # Uncomment this when nix-update-script supports Gitea.
-  #passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://codeberg.org/annaaurora/kaufkauflist";
     description = "A to-do list for shopping or other use cases";
     license = licenses.mit;
     maintainers = with maintainers; [ annaaurora ];
+    mainProgram = "kaufdbclean";
   };
 }

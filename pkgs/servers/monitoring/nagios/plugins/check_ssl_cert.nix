@@ -1,29 +1,29 @@
 { lib
 , stdenv
+, bc
+, bind # host and dig binary
+, coreutils # date and timeout binary
+, curl
 , fetchFromGitHub
 , file
-, openssl
-, makeWrapper
-, which
-, curl
-, bc
-, coreutils # date and timeout binary
-, bind # host and dig binary
-, nmap
 , iproute2
+, makeWrapper
 , netcat-gnu
+, nmap
+, openssl
 , python3
+, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "check_ssl_cert";
-  version = "2.61.0";
+  version = "2.79.0";
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
-    rev = "v${version}";
-    hash = "sha256-BePgfyVtEhm81kDtjRt0P6O9zgWA4f+5pH//w9PxD8w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2NraUEUGyvmEdWCQdzZ5kf+sx/CnSZ54N3zRcCSYhBA=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/check_ssl_cert \
-      --prefix PATH : "${lib.makeBinPath [ openssl file which curl bc coreutils bind nmap iproute2 netcat-gnu python3 ]}"
+      --prefix PATH : "${lib.makeBinPath ([ openssl file which curl bc coreutils bind nmap netcat-gnu python3 ] ++ lib.optional stdenv.isLinux iproute2) }"
   '';
 
   meta = with lib; {

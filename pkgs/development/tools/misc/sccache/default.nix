@@ -1,23 +1,37 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, stdenv, Security }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.4.0";
+  version = "0.7.7";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${version}";
-    sha256 = "sha256-6ok8N5y/Wtz4t0414GHT7qc5D2ysw97oKASbKHPLXN8=";
+    sha256 = "sha256-nWSMWaz1UvjsA2V7q7WKx44G45VVaoQxteZqrKAlxY8=";
   };
 
-  cargoSha256 = "sha256-dxjVlbnewFdnO294L+9kQE8owlgyPaxepxtmC7V9nGk=";
+  cargoHash = "sha256-ezub+pOqNjCfH7QgjLBrYtsyYbPM3/SADLpNgPtlG+I=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
-  # Tests fail because of client server setup which is not possible inside the pure environment,
-  # see https://github.com/mozilla/sccache/issues/460
+  # Tests fail because of client server setup which is not possible inside the
+  # pure environment, see https://github.com/mozilla/sccache/issues/460
   doCheck = false;
 
   meta = with lib; {

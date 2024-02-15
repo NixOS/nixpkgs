@@ -20,16 +20,16 @@ jobs:
     if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Create backport PRs
-        uses: korthout/backport-action@v1.2.0
+        uses: korthout/backport-action@08bafb375e6e9a9a2b53a744b987e5d81a133191 # v2.1.1
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           copy_labels_pattern: 'severity:\ssecurity'
           pull_description: |-
             Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
 
-            * [ ] Before merging, ensure that this backport complies with the [Criteria for Backporting](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#criteria-for-backporting-changes).
-              * Even as a non-commiter, if you find that it does not comply, leave a comment.
+            * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
+              * Even as a non-commiter, if you find that it is not acceptable, leave a comment.

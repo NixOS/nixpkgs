@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , meson
 , ninja
@@ -8,50 +9,61 @@
 , vulkan-loader
 , shaderc
 , lcms2
-, libepoxy
 , libGL
-, xorg
+, libX11
 , libunwind
+, libdovi
+, xxHash
+, fast-float
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "4.208.0";
+  version = "6.338.2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "161dp5781s74ca3gglaxlmchx7glyshf0wg43w98pl22n1jcm5qk";
+    hash = "sha256-gE6yKnFvsOFh8bFYc7b+bS+zmdDU7jucr0HwhdDeFzU=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3Packages.mako
+    vulkan-headers
+    python3Packages.jinja2
+    python3Packages.glad2
   ];
 
   buildInputs = [
-    vulkan-headers
     vulkan-loader
     shaderc
     lcms2
-    libepoxy
     libGL
-    xorg.libX11
+    libX11
     libunwind
+    libdovi
+    xxHash
+  ] ++ lib.optionals (!stdenv.cc.isGNU) [
+    fast-float
   ];
 
-  mesonFlags = [
-    "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
-    "-Ddemos=false" # Don't build and install the demo programs
-    "-Dd3d11=disabled" # Disable the Direct3D 11 based renderer
-    "-Dglslang=disabled" # rely on shaderc for GLSL compilation instead
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-Dunwind=disabled" # libplacebo doesn’t build with `darwin.libunwind`
+  mesonFlags = with lib; [
+    (mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+    (mesonBool "demos" false) # Don't build and install the demo programs
+    (mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+    (mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+  ] ++ optionals stdenv.isDarwin [
+    (mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace 'python_env.append' '#'
+  '';
 
   meta = with lib; {
     description = "Reusable library for GPU-accelerated video/image rendering primitives";

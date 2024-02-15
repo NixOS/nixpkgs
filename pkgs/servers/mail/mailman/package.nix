@@ -1,22 +1,22 @@
 { lib
 , fetchpatch
 , python3
-, docutils
-, sphinx
+, fetchPypi
 , postfix
 , lynx
+, nixosTests
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.8";
+  version = "3.3.9";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g6wH7lXqK0yJ8AxO1HFxMvBicBJ9NGWlPePFyxl9Qc4=";
+    hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -30,17 +30,16 @@ buildPythonPackage rec {
     flufl_i18n
     flufl_lock
     gunicorn
-    importlib-resources
-    lazr_config
+    lazr-config
     passlib
+    python-dateutil
     requests
     sqlalchemy
-    zope_component
-    zope_configuration
+    zope-component
+    zope-configuration
   ];
 
   checkInputs = [
-    docutils
     sphinx
   ];
 
@@ -57,9 +56,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "alembic>=1.6.2,<1.7" "alembic>=1.6.2"
-
     substituteInPlace src/mailman/config/postfix.cfg \
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
@@ -75,10 +71,12 @@ buildPythonPackage rec {
   # 'runner' scripts.
   dontWrapPythonPrograms = true;
 
+  passthru.tests = { inherit (nixosTests) mailman; };
+
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ qyliss ma27 ];
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

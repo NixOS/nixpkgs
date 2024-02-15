@@ -3,7 +3,7 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
-, fetchpatch
+, setuptools
 , pytestCheckHook
 , libffi
 , pkg-config
@@ -13,11 +13,12 @@
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.15.1";
+  version = "1.16.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1AC/uaN7E1ElPLQCZxzqfom97MKU6AFqcH9tHYrJNPk=";
+    hash = "sha256-vLPvQ+WGZbvaL7GYaY/K5ndkg+DEpjGqVkeAbCXgLMA=";
   };
 
   patches = [
@@ -32,32 +33,12 @@ if isPyPy then null else buildPythonPackage rec {
     # deemed safe to trust in cffi.
     #
     ./darwin-use-libffi-closures.diff
-    (fetchpatch {
-      # Drop py.code usage from tests, no longer depend on the deprecated py package
-      url = "https://foss.heptapod.net/pypy/cffi/-/commit/9c7d865e17ec16a847090a3e0d1498b698b99756.patch";
-      excludes = [
-        "README.md"
-        "requirements.txt"
-      ];
-      hash = "sha256-HSuLLIYXXGGCPccMNLV7o1G3ppn2P0FGCrPjqDv2e7k=";
-    })
-    (fetchpatch {
-      #  Replace py.test usage with pytest
-      url = "https://foss.heptapod.net/pypy/cffi/-/commit/bd02e1b122612baa74a126e428bacebc7889e897.patch";
-      excludes = [
-        "README.md"
-        "requirements.txt"
-      ];
-      hash = "sha256-+2daRTvxtyrCPimOEAmVbiVm1Bso9hxGbaAbd03E+ws=";
-    })
-  ] ++  lib.optionals (pythonAtLeast "3.11") [
-    # Fix test that failed because python seems to have changed the exception format in the
-    # final release. This patch should be included in the next version and can be removed when
-    # it is released.
-    (fetchpatch {
-      url = "https://foss.heptapod.net/pypy/cffi/-/commit/8a3c2c816d789639b49d3ae867213393ed7abdff.diff";
-      hash = "sha256-3wpZeBqN4D8IP+47QDGK7qh/9Z0Ag4lAe+H0R5xCb1E=";
-    })
+  ] ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc) "13") [
+    # -Wnull-pointer-subtraction is enabled with -Wextra. Suppress it to allow the following tests
+    # to run and pass when cffi is built with newer versions of clang:
+    # - testing/cffi1/test_verify1.py::test_enum_usage
+    # - testing/cffi1/test_verify1.py::test_named_pointer_as_argument
+    ./clang-pointer-substraction-warning.diff
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -68,11 +49,18 @@ if isPyPy then null else buildPythonPackage rec {
       --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
   '';
 
-  buildInputs = [ libffi ];
+  nativeBuildInputs = [
+    pkg-config
+    setuptools
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libffi
+  ];
 
-  propagatedBuildInputs = [ pycparser ];
+  propagatedBuildInputs = [
+    pycparser
+  ];
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
@@ -80,18 +68,16 @@ if isPyPy then null else buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isMusl;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # AssertionError: cannot seem to get an int[10] not completely cleared
-    # https://foss.heptapod.net/pypy/cffi/-/issues/556
-    "test_ffi_new_allocator_1"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ domenkozar lnl7 ];
+    changelog = "https://github.com/python-cffi/cffi/releases/tag/v${version}";
+    description = "Foreign Function Interface for Python calling C code";
+    downloadPage = "https://github.com/python-cffi/cffi";
     homepage = "https://cffi.readthedocs.org/";
     license = licenses.mit;
-    description = "Foreign Function Interface for Python calling C code";
+    maintainers = teams.python.members;
   };
 }

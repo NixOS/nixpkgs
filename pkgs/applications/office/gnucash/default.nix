@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, fetchFromGitHub
 , fetchurl
+, fetchpatch
 , aqbanking
 , boost
 , cmake
@@ -26,12 +28,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.12";
+  version = "5.5";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-zIwFGla4u0M1ZtbiiQ31nz2JWjlcjPUkbBtygQLOEK4=";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
+    hash = "sha256-tNr2e7iStwYyP2Lp+pckIDnX3QouHhB3HgwlgX3Q7Ts=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
     webkitgtk
   ]
   ++ (with perlPackages; [
-    DateManip
+    JSONParse
     FinanceQuote
     perl
   ]);
@@ -72,103 +74,46 @@ stdenv.mkDerivation rec {
     ./0002-disable-gnc-fq-update.patch
     # this patch prevents the building of gnucash-valgrind
     ./0003-remove-valgrind.patch
-    # this patch makes gnucash exec the Finance::Quote helpers directly
-    ./0004-exec-fq-helpers.patch
+    # this patch makes gnucash exec the Finance::Quote wrapper directly
+    ./0004-exec-fq-wrapper.patch
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
   # guile warning
-  GUILE_AUTO_COMPILE="0";
+  env.GUILE_AUTO_COMPILE = "0";
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
     # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
     "-Wno-error=use-after-free"
   ]);
 
-  # `make check` target does not define its prerequisites but expects them to
-  # have already been built.  The list of targets below was built through trial
-  # and error based on failing tests.
   doCheck = true;
-  preCheck = ''
-    make \
-      test-account-object \
-      test-address \
-      test-agedver \
-      test-app-utils \
-      test-aqb \
-      test-autoclear \
-      test-backend-dbi \
-      test-business \
-      test-column-types \
-      test-commodities \
-      test-customer \
-      test-dom-converters1 \
-      test-dynload \
-      test-employee \
-      test-engine \
-      test-exp-parser \
-      test-gnc-glib-utils \
-      test-gnc-guid \
-      test-gnc-int128 \
-      test-gnc-numeric \
-      test-gnc-path-util \
-      test-gnc-rational \
-      test-group-vs-book \
-      test-guid \
-      test-import-account-matcher \
-      test-import-backend \
-      test-import-map \
-      test-import-parse \
-      test-import-pending-matches \
-      test-incompatdep \
-      test-job \
-      test-kvp-frames \
-      test-kvp-value \
-      test-link-module-tax-us \
-      test-link-ofx \
-      test-load-backend \
-      test-load-c \
-      test-load-engine \
-      test-load-example-account \
-      test-load-xml2 \
-      test-lots \
-      test-modsysver \
-      test-numeric \
-      test-object \
-      test-print-parse-amount \
-      test-qof \
-      test-qofquerycore \
-      test-qofsession \
-      test-query \
-      test-querynew \
-      test-recurrence \
-      test-resolve-file-path \
-      test-scm-query \
-      test-scm-query-string \
-      test-split-register-copy-ops \
-      test-split-vs-account \
-      test-sqlbe \
-      test-string-converters \
-      test-sx \
-      test-tokenizer \
-      test-transaction-reversal \
-      test-transaction-voiding \
-      test-userdata-dir \
-      test-userdata-dir-invalid-home \
-      test-vendor \
-      test-xml-account \
-      test-xml-commodity \
-      test-xml-pricedb \
-      test-xml-transaction \
-      test-xml2-is-file
-  '';
+  enableParallelChecking = true;
+  checkTarget = "check";
+
+  passthru.docs = stdenv.mkDerivation {
+    pname = "gnucash-docs";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "Gnucash";
+      repo = "gnucash-docs";
+      rev = version;
+      hash = "sha256-ilDh4PH+tdrJReIpgvEd0Gvs8Xvt5Q43XM5r7Bn+5IM=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ libxml2 libxslt ];
+  };
 
   preFixup = ''
     gappsWrapperArgs+=(
+      # documentation
+      --prefix XDG_DATA_DIRS : ${passthru.docs}/share
       # db drivers location
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
-      # gnome settings schemas location on Nix
-      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      # gsettings schema location on Nix
+      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${version}"}
     )
   '';
 
@@ -180,12 +125,13 @@ stdenv.mkDerivation rec {
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
     wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash-cli "''${gappsWrapperArgs[@]}"
 
-    for file in $out/bin/gnc-fq-check $out/bin/gnc-fq-dump $out/bin/gnc-fq-helper; do
-      wrapProgram $file \
-      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ DateManip FinanceQuote ]}"
-    done
+    wrapProgram $out/bin/finance-quote-wrapper \
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://www.gnucash.org/";
@@ -211,8 +157,9 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres rski ];
+    maintainers = with maintainers; [ domenkozar AndersonTorres rski nevivurn ];
     platforms = platforms.unix;
+    mainProgram = "gnucash";
   };
 }
 # TODO: investigate Darwin support

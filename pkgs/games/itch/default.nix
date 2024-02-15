@@ -1,10 +1,9 @@
 { lib
 , stdenvNoCC
-, fetchpatch
 , fetchzip
 , fetchFromGitHub
 , butler
-, electron_11
+, electron
 , steam-run
 , makeWrapper
 , copyDesktopItems
@@ -12,22 +11,14 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "itch";
-  version = "25.5.1";
+  version = "26.1.2";
 
+  # TODO: Using kitch instead of itch, revert when possible
   src = fetchzip {
-    url = "https://broth.itch.ovh/${pname}/linux-amd64/${version}/itch.zip";
+    url = "https://broth.itch.ovh/k${pname}/linux-amd64/${version}/archive/default#.zip";
     stripRoot = false;
-    sha256 = "sha256-ejfS+sqhacW2h8u96W4fout3V8xrBs0SrW5w/7X83m4=";
+    sha256 = "sha256-thXe+glpltSiKNGIRgvOZQZPJWfDHWo3dLdziyp2BM4=";
   };
-
-  patches = [
-    # Fixes crash while browsing the store.
-    (fetchpatch {
-      name = "itch.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/itch.patch?h=itch-bin&id=0b181454567029141749f870880b10093216e133";
-      sha256 = "sha256-gmLL/BMondSflERm0z+DuGDP56JhDXiyxEwLUavTD8Q=";
-    })
-  ];
 
   itch-setup = fetchzip {
     url = "https://broth.itch.ovh/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
@@ -39,8 +30,8 @@ stdenvNoCC.mkDerivation rec {
     fetchFromGitHub {
         owner = "itchio";
         repo = pname;
-        rev = "v${version}";
-        hash = "sha256-DZBmf8fe0zw5uiQjNKXw8g/vU2hjNDa87z/7XuhyXog=";
+        rev = "v${version}-canary";
+        sha256 = "sha256-veZiKs9qHge+gCEpJ119bAT56ssXJAH3HBcYkEHqBFg=";
         sparseCheckout = [ sparseCheckout ];
       } + sparseCheckout;
 
@@ -63,6 +54,10 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    # TODO: Remove when the next stable Itch is stabilized
+    substituteInPlace ./resources/app/package.json \
+      --replace "kitch" "itch"
+
     mkdir -p $out/bin $out/share/${pname}/resources/app
     cp -r resources/app "$out/share/${pname}/resources/"
 
@@ -82,7 +77,7 @@ stdenvNoCC.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${steam-run}/bin/steam-run $out/bin/${pname} \
-      --add-flags ${electron_11}/bin/electron \
+      --add-flags ${electron}/bin/electron \
       --add-flags $out/share/${pname}/resources/app \
       --set BROTH_USE_LOCAL butler,itch-setup \
       --prefix PATH : ${butler}/bin/:${itch-setup}

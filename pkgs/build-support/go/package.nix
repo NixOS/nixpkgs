@@ -7,12 +7,6 @@
 , preFixup ? ""
 , shellHook ? ""
 
-# Go linker flags, passed to go via -ldflags
-, ldflags ? []
-
-# Go tags, passed to go via -tag
-, tags ? []
-
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -43,14 +37,13 @@
 
 , CGO_ENABLED ? go.CGO_ENABLED
 
+, ldflags ? [ ]
+
 # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
 
 , meta ? {}, ... } @ args:
-
-
-with builtins;
 
 let
   dep2src = goDep:
@@ -92,14 +85,18 @@ let
     GOHOSTARCH = go.GOHOSTARCH or null;
     GOHOSTOS = go.GOHOSTOS or null;
 
-    inherit CGO_ENABLED;
+    inherit CGO_ENABLED enableParallelBuilding;
 
     GO111MODULE = "off";
+    GOTOOLCHAIN = "local";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
-    configurePhase = args.configurePhase or ''
+    # If not set to an explicit value, set the buildid empty for reproducibility.
+    ldflags = ldflags ++ lib.optionals (!lib.any (lib.hasPrefix "-buildid=") ldflags) [ "-buildid=" ];
+
+    configurePhase = args.configurePhase or (''
       runHook preConfigure
 
       # Extract the source
@@ -107,7 +104,7 @@ let
       mkdir -p "go/src/$(dirname "$goPackagePath")"
       mv "$sourceRoot" "go/src/$goPackagePath"
 
-    '' + lib.optionalString (deleteVendor == true) ''
+    '' + lib.optionalString deleteVendor ''
       if [ ! -d "go/src/$goPackagePath/vendor" ]; then
         echo "vendor folder does not exist, 'deleteVendor' is not needed"
         exit 10
@@ -141,7 +138,7 @@ let
       fi
 
       runHook postConfigure
-    '';
+    '');
 
     renameImports = args.renameImports or (
       let
@@ -151,7 +148,7 @@ let
         renames = p: lib.concatMapStringsSep "\n" (rename p.goPackagePath) p.goPackageAliases;
       in lib.concatMapStringsSep "\n" renames inputsWithAliases);
 
-    buildPhase = args.buildPhase or ''
+    buildPhase = args.buildPhase or (''
       runHook preBuild
 
       runHook renameImports
@@ -172,7 +169,7 @@ let
 
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
-        flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
+        flags+=(''${tags:+-tags=''${tags// /,}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
         flags+=("-p" "$NIX_BUILD_CORES")
 
@@ -235,7 +232,7 @@ let
       )
     '' + ''
       runHook postBuild
-    '';
+    '');
 
     doCheck = args.doCheck or false;
     checkPhase = args.checkPhase or ''
@@ -279,8 +276,6 @@ let
       { inherit go; } //
       lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
-    enableParallelBuilding = enableParallelBuilding;
-
     meta = {
       # Add default meta information
       homepage = "https://${goPackagePath}";
@@ -290,4 +285,5 @@ let
 in
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
   "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+lib.warnIf (builtins.elem "-buildid=" ldflags) "`-buildid=` is set by default as ldflag by buildGoModule"
   package

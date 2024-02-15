@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -17,6 +18,7 @@
 buildPythonPackage rec {
   pname = "accupy";
   version = "0.3.6";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -56,6 +58,10 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.
+  # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
+  env.MPLBACKEND = lib.optionalString stdenv.isDarwin "Agg";
+
   # performance tests aren't useful to us and disabling them allows us to
   # decouple ourselves from an unnecessary build dep
   preCheck = ''
@@ -70,6 +76,6 @@ buildPythonPackage rec {
     description = "Accurate sums and dot products for Python";
     homepage = "https://github.com/nschloe/accupy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

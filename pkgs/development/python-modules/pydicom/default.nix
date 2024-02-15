@@ -2,22 +2,23 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+, flit-core
 , numpy
 , pillow
+, pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
 let
   pname = "pydicom";
-  version = "2.3.1";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xt0aK908lLgNlpcI86OSxy96Z/PZnQh7+GXzJ0VMQGA=";
+    hash = "sha256-iJE1horEmdL7bKPn+NlZLgmtCbLZCZWQ8NjDBQPzXk8=";
   };
 
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
@@ -25,16 +26,25 @@ let
   test_data = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom-data";
-    rev = "bbb723879690bb77e077a6d57657930998e92bd5";
-    hash = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
+    rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
+    hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
   };
 
 in
 buildPythonPackage {
   inherit pname version src;
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.10";
+
+  patches = [
+    # backport of https://github.com/pydicom/pydicom/commit/2513a20cc41743a42bdb86f4cbb4873899b7823c
+    ./pillow-10.1.0-compat.patch
+  ];
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -73,6 +83,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Python package for working with DICOM files";
     homepage = "https://pydicom.github.io";
+    changelog = "https://github.com/pydicom/pydicom/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

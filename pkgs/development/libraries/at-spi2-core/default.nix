@@ -6,7 +6,7 @@
 , pkg-config
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gsettings-desktop-schemas
 , makeWrapper
 , dbus
@@ -18,17 +18,19 @@
 , libXi
 , libXext
 , gnome
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.46.0";
+  version = "2.50.0";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "qgyGx596jWe65JpbelqwhDDGCM/+bjO/R6cvQasDw9A=";
+    sha256 = "6fWoyCNcndljshcd6RIDARKcZ33ekzlV4d9hi5ScStw=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +51,9 @@ stdenv.mkDerivation rec {
     libXi
     # libXext is a transitive dependency of libXi
     libXext
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
+    # libsystemd is a needed for dbus-broker support
+    systemd
   ];
 
   # In atspi-2.pc dbus-1 glib-2.0
@@ -67,6 +72,9 @@ stdenv.mkDerivation rec {
     # including the entire dbus closure in libraries linked with
     # the at-spi2-core libraries.
     "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Same as the above, but for dbus-broker
+    "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
   ];
 
   passthru = {

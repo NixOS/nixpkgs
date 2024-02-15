@@ -4,13 +4,13 @@ let
   soVersion = "5";
 in stdenv.mkDerivation rec {
   pname = "liblinear";
-  version = "2.46";
+  version = "2.47";
 
   src = fetchFromGitHub {
     owner = "cjlin1";
     repo = "liblinear";
     rev = "v${builtins.replaceStrings ["."] [""] version}";
-    sha256 = "sha256-mKd6idfr6mIIDEie8DCS+drtfpgKoS/5UXI0JenTxlA=";
+    sha256 = "sha256-so7uCc/52NdN0V2Ska8EUdw/wSegaudX5AF+c0xe5jk=";
   };
 
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ];

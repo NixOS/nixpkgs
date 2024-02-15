@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "3.0.1";
+  version = "3.1.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7IsnamtgvYDe/tJa3X5DmIHBnmSFCv2bNGKD1BZf0P0=";
+    hash = "sha256-oKrgNMRE2wBxqgd5crpHaNQMgw2VOf1Fv0zT+PaZLvw=";
   };
 
   nativeCheckInputs = [

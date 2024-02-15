@@ -3,26 +3,17 @@
 
 stdenv.mkDerivation rec {
   pname = "goxel";
-  version = "0.10.8";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
     rev = "v${version}";
-    sha256 = "sha256-M9H9SV8xmU7Jw5rEdV0gfloIEBvWmWSuH+BCrowpf2M=";
+    hash = "sha256-ueA0YW2n/DXd9AytDzfPtvtXbvuUm4VDwcdvHWObKxc=";
   };
-
-  patches = [ ./disable-imgui_ini.patch ];
 
   nativeBuildInputs = [ scons pkg-config wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=format-truncation"
-  ];
-
-  NIX_LDFLAGS = "-lpthread";
 
   buildPhase = ''
     make release
@@ -30,6 +21,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D ./goxel $out/bin/goxel
+
+    for res in $(ls data/icons | sed -e 's/icon//g' -e 's/.png//g'); do
+      install -Dm444 data/icons/icon$res.png $out/share/icons/hicolor/''${res}x''${res}/apps/goxel.png
+    done
+
+    install -Dm444 snap/gui/goxel.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/goxel.desktop \
+      --replace 'Icon=''${SNAP}/icon.png' 'Icon=goxel'
   '';
 
   meta = with lib; {
@@ -37,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://guillaumechereau.github.io/goxel/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tilpner ];
+    maintainers = with maintainers; [ tilpner fgaz ];
   };
 }

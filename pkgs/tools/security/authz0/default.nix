@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "authz0";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8WtvUeHP7fJ1/G+UB1QLCSSNx7XA+vREcwJxoMeQsgM=";
+    hash = "sha256-NrArxuhzd57NIdM4d9p/wfCB1e6l83pV+cjjCgZ9YtM=";
   };
 
-  vendorSha256 = "sha256-EQhvHu/LXZtVQ+MzjB96K0MUM4THiRDe1FkAATfGhdw=";
+  vendorHash = "sha256-ARPrArvCgxLdCaiUdJyjB/9GbbldnMXwFbyYubbsqxc=";
 
   meta = with lib; {
     description = "Automated authorization test tool";

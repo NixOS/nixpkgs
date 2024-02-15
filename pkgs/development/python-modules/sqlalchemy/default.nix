@@ -1,8 +1,7 @@
-{ stdenv
-, lib
+{ lib
 , isPyPy
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 
 # build
@@ -14,10 +13,11 @@
 , typing-extensions
 
 # optionals
+, aiomysql
 , aiosqlite
 , asyncmy
 , asyncpg
-, cx_oracle
+, cx-oracle
 , mariadb
 , mypy
 , mysql-connector
@@ -40,15 +40,21 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "2.0.4";
+  version = "2.0.25";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-laGOGmryEU29nuTxaK0zBw1jF+Ebr6KNmDzHtYX+kAs=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "sqlalchemy";
+    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-nfkYzLpWyNXDuRUJl5pzaedw5v7jHpG7kpmr6VTGUaw=";
   };
+
+  postPatch = ''
+    sed -i '/tag_build = dev/d' setup.cfg
+  '';
 
   nativeBuildInputs =[
     setuptools
@@ -61,7 +67,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = rec {
+  passthru.optional-dependencies = lib.fix (self: {
     asyncio = [
       greenlet
     ];
@@ -87,7 +93,7 @@ buildPythonPackage rec {
       mariadb
     ];
     oracle = [
-      cx_oracle
+      cx-oracle
     ];
     oracle_oracledb = [
       oracledb
@@ -100,7 +106,7 @@ buildPythonPackage rec {
     ];
     postgresql_asyncpg = [
       asyncpg
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     postgresql_psycopg2binary = [
       psycopg2
     ];
@@ -110,23 +116,26 @@ buildPythonPackage rec {
     postgresql_psycopg = [
       psycopg
     ];
+    postgresql_psycopgbinary = [
+      psycopg
+    ];
     pymysql = [
       pymysql
     ];
     aiomysql = [
       aiomysql
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     asyncmy = [
       asyncmy
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     aiosqlite = [
       aiosqlite
       typing-extensions
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     sqlcipher = [
       # TODO: sqlcipher3
     ];
-  };
+  });
 
   nativeCheckInputs = [
     pytest-xdist
@@ -137,6 +146,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # typing correctness, not interesting
     "test/ext/mypy"
+    "test/typing"
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];

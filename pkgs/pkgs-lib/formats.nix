@@ -28,11 +28,20 @@ rec {
       generate = ...;
 
     });
+
+  Please note that `pkgs` may not always be available for use due to the split
+  options doc build introduced in fc614c37c653, so lazy evaluation of only the
+  'type' field is required.
+
   */
 
 
   inherit (import ./formats/java-properties/default.nix { inherit lib pkgs; })
     javaProperties;
+
+  libconfig = (import ./formats/libconfig/default.nix { inherit lib pkgs; }).format;
+
+  hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
 
   json = {}: {
 
@@ -133,6 +142,20 @@ rec {
           else value;
       in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
 
+  };
+
+  # As defined by systemd.syntax(7)
+  #
+  # null does not set any value, which allows for RFC42 modules to specify
+  # optional config options.
+  systemd = let
+    mkValueString = lib.generators.mkValueStringDefault {};
+    mkKeyValue = k: v:
+      if v == null then "# ${k} is unset"
+      else "${k} = ${mkValueString v}";
+  in ini {
+    listsAsDuplicateKeys = true;
+    inherit mkKeyValue;
   };
 
   keyValue = {
@@ -416,5 +439,40 @@ rec {
         mix format "$out"
       '';
     };
+
+  # Outputs a succession of Python variable assignments
+  # Useful for many Django-based services
+  pythonVars = {}: {
+    type = with lib.types; let
+      valueType = nullOr(oneOf [
+        bool
+        float
+        int
+        path
+        str
+        (attrsOf valueType)
+        (listOf valueType)
+      ]) // {
+        description = "Python value";
+      };
+    in attrsOf valueType;
+    generate = name: value: pkgs.callPackage ({ runCommand, python3, black }: runCommand name {
+      nativeBuildInputs = [ python3 black ];
+      value = builtins.toJSON value;
+      pythonGen = ''
+        import json
+        import os
+
+        with open(os.environ["valuePath"], "r") as f:
+            for key, value in json.load(f).items():
+                print(f"{key} = {repr(value)}")
+      '';
+      passAsFile = [ "value" "pythonGen" ];
+    } ''
+      cat "$valuePath"
+      python3 "$pythonGenPath" > $out
+      black $out
+    '') {};
+  };
 
 }

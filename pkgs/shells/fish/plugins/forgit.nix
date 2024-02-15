@@ -1,21 +1,19 @@
-{ lib, buildFishPlugin, fetchFromGitHub, git, fzf }:
+{ lib, buildFishPlugin, fetchFromGitHub }:
 
 buildFishPlugin rec {
   pname = "forgit";
-  version = "unstable-2022-10-14";
-
-  preFixup = ''
-    substituteInPlace $out/share/fish/vendor_conf.d/forgit.plugin.fish \
-      --replace "fzf " "${fzf}/bin/fzf " \
-      --replace "git " "${git}/bin/git "
-  '';
+  version = "24.01.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
-    rev = "2872548075e63bc83a0b960e2813b16571998563";
-    sha256 = "sha256-NKL4c4k9Nath8NQ3sWUTGUzp517jRX4v0qVaKMJSMrw=";
+    rev = version;
+    hash = "sha256-WHhyllOr/PgR+vlrfMQs/3/d3xpmDylT6BlLCu50a2g=";
   };
+
+  postInstall = ''
+    cp -r bin $out/share/fish/vendor_conf.d/
+  '';
 
   meta = with lib; {
     description = "A utility tool powered by fzf for using git interactively.";

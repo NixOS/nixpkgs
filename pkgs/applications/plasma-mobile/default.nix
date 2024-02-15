@@ -57,26 +57,10 @@ let
         inherit mkDerivation;
       };
     in {
-      alligator = callPackage ./alligator.nix {};
-      angelfish = callPackage ./angelfish.nix { inherit srcs; };
-      audiotube = callPackage ./audiotube.nix {};
-      calindori = callPackage ./calindori.nix {};
-      kalk = callPackage ./kalk.nix {};
-      kasts = callPackage ./kasts.nix {};
-      kclock = callPackage ./kclock.nix {};
-      keysmith = callPackage ./keysmith.nix {};
-      koko = callPackage ./koko.nix {};
-      krecorder = callPackage ./krecorder.nix {};
-      ktrip = callPackage ./ktrip.nix {};
-      kweather = callPackage ./kweather.nix {};
-      neochat = callPackage ./neochat.nix { inherit srcs; };
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
       plasma-settings = callPackage ./plasma-settings.nix {};
-      plasmatube = callPackage ./plasmatube {};
-      qmlkonsole = callPackage ./qmlkonsole.nix {};
       spacebar = callPackage ./spacebar.nix {};
-      tokodon = callPackage ./tokodon.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages

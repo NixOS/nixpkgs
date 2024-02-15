@@ -14,7 +14,7 @@
 , pango
 , libsecret
 , openssh
-, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , gobject-introspection
 , wrapGAppsHook
 , gi-docgen
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.41.1";
+  version = "3.41.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "u3Eoo8L+u/7pwDuQ131JjQzrI3sHiYAtYBhcccS+ok8=";
+    sha256 = "utEPPFU6DhhUZJq1nFskNNoiyhpUrmE48fU5YVZ+Grc=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (systemdSupport) [
     systemd
   ];
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!systemdSupport) [
     "-Dsystemd=disabled"
   ];
 

@@ -1,21 +1,42 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, robotframework }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, robotframework
+, python
+}:
 
 buildPythonPackage rec {
-  version = "3.0.0";
   pname = "robotstatuschecker";
+  version = "3.0.1";
+  pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "statuschecker";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7xHPqlR7IFZp3Z120mg25ZSg9eI878kE8RF1y3F5O70=";
+    hash = "sha256-yW6353gDwo/IzoWOB8oelaS6IUbvTtwwDT05yD7w6UA=";
   };
+
+  postPatch = ''
+    # https://github.com/robotframework/statuschecker/issues/46
+    substituteInPlace test/tests.robot \
+      --replace-fail BuiltIn.Log Log
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ robotframework ];
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} test/run.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

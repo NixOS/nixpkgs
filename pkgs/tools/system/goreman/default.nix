@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "goreman";
-  version = "0.3.14";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "goreman";
     rev = "v${version}";
-    sha256 = "sha256-FskP0/mqmPTkI0Pj22aweOcr9SqlcFfFaZYgot2wY90=";
+    sha256 = "sha256-Z6b245tC6UsTaHTTlKEFH0egb5z8HTmv/554nkileng=";
   };
 
   vendorHash = "sha256-Qbi2GfBrVLFbH9SMZOd1JqvD/afkrVOjU4ECkFK+dFA=";

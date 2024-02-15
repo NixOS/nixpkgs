@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "python-registry";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
@@ -40,6 +41,6 @@ buildPythonPackage rec {
     description = "Pure Python parser for Windows Registry hives";
     homepage = "https://github.com/williballenthin/python-registry";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

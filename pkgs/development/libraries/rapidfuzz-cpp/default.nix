@@ -3,24 +3,25 @@
 , fetchFromGitHub
 , cmake
 , catch2_3
+, python3Packages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rapidfuzz-cpp";
-  version = "1.10.4";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz-cpp";
-    rev = "v${version}";
-    hash = "sha256-I7MdeLs+J5a57ypgUJIW0/pSFPzK4nZA4ZrVRdKX7J4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-N9yGOxlk1+wgRXWLbDIXWQz+/pwbnYVs3ub4/16Nzws=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  cmakeFlags = lib.optionals doCheck [
+  cmakeFlags = lib.optionals finalAttrs.finalPackage.doCheck [
     "-DRAPIDFUZZ_BUILD_TESTING=ON"
   ];
 
@@ -33,14 +34,19 @@ stdenv.mkDerivation rec {
     catch2_3
   ];
 
-  doCheck = true;
+  passthru = {
+    tests = {
+      /** `python3Packages.levenshtein` crucially depends on `rapidfuzz-cpp` */
+      inherit (python3Packages) levenshtein;
+    };
+  };
 
   meta = {
     description = "Rapid fuzzy string matching in C++ using the Levenshtein Distance";
     homepage = "https://github.com/maxbachmann/rapidfuzz-cpp";
-    changelog = "https://github.com/maxbachmann/rapidfuzz-cpp/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/maxbachmann/rapidfuzz-cpp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.unix;
   };
-}
+})

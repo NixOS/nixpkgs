@@ -2,18 +2,21 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, nix-update-script
 , polaris-web
+, darwin
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "polaris";
-  version = "0.13.5";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
-    rev = "${version}";
-    sha256 = "sp1KDTzKvcGtuqL37fFnVgcnkIsmj5ZQji72BeyiFQE=";
+    rev = version;
+    hash = "sha256-YI2IBlZm+RIFcZgXYh9HdxVpSMjPN/s9oBXDrb2V3iE=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".
     # We're unable to simply patch it in the patch phase due to
@@ -27,11 +30,19 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-0VHrlUoyYu+UTUQUioftBDlQJfLd/axz6bGJs+YXSmE=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.Security
+  ];
 
   # Compile-time environment variables for where to find assets needed at runtime
-  POLARIS_WEB_DIR = "${polaris-web}/share/polaris-web";
-  POLARIS_SWAGGER_DIR = "${placeholder "out"}/share/polaris-swagger";
+  env = {
+    POLARIS_WEB_DIR = "${polaris-web}/share/polaris-web";
+    POLARIS_SWAGGER_DIR = "${placeholder "out"}/share/polaris-swagger";
+  };
 
   postInstall = ''
     mkdir -p $out/share
@@ -43,7 +54,12 @@ rustPlatform.buildRustPackage rec {
     ulimit -n 4096
   '';
 
-  passthru.updateScript = ./update.sh;
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests = nixosTests.polaris;
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Self-host your music collection, and access it from any computer and mobile device";
@@ -57,5 +73,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
     platforms = platforms.unix;
+    mainProgram = "polaris";
   };
 }

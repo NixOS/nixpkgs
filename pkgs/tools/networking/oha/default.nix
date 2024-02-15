@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
-  version = "0.5.7";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-lk4CePSvJb8W/3TAWyRhMcUUi7ZRdIs097Ny0ipXIuc=";
+    hash = "sha256-UZPC1Arp7/u8XafBvupAAwVu7lx5/F1Ahp944pfe2gw=";
   };
 
-  cargoSha256 = "sha256-cBtK/38b+W4GKiH+u9ouT52tapGUcPsHfC4DlNDHyjg=";
+  cargoHash = "sha256-6uGJ6cuMXFLJ6vvUNmUwc+r/4jRHEH5jiOTNb6Fkf6Y=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config
@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "oha";
   };
 }

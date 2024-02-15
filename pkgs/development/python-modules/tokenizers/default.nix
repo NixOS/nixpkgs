@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, linkFarm
 , buildPythonPackage
+, cargo
 , datasets
 , fetchFromGitHub
 , fetchurl
@@ -12,6 +14,7 @@
 , pythonOlder
 , requests
 , rustPlatform
+, rustc
 , Security
 , setuptools-rust
 }:
@@ -19,72 +22,73 @@
 let
   # See https://github.com/huggingface/tokenizers/blob/main/bindings/python/tests/utils.py for details
   # about URLs and file names
-  robertaVocab = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-vocab.json";
-    sha256 = "0m86wpkfb2gdh9x9i9ng2fvwk1rva4p0s98xw996nrjxs7166zwy";
-  };
-  robertaMerges = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-merges.txt";
-    sha256 = "1idd4rvkpqqbks51i2vjbd928inw7slij9l4r063w3y5fd3ndq8w";
-  };
-  albertVocab = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/albert-base-v1-tokenizer.json";
-    sha256 = "1hra9pn8rczx7378z88zjclw2qsdrdwq20m56sy42s2crbas6akf";
-  };
-  bertVocab = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
-    sha256 = "18rq42cmqa8zanydsbzrb34xwy4l6cz1y900r4kls57cbhvyvv07";
-  };
-  norvigBig = fetchurl {
-    url = "https://norvig.com/big.txt";
-    sha256 = "0yz80icdly7na03cfpl0nfk5h3j3cam55rj486n03wph81ynq1ps";
-  };
-  docPipelineTokenizer = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-pipeline/tokenizer.json";
-    hash = "sha256-i533xC8J5CDMNxBjo+p6avIM8UOcui8RmGAmK0GmfBc=";
-  };
-  docQuicktourTokenizer = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-quicktour/tokenizer.json";
-    hash = "sha256-ipY9d5DR5nxoO6kj7rItueZ9AO5wq9+Nzr6GuEIfIBI=";
-  };
-  openaiVocab = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-vocab.json";
-    sha256 = "0y40gc9bixj5rxv674br1rxmxkd3ly29p80x1596h8yywwcrpx7x";
-  };
-  openaiMerges = fetchurl {
-    url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
-    sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
+  test-data = linkFarm "tokenizers-test-data" {
+    "roberta-base-vocab.json" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-vocab.json";
+      sha256 = "0m86wpkfb2gdh9x9i9ng2fvwk1rva4p0s98xw996nrjxs7166zwy";
+    };
+    "roberta-base-merges.txt" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-merges.txt";
+      sha256 = "1idd4rvkpqqbks51i2vjbd928inw7slij9l4r063w3y5fd3ndq8w";
+    };
+    "albert-base-v1-tokenizer.json" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/albert-base-v1-tokenizer.json";
+      sha256 = "1hra9pn8rczx7378z88zjclw2qsdrdwq20m56sy42s2crbas6akf";
+    };
+    "bert-base-uncased-vocab.txt" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
+      sha256 = "18rq42cmqa8zanydsbzrb34xwy4l6cz1y900r4kls57cbhvyvv07";
+    };
+    "big.txt" = fetchurl {
+      url = "https://norvig.com/big.txt";
+      sha256 = "0yz80icdly7na03cfpl0nfk5h3j3cam55rj486n03wph81ynq1ps";
+    };
+    "bert-wiki.json" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-pipeline/tokenizer.json";
+      hash = "sha256-i533xC8J5CDMNxBjo+p6avIM8UOcui8RmGAmK0GmfBc=";
+    };
+    "tokenizer-wiki.json" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-quicktour/tokenizer.json";
+      hash = "sha256-ipY9d5DR5nxoO6kj7rItueZ9AO5wq9+Nzr6GuEIfIBI=";
+    };
+    "openai-gpt-vocab.json" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-vocab.json";
+      sha256 = "0y40gc9bixj5rxv674br1rxmxkd3ly29p80x1596h8yywwcrpx7x";
+    };
+    "openai-gpt-merges.txt" = fetchurl {
+      url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
+      sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
+    };
   };
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.12.1";
+  version = "0.15.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "python-v${version}";
-    hash = "sha256-XIXKgcqa6ToAH4OkyaaJALOS9F+sD8d5Z71RttRcIsw=";
+    rev = "v${version}";
+    hash = "sha256-+yfX12eKtgZV1OQvPOlMVTONbpFuigHcl4SjoCIZkSk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src sourceRoot;
-    name = "${pname}-${version}";
-    hash = "sha256-Euvf0LNMa2Od+6gY1Ldge/7VPrH5mJoZduRRsb+lM/E=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
     pkg-config
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     openssl
@@ -106,16 +110,7 @@ buildPythonPackage rec {
   postUnpack = ''
     # Add data files for tests, otherwise tests attempt network access
     mkdir $sourceRoot/tests/data
-    ( cd $sourceRoot/tests/data
-      ln -s ${robertaVocab} roberta-base-vocab.json
-      ln -s ${robertaMerges} roberta-base-merges.txt
-      ln -s ${albertVocab} albert-base-v1-tokenizer.json
-      ln -s ${bertVocab} bert-base-uncased-vocab.txt
-      ln -s ${docPipelineTokenizer} bert-wiki.json
-      ln -s ${docQuicktourTokenizer} tokenizer-wiki.json
-      ln -s ${norvigBig} big.txt
-      ln -s ${openaiVocab} openai-gpt-vocab.json
-      ln -s ${openaiMerges} openai-gpt-merges.txt )
+    ln -s ${test-data}/* $sourceRoot/tests/data/
   '';
 
   preCheck = ''

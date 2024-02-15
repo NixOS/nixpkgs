@@ -1,13 +1,14 @@
 { lib
-, fetchFromGitLab
+, fetchFromGitea
 , desktop-file-utils
 , gettext
 , glib
 , gobject-introspection
+, blueprint-compiler
 , gtk4
 , libadwaita
 , libnotify
-, webkitgtk_5_0
+, webkitgtk_6_0
 , meson
 , ninja
 , pkg-config
@@ -18,15 +19,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.15.0";
+  version = "1.37.1";
 
   format = "other";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-dmi8a9Gf4ixq5oW6ewDGZYRmxY2qmUrD42DfjskRpHk=";
+    hash = "sha256-pGOut63+ST1Yqe1Fj0c4cI0du1q4JW7WVA4h+muWGJQ=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     glib # for glib-compile-resources
     desktop-file-utils
     gobject-introspection
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -45,25 +48,25 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     libadwaita
     libnotify
-    webkitgtk_5_0
-    gobject-introspection
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
     beautifulsoup4
     brotli
-    cloudscraper
+    colorthief
     dateparser
     emoji
     keyring
     lxml
-    python-magic
     natsort
     piexif
     pillow
     pure-protobuf
+    pygobject3
+    python-magic
     rarfile
+    requests
     unidecode
   ];
 
@@ -80,15 +83,14 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "komikku";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Manga reader for GNOME";
-    homepage = "https://valos.gitlab.io/Komikku/";
+    homepage = "https://apps.gnome.org/Komikku/";
     license = licenses.gpl3Plus;
+    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
     maintainers = with maintainers; [ chuangzhu infinitivewitch ];
   };
 }

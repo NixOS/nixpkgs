@@ -17,6 +17,7 @@ in
 buildPythonPackage rec {
   pname = "kaitaistruct";
   version = "0.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -45,6 +46,6 @@ buildPythonPackage rec {
     description = "Kaitai Struct: runtime library for Python";
     homepage = "https://github.com/kaitai-io/kaitai_struct_python_runtime";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

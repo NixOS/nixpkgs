@@ -93,8 +93,18 @@ in
         default = null;
         description =
           lib.mdDoc ''
-            This option determines which Docker storage driver to use. By default
-            it let's docker automatically choose preferred storage driver.
+            This option determines which Docker
+            [storage driver](https://docs.docker.com/storage/storagedriver/select-storage-driver/)
+            to use.
+            By default it lets docker automatically choose the preferred storage
+            driver.
+            However, it is recommended to specify a storage driver explicitly, as
+            docker's default varies over versions.
+
+            ::: {.warning}
+            Changing the storage driver will cause any existing containers
+            and images to become inaccessible.
+            :::
           '';
       };
 
@@ -150,12 +160,14 @@ in
       };
     };
 
-    package = mkOption {
-      default = pkgs.docker;
-      defaultText = literalExpression "pkgs.docker";
-      type = types.package;
+    package = mkPackageOption pkgs "docker" { };
+
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = literalExpression "with pkgs; [ criu ]";
       description = lib.mdDoc ''
-        Docker package to be used in the module.
+        Extra packages to add to PATH for the docker daemon process.
       '';
     };
   };
@@ -194,7 +206,8 @@ in
         };
 
         path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
-          ++ optional cfg.enableNvidia pkgs.nvidia-docker;
+          ++ optional cfg.enableNvidia pkgs.nvidia-docker
+          ++ cfg.extraPackages;
       };
 
       systemd.sockets.docker = {
@@ -226,8 +239,8 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
-          message = "Option enableNvidia requires 32bit support libraries";
+        { assertion = cfg.enableNvidia && pkgs.stdenv.isx86_64 -> config.hardware.opengl.driSupport32Bit or false;
+          message = "Option enableNvidia on x86_64 requires 32bit support libraries";
         }];
 
       virtualisation.docker.daemon.settings = {

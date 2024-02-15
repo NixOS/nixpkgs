@@ -1,18 +1,13 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "i3a";
-  version = "2.0.1";
+  version = "2.1.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2k1HYtgJ76qXLvX6RmOSKtMMg+K722n8U9YmBANvQvE=";
+    hash = "sha256-b1bB7Gto4aL1rbQXIelBVhutjIvZY+K+Y66BGN7OcCs=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "python_requires='>=3.7,<3.10'," "python_requires='>=3.7',"
-  '';
 
   nativeBuildInputs = [ python3Packages.setuptools-scm ];
 
@@ -21,9 +16,10 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://git.goral.net.pl/mgoral/i3a";
+    changelog = "https://git.goral.net.pl/i3a.git/log/";
     description = "A set of scripts used for automation of i3 and sway window manager layouts";
+    homepage = "https://git.goral.net.pl/i3a.git/about";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

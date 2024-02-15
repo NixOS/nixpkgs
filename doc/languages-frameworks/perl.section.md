@@ -118,7 +118,7 @@ ImageExifTool = buildPerlPackage {
     hash = "sha256-vOhB/FwQMC8PPvdnjDvxRpU6jAZcC6GMQfc0AH4uwKg=";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
   postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';

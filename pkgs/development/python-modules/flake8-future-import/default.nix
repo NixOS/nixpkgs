@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "flake8-future-import";
   version = "0.4.7";
+  format = "setuptools";
 
   # PyPI tarball doesn't include the test suite
   src = fetchFromGitHub {
@@ -33,12 +34,21 @@ buildPythonPackage rec {
     ./skip-test.patch
   ];
 
+  postPatch = ''
+    substituteInPlace "test_flake8_future_import.py" \
+      --replace "'flake8'" "'${lib.getExe flake8}'"
+  '';
+
   propagatedBuildInputs = [ flake8 ];
 
   nativeCheckInputs = [ six ];
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} -m test_flake8_future_import
+
+    runHook postCheck
   '';
 
   meta = with lib; {

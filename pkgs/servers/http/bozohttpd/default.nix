@@ -22,26 +22,14 @@ let inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "bozohttpd";
-  version = "20210227";
+  version = "20220517";
 
   # bozohttpd is developed in-tree in pkgsrc, canonical hashes can be found at:
   # http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/www/bozohttpd/distinfo
   src = fetchurl {
-    url = "http://www.eterna.com.au/${pname}/${pname}-${version}.tar.bz2";
-    sha512 = "b838498626ffb7f7e84f31611e0e99aaa3af64bd9376e1a13ec16313c182eebfd9ea2c2d03904497239af723bf34a3d2202dac1f2d3e55f9fd076f6d45ccfa33";
+    url = "http://eterna23.net/${pname}/${pname}-${version}.tar.bz2";
+    hash = "sha512-J1uPqzzy5sWXIWgsrpUtuV2lvTsfIGgCQMbPEClGNpP2/soEf77146PnUotAt7LoeypW/YALYS5nmhbySJDltg==";
   };
-
-  # backport two unreleased commits to fix builds on non-netbsd platforms.
-  patches = [
-    # add missing `#include <stdint.h>`
-    # https://freshbsd.org/netbsd/src/commit/qMGNoXfgeieZBVRC
-    ./0001-include-stdint.h.patch
-
-    # BUFSIZ is not guaranteed to be large enough
-    # https://freshbsd.org/netbsd/src/commit/A4ueIHIp3JgjNVRC
-    ./0002-dont-use-host-BUFSIZ.patch
-  ];
-  patchFlags = [ "-p3" ];
 
   buildInputs = [ openssl libxcrypt ] ++ optional (luaSupport) lua;
   nativeBuildInputs = [ bmake groff ];

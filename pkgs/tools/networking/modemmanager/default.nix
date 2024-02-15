@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
-  version = "1.20.4";
+  version = "1.22.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "ModemManager";
     rev = version;
-    hash = "sha256-OWP23EQ7a8rghhV7AC9yinCxRI0xwcntB5dl9XtgK6M=";
+    hash = "sha256-/D9b2rCCUhpDCUfSNAWR65+3EyUywzFdH1R17eSKRDo=";
   };
 
   patches = [

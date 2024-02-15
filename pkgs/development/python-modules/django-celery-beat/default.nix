@@ -3,6 +3,7 @@
 , buildPythonPackage
 , python-crontab
 , celery
+, cron-descriptor
 , django-timezone-field
 , tzdata
 , ephem
@@ -15,17 +16,18 @@
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
-  version = "2.4.0";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WO/pRg5Dc6JBwrPYOVGPKaKK4ZvICo26INogTH6lBhM=";
+    hash = "sha256-zQpH9ZWEAvUawMcVvJQq4z17ULTkjLqRvD8nEr5QXfE=";
   };
 
   propagatedBuildInputs = [
+    cron-descriptor
     python-crontab
     celery
     django-timezone-field

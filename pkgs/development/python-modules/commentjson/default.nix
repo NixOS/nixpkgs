@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "commentjson";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "vaidik";
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     description = "Add JavaScript or Python style comments in JSON";
     homepage = "https://github.com/vaidik/commentjson/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , xorg
 , xkeyboard_config
 , zlib
@@ -24,23 +23,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "1.13.1";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     rev = "v${version}";
-    sha256 = "sha256-77X+AvHFWfYYIio3c+EYf11jg/1IbYhNUweRIDHMOZw=";
+    sha256 = "sha256-YSkgkk87bbHg7lJGoPBs7bfjvd1hvUeOZulFHYpXvvo=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/TigerVNC/tigervnc/pull/1383.patch";
-      sha256 = "sha256-r3QLtxVD0wIv2NWVN9r0LVxSlLurDHgkAZfkpIjmZyU=";
-      name = "Xvnc-support-Xorg-1.21-PR1383.patch";
-    })
-  ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
@@ -156,7 +147,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional stdenv.isLinux xorg.xorgserver.propagatedBuildInputs;
 
-  passthru.tests.tigervnc = nixosTests.vnc.testTigerVNC;
+  passthru.tests.tigervnc = nixosTests.tigervnc;
 
   meta = {
     homepage = "https://tigervnc.org/";

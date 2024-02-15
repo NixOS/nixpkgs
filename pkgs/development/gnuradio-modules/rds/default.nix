@@ -6,12 +6,13 @@
 , pkg-config
 , swig
 , python
-, log4cpp
+, logLib
 , mpir
 , thrift
 , boost
 , gmp
 , icu
+, gnuradioAtLeast
 }:
 
 let
@@ -33,10 +34,10 @@ let
 in mkDerivation {
   pname = "gr-rds";
   inherit version src;
-  disabledForGRafter = "3.9";
+  disabled = gnuradioAtLeast "3.9";
 
   buildInputs = [
-    log4cpp
+    logLib
     mpir
     boost
     gmp

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , callPackage
+, pkg-config
 , swift
 , swiftpm
 , swiftpm2nix
@@ -27,18 +28,20 @@ stdenv.mkDerivation {
   inherit (sources) version;
   src = sources.sourcekit-lsp;
 
-  nativeBuildInputs = [ swift swiftpm ];
+  nativeBuildInputs = [ pkg-config swift swiftpm ];
   buildInputs = [
     Foundation
     XCTest
     sqlite
     ncursesInput
-  ]
-    ++ lib.optionals stdenv.isDarwin [ CryptoKit LocalAuthentication ];
+  ] ++ lib.optionals stdenv.isDarwin [ CryptoKit LocalAuthentication ];
 
   configurePhase = generated.configure + ''
     swiftpmMakeMutable indexstore-db
     patch -p1 -d .build/checkouts/indexstore-db -i ${./patches/indexstore-db-macos-target.patch}
+
+    swiftpmMakeMutable swift-tools-support-core
+    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${./patches/force-unwrap-file-handles.patch}
 
     # This toggles a section specific to Xcode XCTest, which doesn't work on
     # Darwin, where we also use swift-corelibs-xctest.

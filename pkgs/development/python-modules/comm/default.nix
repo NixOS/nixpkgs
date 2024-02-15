@@ -8,7 +8,7 @@
 
 let
   pname = "comm";
-  version = "0.1.2";
+  version = "0.2.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -17,8 +17,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "comm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Ve6tCvu89P5wUOj+vlzXItRR5RjJNKxItKnWP2fVk9U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iyO3q9E2lYU1rMYTnsa+ZJYh+Hq72LEvE9ynebFIBUk=";
   };
 
   nativeBuildInputs = [

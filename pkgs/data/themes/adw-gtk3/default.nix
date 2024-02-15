@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "adw-gtk3";
-  version = "4.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7E+eBbsavWdraCxxtwFdvFkxTWN/XMz8obvnpxf6PQc=";
+    sha256 = "sha256-S6Yo67DTyRzS9uz/6g87SRmfPIBmAKfy4c23M5aENNg=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     description = "The theme from libadwaita ported to GTK-3";
     homepage = "https://github.com/lassekongo83/adw-gtk3";
     license = licenses.lgpl21Only;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ciferkey ];
   };
 }

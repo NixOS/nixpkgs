@@ -1,9 +1,13 @@
-{ fetchurl, lib, stdenv, ocaml, makeWrapper, ncurses }:
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, ncurses
+}:
 
-let version = "0.92"; in
 stdenv.mkDerivation {
   pname = "megam";
-  inherit version;
+  version = "0.92";
 
   src = fetchurl {
     url = "http://hal3.name/megam/megam_src.tgz";
@@ -22,39 +26,40 @@ stdenv.mkDerivation {
   '';
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper ocaml ];
+  nativeBuildInputs = [ ocaml ];
 
   buildInputs = [ ncurses ];
 
   makeFlags = [
     "CAML_INCLUDES=${ocaml}/lib/ocaml/caml"
     ("WITHBIGARRAY=" + lib.optionalString (lib.versionOlder ocaml.version "4.08.0") "bigarray.cma")
+    "all"
+    "opt"
   ];
 
   # see https://bugzilla.redhat.com/show_bug.cgi?id=435559
   dontStrip = true;
 
   installPhase = ''
-    mkdir -pv $out/bin
-    cp -Rv megam $out/bin
+    runHook preInstall
+
+    install -Dm755 megam $out/bin/megam
+    install -Dm755 megam.opt $out/bin/megam.opt
+
+    runHook postInstall
   '';
 
-
-  meta = {
+  meta = with lib; {
     description = "MEGA Model Optimization Package";
-
-    longDescription =
-      ''  The software here is an implementation of maximum likelihood
-          and maximum a posterior optimization of the parameters of
-          these models.  The algorithms used are much more efficient
-          than the iterative scaling techniques used in almost every
-          other maxent package out there.  '';
-
+    longDescription = ''
+      The software here is an implementation of maximum likelihood and maximum a
+      posterior optimization of the parameters of these models. The algorithms
+      used are much more efficient than the iterative scaling techniques used in
+      almost every other maxent package out there.
+    '';
     homepage = "http://www.umiacs.umd.edu/~hal/megam";
-
     license = "non-commercial";
-
-    maintainers = [ ];
-    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ leixb ];
+    platforms = platforms.unix;
   };
 }

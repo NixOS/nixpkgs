@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snd";
-  version = "23.1";
+  version = "24.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/snd-${version}.tar.gz";
-    sha256 = "sha256-zNXA/HFUCTxKzeKde/XVK239dInnxkPBmxXrlicl1fI=";
+    sha256 = "sha256-DU7AtPoLH+WXXsmree8GbHePvNYmPP7MxYSfhEzgOtU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.free;
     maintainers = with maintainers; [ ];
+    mainProgram = "snd";
   };
 }

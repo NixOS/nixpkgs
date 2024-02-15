@@ -1,6 +1,7 @@
 { lib, stdenv
 , substituteAll
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , gettext
 , makeWrapper
@@ -13,7 +14,6 @@
 , glib
 , gdk-pixbuf
 , gobject-introspection
-, gtk2
 , gtk3
 , gtk4
 , gtk-doc
@@ -56,13 +56,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.27";
+  version = "1.5.28";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-DwX7SYRb18C0Lz2ySPS3yV99Q1xQezs0Ls2P7Rbtk5Q=";
+    sha256 = "sha256-zjV+QkhVkrHFs9Vt1FpbvmS4nRHxwKaKU3mQkSgyLaQ=";
   };
 
   patches = [
@@ -72,6 +72,22 @@ stdenv.mkDerivation rec {
       pythonSitePackages = python3.sitePackages;
     })
     ./build-without-dbus-launch.patch
+    # unicode and emoji input are broken before 1.5.29
+    # https://github.com/NixOS/nixpkgs/issues/226526
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/7c8abbe89403c2fcb08e3fda42049a97187e53ab.patch";
+      hash = "sha256-59HzAdLq8ahrF7K+tFGLjTodwIiTkJGEkFe8quqIkhU=";
+    })
+    # fix SIGABRT in X11 https://github.com/ibus/ibus/issues/2484
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/8f706d160631f1ffdbfa16543a38b9d5f91c16ad.patch";
+      hash = "sha256-YzS9TmUWW0OmheDeCeU00kFK2U2QEmKYMSRJAbu14ec=";
+    })
+    # fix missing key releases in Wine https://github.com/ibus/ibus/issues/2480
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/497f0c74230a65309e22ce5569060ce48310406b.patch";
+      hash = "sha256-PAZcUxmzjChs1/K8hXgOcytyS4LYoNL1dtU6X5Tx8ic=";
+    })
   ];
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -91,12 +107,19 @@ stdenv.mkDerivation rec {
     (lib.enableFeature (libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
     (lib.enableFeature enableUI "ui")
+    "--disable-gtk2"
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
+
+  # missing make dependency
+  # https://github.com/NixOS/nixpkgs/pull/218120#issuecomment-1514027173
+  preBuild = ''
+    make -C src ibusenumtypes.h
+  '';
 
   makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
@@ -113,6 +136,7 @@ stdenv.mkDerivation rec {
     vala
     wrapGAppsHook
     dbus-launch
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -124,9 +148,7 @@ stdenv.mkDerivation rec {
     systemd
     dconf
     gdk-pixbuf
-    gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
-    gtk2
     gtk3
     gtk4
     isocodes

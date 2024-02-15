@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
-    patch -p1 -d llvm -i ${./wasm.patch}
+    patch -p1 -d llvm -i ${../../common/libcxxabi/wasm.patch}
   '';
 
   patches = [

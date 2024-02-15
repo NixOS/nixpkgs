@@ -6,22 +6,24 @@
 
 buildGoModule rec {
   pname = "blocky";
-  version = "0.20";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "0xERR0R";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-l2GhqJit/+WpNDICD/NUzCAGrKrTNHzEzgpF9k3+DLk=";
+    hash = "sha256-IB5vi+nFXbV94YFtY2eMKTgzUgX8q8i8soSrso2zaD4=";
   };
 
   # needs network connection and fails at
   # https://github.com/0xERR0R/blocky/blob/development/resolver/upstream_resolver_test.go
   doCheck = false;
 
-  vendorSha256 = "sha256-CS8+tsE5dptG9gF46OFoJGzn1FnfjekXLTLrpwIQdFQ=";
+  vendorHash = "sha256-h1CkvI7M1kt2Ix3D8+gDl97CFElV+0/9Eram1burOaM=";
 
   ldflags = [ "-s" "-w" "-X github.com/0xERR0R/blocky/util.Version=${version}" ];
+
+  passthru.tests = { inherit (nixosTests) blocky; };
 
   meta = with lib; {
     description = "Fast and lightweight DNS proxy as ad-blocker for local network with many features.";
@@ -29,7 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/0xERR0R/blocky/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [ ratsclub ];
+    mainProgram = "blocky";
   };
-
-  passthru.tests = { inherit (nixosTests) blocky; };
 }

@@ -3,61 +3,54 @@
 , fetchzip
 , makeWrapper
 , jdk8
-, python3Packages
-, extraPythonPackages ? [ ]
+, python3
+, python310
 , coreutils
-, hadoopSupport ? true
 , hadoop
 , RSupport ? true
 , R
+, nixosTests
 }:
 
 let
-  spark = { pname, version, sha256, extraMeta ? {} }:
-    stdenv.mkDerivation rec {
-      inherit pname version;
-      jdk = if hadoopSupport then hadoop.jdk else jdk8;
+  spark = { pname, version, hash, extraMeta ? {}, pysparkPython ? python3 }:
+    stdenv.mkDerivation (finalAttrs: {
+      inherit pname version hash hadoop R pysparkPython;
+      inherit (finalAttrs.hadoop) jdk;
       src = fetchzip {
-        url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-        sha256 = sha256;
+        url = with finalAttrs; "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+        inherit (finalAttrs) hash;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ jdk python3Packages.python ]
-        ++ extraPythonPackages
-        ++ lib.optional RSupport R;
+      buildInputs = with finalAttrs; [ jdk pysparkPython ]
+        ++ lib.optional RSupport finalAttrs.R;
 
-      untarDir = "${pname}-${version}";
       installPhase = ''
-        mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
-        mv * $out/lib/${untarDir}
-
-        cp $out/lib/${untarDir}/conf/log4j.properties{.template,}
-
-        cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
-        export JAVA_HOME="${jdk}"
-        export SPARK_HOME="$out/lib/${untarDir}"
-      '' + lib.optionalString hadoopSupport ''
-        export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
-      '' + ''
-        export PYSPARK_PYTHON="${python3Packages.python}/bin/${python3Packages.python.executable}"
-        export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
-        ${lib.optionalString RSupport ''
-          export SPARKR_R_SHELL="${R}/bin/R"
-          export PATH="\$PATH:${R}/bin"''}
-        EOF
-
-        for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
-          makeWrapper "$n" "$out/bin/$(basename $n)"
-          substituteInPlace "$n" --replace dirname ${coreutils.out}/bin/dirname
+        mkdir -p "$out/opt"
+        mv * $out/
+        for n in $(find $out/bin -type f -executable ! -name "find-spark-home"); do
+          wrapProgram "$n" --set JAVA_HOME "${finalAttrs.jdk}" \
+            --run "[ -z $SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
+            ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${finalAttrs.R}/bin/R"''} \
+            --prefix PATH : "${
+              lib.makeBinPath (
+                [ finalAttrs.pysparkPython ] ++
+                (lib.optionals RSupport [ finalAttrs.R ])
+              )}"
         done
-        for n in $(find $out/lib/${untarDir}/sbin -type f); do
-          # Spark deprecated scripts with "slave" in the name.
-          # This line adds forward compatibility with the nixos spark module for
-          # older versions of spark that don't have the new "worker" scripts.
-          ln -s "$n" $(echo "$n" | sed -r 's/slave(s?).sh$/worker\1.sh/g') || true
-        done
-        ln -s $out/lib/${untarDir}/lib/spark-assembly-*.jar $out/share/java
+        ln -s ${finalAttrs.hadoop} "$out/opt/hadoop"
+        ${lib.optionalString RSupport ''ln -s ${finalAttrs.R} "$out/opt/R"''}
       '';
+
+      passthru = {
+        tests = nixosTests.spark.default.passthru.override {
+          sparkPackage = finalAttrs.finalPackage;
+        };
+        # Add python packages to PYSPARK_PYTHON
+        withPythonPackages = f: finalAttrs.finalPackage.overrideAttrs (old: {
+          pysparkPython = old.pysparkPython.withPackages f;
+        });
+      };
 
       meta = {
         description = "Apache Spark is a fast and general engine for large-scale data processing";
@@ -67,23 +60,23 @@ let
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [ thoughtpolice offline kamilchm illustris ];
       } // extraMeta;
-    };
+    });
 in
 {
-  spark_3_2 = spark rec {
+  spark_3_5 = spark rec {
     pname = "spark";
-    version = "3.2.2";
-    sha256 = "sha256-yKoTyD/IqvsJQs0jB67h1zqwYaLuikdoa5fYIXtvhz0=";
+    version = "3.5.0";
+    hash = "sha256-f+a4a23aOM0GCDoZlZ7WNXs0Olzyh3yMtO8ZmEoYvZ4=";
   };
-  spark_3_1 = spark rec {
+  spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.1.3";
-    sha256 = "sha256-RIQyN5YjxFLfNIrETR3Vv99zsHxt77rhOXHIThCI2Y8=";
+    version = "3.4.2";
+    hash = "sha256-qr0tRuzzEcarJznrQYkaQzGqI7tugp/XJpoZxL7tJwk=";
   };
-  spark_2_4 = spark rec {
+  spark_3_3 = spark rec {
     pname = "spark";
-    version = "2.4.8";
-    sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
-    extraMeta.knownVulnerabilities = [ "CVE-2021-38296" ];
+    version = "3.3.3";
+    hash = "sha256-YtHxRYTwrwSle3UpFjRSwKcnLFj2m9/zLBENH/HVzuM=";
+    pysparkPython = python310;
   };
 }

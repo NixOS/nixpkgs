@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.tar.gz";
   };
 
+  patches = [
+    ./makefile-install-dir.patch
+  ];
+
   buildInputs = [ libnfnetlink ];
 
   installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
@@ -31,5 +35,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://miniupnp.free.fr/files/";
     license = licenses.bsd3;
     platforms = platforms.linux;
+    mainProgram = "minissdpd";
   };
 }

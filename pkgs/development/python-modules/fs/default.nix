@@ -22,6 +22,7 @@
 buildPythonPackage rec {
   pname = "fs";
   version = "2.4.16";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +31,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  # strong cycle with paramaterized
+  # strong cycle with parameterized
   doCheck = false;
   nativeCheckInputs = [ pyftpdlib mock psutil pytestCheckHook ];
   propagatedBuildInputs = [ six appdirs pytz setuptools ]

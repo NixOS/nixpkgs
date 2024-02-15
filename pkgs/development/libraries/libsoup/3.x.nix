@@ -8,10 +8,9 @@
 , gnome
 , libsysprof-capture
 , sqlite
-, glib-networking
 , buildPackages
 , gobject-introspection
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , libpsl
 , python3
@@ -22,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.2.2";
+  version = "3.4.4";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-g2c8aFuRD7fTnx8o7uWvvvtxwFeY/DUKw78biF4e+qE=";
+    sha256 = "sha256-KRxncl827ZDqQ+//JQZLacWi0ZgUiEd8BcSBo7Swxao=";
   };
 
   depsBuildBuild = [
@@ -81,6 +80,7 @@ stdenv.mkDerivation rec {
 
   # HSTS tests fail.
   doCheck = false;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs libsoup/
@@ -92,9 +92,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    propagatedUserEnvPackages = [
-      glib-networking.out
-    ];
     updateScript = gnome.updateScript {
       attrPath = "libsoup_3";
       packageName = pname;

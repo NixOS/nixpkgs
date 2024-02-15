@@ -1,26 +1,49 @@
-{lib, stdenv, fetchurl, bison, flex, fftw}:
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, fftw
+, withNgshared ? true
+, libXaw
+, libXext
+}:
 
-# Note that this does not provide the ngspice command-line utility. For that see
-# the ngspice derivation.
 stdenv.mkDerivation rec {
-  pname = "libngspice";
-  version = "37";
+  pname = "${lib.optionalString withNgshared "lib"}ngspice";
+  version = "42";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    sha256 = "1gpcic6b6xk3g4956jcsqljf33kj5g43cahmydq6m8rn39sadvlv";
+    hash = "sha256-c3/jhGqyMzolDfrfHtbr4YYK8dil/154A8dyzEJW5Qo=";
   };
 
-  nativeBuildInputs = [ flex bison ];
-  buildInputs = [ fftw ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
-  configureFlags = [ "--with-ngshared" "--enable-xspice" "--enable-cider" ];
+  buildInputs = [
+    fftw
+  ] ++ lib.optionals (!withNgshared) [
+    libXaw
+    libXext
+  ];
+
+  configureFlags = lib.optionals withNgshared [
+    "--with-ngshared"
+  ] ++ [
+    "--enable-xspice"
+    "--enable-cider"
+  ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";
     homepage = "http://ngspice.sourceforge.net";
     license = with licenses; [ bsd3 gpl2Plus lgpl2Plus ]; # See https://sourceforge.net/p/ngspice/ngspice/ci/master/tree/COPYING
-    maintainers = with maintainers; [ bgamari ];
+    maintainers = with maintainers; [ bgamari rongcuid ];
     platforms = platforms.unix;
   };
 }

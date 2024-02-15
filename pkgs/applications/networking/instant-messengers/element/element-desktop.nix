@@ -3,10 +3,11 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , yarn
 , nodejs
 , fetchYarnDeps
+, jq
 , electron
 , element-web
 , sqlcipher
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
-    sha256 = desktopSrcHash;
+    hash = desktopSrcHash;
   };
 
   offlineCache = fetchYarnDeps {
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper jq ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -119,9 +120,13 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     genericName = "Matrix Client";
     comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
-    startupWMClass = "element";
+    startupWMClass = "Element";
     mimeTypes = [ "x-scheme-handler/element" ];
   };
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
+  '';
 
   passthru = {
     updateScript = ./update.sh;
@@ -145,5 +150,6 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
+    mainProgram = "element-desktop";
   };
 })

@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "stk";
-  version = "2.7.0";
+  version = "2.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-vIf+XDLvLNOMwptFCgiqfl+o3PIQ+KLpsJhOArd7gMM=";
+    url = "https://github.com/stk-kriging/stk/releases/download/${version}/${pname}-${version}-octpkg.tar.gz";
+    sha256 = "sha256-wTjM9LUcC8BEj3TNxAz877LqJvuoxWUse9PIZoWGnIU=";
   };
 
   meta = with lib; {

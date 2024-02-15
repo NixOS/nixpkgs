@@ -1,45 +1,52 @@
 { lib
+, fetchpatch
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , testers
 , difftastic
+, stdenv
 }:
+
+let
+  mimallocPatch = fetchpatch {
+    name = "fix-build-on-older-macos-releases.patch";
+    url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
+    sha256 = "sha256-DK0LqsVXXiEVQSQCxZ5jyZMg0UJJx9a/WxzCroYSHZc=";
+  };
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.45.0";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AJwOft5hZoeraDDjwUBsdXn3V+4p8jOGSCYFCEOkWJA=";
+    hash = "sha256-ltlgZoR94BrF6FOOUnSNZf3Uagu5AZjxE7yxOwWWMzU=";
   };
 
-  depsExtraArgs = {
-    postBuild = let
-      mimallocPatch = fetchpatch {
-        name = "mimalloc-older-macos-fixes.patch";
-        url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
-        stripLen = 1;
-        extraPrefix = "libmimalloc-sys/c_src/mimalloc/";
-        sha256 = "1cqgay6ayzxsj8v1dy8405kwd8av34m4bjc84iyg9r52amlijbg4";
-      };
-    in ''
-      pushd $name
-      patch -p1 < ${mimallocPatch}
-      substituteInPlace libmimalloc-sys/.cargo-checksum.json \
-        --replace \
-          '6a2e9f0db0d3de160f9f15ddc8a870dbc42bba724f19f1e69b8c4952cb36821a' \
-          '201ab8874d9ba863406e084888e492b785a7edae00a222f395c079028d21a89a' \
-        --replace \
-          'a87a27e8432a63e5de25703ff5025588afd458e3a573e51b3c3dee2281bff0d4' \
-          'ab98a2da81d2145003a9cba7b7025efbd2c7b37c7a23c058c150705a3ec39298'
-      popd
-    '';
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tree_magic_mini-3.0.2" = "sha256-iIX/DeDbquObDPOx/pctVFN4R8GSkD9bPNkNgOLdUJs=";
+    };
   };
-  cargoSha256 = "sha256-iCkBXbwEUooybQ3IY8bxPZwD2tsWFEpVzJ5l2nkF/dg=";
+
+  # skip flaky tests
+  checkFlags = [
+    "--skip=options::tests::test_detect_display_width"
+  ];
+
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
+  postPatch = ''
+    patch -d $cargoDepsCopy/libmimalloc-sys-0.1.24/c_src/mimalloc \
+      -p1 < ${mimallocPatch}
+  '';
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 

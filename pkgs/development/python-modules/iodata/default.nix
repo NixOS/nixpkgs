@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "iodata";
   version = "0.1.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "theochem";

@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , duckdb
+, fsspec
 , google-cloud-storage
-, mypy
 , numpy
+, openssl
 , pandas
 , psutil
 , pybind11
@@ -13,27 +13,32 @@
 }:
 
 buildPythonPackage rec {
-  inherit (duckdb) pname version src patches;
+  inherit (duckdb) pname version src;
   format = "setuptools";
 
-  # we can't use sourceRoot otherwise patches don't apply, because the patches
-  # apply to the C++ library
-  postPatch = ''
+  # 1. let nix control build cores
+  # 2. default to extension autoload & autoinstall disabled
+  # 3. unconstrain setuptools_scm version
+  patches = (duckdb.patches or []) ++ [ ./setup.patch ];
+
+  postPatch = (duckdb.postPatch or "") + ''
+    # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
     cd tools/pythonpkg
 
-    # 1. let nix control build cores
-    # 2. unconstrain setuptools_scm version
-    substituteInPlace setup.py \
-      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES" \
-      --replace "setuptools_scm<7.0.0" "setuptools_scm"
+    substituteInPlace setup.py --subst-var NIX_BUILD_CORES
+
+    # avoid dependency on mypy
+    rm tests/stubs/test_stubs.py
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  BUILD_HTTPFS = 1;
 
   nativeBuildInputs = [
     pybind11
     setuptools-scm
   ];
+
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [
     numpy
@@ -41,10 +46,25 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    fsspec
     google-cloud-storage
-    mypy
     psutil
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # tries to make http request
+    "test_install_non_existent_extension"
+    # test is racy and interrupt can be delivered before or after target point
+    "test_connection_interrupt"
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
+  setupPyBuildFlags = [
+    "--inplace"
   ];
 
   pythonImportsCheck = [
@@ -55,6 +75,6 @@ buildPythonPackage rec {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc cpcloud ];
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

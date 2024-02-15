@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "woodblock";
   version = "0.1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,6 +32,6 @@ buildPythonPackage rec {
     description = "A framework to generate file carving test data";
     homepage = "https://github.com/fkie-cad/woodblock";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

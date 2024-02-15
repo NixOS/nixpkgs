@@ -76,6 +76,17 @@ in stdenv.mkDerivation ({
     # Override the `http.cainfo` option usually specified in `.cargo/config`.
     export CARGO_HTTP_CAINFO=${cacert}/etc/ssl/certs/ca-bundle.crt
 
+    if grep '^source = "git' Cargo.lock; then
+        echo
+        echo "ERROR: The Cargo.lock contains git dependencies"
+        echo
+        echo "This is currently not supported in the fixed-output derivation fetcher."
+        echo "Use cargoLock.lockFile / importCargoLock instead."
+        echo
+
+        exit 1
+    fi
+
     cargo vendor $name --respect-source-config | cargo-vendor-normalise > $CARGO_CONFIG
 
     # Create an empty vendor directory when there is no dependency to vendor

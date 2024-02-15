@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , boost
-, cgal_5
+, cgal
 , eigen
 , flann
 , gdal
@@ -41,7 +41,7 @@ mkDerivation rec {
 
   buildInputs = [
     boost
-    cgal_5
+    cgal
     flann
     gdal
     gmp
@@ -88,12 +88,21 @@ mkDerivation rec {
     "-DPLUGIN_STANDARD_QM3C2=ON"
     "-DPLUGIN_STANDARD_QMPLANE=ON"
     "-DPLUGIN_STANDARD_QPOISSON_RECON=ON"
-    "-DPLUGIN_STANDARD_QRANSAC_SD=ON"
+    "-DPLUGIN_STANDARD_QRANSAC_SD=OFF" # not compatible with GPL, broken on non-x86
     "-DPLUGIN_STANDARD_QSRA=ON"
     "-DPLUGIN_STANDARD_QCLOUDLAYERS=ON"
   ];
 
   dontWrapGApps = true;
+
+  postInstall = ''
+    install -Dm444 $src/snap/gui/{ccViewer,cloudcompare}.png -t $out/share/icons/hicolor/256x256/apps
+    install -Dm444 $src/snap/gui/{ccViewer,cloudcompare}.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/{ccViewer,cloudcompare}.desktop \
+      --replace 'Exec=cloudcompare.' 'Exec=' \
+      --replace 'Icon=''${SNAP}/meta/gui/' 'Icon=' \
+      --replace '.png' ""
+  '';
 
   # fix file dialogs crashing on non-NixOS (and avoid double wrapping)
   preFixup = ''

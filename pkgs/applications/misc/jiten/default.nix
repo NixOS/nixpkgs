@@ -27,6 +27,12 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "16sz8i0sw7ggy6kijcx4qyl2zr6xj789x4iav0yyllx12dfgp5b1";
   };
 
+  patches = [
+    # Potentially can be dropped after the next release
+    # https://github.com/NixOS/nixpkgs/issues/271600
+    ./cookie-fix.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pcre sqlite ];
   propagatedBuildInputs = with python3.pkgs; [ click flask kanjidraw ];

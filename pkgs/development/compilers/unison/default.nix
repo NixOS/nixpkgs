@@ -1,23 +1,27 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook
-, ncurses5, zlib, gmp
-, makeWrapper
+{ lib
+, autoPatchelfHook
+, fetchurl
+, gmp
 , less
+, makeWrapper
+, ncurses6
+, stdenv
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  milestone_id = "M4h";
-  version = "1.0.${milestone_id}-alpha";
+  version = "0.5.15";
 
-  src = if (stdenv.isDarwin) then
+  src = if stdenv.isDarwin then
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-macos.tar.gz";
-      hash = "sha256-7yphap7qZBkbTKiwhyCTLgbBO/aA0eUWtva+XjpaZDI=";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
+      hash = "sha256-Umpu9WQhg6ln6aBb6bPVUZSax1Zeh6vcYHwmQuFRx2Y=";
     }
   else
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-linux.tar.gz";
-      hash = "sha256-vrZpYFoQw1hxgZ7lAoejIqnjIOFFMahAI9SjFN/Cnms=";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux.tar.gz";
+      hash = "sha256-cFucBQcyye4F6Vep6O9buENFzqJ96q8/2cVr9NFvHB8=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -25,8 +29,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  nativeBuildInputs = [ makeWrapper ] ++ (lib.optional (!stdenv.isDarwin) autoPatchelfHook);
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses6 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -41,7 +46,9 @@ stdenv.mkDerivation rec {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];
+    mainProgram = "ucm";
     maintainers = [ maintainers.virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.20";
+  version = "2.3.21";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-yqgy65aBSKvfNe6dD1NLd5+nMsDOSpE9mrjDRpshhVI=";
+    hash = "sha256-BbEQk6ccI3wu8wmtWHUQchzJO77mgoJRVJ/BWGw2UC0=";
   };
 
   enableParallelBuilding = true;
@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     sed -i -s -E 's!\bcat\b!${coreutils}/bin/cat!g' src/lib-smtp/test-bin/*.sh
 
     patchShebangs src/config/settings-get.pl
+
+    # DES-encrypted passwords are not supported by NixPkgs anymore
+    sed '/test_password_scheme("CRYPT"/d' -i src/auth/test-libpassword.c
   '' + lib.optionalString stdenv.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
   '';
@@ -63,6 +66,9 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
       hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fix timespec calls
+    ./timespec.patch
   ];
 
   configureFlags = [
@@ -107,7 +113,8 @@ stdenv.mkDerivation rec {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
-    maintainers = with maintainers; [ fpletz globin ajs124 ];
+    mainProgram = "dovecot";
+    maintainers = with maintainers; [ fpletz globin ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;
   };
   passthru.tests = {

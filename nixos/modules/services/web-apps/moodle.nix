@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
 
   cfg = config.services.moodle;
@@ -56,7 +56,7 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
-  phpExt = pkgs.php80.buildEnv {
+  phpExt = pkgs.php81.buildEnv {
     extensions = { all, ... }: with all; [ iconv mbstring curl openssl tokenizer soap ctype zip gd simplexml dom intl sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo filter opcache exif sodium ];
     extraConfig = "max_input_vars = 5000";
   };
@@ -66,12 +66,7 @@ in
   options.services.moodle = {
     enable = mkEnableOption (lib.mdDoc "Moodle web application");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.moodle;
-      defaultText = literalExpression "pkgs.moodle";
-      description = lib.mdDoc "The Moodle package to use.";
-    };
+    package = mkPackageOption pkgs "moodle" { };
 
     initialPassword = mkOption {
       type = types.str;
@@ -194,7 +189,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.user == cfg.database.name;
         message = "services.moodle.database.user must be set to ${user} if services.moodle.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
@@ -220,7 +215,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -260,9 +255,10 @@ in
       } ];
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0750 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-moodle".${stateDir}.d = {
+      inherit user group;
+      mode = "0750";
+    };
 
     systemd.services.moodle-init = {
       wantedBy = [ "multi-user.target" ];

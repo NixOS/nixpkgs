@@ -77,7 +77,7 @@ stdenv.mkDerivation {
 
 
     configureFlagsArray=(
-      "--with-gssapi"
+      "--with-krb5"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
       "--disable-kernel-module"
@@ -108,6 +108,8 @@ stdenv.mkDerivation {
       cp "doc/xml/''${d}"/*.html "$doc/share/doc/openafs/''${d}"
     done
 
+    cp src/tools/dumpscan/{afsdump_dirlist,afsdump_extract,afsdump_scan,dumptool} $out/bin
+
     rm -r $out/lib/openafs
   '' + optionalString withDevdoc ''
     mkdir -p $devdoc/share/devhelp/openafs/doxygen
@@ -115,10 +117,13 @@ stdenv.mkDerivation {
     cp -r doc/doxygen/output/html $devdoc/share/devhelp/openafs/doxygen
   '';
 
-  # Avoid references to $TMPDIR by removing it and let patchelf cleanup the
-  # binaries.
+  # remove forbidden references to $TMPDIR
   preFixup = ''
-    rm -rf "$(pwd)" && mkdir "$(pwd)"
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
   '';
 
   meta = with lib; {

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2023.2.3";
+  version = "2023.9.26";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RY31rZpSF/Zo7dY23Bn7xzYGK/eKrII6uEzbrp3o6qY=";
+    hash = "sha256-Z+NV5Flaqzl/hAXQSv4bSufG9ipE4i2TP+4aVxpIx64=";
   };
 
   propagatedBuildInputs = [
@@ -47,11 +47,16 @@ buildPythonPackage rec {
     "test_write_imagej_raw"
     # https://github.com/cgohlke/tifffile/issues/142
     "test_func_bitorder_decode"
+    # Test file is missing
+    "test_issue_invalid_predictor"
   ];
 
   pythonImportsCheck = [
     "tifffile"
   ];
+
+  # flaky, often killed due to OOM or timeout
+  env.SKIP_LARGE = "1";
 
   meta = with lib; {
     description = "Read and write image data from and to TIFF files";

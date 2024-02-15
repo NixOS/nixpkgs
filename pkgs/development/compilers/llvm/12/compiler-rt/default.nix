@@ -1,4 +1,5 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, xcbuild, libllvm, libcxxabi, libxcrypt
+{ lib, stdenv, llvm_meta, version, fetch
+, cmake, python3, xcbuild, libllvm, linuxHeaders, libcxxabi, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -18,7 +19,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
+  buildInputs =
+    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
+    ++ lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
@@ -34,15 +37,14 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal) [
+    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals (useLLVM && !haveLibc) [
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
@@ -58,7 +60,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches = [
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ../../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
     ./gnu-install-dirs.patch
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
@@ -66,6 +68,10 @@ stdenv.mkDerivation {
     ./normalize-var.patch
     ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
     ./armv7l.patch
+    # Fix build on armv6l
+    ../../common/compiler-rt/armv6-mcr-dmb.patch
+    ../../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+    ../../common/compiler-rt/armv6-no-ldrexd-strexd.patch
   ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
@@ -86,6 +92,10 @@ stdenv.mkDerivation {
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model.c \
       --replace "#include <assert.h>" ""
+  '';
+
+  preConfigure = lib.optionalString (useLLVM && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
   '';
 
   # Hack around weird upsream RPATH bug
@@ -114,5 +124,8 @@ stdenv.mkDerivation {
     # "All of the code in the compiler-rt project is dual licensed under the MIT
     # license and the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
+    # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
+    # https://reviews.llvm.org/D43106#1019077
+    broken = stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang;
   };
 }

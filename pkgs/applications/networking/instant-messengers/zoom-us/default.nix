@@ -48,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "5.13.11.16405";
-  versions.x86_64-darwin = "5.13.11.16405";
-  versions.x86_64-linux = "5.13.11.1288";
+  versions.aarch64-darwin = "5.17.5.29101";
+  versions.x86_64-darwin = "5.17.5.29101";
+  versions.x86_64-linux = "5.17.5.2543";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-YjERJ6B06/uloHRQVyZDLyf/2Gae0P7xdk4Db9aqROs=";
+      hash = "sha256-Zq/8r4Ny9m+Ym6YMm49iMoITvkGO9q1DxQ0IqHC/7Us=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-g6n4SKdord7gRwBaYUle3+yi1eB0T36ilScTaCcU8us=";
+      hash = "sha256-/GTBPIswV+YSvnbrSYefrLfcv5eXsRCe3vaTDGmptl8=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-BdI3HEQVe9A3D6KJ45wHWsrfb+dhTZAp/xlcr9X92EU=";
+      hash = "sha256-R8LHyL5ojnaLBk00W997PtnKzDwMaADIpYClKDYkJcQ=";
     };
   };
 
@@ -194,6 +194,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ danbst tadfisher doronbehar ];
+    maintainers = with maintainers; [ danbst tadfisher ];
+    mainProgram = "zoom";
   };
 }

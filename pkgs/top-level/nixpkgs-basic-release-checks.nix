@@ -1,6 +1,12 @@
 { supportedSystems, nixpkgs, pkgs, nix }:
 
-pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; } ''
+pkgs.runCommand "nixpkgs-release-checks"
+  {
+    src = nixpkgs;
+    buildInputs = [ nix ];
+    requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~10G RAM; see #227945
+  }
+  ''
     set -o pipefail
 
     export NIX_STORE_DIR=$TMPDIR/store
@@ -12,7 +18,7 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
     # Make sure that Nixpkgs does not use <nixpkgs>.
-    badFiles=$(find $src/pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)
+    badFiles=$(find $src/pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs/' || true)
     if [[ -n $badFiles ]]; then
         echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
         echo "The offending files: $badFiles"

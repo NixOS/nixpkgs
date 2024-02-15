@@ -7,7 +7,6 @@
 , perl
 , perlPackages
 , lib, stdenv
-, tree
 , util-linux
 }:
 let

@@ -2,50 +2,55 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, libqalculate
 , muparser
-, python3
+, libarchive
+, python3Packages
 , qtbase
-, qtcharts
-, qtdeclarative
-, qtgraphicaleffects
+, qtscxml
 , qtsvg
-, qtx11extras
+, qtdeclarative
+, qtwayland
+, qt5compat
 , wrapQtAppsHook
 , nix-update-script
+, pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.17.6";
+  version = "0.22.17";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
-    rev = "v${version}";
-    sha256 = "sha256-nbnywrsKvFG8AkayjnylOKSnn7rRWgNv5zE9DDeOmLw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-2wu4bOQDKoZ4DDzTttXXRNDluvuJth7M1pCvJmYQ+f4=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     wrapQtAppsHook
   ];
 
   buildInputs = [
+    libqalculate
+    libarchive
     muparser
-    python3
     qtbase
-    qtcharts
-    qtdeclarative
-    qtgraphicaleffects
+    qtscxml
     qtsvg
-    qtx11extras
-  ];
+    qtdeclarative
+    qtwayland
+    qt5compat
+  ] ++ (with python3Packages; [ python pybind11 ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
 
-    sed -i src/app/main.cpp \
+    sed -i src/qtpluginprovider.cpp \
       -e "/QStringList dirs = {/a    QFileInfo(\"$out/lib\").canonicalFilePath(),"
   '';
 
@@ -55,7 +60,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A fast and flexible keyboard launcher";
@@ -65,9 +72,10 @@ stdenv.mkDerivation rec {
       framework.
     '';
     homepage = "https://albertlauncher.github.io";
-    changelog = "https://github.com/albertlauncher/albert/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/albertlauncher/albert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes synthetica ];
+    mainProgram = "albert";
     platforms = platforms.linux;
   };
-}
+})

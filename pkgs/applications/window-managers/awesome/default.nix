@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     xmlto docbook_xml_dtd_45
     docbook_xsl findXMLCatalogs
     asciidoctor
+    gobject-introspection
   ];
 
   outputs = [ "out" "doc" ];
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   FONTCONFIG_FILE = toString fontsConf;
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
-  buildInputs = [ cairo librsvg dbus gdk-pixbuf gobject-introspection
+  buildInputs = [ cairo librsvg dbus gdk-pixbuf
                   git luaEnv libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence

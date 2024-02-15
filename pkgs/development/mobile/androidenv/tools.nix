@@ -1,12 +1,14 @@
 {deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, postInstall}:
 
 deployAndroidPackage {
-  name = "androidsdk";
+  name = "androidsdk-tools";
   inherit os package;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
   buildInputs = lib.optional (os == "linux") (
-      (with pkgs; [ glibc freetype fontconfig fontconfig.lib])
+      (with pkgs; [ glibc freetype fontconfig fontconfig.lib
+        stdenv.cc.cc.libgcc or null # fix for https://github.com/NixOS/nixpkgs/issues/226357
+      ])
       ++ (with pkgs.xorg; [ libX11 libXrender libXext ])
       ++ (with pkgsi686Linux; [ glibc xorg.libX11 xorg.libXrender xorg.libXext fontconfig.lib freetype zlib ])
     );

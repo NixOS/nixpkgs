@@ -45,24 +45,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "touchosc";
-  version = "1.1.9.163";
+  version = "1.2.7.190";
 
   suffix = {
     aarch64-linux = "linux-arm64";
     armv7l-linux  = "linux-armhf";
-    x86_64-linux  = "linux-x86_64";
+    x86_64-linux  = "linux-x64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-LhF0pgMRbEXeLt5g56VBNuCssaTjsczx/+C76ckmGZo=";
-      armv7l-linux  = "sha256-T4AzXIbhO6fNN8xDFwz6M2lSH6hLgNjVyDsSt8m+Mr4=";
-      x86_64-linux  = "sha256-LJ36kHx8PPzfLpJMx1ANSmifS84saCQ8pF0quhgzdt0=";
+      aarch64-linux = "sha256-VUsT14miAkCjaGWwcsREBgd5uhKLOIHaH9/jfQECVZ4=";
+      armv7l-linux  = "sha256-x5zpeuIEfimiGmM9YWBSaXknIZdpO9RzQjE/bYMt16g=";
+      x86_64-linux  = "sha256-LdMDFNHIWBcaAf+q2JPOm8MqtkaQ+6Drrqkyrrpx6MM=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
-
-  unpackCmd = "mkdir root; dpkg-deb -x $curSrc root";
 
   strictDeps = true;
 

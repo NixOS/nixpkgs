@@ -51,9 +51,14 @@ Options:
  -d, --debug      debug mode
 
 EOF
-            exit 1
-            ;;
-
+            case "${1:-}" in
+                -h|--help)
+                    exit 0
+                    ;;
+                *)
+                    exit 1
+                    ;;
+            esac
     esac
 done
 

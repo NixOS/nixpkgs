@@ -1,96 +1,74 @@
-# NOTE: Mirakurun is packaged outside of nodePackages because Node2nix can't
-# handle one of its subdependencies. See below link for details.
-#
-# https://github.com/Chinachu/node-aribts/blob/af84dbbbd81ea80b946e538083b64b5b2dc7e8f2/package.json#L26
-
 { lib
-, stdenvNoCC
+, stdenv
 , bash
+, buildNpmPackage
 , fetchFromGitHub
-, gitUpdater
-, jq
+, installShellFiles
 , makeWrapper
-, mkYarnPackage
-, which
-, writers
+, nodejs
+, substituteAll
 , v4l-utils
-, yarn
-, yarn2nix
+, which
 }:
 
-stdenvNoCC.mkDerivation rec {
+buildNpmPackage rec {
   pname = "mirakurun";
-  version = "3.8.0";
+  version = "3.9.0-rc.4";
 
   src = fetchFromGitHub {
     owner = "Chinachu";
     repo = "Mirakurun";
     rev = version;
-    sha256 = "1fmzi3jc3havvpc1kz5z16k52lnrsmc3b5yqyxc7i911gqyjsxzr";
+    sha256 = "sha256-Qg+wET5H9t3Mv2Hv0iT/C85/SEaQ+BHSBL3JjMQW5+Q=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  patches = [
+    # NOTE: fixes for hardcoded paths and assumptions about filesystem
+    # permissions
+    ./nix-filesystem.patch
+  ];
 
-  mirakurun = mkYarnPackage rec {
-    name = "${pname}-${version}";
-    inherit version src;
+  npmDepsHash = "sha256-e7m7xb7p1SBzLAyQ82TTR/qLXv4lRm37x0JJPWYYGvI=";
 
-    yarnNix = ./yarn.nix;
-    yarnLock = ./yarn.lock;
-    packageJSON = ./package.json;
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-    # workaround for https://github.com/webpack/webpack/issues/14532
-    NODE_OPTIONS = "--openssl-legacy-provider";
+  # workaround for https://github.com/webpack/webpack/issues/14532
+  NODE_OPTIONS = "--openssl-legacy-provider";
 
-    patches = [
-      # NOTE: fixes for hardcoded paths and assumptions about filesystem
-      # permissions
-      ./nix-filesystem.patch
-    ];
-
-    buildPhase = ''
-      yarn --offline build
-    '';
-
-    distPhase = "true";
-  };
-
-  installPhase =
+  postInstall =
     let
-      runtimeDeps = [ bash which v4l-utils ];
+      runtimeDeps = [
+        bash
+        nodejs
+        which
+      ] ++ lib.optionals stdenv.isLinux [ v4l-utils ];
+      crc32Patch = substituteAll {
+        src = ./fix-musl-detection.patch;
+        isMusl = if stdenv.hostPlatform.isMusl then "true" else "false";
+      };
     in
     ''
-      mkdir -p $out/bin
+      sed 's/@DESCRIPTION@/${meta.description}/g' ${./mirakurun.1} > mirakurun.1
+      installManPage mirakurun.1
 
-      makeWrapper ${mirakurun}/bin/mirakurun-epgdump $out/bin/mirakurun-epgdump \
-        --chdir "${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
+      wrapProgram $out/bin/mirakurun-epgdump \
         --prefix PATH : ${lib.makeBinPath runtimeDeps}
 
       # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
       # server.  However, we invoke the server directly and let systemd
       # manage it to avoid complication. This is okay since no features
       # unique to PM2 is currently being used.
-      makeWrapper ${yarn}/bin/yarn $out/bin/mirakurun-start \
-        --add-flags "start" \
-        --chdir "${mirakurun}/libexec/mirakurun/node_modules/mirakurun" \
+      makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
+        --chdir "$out/lib/node_modules/mirakurun" \
         --prefix PATH : ${lib.makeBinPath runtimeDeps}
+
+      pushd $out/lib/node_modules/mirakurun/node_modules/@node-rs/crc32
+      patch -p3 < ${crc32Patch}
+      popd
     '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit (src.meta) homepage;
-    inherit
-      pname
-      version
-      gitUpdater
-      writers
-      jq
-      yarn
-      yarn2nix;
-  };
-
   meta = with lib; {
-    inherit (mirakurun.meta) description platforms;
+    description = "Resource manager for TV tuners.";
     license = licenses.asl20;
     maintainers = with maintainers; [ midchildan ];
   };

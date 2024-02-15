@@ -1,15 +1,16 @@
 { lib
 , python3
+, fetchPypi
 , nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prometheus-pve-exporter";
-  version = "2.2.2";
+  version = "3.2.2";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0vvsiw8nj8zkx6v42f260xbsdd92l0ac4vwpm7w38j3qwvanar7k";
+    sha256 = "sha256-E1hxYslVaMpoeCsTrw/7D0Ycq+GzMpJ0e6B4mEe/UJs=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -18,6 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     requests
     werkzeug
+    gunicorn
   ];
 
   doCheck = false;

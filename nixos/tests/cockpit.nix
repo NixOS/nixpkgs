@@ -50,7 +50,8 @@ import ./make-test-python.nix (
             options = Options()
             options.add_argument("--headless")
 
-            driver = webdriver.Firefox(options=options)
+            service = webdriver.FirefoxService(executable_path="${lib.getExe pkgs.geckodriver}")  # noqa: E501
+            driver = webdriver.Firefox(options=options, service=service)
 
             driver.implicitly_wait(10)
 
@@ -93,7 +94,7 @@ import ./make-test-python.nix (
             password_input = find_element(By.CSS_SELECTOR, 'input#login-password-input')
             set_value(password_input, "${password}")
 
-            log("Submiting credentials for login")
+            log("Submitting credentials for login")
             driver.find_element(By.CSS_SELECTOR, 'button#login-button').click()
 
             # driver.implicitly_wait(1)
@@ -102,7 +103,7 @@ import ./make-test-python.nix (
             log("Waiting dashboard to load")
             wait_title_contains("${user}@server")
 
-            log("Waiting for the frontend to initalize")
+            log("Waiting for the frontend to initialize")
             sleep(1)
 
             log("Looking for that banner that tells about limited access")

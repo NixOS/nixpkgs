@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Launch jobs, organize the output, and dissect the results";
     homepage = "https://pyviz.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

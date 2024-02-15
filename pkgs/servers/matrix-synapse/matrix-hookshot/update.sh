@@ -15,7 +15,7 @@ if [ -z "$version" ]; then
 fi
 
 src="https://raw.githubusercontent.com/matrix-org/matrix-hookshot/$version"
-src_hash=$(nix-prefetch-github matrix-org matrix-hookshot --rev ${version} | jq -r .sha256)
+src_hash=$(nix-prefetch-github matrix-org matrix-hookshot --rev ${version} | jq -r .hash)
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
@@ -26,10 +26,12 @@ yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
 curl -O "$src/package.json"
+# There is no prefetcher for the cargo hash, but care should still be taken to update it
 cat > pin.json << EOF
 {
   "version": "$version",
   "srcHash": "$src_hash",
-  "yarnHash": "$yarn_hash"
+  "yarnHash": "$yarn_hash",
+  "cargoHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 }
 EOF

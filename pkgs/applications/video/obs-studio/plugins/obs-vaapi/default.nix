@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vaapi";
-  version = "0.2.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = pname;
     rev = version;
-    hash = "sha256-wrbVuqIe+DY3R+Jp3zCy2Uw3fv5ejYHtRV2Sv+y/n0w=";
+    hash = "sha256-PpGNLIOz+fCpcP/nvjcJ+1fkduxjcbZjb7yx8TUO25s=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OBS Studio VAAPI support via GStreamer";
     homepage = "https://github.com/fzwoch/obs-vaapi";
+    changelog = "https://github.com/fzwoch/obs-vaapi/releases/tag/${version}";
     maintainers = with maintainers; [ ahuzik pedrohlc ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];

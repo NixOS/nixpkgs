@@ -5,6 +5,8 @@
 , buildPythonPackage
 , dill
 , fetchFromGitHub
+, flask
+, flask-cors
 , moto
 , pytest-asyncio
 , pytestCheckHook
@@ -14,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.4.2";
+  version = "2.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IHVplle73JVLbz9R9uPyleL9Occ723EE9Ogl059TcPg=";
+    hash = "sha256-mVG3dCz9DnExteUFhvTGjZu81E0KbrObP3OX0w/OVzU=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -41,6 +43,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dill
+    flask
+    flask-cors
     moto
     pytest-asyncio
     pytestCheckHook
@@ -77,6 +81,8 @@ buildPythonPackage rec {
     "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
     "test_sso_credential_fetcher_can_fetch_credentials"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python client for amazon services";

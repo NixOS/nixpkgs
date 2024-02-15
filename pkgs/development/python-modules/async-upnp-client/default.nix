@@ -1,30 +1,42 @@
 { lib
 , stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# build-system
+, setuptools
+
+# dependencies
 , aiohttp
 , async-timeout
-, buildPythonPackage
 , defusedxml
-, fetchFromGitHub
+, python-didl-lite
+, voluptuous
+
+# tests
+, pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
-, python-didl-lite
-, pythonOlder
-, voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.33.1";
-  format = "setuptools";
+  version = "0.38.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = "refs/tags/${version}";
-    hash = "sha256-gXDuStgCBH6YW3SsAjEvQq7l+Vf8+Z8sle1TnLRtNwo=";
+    hash = "sha256-tYGJwmzyVTry3KIMv1JjoBsE6kNw7FJb1nq1+39bEdU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -36,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-aiohttp
     pytest-asyncio
   ];
 

@@ -48,6 +48,11 @@ let
     ''
   else
     cfg.staticConfigFile;
+
+  finalStaticConfigFile =
+    if cfg.environmentFiles == []
+    then staticConfigFile
+    else "/run/traefik/config.toml";
 in {
   options.services.traefik = {
     enable = mkEnableOption (lib.mdDoc "Traefik web server");
@@ -121,11 +126,16 @@ in {
       '';
     };
 
-    package = mkOption {
-      default = pkgs.traefik;
-      defaultText = literalExpression "pkgs.traefik";
-      type = types.package;
-      description = lib.mdDoc "Traefik package to use.";
+    package = mkPackageOption pkgs "traefik" { };
+
+    environmentFiles = mkOption {
+      default = [];
+      type = types.listOf types.path;
+      example = [ "/run/secrets/traefik.env" ];
+      description = lib.mdDoc ''
+        Files to load as environment file. Environment variables from this file
+        will be substituted into the static configuration file using envsubst.
+      '';
     };
   };
 
@@ -134,13 +144,19 @@ in {
 
     systemd.services.traefik = {
       description = "Traefik web server";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
       serviceConfig = {
-        ExecStart =
-          "${cfg.package}/bin/traefik --configfile=${staticConfigFile}";
+        EnvironmentFile = cfg.environmentFiles;
+        ExecStartPre = lib.optional (cfg.environmentFiles != [])
+          (pkgs.writeShellScript "pre-start" ''
+            umask 077
+            ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
+          '');
+        ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";
         Group = cfg.group;
@@ -155,6 +171,7 @@ in {
         ProtectHome = true;
         ProtectSystem = "full";
         ReadWriteDirectories = cfg.dataDir;
+        RuntimeDirectory = "traefik";
       };
     };
 

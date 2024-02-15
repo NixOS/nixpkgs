@@ -1,104 +1,117 @@
-{ stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
-
-# Dynamic libraries
-, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
-, gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
-, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
-
-, systemd
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, makeDesktopItem
+, copyDesktopItems
+, prefetch-yarn-deps
+, makeWrapper
+, nodejs
+, yarn
+, electron
 }:
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "20.8.16";
+  version = "22.1.18";
 
-  src = fetchurl {
-    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
-    sha256 = "sha256-FBnyogqf5BHLRInjJzC2dENnAwFcWMHDvJ+F0I3ffVg=";
+  src = fetchFromGitHub {
+    owner = "jgraph";
+    repo = "drawio-desktop";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-qOZm7XbF8QOx5rD5EJY0lJhaq2Yhp/nppOA4BIWheyE=";
+  };
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-TwI3NCIn5NnKXuwW5dBl4q6Ma5rZR7NVNb5hoKbmNLM=";
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    rpmextract
-    wrapGAppsHook
+    prefetch-yarn-deps
+    makeWrapper
+    nodejs
+    yarn
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    copyDesktopItems
   ];
 
-  buildInputs = [
-    alsa-lib
-    atk
-    at-spi2-atk
-    at-spi2-core
-    cairo
-    cups
-    dbus
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libxshmfence
-    libXtst
-    libxcb
-    libuuid
-    mesa # for libgbm
-    nspr
-    nss
-    pango
-    systemd
-  ];
+  ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
-  runtimeDependencies = [
-    (lib.getLib systemd)
-  ];
+  configurePhase = ''
+    runHook preConfigure
 
-  dontBuild = true;
-  dontConfigure = true;
+    export HOME="$TMPDIR"
+    yarn config --offline set yarn-offline-mirror "$offlineCache"
+    fixup-yarn-lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
 
-  unpackPhase = "rpmextract ${src}";
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+  '' + lib.optionalString stdenv.isDarwin ''
+    cp -R ${electron}/Applications/Electron.app Electron.app
+    chmod -R u+w Electron.app
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    sed -i "/afterSign/d" electron-builder-linux-mac.json
+  '' + ''
+    yarn --offline run electron-builder --dir \
+      --config electron-builder-linux-mac.json \
+      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      -c.electronVersion=${electron.version}
+
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir -p $out/share
-    cp -r opt/drawio $out/share/
+    runHook preInstall
 
-    # Application icon
-    mkdir -p $out/share/icons/hicolor
-    cp -r usr/share/icons/hicolor/* $out/share/icons/hicolor/
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv dist/mac*/draw.io.app $out/Applications
 
-    # XDG desktop item
-    cp -r usr/share/applications $out/share/applications
+    # Symlinking `draw.io` doesn't work; seems to look for files in the wrong place.
+    makeWrapper $out/Applications/draw.io.app/Contents/MacOS/draw.io $out/bin/drawio
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    mkdir -p "$out/share/lib/drawio"
+    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/drawio"
 
-    # Symlink wrapper
-    mkdir -p $out/bin
-    ln -s $out/share/drawio/drawio $out/bin/drawio
+    install -Dm644 build/icon.svg "$out/share/icons/hicolor/scalable/apps/drawio.svg"
 
-    # Update binary path
-    substituteInPlace $out/share/applications/drawio.desktop \
-      --replace /opt/drawio/drawio $out/bin/drawio
+    makeWrapper '${electron}/bin/electron' "$out/bin/drawio" \
+      --add-flags "$out/share/lib/drawio/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --inherit-argv0
+  '' + ''
+
+    runHook postInstall
   '';
 
-  doInstallCheckPhase = true;
-
-  installCheckPhase = ''
-    $out/bin/drawio --help > /dev/null
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "drawio";
+      exec = "drawio %U";
+      icon = "drawio";
+      desktopName = "drawio";
+      comment = "draw.io desktop";
+      mimeTypes = [ "application/vnd.jgraph.mxfile" "application/vnd.visio" ];
+      categories = [ "Graphics" ];
+      startupWMClass = "draw.io";
+    })
+  ];
 
   meta = with lib; {
     description = "A desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ qyliss darkonion0 ];
+    platforms = platforms.darwin ++ platforms.linux;
+    mainProgram = "drawio";
   };
 }

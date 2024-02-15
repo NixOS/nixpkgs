@@ -15,23 +15,23 @@
 
 mkDerivation rec {
   pname = "lxqt-admin";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0b6I45O4hUSnhP+IJJV8jesJgWpg3Y53TEaROhGQctY=";
+    hash = "sha256-wPK3TMBC359GnisjpdY2zU+Jnvr7Hdzb6r+HuUQC3mo=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtx11extras
-    qttools
     qtsvg
     kwindowsystem
     liblxqt

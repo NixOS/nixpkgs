@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unifont";
-  version = "15.0.01";
+  version = "15.1.04";
 
-  ttf = fetchurl {
-    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
-    hash = "sha256-KZRZvDTpFbHBjdOGd3OfQdCyptebk/SAzRV+8k2mdas=";
+  otf = fetchurl {
+    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.otf";
+    hash = "sha256-J8g8ojXDq5nV013zXXi1rEAYQhpCh7G06mV7IpmZbTg=";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    hash = "sha256-77rkcU0YajAVugWHnGscaFvcFTgWm+1WPLknQZvTjN0=";
+    hash = "sha256-XHKP8xx+GvhFYBW03Sambpd2gclKvQUz1JAjIlb59OI=";
   };
 
   nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
       install -m 644 -D unifont.otb "$out/share/fonts/unifont.otb"
       mkfontdir "$out/share/fonts"
 
-      # install pcf and ttf fonts
+      # install pcf and otf fonts
       install -m 644 -D ${pcf} $out/share/fonts/unifont.pcf.gz
-      install -m 644 -D ${ttf} $out/share/fonts/truetype/unifont.ttf
+      install -m 644 -D ${otf} $out/share/fonts/opentype/unifont.otf
       cd "$out/share/fonts"
       mkfontdir
       mkfontscale

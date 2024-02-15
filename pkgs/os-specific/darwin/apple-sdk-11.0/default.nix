@@ -31,10 +31,7 @@ let
     };
 
     installPhase = ''
-      cd Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
-
-      mkdir $out
-      cp -r System usr $out/
+      mv Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk $out
     '';
   };
 
@@ -49,34 +46,43 @@ let
     };
 
     installPhase = ''
-      cd Library/Developer/CommandLineTools
-
-      mkdir $out
-      cp -r Library usr $out/
+      mv Library/Developer/CommandLineTools $out
     '';
   };
 
-  mkStdenv = stdenv:
-    let
-      cc = stdenv.cc.override {
+  mkCc = cc:
+    if stdenv.isAarch64 then cc
+    else
+      cc.override {
         bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
         libc = packages.Libsystem;
       };
-    in
+
+  mkStdenv = stdenv:
     if stdenv.isAarch64 then stdenv
     else
-      (overrideCC stdenv cc).override {
-        targetPlatform = stdenv.targetPlatform // {
-          darwinMinVersion = "10.12";
-          darwinSdkVersion = "11.0";
-        };
+      let
+        darwinMinVersion = "10.12";
+        darwinSdkVersion = "11.0";
+      in
+      (overrideCC stdenv (mkCc stdenv.cc)).override {
+        extraBuildInputs = [ pkgs.darwin.apple_sdk_11_0.frameworks.CoreFoundation ];
+        buildPlatform = stdenv.buildPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+        hostPlatform = stdenv.hostPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+        targetPlatform = stdenv.targetPlatform // { inherit darwinMinVersion darwinSdkVersion; };
       };
 
   stdenvs = {
     stdenv = mkStdenv stdenv;
   } // builtins.listToAttrs (map
-    (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
-    [ "12" "13" "14" "15" ]
+    (v: {
+      name = "llvmPackages_${v}";
+      value = pkgs."llvmPackages_${v}" // {
+        stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
+        clang = mkCc pkgs."llvmPackages_${v}".clang;
+      };
+    })
+    [ "12" "13" "14" "15" "16" ]
   );
 
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
@@ -91,6 +97,7 @@ let
     Libsystem = callPackage ./libSystem.nix { };
     LibsystemCross = pkgs.darwin.Libsystem;
     libcharset = callPackage ./libcharset.nix { };
+    libcompression = callPackage ./libcompression.nix { };
     libunwind = callPackage ./libunwind.nix { };
     libnetwork = callPackage ./libnetwork.nix { };
     libpm = callPackage ./libpm.nix { };
@@ -110,6 +117,12 @@ let
     rustPlatform = pkgs.makeRustPlatform {
       inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
       inherit (pkgs) rustc cargo;
+    } // {
+      inherit (pkgs.callPackage ../../../build-support/rust/hooks {
+        inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+        inherit (pkgs) cargo rustc;
+        clang = mkCc pkgs.clang;
+      }) bindgenHook;
     };
 
     callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {

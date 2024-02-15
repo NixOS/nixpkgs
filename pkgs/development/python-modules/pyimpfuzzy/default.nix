@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyimpfuzzy";
   version = "0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "A Python module which calculates and compares the impfuzzy (import fuzzy hashing)";
     homepage = "https://github.com/JPCERTCC/impfuzzy";
     license = licenses.gpl2Only;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

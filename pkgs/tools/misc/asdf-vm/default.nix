@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, installShellFiles, bash, coreutils, curl, git, writeScript }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, installShellFiles, bash, curl, git, writeScript }:
 
 let
   asdfReshimFile = writeScript "asdf-reshim" ''
@@ -37,13 +37,13 @@ ${asdfReshimFile}
   '';
 in stdenv.mkDerivation rec {
   pname = "asdf-vm";
-  version = "0.11.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
     rev = "v${version}";
-    sha256 = "sha256-ZNmqWDjPEtmQhDUTkTw0Gy2pox1PyRK4U9Q0vxjZSlw=";
+    sha256 = "sha256-DmwKzW0oHjokMxj2RMT4iogurEMKeAcl7MWlPTOqMmg=";
   };
 
   nativeBuildInputs = [

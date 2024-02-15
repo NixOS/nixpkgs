@@ -11,7 +11,7 @@
 , ninja
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , icu
 , graphite2
 , harfbuzz # The icu variant uses and propagates the non-icu one.
@@ -30,15 +30,16 @@
 , gtk4
 , mapnik
 , qt5
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "7.0.1";
+  version = "7.3.0";
 
   src = fetchurl {
-    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
-    hash = "sha256-LPTT2PIlAHURmQo2o0GV8NZWLKVt8KiwiFs4KDeUgZk=";
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
+    hash = "sha256-IHcHiXSaybqEbfM5g9vaItuDbHDZ9dBQy5qlNHCUqPs=";
   };
 
   postPatch = ''
@@ -103,13 +104,22 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit gimp gtk3 gtk4 mapnik;
     inherit (qt5) qtbase;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
     description = "An OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
+    changelog = "https://github.com/harfbuzz/harfbuzz/raw/${version}/NEWS";
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
+    pkgConfigModules = [
+      "harfbuzz"
+      "harfbuzz-gobject"
+      "harfbuzz-subset"
+    ];
   };
-}
+})

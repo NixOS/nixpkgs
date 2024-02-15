@@ -5,22 +5,25 @@
 , pkg-config
 , withGstreamer ? true
 , gst_all_1
+, withOmemo ? true
+, qca-qt5
+, libomemo-c
 }:
 
 mkDerivation rec {
   pname = "qxmpp";
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "qxmpp-project";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-h2MBs46E2dvwOhs1cnSvrMll3nZSE9o4oEZV2Bd1Yh0=";
+    sha256 = "sha256-5NPqNQuVuRz9GfrJULSmTiYHUMe6VxoaQZDHhYCguWQ=";
   };
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals withGstreamer [
+  ] ++ lib.optionals (withGstreamer || withOmemo) [
     pkg-config
   ];
   buildInputs = lib.optionals withGstreamer (with gst_all_1; [
@@ -28,12 +31,17 @@ mkDerivation rec {
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
-  ]);
+  ]) ++ lib.optionals withOmemo [
+    qca-qt5
+    libomemo-c
+  ];
   cmakeFlags = [
     "-DBUILD_EXAMPLES=false"
     "-DBUILD_TESTS=false"
   ] ++ lib.optionals withGstreamer [
     "-DWITH_GSTREAMER=ON"
+  ] ++ lib.optionals withOmemo [
+    "-DBUILD_OMEMO=ON"
   ];
 
   meta = with lib; {

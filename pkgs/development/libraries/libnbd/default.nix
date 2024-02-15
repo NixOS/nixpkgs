@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
-  version = "1.14.1";
+  version = "1.18.2";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    hash = "sha256-LwgXVWOWwyc9OUJEKHkDQEfGBy41XsdbRuG+zluFc3E=";
+    hash = "sha256-OYtNHAIGgwJuapoJNEMVkurUK9bQ7KO+V223bGC0TFI=";
   };
 
   nativeBuildInputs = [

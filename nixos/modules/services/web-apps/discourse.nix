@@ -407,7 +407,7 @@ in
             type = with lib.types; nullOr (enum ["plain" "login" "cram_md5"]);
             default = null;
             description = lib.mdDoc ''
-              Authentication type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
+              Authentication type to use, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
 
@@ -423,7 +423,7 @@ in
             type = lib.types.str;
             default = "peer";
             description = lib.mdDoc ''
-              How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
+              How OpenSSL checks the certificate, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
 
@@ -651,6 +651,9 @@ in
       preload_link_header = false;
       redirect_avatar_requests = false;
       pg_force_readonly_mode = false;
+      dns_query_timeout_secs = null;
+      regex_timeout_seconds = 2;
+      allow_impersonation = true;
     };
 
     services.redis.servers.discourse =
@@ -1025,8 +1028,8 @@ in
 
     services.postfix = lib.mkIf cfg.mail.incoming.enable {
       enable = true;
-      sslCert = if cfg.sslCertificate != null then cfg.sslCertificate else "";
-      sslKey = if cfg.sslCertificateKey != null then cfg.sslCertificateKey else "";
+      sslCert = lib.optionalString (cfg.sslCertificate != null) cfg.sslCertificate;
+      sslKey = lib.optionalString (cfg.sslCertificateKey != null) cfg.sslCertificateKey;
 
       origin = cfg.hostname;
       relayDomains = [ cfg.hostname ];

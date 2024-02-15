@@ -1,25 +1,36 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cpp-utilities
-, qttools
-, qtbase
 , cmake
+, qttools
+, cpp-utilities
+, qtbase
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtutilities";
-  version = "6.11.0";
+  version = "6.13.4";
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eMQyXxBupqcLmNtAcVBgTWtAtuyRlWB9GKNpomM10B0=";
+    repo = "qtutilities";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AlDPu2mD2OrjBq3tUxQBAoqD32L9MiSjcUNGWzpj/xc=";
   };
 
-  buildInputs = [ qtbase cpp-utilities ];
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ];
+  buildInputs = [
+    qtbase
+    cpp-utilities
+  ];
+
+  cmakeFlags = [
+    "-DQT_PACKAGE_PREFIX=Qt${lib.versions.major qtbase.version}"
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
 
   dontWrapQtApps = true;
 
@@ -28,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Common Qt related C++ classes and routines used by @Martchus' applications such as dialogs, widgets and models Topics";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
-}
+})

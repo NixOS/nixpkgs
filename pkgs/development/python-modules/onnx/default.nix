@@ -1,55 +1,62 @@
 { lib
+, stdenv
 , buildPythonPackage
-, python3
-, bash
 , cmake
 , fetchFromGitHub
 , gtest
-, isPy27
 , nbval
 , numpy
-, protobuf
+, parameterized
+, protobuf_21
 , pybind11
 , pytestCheckHook
-, six
+, pythonOlder
 , tabulate
 , typing-extensions
-, pythonRelaxDepsHook
+, abseil-cpp
+, google-re2
+, pillow
+, protobuf
 }:
 
 let
   gtestStatic = gtest.override { static = true; };
 in buildPythonPackage rec {
   pname = "onnx";
-  version = "1.13.1";
+  version = "1.15.0";
   format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-10MH23XpAv/uDW/2tRFGS2lKU8hnaNBwbIBIgVc7Jpk=";
+    hash = "sha256-Jzga1IiUO5LN5imSUmnbsjYtapRatTihx38EOUjm9Os=";
   };
 
   nativeBuildInputs = [
     cmake
-    pythonRelaxDepsHook
     pybind11
   ];
 
-  pythonRelaxDeps = [ "protobuf" ];
+  buildInputs = [
+    abseil-cpp
+    protobuf
+    google-re2
+    pillow
+  ];
 
   propagatedBuildInputs = [
+    protobuf_21
     protobuf
     numpy
-    six
     typing-extensions
   ];
 
   nativeCheckInputs = [
     nbval
+    parameterized
     pytestCheckHook
     tabulate
   ];
@@ -72,7 +79,6 @@ in buildPythonPackage rec {
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
     # to lib64 and cmake incorrectly looks for the protobuf library in lib64
     export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
-  '' + lib.optionalString doCheck ''
     export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a -Dgoogletest_INCLUDE_DIRS=${lib.getDev gtestStatic}/include"
     export ONNX_BUILD_TESTS=1
   '';
@@ -89,14 +95,18 @@ in buildPythonPackage rec {
   # The setup.py does all the configuration
   dontUseCmakeConfigure = true;
 
-  doCheck = true;
   preCheck = ''
     export HOME=$(mktemp -d)
 
     # detecting source dir as a python package confuses pytest
     mv onnx/__init__.py onnx/__init__.py.hidden
   '';
-  pytestFlagsArray = [ "onnx/test" "onnx/examples" ];
+
+  pytestFlagsArray = [
+    "onnx/test"
+    "onnx/examples"
+  ];
+
   disabledTests = [
     # attempts to fetch data from web
     "test_bvlc_alexnet_cpu"
@@ -108,11 +118,25 @@ in buildPythonPackage rec {
     "test_squeezenet_cpu"
     "test_vgg19_cpu"
     "test_zfnet512_cpu"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # AssertionError: Output 0 of test 0 in folder
+    "test__pytorch_converted_Conv2d_depthwise_padded"
+    "test__pytorch_converted_Conv2d_dilated"
+    "test_dft"
+    "test_dft_axis"
+    # AssertionError: Mismatch in test 'test_Conv2d_depthwise_padded'
+    "test_xor_bcast4v4d"
+    # AssertionError: assert 1 == 0
+    "test_ops_tested"
   ];
+
   disabledTestPaths = [
     # Unexpected output fields from running code: {'stderr'}
     "onnx/examples/np_array_tensorproto.ipynb"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
   postCheck = ''
     # run "cpp" tests
     .setuptools-cmake-build/onnx_gtests

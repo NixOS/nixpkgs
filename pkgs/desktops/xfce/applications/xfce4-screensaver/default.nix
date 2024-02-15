@@ -1,4 +1,5 @@
 { mkXfceDerivation
+, gobject-introspection
 , dbus-glib
 , garcon
 , glib
@@ -11,17 +12,26 @@
 , libxfce4util
 , libxklavier
 , pam
+, python3
 , systemd
 , xfconf
 , lib
 }:
 
+let
+  # For xfce4-screensaver-configure
+  pythonEnv = python3.withPackages (pp: [ pp.pygobject3 ]);
+in
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screensaver";
-  version = "4.18.0";
+  version = "4.18.2";
 
-  sha256 = "sha256-W9rEssR6jHMBM2m1lCBvj7YMOGOTaqBAOP7grQ01880=";
+  sha256 = "sha256-j5K5i+hl/miyHste73akZL62K6YTxXmN8mmFK9BCecs=";
+
+  nativeBuildInputs = [
+    gobject-introspection
+  ];
 
   buildInputs = [
     dbus-glib
@@ -36,6 +46,7 @@ mkXfceDerivation {
     libxfce4util
     libxklavier
     pam
+    pythonEnv
     systemd
     xfconf
   ];
@@ -44,8 +55,8 @@ mkXfceDerivation {
 
   makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
 
-  meta =  {
+  meta = with lib; {
     description = "Screensaver for Xfce";
-    maintainers = with lib.maintainers; [ symphorien ];
+    maintainers = with maintainers; [ symphorien ] ++ teams.xfce.members;
   };
 }

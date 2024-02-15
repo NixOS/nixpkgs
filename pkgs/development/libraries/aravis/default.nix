@@ -29,13 +29,13 @@ assert enableViewer -> wrapGAppsHook != null;
 
 stdenv.mkDerivation rec {
   pname = "aravis";
-  version = "0.8.26";
+  version = "0.8.30";
 
   src = fetchFromGitHub {
     owner = "AravisProject";
     repo = pname;
     rev = version;
-    sha256 = "sha256-24FSq9qe8tAFGB4BOjD52BQiy8Rw6ZDE5Sq+VS5S638=";
+    sha256 = "sha256-1OxvLpzEKxIXiLJIUr+hCx+sxnH9Z5dBM5Lug1acCok=";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
@@ -45,10 +45,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gi-docgen
+    gobject-introspection
   ] ++ lib.optional enableViewer wrapGAppsHook;
 
   buildInputs =
-    [ glib libxml2 gobject-introspection ]
+    [ glib libxml2 ]
     ++ lib.optional enableUsb libusb1
     ++ lib.optionals (enableViewer || enableGstPlugin) (with gst_all_1; [ gstreamer gst-plugins-base (gst-plugins-good.override { gtkSupport = true; }) gst-plugins-bad ])
     ++ lib.optionals (enableViewer) [ gtk3 ];

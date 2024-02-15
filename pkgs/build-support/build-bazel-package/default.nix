@@ -1,6 +1,7 @@
 { stdenv
 , cacert
 , lib
+, writeCBin
 }:
 
 args@{
@@ -9,9 +10,12 @@ args@{
 , bazelFlags ? []
 , bazelBuildFlags ? []
 , bazelTestFlags ? []
+, bazelRunFlags ? []
+, runTargetFlags ? []
 , bazelFetchFlags ? []
-, bazelTarget
+, bazelTargets ? []
 , bazelTestTargets ? []
+, bazelRunTarget ? null
 , buildAttrs
 , fetchAttrs
 
@@ -44,10 +48,24 @@ args@{
 }:
 
 let
-  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ];
+  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ] // {
+    inherit
+      name
+      bazelFlags
+      bazelBuildFlags
+      bazelTestFlags
+      bazelRunFlags
+      runTargetFlags
+      bazelFetchFlags
+      bazelTargets
+      bazelTestTargets
+      bazelRunTarget
+      dontAddBazelOpts
+      ;
+  };
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
-  bazelCmd = { cmd, additionalFlags, targets }:
+  bazelCmd = { cmd, additionalFlags, targets, targetRunFlags ? [ ] }:
     lib.optionalString (targets != [ ]) ''
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
@@ -58,22 +76,42 @@ let
         --output_user_root="$bazelUserRoot" \
         ${cmd} \
         --curses=no \
-        -j $NIX_BUILD_CORES \
         "''${copts[@]}" \
         "''${host_copts[@]}" \
         "''${linkopts[@]}" \
         "''${host_linkopts[@]}" \
         $bazelFlags \
         ${lib.strings.concatStringsSep " " additionalFlags} \
-        ${lib.strings.concatStringsSep " " targets}
+        ${lib.strings.concatStringsSep " " targets} \
+        ${lib.optionalString (targetRunFlags != []) " -- " + lib.strings.concatStringsSep " " targetRunFlags}
     '';
+  # we need this to chmod dangling symlinks on darwin, gnu coreutils refuses to do so:
+  # chmod: cannot operate on dangling symlink '$symlink'
+  chmodder = writeCBin "chmodder" ''
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <sys/types.h>
+    #include <sys/stat.h>
+    #include <errno.h>
+    #include <string.h>
+
+    int main(int argc, char** argv) {
+      mode_t mode = S_IRWXU | S_IRWXG | S_IRWXO;
+      if (argc != 2) {
+        fprintf(stderr, "usage: chmodder file");
+        exit(EXIT_FAILURE);
+      }
+      if (lchmod(argv[1], mode) != 0) {
+        fprintf(stderr, "failed to lchmod '%s': %s", argv[0], strerror(errno));
+        exit(EXIT_FAILURE);
+      }
+    }
+  '';
 in
 stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTarget bazelTestTargets;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps.tar.gz";
-    inherit bazelFlags bazelBuildFlags bazelTestFlags bazelFetchFlags bazelTarget bazelTestTargets;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [];
 
@@ -94,26 +132,23 @@ stdenv.mkDerivation (fBuildAttrs // {
     buildPhase = fFetchAttrs.buildPhase or ''
       runHook preBuild
 
-      # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables].
-      # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
-      # https://github.com/bazelbuild/bazel/issues/6502
-      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-      USER=homeless-shelter \
-      bazel \
-        --batch \
-        --output_base="$bazelOut" \
-        --output_user_root="$bazelUserRoot" \
-        ${if fetchConfigured then "build --nobuild" else "fetch"} \
-        --loading_phase_threads=1 \
-        $bazelFlags \
-        $bazelFetchFlags \
-        ${bazelTarget} \
-        ${lib.strings.concatStringsSep " " bazelTestTargets}
+      ${
+        bazelCmd {
+          cmd = if fetchConfigured then "build --nobuild" else "fetch";
+          additionalFlags = [
+            # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
+            # https://github.com/bazelbuild/bazel/issues/6502
+            "--loading_phase_threads=1"
+            "$bazelFetchFlags"
+          ] ++ (if fetchConfigured then ["--jobs" "$NIX_BUILD_CORES"] else []);
+          targets = fFetchAttrs.bazelTargets ++ fFetchAttrs.bazelTestTargets;
+        }
+      }
 
       runHook postBuild
     '';
 
-    installPhase = fFetchAttrs.installPhase or ''
+    installPhase = fFetchAttrs.installPhase or (''
       runHook preInstall
 
       # Remove all built in external workspaces, Bazel will recreate them when building
@@ -146,6 +181,10 @@ stdenv.mkDerivation (fBuildAttrs // {
         new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
         rm "$symlink"
         ln -sf "$new_target" "$symlink"
+    '' + lib.optionalString stdenv.isDarwin ''
+        # on linux symlink permissions cannot be modified, so we modify those on darwin to match the linux ones
+        ${chmodder}/bin/chmodder "$symlink"
+    '' + ''
       done
 
       echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
@@ -153,7 +192,7 @@ stdenv.mkDerivation (fBuildAttrs // {
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
       runHook postInstall
-    '';
+    '');
 
     dontFixup = true;
     allowedRequisites = [];
@@ -190,8 +229,6 @@ stdenv.mkDerivation (fBuildAttrs // {
     done
   '' + fBuildAttrs.preConfigure or "";
 
-  inherit dontAddBazelOpts;
-
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
@@ -224,15 +261,24 @@ stdenv.mkDerivation (fBuildAttrs // {
       bazelCmd {
         cmd = "test";
         additionalFlags =
-          ["--test_output=errors"] ++  bazelTestFlags;
-        targets = bazelTestTargets;
+          ["--test_output=errors"] ++ fBuildAttrs.bazelTestFlags ++ ["--jobs" "$NIX_BUILD_CORES"];
+        targets = fBuildAttrs.bazelTestTargets;
       }
     }
     ${
       bazelCmd {
         cmd = "build";
-        additionalFlags = bazelBuildFlags;
-        targets = [bazelTarget];
+        additionalFlags = fBuildAttrs.bazelBuildFlags ++ ["--jobs" "$NIX_BUILD_CORES"];
+        targets = fBuildAttrs.bazelTargets;
+      }
+    }
+    ${
+      bazelCmd {
+        cmd = "run";
+        additionalFlags = fBuildAttrs.bazelRunFlags ++ [ "--jobs" "$NIX_BUILD_CORES" ];
+        # Bazel run only accepts a single target, but `bazelCmd` expects `targets` to be a list.
+        targets = lib.optionals (fBuildAttrs.bazelRunTarget != null) [ fBuildAttrs.bazelRunTarget ];
+        targetRunFlags = fBuildAttrs.runTargetFlags;
       }
     }
     runHook postBuild

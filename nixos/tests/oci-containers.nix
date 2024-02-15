@@ -11,9 +11,8 @@ let
   mkOCITest = backend: makeTest {
     name = "oci-containers-${backend}";
 
-    meta = {
-      maintainers = with lib.maintainers; [ adisbladis benley mkaito ] ++ lib.teams.serokell.members;
-    };
+    meta.maintainers = lib.teams.serokell.members
+                       ++ (with lib.maintainers; [ benley mkaito ]);
 
     nodes = {
       ${backend} = { pkgs, ... }: {
@@ -25,6 +24,10 @@ let
             ports = ["8181:80"];
           };
         };
+
+        # Stop systemd from killing remaining processes if ExecStop script
+        # doesn't work, so that proper stopping can be tested.
+        systemd.services."${backend}-nginx".serviceConfig.KillSignal = "SIGCONT";
       };
     };
 
@@ -33,6 +36,7 @@ let
       ${backend}.wait_for_unit("${backend}-nginx.service")
       ${backend}.wait_for_open_port(8181)
       ${backend}.wait_until_succeeds("curl -f http://localhost:8181 | grep Hello")
+      ${backend}.succeed("systemctl stop ${backend}-nginx.service", timeout=10)
     '';
   };
 

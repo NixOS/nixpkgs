@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "babelgladeextractor";
   version = "0.7.0";
+  format = "setuptools";
   disabled = (!isPy3k); # uses python3 specific file io in setup.py
 
   src = fetchPypi {
@@ -28,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gnome-keysign/babel-glade";
     description = "Babel Glade XML files translatable strings extractor";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

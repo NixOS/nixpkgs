@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildNpmPackage
 , nixosTests
@@ -14,68 +15,23 @@
 , unpaper
 , poppler_utils
 , liberation_ttf
+, xcbuild
+, pango
+, pkg-config
+, nltk-data
 }:
 
 let
-  version = "1.13.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aIJWEZD98tjfNDQjQfxRR1kOJ4P/fxZP8sw1dKy7apw=";
+    hash = "sha256-f9XMGGNr4qA/twp7Kbv/34mvgNQT+KZ1rYre1BXVWw0=";
   };
 
-  # Use specific package versions required by paperless-ngx
-  python = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_4;
-
-      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
-        };
-      });
-
-      # downgrade redis due to https://github.com/paperless-ngx/paperless-ngx/pull/1802
-      # and https://github.com/django/channels_redis/issues/332
-      channels-redis = super.channels-redis.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "channels_redis";
-          rev = version;
-          hash = "sha256-ZQSsE3pkM+nfDhWutNuupcyC5MDikUu6zU4u7Im6bRQ=";
-        };
-      });
-
-      channels = super.channels.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.5";
-        pname = "channels";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = pname;
-          rev = version;
-          sha256 = "sha256-bKrPLbD9zG7DwIYBst1cb+zkDsM8B02wh3D80iortpw=";
-        };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.daphne ];
-        pytestFlagsArray = [ "--asyncio-mode=auto" ];
-      });
-
-      daphne = super.daphne.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.2";
-        pname = "daphne";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = pname;
-          rev = version;
-          hash = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
-        };
-      });
-    };
-  };
+  python = python3;
 
   path = lib.makeBinPath [
     ghostscript
@@ -93,15 +49,22 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-es9x7KR5S7E8KjYWq8ie/EwlAy6zrDvySYQi1vy08Wc=";
-
-    nativeBuildInputs = [
-      python3
-    ];
-
     postPatch = ''
       cd src-ui
     '';
+
+    npmDepsHash = "sha256-7//VmAgXB4H8hlalfu4JeqFDa8dj1u5Z1kbwp2Wi4cQ=";
+
+    nativeBuildInputs = [
+      pkg-config
+      python3
+    ] ++ lib.optionals stdenv.isDarwin [
+      xcbuild
+    ];
+
+    buildInputs = [
+      pango
+    ];
 
     CYPRESS_INSTALL_BINARY = "0";
     NG_CLI_ANALYTICS = "false";
@@ -109,6 +72,13 @@ let
     npmBuildFlags = [
       "--" "--configuration" "production"
     ];
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+      npm run test
+      runHook postCheck
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -129,7 +99,6 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python.pkgs; [
-    aioredis
     amqp
     anyio
     asgiref
@@ -153,20 +122,29 @@ python.pkgs.buildPythonApplication rec {
     concurrent-log-handler
     constantly
     cryptography
-    daphne
     dateparser
+    django-allauth
+    django-auditlog
     django-celery-results
-    django-cors-headers
     django-compression-middleware
+    django-cors-headers
     django-extensions
     django-filter
+    django-guardian
+    django-multiselectfield
     django
+    djangorestframework-guardian2
     djangorestframework
+    drf-writable-nested
     filelock
+    flower
+    gotenberg-client
     gunicorn
     h11
+    h2
     hiredis
     httptools
+    httpx
     humanfriendly
     humanize
     hyperlink
@@ -182,12 +160,10 @@ python.pkgs.buildPythonApplication rec {
     msgpack
     mysqlclient
     nltk
-    numpy
     ocrmypdf
     packaging
     pathvalidate
     pdf2image
-    pdfminer-six
     pikepdf
     pillow
     pluggy
@@ -200,8 +176,9 @@ python.pkgs.buildPythonApplication rec {
     pyopenssl
     python-dateutil
     python-dotenv
-    python-gnupg
+    python-ipware
     python-magic
+    python-gnupg
     pytz
     pyyaml
     pyzbar
@@ -212,12 +189,12 @@ python.pkgs.buildPythonApplication rec {
     requests
     scikit-learn
     scipy
-    service-identity
     setproctitle
+    service-identity
     sniffio
     sqlparse
     threadpoolctl
-    tika
+    tika-client
     tornado
     tqdm
     twisted
@@ -236,7 +213,8 @@ python.pkgs.buildPythonApplication rec {
     whitenoise
     whoosh
     zipp
-    zope_interface
+    zope-interface
+    zxing-cpp
   ]
   ++ redis.optional-dependencies.hiredis
   ++ twisted.optional-dependencies.tls
@@ -245,25 +223,27 @@ python.pkgs.buildPythonApplication rec {
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
     # for files in `python.sitePackages`
-    ${python.pythonForBuild.interpreter} -OO -m compileall src
+    ${python.pythonOnBuildForHost.interpreter} -OO -m compileall src
 
     # Collect static files
-    ${python.pythonForBuild.interpreter} src/manage.py collectstatic --clear --no-input
+    ${python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
 
     # Compile string translations using gettext
-    ${python.pythonForBuild.interpreter} src/manage.py compilemessages
+    ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
-  installPhase = ''
+  installPhase = let
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+  in ''
     mkdir -p $out/lib/paperless-ngx
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
     ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "${pythonPath}" \
       --prefix PATH : "${path}"
     makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
-      --prefix PYTHONPATH : "$PYTHONPATH:$out/lib/paperless-ngx/src" \
+      --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
   '';
 
@@ -273,12 +253,16 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
-    factory_boy
+    daphne
+    factory-boy
     imagehash
     pytest-django
     pytest-env
+    pytest-httpx
+    pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
+    reportlab
   ];
 
   pytestFlagsArray = [
@@ -297,10 +281,6 @@ python.pkgs.buildPythonApplication rec {
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
       --replace "--cov --cov-report=html --cov-report=xml" ""
-    # OCR on NixOS recognizes the space in the picture, upstream CI doesn't.
-    # See https://github.com/paperless-ngx/paperless-ngx/pull/2216
-    substituteInPlace src/paperless_tesseract/tests/test_parser.py \
-      --replace "this is awebp document" "this is a webp document"
   '';
 
   disabledTests = [
@@ -311,8 +291,11 @@ python.pkgs.buildPythonApplication rec {
     "testNormalOperation"
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   passthru = {
     inherit python path frontend;
+    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 
@@ -321,6 +304,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://docs.paperless-ngx.com/";
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
   };
 }

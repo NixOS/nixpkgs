@@ -10,23 +10,18 @@ in
 assert lib.assertMsg ((builtins.length dotnetPackages) > 0)
     ''You must include at least one package, e.g
       `with dotnetCorePackages; combinePackages [
-          sdk_3_1 aspnetcore_5_0
+          sdk_6_0 aspnetcore_7_0
        ];`'' ;
   buildEnv {
     name = "dotnet-core-combined";
     paths = dotnetPackages;
     pathsToLink = [ "/host" "/packs" "/sdk" "/sdk-manifests" "/shared" "/templates" ];
     ignoreCollisions = true;
-    nativeBuildInputs = [
-      makeWrapper
-    ];
     postBuild = ''
       cp -R ${cli}/{dotnet,share,nix-support} $out/
 
       mkdir $out/bin
       ln -s $out/dotnet $out/bin/dotnet
-      wrapProgram $out/bin/dotnet \
-        --prefix LD_LIBRARY_PATH : ${cli.icu}/lib
     '';
     passthru = {
       inherit (cli) icu;

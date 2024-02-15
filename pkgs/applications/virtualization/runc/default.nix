@@ -9,22 +9,21 @@
 , libseccomp
 , libselinux
 , makeWrapper
-, procps
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.4";
+  version = "1.1.12";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "sha256-ougJHW1Z+qZ324P8WpZqawY1QofKnn8WezP7orzRTdA=";
+    hash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
@@ -45,7 +44,6 @@ buildGoModule rec {
     install -Dm755 runc $out/bin/runc
     installManPage man/*/*.[1-9]
     wrapProgram $out/bin/runc \
-      --prefix PATH : ${lib.makeBinPath [ procps ]} \
       --prefix PATH : /run/current-system/systemd/bin
     runHook postInstall
   '';
@@ -58,5 +56,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;
+    mainProgram = "runc";
   };
 }

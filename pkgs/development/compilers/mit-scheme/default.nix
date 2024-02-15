@@ -4,7 +4,7 @@
 , makeWrapper
 , gnum4
 , texinfo
-, texLive
+, texliveSmall
 , automake
 , autoconf
 , libtool
@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "11.2";
+  version = "12.1";
   bootstrapFromC = ! ((stdenv.isLinux && stdenv.isAarch64) || stdenv.isx86_64);
 
   arch = if stdenv.isLinux && stdenv.isAarch64 then
@@ -34,10 +34,10 @@ stdenv.mkDerivation {
     if stdenv.isLinux && stdenv.isAarch64
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-aarch64le.tar.gz";
-      sha256 = "11maixldk20wqb5js5p4imq221zz9nf27649v9pqkdf8fv7rnrs9";
+      sha256 = "12ra9bc93x8g07impbd8jr6djjzwpb9qvh9zhxvvrba3332zx3vh";
   } else fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
-      sha256 = "17822hs9y07vcviv2af17p3va7qh79dird49nj50bwi9rz64ia3w";
+      sha256 = "035f92vni0vqmgj9hq2i7vwasz7crx52wll4823vhfkm1qdv5ywc";
     };
 
   buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libX11 ];
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       $out/lib/mit-scheme${arch}-${version}
   '';
 
-  nativeBuildInputs = [ makeWrapper gnum4 texinfo texLive automake ghostscript autoconf libtool ];
+  nativeBuildInputs = [ makeWrapper gnum4 texinfo (texliveSmall.withPackages (ps: with ps; [ epsf ps.texinfo ])) automake ghostscript autoconf libtool ];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;

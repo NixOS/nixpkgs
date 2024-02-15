@@ -45,8 +45,8 @@ services.xserver.displayManager.gdm.enable = true;
 You can set the keyboard layout (and optionally the layout variant):
 
 ```nix
-services.xserver.layout = "de";
-services.xserver.xkbVariant = "neo";
+services.xserver.xkb.layout = "de";
+services.xserver.xkb.variant = "neo";
 ```
 
 The X server is started automatically at boot time. If you don't want
@@ -208,7 +208,7 @@ qt.style = "gtk2";
 
 It is possible to install custom [ XKB
 ](https://en.wikipedia.org/wiki/X_keyboard_extension) keyboard layouts
-using the option `services.xserver.extraLayouts`.
+using the option `services.xserver.xkb.extraLayouts`.
 
 As a first example, we are going to create a layout based on the basic
 US layout, with an additional layer to type some greek symbols by
@@ -235,7 +235,7 @@ xkb_symbols "us-greek"
 A minimal layout specification must include the following:
 
 ```nix
-services.xserver.extraLayouts.us-greek = {
+services.xserver.xkb.extraLayouts.us-greek = {
   description = "US layout with alt-gr greek";
   languages   = [ "eng" ];
   symbolsFile = /yourpath/symbols/us-greek;
@@ -266,7 +266,7 @@ Once the configuration is applied, and you did a logout/login cycle, the
 layout should be ready to use. You can try it by e.g. running
 `setxkbmap us-greek` and then type `<alt>+a` (it may not get applied in
 your terminal straight away). To change the default, the usual
-`services.xserver.layout` option can still be used.
+`services.xserver.xkb.layout` option can still be used.
 
 A layout can have several other components besides `xkb_symbols`, for
 example we will define new keycodes for some multimedia key and bind
@@ -298,7 +298,7 @@ xkb_symbols "media"
 As before, to install the layout do
 
 ```nix
-services.xserver.extraLayouts.media = {
+services.xserver.xkb.extraLayouts.media = {
   description  = "Multimedia keys remapping";
   languages    = [ "eng" ];
   symbolsFile  = /path/to/media-key;

@@ -1,10 +1,12 @@
 { lib
+, async-interrupt
 , async-timeout
 , bleak
 , bleak-retry-connector
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, lru-dict
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -13,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "2.1.0";
+  version = "2.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BF2jGEFtUYckFNJwddLGjwQYIhYKhM7q6Q2mCil6Z3Y=";
+    hash = "sha256-u6Mhqt6DcPiini8EvtqKoVAYUwb31hvWfCNb/sbqvWQ=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +32,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    async-interrupt
     async-timeout
     bleak
     bleak-retry-connector
     cryptography
+    lru-dict
   ];
 
   nativeCheckInputs = [

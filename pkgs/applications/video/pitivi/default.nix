@@ -16,17 +16,18 @@
 , meson
 , ninja
 , gsettings-desktop-schemas
+, hicolor-icon-theme
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2022.06";
+  version = "2023.03";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Uz0448bSEcK9DpXiuWsPCDO98NXUd6zgffYRWDUGyDg=";
+    sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 
   patches = [
@@ -74,6 +75,13 @@ python3.pkgs.buildPythonApplication rec {
     librosa
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
+    )
+  '';
+
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
@@ -94,7 +102,8 @@ python3.pkgs.buildPythonApplication rec {
       that can appeal to newbies and professionals alike.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "pitivi";
   };
 }

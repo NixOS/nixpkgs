@@ -1,23 +1,41 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, nasm, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, nasm
+, pkg-config
 , xxHash
 , withTools ? false # "dav1d" binary
-, withExamples ? false, SDL2 # "dav1dplay" binary
-, useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
+, withExamples ? false
+, SDL2 # "dav1dplay" binary
+, useVulkan ? false
+, libplacebo
+, vulkan-loader
+, vulkan-headers
+
+  # for passthru.tests
+, ffmpeg
+, gdal
+, handbrake
+, libavif
+, libheif
 }:
 
 assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "videolan";
     repo = pname;
     rev = version;
-    hash = "sha256-1k6TsaXI9nwrBXTj3hncblkQuN/bvDudWDCsx4E4iwY=";
+    hash = "sha256-c7Dur+0HpteI7KkR9oo3WynoH/FCRaBwZA7bJmPDJp8=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ meson ninja nasm pkg-config ];
   # TODO: doxygen (currently only HTML and not build by default).
@@ -25,12 +43,21 @@ stdenv.mkDerivation rec {
     ++ lib.optional withExamples SDL2
     ++ lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
 
-  mesonFlags= [
+  mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"
     "-Denable_examples=${lib.boolToString withExamples}"
   ];
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit
+      ffmpeg
+      gdal
+      handbrake
+      libavif
+      libheif;
+  };
 
   meta = with lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";
@@ -44,7 +71,7 @@ stdenv.mkDerivation rec {
     changelog = "https://code.videolan.org/videolan/dav1d/-/tags/${version}";
     # More technical: https://code.videolan.org/videolan/dav1d/blob/${version}/NEWS
     license = licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ primeos ];
   };
 }

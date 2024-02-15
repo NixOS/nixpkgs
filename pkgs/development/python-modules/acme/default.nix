@@ -3,7 +3,7 @@
 , cryptography
 , pyasn1
 , pyopenssl
-, pyRFC3339
+, pyrfc3339
 , josepy
 , pytz
 , requests
@@ -17,9 +17,10 @@ buildPythonPackage rec {
   inherit (certbot) src version;
 
   pname = "acme";
+  format = "setuptools";
 
   propagatedBuildInputs = [
-    cryptography pyasn1 pyopenssl pyRFC3339 pytz requests requests-toolbelt six
+    cryptography pyasn1 pyopenssl pyrfc3339 pytz requests requests-toolbelt six
     werkzeug ndg-httpsclient josepy
   ];
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "acme" ];
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   meta = certbot.meta // {
     description = "ACME protocol implementation in Python";

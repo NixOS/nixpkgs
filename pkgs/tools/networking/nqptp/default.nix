@@ -3,26 +3,37 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2022-09-12";
+  version = "1.2.4";
   pname = "nqptp";
 
   src = fetchFromGitHub {
     owner = "mikebrady";
     repo = pname;
-    rev = "476e69697d2ec1a28d399432aed23c580e3e570a";
-    hash = "sha256-UPUYEX5YUl//OcsBKuGgKLaAMzn2F+ksNRQJ3/pkbKc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-roTNcr3v2kzE6vQ5plAVtlw1+2yJplltOYsGGibtoZo=";
   };
+
+  patches = [
+    # this patch should be removed when > 1.2.4
+    ./remove-setcap.patch
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = ".*(-dev|d0)";
+  };
+
+  meta = {
     homepage = "https://github.com/mikebrady/nqptp";
     description = "Daemon and companion application to Shairport Sync that monitors timing data from any PTP clocks";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jordanisaacs ];
-    platforms = platforms.linux ++ platforms.freebsd;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "nqptp";
+    maintainers = with lib.maintainers; [ jordanisaacs adamcstephens ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

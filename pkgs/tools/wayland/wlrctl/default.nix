@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlrctl";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromSourcehut {
     owner = "~brocellous";
     repo = "wlrctl";
     rev = "v${version}";
-    sha256 = "039cxc82k7x473n6d65jray90rj35qmfdmr390zy0c7ic7vn4b78";
+    sha256 = "sha256-5mDcCSHbZMbfXbksAO4YhELznKpanse7jtbtfr09HL0=";
   };
 
   strictDeps = true;
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh artturin ];
     platforms = platforms.linux;
+    mainProgram = "wlrctl";
   };
 }

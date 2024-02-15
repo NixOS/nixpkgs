@@ -3,12 +3,13 @@ use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::hash::Hash;
+use std::io::{BufRead, BufReader};
 use std::iter::FromIterator;
-use std::io::{BufRead, BufReader, Error};
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
 
+use eyre::Context;
 use goblin::{elf::Elf, Object};
 
 struct NonRepeatingQueue<T> {
@@ -87,22 +88,30 @@ fn add_dependencies<P: AsRef<Path> + AsRef<OsStr>>(
     }
 }
 
-fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
+fn copy_file<
+    P: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug,
+    S: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug,
+>(
     source: P,
     target: S,
     queue: &mut NonRepeatingQueue<Box<Path>>,
-) -> Result<(), Error> {
-    fs::copy(&source, &target)?;
+) -> eyre::Result<()> {
+    fs::copy(&source, &target)
+        .wrap_err_with(|| format!("failed to copy {:?} to {:?}", source, target))?;
 
-    let contents = fs::read(&source)?;
+    let contents =
+        fs::read(&source).wrap_err_with(|| format!("failed to read from {:?}", source))?;
 
     if let Ok(Object::Elf(e)) = Object::parse(&contents) {
         add_dependencies(source, e, queue);
 
         // Make file writable to strip it
-        let mut permissions = fs::metadata(&target)?.permissions();
+        let mut permissions = fs::metadata(&target)
+            .wrap_err_with(|| format!("failed to get metadata for {:?}", target))?
+            .permissions();
         permissions.set_readonly(false);
-        fs::set_permissions(&target, permissions)?;
+        fs::set_permissions(&target, permissions)
+            .wrap_err_with(|| format!("failed to set readonly flag to false for {:?}", target))?;
 
         // Strip further than normal
         if let Ok(strip) = env::var("STRIP") {
@@ -121,11 +130,13 @@ fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
     Ok(())
 }
 
-fn queue_dir<P: AsRef<Path>>(
+fn queue_dir<P: AsRef<Path> + std::fmt::Debug>(
     source: P,
     queue: &mut NonRepeatingQueue<Box<Path>>,
-) -> Result<(), Error> {
-    for entry in fs::read_dir(source)? {
+) -> eyre::Result<()> {
+    for entry in
+        fs::read_dir(&source).wrap_err_with(|| format!("failed to read dir {:?}", source))?
+    {
         let entry = entry?;
         // No need to recurse. The queue will bring us back round here on its own.
         queue.push_back(Box::from(entry.path().as_path()));
@@ -138,7 +149,7 @@ fn handle_path(
     root: &Path,
     p: &Path,
     queue: &mut NonRepeatingQueue<Box<Path>>,
-) -> Result<(), Error> {
+) -> eyre::Result<()> {
     let mut source = PathBuf::new();
     let mut target = Path::new(root).to_path_buf();
     let mut iter = p.components().peekable();
@@ -161,15 +172,17 @@ fn handle_path(
             Component::Normal(name) => {
                 target.push(name);
                 source.push(name);
-                let typ = fs::symlink_metadata(&source)?.file_type();
+                let typ = fs::symlink_metadata(&source)
+                    .wrap_err_with(|| format!("failed to get symlink metadata for {:?}", source))?
+                    .file_type();
                 if typ.is_file() && !target.exists() {
                     copy_file(&source, &target, queue)?;
 
                     if let Some(filename) = source.file_name() {
                         source.set_file_name(OsString::from_iter([
-                                OsStr::new("."),
-                                filename,
-                                OsStr::new("-wrapped"),
+                            OsStr::new("."),
+                            filename,
+                            OsStr::new("-wrapped"),
                         ]));
 
                         let wrapped_path = source.as_path();
@@ -178,11 +191,14 @@ fn handle_path(
                         }
                     }
                 } else if typ.is_symlink() {
-                    let link_target = fs::read_link(&source)?;
+                    let link_target = fs::read_link(&source)
+                        .wrap_err_with(|| format!("failed to resolve symlink of {:?}", source))?;
 
                     // Create the link, then push its target to the queue
-                    if !target.exists() {
-                        unix::fs::symlink(&link_target, &target)?;
+                    if !target.exists() && !target.is_symlink() {
+                        unix::fs::symlink(&link_target, &target).wrap_err_with(|| {
+                            format!("failed to symlink {:?} to {:?}", link_target, target)
+                        })?;
                     }
                     source.pop();
                     source.push(link_target);
@@ -196,12 +212,14 @@ fn handle_path(
                     break;
                 } else if typ.is_dir() {
                     if !target.exists() {
-                        fs::create_dir(&target)?;
+                        fs::create_dir(&target)
+                            .wrap_err_with(|| format!("failed to create dir {:?}", target))?;
                     }
 
                     // Only recursively copy if the directory is the target object
                     if iter.peek().is_none() {
-                        queue_dir(&source, queue)?;
+                        queue_dir(&source, queue)
+                            .wrap_err_with(|| format!("failed to queue dir {:?}", source))?;
                     }
                 }
             }
@@ -211,9 +229,10 @@ fn handle_path(
     Ok(())
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> eyre::Result<()> {
     let args: Vec<String> = env::args().collect();
-    let input = fs::File::open(&args[1])?;
+    let input =
+        fs::File::open(&args[1]).wrap_err_with(|| format!("failed to open file {:?}", &args[1]))?;
     let output = &args[2];
     let out_path = Path::new(output);
 
@@ -235,8 +254,10 @@ fn main() -> Result<(), Error> {
             let link_path = Path::new(&link_string);
             let mut link_parent = link_path.to_path_buf();
             link_parent.pop();
-            fs::create_dir_all(link_parent)?;
-            unix::fs::symlink(obj_path, link_path)?;
+            fs::create_dir_all(&link_parent)
+                .wrap_err_with(|| format!("failed to create directories to {:?}", link_parent))?;
+            unix::fs::symlink(obj_path, link_path)
+                .wrap_err_with(|| format!("failed to symlink {:?} to {:?}", obj_path, link_path))?;
         }
     }
     while let Some(obj) = queue.pop_front() {

@@ -1,7 +1,6 @@
 { fetchurl
 , runCommand
 , lib
-, fetchpatch
 , stdenv
 , pkg-config
 , gnome
@@ -16,28 +15,45 @@
 , libcanberra
 , ninja
 , xvfb-run
-, xkeyboard_config
 , libxcvt
-, libxkbfile
+, libICE
+, libX11
+, libXcomposite
+, libXcursor
 , libXdamage
-, libxkbcommon
+, libXext
+, libXfixes
+, libXi
 , libXtst
+, libxkbfile
+, xkeyboard_config
+, libxkbcommon
+, libXrender
+, libxcb
+, libXrandr
+, libXinerama
+, libXau
 , libinput
 , libdrm
+, libei
 , gsettings-desktop-schemas
 , glib
-, gtk3
+, atk
+, gtk4
+, fribidi
+, harfbuzz
 , gnome-desktop
 , pipewire
 , libgudev
 , libwacom
+, libSM
 , xwayland
 , mesa
 , meson
 , gnome-settings-daemon
 , xorgserver
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , gi-docgen
 , sysprof
 , libsysprof-capture
@@ -45,42 +61,28 @@
 , libcap_ng
 , egl-wayland
 , graphene
+, wayland
 , wayland-protocols
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.3";
+  version = "45.4";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "Z75IINmycMnDxl44lHvwUtLC/xiunnBCHUklnvrACn0=";
+    sha256 = "kRQIN74VWC8sdTvmYauOQtrVXUobDwZQvQssk/Ar16s=";
   };
-
-  patches = [
-    # Fix build with separate sysprof.
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
-      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
-    })
-
-    # Fix focus regression.
-    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2848
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/12ce58dba4f96f6a948c1d166646d263253e3ee0.patch";
-      sha256 = "CGu11aLFs8VEt8NiIkih+cXZzU82oxY6Ko9QRKOkM98=";
-    })
-  ];
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
+    "-Dtests=false"
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
-    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+    "-Dxwayland_path=${lib.getExe xwayland}"
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
@@ -90,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-clutter
     json-glib
-    libXtst
     libcap_ng
     graphene
   ];
@@ -105,9 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
     gi-docgen
     xorgserver
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -116,27 +118,47 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     gsettings-desktop-schemas
-    gtk3
+    atk
+    fribidi
+    harfbuzz
     libcanberra
     libdrm
+    libei
     libgudev
     libinput
     libstartup_notification
     libwacom
-    libxkbcommon
-    libxkbfile
-    libXdamage
+    libSM
     colord
     lcms2
     pango
     pipewire
     sysprof # for D-Bus interfaces
     libsysprof-capture
-    xkeyboard_config
     xwayland
+    wayland
     wayland-protocols
+  ] ++ [
+    # X11 client
+    gtk4
+    libICE
+    libX11
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXtst
+    libxkbfile
+    xkeyboard_config
+    libxkbcommon
+    libXrender
+    libxcb
+    libXrandr
+    libXinerama
+    libXau
   ];
 
   postPatch = ''
@@ -150,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-11/doc" "$devdoc"
+    moveToOutput "share/mutter-13/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -159,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-11";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-13";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''

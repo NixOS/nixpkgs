@@ -13,12 +13,6 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-common"; attrPath = "gnome.gnome-common"; };
   };
 
-  patches = [(fetchurl {
-    name = "gnome-common-patch";
-    url = "https://bug697543.bugzilla-attachments.gnome.org/attachment.cgi?id=240935";
-    sha256 = "17abp7czfzirjm7qsn2czd03hdv9kbyhk3lkjxg2xsf5fky7z7jl";
-  })];
-
   propagatedBuildInputs = [ which autoconf automake ]; # autogen.sh which is using gnome-common tends to require which
 
   meta = with lib; {

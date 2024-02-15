@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, envconsul }:
 
 buildGoModule rec {
   pname = "envconsul";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "envconsul";
     rev = "v${version}";
-    sha256 = "sha256-9X0mSEMaLGdchf9g5EyRUsn7z6cvbG4QBPoaris7RwQ=";
+    hash = "sha256-GZU1lEAI3k5EUU/z4gHR8plECudwp+YYyPSk7E0NQtI=";
   };
 
-  vendorSha256 = "sha256-Vunq3lsM1aSXNIr3ZMqE03f0jEI5BpWwMYhZ41tiB9M=";
+  vendorHash = "sha256-ehxeupO8CrKqkqK11ig7Pj4XTh61VOE4rT2T2SsChxw=";
 
   ldflags = [
     "-s"
@@ -19,11 +19,16 @@ buildGoModule rec {
     "-X github.com/hashicorp/envconsul/version.Name=envconsul"
   ];
 
+  passthru.tests.version = testers.testVersion {
+    package = envconsul;
+    version = "v${version}";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/hashicorp/envconsul/";
     description = "Read and set environmental variables for processes from Consul";
-    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ pradeepchhetri ];
+    mainProgram = "envconsul";
   };
 }

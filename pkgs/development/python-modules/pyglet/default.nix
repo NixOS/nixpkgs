@@ -18,13 +18,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.4";
+  version = "2.0.10";
+  format = "setuptools";
   pname = "pyglet";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+JGAjBv2XHzFExsLJrBH6uXPN8fiUycJZKxLLwFHdPI=";
+    hash = "sha256-JCvrGzvWfFvr3+W6EexWtpathrUMbn8qMX+NeDJWuck=";
     extension = "zip";
   };
 

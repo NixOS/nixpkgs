@@ -5,12 +5,13 @@ buildDunePackage rec {
   version = "0.9.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HXPjnE56auy2MI6HV2XuBX/VeqsO50HFzTul17lKEqE=";
+    hash = "sha256-HXPjnE56auy2MI6HV2XuBX/VeqsO50HFzTul17lKEqE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

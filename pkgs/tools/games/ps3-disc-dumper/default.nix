@@ -1,6 +1,5 @@
 { lib
 , buildDotnetModule
-, dotnetCorePackages
 , fetchFromGitHub
 , zlib
 , openssl
@@ -33,5 +32,6 @@ buildDotnetModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ evanjs ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "ps3-disc-dumper";
   };
 }

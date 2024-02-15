@@ -11,13 +11,13 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extensions";
-  version = "43.1";
+  version = "45.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "rd4EvZRqExE1V+TDTIkLvpB3UFpqPwdV8XvqHG5KLRc=";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major finalAttrs.version}/gnome-shell-extensions-${finalAttrs.version}.tar.xz";
+    sha256 = "7jL2OHotGK2/96lWaJvHR4ZrSocS1zeQwAKr6uTMqq8=";
   };
 
   patches = [
@@ -40,31 +40,31 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    # The meson build doesn't compile the schemas.
-    # Fixup adapted from export-zips.sh in the source.
+    # Since we do not install the schemas to central location,
+    # let’s link them to where extensions installed
+    # through the extension portal would look for them.
+    # Adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
     schemadir=${glib.makeSchemaPath "$out" "$name"}
 
-    glib-compile-schemas $schemadir
-
     for f in $extensiondir/*; do
-      name=`basename ''${f%%@*}`
-      uuid=$name@gnome-shell-extensions.gcampax.github.com
+      name=$(basename "''${f%%@*}")
       schema=$schemadir/org.gnome.shell.extensions.$name.gschema.xml
+      schemas_compiled=$schemadir/gschemas.compiled
 
-      if [ -f $schema ]; then
-        mkdir $f/schemas
-        ln -s $schema $f/schemas;
-        glib-compile-schemas $f/schemas
+      if [[ -f $schema ]]; then
+        mkdir "$f/schemas"
+        ln -s "$schema" "$f/schemas"
+        ln -s "$schemas_compiled" "$f/schemas"
       fi
     done
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-shell-extensions";
+      attrPath = "gnome.gnome-shell-extensions";
     };
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-}
+})

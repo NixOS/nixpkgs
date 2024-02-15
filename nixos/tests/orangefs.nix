@@ -62,7 +62,7 @@ in {
             "sudo -g orangefs -u orangefs pvfs2-server -f /etc/orangefs/server.conf"
         )
 
-    # start services after storage is formated on all machines
+    # start services after storage is formatted on all machines
     for server in server1, server2:
         server.succeed("systemctl start orangefs-server.service")
 

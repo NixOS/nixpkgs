@@ -1,35 +1,35 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkgs
+, wrapGAppsHook
 , pam
 , scdoc
 , gtk3
 , pkg-config
 , gtk-layer-shell
 , glib
+, librsvg
 , wayland
 , wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtklock";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W+GyeGxlfp1YZtSFEZYXuHmvTVZ8mU1oBcsrWN1yvjU=";
+    sha256 = "sha256-Jh+BmtKGaLgAcTXc44ydV83dp/W4wzByehUWyeyBoFI=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     scdoc
     pkg-config
     wayland-scanner
     glib
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     gtk3
     pam
     gtk-layer-shell
+    librsvg
   ];
 
   installFlags = [
@@ -53,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.linux;
+    mainProgram = "gtklock";
   };
 }

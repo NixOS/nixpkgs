@@ -55,7 +55,6 @@
 , kxmlgui
 , plasma-framework
 , libqaccessibilityclient
-, python3
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -144,7 +143,7 @@ mkDerivation {
   ];
 
   CXXFLAGS = [
-    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
+    ''-DNIXPKGS_XWAYLAND=\"${lib.getExe xwayland}\"''
   ];
 
   postInstall = ''

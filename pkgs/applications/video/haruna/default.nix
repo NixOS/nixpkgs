@@ -5,7 +5,7 @@
 , breeze-qt5
 , cmake
 , extra-cmake-modules
-, ffmpeg-full
+, ffmpeg-headless
 , kconfig
 , kcoreaddons
 , kfilemetadata
@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "haruna";
-  version = "0.10.3";
+  version = "0.12.3";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-kXafPUcWWvadGbcN4PAtXlFmfll/mSpwu2Sbh6Gxx4w=";
+    hash = "sha256-iYf8oTMQ65+6E1dlOj0GU6EezPul6p1GG2CcrcjDUik=";
     domain = "invent.kde.org";
   };
 
@@ -47,7 +47,7 @@ mkDerivation rec {
     qqc2-desktop-style
     yt-dlp
 
-    ffmpeg-full
+    ffmpeg-headless
     kconfig
     kcoreaddons
     kfilemetadata
@@ -73,6 +73,7 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
     license = with licenses; [ bsd3 cc-by-40 cc-by-sa-40 cc0 gpl2Plus gpl3Plus wtfpl ];
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with maintainers; [ jojosch kashw2 ];
+    mainProgram = "haruna";
   };
 }

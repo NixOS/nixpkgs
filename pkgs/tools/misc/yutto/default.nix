@@ -1,7 +1,7 @@
 { lib
 , python3
+, fetchPypi
 , ffmpeg
-, makeWrapper
 , nix-update-script
 }:
 
@@ -9,14 +9,14 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b20";
+  version = "2.0.0b33";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9tYc8MlKZ1pzuGMipy827RoUJkU+C6UQz/Cex48UhLQ=";
+    hash = "sha256-TUyjppAHmWCZxifeQeOpFMPBksqLRSYdqgG7NEMVILY=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     aiohttp
     aiofiles
     biliass
-    dicttoxml
+    dict2xml
     colorama
   ];
 
@@ -44,5 +44,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/yutto-dev/yutto";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linsui ];
+    mainProgram = "yutto";
   };
 }

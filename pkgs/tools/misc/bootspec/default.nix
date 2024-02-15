@@ -1,19 +1,31 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bootspec";
-  version = "unstable-2022-12-05";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = pname;
-    rev = "67a617ab6b99211daa92e748d27ead3f78127cf8";
-    hash = "sha256-GX6Tzs/ClTUV9OXLvPFw6uBhrpCWSMI+PfrViyFEIxs=";
+    rev = "v${version}";
+    hash = "sha256-5IGSMHeL0eKfl7teDejAckYQjc8aeLwfwIQSzQ8YaAg=";
   };
 
-  cargoHash = "sha256-N/hbfjsuvwCc0mxOpeVVcTxb5cA024lyLSEpVcrS7kA=";
+  patches = [
+    # https://github.com/DeterminateSystems/bootspec/pull/127
+    # Fixes the synthesize tool for aarch64-linux
+    (fetchpatch {
+      name = "aarch64-support.patch";
+      url = "https://github.com/DeterminateSystems/bootspec/commit/1d0e925f360f0199f13422fb7541225fd162fd4f.patch";
+      sha256 = "sha256-wU/jWnOqVBrU2swANdXbQfzRpNd/JIS4cxSyCvixZM0=";
+    })
+
+  ];
+
+  cargoHash = "sha256-eGSKVHjPnHK7WyGkO5LIjocNGHawahYQR3H5Lgk1C9s=";
 
   meta = with lib; {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";

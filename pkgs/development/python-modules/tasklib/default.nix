@@ -1,5 +1,6 @@
 { lib
 , pythonPackages
+, fetchPypi
 , taskwarrior
 , writeShellScriptBin
 }:
@@ -13,6 +14,7 @@ wsl_stub = writeShellScriptBin "wsl" "true";
 in buildPythonPackage rec {
   pname = "tasklib";
   version = "2.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

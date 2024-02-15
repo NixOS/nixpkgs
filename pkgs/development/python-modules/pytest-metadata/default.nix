@@ -1,16 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, poetry-core
+, hatch-vcs
+, hatchling
 , pytest
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-metadata";
-  version = "2.0.4";
+  version = "3.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytest_metadata";
     inherit version;
-    hash = "sha256-/MZT9l/jA1tHiCC1KE+/D1KANiLuP2Ci+u16fTuh9B4=";
+    hash = "sha256-dpqcZdKIS9WDvGJrCs53rRXb4C3ZGpEG1H/UbZwlaco=";
   };
 
   nativeBuildInputs = [
-    poetry-core
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   buildInputs = [

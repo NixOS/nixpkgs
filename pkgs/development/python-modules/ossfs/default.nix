@@ -1,16 +1,17 @@
 { lib
+, aiooss2
 , buildPythonPackage
 , fetchFromGitHub
 , fsspec
 , oss2
 , pythonOlder
-, setuptools-scm
 , pythonRelaxDepsHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "ossfs";
-  version = "2023.1.0";
+  version = "2023.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,12 +20,11 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5mz1OC+6kDpiLNsMwOp+bdqY2eozMpAekS6h34QiOdo=";
+    hash = "sha256-N1NkpI8inGJCf0xuc+FFmVX85CS7vqzoNddxZ9kqEk0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
+    "aiooss2"
     "fsspec"
     "oss2"
   ];
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiooss2
     fsspec
     oss2
   ];

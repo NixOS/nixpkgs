@@ -5,7 +5,6 @@
 , cmake
 , expat
 , yaml-cpp
-, ilmbase
 , pystring
 , imath
 , minizip-ng
@@ -27,27 +26,25 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "sha256-l5UUysHdP/gb4Mn5A64XEoHOkthl6Mlb95CuI0l4vXQ=";
+    sha256 = "sha256-E4TmMEFzI3nKqiDFaAkNx44uo84sacvZqjbfWe3A8fE=";
   };
 
   patches = [
     (fetchpatch {
-      name = "darwin-no-hidden-l.patch";
-      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/48bab7c643ed8d108524d718e5038d836f906682.patch";
-      revert = true;
-      sha256 = "sha256-0DF+lwi2nfkUFG0wYvL3HYbhZS6SqGtPWoOabrFS1Eo=";
+      # Taken from https://github.com/AcademySoftwareFoundation/OpenColorIO/pull/1891.
+      name = "opencolorio-yaml-cpp-8.0-compat.patch";
+      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/e99b4afcf0408d8ec56fdf2b9380327c9284db00.patch";
+      sha256 = "sha256-7eIvVWKcpE0lmuYdNqFQFHkW/sSSzQ//LNIMOC28KZg=";
     })
-    (fetchpatch {
-      name = "pkg-config-absolute-path.patch";
-      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/332462e7f5051b7e26ee3d8c22890cd5e71e7c30.patch";
-      sha256 = "sha256-7xHALhnOkKszgFBgPIbiZQaORnEJ+1M6RyoZdFgjElM=";
-    })
+    # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
+    # Needed for zlib >= 1.3 && cmake < 3.27.4.
+    ./broken-cmake-zlib-version.patch
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -62,7 +59,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat
     yaml-cpp
-    ilmbase
     pystring
     imath
     minizip-ng
@@ -76,13 +72,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
+    "-DOCIO_USE_SSE2NEON=OFF"
     # GPU test fails with: freeglut (GPU tests): failed to open display ''
     "-DOCIO_BUILD_GPU_TESTS=OFF"
+    "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
   ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
   # precision issues on non-x86
   doCheck = stdenv.isx86_64;
+  # Tends to fail otherwise.
+  enableParallelChecking = false;
 
   meta = with lib; {
     homepage = "https://opencolorio.org";

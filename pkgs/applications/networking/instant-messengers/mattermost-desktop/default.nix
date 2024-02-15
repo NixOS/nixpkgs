@@ -1,30 +1,24 @@
 { lib
 , stdenv
 , fetchurl
-, atomEnv
-, systemd
-, pulseaudio
-, libxshmfence
-, libnotify
-, libappindicator-gtk3
-, wrapGAppsHook
-, autoPatchelfHook
+, electron_26
+, makeWrapper
 }:
 
 let
 
   pname = "mattermost-desktop";
-  version = "5.1.0";
+  version = "5.5.1";
 
   srcs = {
     "x86_64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
-      hash = "sha256-KmtQUqg2ODbZ6zJjsnwlvB+vhR1xbK2X9qqmZpyTR78=";
+      hash = "sha256-bRiO5gYM7nrnkbHBP3B9zAK2YV5POkc3stEsbZJ48VA=";
     };
 
-    "i686-linux" = {
-      url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
-      hash = "sha256-X8Zrthw1hZOqmcYidt72l2vonh31iiA3EDGmCQr7e4c=";
+    "aarch64-linux" = {
+      url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-arm64.tar.gz";
+      hash = "sha256-Z4U6Jbwasra69QPHJ9/7WwMSxh0O9r4QIe/xC3WRf4w=";
     };
   };
 
@@ -37,22 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl (srcs."${system}" or (throw "Unsupported system ${system}"));
 
-  dontBuild = true;
-  dontConfigure = true;
-  dontStrip = true;
-
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook ];
-
-  buildInputs = atomEnv.packages ++ [
-    libxshmfence
-  ];
-
-  runtimeDependencies = [
-    (lib.getLib systemd)
-    pulseaudio
-    libnotify
-    libappindicator-gtk3
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -63,20 +42,18 @@ stdenv.mkDerivation {
     find . -type f \( -name '*.so.*' -o -name '*.s[oh]' \) -print0 | xargs -0 chmod +x
     chmod +x mattermost-desktop chrome-sandbox
 
-    mkdir -p $out/share/mattermost-desktop
-    cp -R . $out/share/mattermost-desktop
+    mkdir -p $out/bin $out/share/applications $out/share/${pname}/
+    cp -r app_icon.png create_desktop_file.sh locales/ resources/* $out/share/${pname}/
 
-    mkdir -p "$out/bin"
-    ln -s $out/share/mattermost-desktop/mattermost-desktop $out/bin/mattermost-desktop
-
-    patchShebangs $out/share/mattermost-desktop/create_desktop_file.sh
-    $out/share/mattermost-desktop/create_desktop_file.sh
-    rm $out/share/mattermost-desktop/create_desktop_file.sh
-    mkdir -p $out/share/applications
-    chmod -x Mattermost.desktop
+    patchShebangs $out/share/${pname}/create_desktop_file.sh
+    $out/share/${pname}/create_desktop_file.sh
+    rm $out/share/${pname}/create_desktop_file.sh
     mv Mattermost.desktop $out/share/applications/Mattermost.desktop
     substituteInPlace $out/share/applications/Mattermost.desktop \
       --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
+
+    makeWrapper ${electron_26}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/app.asar
 
     runHook postInstall
   '';
@@ -86,7 +63,7 @@ stdenv.mkDerivation {
     homepage = "https://about.mattermost.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = [ maintainers.joko ];
   };
 }

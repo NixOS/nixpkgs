@@ -1,14 +1,14 @@
-{ lib, stdenv, clang14Stdenv, fetchFromGitHub, openssl, sqlite }:
+{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
 
-(if stdenv.isDarwin then clang14Stdenv else stdenv).mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20230316";
+  version = "20240210-1";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = pname;
     rev = version;
-    hash = "sha256-aq/+6wxGEYhOsAIBJ+Phjc+jKZGFxrWIZozi4T6WwBI=";
+    hash = "sha256-3HBycPKj3dosI6vPhIMM5CZQ9r/ndoQrW5FT3eEuHF0=";
   };
 
   postPatch = ''

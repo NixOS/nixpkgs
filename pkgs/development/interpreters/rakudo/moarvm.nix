@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , perl
 , CoreServices
 , ApplicationServices
@@ -8,11 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2023.02";
+  version = "2024.01";
 
-  src = fetchurl {
-    url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    hash = "sha256-Z+IU1E1fYmeHyn8EQkBDpjkwikOnd3tvpBkmtyQODcU=";
+  src = fetchFromGitHub {
+    owner = "moarvm";
+    repo = "moarvm";
+    rev = version;
+    hash = "sha256-vU1fhR6pKz2qnznrJ/mknt9DVx+I1kLaPStXKQvp59g=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/arch' "$(type -P true)" \
       --replace '/usr/' '/nope/'
     substituteInPlace 3rdparty/dyncall/configure \
-      --replace '`sw_vers -productVersion`' '"$MACOSX_DEPLOYMENT_TARGET"'
+      --replace '`sw_vers -productVersion`' '"11.0"'
   '';
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];

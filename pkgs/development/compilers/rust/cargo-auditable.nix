@@ -1,18 +1,23 @@
-{ lib, fetchFromGitHub, makeRustPlatform, rustc, cargo }:
+{ lib, buildPackages, fetchFromGitHub, makeRustPlatform, installShellFiles, stdenv }:
 
 let
   args = rec {
     pname = "cargo-auditable";
-    version = "0.6.0";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-mSiEC+9QtRjWmywJnGgUqp+q8fhY0qUYrgjrAVaY114=";
+      sha256 = "sha256-MKMPLv8jeST0l4tq+MMPC18qfZMmBixdj6Ng19YKepU=";
     };
 
-    cargoSha256 = "sha256-Wz5My/QxPpZVsPBUe3KHT3ttD6CTU8NCY8rhFEC+UlA=";
+    cargoSha256 = "sha256-6/f7pNaTL+U6bI6jMakU/lfwYYxN/EM3WkKZcydsyLk=";
+
+    # Cargo.lock is outdated
+    preConfigure = ''
+      cargo update --offline
+    '';
 
     meta = with lib; {
       description = "A tool to make production Rust binaries auditable";
@@ -20,12 +25,13 @@ let
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";
       license = with licenses; [ mit /* or */ asl20 ];
       maintainers = with maintainers; [ figsoda ];
+      broken = stdenv.hostPlatform != stdenv.buildPlatform;
     };
   };
 
   rustPlatform = makeRustPlatform {
-    inherit rustc;
-    cargo = cargo.override {
+    inherit (buildPackages) rustc;
+    cargo = buildPackages.cargo.override {
       auditable = false;
     };
   };
@@ -36,5 +42,15 @@ let
 in
 
 rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (args // {
-  auditable = true; # TODO: remove when this is the default
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installManPage cargo-auditable/cargo-auditable.1
+  '';
+
+  passthru = {
+    inherit bootstrap;
+  };
 })

@@ -20,7 +20,7 @@ buildPythonPackage {
     homepage = "https://github.com/williamh/pybugz";
     description = "Command line interface for Bugzilla";
     license = licenses.gpl2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 
 }

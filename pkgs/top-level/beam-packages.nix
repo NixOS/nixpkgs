@@ -1,7 +1,6 @@
 { lib
 , beam
 , callPackage
-, openssl_1_1
 , wxGTK32
 , buildPackages
 , stdenv
@@ -14,7 +13,7 @@ let
   self = beam;
 
   # Aliases added 2023-03-21
-  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "25" "24" "23" ];
+  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "26" "25" "24" ];
 
   interpretersAliases = versionLoop (version: {
     "erlangR${version}" = self.interpreters."erlang_${version}";
@@ -41,6 +40,19 @@ in
     erlang_odbc_javac = self.interpreters."${self.latestVersion}_odbc_javac";
 
     # Standard Erlang versions, using the generic builder.
+
+    erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
+      wxGTK = wxGTK32;
+      parallelBuild = true;
+      autoconf = buildPackages.autoconf269;
+      inherit wxSupport systemdSupport;
+    };
+    erlang_26_odbc = self.interpreters.erlang_26.override { odbcSupport = true; };
+    erlang_26_javac = self.interpreters.erlang_26.override { javacSupport = true; };
+    erlang_26_odbc_javac = self.interpreters.erlang_26.override {
+      javacSupport = true;
+      odbcSupport = true;
+    };
 
     erlang_25 = self.beamLib.callErlang ../development/interpreters/erlang/25.nix {
       wxGTK = wxGTK32;
@@ -69,26 +81,11 @@ in
       odbcSupport = true;
     };
 
-    erlang_23 = self.beamLib.callErlang ../development/interpreters/erlang/23.nix {
-      openssl = openssl_1_1;
-      wxGTK = wxGTK32;
-      # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
-    };
-    erlang_23_odbc = self.interpreters.erlang_23.override { odbcSupport = true; };
-    erlang_23_javac = self.interpreters.erlang_23.override { javacSupport = true; };
-    erlang_23_odbc_javac = self.interpreters.erlang_23.override {
-      javacSupport = true;
-      odbcSupport = true;
-    };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_24.elixir`.
     inherit (self.packages.erlang)
-      elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls lfe lfe_2_1;
+      elixir elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls lfe lfe_2_1;
   } // interpretersAliases;
 
   # Helper function to generate package set with a specific Erlang version.
@@ -100,8 +97,10 @@ in
   packages = {
     erlang = self.packages.${self.latestVersion};
 
+    erlang_26 = self.packagesWith self.interpreters.erlang_26;
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
     erlang_24 = self.packagesWith self.interpreters.erlang_24;
-    erlang_23 = self.packagesWith self.interpreters.erlang_23;
   } // packagesAliases;
+
+  __attrsFailEvaluation = true;
 }

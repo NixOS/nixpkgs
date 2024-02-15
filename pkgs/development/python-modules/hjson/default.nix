@@ -2,13 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, pythonImportsCheckHook
 , makeWrapper
 }:
 
 buildPythonPackage rec {
   pname = "hjson";
   version = "3.0.2";
+  format = "setuptools";
 
   # N.B. pypi src tarball does not have tests
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1jc7j790rcqnhbrfj4lhnz3f6768dc55aij840wmx16jylfqpc2n";
   };
 
-  nativeBuildInputs = [ makeWrapper pythonImportsCheckHook ];
+  nativeBuildInputs = [ makeWrapper ];
 
   pythonImportsCheck = [ "hjson" ];
 

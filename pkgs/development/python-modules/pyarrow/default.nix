@@ -16,8 +16,9 @@
 , pytestCheckHook
 , pytest-lazy-fixture
 , pkg-config
-, scipy
+, setuptools
 , setuptools-scm
+, oldest-supported-numpy
 }:
 
 let
@@ -27,26 +28,36 @@ in
 buildPythonPackage rec {
   pname = "pyarrow";
   inherit (arrow-cpp) version src;
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   sourceRoot = "apache-arrow-${version}/python";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml setup.py \
+      --replace "setuptools_scm < 8.0.0" "setuptools_scm"
+  '';
+
   nativeBuildInputs = [
     cmake
     cython
     pkg-config
+    setuptools
     setuptools-scm
+    oldest-supported-numpy
   ];
 
   buildInputs = [ arrow-cpp ];
 
   propagatedBuildInputs = [
     cffi
+    numpy
+  ];
+
+  checkInputs = [
     cloudpickle
     fsspec
-    numpy
-    scipy
   ];
 
   nativeCheckInputs = [
@@ -96,6 +107,9 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
+    # A couple of tests are missing fixture imports, luckily pytest offers a
+    # clean solution.
+    "--fixtures pyarrow/tests/conftest.py"
     # Deselect a single test because pyarrow prints a 2-line error message where
     # only a single line is expected. The additional line of output comes from
     # the glog library which is an optional dependency of arrow-cpp that is

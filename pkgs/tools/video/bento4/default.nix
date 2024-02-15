@@ -3,13 +3,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "bento4";
-  version = "1.6.0-639";
+  version = "1.6.0-641";
 
   src = fetchFromGitHub {
     owner = "axiomatic-systems";
     repo = "Bento4";
     rev = "v${version}";
-    sha256 = "sha256-Rfmyjsgn/dcIplRtPFb5AfBxWOKmP6w8IHykgVxVNsQ=";
+    hash = "sha256-Qy8D3cbCVHmLAaXtiF64rL2oRurXNCtd5Dsgt0W7WdY=";
   };
 
   patches = [
@@ -23,9 +23,14 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{lib,bin}
-    find -iname '*.so' -exec mv --target-directory="$out/lib" {} \;
+    find -iname '*${stdenv.hostPlatform.extensions.sharedLibrary}' -exec mv --target-directory="$out/lib" {} \;
     find -maxdepth 1 -executable -type f -exec mv --target-directory="$out/bin" {} \;
     runHook postInstall
+  '';
+
+  # Patch binaries to use our dylib
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    find $out/bin -maxdepth 1 -executable -type f -exec install_name_tool -change @rpath/libap4.dylib $out/lib/libap4.dylib {} \;
   '';
 
   meta = with lib; {
@@ -33,7 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://bento4.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ makefu ];
-    broken = stdenv.isAarch64;
     platforms = platforms.unix;
   };
 }

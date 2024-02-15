@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "2.3.5";
+  version = "2.3.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SMTG-UCL";
     repo = "sumo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eGQOFTo/tg1aM/P1la3stE7RLxpACUdcJ7g1z3zSasc=";
+    hash = "sha256-nQ5US7maFcOJCqFYeokGiBFp3jhiOPSfCBeclLdHdkk=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Toolkit for plotting and analysis of ab initio solid-state calculation data";
     homepage = "https://github.com/SMTG-UCL/sumo";
+    changelog = "https://github.com/SMTG-Bham/sumo/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

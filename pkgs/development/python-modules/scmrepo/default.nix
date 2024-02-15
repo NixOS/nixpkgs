@@ -2,6 +2,8 @@
 , asyncssh
 , buildPythonPackage
 , dulwich
+, dvc-http
+, dvc-objects
 , fetchFromGitHub
 , fsspec
 , funcy
@@ -11,12 +13,13 @@
 , pygtrie
 , pythonOlder
 , setuptools
+, setuptools-scm
 , shortuuid
 }:
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "0.1.15";
+  version = "2.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,22 +28,19 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Z/W49P1T8XgCmKWLTO/eI7ArAB9QKWUbJWRTlRnjJ7E=";
+    hash = "sha256-KG7Y+1qqsgDwgRYsb3XbZnF6FduHJCAEizfuugBi0Go=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1" \
-      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
-  '';
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     asyncssh
     dulwich
+    dvc-http
+    dvc-objects
     fsspec
     funcy
     gitpython

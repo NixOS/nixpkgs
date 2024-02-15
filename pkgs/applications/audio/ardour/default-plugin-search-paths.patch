@@ -1,0 +1,55 @@
+From 1217722e4bf6c65b5c24da17a7de4bf712ca6775 Mon Sep 17 00:00:00 2001
+From: Tamara Schmitz <tamara.zoe.schmitz@posteo.de>
+Date: Sat, 17 Jun 2023 14:05:53 +0200
+Subject: [PATCH] add NixOS plugin paths as default search paths
+
+Since NixOS uses unusual paths, we should tell Ardour about this. During
+first launch, Ardour does indeed check for environmentals but not when
+you press the "Reset to Defaults" button in the Settings menu. This
+path fixes this by including NixOS paths in the defaults.
+---
+ libs/ardour/plugin_manager.cc | 5 +++--
+ libs/ardour/search_paths.cc   | 4 ++++
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/libs/ardour/plugin_manager.cc b/libs/ardour/plugin_manager.cc
+index a572ed55dd..3dd6c2fda6 100644
+--- a/libs/ardour/plugin_manager.cc
++++ b/libs/ardour/plugin_manager.cc
+@@ -305,7 +305,8 @@ PluginManager::PluginManager ()
+ 	if (lxvst_path.length() == 0) {
+ 		lxvst_path = "/usr/local/lib64/lxvst:/usr/local/lib/lxvst:/usr/lib64/lxvst:/usr/lib/lxvst:"
+ 			"/usr/local/lib64/linux_vst:/usr/local/lib/linux_vst:/usr/lib64/linux_vst:/usr/lib/linux_vst:"
+-			"/usr/lib/vst:/usr/local/lib/vst";
++			"/usr/lib/vst:/usr/local/lib/vst:"
++			"$HOME/.lxvst:$HOME/.nix-profile/lib/lxvst:/run/current-system/sw/lib/lxvst:/etc/profiles/per-user/$USER/lib/lxvst";
+ 	}
+ 
+ 	/* first time setup, use 'default' path */
+@@ -2040,7 +2041,7 @@ PluginManager::vst3_refresh (bool cache_only)
+ 	std::string prog = PBD::get_win_special_folder_path (CSIDL_PROGRAM_FILES);
+ 	vst3_discover_from_path (Glib::build_filename (prog, "Common Files", "VST3"), cache_only);
+ #else
+-	vst3_discover_from_path ("~/.vst3:/usr/local/lib/vst3:/usr/lib/vst3", cache_only);
++	vst3_discover_from_path ("~/.vst3:/usr/local/lib/vst3:/usr/lib/vst3:~/.nix-profile/lib/vst3:/run/current-system/sw/lib/vst3:/etc/profiles/per-user/$USER/lib/vst3", cache_only);
+ #endif
+ }
+ 
+diff --git a/libs/ardour/search_paths.cc b/libs/ardour/search_paths.cc
+index e6d8744369..b9774cb006 100644
+--- a/libs/ardour/search_paths.cc
++++ b/libs/ardour/search_paths.cc
+@@ -112,6 +112,10 @@ ladspa_search_path ()
+ 	spath.push_back ("/usr/local/lib/ladspa");
+ 	spath.push_back ("/usr/lib64/ladspa");
+ 	spath.push_back ("/usr/lib/ladspa");
++	spath.push_back ("/run/current-system/sw/lib/ladspa");
++	spath.push_back (path_expand ("$HOME/.ladspa"));
++	spath.push_back (path_expand ("$HOME/.nix-profile/lib/ladspa"));
++	spath.push_back (path_expand ("/etc/profiles/per-user/$USER/lib/ladspa"));
+ #endif
+ 
+ #ifdef __APPLE__
+-- 
+2.40.1
+

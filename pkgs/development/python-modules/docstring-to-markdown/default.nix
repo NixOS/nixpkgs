@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "docstring-to-markdown";
-  version = "0.11";
+  version = "0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Jl1XJpxwbxGWxdF4bOerjHyzHCIHtrydklwwk1WGs4=";
+    hash = "sha256-r+TRYofTRDCBC0s+bJRhagepEQbbj5WeI5FRtaVPt24=";
   };
 
   patches = [

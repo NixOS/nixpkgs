@@ -15,18 +15,16 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.9";
-  format = "setuptools";
+  version = "0.2.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    # Currently it is not possible to fetch from version as there is a branch with the same name
-    rev = "refs/tags/${version}";
-    hash = "sha256-MrzAsa0AZX3+0LN/Can3QBoPBRxb0a/F2jLBd8rD5H4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-K7gsTLYcXmKmEQzOXrJ2kvvLzKaDkZ/NRLRc0USii5M=";
   };
 
   propagatedBuildInputs = [
@@ -44,14 +42,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Tests requires network access
+    "test_document_cannot_identify_image"
+    "test_document_with_broken_image"
+  ];
+
   pythonImportsCheck = [
     "xhtml2pdf"
+    "xhtml2pdf.pisa"
   ];
 
   meta = with lib; {
     description = "A PDF generator using HTML and CSS";
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
+    changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+    mainProgram = "xhtml2pdf";
   };
 }

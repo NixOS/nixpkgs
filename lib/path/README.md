@@ -187,6 +187,27 @@ Decision: All functions remove trailing slashes in their results.
 
 </details>
 
+### Prefer returning subpaths over components
+[subpath-preference]: #prefer-returning-subpaths-over-components
+
+Observing: Functions could return subpaths or lists of path component strings.
+
+Considering: Subpaths are used as inputs for some functions. Using them for outputs, too, makes the library more consistent and composable.
+
+Decision: Subpaths should be preferred over list of path component strings.
+
+<details>
+<summary>Arguments</summary>
+
+- (+) It is consistent with functions accepting subpaths, making the library more composable
+- (-) It is less efficient when the components are needed, because after creating the normalised subpath string, it will have to be parsed into components again
+  - (+) If necessary, we can still make it faster by adding builtins to Nix
+  - (+) Alternatively if necessary, versions of these functions that return components could later still be introduced.
+- (+) It makes the path library simpler because there's only two types (paths and subpaths). Only `lib.path.subpath.components` can be used to get a list of components.
+  And once we have a list of component strings, `lib.lists` and `lib.strings` can be used to operate on them.
+  For completeness, `lib.path.subpath.join` allows converting the list of components back to a subpath.
+</details>
+
 ## Other implementations and references
 
 - [Rust](https://doc.rust-lang.org/std/path/struct.Path.html)

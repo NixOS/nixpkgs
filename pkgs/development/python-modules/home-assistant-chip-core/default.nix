@@ -8,12 +8,16 @@
 , autoPatchelfHook
 
 # runtime
+, libnl
 , openssl_1_1
 
 # propagates
+, aenum
 , coloredlogs
 , construct
+, cryptography
 , dacite
+, ecdsa
 , rich
 , pyyaml
 , ipdb
@@ -24,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2023.2.2";
+  version = "2024.1.0";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -33,13 +37,13 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-e3OIpTGPMj+YSx/pqzGi5paUAIpDhI94prhHL3DkM18=";
+        hash = "sha256-UiikZ2DVhTqX6WYfiE8sp2e52BMlyoQnDjLap/efmNc=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-15olERnpfe4PbDsDfw47vsYsqjFe8P8IDmSSGxGLtx8=";
+        hash = "sha256-/+gegUMd2n7MpJvdilS5VWefXc0tuRcLrXBBXSH35b0=";
       };
-    }.${stdenv.system} or (throw "Unsupported system");
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   in fetchPypi {
     pname = "home_assistant_chip_core";
     inherit version format;
@@ -55,13 +59,17 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    libnl
     openssl_1_1
   ];
 
   propagatedBuildInputs = [
+    aenum
     coloredlogs
     construct
+    cryptography
     dacite
+    ecdsa
     rich
     pyyaml
     ipdb
@@ -70,12 +78,17 @@ buildPythonPackage rec {
     pygobject3
   ];
 
+  pythonNamespaces = [
+    "chip"
+    "chip.clusters"
+  ];
+
   pythonImportsCheck = [
     "chip"
     "chip.ble"
-    # https://github.com/project-chip/connectedhomeip/pull/24376
-    #"chip.configuration"
+    "chip.configuration"
     "chip.discovery"
+    "chip.exceptions"
     "chip.native"
     "chip.storage"
   ];

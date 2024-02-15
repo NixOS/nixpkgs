@@ -1,4 +1,4 @@
-{ lib, perlPackages, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, perlPackages, fetchFromGitHub, installShellFiles, shortenPerlShebang }:
 
 perlPackages.buildPerlPackage rec {
   pname = "wakeonlan";
@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
 
   nativeCheckInputs = [ perlPackages.TestPerlCritic perlPackages.TestPod perlPackages.TestPodCoverage ];
   # Linting and formatting checks are of no interest for us.
@@ -24,6 +24,8 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     install -Dt $out/bin wakeonlan
     installManPage blib/man1/wakeonlan.1
+  '' + lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/wakeonlan
   '';
 
   meta = with lib; {
@@ -31,5 +33,6 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/jpoliv/wakeonlan";
     license = licenses.artistic1;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "wakeonlan";
   };
 }

@@ -35,6 +35,11 @@ mkDerivation rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-compilation.patch?h=mapbox-gl-native";
       hash = "sha256-KgJHyoIdKdnQo+gedns3C+mEXlaTH/UtyQsaYR1T3iI=";
     })
+    (fetchpatch {
+      name = "fix-narrowing-conversion.patch";
+      url = "https://github.com/mapbox/mapbox-gl-native/commit/2955d0e479f57a39a0af4a0fa7ca7683455cca58.patch";
+      hash = "sha256-Jk7OLb9/mVtc2mm0AL1h9zcSiQ54jogNI+q6ojY0HEo=";
+    })
   ];
 
   postPatch = ''
@@ -53,6 +58,8 @@ mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
 
   meta = with lib; {
+    # Does not build against gcc-13, the repository is archived upstream.
+    broken = true;
     description = "Interactive, thoroughly customizable maps in native Android, iOS, macOS, Node.js, and Qt applications, powered by vector tiles and OpenGL";
     homepage = "https://mapbox.com/mobile";
     license = licenses.bsd2;

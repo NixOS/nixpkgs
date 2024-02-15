@@ -19,7 +19,6 @@
 , gobject-introspection
 , python3
 , pam
-, accountsservice
 , cairo
 , xapp
 , xdotool
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "5.6.3";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-S4+9ZTpDwwvYTc3gz0YQBYjgygp8KP94azkiJcH6xCk=";
+    hash = "sha256-ncYE2dCIAQxCMCe/5zrDU9iHTIkw+iO/IQl8+pfTvLI=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +47,11 @@ stdenv.mkDerivation rec {
     libtool
     meson
     ninja
+    gobject-introspection
   ];
 
   buildInputs = [
     # from meson.build
-    gobject-introspection
     gtk3
     glib
 
@@ -70,7 +69,6 @@ stdenv.mkDerivation rec {
     xapp
     xdotool
     pam
-    accountsservice
     cairo
     cinnamon-desktop
     cinnamon-common
@@ -89,8 +87,6 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/cinnamon-screensaver,$out/share,g \
       -e s,/usr/share/iso-flag-png,${iso-flags-png-320x420}/share/iso-flags-png,g \
       {} +
-
-    sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
   '';
 
   preFixup = ''

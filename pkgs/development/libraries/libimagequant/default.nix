@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, rust, rustPlatform, cargo-c, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, rust
+, rustPlatform
+, cargo-c
+, python3
 
-let
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-in
+# tests
+, testers
+, vips
+, libimagequant
+}:
+
 rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "4.1.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
-    repo = pname;
+    repo = "libimagequant";
     rev = version;
-    hash = "sha256-W9Q81AbFhWUe6c3csAnm8L5wLqURizrjwqcurWhPISI=";
+    hash = "sha256-/gHe3LQaBWOQImBesKvHK46T42TtRld988wgxbut4i0=";
   };
 
   cargoLock = {
@@ -19,29 +29,31 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
-
-  cargoHash = "sha256-0HOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkg0d00=";
-
-  auditable = true; # TODO: remove when this is the default
 
   nativeBuildInputs = [ cargo-c ];
 
   postBuild = ''
     pushd imagequant-sys
-    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     popd
   '';
 
   postInstall = ''
     pushd imagequant-sys
-    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     popd
   '';
 
   passthru.tests = {
+    inherit vips;
     inherit (python3.pkgs) pillow;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = libimagequant;
+      moduleNames = [ "imagequant" ];
+    };
   };
 
   meta = with lib; {

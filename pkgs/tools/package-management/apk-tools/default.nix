@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "apk-tools";
-  version = "2.12.11";
+  version = "2.14.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "apk-tools";
     rev = "v${version}";
-    sha256 = "sha256-vhEjzCuMvMZmzkCQK25JG3tT33KnX2fJbqdaTaeuhgo=";
+    sha256 = "sha256-NbADp017wL6h+Owg/GISidoXEq0seWaa98/Hyyq6pYc=";
   };
 
   nativeBuildInputs = [ pkg-config scdoc ]
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+    mainProgram = "apk";
   };
 }

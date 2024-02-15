@@ -2,13 +2,13 @@
 , cmake }:
 
 stdenv.mkDerivation rec {
-  version = "2.10.0";
+  version = "2.12.0";
   pname = "librem";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "rem";
     rev = "v${version}";
-    sha256 = "sha256-wyzpx0WjQLA8UKx4S6QOETMehf51Af5napZsxMXttmM=";
+    sha256 = "sha256-MsXSUxFH89EqxMe4285xFV1Tsqmv2l5RnEeli48O3XQ=";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib openssl libre ];
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
     "PREFIX=$(out)"
+    "AR=${stdenv.cc.targetPrefix}ar"
   ]
   ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${lib.getDev stdenv.cc.cc}"
   ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}"

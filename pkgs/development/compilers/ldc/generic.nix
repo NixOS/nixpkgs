@@ -1,5 +1,5 @@
 { version, sha256 }:
-{ lib, stdenv, fetchurl, cmake, ninja, llvm_11, curl, tzdata
+{ lib, stdenv, fetchurl, cmake, ninja, llvm_17, curl, tzdata
 , libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, runCommand, targetPackages
 , ldcBootstrap ? callPackage ./bootstrap.nix { }
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     patchShebangs .
   ''
   + ''
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/fail_compilation/mixin_gc.d
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/xtest46_gc.d
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/testptrref_gc.d
+      rm ldc-${version}-src/tests/dmd/fail_compilation/mixin_gc.d
+      rm ldc-${version}-src/tests/dmd/runnable/xtest46_gc.d
+      rm ldc-${version}-src/tests/dmd/runnable/testptrref_gc.d
 
       # test depends on current year
-      rm ldc-${version}-src/tests/d2/dmd-testsuite/compilable/ddocYear.d
+      rm ldc-${version}-src/tests/dmd/compilable/ddocYear.d
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # https://github.com/NixOS/nixpkgs/issues/34817
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Setting SHELL=$SHELL when dmd testsuite is run doesn't work on Linux somehow
-    substituteInPlace tests/d2/dmd-testsuite/Makefile --replace "SHELL=/bin/bash" "SHELL=${bash}/bin/bash"
+    substituteInPlace tests/dmd/Makefile --replace "SHELL=/bin/bash" "SHELL=${bash}/bin/bash"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace runtime/phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_11.dev makeWrapper ninja unzip
+    cmake ldcBootstrap lit lit.python llvm_17.dev makeWrapper ninja unzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J${pathConfig}"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   postConfigure = ''
@@ -131,7 +130,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
     license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
-    maintainers = with maintainers; [ ThomasMader lionello ];
+    maintainers = with maintainers; [ ThomasMader lionello jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

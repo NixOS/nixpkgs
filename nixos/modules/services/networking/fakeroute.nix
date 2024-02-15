@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.fakeroute;
-  routeConf = pkgs.writeText "route.conf" (concatStringsSep "\n" cfg.route);
+  routeConf = pkgs.writeText "route.conf" (lib.concatStringsSep "\n" cfg.route);
 
 in
 
@@ -16,16 +14,10 @@ in
 
     services.fakeroute = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to enable the fakeroute service.
-        '';
-      };
+      enable = lib.mkEnableOption (lib.mdDoc "the fakeroute service");
 
-      route = mkOption {
-        type = types.listOf types.str;
+      route = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [];
         example = [
           "216.102.187.130"
@@ -46,14 +38,16 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.fakeroute = {
       description = "Fakeroute Daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";
-        User = "root";
+        User = "fakeroute";
+        DynamicUser = true;
+        AmbientCapabilities = [ "CAP_NET_RAW" ];
         ExecStart = "${pkgs.fakeroute}/bin/fakeroute -f ${routeConf}";
       };
     };

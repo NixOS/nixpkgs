@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmium-tool";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "osmium-tool";
     rev = "v${version}";
-    sha256 = "sha256-xV/1LFby0L/o648XEQQ9gS9/eHssWhMIG7R1E8bfIDU=";
+    sha256 = "sha256-DObqbzdPA4RlrlcZhqA0MQtWBE+D6GRD1pd9U4DARIk=";
   };
 
   nativeBuildInputs = [
@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/osmcode/osmium-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus mit bsd3 ];
     maintainers = with maintainers; [ das-g ];
+    mainProgram = "osmium";
   };
 }

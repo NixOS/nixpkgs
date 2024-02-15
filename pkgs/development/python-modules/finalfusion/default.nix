@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "finalfusion";
   version = "0.7.1";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -36,6 +37,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     patchShebangs tests/integration
+
+    # `np.float` was a deprecated alias of the builtin `float`
+    substituteInPlace tests/test_storage.py \
+      --replace 'dtype=np.float)' 'dtype=float)'
   '';
 
   checkPhase = ''

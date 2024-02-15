@@ -1,14 +1,15 @@
 { lib, stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff
 , libwebp, pkg-config, librsvg, glib, gtk2, libXext, libXxf86vm, poppler, vlc
-, ghostscript, makeWrapper, tzdata, makeDesktopItem, copyDesktopItems }:
+, ghostscript, makeWrapper, tzdata, makeDesktopItem, copyDesktopItems
+, directoryListingUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "eaglemode";
-  version = "0.96.0";
+  version = "0.96.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
-    hash = "sha256-aMVXJpfws9rh2Eaa/EzSLwtwvn0pVJlEbhxzvXME1hs=";
+    hash = "sha256-FIhCcMghzLg7Odcsou9hBw7kIaqLVUFEAKUk9uwRNNw=";
   };
 
   # Fixes "Error: No time zones found." on the clock
@@ -54,6 +55,11 @@ stdenv.mkDerivation rec {
       categories = [ "Game" "Graphics" "System" "Utility" ];
     })
   ];
+
+  passthru.updateScript = directoryListingUpdater {
+    url = "https://eaglemode.sourceforge.net/download.html";
+    extraRegex = "(?!.*(x86_64|setup64|livecd)).*";
+  };
 
   meta = with lib; {
     homepage = "https://eaglemode.sourceforge.net";

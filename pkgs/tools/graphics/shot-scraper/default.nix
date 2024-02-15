@@ -1,17 +1,18 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shot-scraper";
-  version = "1.1.1";
+  version = "1.3";
   format = "setuptools";
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YfWiy44rCRXK5xVkmA9X7pAlDhZrk6nS9vbC2eYvjbg=";
+    hash = "sha256-IC6S6LnavwxTcGEDX7lSHF1GZKBH1QcHQy17LGx4Ago=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -34,5 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/simonw/shot-scraper/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ techknowlogick ];
+    mainProgram = "shot-scraper";
   };
 }

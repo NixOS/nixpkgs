@@ -1,10 +1,10 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , setuptools
 , jinja2
+, pdoc-pyo3-sample-library
 , pygments
 , markupsafe
 , astunparse
@@ -14,17 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "12.3.1";
-  disabled = pythonOlder "3.7";
+  version = "14.4.0";
+  disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
-  # the Pypi version does not include tests
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-SaLrE/eHxKnlm6BZYbcZZrbrUZMeHJ4eCcqMsFvyZ7I=";
+    hash = "sha256-2k9uIK6TvoGtVqnh97g9f5QvjhyZlznRvYdw5sPaeVE=";
   };
 
   nativeBuildInputs = [
@@ -40,18 +39,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
+    pdoc-pyo3-sample-library
   ];
-  disabledTests = [
-    # Failing "test_snapshots" parametrization: Output does not match the stored snapshot
-    # This test seems to be sensitive to ordering of dictionary items and the version of dependencies.
-    # the only difference between the stored snapshot and the produced documentation is a debug javascript comment
-    "html-demopackage_dir"
-    # snapshot tests mismatch with latest pygments version
-    "test_snapshots"
+  disabledTestPaths = [
+    # "test_snapshots" tries to match generated output against stored snapshots,
+    # which are highly sensitive to dep versions.
+    "test/test_snapshot.py"
   ];
 
   pytestFlagsArray = [
-    ''-m "not slow"'' # skip tests marked slow
+    ''-m "not slow"'' # skip slow tests
   ];
 
   __darwinAllowLocalNetworking = true;

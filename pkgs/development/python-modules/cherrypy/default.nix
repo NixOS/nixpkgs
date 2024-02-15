@@ -3,7 +3,7 @@
 , buildPythonPackage
 , cheroot
 , fetchPypi
-, jaraco_collections
+, jaraco-collections
 , more-itertools
 , objgraph
 , path
@@ -19,7 +19,7 @@
 , routes
 , setuptools-scm
 , simplejson
-, zc_lockfile
+, zc-lockfile
 }:
 
 buildPythonPackage rec {
@@ -52,8 +52,8 @@ buildPythonPackage rec {
     cheroot
     portend
     more-itertools
-    zc_lockfile
-    jaraco_collections
+    zc-lockfile
+    jaraco-collections
   ];
 
   nativeCheckInputs = [
@@ -64,6 +64,10 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-toolbelt
   ];
+
+  preCheck = ''
+    export CI=true
+  '';
 
   pytestFlagsArray = [
     "-W"
@@ -82,6 +86,20 @@ buildPythonPackage rec {
     "test_basic_request"
     "test_3_Redirect"
     "test_4_File_deletion"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    "testErrorHandling"
+    "testHookErrors"
+    "test_HTTP10_KeepAlive"
+    "test_No_Message_Body"
+    "test_HTTP11_Timeout"
+    "testGzip"
+    "test_malformed_header"
+    "test_no_content_length"
+    "test_post_filename_with_special_characters"
+    "test_post_multipart"
+    "test_iterator"
+    "test_1_Ram_Concurrency"
+    "test_2_File_Concurrency"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];

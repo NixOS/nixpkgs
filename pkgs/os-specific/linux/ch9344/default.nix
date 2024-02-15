@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
   patches = lib.optionals (lib.versionAtLeast kernel.modDirVersion "6.1") [
     # https://github.com/torvalds/linux/commit/a8c11c1520347be74b02312d10ef686b01b525f1
     ./fix-incompatible-pointer-types.patch
+  ] ++ lib.optionals (lib.versionAtLeast kernel.modDirVersion "6.3") [
+    # https://github.com/torvalds/linux/commit/5d420399073770134d2b03e004b2c0201c7fa26f
+    ./fix-incompatible-pointer-types_6_3.patch
   ];
 
   sourceRoot = "${src.name}/driver";
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.wch-ic.com/";
+    homepage = "https://www.wch-ic.com/";
     downloadPage = "https://www.wch.cn/downloads/CH9344SER_LINUX_ZIP.html";
     description = "WCH CH9344/CH348 UART driver";
     longDescription = ''

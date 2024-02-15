@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, gitUpdater
 , python3Packages
 , gnutar
 , unzip
@@ -21,32 +22,35 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
-  version = "8.4.0";
+  version = "8.5.3";
 
   src = fetchFromGitHub {
     owner = "dtrx-py";
     repo = "dtrx";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-G+W0qY8s30cYSmOEy9Kkx+Wr48n7+6FuzL34GvwdKtg=";
+    rev = version;
+    sha256 = "sha256-LB3F6jcqQPRsjFO4L2fPAPnacDAdtcaadgGbwXA9LAw=";
   };
 
-  postInstall =
+  makeWrapperArgs =
     let
       archivers = lib.makeBinPath (
         [ gnutar lhasa rpm binutils cpio gzip p7zip cabextract unshield bzip2 xz lzip ]
         ++ lib.optional (unzipSupport) unzip
         ++ lib.optional (unrarSupport) unrar
       );
-    in ''
-      wrapProgram "$out/bin/dtrx" --prefix PATH : "${archivers}"
-    '';
+    in [
+      ''--prefix PATH : "${archivers}"''
+    ];
 
-  buildInputs = [ python3Packages.twine ];
+  nativeBuildInputs = [ python3Packages.invoke ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";
     homepage = "https://github.com/dtrx-py/dtrx";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [ ];
+    mainProgram = "dtrx";
   };
 }

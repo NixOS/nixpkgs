@@ -1,15 +1,24 @@
-{ lib, stdenv, fetchurl, autoreconfHook, ncurses, libxcrypt, utmp, pam ? null }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, ncurses
+, libxcrypt
+, utmp
+, pam ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "screen";
-  version = "4.9.0";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
-    sha256 = "1x1hqy4h47i7hk85f779lkwkm7gkq8h8mxwd0znkh5adpf0m4czr";
+    hash = "sha256-Js7z48QlccDUhK1vrxEMXBUJH7+HKwb6eqR2bHQFrGk=";
   };
 
-  configureFlags= [
+  configureFlags = [
     "--enable-telnet"
     "--enable-pam"
     "--with-sys-screenrc=/etc/screenrc"

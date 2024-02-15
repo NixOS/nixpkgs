@@ -1,6 +1,7 @@
 { lib
 , adb-shell
 , aiofiles
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , mock
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "androidtv";
-  version = "0.0.70";
+  version = "0.0.73";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,11 +21,12 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "python-androidtv";
     rev = "v${version}";
-    hash = "sha256-LKV5aO3sptHz48UYpP+zPk6pPhyHAZWAxiTTIWKHiSg=";
+    hash = "sha256-FJUTJfS9jiC7KDf6XcGVRNXf75bVUOBPZe8y9M39Uak=";
   };
 
   propagatedBuildInputs = [
     adb-shell
+    async-timeout
     pure-python-adb
   ];
 

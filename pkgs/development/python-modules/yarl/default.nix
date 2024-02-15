@@ -1,30 +1,39 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 , pythonOlder
+, cython_3
+, expandvars
+, setuptools
 , idna
 , multidict
 , typing-extensions
+, pytest-xdist
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.8.2";
+  version = "1.9.4";
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SdQ0AsbjATrQl4YCv2v1MoU1xI0ZIwS5G5ejxnkLFWI=";
+    hash = "sha256-Vm24ZxfPgIC5m1iwg7dzqQiuQPBmgeh+WJqXb6+CRr8=";
   };
 
   postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
+    sed -i '/cov/d' pytest.ini
   '';
+
+  nativeBuildInputs = [
+    cython_3
+    expandvars
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     idna
@@ -39,11 +48,8 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    "test_not_a_scheme2"
   ];
 
   postCheck = ''

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , substituteAll
 , cmake
@@ -9,7 +10,7 @@
 , gtkmm3
 , pcre
 , swig
-, antlr4_9
+, antlr4_12
 , sudo
 , mysql
 , libxml2
@@ -44,18 +45,17 @@
 
 let
   inherit (python3.pkgs) paramiko pycairo pyodbc;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.32";
+  version = "8.0.36";
 
   src = fetchurl {
-    url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "sha256-ruGdYTG0KPhRnUdlfaZjt1r/tAhA1XeAtjDgu/K9okI=";
+    url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-Y02KZrbCd3SRBYpgq6gYfpR+TEmg566D3zEvpwcUY3w=";
   };
 
   patches = [
-    ./fix-gdal-includes.patch
-
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";
@@ -77,13 +77,16 @@ in stdenv.mkDerivation rec {
       src = ./fix-swig-build.patch;
       cairoDev = "${cairo.dev}";
     })
+
+    # a newer libxml2 version has changed some interfaces
+    ./fix-xml2.patch
   ];
 
-  # 1. have it look for 4.9.3 instead of 4.9.1
+  # 1. have it look for 4.12.0 instead of 4.11.1
   # 2. for some reason CMakeCache.txt is part of source code
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.9.1-complete.jar" "antlr-4.9.3-complete.jar"
+      --replace "antlr-4.11.1-complete.jar" "antlr-4.12.0-complete.jar"
     rm -f build/CMakeCache.txt
   '';
 
@@ -100,7 +103,7 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     libX11
-    antlr4_9.runtime.cpp
+    antlr4_12.runtime.cpp
     python3
     mysql
     libxml2
@@ -140,6 +143,10 @@ in stdenv.mkDerivation rec {
     patchShebangs tools/get_wb_version.sh
   '';
 
+  # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
+  # when updating the version make sure this is still needed
+  env.CXXFLAGS = "-include cstdint";
+
   env.NIX_CFLAGS_COMPILE = toString ([
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
     "-Wno-error=deprecated-declarations"
@@ -157,7 +164,7 @@ in stdenv.mkDerivation rec {
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
-    "-DWITH_ANTLR_JAR=${antlr4_9.jarLocation}"
+    "-DWITH_ANTLR_JAR=${antlr4_12.jarLocation}"
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 
@@ -185,7 +192,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Visual MySQL database modeling, administration and querying tool";
     longDescription = ''
       MySQL Workbench is a modeling tool that allows you to design
@@ -193,10 +200,10 @@ in stdenv.mkDerivation rec {
       and query development modules where you can manage MySQL server instances
       and execute SQL queries.
     '';
-
     homepage = "http://wb.mysql.com/";
-    license = licenses.gpl2;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "mysql-workbench";
+    maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.linux;
   };
-}
+})

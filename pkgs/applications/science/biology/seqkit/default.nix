@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "seqkit";
-  version = "2.4.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "shenwei356";
     repo = "seqkit";
     rev = "v${version}";
-    sha256 = "sha256-v2Z94UDuXnT7eVFX+uLSxXR34eIBzRm1bHwD7gO9SVA=";
+    sha256 = "sha256-tnVkFING9BH/iNOdKeCsSk4ln2fLUUpI5ASaQ7CCdrg=";
   };
 
-  vendorHash = "sha256-dDMSwZnTWC60zvPDvUT+9T/mUUrhW0Itn87XO/+Ef2Q=";
+  vendorHash = "sha256-o7XGBI05BK7kOBagVV2eteJmkzLTmio41KOm46GdzDU=";
 
   meta = with lib; {
     description = "cross-platform and ultrafast toolkit for FASTA/Q file manipulation";

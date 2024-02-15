@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "1.2.0";
+  version = "2.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46493c7e8d9ca2167e8a46eb97ae8d280997cb40a81993230124d74f0fe40bac";
+    sha256 = "sha256-WrcXuXlTB3DBavtItQ0qmNI8Pp/jmFHc9rxNAYRaAqA=";
   };
 
   postPatch = ''
@@ -32,6 +32,8 @@ buildPythonPackage rec {
     pytz
     tornado
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytestCheckHook

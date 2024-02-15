@@ -1,20 +1,33 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "threatest";
-  version = "1.1.1";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9/TIiBp3w7NaECX929Tai5nqHKxb7YxYEr2hAl2ttsM=";
+    hash = "sha256-rVRBrf/RTcHvKOLHNASzvij3fV+uQEuIVKb07CZ/cT0=";
   };
 
-  vendorHash = "sha256-vTzgxByZ2BC7nuq/+LJV7LR0KsUxh1EbHFe81PwqCJc=";
+  proxyVendor = true;
+  vendorHash = "sha256-zwHcGy7wjy2yx7nMi88R+z+Is+YcqGRMK0czeBNlcdA=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd threatest \
+      --bash <($out/bin/threatest completion bash) \
+      --fish <($out/bin/threatest completion fish) \
+      --zsh <($out/bin/threatest completion zsh)
+  '';
 
   meta = with lib; {
     description = "Framework for end-to-end testing threat detection rules";

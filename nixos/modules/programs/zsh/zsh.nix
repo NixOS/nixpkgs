@@ -159,6 +159,14 @@ in
         type = types.bool;
       };
 
+      enableLsColors = mkOption {
+        default = true;
+        description = lib.mdDoc ''
+          Enable extra colors in directory listings (used by `ls` and `tree`).
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -236,6 +244,9 @@ in
           setopt ${concatStringsSep " " cfg.setOptions}
         ''}
 
+        # Alternative method of determining short and full hostname.
+        HOST=${config.networking.fqdnOrHostName}
+
         # Setup command line history.
         # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
         SAVEHIST=${toString cfg.histSize}
@@ -259,6 +270,11 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${optionalString cfg.enableLsColors ''
+          # Extra colors for directory listings.
+          eval "$(${pkgs.coreutils}/bin/dircolors -b)"
+        ''}
 
         # Setup aliases.
         ${zshAliases}

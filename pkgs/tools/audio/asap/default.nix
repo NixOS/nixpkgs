@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "asap";
-  version = "5.2.0";
+  version = "6.0.2";
 
   src = fetchzip {
     url = "mirror://sourceforge/project/asap/asap/${version}/asap-${version}.tar.gz";
-    sha256 = "1riwfds5ipgh19i3ibsyqhxlh70xix9452y4wqih9xdkixmxqbqm";
+    sha256 = "sha256-hVZODnm2GxSUKglOyQ8uObeKkAKrupPTftEP0dck9a8=";
   };
 
   outputs = [ "out" "dev" ];

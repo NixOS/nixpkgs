@@ -1,35 +1,33 @@
-{ lib, stdenv, fetchurl, writeText, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.39.2";
+  version = "1.41.0";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    sha256 = "sha256-3bUdIooZymjNiHHYUBdfa+9Gh0R27RRm8BXPmEbZx6U=";
+    hash = "sha256-84Qrcqp6JYiPHsYyMj3YkEF3OaEg2VHEhfhQ4MzLQhs=";
   };
 
   postPatch = ''
     sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
   '';
 
-  installPhase = let
-    phpConfig = writeText "LocalSettings.php" ''
-      <?php
-        return require(getenv('MEDIAWIKI_CONFIG'));
-      ?>
-    '';
-  in ''
+  installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/mediawiki
     cp -r * $out/share/mediawiki
-    cp ${phpConfig} $out/share/mediawiki/LocalSettings.php
+    echo "<?php
+      return require(getenv('MEDIAWIKI_CONFIG'));
+    ?>" > $out/share/mediawiki/LocalSettings.php
 
     runHook postInstall
   '';
 
-  passthru.tests.mediawiki = nixosTests.mediawiki;
+  passthru.tests = {
+    inherit (nixosTests.mediawiki) mysql postgresql;
+  };
 
   meta = with lib; {
     description = "The collaborative editing software that runs Wikipedia";

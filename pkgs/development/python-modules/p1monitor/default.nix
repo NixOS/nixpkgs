@@ -12,17 +12,23 @@
 
 buildPythonPackage rec {
   pname = "p1monitor";
-  version = "2.3.0";
-  format = "pyproject";
+  version = "3.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4/zaD+0Tuy5DvcwmH5BurGWCCjQlRYOJT77toEPS06k=";
+    hash = "sha256-ZtIY4HvRllqlLlf3j1+RMJuuQuq+BZbMuMn9n/v8H5M=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"' \
+      --replace 'addopts = "--cov"' ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -38,12 +44,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
-  '';
 
   pythonImportsCheck = [
     "p1monitor"

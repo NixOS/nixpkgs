@@ -1,0 +1,10 @@
+diff --git a/flux/src/lib.rs b/flux/src/lib.rs
+index 3fdf4071..a4c02277 100644
+--- a/flux/src/lib.rs
++++ b/flux/src/lib.rs
+@@ -1,5 +1,3 @@
+-#![cfg_attr(feature = "strict", deny(warnings, missing_docs))]
+-
+ //! This module provides the public facing API for Flux's Go runtime, including formatting,
+ //! parsing, and standard library analysis.
+ use std::sync::Arc;

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
+, grpc-google-iam-v1
 , mock
 , libcst
 , proto-plus
@@ -9,22 +10,28 @@
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.4.0";
-  format = "setuptools";
+  version = "5.9.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oMX+XMglmgu2sfREVxSq/E9foEf49UzHEzkUupeFb14=";
+    hash = "sha256-qDc6E6d6hIHgRBNDGUHaJ7ROP24xDUXK1rkXTX187g0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
+    grpc-google-iam-v1
     libcst
     proto-plus
     protobuf
@@ -48,9 +55,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Dataproc API client library";
-    homepage = "https://github.com/googleapis/python-dataproc";
-    changelog = "https://github.com/googleapis/python-dataproc/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-dataproc";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dataproc-v${version}/packages/google-cloud-dataproc/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

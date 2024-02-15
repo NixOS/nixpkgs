@@ -2,16 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agg";
-  version = "1.3.0";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "asciinema";
-    repo = pname;
+    repo = "agg";
     rev = "v${version}";
-    sha256 = "15j7smkjv2z9vd7drdq83g40j986ny39ai6y9rnai3iljsycyvgs";
+    sha256 = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
   };
 
-  cargoSha256 = "sha256-ORSYIRcvnKFkJxEjiTUSa1gkfmiQs3EAVOpXePVgBPQ=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "avt-0.8.0" = "sha256-5IN8P/2UWJ2EmkbbTSGWECTqiD8TeOd8LgwLZ+W2z90=";
+    };
+  };
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
@@ -20,7 +25,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";
     homepage = "https://github.com/asciinema/agg";
+    changelog = "https://github.com/asciinema/agg/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "agg";
   };
 }

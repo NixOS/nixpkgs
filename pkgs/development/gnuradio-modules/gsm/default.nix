@@ -6,10 +6,11 @@
 , cppunit
 , swig
 , boost
-, log4cpp
+, logLib
 , python
 , libosmocore
 , osmosdr
+, gnuradioAtLeast
 }:
 
 mkDerivation {
@@ -21,7 +22,7 @@ mkDerivation {
     rev = "3ca05e6914ef29eb536da5dbec323701fbc2050d";
     sha256 = "13nnq927kpf91iqccr8db9ripy5czjl5jiyivizn6bia0bam2pvx";
   };
-  disabledForGRafter = "3.8";
+  disabled = gnuradioAtLeast "3.8";
 
   nativeBuildInputs = [
     cmake
@@ -32,7 +33,7 @@ mkDerivation {
 
   buildInputs = [
     cppunit
-    log4cpp
+    logLib
     boost
     libosmocore
     osmosdr

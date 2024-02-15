@@ -86,8 +86,7 @@ let
   mattermostConf = recursiveUpdate
     mattermostConfWithoutPlugins
     (
-      if mattermostPlugins == null then {}
-      else {
+      lib.optionalAttrs (mattermostPlugins != null) {
         PluginSettings = {
           Enable = true;
         };
@@ -103,12 +102,7 @@ in
     services.mattermost = {
       enable = mkEnableOption (lib.mdDoc "Mattermost chat server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mattermost;
-        defaultText = lib.literalExpression "pkgs.mattermost";
-        description = lib.mdDoc "Mattermost derivation to use.";
-      };
+      package = mkPackageOption pkgs "mattermost" { };
 
       statePath = mkOption {
         type = types.str;
@@ -184,6 +178,22 @@ in
           .tar.gz files.
         '';
       };
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          Environment file (see {manpage}`systemd.exec(5)`
+          "EnvironmentFile=" section for the syntax) which sets config options
+          for mattermost (see [the mattermost documentation](https://docs.mattermost.com/configure/configuration-settings.html#environment-variables)).
+
+          Settings defined in the environment file will overwrite settings
+          set via nix or via the {option}`services.mattermost.extraConfig`
+          option.
+
+          Useful for setting config options without their value ending up in the
+          (world-readable) nix store, e.g. for a database password.
+        '';
+      };
 
       localDatabaseCreate = mkOption {
         type = types.bool;
@@ -235,12 +245,7 @@ in
 
       matterircd = {
         enable = mkEnableOption (lib.mdDoc "Mattermost IRC bridge");
-        package = mkOption {
-          type = types.package;
-          default = pkgs.matterircd;
-          defaultText = lib.literalExpression "pkgs.matterircd";
-          description = lib.mdDoc "matterircd derivation to use.";
-        };
+        package = mkPackageOption pkgs "matterircd" { };
         parameters = mkOption {
           type = types.listOf types.str;
           default = [ ];
@@ -272,9 +277,7 @@ in
 
       # The systemd service will fail to execute the preStart hook
       # if the WorkingDirectory does not exist
-      system.activationScripts.mattermost = ''
-        mkdir -p "${cfg.statePath}"
-      '';
+      systemd.tmpfiles.settings."10-mattermost".${cfg.statePath}.d = { };
 
       systemd.services.mattermost = {
         description = "Mattermost chat service";
@@ -321,6 +324,7 @@ in
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";
+          EnvironmentFile = cfg.environmentFile;
         };
         unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
       };

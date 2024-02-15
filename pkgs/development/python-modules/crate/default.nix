@@ -1,25 +1,26 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, dask
 , urllib3
 , geojson
+, pandas
 , pythonOlder
 , sqlalchemy
 , pytestCheckHook
 , pytz
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "crate";
-  version = "0.30.0";
+  version = "0.34.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8xraDCFZbpJZsh3sO5VlSHwnEfH4u4AJZkXA+L4TB60=";
+    hash = "sha256-nEWrfCd2MQCcIM6dLkVYc/cWT5wcT/pvYaY2V3wfuto=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +30,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    dask
+    pandas
     pytestCheckHook
     pytz
   ];

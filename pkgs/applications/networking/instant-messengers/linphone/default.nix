@@ -11,8 +11,9 @@
 , minizip-ng
 , mkDerivation
 , qtgraphicaleffects
+, qtmultimedia
 , qtquickcontrols2
-, qttranslations
+, qttools
 }:
 
 # How to update Linphone? (The Qt desktop app)
@@ -33,7 +34,7 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "5.0.8";
+  version = "5.1.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,13 +42,14 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-e/0yGHtOHMgPhaF5xELodKS9/v/mbnT3ZpE12lXAocU=";
+    hash = "sha256-Pu2tGKe3C1uR4lzXkC5sJFu8iJBqF76UfWJXYjPwBkc=";
   };
 
   patches = [
     ./do-not-build-linphone-sdk.patch
     ./remove-bc_compute_full_version-usage.patch
     ./no-store-path-in-autostart.patch
+    ./reset-output-dirs.patch
   ];
 
   # See: https://gitlab.linphone.org/BC/public/linphone-desktop/issues/21
@@ -55,6 +57,8 @@ mkDerivation rec {
     echo "project(linphoneqt VERSION ${version})" >linphone-app/linphoneqt_version.cmake
     substituteInPlace linphone-app/src/app/AppController.cpp \
       --replace "APPLICATION_SEMVER" "\"${version}\""
+    substituteInPlace CMakeLists.txt \
+      --subst-var out
   '';
 
   # TODO: After linphone-desktop and liblinphone split into separate packages,
@@ -72,12 +76,13 @@ mkDerivation rec {
 
     minizip-ng
     qtgraphicaleffects
+    qtmultimedia
     qtquickcontrols2
-    qttranslations
   ];
 
   nativeBuildInputs = [
     cmake
+    qttools
   ];
 
   cmakeFlags = [
@@ -86,23 +91,20 @@ mkDerivation rec {
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+
+    # Requires EQt5Keychain
+    "-DENABLE_QT_KEYCHAIN=OFF"
+
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  # The default install phase fails because the paths are somehow messed up in
-  # the makefiles. The errors were like:
-  #
-  #   CMake Error at cmake_builder/linphone_package/cmake_install.cmake:49 (file):
-  #     file INSTALL cannot find
-  #     "/build/linphone-desktop-.../build/linphone-sdk/desktop//nix/store/.../bin":
-  #     No such file or directory.
-  #
-  # If someone is able to figure out how to fix that, great. For now, just
-  # trying to pick all the relevant files to the output.
-  #
-  # Also, the exec path in linphone.desktop file remains invalid, pointing to
-  # the build directory, after the whole nix build process. So, let's use sed to
-  # manually fix that path.
-  #
+  preInstall = ''
+    mkdir -p $out/share/linphone
+    mkdir -p $out/share/sounds/linphone
+  '';
+
   # In order to find mediastreamer plugins, mediastreamer package was patched to
   # support an environment variable pointing to the plugin directory. Set that
   # environment variable by wrapping the Linphone executable.
@@ -116,26 +118,17 @@ mkDerivation rec {
   # It is quite likely that there are some other files still missing and
   # Linphone will randomly crash when it tries to access those files. Then,
   # those just need to be copied manually below.
-  installPhase = ''
-    mkdir -p $out/bin $out/lib
-    cp linphone-app/linphone $out/bin/
-    cp linphone-app/libapp-plugin.so $out/lib/
+  postInstall = ''
     mkdir -p $out/lib/mediastreamer/plugins
     ln -s ${mediastreamer-openh264}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     ln -s ${mediastreamer}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
-    wrapProgram $out/bin/linphone \
-      --set MEDIASTREAMER_PLUGINS_DIR \
-            $out/lib/mediastreamer/plugins
-    mkdir -p $out/share/applications
-    cp linphone-app/linphone.desktop $out/share/applications/
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp ../linphone-app/assets/images/linphone_logo.svg $out/share/icons/hicolor/scalable/apps/linphone.svg
+
     mkdir -p $out/share/belr/grammars
     ln -s ${liblinphone}/share/belr/grammars/* $out/share/belr/grammars/
     ln -s ${belle-sip}/share/belr/grammars/* $out/share/belr/grammars/
-    mkdir -p $out/share/linphone
-    ln -s ${liblinphone}/share/linphone/* $out/share/linphone/
-    ln -s ${liblinphone}/share/sounds $out/share/sounds
+
+    wrapProgram $out/bin/linphone \
+      --set MEDIASTREAMER_PLUGINS_DIR $out/lib/mediastreamer/plugins
   '';
 
   meta = with lib; {

@@ -206,7 +206,7 @@ if [[ -z $noBootLoader ]]; then
       mount --rbind --mkdir / "$mountPoint"
       mount --make-rslave "$mountPoint"
       /run/current-system/bin/switch-to-configuration boot
-      umount -R "$mountPoint" && rmdir "$mountPoint"
+      umount -R "$mountPoint" && (rmdir "$mountPoint" 2>/dev/null || true)
 EOF
 )"
 fi

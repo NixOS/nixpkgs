@@ -1,12 +1,14 @@
 { stdenv
 , lib
 , rustPlatform
+, rustc
 , callPackage
 , fetchFromGitHub
 , buildPythonPackage
 , libiconv
 , libffi
 , libxml2
+, llvm_14
 , ncurses
 , zlib
 }:
@@ -67,16 +69,15 @@ let
       pythonImportsCheck = [ "${lib.replaceStrings ["-"] ["_"] pname}" ];
 
       meta = with lib; {
-        broken = stdenv.isDarwin;
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
         license = licenses.mit;
         platforms = platforms.unix;
-        maintainers = with maintainers; [ SuperSandro2000 ];
+        maintainers = [ ];
       };
     };
 in
-rec {
+{
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";
@@ -93,7 +94,7 @@ rec {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
     cargoHash = "sha256-xawbf5gXXV+7I2F2fDSaMvjtFvGDBtqX7wL3c28TSbA=";
-    extraNativeBuildInputs = [ rustPlatform.rust.rustc.llvm ];
+    extraNativeBuildInputs = [ llvm_14 ];
     extraBuildInputs = [ libffi libxml2.out ncurses zlib ];
   };
 

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4-headless, python3, ruby, icu68
+, ffmpeg_4-headless, python3, ruby, icu71, fetchurl, runCommand
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -14,6 +14,18 @@ let
     java = openjdk17_headless;
   });
 
+  dashed-icu-version = lib.concatStringsSep "-" (lib.splitVersion (lib.getVersion icu71));
+  underscored-icu-version = lib.concatStringsSep "_" (lib.splitVersion (lib.getVersion icu71));
+  icu-data = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/download/release-${dashed-icu-version}/icu4c-${underscored-icu-version}-data-bin-l.zip";
+    hash = "sha256-pVWIy0BkICsthA5mxhR9SJQHleMNnaEcGl/AaLi5qZM=";
+  };
+
+  fakeRepository = runCommand "icu-data-repository" {} ''
+    mkdir -p $out/download/release-${dashed-icu-version}
+    cp ${icu-data} $out/download/release-${dashed-icu-version}/icu4c-${underscored-icu-version}-data-bin-l.zip
+  '';
+
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}${build}";
 
@@ -24,10 +36,17 @@ let
       sha256 = "sha256-9VfXk2EfMebMyVKPohPRP2QXRFf8XemUtfY0JtBCHyw=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu71 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
+
+    postPatch = ''
+      # Add missing includes for gcc-13 for webkit build:
+      sed -e '1i #include <cstdio>' \
+        -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+           modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
+    '';
 
     config = writeText "gradle.properties" (''
       CONF = Release
@@ -37,6 +56,7 @@ let
     buildPhase = ''
       runHook preBuild
 
+      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
@@ -71,6 +91,7 @@ in makePackage {
   gradleProperties = ''
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
+    ${lib.optionalString withWebKit "icuRepositoryURL = file://${fakeRepository}"}
   '';
 
   preBuild = ''

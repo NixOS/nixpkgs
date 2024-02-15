@@ -9,12 +9,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-dns";
-  version = "8.0.0";
+  version = "8.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "407c2dacb33513ffbe9ca4be5addb5e9d4bae0cb7efa613c3f7d531ef7bf8de8";
+    sha256 = "sha256-2DedS7kZS4G3nlKE2HX6bfgHBzRvLLtcVJGiDzUmb9A=";
   };
 
   propagatedBuildInputs = [

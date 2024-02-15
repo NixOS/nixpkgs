@@ -45,16 +45,16 @@ let
   '';
 in
 {
+  imports = [
+    # https://github.com/zedeus/nitter/pull/772
+    (mkRemovedOptionModule [ "services" "nitter" "replaceInstagram" ] "Nitter no longer supports this option as Bibliogram has been discontinued.")
+  ];
+
   options = {
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
 
-      package = mkOption {
-        default = pkgs.nitter;
-        type = types.package;
-        defaultText = literalExpression "pkgs.nitter";
-        description = lib.mdDoc "The nitter derivation to use.";
-      };
+      package = mkPackageOption pkgs "nitter" { };
 
       server = {
         address = mkOption {
@@ -155,6 +155,22 @@ in
           description = lib.mdDoc "Use base64 encoding for proxied media URLs.";
         };
 
+        enableRSS = mkEnableOption (lib.mdDoc "RSS feeds") // { default = true; };
+
+        enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
+
+        proxy = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "URL to a HTTP/HTTPS proxy.";
+        };
+
+        proxyAuth = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "Credentials for proxy.";
+        };
+
         tokenCount = mkOption {
           type = types.int;
           default = 10;
@@ -190,12 +206,6 @@ in
           default = "";
           example = "teddit.net";
           description = lib.mdDoc "Replace Reddit links with links to this instance (blank to disable).";
-        };
-
-        replaceInstagram = mkOption {
-          type = types.str;
-          default = "";
-          description = lib.mdDoc "Replace Instagram links with links to this instance (blank to disable).";
         };
 
         mp4Playback = mkOption {
@@ -275,6 +285,12 @@ in
           default = false;
           description = lib.mdDoc "Hide tweet replies.";
         };
+
+        squareAvatars = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Square profile pictures.";
+        };
       };
 
       settings = mkOption {
@@ -285,6 +301,23 @@ in
 
           Check the official repository for the available settings:
           https://github.com/zedeus/nitter/blob/master/nitter.example.conf
+        '';
+      };
+
+      guestAccounts = mkOption {
+        type = types.path;
+        default = "/var/lib/nitter/guest_accounts.jsonl";
+        description = lib.mdDoc ''
+          Path to the guest accounts file.
+
+          This file contains a list of guest accounts that can be used to
+          access the instance without logging in. The file is in JSONL format,
+          where each line is a JSON object with the following fields:
+
+          {"oauth_token":"some_token","oauth_token_secret":"some_secret_key"}
+
+          See https://github.com/zedeus/nitter/wiki/Guest-Account-Branch-Deployment
+          for more information on guest accounts and how to generate them.
         '';
       };
 
@@ -313,11 +346,16 @@ in
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = {
           DynamicUser = true;
+          LoadCredential="guestAccountsFile:${cfg.guestAccounts}";
           StateDirectory = "nitter";
-          Environment = [ "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf" ];
+          Environment = [
+            "NITTER_CONF_FILE=/var/lib/nitter/nitter.conf"
+            "NITTER_ACCOUNTS_FILE=%d/guestAccountsFile"
+          ];
           # Some parts of Nitter expect `public` folder in working directory,
           # see https://github.com/zedeus/nitter/issues/414
           WorkingDirectory = "${cfg.package}/share/nitter";

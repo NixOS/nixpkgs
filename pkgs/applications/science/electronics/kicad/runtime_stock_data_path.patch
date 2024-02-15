@@ -1,0 +1,15 @@
+diff --git a/common/paths.cpp b/common/paths.cpp
+index a74cdd9..790cc58 100644
+--- a/common/paths.cpp
++++ b/common/paths.cpp
+@@ -151,6 +151,10 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
+ {
+     wxString path;
+
++    if( wxGetEnv( wxT( "NIX_KICAD7_STOCK_DATA_PATH" ), &path ) ) {
++        return path;
++    }
++
+     if( aRespectRunFromBuildDir && wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+     {
+         // Allow debugging from build dir by placing relevant files/folders in the build root

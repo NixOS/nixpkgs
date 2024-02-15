@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pymaven-patch";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,6 +40,6 @@ buildPythonPackage rec {
     description = "Python access to maven";
     homepage = "https://github.com/nexB/pymaven";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

@@ -14,6 +14,11 @@ mkDerivation rec {
     sha256 = "0xncdp0z8ry4lkzmvbj5d7hlzikivghpwicgywlv47spgh8ny0ix";
   };
 
+  # Boomerang usually compiles with -Werror but has not been updated for newer
+  # compilers. Disable -Werror for now. Consider trying to remove this when
+  # updating this derivation.
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   nativeBuildInputs = [ cmake bison flex ];
   buildInputs = [ qtbase capstone ];
   patches = [

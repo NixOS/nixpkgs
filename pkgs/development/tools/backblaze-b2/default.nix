@@ -1,13 +1,17 @@
-{ fetchFromGitHub, lib, python3Packages }:
+{ lib, python3Packages, fetchPypi, installShellFiles, testers, backblaze-b2
+# executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
+, execName ? "backblaze-b2"
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.7.0";
+  version = "3.15.0";
+  format = "setuptools";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-sW6gaZWUh3WX+0+qHRlQ4gZzKU4bL8ePPNKWo9rdF84=";
+    hash = "sha256-10c2zddALy7+CGxhjUC6tMLQcZ3WmLeRY1bNKWunAys=";
   };
 
   postPatch = ''
@@ -19,22 +23,29 @@ python3Packages.buildPythonApplication rec {
       --replace 'setuptools_scm<6.0' 'setuptools_scm'
   '';
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
+  nativeBuildInputs = [
+    installShellFiles
+    python3Packages.setuptools-scm
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    argcomplete
+    arrow
     b2sdk
     phx-class-registry
-    setuptools
     docutils
     rst2ansi
     tabulate
+    tqdm
+    platformdirs
+    packaging
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
     backoff
     more-itertools
+    pexpect
     pytestCheckHook
   ];
 
@@ -46,25 +57,42 @@ python3Packages.buildPythonApplication rec {
     # require network
     "test_files_headers"
     "test_integration"
+
+    # fixed by https://github.com/Backblaze/B2_Command_Line_Tool/pull/915
+    "TestRmConsoleTool"
   ];
 
   disabledTestPaths = [
     # requires network
     "test/integration/test_b2_command_line.py"
+
+    # it's hard to make it work on nix
+    "test/integration/test_autocomplete.py"
+    "test/unit/console_tool"
   ];
 
-  postInstall = ''
-    mv "$out/bin/b2" "$out/bin/backblaze-b2"
-
-    sed 's/b2/backblaze-b2/' -i contrib/bash_completion/b2
-
-    mkdir -p "$out/share/bash-completion/completions"
-    cp contrib/bash_completion/b2 "$out/share/bash-completion/completions/backblaze-b2"
+  postInstall = lib.optionalString (execName != "b2") ''
+    mv "$out/bin/b2" "$out/bin/${execName}"
+  ''
+  + ''
+    installShellCompletion --cmd ${execName} \
+      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName}) \
+      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName})
   '';
+
+  passthru.tests.version = (testers.testVersion {
+    package = backblaze-b2;
+    command = "${execName} version --short";
+  }).overrideAttrs (old: {
+    # workaround the error: Permission denied: '/homeless-shelter'
+    # backblaze-b2 fails to create a 'b2' directory under the XDG config path
+    HOME = "$(mktemp -d)";
+  });
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
+    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hrdinka kevincox tomhoule ];
   };

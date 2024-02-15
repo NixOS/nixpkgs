@@ -1,11 +1,11 @@
-{ lib, stdenv, darwin, fetchurl, pkg-config, SDL2 }:
+{ lib, stdenv, darwin, fetchurl, pkg-config, SDL2, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_gfx";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "http://www.ferzkopp.net/Software/${pname}/${pname}-${version}.tar.gz";
+    url = "http://www.ferzkopp.net/Software/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "0qk2ax7f7grlxb13ba0ll3zlm8780s7j8fmrhlpxzjgdvldf1q33";
   };
 
@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [(if stdenv.hostPlatform.isx86 then "--enable-mmx" else "--disable-mmx")]
      ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "SDL graphics drawing primitives and support functions";
@@ -42,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     maintainers = with maintainers; [ cpages ];
     platforms = platforms.unix;
+    pkgConfigModules = [ "SDL2_gfx" ];
   };
-}
+})

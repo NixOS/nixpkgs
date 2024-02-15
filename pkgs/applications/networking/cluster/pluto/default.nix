@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pluto";
-  version = "5.15.1";
+  version = "5.19.1";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "pluto";
     rev = "v${version}";
-    sha256 = "sha256-qCWKmn0buITZo86hQncXWuEDQq0rITrCz/aRVR1+Zt4=";
+    hash = "sha256-6TOHDjR5sFaIeR6Zuf4azQAIgUyev7vdlAKB7YNk8R0=";
   };
 
-  vendorHash = "sha256-3wtE2Cz+AVF+zfsLH/+6KMHPihYcuYsrzTguHNnwT+U=";
+  vendorHash = "sha256-8ZOYp/vM16PugmE+3QK7ZRDwIwRCMEwD0NRyiOBlh14=";
 
   ldflags = [
     "-w" "-s"
@@ -22,6 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/FairwindsOps/pluto";
     description = "Find deprecated Kubernetes apiVersions";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterromfeldhk ];
+    maintainers = with maintainers; [ peterromfeldhk kashw2 ];
   };
 }

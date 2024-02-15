@@ -62,6 +62,8 @@ pinentryMkDerivation rec {
   ];
 
   configureFlags = [
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
     (lib.enableFeature withLibsecret "libsecret")
   ] ++ (map enableFeaturePinentry (lib.attrNames flavorInfo));
 

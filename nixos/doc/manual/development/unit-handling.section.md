@@ -25,8 +25,11 @@ checks:
     since changes in their values are applied by systemd when systemd is
     reloaded.
 
-  - `.mount` units are **reload**ed. These mostly come from the `/etc/fstab`
-    parser.
+  - `.mount` units are **reload**ed if only their `Options` changed. If anything
+    else changed (like `What`), they are **restart**ed unless they are the mount
+    unit for `/` or `/nix` in which case they are reloaded to prevent the system
+    from crashing. Note that this is the case for `.mount` units and not for
+    mounts from `/etc/fstab`. These are explained in [](#sec-switching-systems).
 
   - `.socket` units are currently ignored. This is to be fixed at a later
     point.
@@ -60,3 +63,42 @@ checks:
     is **restart**ed with the others. If it is set, both the service and the
     socket are **stop**ped and the socket is **start**ed, leaving socket
     activation to start the service when it's needed.
+
+## Sysinit reactivation {#sec-sysinit-reactivation}
+
+[`sysinit.target`](https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html#sysinit.target)
+is a systemd target that encodes system initialization (i.e. early startup). A
+few units that need to run very early in the bootup process are ordered to
+finish before this target is reached. Probably the most notable one of these is
+`systemd-tmpfiles-setup.service`. We will refer to these units as "sysinit
+units".
+
+"Normal" systemd units, by default, are ordered AFTER `sysinit.target`. In
+other words, these "normal" units expect all services ordered before
+`sysinit.target` to have finished without explicity declaring this dependency
+relationship for each dependency. See the [systemd
+bootup](https://www.freedesktop.org/software/systemd/man/latest/bootup.html)
+for more details on the bootup process.
+
+When restarting both a unit ordered before `sysinit.target` as well as one
+after, this presents a problem because they would be started at the same time
+as they do not explicitly declare their dependency relations.
+
+To solve this, NixOS has an artificial `sysinit-reactivation.target` which
+allows you to ensure that services ordered before `sysinit.target` are
+restarted correctly. This applies both to the ordering between these sysinit
+services as well as ensuring that sysinit units are restarted before "normal"
+units.
+
+To make an existing sysinit service restart correctly during system switch, you
+have to declare:
+
+```nix
+systemd.services.my-sysinit = {
+  requiredBy = [ "sysinit-reactivation.target" ];
+  before = [ "sysinit-reactivation.target" ];
+  restartTriggers = [ config.environment.etc."my-sysinit.d".source ];
+};
+```
+
+You need to configure appropriate `restartTriggers` specific to your service.

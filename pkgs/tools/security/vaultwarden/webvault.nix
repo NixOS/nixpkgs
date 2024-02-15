@@ -3,37 +3,35 @@
 , fetchFromGitHub
 , git
 , nixosTests
-, nodejs-16_x
 , python3
 }:
 
 let
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs-16_x; };
-
-  version = "2022.12.0";
+  version = "2024.1.2";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-4yUE0ySUCKmmbca+T8qjqSO0AHZEUAHZ4nheRjpDnZo=";
+    hash = "sha256-XpFGLZpX5BeP6cEZfGlNnh94aS6As0eCnllVyHLrOWo=";
   };
-in buildNpmPackage' {
+
+in buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "web-v${version}";
-    hash = "sha256-CsbnnP12P7JuGDOm5Ia73SzET/jCx3qRbz9vdUf7lCA=";
+    rev = "web-v${lib.removeSuffix "b" version}";
+    hash = "sha256-hzAkVzaCjwoZ/PMnsnSmsqUBWLhqfPWuWVujChy0V38=";
   };
 
-  npmDepsHash = "sha256-wWOtVGNOzY2s82nfQDuWgA4ukpJxJr8Z7Y+rFPq2QdU=";
+  npmDepsHash = "sha256-KTqPf8jy8cgGz0+1GssSzEfPVSSQlLenLPgHggNoGfc=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
-    PATH="${git}/bin:$PATH" VAULT_VERSION=${bw_web_builds.rev} \
+    PATH="${git}/bin:$PATH" VAULT_VERSION="${lib.removePrefix "web-" src.rev}" \
       bash ${bw_web_builds}/scripts/apply_patches.sh
   '';
 
@@ -51,6 +49,8 @@ in buildNpmPackage' {
     "--workspace" "apps/web"
   ];
 
+  npmFlags = [ "--legacy-peer-deps" ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/vaultwarden
@@ -66,6 +66,7 @@ in buildNpmPackage' {
   meta = with lib; {
     description = "Integrates the web vault into vaultwarden";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
+    changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda msteen mic92 ];

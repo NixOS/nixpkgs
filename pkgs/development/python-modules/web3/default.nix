@@ -1,31 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , aiohttp
 , eth-abi
 , eth-account
 , eth-hash
 , eth-typing
 , eth-utils
-, eth-rlp
 , hexbytes
 , ipfshttpclient
 , jsonschema
 , lru-dict
 , protobuf
 , requests
-, typing-extensions
 , websockets
-# , eth-tester
-# , py-geth
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "5.31.1";
+  version = "6.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,52 +28,44 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "web3.py";
     rev = "v${version}";
-    hash = "sha256-YsAbPI9Y6z+snKZ9NsA0YSpB38n+ra4+Ei6COYFe8v4=";
+    hash = "sha256-RNWCZQjcse415SSNkHhMWckDcBJGFZnjisckF7gbYY8=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  # Note: to reflect the extra_requires in main/setup.py.
+  passthru.optional-dependencies = {
+    ipfs = [ ipfshttpclient ];
+  };
 
   propagatedBuildInputs = [
     aiohttp
     eth-abi
     eth-account
-    eth-hash
-    eth-rlp
+    eth-hash ] ++ eth-hash.optional-dependencies.pycryptodome ++ [
     eth-typing
     eth-utils
     hexbytes
-    ipfshttpclient
     jsonschema
     lru-dict
     protobuf
     requests
     websockets
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  ];
 
-  pythonRelaxDeps = true;
-
-  # TODO: package eth-tester
-  #nativeCheckInputs = [
-  #  eth-tester
-  #  eth-tester.optional-dependencies.py-evm
-  #  py-geth
-  #  pytestCheckHook
-  #];
-
+  # TODO: package eth-tester required for tests
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "types-protobuf==3.19.13" "types-protobuf"
+  '';
 
   pythonImportsCheck = [
     "web3"
   ];
 
   meta = with lib; {
-    description = "Web3 library for interactions";
-    homepage = "https://github.com/ethereum/web3";
+    description = "A python interface for interacting with the Ethereum blockchain and ecosystem";
+    homepage = "https://web3py.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = with maintainers; [ hellwolf ];
   };
 }

@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , coreutils
 , git
 , mercurial
@@ -9,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.6.1";
   pname = "nbstripout";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-kGW83RSIs4bk88CB/8HUj0UTovjYv00NmiggjF2v6dM=";
   };
@@ -45,5 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kynan/nbstripout";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+    mainProgram = "nbstripout";
   };
 }

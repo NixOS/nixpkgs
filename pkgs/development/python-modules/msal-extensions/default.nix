@@ -1,45 +1,47 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, isPy27
-
-# pythonPackages
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , msal
-, pathlib2
 , portalocker
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "msal-extensions";
-  version = "1.0.0";
+  version = "1.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xnarpWsMzjeD3htcXs/oKNuZgWeHUSbKS0fcZDZFE1Q=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "AzureAD";
+    repo = "microsoft-authentication-extensions-for-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ScInTvOgFxP5mgep5FRu6YZHPTtXhrcZGFE7Wdvcm4c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     msal
     portalocker
-  ] ++ lib.optionals isPy27 [
-    pathlib2
   ];
-
-  # upstream doesn't update this requirement probably because they use pip
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "portalocker~=1.0" "portalocker"
-  '';
 
   # No tests found
   doCheck = false;
 
+  pythonImportsCheck = [
+    "msal_extensions"
+  ];
+
   meta = with lib; {
     description = "The Microsoft Authentication Library Extensions (MSAL-Extensions) for Python";
     homepage = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python";
+    changelog = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

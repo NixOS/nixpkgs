@@ -5,6 +5,7 @@
 , limits
 , mock
 , hiro
+, httpx
 , poetry-core
 , pytestCheckHook
 , pythonAtLeast
@@ -15,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.7";
-  format = "pyproject";
+  version = "0.1.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laurentS";
-    repo = pname;
+    repo = "slowapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IAB7JW8iVb5M610GVK0POXlSiya22KzNgr26BNvPC4Q=";
+    hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
   };
 
   nativeBuildInputs = [
@@ -39,16 +40,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fastapi
     hiro
+    httpx
     mock
     pytestCheckHook
     starlette
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'limits = "^1.5"' 'limits = "*"' \
-      --replace 'redis = "^3.4.1"' 'redis = "*"'
-  '';
 
   disabledTests = [
     # AssertionError: Regex pattern 'parameter `request` must be an instance of starlette.requests.Request' does not match 'This portal is not running'.

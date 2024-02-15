@@ -41,7 +41,7 @@
 , at-spi2-core
 , autoPatchelfHook
 , wrapGAppsHook
-, qt5
+, qt6
 , proprietaryCodecs ? false
 , vivaldi-ffmpeg-codecs
 }:
@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
-  version = "96.0.4693.31";
+  version = "106.0.4998.70";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-ygJmwwwYg5lc7rDMkc8YH7oThET+4reFqPTrojtFowQ=";
+    hash = "sha256-JTLu59x5fthTKwP4cTX8pabRWFVhkatGNm0bV2yHBxE=";
   };
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     dpkg
     autoPatchelfHook
     wrapGAppsHook
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
     nss
     pango
     stdenv.cc.cc.lib
+    qt6.qtbase
   ];
 
   runtimeDependencies = [
@@ -128,6 +129,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -r usr $out
     cp -r usr/share $out/share
+
+    # we already using QT6, autopatchelf wants to patch this as well
+    rm $out/usr/lib/x86_64-linux-gnu/opera/libqt5_shim.so
     ln -s $out/usr/bin/opera $out/bin/opera
   '';
 
@@ -137,5 +141,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ kindrowboat ];
   };
 }

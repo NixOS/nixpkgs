@@ -1,7 +1,6 @@
 from collections.abc import Mapping, Sequence
-from typing import Any, cast, Optional, NamedTuple
+from typing import cast, Optional, NamedTuple
 
-import markdown_it
 from markdown_it.token import Token
 from xml.sax.saxutils import escape, quoteattr
 
@@ -197,7 +196,7 @@ class DocBookRenderer(Renderer):
         spacing = ' spacing="compact"' if token.meta.get('compact', False) else ''
         return f"<orderedlist{start}{spacing}>"
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return f"</orderedlist>"
+        return "</orderedlist>"
     def heading_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         hlevel = int(token.tag[1:])
         result = self._close_headings(hlevel)
@@ -218,11 +217,15 @@ class DocBookRenderer(Renderer):
             result += f"<partintro{maybe_id}>"
         return result
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        if id := token.attrs.get('id'):
-            return f"<anchor xml:id={quoteattr(cast(str, id))} />"
-        return ""
+        if id := cast(str, token.attrs.get('id', '')):
+            id = f'xml:id={quoteattr(id)}' if id else ''
+        return f'<example {id}>'
     def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return ""
+        return "</example>"
+    def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<title>"
+    def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</title>"
 
     def _close_headings(self, level: Optional[int]) -> str:
         # we rely on markdown-it producing h{1..6} tags in token.tag for this to work

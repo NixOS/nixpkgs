@@ -2,47 +2,99 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
+, isPyPy
 , substituteAll
-, imageio-ffmpeg
+
+# build-system
+, setuptools
+
+# native dependencies
+, libGL
+
+# dependencies
 , numpy
 , pillow
+
+# optional-dependencies
+, astropy
+, av
+, imageio-ffmpeg
+, pillow-heif
 , psutil
-, pytestCheckHook
 , tifffile
+
+# tests
+, pytestCheckHook
 , fsspec
-, libGL
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.26.0";
-  disabled = pythonOlder "3.7";
+  version = "2.34.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Fp8WQs23IxM/6P6QGIf08bObwDZFjEZk8fnSViJs7TU=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "imageio";
+    repo = "imageio";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+I5KmKSLi8ARbDH06em71LWhmqziAaDfaBp4hU67/jg=";
   };
 
-  patches = [
+  patches = lib.optionals (!stdenv.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    imageio-ffmpeg
     numpy
     pillow
   ];
+
+  passthru.optional-dependencies = {
+    bsdf = [];
+    dicom = [];
+    feisem = [];
+    ffmpeg = [
+      imageio-ffmpeg
+      psutil
+    ];
+    fits = lib.optionals (!isPyPy) [
+      astropy
+    ];
+    freeimage = [];
+    lytro = [];
+    numpy = [];
+    pillow = [];
+    simpleitk = [];
+    spe = [];
+    swf = [];
+    tifffile = [
+      tifffile
+    ];
+    pyav = [
+      av
+    ];
+    heif = [
+      pillow-heif
+    ];
+  };
 
   nativeCheckInputs = [
     fsspec
     psutil
     pytestCheckHook
-    tifffile
-  ];
+  ]
+  ++ fsspec.optional-dependencies.github
+  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     "-m 'not needs_internet'"
@@ -61,9 +113,20 @@ buildPythonPackage rec {
     "tests/test_swf.py"
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Segmentation fault
+    "test_bayer_write"
+    # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation
+    "test_writer_file_properly_closed"
+    "test_writer_pixelformat_size_verbose"
+    "test_writer_ffmpeg_params"
+    "test_reverse_read"
+  ];
+
   meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
-    homepage = "http://imageio.github.io/";
+    homepage = "https://imageio.readthedocs.io";
+    changelog = "https://github.com/imageio/imageio/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ Luflosi ];
   };

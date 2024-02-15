@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "cilium-cli";
-  version = "0.12.11";
+  version = "0.15.22";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-50D3iH5KAWvX7lAPHY7cUKc4d4ww47ti2QOgdrfY1BY=";
+    hash = "sha256-tjVrcxWXE/eOeVoXnoBHYXk4rA3QqcWDbK1MRZ+v7uE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/cilium" ];
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/cilium/cilium-cli/internal/cli/cmd.Version=${version}"
+    "-X github.com/cilium/cilium-cli/cli.Version=${version}"
   ];
 
   # Required to workaround install check error:
@@ -41,7 +41,7 @@ buildGoModule rec {
     description = "CLI to install, manage & troubleshoot Kubernetes clusters running Cilium";
     license = licenses.asl20;
     homepage = "https://www.cilium.io/";
-    maintainers = with maintainers; [ humancalico bryanasdev000 ];
+    maintainers = with maintainers; [ humancalico bryanasdev000 qjoly ];
     mainProgram = "cilium";
   };
 }

@@ -11,16 +11,18 @@ in {
   name = "systemd-timesyncd";
   nodes = {
     current = mkVM {};
-    pre1909 = mkVM ({lib, ... }: with lib; {
+    pre1909 = mkVM ({lib, ... }: {
       # create the path that should be migrated by our activation script when
       # upgrading to a newer nixos version
       system.stateVersion = "19.03";
-      system.activationScripts.simulate-old-timesync-state-dir = mkBefore ''
-        rm -f /var/lib/systemd/timesync
-        mkdir -p /var/lib/systemd /var/lib/private/systemd/timesync
-        ln -s /var/lib/private/systemd/timesync /var/lib/systemd/timesync
-        chown systemd-timesync: /var/lib/private/systemd/timesync
-      '';
+      systemd.tmpfiles.settings.systemd-timesyncd-test = {
+        "/var/lib/systemd/timesync".R = { };
+        "/var/lib/systemd/timesync".L.argument = "/var/lib/private/systemd/timesync";
+        "/var/lib/private/systemd/timesync".d = {
+          user = "systemd-timesync";
+          group = "systemd-timesync";
+        };
+      };
     });
   };
 

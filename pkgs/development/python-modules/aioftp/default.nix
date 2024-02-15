@@ -6,32 +6,48 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , siosocks
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.21.4";
-  format = "setuptools";
+  version = "0.22.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KLsm1GFsfDgaFUMoH5hwUbjS0dW/rwI9nn4sIQXFG7k=";
+    hash = "sha256-uqKxMYaqAWIuS4LyfC9I9Nr7SORXprGPzamakl4NwnA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     siosocks
   ];
+
+  passthru.optional-dependencies = {
+    socks = [
+      siosocks
+    ];
+  };
 
   nativeCheckInputs = [
     async-timeout
     pytest-asyncio
     pytestCheckHook
     trustme
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # uses 127.0.0.2, which macos doesn't like
@@ -44,8 +60,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python FTP client/server for asyncio";
-    homepage = "https://github.com/aio-libs/aioftp";
+    homepage = "https://aioftp.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

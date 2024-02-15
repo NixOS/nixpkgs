@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.20.0";
-  disabled = pythonOlder "3.7";
+  version = "0.24.0.post1";
+  disabled = pythonOlder "3.8";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    hash = "sha256-yca6JI3/aqdZF7SxFeYr84GOeQnLBmbm1dIXjngX9Ng=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WMXOmQOTj/yPazPEAuteho4UH9enXcIa1mMDDl2eaIk=";
   };
 
   outputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     h11
-  ] ++ lib.optionals (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ];
 

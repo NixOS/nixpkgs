@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 , mopidy
 }:
 
@@ -7,7 +8,7 @@ python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Tidal";
   version = "0.3.2";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-ekqhzKyU2WqTOeRR1ZSZA9yW3UXsLBsC2Bk6FZrQgmc=";
   };
@@ -28,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     description = "Mopidy extension for playing music from Tidal";
     homepage = "https://github.com/tehkillerbee/mopidy-tidal";
     license = licenses.mit;
-    maintainers = [ maintainers.rodrgz ];
+    maintainers = [ ];
   };
 }
 

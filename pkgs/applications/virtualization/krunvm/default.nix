@@ -5,9 +5,11 @@
 , asciidoctor
 , buildah
 , buildah-unwrapped
+, cargo
 , libiconv
 , libkrun
 , makeWrapper
+, rustc
 , sigtool
 }:
 
@@ -27,10 +29,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y0FNi/+HuN5SqexHTKjcW6lEaeis7xZDYc2/FOAANIA=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
     asciidoctor
     makeWrapper
   ] ++ lib.optionals stdenv.isDarwin [ sigtool ];
@@ -68,5 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
     platforms = libkrun.meta.platforms;
+    mainProgram = "krunvm";
   };
 }

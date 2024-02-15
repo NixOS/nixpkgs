@@ -1,17 +1,17 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , substituteAll
-, krb5
 , findutils
-, which
-, pythonOlder
+, krb5
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "k5test";
   version = "0.10.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -26,7 +26,6 @@ buildPythonPackage rec {
       inherit findutils krb5;
       # krb5-config is in dev output
       krb5Dev = krb5.dev;
-      which = "${which}/bin/which";
     })
   ];
 
@@ -36,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "k5test" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     license = licenses.mit;

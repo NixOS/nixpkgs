@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 with python3.pkgs;
@@ -27,9 +28,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "wlc is a Weblate commandline client using Weblate's REST API.";
+    description = "A Weblate commandline client using Weblate's REST API";
     homepage = "https://github.com/WeblateOrg/wlc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ paperdigits ];
+    mainProgram = "wlc";
   };
 }

@@ -1,11 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
 , cairo
 , pango
+, expat
 , fribidi
 , fmt
 , wayland
@@ -17,7 +20,6 @@
 , enchant
 , gdk-pixbuf
 , libGL
-, libevent
 , libuuid
 , libselinux
 , libXdmcp
@@ -27,26 +29,28 @@
 , libdatrie
 , xcbutilkeysyms
 , pcre
+, xcbutil
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
+, nixosTests
 }:
 let
   enDictVer = "20121020";
   enDict = fetchurl {
     url = "https://download.fcitx-im.org/data/en_dict-${enDictVer}.tar.gz";
-    sha256 = "1svcb97sq7nrywp5f2ws57cqvlic8j6p811d9ngflplj8xw5sjn4";
+    hash = "sha256-xEpdeEeSXuqeTS0EdI1ELNKN2SmaC1cu99kerE9abOs=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.22";
+  version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9/5I/ZOJvqAx4UpXOeDrU9SKPV68HdRrWI9IzBZEctk=";
+    hash = "sha256-XI4E+fWDIYDiYBv6HezytaZmhzv4NUaNam1T5Fyx+LI=";
   };
 
   prePatch = ''
@@ -60,6 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    expat
     fmt
     isocodes
     cairo
@@ -74,13 +79,13 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json_c
     libGL
-    libevent
     libuuid
     libselinux
     libsepol
     libXdmcp
     libxkbcommon
     pcre
+    xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit
@@ -88,7 +93,12 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
-  passthru.updateScript = ./update.py;
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      inherit (nixosTests) fcitx5;
+    };
+  };
 
   meta = with lib; {
     description = "Next generation of fcitx";

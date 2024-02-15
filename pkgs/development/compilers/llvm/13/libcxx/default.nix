@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/libcxx";
+  sourceRoot = "${src.name}/libcxx";
 
   outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
 

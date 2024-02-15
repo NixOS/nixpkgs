@@ -1,14 +1,14 @@
-{ pkgs, lib, makeWrapper }:
+{ pkgs
+, lib
+, makeWrapper
+, nodejs ? pkgs.nodejs_18
+}:
 
 let
-
-  # To control nodejs version we pass down
-  nodejs = pkgs.nodejs-14_x;
-
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
-  # Haskell packages that require ghc 8.10
-  hs810Pkgs = self: pkgs.haskell.packages.ghc810.override {
+  # Haskell packages that require ghc 9.6
+  hs96Pkgs = self: pkgs.haskell.packages.ghc96.override {
     overrides = self: super: with pkgs.haskell.lib.compose; with lib;
     let elmPkgs = rec {
       elm = overrideCabal (drv: {
@@ -20,7 +20,6 @@ let
           registryDat = ./registry.dat;
         };
         buildTools = drv.buildTools or [] ++ [ makeWrapper ];
-        jailbreak = true;
         postInstall = ''
           wrapProgram $out/bin/elm \
             --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
@@ -32,6 +31,18 @@ let
         maintainers = with maintainers; [ domenkozar turbomack ];
       }) (self.callPackage ./packages/elm.nix { });
 
+      inherit fetchElmDeps;
+      elmVersion = elmPkgs.elm.version;
+    };
+    in elmPkgs // {
+      inherit elmPkgs;
+    };
+  };
+
+  # Haskell packages that require ghc 8.10
+  hs810Pkgs = self: pkgs.haskell.packages.ghc810.override {
+    overrides = self: super: with pkgs.haskell.lib.compose; with lib;
+    let elmPkgs = rec {
       elmi-to-json = justStaticExecutables (overrideCabal (drv: {
         prePatch = ''
           substituteInPlace package.yaml --replace "- -Werror" ""
@@ -58,9 +69,6 @@ let
         license = licenses.bsd3;
         maintainers = [ maintainers.turbomack ];
       }) (self.callPackage ./packages/elm-instrument.nix {}));
-
-      inherit fetchElmDeps;
-      elmVersion = elmPkgs.elm.version;
     };
     in elmPkgs // {
       inherit elmPkgs;
@@ -69,7 +77,7 @@ let
       attoparsec = self.attoparsec_0_13_2_5;
 
       # aeson 2.0.3.0 does not build with attoparsec_0_13_2_5
-      aeson = self.aeson_1_5_6_0;
+      aeson = doJailbreak self.aeson_1_5_6_0;
 
       # elm-instrument needs this
       indents = self.callPackage ./packages/indents.nix {};
@@ -107,8 +115,6 @@ let
 
       # elm-format requires text >= 2.0
       text = self.text_2_0_2;
-      # elm-format-lib requires hspec-golden < 0.2
-      hspec-golden = self.hspec-golden_0_1_0_3;
       # unorderd-container's tests indirectly depend on text < 2.0
       unordered-containers = overrideCabal (drv: { doCheck = false; }) super.unordered-containers;
       # relude-1.1.0.0's tests depend on hedgehog < 1.2, which indirectly depends on text < 2.0
@@ -117,15 +123,14 @@ let
   };
 
   nodePkgs = pkgs.callPackage ./packages/node-composition.nix {
-    inherit pkgs;
-    nodejs = pkgs.nodejs-14_x;
+    inherit pkgs nodejs;
     inherit (pkgs.stdenv.hostPlatform) system;
   };
 
 in lib.makeScope pkgs.newScope (self: with self; {
   inherit fetchElmDeps nodejs;
 
-  /* Node/NPM based dependecies can be upgraded using script `packages/generate-node-packages.sh`.
+  /* Node/NPM based dependencies can be upgraded using script `packages/generate-node-packages.sh`.
 
       * Packages which rely on `bin-wrap` will fail by default
         and can be patched using `patchBinwrap` function defined in `packages/lib.nix`.
@@ -134,7 +139,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
         `patchNpmElm` function also defined in `packages/lib.nix`.
   */
   elmLib = let
-    hsElmPkgs = hs810Pkgs self;
+    hsElmPkgs = (hs810Pkgs self) // (hs96Pkgs self);
   in import ./packages/lib.nix {
     inherit lib;
     inherit (pkgs) writeScriptBin stdenv;
@@ -145,16 +150,10 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
   elm-test-rs = callPackage ./packages/elm-test-rs.nix { };
 
-  elm-test = nodePkgs.elm-test // {
-    meta = with lib; nodePkgs.elm-test.meta // {
-      description = "Runs elm-test suites from Node.js";
-      homepage = "https://github.com/rtfeldman/node-test-runner";
-      license = licenses.bsd3;
-      maintainers = [ maintainers.turbomack ];
-    };
-  };
-} // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
-  elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
+  elm-test = callPackage ./packages/elm-test.nix { };
+} // (hs96Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (hs810Pkgs self).elmPkgs // (with elmLib; with (hs96Pkgs self).elmPkgs; {
+  elm-verify-examples = let
+    patched = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
     meta = with lib; nodePkgs.elm-verify-examples.meta // {
       description = "Verify examples in your docs";
       homepage = "https://github.com/stoeffel/elm-verify-examples";
@@ -162,6 +161,14 @@ in lib.makeScope pkgs.newScope (self: with self; {
       maintainers = [ maintainers.turbomack ];
     };
   };
+  in patched.override (old: {
+    preRebuild = (old.preRebuild or "") + ''
+      # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
+      # in case of just this package
+      # TODO: investigate, same as for elm-coverage below
+      sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
+    '';
+  });
 
   elm-coverage = let
       patched = patchNpmElm (patchBinwrap [elmi-to-json] nodePkgs.elm-coverage);
@@ -198,6 +205,15 @@ in lib.makeScope pkgs.newScope (self: with self; {
       };
     };
 
+    elm-graphql =
+      nodePkgs."@dillonkearns/elm-graphql" // {
+        meta = with lib; nodePkgs."@dillonkearns/elm-graphql".meta // {
+          description = " Autogenerate type-safe GraphQL queries in Elm.";
+          license = licenses.bsd3;
+          maintainers = [ maintainers.pedrohlc ];
+        };
+      };
+
     elm-review =
       nodePkgs.elm-review // {
         meta = with lib; nodePkgs.elm-review.meta // {
@@ -217,6 +233,19 @@ in lib.makeScope pkgs.newScope (self: with self; {
         };
       };
 
+      elm-spa = nodePkgs."elm-spa".overrideAttrs  (
+        old: {
+          nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
+
+          meta = with lib; nodePkgs."elm-spa".meta // {
+            description = "A tool for building single page apps in Elm";
+            homepage = "https://www.elm-spa.dev/";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.ilyakooo0 ];
+          };
+        }
+      );
+
       elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
         meta = with lib; nodePkgs."elm-optimize-level-2".meta // {
           description = "A second level of optimization for the Javascript that the Elm Compiler produces";
@@ -235,6 +264,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
           # see upstream issue https://github.com/dillonkearns/elm-pages/issues/305 for dealing with the read-only problem
           preFixup = ''
             patch $out/lib/node_modules/elm-pages/generator/src/codegen.js ${./packages/elm-pages-fix-read-only.patch}
+            patch $out/lib/node_modules/elm-pages/generator/src/init.js ${./packages/elm-pages-fix-init-read-only.patch}
           '';
 
           postFixup = ''
@@ -248,6 +278,20 @@ in lib.makeScope pkgs.newScope (self: with self; {
             homepage = "https://github.com/dillonkearns/elm-pages";
             license = licenses.bsd3;
             maintainers = [ maintainers.turbomack maintainers.jali-clarke ];
+          };
+        }
+      );
+
+      elm-land =
+        let
+          patched = patchNpmElm nodePkgs.elm-land;
+        in
+        patched.override (old: {
+          meta = with lib; nodePkgs."elm-land".meta // {
+            description = "A production-ready framework for building Elm applications.";
+            homepage = "https://elm.land/";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.zupo ];
           };
         }
       );

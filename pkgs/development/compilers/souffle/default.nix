@@ -10,22 +10,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.3";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "sha256-wdTBSmyA2I+gaSV577NNKA2oY2fdVTGmvV7h15NY1tU=";
+    sha256 = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
   };
 
   patches = [
     ./threads.patch
-    (fetchpatch {
-      name = "missing-override.patch";
-      url = "https://github.com/souffle-lang/souffle/commit/da2d778f0cca94f206686546fa56b9ffc738ad75.patch";
-      sha256 = "Oefm3vRRwOyom94oGSOK2w9m23gkbJ++9gcWrdLlkyk=";
-    })
   ];
 
   hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
@@ -38,6 +33,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ ncurses zlib sqlite libffi ];
 
   cmakeFlags = [ "-DSOUFFLE_GIT=OFF" ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
 
   postInstall = ''
     wrapProgram "$out/bin/souffle" --prefix PATH : "${toolsPath}"

@@ -13,8 +13,8 @@
 , libXdmcp
 , libXrandr
 , spirv-headers
-, spirv-tools
 , vulkan-headers
+, vulkan-utility-libraries
 , wayland
 }:
 
@@ -23,20 +23,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.239.0";
+  version = "1.3.275.0";
 
-  # If we were to use "dev" here instead of headers, the setupHook would be
-  # placed in that output instead of "out".
-  outputs = ["out" "headers"];
-  outputInclude = "headers";
-
-  src = (assert (lib.all (pkg: pkg.version == version) [vulkan-headers glslang spirv-tools spirv-headers]);
-    fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "Vulkan-ValidationLayers";
-      rev = "sdk-${version}";
-      hash = "sha256-k/A0TaERQAHSM0Fal2IOaRvTz3FV2Go/17P12FSBG1s=";
-    });
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "Vulkan-ValidationLayers";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-hJx8gn0zCN3+DhO6niylZJXPHgQ+VhQV5tL8qAeRaUg=";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -51,8 +45,8 @@ stdenv.mkDerivation rec {
     libXrandr
     libffi
     libxcb
-    spirv-tools
     vulkan-headers
+    vulkan-utility-libraries
     wayland
   ];
 
@@ -69,6 +63,8 @@ stdenv.mkDerivation rec {
   # Tests require access to vulkan-compatible GPU, which isn't
   # available in Nix sandbox. Fails with VK_ERROR_INCOMPATIBLE_DRIVER.
   doCheck = false;
+
+  separateDebugInfo = true;
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.

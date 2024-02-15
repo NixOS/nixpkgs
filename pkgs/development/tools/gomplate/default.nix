@@ -1,20 +1,27 @@
+# Gomplate 3.x does not build with go > 1.20.
+# Version 4 of gomplate (yet unreleased) should not have this issue.
+#
+# see https://github.com/hairyhenderson/gomplate/issues/1872
+
 { lib
-, buildGoModule
+#, buildGoModule
+, buildGo120Module
 , fetchFromGitHub
 }:
 
-buildGoModule rec {
+# buildGoModule rec {
+buildGo120Module rec {
   pname = "gomplate";
-  version = "3.11.4";
+  version = "3.11.7";
 
   src = fetchFromGitHub {
     owner = "hairyhenderson";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3WTscK2nmjd7+cUKGaAi9i+C3HFpuxb7eRCn0fOHFV4=";
+    hash = "sha256-0cYQ44SF8fQ5Ml0tRUbqTFZ+zDVTV6elox1q6tNsG7Q=";
   };
 
-  vendorHash = "sha256-X3o00WATVlWoc1Axug5ErPtLDQ+BL3CtO/QyNtavIpg=";
+  vendorHash = "sha256-8siITXKIqDbph/74aBEvkbLVqHE30VyRompFL6z92zA=";
 
   postPatch = ''
     # some tests require network access

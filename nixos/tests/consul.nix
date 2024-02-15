@@ -145,7 +145,7 @@ in {
     client2.succeed("[ $(consul kv get testkey) == 42 ]")
 
 
-    def rolling_reboot_test(proper_rolling_procedure=True):
+    def rolling_restart_test(proper_rolling_procedure=True):
         """
         Tests that the cluster can tolearate failures of any single server,
         following the recommended rolling upgrade procedure from
@@ -158,7 +158,13 @@ in {
         """
 
         for server in servers:
-            server.crash()
+            server.block()
+            server.systemctl("stop consul")
+
+            # Make sure the stopped peer is recognized as being down
+            client1.wait_until_succeeds(
+              f"[ $(consul members | grep {server.name} | grep -o -E 'failed|left' | wc -l) == 1 ]"
+            )
 
             # For each client, wait until they have connection again
             # using `kv get -recurse` before issuing commands.
@@ -170,8 +176,8 @@ in {
             client2.succeed("[ $(consul kv get testkey) == 43 ]")
             client2.succeed("consul kv delete testkey")
 
-            # Restart crashed machine.
-            server.start()
+            server.unblock()
+            server.systemctl("start consul")
 
             if proper_rolling_procedure:
                 # Wait for recovery.
@@ -197,10 +203,14 @@ in {
         """
 
         for server in servers:
-            server.crash()
+            server.block()
+            server.systemctl("stop --no-block consul")
 
         for server in servers:
-            server.start()
+            # --no-block is async, so ensure it has been stopped by now
+            server.wait_until_fails("systemctl is-active --quiet consul")
+            server.unblock()
+            server.systemctl("start consul")
 
         # Wait for recovery.
         wait_for_healthy_servers()
@@ -217,13 +227,13 @@ in {
 
     # Run the tests.
 
-    print("rolling_reboot_test()")
-    rolling_reboot_test()
+    print("rolling_restart_test()")
+    rolling_restart_test()
 
     print("all_servers_crash_simultaneously_test()")
     all_servers_crash_simultaneously_test()
 
-    print("rolling_reboot_test(proper_rolling_procedure=False)")
-    rolling_reboot_test(proper_rolling_procedure=False)
+    print("rolling_restart_test(proper_rolling_procedure=False)")
+    rolling_restart_test(proper_rolling_procedure=False)
   '';
 })

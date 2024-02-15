@@ -6,11 +6,12 @@
 
 buildPythonPackage rec {
   pname = "python-pidfile";
-  version = "3.0.0";
+  version = "3.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HhCX30G8dfV0WZ/++J6LIO/xvfyRkdPtJkzC2ulUKdA=";
+    hash = "sha256-pgQBL2iagsHMRFEKI85ZwyaIL7kcIftAy6s+lX958M0=";
   };
 
   propagatedBuildInputs = [

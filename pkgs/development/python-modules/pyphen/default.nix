@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyphen";
-  version = "0.13.2";
+  version = "0.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hH9XoEOlhAjyRnCuAYT/bt+1/VcxdDIIIowCjdxRRDg=";
+    hash = "sha256-WWyLO+HBpwQRul9lF9nM/jCDx1iuK5SkXycHNG2OZvo=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/Kozea/Pyphen";
     changelog = "https://github.com/Kozea/Pyphen/releases/tag/${version}";
     license = with licenses; [gpl2 lgpl21 mpl20];
-    maintainers = with maintainers; [ rvl ];
   };
 }

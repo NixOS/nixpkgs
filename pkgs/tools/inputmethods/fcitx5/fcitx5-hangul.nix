@@ -6,17 +6,18 @@
 , gettext
 , fcitx5
 , libhangul
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-hangul";
-  version = "5.0.11";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VA9LDGMJRJDDCxIsx7wpDgdc2V9cuWlydAq5yiIvpxA=";
+    sha256 = "sha256-3gkZh+ZzgTdpTbQe92gxJlG0x6Yhl7LfMiFEq5mb92o=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,10 @@ stdenv.mkDerivation rec {
     fcitx5
     libhangul
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) fcitx5;
+  };
 
   meta = with lib; {
     description = "Hangul wrapper for Fcitx5";

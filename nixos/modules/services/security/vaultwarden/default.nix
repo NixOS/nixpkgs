@@ -55,11 +55,15 @@ in {
       description = lib.mdDoc ''
         The directory under which vaultwarden will backup its persistent data.
       '';
+      example = "/var/backup/vaultwarden";
     };
 
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
-      default = {};
+      default = {
+        ROCKET_ADDRESS = "::1"; # default to localhost
+        ROCKET_PORT = 8222;
+      };
       example = literalExpression ''
         {
           DOMAIN = "https://bitwarden.example.com";
@@ -116,7 +120,7 @@ in {
         The available configuration options can be found in
         [the environment template file](https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template).
 
-        See ()[#opt-services.vaultwarden.environmentFile) for how
+        See [](#opt-services.vaultwarden.environmentFile) for how
         to set up access to the Admin UI to invite initial users.
       '';
     };
@@ -153,12 +157,7 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.vaultwarden;
-      defaultText = literalExpression "pkgs.vaultwarden";
-      description = lib.mdDoc "Vaultwarden package to use.";
-    };
+    package = mkPackageOption pkgs "vaultwarden" { };
 
     webVaultPackage = mkOption {
       type = package;
@@ -231,6 +230,13 @@ in {
         Unit = "backup-vaultwarden.service";
       };
       wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.tmpfiles.settings = mkIf (cfg.backupDir != null) {
+      "10-vaultwarden".${cfg.backupDir}.d = {
+        inherit user group;
+        mode = "0770";
+      };
     };
   };
 

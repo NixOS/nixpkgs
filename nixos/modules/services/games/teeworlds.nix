@@ -100,7 +100,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.teeworlds}/bin/teeworlds_srv -f ${teeworldsConf}";
+        ExecStart = "${pkgs.teeworlds-server}/bin/teeworlds_srv -f ${teeworldsConf}";
 
         # Hardening
         CapabilityBoundingSet = false;

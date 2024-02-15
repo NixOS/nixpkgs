@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -31,35 +30,31 @@
 , gst_all_1
 , gtest
 , libpulseaudio
+, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "5.10.23";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0m8wYRQGsdN4zpnHUJKCfF05SdvTauRSp6gCu2F9ZAI";
+    hash = "sha256-dWN2IVVpwYwzEuLtT3JvhzKiBwaBq4lzmaEhA9S1hjE=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "chore: dont use </usr/include/linux/cdrom.h>";
-      url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/2afc63541589adab8b0c8c48e290f03535ec2996.patch";
-      sha256 = "sha256-Q9dv5L5sUGeuvNxF8ypQlZuZVuU4NIR/8d8EyP/Q5wk=";
-    })
-    (fetchpatch {
-      name = "feat: rewrite libPath to read LD_LIBRARY_PATH";
-      url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/432bf452ed244c256e99ecaf80bb6a0eef9b4a74.patch";
-      sha256 = "sha256-5hRQ8D9twBKgouVpIBa1pdAGk0lI/wEdQaHBBHFCZBA";
-    })
+    ./dont_use_libPath.diff
   ];
 
   postPatch = ''
-    substituteInPlace src/widgets/toolbox_proxy.cpp \
-      --replace "/bin/bash" "${runtimeShell}"
+    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/198
+    substituteInPlace src/common/diskcheckthread.cpp \
+      --replace "/usr/include/linux/cdrom.h" "linux/cdrom.h"
+    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/337
+    substituteInPlace src/libdmr/playlist_model.cpp \
+      --replace "DGuiApplicationHelper" "Dtk::Gui::DGuiApplicationHelper"
   '';
 
   outputs = [ "out" "dev" ];
@@ -73,13 +68,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    qt5integration
     qt5platform-plugins
     qtx11extras
     qtmultimedia
     qtdbusextended
     qtmpris
     gsettings-qt
-    elfutils.dev
+    elfutils
     ffmpeg
     ffmpegthumbnailer
     xorg.libXtst
@@ -90,7 +86,7 @@ stdenv.mkDerivation rec {
     libdvdnav
     libunwind
     libva
-    zstd.dev
+    zstd
     mpv
     gtest
     libpulseaudio
@@ -99,10 +95,10 @@ stdenv.mkDerivation rec {
     gst-plugins-base
   ]);
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ mpv ffmpeg ffmpegthumbnailer gst_all_1.gstreamer gst_all_1.gst-plugins-base ]}"
+  propagatedBuildInputs = [
+    qtmultimedia
+    qtx11extras
+    ffmpegthumbnailer
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -112,6 +108,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DVERSION=${version}"
+  ];
+
+  strictDeps = true;
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ mpv ffmpeg ffmpegthumbnailer gst_all_1.gstreamer gst_all_1.gst-plugins-base ]}"
   ];
 
   preFixup = ''

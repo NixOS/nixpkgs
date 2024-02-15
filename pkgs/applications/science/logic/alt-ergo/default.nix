@@ -1,47 +1,35 @@
-{ fetchFromGitHub, fetchpatch, lib, which, ocamlPackages }:
+{ darwin, fetchurl, lib, ocamlPackages, stdenv }:
 
 let
   pname = "alt-ergo";
-  version = "2.4.2";
+  version = "2.5.2";
 
-  configureScript = "ocaml unix.cma configure.ml";
-
-  src = fetchFromGitHub {
-    owner = "OCamlPro";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-8pJ/1UAbheQaLFs5Uubmmf5D0oFJiPxF6e2WTZgRyAc=";
+  src = fetchurl {
+    url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${version}/alt-ergo-${version}.tbz";
+    hash = "sha256-9GDBcBH49sheO5AjmDsznMEbw0JSrnSOcIIRN40/aJU=";
   };
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src configureScript;
-  configureFlags = [ pname ];
-  nativeBuildInputs = [ which ];
-  buildInputs = with ocamlPackages; [ dune-configurator ];
-  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex seq stdlib-shims zarith ];
-  preBuild = ''
-    substituteInPlace src/lib/util/version.ml --replace 'version="dev"' 'version="${version}"'
-  '';
+  inherit version src;
+  buildInputs = with ocamlPackages; [ ppx_blob ];
+  propagatedBuildInputs = with ocamlPackages; [ camlzip dolmen_loop dune-build-info fmt ocplib-simplex seq stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src configureScript;
-  configureFlags = [ pname ];
-  nativeBuildInputs = [ which ocamlPackages.menhir ];
-  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
+  inherit version src;
+  nativeBuildInputs = [ ocamlPackages.menhir ];
+  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ psmt2-frontend ]);
 }; in
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src configureScript;
+  inherit pname version src;
 
-  configureFlags = [ pname ];
-
-  nativeBuildInputs = [ which ocamlPackages.menhir ];
-  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];
+  nativeBuildInputs = [ ocamlPackages.menhir ] ++ lib.optionals stdenv.isDarwin [ darwin.sigtool ];
+  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ]);
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

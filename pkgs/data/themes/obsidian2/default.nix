@@ -1,20 +1,25 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchurl
 , gtk-engine-murrine
+, jdupes
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "theme-obsidian2";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${version}/obsidian-2-theme.tar.xz";
-    sha256 = "sha256-WvSlzCock0UMdvajHRBNHSugVMStR1FDt9vjzX5Kp8A=";
+    sha256 = "sha256-yJoMS5XrHlMss+rdJ+xLJx0F9Hs1Cc+MFk+xyhRXaf0=";
   };
 
   sourceRoot = ".";
+
+  nativeBuildInputs = [
+    jdupes
+  ];
 
   propagatedUserEnvPkgs = [
     gtk-engine-murrine
@@ -24,6 +29,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share/themes
     cp -a Obsidian-2* $out/share/themes
+    jdupes --quiet --link-soft --recurse $out/share
     runHook postInstall
   '';
 

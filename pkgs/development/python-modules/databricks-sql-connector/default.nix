@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "2.4.0";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = "databricks-sql-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V8Nl6xr96Xnd1gkw9R0aqXkitLESsAyW7ufTYn6ttLg=";
+    hash = "sha256-Uvy5/a9YFdPKpZ3B+Yvrvp7uZCY/My45w1lDqX7zJvI=";
   };
 
   pythonRelaxDeps = [
@@ -70,5 +70,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/databricks/databricks-sql-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ harvidsen ];
+    # No SQLAlchemy 2.0 support
+    # https://github.com/databricks/databricks-sql-python/issues/91
+    broken = true;
   };
 }

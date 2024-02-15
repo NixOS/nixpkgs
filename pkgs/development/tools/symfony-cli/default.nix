@@ -1,36 +1,60 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nix-update-script
+, testers
+, symfony-cli
+, nssTools
+, makeBinaryWrapper
+}:
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.5.1";
-  vendorHash = "sha256-OMQaYvNt4VeLoNVL/syQlIlGsP4F0C2A679OLbXIXng=";
+  version = "5.8.8";
+  vendorHash = "sha256-ACK0JCaS1MOCgUi2DMEjIcKf/nMCcrdDyIdioBZv7qw=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    sha256 = "sha256-sTgnDe3cjisdmJPtqNkjPF5XncC25Leud4ASai9peJE=";
+    hash = "sha256-GdmFRGyp4s5G5RTEFKjcrY/OpaEVCgRhNVJbY1F8vk0=";
   };
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${version}"
+    "-X main.channel=stable"
   ];
 
+  buildInputs = [ makeBinaryWrapper ];
+
   postInstall = ''
-    mv $out/bin/symfony-cli $out/bin/symfony
+    mkdir $out/libexec
+    mv $out/bin/symfony-cli $out/libexec/symfony
+
+    makeBinaryWrapper $out/libexec/symfony $out/bin/symfony \
+      --prefix PATH : ${lib.makeBinPath [ nssTools ]}
   '';
 
   # Tests requires network access
-  checkPhase = ''
-    $GOPATH/bin/symfony-cli
-  '';
+  doCheck = false;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      inherit version;
+      package = symfony-cli;
+      command = "symfony version --no-ansi";
+    };
+  };
+
+  meta = {
+    changelog = "https://github.com/symfony-cli/symfony-cli/releases/tag/v${version}";
     description = "Symfony CLI";
     homepage = "https://github.com/symfony-cli/symfony-cli";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ drupol ];
+    license = lib.licenses.agpl3Plus;
+    mainProgram = "symfony";
+    maintainers = with lib.maintainers; [ drupol ];
   };
 }

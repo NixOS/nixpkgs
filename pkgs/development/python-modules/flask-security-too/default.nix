@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
+, fetchpatch
 
 # extras: babel
 , babel
@@ -11,7 +13,6 @@
 , bcrypt
 , bleach
 , flask-mailman
-, qrcode
 
 # extras: fsqla
 , flask-sqlalchemy
@@ -21,20 +22,21 @@
 # extras: mfa
 , cryptography
 , phonenumbers
+, webauthn
+, qrcode
 
 # propagates
-, blinker
 , email-validator
 , flask
 , flask-login
-, flask_principal
+, flask-principal
 , flask-wtf
-, itsdangerous
 , passlib
+, importlib-resources
+, wtforms
 
 # tests
 , argon2-cffi
-, flask-mongoengine
 , mongoengine
 , mongomock
 , peewee
@@ -46,26 +48,40 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.1.2";
-  format = "setuptools";
+  version = "5.3.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
+    hash = "sha256-we2TquU28qP/ir4eE67J0Nlft/8IL8w7Ny3ypSE5cNk=";
   };
 
+  patches = [
+    # https://github.com/Flask-Middleware/flask-security/pull/901
+    (fetchpatch {
+      name = "fixes-for-py_webauthn-2.0.patch";
+      url = "https://github.com/Flask-Middleware/flask-security/commit/5725f7021343567ec0b25c890e859f4e84c93ba6.patch";
+      hash = "sha256-4EgwT4zRj0mh4ZaoZFz7H5KeiZ9zs+BY4siYm8DwMfU=";
+      excludes = [ "CHANGES.rst" ];
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    blinker
     email-validator
     flask
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
-    itsdangerous
     passlib
+    importlib-resources
+    wtforms
   ];
 
   passthru.optional-dependencies = {
@@ -77,7 +93,6 @@ buildPythonPackage rec {
       bcrypt
       bleach
       flask-mailman
-      qrcode
     ];
     fsqla = [
       flask-sqlalchemy
@@ -87,12 +102,13 @@ buildPythonPackage rec {
     mfa = [
       cryptography
       phonenumbers
+      webauthn
+      qrcode
     ];
   };
 
   nativeCheckInputs = [
     argon2-cffi
-    flask-mongoengine
     mongoengine
     mongomock
     peewee
@@ -106,6 +122,11 @@ buildPythonPackage rec {
   ++ passthru.optional-dependencies.fsqla
   ++ passthru.optional-dependencies.mfa;
 
+
+  disabledTests = [
+    # needs /etc/resolv.conf
+    "test_login_email_whatever"
+  ];
 
   pythonImportsCheck = [
     "flask_security"

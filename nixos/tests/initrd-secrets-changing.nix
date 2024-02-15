@@ -15,7 +15,6 @@ testing.makeTest {
 
   nodes.machine = { ... }: {
     virtualisation.useBootLoader = true;
-    virtualisation.persistBootDevice = true;
 
     boot.loader.grub.device = "/dev/vda";
 

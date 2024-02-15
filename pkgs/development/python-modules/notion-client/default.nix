@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, setuptools
 , anyio
 , httpx
 , pytest-asyncio
@@ -11,21 +12,27 @@
 
 buildPythonPackage rec {
   pname = "notion-client";
-  version = "2.0.0";
+  version = "2.1.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ramnes";
     repo = "notion-sdk-py";
-    rev = version;
-    hash = "sha256-zfG1OgH/2ytDUC+ogIY9/nP+xkgjiMt9+HVcWEMXoj8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-u10iPSbFPv9RewEYru3V6MpwhhySzmnymmv4CsefGC8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     httpx
   ];
 
-  # disable coverage options as they don't provide us value, and they break the defalt pytestCheckHook
+  # disable coverage options as they don't provide us value, and they break the default pytestCheckHook
   preCheck = ''
     sed -i '/addopts/d' ./setup.cfg
   '';

@@ -1,7 +1,7 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, isPyPy, isPy3k
 , olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2
 , libxcb, tk, libX11, openjpeg, libimagequant, pyroma, numpy, defusedxml
-, pytestCheckHook
+, pytestCheckHook, setuptools
 }@args:
 
 import ../pillow/generic.nix (rec {
@@ -31,7 +31,7 @@ import ../pillow/generic.nix (rec {
 
       Currently, Pillow-SIMD can be compiled with SSE4 (default) or AVX2 support.
     '';
-    license = "http://www.pythonware.com/products/pil/license.htm";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = licenses.hpnd;
+    maintainers = with maintainers; [ ];
   };
 } // args )

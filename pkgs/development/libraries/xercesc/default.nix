@@ -1,16 +1,28 @@
-{ lib, stdenv, fetchurl }:
+{ stdenv
+, lib
+, fetchurl
+, curl
+}:
 
 stdenv.mkDerivation rec {
   pname = "xerces-c";
-  version = "3.2.4";
+  version = "3.2.5";
 
   src = fetchurl {
     url = "mirror://apache/xerces/c/3/sources/${pname}-${version}.tar.gz";
-    sha256 = "sha256-PY7Bx/lOOP7g5Mpa0eHZ2yPL86ELumJva0r6Le2v5as=";
+    sha256 = "sha256-VFz8zmxOdVIHvR8n4xkkHlDjfAwnJQ8RzaEWAY8e8PU=";
   };
 
-  # Disable SSE2 extensions on platforms for which they are not enabled by default
-  configureFlags = [ "--disable-sse2" ];
+  buildInputs = [
+    curl
+  ];
+
+  configureFlags = [
+    # Disable SSE2 extensions on platforms for which they are not enabled by default
+    "--disable-sse2"
+    "--enable-netaccessor-curl"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {

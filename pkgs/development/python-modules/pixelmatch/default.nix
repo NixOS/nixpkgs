@@ -4,7 +4,6 @@
 , pillow
 , poetry-core
 , pytest-benchmark
-, pytest-mypy
 , pytestCheckHook
 , pythonOlder
 }:
@@ -31,13 +30,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pillow
     pytest-benchmark
-    pytest-mypy
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    # Incompatible types in assignment
-    #"--mypy"
     "--benchmark-disable"
   ];
 

@@ -5,9 +5,9 @@
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.19";
+  version = "2.3.7";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "sha256-Tw5rHUZuJt6taCxNSEPo9koBLrpL6RUGrmxtNNPZyPk=";
+  hash = "sha256-+oqWMZqnuf9fSpkbd8vzf1SVSdhHN2JLzr76jyAEv0U=";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -21,7 +21,7 @@ let
       vagrant = {
         source = {
           type = "url";
-          inherit url sha256;
+          inherit url hash;
         };
         inherit version;
       };
@@ -48,7 +48,7 @@ in buildRubyGem rec {
 
   doInstallCheck = true;
   dontBuild = false;
-  src = fetchurl { inherit url sha256; };
+  src = fetchurl { inherit url hash; };
 
   patches = [
     ./unofficial-installation-nowarn.patch
@@ -79,7 +79,8 @@ in buildRubyGem rec {
     in ''
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' ${pathAdditions}
+      --prefix PATH ':' ${pathAdditions} \
+      --set-default VAGRANT_CHECKPOINT_DISABLE 1
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
@@ -95,13 +96,6 @@ in buildRubyGem rec {
 
   installCheckPhase = ''
     HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null
-  '';
-
-  # `patchShebangsAuto` patches this one script which is intended to run
-  # on foreign systems.
-  postFixup = ''
-    sed -i -e '1c#!/bin/sh -' \
-      $out/lib/ruby/gems/*/gems/vagrant-*/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   passthru = {

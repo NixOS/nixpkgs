@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.22.0";
+  version = "5.26.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-bWeMZ1tQkJsRJbolZBue9UzM4Qs7K5Rj5Z80Uotyb8I=";
+    hash = "sha256-bbSpU6l5rhBo7jp7E66/ti4r9GJjXtaaDY5GKYGtLYM=";
   };
 
-  vendorHash = "sha256-UP6IdJLc93gRP4vwKKOJl3sNt4sOFeYXjvwk8QM+D48=";
+  vendorHash = "sha256-X1xuQiFSCPH10OK5bPcRN5fqMLxyi6y2mJGE9RQ1aJg=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -55,5 +55,6 @@ buildGoModule rec {
     changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab zowoq ];
+    mainProgram = "gdu";
   };
 }

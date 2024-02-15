@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "1yg2v4wmswh1sigk47drwsxyayr472mf4i47lqmlcgn9hhbx1q87";
   };
 
+  postPatch = ''
+    # Upstream fix for gcc-13 support:
+    #   https://github.com/stp/stp/pull/462
+    # Can't apply it as is as patch context changed in ither patches.
+    # TODO: remove me on 2.4 release
+    sed -e '1i #include <cstdint>' -i include/stp/AST/ASTNode.h
+  '';
+
   buildInputs = [ boost zlib minisat cryptominisat python3 ];
   nativeBuildInputs = [ cmake bison flex perl ];
   preConfigure = ''

@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pyexcel-ods";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,6 +37,6 @@ buildPythonPackage rec {
     description = "Plug-in to pyexcel providing the capbility to read, manipulate and write data in ods formats using odfpy";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

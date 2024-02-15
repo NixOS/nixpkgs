@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kcoreaddons
 , kconfig
@@ -11,7 +10,6 @@
 , kwidgetsaddons
 , kwindowsystem
 , polkit-qt
-, qtbase
 }:
 
 mkDerivation {

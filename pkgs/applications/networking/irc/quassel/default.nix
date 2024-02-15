@@ -6,7 +6,7 @@
 
 , lib, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
 , mkDerivation, qtbase, boost, zlib, qtscript
-, phonon, libdbusmenu, qca-qt5
+, phonon, libdbusmenu, qca-qt5, openldap
 
 , withKDE ? true # enable KDE integration
 , extra-cmake-modules
@@ -47,7 +47,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ qtbase boost zlib ]
-    ++ lib.optionals buildCore [qtscript qca-qt5 ]
+    ++ lib.optionals buildCore [qtscript qca-qt5 openldap]
     ++ lib.optionals buildClient [libdbusmenu phonon]
     ++ lib.optionals (buildClient && withKDE) [
       extra-cmake-modules kconfigwidgets kcoreaddons
@@ -62,6 +62,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
     ++ edf enableDaemon "WANT_CORE"
+    ++ edf enableDaemon "WITH_LDAP"
     ++ edf client "WANT_QTCLIENT"
     ++ edf withKDE "WITH_KDE";
 
@@ -78,7 +79,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
 
   meta = with lib; {
     homepage = "https://quassel-irc.org/";
-    description = "Qt/KDE distributed IRC client suppporting a remote daemon";
+    description = "Qt/KDE distributed IRC client supporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to

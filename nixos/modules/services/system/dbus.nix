@@ -14,12 +14,16 @@ let
     serviceDirectories = cfg.packages;
   };
 
-  inherit (lib) mkOption mkIf mkMerge types;
+  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
 
 in
 
 {
   options = {
+
+    boot.initrd.systemd.dbus = {
+      enable = mkEnableOption (lib.mdDoc "dbus in stage 1");
+    };
 
     services.dbus = {
 
@@ -91,6 +95,7 @@ in
         uid = config.ids.uids.messagebus;
         description = "D-Bus system message bus daemon user";
         home = homeDir;
+        homeMode = "0755";
         group = "messagebus";
       };
 
@@ -110,6 +115,21 @@ in
         "sockets.target"
       ];
     }
+
+    (mkIf config.boot.initrd.systemd.dbus.enable {
+      boot.initrd.systemd = {
+        users.messagebus = { };
+        groups.messagebus = { };
+        contents."/etc/dbus-1".source = pkgs.makeDBusConf {
+          inherit (cfg) apparmor;
+          suidHelper = "/bin/false";
+          serviceDirectories = [ pkgs.dbus ];
+        };
+        packages = [ pkgs.dbus ];
+        storePaths = [ "${pkgs.dbus}/bin/dbus-daemon" ];
+        targets.sockets.wants = [ "dbus.socket" ];
+      };
+    })
 
     (mkIf (cfg.implementation == "dbus") {
       environment.systemPackages = [
@@ -165,6 +185,11 @@ in
         aliases = [
           "dbus.service"
         ];
+        unitConfig = {
+          # We get errors when reloading the dbus-broker service
+          # if /tmp got remounted after this service started
+          RequiresMountsFor = [ "/tmp" ];
+        };
         # Don't restart dbus. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [

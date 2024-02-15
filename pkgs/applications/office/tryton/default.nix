@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 , pkg-config
 , librsvg
 , gobject-introspection
@@ -20,13 +21,13 @@ with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "5.4.2";
+  version = "7.0.5";
 
   disabled = !python3Packages.isPy3k;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
+    sha256 = "sha256-NAnNBfwnMky0qbtU3P5+kHJwCj6nfIQCtYgu6nXLcaQ=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-QgkUxT5Ae0agvalZl1ie+1LwxgaTzMrKpQY3KkpWwG4=";
   };
 
-  cargoSha256 = "sha256-LPcN5xWOrl+MYVDKRIAlJoDepSSE9LTEN4fUS7bPS2U=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "sdtx-0.1.3" = "sha256-srYSVXRP/rynhhE3ZfOGRM6c7GDgjfmjO/GLXeTze3A=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ udev ];
@@ -34,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "surface";
   };
 }

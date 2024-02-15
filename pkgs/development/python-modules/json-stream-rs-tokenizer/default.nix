@@ -1,42 +1,52 @@
 { lib
+, stdenv
 , buildPythonPackage
+, cargo
+, darwin
 , fetchFromGitHub
-, rustPlatform
-, setuptools-rust
-, json-stream-rs-tokenizer
 , json-stream
+, json-stream-rs-tokenizer
+, pythonOlder
+, rustc
+, rustPlatform
+, setuptools
+, setuptools-rust
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.13";
-  format = "setuptools";
+  version = "0.4.25";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9pJi80V7WKvsgtp0ffItWnjoOvFvfE/Sz6y2VlsU+wQ=";
+    hash = "sha256-zo/jRAWSwcOnO8eU4KhDNz44P6xDGcrZf9CflwsSvF0=";
   };
 
-  postPatch = ''
-    cp ${./Cargo.lock} ./Cargo.lock
-  '';
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src postPatch;
-    name = "${pname}-${version}";
-    hash = "sha256-TjRdHSXHmF6fzCshX1I4Sq+A/fEmBHDPGZvJUxL13aM=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "utf8-read-0.4.0" = "sha256-L/NcgbB+2Rwtc+1e39fQh1D9S4RqQY6CCFOTh8CI8Ts=";
+    };
   };
 
   nativeBuildInputs = [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+    setuptools
     setuptools-rust
-  ]
-  ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    wheel
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.libiconv
+  ];
 
   # Tests depend on json-stream, which depends on this package.
   # To avoid infinite recursion, we only enable tests when building passthru.tests.

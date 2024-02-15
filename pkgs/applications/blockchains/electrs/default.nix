@@ -3,25 +3,25 @@
 , rustPlatform
 , fetchFromGitHub
 , llvmPackages
-, rocksdb_6_23
+, rocksdb_7_10
 , Security
 }:
 
 let
-  rocksdb = rocksdb_6_23;
+  rocksdb = rocksdb_7_10;
 in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.9.11";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iudHdsSjoPal+ORMB3lU7ejGYv69q/8HcxScZS8D/u8=";
+    hash = "sha256-cRnCo/N0k5poiOh308Djw6bySFQFIY3GiD2qjRyMjLM=";
   };
 
-  cargoHash = "sha256-Ft1AluPfV6BIRGEddrrIGNRmaZIzUsA2DN2TcghCnSQ=";
+  cargoHash = "sha256-fsYJ+80se5VsIaRkFgwJaPPgRw/WdsecRTt6EIjoQTQ=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/romanz/electrs";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
+    mainProgram = "electrs";
   };
 }

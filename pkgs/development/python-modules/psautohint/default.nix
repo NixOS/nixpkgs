@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "psautohint";
   version = "2.4.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -44,6 +45,9 @@ buildPythonPackage rec {
     "test_multi_outpath"
     "test_mmhint"
     "test_otf"
+    # flaky tests (see https://github.com/adobe-type-tools/psautohint/issues/385)
+    "test_hashmap_old_version"
+    "test_hashmap_no_version"
   ];
 
   passthru.tests = {

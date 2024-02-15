@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tvm";
-  version = "0.11.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "incubator-tvm";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-feFOmpbC2lN3oH7NiCK9mCjBKTfjpI3JqLNad9MUk9A=";
+    sha256 = "sha256-VbJptTUi12pJh1wz4I+xL6HVo/rSiUHCkvgEMPe1F6o=";
   };
 
   nativeBuildInputs = [ cmake ];

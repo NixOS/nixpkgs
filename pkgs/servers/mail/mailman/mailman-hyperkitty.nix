@@ -1,6 +1,8 @@
 { lib
 , python3
+, fetchPypi
 , mailman
+, nixosTests
 }:
 
 with python3.pkgs;
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     mailman
     requests
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
@@ -38,10 +40,12 @@ buildPythonPackage rec {
     "mailman_hyperkitty"
   ];
 
+  passthru.tests = { inherit (nixosTests) mailman; };
+
   meta = with lib; {
     description = "Mailman archiver plugin for HyperKitty";
     homepage = "https://gitlab.com/mailman/mailman-hyperkitty";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin qyliss ];
+    maintainers = with maintainers; [ qyliss ];
   };
 }

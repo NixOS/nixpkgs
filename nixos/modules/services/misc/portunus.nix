@@ -26,12 +26,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.portunus;
-      defaultText = lib.literalExpression "pkgs.portunus";
-      description = lib.mdDoc "The Portunus package to use.";
-    };
+    package = mkPackageOption pkgs "portunus" { };
 
     seedPath = mkOption {
       type = types.nullOr types.path;
@@ -39,6 +34,15 @@ in
       description = lib.mdDoc ''
         Path to a portunus seed file in json format.
         See <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration> for available options.
+      '';
+    };
+
+    seedSettings = lib.mkOption {
+      type = with lib.types; nullOr (attrsOf (listOf (attrsOf anything)));
+      default = null;
+      description = lib.mdDoc ''
+        Seed settings for users and groups.
+        See upstream for format <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration>
       '';
     };
 
@@ -107,8 +111,11 @@ in
     ldap = {
       package = mkOption {
         type = types.package;
-        default = pkgs.openldap;
-        defaultText = lib.literalExpression "pkgs.openldap";
+        # needs openldap built with a libxcrypt that support crypt sha256 until users have had time to migrate to newer hashes
+        # Ref: <https://github.com/majewsky/portunus/issues/2>
+        # TODO: remove in NixOS 24.11 (cf. same note on pkgs/servers/portunus/default.nix)
+        default = pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; };
+        defaultText = lib.literalExpression "pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; }";
         description = lib.mdDoc "The OpenLDAP package to use.";
       };
 
@@ -174,49 +181,53 @@ in
       "127.0.0.1" = [ cfg.domain ];
     };
 
-    services.dex = mkIf cfg.dex.enable {
-      enable = true;
-      settings = {
-        issuer = "https://${cfg.domain}/dex";
-        web.http = "127.0.0.1:${toString cfg.dex.port}";
-        storage = {
-          type = "sqlite3";
-          config.file = "/var/lib/dex/dex.db";
-        };
-        enablePasswordDB = false;
-        connectors = [{
-          type = "ldap";
-          id = "ldap";
-          name = "LDAP";
-          config = {
-            host = "${cfg.domain}:636";
-            bindDN = "uid=${cfg.ldap.searchUserName},ou=users,${cfg.ldap.suffix}";
-            bindPW = "$DEX_SEARCH_USER_PASSWORD";
-            userSearch = {
-              baseDN = "ou=users,${cfg.ldap.suffix}";
-              filter = "(objectclass=person)";
-              username = "uid";
-              idAttr = "uid";
-              emailAttr = "mail";
-              nameAttr = "cn";
-              preferredUsernameAttr = "uid";
-            };
-            groupSearch = {
-              baseDN = "ou=groups,${cfg.ldap.suffix}";
-              filter = "(objectclass=groupOfNames)";
-              nameAttr = "cn";
-              userMatchers = [{ userAttr = "DN"; groupAttr = "member"; }];
-            };
+    services = {
+      dex = mkIf cfg.dex.enable {
+        enable = true;
+        settings = {
+          issuer = "https://${cfg.domain}/dex";
+          web.http = "127.0.0.1:${toString cfg.dex.port}";
+          storage = {
+            type = "sqlite3";
+            config.file = "/var/lib/dex/dex.db";
           };
-        }];
+          enablePasswordDB = false;
+          connectors = [{
+            type = "ldap";
+            id = "ldap";
+            name = "LDAP";
+            config = {
+              host = "${cfg.domain}:636";
+              bindDN = "uid=${cfg.ldap.searchUserName},ou=users,${cfg.ldap.suffix}";
+              bindPW = "$DEX_SEARCH_USER_PASSWORD";
+              userSearch = {
+                baseDN = "ou=users,${cfg.ldap.suffix}";
+                filter = "(objectclass=person)";
+                username = "uid";
+                idAttr = "uid";
+                emailAttr = "mail";
+                nameAttr = "cn";
+                preferredUsernameAttr = "uid";
+              };
+              groupSearch = {
+                baseDN = "ou=groups,${cfg.ldap.suffix}";
+                filter = "(objectclass=groupOfNames)";
+                nameAttr = "cn";
+                userMatchers = [{ userAttr = "DN"; groupAttr = "member"; }];
+              };
+            };
+          }];
 
-        staticClients = forEach cfg.dex.oidcClients (client: {
-          inherit (client) id;
-          redirectURIs = [ client.callbackURL ];
-          name = "OIDC for ${client.id}";
-          secretEnv = "DEX_CLIENT_${client.id}";
-        });
+          staticClients = forEach cfg.dex.oidcClients (client: {
+            inherit (client) id;
+            redirectURIs = [ client.callbackURL ];
+            name = "OIDC for ${client.id}";
+            secretEnv = "DEX_CLIENT_${client.id}";
+          });
+        };
       };
+
+      portunus.seedPath = lib.mkIf (cfg.seedSettings != null) (pkgs.writeText "seed.json" (builtins.toJSON cfg.seedSettings));
     };
 
     systemd.services = {
@@ -232,7 +243,10 @@ in
         description = "Self-contained authentication service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig.ExecStart = "${cfg.package.out}/bin/portunus-orchestrator";
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/portunus-orchestrator";
+          Restart = "on-failure";
+        };
         environment = {
           PORTUNUS_LDAP_SUFFIX = cfg.ldap.suffix;
           PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";
@@ -251,6 +265,7 @@ in
             acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;
           in
           {
+            PORTUNUS_SERVER_HTTP_SECURE = "true";
             PORTUNUS_SLAPD_TLS_CA_CERTIFICATE = "/etc/ssl/certs/ca-certificates.crt";
             PORTUNUS_SLAPD_TLS_CERTIFICATE = "${acmeDirectory}/cert.pem";
             PORTUNUS_SLAPD_TLS_DOMAIN_NAME = cfg.domain;

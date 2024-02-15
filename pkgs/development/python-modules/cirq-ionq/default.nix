@@ -6,9 +6,10 @@
 
 buildPythonPackage rec {
   pname = "cirq-ionq";
+  format = "setuptools";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -30,5 +31,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # No need to test the version number
     "cirq_ionq/_version_test.py"
+  ];
+
+  disabledTests = [
+    # DeprecationWarning: decompose_to_device was used but is deprecated.
+    "test_decompose_operation_deprecated"
   ];
 }

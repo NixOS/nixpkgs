@@ -6,19 +6,21 @@
 , fetchFromGitHub
 , html2text
 , lxml
+, markdown
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
 , pytz
 , requests
+, setuptools
 , simplejson
 , tabulate
 }:
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.10.0";
-  format = "setuptools";
+  version = "1.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,13 +28,17 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-bVuysEr8VVFgA4OZ7N7UlL2FigbyLVyPr1HHwkshSMU=";
+    hash = "sha256-1haWRuWK9WCgdR4geT2w3E95+CapBYDohGowUmnJ2H4=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=version," "version='${version}',"
+      --replace-warn "version=version," "version='${version}',"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -40,6 +46,7 @@ buildPythonPackage rec {
     colorama
     html2text
     lxml
+    markdown
     python-dateutil
     pytz
     requests

@@ -36,7 +36,8 @@ let
     );
   '';
   configFile = pkgs.writeText "config.php" ''
-    ${strings.fileContents "${pkgs.cloudlog}/install/config/config.php"}
+    <?php
+    include('${pkgs.cloudlog}/install/config/config.php');
     $config['datadir'] = "${cfg.dataDir}/";
     $config['base_url'] = "${cfg.baseUrl}";
     ${cfg.extraConfig}
@@ -68,7 +69,7 @@ let
 in
 {
   options.services.cloudlog = with types; {
-    enable = mkEnableOption (mdDoc "Whether to enable Cloudlog");
+    enable = mkEnableOption (mdDoc "Cloudlog");
     dataDir = mkOption {
       type = str;
       default = "/var/lib/cloudlog";

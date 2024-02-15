@@ -18,18 +18,20 @@
 
 buildPythonPackage rec {
   pname = "myst-nb";
-  version = "0.17.1";
+  version = "1.0.0";
+  pyproject = true;
 
-  format = "flit";
-
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FN9yXz4Ay17+9PhjvwwnNJDIxmLf7jntins3S/JWGTM=";
+    inherit version;
+    pname = "myst_nb";
+    hash = "sha256-kHfkKhxrRB6lUHhQb4NVXdpdbIFu9JMIQdcdI54+DF4=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     importlib-metadata
@@ -45,11 +47,14 @@ buildPythonPackage rec {
     ipykernel
   ];
 
-  pythonImportsCheck = [ "myst_nb" ];
+  pythonImportsCheck = [
+    "myst_nb"
+    "myst_nb.sphinx_ext"
+  ];
 
   meta = with lib; {
     description = "A Jupyter Notebook Sphinx reader built on top of the MyST markdown parser";
-    homepage = "https://github.com/executablebooks/myst-nb";
+    homepage = "https://github.com/executablebooks/MyST-NB";
     changelog = "https://github.com/executablebooks/MyST-NB/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

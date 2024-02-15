@@ -1,11 +1,11 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , glib
 , lxqt-build-tools
+, lxqt-menu-data
 , qtbase
 , qtx11extras
 , qttools
@@ -21,42 +21,32 @@
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "WgrcHM4iJLZsJO2obqSkjHHMB+/kcadQArkcXC5FB24=";
+    hash = "sha256-ypHjUYRtrWx1Cp9KGSqsWpRHg7zoV0YDW6P4amJKapI=";
   };
-
-  patches = [
-    # FIXME: backport Plasma 5.27 build fix, remove for next release
-    (fetchpatch {
-      url = "https://github.com/lxqt/lxqt-config/commit/6add4e4f0040693e7c4242fbae48c9d32007686c.diff";
-      hash = "sha256-Tir4KeGhBnD9dYmB1FAjuf4R4V+rn12MOxsRwTdE0Sc=";
-    })
-  ];
-
-  # FIXME: required to build with Plasma 5.27, which uses std::optional
-  cmakeFlags = ["-DCMAKE_CXX_STANDARD=17"];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     glib.bin
     qtbase
     qtx11extras
-    qttools
     qtsvg
     kwindowsystem
     libkscreen
     liblxqt
     libqtxdg
+    lxqt-menu-data
     xorg.libpthreadstubs
     xorg.libXdmcp
     xorg.libXScrnSaver

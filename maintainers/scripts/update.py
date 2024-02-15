@@ -100,7 +100,7 @@ async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, bra
         # Git can only handle a single index operation at a time
         async with merge_lock:
             await check_subprocess('git', 'add', *change['files'], cwd=worktree)
-            commit_message = '{attrPath}: {oldVersion} → {newVersion}'.format(**change)
+            commit_message = '{attrPath}: {oldVersion} -> {newVersion}'.format(**change)
             if 'commitMessage' in change:
                 commit_message = change['commitMessage']
             elif 'commitBody' in change:

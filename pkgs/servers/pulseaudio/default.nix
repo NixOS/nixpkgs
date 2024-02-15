@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config
+{ lib, stdenv, fetchurl, pkg-config
 , libsndfile, libtool, makeWrapper, perlPackages
 , xorg, libcap, alsa-lib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
@@ -88,45 +88,47 @@ stdenv.mkDerivation rec {
   );
 
   mesonFlags = [
-    "-Dalsa=${if !libOnly && alsaSupport then "enabled" else "disabled"}"
-    "-Dasyncns=${if !libOnly then "enabled" else "disabled"}"
-    "-Davahi=${if zeroconfSupport then "enabled" else "disabled"}"
-    "-Dbluez5=${if !libOnly && bluetoothSupport then "enabled" else "disabled"}"
+    (lib.mesonEnable "alsa" (!libOnly && alsaSupport))
+    (lib.mesonEnable "asyncns" (!libOnly))
+    (lib.mesonEnable "avahi" zeroconfSupport)
+    (lib.mesonEnable "bluez5" (!libOnly && bluetoothSupport))
     # advanced bluetooth audio codecs are provided by gstreamer
-    "-Dbluez5-gstreamer=${if (!libOnly && bluetoothSupport && advancedBluetoothCodecs) then "enabled" else "disabled"}"
-    "-Ddatabase=simple"
-    "-Ddoxygen=false"
-    "-Delogind=disabled"
+    (lib.mesonEnable "bluez5-gstreamer" (!libOnly && bluetoothSupport && advancedBluetoothCodecs))
+    (lib.mesonOption "database" "simple")
+    (lib.mesonBool "doxygen" false)
+    (lib.mesonEnable "elogind" false)
     # gsettings does not support cross-compilation
-    "-Dgsettings=${if stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
-    "-Dgstreamer=disabled"
-    "-Dgtk=disabled"
-    "-Djack=${if jackaudioSupport && !libOnly then "enabled" else "disabled"}"
-    "-Dlirc=${if remoteControlSupport then "enabled" else "disabled"}"
-    "-Dopenssl=${if airtunesSupport then "enabled" else "disabled"}"
-    "-Dorc=disabled"
-    "-Dsystemd=${if useSystemd && !libOnly then "enabled" else "disabled"}"
-    "-Dtcpwrap=disabled"
-    "-Dudev=${if !libOnly && udevSupport then "enabled" else "disabled"}"
-    "-Dvalgrind=disabled"
-    "-Dwebrtc-aec=${if !libOnly then "enabled" else "disabled"}"
-    "-Dx11=${if x11Support then "enabled" else "disabled"}"
+    (lib.mesonEnable "gsettings" (stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)))
+    (lib.mesonEnable "gstreamer" false)
+    (lib.mesonEnable "gtk" false)
+    (lib.mesonEnable "jack" (jackaudioSupport && !libOnly))
+    (lib.mesonEnable "lirc" remoteControlSupport)
+    (lib.mesonEnable "openssl" airtunesSupport)
+    (lib.mesonEnable "orc" false)
+    (lib.mesonEnable "systemd" (useSystemd && !libOnly))
+    (lib.mesonEnable "tcpwrap" false)
+    (lib.mesonEnable "udev" (!libOnly && udevSupport))
+    (lib.mesonEnable "valgrind" false)
+    (lib.mesonEnable "webrtc-aec" (!libOnly))
+    (lib.mesonEnable "x11" x11Support)
 
-    "-Dlocalstatedir=/var"
-    "-Dsysconfdir=/etc"
-    "-Dsysconfdir_install=${placeholder "out"}/etc"
-    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    (lib.mesonOption "localstatedir" "/var")
+    (lib.mesonOption "sysconfdir" "/etc")
+    (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
+    (lib.mesonOption "udevrulesdir" "${placeholder "out"}/lib/udev/rules.d")
 
     # pulseaudio complains if its binary is moved after installation;
     # this is needed so that wrapGApp can operate *without*
     # renaming the unwrapped binaries (see below)
     "--bindir=${placeholder "out"}/.bin-unwrapped"
   ]
-  ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  ++ lib.optionals (stdenv.isLinux && useSystemd) [
+    (lib.mesonOption "systemduserunitdir" "${placeholder "out"}/lib/systemd/user")
+  ]
   ++ lib.optionals stdenv.isDarwin [
-    "-Ddbus=disabled"
-    "-Dglib=disabled"
-    "-Doss-output=disabled"
+    (lib.mesonEnable "dbus" false)
+    (lib.mesonEnable "glib" false)
+    (lib.mesonEnable "oss-output" false)
   ];
 
   # tests fail on Darwin because of timeouts
@@ -143,6 +145,8 @@ stdenv.mkDerivation rec {
     + ''
     moveToOutput lib/cmake "$dev"
     rm -f $out/.bin-unwrapped/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+
+    cp config.h $dev/include/pulse
   '';
 
   preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
@@ -178,6 +182,9 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms   = lib.platforms.unix;
+
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/1089
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
 
     longDescription = ''
       PulseAudio is a sound server for POSIX and Win32 systems.  A

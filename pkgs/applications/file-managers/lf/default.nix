@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "lf";
-  version = "28";
+  version = "31";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    hash = "sha256-VEXWjpdUP5Kabimp9kKoLR7/FlE39MAroRBl9au2TI8=";
+    hash = "sha256-Tuk/4R/gGtSY+4M/+OhQCbhXftZGoxZ0SeLIwYjTLA4=";
   };
 
-  vendorHash = "sha256-oIIyQbw42+B6T6Qn6nIV62Xr+8ms3tatfFI8ocYNr0A=";
+  vendorHash = "sha256-PVvHrXfMN6ZSWqd5GJ08VaeKaHrFsz6FKdDoe0tk2BE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,7 +43,7 @@ buildGoModule rec {
     homepage = "https://godoc.org/github.com/gokcehan/lf";
     changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "lf";
   };
 }

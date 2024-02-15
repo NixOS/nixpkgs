@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "ttach";
   version = "0.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ torch ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ttach" ];
 
   meta = with lib; {

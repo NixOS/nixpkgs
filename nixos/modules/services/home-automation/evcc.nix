@@ -41,6 +41,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.evcc = {
+      wants = [ "network-online.target" ];
       after = [
         "network-online.target"
         "mosquitto.target"
@@ -50,7 +51,7 @@ in
       ];
       environment.HOME = "/var/lib/evcc";
       path = with pkgs; [
-        glibc # requires getent
+        getent
       ];
       serviceConfig = {
         ExecStart = "${package}/bin/evcc --config ${configFile} ${escapeShellArgs cfg.extraArgs}";

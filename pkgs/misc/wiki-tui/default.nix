@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.6.4";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pjNXDU1YgzaH4vtdQnnfRCSmbhIgeAiOP/uyhBNG/7s=";
+    hash = "sha256-euyg4wYWYerYT3hKdOCjokx8lJldGN7E3PHimDgQy3U=";
   };
 
   nativeBuildInputs = [
@@ -30,13 +30,14 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoHash = "sha256-RWj1QCHYEtw+QzdX+YlFiMqMhvCfxYzj6SUzfhqrcM8=";
+  cargoHash = "sha256-rKTR7vKt8woWAn7XgNYFiWu4KSiZYhaH+PLEIOfbNIY=";
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";
     homepage = "https://github.com/builditluc/wiki-tui";
     changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom builditluc ];
+    maintainers = with maintainers; [ lom builditluc matthiasbeyer ];
+    mainProgram = "wiki-tui";
   };
 }

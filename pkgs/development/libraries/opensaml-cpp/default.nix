@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "A low-level library written in C++ that provides support for producing and consuming SAML messages";
     platforms   = platforms.unix;
     license     = licenses.asl20;
-    maintainers = [ maintainers.jammerful ];
+    maintainers = [ ];
   };
 }

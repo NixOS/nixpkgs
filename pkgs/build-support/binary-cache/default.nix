@@ -1,4 +1,4 @@
-{ stdenv, buildPackages }:
+{ lib, stdenv, coreutils, jq, python3, nix, xz }:
 
 # This function is for creating a flat-file binary cache, i.e. the kind created by
 # nix copy --to file:///some/path and usable as a substituter (with the file:// prefix).
@@ -19,15 +19,10 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  PATH = "${buildPackages.coreutils}/bin:${buildPackages.jq}/bin:${buildPackages.python3}/bin:${buildPackages.nix}/bin:${buildPackages.xz}/bin";
+  nativeBuildInputs = [ coreutils jq python3 nix xz ];
 
-  builder = builtins.toFile "builder" ''
-    . .attrs.sh
-
-    export out=''${outputs[out]}
-
-    mkdir $out
-    mkdir $out/nar
+  buildCommand = ''
+    mkdir -p $out/nar
 
     python ${./make-binary-cache.py}
 

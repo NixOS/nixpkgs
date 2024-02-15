@@ -1,12 +1,12 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "distgen";
-  version = "1.5";
+  version = "1.17";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "08f9rw5irgv0gw7jizk5f9csn0yhrdnb84k40px1zbypsylvr5c5";
+    sha256 = "sha256-Md6R1thUtPQ7BFZsWmTDuNdD7UHMMFlEVksIJZAyjk4=";
   };
 
   nativeCheckInputs = with python3.pkgs; [

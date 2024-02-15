@@ -4,25 +4,38 @@
 , flex
 , bison
 , bluez
+, libnl
 , libxcrypt
 , pkg-config
 , withBluez ? false
 , withRemote ? false
+
+# for passthru.tests
+, ettercap
+, nmap
+, ostinato
+, tcpreplay
+, vde2
+, wireshark
+, python3
+, haskellPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.10.1";
+  version = "1.10.4";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
+    hash = "sha256-7RmgOD+tcuOtQ1/SOdfNgNZJFrhyaVUBWdIORxYOvl8=";
   };
 
-  buildInputs = lib.optionals withRemote [ libxcrypt ];
+  buildInputs = lib.optionals stdenv.isLinux [ libnl ]
+    ++ lib.optionals withRemote [ libxcrypt ];
 
   nativeBuildInputs = [ flex bison ]
-    ++ lib.optionals withBluez [ bluez.dev pkg-config ];
+    ++ lib.optionals stdenv.isLinux [ pkg-config ]
+    ++ lib.optionals withBluez [ bluez.dev ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
@@ -40,6 +53,12 @@ stdenv.mkDerivation rec {
       rm -f $out/lib/libpcap.a
     fi
   '';
+
+  passthru.tests = {
+    inherit ettercap nmap ostinato tcpreplay vde2 wireshark;
+    inherit (python3.pkgs) pcapy-ng scapy;
+    haskell-pcap = haskellPackages.pcap;
+  };
 
   meta = with lib; {
     homepage = "https://www.tcpdump.org";

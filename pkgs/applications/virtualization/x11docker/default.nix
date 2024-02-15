@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "x11docker";
   };
 }

@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "marshmallow-enum";
   version = "1.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "justanr";
@@ -39,6 +40,6 @@ buildPythonPackage rec {
     description = "Enum field for Marshmallow";
     homepage = "https://github.com/justanr/marshmallow_enum";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

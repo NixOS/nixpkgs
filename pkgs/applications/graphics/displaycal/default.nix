@@ -1,21 +1,22 @@
 { lib
 , python3
-, xorg
-, argyllcms
+, fetchPypi
 , wrapGAppsHook
 , gtk3
 , librsvg
+, xorg
+, argyllcms
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "displaycal";
-  version = "3.9.10";
+  version = "3.9.11";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     pname = "DisplayCAL";
     inherit version;
-    hash = "sha256-oDHDVb0zuAC49yPfmNe7xuFKaA1BRZGr75XwsLqugHs=";
+    hash = "sha256-zAZW2eMjwRYevlz8KEzTxzGO8vx5AydfY3vGTapNo1c=";
   };
 
   nativeBuildInputs = [
@@ -26,11 +27,14 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     build
     certifi
-    wxPython_4_2
+    wxpython
     dbus-python
     distro
+    numpy
+    pillow
     pychromecast
     send2trash
+    zeroconf
   ];
 
   buildInputs = [
@@ -43,6 +47,9 @@ python3.pkgs.buildPythonApplication rec {
     libXinerama
     libXrandr
   ]);
+
+  # Workaround for eoyilmaz/displaycal-py3#261
+  setupPyGlobalFlags = [ "appdata" ];
 
   doCheck = false; # Tests try to access an X11 session and dbus in weird locations.
 

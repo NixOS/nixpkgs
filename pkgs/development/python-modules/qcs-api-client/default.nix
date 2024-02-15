@@ -22,8 +22,8 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.21.3";
-  format = "pyproject";
+  version = "0.23.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GEsCyqawLX6fTICjAOOREsO5FsmV6U/5+sDOW1v+VKE=";
+    hash = "sha256-Z+RCjpSpfYU3oU5HQ8CzZfwqUjMHvCKVn+p2tq+VDxQ=";
   };
 
   patches = [
@@ -46,6 +46,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "attrs"
     "httpx"
+    "iso8601"
+    "pydantic"
   ];
 
   nativeBuildInputs = [

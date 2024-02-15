@@ -6,11 +6,12 @@
 , requests
 , requests-mock
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyfibaro";
-  version = "0.6.9";
+  version = "0.7.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,11 +20,12 @@ buildPythonPackage rec {
     owner = "rappenze";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vyp+O5Oj1/OYALGb+ioXeFdlDveR8j5M9Z40QTC+sj4=";
+    hash = "sha256-yE9HkAlGj1t90FwmwHDsk3ea2UOl0bG3UtYXxz/SWbI=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

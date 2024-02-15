@@ -24,24 +24,20 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR/sage_home"
     mkdir -p "$HOME"
 
+    # adapted from src/doc/Makefile (doc-src target), which tries to call Sage from PATH
+    mkdir -p $SAGE_DOC_SRC_OVERRIDE/en/reference/repl
+    ${sage-with-env}/bin/sage -advanced > $SAGE_DOC_SRC_OVERRIDE/en/reference/repl/options.txt
+
     # needed to link them in the sage docs using intersphinx
     export PPLPY_DOCS=${python3.pkgs.pplpy.doc}/share/doc/pplpy
-
-    # adapted from src/doc/bootstrap (which we don't run)
-    OUTPUT_DIR="$SAGE_DOC_SRC_OVERRIDE/en/reference/repl"
-    mkdir -p "$OUTPUT_DIR"
-    OUTPUT="$OUTPUT_DIR/options.txt"
-    ${sage-with-env}/bin/sage -advanced > "$OUTPUT"
 
     # jupyter-sphinx calls the sagemath jupyter kernel during docbuild
     export JUPYTER_PATH=${jupyter-kernel-specs}
 
-    # sage --docbuild unsets JUPYTER_PATH, so we call sage_docbuild directly
-    # https://trac.sagemath.org/ticket/33650#comment:32
-    ${sage-with-env}/bin/sage --python3 -m sage_docbuild \
+    ${sage-with-env}/bin/sage --docbuild \
       --mathjax \
       --no-pdf-links \
-      all html < /dev/null
+      all html
   '';
 
   installPhase = ''
@@ -65,7 +61,7 @@ stdenv.mkDerivation rec {
     # sagemath_doc_html tests assume sage tests are being run, so we
     # compromise: we run standard tests, but only on files containing
     # relevant tests. as of Sage 9.6, there are only 4 such files.
-    grep -PRl "#.*optional.*sagemath_doc_html" ${src}/src/sage{,_docbuild} | \
+    grep -PRl "#.*(optional|needs).*sagemath_doc_html" ${src}/src/sage{,_docbuild} | \
       xargs ${sage-with-env}/bin/sage -t --optional=sage,sagemath_doc_html
   '';
 }

@@ -9,19 +9,20 @@
 , glib
 , gtk3
 , freerdp
+, fuse3
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "unstable-2022-04-11";
+  version = "unstable-2023-09-16";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "d7f408fb23adc01db14c708b35b74a317418de4b";
-    sha256 = "EyReJX3f7G5+EEB/gbLTnrxdltedbzm7Bg02hCb+XO0=";
+    rev = "62fc62c5ccb7634f0bc87c57a4673877c24c94ed";
+    sha256 = "H+ebFWjpmp4Ua22Bd6K3LsxNHqEbtpawnzA5ry8+XFc=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +37,11 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     freerdp
+    fuse3
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      branch = "gtk-frdp-0-1";
-    };
+    updateScript = unstableGitUpdater { };
   };
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [

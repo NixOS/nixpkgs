@@ -15,23 +15,17 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2022.10.0";
-  format = "pyproject";
+  version = "2024.01.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aioambient";
     rev = "refs/tags/${version}";
-    hash = "sha256-Oppi4J0TuLbqwVn1Hpa4xcU9c/I+YDP3E0VXwiP8a/w=";
+    hash = "sha256-eqZVY0L+2BWF7cCXW/VLQYYXNPtUF6tJHQmeZNW1W5o=";
   };
-
-  postPatch = ''
-    # https://github.com/bachya/aioambient/pull/97
-    substituteInPlace pyproject.toml \
-      --replace 'websockets = ">=9.1,<11.0"' 'websockets = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -43,6 +37,8 @@ buildPythonPackage rec {
     python-socketio
     websockets
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

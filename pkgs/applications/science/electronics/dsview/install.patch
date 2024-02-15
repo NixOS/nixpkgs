@@ -16,8 +16,8 @@ index eb9be42..220817c 100644
 -		install(FILES DSView/DreamSourceLab.rules DESTINATION /etc/udev/rules.d RENAME 60-dreamsourcelab.rules)
 -	endif()
 -
-+	install(FILES DSView/DSView.desktop DESTINATION share/applications RENAME dsview.desktop)
 +	install(FILES DSView/DreamSourceLab.rules DESTINATION etc/udev/rules.d RENAME 60-dreamsourcelab.rules)
  endif()
++install(FILES DSView/DSView.desktop DESTINATION share/applications RENAME dsview.desktop)
  
  install(FILES NEWS25 DESTINATION share/DSView RENAME NEWS25)

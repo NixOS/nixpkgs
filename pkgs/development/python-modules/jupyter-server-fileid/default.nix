@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server-fileid";
-  version = "0.8.0";
+  version = "0.9.1";
 
   disables = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jupyter-server";
     repo = "jupyter_server_fileid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gJ+OM2b4JrdBObPnltqCWGK3e5p3K2XcoUohej3nDIM=";
+    hash = "sha256-rEjrfioAmqijyObiK7CMLWhLqVpfcmNYhjdjKjkMp6s=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TEMPDIR
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/jupyter-server/jupyter_server_fileid/blob/${src.rev}/CHANGELOG.md";

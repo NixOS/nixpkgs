@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1S8U4empk3l6CG7/PUdy3qeQg5DGrWEtJigTQfF8mkk=";
+    hash = "sha256-mQXHwww8K77dCxMuKycfyCRzM+vJMdLSOvG7vRG0Nf4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core

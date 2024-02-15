@@ -1,18 +1,39 @@
 { lib
 , buildPythonPackage
+, datasets
+, dvc
 , dvc-render
+, dvc-studio-client
+, fastai
 , fetchFromGitHub
+, funcy
+, gto
+, jsonargparse
+, lightgbm
+, lightning
+, matplotlib
+, mmcv
+, numpy
+, optuna
+, pandas
+, pillow
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
-, setuptools
+, scikit-learn
+, scmrepo
+, setuptools-scm
 , tabulate
+, tensorflow
+, torch
+, transformers
+, xgboost
 }:
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "2.1.0";
-  format = "pyproject";
+  version = "3.41.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,17 +41,86 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-n3JjZrh2ImpjW1MUTwag716qaVjSChrYqNJuNp6K1s8=";
+    hash = "sha256-PbgazRK3+CoJISh1ZXGjxDfbKHY/XqSvVrkpycvPi7c=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    dvc
     dvc-render
+    dvc-studio-client
+    funcy
+    gto
     ruamel-yaml
-  ] ++ dvc-render.optional-dependencies.table;
+    scmrepo
+  ];
+
+  passthru.optional-dependencies = {
+    all = [
+      jsonargparse
+      lightgbm
+      lightning
+      matplotlib
+      mmcv
+      numpy
+      optuna
+      pandas
+      pillow
+      scikit-learn
+      tensorflow
+      torch
+      transformers
+      xgboost
+    ] ++ jsonargparse.optional-dependencies.signatures;
+    image = [
+      numpy
+      pillow
+    ];
+    sklearn = [
+      scikit-learn
+    ];
+    plots = [
+      pandas
+      scikit-learn
+      numpy
+    ];
+    markdown = [
+      matplotlib
+    ];
+    mmcv = [
+      mmcv
+    ];
+    tf = [
+      tensorflow
+    ];
+    xgb = [
+      xgboost
+    ];
+    lgbm = [
+      lightgbm
+    ];
+    huggingface = [
+      datasets
+      transformers
+    ];
+    # catalyst = [
+    #   catalyst
+    # ];
+    fastai = [
+      fastai
+    ];
+    lightning = [
+      lightning
+      torch
+      jsonargparse
+    ] ++ jsonargparse.optional-dependencies.signatures;
+    optuna = [
+      optuna
+    ];
+  };
 
   # Circular dependency with dvc
   doCheck = false;

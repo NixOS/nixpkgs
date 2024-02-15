@@ -5,6 +5,7 @@
 , curl
 , darwin
 , libgit2
+, gtk3
 , libssh2
 , openssl
 , sqlite
@@ -35,6 +36,11 @@
 , libevdev
 , alsa-lib
 , graphene
+, protobuf
+, autoconf
+, automake
+, libtool
+, seatd # =libseat
 , ...
 }:
 
@@ -84,8 +90,17 @@ in
   };
 
   evdev-sys = attrs: {
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [
+      pkg-config
+    ] ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
+      python3 autoconf automake libtool
+    ];
     buildInputs = [ libevdev ];
+
+    # This prevents libevdev's build.rs from trying to `git fetch` when HOST!=TARGET
+    prePatch = ''
+      touch libevdev/.git
+    '';
   };
 
   expat-sys = attrs: {
@@ -132,6 +147,11 @@ in
     buildInputs = [ gdk-pixbuf ];
   };
 
+  gtk-sys = attrs: {
+    buildInputs = [ gtk3 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
   gtk4-sys = attrs: {
     buildInputs = [ gtk4 ];
     nativeBuildInputs = [ pkg-config ];
@@ -151,6 +171,11 @@ in
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libgit2 ];
+  };
+
+  libseat-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ seatd ];
   };
 
   libsqlite3-sys = attrs: {
@@ -174,8 +199,8 @@ in
   };
 
   graphene-sys = attrs: {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ graphene gobject-introspection ];
+    nativeBuildInputs = [ pkg-config gobject-introspection ];
+    buildInputs = [ graphene ];
   };
 
   nettle-sys = attrs: {
@@ -205,6 +230,10 @@ in
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
+  };
+
+  prost-build = attr: {
+    nativeBuildInputs = [ protobuf ];
   };
 
   rdkafka-sys = attr: {

@@ -1,21 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, libcap, libconfig, perl, tcp_wrappers, pcre2, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, libcap, libev, libconfig, perl, tcp_wrappers, pcre2, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "sslh";
-  version = "1.22c";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "yrutschle";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A+nUWiOPoz/T5afZUzt5In01e049TgHisTF8P5Vj180=";
+    hash = "sha256-KXjoYtiGaOrdWRbI0umNfxbtS7p+YaW352lC/5f+AM4=";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libcap libconfig perl tcp_wrappers pcre2 ];
+  buildInputs = [ libev libconfig perl pcre2 ] ++ lib.optionals stdenv.isLinux [ libcap tcp_wrappers ];
 
-  makeFlags = [ "USELIBCAP=1" "USELIBWRAP=1" ];
+  makeFlags = lib.optionals stdenv.isLinux [ "USELIBCAP=1" "USELIBWRAP=1" ];
+
+  postInstall = ''
+    # install all flavours
+    install -p sslh-fork "$out/sbin/sslh-fork"
+    install -p sslh-select "$out/sbin/sslh-select"
+    install -p sslh-ev "$out/sbin/sslh-ev"
+    ln -sf sslh-fork "$out/sbin/sslh"
+  '';
 
   installFlags = [ "PREFIX=$(out)" ];
 

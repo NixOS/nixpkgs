@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
-  version = "0.6.8";
+  version = "0.7.3";
 
   outputs = [ "out" "dev" "bin" ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    sha256 = "HGGLPf8afLaiT0MXVZIPokN1YmgTj/ox09t8YHwsLWk=";
+    hash = "sha256-LPg2m3kWsJJk8/FLn7bO81pum+4DKN7E9J2YIRzP1yI=";
   };
 
   enableParallelBuilding = true;
@@ -39,11 +39,15 @@ stdenv.mkDerivation rec {
     portaudio
     libsndfile
     flac
-  ] ++ lib.optional usePulseAudio libpulseaudio;
+  ] ++ lib.optionals usePulseAudio [
+    libpulseaudio
+  ];
 
-  configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
+  configureFlags = [
+    (lib.strings.withFeature usePulseAudio "pulseaudio")
+  ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postFixup = ''
     moveToOutput share/doc $dev

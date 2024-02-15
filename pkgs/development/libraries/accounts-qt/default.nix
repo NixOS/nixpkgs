@@ -1,6 +1,6 @@
-{ mkDerivation, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake }:
+{ stdenv, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "accounts-qt";
   version = "1.16";
 
@@ -12,15 +12,18 @@ mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib libaccounts-glib ];
-  nativeBuildInputs = [ doxygen pkg-config qmake ];
+  buildInputs = [ qtbase ];
+  nativeBuildInputs = [ doxygen pkg-config qmake wrapQtAppsHook ];
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" '';
+  # remove forbidden references to /build
+  preFixup = ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
+  '';
 
   meta = with lib; {
     description = "Qt library for accessing the online accounts database";
     homepage = "https://gitlab.com/accounts-sso";
     license = licenses.lgpl21;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }

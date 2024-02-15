@@ -3,8 +3,7 @@
 , buildPythonPackage
 , colorlog
 , fetchFromGitHub
-, fetchpatch
-, setuptools
+, hatchling
 , importlib-metadata
 , jinja2
 , packaging
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2022.11.21";
+  version = "2023.04.22";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,20 +25,11 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-N70yBZyrtdQvgaJzkskG3goHit8eH0di9jHycuAwzfU=";
+    hash = "sha256-WuyNp3jxIktI72zbk+1CK8xflTKrYE5evn/gVdMx+cQ=";
   };
 
-  patches = [
-    # Remove rogue mocking of py._path, https://github.com/wntrblm/nox/pull/677
-    (fetchpatch {
-      name = "remove-py-pyth.patch";
-      url = "https://github.com/wntrblm/nox/commit/44d06b679761e21d76bb96b2b8ffe0ffbe3d4fd0.patch";
-      hash = "sha256-KRDVwbBMBd4GdiAcGJyS7DTNUw3Pumt0JO1igx6npnc=";
-    })
-  ];
-
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -51,7 +41,6 @@ buildPythonPackage rec {
     typing-extensions
     importlib-metadata
   ];
-
 
   checkInputs = [
     jinja2

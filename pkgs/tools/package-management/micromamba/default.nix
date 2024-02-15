@@ -14,9 +14,7 @@
 , python3
 , reproc
 , spdlog
-, termcolor
 , tl-expected
-, fmt_9
 }:
 
 let
@@ -34,30 +32,16 @@ let
       })
     ];
   });
-
-  spdlog' = spdlog.overrideAttrs (oldAttrs: {
-    # Use as header-only library.
-    #
-    # Spdlog 1.11 requires fmt version 8 while micromamba requires
-    # version 9. spdlog may use its bundled version of fmt,
-    # though. Micromamba is not calling spdlog functions with
-    # fmt-types in their signature. I.e. we get away with removing
-    # fmt_8 from spdlog's propagated dependencies and using fmt_9 for
-    # micromamba itself.
-    dontBuild = true;
-    cmakeFlags = oldAttrs.cmakeFlags ++ [ "-DSPDLOG_FMT_EXTERNAL=OFF" ];
-    propagatedBuildInputs = [];
-  });
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "1.2.0";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "micromamba-" + version;
-    sha256 = "sha256-KGlH5i/lI6c1Jj1ttAOrip8BKECaea5D202TJMcFDmM=";
+    hash = "sha256-29SuR4RDW0+yNR1RHlm3I4avy0CjBTGxv1FKxMDZxO0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -71,12 +55,10 @@ stdenv.mkDerivation rec {
     yaml-cpp
     libsolv'
     reproc
-    spdlog'
-    termcolor
+    spdlog
     ghc_filesystem
     python3
     tl-expected
-    fmt_9
   ];
 
   cmakeFlags = [
@@ -92,5 +74,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ mausch ];
+    mainProgram = "micromamba";
   };
 }

@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "banal";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,6 +23,6 @@ buildPythonPackage rec {
     description = "Commons of banal micro-functions for Python";
     homepage = "https://github.com/pudo/banal";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

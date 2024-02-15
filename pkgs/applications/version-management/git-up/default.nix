@@ -1,38 +1,46 @@
 { lib
 , pythonPackages
+, fetchPypi
 , git
 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "git-up";
-  version = "1.6.1";
+  version = "2.2.0";
+  format = "pyproject";
 
-  src = pythonPackages.fetchPypi {
-    inherit pname version;
-    sha256 = "0gs791yb0cndg9879vayvcj329jwhzpk6wrf9ri12l5hg8g490za";
+  src = fetchPypi {
+    pname = "git_up";
+    inherit version;
+    hash = "sha256-GTX2IWLQ48yWfPnmtEa9HJ5umQLttqgTlgZQlaWgeE4=";
   };
+
+  nativeBuildInputs = with pythonPackages; [
+    poetry-core
+  ];
 
   # git should be on path for tool to work correctly
   propagatedBuildInputs = [
     git
   ] ++ (with pythonPackages; [
-    click
     colorama
-    docopt
     gitpython
-    six
     termcolor
   ]);
 
-  nativeCheckInputs = [ git pythonPackages.nose ]; # git needs to be on path
+  nativeCheckInputs = [
+    git
+    pythonPackages.pytestCheckHook
+  ];
+
   # 1. git fails to run as it cannot detect the email address, so we set it
   # 2. $HOME is by default not a valid dir, so we have to set that too
   # https://github.com/NixOS/nixpkgs/issues/12591
   preCheck = ''
-      export HOME=$TMPDIR
-      git config --global user.email "nobody@example.com"
-      git config --global user.name "Nobody"
-    '';
+    export HOME=$TMPDIR
+    git config --global user.email "nobody@example.com"
+    git config --global user.name "Nobody"
+  '';
 
   postInstall = ''
     rm -r $out/${pythonPackages.python.sitePackages}/PyGitUp/tests
@@ -44,5 +52,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
+    mainProgram = "git-up";
   };
 }

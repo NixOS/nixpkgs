@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja }:
 stdenv.mkDerivation rec {
   pname = "directx-headers";
-  version = "1.608.2";
+  version = "1.611.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "DirectX-Headers";
     rev = "v${version}";
-    hash = "sha256-F0riTDJpydqe4yhE9GKSSvnRI0Sl3oY2sOP+H/vDHG0=";
+    hash = "sha256-HG2Zj8hvsgv8oeSDp1eK+1A5bvFL6oQIh5mMFWOFsvk=";
   };
 
   nativeBuildInputs = [ meson ninja ];

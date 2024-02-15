@@ -9,28 +9,33 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "unstable-2021-12-12";
-  # python software/setup.py --version
-  realVersion = "0.1.dev1679+g${lib.substring 0 7 src.rev}";
+  version = "unstable-2023-09-20";
+  # python -m setuptools_scm
+  realVersion = "0.1.dev1798+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "e640a778c446b7e9812727e73c560d12aeb41d7c";
-    sha256 = "EsQ9ZjalKDQ54JOonra4yPDI56cF5n86y/Rd798cZsU=";
+    rev = "e9a9801d5be3dcba0ee188dd8a6e9115e337795d";
+    sha256 = "sha256-ztB3I/jrDSm1gKB1e5igivUVloq+YYhkshDlWg75NMA=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.setuptools-scm sdcc ];
+  nativeBuildInputs = [
+    python3.pkgs.setuptools-scm
+    sdcc
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    setuptools
+    aiohttp
     amaranth
+    appdirs
+    bitarray
+    crc
     fx2
     libusb1
-    aiohttp
+    packaging
     pyvcd
-    bitarray
-    crcmod
+    setuptools
   ];
 
   nativeCheckInputs = [ yosys icestorm nextpnr ];
@@ -47,7 +52,17 @@ python3.pkgs.buildPythonApplication rec {
   # installCheck tries to build_ext again
   doInstallCheck = false;
 
+  postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
+    cp $src/config/99-glasgow.rules $out/etc/udev/rules.d
+  '';
+
   checkPhase = ''
+    # tests attempt to cache bitstreams
+    # for linux:
+    export XDG_CACHE_HOME=$TMPDIR
+    # for darwin:
+    export HOME=$TMPDIR
     ${python3.interpreter} -W ignore::DeprecationWarning test.py
   '';
 
@@ -62,5 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
     maintainers = with maintainers; [ emily thoughtpolice ];
+    mainProgram = "glasgow";
   };
 }

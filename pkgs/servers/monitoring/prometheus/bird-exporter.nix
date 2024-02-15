@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "bird-exporter";
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "bird_exporter";
     rev = version;
-    sha256 = "sha256-QCnOMiAcvn0HcppGJlf3sdllApKcjHpucvk9xxD/MqE=";
+    sha256 = "sha256-aClwJ+J83iuZbfNP+Y1vKEjBULD5wh/R3TMceCccacc=";
   };
 
-  vendorSha256 = "sha256-jBwaneVv1a8iIqnhDbQOnvaJdnXgO8P90Iv51IfGaM0=";
+  vendorHash = "sha256-0EXRpehdpOYpq6H9udmNnQ24EucvAcPUKOlFSAAewbE=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bird; };
 

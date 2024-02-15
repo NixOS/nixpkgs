@@ -8,7 +8,7 @@
 , packaging
 , pytestCheckHook
 , pythonOlder
-, readme_renderer
+, readme-renderer
 , wheel-filename
 }:
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     entry-points-txt
     headerparser
     packaging
-    readme_renderer
+    readme-renderer
     wheel-filename
   ];
 

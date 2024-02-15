@@ -1,14 +1,15 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "semiphemeral";
-  version = "0.6";
+  version = "0.7";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "c90d73b14c826f262b1339d1f5926c5abc6431181090ea87177af821c0866fb7";
+    sha256 = "sha256-KRi3zfRWGRZJjQ6KPqBI9wQ6yU8Ohx0TDtA5qoak35U=";
   };
 
   doCheck = false; # upstream has no tests
@@ -22,5 +23,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/micahflee/semiphemeral";
     license = licenses.mit;
     maintainers = with maintainers; [ amanjeev ];
+    mainProgram = "semiphemeral";
   };
 }

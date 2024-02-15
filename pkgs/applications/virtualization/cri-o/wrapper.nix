@@ -4,6 +4,7 @@
 , lib
 , extraPackages ? []
 , runc # Default container runtime
+, conntrack-tools
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
 , util-linux # nsenter
@@ -13,6 +14,7 @@
 let
   binPath = lib.makeBinPath ([
     runc
+    conntrack-tools
     crun
     conmon
     util-linux

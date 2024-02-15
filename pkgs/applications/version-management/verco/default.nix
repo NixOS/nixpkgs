@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://vamolessa.github.io/verco";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "verco";
   };
 }

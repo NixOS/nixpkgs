@@ -22,8 +22,7 @@
 , luajit
 , lz4
 , nspr
-, nss
-, pcre
+, pcre2
 , python
 , zlib
 , redisSupport ? true, redis, hiredis
@@ -34,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "6.0.10";
+  version = "7.0.2";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Wb/Rv12cFZYib6SBW/dmQ85ZaYhmwQeiYmnEgfElxNc=";
+    hash = "sha256-tOtgSDjvmag5a8i3u1TK0R8kQsvXy7MA5/WqsZCXvE0=";
   };
 
   nativeBuildInputs = [
@@ -67,8 +66,7 @@ stdenv.mkDerivation rec {
     luajit
     lz4
     nspr
-    nss
-    pcre
+    pcre2
     python
     zlib
   ]
@@ -101,7 +99,6 @@ stdenv.mkDerivation rec {
     "--enable-nflog"
     "--enable-nfqueue"
     "--enable-pie"
-    "--disable-prelude"
     "--enable-python"
     "--enable-unix-socket"
     "--localstatedir=/var"
@@ -121,12 +118,13 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     # Avoid unintended clousure growth.
-    sed -i 's|/nix/store/\(.\{8\}\)[^-]*-|/nix/store/\1...-|g' ./src/build-info.h
+    sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
   hardeningDisable = [ "stackprotector" ];
 
   installFlags = [
+    "e_datadir=\${TMPDIR}"
     "e_localstatedir=\${TMPDIR}"
     "e_logdir=\${TMPDIR}"
     "e_logcertsdir=\${TMPDIR}"

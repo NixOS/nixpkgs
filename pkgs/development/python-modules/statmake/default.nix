@@ -11,7 +11,7 @@
 , pytestCheckHook
 , pythonOlder
 , ufo2ft
-, ufoLib2
+, ufolib2
 }:
 
 buildPythonPackage rec {
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     ufo2ft
-    ufoLib2
+    ufolib2
   ];
 
   pythonImportsCheck = [
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/daltonmaag/statmake";
     changelog = "https://github.com/daltonmaag/statmake/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

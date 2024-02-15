@@ -28,13 +28,13 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "2021.04.06";
+    version = "2023.06.15";
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "sha256-MphI2n+oHZrw8bPohNGeGdST5LS1c6s/rKqtpcR9cLo=";
+      sha256 = "sha256-dBrnUIG3EuEgDZBbzrspP5UReiUKjrMSYIe5QtZ0/tU=";
       fetchSubmodules = true;
     };
 
@@ -112,7 +112,7 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
-      nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+      nativeCheckInputs = [ bat bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}
@@ -142,7 +142,7 @@ in
 {
   batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
-  batman = script "batman" [ util-linux ];
+  batman = script "batman" (lib.optionals stdenv.isLinux [ util-linux ]);
   batpipe = script "batpipe" [ less ];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
   prettybat = script "prettybat" ([]

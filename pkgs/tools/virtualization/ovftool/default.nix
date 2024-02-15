@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, system ? builtins.currentSystem, ovftoolBundles ? {}
-, requireFile, autoPatchelfHook, makeWrapper, unzip
-, glibc, c-ares, libxcrypt, expat, icu60, xercesc, zlib
+, autoPatchelfHook, makeWrapper, unzip
+, glibc, c-ares, libxcrypt-legacy, expat, icu60, xercesc, zlib
 }:
 
 let
-  version = "4.5.0-20459872";
+  version = "4.6.2-22220919";
+  version_i686 = "4.6.0-21452615";
 
   ovftoolZipUnpackPhase = ''
     runHook preUnpack
@@ -23,15 +24,15 @@ let
     baseUrl = "https://vdc-download.vmware.com/vmwb-repository/dcr-public";
   in {
     "i686-linux" = rec {
-      filename = "VMware-ovftool-${version}-lin.i386.zip";
-      url = "${baseUrl}/b70b2ad5-861a-4c11-b081-e541586bf934/57109c63-6b80-4ced-95f2-1b7255200a36/${filename}";
-      sha256 = "11zs5dm4gmssm94s501p66l4s8v9p7prrd87cfa903mwmyp0ihnx";
+      name = "VMware-ovftool-${version_i686}-lin.i386.zip";
+      url = "${baseUrl}/7254abb2-434d-4f5d-83e2-9311ced9752e/57e666a2-874c-48fe-b1d2-4b6381f7fe97/${name}";
+      hash = "sha256-qEOr/3SW643G5ZQQNJTelZbUxB8HmxPd5uD+Gqsoxz0=";
       unpackPhase = ovftoolZipUnpackPhase;
     };
     "x86_64-linux" = rec {
-      filename = "VMware-ovftool-${version}-lin.x86_64.zip";
-      url = "${baseUrl}/f87355ff-f7a9-4532-b312-0be218a92eac/b2916af6-9f4f-4112-adac-49d1d6c81f63/${filename}";
-      sha256 = "1fkm18yfkkm92m7ccl6b4nxy5lagwwldq56b567091a5sgad38zw";
+      name = "VMware-ovftool-${version}-lin.x86_64.zip";
+      url = "${baseUrl}/8a93ce23-4f88-4ae8-b067-ae174291e98f/c609234d-59f2-4758-a113-0ec5bbe4b120/${name}";
+      hash = "sha256-3B1cUDldoTqLsbSARj2abM65nv+Ot0z/Fa35/klJXEY=";
       unpackPhase = ovftoolZipUnpackPhase;
     };
   };
@@ -44,9 +45,7 @@ let
                     ovftoolBundles.${system}
                   else
                     fetchurl {
-                      name = ovftoolSystem.filename;
-                      url = ovftoolSystem.url;
-                      sha256 = ovftoolSystem.sha256;
+                      inherit (ovftoolSystem) name url hash;
                     };
 in
 stdenv.mkDerivation rec {
@@ -55,12 +54,9 @@ stdenv.mkDerivation rec {
 
   src = ovftoolSource;
 
-  # Maintainers: try downloading a NixOS OVA and run the following to test:
-  # `./result/bin/ovftool https://channels.nixos.org/nixos-unstable/latest-nixos-x86_64-linux.ova nixos.ovf`
-  # Some dependencies are not loaded until operations actually occur!
   buildInputs = [
     glibc
-    libxcrypt
+    libxcrypt-legacy
     c-ares
     expat
     icu60
@@ -149,5 +145,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ numinit wolfangaukang ];
     platforms = builtins.attrNames ovftoolSystems;
+    mainProgram = "ovftool";
   };
 }

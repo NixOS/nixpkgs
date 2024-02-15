@@ -3,13 +3,13 @@
 , cppunit
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "5.8";
+  version = "6.6";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
-    hash = "sha256-fpafjI31acuGRtZ+5Z/b8mJ76toSlUwwHnwanBwRc08=";
+    url = "http://www.squid-cache.org/Versions/v6/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Vb1/n0iYFTFh6hIomYrLVRv4QIMrnluQ/I7NKUJCAxg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
+    knownVulnerabilities = [ "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/" ];
   };
-}
+})

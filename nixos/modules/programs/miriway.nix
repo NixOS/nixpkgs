@@ -8,7 +8,7 @@ in {
       Miriway, a Mir based Wayland compositor. You can manually launch Miriway by
       executing "exec miriway" on a TTY, or launch it from a display manager. Copy
       /etc/xdg/xdg-miriway/miriway-shell.config to ~/.config/miriway-shell.config
-      to modify the default configuration. See <https://github.com/Miriway/Miriway>,
+      to modify the system-wide configuration on a per-user basis. See <https://github.com/Miriway/Miriway>,
       and "miriway --help" for more information'');
 
     config = lib.mkOption {
@@ -19,6 +19,15 @@ in {
         ctrl-alt=t:miriway-terminal # Default "terminal emulator finder"
 
         shell-component=dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY
+
+        meta=Left:@dock-left
+        meta=Right:@dock-right
+        meta=Space:@toggle-maximized
+        meta=Home:@workspace-begin
+        meta=End:@workspace-end
+        meta=Page_Up:@workspace-up
+        meta=Page_Down:@workspace-down
+        ctrl-alt=BackSpace:@exit
       '';
       example = ''
         idle-timeout=300
@@ -31,6 +40,15 @@ in {
         shell-component=wbg Pictures/wallpaper
 
         shell-meta=a:synapse
+
+        meta=Left:@dock-left
+        meta=Right:@dock-right
+        meta=Space:@toggle-maximized
+        meta=Home:@workspace-begin
+        meta=End:@workspace-end
+        meta=Page_Up:@workspace-up
+        meta=Page_Down:@workspace-down
+        ctrl-alt=BackSpace:@exit
       '';
       description = lib.mdDoc ''
         Miriway's config. This will be installed system-wide.
@@ -48,7 +66,7 @@ in {
     };
 
     hardware.opengl.enable = lib.mkDefault true;
-    fonts.enableDefaultFonts = lib.mkDefault true;
+    fonts.enableDefaultPackages = lib.mkDefault true;
     programs.dconf.enable = lib.mkDefault true;
     programs.xwayland.enable = lib.mkDefault true;
 

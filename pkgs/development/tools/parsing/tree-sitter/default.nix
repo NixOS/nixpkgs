@@ -2,21 +2,14 @@
 , stdenv
 , fetchgit
 , fetchFromGitHub
-, fetchurl
-, writeShellScript
 , runCommand
 , which
-, formats
 , rustPlatform
-, jq
-, nix-prefetch-git
-, xe
-, curl
 , emscripten
 , Security
 , callPackage
 , linkFarm
-
+, CoreServices
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
@@ -29,9 +22,8 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.7";
-  sha256 = "sha256-5ILiN5EfJ7WpeYBiXynfcLucdp8zmxVOj4gLkaFQYts=";
-  cargoSha256 = "sha256-V4frCaU5QzTx3ujdaplw7vNkosbzyXHQvE+T7ntVOtU=";
+  version = "0.20.9";
+  sha256 = "sha256-NxWqpMNwu5Ajffw1E2q9KS4TgkCH6M+ctFyi9Jp0tqQ=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -41,7 +33,7 @@ let
     fetchSubmodules = true;
   };
 
-  update-all-grammars = callPackage ./update.nix {};
+  update-all-grammars = callPackage ./update.nix { };
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
@@ -62,6 +54,7 @@ let
           inherit version;
           src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
+          generate = grammar.generate or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
@@ -70,8 +63,10 @@ let
         { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
+        { tree-sitter-typst = grammars'.tree-sitter-typst // { generate = true; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
     in
     lib.mapAttrs build (grammars);
 
@@ -108,20 +103,23 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "tree-sitter";
-  inherit src version cargoSha256;
+  inherit src version;
+
+  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock.outputHashes."cranelift-bforest-0.102.0" = "sha256-rJeRbRDrAnKb8s98gNn1NTMKuB8B4aOI8Fh6JeLX7as=";
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ Security ];
+    lib.optionals stdenv.isDarwin [ Security CoreServices ];
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
 
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
-    sed -e '/pub mod web_ui/d' \
+    sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
-    sed -e 's/web_ui,//' \
-        -e 's/web_ui::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+    sed -e 's/playground,//' \
+        -e 's/playground::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 
@@ -129,6 +127,8 @@ rustPlatform.buildRustPackage {
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
   preBuild = lib.optionalString webUISupport ''
+    mkdir -p .emscriptencache
+    export EM_CACHE=$(pwd)/.emscriptencache
     bash ./script/build-wasm --debug
   '';
 
@@ -168,6 +168,6 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch oxalica ];
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }

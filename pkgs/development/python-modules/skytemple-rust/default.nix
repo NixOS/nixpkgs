@@ -1,35 +1,39 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, cargo
+, fetchPypi
 , libiconv
 , Foundation
 , rustPlatform
-, setuptools-rust }:
+, rustc
+, setuptools-rust
+, range-typed-integers
+}:
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.3.7";
+  version = "1.6.3";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    hash = "sha256-rC7KA79va8gZpMKJQ7s3xYdbopNqmWdRYDCbaWaxsR0=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-z9Vu9mj82hwuPva56tmav4jN9RCoNIZxL+C3GYtYsOo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-lXPCxRbaqUC5EfyeBPtJDuGADYOA+DWMaOZRwXppP8E=";
+    hash = "sha256-2or419evNxi99HIvL2TlSWFFh4BCky8qI/dVQbq/X38=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
+  nativeBuildInputs = [ setuptools-rust rustPlatform.cargoSetupHook cargo rustc ];
+  propagatedBuildInputs = [ range-typed-integers ];
 
   GETTEXT_SYSTEM = true;
 
-  doCheck = false; # there are no tests
+  doCheck = false; # tests for this package are in skytemple-files package
   pythonImportsCheck = [ "skytemple_rust" ];
 
   meta = with lib; {

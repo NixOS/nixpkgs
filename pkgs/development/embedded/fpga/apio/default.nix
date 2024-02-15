@@ -10,13 +10,14 @@
 , scons
 , setuptools
 , tinyprog
+, flit-core
 , pytestCheckHook
 }:
 
 buildPythonApplication rec {
   pname = "apio";
   version = "0.8.1";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
@@ -46,6 +47,10 @@ buildPythonApplication rec {
         'version = semantic_version.Version(pkg_version)' \
         'version = semantic_version.Version(pkg_version.replace(".dev", "-dev"))'
   '';
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     click

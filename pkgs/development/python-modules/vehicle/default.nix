@@ -3,43 +3,29 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, mashumaro
+, orjson
 , poetry-core
-, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, syrupy
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "vehicle";
-  version = "0.4.0";
+  version = "2.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-vehicle";
-    rev = "v${version}";
-    hash = "sha256-dvSdYrONUEe+bdZ+9nALrOQ6gJwq9e1dLvuq08xP5tQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mu30v4iZoOYfQZc1P45UZaor6hf+i+gOvGcVGcQYzTo=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    pydantic
-    yarl
-  ];
-
-  nativeCheckInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
@@ -48,6 +34,24 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    aiohttp
+    mashumaro
+    orjson
+    yarl
+  ];
+
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytestCheckHook
+    syrupy
+  ];
+
   pythonImportsCheck = [
     "vehicle"
   ];
@@ -55,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client providing RDW vehicle information";
     homepage = "https://github.com/frenck/python-vehicle";
+    changelog = "https://github.com/frenck/python-vehicle/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -11,7 +11,8 @@
 , curl
 , enet
 , ffmpeg
-, fmt_8
+, fmt_10
+, gtest
 , hidapi
 , libevdev
 , libGL
@@ -22,15 +23,16 @@
 , libXdmcp
 , libXext
 , libXrandr
+, lz4
+, lzo
 , mbedtls_2
-, mgba
 , miniupnpc
 , minizip-ng
 , openal
 , pugixml
 , qtbase
+, qtsvg
 , sfml
-, soundtouch
 , udev
 , vulkan-loader
 , xxHash
@@ -46,6 +48,7 @@
   # Darwin-only dependencies
 , CoreBluetooth
 , ForceFeedback
+, IOBluetooth
 , IOKit
 , moltenvk
 , OpenGL
@@ -54,77 +57,90 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-18498";
+  version = "5.0-20347";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "46b99671d9158e0ca840c1d8ef249db0f321ced7";
-    sha256 = "sha256-K+OF8o8I1XDLQQcsWC8p8jUuWeb+RoHlBG3cEZ1aWIU=";
+    rev = "dc0814ae4622313d513468bdc377ee9c031de199";
+    hash = "sha256-s3mGwXkgdoLLfPEUVyjaqXb+a5KPKC3dhHIyKC2BF1w=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
+    ./find-minizip-ng.patch
+  ];
+
+  strictDeps = true;
+
   nativeBuildInputs = [
+    stdenv.cc
     cmake
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreBluetooth
+    ForceFeedback
+    IOBluetooth
+    IOKit
+    moltenvk
+    OpenGL
+    VideoToolbox
+  ] ++ [
     bzip2
     cubeb
     curl
     enet
     ffmpeg
-    fmt_8
+    fmt_10
+    gtest
     hidapi
-    libGL
     libiconv
     libpulseaudio
     libspng
     libusb1
     libXdmcp
+    lz4
+    lzo
     mbedtls_2
     miniupnpc
     minizip-ng
     openal
     pugixml
     qtbase
+    qtsvg
     sfml
-    soundtouch
     xxHash
-    xz
+    xz # LibLZMA
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     bluez
     libevdev
+    libGL
     libXext
     libXrandr
-    mgba # Derivation doesn't support Darwin
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
+    #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreBluetooth
-    ForceFeedback
-    IOKit
-    moltenvk
-    OpenGL
-    VideoToolbox
   ];
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
-    "-DUSE_SHARED_ENET=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
     "-DUSE_BUNDLED_MOLTENVK=OFF"
+    "-DMACOS_CODE_SIGNING=OFF"
     # Bundles the application folder into a standalone executable, so we cannot devendor libraries
     "-DSKIP_POSTPROCESS_BUNDLE=ON"
     # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
-    # Note: The updater isn't available on linux, so we dont need to disable it there.
+    # Note: The updater isn't available on linux, so we don't need to disable it there.
     "-DENABLE_AUTOUPDATE=OFF"
   ];
 
@@ -155,6 +171,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = dolphin-emu;
       command = "dolphin-emu-nogui --version";
+      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
     };
 
     updateScript = writeShellScript "dolphin-update-script" ''
@@ -181,7 +198,5 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
-    # Requires both LLVM and SDK bump
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

@@ -6,6 +6,8 @@
 buildPythonPackage rec {
   inherit (i2c-tools) pname version src;
 
+  format = "setuptools";
+
   buildInputs = [ i2c-tools ];
 
   preConfigure = "cd py-smbus";

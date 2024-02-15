@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dmlive";
-  version = "unstable-2022-11-19";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "THMonster";
     repo = pname;
-    rev = "711319043dca3c1fee44cd60841ef51605b42bce";
-    hash = "sha256-weWl9voqTP/1ZBSLuMFzfWE5NskHNPJnFYy9n9IgcZk=";
+    rev = "3736d83ac0920de78ac82fe331bc6b16dc72b5cd"; # no tag
+    hash = "sha256-3agUeAv6Nespn6GNw4wmy8HNPQ0VIgZAMnKiV/myKbA=";
   };
 
-  cargoHash = "sha256-9bonyOCQfO5Eq8T2GVCri+INCe4RUOK28nw4cnmmAWs=";
+  cargoHash = "sha256-MxkWaEn/gMMOuje7lu7PlqsQjnF0LWpV9JzmFBG1ukU=";
 
   OPENSSL_NO_VENDOR = true;
 
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to play and record videos or live streams with danmaku";
     homepage = "https://github.com/THMonster/dmlive";
     license = licenses.mit;
+    mainProgram = "dmlive";
     maintainers = with maintainers; [ nickcao ];
   };
 }

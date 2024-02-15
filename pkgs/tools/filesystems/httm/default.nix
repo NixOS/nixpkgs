@@ -15,7 +15,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yia7GEPemFVHzTkhrL7HejQsFO1zwpdUtq4DLdm4s2g=";
   };
 
-  cargoHash = "sha256-NfuLLKt4dObggqFw8bjHMYdJPz2Rx8eXBrz5/BB7UxM=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "skim-0.10.2" = "sha256-5bDQZer4r9sNupIilY3afXbyFE1UB8kNsZIFOPmuyu4=";
+    };
+  };
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kimono-koans/httm/releases/tag/${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ wyndon ];
+    mainProgram = "httm";
   };
 }

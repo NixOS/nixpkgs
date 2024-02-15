@@ -6,10 +6,10 @@
 # run-time) of a package to a consumer that isn't used to thinking so cleverly.
 #
 # The solution is to splice the package sets together as we do below, so every
-# `callPackage`d expression in fact gets both versions. Each# derivation (and
-# each derivation's outputs) consists of the run-time version, augmented with a
-# `__spliced.buildHost` field for the build-time version, and `__spliced.hostTarget` field for the
-# run-time version.
+# `callPackage`d expression in fact gets both versions. Each derivation (and
+# each derivation's outputs) consists of the run-time version, augmented with
+# a `__spliced.buildHost` field for the build-time version, and
+# `__spliced.hostTarget` field for the run-time version.
 #
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
@@ -45,9 +45,6 @@ let
             valueHostTarget = pkgsHostTarget.${name} or { };
             valueTargetTarget = pkgsTargetTarget.${name} or { };
             augmentedValue = defaultValue
-              # TODO(@Artturin): remove before release 23.05 and only have __spliced.
-              // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { nativeDrv = lib.warn "use ${name}.__spliced.buildHost instead of ${name}.nativeDrv" valueBuildHost; })
-              // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { crossDrv = lib.warn "use ${name}.__spliced.hostTarget instead of ${name}.crossDrv" valueHostTarget; })
               // {
               __spliced =
                 (lib.optionalAttrs (pkgsBuildBuild ? ${name}) { buildBuild = valueBuildBuild; })
@@ -148,6 +145,7 @@ in
 
   # prefill 2 fields of the function for convenience
   makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
+  makeScopeWithSplicing' = lib.makeScopeWithSplicing' { inherit splicePackages; inherit (pkgs) newScope; };
 
   # generate 'otherSplices' for 'makeScopeWithSplicing'
   generateSplicesForMkScope = attr:

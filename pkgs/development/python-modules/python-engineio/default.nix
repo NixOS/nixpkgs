@@ -2,23 +2,24 @@
 , stdenv
 , aiohttp
 , buildPythonPackage
+, setuptools
 , eventlet
 , fetchFromGitHub
-, fetchpatch
 , iana-etc
 , libredirect
 , mock
 , pytestCheckHook
 , pythonOlder
 , requests
+, simple-websocket
 , tornado
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.3.4";
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -26,17 +27,26 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fymO9WqkYaRsHKCJHQJpySHqZor2t8BfVrfYUfYoJno=";
+    hash = "sha256-btXwx9GRLBcjtcGdgckb2Y/MxC0E/rKTWKgkP8olezo=";
   };
 
-  patches = [
-    # Address Python 3.11 mocking issue, https://github.com/miguelgrinberg/python-engineio/issues/279
-    (fetchpatch {
-      name = "mocking-issue-py311.patch";
-      url = "https://github.com/miguelgrinberg/python-engineio/commit/ac3911356fbe933afa7c11d56141f0e228c01528.patch";
-      hash = "sha256-LNMhjX8kqOI3y8XugCHxCPEC6lF83NROfIczXWiLuqY=";
-    })
+  nativeBuildInputs = [
+    setuptools
   ];
+
+  propagatedBuildInputs = [
+    simple-websocket
+  ];
+
+  passthru.optional-dependencies = {
+    client = [
+      requests
+      websocket-client
+    ];
+    asyncio_client = [
+      aiohttp
+    ];
+  };
 
   nativeCheckInputs = [
     aiohttp

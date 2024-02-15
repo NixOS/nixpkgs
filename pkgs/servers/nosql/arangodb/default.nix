@@ -1,5 +1,5 @@
 {
-  # gcc 11.2 suggested on 3.10.3.
+  # gcc 11.2 suggested on 3.10.5.2.
   # gcc 11.3.0 unsupported yet, investigate gcc support when upgrading
   # See https://github.com/arangodb/arangodb/issues/17454
   gcc10Stdenv
@@ -15,12 +15,12 @@
 , lzo
 , which
 , targetArchitecture ? null
-, asmOptimizations ? gcc10Stdenv.targetPlatform.isx86
+, asmOptimizations ? gcc10Stdenv.hostPlatform.isx86
 }:
 
 let
   defaultTargetArchitecture =
-    if gcc10Stdenv.targetPlatform.isx86
+    if gcc10Stdenv.hostPlatform.isx86
     then "haswell"
     else "core";
 
@@ -32,13 +32,13 @@ in
 
 gcc10Stdenv.mkDerivation rec {
   pname = "arangodb";
-  version = "3.10.3";
+  version = "3.10.5.2";
 
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
     rev = "v${version}";
-    sha256 = "sha256-Jp2rvapTe0CtyYfh1YLJ5eUngh8V+BCUQ/OgH3nE2Ro=";
+    sha256 = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
     fetchSubmodules = true;
   };
 
@@ -62,16 +62,17 @@ gcc10Stdenv.mkDerivation rec {
     patchShebangs utils
   '';
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
     "-DUSE_MAINTAINER_MODE=OFF"
     "-DUSE_GOOGLE_TESTS=OFF"
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
     # avoid reading /proc/cpuinfo for feature detection
     "-DTARGET_ARCHITECTURE=${targetArch}"
   ] ++ lib.optionals asmOptimizations [
     "-DASM_OPTIMIZATIONS=ON"
-    "-DHAVE_SSE42=${if gcc10Stdenv.targetPlatform.sse4_2Support then "ON" else "OFF"}"
+    "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
   ];
 
   meta = with lib; {

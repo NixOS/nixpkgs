@@ -12,19 +12,25 @@ let
       splitTS = builtins.elemAt (builtins.split "(.*)(T.*)" version) 1;
     in
     builtins.concatStringsSep "" [ (builtins.elemAt splitTS 0) (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1)) ];
+
+  # CopyrightYear will be printed to the CLI UI.
+  # Example:
+  #   versionToYear "2021-04-22T15-44-28Z"
+  #   => "2021"
+  versionToYear = version: builtins.elemAt (lib.splitString "-" version) 0;
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2023-02-27T18-10-45Z";
+  version = "2024-02-04T22-36-13Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "sha256-0Qz64uNe5rkHOUepzCYUdeyP1ZXzY3Bi1LUvQw2quPA=";
+    hash = "sha256-vA1xrwvHyhqrdWjEXqs0MUaPq8S3J2r1uE0IndpwdjQ=";
   };
 
-  vendorHash = "sha256-b/2/VTIVJyWNm6j+GyhbOKsIl9B0Nqw2fbpBw20Wicw=";
+  vendorHash = "sha256-eE8F/cG7SdSHrFW4qg+MBdS/rxoz4xB0JbCQ3vi38ok=";
 
   doCheck = false;
 
@@ -35,7 +41,12 @@ buildGoModule rec {
   tags = [ "kqueue" ];
 
   ldflags = let t = "github.com/minio/minio/cmd"; in [
-    "-s" "-w" "-X ${t}.Version=${versionToTimestamp version}" "-X ${t}.ReleaseTag=RELEASE.${version}" "-X ${t}.CommitID=${src.rev}"
+    "-s"
+    "-w"
+    "-X ${t}.Version=${versionToTimestamp version}"
+    "-X ${t}.CopyrightYear=${versionToYear version}"
+    "-X ${t}.ReleaseTag=RELEASE.${version}"
+    "-X ${t}.CommitID=${src.rev}"
   ];
 
   passthru.tests.minio = nixosTests.minio;
@@ -45,7 +56,7 @@ buildGoModule rec {
     description = "An S3-compatible object storage server";
     changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
-    platforms = platforms.unix;
     license = licenses.agpl3Plus;
+    mainProgram = "minio";
   };
 }

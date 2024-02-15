@@ -1,44 +1,42 @@
 { stdenv
 , lib
 , fetchurl
+, help2man
 , meson
 , ninja
 , pkg-config
 , libxml2
 , gnome
-, gtk3
+, gtk4
 , gettext
-, libX11
+, libadwaita
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zenity";
-  version = "3.44.0";
+  version = "4.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wVWCMB7ZC51CzlIdvM+ZqYnyLxIEG91SecZjbamev2U=";
+    url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor finalAttrs.version}/zenity-${finalAttrs.version}.tar.xz";
+    sha256 = "DC9TeBOxD3KEcNnQXWyVcT2yUS+clQluHoWxpnOWBeY=";
   };
 
-  patches = [
-    ./fix-icon-install.patch
-  ];
-
   nativeBuildInputs = [
+    help2man
     meson
     ninja
     pkg-config
     gettext
     itstool
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
-    libX11
+    gtk4
+    libadwaita
   ];
 
   passthru = {
@@ -49,9 +47,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    mainProgram = "zenity";
     description = "Tool to display dialogs from the commandline and shell scripts";
     homepage = "https://wiki.gnome.org/Projects/Zenity";
+    license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
-}
+})

@@ -13,7 +13,7 @@
 , libgcrypt
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , gi-docgen
 , gnome
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.5";
+  version = "0.21.2";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "P7PONA/NfbVNh8iT5pv8Kx9uTUsnkGX/5m2snw/RK00=";
+    hash = "sha256-5KNBSWoIFeZMjTuPq6sz17rn796rd7hDZpcx1bGB3O4=";
   };
 
   depsBuildBuild = [
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.isLinux && withIntrospection;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs ./tool/test-*.sh

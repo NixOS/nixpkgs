@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "django-guardian";
   version = "2.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
     license = with licenses; [ mit bsd2 ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -23,14 +23,16 @@
 , libnotify
 , xdg-utils
 , mesa
+, libglvnd
 , libappindicator-gtk3
 }:
 
 # Helper function for building a derivation for Franz and forks.
 
-{ pname, name, version, src, meta, extraBuildInputs ? [] }:
-
-stdenv.mkDerivation rec {
+{ pname, name, version, src, meta, extraBuildInputs ? [], ... } @ args:
+let
+  cleanedArgs = builtins.removeAttrs args [ "pname" "name" "version" "src" "meta" "extraBuildInputs" ];
+in stdenv.mkDerivation (rec {
   inherit pname version src meta;
 
   # Don't remove runtime deps.
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
+  runtimeDependencies = [ libglvnd stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -91,4 +93,4 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${xdg-utils}/bin \
       "''${gappsWrapperArgs[@]}"
   '';
-}
+} // cleanedArgs)

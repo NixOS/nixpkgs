@@ -1,24 +1,25 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles, testers, cue }:
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, installShellFiles
+, testers
+, cue
+}:
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.4.3";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     rev = "v${version}";
-    hash = "sha256-v9MYrijnbtJpTgRZ4hmkaekisOyujldGewCRNbkVzWw=";
+    hash = "sha256-x8DXAKrkqrZE6mxkIfjMhxZBnFbQnqWhmrvjrFjnQuc=";
   };
 
-  postPatch = ''
-    # Disable script tests
-    rm -f cmd/cue/cmd/script_test.go
-  '';
+  vendorHash = "sha256-Eq51sydt2eu3pSCRjepvxpU01T0vr0axx9XEk34db28=";
 
-  vendorHash = "sha256-jTfV8DJlr5LxS3HjOEBkVzBvZKiySrmINumXSUIq2mI=";
-
-  excludedPackages = [ "internal/ci/updatetxtar" "internal/cmd/embedpkg" "internal/cmd/qgo" "pkg/gen" ];
+  subPackages = [ "cmd/cue" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
-  version = "2.5.5";
+  version = "2.5.6";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-jowvzJgvnKZ9y7HZXi3HRrFzmkZovCCzo8W+Yy7bNOQ=";
+    sha256 = "sha256-6f0nIY1TlJBOTjl4j5sXQnEcPmtBaJoxqjOAvVqk9CY=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://gnupg.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [ ];
   };
 }

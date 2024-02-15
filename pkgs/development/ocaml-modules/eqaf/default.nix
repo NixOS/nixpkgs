@@ -2,12 +2,13 @@
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.07";
+  duneVersion = "3";
   pname = "eqaf";
   version = "0.9";
 
   src = fetchurl {
     url = "https://github.com/mirage/eqaf/releases/download/v${version}/eqaf-${version}.tbz";
-    sha256 = "sha256-7A4oqUasaBf5XVhU8FqZYa46hAi7YQ55z60BubJV3+A=";
+    hash = "sha256-7A4oqUasaBf5XVhU8FqZYa46hAi7YQ55z60BubJV3+A=";
   };
 
   propagatedBuildInputs = [ cstruct ];

@@ -3,15 +3,15 @@
 , pkg-config
 , fetchFromGitLab
 , gitUpdater
-, ffmpeg_5
+, ffmpeg_6
 
-# for daemon
+  # for daemon
 , autoreconfHook
 , perl # for pod2man
 , alsa-lib
 , asio
 , dbus
-, dbus_cplusplus
+, sdbus-cpp
 , fmt
 , gmp
 , gnutls
@@ -24,7 +24,7 @@
 , libpulseaudio
 , libupnp
 , yaml-cpp
-, msgpack
+, msgpack-cxx
 , openssl
 , restinio
 , secp256k1
@@ -33,7 +33,7 @@
 , webrtc-audio-processing
 , zlib
 
-# for client
+  # for client
 , cmake
 , networkmanager # for libnm
 , python3
@@ -46,16 +46,18 @@
 , qrencode
 , qtmultimedia
 , qtnetworkauth
+, qtpositioning
 , qtsvg
 , qtwebengine
 , qtwebchannel
+, wrapGAppsHook
 , withWebengine ? true
 
-# for pjsip
+  # for pjsip
 , fetchFromGitHub
 , pjsip
 
-# for opendht
+  # for opendht
 , opendht
 }:
 
@@ -64,14 +66,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20230313.0";
+  version = "20231201.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-3kZ4nn6x1xsXWybyuaY9W07tEM6LFvLL4QtDRPRmob4=";
+    hash = "sha256-A38JwjqdQVy03d738p2tpTFA6EWRSPNiesS5wZfti7Y=";
     fetchSubmodules = true;
   };
 
@@ -80,13 +82,13 @@ stdenv.mkDerivation rec {
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     rec {
-      version = "3b78ef1c48732d238ba284cdccb04dc6de79c54f";
+      version = "311bd018fc07aaf62d4c2d2494e08b5ee97e6846";
 
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
         repo = "pjproject";
         rev = version;
-        hash = "sha256-hrm5tDM2jknU/gWMeO6/FhqOvay8bajFid39OiEtAAQ=";
+        hash = "sha256-pZiOSOUxAXzMY4c1/AyKcwa7nyIJC/ZVOqDg9/QO/Nk=";
       };
 
       patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
@@ -100,10 +102,56 @@ stdenv.mkDerivation rec {
     enablePushNotifications = true;
   };
 
+  dhtnet = stdenv.mkDerivation {
+    pname = "dhtnet";
+    version = "unstable-2023-11-23";
+
+    src = fetchFromGitLab {
+      domain = "git.jami.net";
+      owner = "savoirfairelinux";
+      repo = "dhtnet";
+      rev = "b1bcdecbac2a41de3941ef5a34faa6fbe4472535";
+      hash = "sha256-EucSsUuHXbVqr7drrTLK0f+WZT2k9Tx/LV+IBldTQO8=";
+    };
+
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+
+    buildInputs = [
+      asio
+      fmt
+      gnutls
+      http-parser
+      jsoncpp
+      libupnp
+      msgpack-cxx
+      opendht-jami
+      openssl
+      pjsip-jami
+      restinio
+    ];
+
+    cmakeFlags = [
+      "-DBUILD_SHARED_LIBS=Off"
+      "-DBUILD_BENCHMARKS=Off"
+      "-DBUILD_TOOLS=Off"
+      "-DBUILD_TESTING=Off"
+    ];
+
+    meta = with lib; {
+      description = "Lightweight Peer-to-Peer Communication Library";
+      license = licenses.gpl3Only;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.linsui ];
+    };
+  };
+
   daemon = stdenv.mkDerivation {
     pname = "jami-daemon";
     inherit src version meta;
-    sourceRoot = "source/daemon";
+    sourceRoot = "${src.name}/daemon";
 
     nativeBuildInputs = [
       autoreconfHook
@@ -115,9 +163,10 @@ stdenv.mkDerivation rec {
       alsa-lib
       asio
       dbus
-      dbus_cplusplus
+      dhtnet
+      sdbus-cpp
       fmt
-      ffmpeg_5
+      ffmpeg_6
       gmp
       gnutls
       http-parser
@@ -129,7 +178,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libupnp
       yaml-cpp
-      msgpack
+      msgpack-cxx
       opendht-jami
       openssl
       pjsip-jami
@@ -146,9 +195,16 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
+    # Currently the daemon is still built seperately but jami expects it in CMAKE_INSTALL_PREFIX
+    # This can be removed in future versions when JAMICORE_AS_SUBDIR is on
+    mkdir -p $out
+    ln -s ${daemon} $out/daemon
   '';
 
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
+    wrapGAppsHook
     wrapQtAppsHook
     pkg-config
     cmake
@@ -157,8 +213,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    daemon
-    ffmpeg_5
+    ffmpeg_6
     libnotify
     networkmanager
     qtbase
@@ -167,16 +222,14 @@ stdenv.mkDerivation rec {
     qtnetworkauth
     qtdeclarative
     qtmultimedia
+    qtpositioning
     qtsvg
     qtwebchannel
   ] ++ lib.optionals withWebengine [
     qtwebengine
   ];
 
-  cmakeFlags = [
-    "-DLIBJAMI_INCLUDE_DIR=${daemon}/include/jami"
-    "-DLIBJAMI_XML_INTERFACES_DIR=${daemon}/share/dbus-1/interfaces"
-  ] ++ lib.optionals (!withWebengine) [
+  cmakeFlags = lib.optionals (!withWebengine) [
     "-DWITH_WEBENGINE=false"
   ];
 
@@ -185,9 +238,8 @@ stdenv.mkDerivation rec {
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
-  postInstall = ''
-    # Make the jamid d-bus services available
-    ln -s ${daemon}/share/dbus-1 $out/share
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru.updateScript = gitUpdater {

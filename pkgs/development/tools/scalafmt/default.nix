@@ -2,7 +2,7 @@
 
 let
   baseName = "scalafmt";
-  version = "3.5.2";
+  version = "3.7.9";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -12,7 +12,7 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash     = "sha256-1QP5a0QjYUDU3JzrIX2rM/DclRfU/ACSXVLd6C7uFCo=";
+    outputHash = "sha256-r4vv62H0AryjZb+34fVHvqvndipOYyf6XpQC9u8Dxso=";
   };
 in
 stdenv.mkDerivation {
@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;
     maintainers = [ maintainers.markus1189 ];
+    mainProgram = "scalafmt";
   };
 }

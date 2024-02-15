@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , substituteAll
 , ffmpeg
 , installShellFiles
@@ -14,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   # probably aren't suitable for a build environment anyway.
   doCheck = false;
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-s8lEz3pjzEaMzMiBbc5/wAjC5rW6Uq7+XOIIGBijrUc=";
   };
@@ -47,5 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ryneeverett ];
+    mainProgram = "you-get";
   };
 }

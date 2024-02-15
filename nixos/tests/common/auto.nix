@@ -1,23 +1,16 @@
 { config, lib, ... }:
 
-with lib;
-
 let
-
   dmcfg = config.services.xserver.displayManager;
   cfg = config.test-support.displayManager.auto;
-
 in
-
 {
 
   ###### interface
 
   options = {
-
     test-support.displayManager.auto = {
-
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
         description = lib.mdDoc ''
           Whether to enable the fake "auto" display manager, which
@@ -27,20 +20,16 @@ in
         '';
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "root";
         description = lib.mdDoc "The user account to login automatically.";
       };
-
     };
-
   };
-
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-
+  config = lib.mkIf cfg.enable {
     services.xserver.displayManager = {
       lightdm.enable = true;
       autoLogin = {
@@ -62,7 +51,5 @@ in
 
         session  include   lightdm
     '';
-
   };
-
 }

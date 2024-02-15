@@ -5,18 +5,18 @@
 
 buildGoModule rec {
   pname = "jwx";
-  version = "2.0.8";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = "lestrrat-go";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eoXSSXh9NxWLgogrE2hDjsPxqeUmH54TnYXwhm7kpz4=";
+    hash = "sha256-JR2Z1XOcTfocaXHA+q6INcIZFeuMjB+G16fRmYjOhzU=";
   };
 
-  vendorSha256 = "sha256-fbNnSjUOHnm/zxEGdhHQEKHgYp+nW1rgvMGJBm4b9IM=";
+  vendorHash = "sha256-g97cSHGo0nw7Ker+S/qG0awUf1/UdcSkF55BjMyTfAY=";
 
-  sourceRoot = "source/cmd/jwx";
+  sourceRoot = "${src.name}/cmd/jwx";
 
   meta = with lib; {
     description = " Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";

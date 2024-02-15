@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, config, lib, fetchpatch, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -7,6 +7,7 @@
 , qtxmlpatterns
 , qtsvg
 , qtwebengine
+, qtnetworkauth
 
 , akonadi-contacts
 , kcalendarcore
@@ -24,7 +25,7 @@
 , boost
 , eigen
 , exiv2
-, ffmpeg
+, ffmpeg_4
 , flex
 , graphviz
 , imagemagick
@@ -52,25 +53,44 @@
 
 , breeze-icons
 , oxygen
+
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? {}
 }:
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.9.0";
+  version = "8.1.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    sha256 = "sha256-w7gKvAkNo8u8QuZ6QDCA1/X+CnyYaYc1vaVWxgMUurQ=";
+    hash = "sha256-BQPANORF/0JPGKZxXAp6eb5KXgyCs+vEYaIc7DdFpbM=";
   };
 
-  nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
+  # Fix build against exiv2 0.28.1
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/digikam/-/commit/f5ea91a7f6c1926815ec68f3e0176d6c15b83051.patch";
+      hash = "sha256-5g2NaKKNKVfgW3dTO/IP/H/nZ0YAIOmdPAumy3NEaNg=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    extra-cmake-modules
+    kdoctools
+    wrapGAppsHook
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_nvcc
+  ]);
 
   buildInputs = [
     bison
     boost
     eigen
     exiv2
-    ffmpeg
+    ffmpeg_4
     flex
     graphviz
     imagemagick
@@ -93,6 +113,7 @@ mkDerivation rec {
     qtxmlpatterns
     qtsvg
     qtwebengine
+    qtnetworkauth
 
     akonadi-contacts
     kcalendarcore
@@ -109,7 +130,9 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cudart
+  ]);
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
@@ -135,6 +158,8 @@ mkDerivation rec {
     description = "Photo Management Program";
     license = licenses.gpl2;
     homepage = "https://www.digikam.org";
+    maintainers = with maintainers; [ spacefault ];
     platforms = platforms.linux;
+    mainProgram = "digikam";
   };
 }

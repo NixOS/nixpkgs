@@ -4,12 +4,12 @@ let
   majorVersion = "0";
   minorVersion = "110";
 in
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "f5_6";
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/${self.pname}_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/download/fonts/${finalAttrs.pname}_${majorVersion}${minorVersion}.zip";
     hash = "sha256-FeCU+mzR0iO5tixI72XUnhvpGj+WRfKyT3mhBtud3uE=";
     stripRoot = false;
   };
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (self: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${self.pname}/";
+    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
     description = "A weighted decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars minijackson ];

@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "ppx_blob";
   version = "0.7.2";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/johnwhitington/${pname}/releases/download/${version}/ppx_blob-${version}.tbz";

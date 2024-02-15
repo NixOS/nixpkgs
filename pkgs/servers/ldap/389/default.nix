@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoconf
 , automake
+, cargo
 , libtool
 , pkg-config
 , cracklib
@@ -25,6 +26,7 @@
 , pcre2
 , python3
 , rustPlatform
+, rustc
 , openssl
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , zlib
@@ -35,20 +37,20 @@
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.3.1";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-14zl0zGVb8ykgtjao8QGakFyr+b5Cve0NbiZeZig/Ac=";
+    hash = "sha256-bUjL1fjzyrq9jjpB/xbRCAISiPBwrlXbbDqT0aLOVOc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/src";
+    sourceRoot = "${src.name}/src";
     name = "${pname}-${version}";
-    hash = "sha256-C7HFv6tTBXoi0a1yEQeGjcKjruvBrm/kiu5zgUUTse0=";
+    hash = "sha256-FlrHaz1whwzDvm3MA+wEaQpq7h2X9ZDnQc3f73vLZ58=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +59,8 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     python3
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
   ]
   ++ lib.optional withCockpit rsync;
 
@@ -119,6 +121,10 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  # Disable parallel builds as those lack some dependencies:
+  #   ld: cannot find -lslapd: No such file or directory
+  # https://hydra.nixos.org/log/h38bj77gav0r6jbi4bgzy1lfjq22k2wy-389-ds-base-2.3.1.drv
+  enableParallelInstalling = false;
 
   doCheck = true;
 

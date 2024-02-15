@@ -12,12 +12,7 @@ in
   options.services.ntfy-sh = {
     enable = mkEnableOption (mdDoc "[ntfy-sh](https://ntfy.sh), a push notification service");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.ntfy-sh;
-      defaultText = literalExpression "pkgs.ntfy-sh";
-      description = mdDoc "The ntfy.sh package to use.";
-    };
+    package = mkPackageOption pkgs "ntfy-sh" { };
 
     user = mkOption {
       default = "ntfy-sh";
@@ -32,7 +27,25 @@ in
     };
 
     settings = mkOption {
-      type = types.submodule { freeformType = settingsFormat.type; };
+      type = types.submodule {
+        freeformType = settingsFormat.type;
+        options = {
+          base-url = mkOption {
+            type = types.str;
+            example = "https://ntfy.example";
+            description = lib.mdDoc ''
+              Public facing base URL of the service
+
+              This setting is required for any of the following features:
+              - attachments (to return a download URL)
+              - e-mail sending (for the topic URL in the email footer)
+              - iOS push notifications for self-hosted servers
+                (to calculate the Firebase poll_request topic)
+              - Matrix Push Gateway (to validate that the pushkey is correct)
+            '';
+          };
+        };
+      };
 
       default = { };
 
@@ -61,6 +74,9 @@ in
 
       services.ntfy-sh.settings = {
         auth-file = mkDefault "/var/lib/ntfy-sh/user.db";
+        listen-http = mkDefault "127.0.0.1:2586";
+        attachment-cache-dir = mkDefault "/var/lib/ntfy-sh/attachments";
+        cache-file = mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
 
       systemd.services.ntfy-sh = {
@@ -74,6 +90,7 @@ in
           User = cfg.user;
           StateDirectory = "ntfy-sh";
 
+          DynamicUser = true;
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           PrivateTmp = true;
           NoNewPrivileges = true;
@@ -88,6 +105,8 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           MemoryDenyWriteExecute = true;
+          # Upstream Recommandation
+          LimitNOFILE = 20500;
         };
       };
 

@@ -8,7 +8,6 @@
 , wayland-scanner
 , libjpeg
 , libpng
-, xorg
 , libX11
 , libGL
 , libdrm

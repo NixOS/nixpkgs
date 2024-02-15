@@ -1,29 +1,54 @@
 { lib
 , fetchFromGitHub
-, buildPgxExtension
+, buildPgrxExtension
 , postgresql
-, stdenv
 , nixosTests
+, cargo-pgrx
+, fetchCrate
+, nix-update-script
+, stdenv
 }:
 
-buildPgxExtension rec {
+let
+  cargo-pgrx_0_10_2 = cargo-pgrx.overrideAttrs (old: rec {
+    name = "cargo-pgrx-${version}";
+    version = "0.10.2";
+
+    src = fetchCrate {
+      pname = "cargo-pgrx";
+      inherit version;
+      hash = "sha256-FqjfbJmSy5UCpPPPk4bkEyvQCnaH9zYtkI7txgIn+ls=";
+    };
+
+    cargoDeps = old.cargoDeps.overrideAttrs (_: {
+      inherit src;
+      outputHash = "sha256-XyI3RaPI3Edm/tCP2xoZemib2d2n2cAhobgk9Oafg6s=";
+    });
+  });
+
+in
+
+(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
-  version = "1.14.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     rev = version;
-    sha256 = "sha256-ADmYALsCzZGqTX0XSkCif7ndvXwa8nEqddQpty4hbZ0=";
+    hash = "sha256-Lm/LFBkG91GeWlJL9RBqP8W0tlhBEeGQ6kXUzzv4xRE=";
   };
 
-  cargoSha256 = "sha256-ukjJ11LmfG+k8D20rj68i43gOWUN80nf3hIAjUWXihI=";
+  cargoHash = "sha256-LME8oftHmmiN8GU3eTBTSB6m0CE+KtDFRssL1g2Cjm8=";
   buildAndTestSubdir = "extension";
 
-  passthru.tests = {
-    timescaledb_toolkit = nixosTests.timescaledb;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      timescaledb_toolkit = nixosTests.timescaledb;
+    };
   };
 
   # tests take really long
@@ -37,6 +62,6 @@ buildPgxExtension rec {
     license = licenses.asl20;
 
     # as it needs to be used with timescaledb, simply use the condition from there
-    broken = versionOlder postgresql.version "12";
+    broken = versionOlder postgresql.version "12" || stdenv.isDarwin;
   };
 }

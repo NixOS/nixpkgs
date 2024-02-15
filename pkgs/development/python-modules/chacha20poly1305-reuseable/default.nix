@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , pythonOlder
 
-# build
+# build-system
+, cython_3
 , poetry-core
+, setuptools
 
 # propagates
 , cryptography
@@ -15,12 +17,12 @@
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.0.4";
+  version = "0.12.1";
 in
 
 buildPythonPackage {
   inherit pname version;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,11 +30,13 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iOGDTQyiznjYblT/NfHxewIwEZsPnp7bdNVD1p9/H1M=";
+    hash = "sha256-jgbtDpl2hXmfzmsiIIG6+B3QoekuAjBJGMxQJPX4ynA=";
   };
 
   nativeBuildInputs = [
+    cython_3
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -55,7 +59,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "ChaCha20Poly1305 that is reuseable for asyncio";
     homepage = "https://github.com/bdraco/chacha20poly1305-reuseable";
-    changelog = "https://github.com/bdraco/chacha20poly1305-reuseable/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/chacha20poly1305-reuseable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

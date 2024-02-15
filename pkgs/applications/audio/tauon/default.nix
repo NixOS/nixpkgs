@@ -10,6 +10,7 @@
 , gobject-introspection
 , gtk3
 , kissfft
+, libappindicator
 , libnotify
 , libsamplerate
 , libvorbis
@@ -23,15 +24,15 @@
 , withDiscordRPC ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
-  version = "7.6.0";
+  version = "7.7.1";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
-    rev = "v${version}";
-    hash = "sha256-oQ3mcDrWWIT/2fu4MBw+0GjxWGFw1aLSTvmaKSDsdz4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rRYM8wdvwfetoIpS/lzAV/uV5XVpXyXsHSrClPWcsCo=";
   };
 
   postUnpack = ''
@@ -57,6 +58,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs compile-phazor.sh
 
+    substituteInPlace compile-phazor.sh --replace 'gcc' '${stdenv.cc.targetPrefix}cc'
+
     substituteInPlace extra/tauonmb.desktop --replace 'Exec=/opt/tauon-music-box/tauonmb.sh' 'Exec=${placeholder "out"}/bin/tauon'
   '';
 
@@ -67,12 +70,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3Packages.wrapPython
+    gobject-introspection
   ];
 
   buildInputs = [
     flac
-    gobject-introspection
     gtk3
+    libappindicator
     libnotify
     libopenmpt
     librsvg
@@ -95,7 +99,6 @@ stdenv.mkDerivation rec {
     natsort
     pillow
     plexapi
-    pulsectl
     pycairo
     pychromecast
     pylast
@@ -105,7 +108,8 @@ stdenv.mkDerivation rec {
     requests
     send2trash
     setproctitle
-  ] ++ lib.optional withDiscordRPC pypresence;
+  ] ++ lib.optional withDiscordRPC pypresence
+    ++ lib.optional stdenv.isLinux pulsectl;
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"
@@ -131,9 +135,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
-    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${version}";
+    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jansol ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

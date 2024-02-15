@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , apispec
 , boto3
 , cachetools
@@ -20,13 +21,14 @@
 
 buildPythonPackage rec {
   pname = "localstack";
-  version = "1.4.0";
+  version = "3.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mfPlpB1CvYuhnfucDfJjZtNS+1Kz0/l3+3uUXxxGiF4=";
+    hash = "sha256-HncD/lhYfBrqtXF8F1Gz7JqwrASoHbsXvp1HXM5rldw=";
   };
 
   postPatch = ''
@@ -35,6 +37,10 @@ buildPythonPackage rec {
       --replace "cachetools~=5.0.0" "cachetools~=5.0" \
       --replace "boto3>=1.20,<1.25.0" "boto3~=1.20"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     apispec

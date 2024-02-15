@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -7,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.1.1";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-SvKjjE629OwxWsPo2egGf2K6GzlWAYYStarHhA4Ex0w=";
   };
@@ -40,7 +41,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to convert Markdown files into Anki Decks";
     homepage = "https://github.com/lukesmurray/markdown-anki-decks";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    mainProgram = "mdankideck";
   };
 }

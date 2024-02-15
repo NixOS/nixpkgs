@@ -1,6 +1,7 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
+, rustc, rust-bindgen, rustPlatform
 }:
 
 let
@@ -56,15 +57,6 @@ let
   inherit (lib)
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
-  # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = [
-    pahole
-    perl
-    libelf
-    # module makefiles often run uname commands to find out the kernel version
-    (buildPackages.deterministic-uname.override { inherit modDirVersion; })
-  ] ++ optional (lib.versionAtLeast version "5.13") zstd;
-
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
       config = let attrName = attr: "CONFIG_" + attr; in {
@@ -84,14 +76,27 @@ let
       } // config_;
 
       isModular = config.isYes "MODULES";
+      withRust = config.isYes "RUST";
 
       buildDTBs = kernelConf.DTB or false;
+
+      # Dependencies that are required to build kernel modules
+      moduleBuildDependencies = [
+        pahole
+        perl
+        libelf
+        # module makefiles often run uname commands to find out the kernel version
+        (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+      ]
+      ++ optional (lib.versionAtLeast version "5.13") zstd
+      ++ optionals withRust [ rustc rust-bindgen ]
+      ;
 
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
-        inherit isZen isHardened isLibre;
+        inherit isZen isHardened isLibre withRust;
         isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
         baseVersion = lib.head (lib.splitString "-rc" version);
         kernelOlder = lib.versionOlder baseVersion;
@@ -99,6 +104,16 @@ let
       };
 
       inherit src;
+
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
+      nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal kmod ubootTools ]
+                          ++ optional  (lib.versionOlder version "5.8") libelf
+                          ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+                          ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+                          ++ optional  (lib.versionAtLeast version "5.8")  elfutils
+                          ++ optionals withRust [ rustc rust-bindgen ];
+
+      RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
       patches =
         map (p: p.patch) kernelPatches
@@ -116,26 +131,9 @@ let
             hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
           });
 
-      preUnpack = ''
-        # The same preUnpack is used to build the configfile,
-        # which does not have $dev.
-        if [ -n "$dev" ]; then
-            mkdir -p $dev/lib/modules/${modDirVersion}
-            cd $dev/lib/modules/${modDirVersion}
-        fi
-      '';
-
-      postUnpack = ''
-        mv -Tv "$sourceRoot" source 2>/dev/null || :
-        export sourceRoot=$PWD/source
-      '';
-
       postPatch = ''
-        sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
-
-        # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
-        # FIXME: remove when no longer needed
-        substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
+        # Ensure that depmod gets resolved through PATH
+        sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
 
         # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
         # This way kernels can be bit-by-bit reproducible depending on settings
@@ -171,7 +169,8 @@ let
       configurePhase = ''
         runHook preConfigure
 
-        export buildRoot=$(mktemp -d)
+        mkdir build
+        export buildRoot="$(pwd)/build"
 
         echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
 
@@ -199,14 +198,12 @@ let
       '';
 
       buildFlags = [
-        "DTC_FLAGS=-@"
         "KBUILD_BUILD_VERSION=1-NixOS"
-
-        # Set by default in the kernel since a73619a845d5,
-        # replicated here to apply to older versions.
-        # Makes __FILE__ relative to the build directory.
-        "KCPPFLAGS=-fmacro-prefix-map=$(sourceRoot)/="
-      ] ++ extraMakeFlags;
+        kernelConf.target
+        "vmlinux"  # for "perf" and things like that
+      ] ++ optional isModular "modules"
+        ++ optionals buildDTBs ["dtbs" "DTC_FLAGS=-@"]
+      ++ extraMakeFlags;
 
       installFlags = [
         "INSTALL_PATH=$(out)"
@@ -278,15 +275,22 @@ let
       ];
 
       postInstall = optionalString isModular ''
+        mkdir -p $dev
+        cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
-        unlink $out/lib/modules/${modDirVersion}/source
+        rm -f $out/lib/modules/${modDirVersion}/source
 
-        mkdir $dev/lib/modules/${modDirVersion}/build
+        mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
+
+        # To save space, exclude a bunch of unneeded stuff when copying.
+        (cd .. && rsync --archive --prune-empty-dirs \
+            --exclude='/build/' \
+            * $dev/lib/modules/${modDirVersion}/source/)
 
         cd $dev/lib/modules/${modDirVersion}/source
 
@@ -297,16 +301,12 @@ let
         # from a `try-run` call from the Makefile
         rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
 
-        # Keep some extra files
-        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o \
-                 scripts/gdb/linux vmlinux vmlinux-gdb.py
-        do
-          if [ -e "$buildRoot/$f" ]; then
-            mkdir -p "$(dirname "$dev/lib/modules/${modDirVersion}/build/$f")"
-            cp -HR $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+        # Keep some extra files on some arches (powerpc, aarch64)
+        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
+          if [ -f "$buildRoot/$f" ]; then
+            cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
           fi
         done
-        ln -s $dev/lib/modules/${modDirVersion}/build/vmlinux $dev
 
         # !!! No documentation on how much of the source tree must be kept
         # If/when kernel builds fail due to missing files, you can add
@@ -344,14 +344,6 @@ let
 
         # Delete empty directories
         find -empty -type d -delete
-
-        # Remove reference to kmod
-        sed -i Makefile -e 's|= ${buildPackages.kmod}/bin/depmod|= depmod|'
-      '';
-
-      preFixup = ''
-        # Don't strip $dev/lib/modules/*/vmlinux
-        stripDebugList="$(cd $dev && echo lib/modules/*/build/*/)"
       '';
 
       requiredSystemFeatures = [ "big-parallel" ];
@@ -369,6 +361,9 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
+        badPlatforms =
+          lib.optionals (lib.versionOlder version "4.15") [ "riscv32-linux" "riscv64-linux" ] ++
+          lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
         timeout = 14400; # 4 hours
       } // extraMeta;
     };
@@ -382,15 +377,6 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   inherit version;
 
   enableParallelBuilding = true;
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
-      ++ optional  (lib.versionOlder version "5.8") libelf
-      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-      ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 

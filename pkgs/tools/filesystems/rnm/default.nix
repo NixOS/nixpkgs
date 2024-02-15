@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/neurobin/rnm/blob/${version}/ChangeLog";
     platforms = lib.platforms.all;
     license = licenses.gpl3Only;
+    mainProgram = "rnm";
   };
 }

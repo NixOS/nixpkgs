@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gopsuinfo";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "gopsuinfo";
     rev = "v${version}";
-    sha256 = "sha256-e+obIFbhjxsdnyJe3+sUpe9pK9eNTspxNH+Cvf4RBMQ=";
+    sha256 = "sha256-h+CdiQh7IguCduIMCCI/UPIUAdXlNSHdkz6hrG10h3c=";
   };
 
   vendorHash = "sha256-S2ZHfrbEjPDweazwWbMbEMcMl/i+8Nru0G0e7RjOJMk=";
@@ -37,5 +37,6 @@ buildGoModule rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ otini ];
     platforms = platforms.linux;
+    mainProgram = "gopsuinfo";
   };
 }

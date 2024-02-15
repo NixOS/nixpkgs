@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xeus";
-  version = "3.0.5";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "jupyter-xeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LeU4PJ1UKfGqkRKq0/Mn9gjwNmXCy0/2SbjWJrjlOyU=";
+    sha256 = "sha256-D/dJ0SHxTHJw63gHD6FRZS7O2TVZ0voIv2mQASEjLA8=";
   };
 
   nativeBuildInputs = [

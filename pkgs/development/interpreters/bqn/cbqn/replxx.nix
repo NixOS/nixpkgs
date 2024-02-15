@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "replxx";
-  version = "unstable-2023-01-21";
+  version = "unstable-2023-10-31";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "replxx";
-    rev = "eb6bcecff4ca6051120c99e9dd64c3bd20fcc42f";
-    hash = "sha256-cb486FGF+4sUxgBbRfnbTTnZn2WQ3p93fSwDRCEtFJg=";
+    rev = "13f7b60f4f79c2f14f352a76d94860bad0fc7ce9";
+    hash = "sha256-xPuQ5YBDSqhZCwssbaN/FcTZlc3ampYl7nfl2bbsgBA=";
   };
 
   dontConfigure = true;
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/dzaima/replxx";
     description = "A replxx fork for CBQN";
     license = licenses.free;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
     platforms = platforms.all;
   };
 }

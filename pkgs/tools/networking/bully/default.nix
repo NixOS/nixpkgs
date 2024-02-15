@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "./source/src";
+  sourceRoot = "${src.name}/src";
 
   installPhase = ''
     install -Dm555 -t $out/bin bully
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;
+    mainProgram = "bully";
   };
 }

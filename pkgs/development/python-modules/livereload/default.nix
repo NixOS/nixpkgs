@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "livereload";
   version = "2.6.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lepture";

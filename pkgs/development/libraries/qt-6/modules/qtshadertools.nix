@@ -4,5 +4,5 @@
 
 qtModule {
   pname = "qtshadertools";
-  qtInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
 }

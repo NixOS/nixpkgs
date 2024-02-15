@@ -1,6 +1,5 @@
 { lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , pythonOlder
 , blosc2
@@ -12,39 +11,47 @@
 , numpy
 , numexpr
 , packaging
+, setuptools
 , sphinx
   # Test inputs
 , python
 , pytest
+, py-cpuinfo
 }:
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.8.0";
-  disabled = pythonOlder "3.5";
+  version = "3.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NPP6I2bOILGPHfVzp3wdJzBs4fKkHZ+e/2IbUZLqh4g=";
+    hash = "sha256-1HAmPC5QxLfIY1oNmawf8vnnBMJNceX6M8RSnn0K2cM=";
   };
 
   nativeBuildInputs = [
     blosc2
     cython
+    setuptools
     sphinx
   ];
 
   buildInputs = [
     bzip2
     c-blosc
+    blosc2.c-blosc2
     hdf5
     lzo
   ];
+
   propagatedBuildInputs = [
     blosc2
+    py-cpuinfo
     numpy
     numexpr
-    packaging  # uses packaging.version at runtime
+    packaging # uses packaging.version at runtime
   ];
 
   # When doing `make distclean`, ignore docs
@@ -55,6 +62,7 @@ buildPythonPackage rec {
       --replace "return 0" "assert result.wasSuccessful(); return 0" \
       --replace "return 1" "assert result.wasSuccessful(); return 1"
     substituteInPlace requirements.txt \
+      --replace "cython>=0.29.21" "" \
       --replace "blosc2~=2.0.0" "blosc2"
   '';
 
@@ -68,6 +76,7 @@ buildPythonPackage rec {
     "--lzo=${lib.getDev lzo}"
     "--bzip2=${lib.getDev bzip2}"
     "--blosc=${lib.getDev c-blosc}"
+    "--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
   nativeCheckInputs = [
@@ -91,6 +100,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
+    changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
   };

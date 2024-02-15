@@ -1,11 +1,10 @@
-{ stdenv
-, lib
-, google-cloud-sdk
+{ lib
+, stdenv
 , system
 , snapshotPath
 , autoPatchelfHook
 , python3
-, ...
+, libxcrypt-legacy
 }:
 
 let
@@ -37,7 +36,7 @@ let
 
   # A description of all available google-cloud-sdk components.
   # It's a JSON file with a list of components, along with some metadata
-  snapshot = builtins.fromJSON (builtins.readFile snapshotPath);
+  snapshot = lib.importJSON snapshotPath;
 
   # Generate a snapshot file for a single component.  It has the same format as
   # `snapshot`, but only contains a single component.  These files are
@@ -142,7 +141,7 @@ let
             {
               url = src;
               inherit sha256;
-            }) ;
+            });
       dontUnpack = true;
       installPhase = ''
         mkdir -p $out/google-cloud-sdk/.install
@@ -166,6 +165,9 @@ let
         stdenv.cc.cc
       ] ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
+      ];
+      buildInputs = [
+        libxcrypt-legacy
       ];
       passthru = {
         dependencies = filterForSystem dependencies;

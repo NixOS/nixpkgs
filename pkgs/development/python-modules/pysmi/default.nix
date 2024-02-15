@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "0.3.4";
+  format = "setuptools";
   pname = "pysmi";
 
  src = fetchPypi {

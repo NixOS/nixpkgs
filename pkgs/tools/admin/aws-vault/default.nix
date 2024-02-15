@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "99designs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ydg//2t+B02eXwnwsmECx+I8oluPf6dKntz7L6gWV88=";
+    sha256 = "sha256-Qs4vxFgehWQYYECBGBSU8YI/BHLwOQUO5wBlNEUzD7c=";
   };
 
   vendorHash = "sha256-4bJKDEZlO0DzEzTQ7m+SQuzhe+wKmL6wLueqgSz/46s=";

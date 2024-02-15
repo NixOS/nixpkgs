@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "comma";
-  version = "1.5.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
     rev = "v${version}";
-    hash = "sha256-OonKO7D6xuNf9S6SvxWYzZXNOfoUw5ZEymfC5UmZT7Y=";
+    hash = "sha256-x2HVm2vcEFHDrCQLIp5QzNsDARcbBfPdaIMLWVNfi4c=";
   };
 
-  cargoHash = "sha256-q6MbaKrGkwvKWSfL7bQjf9+RdcgKpKj3iXJtSz3FnMc=";
+  cargoHash = "sha256-N6Bc0+m0Qz1c/80oLvQTj8gvMusPXIriegNlRYWWStU=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/comma";
     description = "Runs programs without installing them";
     license = licenses.mit;
+    mainProgram = "comma";
     maintainers = with maintainers; [ Enzime artturin marsam ];
   };
 }

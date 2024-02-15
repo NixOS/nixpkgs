@@ -1,30 +1,32 @@
-{ lib, python3Packages, ffmpeg }:
+{ lib, python3Packages, fetchPypi, ffmpeg-headless }:
 
 python3Packages.buildPythonApplication rec {
   pname = "twspace-dl";
-  version = "2023.1.22.1";
+  version = "2023.7.24.1";
 
   format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "twspace_dl";
-    sha256 = "050e78b4583374351c288114e3b01ab34b0b19ad2d4971d15c5519521cf3f2f4";
+    sha256 = "sha256-Oq9k5Nfixf1vihhna7g3ZkqCwEtCdnvlbxIuOnGVoKE=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs = with python3Packages; [
+    mutagen
     requests
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}" ];
 
   pythonImportsCheck = [ "twspace_dl" ];
 
   meta = with lib; {
     description = "A python module to download twitter spaces";
     homepage = "https://github.com/HoloArchivists/twspace-dl";
+    changelog = "https://github.com/HoloArchivists/twspace-dl/releases/tag/${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ marsam ];
     mainProgram = "twspace_dl";

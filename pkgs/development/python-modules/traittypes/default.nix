@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "traittypes";
   version = "unstable-2019-06-23";
+  format = "setuptools";
 
   disabled = isPy27;
 
@@ -36,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ numpy pandas xarray nose pytestCheckHook ];
 
-  disabledTestPaths = lib.optional (lib.versionAtLeast numpy.version "1.17") [
+  disabledTestPaths = lib.optionals (lib.versionAtLeast numpy.version "1.17") [
     # https://github.com/jupyter-widgets/traittypes/blob/master/setup.py#L86-L87
     "traittypes/tests/test_traittypes.py"
   ];

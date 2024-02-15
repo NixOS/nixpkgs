@@ -19,6 +19,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/mhagger/git-imerge";
     description = "Perform a merge between two branches incrementally";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [ ];
+    mainProgram = "git-imerge";
   };
 }

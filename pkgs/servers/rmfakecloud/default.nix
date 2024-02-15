@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.12";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xBKo+qwwgGMOb+B1aI0pwH8u8c1GNZSXfhVd4SNewdg=";
+    sha256 = "sha256-Rb81CbtC1V8AugTNIGx07CvK20sZ5d4hfc4OxF259IQ=";
   };
 
-  vendorSha256 = "sha256-NwDaPpjkQogXE37RGS3zEALlp3NuXP9RW//vbwM6y0A=";
+  vendorHash = "sha256-Rr2EVrQOdlOqSlTpXFMfnKNmdw6UiT7LZH0xBUwqkJc=";
 
   ui = callPackage ./webui.nix { inherit version src; };
 
@@ -31,5 +31,6 @@ buildGoModule rec {
     homepage = "https://ddvk.github.io/rmfakecloud/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ pacien martinetd ];
+    mainProgram = "rmfakecloud";
   };
 }

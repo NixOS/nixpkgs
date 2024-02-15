@@ -1,19 +1,29 @@
-{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
+{ lib
+, stdenv
+, buildGraalvmNativeImage
+, babashka
+, fetchurl
+, fetchFromGitHub
+, clojure
+, writeScript
+, testers
+, clojure-lsp
+}:
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2023.02.27-13.12.12";
+  version = "2023.08.06-00.28.06";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-QyXmjszXBBUFOAZTNgUYIWWv2v7v/QbsAglRjF0Frfo=";
+    sha256 = "sha256-wc7M2cPRtdaRzZn3GNu/aCbQ2VqxiDxvu/b7qnBVUBo=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    sha256 = "828339a66ad23692c71ca62a720ac036e4acdef90769a2cce588e89ed8ea9c36";
+    sha256 = "c301821ac6914999a44f5c1cd371d46b248fe9a2e31d43a666d0bc2656cfdd78";
   };
 
   extraNativeImageBuildArgs = [
@@ -28,11 +38,17 @@ buildGraalvmNativeImage rec {
     export HOME="$(mktemp -d)"
     ./${pname} --version | fgrep -q '${version}'
   ''
-    # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
-    #${babashka}/bin/bb integration-test ./${pname}
+  # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
+  #${babashka}/bin/bb integration-test ./${pname}
   + ''
     runHook postCheck
   '';
+
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = clojure-lsp;
+    command = "clojure-lsp --version";
+  };
 
   passthru.updateScript = writeScript "update-clojure-lsp" ''
     #!/usr/bin/env nix-shell

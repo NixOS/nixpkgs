@@ -54,9 +54,8 @@ let
             services.postgresql = {
               enable = true;
               initialScript = pkgs.writeText "postgresql-init.sql" ''
-                CREATE DATABASE bitwarden;
                 CREATE USER bitwardenuser WITH PASSWORD '${dbPassword}';
-                GRANT ALL PRIVILEGES ON DATABASE bitwarden TO bitwardenuser;
+                CREATE DATABASE bitwarden WITH OWNER bitwardenuser;
               '';
             };
 
@@ -121,6 +120,8 @@ let
                   driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_confirm-master-password').send_keys(
                       '${userPassword}'
                   )
+                  if driver.find_element(By.CSS_SELECTOR, 'input#checkForBreaches').is_selected():
+                      driver.find_element(By.CSS_SELECTOR, 'input#checkForBreaches').click()
 
                   driver.find_element(By.XPATH, "//button[contains(., 'Create account')]").click()
 
@@ -133,9 +134,9 @@ let
                   )
                   driver.find_element(By.XPATH, "//button[contains(., 'Log in')]").click()
 
-                  wait.until(EC.title_contains("Vaultwarden Web Vault"))
+                  wait.until(EC.title_contains("Vaults"))
 
-                  driver.find_element(By.XPATH, "//button[contains(., 'Add item')]").click()
+                  driver.find_element(By.XPATH, "//button[contains(., 'New item')]").click()
 
                   driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
                       'secrets'
@@ -172,7 +173,7 @@ let
           )
 
       with subtest("use the web interface to sign up, log in, and save a password"):
-          server.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")
+          server.succeed("PYTHONUNBUFFERED=1 systemd-cat -t test-runner test-runner")
 
       with subtest("log in with the cli"):
           key = client.succeed(

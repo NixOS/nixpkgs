@@ -37,5 +37,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ magnetophon orivej ];
     platforms = platforms.linux;
+    # 2023-08-19, `-Werror=format-security` fails for xputty
+    # reported as https://github.com/brummer10/libxputty/issues/12
+    broken = true;
   };
 }

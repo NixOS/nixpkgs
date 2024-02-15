@@ -1,15 +1,15 @@
 { lib
 , stdenv
-, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "3.5.2";
+  version = "3.7.2";
   pname = "asgiref";
   format = "setuptools";
 
@@ -17,13 +17,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "django";
-    repo = pname;
-    rev = version;
-    hash = "sha256-56suF63ePRDprqODhVIPCEGiO8UGgWrpwg2wYEs6OOE=";
+    repo = "asgiref";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VW1PBh6+nLMD7qxmL83ymuxCPYKVY3qGKsB7ZiMqMu8=";
   };
 
   propagatedBuildInputs = [
-    async-timeout
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -40,9 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "asgiref" ];
 
   meta = with lib; {
+    changelog = "https://github.com/django/asgiref/blob/${src.rev}/CHANGELOG.txt";
     description = "Reference ASGI adapters and channel layers";
     homepage = "https://github.com/django/asgiref";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

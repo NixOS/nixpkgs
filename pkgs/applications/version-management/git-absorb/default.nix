@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
-  version = "0.6.9";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "tummychow";
-    repo = pname;
+    repo = "git-absorb";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-z02bMJ+KQaLHqIzsdB3BCVzTQ0NRG0ylAfTHYgOxZYk=";
+    hash = "sha256-SYBJKnzv2oktWubgm/j6wEeoLSBjGqQVXQf9LOaq+NU=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "sha256-lP0fU2Cirta4WWha7Pgje537u6TbD5oiHLfamfzJtpU=";
+  cargoHash = "sha256-i2ntM7NTi+hiB7DxEEV+3SXV8sVVWcNanif/wUZ9XvI=";
 
   postInstall = ''
     installManPage Documentation/git-absorb.1
@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];
     maintainers = [ maintainers.marsam ];
+    mainProgram = "git-absorb";
   };
 }

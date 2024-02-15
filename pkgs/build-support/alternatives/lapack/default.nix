@@ -35,6 +35,9 @@ stdenv.mkDerivation {
     implementation = lapackImplementation;
   };
 
+  # TODO: drop this forced rebuild, as it was needed just once.
+  rebuild_salt = if stdenv.isDarwin && stdenv.isx86_64 then "J4AQ" else null;
+
   dontBuild = true;
   dontConfigure = true;
   unpackPhase = "src=$PWD";
@@ -54,7 +57,7 @@ stdenv.mkDerivation {
   cp -L "$liblapack" $out/lib/liblapack${canonicalExtension}
   chmod +w $out/lib/liblapack${canonicalExtension}
 
-'' + (lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") ''
+'' + (lib.optionalString stdenv.hostPlatform.isElf ''
   patchelf --set-soname liblapack${canonicalExtension} $out/lib/liblapack${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapack${canonicalExtension}):${lapackProvider'}/lib" $out/lib/liblapack${canonicalExtension}
 '') + ''
@@ -83,7 +86,7 @@ EOF
   cp -L "$liblapacke" $out/lib/liblapacke${canonicalExtension}
   chmod +w $out/lib/liblapacke${canonicalExtension}
 
-'' + (lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") ''
+'' + (lib.optionalString stdenv.hostPlatform.isElf ''
   patchelf --set-soname liblapacke${canonicalExtension} $out/lib/liblapacke${canonicalExtension}
   patchelf --set-rpath "$(patchelf --print-rpath $out/lib/liblapacke${canonicalExtension}):${lib.getLib lapackProvider'}/lib" $out/lib/liblapacke${canonicalExtension}
 '') + ''

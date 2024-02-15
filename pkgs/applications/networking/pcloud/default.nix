@@ -3,7 +3,7 @@
 # of applications.
 #
 # What Nix does, simplifying a bit, is that it extracts an AppImage and starts
-# it via buildFHSUserEnv - this is totally fine for majority of apps, but makes
+# it via buildFHSEnv - this is totally fine for majority of apps, but makes
 # it by-design *impossible* to launch SUID wrappers [^1]; in case of pCloud,
 # it's fusermount.
 # (so pCloud starts, but silently fails to mount the FUSE drive.)
@@ -38,12 +38,13 @@
 
 let
   pname = "pcloud";
-  version = "1.11.0";
-  code = "XZspqgVZxM1CCER1we0esiDGuAxshjRSY77X";
+  version = "1.14.4";
+  code = "XZDh750ZBgJa45xqQ8H1ztdMFX2wVhOCTOFk";
+
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
-    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
-    hash = "sha256-EXJ+5LwVF5lTXc5zlppRQLCm0EZwqG3ndfK4LIjmWwc=";
+    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
+    hash = "sha256-1KF3tF62lkT6tfeP/dMaZITXp4Vyegp3lFYdLJ49OR8=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -120,5 +121,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "pcloud";
   };
 }

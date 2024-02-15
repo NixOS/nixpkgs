@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
-  version = "3.1.1";
+  version = "4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxptp/${pname}-${version}.tgz";
-    sha256 = "1nf0w4xyzg884v8blb81zkk6q8p6zbiq9lx61jdqwbbzkdgqbmll";
+    hash = "sha256-cOOOXSdk4CF0Q9pvFOiEb+QBpHIpOsE42EGcB6ZlRHo=";
   };
 
   postPatch = ''
@@ -15,7 +15,10 @@ stdenv.mkDerivation rec {
        '/usr/include/linux/' "${linuxHeaders}/include/linux/"
   '';
 
-  makeFlags = [ "prefix=" ];
+  makeFlags = [
+    "prefix="
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   preInstall = ''
     export DESTDIR=$out

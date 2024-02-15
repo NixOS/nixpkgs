@@ -24,6 +24,7 @@ let
     license = licenses.mit;
     maintainers = with maintainers; [ seberm ];
   };
+  updateScript = ./update.sh;
 in
 {
   teos = rustPlatform.buildRustPackage {
@@ -42,6 +43,8 @@ in
     buildInputs = lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.Security
     ];
+
+    passthru.updateScript = updateScript;
 
     __darwinAllowLocalNetworking = true;
 
@@ -69,6 +72,8 @@ in
     ] ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
+
+    passthru.updateScript = updateScript;
 
     __darwinAllowLocalNetworking = true;
 

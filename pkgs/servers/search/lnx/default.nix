@@ -19,7 +19,12 @@ rustPlatform.buildRustPackage {
     rev = "2cb80f344c558bfe37f21ccfb83265bf351419d9";
     sha256 = "sha256-iwoZ6xRzEDArmhWYxIrbIXRTQjOizyTsXCvMdnUrs2g=";
   };
-  cargoSha256 = "sha256-JpsZ37u3+4+X8knTxoGmJisopTsPR221rv3Bu4DMZZI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "compose-0.1.0" = "sha256-zcniGI3wa+gI3jFTDqHcesX+6hAtNEbW81ABPUcFTXk=";
+    };
+  };
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
   meta = with lib; {
     description = "Insanely fast, Feature-rich searching. lnx is the adaptable, typo tollerant deployment of the tantivy search engine. Standing on the shoulders of giants. ";

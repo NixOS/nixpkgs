@@ -2,8 +2,10 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
+, pydantic
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-cov
@@ -13,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2022.10.0";
+  version = "2023.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    hash = "sha256-DJkqFj87N8OlWHNto+tInj8QvVoNA9faLBb/pBbQl0U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-F9Mv8c+QEd+Vi5pdNDAFzRnYoNKZSAN5qbeX7yG6kIk=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +33,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
+    pydantic
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses
@@ -52,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${src.rev}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

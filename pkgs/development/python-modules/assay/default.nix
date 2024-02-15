@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "assay";
   version = "unstable-2022-01-19";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "brandon-rhodes";
@@ -18,5 +19,6 @@ buildPythonPackage rec {
     description = "Attempt to write a Python testing framework I can actually stand";
     license = licenses.mit;
     maintainers = with maintainers; [ zane ];
+    broken = pythonAtLeast "3.11";
   };
 }

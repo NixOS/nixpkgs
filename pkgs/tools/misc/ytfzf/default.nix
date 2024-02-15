@@ -9,19 +9,19 @@
 , gnused
 , jq
 , mpv
-, ueberzug
+, ueberzugpp
 , yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.5.5";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    hash = "sha256-2GpCO8U1QZQy+0DQzzqc1Ba+PRj1Ns0lNHupzKYCkVY=";
+    hash = "sha256-wd7IgJRSh8UJ28slItIz1OhAg7cgVSDUldCyaObn6Ak=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" \
       --prefix PATH : ${lib.makeBinPath [
-        coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
+        coreutils curl dmenu fzf gnused jq mpv ueberzugpp yt-dlp
       ]} \
       --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "ytfzf";
   };
 }

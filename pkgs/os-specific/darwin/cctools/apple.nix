@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, symlinkJoin, xcbuildHook, tcsh, libobjc, libtapi, libunwind, llvm, memstreamHook, xar }:
+{ lib, stdenv, fetchFromGitHub, symlinkJoin, xcbuildHook, tcsh, libobjc, libtapi, libunwind, llvm, memstreamHook, xar }:
 
 let
 
@@ -6,9 +6,11 @@ cctools = stdenv.mkDerivation rec {
   pname = "cctools";
   version = "973.0.1";
 
-  src = fetchurl {
-    url = "https://opensource.apple.com/tarballs/cctools/cctools-${version}.tar.gz";
-    hash = "sha256-r/6tsyyfi3R/0cLl+lN/B9ZaOaVF+Z7vJ6xj4LzSgiQ=";
+  src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "cctools";
+    rev = "${pname}-${version}";
+    hash = "sha256-0NlDqy3zeg4D0MbDipx0sMYDfzYa63Jxfsckzz/928o=";
   };
 
   patches = [
@@ -60,9 +62,11 @@ ld64 = stdenv.mkDerivation rec {
   pname = "ld64";
   version = "609";
 
-  src = fetchurl {
-    url = "https://opensource.apple.com/tarballs/ld64/ld64-${version}.tar.gz";
-    hash = "sha256-SqQ7SqmK+uOPijzxOTqtkEu3qYmcth6H7rrQ03R1Q+4=";
+  src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "ld64";
+    rev = "${pname}-${version}";
+    hash = "sha256-WAaphem6NS4eCHL/pISlDXnO1CDYTgSrVGzcothh4/Q=";
   };
 
   postPatch = ''

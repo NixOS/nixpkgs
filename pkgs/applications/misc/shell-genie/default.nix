@@ -1,23 +1,28 @@
 { lib
 , python3
-, fetchFromGitHub
+, fetchPypi
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "shell-genie";
-  version = "0.2.8";
+  version = "0.2.10";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "shell_genie";
     inherit version;
-    hash = "sha256-6miqTjiGLK7r6evfchwuAXTHj+JwoH/CqgRoa5+jDJI=";
+    hash = "sha256-z7LiAq2jLzqjg4Q/r9o7M6VbedeT34NyPpgctfqBp+8=";
   };
+
+  pythonRelaxDeps = [
+    "typer"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

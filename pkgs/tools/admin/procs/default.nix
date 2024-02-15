@@ -2,24 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.13.4";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "dalance";
-    repo = pname;
+    repo = "procs";
     rev = "v${version}";
-    sha256 = "sha256-PTUATmnpJGeY0Ushf7sAapsZ51VC2IdnKMzYJX5+h9A=";
+    hash = "sha256-Gx3HRGWi+t/wT1WrbuHXVyX+cP+JvZV8lBun1Qs8Xys=";
   };
 
-  cargoHash = "sha256-jxGdozSEIop2jBL4lK3ZcEuuR7P8qDoQD/Lrl4yaBN0=";
+  cargoHash = "sha256-0eLOAZnHbnvT8qgSfWO/RKXIdRr5wwfUQ9YQ77I6okQ=";
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  LIBCLANG_PATH = lib.optionals stdenv.isDarwin "${stdenv.cc.cc.lib}/lib/";
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $out/bin/procs --completion $shell
+      $out/bin/procs --gen-completion $shell
     done
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';
@@ -31,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 sciencentistguy ];
+    maintainers = with maintainers; [ Br1ght0ne sciencentistguy ];
+    mainProgram = "procs";
   };
 }

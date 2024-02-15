@@ -1,17 +1,17 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, testers, oras }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, oras }:
 
 buildGoModule rec {
   pname = "oras";
-  version = "0.16.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
     rev = "v${version}";
-    hash = "sha256-7fmrWkJ2f9LPaBB0vqLqPCCLpkdsS1gVfJ1xn6K/M3E=";
+    hash = "sha256-oWDxrxCrBU0quSpRLXZ0w1COuImVj4FzAmv8574x76o=";
   };
 
-  vendorHash = "sha256-BLjGu1xk5OCNILc2es5Q0fEIqoexq/lHnJtHz72w6iI=";
+  vendorHash = "sha256-51keQmj1eGT3rJysnfTWIl8xoHfz3NPL/qXegc3wwNc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,6 +52,6 @@ buildGoModule rec {
     changelog = "https://github.com/oras-project/oras/releases/tag/v${version}";
     description = "The ORAS project provides a way to push and pull OCI Artifacts to and from OCI Registries";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk developer-guy ];
   };
 }

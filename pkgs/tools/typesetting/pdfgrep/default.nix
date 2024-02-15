@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  configureFlags = [
+    "--with-libgcrypt-prefix=${lib.getDev libgcrypt}"
+  ];
+
   nativeBuildInputs = [ pkg-config asciidoc ];
   buildInputs = [ poppler libgcrypt pcre ];
 
@@ -24,5 +28,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ qknight fpletz ];
     platforms = with lib.platforms; unix;
+    mainProgram = "pdfgrep";
   };
 }

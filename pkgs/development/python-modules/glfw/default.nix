@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "glfw";
-  version = "2.5.7";
+  version = "2.6.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,14 +16,12 @@ buildPythonPackage rec {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tB9qoGIUb0KgD7SQIV7nP5/fWKY/LrP/lQbljfVqiXw=";
+    hash = "sha256-mh2l63Nt9YMCPM3AplKWPx5HQZi2/cm+dUS56JB8fGA=";
   };
 
   # Patch path to GLFW shared object
-  patches = [ ./search-path.patch ];
-
   postPatch = ''
-    substituteInPlace glfw/library.py --replace "@GLFW@" '${glfw3}/lib'
+    substituteInPlace glfw/library.py --replace "_get_library_search_paths()," "[ '${glfw3}/lib' ],"
   '';
 
   propagatedBuildInputs = [

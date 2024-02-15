@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 , dulwich
 , mercurial
 , pythonOlder
@@ -8,15 +9,19 @@
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "1.1.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P3Ng9bD16AX7DJac/Y168GSWLTIAD3I1aLblYIDQiyk=";
+    hash = "sha256-btEamGLqCC5PRigxHbe49/bnJNVGm6Czf852JaAdB38=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     dulwich

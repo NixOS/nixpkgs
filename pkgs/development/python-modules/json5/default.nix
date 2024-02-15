@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "json5";
-  version = "0.9.9";
+  version = "0.9.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dpranke";
     repo = "pyjson5";
     rev = "v${version}";
-    hash = "sha256-0ommoTv5q7YuLNF+ZPWW/Xg/8CwnPrF7rXJ+eS0joUs=";
+    hash = "sha256-cshP1kraLENqWuQTlm4HPAP/0ywRRLFOJI8mteWcjR4=";
   };
 
   nativeCheckInputs = [

@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, docbook_xsl, docbook_xsl_ns, gettext, libxslt, glibcLocales, docbook_xml_dtd_412, docbook_sgml_dtd_41, texlive, opensp, bash
+{ stdenv, lib, fetchurl, docbook_xsl, docbook_xsl_ns, gettext, libxslt, glibcLocales, docbook_xml_dtd_412, docbook_sgml_dtd_41, opensp, bash
 , perl, buildPerlPackage, ModuleBuild, TextWrapI18N, LocaleGettext, TermReadKey, SGMLSpm, UnicodeLineBreak, PodParser, YAMLTiny
-, fetchpatch
+, fetchpatch, writeShellScriptBin
 }:
 
 buildPerlPackage rec {
@@ -20,7 +20,15 @@ buildPerlPackage rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ gettext libxslt docbook_xsl docbook_xsl_ns ModuleBuild docbook_xml_dtd_412 docbook_sgml_dtd_41 opensp texlive.combined.scheme-basic glibcLocales ];
+  nativeBuildInputs =
+    # the tests for the tex-format use kpsewhich -- texlive's file finding utility.
+    # We don't want to depend on texlive here, so we replace it with a minimal
+    # shellscript that suffices for the tests in t/fmt/tex/, i.e. it looks up
+    # article.cls to an existing file, but doesn't find article-wrong.cls.
+    let kpsewhich-stub = writeShellScriptBin "kpsewhich"
+      ''[[ $1 = "article.cls" ]] && echo /dev/null'';
+    in
+    [ gettext libxslt docbook_xsl docbook_xsl_ns ModuleBuild docbook_xml_dtd_412 docbook_sgml_dtd_41 opensp kpsewhich-stub glibcLocales ];
   propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isMusl) TextWrapI18N ++ [ LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
   buildInputs = [ bash ];
@@ -37,7 +45,9 @@ buildPerlPackage rec {
   # https://github.com/void-linux/void-packages/pull/34029#issuecomment-973267880
   # Alpine packagers have not worried about running the tests until now:
   # https://git.alpinelinux.org/aports/tree/main/po4a/APKBUILD#n11
-  doCheck = !stdenv.hostPlatform.isMusl;
+  #
+  # Disabling tests on Darwin until https://github.com/NixOS/nixpkgs/issues/236560 is resolved.
+  doCheck = (!stdenv.hostPlatform.isMusl) && (!stdenv.hostPlatform.isDarwin);
 
   checkPhase = ''
     export SGML_CATALOG_FILES=${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat

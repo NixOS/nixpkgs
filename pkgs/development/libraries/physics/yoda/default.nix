@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , python
 , root
 , makeWrapper
@@ -11,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.7";
+  version = "1.9.9";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-jQe7BNy3k2SFhxihggNFLY2foAAp+pQjnq+oUpAyuP8=";
+    hash = "sha256-68rVU2mhztzuOi3gWUB8hRZSukRJURP1wJ2MLlf1Fqo=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -41,6 +40,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     touch pyext/yoda/*.{pyx,pxd}
     patchShebangs .
+
+    substituteInPlace pyext/yoda/plotting/script_generator.py \
+      --replace '/usr/bin/env python' '${python.interpreter}'
   '';
 
   postInstall = ''

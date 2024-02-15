@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "aiowebostv";
-  version = "0.3.2";
+  version = "0.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SNrznJY/HKUhDsClpC4j6Z/qE9qOsrdfc7Fu0W8ru/c=";
+    hash = "sha256-djcfYpHkhXhjQwJzHP3mNflKrcP6Yj3/z62qeXg67ss=";
   };
 
   propagatedBuildInputs = [

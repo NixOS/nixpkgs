@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kcoreaddons
 , kdeclarative
@@ -8,7 +7,6 @@
 , krunner
 , kservice
 , plasma-framework
-, qtbase
 , qtscript
 , qtdeclarative
 }:

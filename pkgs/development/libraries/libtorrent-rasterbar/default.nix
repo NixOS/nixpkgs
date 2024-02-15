@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "2.0.8";
+  version = "2.0.9";
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override { enablePython = true; inherit python; };
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
-    sha256 = "sha256-mMY3NiSL/lYuYmV/KWgfKbs8XukSV4PvQ87tpgBid6M=";
+    sha256 = "sha256-kUpeofullQ70uK/YZUD0ikHCquFTGwev7MxBYj0oHeU=";
     fetchSubmodules = true;
   };
 
@@ -40,6 +40,11 @@ in stdenv.mkDerivation {
   postInstall = ''
     moveToOutput "include" "$dev"
     moveToOutput "lib/${python.libPrefix}" "$python"
+  '';
+
+  postFixup = ''
+    substituteInPlace "$dev/lib/cmake/LibtorrentRasterbar/LibtorrentRasterbarTargets-release.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
   '';
 
   outputs = [ "out" "dev" "python" ];

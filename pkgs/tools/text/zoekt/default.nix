@@ -29,6 +29,6 @@ buildGoModule {
     description = "Fast trigram based code search";
     homepage = "https://github.com/google/zoekt";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

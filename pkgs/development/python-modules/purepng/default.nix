@@ -10,6 +10,7 @@
 buildPythonPackage {
   pname = "purepng";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Scondo";
@@ -32,17 +33,26 @@ buildPythonPackage {
 
   # numpy is optional - if not supplied, tests simply have less coverage
   nativeCheckInputs = [ numpy ];
+
+  postPatch = ''
+    substituteInPlace code/test_png.py \
+      --replace numpy.bool bool
+  '';
+
   # checkPhase begins by deleting source dir to force test execution against installed version
   checkPhase = ''
+    runHook preCheck
+
     rm -r code/png
     ${python.interpreter} code/test_png.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage    = "https://github.com/scondo/purepng";
-    license     = licenses.mit;
+    homepage = "https://github.com/scondo/purepng";
+    license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };
-
 }

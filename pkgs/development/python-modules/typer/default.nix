@@ -1,36 +1,41 @@
 { lib
 , stdenv
 , buildPythonPackage
+, click
 , colorama
+, coverage
 , fetchpatch
 , fetchPypi
 , flit-core
-, click
+, pytest-sugar
+, pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , rich
 , shellingham
-, pytest-xdist
-, pytest-sugar
-, coverage
-, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.7.0";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/3l4RleKnyogG1NEKu3rVDMZRmhw++HHAeq2bddoEWU=";
+    hash = "sha256-UJIv15rqL0dRqOBAj/ENJmK9DIu/qEdVppnzutopeLI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "rich >=10.11.0,<13.0.0" "rich"
-  '';
+  patches = [
+    # https://github.com/tiangolo/typer/pull/651
+    (fetchpatch {
+      name = "unpin-flit-core-dependency.patch";
+      url = "https://github.com/tiangolo/typer/commit/78a0ee2eec9f54ad496420e177fdaad84984def1.patch";
+      hash = "sha256-VVUzFvF2KCXXkCfCU5xu9acT6OLr+PlQQPeVGONtU4A=";
+    })
+  ];
 
   nativeBuildInputs = [
     flit-core
@@ -38,6 +43,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
+    typing-extensions
   ];
 
   passthru.optional-dependencies = {
@@ -58,8 +64,11 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # likely related to https://github.com/sarugaku/shellingham/issues/35
+
+  disabledTests = [
+    "test_scripts"
+    # Likely related to https://github.com/sarugaku/shellingham/issues/35
+    # fails also on Linux
     "test_show_completion"
     "test_install_completion"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
@@ -73,6 +82,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
+    changelog = "https://github.com/tiangolo/typer/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ winpat ];
   };

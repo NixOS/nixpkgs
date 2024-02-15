@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiosqlite";
-  version = "0.18.0";
+  version = "0.19.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yPGSKqjOz1EY5/V0oKz2EiZ90q2O4TINoXdxHuB7Gqk=";
+    hash = "sha256-dm7uqG59FP40hcQt+R7qfQiD8P42AYZ2WcH1RoEC5wQ=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jreese/aiosqlite";
     changelog = "https://github.com/omnilib/aiosqlite/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

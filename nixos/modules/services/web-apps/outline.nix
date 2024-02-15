@@ -3,8 +3,12 @@
 let
   defaultUser = "outline";
   cfg = config.services.outline;
+  inherit (lib) mkRemovedOptionModule;
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "outline" "sequelizeArguments" ] "Database migration are run agains configurated database by outline directly")
+  ];
   # See here for a reference of all the options:
   #   https://github.com/outline/outline/blob/v0.67.0/.env.sample
   #   https://github.com/outline/outline/blob/v0.67.0/app.json
@@ -25,7 +29,7 @@ in
           # to still land in the same team. Note that this effectively makes
           # Outline a single-team instance.
           patchPhase = ${"''"}
-            sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' server/routes/auth/providers/oidc.ts
+            sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' plugins/oidc/server/auth/oidc.ts
           ${"''"};
         })
       '';
@@ -48,15 +52,6 @@ in
       description = lib.mdDoc ''
         Group under which the service should run. If this is the default value,
         the group will be created.
-      '';
-    };
-
-    sequelizeArguments = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "--env=production-ssl-disabled";
-      description = lib.mdDoc ''
-        Optional arguments to pass to `sequelize` calls.
       '';
     };
 
@@ -122,13 +117,14 @@ in
     storage = lib.mkOption {
       description = lib.mdDoc ''
         To support uploading of images for avatars and document attachments an
-        s3-compatible storage must be provided. AWS S3 is recommended for
+        s3-compatible storage can be provided. AWS S3 is recommended for
         redundancy however if you want to keep all file storage local an
         alternative such as [minio](https://github.com/minio/minio)
         can be used.
+        Local filesystem storage can also be used.
 
-        A more detailed guide on setting up S3 is available
-        [here](https://wiki.generaloutline.com/share/125de1cc-9ff6-424b-8415-0d58c809a40f).
+        A more detailed guide on setting up storage is available
+        [here](https://docs.getoutline.com/s/hosting/doc/file-storage-N4M0T6Ypu7).
       '';
       example = lib.literalExpression ''
         {
@@ -141,6 +137,19 @@ in
       '';
       type = lib.types.submodule {
         options = {
+          storageType = lib.mkOption {
+            type = lib.types.enum [ "local" "s3" ];
+            description = lib.mdDoc "File storage type, it can be local or s3.";
+            default = "s3";
+          };
+          localRootDir = lib.mkOption {
+            type = lib.types.str;
+            description = lib.mdDoc ''
+              If `storageType` is `local`, this sets the parent directory
+              under which all attachments/images go.
+            '';
+            default = "/var/lib/outline/data";
+          };
           accessKey = lib.mkOption {
             type = lib.types.str;
             description = lib.mdDoc "S3 access key.";
@@ -562,17 +571,51 @@ in
     systemd.tmpfiles.rules = [
       "f ${cfg.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
       "f ${cfg.utilsSecretFile} 0600 ${cfg.user} ${cfg.group} -"
-      "f ${cfg.storage.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
+      (if (cfg.storage.storageType == "s3") then
+        "f ${cfg.storage.secretKeyFile} 0600 ${cfg.user} ${cfg.group} -"
+      else
+        "d ${cfg.storage.localRootDir} 0700 ${cfg.user} ${cfg.group} - -")
     ];
 
     services.postgresql = lib.mkIf (cfg.databaseUrl == "local") {
       enable = true;
       ensureUsers = [{
         name = "outline";
-        ensurePermissions."DATABASE outline" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       }];
       ensureDatabases = [ "outline" ];
     };
+
+    # Outline is unable to create the uuid-ossp extension when using postgresql 12, in later version this
+    # extension can be created without superuser permission. This services therefor this extension before
+    # outline starts and postgresql 12 is using on the host.
+    #
+    # Can be removed after postgresql 12 is dropped from nixos.
+    systemd.services.outline-postgresql =
+      let
+        pgsql = config.services.postgresql;
+      in
+        lib.mkIf (cfg.databaseUrl == "local" && pgsql.package == pkgs.postgresql_12) {
+          after = [ "postgresql.service" ];
+          bindsTo = [ "postgresql.service" ];
+          wantedBy = [ "outline.service" ];
+          partOf = [ "outline.service" ];
+          path = [
+            pgsql.package
+          ];
+          script = ''
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
+
+            psql outline -tAc 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
+          '';
+
+          serviceConfig = {
+            User = pgsql.superUser;
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+        };
 
     services.redis.servers.outline = lib.mkIf (cfg.redisUrl == "local") {
       enable = true;
@@ -583,16 +626,6 @@ in
     systemd.services.outline = let
       localRedisUrl = "redis+unix:///run/redis-outline/redis.sock";
       localPostgresqlUrl = "postgres://localhost/outline?host=/run/postgresql";
-
-      # Create an outline-sequalize wrapper (a wrapper around the wrapper) that
-      # has the config file's path baked in. This is necessary because there is
-      # at least one occurrence of outline calling this from its own code.
-      sequelize = pkgs.writeShellScriptBin "outline-sequelize" ''
-        exec ${cfg.package}/bin/outline-sequelize \
-          --config $RUNTIME_DIRECTORY/database.json \
-          ${cfg.sequelizeArguments} \
-          "$@"
-      '';
     in {
       description = "Outline wiki and knowledge base";
       wantedBy = [ "multi-user.target" ];
@@ -603,7 +636,6 @@ in
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
       path = [
         pkgs.openssl # Required by the preStart script
-        sequelize
       ];
 
 
@@ -614,14 +646,6 @@ in
           REDIS_URL = if cfg.redisUrl == "local" then localRedisUrl else cfg.redisUrl;
           URL = cfg.publicUrl;
           PORT = builtins.toString cfg.port;
-
-          AWS_ACCESS_KEY_ID = cfg.storage.accessKey;
-          AWS_REGION = cfg.storage.region;
-          AWS_S3_UPLOAD_BUCKET_URL = cfg.storage.uploadBucketUrl;
-          AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
-          AWS_S3_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
-          AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
-          AWS_S3_ACL = cfg.storage.acl;
 
           CDN_URL = cfg.cdnUrl;
           FORCE_HTTPS = builtins.toString cfg.forceHttps;
@@ -638,7 +662,20 @@ in
           RATE_LIMITER_ENABLED = builtins.toString cfg.rateLimiter.enable;
           RATE_LIMITER_REQUESTS = builtins.toString cfg.rateLimiter.requests;
           RATE_LIMITER_DURATION_WINDOW = builtins.toString cfg.rateLimiter.durationWindow;
+
+          FILE_STORAGE = cfg.storage.storageType;
+          FILE_STORAGE_UPLOAD_MAX_SIZE = builtins.toString cfg.storage.uploadMaxSize;
+          FILE_STORAGE_LOCAL_ROOT_DIR = cfg.storage.localRootDir;
         }
+
+        (lib.mkIf (cfg.storage.storageType == "s3") {
+          AWS_ACCESS_KEY_ID = cfg.storage.accessKey;
+          AWS_REGION = cfg.storage.region;
+          AWS_S3_UPLOAD_BUCKET_URL = cfg.storage.uploadBucketUrl;
+          AWS_S3_UPLOAD_BUCKET_NAME = cfg.storage.uploadBucketName;
+          AWS_S3_FORCE_PATH_STYLE = builtins.toString cfg.storage.forcePathStyle;
+          AWS_S3_ACL = cfg.storage.acl;
+        })
 
         (lib.mkIf (cfg.slackAuthentication != null) {
           SLACK_CLIENT_ID = cfg.slackAuthentication.clientId;
@@ -687,50 +724,14 @@ in
           openssl rand -hex 32 > ${lib.escapeShellArg cfg.utilsSecretFile}
         fi
 
-        # The config file is required for the CLI, the DATABASE_URL environment
-        # variable is read by the app.
-        ${if (cfg.databaseUrl == "local") then ''
-          cat <<EOF > $RUNTIME_DIRECTORY/database.json
-          {
-            "production": {
-              "dialect": "postgres",
-              "host": "/run/postgresql",
-              "username": null,
-              "password": null
-            }
-          }
-          EOF
-          export DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
-          export PGSSLMODE=disable
-        '' else ''
-          cat <<EOF > $RUNTIME_DIRECTORY/database.json
-          {
-            "production": {
-              "use_env_variable": "DATABASE_URL",
-              "dialect": "postgres",
-              "dialectOptions": {
-                "ssl": {
-                  "rejectUnauthorized": false
-                }
-              }
-            },
-            "production-ssl-disabled": {
-              "use_env_variable": "DATABASE_URL",
-              "dialect": "postgres"
-            }
-          }
-          EOF
-          export DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
-        ''}
-
-        cd $RUNTIME_DIRECTORY
-        ${sequelize}/bin/outline-sequelize db:migrate
       '';
 
       script = ''
         export SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
         export UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
-        export AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+        ${lib.optionalString (cfg.storage.storageType == "s3") ''
+          export AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+        ''}
         ${lib.optionalString (cfg.slackAuthentication != null) ''
           export SLACK_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.slackAuthentication.secretFile})"
         ''}
@@ -781,7 +782,7 @@ in
         RuntimeDirectoryMode = "0750";
         # This working directory is required to find stuff like the set of
         # onboarding files:
-        WorkingDirectory = "${cfg.package}/share/outline/build";
+        WorkingDirectory = "${cfg.package}/share/outline";
       };
     };
   };

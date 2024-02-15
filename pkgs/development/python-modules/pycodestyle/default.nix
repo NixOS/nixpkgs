@@ -3,11 +3,12 @@
 , fetchPypi
 , lib
 , python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.10.0";
+  version = "2.11.1";
 
   disabled = pythonOlder "3.6";
 
@@ -15,18 +16,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NHGHvbR2Mp2Y9pXCE9cpWoRtEVL/T+m6y4qVkLjucFM=";
+    hash = "sha256-QboOevyXUt+1PO1UieifgYa+AOWZ5xJmBpW3p1/yZj8=";
   };
 
-  # https://github.com/PyCQA/pycodestyle/blob/2.10.0/tox.ini#L13
-  checkPhase = ''
-    ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
-    ${python.interpreter} -m pycodestyle --max-doc-length=72 --testsuite testsuite
-    ${python.interpreter} -m pycodestyle --max-doc-length=72 --doctest
-    ${python.interpreter} -m unittest discover testsuite -vv
-  '';
+  pythonImportsCheck = [
+    "pycodestyle"
+  ];
 
-  pythonImportsCheck = [ "pycodestyle" ];
+  nativCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # https://github.com/PyCQA/pycodestyle/blob/2.11.0/tox.ini#L16
+  postCheck = ''
+    ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";

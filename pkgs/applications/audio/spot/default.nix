@@ -7,7 +7,9 @@
 , gettext
 , python3
 , desktop-file-utils
+, cargo
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libadwaita
@@ -21,19 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    hash = "sha256-0iuLZq9FSxaOchxx6LzGwpY8qnOq2APl/qkBYzEV2uw=";
+    hash = "sha256-K6wGWhAUUGsbE4O+z0TmJcJyGarvHgZteY527jfAa90=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-g46BkrTv6tdrGe/p245O4cBoPjbvyRP7U6hH1Hp4ja0=";
+    hash = "sha256-eM2XLumn4dr2YtyUzBZJADlqdexc1iOaNJUudMlfSUc=";
   };
 
   nativeBuildInputs = [
@@ -45,9 +47,9 @@ stdenv.mkDerivation rec {
     gtk4 # for gtk-update-icon-cache
     glib # for glib-compile-schemas
     desktop-file-utils
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
   ];
 
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

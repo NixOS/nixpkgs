@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minimacy";
-  version = "0.6.4";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = pname;
     rev =  version;
-    hash = "sha256-qIK7QnXZ9FmfarMZaHktZCHhvR8cctyKVpFS8PeOpLs=";
+    hash = "sha256-uA+4dnhOnv7qRE7nqew8a14DGaQblsMY2uBZ+iyLtFU=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

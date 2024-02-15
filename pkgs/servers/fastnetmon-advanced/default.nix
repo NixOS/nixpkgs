@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, bzip2 }:
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, bzip2
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.335";
+  version = "2.0.358";
 
   src = fetchurl {
     url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-2WdCQX0AiLTPGM9flVSXgKMrTGCwSXk9IfyS5SRKroY=";
+    hash = "sha256-qL+LxePCZnSpbeeNANvI/f8ntNStHe02fSqMA+XKFng=";
   };
 
   nativeBuildInputs = [
@@ -21,11 +27,10 @@ stdenv.mkDerivation rec {
     ar xf $src
     tar xf data.tar.xz
 
-    # "These binaries are not part of FastNetMon and we shipped them by accident. They will be removed in next stable build"
-    rm opt/fastnetmon/app/bin/{generate_rsa_keys,license_app,fastnetmon_license_server}
-
-    # ships with both 2_0_0 and 2_3_0 but the shared objects are not versioned and only 2_3_0 has the necessary symbols
-    rm -rf opt/fastnetmon/libraries/libclickhouse_2_0_0/
+    # both clickhouse 2.0.0 and 2.3.0 libs are included, without versioning it will by
+    # default choose the first it finds, but we need 2.3.0 otherwise the fastnetmon
+    # binary will be missing symbols
+    rm -r opt/fastnetmon/libraries/libclickhouse_2_0_0
 
     # unused libraries, which have additional dependencies
     rm opt/fastnetmon/libraries/gcc1210/lib/libgccjit.so.0.0.1
@@ -41,14 +46,32 @@ stdenv.mkDerivation rec {
     cp -r opt/fastnetmon/app/bin $out/bin
     cp -r opt/fastnetmon/libraries $out/libexec/fastnetmon
 
+    readlink usr/sbin/gobgpd
+    readlink usr/bin/gobgp
+
+    ln -s $(readlink usr/sbin/gobgpd | sed "s:/opt/fastnetmon:$out/libexec/fastnetmon:") $out/bin/fnm-gobgpd
+    ln -s $(readlink usr/bin/gobgp | sed "s:/opt/fastnetmon:$out/libexec/fastnetmon:") $out/bin/fnm-gobgp
+
     addAutoPatchelfSearchPath $out/libexec/fastnetmon/libraries
   '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    set +o pipefail
+    $out/bin/fastnetmon 2>&1 | grep "Can't open log file"
+    $out/bin/fcli 2>&1 | grep "Please run this tool with root rights"
+    $out/bin/fnm-gobgp --help 2>&1 | grep "Available Commands"
+    $out/bin/fnm-gobgpd --help 2>&1 | grep "Application Options"
+  '';
+
+  passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
 
   meta = with lib; {
     description = "A high performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
+    changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ yuka ];
+    maintainers = teams.wdz.members;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

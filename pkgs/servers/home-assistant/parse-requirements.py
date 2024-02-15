@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ attrs packaging rich ])" -p nodePackages.pyright ruff isort"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ packaging rich ])" -p nodePackages.pyright ruff isort"
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Optional, Set
 from urllib.request import urlopen
 
 from packaging import version as Version
+from packaging.version import InvalidVersion
 from rich.console import Console
 from rich.table import Table
 
@@ -39,10 +40,30 @@ PKG_SET = "home-assistant.python.pkgs"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
-    "ha-av": "av",
     "HAP-python": "hap-python",
+    "SQLAlchemy": "sqlalchemy",
     "tensorflow": "tensorflow",
-    "youtube_dl": "youtube-dl-light",
+    "yt-dlp": "yt-dlp",
+}
+
+# Some dependencies are loaded dynamically at runtime, and are not
+# mentioned in the manifest files.
+EXTRA_COMPONENT_DEPS = {
+    "conversation": [
+        "intent"
+    ],
+    "default_config": [
+        "backup",
+    ],
+}
+
+# Sometimes we have unstable versions for libraries that are not
+# well-maintained. This allows us to mark our weird version as newer
+# than a certain wanted version
+OUR_VERSION_IS_NEWER_THAN = {
+    "blinkstick": "1.2.0",
+    "gps3": "0.33.3",
+    "pybluez": "0.22",
 }
 
 
@@ -87,6 +108,8 @@ def parse_components(version: str = "master"):
         )
         for domain in sorted(integrations):
             integration = integrations[domain]
+            if extra_deps := EXTRA_COMPONENT_DEPS.get(integration.domain):
+                integration.dependencies.extend(extra_deps)
             if not integration.disabled:
                 components[domain] = integration.manifest
 
@@ -197,6 +220,8 @@ def main() -> None:
             # Therefore, if there's a "#" in the line, only take the part after it
             req = req[req.find("#") + 1 :]
             name, required_version = req.split("==", maxsplit=1)
+            # Strip conditions off version constraints e.g. "1.0; python<3.11"
+            required_version = required_version.split(";").pop(0)
             # Split package name and extra requires
             extras = []
             if name.endswith("]"):
@@ -206,11 +231,25 @@ def main() -> None:
             if attr_path:
                 if our_version := get_pkg_version(attr_path, packages):
                     attr_name = attr_path.split(".")[-1]
-                    if Version.parse(our_version) < Version.parse(required_version):
-                        outdated[attr_name] = {
-                          'wanted': required_version,
-                          'current': our_version
-                        }
+                    attr_outdated = False
+                    try:
+                        Version.parse(our_version)
+                    except InvalidVersion:
+                        print(f"Attribute {attr_name} has invalid version specifier {our_version}", file=sys.stderr)
+
+                        # allow specifying that our unstable version is newer than some version
+                        if newer_than_version := OUR_VERSION_IS_NEWER_THAN.get(attr_name):
+                            attr_outdated = Version.parse(newer_than_version) < Version.parse(required_version)
+                        else:
+                            attr_outdated = True
+                    else:
+                        attr_outdated = Version.parse(our_version) < Version.parse(required_version)
+                    finally:
+                        if attr_outdated:
+                            outdated[attr_name] = {
+                              'wanted': required_version,
+                              'current': our_version
+                            }
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
                 pname = attr_path[len(PKG_SET + "."):]
@@ -238,13 +277,13 @@ def main() -> None:
             available, extras, missing = deps
             f.write(f'    "{component}" = ps: with ps; [')
             if available:
-                f.write("\n      " + "\n      ".join(available))
+                f.write("\n      " + "\n      ".join(sorted(available)))
             f.write("\n    ]")
             if extras:
-                f.write("\n    ++ " + "\n    ++ ".join(extras))
+                f.write("\n    ++ " + "\n    ++ ".join(sorted(extras)))
             f.write(";")
             if len(missing) > 0:
-                f.write(f" # missing inputs: {' '.join(missing)}")
+                f.write(f" # missing inputs: {' '.join(sorted(missing))}")
             f.write("\n")
         f.write("  };\n")
         f.write("  # components listed in tests/components for which all dependencies are packaged\n")

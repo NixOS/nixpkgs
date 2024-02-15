@@ -1,14 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub, SDL2
-, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, SDL2, qtbase, qtcharts, qtlocation, qtserialport
+, qtsvg, qtquickcontrols2, qtgraphicaleffects, qtspeech, qtx11extras, qmake
+, qttools, gst_all_1, wayland, pkg-config, wrapQtAppsHook }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.2.4";
+  version = "4.3.0";
 
-  qtInputs = [
+  propagatedBuildInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
     qtgraphicaleffects qtspeech qtx11extras
   ];
@@ -22,8 +20,8 @@ mkDerivation rec {
     wayland
   ];
 
-  buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkg-config qmake qttools ];
+  buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
+  nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''
     mkdir build
@@ -69,15 +67,9 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pPxqYxBlw9re1rlUU2qz0gFRmT+PmslrcBv97VEG84k=";
+    sha256 = "sha256-a0+cpT413qi88PvaWQPxKABHfK7vbPE7B42n84n/SAk=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix build problems caused by https://github.com/mavlink/qgroundcontrol/pull/10132
-    # remove once updated past 4.2.0
-    ./fix-10132.patch
-  ];
 
   meta = with lib; {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
@@ -85,5 +77,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lopsided98 ];
+    mainProgram = "QGroundControl";
   };
 }

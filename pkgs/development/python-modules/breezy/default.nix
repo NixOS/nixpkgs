@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, cargo
 , configobj
 , cython
 , dulwich
 , fastbencode
 , fastimport
+, pygithub
 , libiconv
 , merge3
 , patiencediff
@@ -18,6 +20,7 @@
 , pythonOlder
 , installShellFiles
 , rustPlatform
+, rustc
 , setuptools-gettext
 , setuptools-rust
 , testers
@@ -25,14 +28,16 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.3.2";
-  format = "pyproject";
+  version = "3.3.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TqaUn8uwdrl4VFsJn6xoq6011voYmd7vT2uCo9uiV8E=";
+  src = fetchFromGitHub {
+    owner = "breezy-team";
+    repo = "breezy";
+    rev = "brz-${version}";
+    hash = "sha256-z8NKb8gFgA6dufM12jnZIZ6b1ZMZRzFA3w7t7gECEts=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -43,14 +48,12 @@ buildPythonPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  cargoHash = "sha256-xYZh/evNp036/wRlNWWUYeD2EkleM+OeY4qbYMCE00I=";
-
   nativeBuildInputs = [
     cython
     installShellFiles
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     setuptools-gettext
     setuptools-rust
   ];
@@ -66,7 +69,8 @@ buildPythonPackage rec {
     pyyaml
     urllib3
   ] ++ passthru.optional-dependencies.launchpad
-    ++ passthru.optional-dependencies.fastimport;
+    ++ passthru.optional-dependencies.fastimport
+    ++ passthru.optional-dependencies.github;
 
   nativeCheckInputs = [
     testtools
@@ -109,12 +113,16 @@ buildPythonPackage rec {
       fastimport = [
         fastimport
       ];
+      github = [
+        pygithub
+      ];
     };
   };
 
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
+    changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
     mainProgram = "brz";

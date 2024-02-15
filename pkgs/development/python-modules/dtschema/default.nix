@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , jsonschema
@@ -6,11 +7,12 @@
 , rfc3987
 , ruamel-yaml
 , setuptools-scm
+, libfdt
 }:
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2022.01";
+  version = "2023.04";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,10 +21,13 @@ buildPythonPackage rec {
     owner = "devicetree-org";
     repo = "dt-schema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wwlXIM/eO3dII/qQpkAGLT3/15rBLi7ZiNtqYFf7Li4=";
+    sha256 = "sha256-w9TsRdiDTdExft7rdb2hYcvxP6hxOFZKI3hITiNSwgw=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  patches = [
+    # Change name of pylibfdt to libfdt
+    ./fix_libfdt_name.patch
+  ];
 
   nativeBuildInputs = [
     setuptools-scm
@@ -32,6 +37,7 @@ buildPythonPackage rec {
     jsonschema
     rfc3987
     ruamel-yaml
+    libfdt
   ];
 
   # Module has no tests
@@ -47,6 +53,14 @@ buildPythonPackage rec {
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
     license = with licenses; [ bsd2 /* or */ gpl2Only ];
     maintainers = with maintainers; [ sorki ];
+
+    broken = (
+      # Library not loaded: @rpath/libfdt.1.dylib
+      stdenv.isDarwin ||
+
+      # see https://github.com/devicetree-org/dt-schema/issues/108
+      versionAtLeast jsonschema.version "4.18"
+    );
   };
 }
 

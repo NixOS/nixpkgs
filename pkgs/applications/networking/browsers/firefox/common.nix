@@ -1,10 +1,14 @@
 { pname
 , version
+, packageVersion ? version
 , meta
 , updateScript ? null
 , binaryName ? "firefox"
 , application ? "browser"
 , applicationName ? "Mozilla Firefox"
+, branding ? null
+, requireSigning ? true
+, allowAddonSideload ? false
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -17,6 +21,11 @@
 , tests ? []
 }:
 
+let
+  # Rename the variables to prevent infinite recursion
+  requireSigningDefault = requireSigning;
+  allowAddonSideloadDefault = allowAddonSideload;
+in
 
 { lib
 , pkgs
@@ -29,6 +38,7 @@
 , cargo
 , dump_syms
 , makeWrapper
+, mimalloc
 , nodejs
 , perl
 , pkg-config
@@ -53,6 +63,7 @@
 , gnum4
 , gtk3
 , icu
+, icu72
 , libGL
 , libGLU
 , libevent
@@ -74,6 +85,10 @@
 
 # optionals
 
+## addon signing/sideloading
+, requireSigning ? requireSigningDefault
+, allowAddonSideload ? allowAddonSideloadDefault
+
 ## debugging
 
 , debugBuild ? false
@@ -87,8 +102,8 @@
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
 , jackSupport ? stdenv.isLinux, libjack2
-, jemallocSupport ? true, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
@@ -102,11 +117,11 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport, curl
+, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport
+, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
 
 # digital rights managemewnt
 
@@ -184,7 +199,6 @@ let
       # These values are exposed through telemetry
       "app.distributor" = "nixos";
       "app.distributor.channel" = "nixpkgs";
-      "app.partner.nixos" = "nixos";
     };
   });
 
@@ -202,9 +216,9 @@ let
 
 in
 
-buildStdenv.mkDerivation ({
+buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
-  inherit version;
+  version = packageVersion;
 
   inherit src unpackPhase meta;
 
@@ -220,17 +234,29 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionOlder version "102.6.0") [
+  patches = lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "122") [
+    # dbus cflags regression fix
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
     (fetchpatch {
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
-      name = "rust-cbindgen-0.24.2-compat.patch";
-      url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
-      hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f1f5f98290b3";
+      hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
     })
   ]
-  ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
+  ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
+  ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
+  ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "120.0.1") [
+    (fetchpatch {
+      # Do not crash on systems without an expected statically assumed page size.
+      # https://phabricator.services.mozilla.com/D194458
+      name = "mozbz1866025.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
+      hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
+    })
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
+    ./122.0-libvpx-mozbz1875201.patch
+  ]
   ++ extraPatches;
 
   postPatch = ''
@@ -278,6 +304,9 @@ buildStdenv.mkDerivation ({
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
 
+    # Set reproducible build date; https://bugzilla.mozilla.org/show_bug.cgi?id=885777#c21
+    export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
+
     # Set predictable directories for build and state
     export MOZ_OBJDIR=$(pwd)/mozobj
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
@@ -298,25 +327,35 @@ buildStdenv.mkDerivation ({
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
- '' + lib.optionalString pgoSupport ''
-   if [ -e "$TMPDIR/merged.profdata" ]; then
-     echo "Configuring with profiling data"
-     for i in "''${!configureFlagsArray[@]}"; do
-       if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
-         unset 'configureFlagsArray[i]'
-       fi
-     done
-     configureFlagsArray+=(
-       "--enable-profile-use=cross"
-       "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-       "--with-pgo-jarlog="$TMPDIR/jarlog""
-     )
-   else
-     echo "Configuring to generate profiling data"
-     configureFlagsArray+=(
-       "--enable-profile-generate=cross"
-     )
-   fi
+  '' + lib.optionalString pgoSupport ''
+    if [ -e "$TMPDIR/merged.profdata" ]; then
+      echo "Configuring with profiling data"
+      for i in "''${!configureFlagsArray[@]}"; do
+        if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
+          unset 'configureFlagsArray[i]'
+        fi
+      done
+      appendToVar configureFlags --enable-profile-use=cross
+      appendToVar configureFlags --with-pgo-profile-path=$TMPDIR/merged.profdata
+      appendToVar configureFlags --with-pgo-jarlog=$TMPDIR/jarlog
+      ${lib.optionalString stdenv.hostPlatform.isMusl ''
+        LDFLAGS="$OLD_LDFLAGS"
+        unset OLD_LDFLAGS
+      ''}
+    else
+      echo "Configuring to generate profiling data"
+      configureFlagsArray+=(
+        "--enable-profile-generate=cross"
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl
+      # Set the rpath appropriately for the profiling run
+      # During the profiling run, loading libraries from $out would fail,
+      # since the profiling build has not been installed to $out
+      ''
+        OLD_LDFLAGS="$LDFLAGS"
+        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+      ''}
+    fi
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -333,6 +372,12 @@ buildStdenv.mkDerivation ({
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
+  '' + lib.optionalString (!requireSigning) ''
+    export MOZ_REQUIRE_SIGNING=
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+    # TODO: Default vm.max_map_count has been increased, retest without this
+    export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
@@ -370,6 +415,7 @@ buildStdenv.mkDerivation ({
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
+  ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ [
     (enableFeature alsaSupport "alsa")
     (enableFeature crashreporterSupport "crashreporter")
@@ -390,6 +436,7 @@ buildStdenv.mkDerivation ({
   ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ lib.optional (branding != null) "--with-branding=${branding}"
   ++ extraConfigureFlags;
 
   buildInputs = [
@@ -401,7 +448,6 @@ buildStdenv.mkDerivation ({
     freetype
     glib
     gtk3
-    icu
     libffi
     libGL
     libGLU
@@ -429,7 +475,10 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
+  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
+  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+  ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -471,6 +520,12 @@ buildStdenv.mkDerivation ({
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
+    # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
+    # On musl we have to explicity set the rpath to include these libraries.
+    LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
+  };
 
   # tests were disabled in configureFlags
   doCheck = false;
@@ -509,10 +564,11 @@ buildStdenv.mkDerivation ({
   '';
 
   passthru = {
+    inherit application extraPatches;
     inherit updateScript;
-    inherit version;
     inherit alsaSupport;
     inherit binaryName;
+    inherit requireSigning allowAddonSideload;
     inherit jackSupport;
     inherit pipewireSupport;
     inherit sndioSupport;
@@ -522,6 +578,7 @@ buildStdenv.mkDerivation ({
     inherit tests;
     inherit gtk3;
     inherit wasiSysRoot;
+    version = packageVersion;
   } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
@@ -540,4 +597,4 @@ buildStdenv.mkDerivation ({
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
-})
+}

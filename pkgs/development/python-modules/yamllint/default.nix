@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , pathspec
 , pytestCheckHook
 , pythonOlder
@@ -10,15 +11,21 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.29.0";
-  format = "setuptools";
+  version = "1.33.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZqdV1fvLuIMfGpVoZ2MptbrILDeZW8ya/QSLZFn5+kg=";
+  src = fetchFromGitHub {
+    owner = "adrienverge";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hWN5PhEAhckp250Dj7h5PpyH/E1jCi38O4VmMYgPtzE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyyaml

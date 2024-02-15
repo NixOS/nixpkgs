@@ -5,43 +5,51 @@
 , pytest-httpserver
 , pytestCheckHook
 , pythonOlder
+, pyyaml
 , requests
-, toml
+, setuptools
+, tomli
+, tomli-w
+, types-pyyaml
 , types-toml
-, typing-extensions
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.22.0";
-  format = "setuptools";
+  version = "0.24.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = pname;
-    rev = version;
-    hash = "sha256-VOIpowxPvYmufnj9MM/vMtZQDIOxorAhMCNK0fX/j1U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fvfEHJioyjQoEvIgZZKt9/AKtzTgo0APGUK7lDrbahs=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    toml
-    types-toml
-    urllib3
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+  nativeBuildInputs = [
+    setuptools
   ];
 
+  propagatedBuildInputs = [
+    pyyaml
+    requests
+    types-pyyaml
+    types-toml
+    urllib3
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook
+    tomli-w
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   pythonImportsCheck = [
@@ -51,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for mocking out the requests Python library";
     homepage = "https://github.com/getsentry/responses";
+    changelog = "https://github.com/getsentry/responses/blob/${version}/CHANGES";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -13,17 +13,17 @@ let
   info = lib.splitString "-" stdenv.hostPlatform.system;
   arch = lib.elemAt info 0;
   plat = lib.elemAt info 1;
-  shas =
+  hashes =
     if enableUnfree
     then {
-      x86_64-linux  = "35e50e05fba0240aa5b138bc1c81f67addaf557701f8df41c682b5bc708f7455";
-      x86_64-darwin = "698b6000788e123b647c988993f710c6d9bc44eb8c8e6f97d6b18a695a61f0a6";
-      aarch64-linux = "69694856fde11836eb1613bf3a2ba31fbdc933f58c8527b6180f6122c8bb528b";
+      x86_64-linux  = "sha512-ze0hJxUHCN52bOxUs5upDj64tIE58P2BTow2kaCo6HreRiF9rfTTzNkNr/hCmEgE+/oFbgSEuOQLz+6G373RDQ==";
+      x86_64-darwin = "sha512-FOFd8d+4UddSGorjuUWW/JbQ5fQH4LU1f1HJLmdbfnb8Q5L4GEveb2LmWNILU8/a85V4HGmD6lL8mCJqH9CULQ==";
+      aarch64-linux = "sha512-giYqW88/6iT3haXzJVn/+b7uxjYhHq4GERmiq3tMIvjxDyu7B6g+X7JneaTYxhpNdn6gOD/hfXgNv+hFRq6lgg==";
     }
     else {
-      x86_64-linux  = "3a2da2e63bc08ee1886db29c80103c669d3ed6960290b8b97d771232769f282e";
-      x86_64-darwin = "655ab873e16257827f884f67b66d62c4da40a895d06206faa435615ad0a56796";
-      aarch64-linux = "235cf57afb619801808d5fe1bff7e01a4a9b29f77723566e5371b5f3b2bf8fad";
+      x86_64-linux  = "sha512-OC9gx76k+RMdjqcDkrJCNbPYSQameyddaYMxUIB0foVxCmo6UvbdcwZGXRLPPn95in8rYOCjvPoBkmupiQw9xQ==";
+      x86_64-darwin = "sha512-1OEfEED/jjlT3Fd095Y5VYiWKnovytI3UYCCy1Rs3tEvkZPHYwqIQHfMQYeAvGgUci37ADwEDu8xrSQULHToLw==";
+      aarch64-linux = "sha512-QWW0AXOMNIXThxpUiRomvINm+917MvGrSDndrEw11IYYuvi0d0dckJiRytfnBbBNoOKpVhB68uOmfjIcZBNpWQ==";
     };
   this = stdenv.mkDerivation rec {
     version = elk7Version;
@@ -32,7 +32,7 @@ let
 
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/logstash/${pname}-${version}-${plat}-${arch}.tar.gz";
-      sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
+      hash = hashes.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
     };
 
     dontBuild = true;
@@ -72,9 +72,9 @@ let
         binaryBytecode  # source bundles dependencies as jars
         binaryNativeCode  # bundled jruby includes native code
       ];
-      license = if enableUnfree then licenses.elastic else licenses.asl20;
+      license = if enableUnfree then licenses.elastic20 else licenses.asl20;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ wjlroe offline basvandijk ];
+      maintainers = with maintainers; [ offline basvandijk ];
     };
     passthru.tests =
       lib.optionalAttrs (config.allowUnfree && enableUnfree) (

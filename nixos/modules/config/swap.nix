@@ -38,6 +38,34 @@ let
         '';
       };
 
+      keySize = mkOption {
+        default = null;
+        example = "512";
+        type = types.nullOr types.int;
+        description = lib.mdDoc ''
+          Set the encryption key size for the plain device.
+
+          If not specified, the amount of data to read from `source` will be
+          determined by cryptsetup.
+
+          See `cryptsetup-open(8)` for details.
+        '';
+      };
+
+      sectorSize = mkOption {
+        default = null;
+        example = "4096";
+        type = types.nullOr types.int;
+        description = lib.mdDoc ''
+          Set the sector size for the plain encrypted device type.
+
+          If not specified, the default sector size is determined from the
+          underlying block device.
+
+          See `cryptsetup-open(8)` for details.
+        '';
+      };
+
       source = mkOption {
         default = "/dev/urandom";
         example = "/dev/random";
@@ -157,11 +185,11 @@ let
 
     };
 
-    config = rec {
+    config = {
       device = mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
       deviceName = lib.replaceStrings ["\\"] [""] (escapeSystemdPath config.device);
-      realDevice = if config.randomEncryption.enable then "/dev/mapper/${deviceName}" else config.device;
+      realDevice = if config.randomEncryption.enable then "/dev/mapper/${config.deviceName}" else config.device;
     };
 
   };
@@ -224,8 +252,14 @@ in
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
+            # The mkswap service fails for file-backed swap devices if the
+            # loop module has not been loaded before the service runs.
+            # We add an ordering constraint to run after systemd-modules-load to
+            # avoid this race condition.
+            after = [ "systemd-modules-load.service" ];
             wantedBy = [ "${realDevice'}.swap" ];
-            before = [ "${realDevice'}.swap" ];
+            before = [ "${realDevice'}.swap" "shutdown.target"];
+            conflicts = [ "shutdown.target" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
               ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
 
@@ -247,7 +281,11 @@ in
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
                   cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
-                    ${optionalString sw.randomEncryption.allowDiscards "--allow-discards"} ${sw.device} ${sw.deviceName}
+                  ${concatStringsSep " \\\n" (flatten [
+                    (optional (sw.randomEncryption.sectorSize != null) "--sector-size=${toString sw.randomEncryption.sectorSize}")
+                    (optional (sw.randomEncryption.keySize != null) "--key-size=${toString sw.randomEncryption.keySize}")
+                    (optional sw.randomEncryption.allowDiscards "--allow-discards")
+                  ])} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

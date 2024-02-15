@@ -5,18 +5,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mitmproxy2swagger";
-  version = "0.8.2";
+  version = "0.13.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alufers";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-w9Jbtf/BFkr2qEVqpxkRkQ1ve5o77Mhs0kGwdG5ucKI=";
+    hash = "sha256-VHxqxee5sQWRS13V4SfY4LWaN0oxxWsNVDOEqUyKHfg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "ruamel.yaml"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

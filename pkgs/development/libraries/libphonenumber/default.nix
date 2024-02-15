@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, gtest, boost, pkg-config, protobuf, icu, Foundation, buildPackages }:
 
 stdenv.mkDerivation rec {
-  pname = "phonenumber";
+  pname = "libphonenumber";
   version = "8.12.37";
 
   src = fetchFromGitHub {
@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-xLxadSxVY3DjFDQrqj3BuOvdMaKdFSLjocfzovJCBB0=";
   };
+
+  patches = [
+    # An earlier version of this patch was submitted upstream but did not get
+    # any interest there - https://github.com/google/libphonenumber/pull/2921
+    ./build-reproducibility.patch
+  ];
 
   nativeBuildInputs = [
     cmake

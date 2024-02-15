@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, spotify, xorg, makeWrapper }:
 stdenv.mkDerivation {
   pname = "spotifywm-unstable";
   version = "2022-10-26";
@@ -10,15 +10,23 @@ stdenv.mkDerivation {
     sha256 = "sha256-AsXqcoqUXUFxTG+G+31lm45gjP6qGohEnUSUtKypew0=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [ xorg.libX11 ];
 
-  propagatedBuildInputs = [ spotify ];
-
   installPhase = ''
-    echo "#!${runtimeShell}" > spotifywm
-    echo "LD_PRELOAD="$out/lib/spotifywm.so" ${spotify}/bin/spotify \$*" >> spotifywm
-    install -Dm644 spotifywm.so $out/lib/spotifywm.so
-    install -Dm755 spotifywm $out/bin/spotifywm
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib}
+    install -Dm644 spotifywm.so $out/lib/
+    ln -sf ${spotify}/bin/spotify $out/bin/spotify
+
+    # wrap spotify to use spotifywm.so
+    wrapProgram $out/bin/spotify --set LD_PRELOAD "$out/lib/spotifywm.so"
+    # backwards compatibility for people who are using the "spotifywm" binary
+    ln -sf $out/bin/spotify $out/bin/spotifywm
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -26,6 +34,6 @@ stdenv.mkDerivation {
     description = "Wrapper around Spotify that correctly sets class name before opening the window";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jqueiroz ];
+    maintainers = with maintainers; [ jqueiroz the-argus ];
   };
 }

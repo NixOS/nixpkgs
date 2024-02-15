@@ -1,6 +1,7 @@
 { buildPythonApplication
 , lib
 , fetchFromGitHub
+, fetchpatch
 
   # build inputs
 , atk
@@ -32,6 +33,8 @@
 , pypresence
 , pyyaml
 , requests
+, protobuf
+, moddb
 
   # commands that lutris needs
 , xrandr
@@ -44,7 +47,6 @@
 , p7zip
 , xgamma
 , libstrangle
-, wine
 , fluidsynth
 , xorgserver
 , xorg
@@ -64,7 +66,6 @@ let
     p7zip
     xgamma
     libstrangle
-    wine
     fluidsynth
     xorgserver
     xorg.setxkbmap
@@ -75,13 +76,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.12";
+  version = "0.5.16";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-rsiXm7L/M85ot6NrTyy//lMRFlLPJYve9y6Erg9Ugxg=";
+    rev = "v${version}";
+    hash = "sha256-Ed1bhugBe97XmY050A5jCPcnLj0Fd7qPX2p/Ab+YbOE=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
@@ -115,6 +116,8 @@ buildPythonApplication rec {
     pypresence
     pyyaml
     requests
+    protobuf
+    moddb
   ];
 
   postPatch = ''
@@ -145,5 +148,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
+    mainProgram = "lutris";
   };
 }

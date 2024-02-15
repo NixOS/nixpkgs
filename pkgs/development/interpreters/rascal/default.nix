@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rascal";
-  version = "0.6.2";
+  version = "0.28.2";
 
   src = fetchurl {
     url = "https://update.rascal-mpl.org/console/${pname}-${version}.jar";
-    sha256 = "1z4mwdbdc3r24haljnxng8znlfg2ihm9bf9zq8apd9a32ipcw4i6";
+    sha256 = "sha256-KMoGTegjXuGSzNnwH6SkcM5GC/F3oluvFrlJ51Pms3M=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

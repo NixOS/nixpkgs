@@ -9,22 +9,25 @@ let
     sha256 = hash;
   };
 
-in stdenv.mkDerivation {
+  lib_src = fetchurl {
+    url = "http://shinh.skr.jp/libbulletml/libbulletml-${version}.tar.bz2";
+    sha256 = "0yda0zgj2ydgkmby5676f5iiawabxadzh5p7bmy42998sp9g6dvw";
+  };
+
+  cpp_src = fetchurl {
+    url = "http://shinh.skr.jp/d/d_cpp.tar.bz2";
+    sha256 = "1ly9qmbb8q9nyadmdap1gmxs3vkniqgchlv2hw7riansz4gg1agh";
+  };
+in
+
+stdenv.mkDerivation {
   pname = "bulletml";
   inherit version;
 
-  srcs = [
-    (fetchurl {
-      url = "http://shinh.skr.jp/libbulletml/libbulletml-${version}.tar.bz2";
-      sha256 = "0yda0zgj2ydgkmby5676f5iiawabxadzh5p7bmy42998sp9g6dvw";
-    })
-    (fetchurl {
-      url = "http://shinh.skr.jp/d/d_cpp.tar.bz2";
-      sha256 = "1ly9qmbb8q9nyadmdap1gmxs3vkniqgchlv2hw7riansz4gg1agh";
-    })
-  ];
-  sourceRoot = "bulletml";
+  srcs = [ lib_src cpp_src ];
+
   postUnpack = "mv d_cpp bulletml/";
+  sourceRoot = "bulletml";
 
   patches = [
     (debianPatch "fixes" "0cnr968n0h50fjmjijx7idsa2pg2pv5cwy6nvfbkx9z8w2zf0mkl")

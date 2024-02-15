@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, p7zip, win-virtio }:
+{ lib, stdenv, fetchurl, p7zip, virtio-win }:
 
 let
   version_usbdk = "1.0.22";
@@ -58,10 +58,10 @@ stdenv.mkDerivation  {
       copy_usbdk = arch: "mkdir -p $out/${arch}/usbdk; cp usbdk/${arch}/* $out/${arch}/usbdk/. \n";
       copy_vdagent = arch: "mkdir -p $out/${arch}/vdagent; cp vdagent/${arch}/* $out/${arch}/vdagent/. \n";
       # SPICE needs vioserial
-      # TODO: Link windows version in win-spice (here) to version used in win-virtio.
-      #       That way it would never matter whether vioserial is installed from win-virtio or win-spice.
-      copy_vioserial = arch: "mkdir -p $out/${arch}/vioserial; cp ${win-virtio}/${arch}/vioserial/* $out/${arch}/vioserial/. \n";
-      copy = arch: version: (copy_qxl arch version) + (copy_usbdk arch) + (copy_vdagent arch) + (copy_vioserial arch);
+      # TODO: Link windows version in win-spice (here) to version used in virtio-win.
+      #       That way it would never matter whether vioserial is installed from virtio-win or win-spice.
+      copy_vioserial = arch: version: "mkdir -p $out/${arch}/vioserial; cp ${virtio-win}/vioserial/${version}/${arch}/* $out/${arch}/vioserial/. \n";
+      copy = arch: version: (copy_qxl arch version) + (copy_usbdk arch) + (copy_vdagent arch) + (copy_vioserial arch version);
     in ''
       runHook preInstall
       ${(copy "amd64" "w10") + (copy "x86" "w10")}

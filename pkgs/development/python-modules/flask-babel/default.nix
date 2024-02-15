@@ -23,23 +23,15 @@
 
 buildPythonPackage rec {
   pname = "flask-babel";
-  version = "3.0.1";
+  version = "4.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-babel";
     repo = "flask-babel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bHsB1f7dbZW4k8JteyZOwVCgWRDZMu21XdMcjM5NYjk=";
+    hash = "sha256-BAT+oupy4MCSjeZ4hFtSKMkGU9xZtc7Phnz1mIsb2Kc=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/python-babel/flask-babel/pull/222
-      url = "https://github.com/python-babel/flask-babel/commit/756cace7d96e9eacef66813c8df653d2bb349da0.patch";
-      hash = "sha256-hp/QPS/ZyRMUnyqU+fvMJKPISBECc9kqdCu8U6Hnd5g=";
-    })
-  ];
 
   outputs = [
     "out"

@@ -23,6 +23,14 @@ in
       '';
     };
 
+    signingKeyFile = mkOption {
+      type = types.nullOr types.path;
+      description = lib.mdDoc ''
+        Optional file containing a self-managed signing key to sign uploaded store paths.
+      '';
+      default = null;
+    };
+
     compressionLevel = mkOption {
       type = types.nullOr types.int;
       description = lib.mdDoc "The compression level for ZSTD compression (between 0 and 16)";
@@ -47,29 +55,31 @@ in
       default = false;
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.cachix;
-      defaultText = literalExpression "pkgs.cachix";
-      description = lib.mdDoc "Cachix Client package to use.";
-    };
-
+    package = mkPackageOption pkgs "cachix" { };
   };
 
   config = mkIf cfg.enable {
     systemd.services.cachix-watch-store-agent = {
       description = "Cachix watch store Agent";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
+      unitConfig = {
+        # allow to restart indefinitely
+        StartLimitIntervalSec = 0;
+      };
       serviceConfig = {
+        # don't put too much stress on the machine when restarting
+        RestartSec = 1;
         # we don't want to kill children processes as those are deployments
         KillMode = "process";
         Restart = "on-failure";
         DynamicUser = true;
         LoadCredential = [
           "cachix-token:${toString cfg.cachixTokenFile}"
-        ];
+        ]
+        ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
       };
       script =
         let
@@ -80,6 +90,7 @@ in
         in
         ''
           export CACHIX_AUTH_TOKEN="$(<"$CREDENTIALS_DIRECTORY/cachix-token")"
+          ${lib.optionalString (cfg.signingKeyFile != null) ''export CACHIX_SIGNING_KEY="$(<"$CREDENTIALS_DIRECTORY/signing-key")"''}
           ${lib.escapeShellArgs command}
         '';
     };

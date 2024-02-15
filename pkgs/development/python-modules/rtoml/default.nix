@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
+, cargo
 , fetchFromGitHub
 , libiconv
 , pytestCheckHook
 , pythonOlder
 , rustPlatform
+, rustc
 , setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "rtoml";
   version = "0.8";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -29,9 +32,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = with rustPlatform; [
     setuptools-rust
-    rust.rustc
-    rust.cargo
-    cargoSetupHook
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [

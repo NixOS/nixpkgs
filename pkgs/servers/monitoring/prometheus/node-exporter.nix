@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.5.0";
+  version = "1.7.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "sha256-jzgf7XVqtqHf5Uqkcr/0epC0R0fw7l7acr+F8jZ6M68=";
+    sha256 = "sha256-+KY/YXEqT/40QzODOk8lKAo0zMcNuiMvj6ippbJE9ho=";
   };
 
-  vendorSha256 = "sha256-k4Wolrp/mebwA6ZLftCNVFOdHoXHcJZI9JWrhBxX5Pk=";
+  vendorHash = "sha256-HrlzDupZP9+GxB58Lg62tvku1Sl2zo2iV0KnBNwkM58=";
 
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
@@ -39,6 +39,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Prometheus exporter for machine metrics";
     homepage = "https://github.com/prometheus/node_exporter";
+    changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
   };

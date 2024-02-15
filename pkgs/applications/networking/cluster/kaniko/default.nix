@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "kaniko";
-  version = "1.9.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "kaniko";
     rev = "v${version}";
-    hash = "sha256-sPICsDgkijQ7PyeTWQgT553toc4/rWPPo7SY3ptX82U=";
+    hash = "sha256-/JSrkxhW2w9K+MGp7+4xMGwWM8dpwRoUam02K+8NsCU=";
   };
 
   vendorHash = null;
@@ -47,7 +47,7 @@ buildGoModule rec {
     homepage = "https://github.com/GoogleContainerTools/kaniko";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jk superherointj ];
+    maintainers = with lib.maintainers; [ jk qjoly ];
     mainProgram = "executor";
   };
 }

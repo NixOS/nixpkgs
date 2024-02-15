@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "plugnplay";
   version = "0.5.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,6 +23,6 @@ buildPythonPackage rec {
     description = "A Generic plug-in system for python applications";
     homepage = "https://github.com/daltonmatos/plugnplay";
     license = licenses.gpl2Only;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

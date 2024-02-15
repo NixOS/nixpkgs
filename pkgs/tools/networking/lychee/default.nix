@@ -5,33 +5,48 @@
 , pkg-config
 , openssl
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.11.1";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fOD28O6ycRIniQz841PGJzEFGtYord/y44mdqyAmNDg=";
+    hash = "sha256-Ogbfzb57HaWJD2AR9fequty9SyXJ8aqbQ6Tlt82EP/c=";
   };
 
-  cargoHash = "sha256-r089P2VOeIIW0FjkO4oqVXbrxDND4loagVfVMm5EtaE=";
+  cargoHash = "sha256-EmSM8lRCjX9XZVr34SpMhTIKWxRsaJ+g4EphV8bahsU=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  # Disabled because they currently fail
-  doCheck = false;
+  checkFlags = [
+    #  Network errors for all of these tests
+    # "error reading DNS system conf: No such file or directory (os error 2)" } }
+    "--skip=archive::wayback::tests::wayback_suggestion"
+    "--skip=archive::wayback::tests::wayback_suggestion_unknown_url"
+    "--skip=cli::test_dont_dump_data_uris_by_default"
+    "--skip=cli::test_dump_data_uris_in_verbose_mode"
+    "--skip=cli::test_exclude_example_domains"
+    "--skip=cli::test_local_dir"
+    "--skip=cli::test_local_file"
+    "--skip=client::tests"
+    "--skip=collector::tests"
+    "--skip=src/lib.rs"
+  ];
 
   meta = with lib; {
-    description = "A fast, async, resource-friendly link checker written in Rust.";
+    description = "A fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
+    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ tuxinaut ];
+    maintainers = with maintainers; [ totoroot tuxinaut ];
+    mainProgram = "lychee";
   };
 }

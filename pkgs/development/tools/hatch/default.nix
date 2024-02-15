@@ -2,18 +2,24 @@
 , stdenv
 , fetchPypi
 , python3
+, cargo
 , git
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.6.3";
+  version = "1.9.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZQ5nG6MAMY5Jjvk7vjuZsyzhSSB2T7h1P4mZP2Pu15o=";
+    hash = "sha256-4ealEeFS7HzU26vE9Pahh0hwvUnJfRfTkLkjLdpoXOM=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
@@ -24,21 +30,25 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     pexpect
     platformdirs
-    pyperclip
     rich
     shellingham
     tomli-w
     tomlkit
     userpath
     virtualenv
+    zstandard
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
+    cargo
+  ] ++ (with python3.pkgs; [
+    binary
     git
     pytestCheckHook
     pytest-mock
     pytest-xdist
-  ];
+    setuptools
+  ]);
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -61,17 +71,31 @@ python3.pkgs.buildPythonApplication rec {
     "test_editable_pth"
     # AssertionError: assert len(extract_installed_requirements(output.splitlines())) > 0
     "test_creation_allow_system_packages"
-    # Formatting changes with pygments 2.14.0
-    "test_create_necessary_directories"
+    # cli table output mismatch
+    "test_context_formatting"
+    # expects sh, finds bash
+    "test_all"
+    "test_already_installed_update_flag"
+    "test_already_installed_update_prompt"
+    # unmet expectations about the binary module we provide
+    "test_dependency_not_found"
+    "test_marker_unmet"
+    # output capturing mismatch, likely stdout/stderr mixup
+    "test_no_compatibility_check_if_exists"
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/NixOS/nixpkgs/issues/209358
     "test_scripts_no_environment"
+
+    # This test assumes it is running on macOS with a system shell on the PATH.
+    # It is not possible to run it in a nix build using a /nix/store shell.
+    # See https://github.com/pypa/hatch/pull/709 for the relevant code.
+    "test_populate_default_popen_kwargs_executable"
   ];
 
   meta = with lib; {
     description = "Modern, extensible Python project manager";
     homepage = "https://hatch.pypa.io/latest/";
-    changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history.md#hatch";
+    changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history/hatch.md";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

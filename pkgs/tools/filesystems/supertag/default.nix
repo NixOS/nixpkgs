@@ -1,5 +1,5 @@
 { lib, rustPlatform, fetchFromGitHub
-, clang, llvmPackages, pkg-config
+, pkg-config
 , dbus, fuse, sqlite
 }:
 
@@ -20,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-W5Emkbe1jI9Z+irMckD/3gJO47rACa9E5k5dqAFC1yQ=";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
-  nativeBuildInputs = [ clang pkg-config ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
   buildInputs = [ dbus fuse sqlite ];
 
   # The test are requiring extended permissions.

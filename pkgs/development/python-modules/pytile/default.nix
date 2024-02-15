@@ -2,26 +2,28 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "2022.10.0";
+  version = "2023.12.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    hash = "sha256-fxtDqbslUyV/Otwy9MPIC8DSepTnEZiJKzeU8nlsnWI=";
+    repo = "pytile";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oHOeEaqkh+RjhpdQ5v1tFhaS6gUzl8UzDGnPLNRY90c=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +32,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
+    yarl
   ];
 
   nativeCheckInputs = [
@@ -57,6 +61,7 @@ buildPythonPackage rec {
       Bluetooth trackers (including last location and more).
     '';
     homepage = "https://github.com/bachya/pytile";
+    changelog = "https://github.com/bachya/pytile/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

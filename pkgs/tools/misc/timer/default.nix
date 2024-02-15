@@ -2,27 +2,26 @@
 
 buildGoModule rec {
   pname = "timer";
-  version = "unstable-2023-02-01";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "timer";
-    rev = "1f437baceb1ca76b341fdc229fe45938b282f2aa";
-    hash = "sha256-u+naemEiKufKYROuJB55u8QgiIgg4nLsB+FerUImtXs=";
+    rev = "v${version}";
+    hash = "sha256-8BVzijAXsJ8Q8BhDmhzFbEQ23fUEBdmbUsCPxfpXyBA=";
   };
 
-  vendorHash = "sha256-n4AjaojcDAYbgOIuaAJ4faVJqV+/0uby5OHRMsyL9Dg=";
+  vendorHash = "sha256-1n5vZKlOWoB2SFdDdv+pPWLybzCIJG/wdBYqLMatjNA=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = timer;
-  };
+  passthru.tests.version = testers.testVersion { package = timer; };
 
   meta = with lib; {
     description = "A `sleep` with progress";
     homepage = "https://github.com/caarlos0/timer";
     license = licenses.mit;
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ zowoq caarlos0 ];
+    mainProgram = "timer";
   };
 }

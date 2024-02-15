@@ -58,12 +58,12 @@ let
   };
 
   # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
-  # the answer is store in `plugin_was_loaded_too_late` in the cwd
+  # $VIMRUNTIME/ftplugin/vim.tex sources $VIMRUNTIME/ftplugin/initex.vim which sets b:did_ftplugin
+  # we save b:did_ftplugin's value in a `plugin_was_loaded_too_late` file
   texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
     mkdir -p $out/ftplugin
-    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' > $out/ftplugin/tex.vim
+    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' >> $out/ftplugin/tex.vim
     echo ':q!' >> $out/ftplugin/tex.vim
-    echo '\documentclass{article}' > $out/main.tex
   '') // { pname = "test-ftplugin"; };
 
   # neovim-drv must be a wrapped neovim
@@ -74,9 +74,12 @@ let
     }) (''
       source ${nmt}/bash-lib/assertions.sh
       vimrc="${writeText "init.vim" neovim-drv.initRc}"
+      luarc="${writeText "init.lua" neovim-drv.luaRcContent}"
+      luarcGeneric="$out/patched.lua"
       vimrcGeneric="$out/patched.vim"
       mkdir $out
       ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
+      ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$luarc" > "$luarcGeneric"
     '' + buildCommand);
 
 in
@@ -89,6 +92,9 @@ rec {
   nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
 
   singlelinesconfig = runTest (wrapNeovim2 "-single-lines" nvimConfSingleLines) ''
+      assertFileContains \
+        "$luarcGeneric" \
+        "vim.cmd.source \"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-init.vim"
       assertFileContent \
         "$vimrcGeneric" \
         "${./init-single-lines.vim}"
@@ -141,10 +147,12 @@ rec {
   # files from $VIMRUNTIME
   run_nvim_with_ftplugin = runTest nvim_with_ftplugin ''
     export HOME=$TMPDIR
-    ${nvim_with_ftplugin}/bin/nvim ${texFtplugin}/main.tex
-    result="$(cat plugin_was_loaded_too_late)"
-    echo $result
-    [ "$result" = 0 ]
+    echo '\documentclass{article}' > main.tex
+
+    ${nvim_with_ftplugin}/bin/nvim main.tex -c "set ft?" -c quit
+    ls -l $TMPDIR
+    # if the file exists, then our plugin has been loaded instead of neovim's
+    [ ! -f plugin_was_loaded_too_late ]
   '';
 
 
@@ -210,7 +218,7 @@ rec {
 
   # having no RC generated should autodisable init.vim wrapping
   nvim_autowrap = runTest nvim_via_override ''
-      ! grep "-u" ${nvimShouldntWrap}/bin/nvim
+      ! grep ${nvimShouldntWrap}/bin/nvim
   '';
 
 
@@ -260,13 +268,12 @@ rec {
       packadd dashboard-nvim-unique-for-tests-please-dont-use-opt
 
       " Try to run Dashboard again, and throw if it fails
-      try
-        Dashboard
-        echo "Dashboard found"
-      catch /^Vim\%((\a\+)\)\=:E492/
+      let res = exists(':Dashboard')
+      if res == 0
         echo "Dashboard not found, throwing error"
         cquit 1
-      endtry
+      endif
+      cquit 0
     '';
   };
 

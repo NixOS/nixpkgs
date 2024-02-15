@@ -12,22 +12,22 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json";
-  version = "3.11.2";
+  version = "3.11.3";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SUdhIV7tjtacf5DkoWk9cnkfyMlrkg8ZU7XnPZd22Tw=";
+    hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DJSON_BuildTests=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DJSON_BuildTests=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DJSON_FastTests=ON"
     "-DJSON_MultipleHeaders=ON"
-  ] ++ lib.optional finalAttrs.doCheck "-DJSON_TestDataDirectory=${testData}";
+  ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DJSON_TestDataDirectory=${testData}";
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 

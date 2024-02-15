@@ -13,19 +13,18 @@
 , pango
 , pkg-config
 , sound-theme-freedesktop
-, withLibadwaita ? false
 , wrapGAppsHook4
 }:
 
 buildGoModule rec {
   pname = "gtkcord4";
-  version = "0.0.9";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-55mS+hrhLLRkhgih5lvdM9Xka+WKg2iliFm6TYF6n3w=";
+    hash = "sha256-J76MkbXtlrRIyQEbNlHFNpAW9+mXcOcrx9ahMQ61NL4=";
   };
 
   nativeBuildInputs = [
@@ -49,24 +48,21 @@ buildGoModule rec {
     gst_all_1.gstreamer
     libcanberra-gtk3
     sound-theme-freedesktop
-  ] ++ lib.optionals withLibadwaita [
     libadwaita
   ];
 
-  tags = lib.optionals withLibadwaita [ "libadwaita" ];
-
   postInstall = ''
-    install -D -m 444 -t $out/share/applications nix/xyz.diamondb.gtkcord4.desktop
-    install -D -m 444 internal/icons/svg/logo.svg $out/share/icons/hicolor/scalable/apps/gtkcord4.svg
-    install -D -m 444 internal/icons/png/logo.png $out/share/icons/hicolor/256x256/apps/gtkcord4.png
+    install -D -m 444 -t $out/share/applications nix/so.libdb.gtkcord4.desktop
+    install -D -m 444 internal/icons/hicolor/scalable/apps/logo.svg $out/share/icons/hicolor/scalable/apps/gtkcord4.svg
   '';
 
-  vendorHash = "sha256-IQpokMeo46vZIdVA1F7JILXCN9bUqTMOCa/SQ0JSjaM=";
+  vendorHash = "sha256-BDR67P4Gxveg2FpxijT0eWjUciGDO+l02QmBUxVb99c=";
 
   meta = with lib; {
-    description = "GTK4 Discord client in Go, attempt #4.";
+    description = "GTK4 Discord client in Go, attempt #4";
     homepage = "https://github.com/diamondburned/gtkcord4";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hmenke urandom ];
+    mainProgram = "gtkcord4";
+    maintainers = with maintainers; [ hmenke urandom aleksana ];
   };
 }

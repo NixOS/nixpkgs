@@ -1,9 +1,10 @@
 { config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
-, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
-, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
+, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL2, libcap, libGL, libGLU
+, libpng, glib, lvm2, libXrandr, libXinerama, libopus, libtpms, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
-, alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
+, alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib, xz
 , yasm, glslang
+, linuxPackages
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -16,6 +17,7 @@
 , headless ? false
 , enable32bitGuests ? true
 , enableWebService ? false
+, extraConfigureFlags ? ""
 }:
 
 with lib;
@@ -24,14 +26,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "7.0.6";
+  version = "7.0.14";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "f146d9a86a35af0abb010e628636fd800cb476cc2ce82f95b0c0ca876e1756ff";
+    sha256 = "45860d834804a24a163c1bb264a6b1cb802a5bc7ce7e01128072f8d6a4617ca9";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -45,12 +47,12 @@ in stdenv.mkDerivation {
   buildInputs = [
     acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
     libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
-    libXmu libpng libopus python3 ]
+    libXmu libXrandr libpng libopus libtpms python3 xz ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python3 # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
+    ++ optionals headless [ libGL ]
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL2 libGLU ]
     ++ optionals enableWebService [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
@@ -82,6 +84,8 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
+     # Since VirtualBox 7.0.8, VBoxSDL requires SDL2, but the build framework uses SDL1
+  ++ optional (!headless) ./fix-sdl.patch
   ++ [ ./extra_symbols.patch ]
      # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
      # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
@@ -98,6 +102,8 @@ in stdenv.mkDerivation {
     ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
+    ./libxml-2.12.patch
+    ./gcc-13.patch
   ];
 
   postPatch = ''
@@ -153,6 +159,7 @@ in stdenv.mkDerivation {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -210,6 +217,10 @@ in stdenv.mkDerivation {
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+
+    mkdir -p "$out/share/virtualbox"
+    cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
+    ln -s "${linuxPackages.virtualboxGuestAdditions.src}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''
@@ -229,6 +240,12 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "PC emulator";
+    longDescription = ''
+      VirtualBox is an x86 and AMD64/Intel64 virtualization product for enterprise and home use.
+
+      To install on NixOS, please use the option `virtualisation.virtualbox.host.enable = true`.
+      Please also check other options under `virtualisation.virtualbox`.
+    '';
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode

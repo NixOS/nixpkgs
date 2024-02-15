@@ -154,6 +154,9 @@ in
         description = "Mirakurun user";
         group = "video";
         isSystemUser = true;
+
+        # NPM insists on creating ~/.npm
+        home = "/var/cache/mirakurun";
       };
 
       services.mirakurun.serverSettings = {
@@ -162,18 +165,20 @@ in
         port = mkIf (cfg.port != null) cfg.port;
       };
 
-      systemd.tmpfiles.rules = [
-        "d '/etc/mirakurun' - ${username} ${groupname} - -"
-      ];
+      systemd.tmpfiles.settings."10-mirakurun"."/etc/mirakurun".d = {
+        user = username;
+        group = groupname;
+      };
 
       systemd.services.mirakurun = {
         description = mirakurun.meta.description;
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${mirakurun}/bin/mirakurun-start";
+          ExecStart = "${mirakurun}/bin/mirakurun start";
           User = username;
           Group = groupname;
+          CacheDirectory = "mirakurun";
           RuntimeDirectory="mirakurun";
           StateDirectory="mirakurun";
           Nice = -10;

@@ -1,13 +1,13 @@
 { lib, stdenv, buildEnv, fetchurl, mono }:
 
 let
-  version = "1.14.0";
+  version = "1.16.0";
   drv = stdenv.mkDerivation {
     pname = "keepassrpc";
     inherit version;
     src = fetchurl {
       url    = "https://github.com/kee-org/keepassrpc/releases/download/v${version}/KeePassRPC.plgx";
-      sha256 = "1c410cc93c0252e7cfdb02507b8172c13e18d12c97f08630b721d897dc9b8b24";
+      hash   = "sha256-p5dYluCrXAKhBhlm6sQ3QQE3gLMJzEZsHXwGnVeXFos=";
     };
 
     meta = with lib; {
@@ -18,17 +18,10 @@ let
       maintainers = with maintainers; [ mjanczyk svsdep mgregoire ];
     };
 
-    pluginFilename = "KeePassRPC.plgx";
-
-    unpackCmd = ''
-      mkdir deps/
-      cp -p $src deps/$pluginFilename
-    '';
-    sourceRoot = "deps";
-
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/lib/dotnet/keepass/
-      cp $pluginFilename $out/lib/dotnet/keepass/$pluginFilename
+      cp $src $out/lib/dotnet/keepass/
     '';
   };
 in

@@ -14,16 +14,18 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.3.0";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nTnv/mkJvomLo+coap6bF6ap9zT7Hvnd4+m7aHFfyjk=";
+    hash = "sha256-TZijIFldp6fFoY/EjLYzwuc82nj5PKwu9C1Cv2CaM/k=";
   };
 
+  # force kqueue on x86_64-darwin, because our api version does
+  # not support fsevents
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     ./force-kqueue.patch
   ];
@@ -60,6 +62,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # FileCreationEvent != FileDeletionEvent
     "--deselect=tests/test_emitter.py::test_separate_consecutive_moves"
+    "--deselect=tests/test_observers_polling.py::test___init__"
     # segfaults
     "--deselect=tests/test_delayed_queue.py::test_delayed_get"
     "--deselect=tests/test_emitter.py::test_delete"
@@ -86,9 +89,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # tests timeout easily
     "tests/test_inotify_buffer.py"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.isDarwin) [
     # segfaults the testsuite
     "tests/test_emitter.py"
+    # unsupported on x86_64-darwin
     "tests/test_fsevents.py"
   ];
 

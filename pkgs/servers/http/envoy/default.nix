@@ -1,8 +1,9 @@
 { lib
-, bazel_5
+, bazel_6
 , bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
+, fetchpatch
 , stdenv
 , cmake
 , gn
@@ -14,7 +15,7 @@
 , linuxHeaders
 , nixosTests
 
-# v8 (upstream default), wavm, wamr, wasmtime, disabled
+  # v8 (upstream default), wavm, wamr, wasmtime, disabled
 , wasmRuntime ? "wamr"
 }:
 
@@ -24,19 +25,25 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.25.1";
-    rev = "bae2e9d642a6a8ae6c5d3810f77f3e888f0d97da";
+    version = "1.27.3";
+    rev = "0fd81ee7ffcd7cfc864094b24dc9b5c3ade89ff2";
+    hash = "sha256-WNyyUw3517oKqMd1sJMk9CiLa/V7UrhwlRS+AWNNOOo=";
   };
+
+  # these need to be updated for any changes to fetchAttrs
+  depsHash = {
+    x86_64-linux = "sha256-wTGHfeFkCuijPdX//lT5GPspaxZsxzBHJffH1tpVM2w=";
+    aarch64-linux = "sha256-9/Wem+Gk/7bFeMNFC4J3mdTm3mrNmyMxiu5oadQcovU=";
+  }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "envoy";
   inherit (srcVer) version;
-  bazel = bazel_5;
+  bazel = bazel_6;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev;
-    sha256 = "sha256-qA3+bta2vXGtAYX3mg+CmSIEitk4576JQB/QLPsj9Vc=";
+    inherit (srcVer) hash rev;
 
     postFetch = ''
       chmod -R +w $out
@@ -59,6 +66,15 @@ buildBazelPackage rec {
 
     # use system Go, not bazel-fetched binary Go
     ./0002-nixpkgs-use-system-Go.patch
+
+    # use system C/C++ tools
+    ./0003-nixpkgs-use-system-C-C-toolchains.patch
+
+    # bump proxy-wasm-cpp-host until > 1.27.3/1.28.0
+    (fetchpatch {
+      url = "https://github.com/envoyproxy/envoy/pull/31451.patch";
+      hash = "sha256-n8k7bho3B8Gm0dJbgf43kU7ymvo15aGJ2Twi2xR450g=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -79,10 +95,7 @@ buildBazelPackage rec {
   hardeningDisable = [ "format" ];
 
   fetchAttrs = {
-    sha256 = {
-      x86_64-linux = "sha256-H2s8sTbmKF+yRfSzLsZAT2ckFuunFwh/FMSKj+GYyPM=";
-      aarch64-linux = "sha256-R9jzy/dpdCcGgT9yq59Wo/IN/bVo6fxnVPGhLMZ9fbM=";
-    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+    sha256 = depsHash;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -97,14 +110,20 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
+      # Remove compiled python
+      find $bazelOut -name '*.pyc' -delete
+
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
+
+      # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
+      sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
     '';
   };
   buildAttrs = {
@@ -130,7 +149,7 @@ buildBazelPackage rec {
         -e 's,__NIXSHELL__,${stdenv.shellPackage},' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
     '';
     installPhase = ''
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy
@@ -140,7 +159,7 @@ buildBazelPackage rec {
   removeRulesCC = false;
   removeLocalConfigCc = true;
   removeLocal = false;
-  bazelTarget = "//source/exe:envoy-static";
+  bazelTargets = [ "//source/exe:envoy-static" ];
   bazelBuildFlags = [
     "-c opt"
     "--spawn_strategy=standalone"
@@ -172,6 +191,7 @@ buildBazelPackage rec {
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
+    changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];

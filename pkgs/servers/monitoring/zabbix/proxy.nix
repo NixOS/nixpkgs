@@ -15,7 +15,7 @@ assert sqliteSupport -> !mysqlSupport && !postgresqlSupport;
 let
   inherit (lib) optional optionalString;
 in
-  import ./versions.nix ({ version, sha256 }:
+  import ./versions.nix ({ version, sha256, ... }:
     stdenv.mkDerivation {
       pname = "zabbix-proxy";
       inherit version;

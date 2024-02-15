@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "etcd";
   version = "2.0.8";
+  format = "setuptools";
 
   # PyPI package is incomplete
   src = fetchFromGitHub {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-h+jYIRSNdrGkW3tBV1ifIDEXU46EQGyeJoz/Mxym4pI=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e '13,14d;37d' setup.py
   '';
 
@@ -31,6 +32,6 @@ buildPythonPackage rec {
     description = "A Python etcd client that just works";
     homepage = "https://github.com/dsoprea/PythonEtcdClient";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -14,8 +14,8 @@ let
     nonchars = filter (x : !(elem x.value chars))
                (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
   in
-    if length nonchars == 0 then ""
-    else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
+    lib.optionalString (nonchars != [ ])
+      (substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str);
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
   connectionText = concatStrings (mapAttrsToList (n: v:
@@ -133,9 +133,6 @@ in
       "ipsec.d/01-nixos.conf".source = configFile;
     } // policyFiles;
 
-    # Create NSS database directory
-    systemd.tmpfiles.rules = [ "d /var/lib/ipsec/nss 755 root root -" ];
-
     systemd.services.ipsec = {
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";
       wantedBy = [ "multi-user.target" ];
@@ -153,6 +150,10 @@ in
         echo 0 | tee /proc/sys/net/ipv4/conf/*/send_redirects
         echo 0 | tee /proc/sys/net/ipv{4,6}/conf/*/accept_redirects
       '';
+      serviceConfig = {
+        StateDirectory = "ipsec/nss";
+        StateDirectoryMode = 0700;
+      };
     };
 
   };

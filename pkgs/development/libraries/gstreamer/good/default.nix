@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , meson
 , nasm
 , ninja
@@ -9,6 +10,7 @@
 , orc
 , bzip2
 , gettext
+, libGL
 , libv4l
 , libdv
 , libavc1394
@@ -31,31 +33,34 @@
 , twolame
 , gtkSupport ? false, gtk3
 , qt5Support ? false, qt5
+, qt6Support ? false, qt6
 , raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
-, libXdamage
-, libXext
-, libXfixes
+, enableX11 ? stdenv.isLinux, xorg
 , ncurses
 , wayland
 , wayland-protocols
-, xorg
 , libgudev
 , wavpack
 , glib
+, openssl
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
+# MMAL is not supported on aarch64, see:
+# https://github.com/raspberrypi/userland/issues/688
+assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.20.3";
+  version = "1.22.8";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+PPCBr9c2rwAlTkgtHs1da8O8V6fhxwLaWb20KpYaLc=";
+    hash = "sha256-4wW58H9SdDykgdoKTgx2w179YK2vGwaU6zuwIeITfjk=";
   };
 
   strictDeps = true;
@@ -72,8 +77,14 @@ stdenv.mkDerivation rec {
     orc
     libshout
     glib
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ] ++ lib.optionals qt5Support (with qt5; [
     qtbase
+    qttools
+  ]) ++ lib.optionals qt6Support (with qt6; [
+    qtbase
+    qttools
   ]) ++ lib.optionals stdenv.isLinux [
     wayland-protocols
   ];
@@ -97,15 +108,15 @@ stdenv.mkDerivation rec {
     mpg123
     twolame
     libintl
-    libXdamage
-    libXext
-    libXfixes
     ncurses
-    xorg.libXfixes
-    xorg.libXdamage
     wavpack
+    openssl
   ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
+  ] ++ lib.optionals enableX11 [
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXdamage
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -114,9 +125,14 @@ stdenv.mkDerivation rec {
     qtdeclarative
     qtwayland
     qtx11extras
+  ]) ++ lib.optionals qt6Support (with qt6; [
+    qtbase
+    qtdeclarative
+    qtwayland
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libGL
     libv4l
     libpulseaudio
     libavc1394
@@ -129,12 +145,16 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (!qt5Support) [
     "-Dqt5=disabled"
+  ] ++ lib.optionals (!qt6Support) [
+    "-Dqt6=disabled"
   ] ++ lib.optionals (!gtkSupport) [
     "-Dgtk3=disabled"
+  ] ++ lib.optionals (!enableX11) [
+    "-Dximagesrc=disabled" # Linux-only
   ] ++ lib.optionals (!enableJack) [
     "-Djack=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
@@ -144,10 +164,11 @@ stdenv.mkDerivation rec {
     "-Dpulse=disabled" # TODO check if we can keep this enabled
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
-    "-Dximagesrc=disabled" # Linux-only
-  ] ++ lib.optionals (!raspiCameraSupport) [
+  ] ++ (if raspiCameraSupport then [
+    "-Drpi-lib-dir=${libraspberrypi}/lib"
+  ] else [
     "-Drpicamsrc=disabled"
-  ];
+  ]);
 
   postPatch = ''
     patchShebangs \
@@ -176,6 +197,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 }

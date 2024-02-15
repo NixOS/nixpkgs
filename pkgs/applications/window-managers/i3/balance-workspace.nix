@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/i3-balance-workspace/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pacien ];
+    mainProgram = "i3_balance_workspace";
   };
 }

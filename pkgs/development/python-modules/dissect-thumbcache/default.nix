@@ -11,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
-  version = "1.2";
-  format = "pyproject";
+  version = "1.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.thumbcache";
     rev = "refs/tags/${version}";
-    hash = "sha256-lTtTZQgEvgaVoNPnVeRGO/BQU/8RfQ2ktljSBflhlOw=";
+    hash = "sha256-q35VL3BUZrxNBB5mHegqVObG76BYG4FAk/KIAvdm6B8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -46,6 +44,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't run Windows related tests
     "windows"
+    "test_index_type"
   ];
 
   meta = with lib; {

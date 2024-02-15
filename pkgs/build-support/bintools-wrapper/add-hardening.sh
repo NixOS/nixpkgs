@@ -37,11 +37,11 @@ fi
 for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
     pie)
-      if [[ ! (" $* " =~ " -shared " \
-            || " $* " =~ " -static " \
-            || " $* " =~ " -r " \
-            || " $* " =~ " -Ur " \
-            || " $* " =~ " -i ") ]]; then
+      if [[ ! (" ${params[*]} " =~ " -shared " \
+            || " ${params[*]} " =~ " -static " \
+            || " ${params[*]} " =~ " -r " \
+            || " ${params[*]} " =~ " -Ur " \
+            || " ${params[*]} " =~ " -i ") ]]; then
         if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
         hardeningLDFlags+=('-pie')
       fi

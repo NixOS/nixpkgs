@@ -2,32 +2,24 @@
 , fetchFromGitHub
 , nixosTests
 , python3
-, fetchpatch
 }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
-        version = "1.4.46";
-        src = self.fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
-        };
-      });
+      sqlalchemy = super.sqlalchemy_1_4;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.19";
+  version = "0.6.21";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    hash = "sha256-mNYLQ+3u6xRaoZ5oH6HdylFfgz1fq1ZB86AWk9vULWQ=";
+    hash = "sha256-tRrOquetn3P2NmrXq7DQHRGP1sWnLR7bV2Lw0W/lUPQ=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
@@ -36,11 +28,13 @@ python.pkgs.buildPythonApplication rec {
     chardet
     flask-babel
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
+    flask-limiter
     iso-639
+    jsonschema
     lxml
-    pypdf3
+    pypdf
     requests
     sqlalchemy
     tornado
@@ -58,12 +52,6 @@ python.pkgs.buildPythonApplication rec {
     # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
     # are stored in the DB.
     ./db-migrations.patch
-    # Handle version 3.0 of flask-babel
-    (fetchpatch {
-      url = "https://github.com/janeczku/calibre-web/commit/94a6931d48d347ae6c07e2b5f0301e8cf97cf53d.patch";
-      excludes = [ "requirements.txt" ];
-      hash = "sha256-0DQ+LbIOOwjBXQh+b1w8dYQ3s+xZ6nFoH5GvgJdBAFI=";
-    })
   ];
 
   # calibre-web doesn't follow setuptools directory structure. The following is taken from the script
@@ -81,13 +69,13 @@ python.pkgs.buildPythonApplication rec {
       --replace "APScheduler>=3.6.3,<3.10.0" "APScheduler>=3.6.3" \
       --replace "chardet>=3.0.0,<4.1.0" "chardet>=3.0.0,<6" \
       --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
-      --replace "Flask-Babel>=0.11.1,<2.1.0" "Flask-Babel>=0.11.1" \
+      --replace "Flask-Babel>=0.11.1,<3.1.0" "Flask-Babel>=0.11.1" \
       --replace "Flask-Login>=0.3.2,<0.6.2" "Flask-Login>=0.3.2" \
       --replace "flask-wtf>=0.14.2,<1.1.0" "flask-wtf>=0.14.2" \
       --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \
       --replace "tornado>=4.1,<6.2" "tornado>=4.1,<7" \
-      --replace "PyPDF3>=1.0.0,<1.0.7" "PyPDF3>=1.0.0" \
-      --replace "requests>=2.11.1,<2.28.0" "requests" \
+      --replace "PyPDF>=3.0.0,<3.6.0" "PyPDF>=3.0.0" \
+      --replace "requests>=2.11.1,<2.29.0" "requests" \
       --replace "unidecode>=0.04.19,<1.4.0" "unidecode>=0.04.19" \
       --replace "werkzeug<2.1.0" ""
   '';
@@ -103,5 +91,6 @@ python.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pborzenkov ];
     platforms = platforms.all;
+    mainProgram = "calibre-web";
   };
 }

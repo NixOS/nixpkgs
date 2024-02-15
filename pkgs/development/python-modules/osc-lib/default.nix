@@ -14,17 +14,18 @@
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "unstable-2022-03-09";
+  version = "2.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    rev = "65c73fd5030276e34f3d52c03ddb9d27cd8ec6f5";
-    hash = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
+    rev = version;
+    hash = "sha256-ijL/m9BTAgDUjqy77nkl3rDppeUPBycmEqlL6uMruIA=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...
-  PBR_VERSION = "2.5.0";
+  PBR_VERSION = version;
 
   nativeBuildInputs = [
     pbr

@@ -11,20 +11,21 @@
 , enableOpencl ? true
 , opencl-headers
 , ocl-icd
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport
 , cudaPackages
 , addOpenGLRunpath
 }:
 
 stdenv.mkDerivation rec {
   pname = "openmm";
-  version = "8.0.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = pname;
     rev = version;
-    hash = "sha256-89ngeZHdjyL/OoGuQ+F5eaXE1/od0EEfIgw9eKdLtL8=";
+    hash = "sha256-pYWBniV1J+UZBOPPjuUxVevONHaclo+GvGBEpr7Zmxg=";
   };
 
   # "This test is stochastic and may occassionally fail". It does.
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableCuda cudaPackages.cudatoolkit;
 
   propagatedBuildInputs = lib.optionals enablePython (with python3Packages; [
+    setuptools
     python
     numpy
     cython
@@ -82,8 +84,9 @@ stdenv.mkDerivation rec {
       export OPENMM_LIB_PATH=$out/lib
       export OPENMM_INCLUDE_PATH=$out/include
       cd python
-      ${python3Packages.python.pythonForBuild.interpreter} setup.py build
-      ${python3Packages.python.pythonForBuild.interpreter} setup.py install --prefix=$out
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py build
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out
+      mv $out/lib/python*/site-packages/OpenMM*.egg/{openmm,simtk} $out/lib/python*/site-packages/.
     '';
 
   postFixup = ''

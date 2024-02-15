@@ -7,6 +7,7 @@
 , shared-mime-info
 , gtk3
 , wrapGAppsHook
+, libarchive
 , libxml2
 , xapp
 , meson
@@ -16,7 +17,7 @@
 , poppler
 , libspectre
 , libgxps
-, webkitgtk
+, webkitgtk_4_1
 , nodePackages
 , ninja
 , gsettings-desktop-schemas
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "3.6.3";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KuCcOnhM8AzKC8hfBpdcnC/ubDVsElKMZuxEnTcJLn0=";
+    sha256 = "sha256-X5XMkO2JFceLyH7KEp8mnDltdjGpCT4kVGdcpGRpUJI=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +55,13 @@ stdenv.mkDerivation rec {
     gtk3
     xapp
     cairo
+    libarchive
     libxml2
     libsecret
     poppler
     libspectre
     libgxps
-    webkitgtk
+    webkitgtk_4_1
     nodePackages.mathjax
     djvulibre
   ];

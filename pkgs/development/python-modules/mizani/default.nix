@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.8.1";
-  format = "pyproject";
+  version = "0.9.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "has2k1";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VE0M5/s8/XmmAe8EE/FcHBFGc9ppVWuYOYMuajQeZww=";
+    repo = "mizani";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gZwM8/9ipcA73m1sPCz9oxD7cndli+qX9+gLILdbq1A=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace pytest.ini \
+    substituteInPlace pyproject.toml \
       --replace " --cov=mizani --cov-report=xml" ""
   '';
 

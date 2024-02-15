@@ -4,6 +4,7 @@
 , fetchPypi
 , lxml
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , requests
 , webob
@@ -22,10 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-lj6NTpAmL/bY3sBy6pcoXcN0ovacrXd29AgqvPah2K4=";
   };
 
+  # https://github.com/gawel/pyquery/issues/248
+  postPatch = ''
+    substituteInPlace tests/test_pyquery.py \
+      --replace test_selector_html skip_test_selector_html
+  '';
+
   propagatedBuildInputs = [
     cssselect
     lxml
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyquery" ];
 
@@ -42,6 +51,11 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # requires network
     "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/gawel/pyquery/issues/249
+    "pyquery.pyquery.PyQuery.serialize_dict"
   ];
 
   meta = with lib; {

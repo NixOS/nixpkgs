@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoconf
 , bison
 , bzip2
@@ -7,33 +8,35 @@
 , gperf
 , ncurses
 , perl
+, python3
 , readline
 , zlib
 }:
 
-let
-  # iverilog-test has been merged to the main iverilog main source tree
-  # in January 2022, so it won't be longer necessary.
-  # For now let's fetch it from the separate repo, since 11.0 was released in 2020.
-  iverilog-test = fetchFromGitHub {
-    owner  = "steveicarus";
-    repo   = "ivtest";
-    rev    = "a19e629a1879801ffcc6f2e6256ca435c20570f3";
-    sha256 = "sha256-3EkmrAXU0/mRxrxp5Hy7C3yWTVK16L+tPqqeEryY/r8=";
-  };
-in
 stdenv.mkDerivation rec {
   pname   = "iverilog";
-  version = "11.0";
+  version = "12.0";
 
   src = fetchFromGitHub {
     owner  = "steveicarus";
     repo   = pname;
     rev    = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0nzcyi6l2zv9wxzsv9i963p3igyjds0n55x0ph561mc3pfbc7aqp";
+    hash   = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
   };
 
   nativeBuildInputs = [ autoconf bison flex gperf ];
+
+  CC_FOR_BUILD="${stdenv.cc}/bin/cc";
+  CXX_FOR_BUILD="${stdenv.cc}/bin/c++";
+
+  patches = [
+    # NOTE(jleightcap): `-Werror=format-security` warning patched shortly after release, backport the upstream fix
+    (fetchpatch {
+      name = "format-security";
+      url = "https://github.com/steveicarus/iverilog/commit/23e51ef7a8e8e4ba42208936e0a6a25901f58c65.patch";
+      hash = "sha256-fMWfBsCl2fuXe+6AR10ytb8QpC84bXlP5RSdrqsWzEk=";
+    })
+  ];
 
   buildInputs = [ bzip2 ncurses readline zlib ];
 
@@ -41,22 +44,30 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeInstallCheckInputs = [ perl ];
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
+  # NOTE(jleightcap): the `make check` target only runs a "Hello, World"-esque sanity check.
+  # the tests in the doInstallCheck phase run a full regression test suite.
+  # however, these tests currently fail upstream on aarch64
+  # (see https://github.com/steveicarus/iverilog/issues/917)
+  # so disable the full suite for now.
+  doCheck = true;
+  doInstallCheck = !stdenv.isAarch64;
+
+  nativeInstallCheckInputs = [
+    perl
+    (python3.withPackages (pp: with pp; [
+      docopt
+    ]))
+  ];
 
   installCheckPhase = ''
-    # copy tests to allow writing results
-    export TESTDIR=$(mktemp -d)
-    cp -r ${iverilog-test}/* $TESTDIR
-
-    pushd $TESTDIR
-
-    # Run & check tests
-    PATH=$out/bin:$PATH perl vvp_reg.pl
-    # Check the tests, will error if unexpected tests fail. Some failures MIGHT be normal.
-    diff regression_report-devel.txt regression_report.txt
-    PATH=$out/bin:$PATH perl vpi_reg.pl
-
-    popd
+    runHook preInstallCheck
+    export PATH="$PATH:$out/bin"
+    sh .github/test.sh
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

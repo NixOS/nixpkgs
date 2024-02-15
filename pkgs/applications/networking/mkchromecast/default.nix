@@ -13,6 +13,7 @@
 , opusTools
 , gst_all_1
 , enableSonos ? true
+, qtwayland
 }:
 let packages = [
   vorbis-tools
@@ -27,17 +28,18 @@ let packages = [
 ] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
   version = "2022-10-31";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
     rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
     sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
+  buildInputs = lib.optional stdenv.isLinux qtwayland;
   propagatedBuildInputs = with python3Packages; ([
     pychromecast
     psutil
@@ -68,11 +70,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/video.py \
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/video.py \
       --replace '/usr/share/mkchromecast/nodejs/' '${placeholder "out"}/share/mkchromecast/nodejs/'
   '' + lib.optionalString stdenv.isDarwin ''
     install -Dm 755 -t $out/bin bin/audiodevice
-    substituteInPlace $out/lib/${python3Packages.python.libPrefix}/site-packages/mkchromecast/audio_devices.py \
+    substituteInPlace $out/${python3Packages.python.sitePackages}/mkchromecast/audio_devices.py \
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 

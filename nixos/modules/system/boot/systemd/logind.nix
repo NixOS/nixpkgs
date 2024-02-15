@@ -11,64 +11,145 @@ let
   ];
 in
 {
-  options = {
-    services.logind.extraConfig = mkOption {
+  options.services.logind = {
+    extraConfig = mkOption {
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
       description = lib.mdDoc ''
-        Extra config options for systemd-logind. See
-        [
-        logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html) for available options.
+        Extra config options for systemd-logind.
+        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
+        for available options.
       '';
     };
 
-    services.logind.killUserProcesses = mkOption {
+    killUserProcesses = mkOption {
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
         Specifies whether the processes of a user should be killed
         when the user logs out.  If true, the scope unit corresponding
         to the session and all processes inside that scope will be
-        terminated.  If false, the scope is "abandoned" (see
-        [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)), and processes are not killed.
+        terminated.  If false, the scope is "abandoned"
+        (see [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)),
+        and processes are not killed.
 
         See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=)
         for more details.
       '';
     };
 
-    services.logind.lidSwitch = mkOption {
+    powerKey = mkOption {
+      default = "poweroff";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the power key is pressed.
+      '';
+    };
+
+    powerKeyLongPress = mkOption {
+      default = "ignore";
+      example = "reboot";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the power key is long-pressed.
+      '';
+    };
+
+    rebootKey = mkOption {
+      default = "reboot";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the reboot key is pressed.
+      '';
+    };
+
+    rebootKeyLongPress = mkOption {
+      default = "poweroff";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the reboot key is long-pressed.
+      '';
+    };
+
+    suspendKey = mkOption {
       default = "suspend";
       example = "ignore";
       type = logindHandlerType;
 
       description = lib.mdDoc ''
-        Specifies what to be done when the laptop lid is closed.
+        Specifies what to do when the suspend key is pressed.
       '';
     };
 
-    services.logind.lidSwitchDocked = mkOption {
+    suspendKeyLongPress = mkOption {
+      default = "hibernate";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the suspend key is long-pressed.
+      '';
+    };
+
+    hibernateKey = mkOption {
+      default = "hibernate";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the hibernate key is pressed.
+      '';
+    };
+
+    hibernateKeyLongPress = mkOption {
       default = "ignore";
       example = "suspend";
       type = logindHandlerType;
 
       description = lib.mdDoc ''
-        Specifies what to be done when the laptop lid is closed
-        and another screen is added.
+        Specifies what to do when the hibernate key is long-pressed.
       '';
     };
 
-    services.logind.lidSwitchExternalPower = mkOption {
+    lidSwitch = mkOption {
+      default = "suspend";
+      example = "ignore";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the laptop lid is closed.
+      '';
+    };
+
+    lidSwitchExternalPower = mkOption {
       default = cfg.lidSwitch;
       defaultText = literalExpression "services.logind.lidSwitch";
       example = "ignore";
       type = logindHandlerType;
 
       description = lib.mdDoc ''
-        Specifies what to do when the laptop lid is closed and the system is
-        on external power. By default use the same action as specified in
-        services.logind.lidSwitch.
+        Specifies what to do when the laptop lid is closed
+        and the system is on external power. By default use
+        the same action as specified in services.logind.lidSwitch.
+      '';
+    };
+
+    lidSwitchDocked = mkOption {
+      default = "ignore";
+      example = "suspend";
+      type = logindHandlerType;
+
+      description = lib.mdDoc ''
+        Specifies what to do when the laptop lid is closed
+        and another screen is added.
       '';
     };
   };
@@ -94,9 +175,17 @@ in
       "systemd/logind.conf".text = ''
         [Login]
         KillUserProcesses=${if cfg.killUserProcesses then "yes" else "no"}
+        HandlePowerKey=${cfg.powerKey}
+        HandlePowerKeyLongPress=${cfg.powerKeyLongPress}
+        HandleRebootKey=${cfg.rebootKey}
+        HandleRebootKeyLongPress=${cfg.rebootKeyLongPress}
+        HandleSuspendKey=${cfg.suspendKey}
+        HandleSuspendKeyLongPress=${cfg.suspendKeyLongPress}
+        HandleHibernateKey=${cfg.hibernateKey}
+        HandleHibernateKeyLongPress=${cfg.hibernateKeyLongPress}
         HandleLidSwitch=${cfg.lidSwitch}
-        HandleLidSwitchDocked=${cfg.lidSwitchDocked}
         HandleLidSwitchExternalPower=${cfg.lidSwitchExternalPower}
+        HandleLidSwitchDocked=${cfg.lidSwitchDocked}
         ${cfg.extraConfig}
       '';
     };

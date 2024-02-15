@@ -1,31 +1,42 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, zlib
-, expat
+, fetchpatch
 , cmake
-, which
-, libxml2
-, python3
-, gettext
 , doxygen
+, gettext
 , graphviz
 , libxslt
-, libiconv
 , removeReferencesTo
+, libiconv
+, brotli
+, expat
+, inih
+, zlib
+, libxml2
+, python3
+, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.27.6";
+  version = "0.28.1";
 
-  outputs = [ "out" "lib" "dev" "doc" "man" "static" ];
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "exiv2";
-    repo  = "exiv2";
+    repo = "exiv2";
     rev = "v${version}";
-    sha256 = "sha256-Ddy605EQhsATzmdhN3Zq+2ksYMrHEfucA+IqezYmjo4=";
+    hash = "sha256-Jim8vYWyCa16LAJ1GuP8cCzhXIc2ouo6hVsHg3UQbdg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Exiv2/exiv2/commit/c351c7cce317571934abf693055779a59df30d6e.patch";
+      hash = "sha256-fWJT4IUBrAELl6ku0M1iTzGFX74le8Z0UzTJLU/gYls=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -36,10 +47,14 @@ stdenv.mkDerivation rec {
     removeReferencesTo
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   propagatedBuildInputs = [
+    brotli
     expat
+    inih
     zlib
   ];
 
@@ -65,56 +80,27 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs ../test/
     mkdir ../test/tmp
-
-    ${lib.optionalString stdenv.hostPlatform.isAarch ''
-      # Fix tests on arm
-      # https://github.com/Exiv2/exiv2/issues/933
-      rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
-    ''}
-
-    ${lib.optionalString stdenv.isDarwin ''
-      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
-      # Removing tests depending on charset conversion
-      substituteInPlace ../test/Makefile --replace "conversions.sh" ""
-      rm -f ../tests/bugfixes/redmine/test_issue_460.py
-      rm -f ../tests/bugfixes/redmine/test_issue_662.py
-      rm -f ../tests/bugfixes/github/test_issue_1046.py
-
-      rm ../tests/bugfixes/redmine/test_issue_683.py
-
-      # disable tests that requires loopback networking
-      substituteInPlace  ../tests/bash_tests/testcases.py \
-        --replace "def io_test(self):" "def io_disabled(self):"
-     ''}
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString stdenv.hostPlatform.isAarch32 ''
+    # Fix tests on arm
+    # https://github.com/Exiv2/exiv2/issues/933
+    rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
+  '' + lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
     export LC_ALL=C
+
+    # disable tests that requires loopback networking
+    substituteInPlace  ../tests/bash_tests/testcases.py \
+      --replace "def io_test(self):" "def io_disabled(self):"
   '';
 
-  # With CMake we have to enable samples or there won't be
-  # a tests target. This removes them.
-  postInstall = ''
-    ( cd "$out/bin"
-      mv exiv2 .exiv2
-      rm *
-      mv .exiv2 exiv2
-    )
-
-    mkdir -p $static/lib
-    mv $lib/lib/*.a $static/lib/
-
+  preFixup = ''
     remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2 $static/lib/*.a
   '';
 
-  postFixup = ''
-    substituteInPlace "$dev"/lib/cmake/exiv2/exiv2Config.cmake --replace \
-      "set(_IMPORT_PREFIX \"$out\")" \
-      "set(_IMPORT_PREFIX \"$static\")"
-    substituteInPlace "$dev"/lib/cmake/exiv2/exiv2Config-*.cmake --replace \
-      "$lib/lib/libexiv2-xmp.a" \
-      "$static/lib/libexiv2-xmp.a"
-  '';
-
   disallowedReferences = [ stdenv.cc.cc ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
     homepage = "https://exiv2.org";

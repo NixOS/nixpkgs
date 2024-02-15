@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
-
   doCheck = true;
   checkPhase = ''
     echo "***Muparserx self-test***"
@@ -38,7 +34,5 @@ stdenv.mkDerivation rec {
     homepage = "https://beltoforion.de/en/muparserx/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
-    # selftest fails
-    broken = stdenv.isDarwin;
   };
 }

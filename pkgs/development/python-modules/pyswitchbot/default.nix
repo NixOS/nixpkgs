@@ -5,15 +5,17 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, pyopenssl
 , pythonOlder
 , pytestCheckHook
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.37.3";
-  format = "setuptools";
+  version = "0.45.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,14 +23,19 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = "refs/tags/${version}";
-    hash = "sha256-0Kzzyzlxs5PaEHKzJLsconUg4zmgPzWI8LD5UIcKwEY=";
+    hash = "sha256-lQVUHZvAZ4J0DLlUl30dSz2wwXKb9MK5prkXvub0yNI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     bleak
     bleak-retry-connector
     boto3
     cryptography
+    pyopenssl
     requests
   ];
 

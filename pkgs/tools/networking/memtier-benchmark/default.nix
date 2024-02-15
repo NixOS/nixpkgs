@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "memtier-benchmark";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner  = "redislabs";
     repo   = "memtier_benchmark";
     rev    = "refs/tags/${version}";
-    sha256 = "sha256-1ZgSmHOLvPecqVN9P/Mr/2cOdbdl4oe4GgMjLaDX7YQ=";
+    sha256 = "sha256-3KFBj+Cj5qO5k1hy5oSvtXdtTZIbGPJ1fhmnIeCW2s8=";
   };
 
   patchPhase = ''
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.gpl2;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+    mainProgram = "memtier_benchmark";
   };
 }

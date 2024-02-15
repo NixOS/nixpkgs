@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.8.0";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g7xUB5RfjG4G7J9Upj3KXKSePa+VDit1Zf8pWHfui1o=";
+    hash = "sha256-G9Q77nWUUW+hG/wm9z/S8gea4U1wHZdj7WdK2LsKBos=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://aiokafka.readthedocs.org";
     changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

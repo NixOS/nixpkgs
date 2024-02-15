@@ -3,28 +3,43 @@
 , fetchFromGitHub
 , cmake
 , enableVTK ? true
-, vtk_8
+, vtk
 , ApplicationServices
 , Cocoa
+, libiconv
 , enablePython ? false
 , python ? null
-, swig
+, swig4
+, expat
+, libuuid
+, openjpeg
+, zlib
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "gdcm";
-  version = "3.0.21";
+  version = "3.0.23";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    rev = "v${version}";
-    sha256 = "sha256-BmUJCqCGt+BvVpLG4bzCH4lsqmhWHU0gbOIU2CCIMGU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zwIPWcjTrfbdNBzAqwV6lU2l6sx+e4Yi7dprdem6AeE=";
   };
 
   cmakeFlags = [
     "-DGDCM_BUILD_APPLICATIONS=ON"
     "-DGDCM_BUILD_SHARED_LIBS=ON"
+    "-DGDCM_BUILD_TESTING=ON"
+    "-DGDCM_USE_SYSTEM_EXPAT=ON"
+    "-DGDCM_USE_SYSTEM_ZLIB=ON"
+    "-DGDCM_USE_SYSTEM_UUID=ON"
+    "-DGDCM_USE_SYSTEM_OPENJPEG=ON"
+    # hack around usual "`RUNTIME_DESTINATION` must not be an absolute path" issue:
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ] ++ lib.optionals enableVTK [
     "-DGDCM_USE_VTK=ON"
   ] ++ lib.optionals enablePython [
@@ -32,14 +47,47 @@ stdenv.mkDerivation rec {
     "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals enableVTK [
-    vtk_8
+  buildInputs = [
+    expat
+    libuuid
+    openjpeg
+    zlib
+  ] ++ lib.optionals enableVTK [
+    vtk
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
     Cocoa
-  ] ++ lib.optionals enablePython [ swig python ];
+    libiconv
+  ] ++ lib.optionals enablePython [ swig4 python ];
+
+  disabledTests = [
+    # require networking:
+    "TestEcho"
+    "TestFind"
+    "gdcmscu-echo-dicomserver"
+    "gdcmscu-find-dicomserver"
+    # seemingly ought to be be disabled when the test data submodule is not present:
+    "TestvtkGDCMImageReader2_3"
+    "TestSCUValidation"
+    # errors because 3 classes not wrapped:
+    "TestWrapPython"
+  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    "TestRescaler2"
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    ctest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+    runHook postCheck
+  '';
+  doCheck = true;
+  # note that when the test data is available to the build via `fetchSubmodules = true`,
+  # a number of additional but much slower tests are enabled
 
   meta = with lib; {
     description = "The grassroots cross-platform DICOM implementation";
@@ -50,5 +98,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gdcm.sourceforge.net/";
     license = with licenses; [ bsd3 asl20 ];
     maintainers = with maintainers; [ tfmoraes ];
+    platforms = platforms.all;
   };
 }

@@ -6,7 +6,7 @@ let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
 in {
-  meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
+  meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 mfrw ];
 
   options.services.tailscale = {
     enable = mkEnableOption (lib.mdDoc "Tailscale client daemon");
@@ -29,11 +29,12 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.tailscale;
-      defaultText = literalExpression "pkgs.tailscale";
-      description = lib.mdDoc "The package to use for tailscale";
+    package = lib.mkPackageOption pkgs "tailscale" {};
+
+    openFirewall = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc "Whether to open the firewall for the specified port.";
     };
 
     useRoutingFeatures = mkOption {
@@ -49,6 +50,22 @@ in {
         When set to `server` or `both`, IP forwarding will be enabled.
       '';
     };
+
+    authKeyFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/run/secrets/tailscale_key";
+      description = lib.mdDoc ''
+        A file containing the auth key.
+      '';
+    };
+
+    extraUpFlags = mkOption {
+      description = lib.mdDoc "Extra flags to pass to {command}`tailscale up`.";
+      type = types.listOf types.str;
+      default = [];
+      example = ["--ssh"];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -57,10 +74,10 @@ in {
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       path = [
-        config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
-        pkgs.glibc      # for `getent` to look up user shells
-      ];
+        pkgs.getent     # for `getent` to look up user shells
+        pkgs.kmod       # required to pass tailscale's v6nat check
+      ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
@@ -81,10 +98,27 @@ in {
       stopIfChanged = false;
     };
 
+    systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
+      after = ["tailscaled.service"];
+      wants = ["tailscaled.service"];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      script = ''
+        status=$(${config.systemd.package}/bin/systemctl show -P StatusText tailscaled.service)
+        if [[ $status != Connected* ]]; then
+          ${cfg.package}/bin/tailscale up --auth-key 'file:${cfg.authKeyFile}' ${escapeShellArgs cfg.extraUpFlags}
+        fi
+      '';
+    };
+
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
       "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
       "net.ipv6.conf.all.forwarding" = mkOverride 97 true;
     };
+
+    networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     networking.firewall.checkReversePath = mkIf (cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both") "loose";
 

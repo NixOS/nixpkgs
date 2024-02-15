@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "reproxy";
-  version = "0.11.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3kpGeG60WSpcIqVLw437gkDT8XLsDyhGL8/sEnhTgBw=";
+    hash = "sha256-ac4fOOMht2WGlrXLN95NEIA8ivqghhVuxHnBumvajx0=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ buildGoModule rec {
       --replace "TestFile_Events_BusyListener" "SkipFile_Events_BusyListener"
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [
     "-s" "-w" "-X main.revision=${version}"
@@ -40,5 +40,6 @@ buildGoModule rec {
     homepage = "https://reproxy.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
+    mainProgram = "reproxy";
   };
 }

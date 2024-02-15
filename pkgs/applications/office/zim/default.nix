@@ -7,11 +7,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zim";
-  version = "0.75.1";
+  version = "0.75.2";
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
-    sha256 = "sha256-iOF11/fhQYlvnpWJidJS1yJVavF7xLxvBl59VCh9A4U=";
+    hash = "sha256-QIkNsFsWeNHEcXhGHHZyJDMMW2lNvdwMJLGxeCZaLdI=";
   };
 
   buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
@@ -27,6 +27,20 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  postInstall = ''
+    (
+      cd icons
+      for img in *.{png,svg}; do
+        size=''${img#zim}
+        size=''${size%.png}
+        size=''${size%.svg}
+        dimensions="''${size}x''${size}"
+        mkdir -p $out/share/icons/hicolor/$dimensions/apps
+        cp $img $out/share/icons/hicolor/$dimensions/apps/${pname}.png
+      done
+    )
+  '';
+
   # RuntimeError: could not create GtkClipboard object
   doCheck = false;
 
@@ -40,6 +54,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${version}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "zim";
     broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };
 }

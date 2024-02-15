@@ -28,6 +28,7 @@
 # output plugins
 , alsaSupport ? true, alsa-lib
 , pulseSupport ? config.pulseaudio or true, libpulseaudio
+, pipewireSupport ? true, pipewire
 # effect plugins
 , resamplerSupport ? true, libsamplerate
 , overloadSupport ? true, zlib
@@ -40,7 +41,7 @@ assert gtk2Support || gtk3Support;
 let
   inherit (lib) optionals;
 
-  version = "1.9.4";
+  version = "1.9.6";
 in clangStdenv.mkDerivation {
   pname = "deadbeef";
   inherit version;
@@ -50,7 +51,7 @@ in clangStdenv.mkDerivation {
     repo = "deadbeef";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-ow+Aw/lp+oe9GhbOWM7XcX/tJjfAAu7KOUY1us7+f84=";
+    hash = "sha256-Q6hL4fOFPHn26ZqvrebgTMTgQZrhbXCEhM4ZFzNeyJE=";
   };
 
   buildInputs = [
@@ -92,6 +93,8 @@ in clangStdenv.mkDerivation {
     alsa-lib
   ] ++ optionals pulseSupport [
     libpulseaudio
+  ] ++ optionals pipewireSupport [
+    pipewire
   ] ++ optionals resamplerSupport [
     libsamplerate
   ] ++ optionals overloadSupport [
@@ -118,9 +121,17 @@ in clangStdenv.mkDerivation {
     ./autogen.sh
   '';
 
+  postPatch = ''
+    # Fix the build on c++17 compiler:
+    #   https://github.com/DeaDBeeF-Player/deadbeef/issues/3012
+    # TODO: remove after 1.9.5 release.
+    substituteInPlace plugins/adplug/Makefile.am --replace 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
+  '';
+
   meta = with lib; {
     description = "Ultimate Music Player for GNU/Linux";
     homepage = "http://deadbeef.sourceforge.net/";
+    downloadPage = "https://github.com/DeaDBeeF-Player/deadbeef";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];

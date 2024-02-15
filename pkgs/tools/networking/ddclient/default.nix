@@ -1,8 +1,11 @@
-{ lib, fetchFromGitHub, perlPackages, autoreconfHook, iproute2, perl }:
+{ lib, fetchFromGitHub, perlPackages, autoreconfHook, perl, curl }:
 
+let
+  myPerl = perl.withPackages (ps: [ ps.JSONPP ]);
+in
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.10.0";
+  version = "3.11.2";
 
   outputs = [ "out" ];
 
@@ -10,7 +13,7 @@ perlPackages.buildPerlPackage rec {
     owner = "ddclient";
     repo = "ddclient";
     rev = "v${version}";
-    sha256 = "sha256-wWUkjXwVNZRJR1rXPn3IkDRi9is9vsRuNC/zq8RpB1E=";
+    sha256 = "sha256-d1G+AM28nBpMWh1QBjm78KKeOL5b5arxERYRCXohwBg=";
   };
 
   postPatch = ''
@@ -19,13 +22,17 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = with perlPackages; [ IOSocketINET6 IOSocketSSL JSONPP ];
+  buildInputs = [ curl myPerl ];
+
+  # Prevent ddclient from picking up build time perl which is implicitly added
+  # by buildPerlPackage.
+  configureFlags = [
+    "--with-perl=${lib.getExe myPerl}"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    # patch sheebang ddclient script which only exists after buildPhase
-    preConfigure
     install -Dm755 ddclient $out/bin/ddclient
     install -Dm644 -t $out/share/doc/ddclient COP* README.* ChangeLog.md
 
@@ -40,6 +47,7 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://ddclient.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "ddclient";
   };
 }

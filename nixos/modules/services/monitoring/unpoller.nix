@@ -47,7 +47,7 @@ in {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Whether to disable the prometheus ouput plugin.
+          Whether to disable the prometheus output plugin.
         '';
       };
       http_listen = mkOption {
@@ -71,7 +71,7 @@ in {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Whether to disable the influxdb ouput plugin.
+          Whether to disable the influxdb output plugin.
         '';
       };
       url = mkOption {

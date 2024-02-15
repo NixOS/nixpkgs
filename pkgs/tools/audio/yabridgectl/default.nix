@@ -10,8 +10,13 @@ rustPlatform.buildRustPackage {
   version = yabridge.version;
 
   src = yabridge.src;
-  sourceRoot = "source/tools/yabridgectl";
-  cargoSha256 = "sha256-qr6obmabcO3n+DxMxkj3mbpzR/Wn6eOg2J99/FarMVs=";
+  sourceRoot = "${yabridge.src.name}/tools/yabridgectl";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "reflink-0.1.3" = "sha256-1o5d/mepjbDLuoZ2/49Bi6sFgVX4WdCuhGJkk8ulhcI=";
+    };
+  };
 
   patches = [
     # Patch yabridgectl to search for the chainloader through NIX_PROFILES
@@ -35,8 +40,10 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "A small, optional utility to help set up and update yabridge for several directories at once";
     homepage = "${yabridge.src.meta.homepage}/tree/${yabridge.version}/tools/yabridgectl";
+    changelog = yabridge.meta.changelog;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = yabridge.meta.platforms;
+    mainProgram = "yabridgectl";
   };
 }

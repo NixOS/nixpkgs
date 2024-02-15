@@ -3,6 +3,7 @@
 , fetchurl
 , fontutil
 , lib
+, libei
 , libGL
 , libGLU
 , libX11
@@ -19,7 +20,7 @@
 , libXt
 , libdrm
 , libtirpc
-, libunwind
+, withLibunwind ? true, libunwind
 , libxcb
 , libxkbfile
 , libxshmfence
@@ -39,15 +40,17 @@
 , xorgproto
 , xtrans
 , zlib
-, defaultFontPath ? "" }:
+, defaultFontPath ? ""
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "22.1.8";
+  version = "23.2.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-0R7u5zKQuI6o2kKn2TUN7fq6hWzkrkTljARa2eyqL3M=";
+    sha256 = "sha256-qZ4Vm20NMwmLO2qyKoi/zs4jyLnQynLFNcVdywaBtGs=";
   };
 
   depsBuildBuild = [
@@ -62,6 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     egl-wayland
     libepoxy
+    libei
     fontutil
     libGL
     libGLU
@@ -79,7 +83,6 @@ stdenv.mkDerivation rec {
     libXt
     libdrm
     libtirpc
-    libunwind
     libxcb
     libxkbfile
     libxshmfence
@@ -93,20 +96,30 @@ stdenv.mkDerivation rec {
     xorgproto
     xtrans
     zlib
+  ] ++ lib.optionals withLibunwind [
+    libunwind
   ];
   mesonFlags = [
     (lib.mesonBool "xwayland_eglstream" true)
+    (lib.mesonBool "xcsecurity" true)
     (lib.mesonOption "default_font_path" defaultFontPath)
     (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
     (lib.mesonOption "xkb_dir" "${xkeyboard_config}/etc/X11/xkb")
     (lib.mesonOption "xkb_output_dir" "${placeholder "out"}/share/X11/xkb/compiled")
-    (lib.mesonBool "libunwind" (libunwind != null))
+    (lib.mesonBool "libunwind" withLibunwind)
   ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://gitlab.freedesktop.org/xorg/xserver.git";
+    rev-prefix = "xwayland-";
+  };
 
   meta = with lib; {
     description = "An X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
+    mainProgram = "Xwayland";
     maintainers = with maintainers; [ emantor ];
     platforms = platforms.linux;
   };

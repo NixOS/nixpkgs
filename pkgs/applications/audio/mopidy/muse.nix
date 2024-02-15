@@ -1,10 +1,10 @@
-{ lib, pythonPackages, mopidy }:
+{ lib, pythonPackages, fetchPypi, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-muse";
   version = "0.0.27";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "Mopidy-Muse";
     sha256 = "0jx9dkgxr07avzz9zskzhqy98zsxkdrf7iid2ax5vygwf8qsx8ks";
@@ -24,6 +24,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Mopidy web client with Snapcast support";
     homepage = "https://github.com/cristianpb/muse";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,18 +1,43 @@
-{ lib, stdenv, fetchurl, imake, bison, flex, gccmakedep
-, xorgproto, libXau, libXt, libXext, libXaw, libXpm, xorgcffiles }:
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, gccmakedep
+, imake
+, libXau
+, libXaw
+, libXext
+, libXpm
+, libXt
+, xorgcffiles
+, xorgproto
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nas";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.src.tar.gz";
-    sha256 = "17dk0ckm6mp1ajc0cd6bwyi638ynw2f6bhbn7gynrs0wfmiyldng";
+    url = "mirror://sourceforge/nas/nas-${finalAttrs.version}.tar.gz";
+    hash = "sha256-t4hK+zj+7AOhlr07fpxHuAPIMOzRDXRV6cl+Eiw3lEw=";
   };
 
-  nativeBuildInputs = [ imake bison flex gccmakedep ];
+  nativeBuildInputs = [
+    bison
+    flex
+    gccmakedep
+    imake
+  ];
 
-  buildInputs = [ xorgproto libXau libXt libXext libXaw libXpm ];
+  buildInputs = [
+    libXau
+    libXaw
+    libXext
+    libXpm
+    libXt
+    xorgproto
+  ];
 
   buildFlags = [ "WORLDOPTS=" "World" ];
 
@@ -20,14 +45,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/${xorgcffiles}/* $out
-    rm -r $out/nix
+    rm -fr $out/nix
   '';
 
-  meta = with lib; {
-    description = "A network transparent, client/server audio transport system";
+  meta = {
     homepage = "http://radscan.com/nas.html";
-    license = licenses.mit;
+    description = "A network transparent, client/server audio transport system";
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

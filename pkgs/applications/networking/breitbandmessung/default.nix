@@ -1,30 +1,30 @@
 { lib
 , stdenv
 , fetchurl
+, asar
 , dpkg
-, electron_16
+, electron_24
 , makeWrapper
 , nixosTests
-, nodePackages
 , undmg
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
-  version = "3.1.0";
+  version = "3.3.0";
 
   systemArgs = rec {
     x86_64-linux = rec {
       src = fetchurl {
         url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-${version}-linux.deb";
-        sha256 = "sha256-jSP+H9ej9Wd+swBZSy9uMi2ExSTZ191FGZhqaocTl7w=";
+        sha256 = "sha256-12mbdxklje9msnRtNk1RAtIg3OCybev/vUersDZj2i4=";
       };
 
       nativeBuildInputs = [
+        asar
         dpkg
         makeWrapper
-        nodePackages.asar
       ];
 
       unpackPhase = "dpkg-deb -x $src .";
@@ -49,7 +49,7 @@ let
         }
         EOF
 
-        makeWrapper ${electron_16}/bin/electron $out/bin/breitbandmessung \
+        makeWrapper ${electron_24}/bin/electron $out/bin/breitbandmessung \
           --add-flags $out/share/breitbandmessung/resources/build/electron.js
 
         # Fix the desktop link
@@ -61,7 +61,7 @@ let
     x86_64-darwin = {
       src = fetchurl {
         url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-${version}-mac.dmg";
-        sha256 = "sha256-2c8mDKJuHDSw7p52EKnJO5vr2kNTLU6r9pmGPANjE20=";
+        sha256 = "sha256-a27R/N13i4qU2znTKz+LGxSdgSzJ0MzIHeiPHyRd65k=";
       };
 
       nativeBuildInputs = [ undmg ];

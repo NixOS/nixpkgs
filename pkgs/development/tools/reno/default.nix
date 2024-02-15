@@ -2,6 +2,7 @@
 , git
 , gnupg1
 , python3Packages
+, fetchPypi
 }:
 
 with python3Packages; buildPythonApplication rec {

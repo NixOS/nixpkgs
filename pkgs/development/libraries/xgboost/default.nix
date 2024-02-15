@@ -5,22 +5,30 @@
 , cmake
 , gtest
 , doCheck ? true
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , ncclSupport ? false
 , rLibrary ? false
 , cudaPackages
 , llvmPackages
 , R
 , rPackages
-}:
+}@inputs:
 
-assert ncclSupport -> cudaSupport;
+assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);
 # Disable regular tests when building the R package
 # because 1) the R package runs its own tests and
 # 2) the R package creates a different binary shared
 # object that isn't compatible with the regular CLI
 # tests.
 assert rLibrary -> doCheck != true;
+
+let
+  # This ensures xgboost gets the correct libstdc++ when
+  # built with cuda support. This may be removed once
+  # #226165 rewrites cudaStdenv
+  inherit (cudaPackages) backendStdenv;
+  stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
+in
 
 stdenv.mkDerivation rec {
   pnameBase = "xgboost";
@@ -37,14 +45,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "1.7.4";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-HGS9w4g2+Aw5foKjHK/XQvSCnFHUswhzAsQf6XkdvOI=";
+    hash = "sha256-tRx6kJwIoVSN701ppuyZpIFUQIFy4LBMFyirLtwApjA=";
   };
 
   nativeBuildInputs = [ cmake ]

@@ -4,7 +4,7 @@
 , makeWrapper
 , electron
 , makeDesktopItem
-, graphicsmagick
+, imagemagick
 , writeScript
 , undmg
 , unzip
@@ -12,25 +12,25 @@
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
-  version = "1.1.16";
+  version = "1.5.3";
   appname = "Obsidian";
   meta = with lib; {
     description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     license = licenses.obsidian;
-    maintainers = with maintainers; [ atila conradmearns zaninime qbit ];
+    maintainers = with maintainers; [ atila conradmearns zaninime qbit kashw2 ];
   };
 
   filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    sha256 = if stdenv.isDarwin then "sha256-0p9vYHd1+kH+2ZTJ5OPeIEKNOzUGRU/M1xlmtyPOvJo=" else "sha256-zO5RpRkatGd5kJTPrTQ5xAYHntyw/7aQUSpZFUnDMnw=";
+    hash = if stdenv.isDarwin then "sha256-AXjzQwZxyRaI8mMU2EsNK0fRcXS7UNNBWPXeJzgomlY=" else "sha256-F7nqWOeBGGSmSVNTpcx3lHRejSjNeM2BBqS9tsasTvg=";
   };
 
   icon = fetchurl {
-    url = "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
-    sha256 = "18ylnbvxr6k4x44c4i1d55wxy2dq4fdppp43a4wl6h6zar0sc9s2";
+    url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
+    hash = "sha256-EZsBuWyZ9zYJh0LDKfRAMTtnY70q6iLK/ggXlplDEoA=";
   };
 
   desktopItem = makeDesktopItem {
@@ -46,7 +46,7 @@ let
   linux = stdenv.mkDerivation {
     inherit pname version src desktopItem icon;
     meta = meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; };
-    nativeBuildInputs = [ makeWrapper graphicsmagick ];
+    nativeBuildInputs = [ makeWrapper imagemagick ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
@@ -59,7 +59,7 @@ let
         -t $out/share/applications/
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        gm convert -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
+        convert -background none -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
       done
       runHook postInstall
     '';

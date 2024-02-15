@@ -1,75 +1,54 @@
-{ stdenv
-, lib
+{ lib
 , fetchPypi
-, fetchNuGet
 , buildPythonPackage
 , pytestCheckHook
 , pycparser
 , psutil
-, pkg-config
-, dotnetbuildhelpers
-, clang
-, glib
-, mono
+, dotnet-sdk
+, buildDotnetModule
+, clr-loader
+, setuptools
 }:
 
 let
-
-  dotnetPkgs = [
-    (fetchNuGet {
-      pname = "UnmanagedExports";
-      version = "1.2.7";
-      sha256 = "0bfrhpmq556p0swd9ssapw4f2aafmgp930jgf00sy89hzg2bfijf";
-      outputFiles = [ "*" ];
-    })
-    (fetchNuGet {
-      pname = "NUnit";
-      version = "3.12.0";
-      sha256 = "1880j2xwavi8f28vxan3hyvdnph4nlh5sbmh285s4lc9l0b7bdk2";
-      outputFiles = [ "*" ];
-    })
-    (fetchNuGet {
-      pname = "System.ValueTuple";
-      version = "4.5.0";
-      sha256 = "00k8ja51d0f9wrq4vv5z2jhq8hy31kac2rg0rv06prylcybzl8cy";
-      outputFiles = [ "*" ];
-    })
-  ];
-
-in
-
-buildPythonPackage rec {
   pname = "pythonnet";
-  version = "2.5.2";
-
+  version = "3.0.3";
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1qzdc6jd7i9j7p6bcihnr98y005gv1358xqdr1plpbpnl6078a5p";
+    pname = "pythonnet";
+    inherit version;
+    hash = "sha256-jUsulxWKAjh1+GR0WKWPOIF/T+Oa9gq91rDYrfHXfnU=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'self._install_packages()' '#self._install_packages()'
-  '';
+  # This buildDotnetModule is used only to get nuget sources, the actual
+  # build is done in `buildPythonPackage` below.
+  dotnet-build = buildDotnetModule {
+    inherit pname version src;
+    nugetDeps = ./deps.nix;
+  };
+in
+buildPythonPackage {
+  inherit pname version src;
 
-  preConfigure = ''
-    [ -z "''${dontPlacateNuget-}" ] && placate-nuget.sh
-    [ -z "''${dontPlacatePaket-}" ] && placate-paket.sh
+  format = "pyproject";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [
+    setuptools
+    dotnet-sdk
+  ];
+
+  propagatedBuildInputs = [
     pycparser
+    clr-loader
+  ];
 
-    pkg-config
-    dotnetbuildhelpers
-    clang
-
-    mono
-
-  ] ++ dotnetPkgs;
-
-  buildInputs = [
-    glib
-    mono
+  pytestFlagsArray = [
+    # Run tests using .NET Core, Mono is unsupported for now due to find_library problem in clr-loader
+    "--runtime coreclr"
   ];
 
   nativeCheckInputs = [
@@ -77,26 +56,24 @@ buildPythonPackage rec {
     psutil # needed for memory leak tests
   ];
 
-  preBuild = ''
-    rm -rf packages
-    mkdir packages
-
-    ${builtins.concatStringsSep "\n" (
-        builtins.map (
-            x: ''ln -s ${x}/lib/dotnet/${x.pname} ./packages/${x.pname}.${x.version}''
-          ) dotnetPkgs)}
-
-    # Setting TERM=xterm fixes an issue with terminfo in mono: System.Exception: Magic number is wrong: 542
-    export TERM=xterm
+  # Perform dotnet restore based on the nuget-source
+  preConfigure = ''
+    dotnet restore \
+      -p:ContinuousIntegrationBuild=true \
+      -p:Deterministic=true \
+      --source ${dotnet-build.nuget-source}
   '';
 
+  # Rerun this when updating to refresh Nuget dependencies
+  passthru.fetch-deps = dotnet-build.fetch-deps;
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = ".Net and Mono integration for Python";
+    description = ".NET integration for Python";
     homepage = "https://pythonnet.github.io";
+    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/v${version}";
     license = licenses.mit;
     # <https://github.com/pythonnet/pythonnet/issues/898>
     badPlatforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [ jraygauthier mdarocha ];
   };
 }

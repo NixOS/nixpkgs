@@ -24,15 +24,15 @@
 assert withQt -> qtbase != null;
 assert withQt -> wrapQtAppsHook != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "carla";
-  version = "2.5.3";
+  version = "2.5.8";
 
   src = fetchFromGitHub {
     owner = "falkTX";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-J0C3GLdlLMkm3LHl6l3OI2rA73A6z5MMcNJ1I1T0pbI=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-H15T/z/IRfgWdqToTzq2eJ7q3n9Kj44IZXsd4uaipuU=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGtk2 gtk2
     ++ lib.optional withGtk3 gtk3;
 
-  propagatedBuildInputs = pythonPath;
+  propagatedBuildInputs = finalAttrs.pythonPath;
 
   enableParallelBuilding = true;
 
@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
         filename="$(basename -- "$file")"
         substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
     done
+  '' + lib.optionalString withGtk2 ''
+    # Will try to dlopen() libgtk-x11-2.0 at runtime when using the bridge.
+    substituteInPlace source/bridges-ui/Makefile \
+        --replace '$(CXX) $(OBJS_GTK2)' '$(CXX) $(OBJS_GTK2) -lgtk-x11-2.0'
   '';
 
   dontWrapQtApps = true;
@@ -100,4 +104,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.minijackson ];
     platforms = platforms.linux;
   };
-}
+})

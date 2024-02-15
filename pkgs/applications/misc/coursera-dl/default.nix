@@ -1,26 +1,39 @@
-{ lib, fetchFromGitHub, fetchpatch, glibcLocales, pandoc, python3 }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, glibcLocales
+, pandoc
+, python3
+}:
 
-let
-  pythonPackages = python3.pkgs;
-
-in pythonPackages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "coursera-dl";
   version = "0.11.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coursera-dl";
     repo = "coursera-dl";
-    rev = version;
-    sha256 = "0akgwzrsx094jj30n4bd2ilwgva4qxx38v3bgm69iqfxi8c2bqbk";
+    rev = "refs/tags/${version}";
+    hash = "sha256-c+ElGIrd4ZhMfWtsNHrHRO3HaRRtEQuGlCSBrvPnbyo=";
   };
 
-  nativeBuildInputs = with pythonPackages; [ pandoc ];
-
-  buildInputs = with pythonPackages; [ glibcLocales ];
-
-  propagatedBuildInputs = with pythonPackages; [ attrs beautifulsoup4 configargparse keyring pyasn1 requests six urllib3 ];
-
-  nativeCheckInputs = with pythonPackages; [ pytest mock ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/coursera-dl/coursera-dl/commit/c8796e567698be166cb15f54e095140c1a9b567e.patch";
+      hash = "sha256-e52QPr4XH+HnB49R+nkG0KC9Zf1TbPf92dcP7ts3ih0=";
+    })
+    (fetchpatch {
+      url = "https://github.com/coursera-dl/coursera-dl/commit/6c221706ba828285ca7a30a08708e63e3891b36f.patch";
+      hash = "sha256-/AKFvBPInSq/lsz+G0jVSl/ukVgCnt66oePAb+66AjI=";
+    })
+    # https://github.com/coursera-dl/coursera-dl/pull/857
+    (fetchpatch {
+      name = "python-3.11-compatibility.patch";
+      url = "https://github.com/coursera-dl/coursera-dl/commit/7b0783433b6b198fca9e51405b18386f90790892.patch";
+      hash = "sha256-OpW8gqzrMyaE69qH3uGsB5TNQTYaO7pn3uJ7NU5SrcM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -31,25 +44,39 @@ in pythonPackages.buildPythonApplication rec {
     export LC_ALL=en_US.utf-8
   '';
 
-  checkPhase = ''
-    # requires dbus service
-    py.test -k 'not test_get_credentials_with_keyring' .
-  '';
+  nativeBuildInputs = with python3.pkgs; [
+    pandoc
+  ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/coursera-dl/coursera-dl/commit/c8796e567698be166cb15f54e095140c1a9b567e.patch";
-      sha256 = "sha256:07ca6zdyw3ypv7yzfv2kzmjvv86h0rwzllcg0zky27qppqz917bv";
-    })
-    (fetchpatch {
-      url = "https://github.com/coursera-dl/coursera-dl/commit/6c221706ba828285ca7a30a08708e63e3891b36f.patch";
-      sha256 = "sha256-/AKFvBPInSq/lsz+G0jVSl/ukVgCnt66oePAb+66AjI=";
-    })
+  buildInputs = with python3.pkgs; [
+    glibcLocales
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    attrs
+    beautifulsoup4
+    configargparse
+    keyring
+    pyasn1
+    requests
+    six
+    urllib3
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    mock
+  ];
+
+  disabledTests = [
+    "test_get_credentials_with_keyring"
+    "test_quiz_exam_to_markup_converter"
   ];
 
   meta = with lib; {
     description = "CLI for downloading Coursera.org videos and naming them";
     homepage = "https://github.com/coursera-dl/coursera-dl";
+    changelog = "https://github.com/coursera-dl/coursera-dl/blob/0.11.5/CHANGELOG.md";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ alexfmpe ];
     platforms = platforms.darwin ++ platforms.linux;

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "polarizationsolver";
   version = "unstable-2021-11-02";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "reinholdt";
@@ -18,6 +19,12 @@ buildPythonPackage rec {
     rev = "00424ac4d1862257a55e4b16543f63ace3fe8c22";
     hash = "sha256-LACf8Xw+o/uJ3+PD/DE/o7nwKY7fv3NyYbpjCrTTnBU=";
   };
+
+  # setup.py states version="dev", which is not a valid version string for setuptools
+  # There has never been a formal stable release, so let's say 0.0 here.
+  postPatch = ''
+    substituteInPlace ./setup.py --replace 'version="dev",' 'version="0.0",'
+  '';
 
   propagatedBuildInputs = [
     numpy

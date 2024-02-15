@@ -6,18 +6,18 @@
 , copyDesktopItems
 , makeDesktopItem
 , gtk3
-, openssl_1_1
 , xdg-user-dirs
 , keybinder3
+, libnotify
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.1.0";
+  version = "0.4.6";
 
   src = fetchzip {
-    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04.tar.gz";
-    sha256 = "sha256-WuEwhJ1YhbldFfisfUsp3GCV2vQy9oTam6BkL/7QEgI=";
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-linux-x86_64.tar.gz";
+    hash = "sha256-496uXlJ/3ID8fnW/LKwk0Waca4gSQBuKIFMJ4EJGcsA=";
     stripRoot = false;
   };
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    openssl_1_1
     keybinder3
+    libnotify
   ];
 
   dontBuild = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mv AppFlowy/* ./
+    cd AppFlowy/
 
     mkdir -p $out/opt/
     mkdir -p $out/bin/
@@ -47,12 +47,15 @@ stdenv.mkDerivation rec {
     # Copy archive contents to the outpout directory
     cp -r ./* $out/opt/
 
+    # Copy icon
+    install -Dm444 data/flutter_assets/assets/images/flowy_logo.svg $out/share/icons/hicolor/scalable/apps/appflowy.svg
+
     runHook postInstall
   '';
 
   preFixup = ''
     # Add missing libraries to appflowy using the ones it comes with
-    makeWrapper $out/opt/app_flowy $out/bin/appflowy \
+    makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
       --set LD_LIBRARY_PATH "$out/opt/lib/" \
       --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
   '';
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
       desktopName = "AppFlowy";
       comment = meta.description;
       exec = "appflowy";
+      icon = "appflowy";
       categories = [ "Office" ];
     })
   ];
@@ -75,5 +79,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${version}";
     maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "appflowy";
   };
 }

@@ -8,14 +8,15 @@
 , secp256k1
 , enableQt ? true
 , callPackage
+, qtwayland
 }:
 
 let
-  version = "4.3.4";
+  version = "4.5.0";
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    if stdenv.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
@@ -28,7 +29,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-0xYGTCk+Sk7LP+E9r2Y7UJZsfbobLe6Yb+x5ZRCN40Y=";
+    sha256 = "sha256-IEKuHUlH+dg+8w+n7XV7hdDOPOFZ/lpUsIlYldwR44Y=";
 
     postFetch = ''
       mv $out ./all
@@ -44,7 +45,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-+Z4NZK/unFN6mxCuMleHBxAoD+U1PzVk3/ZnZRmOOxo=";
+    sha256 = "sha256-s4FH8FtPg4wepU/5XI062dAN9fCYR1xJGwrxftCSKzw=";
   };
 
   postUnpack = ''
@@ -53,6 +54,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -70,8 +72,11 @@ python3.pkgs.buildPythonApplication {
     qrcode
     requests
     tlslite-ng
+    certifi
+    jsonpatch
     # plugins
     btchip-python
+    ledger-bitcoin
     ckcc-protocol
     keepkey
     trezor
@@ -83,7 +88,7 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
-      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
     # ... and regenerating the paymentrequest_pb2.py file
     protoc --python_out=. electrum/paymentrequest.proto
 
@@ -132,5 +137,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ joachifm np prusnak ];
+    mainProgram = "electrum";
   };
 }

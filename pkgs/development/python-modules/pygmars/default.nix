@@ -20,6 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-PiH1lV1Vt9VTSOB+jep8FHIdk8qnauxj4nP3CIi/m7o=";
   };
 
+  postPatch = ''
+    # https://github.com/nexB/pygmars/pull/9
+    substituteInPlace setup.cfg \
+      --replace ">=3.6.*" ">=3.6"
+  '';
+
   dontConfigure = true;
 
   nativeBuildInputs = [

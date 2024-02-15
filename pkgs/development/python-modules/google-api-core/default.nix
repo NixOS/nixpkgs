@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.11.0";
+  version = "2.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S5u11aOAoL76BXOzAmUbipqJJiwXMON79CPOxRGATCI=";
+    hash = "sha256-U2ikUCt5PZu/gSpZEuE+Tmn5vYf277UIRgxD9bvRzkE=";
   };
 
   propagatedBuildInputs = [
@@ -87,6 +87,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-api-core";
     changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

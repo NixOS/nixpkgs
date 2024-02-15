@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "pyexcel";
   version = "0.7.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -38,6 +39,6 @@ buildPythonPackage rec {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

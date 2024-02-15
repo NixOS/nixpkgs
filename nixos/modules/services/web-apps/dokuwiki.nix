@@ -3,6 +3,8 @@
 with lib;
 
 let
+  inherit (lib.options) showOption showFiles;
+
   cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
   user = "dokuwiki";
@@ -63,7 +65,6 @@ let
     conf_gen = c: map (v: "$conf${v}") (mkPhpAttrVals c);
   in writePhpFile "local-${hostName}.php" ''
     ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
-    ${toString cfg.extraConfig}
   '';
 
   dokuwikiPluginsLocalConfig = hostName: cfg: let
@@ -90,13 +91,13 @@ let
 
       page = mkOption {
         type = types.str;
-        description = "Page or namespace to restrict";
+        description = lib.mdDoc "Page or namespace to restrict";
         example = "start";
       };
 
       actor = mkOption {
         type = types.str;
-        description = "User or group to restrict";
+        description = lib.mdDoc "User or group to restrict";
         example = "@external";
       };
 
@@ -112,50 +113,22 @@ let
       in mkOption {
         type = types.enum ((attrValues available) ++ (attrNames available));
         apply = x: if isInt x then x else available.${x};
-        description = ''
+        description = lib.mdDoc ''
           Permission level to restrict the actor(s) to.
           See <https://www.dokuwiki.org/acl#background_info> for explanation
         '';
         example = "read";
       };
-
     };
   };
 
-  siteOpts = { config, lib, name, ... }:
+  siteOpts = { options, config, lib, name, ... }:
     {
-      imports = [
-        # NOTE: These will sadly not print the absolute argument path but only the name. Related to #96006
-        (mkRenamedOptionModule [ "aclUse" ] [ "settings" "useacl" ] )
-        (mkRenamedOptionModule [ "superUser" ] [ "settings" "superuser" ] )
-        (mkRenamedOptionModule [ "disableActions" ] [ "settings" "disableactions" ] )
-        ({ config, options, name, ...}: {
-          config.warnings =
-            (optional (isString config.pluginsConfig) ''
-              Passing plain strings to services.dokuwiki.sites.${name}.pluginsConfig has been deprecated and will not be continue to be supported in the future.
-              Please pass structured settings instead.
-            '')
-            ++ (optional (isString config.acl) ''
-              Passing a plain string to services.dokuwiki.sites.${name}.acl has been deprecated and will not continue to be supported in the future.
-              Please pass structured settings instead.
-            '')
-            ++ (optional (config.extraConfig != null) ''
-              services.dokuwiki.sites.${name}.extraConfig is deprecated and will be removed in the future.
-              Please pass structured settings to services.dokuwiki.sites.${name}.settings instead.
-            '')
-          ;
-        })
-      ];
 
       options = {
         enable = mkEnableOption (lib.mdDoc "DokuWiki web application");
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.dokuwiki;
-          defaultText = literalExpression "pkgs.dokuwiki";
-          description = lib.mdDoc "Which DokuWiki package to use.";
-        };
+        package = mkPackageOption pkgs "dokuwiki" { };
 
         stateDir = mkOption {
           type = types.path;
@@ -164,7 +137,7 @@ let
         };
 
         acl = mkOption {
-          type = with types; nullOr (oneOf [ lines (listOf (submodule aclOpts)) ]);
+          type = with types; nullOr (listOf (submodule aclOpts));
           default = null;
           example = literalExpression ''
             [
@@ -203,7 +176,7 @@ let
         };
 
         pluginsConfig = mkOption {
-          type = with types; oneOf [lines (attrsOf bool)];
+          type = with types; attrsOf bool;
           default = {
             authad = false;
             authldap = false;
@@ -303,14 +276,9 @@ let
           '';
         };
 
-        phpPackage = mkOption {
-          type = types.package;
-          relatedPackages = [ "php80" "php81" ];
-          default = pkgs.php81;
-          defaultText = "pkgs.php81";
-          description = lib.mdDoc ''
-            PHP package to use for this dokuwiki site.
-          '';
+        phpPackage = mkPackageOption pkgs "php" {
+          default = "php81";
+          example = "php82";
         };
 
         phpOptions = mkOption {
@@ -370,36 +338,6 @@ let
           '';
         };
 
-        extraConfig = mkOption {
-          # This Option is deprecated and only kept until sometime before 23.05 for compatibility reasons
-          # FIXME (@e1mo): Actually remember removing this before 23.05.
-          visible = false;
-          type = types.nullOr types.lines;
-          default = null;
-          example = ''
-            $conf['title'] = 'My Wiki';
-            $conf['userewrite'] = 1;
-          '';
-          description = lib.mdDoc ''
-            DokuWiki configuration. Refer to
-            <https://www.dokuwiki.org/config>
-            for details on supported values.
-
-            **Note**: Please pass Structured settings via
-            `services.dokuwiki.sites.${name}.settings` instead.
-          '';
-        };
-
-      # Required for the mkRenamedOptionModule
-      # TODO: Remove me once https://github.com/NixOS/nixpkgs/issues/96006 is fixed
-      # or the aclUse, ... options are removed.
-      warnings = mkOption {
-        type = types.listOf types.unspecified;
-        default = [ ];
-        visible = false;
-        internal = true;
-      };
-
     };
   };
 in
@@ -432,19 +370,6 @@ in
 
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
-
-    warnings = flatten (mapAttrsToList (_: cfg: cfg.warnings) eachSite);
-
-    assertions = flatten (mapAttrsToList (hostName: cfg:
-    [{
-      assertion = cfg.mergedConfig.useacl -> (cfg.acl != null || cfg.aclFile != null);
-      message = "Either services.dokuwiki.sites.${hostName}.acl or services.dokuwiki.sites.${hostName}.aclFile is mandatory if settings.useacl is true";
-    }
-    {
-      assertion = cfg.usersFile != null -> cfg.mergedConfig.useacl != false;
-      message = "services.dokuwiki.sites.${hostName}.settings.useacl must must be true if usersFile is not null";
-    }
-    ]) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {

@@ -5,6 +5,7 @@
 
 buildPythonPackage rec {
   version = "0.1";
+  format = "setuptools";
   pname = "dj-search-url";
 
   src = fetchPypi {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dstufft/dj-search-url";
     description = "Use Search URLs in your Django Haystack Application";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 
 }

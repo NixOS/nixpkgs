@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ ... }:
         fsType = "btrfs";
       };
     };
-    services.snapper.configs.home.subvolume = "/home";
+    services.snapper.configs.home.SUBVOLUME = "/home";
     services.snapper.filters = "/nix";
   };
 

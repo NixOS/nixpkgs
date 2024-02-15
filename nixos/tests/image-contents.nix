@@ -27,13 +27,19 @@ let
     inherit pkgs config;
     lib = pkgs.lib;
     format = "qcow2";
-    contents = [{
-      source = pkgs.writeText "testFile" "contents";
-      target = "/testFile";
-      user = "1234";
-      group = "5678";
-      mode = "755";
-    }];
+    contents = [
+      {
+        source = pkgs.writeText "testFile" "contents";
+        target = "/testFile";
+        user = "1234";
+        group = "5678";
+        mode = "755";
+      }
+      {
+        source = ./.;
+        target = "/testDir";
+      }
+    ];
   }) + "/nixos.qcow2";
 
 in makeEc2Test {
@@ -42,10 +48,15 @@ in makeEc2Test {
   userData = null;
   script = ''
     machine.start()
+    # Test that if contents includes a file, it is copied to the target.
     assert "content" in machine.succeed("cat /testFile")
     fileDetails = machine.succeed("ls -l /testFile")
     assert "1234" in fileDetails
     assert "5678" in fileDetails
     assert "rwxr-xr-x" in fileDetails
+
+    # Test that if contents includes a directory, it is copied to the target.
+    dirList = machine.succeed("ls /testDir")
+    assert "image-contents.nix" in dirList
   '';
 }

@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     chmod -R u+w macosx/*.nib
   '';
 
+  # Unfortunately, PlistBuddy from xcbuild is not compatible enough pinentry-mac’s build process.
+  sandboxProfile = ''
+    (allow process-exec (literal "/usr/libexec/PlistBuddy"))
+  '';
+
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ libassuan libgpg-error libiconv Cocoa ];
 
@@ -80,5 +85,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/GPGTools/pinentry-mac";
     platforms = lib.platforms.darwin;
+    mainProgram = passthru.binaryPath;
   };
 }

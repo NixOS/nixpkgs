@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jflex";
-  version = "1.8.2";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "http://jflex.de/release/jflex-${version}.tar.gz";
-    sha256 = "1ar7g6zb2xjgnws3j4cqcp86jplhc9av8cpcjdmxw08x6igd5q51";
+    sha256 = "sha256-4MHp7vkf9t8E1z+l6v8T86ArZ5/uFHTlzK4AciTfbfY=";
   };
 
   sourceRoot = "${pname}-${version}";

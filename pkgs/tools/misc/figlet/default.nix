@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
       name = "musl-fix-cplusplus-decls.patch";
       sha256 = "1720zgrfk9makznqkbjrnlxm7nnhk6zx7g458fv53337n3g3zn7j";
     })
+    (fetchpatch {
+      url = "https://github.com/cmatsuoka/figlet/commit/9a50c1795bc32e5a698b855131ee87c8d7762c9e.patch";
+      name = "unistd-on-darwin.patch";
+      sha256 = "hyfY87N+yuAwjsBIjpgvcdJ1IbzlR4A2yUJQSzShCRI=";
+    })
   ];
 
   makeFlags = [ "prefix=$(out)" "CC:=$(CC)" "LD:=$(CC)" ];

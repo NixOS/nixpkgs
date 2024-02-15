@@ -2,26 +2,29 @@
 , buildPythonPackage
 , fetchPypi
 , aiohttp
-, async-timeout
 , lxml
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
-  version = "0.2.3";
-  format = "setuptools";
+  version = "0.3.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bbg1FzzJ3cJIbV+u3Ih70hkgu23Joxc1xeLELiRYt8g=";
+    hash = "sha256-B3K9wDFj7uSgs6BsJUnD6r2JVcH7u7UrbVXUTMGqmQE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
-    async-timeout
     lxml
   ];
 

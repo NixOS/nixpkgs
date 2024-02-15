@@ -32,17 +32,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.1";
+  version = "9.4";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    sha256 = "sha256-YaH0ENeLp+fzelpPUObRMgrKMzdUhKMlXt3xejhYBCM=";
+    hash = "sha256-6mE6TPRGEjJukXIBu7zfvTAd4h/8O1m25cB+BAsnXlI=";
   };
-
-  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
-    ./disable-seek-hole.patch
-  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -55,7 +50,7 @@ stdenv.mkDerivation rec {
 
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
-    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
 
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
@@ -82,10 +77,8 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
   ])) + (optionalString stdenv.isAarch64 ''
-    sed '2i print "Skipping tail assert test"; exit 77' -i ./tests/tail-2/assert.sh
-
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
-    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/misc/cut-huge-range.sh
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
   '');
 
   outputs = [ "out" "info" ];
@@ -136,10 +129,8 @@ stdenv.mkDerivation rec {
   # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
-  # On aarch64+musl, test-init.sh fails due to a segfault in diff.
   doCheck = (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
-    && !(stdenv.hostPlatform.libc == "musl" && stdenv.hostPlatform.isAarch64)
     && !stdenv.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.

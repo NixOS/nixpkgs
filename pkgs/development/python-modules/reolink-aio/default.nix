@@ -1,17 +1,16 @@
 { lib
 , aiohttp
-, aiounittest
+, aiortsp
 , buildPythonPackage
 , fetchFromGitHub
-, ffmpeg-python
-, pytestCheckHook
+, orjson
 , pythonOlder
-, requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.5.5";
+  version = "0.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -20,46 +19,22 @@ buildPythonPackage rec {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-Nu0U/I0dDwJ2wAk2Vj6nMt0/0galfTPurj8MqAUzSks=";
+    hash = "sha256-+Yhw7Wbt0K7BLXatd/UANnnNWPkxgk8SqAyV9Kk4hos=";
   };
 
-  postPatch = ''
-    # Packages in nixpkgs is different than the module name
-    substituteInPlace setup.py \
-      --replace "ffmpeg" "ffmpeg-python"
-  '';
   propagatedBuildInputs = [
     aiohttp
-    ffmpeg-python
-    requests
-  ];
-
-  doCheck = false; # all testse require a network device
-
-  nativeCheckInputs = [
-    aiounittest
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "tests/test.py"
-  ];
-
-  disabledTests = [
-    # Tests require network access
-    "test1_settings"
-    "test2_states"
-    "test3_images"
-    "test4_properties"
-    "test_succes"
-    "test_wrong_host"
-    "test_wrong_password"
-    "test_wrong_user"
+    aiortsp
+    orjson
+    typing-extensions
   ];
 
   pythonImportsCheck = [
     "reolink_aio"
   ];
+
+  # All tests require a network device
+  doCheck = false;
 
   meta = with lib; {
     description = "Module to interact with the Reolink IP camera API";

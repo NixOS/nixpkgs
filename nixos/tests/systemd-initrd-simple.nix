@@ -2,15 +2,18 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "systemd-initrd-simple";
 
   nodes.machine = { pkgs, ... }: {
-    boot.initrd.systemd = {
-      enable = true;
-      emergencyAccess = true;
-    };
+    testing.initrdBackdoor = true;
+    boot.initrd.systemd.enable = true;
     virtualisation.fileSystems."/".autoResize = true;
   };
 
   testScript = ''
     import subprocess
+
+    with subtest("testing initrd backdoor"):
+        machine.wait_for_unit("initrd.target")
+        machine.succeed("systemctl status initrd-fs.target")
+        machine.switch_root()
 
     with subtest("handover to stage-2 systemd works"):
         machine.wait_for_unit("multi-user.target")
@@ -27,6 +30,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         machine.succeed("[ -e /dev/pts/ptmx ]") # /dev/pts
         machine.succeed("[ -e /run/keys ]") # /run/keys
 
+    with subtest("groups work"):
+        machine.fail("journalctl -b 0 | grep 'systemd-udevd.*Unknown group.*ignoring'")
 
     with subtest("growfs works"):
         oldAvail = machine.succeed("df --output=avail / | sed 1d")
@@ -35,6 +40,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         subprocess.check_call(["qemu-img", "resize", "vm-state-machine/machine.qcow2", "+1G"])
 
         machine.start()
+        machine.switch_root()
         newAvail = machine.succeed("df --output=avail / | sed 1d")
 
         assert int(oldAvail) < int(newAvail), "File system did not grow"

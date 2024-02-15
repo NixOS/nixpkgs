@@ -3,6 +3,7 @@
 , autoconf
 , automake
 , fetchFromGitHub
+, fetchpatch
 , libpcap
 , ncurses
 , openssl
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dXCOuae/T38Ltq4uywPJW5TGMyXwaECUj3/Zq4sDflU=";
+    sha256 = "sha256-9ccp5Pxhs7jOQuWHCmU9yvzLKeOAN8lEaieCIvnXJRA=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./bootstrap.sh
   '';
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A tool for displaying SIP calls message flows from terminal";

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "py-desmume";
-  version = "0.0.4.post2";
+  version = "0.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
-    rev = version;
-    hash = "sha256-a819+K/Ovnz53ViDKpUGGjeblWvrAO5ozt/tizdLKCY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AgUdILCqpmuVI3uMSdGl+lIfUVXnIo/egm/48FMRF3M=";
     fetchSubmodules = true;
   };
 
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "Python library to interface with DeSmuME, the Nintendo DS emulator";
     homepage = "https://github.com/SkyTemple/py-desmume";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ marius851000 xfix ];
   };
 }

@@ -21,13 +21,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.10";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
     rev = "refs/tags/${version}";
-    hash = "sha256-Uln0uoaEZgV9FN3HEBTeFOD7d6RkAQLgQZw7bcgu26A=";
+    hash = "sha256-FjnhV7vzRPVDCgUNK8CHo3arKXuwe+3xH/5AxCVgeIY=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gexiv2
-    gobject-introspection
     gtk3
     hicolor-icon-theme
     libnotify
@@ -50,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     beautifulsoup4
     configobj
     dbus-python
-    distutils_extra
+    distutils-extra
     httplib2
     lxml
     pillow
@@ -75,10 +74,9 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace variety_lib/varietyconfig.py \
       --replace "__variety_data_directory__ = \"../data\"" \
                 "__variety_data_directory__ = \"$out/share/variety\""
-    substituteInPlace data/scripts/set_wallpaper \
-      --replace /bin/bash ${runtimeShell}
-    substituteInPlace data/scripts/get_wallpaper \
-      --replace /bin/bash ${runtimeShell}
+    substituteInPlace variety/VarietyWindow.py \
+      --replace '[script,' '["${runtimeShell}", script,' \
+      --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
   '';
 
   meta = with lib; {

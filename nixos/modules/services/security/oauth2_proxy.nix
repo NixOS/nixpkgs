@@ -72,15 +72,14 @@ let
   } // (getProviderOptions cfg cfg.provider) // cfg.extraConfig;
 
   mapConfig = key: attr:
-  if attr != null && attr != [] then (
+  optionalString (attr != null && attr != []) (
     if isDerivation attr then mapConfig key (toString attr) else
     if (builtins.typeOf attr) == "set" then concatStringsSep " "
       (mapAttrsToList (name: value: mapConfig (key + "-" + name) value) attr) else
     if (builtins.typeOf attr) == "list" then concatMapStringsSep " " (mapConfig key) attr else
     if (builtins.typeOf attr) == "bool" then "--${key}=${boolToString attr}" else
     if (builtins.typeOf attr) == "string" then "--${key}='${attr}'" else
-    "--${key}=${toString attr}")
-    else "";
+    "--${key}=${toString attr}");
 
   configString = concatStringsSep " " (mapAttrsToList mapConfig allConfig);
 in
@@ -88,14 +87,7 @@ in
   options.services.oauth2_proxy = {
     enable = mkEnableOption (lib.mdDoc "oauth2_proxy");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.oauth2-proxy;
-      defaultText = literalExpression "pkgs.oauth2-proxy";
-      description = lib.mdDoc ''
-        The package that provides oauth2-proxy.
-      '';
-    };
+    package = mkPackageOption pkgs "oauth2-proxy" { };
 
     ##############################################
     # PROVIDER configuration
@@ -580,7 +572,8 @@ in
       description = "OAuth2 Proxy";
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       serviceConfig = {
         User = "oauth2_proxy";

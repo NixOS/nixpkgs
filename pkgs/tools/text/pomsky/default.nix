@@ -1,17 +1,35 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, oniguruma }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pomsky";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "pomsky-lang";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-V4WztquClcBQF74c8WalWITT+SRymEawLXmvTflNEGk=";
+    hash = "sha256-BoA59P0jzV08hlFO7NPB9E+fdpYB9G50dNggFkexc/c=";
   };
 
-  cargoHash = "sha256-34lI4zI1JMYek3sCXOWw08EqhaI1bqTGFPxeEYmEbXQ=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "onig_sys-69.8.1" = "sha256-NJv/Dooh93yQ9KYyuNBhO1c4U7Gd7X007ECXyRsztrY=";
+    };
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    oniguruma
+  ];
+
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  };
 
   # thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: invalid option '--test-threads''
   doCheck = false;

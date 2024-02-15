@@ -1,30 +1,37 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , cryptography
 , ifaddr
-, voluptuous
-, pyyaml
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.7.0";
-  format = "setuptools";
+  version = "2.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "XKNX";
-    repo = pname;
+    repo = "xknx";
     rev = "refs/tags/${version}";
-    hash = "sha256-Hr2uDFsYArU4iSK0xKZONjEgVZU0C0e4UpAD03t10zA=";
+    hash = "sha256-Fwo76tvkLLx8QJeokuGohhnt83eGBMyWIUSHJGuQWJ4=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
   propagatedBuildInputs = [
+    async-timeout
     cryptography
     ifaddr
   ];

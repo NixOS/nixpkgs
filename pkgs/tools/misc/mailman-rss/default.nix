@@ -1,10 +1,10 @@
-{ lib, python3Packages, withTwitter ? false}:
+{ lib, python3Packages, fetchPypi, withTwitter ? false}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mailman-rss";
   version = "0.2.4";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "1brrik70jyagxa9l0cfmlxvqpilwj1q655bphxnvjxyganxf4c00";
   };
@@ -21,5 +21,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/kyamagu/mailman-rss";
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
+    mainProgram = "mailman-rss";
   };
 }

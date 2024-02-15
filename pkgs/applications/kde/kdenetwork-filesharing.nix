@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kcoreaddons, kdeclarative, ki18n, kio, kwidgetsaddons, samba,
+  kcoreaddons, kdeclarative, ki18n, kio, kwidgetsaddons, samba, qcoro
 }:
 
 mkDerivation {
@@ -11,5 +11,5 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kcoreaddons kdeclarative ki18n kio kwidgetsaddons samba ];
+  buildInputs = [ kcoreaddons kdeclarative ki18n kio kwidgetsaddons samba qcoro ];
 }

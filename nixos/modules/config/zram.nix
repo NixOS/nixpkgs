@@ -82,39 +82,48 @@ in
           {command}`cat /sys/class/block/zram*/comp_algorithm`
         '';
       };
+
+      writebackDevice = lib.mkOption {
+        default = null;
+        example = "/dev/zvol/tarta-zoot/swap-writeback";
+        type = lib.types.nullOr lib.types.path;
+        description = lib.mdDoc ''
+          Write incompressible pages to this device,
+          as there's no gain from keeping them in RAM.
+        '';
+      };
     };
 
   };
 
   config = lib.mkIf cfg.enable {
 
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isModule "ZRAM")
+    assertions = [
+      {
+        assertion = cfg.writebackDevice == null || cfg.swapDevices <= 1;
+        message = "A single writeback device cannot be shared among multiple zram devices";
+      }
     ];
 
-    # Disabling this for the moment, as it would create and mkswap devices twice,
-    # once in stage 2 boot, and again when the zram-reloader service starts.
-    # boot.kernelModules = [ "zram" ];
+    services.zram-generator.enable = true;
 
-    systemd.packages = [ pkgs.zram-generator ];
-    systemd.services."systemd-zram-setup@".path = [ pkgs.util-linux ]; # for mkswap
-
-    environment.etc."systemd/zram-generator.conf".source =
-      (pkgs.formats.ini { }).generate "zram-generator.conf" (lib.listToAttrs
-        (builtins.map
-          (dev: {
-            name = dev;
-            value =
-              let
-                size = "${toString cfg.memoryPercent} / 100 * ram";
-              in
-              {
-                zram-size = if cfg.memoryMax != null then "min(${size}, ${toString cfg.memoryMax} / 1024 / 1024)" else size;
-                compression-algorithm = cfg.algorithm;
-                swap-priority = cfg.priority;
-              };
-          })
-          devices));
+    services.zram-generator.settings = lib.listToAttrs
+      (builtins.map
+        (dev: {
+          name = dev;
+          value =
+            let
+              size = "${toString cfg.memoryPercent} / 100 * ram";
+            in
+            {
+              zram-size = if cfg.memoryMax != null then "min(${size}, ${toString cfg.memoryMax} / 1024 / 1024)" else size;
+              compression-algorithm = cfg.algorithm;
+              swap-priority = cfg.priority;
+            } // lib.optionalAttrs (cfg.writebackDevice != null) {
+              writeback-device = cfg.writebackDevice;
+            };
+        })
+        devices);
 
   };
 

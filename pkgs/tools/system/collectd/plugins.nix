@@ -1,6 +1,5 @@
 { lib, stdenv
 , curl
-, darwin
 , hiredis
 , iptables
 , jdk
@@ -19,7 +18,6 @@
 , libsigrok
 , libvirt
 , libxml2
-, libapparmor, libcap_ng, numactl
 , lua
 , lvm2
 , lm_sensors

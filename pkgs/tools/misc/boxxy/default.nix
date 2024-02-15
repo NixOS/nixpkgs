@@ -1,21 +1,35 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, pkg-config
+, oniguruma
 , stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "boxxy";
-  version = "0.3.6";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "queer";
     repo = "boxxy";
     rev = "v${version}";
-    hash = "sha256-Iy4PDtqjAqZ8MKPAnPqLqsd+d37PB57fJE8C1fOdfQ4=";
+    hash = "sha256-euIecFMDktL0gDkso83T1qZfVdfYAAC+WBMsfZaarAQ=";
   };
 
-  cargoHash = "sha256-wBSgdVNoGksvMFcRRAvYXrIw12BlW40zSPOmboGuVhQ=";
+  cargoHash = "sha256-8aIuMRjZHLlP3x+C9S9WX21/i98RAUvGGwzptzCpRR4=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    oniguruma
+  ];
+
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  };
 
   meta = with lib; {
     description = "Puts bad Linux applications in a box with only their files";
@@ -24,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dit7ya figsoda ];
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
+    mainProgram = "boxxy";
   };
 }

@@ -402,11 +402,16 @@ let format' = format; in let
         done
       else
         mkdir -p $root/$(dirname $target)
-        if ! [ -e $root/$target ]; then
-          rsync $rsync_flags $source $root/$target
-        else
+        if [ -e $root/$target ]; then
           echo "duplicate entry $target -> $source"
           exit 1
+        elif [ -d $source ]; then
+          # Append a slash to the end of source to get rsync to copy the
+          # directory _to_ the target instead of _inside_ the target.
+          # (See `man rsync`'s note on a trailing slash.)
+          rsync $rsync_flags $source/ $root/$target
+        else
+          rsync $rsync_flags $source $root/$target
         fi
       fi
     done
@@ -506,7 +511,7 @@ let format' = format; in let
     ${if format == "raw" then ''
       mv $diskImage $out/${filename}
     '' else ''
-      ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+      ${pkgs.qemu-utils}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
     ''}
     diskImage=$out/${filename}
   '';
@@ -517,11 +522,16 @@ let format' = format; in let
     chmod 0644 $efiVars
   '';
 
+  createHydraBuildProducts = ''
+    mkdir -p $out/nix-support
+    echo "file ${format}-image $out/${filename}" >> $out/nix-support/hydra-build-products
+  '';
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
       preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-      postVM = moveOrConvertImage + postVM;
+      postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
       QEMU_OPTS =
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
         ++ lib.optionals touchEFIVars [
@@ -567,7 +577,8 @@ let format' = format; in let
       ${lib.optionalString installBootLoader ''
         # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
         # Use this option to create a symlink from vda to any arbitrary device you want.
-        ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
+        ${optionalString (config.boot.loader.grub.enable && config.boot.loader.grub.device != "/dev/vda") ''
+            mkdir -p $(dirname ${config.boot.loader.grub.device})
             ln -s /dev/vda ${config.boot.loader.grub.device}
         ''}
 
@@ -610,5 +621,5 @@ let format' = format; in let
 in
   if onlyNixStore then
     pkgs.runCommand name {}
-      (prepareImage + moveOrConvertImage + postVM)
+      (prepareImage + moveOrConvertImage + createHydraBuildProducts + postVM)
   else buildImage

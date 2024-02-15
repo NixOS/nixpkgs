@@ -3,14 +3,11 @@
  systemd}:
 stdenv.mkDerivation rec {
   pname = "spice-vdagent";
-  version = "0.21.0";
+  version = "0.22.1";
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
-    sha256 = "0n8jlc1pv6mkry161y656b1nk9hhhminjq6nymzmmyjl7k95ymzx";
+    hash = "sha256-k7DRWspHYsx9N5sXmnEBFJ267WK3IRL/+ys+kLEWh6A=";
   };
-
-  # FIXME: May no longer be needed with spice-vdagent versions over 0.21.0
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out

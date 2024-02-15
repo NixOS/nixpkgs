@@ -5,9 +5,10 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , wrapGAppsHook4
+, elementary-gtk-theme
+, elementary-icon-theme
 , granite7
 , gtk4
 , libgee
@@ -15,33 +16,37 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calculator";
     rev = version;
-    sha256 = "sha256-7aKJDlpODIysrHtqtD5wfd+dULFpD+LfWsjzg3OAxkY=";
+    sha256 = "sha256-VPxCW2lVA/nS2aJsjLgkuEM9wnAzyEr864XY8tfLQAY=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
   ];
 
   buildInputs = [
+    elementary-icon-theme
     granite7
     gtk4
     libgee
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
   '';
 
   passthru = {

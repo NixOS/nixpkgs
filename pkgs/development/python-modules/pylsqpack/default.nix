@@ -1,17 +1,23 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pylsqpack";
-  version = "0.3.16";
+  version = "0.3.18";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tnps4/aTfYUGgYJ3FL5zCqNhwEnjd1Lj7Z3xHn8jL/s=";
+    hash = "sha256-Ra5V5yGHdQX01czUlZHWk1PypUioZz36+yUdOFs8CX8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

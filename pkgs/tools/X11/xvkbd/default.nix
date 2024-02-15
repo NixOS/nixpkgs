@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.bennofs ];
     platforms = platforms.linux;
+    mainProgram = "xvkbd";
   };
 }

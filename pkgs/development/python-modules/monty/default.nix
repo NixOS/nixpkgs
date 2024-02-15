@@ -9,27 +9,35 @@
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
+, setuptools
+, setuptools-scm
+, torch
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2022.9.9";
-  format = "setuptools";
+  version = "2024.2.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
-    repo = pname;
+    repo = "monty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7ToNiRSWxe9nNcaWWmS6bhVqWMEwXN4uiwtjAmuK5qw=";
+    hash = "sha256-tKt0IMUmx1WvnQ27PyeyEEGekOKGY33YX4af1/ipbk4=";
   };
 
   postPatch = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     msgpack
@@ -43,6 +51,7 @@ buildPythonPackage rec {
     pydantic
     pymongo
     pytestCheckHook
+    torch
   ];
 
   pythonImportsCheck = [

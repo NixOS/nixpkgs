@@ -3,20 +3,20 @@
 }:
 let
   pname = "josm";
-  version = "18678";
+  version = "18969";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-p0HjjF4SLPsD/KcAPNyHasuGrDPSQ/2KHjX1R2eywNo=";
+      hash = "sha256-a8muRwE4+9WdYVz7lYE9dRnqVIGQxL8cFmIdBr2R65U=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java17.zip";
-      hash = "sha256-YlSFHx37RkdTlQ3/ZAqj+ezv+cSVifsxR7s6S7pDd4o=";
+      hash = "sha256-npXY7WJM1+9ygeAw102UtimnI/yXqs5vgPnatm4AIrI=";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      sha256 = "sha256-Cga17ymUROJb5scpyOlo6JIgQ77yHavI0ciUpZN+jLk=";
+      sha256 = "sha256-RFZGRTDdWP/goH/Ev16nhq1SjxYkfFr3djwSrotK7Fo=";
     };
   };
 in
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rycee sikmir ];
     platforms = platforms.all;
+    mainProgram = "josm";
   };
 }

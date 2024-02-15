@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
       See https://github.com/tonsky/FiraCode/issues/211.
     '';
     license = licenses.ofl;
-    maintainers = [ maintainers.Profpatsch ];
+    maintainers = [ ];
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }

@@ -1,31 +1,53 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, six
-, flake8
-, nose
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "polyline";
-  version = "2.0.0";
+  version = "2.0.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FJK4/K3CFD+K7cZz08bZXfRRMfHGLrjVHIGDsk53FIY=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "frederickjansen";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fbGGfZdme4OiIGNlXG1uVl1xP+rPVI9l5hjHM0gwAsE=";
   };
 
-  propagatedBuildInputs = [ six ];
-  nativeCheckInputs = [ flake8 nose ];
-  checkPhase = ''
-    nosetests
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=polyline --cov-report term-missing" ""
   '';
 
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "polyline"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/hicsail/polyline";
+    description = "Python implementation of Google's Encoded Polyline Algorithm Format";
+    longDescription = ''
+      polyline is a Python implementation of Google's Encoded Polyline Algorithm Format. It is
+      essentially a port of https://github.com/mapbox/polyline.
+    '';
+    homepage = "https://github.com/frederickjansen/polyline";
+    changelog = "https://github.com/frederickjansen/polyline/releases/tag/${version}";
     license = licenses.mit;
-    description = "Python implementation of Google's Encoded Polyline Algorithm Format.";
-    longDescription = "polyline is a Python implementation of Google's Encoded Polyline Algorithm Format (http://goo.gl/PvXf8Y). It is essentially a port of https://github.com/mapbox/polyline built with Python 2 and 3 support in mind.";
     maintainers = with maintainers; [ ersin ];
   };
 }

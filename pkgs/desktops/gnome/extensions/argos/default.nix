@@ -1,14 +1,14 @@
 { fetchFromGitHub, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  pname = "argos-unstable";
-  version = "20220930";
+  pname = "argos";
+  version = "unstable-2023-09-26";
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "argos";
-    rev = "f5f6f5bf6ab33dd2d65a490efe8faac5a0c07dc6";
-    hash = "sha256-kI8EpZ68loM5oOS9Dkde+dkldD08mo9VcDqNhecyTOU=";
+    rev = "adfaa31e8c08f7b59e9492891a7e6f753c29b35e";  # https://github.com/p-e-w/argos/pull/150
+    hash = "sha256-st8AeMRtkvM4M/Z70qopjw9Yx0t9l0DsUke4ClQtcBU=";
   };
 
   installPhase = ''

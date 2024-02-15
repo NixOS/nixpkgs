@@ -9,17 +9,17 @@
 , qtbase
 , qtgraphicaleffects
 , qtquickcontrols2
-, yubikey-manager4
+, yubikey-manager
 , yubikey-personalization
 }:
 
 mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-PxHc7IeRsO+CPrNTofGypLLW8fSHDkcBqr75NwdlUyc=";
+    url = "https://developers.yubico.com/yubikey-manager-qt/Releases/yubikey-manager-qt-${version}.tar.gz";
+    hash = "sha256-6bKeR3UX2DhXGcKJ1bxvT1aLTgCfc+aNo6ckE89NV+I=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ mkDerivation rec {
   ];
 
   pythonPath = [
-    (yubikey-manager4.override { python3Packages = python3.pkgs; })
+    (yubikey-manager.override { python3Packages = python3.pkgs; })
   ];
 
   postInstall = ''
@@ -80,6 +80,7 @@ mkDerivation rec {
     homepage = "https://developers.yubico.com/yubikey-manager-qt/";
     license = licenses.bsd2;
     maintainers = [ maintainers.cbley ];
+    mainProgram = "ykman-gui";
     platforms = platforms.linux;
   };
 }

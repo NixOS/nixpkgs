@@ -4,7 +4,7 @@
 , makeWrapper
 }:
 
-# defined in trivial-builders.nix
+# defined in trivial-builders
 # imported as wrapLua in lua-packages.nix and passed to build-lua-derivation to be used as buildInput
 makeSetupHook {
   name = "wrap-lua-hook";

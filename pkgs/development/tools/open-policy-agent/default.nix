@@ -11,14 +11,15 @@ assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm o
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.48.0";
+  version = "0.61.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    hash = "sha256-//xwk5T477Ae61MqZCrj8VcG23mqrP04/VVuUwtxyio=";
+    hash = "sha256-d0/S9XP/W6Mhs1b9IBzm7kerb6SJ7UzsYS0DnTDVfvY=";
   };
+
   vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,6 +34,10 @@ buildGoModule rec {
         + "ensure you need wasm evaluation. "
         + "`opa build` does not need this feature.")
       "opa_wasm");
+
+  checkFlags = lib.optionals (!enableWasmEval) [
+    "-skip=TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+  ];
 
   preCheck = ''
     # Feed in all but the e2e tests for testing

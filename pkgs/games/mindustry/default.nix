@@ -15,6 +15,7 @@
 , alsa-lib
 , alsa-plugins
 , glew
+, glew-egl
 
 # for soloud
 , libpulseaudio ? null
@@ -30,24 +31,30 @@
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
+
+, enableWayland ? false
 }:
 
 let
   pname = "mindustry";
-  version = "142";
+  version = "146";
   buildVersion = makeBuildVersion version;
+
+  gradleWithJdk = gradle.override { java = jdk; };
+
+  selectedGlew = if enableWayland then glew-egl else glew;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-xL1oy93ljAl1hdzsdEF9NHZL/yb11markUg271C++R4=";
+    hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-CKcAnYAuHQb6wPkDUpinU83MVxhdvhYpjjuS3sEb6cg=";
+    hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -109,7 +116,7 @@ let
     inherit version unpackPhase patches;
     postPatch = cleanupMindustrySrc;
 
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [ gradleWithJdk perl ];
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
@@ -126,7 +133,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-Fy2GXdB+cmRfiQFKnnz+UTUxT+LBTZa69BNwC23XD84=";
+    outputHash = "sha256-hbWLsWorEo+1BBURvrFMXpxvZjJBZ1p7HVlJN5e5JZc=";
   };
 
 in
@@ -139,12 +146,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals enableClient [
     SDL2
-    glew
+    selectedGlew
     alsa-lib
   ];
   nativeBuildInputs = [
     pkg-config
-    gradle
+    gradleWithJdk
     makeWrapper
     jdk
   ] ++ lib.optionals enableClient [
@@ -171,7 +178,7 @@ stdenv.mkDerivation rec {
     pushd ../Arc
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
@@ -186,33 +193,41 @@ stdenv.mkDerivation rec {
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
   '';
 
-  installPhase = with lib; ''
+  installPhase = with lib; let
+    installClient = ''
+      install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry \
+        --add-flags "-jar $out/share/mindustry.jar" \
+        --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
+        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
+        --set SDL_VIDEODRIVER wayland \
+        --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
+      '' + ''
+
+      # Retain runtime depends to prevent them from being cleaned up.
+      # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+      # and will assume that it's not actually needed.
+      # This can cause issues.
+      # See https://github.com/NixOS/nixpkgs/issues/109798.
+      echo "# Retained runtime dependencies: " >> $out/bin/mindustry
+      for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
+        echo "# $dep" >> $out/bin/mindustry
+      done
+
+      install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+    '';
+    installServer = ''
+      install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
+        --add-flags "-jar $out/share/mindustry-server.jar"
+    '';
+  in ''
     runHook preInstall
-  '' + optionalString enableClient ''
-    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-      --add-flags "-jar $out/share/mindustry.jar" \
-      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
-
-    # Retain runtime depends to prevent them from being cleaned up.
-    # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
-    # and will assume that it's not actually needed.
-    # This can cause issues.
-    # See https://github.com/NixOS/nixpkgs/issues/109798.
-    echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-    for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
-      echo "# $dep" >> $out/bin/mindustry
-    done
-
-    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
-  '' + optionalString enableServer ''
-    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
-      --add-flags "-jar $out/share/mindustry-server.jar"
-  '' + ''
+  '' + optionalString enableClient installClient
+     + optionalString enableServer installServer
+     + ''
     runHook postInstall
   '';
 
@@ -230,7 +245,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno fgaz thekostins ];
-    platforms = platforms.x86_64;
+    platforms = if enableClient then platforms.x86_64 else platforms.linux;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
     broken = stdenv.isDarwin;

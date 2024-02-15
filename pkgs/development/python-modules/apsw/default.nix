@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.41.0.0";
+  version = "3.44.2.0";
   format = "setuptools";
 
   disabled = isPyPy;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "rogerbinns";
     repo = "apsw";
     rev = "refs/tags/${version}";
-    hash = "sha256-U7NhC83wBaUONLsQbL+j9866u4zs58O6AQxwzS3e0qM=";
+    hash = "sha256-H7aqZHU4SXNrfbv6iwHckkNm5MeGkro42+njSoFJgS4=";
   };
 
   buildInputs = [

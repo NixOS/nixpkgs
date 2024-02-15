@@ -25,10 +25,15 @@ let
     buildInputs = [ libuuid zlib ];
     nativeBuildInputs = [ autoreconfHook ];
 
-    doCheck = true;
-    env.AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
+    enableParallelBuilding = true;
 
-    patches = lib.optionals stdenv.isDarwin [ ./skip-flaky-darwin-test.patch ];
+    doCheck = true;
+
+    env = {
+      AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
+    } // lib.optionalAttrs stdenv.is32bit {
+      NIX_CFLAGS_COMPILE = "-fpermissive";
+    };
 
     # the configure script thinks that Darwin has ___exp10
     # but it’s not available on my systems (or hydra apparently)
@@ -46,7 +51,7 @@ let
       homepage = "https://xapian.org/";
       changelog = "https://xapian.org/docs/xapian-core-${version}/NEWS";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ matthiasbeyer ];
       platforms = platforms.unix;
     };
   };
@@ -54,5 +59,5 @@ in {
   # Don't forget to change the hashes in xapian-omega and
   # python3Packages.xapian. They inherit the version from this package, and
   # should always be built with the equivalent xapian version.
-  xapian_1_4 = generic "1.4.21" "sha256-gPhgNNL7VZAHlUgd+uaBv6oQ776BirrTYizcDFXgb4g=";
+  xapian_1_4 = generic "1.4.24" "sha256-7aWubc9rBVOoZ2r2Sx/TBOmYzSD3eQMcyq96uaNzUxo=";
 }

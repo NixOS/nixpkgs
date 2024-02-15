@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-qhKHdBf3bTZC2fTHIzAjgNgzF1Y51jpVZB0Bkopd230=";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [
     # pull upstream fix for SDL1 cross-compilation.
     #   https://github.com/Libvisual/libvisual/pull/238

@@ -17,10 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ freetype ];
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+  postPatch = ''
+    # disable broken 'nametabletest' test, fails on gcc-13:
+    #   https://github.com/silnrsi/graphite/pull/74
+    substituteInPlace tests/CMakeLists.txt \
+      --replace 'add_subdirectory(nametabletest)' '#add_subdirectory(nametabletest)'
+
+    # support cross-compilation by using target readelf binary:
+    substituteInPlace Graphite.cmake \
+      --replace 'readelf' "${stdenv.cc.targetPrefix}readelf"
+  '';
 
   cmakeFlags = lib.optionals static [
     "-DBUILD_SHARED_LIBS=OFF"
@@ -40,6 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.raskin ];
     mainProgram = "gr2fonttest";
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

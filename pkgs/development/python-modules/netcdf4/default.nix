@@ -1,9 +1,12 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPyPy
 , python
+, oldest-supported-numpy
 , setuptools
+, wheel
 , numpy
 , zlib
 , netcdf
@@ -26,7 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
   };
 
-  nativeBuildInputs = [ setuptools cython ];
+  nativeBuildInputs = [
+    cython
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     cftime
@@ -43,14 +51,18 @@ buildPythonPackage rec {
     NO_NET=1 NO_CDL=1 ${python.interpreter} run_all.py
   '';
 
-  # Variables used to configure the build process
-  USE_NCCONFIG = "0";
-  HDF5_DIR = lib.getDev hdf5;
-  NETCDF4_DIR = netcdf;
-  CURL_DIR = curl.dev;
-  JPEG_DIR = libjpeg.dev;
+  env = {
+    # Variables used to configure the build process
+    USE_NCCONFIG = "0";
+    HDF5_DIR = lib.getDev hdf5;
+    NETCDF4_DIR = netcdf;
+    CURL_DIR = curl.dev;
+    JPEG_DIR = libjpeg.dev;
+  } // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
+  };
 
-  pythonImportsCheckHook = [ "netcdf4" ];
+  pythonImportsCheck = [ "netCDF4" ];
 
   meta = with lib; {
     description = "Interface to netCDF library (versions 3 and 4)";

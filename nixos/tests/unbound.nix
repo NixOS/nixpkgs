@@ -1,7 +1,7 @@
 /*
  Test that our unbound module indeed works as most users would expect.
  There are a few settings that we must consider when modifying the test. The
- ususal use-cases for unbound are
+ usual use-cases for unbound are
    * running a recursive DNS resolver on the local machine
    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via UDP/53 & TCP/53
    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via TCP/853 (DoT)
@@ -74,7 +74,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         };
       };
 
-      # The resolver that knows that fowards (only) to the authoritative server
+      # The resolver that knows that forwards (only) to the authoritative server
       # and listens on UDP/53, TCP/53 & TCP/853.
       resolver = { lib, nodes, ... }: {
         imports = [ common ];
@@ -106,8 +106,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
               {
                 name = ".";
                 forward-addr = [
-                  (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv6.addresses).address
-                  (lib.head nodes.authoritative.config.networking.interfaces.eth1.ipv4.addresses).address
+                  (lib.head nodes.authoritative.networking.interfaces.eth1.ipv6.addresses).address
+                  (lib.head nodes.authoritative.networking.interfaces.eth1.ipv4.addresses).address
                 ];
               }
             ];
@@ -168,8 +168,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           "unbound-extra1.conf".text = ''
             forward-zone:
             name: "example.local."
-            forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address}
-            forward-addr: ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address}
+            forward-addr: ${(lib.head nodes.resolver.networking.interfaces.eth1.ipv6.addresses).address}
+            forward-addr: ${(lib.head nodes.resolver.networking.interfaces.eth1.ipv4.addresses).address}
           '';
           "unbound-extra2.conf".text = ''
             auth-zone:
@@ -187,8 +187,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       client = { lib, nodes, ... }: {
         imports = [ common ];
         networking.nameservers = [
-          (lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address
-          (lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address
+          (lib.head nodes.resolver.networking.interfaces.eth1.ipv6.addresses).address
+          (lib.head nodes.resolver.networking.interfaces.eth1.ipv4.addresses).address
         ];
         networking.interfaces.eth1.ipv4.addresses = [
           { address = "192.168.0.10"; prefixLength = 24; }
@@ -276,7 +276,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       resolver.wait_for_unit("multi-user.target")
 
       with subtest("client should be able to query the resolver"):
-          test(client, ["${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address}", "${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address}"], doh=True)
+          test(client, ["${(lib.head nodes.resolver.networking.interfaces.eth1.ipv6.addresses).address}", "${(lib.head nodes.resolver.networking.interfaces.eth1.ipv4.addresses).address}"], doh=True)
 
       # discard the client we do not need anymore
       client.shutdown()
@@ -298,7 +298,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           ).strip()
 
           # Thank you black! Can't really break this line into a readable version.
-          expected = "example.local. IN forward ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv6.addresses).address} ${(lib.head nodes.resolver.config.networking.interfaces.eth1.ipv4.addresses).address}"
+          expected = "example.local. IN forward ${(lib.head nodes.resolver.networking.interfaces.eth1.ipv6.addresses).address} ${(lib.head nodes.resolver.networking.interfaces.eth1.ipv4.addresses).address}"
           assert out == expected, f"Expected `{expected}` but got `{out}` instead."
           local_resolver.fail("sudo -u unauthorizeduser -- unbound-control list_forwards")
 

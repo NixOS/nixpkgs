@@ -1,11 +1,10 @@
 { buildPythonApplication
-, poetry-core
 , yubikey-manager
-, fido2
 , mss
-, zxing_cpp
+, zxing-cpp
 , pillow
-, cryptography
+, poetry-core
+, pythonRelaxDepsHook
 
 , src
 , version
@@ -16,14 +15,21 @@ buildPythonApplication {
   pname = "yubioath-flutter-helper";
   inherit src version meta;
 
-  sourceRoot = "source/helper";
-  format = "pyproject";
+  pyproject = true;
+
+  sourceRoot = "${src.name}/helper";
+
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = true;
 
   postPatch = ''
-    sed -i \
-      -e 's,zxing-cpp = .*,zxing-cpp = "*",g' \
-      -e 's,mss = .*,mss = "*",g' \
-      pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "authenticator-helper" "yubioath-flutter-helper" \
+      --replace "0.1.0" "${version}"
   '';
 
   postInstall = ''
@@ -33,12 +39,9 @@ buildPythonApplication {
   '';
 
   propagatedBuildInputs = [
-    poetry-core
     yubikey-manager
-    fido2
     mss
-    zxing_cpp
+    zxing-cpp
     pillow
-    cryptography
   ];
 }

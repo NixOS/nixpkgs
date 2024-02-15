@@ -11,24 +11,24 @@
 , wrapGAppsHook4
 , ninja
 , gnome
+, cairo
 , enchant
 , icu
 , itstool
 , libadwaita
 , editorconfig-core-c
 , libxml2
-, pcre
 , appstream-glib
 , desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
-  version = "43.2";
+  version = "45.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MwRcehI/qife5+ubqabybxsXGMWg52M30Hmg1MkA4UY=";
+    sha256 = "sha256-8//LEakt/QS6PDs9DmZ4R9REmiHgEq428H3aBax9OlI=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     enchant
     icu
     glib
@@ -52,7 +53,6 @@ stdenv.mkDerivation rec {
     gtksourceview5
     libadwaita
     editorconfig-core-c
-    pcre
   ];
 
   passthru = {

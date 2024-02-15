@@ -143,16 +143,11 @@ in {
       default = null;
     };
 
-    package = mkOption {
-      type = types.package;
-      description = lib.mdDoc ''
-        Package that should be used for ucarp.
-
+    package = mkPackageOption pkgs "ucarp" {
+      extraDescription = ''
         Please note that the default package, pkgs.ucarp, has not received any
         upstream updates for a long time and can be considered as unmaintained.
       '';
-      default = pkgs.ucarp;
-      defaultText = literalExpression "pkgs.ucarp";
     };
   };
 

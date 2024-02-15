@@ -1,16 +1,32 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, glib, libintl }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, glib
+, libintl
+}:
 
 stdenv.mkDerivation rec {
   pname = "desktop-file-utils";
-  version = "0.26";
+  version = "0.27";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "02bkfi6fyk4c0gh2avd897882ww5zl7qg7bzzf28qb57kvkvsvdj";
+    hash = "sha256-oIF985zjhbZiGIBAfFbx8pgWjAQMIDLO34jVt2r/6DY=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [ glib libintl ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
+
+  buildInputs = [
+    glib
+    libintl
+  ];
 
   postPatch = ''
     substituteInPlace src/install.c \
@@ -20,9 +36,9 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    homepage = "http://www.freedesktop.org/wiki/Software/desktop-file-utils";
+    homepage = "https://www.freedesktop.org/wiki/Software/desktop-file-utils";
     description = "Command line utilities for working with .desktop files";
     platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

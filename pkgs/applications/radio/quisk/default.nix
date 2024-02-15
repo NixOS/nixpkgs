@@ -1,18 +1,30 @@
-{ lib, python39Packages, fetchPypi
-, fftw, alsa-lib, pulseaudio, pyusb, wxPython_4_2 }:
+{ lib
+, python3
+, fetchPypi
+, fftw
+, alsa-lib
+, pulseaudio
+}:
 
-python39Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.2.17";
+  version = "4.2.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eF/3++wRG0JulVTT+GvtqleBPkzLSZeu+RfHDI1xfOY=";
+    sha256 = "sha256-xG6nRSk0txUMPPuNRK+hOeqLfCfPt6KcacAtcdZT5E8=";
   };
 
-  buildInputs = [ fftw alsa-lib pulseaudio ];
+  buildInputs = [
+    fftw
+    alsa-lib
+    pulseaudio
+  ];
 
-  propagatedBuildInputs = [ pyusb wxPython_4_2 ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pyusb
+    wxpython
+  ];
 
   doCheck = false;
 
@@ -33,7 +45,7 @@ python39Packages.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://james.ahlstrom.name/quisk/";
-    maintainers = with maintainers; [ pulsation ];
+    maintainers = with maintainers; [ pulsation kashw2 ];
     platforms = platforms.linux;
   };
 }

@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, libev, buildDunePackage
-, cppo, dune-configurator, ocplib-endian
+, ocaml, cppo, dune-configurator, ocplib-endian
 }:
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.6.1";
+  version = "5.7.0";
 
   minimalOCamlVersion = "4.08";
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "ocsigen";
     repo = "lwt";
     rev = version;
-    sha256 = "sha256-XstKs0tMwliCyXnP0Vzi5WC27HKJGnATUYtbbQmH1TE=";
+    hash = "sha256-o0wPK6dPdnsr/LzwcSwbIGcL85wkDjdFuEcAxuS/UEs=";
   };
 
   nativeBuildInputs = [ cppo ];

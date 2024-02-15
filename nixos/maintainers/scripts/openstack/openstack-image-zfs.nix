@@ -20,6 +20,12 @@ in
       default = "nixos-openstack-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     };
 
+    ramMB = mkOption {
+      type = types.int;
+      default = 1024;
+      description = lib.mdDoc "RAM allocation for build VM";
+    };
+
     sizeMB = mkOption {
       type = types.int;
       default = 8192;
@@ -64,7 +70,7 @@ in
       includeChannel = copyChannel;
 
       bootSize = 1000;
-
+      memSize = cfg.ramMB;
       rootSize = cfg.sizeMB;
       rootPoolProperties = {
         ashift = 12;
@@ -85,7 +91,7 @@ in
         ${pkgs.jq}/bin/jq -n \
           --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
           --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-          --arg root_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+          --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
           --arg boot_mode "${imageBootMode}" \
           --arg root "$rootDisk" \
          '{}

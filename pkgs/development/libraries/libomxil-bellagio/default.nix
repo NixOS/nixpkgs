@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   env.NIX_CFLAGS_COMPILE =
-    if stdenv.cc.isGNU then "-Wno-error=array-bounds -Wno-error=stringop-overflow=8"
+    # stringop-truncation: see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028978
+    if stdenv.cc.isGNU then "-Wno-error=array-bounds -Wno-error=stringop-overflow=8 -Wno-error=stringop-truncation"
     else "-Wno-error=absolute-value -Wno-error=enum-conversion -Wno-error=logical-not-parentheses -Wno-error=non-literal-null-conversion";
 
   meta = with lib; {

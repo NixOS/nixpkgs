@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, gitUpdater
 , jre
 , makeWrapper
 , mysqlSupport ? true
@@ -24,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "liquibase";
-  version = "4.9.0";
+  version = "4.25.1";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1InRJzHqikm6Jd7z54TW6JFn3FO0LtStehWNaC+rdw8=";
+    hash = "sha256-iyt6qOx1XU7lL6AhDNKiRP0W7WlfxKciRVYpUHdtKlY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -47,7 +48,10 @@ stdenv.mkDerivation rec {
     in
     ''
       mkdir -p $out
-      mv ./{lib,licenses,liquibase.jar} $out/
+      mv ./{lib,licenses} $out/
+
+      mkdir -p $out/internal/lib
+      mv ./internal/lib/*.jar $out/internal/lib/
 
       mkdir -p $out/share/doc/${pname}-${version}
       mv LICENSE.txt \
@@ -61,15 +65,25 @@ stdenv.mkDerivation rec {
       cat > $out/bin/liquibase <<EOF
       #!/usr/bin/env bash
       # taken from the executable script in the source
-      CP="$out/liquibase.jar"
+      CP=""
+      ${addJars "$out/internal/lib"}
       ${addJars "$out/lib"}
+      ${addJars "$out"}
       ${lib.concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
-
       ${lib.getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
-        liquibase.integration.commandline.LiquibaseCommandLine \''${1+"\$@"}
+      liquibase.integration.commandline.LiquibaseCommandLine \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase
     '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/liquibase/liquibase";
+    rev-prefix = "v";
+    # The latest versions are in the 4.xx series.  I am not sure where
+    # 10.10.10 and 5.0.0 came from, though it appears like they are
+    # for the commercial product.
+    ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
+  };
 
   meta = with lib; {
     description = "Version Control for your database";
@@ -77,7 +91,7 @@ stdenv.mkDerivation rec {
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ jsoo1 ];
     platforms = with platforms; unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib, darwin-stubs, print-reexports }:
+{ stdenv, fetchurl, cpio, pbzx, pkgs, lib, darwin-stubs, print-reexports }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -16,27 +16,23 @@ let
       sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
-    nativeBuildInputs = [ xar cpio python3 pbzx ];
+    nativeBuildInputs = [ cpio pbzx ];
 
     outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
-      xar -x -f $src
+      pbzx $src | cpio -idm
     '';
 
+    sourceRoot = ".";
+
     installPhase = ''
-      start="$(pwd)"
       mkdir -p $out
-      cd $out
-      pbzx -n $start/Payload | cpio -idm
 
-      mv usr/* .
-      rmdir usr
+      cp -R System/Library $out
+      cp -R usr/* $out
 
-      mv System/* .
-      rmdir System
-
-      pushd lib
+      pushd $out/lib
       cp ${darwin-stubs}/usr/lib/libcups*.tbd .
       ln -s libcups.2.tbd      libcups.tbd
       ln -s libcupscgi.1.tbd   libcupscgi.tbd
@@ -317,6 +313,15 @@ in rec {
       installPhase = drv.installPhase + ''
         mkdir -p $out/include/simd
         cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
+    System = lib.overrideDerivation super.System (drv: {
+      installPhase = ''
+        mkdir -p $out/Library/Frameworks/System.framework/Versions/B
+        ln -s $out/Library/Frameworks/System.framework/Versions/{B,Current}
+        ln -s ${pkgs.darwin.Libsystem}/lib/libSystem.B.tbd $out/Library/Frameworks/System.framework/Versions/B/System.tbd
+        ln -s $out/Library/Frameworks/System.framework/{Versions/Current/,}System.tbd
       '';
     });
 

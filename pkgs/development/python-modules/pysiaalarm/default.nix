@@ -8,17 +8,19 @@
 , pytest-asyncio
 , pytest-cases
 , pytestCheckHook
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "pysiaalarm";
-  version = "3.0.2";
+  version = "3.1.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hS0OaafYjRdPVSCOHfb2zKp0tEOl1LyMJpwnpvsvALs=";
+    hash = "sha256-q42bsBeAwU9lt7wtYGFJv23UBND+aMXZJlSWyTfZDQE=";
   };
 
   postPatch = ''
@@ -35,6 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dataclasses-json
     pycryptodome
+    pytz
   ];
 
   nativeCheckInputs = [
@@ -51,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package for creating a client that talks with SIA-based alarm systems";
     homepage = "https://github.com/eavanvalkenburg/pysiaalarm";
+    changelog = "https://github.com/eavanvalkenburg/pysiaalarm/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

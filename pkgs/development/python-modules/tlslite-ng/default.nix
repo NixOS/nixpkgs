@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "tlslite-ng";
   version = "0.7.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     description = "Pure python implementation of SSL and TLS.";
     homepage = "https://pypi.python.org/pypi/tlslite-ng";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [ ];
   };
 
 }

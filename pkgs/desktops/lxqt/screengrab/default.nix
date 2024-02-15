@@ -17,25 +17,25 @@
 
 mkDerivation rec {
   pname = "screengrab";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "QEe1vOAeUDOlQfTh5/BvwBv9+v40NsuoMbC77+U6GCA=";
+    hash = "sha256-mmN3BQum7X0GWTUYauEN2mAo3GWdmtkIl2i84g5cp78=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     perl # needed by LXQtTranslateDesktop.cmake
+    qttools
     autoPatchelfHook # fix libuploader.so and libextedit.so not found
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtx11extras
     qtsvg
     kwindowsystem

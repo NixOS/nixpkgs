@@ -1,9 +1,9 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , mock
 , parameterized
+, pip
 , pyelftools
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.27.0";
+  version = "1.45.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,13 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
-    hash = "sha256-axg1kwzH6ZRQwyI80oNPjP8ApjAEZ5u0iCIadkEP/Ps=";
+    hash = "sha256-TmU7neEnHaRuGNzK9VuXUiEayBLZaPqjrnPLvBOQj5g=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=read_version()," 'version="${version}",'
+  '';
 
   propagatedBuildInputs = [
     six
@@ -31,6 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     parameterized
+    pip
     pyelftools
     pytestCheckHook
   ];
@@ -61,7 +67,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Tool to compile, build and package AWS Lambda functions";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
     changelog = "https://github.com/aws/aws-lambda-builders/releases/tag/v${version}";

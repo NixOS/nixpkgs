@@ -20,7 +20,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "sha256-qhffg/s1RZFNW0nHLbJ89yqLzdC72ARXdbSfMLJK2pQ=";
+  vendorHash = "sha256-qhffg/s1RZFNW0nHLbJ89yqLzdC72ARXdbSfMLJK2pQ=";
 
   postInstall = ''
     mv $out/bin/{cmd,kubectl-doctor}

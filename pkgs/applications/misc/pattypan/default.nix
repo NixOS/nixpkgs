@@ -1,62 +1,80 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, unzip
-, jre
-, jdk
 , ant
+, jdk
 , makeWrapper
+, wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
-, glib
-, wrapGAppsHook
+, canonicalize-jars-hook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pattypan";
   version = "22.03";
 
   src = fetchFromGitHub {
     owner = "yarl";
     repo = "pattypan";
-    rev = "v${version}";
-    sha256 = "0qmvlcqhqw5k500v2xdakk340ymgv5amhbfqxib5s4db1w32pi60";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wMQrBg+rEV1W7NgtWFXZr3pAxpyqdbEBKLNwDDGju2I=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems jdk ant makeWrapper wrapGAppsHook ];
-  buildInputs = [ glib jre ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    wrapGAppsHook
+    copyDesktopItems
+    canonicalize-jars-hook
+  ];
+
+  dontWrapGApps = true;
+
+  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=UTF8"; # needed for jdk versions below jdk19
 
   buildPhase = ''
     runHook preBuild
-    export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
     ant
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share/java
-    cp pattypan.jar $out/share/java/pattypan.jar
-    makeWrapper ${jre}/bin/java $out/bin/pattypan \
-      --add-flags "-cp $out/share/java/pattypan.jar pattypan.Launcher"
+    install -Dm644 pattypan.jar -t $out/share/pattypan
+    install -Dm644 src/pattypan/resources/logo.png $out/share/pixmaps/pattypan.png
     runHook postInstall
+  '';
+
+  # gappsWrapperArgs is set in preFixup
+  postFixup = ''
+    makeWrapper ${jdk}/bin/java $out/bin/pattypan \
+        ''${gappsWrapperArgs[@]} \
+        --add-flags "-jar $out/share/pattypan/pattypan.jar"
   '';
 
   desktopItems = [
     (makeDesktopItem {
+      name = "pattypan";
+      exec = "pattypan";
+      icon = "pattypan";
       desktopName = "Pattypan";
       genericName = "An uploader for Wikimedia Commons";
       categories = [ "Utility" ];
-      exec = "pattypan";
-      name = "pattypan";
     })
   ];
 
   meta = with lib; {
-    homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
     description = "An uploader for Wikimedia Commons";
+    homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    mainProgram = "pattypan";
     maintainers = with maintainers; [ fee1-dead ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
   };
-}
+})

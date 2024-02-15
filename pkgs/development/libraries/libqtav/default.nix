@@ -4,13 +4,12 @@
 , extra-cmake-modules
 , qtbase
 , qtmultimedia
-, qtquick1
 , qttools
 , libGL
 , libX11
 , libass
 , openal
-, ffmpeg
+, ffmpeg_4
 , libuchardet
 , alsa-lib
 , libpulseaudio
@@ -25,12 +24,11 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtmultimedia
-    qtquick1
     libGL
     libX11
     libass
     openal
-    ffmpeg
+    ffmpeg_4
     libuchardet
     alsa-lib
     libpulseaudio

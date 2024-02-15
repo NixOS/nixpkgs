@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.0.2";
-  format = "setuptools";
+  version = "5.10.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
-    repo = pname;
+    repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ffNWSSzoRLFmYzN9sm5Z1j6WtEoFzGkCQxpBC0NlpRc=";
+    hash = "sha256-3y8ORRyWjr4KT818ktXrgX4jB0Rkrnf4DQaNkyXGrts=";
   };
 
   propagatedBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
-    homepage = "https://github.com/pymc-devs/pymc3";
+    homepage = "https://github.com/pymc-devs/pymc";
     changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ nidabdella ];

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , pythonOlder
 , yara
@@ -8,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.2.3";
-  format = "setuptools";
+  version = "4.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +18,19 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "yara-python";
     rev = "v${version}";
-    hash = "sha256-spUQuezQMqaG1hboM0/Gs7siCM6x0b40O+sV7qGGBng=";
+    hash = "sha256-Fl/0ordXDKC1CBBmPx0fEwZZjqSiMxnwNvQqD98MjRo=";
   };
+
+  # undefined symbol: yr_finalize
+  # https://github.com/VirusTotal/yara-python/issues/7
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "include_dirs=['yara/libyara/include', 'yara/libyara/', '.']" "libraries = ['yara']"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     yara

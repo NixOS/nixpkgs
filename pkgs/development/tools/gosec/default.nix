@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gosec";
-  version = "2.15.0";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "securego";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GB+BAGIVPtyY2Bsm/yDTYjJixLGvGwsIoOLCyy/0AJk=";
+    hash = "sha256-y0ha9Za0QoZEsZG/eO9/LZ146q1Rg6wCGghe2roymHM=";
   };
 
-  vendorHash = "sha256-5LIIXf+8ZN7WcFSPzsJ5Tt+d40AgF5YI3O1oXms1WgI=";
+  vendorHash = "sha256-cfAS1Z/ym4y2qcm8TPXqX4LZgaLsTjkwO9GOYLNjPN0=";
 
   subPackages = [
     "cmd/gosec"
@@ -33,6 +33,5 @@ buildGoModule rec {
     description = "Golang security checker";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit nilp0inter ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

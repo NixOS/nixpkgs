@@ -7,11 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyworld";
-  version = "0.3.2";
+  version = "0.3.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zo0JhCw8+nSx9u2r2wBYpkwE+c8XuTiD5tqBHhIErU0=";
+    hash = "sha256-EGxw7np9jJukiNgCLyAzcGkppA8CZCVrjofaWquYMDo=";
   };
 
   nativeBuildInputs = [

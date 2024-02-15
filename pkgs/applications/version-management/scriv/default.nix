@@ -9,11 +9,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scriv";
-  version = "1.2.1";
+  version = "1.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-le39dmQs965rXNQJdVRdivWPY5jKv+g/91Xo7tuN3U4=";
+    hash = "sha256-MK6f+NFE+ODPOUxOHTeVQvGzgjdnZClVtU7EDcALMrY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     click-log
     jinja2
+    markdown-it-py
     requests
   ] ++ lib.optionals (python3.pythonOlder "3.11") [
     tomli
@@ -53,5 +54,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/nedbat/scriv/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ amesgen ];
+    mainProgram = "scriv";
   };
 }

@@ -2,14 +2,15 @@
 
 buildPythonPackage rec {
   pname = "gpxpy";
-  version = "1.5.0";
+  version = "1.6.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tkrajina";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Fkl2dte1WkPi2hBOdT23BMfNflR0j4GeNH86d46WNQk=";
+    hash = "sha256-s65k0u4LIwHX9RJMJIYMkNS4/Z0wstzqYVPAjydo2iI=";
   };
 
   propagatedBuildInputs = [ lxml ];

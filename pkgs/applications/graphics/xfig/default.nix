@@ -9,16 +9,17 @@
 , libXp
 , Xaw3d
 , libXaw
+, libXft
 , fig2dev
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfig";
-  version = "3.2.8b";
+  version = "3.2.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
-    sha256 = "0fndgbm1mkqb1sn2v2kj3nx9mxj70jbp31y2bjvzcmmkry0q3k5j";
+    hash = "sha256-E+2dBNG7wt7AnafvSc7sJ4OC0pD2zZJkdMLy0Bb+wvc=";
   };
 
   nativeBuildInputs = [ imagemagick makeWrapper ];
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     libXp
     Xaw3d
     libXaw
+    libXft
   ];
 
   postPatch = ''
@@ -57,6 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    changelog = "https://sourceforge.net/p/mcj/xfig/ci/${version}/tree/CHANGES";
     description = "An interactive drawing tool for X11";
     longDescription = ''
       Note that you need to have the <literal>netpbm</literal> tools

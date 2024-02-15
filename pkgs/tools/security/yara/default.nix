@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pcre
 , pkg-config
@@ -15,14 +16,23 @@
 
 stdenv.mkDerivation rec {
   pname = "yara";
-  version = "4.2.3";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Ol2btm1A8JdvYrjD0hPtc17A4L9wgr4l30C8VrImVoE=";
+    hash = "sha256-axHFy7YwLhhww+lh+ORyW6YG+T385msysIHK5SMyhMk=";
   };
+
+  # FIXME: make unconditional on staging
+  patches = lib.optionals (!stdenv.hostPlatform.isGnu && !stdenv.hostPlatform.isDarwin) [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/VirusTotal/yara/commit/515ed861cf30e154b14a69ffd46c347fb81df72f.patch";
+      hash = "sha256-2scnUyz0SSkNRlsVQapPgI1ATIPXEogqtxbimYYq4Jo=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

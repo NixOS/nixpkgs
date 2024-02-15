@@ -1,36 +1,73 @@
-{ lib, stdenv, fetchFromGitHub, jre, makeWrapper, ant, jdk }:
-stdenv.mkDerivation rec {
-  version = "1.6.3";
+{ lib
+, stdenv
+, maven
+, fetchFromGitHub
+, makeWrapper
+, wrapGAppsHook
+, jre
+}:
+
+let
+  platformName = {
+    "x86_64-linux" = "linux-x86-64";
+    "aarch64-linux" = "linux-aarch64";
+    "x86_64-darwin" = "darwin-x86-64";
+    "aarch64-darwin" = "darwin-aarch64";
+  }.${stdenv.system} or null;
+in
+maven.buildMavenPackage rec {
   pname = "jugglinglab";
+  version = "1.6.5";
+
   src = fetchFromGitHub {
     owner = "jkboyce";
     repo = "jugglinglab";
     rev = "v${version}";
-    sha256 = "sha256-Gq8V7gLl9IakQi7xaK8TCI/B2+6LlLjoLdcv9zlalIE=";
+    hash = "sha256-Y87uHFpVs4A/wErNO2ZF6Su0v4LEvaE9nIysrqFoY8w=";
   };
-  buildInputs = [ jre ];
-  nativeBuildInputs = [ ant jdk makeWrapper ];
-  buildPhase = "ant";
+
+  patches = [
+    # make sure mvnHash doesn't change when maven is updated
+    ./fix-default-maven-plugin-versions.patch
+  ];
+
+  mvnHash = "sha256-1Uzo9nRw+YR/sd7CC9MTPe/lttkRX6BtmcsHaagP1Do=";
+
+  # fix jar timestamps for reproducibility
+  mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";
+
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+  ];
+
+  dontWrapGApps = true;
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    mkdir -p "$out/lib"
-    cp bin/*.jar $out/lib/
+    runHook preInstall
 
-    # copied from the upstream shell wrapper
-    classpath=$out/lib/JugglingLab.jar:$out/lib/commons-math3-3.6.1.jar:$out/lib/protobuf.jar:$out/lib/com.google.ortools.jar
+    install -Dm644 bin/JugglingLab.jar -t $out/share/jugglinglab
+    ${lib.optionalString (platformName != null) ''
+      install -Dm755 bin/ortools-lib/ortools-${platformName}/* -t $out/lib/ortools-lib
+    ''}
 
+    runHook postInstall
+  '';
+
+  # gappsWrapperArgs are set in preFixup
+  postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jugglinglab \
-      --add-flags "-cp $classpath" \
-      --add-flags "-Xss2048k -Djava.library.path=ortools-lib" \
-      --add-flags jugglinglab.JugglingLab
+        "''${gappsWrapperArgs[@]}" \
+        --add-flags "-Xss2048k -Djava.library.path=$out/lib/ortools-lib" \
+        --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar"
   '';
 
   meta = with lib; {
-      description = "A program to visualize different juggling pattens";
-      homepage = "https://jugglinglab.org/";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ wnklmnn ];
-      platforms = platforms.all;
+    description = "A program to visualize different juggling pattens";
+    homepage = "https://jugglinglab.org/";
+    license = licenses.gpl2Only;
+    mainProgram = "jugglinglab";
+    maintainers = with maintainers; [ wnklmnn tomasajt ];
+    platforms = platforms.all;
   };
 }

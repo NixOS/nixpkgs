@@ -8,12 +8,12 @@ buildGoModule rec {
     owner = "mhansen";
     repo = "rtl_433_prometheus";
     rev = "v${version}";
-    sha256 = "1998gvfa5310bxhi6kfv8bn99369dxph3pwrpp335997b25lc2w2";
+    hash = "sha256-ggtGi1gnpTLGvZnfAW9vyYyU7ELbTRNhXyCMotx+KKU=";
   };
 
   postPatch = "substituteInPlace rtl_433_prometheus.go --replace /bin/bash ${bash}/bin/bash";
 
-  vendorSha256 = "03mnmzq72844hzyw7iq5g4gm1ihpqkg4i9dgj2yln1ghwk843hq6";
+  vendorHash = "sha256-BsNB0OTwBUu9kK+lSN7EF8ZQH3kFx8P9h4QgcfCvtg4=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) rtl_433; };
 

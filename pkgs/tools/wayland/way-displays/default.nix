@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "way-displays";
-  version = "1.7.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
-    rev = "${version}";
-    sha256 = "sha256-o8fju0EQy2KS5yxe9DP3A8ewYgA2GzJtMY41BGJUZis=";
+    rev = version;
+    sha256 = "sha256-OEsRSmtNDt3MO5MO7Ch9mOHHHraN+9qfcFn2AhXfvpk=";
   };
 
   strictDeps = true;
@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ simoneruffini ];
     platforms = platforms.linux;
+    mainProgram = "way-displays";
   };
 }

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , makeWrapper
 , wrapGAppsHook
@@ -15,6 +14,8 @@
 , lv2
 , lilv
 , mpg123
+, opusfile
+, rapidjson
 , serd
 , sord
 , sqlite
@@ -29,7 +30,7 @@
 , libid3tag
 , libopus
 , libuuid
-, ffmpeg_4
+, ffmpeg_6
 , soundtouch
 , pcre
 , portaudio # given up fighting their portaudio.patch?
@@ -61,20 +62,24 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.2.5";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "audacity";
+    repo = "audacity";
     rev = "Audacity-${version}";
-    hash = "sha256-tMz55fZh+TfvLEyApDqC0QMd2hEQLJsNQ6y2Xy0xgaQ=";
+    hash = "sha256-YlRWCu6kQYdzast7Mf29p4FvpXJHQLG7vqqo/5SNQCQ=";
   };
 
   postPatch = ''
     mkdir src/private
+    substituteInPlace scripts/build/macOS/fix_bundle.py \
+      --replace "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
+    sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 
   nativeBuildInputs = [
@@ -90,12 +95,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-    ffmpeg_4
+    ffmpeg_6
     file
     flac
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ] ++ [
     gtk3
     lame
     libid3tag
@@ -108,8 +110,10 @@ stdenv.mkDerivation rec {
     lilv
     lv2
     mpg123
+    opusfile
     pcre
     portmidi
+    rapidjson
     serd
     sord
     soundtouch
@@ -135,6 +139,7 @@ stdenv.mkDerivation rec {
     libuuid
     util-linux
   ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
     CoreAudioKit # for portaudio
     libpng
     libjpeg
@@ -148,26 +153,33 @@ stdenv.mkDerivation rec {
     "-Daudacity_conan_enabled=Off"
     "-Daudacity_use_ffmpeg=loaded"
     "-Daudacity_has_vst3=Off"
+    "-Daudacity_has_crashreports=Off"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+
+    # Fix duplicate store paths
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   # [ 57%] Generating LightThemeAsCeeCode.h...
   # ../../utils/image-compiler: error while loading shared libraries:
   # lib-theme.so: cannot open shared object file: No such file or directory
   preBuild = ''
-    export LD_LIBRARY_PATH=$PWD/utils
+    export LD_LIBRARY_PATH=$PWD/Release/lib/audacity
   '';
 
   doCheck = false; # Test fails
 
+  dontWrapGApps = true;
+
   # Replace audacity's wrapper, to:
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram "$out/bin/audacity" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_4 ]} \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_6 ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
   '' + lib.optionalString stdenv.isDarwin ''

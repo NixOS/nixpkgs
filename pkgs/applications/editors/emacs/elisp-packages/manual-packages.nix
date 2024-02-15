@@ -13,19 +13,25 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  bqn-mode = callPackage ./manual-packages/bqn-mode { };
+  beancount = callPackage ./manual-packages/beancount { };
 
   cask = callPackage ./manual-packages/cask { };
 
+  codeium = callPackage ./manual-packages/codeium { };
+
+  consult-gh = callPackage ./manual-packages/consult-gh { };
+
   control-lock = callPackage ./manual-packages/control-lock { };
 
+  copilot = callPackage ./manual-packages/copilot { };
+
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
+
+  el-easydraw = callPackage ./manual-packages/el-easydraw { };
 
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
   emacspeak = callPackage ./manual-packages/emacspeak { };
-
-  ement = callPackage ./manual-packages/ement { };
 
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
@@ -33,13 +39,11 @@ in
 
   font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
+  ghc-mod = callPackage ./manual-packages/ghc-mod { };
 
   git-undo = callPackage ./manual-packages/git-undo { };
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
-
-  header-file-mode = callPackage ./manual-packages/header-file-mode { };
 
   helm-words = callPackage ./manual-packages/helm-words { };
 
@@ -51,23 +55,29 @@ in
 
   jam-mode = callPackage ./manual-packages/jam-mode { };
 
+  ligo-mode = callPackage ./manual-packages/ligo-mode { };
+
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
     inherit (pkgs) python3 git go gopls pyright;
   };
 
+  lspce = callPackage ./manual-packages/lspce { };
+
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
   };
+
+  mu4e = callPackage ./manual-packages/mu4e { };
+
+  notdeft = callPackage ./manual-packages/notdeft { };
 
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
   perl-completion = callPackage ./manual-packages/perl-completion { };
 
   pod-mode = callPackage ./manual-packages/pod-mode { };
-
-  power-mode = callPackage ./manual-packages/power-mode { };
 
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
 
@@ -77,11 +87,17 @@ in
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
+  treesit-grammars = callPackage ./manual-packages/treesit-grammars { };
+
   tsc = callPackage ./manual-packages/tsc { };
 
   urweb-mode = callPackage ./manual-packages/urweb-mode { };
 
   voicemacs = callPackage ./manual-packages/voicemacs { };
+
+  wat-mode = callPackage ./manual-packages/wat-mode { };
+
+  xapian-lite = callPackage ./manual-packages/xapian-lite { };
 
   yes-no = callPackage ./manual-packages/yes-no { };
 
@@ -101,4 +117,6 @@ in
   emacsSessionManagement = self.session-management-for-emacs;
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
+
+  __attrsFailEvaluation = true;
 }

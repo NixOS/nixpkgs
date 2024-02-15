@@ -41,13 +41,13 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gobject-introspection
     libsecret
   ] ++ pluginsDeps;
 
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
+    gobject-introspection
     # To later add plugins to
     xorg.lndir
   ];

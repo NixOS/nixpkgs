@@ -1,24 +1,22 @@
-{ lib, pythonPackages }:
+{ lib, pythonPackages, fetchPypi }:
 
 with pythonPackages;
 
-let
-  cerberus_1_1 = callPackage ./cerberus.nix { };
-in buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "pyditz";
   version = "0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "da0365ae9064e30c4a27526fb0d7a802fda5c8651cda6990d17be7ede89a2551";
+    hash = "sha256-2gNlrpBk4wxKJ1JvsNeoAv2lyGUc2mmQ0Xvn7eiaJVE=";
   };
   nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ pyyaml six jinja2 cerberus_1_1 ];
+  propagatedBuildInputs = [ pyyaml six jinja2 cerberus ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
-    homepage = "https://pythonhosted.org/pyditz/";
+    homepage = "https://pypi.org/project/pyditz/";
     description = "Drop-in replacement for the Ditz distributed issue tracker";
     maintainers = [ maintainers.ilikeavocadoes ];
     license = licenses.lgpl2;

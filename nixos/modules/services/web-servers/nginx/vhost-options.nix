@@ -27,16 +27,43 @@ with lib;
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule { options = {
-        addr = mkOption { type = str;  description = lib.mdDoc "IP address.";  };
-        port = mkOption { type = port;  description = lib.mdDoc "Port number."; default = 80; };
-        ssl  = mkOption { type = bool; description = lib.mdDoc "Enable SSL.";  default = false; };
-        extraParameters = mkOption { type = listOf str; description = lib.mdDoc "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
-      }; });
+      type = with types; listOf (submodule {
+        options = {
+          addr = mkOption {
+            type = str;
+            description = lib.mdDoc "Listen address.";
+          };
+          port = mkOption {
+            type = types.nullOr port;
+            description = lib.mdDoc ''
+              Port number to listen on.
+              If unset and the listen address is not a socket then nginx defaults to 80.
+            '';
+            default = null;
+          };
+          ssl = mkOption {
+            type = bool;
+            description = lib.mdDoc "Enable SSL.";
+            default = false;
+          };
+          proxyProtocol = mkOption {
+            type = bool;
+            description = lib.mdDoc "Enable PROXY protocol.";
+            default = false;
+          };
+          extraParameters = mkOption {
+            type = listOf str;
+            description = lib.mdDoc "Extra parameters of this listen directive.";
+            default = [ ];
+            example = [ "backlog=1024" "deferred" ];
+          };
+        };
+      });
       default = [];
       example = [
         { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
+        { addr = "unix:/var/run/nginx.sock"; }
       ];
       description = lib.mdDoc ''
         Listen addresses and ports for this virtual host.
@@ -45,7 +72,7 @@ with lib;
         and `onlySSL`.
 
         If you only want to set the addresses manually and not
-        the ports, take a look at `listenAddresses`
+        the ports, take a look at `listenAddresses`.
       '';
     };
 
@@ -135,10 +162,11 @@ with lib;
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Whether to add a separate nginx server block that permanently redirects (301)
-        all plain HTTP traffic to HTTPS. This will set defaults for
-        `listen` to listen on all interfaces on the respective default
-        ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
+        Whether to add a separate nginx server block that redirects (defaults
+        to 301, configurable with `redirectCode`) all plain HTTP traffic to
+        HTTPS. This will set defaults for `listen` to listen on all interfaces
+        on the respective default ports (80, 443), where the non-SSL listens
+        are used for the redirect vhosts.
       '';
     };
 
@@ -188,11 +216,11 @@ with lib;
       type = types.bool;
       default = true;
       description = lib.mdDoc ''
-        Whether to enable HTTP 2.
+        Whether to enable the HTTP/2 protocol.
         Note that (as of writing) due to nginx's implementation, to disable
-        HTTP 2 you have to disable it on all vhosts that use a given
+        HTTP/2 you have to disable it on all vhosts that use a given
         IP address / port.
-        If there is one server block configured to enable http2,then it is
+        If there is one server block configured to enable http2, then it is
         enabled for all server blocks on this IP.
         See https://stackoverflow.com/a/39466948/263061.
       '';
@@ -200,12 +228,41 @@ with lib;
 
     http3 = mkOption {
       type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        Whether to enable the HTTP/3 protocol.
+        This requires using `pkgs.nginxQuic` package
+        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
+        and activate the QUIC transport protocol
+        `services.nginx.virtualHosts.<name>.quic = true;`.
+        Note that HTTP/3 support is experimental and *not* yet recommended for production.
+        Read more at https://quic.nginx.org/
+        HTTP/3 availability must be manually advertised, preferably in each location block.
+      '';
+    };
+
+    http3_hq = mkOption {
+      type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Whether to enable HTTP 3.
+        Whether to enable the HTTP/0.9 protocol negotiation used in QUIC interoperability tests.
+        This requires using `pkgs.nginxQuic` package
+        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
+        and activate the QUIC transport protocol
+        `services.nginx.virtualHosts.<name>.quic = true;`.
+        Note that special application protocol support is experimental and *not* yet recommended for production.
+        Read more at https://quic.nginx.org/
+      '';
+    };
+
+    quic = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to enable the QUIC transport protocol.
         This requires using `pkgs.nginxQuic` package
         which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
-        Note that HTTP 3 support is experimental and
+        Note that QUIC support is experimental and
         *not* yet recommended for production.
         Read more at https://quic.nginx.org/
       '';
@@ -250,8 +307,20 @@ with lib;
       default = null;
       example = "newserver.example.org";
       description = lib.mdDoc ''
-        If set, all requests for this host are redirected permanently to
-        the given hostname.
+        If set, all requests for this host are redirected (defaults to 301,
+        configurable with `redirectCode`) to the given hostname.
+      '';
+    };
+
+    redirectCode = mkOption {
+      type = types.ints.between 300 399;
+      default = 301;
+      example = 308;
+      description = lib.mdDoc ''
+        HTTP status used by `globalRedirect` and `forceSSL`. Possible usecases
+        include temporary (302, 307) redirects, keeping the request method and
+        body (307, 308), or explicitly resetting the method to GET (303).
+        See <https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections>.
       '';
     };
 

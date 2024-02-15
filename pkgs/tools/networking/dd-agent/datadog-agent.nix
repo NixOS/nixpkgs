@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , cmake
-, buildGo118Module
+, buildGoModule
 , makeWrapper
 , fetchFromGitHub
 , pythonPackages
@@ -10,21 +10,23 @@
 , hostname
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , extraTags ? [ ]
+, testers
+, datadog-agent
 }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "4.78.0";
+  payloadVersion = "5.0.97";
   python = pythonPackages.python;
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.38.1";
+  version = "7.50.3";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev = version;
-    sha256 = "sha256-bG8wsSQvZcG4/Th6mWVdVX9vpeYBZx8FxwdYXpIdXnU=";
+    hash = "sha256-AN5BruLPyrpIGSUkcYkZC0VgItk9NHiZTXstv6j9TlY=";
   };
   rtloader = stdenv.mkDerivation {
     pname = "datadog-agent-rtloader";
@@ -35,13 +37,13 @@ let
     cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
   };
 
-in buildGo118Module rec {
+in buildGoModule rec {
   pname = "datadog-agent";
   inherit src version;
 
   doCheck = false;
 
-  vendorSha256 = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
+  vendorHash = "sha256-Rn8EB/6FHQk9COlOaxm4TQXjGCIPZHJV2QQnPDcbRnM=";
 
   subPackages = [
     "cmd/agent"
@@ -62,6 +64,7 @@ in buildGo118Module rec {
     "process"
     "log"
     "secrets"
+    "zlib"
   ]
   ++ lib.optionals withSystemd [ "systemd" ]
   ++ extraTags;
@@ -84,16 +87,17 @@ in buildGo118Module rec {
   postPatch = ''
     sed -e "s|PyChecksPath =.*|PyChecksPath = \"$out/${python.sitePackages}\"|" \
         -e "s|distPath =.*|distPath = \"$out/share/datadog-agent\"|" \
-        -i cmd/agent/common/common_nix.go
+        -i cmd/agent/common/path/path_nix.go
     sed -e "s|/bin/hostname|${lib.getBin hostname}/bin/hostname|" \
-        -i pkg/util/hostname_nix.go
+        -i pkg/util/hostname/fqdn_nix.go
   '';
 
   # Install the config files and python modules from the "dist" dir
   # into standard paths.
   postInstall = ''
     mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
-    cp -R $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+    rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d}
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
     cp -R $src/pkg/status/templates $out/share/datadog-agent
@@ -102,6 +106,11 @@ in buildGo118Module rec {
       --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
       --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
 
+  passthru.tests.version = testers.testVersion {
+    package = datadog-agent;
+    command = "agent version";
+  };
+
   meta = with lib; {
     description = ''
       Event collector for the DataDog analysis service
@@ -109,7 +118,7 @@ in buildGo118Module rec {
     '';
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice domenkozar rvl viraptor ];
+    maintainers = with maintainers; [ thoughtpolice domenkozar ];
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

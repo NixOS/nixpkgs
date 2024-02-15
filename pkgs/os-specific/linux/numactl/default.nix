@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aDKzkmvrPDzQl4n0KgeiU5LOLhQA0tmwzGiXvJDp7ZI=";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   postPatch = ''
     patchShebangs test
   '';
-
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   # You probably shouldn't ever run these! They will reconfigure Linux
   # NUMA settings, which on my build machine makes the rest of package

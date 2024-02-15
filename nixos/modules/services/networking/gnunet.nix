@@ -112,12 +112,8 @@ in
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gnunet;
-        defaultText = literalExpression "pkgs.gnunet";
-        description = lib.mdDoc "Overridable attribute of the gnunet package to use.";
-        example = literalExpression "pkgs.gnunet_git";
+      package = mkPackageOption pkgs "gnunet" {
+        example = "gnunet_git";
       };
 
       extraOptions = mkOption {
@@ -155,7 +151,7 @@ in
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ config.environment.etc."gnunet.conf".source ];
       path = [ cfg.package pkgs.miniupnpc ];
       serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c /etc/gnunet.conf";
       serviceConfig.User = "gnunet";

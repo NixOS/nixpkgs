@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , nixosTests
 
@@ -11,6 +10,7 @@
 , ncurses
 , pkg-config
 , python3
+, scdoc
 
 , expat
 , fontconfig
@@ -35,6 +35,7 @@ let
     expat
     fontconfig
     freetype
+  ] ++ lib.optionals stdenv.isLinux [
     libGL
     xorg.libX11
     xorg.libXcursor
@@ -42,25 +43,22 @@ let
     xorg.libXrandr
     xorg.libXxf86vm
     xorg.libxcb
-  ] ++ lib.optionals stdenv.isLinux [
     libxkbcommon
     wayland
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2jNE0UdPXfOyAfPPVKhdBpuVVw4IpwWQ+RLQlJNnK0Y=";
+    hash = "sha256-Nn/G7SkRuHXRSRgNjlmdX1G07sp7FPx8UyAn63Nivfg=";
   };
 
-  cargoSha256 = "sha256-t6ckX0PYI8UHfXhGRpcX8ly3DzE9A6i9P6f3Ny3DBzw=";
-
-  auditable = true; # TODO: remove when this is the default
+  cargoHash = "sha256-vCoKaDd0mQRF6NNfK679FhEXuAdn/1o3F1gTfT8NK+0=";
 
   nativeBuildInputs = [
     cmake
@@ -69,6 +67,7 @@ rustPlatform.buildRustPackage rec {
     ncurses
     pkg-config
     python3
+    scdoc
   ];
 
   buildInputs = rpathLibs
@@ -84,7 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
@@ -104,21 +103,22 @@ rustPlatform.buildRustPackage rec {
       # patchelf generates an ELF that binutils' "strip" doesn't like:
       #    strip: not enough room for program headers, try linking with -N
       # As a workaround, strip manually before running patchelf.
-      strip -S $out/bin/alacritty
+      $STRIP -S $out/bin/alacritty
 
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+      patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''
-
     installShellCompletion --zsh extra/completions/_alacritty
     installShellCompletion --bash extra/completions/alacritty.bash
     installShellCompletion --fish extra/completions/alacritty.fish
 
     install -dm 755 "$out/share/man/man1"
-    gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
-    gzip -c extra/alacritty-msg.man > "$out/share/man/man1/alacritty-msg.1.gz"
+    install -dm 755 "$out/share/man/man5"
 
-    install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
+    scdoc < extra/man/alacritty.1.scd | gzip -c > $out/share/man/man1/alacritty.1.gz
+    scdoc < extra/man/alacritty-msg.1.scd | gzip -c > $out/share/man/man1/alacritty-msg.1.gz
+    scdoc < extra/man/alacritty.5.scd | gzip -c > $out/share/man/man5/alacritty.5.gz
+    scdoc < extra/man/alacritty-bindings.5.scd | gzip -c > $out/share/man/man5/alacritty-bindings.5.gz
 
     install -dm 755 "$terminfo/share/terminfo/a/"
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
@@ -134,6 +134,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
+    mainProgram = "alacritty";
     maintainers = with maintainers; [ Br1ght0ne mic92 ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";

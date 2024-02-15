@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "uptime-kuma";
-  meta.maintainers = with maintainers; [ julienmalka ];
+  meta.maintainers = with lib.maintainers; [ julienmalka ];
 
   nodes.machine =
     { pkgs, ... }:

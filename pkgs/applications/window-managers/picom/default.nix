@@ -8,21 +8,22 @@
 , libdrm
 , libev
 , libGL
+, libepoxy
 , libX11
 , libxcb
 , libxdg_basedir
 , libXext
-, libXinerama
 , libxml2
 , libxslt
 , makeWrapper
 , meson
 , ninja
-, pcre
+, pcre2
 , pixman
 , pkg-config
 , stdenv
 , uthash
+, xcbutil
 , xcbutilimage
 , xcbutilrenderutil
 , xorgproto
@@ -30,15 +31,15 @@
 , withDebug ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "picom";
-  version = "10.2";
+  version = "11.2";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
-    rev = "v${version}";
-    hash = "sha256-C+icJXTkE+XMaU7N6JupsP8xhmRVggX9hY1P7za0pO0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7ohtI890CutwprPEY5njqWou0fD6T9eu51EBSQ2/lWs=";
     fetchSubmodules = true;
   };
 
@@ -59,15 +60,16 @@ stdenv.mkDerivation rec {
     libdrm
     libev
     libGL
+    libepoxy
     libX11
     libxcb
     libxdg_basedir
     libXext
-    libXinerama
     libxml2
     libxslt
-    pcre
+    pcre2
     pixman
+    xcbutil
     xcbutilimage
     xcbutilrenderutil
     xorgproto
@@ -111,7 +113,8 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     homepage = "https://github.com/yshui/picom";
-    maintainers = with maintainers; [ ertes twey thiagokokada ];
+    maintainers = with maintainers; [ ertes gepbird twey thiagokokada ];
     platforms = platforms.linux;
+    mainProgram = "picom";
   };
-}
+})

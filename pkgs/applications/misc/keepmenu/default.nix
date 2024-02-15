@@ -1,28 +1,40 @@
-{ lib, python3Packages, python3, xvfb-run }:
+{ lib, python3Packages, fetchFromGitHub, xvfb-run, xdotool, dmenu }:
 
 python3Packages.buildPythonApplication rec {
   pname = "keepmenu";
-  version = "1.2.2";
+  version = "1.4.0";
+  format = "pyproject";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "SeVNtONH1bn2hb2pBOVM3Oafrb+jARgfvRe7vUu6Gto=";
+  src = fetchFromGitHub {
+    owner = "firecat53";
+    repo = "keepmenu";
+    rev = version;
+    hash = "sha256-3vFg+9Nw+NhuPJbrmBahXwa13wXlBg5IMYwJ+unn88k=";
   };
 
-  preConfigure = ''
-    export HOME=$TMPDIR
-    mkdir -p $HOME/.config/keepmenu
-    cp config.ini.example $HOME/.config/keepmenu/config.ini
-  '';
+  nativeBuildInputs = with python3Packages; [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     pykeepass
     pynput
   ];
 
-  nativeCheckInputs = [ xvfb-run ];
+  nativeCheckInputs = [ xvfb-run xdotool dmenu ];
+
+  postPatch = ''
+    substituteInPlace tests/keepmenu-config.ini tests/tests.py \
+      --replace "/usr/bin/dmenu" "dmenu"
+  '';
+
   checkPhase = ''
-    xvfb-run python setup.py test
+    runHook preCheck
+
+    xvfb-run python tests/tests.py
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "keepmenu" ];
@@ -32,5 +44,6 @@ python3Packages.buildPythonApplication rec {
     description = "Dmenu/Rofi frontend for Keepass databases";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ elliot ];
+    platforms = platforms.linux;
   };
 }

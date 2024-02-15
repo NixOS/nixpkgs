@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkbasalt";
-  version = "0.3.2.9";
+  version = "0.3.2.10";
 
   src = fetchFromGitHub {
     owner = "DadSchoorse";
     repo = "vkBasalt";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-IVlZ6o+1EEEh547rFPN7z+W+EY7MrIM/yUh6+PPkNeI=";
+    hash = "sha256-GC6JKYnsfcUBg+CX6v7MyE4FeLmjadFwighaiyureDg=";
   };
 
   nativeBuildInputs = [ glslang meson ninja pkg-config ];
@@ -31,6 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Include 32bit layer in 64bit build
     ln -s ${vkbasalt32}/share/vulkan/implicit_layer.d/vkBasalt.json \
       "$out/share/vulkan/implicit_layer.d/vkBasalt32.json"
+  '';
+
+  # We need to give the different layers separate names or else the loader
+  # might try the 32-bit one first, fail and not attempt to load the 64-bit
+  # layer under the same name.
+  postFixup = ''
+    substituteInPlace "$out/share/vulkan/implicit_layer.d/vkBasalt.json" \
+      --replace "VK_LAYER_VKBASALT_post_processing" "VK_LAYER_VKBASALT_post_processing_${toString stdenv.hostPlatform.parsed.cpu.bits}"
   '';
 
   meta = with lib; {

@@ -18,7 +18,7 @@
   dnsConfig = nodes: {
     dnsProvider = "exec";
     dnsPropagationCheck = false;
-    credentialsFile = pkgs.writeText "wildcard.env" ''
+    environmentFile = pkgs.writeText "wildcard.env" ''
       EXEC_PATH=${dnsScript nodes}
       EXEC_POLLING_INTERVAL=1
       EXEC_PROPAGATION_TIMEOUT=1
@@ -266,6 +266,37 @@ in {
           }
         ];
 
+        concurrency-limit.configuration = {pkgs, ...}: lib.mkMerge [
+          webserverBasicConfig {
+            security.acme.maxConcurrentRenewals = 1;
+
+            services.nginx.virtualHosts = {
+              "f.example.test" = vhostBase // {
+                enableACME = true;
+              };
+              "g.example.test" = vhostBase // {
+                enableACME = true;
+              };
+              "h.example.test" = vhostBase // {
+                enableACME = true;
+              };
+            };
+
+            systemd.services = {
+              # check for mutual exclusion of starting renew services
+              "acme-f.example.test".serviceConfig.ExecPreStart = "+" + (pkgs.writeShellScript "test-f" ''
+                test "$(systemctl is-active acme-{g,h}.example.test.service | grep activating | wc -l)" -le 0
+                '');
+              "acme-g.example.test".serviceConfig.ExecPreStart = "+" + (pkgs.writeShellScript "test-g" ''
+                test "$(systemctl is-active acme-{f,h}.example.test.service | grep activating | wc -l)" -le 0
+                '');
+              "acme-h.example.test".serviceConfig.ExecPreStart = "+" + (pkgs.writeShellScript "test-h" ''
+                test "$(systemctl is-active acme-{g,f}.example.test.service | grep activating | wc -l)" -le 0
+                '');
+              };
+          }
+        ];
+
         # Test lego internal server (listenHTTP option)
         # Also tests useRoot option
         lego-server.configuration = { ... }: {
@@ -297,7 +328,7 @@ in {
 
           services.caddy = {
             enable = true;
-            virtualHosts."a.exmaple.test" = {
+            virtualHosts."a.example.test" = {
               useACMEHost = "example.test";
               extraConfig = ''
                 root * ${documentRoot}
@@ -407,7 +438,7 @@ in {
       # Ensures the issuer of our cert matches the chain
       # and matches the issuer we expect it to be.
       # It's a good validation to ensure the cert.pem and fullchain.pem
-      # are not still selfsigned afer verification
+      # are not still selfsigned after verification
       def check_issuer(node, cert_name, issuer):
           for fname in ("cert.pem", "fullchain.pem"):
               actual_issuer = node.succeed(
@@ -491,6 +522,7 @@ in {
           'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
+      acme.systemctl("start network-online.target")
       acme.wait_for_unit("network-online.target")
       acme.wait_for_unit("pebble.service")
 
@@ -590,6 +622,15 @@ in {
           check_issuer(webserver, "slow.example.test", "pebble")
           webserver.wait_for_unit("nginx.service")
           check_connection(client, "slow.example.test")
+
+      with subtest("Can limit concurrency of running renewals"):
+          switch_to(webserver, "concurrency-limit")
+          webserver.wait_for_unit("acme-finished-f.example.test.target")
+          webserver.wait_for_unit("acme-finished-g.example.test.target")
+          webserver.wait_for_unit("acme-finished-h.example.test.target")
+          check_connection(client, "f.example.test")
+          check_connection(client, "g.example.test")
+          check_connection(client, "h.example.test")
 
       with subtest("Works with caddy"):
           switch_to(webserver, "caddy")

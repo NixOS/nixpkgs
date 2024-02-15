@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam";
-  version = "2.11.2";
+  version = "2.12.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-viN/BiIYmE83B1JMh5THgj2/HLGOeIotDVLdTODZBAg=";
+    hash = "sha256-YDHQwZEfx5zguLuPb+FkUoO5wakYi0g9rmI7U7TYGBw=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-iam";
     changelog = "https://github.com/googleapis/python-iam/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+    maintainers = with maintainers; [ austinbutler ];
   };
 }

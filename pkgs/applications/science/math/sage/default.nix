@@ -11,8 +11,8 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  python3 = pkgs.python3.override {
-    packageOverrides = self: super: {
+  python3 = pkgs.python3 // {
+    pkgs = pkgs.python3.pkgs.overrideScope (self: super: {
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
@@ -29,9 +29,10 @@ let
       sage-setup = self.callPackage ./python-modules/sage-setup.nix {
         inherit sage-src;
       };
-    };
+    });
   };
 
+  # matches src/sage/repl/ipython_kernel/install.py:kernel_spec
   jupyter-kernel-definition = {
     displayName = "SageMath ${sage-src.version}";
     argv = [
@@ -42,7 +43,7 @@ let
       "-f"
       "{connection_file}"
     ];
-    language = "sagemath";
+    language = "sage";
     # just one 16x16 logo is available
     logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
     logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
@@ -128,7 +129,7 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  maxima = pkgs.maxima-ecl-5_45.override {
+  maxima = pkgs.maxima-ecl.override {
     lisp-compiler = pkgs.ecl.override {
       # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
       # ECL. We apply a patch to fix it (write_error.patch), but it

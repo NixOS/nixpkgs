@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gatekeeper";
-  version = "3.10.0";
+  version = "3.15.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
     rev = "v${version}";
-    sha256 = "sha256-4U03gdOls1uPpTqxmjLo1ruE4eeuUlGxphOgS9e5C1A=";
+    hash = "sha256-Mt9bSgmqjj9KkJJW0F2tr2P8GtSy80h9CfMXvIxyKc4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [
     installShellFiles

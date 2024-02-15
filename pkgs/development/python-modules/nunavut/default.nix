@@ -9,14 +9,14 @@
 
  buildPythonPackage rec {
   pname = "nunavut";
-  version = "2.0.2";
+  version = "2.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rrt26sEdT3EM1KQHnHQogodj+7QwRJ05f8t7Tn679ZE=";
+    hash = "sha256-23C3biUUs10Po5qzn3EFaq4+HeWCXIC6WzxOKy59VgM=";
   };
 
   postPatch = ''
@@ -50,6 +50,7 @@
       authors to generate code, schemas, metadata, documentation, etc.
     '';
     homepage = "https://nunavut.readthedocs.io/";
+    changelog = "https://github.com/OpenCyphal/nunavut/releases/tag/${version}";
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ bsd3 mit ];
   };

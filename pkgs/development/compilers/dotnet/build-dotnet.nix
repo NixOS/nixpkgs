@@ -1,7 +1,6 @@
 { type
 , version
 , srcs
-, icu # passing icu as an argument, because dotnet 3.1 has troubles with icu71
 , packages ? null
 }:
 
@@ -15,7 +14,7 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl_1_1
+, icu
 , libuuid
 , zlib
 , libkrb5
@@ -61,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     zlib
     icu
     libkrb5
-    # this must be before curl for autoPatchElf to find it
-    # curl brings in its own openssl
-    openssl_1_1
     curl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
@@ -124,9 +120,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
     export DOTNET_NOLOGO=1 # Disables the welcome message
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
+    export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1 # Skip integrity check on first run, which fails due to read-only directory
   '';
 
-  passthru = rec {
+  passthru = {
     inherit icu;
     packages = packageDeps;
 
@@ -151,9 +148,10 @@ stdenv.mkDerivation (finalAttrs: rec {
         nativeBuildInputs = [ finalAttrs.finalPackage ];
       } ''
         HOME=$(pwd)/fake-home
-        dotnet new console
-        dotnet build
-        output="$(dotnet run)"
+        dotnet new console --no-restore
+        dotnet restore --source "$(mktemp -d)"
+        dotnet build --no-restore
+        output="$(dotnet run --no-build)"
         # yes, older SDKs omit the comma
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';

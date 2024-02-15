@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-machete";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "bnjbvr";
     repo = "cargo-machete";
     rev = "v${version}";
-    hash = "sha256-AOi4SnFkt82iQIP3bp/9JIaYiqjiEjKvJKUvrLQJTX8=";
+    hash = "sha256-LDhC/vwhyY4KD1RArCxl+nZl5IVj0zAjxlRLwWpnTvI=";
   };
 
-  cargoHash = "sha256-Q/2py0zgCYgnxFpcJD5PfNfIfIEUjtjFPjxDe25f0BQ=";
+  cargoHash = "sha256-vygAznYd/mtArSkLjoIpIxS4RiE3drRfKwNhD1w7KoY=";
 
   # tests require internet access
   doCheck = false;
@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bnjbvr/cargo-machete";
     changelog = "https://github.com/bnjbvr/cargo-machete/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

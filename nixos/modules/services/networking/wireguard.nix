@@ -164,15 +164,36 @@ let
           of the wireguard network has to be adjusted as well.
         '';
       };
+
+      metric = mkOption {
+        default = null;
+        type = with types; nullOr int;
+        example = 700;
+        description = lib.mdDoc ''
+          Set the metric of routes related to this Wireguard interface.
+        '';
+      };
     };
 
   };
 
   # peer options
 
-  peerOpts = {
+  peerOpts = self: {
 
     options = {
+
+      name = mkOption {
+        default =
+          replaceStrings
+            [ "/" "-"     " "     "+"     "="     ]
+            [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ]
+            self.config.publicKey;
+        defaultText = literalExpression "publicKey";
+        example = "bernd";
+        type = types.str;
+        description = lib.mdDoc "Name used to derive peer unit name.";
+      };
 
       publicKey = mkOption {
         example = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
@@ -313,15 +334,11 @@ let
         '';
       };
 
-  peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
+  peerUnitServiceName = interfaceName: peerName: dynamicRefreshEnabled:
     let
-      keyToUnitName = replaceStrings
-        [ "/" "-"    " "     "+"     "="      ]
-        [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
-      unitName = keyToUnitName publicKey;
       refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
     in
-      "wireguard-${interfaceName}-peer-${unitName}${refreshSuffix}";
+      "wireguard-${interfaceName}-peer-${peerName}${refreshSuffix}";
 
   generatePeerUnit = { interfaceName, interfaceCfg, peer }:
     let
@@ -337,10 +354,11 @@ let
       # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
       # to avoid that the same service switches `Type` (`oneshot` vs `simple`),
       # with the intent to make scripting more obvious.
-      serviceName = peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
+      serviceName = peerUnitServiceName interfaceName peer.name dynamicRefreshEnabled;
     in nameValuePair serviceName
       {
-        description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
+        description = "WireGuard Peer - ${interfaceName} - ${peer.name}"
+          + optionalString (peer.name != peer.publicKey) " (${peer.publicKey})";
         requires = [ "wireguard-${interfaceName}.service" ];
         wants = [ "network-online.target" ];
         after = [ "wireguard-${interfaceName}.service" "network-online.target" ];
@@ -386,7 +404,7 @@ let
             optionalString interfaceCfg.allowedIPsAsRoutes
               (concatMapStringsSep "\n"
                 (allowedIP:
-                  ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}"''
+                  ''${ip} route replace "${allowedIP}" dev "${interfaceName}" table "${interfaceCfg.table}" ${optionalString (interfaceCfg.metric != null) "metric ${toString interfaceCfg.metric}"}''
                 ) peer.allowedIPs);
         in ''
           ${wg_setup}
@@ -418,7 +436,7 @@ let
   # the target is required to start new peer units when they are added
   generateInterfaceTarget = name: values:
     let
-      mkPeerUnit = peer: (peerUnitServiceName name peer.publicKey (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
+      mkPeerUnit = peer: (peerUnitServiceName name peer.name (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
     in
     nameValuePair "wireguard-${name}"
       rec {
@@ -568,6 +586,7 @@ in
         }) all_peers;
 
     boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+    boot.kernelModules = [ "wireguard" ];
     environment.systemPackages = [ pkgs.wireguard-tools ];
 
     systemd.services =

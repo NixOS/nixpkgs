@@ -15,17 +15,22 @@
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.6";
-  format = "pyproject";
+  version = "0.3.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
+    repo = "aiomysensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oYYr7LuTvw7e99930vF7odl2dWA/QPOTEW02l8cqXlc=";
+    hash = "sha256-uBmFJFmUClTkaAg8jTThygzmZv7UZDPSt0bXo8BLu00=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=src --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -45,12 +50,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=src --cov-report=term-missing:skip-covered" "" \
-      --replace 'marshmallow = "^3.17"' 'marshmallow = "*"'
-  '';
-
   pythonImportsCheck = [
     "aiomysensors"
   ];
@@ -58,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to connect to MySensors gateways";
     homepage = "https://github.com/MartinHjelmare/aiomysensors";
+    changelog = "https://github.com/MartinHjelmare/aiomysensors/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

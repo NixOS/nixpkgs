@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pluma";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0lway12q2xygiwjgrx7chgka838jbnmlzz98g7agag1rwzd481ii";
+    sha256 = "WVns49cRjhBmWfZNIC0O0XY60Qu7ul0qzYy/ui45lPE=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     itstool
     perl
     pkg-config
+    python3.pkgs.wrapPython
     wrapGAppsHook
   ];
 
@@ -46,6 +47,16 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  pythonPath = with python3.pkgs; [
+    pycairo
+    six
+  ];
+
+  postFixup = ''
+    buildPythonPath "$pythonPath"
+    patchPythonScript $out/lib/pluma/plugins/snippets/Snippet.py
+  '';
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
 

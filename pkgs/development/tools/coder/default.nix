@@ -29,18 +29,17 @@ buildGoModule rec {
     hash = "sha256-nRmEXR9fjDxvpbnT+qpGeM0Cc/qW/kN53sKOXwZiBXY=";
   };
 
-  subPackages = [ "cmd/..." ];
-
   vendorHash = "sha256-+AvmJkZCFovE2+5Lg98tUvA7f2kBHUMzhl5IyrEGuy8=";
 
-  # integration tests require network access
-  doCheck = false;
+  tags = [ "embed" ];
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/coder/coder/buildinfo.tag=${version}"
   ];
+
+  subPackages = [ "cmd/..." ];
 
   preBuild = ''
     export HOME=$TEMPDIR
@@ -50,14 +49,14 @@ buildGoModule rec {
     fixup_yarn_lock yarn.lock
 
     # node-gyp tries to download always the headers and fails: https://github.com/NixOS/nixpkgs/issues/195404
-    yarn remove --offline jest-canvas-mock canvas
+    # playwright tries to download Chrome and fails
+    yarn remove --offline jest-canvas-mock canvas @playwright/test playwright
 
+    export PATH=$PATH:$(pwd)/node_modules/.bin
     NODE_ENV=production node node_modules/.bin/vite build
 
     popd
   '';
-
-  tags = [ "embed" ];
 
   nativeBuildInputs = [
     fixup_yarn_lock
@@ -79,10 +78,13 @@ buildGoModule rec {
     wrapProgram $out/bin/coder --prefix PATH : ${lib.makeBinPath [ terraform ]}
   '';
 
-  meta = with lib; {
+  # integration tests require network access
+  doCheck = false;
+
+  meta = {
     description = "Provision software development environments via Terraform on Linux, macOS, Windows, X86, ARM, and of course, Kubernetes";
     homepage = "https://coder.com";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ ghuntley urandom ];
+    license = lib.licenses.agpl3;
+    maintainers = [ lib.maintainers.ghuntley lib.maintainers.urandom ];
   };
 }

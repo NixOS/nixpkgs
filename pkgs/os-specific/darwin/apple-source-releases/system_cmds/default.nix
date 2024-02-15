@@ -30,7 +30,12 @@ appleDerivation {
                          "-DAU_SESSION_FLAG_HAS_AUTHENTICATED=0x4000"
                        ] ++ lib.optional (!stdenv.isLinux) " -D__FreeBSD__ ");
 
-  patchPhase = ''
+  patches = [
+    # Fix implicit declarations that cause builds to fail when built with clang 16.
+    ./fix-implicit-declarations.patch
+  ];
+
+  postPatch = ''
     substituteInPlace login.tproj/login.c \
       --replace bsm/audit_session.h bsm/audit.h
     substituteInPlace login.tproj/login_audit.c \

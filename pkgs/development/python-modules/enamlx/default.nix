@@ -4,11 +4,13 @@
 , enaml
 , pyqtgraph
 , pythonocc-core
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "enamlx";
   version = "0.6.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
@@ -22,6 +24,7 @@ buildPythonPackage rec {
     # Until https://github.com/inkcut/inkcut/issues/105 perhaps
     pyqtgraph
     pythonocc-core
+    typing-extensions
   ];
 
   # qt_occ_viewer test requires enaml.qt.QtOpenGL which got dropped somewhere

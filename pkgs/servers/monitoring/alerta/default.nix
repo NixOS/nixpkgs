@@ -1,14 +1,15 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta-server";
-  version = "8.7.0";
+  version = "9.0.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EM3owmj+6gFjU0ARaQP3FLYXliGaGCRSaLgkiPwhGdU=";
+    sha256 = "sha256-v4+0l5Sx9RTxmNFnKCoKrWFl1xu1JIRZ/kiI6zi/y0I=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,9 +30,10 @@ python3.pkgs.buildPythonApplication rec {
     requests
     requests-hawk
     sentry-sdk
+    setuptools
   ];
 
-   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+  # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
   doCheck = false;
 
   pythonImportsCheck = [

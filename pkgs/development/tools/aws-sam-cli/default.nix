@@ -1,80 +1,148 @@
 { lib
 , python3
+, fetchFromGitHub
+, git
+, testers
+, aws-sam-cli
+, nix-update-script
 , enableTelemetry ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.53.0";
+  version = "1.103.0";
+  format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    hash = "sha256-kIW+aGYuS+JgOMsPbeLgPSgLFNKLSqHaZ1CHpjs/IVI=";
+  disabled = python3.pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "aws-sam-cli";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oy0+dAA6x8Jl1nZ1wjsR9xvpR9biemTtqL9B1awz4BM=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "aws-sam-translator"
+    "boto3-stubs"
+    "tzlocal"
+    "cookiecutter"
+    "docker"
+    "aws-lambda-builders"
+    "tomlkit"
+    "rich"
+    "jsonschema"
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aws-lambda-builders
     aws-sam-translator
+    boto3
+    boto3-stubs
+    cfn-lint
     chevron
     click
     cookiecutter
     dateparser
-    python-dateutil
     docker
     flask
-    jmespath
+    jsonschema
+    pyopenssl
+    pyyaml
     requests
-    serverlessrepo
+    rich
+    ruamel-yaml
     tomlkit
-    watchdog
     typing-extensions
-    regex
-  ];
+    tzlocal
+    watchdog
+  ] ++ (with python3.pkgs.boto3-stubs.optional-dependencies; [
+    apigateway
+    cloudformation
+    ecr
+    iam
+    kinesis
+    lambda
+    s3
+    schemas
+    secretsmanager
+    signer
+    sqs
+    stepfunctions
+    sts
+    xray
+  ]);
 
-  postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
-    # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
-    wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
+  postFixup = ''
+    # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
+    wrapProgram $out/bin/sam \
+      --set SAM_CLI_TELEMETRY ${if enableTelemetry then "1" else "0"} \
+      --prefix PATH : $out/bin:${lib.makeBinPath [ git ]}
   '';
 
-  patches = [
-    # Click 8.1 removed `get_terminal_size`, recommending
-    # `shutil.get_terminal_size` instead.
-    # (https://github.com/pallets/click/pull/2130)
-    ./support-click-8-1.patch
-    # Werkzeug >= 2.1.0 breaks the `sam local start-lambda` command because
-    # aws-sam-cli uses a "WERKZEUG_RUN_MAIN" hack to suppress flask output.
-    # (https://github.com/cs01/gdbgui/issues/425)
-    ./use_forward_compatible_log_silencing.patch
+  doCheck = true;
+
+  nativeCheckInputs = with python3.pkgs; [
+    filelock
+    flaky
+    parameterized
+    psutil
+    pytest-xdist
+    pytestCheckHook
   ];
 
-  # fix over-restrictive version bounds
-  postPatch = ''
-    substituteInPlace requirements/base.txt \
-      --replace "aws_lambda_builders==" "aws-lambda-builders #" \
-      --replace "aws-sam-translator==1.46.0" "aws-sam-translator~=1.46" \
-      --replace "click~=7.1" "click~=8.1" \
-      --replace "cookiecutter~=1.7.2" "cookiecutter>=1.7.2" \
-      --replace "dateparser~=1.0" "dateparser>=0.7" \
-      --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "Flask~=1.1.4" "Flask~=2.0" \
-      --replace "jmespath~=0.10.0" "jmespath" \
-      --replace "MarkupSafe==2.0.1" "MarkupSafe #" \
-      --replace "PyYAML~=5.3" "PyYAML #" \
-      --replace "regex==" "regex #" \
-      --replace "requests==" "requests #" \
-      --replace "typing_extensions==" "typing-extensions #" \
-      --replace "tzlocal==3.0" "tzlocal #" \
-      --replace "tomlkit==0.7.2" "tomlkit #" \
-      --replace "watchdog==" "watchdog #"
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export PATH="$PATH:$out/bin:${lib.makeBinPath [ git ]}"
   '';
 
-  # Tests are not included in the PyPI package
-  doCheck = false;
+  pytestFlagsArray = [
+    "tests"
+
+    # Disable tests that requires networking or complex setup
+    "--ignore=tests/end_to_end"
+    "--ignore=tests/integration"
+    "--ignore=tests/regression"
+    "--ignore=tests/smoke"
+    "--ignore=tests/unit/lib/telemetry"
+
+    # Disable flaky tests
+    "--ignore=tests/unit/lib/samconfig/test_samconfig.py"
+    "--deselect=tests/unit/lib/sync/flows/test_rest_api_sync_flow.py::TestRestApiSyncFlow::test_update_stage"
+    "--deselect=tests/unit/lib/sync/flows/test_rest_api_sync_flow.py::TestRestApiSyncFlow::test_delete_deployment"
+    "--deselect=tests/unit/local/lambda_service/test_local_lambda_invoke_service.py::TestValidateRequestHandling::test_request_with_no_data"
+
+    # Disable warnings
+    "-W ignore::DeprecationWarning"
+  ];
+
+  pythonImportsCheck = [
+    "samcli"
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = aws-sam-cli;
+      command = "sam --version";
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^v([0-9.]+)$" ];
+    };
+  };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    homepage = "https://github.com/awslabs/aws-sam-cli";
     description = "CLI tool for local development and testing of Serverless applications";
+    homepage = "https://github.com/aws/aws-sam-cli";
+    changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lo1tuma ];
+    mainProgram = "sam";
+    maintainers = with maintainers; [ lo1tuma anthonyroussel ];
   };
 }

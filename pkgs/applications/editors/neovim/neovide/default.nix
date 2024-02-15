@@ -6,6 +6,7 @@
 , fetchgit
 , runCommand
 , gn
+, neovim
 , ninja
 , makeWrapper
 , pkg-config
@@ -25,16 +26,16 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
-  version = "0.10.3";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     rev = version;
-    sha256 = "sha256-CcBiCcfOJzuq0DnokTUHpMdo7Ry29ugQ+N7Hk0R+cQE=";
+    sha256 = "sha256-M19LKNjUmC0WkVGm4t7vjxgMMe0FdMTmB1mLcG33OUg=";
   };
 
-  cargoSha256 = "sha256-bS7yBnxAWPoTTabxI6W5Knl1DFiDztYSkEPJMa8bqlY=";
+  cargoHash = "sha256-2fPprZVT7V+Ot8aCpWj6WTdyFylmzlujFdTJCrtE0rk=";
 
   SKIA_SOURCE_DIR =
     let
@@ -42,8 +43,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m103-0.51.1";
-        sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
+        rev = "m119-0.67.3";
+        sha256 = "sha256-U75NuJnQa5+SNlOrsBmdlvflGdjo3el63EeIsbnE7ms=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = linkFarm "skia-externals" (lib.mapAttrsToList
@@ -67,11 +68,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     removeReferencesTo
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  # All tests passes but at the end cargo prints for unknown reason:
-  #   error: test failed, to rerun pass '--bin neovide'
-  # Increasing the loglevel did not help. In a nix-shell environment
-  # the failure do not occure.
-  doCheck = false;
+  nativeCheckInputs = [ neovim ];
 
   buildInputs = [
     SDL2
@@ -80,6 +77,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   postFixup = let
     libPath = lib.makeLibraryPath ([
@@ -115,6 +117,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d ];
+    maintainers = with maintainers; [ ck3d multisn8 ];
+    platforms = platforms.all;
   };
 }

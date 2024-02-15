@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pdf2image";
-  version = "1.16.2";
+  version = "1.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hnYQke7jX0ZB6pjf3bJUJUNh0Bi+aYoZmv98HTczGAM=";
+    hash = "sha256-6qlZvBFrQg3X7EFfyuSbmBAN2j3RjNL9+obQnxEvbVc=";
   };
 
   postPatch = ''

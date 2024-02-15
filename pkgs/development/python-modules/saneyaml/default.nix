@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "saneyaml";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,6 +37,6 @@ buildPythonPackage rec {
     description = "A PyYaml wrapper with sane behaviour to read and write readable YAML safely";
     homepage = "https://github.com/nexB/saneyaml";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }
