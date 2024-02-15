@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_GTK_DOC=False"
     "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
     "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
+    "-DLIBICAL_BUILD_TESTING=false"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
