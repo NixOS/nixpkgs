@@ -1,10 +1,11 @@
 { lib
-, buildPythonPackage
-, pythonOlder
 , aiobotocore
 , botocore
-, typing-extensions
+, buildPythonPackage
 , fetchPypi
+, pythonOlder
+, setuptools
+, typing-extensions
 }:
 let
   toUnderscore = str: builtins.replaceStrings [ "-" ] [ "_" ] str;
@@ -13,13 +14,17 @@ let
     buildPythonPackage rec {
       pname = "types-aiobotocore-${serviceName}";
       inherit version;
-      format = "setuptools";
+      pyproject = true;
 
       disabled = pythonOlder "3.7";
 
       src = fetchPypi {
         inherit pname version hash;
       };
+
+      nativeBuildInputs = [
+        setuptools
+      ];
 
       propagatedBuildInputs = [
         aiobotocore
