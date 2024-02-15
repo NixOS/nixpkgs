@@ -58,30 +58,19 @@ in
       };
   };
   testScript = ''
+    def runTest(machine, port, user):
+      machine.wait_for_unit("miniflux.service")
+      machine.wait_for_open_port(port)
+      machine.succeed(f"curl --fail 'http://localhost:{port}/healthcheck' | grep OK")
+      machine.succeed(
+          f"curl 'http://localhost:{port}/v1/me' -u '{user}' -H Content-Type:application/json | grep '\"is_admin\":true'"
+      )
+      machine.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
+
     start_all()
 
-    default.wait_for_unit("miniflux.service")
-    default.wait_for_open_port(${toString defaultPort})
-    default.succeed("curl --fail 'http://localhost:${toString defaultPort}/healthcheck' | grep OK")
-    default.succeed(
-        "curl 'http://localhost:${toString defaultPort}/v1/me' -u '${defaultUsername}:${defaultPassword}' -H Content-Type:application/json | grep '\"is_admin\":true'"
-    )
-    default.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
-
-    withoutSudo.wait_for_unit("miniflux.service")
-    withoutSudo.wait_for_open_port(${toString defaultPort})
-    withoutSudo.succeed("curl --fail 'http://localhost:${toString defaultPort}/healthcheck' | grep OK")
-    withoutSudo.succeed(
-        "curl 'http://localhost:${toString defaultPort}/v1/me' -u '${defaultUsername}:${defaultPassword}' -H Content-Type:application/json | grep '\"is_admin\":true'"
-    )
-    withoutSudo.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
-
-    customized.wait_for_unit("miniflux.service")
-    customized.wait_for_open_port(${toString port})
-    customized.succeed("curl --fail 'http://localhost:${toString port}/healthcheck' | grep OK")
-    customized.succeed(
-        "curl 'http://localhost:${toString port}/v1/me' -u '${username}:${password}' -H Content-Type:application/json | grep '\"is_admin\":true'"
-    )
-    customized.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
+    runTest(default, ${toString defaultPort}, "${defaultUsername}:${defaultPassword}")
+    runTest(withoutSudo, ${toString defaultPort}, "${defaultUsername}:${defaultPassword}")
+    runTest(customized, ${toString port}, "${username}:${password}")
   '';
 })
