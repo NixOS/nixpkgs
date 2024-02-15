@@ -50,7 +50,7 @@ rec {
 
   types-aiobotocore-acm = buildTypesAiobotocorePackage "acm" "2.11.2" "sha256-vpE1GuvKFPsBf3rTk5V6B4ujFGaHE3wk9yN3j0sM0bo=";
 
-  types-aiobotocore-acm-pca = buildTypesAiobotocorePackage "acm-pca" "2.8.0" "sha256-ib044RjF+1projrSoyiMdj9LkbT1BJrfObxs1ukSNHo=";
+  types-aiobotocore-acm-pca = buildTypesAiobotocorePackage "acm-pca" "2.11.2" "sha256-g9a2ad5hZonlKWGnLQchfT5CAgwqsvseeQBQemCSCQw=";
 
   types-aiobotocore-alexaforbusiness = buildTypesAiobotocorePackage "alexaforbusiness" "2.11.2" "sha256-XUzsO3dJmVEyAkwGcZ9BxNb8CceJALCNRIfs6/lFa8M=";
 
