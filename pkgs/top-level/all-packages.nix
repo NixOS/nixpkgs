@@ -17213,7 +17213,6 @@ with pkgs;
   tbb = tbb_2020_3;
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_11;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
   };
@@ -36416,14 +36415,6 @@ with pkgs;
   inherit (xorg) xcompmgr;
 
   x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
-
-  picom = callPackage ../applications/window-managers/picom { };
-
-  picom-allusive = callPackage ../applications/window-managers/picom/picom-allusive.nix { };
-
-  picom-jonaburg = callPackage ../applications/window-managers/picom/picom-jonaburg.nix { };
-
-  picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
 
   xd = callPackage ../applications/networking/p2p/xd { };
 
