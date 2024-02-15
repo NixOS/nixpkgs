@@ -1,8 +1,8 @@
 diff --git a/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py b/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
-index d3d6669a..2ded8d9c 100644
+index 56fab577..989ede03 100644
 --- a/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
 +++ b/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
-@@ -494,7 +494,7 @@ def run_python_code_mac(pid, python_code, connect_debugger_tracing=False, show_d
+@@ -500,7 +500,7 @@ def run_python_code_mac(pid, python_code, connect_debugger_tracing=False, show_d
      is_debug = 0
      # Note that the space in the beginning of each line in the multi-line is important!
      cmd = [
