@@ -26,6 +26,7 @@
 , libdisplay-info
 , lib
 , makeBinaryWrapper
+, nix-update-script
 , enableExecutable ? true
 , enableWsi ? true
 }:
@@ -130,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/gamescope/reshade
     cp -r ${joshShaders}/* $out/share/gamescope/reshade/
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "SteamOS session compositing window manager";
