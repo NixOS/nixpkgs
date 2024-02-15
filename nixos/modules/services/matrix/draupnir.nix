@@ -233,11 +233,11 @@ in
           (lib.getExe pkgs.draupnir)
           "--draupnir-config" "${configFile}"
         ] ++ lib.optionals (cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile != null) [
-          "--pantalaimon-password-file"
-          "/run/credentials/draupnir.service/pantalaimon_password"
+          "--pantalaimon-password-path"
+          "$CREDENTIALS_DIRECTORY/pantalaimon_password"
         ] ++ lib.optionals (cfg.accessTokenFile != null) [
-          "--access-token-file"
-          "/run/credentials/draupnir.service/access_token"
+          "--access-token-path"
+          "$CREDENTIALS_DIRECTORY/access_token"
         ]);
 
         WorkingDirectory = "/var/lib/draupnir";
