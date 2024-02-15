@@ -4,32 +4,39 @@
 , fetchPypi
 , pythonOlder
 , protobuf
-, requests
+, setuptools
+, wheel
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pychromecast";
-  version = "13.1.0";
-  format = "setuptools";
+  version = "14.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "PyChromecast";
     inherit version;
-    hash = "sha256-COYai1S9IRnTyasewBNtPYVjqpfgo7V4QViLm+YMJnY=";
+    hash = "sha256-3E+LBS52CpeNqbJWi3kCDLea9gigJkZfB1RM/+Q5c88=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "protobuf>=3.19.1,<4" "protobuf>=3.19.1"
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=65.6" "setuptools" \
+      --replace-fail "wheel~=0.37.1" "wheel" \
+      --replace-fail "protobuf>=4.25.1" "protobuf"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     casttube
     protobuf
-    requests
     zeroconf
   ];
 
