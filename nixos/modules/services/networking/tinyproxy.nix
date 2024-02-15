@@ -7,6 +7,7 @@ let
   mkValueStringTinyproxy = with lib; v:
         if true  ==         v then "yes"
         else if false ==    v then "no"
+        else if types.path.check v then ''"${v}"''
         else generators.mkValueStringDefault {} v;
   mkKeyValueTinyproxy = {
     mkValueString ? mkValueStringDefault {}
