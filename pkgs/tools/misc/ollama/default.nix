@@ -1,36 +1,58 @@
 { lib
+, stdenv
+, fetchpatch
 , buildGoModule
 , fetchFromGitHub
 , llama-cpp
+, darwin
 }:
 
-buildGoModule rec {
+let
+  version = "0.1.25";
+  llama_lib = (llama-cpp.override {
+      static = false;
+    }).overrideDerivation (oldAttrs: {
+      patches = [
+        (fetchpatch {
+          url = "https://github.com/ollama/ollama/raw/v${version}/llm/patches/01-cache.diff";
+          hash = "sha256-MgaSEMaXyRhmD5SaYABe8zthfgVeWK6IyeK4lHmj8yE=";
+        })
+        (fetchpatch {
+          url = "https://github.com/ollama/ollama/raw/v${version}/llm/patches/02-shutdown.diff";
+          hash = "sha256-5VX8PaN+Yh9erdRARkpUXauuiDMPaCqTBdKjDRpzMRc=";
+        })
+      ];
+    });
+in
+buildGoModule {
   pname = "ollama";
-  version = "0.1.17";
+  version = version;
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-eXukNn9Lu1hF19GEi7S7a96qktsjnmXCUp38gw+3MzY=";
+    hash = "sha256-qrmG+wI3FgQegoW/vgUKOZIpcoVOvPB939+dtIfIIq0=";
   };
 
-  patches = [
-    # disable passing the deprecated gqa flag to llama-cpp-server
-    # see https://github.com/ggerganov/llama.cpp/issues/2975
-    ./disable-gqa.patch
+  buildInputs = [ llama_lib ]
+    ++ llama_lib.buildInputs
+    ++ lib.optionals stdenv.isDarwin
+      (with darwin.apple_sdk.frameworks; [
+        MetalPerformanceShaders
+      ]);
 
-    # replace the call to the bundled llama-cpp-server with the one in the llama-cpp package
-    ./set-llamacpp-path.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace llm/llama.go \
-      --subst-var-by llamaCppServer "${llama-cpp}/bin/llama-cpp-server"
-    substituteInPlace server/routes_test.go --replace "0.0.0" "${version}"
+  postPatch = let
+    platformName = (lib.strings.toLower stdenv.targetPlatform.uname.system);
+    platformArch = stdenv.targetPlatform.linuxArch;
+  in ''
+    mkdir -p llm/llama.cpp/build/${platformName}/${platformArch}/foo/
+    [ -r "${llama_lib}/bin/ggml-metal.metal" ] && cp "${llama_lib}/bin/ggml-metal.metal" llm/llama.cpp/ggml-metal.metal
+    cp -r "${lib.attrsets.getLib llama_lib}/lib" llm/llama.cpp/build/${platformName}/${platformArch}/foo/
+    substituteInPlace version/version.go --replace-fail "0.0.0" "${version}"
   '';
 
-  vendorHash = "sha256-yGdCsTJtvdwHw21v0Ot6I8gxtccAvNzZyRu1T0vaius=";
+  vendorHash = "sha256-wXRbfnkbeXPTOalm7SFLvHQ9j46S/yLNbFy+OWNSamQ=";
 
   ldflags = [
     "-s"
