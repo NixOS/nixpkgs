@@ -144,7 +144,8 @@ in {
     # check that the above patching actually works
     disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
-    cmakeFlags = [
+    # Workaround for #289037
+    cmakeFlagsArray = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
       # can spot that cmake says this option was "not used by the project".
       # That's because all dependencies were found and
