@@ -7,6 +7,7 @@
 , ninja
 , pkg-config
 , glib
+, json-glib
 , itstool
 , xorg
 , accountsservice
@@ -42,13 +43,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "45.0.1";
+  version = "46.rc";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "ZXJXjAXjxladbtJp994qrzoDVldlRYbYJDkHu3pv+oU=";
+    sha256 = "sha256-cymxkG0Go76NK9iDFqyIgRY/UMSYahGiVaOZXB0//sA=";
   };
 
   mesonFlags = [
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     accountsservice
     audit
     glib
+    json-glib
     gtk3
     keyutils
     libX11
