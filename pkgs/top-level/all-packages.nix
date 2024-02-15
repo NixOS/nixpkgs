@@ -36496,7 +36496,9 @@ with pkgs;
 
   apvlv = callPackage ../applications/misc/apvlv { };
 
-  xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
+  xpdf = libsForQt5.callPackage ../applications/misc/xpdf {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
 
   xplugd = callPackage ../tools/X11/xplugd { };
 
