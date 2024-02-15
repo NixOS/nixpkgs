@@ -60,7 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString (!buildExamples) ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(example)" ""
-  '';
+  '' + ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(profiler)" ""
+  ''
+  ;
 
   postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
