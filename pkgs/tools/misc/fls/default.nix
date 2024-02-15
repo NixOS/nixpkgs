@@ -53,7 +53,6 @@ rustPlatform.buildRustPackage rec {
       experience improvement, I think other projects tell the wrong
       story; modern software does not need to be larger or slower.
     '';
-    changelog = "https://github.com/saethlin/fls/commits/master";
     homepage = "https://github.com/saethlin/fls";
     license = licenses.gpl3;
     maintainers = with maintainers; [ _2gn ];
