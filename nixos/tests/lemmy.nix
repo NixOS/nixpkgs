@@ -51,7 +51,8 @@ in
 
     with subtest("the backend starts and responds"):
         server.wait_for_open_port(${toString backendPort})
-        server.succeed("curl --fail localhost:${toString backendPort}/api/v3/site")
+        # wait until succeeds, it just needs few seconds for migrations, but lets give it 10s max
+        server.wait_until_succeeds("curl --fail localhost:${toString backendPort}/api/v3/site", 10)
 
     with subtest("the UI starts and responds"):
         server.wait_for_unit("lemmy-ui.service")
