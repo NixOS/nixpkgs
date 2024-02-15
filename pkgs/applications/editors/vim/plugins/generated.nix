@@ -893,18 +893,6 @@ final: prev:
     meta.homepage = "https://github.com/m4xshen/autoclose.nvim/";
   };
 
-  staline-nvim = buildVimPlugin {
-    pname = "staline.nvim";
-    version = "2023-11-22";
-    src = fetchFromGitHub {
-      owner = "tamton-aquib";
-      repo = "staline.nvim";
-      rev = "a53f869278b8b186a5afd6f21680cd103c381599";
-      sha256 = "sha256-GDMKzxFDtQk5LL+rMsxTGTyLv69w5NUd+u19noeO5ws=";
-    };
-    meta.homepage = "https://github.com/tamton-aquib/staline.nvim/";
-  };
-
   autoload_cscope-vim = buildVimPlugin {
     pname = "autoload_cscope.vim";
     version = "2011-01-28";
@@ -9493,6 +9481,18 @@ final: prev:
       sha256 = "0zvirhhq7pnavsldsll35xqjchvsqmvsrj1zhg930kkp2r0ycf01";
     };
     meta.homepage = "https://github.com/luukvbaal/stabilize.nvim/";
+  };
+
+  staline-nvim = buildVimPlugin {
+    pname = "staline.nvim";
+    version = "2023-11-22";
+    src = fetchFromGitHub {
+      owner = "tamton-aquib";
+      repo = "staline.nvim";
+      rev = "a53f869278b8b186a5afd6f21680cd103c381599";
+      sha256 = "sha256-GDMKzxFDtQk5LL+rMsxTGTyLv69w5NUd+u19noeO5ws=";
+    };
+    meta.homepage = "https://github.com/tamton-aquib/staline.nvim/";
   };
 
   stan-vim = buildVimPlugin {
