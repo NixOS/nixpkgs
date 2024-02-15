@@ -86,8 +86,8 @@
 */
 
 let
-  version = "23.3.5";
-  hash = "sha256-acyxJ4ZB/1utccoPhmGIrrGpKq3E27nTX1CuvsW4tQ8=";
+  version = "24.0.0";
+  hash = "sha256-3H6MB3vFiE35VHgmOzS967fojmAGictW+we+K4wwTDY=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -121,14 +121,6 @@ self = stdenv.mkDerivation {
     ./musl.patch
 
     ./opencl.patch
-
-    # Backports to fix build
-    # FIXME: remove when applied upstream
-
-    # Fix build on macOS
-    ./backports/0001-dri-added-build-dependencies-for-systems-using-non-s.patch
-    ./backports/0002-util-Update-util-libdrm.h-stubs-to-allow-loader.c-to.patch
-    ./backports/0003-glx-fix-automatic-zink-fallback-loading-between-hw-a.patch
   ];
 
   postPatch = ''
