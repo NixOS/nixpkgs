@@ -26576,6 +26576,8 @@ with pkgs;
 
   nginx = nginxStable;
 
+  freenginx = freenginxStable;
+
   nginx-doc = callPackage ../data/documentation/nginx-doc { };
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
@@ -26595,6 +26597,15 @@ with pkgs;
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
+
+  freenginxStable = callPackage ../servers/http/nginx/stable-free.nix {
+    zlib = zlib-ng.override { withZlibCompat = true; };
+    withPerl = false;
+    # We don't use `with` statement here on purpose!
+    # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
+    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
+  };
+
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };

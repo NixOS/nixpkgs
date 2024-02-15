@@ -18,6 +18,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nginxVersion ? version
 , src ? null # defaults to upstream nginx ${version}
 , hash ? null # when not specifying src
+, freenginx ? false
 , configureFlags ? []
 , nativeBuildInputs ? []
 , buildInputs ? []
@@ -54,10 +55,15 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "doc" ];
 
-  src = if src != null then src else fetchurl {
-    url = "https://nginx.org/download/nginx-${version}.tar.gz";
-    inherit hash;
-  };
+  src =
+    let
+      domain = if freenginx then "freenginx.org" else "nginx.org";
+    in
+    if src != null then src else
+    fetchurl {
+      url = "https://${domain}/download/nginx-${version}.tar.gz";
+      inherit hash;
+    };
 
   nativeBuildInputs = [
     installShellFiles
