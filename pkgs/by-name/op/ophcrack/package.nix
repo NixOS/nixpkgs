@@ -12,7 +12,6 @@
 , makeWrapper
 , pkg-config
 , expat
-, wrapQtAppsHook
 , cmake
 }:
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-94zEr7aBeqMjy5Ma50W3qv1S5yx090bYuTieoZaXFcc=";
   };
 
- nativeBuildInputs = [ autoreconfHook libtool wrapQtAppsHook ];
+ nativeBuildInputs = [ autoreconfHook libtool ];
 
  buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat ];
 
