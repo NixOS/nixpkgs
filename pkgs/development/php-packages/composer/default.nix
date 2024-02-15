@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchFromGitHub, php, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
+{ lib, callPackage, fetchFromGitHub, fetchpatch, php, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
 
 php.buildComposerProject (finalAttrs: {
   # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
@@ -21,6 +21,18 @@ php.buildComposerProject (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-KsTZi7dSlQcAxoen9rpofbptVdLYhK+bZeDSXQY7o5M=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-24821.patch";
+      url = "https://github.com/composer/composer/commit/77e3982918bc1d886843dc3d5e575e7e871b27b7.patch";
+      hash = "sha256-Q7gkPLf59+p++DpfJZeOrAOiWePuGkdGYRaS/rK+Nv4=";
+      excludes = [
+        # Skipping test files, they are not included in the source tarball
+        "tests/*"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
