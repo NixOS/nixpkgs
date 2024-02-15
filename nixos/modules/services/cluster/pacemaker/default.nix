@@ -21,7 +21,7 @@ in
       '';
     } ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package pkgs.ocf-resource-agents pkgs.iproute2 ];
 
     # required by pacemaker
     users.users.hacluster = {
@@ -38,7 +38,9 @@ in
     systemd.packages = [ cfg.package ];
     systemd.services.pacemaker = {
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.coreutils pkgs.iproute2 pkgs.ocf-resource-agents ];
       serviceConfig = {
+        ExecStartPost = "${pkgs.coreutils}/bin/chown -R hacluster:pacemaker /var/lib/pacemaker";
         StateDirectory = "pacemaker";
         StateDirectoryMode = "0700";
       };
