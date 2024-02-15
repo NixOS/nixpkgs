@@ -19,7 +19,7 @@ buildGoModule {
   };
 
   vendorSha256 = "sha256-mLdAaYkQH2RHcZft27rDW1AoFCWKiUZhh2F0DpqZELw=";
-  
+
   meta = with lib; {
     homepage = "https://github.com/arsham/figurine";
     description = "Print your name in style";
