@@ -23,6 +23,7 @@
 , joystickSupport ? true, cwiid
 , nfsSupport ? true, libnfs
 , pulseSupport ? true, libpulseaudio
+, pipewireSupport ? true, pipewire
 , rtmpSupport ? true, rtmpdump
 , sambaSupport ? true, samba
 , udevSupport ? true, udev
@@ -140,6 +141,7 @@ in stdenv.mkDerivation {
     ++ lib.optional  joystickSupport cwiid
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio
+    ++ lib.optional  pipewireSupport pipewire
     ++ lib.optional  rtmpSupport     rtmpdump
     ++ lib.optional  sambaSupport    samba
     ++ lib.optional  udevSupport     udev
