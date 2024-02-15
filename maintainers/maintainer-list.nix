@@ -8288,6 +8288,12 @@
       fingerprint = "E864 BDFA AB55 36FD C905  5195 DBF2 52AF FB26 19FD";
     }];
   };
+  ironicbadger = {
+    email = "alexktz@gmail.com";
+    github = "ironicbadger";
+    githubId = 2773080;
+    name = "Alex Kretzschmar";
+  };
   ironpinguin = {
     email = "michele@catalano.de";
     github = "ironpinguin";
