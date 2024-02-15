@@ -22,8 +22,6 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/streamdal/plumber/options.VERSION=${version}"
-    # remove once module in go.mod is renamed to github.com/batchcorp/streamdal
-    "-X github.com/batchcorp/plumber/options.VERSION=${version}"
   ];
 
   meta = with lib; {
