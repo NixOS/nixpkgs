@@ -13,7 +13,6 @@
 , pkg-config
 , expat
 , qtcharts
-, qtbase
 , wrapQtAppsHook
 , cmake
 }:
