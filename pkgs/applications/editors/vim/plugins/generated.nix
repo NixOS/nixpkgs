@@ -16503,5 +16503,17 @@ final: prev:
     meta.homepage = "https://github.com/m00qek/baleia.nvim/";
   };
 
+  nvim-bacon = buildVimPlugin {
+    pname = "nvim-bacon";
+    version = "2024-02-12";
+    src = fetchFromGitHub {
+      owner = "Canop";
+      repo = "nvim-bacon";
+      rev = "3f8e7a80a0e715952a3066fefe7447f1347207ca";
+      sha256 = "sha256-jIoRzMjOZlTHR7q4piyY7MjEUgZIR5pjobfOdY/IpeM=";
+    };
+    meta.homepage = "https://github.com/Canop/nvim-bacon";
+  };
+
 
 }
