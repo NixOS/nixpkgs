@@ -72,6 +72,15 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  postFixup = lib.optional stdenv.isLinux (
+    let
+      rpathWayland = lib.makeLibraryPath [ wayland vulkan-loader libxkbcommon ];
+    in
+    ''
+      rpath=$(patchelf --print-rpath $out/bin/halloy)
+      patchelf --set-rpath "$rpath:${rpathWayland}" $out/bin/halloy
+    '');
+
   postInstall = ''
     install -Dm644 assets/linux/org.squidowl.halloy.png $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
   '';
