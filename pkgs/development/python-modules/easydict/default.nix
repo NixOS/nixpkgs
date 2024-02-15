@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "easydict";
-  version = "1.11";
+  version = "1.12";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3LHS7SjrMAyORs03E0A3Orxi98FNbep0/fxvEGkGHHg=";
+    hash = "sha256-BVXMw6c9hhSQGzaLcsKK1Hbszhd9vfQkyD4IwXpJ4HY=";
   };
 
   doCheck = false; # No tests in archive
