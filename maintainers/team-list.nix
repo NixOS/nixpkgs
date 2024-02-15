@@ -429,7 +429,6 @@ with lib.maintainers; {
   helsinki-systems = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
-      ajs124
       das_j
     ];
     scope = "Group registration for packages maintained by Helsinki Systems";
