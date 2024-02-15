@@ -448,7 +448,7 @@ rec {
 
   types-aiobotocore-machinelearning = buildTypesAiobotocorePackage "machinelearning" "2.11.2" "sha256-CKCC7W5h6qKv3Zya/e+WcVoWdOtCqoWKRlJFHSTdxaI=";
 
-  types-aiobotocore-macie = buildTypesAiobotocorePackage "macie" "2.6.0" "sha256-gbl7jEgjk4twoxGM+WRg4MZ/nkGg7btiPOsPptR7yfw=";
+  types-aiobotocore-macie = buildTypesAiobotocorePackage "macie" "2.7.0" "sha256-hJJtGsK2b56nKX1ZhiarC+ffyjHYWRiC8II4oyDZWWw=";
 
   types-aiobotocore-macie2 = buildTypesAiobotocorePackage "macie2" "2.11.2" "sha256-zg/QhW+4Chugyg6rG5HtrE1GAhbWUaveJpaJFemoN94=";
 
