@@ -13,7 +13,7 @@
 , libxc
 , makeWrapper
 , gsl
-, boost175
+, boost180
 , autoPatchelfHook
   # Note that the CASPT2 module is broken with MPI
   # See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     armadillo
     libxc
     gsl.dev
-    boost175
+    boost180
   ] ++ lib.optionals enableMpi [
     mpi
     globalarrays
@@ -155,7 +155,7 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
     license = with licenses; [ lgpl21Only bsd3 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     mainProgram = "pymolcas";
   };
 }

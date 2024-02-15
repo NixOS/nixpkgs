@@ -134,10 +134,6 @@ qtModule {
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
-
-    # Cherry-pick libxml 2.12 build fix
-    # FIXME: remove for 6.7
-    ../patches/qtwebengine-libxml-2.12.patch
   ];
 
   postPatch = ''
