@@ -39,10 +39,11 @@
 , waylandSupport ? stdenv.isLinux
 , libGL
 # experimental and can cause crashes in inspector
-, vulkanSupport ? false
+, vulkanSupport ? stdenv.isLinux
 , shaderc
 , vulkan-loader
 , vulkan-headers
+, libdrm
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -69,7 +70,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.12.5";
+  version = "4.13.9";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "KLNW1ZDuaO9ibi75ggst0hRBSEqaBCpaPwxA6d/E9Pg=";
+    sha256 = "sha256-JWS9BEm3TGhiPbO5/oYneV+1qeZ8Wctpfixm+dBcQjo=";
   };
 
   depsBuildBuild = [
@@ -116,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     isocodes
   ] ++ lib.optionals vulkanSupport [
     vulkan-headers
+    libdrm
   ] ++ [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
@@ -199,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
 
     files=(
-      build-aux/meson/gen-demo-header.py
+      build-aux/meson/gen-profile-conf.py
       build-aux/meson/gen-visibility-macros.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
