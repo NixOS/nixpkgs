@@ -39,5 +39,6 @@ buildGoModule rec {
     homepage = "https://carvel.dev/kapp/";
     license = licenses.asl20;
     maintainers = with maintainers; [ brodes ];
+    mainProgram = "kapp";
   };
 }

@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "avrdudess";
   };
 }

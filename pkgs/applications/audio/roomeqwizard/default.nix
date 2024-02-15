@@ -114,5 +114,6 @@ stdenv.mkDerivation rec {
       REW is free software for room acoustic measurement, loudspeaker
       measurement and audio device measurement.
     '';
+    mainProgram = "roomeqwizard";
   };
 }

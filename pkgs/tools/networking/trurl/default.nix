@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.curl;
     maintainers = with maintainers; [ christoph-heiss ];
     platforms = platforms.all;
+    mainProgram = "trurl";
   };
 }

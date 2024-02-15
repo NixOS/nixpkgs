@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ flokli r3dl3g ];
+    mainProgram = "jameica";
   };
 }

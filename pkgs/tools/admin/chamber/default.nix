@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/segmentio/chamber";
     license = licenses.mit;
     maintainers = with maintainers; [ kalekseev ];
+    mainProgram = "chamber";
   };
 }

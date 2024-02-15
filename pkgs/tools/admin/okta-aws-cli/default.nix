@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/okta/okta-aws-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ daniyalsuri6 ];
+    mainProgram = "okta-aws-cli";
   };
 }

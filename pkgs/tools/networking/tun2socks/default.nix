@@ -27,5 +27,6 @@ buildGoModule rec {
     description = "tun2socks - powered by gVisor TCP/IP stack";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "tun2socks";
   };
 }

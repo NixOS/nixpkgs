@@ -35,5 +35,6 @@ buildGoModule rec {
     changelog = "https://github.com/maaslalani/slides/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ maaslalani penguwin ];
+    mainProgram = "slides";
   };
 }

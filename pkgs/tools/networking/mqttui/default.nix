@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/EdJoPaTo/mqttui/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mqttui";
   };
 }

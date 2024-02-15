@@ -17,5 +17,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/mrjackwills/oxker/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ siph ];
+    mainProgram = "oxker";
   };
 }

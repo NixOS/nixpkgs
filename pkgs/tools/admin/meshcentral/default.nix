@@ -47,5 +47,6 @@ yarn2nix-moretea.mkYarnPackage {
     homepage = "https://meshcentral.com/";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.asl20;
+    mainProgram = "meshcentral";
   };
 }

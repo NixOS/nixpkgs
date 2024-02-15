@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://naturaldocs.org";
     license = licenses.agpl3Only;
     maintainers = [ maintainers.nkpvk ];
+    mainProgram = "NaturalDocs";
   };
 }

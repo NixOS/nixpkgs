@@ -56,5 +56,6 @@ buildGoModule rec {
     homepage = "https://github.com/ginuerzh/gost";
     license = licenses.mit;
     maintainers = with maintainers; [ pmy ];
+    mainProgram = "gost";
   };
 }
