@@ -36,13 +36,13 @@
 }:
 stdenv.mkDerivation(finalAttrs: {
   pname = "yuzu";
-  version = "1704";
+  version = "1715";
 
   src = fetchFromGitHub {
     owner = "yuzu-emu";
     repo = "yuzu-mainline";
     rev = "mainline-0-${finalAttrs.version}";
-    hash = "sha256-8vIwWahl5JmFlOfMRuec1LiYz4F6mPEH4+p2e1IRBdU=";
+    hash = "sha256-ctmySxBLI/1/0ekvqOq+FsWq73iHa/awARtCgZ/ztXs=";
     fetchSubmodules = true;
   };
 
