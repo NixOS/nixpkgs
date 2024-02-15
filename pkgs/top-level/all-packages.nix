@@ -8824,8 +8824,6 @@ with pkgs;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
-  graylog-5_0 = callPackage ../tools/misc/graylog/5.0.nix { };
-
   graylog-5_1 = callPackage ../tools/misc/graylog/5.1.nix { };
 
   graylog-5_2 = callPackage ../tools/misc/graylog/5.2.nix { };
