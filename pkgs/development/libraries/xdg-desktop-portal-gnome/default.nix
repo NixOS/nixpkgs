@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gnome";
-  version = "45.1";
+  version = "46.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "PpyoIQRABfs3vWjr5K0Zb8PQcoNVgUZ6IqSHnax7X90=";
+    sha256 = "sha256-LGUHldYdUb6IekHClDXgK+JQ+L+CC0/hkaokfyEuVLg=";
   };
 
   nativeBuildInputs = [
