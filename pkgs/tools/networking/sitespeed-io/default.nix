@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , buildNpmPackage
-, makeWrapper
+, nodejs_18
 , coreutils
 , ffmpeg-headless
 , imagemagick_light
@@ -32,6 +32,8 @@ buildNpmPackage rec {
     hash = "sha256-Z4U4ZIw5Du/VSHIsGKdgu7wRv/6XVh/nMFDs8aYwkOQ=";
   };
 
+  nodejs = nodejs_18;
+
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
   '';
@@ -40,8 +42,6 @@ buildNpmPackage rec {
   CHROMEDRIVER_SKIP_DOWNLOAD = true;
   GECKODRIVER_SKIP_DOWNLOAD = true;
   EDGEDRIVER_SKIP_DOWNLOAD = true;
-
-  nativeBuildInputs = [ python3 makeWrapper ];
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
