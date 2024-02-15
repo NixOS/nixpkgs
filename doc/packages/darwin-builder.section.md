@@ -98,7 +98,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
             host.pkgs = pkgs;
             darwin-builder.workingDirectory = "/var/lib/darwin-builder";
           };
-        };
+        }
       ];
     };
   in {
