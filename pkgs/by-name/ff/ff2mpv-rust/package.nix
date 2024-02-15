@@ -5,22 +5,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ff2mpv-rust";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "ryze312";
     repo = "ff2mpv-rust";
     rev = version;
-    hash = "sha256-sofv5uRLNbMT+w+ZDGjtKqBjYJk+UDzUDQrOiWvl5Hs=";
+    hash = "sha256-+snuKd6onuoDS8rY7zvRw1WKslcsDSoaIVppcvaMnK0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   postInstall = ''
     mkdir -p $out/lib/mozilla/native-messaging-hosts/
