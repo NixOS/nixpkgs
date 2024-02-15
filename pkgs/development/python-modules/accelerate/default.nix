@@ -1,20 +1,20 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
+, evaluate
 , fetchFromGitHub
 , fetchpatch
-, pythonAtLeast
-, pythonOlder
-, pytestCheckHook
-, setuptools
 , numpy
 , packaging
+, parameterized
 , psutil
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 , pyyaml
 , safetensors
+, setuptools
 , torch
-, evaluate
-, parameterized
 , transformers
 }:
 
@@ -27,12 +27,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "accelerate";
     rev = "refs/tags/v${version}";
     hash = "sha256-l0RSBVAa2u3bGDLbg/e/1UP5WO8z2+YBqzwdviAcMA0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -49,11 +51,16 @@ buildPythonPackage rec {
     pytestCheckHook
     transformers
   ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH=$out/bin:$PATH
   '';
-  pytestFlagsArray = [ "tests" ];
+
+  pytestFlagsArray = [
+    "tests"
+  ];
+
   disabledTests = [
     # try to download data:
     "FeatureExamplesTests"
