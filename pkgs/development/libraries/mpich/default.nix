@@ -20,11 +20,11 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
-  version = "4.1.2";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "sha256-NJLpitq2K1l+8NKS+yRZthI7yABwqKoKML5pYgdaEvA=";
+    sha256 = "sha256-pkpmeBueUxKtBS0yaJ4jJS90WyfuiBisKsDIIJvAuQ4=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -36,14 +36,16 @@ stdenv.mkDerivation  rec {
     "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
     "FCFLAGS=-fallow-argument-mismatch"
   ] ++ lib.optionals pmixSupport [
-    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix"
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ gfortran python3 ];
   buildInputs = [ perl openssh hwloc ]
-    ++ lib.optional (!stdenv.isDarwin) ch4backend;
+    ++ lib.optional (!stdenv.isDarwin) ch4backend
+    ++ lib.optional pmixSupport pmix;
+
 
   doCheck = true;
 

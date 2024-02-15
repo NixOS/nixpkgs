@@ -10,6 +10,7 @@
 , pytestCheckHook
 , sudachidict-core
 , tokenizers
+, sudachipy
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Am+ae2lgnndSDzf0GF8R1i6OPLdIlm2dLThqYqXbscA=";
+    hash = "sha256-ARwvThfATDdzBTjPFr9yjbE/0eYvp/TCZOEGbUupJmU=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,9 @@ buildPythonPackage rec {
     cd python
   '';
 
+  # avoid infinite recursion due to sudachidict
+  doCheck = false;
+
   nativeCheckInputs = [
     pytestCheckHook
     sudachidict-core
@@ -46,6 +50,20 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "sudachipy"
   ];
+
+  passthru = {
+    inherit (sudachi-rs) updateScript;
+    tests = {
+      pytest = sudachipy.overridePythonAttrs (
+        _: {
+          doCheck = true;
+          # avoid catchConflicts of sudachipy
+          # we don't need to install this package since it is just a test
+          dontInstall = true;
+        }
+      );
+    };
+  };
 
   meta = sudachi-rs.meta // {
     homepage = "https://github.com/WorksApplications/sudachi.rs/tree/develop/python";

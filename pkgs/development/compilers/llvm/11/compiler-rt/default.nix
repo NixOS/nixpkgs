@@ -135,6 +135,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ mit ncsa ];
     # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
     # https://reviews.llvm.org/D43106#1019077
-    broken = stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.is32bit && !stdenv.cc.isClang;
+    broken = stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang;
   };
 }

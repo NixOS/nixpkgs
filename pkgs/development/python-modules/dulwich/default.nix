@@ -74,6 +74,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # missing test inputs
     "dulwich/contrib/test_swift_smoke.py"
+    # flaky on high core count >4
+    "dulwich/tests/compat/test_client.py"
   ];
 
   pythonImportsCheck = [

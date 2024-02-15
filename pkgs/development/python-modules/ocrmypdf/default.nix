@@ -25,15 +25,14 @@
 , tqdm
 , typing-extensions
 , unpaper
-, wheel
 , installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "15.4.4";
+  version = "16.1.0";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   pyproject = true;
 
@@ -47,7 +46,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-Ff0OrSJFglVPpSNB0KvDMnatj+P57zWdcVAFaM+Sg0s=";
+    hash = "sha256-rKy1bPgQOqx+F5cpFg+KG0r70B0RWns03gwoiVbz35U=";
   };
 
   patches = [
@@ -64,7 +63,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
     installShellFiles
   ];
 

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.3.2";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ovVMdqzMFaNL+5Bm5selbB5yNd2ldiuZB5IzC1LM+wU=";
+    hash = "sha256-1Dc8mE66IOOTIW7dUaPj7t5Wy+k9QkdRbSBWQ8O5MSE=";
   };
 
   buildInputs = [

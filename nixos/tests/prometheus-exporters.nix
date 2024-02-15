@@ -257,21 +257,6 @@ let
       '';
     };
 
-    exportarr-sonarr = {
-      nodeName = "exportarr_sonarr";
-      exporterConfig = {
-        enable = true;
-        url = "http://127.0.0.1:8989";
-        # testing for real data is tricky, because the api key can not be preconfigured
-        apiKeyFile = pkgs.writeText "dummy-api-key" "eccff6a992bc2e4b88e46d064b26bb4e";
-      };
-      exporterTest = ''
-        wait_for_unit("prometheus-exportarr-sonarr-exporter.service")
-        wait_for_open_port(9707)
-        succeed("curl -sSf 'http://localhost:9707/metrics")
-      '';
-    };
-
     fastly = {
       exporterConfig = {
         enable = true;
@@ -957,31 +942,6 @@ let
       '';
     };
 
-    openvpn = {
-      exporterConfig = {
-        enable = true;
-        group = "openvpn";
-        statusPaths = [ "/run/openvpn-test" ];
-      };
-      metricProvider = {
-        users.groups.openvpn = { };
-        services.openvpn.servers.test = {
-          config = ''
-            dev tun
-            status /run/openvpn-test
-            status-version 3
-          '';
-          up = "chmod g+r /run/openvpn-test";
-        };
-        systemd.services."openvpn-test".serviceConfig.Group = "openvpn";
-      };
-      exporterTest = ''
-        wait_for_unit("openvpn-test.service")
-        wait_for_unit("prometheus-openvpn-exporter.service")
-        succeed("curl -sSf http://localhost:9176/metrics | grep 'openvpn_up{.*} 1'")
-      '';
-    };
-
     pgbouncer = {
       exporterConfig = {
         enable = true;
@@ -1216,6 +1176,39 @@ let
         wait_until_succeeds("curl -sSf localhost:9121/metrics | grep 'redis_up 1'")
       '';
     };
+
+    restic =
+      let
+        repository = "rest:http://127.0.0.1:8000";
+        passwordFile = pkgs.writeText "restic-test-password" "test-password";
+      in
+      {
+        exporterConfig = {
+          enable = true;
+          inherit repository passwordFile;
+        };
+        metricProvider = {
+          services.restic.server = {
+            enable = true;
+            extraFlags = [ "--no-auth" ];
+          };
+          environment.systemPackages = [ pkgs.restic ];
+        };
+        exporterTest = ''
+          # prometheus-restic-exporter.service fails without initialised repository
+          systemctl("stop prometheus-restic-exporter.service")
+
+          # Initialise the repository
+          wait_for_unit("restic-rest-server.service")
+          wait_for_open_port(8000)
+          succeed("restic init --repo ${repository} --password-file ${passwordFile}")
+
+          systemctl("start prometheus-restic-exporter.service")
+          wait_for_unit("prometheus-restic-exporter.service")
+          wait_for_open_port(9753)
+          wait_until_succeeds("curl -sSf localhost:9753/metrics | grep 'restic_check_success 1.0'")
+        '';
+      };
 
     rspamd = {
       exporterConfig = {
@@ -1724,7 +1717,12 @@ mapAttrs
       testScript = ''
         ${nodeName}.start()
         ${concatStringsSep "\n" (map (line:
-          if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
+          if builtins.any (b: b) [
+            (builtins.match "^[[:space:]]*$" line != null)
+            (builtins.substring 0 1 line == "#")
+            (builtins.substring 0 1 line == " ")
+            (builtins.substring 0 1 line == ")")
+          ]
           then line
           else "${nodeName}.${line}"
         ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}

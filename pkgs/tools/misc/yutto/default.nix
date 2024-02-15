@@ -9,14 +9,14 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b32";
+  version = "2.0.0b33";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tncuRrEq59OPO2ZuWUowDHLsqJ1Dof9vroVOxQQ9hpE=";
+    hash = "sha256-TUyjppAHmWCZxifeQeOpFMPBksqLRSYdqgG7NEMVILY=";
   };
 
   nativeBuildInputs = [

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.1.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-u5380inzLmOT0v6emOtjU3pIEQqTmziAVz1R6QG77x0=";
+    hash = "sha256-tTgoRLthNLqRO8fDrmGHVCB9QXpmPmTr9uqSFwkIK+s=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -26,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...
   cmakeBuildDir = "build-directory";
+  cmakeFlags = [
+    (lib.cmakeBool "ALLOW_IN_SOURCE_BUILD" true)
+  ];
 
   strictDeps = true;
 

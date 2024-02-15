@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goldendict-ng";
-  version = "23.09.10";
+  version = "24.01.22";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
-    rev = "v${finalAttrs.version}-WhiteDew.54c8bd56";
-    hash = "sha256-X9xqodCqHjppz1zIHLnb87NiDE4FWlXiQufhDu/rJq4=";
+    rev = "v${finalAttrs.version}-LoongYear.3dddb3be";
+    hash = "sha256-+OiZEkhNV06fZXPXv9zDzgJS5M3isHlcOXee3p/ejpw=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook wrapGAppsHook ];
@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt5compat
     qtmultimedia
     qtspeech
+    qtwayland
     libvorbis
     tomlplusplus
     fmt
@@ -86,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "An advanced multi-dictionary lookup program";
     platforms = platforms.linux;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [ slbtty ];
+    maintainers = with maintainers; [ slbtty michojel ];
     license = licenses.gpl3Plus;
   };
 })

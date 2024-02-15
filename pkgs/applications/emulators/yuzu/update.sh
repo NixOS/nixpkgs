@@ -4,4 +4,4 @@
 nix-update -u yuzuPackages.nx_tzdb "$@"
 nix-update -u yuzuPackages.compat-list "$@"
 nix-update -u yuzuPackages.mainline "$@"
-nix-update -u yuzuPackages.early-access "$@"
+nix-update -u yuzuPackages.early-access --override-filename pkgs/applications/emulators/yuzu/early-access/sources.nix "$@"

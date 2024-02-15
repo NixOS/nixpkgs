@@ -118,6 +118,6 @@ buildPythonPackage rec {
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
     mainProgram = "mypy";
-    maintainers = with maintainers; [ martingms lnl7 ];
+    maintainers = with maintainers; [ lnl7 ];
   };
 }

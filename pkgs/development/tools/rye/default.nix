@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.17.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-4vf+jmEu78LYFAcRrGdC02y+NsLM7zoBpHKCeaS60bY=";
+    hash = "sha256-0sbfqiPxo68429q676hs3vB3wRNmF/+OO7Ykg2x7HIQ=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
-      "monotrail-utils-0.0.1" = "sha256-4x5jnXczXnToU0QXpFalpG5A+7jeyaEBt8vBwxbFCKQ=";
+      "monotrail-utils-0.0.1" = "sha256-ydNdg6VI+Z5wXe2bEzRtavw0rsrcJkdsJ5DvXhbaDE4=";
     };
   };
 

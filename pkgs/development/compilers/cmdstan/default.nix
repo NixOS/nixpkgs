@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.33.1";
+  version = "2.34.1";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-c+L/6PjW7YgmXHuKhKjiRofBRAhKYCzFCZ6BOX5AmC4=";
+    hash = "sha256-gze8kd5zSs9nUlSY7AJwpx+jnc9Y21ahzDJmynlqm1Y=";
   };
 
   postPatch = ''

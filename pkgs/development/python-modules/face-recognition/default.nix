@@ -2,15 +2,17 @@
 , fetchPypi
 , lib
 
-# propagates
+  # propagates
 , click
 , dlib
 , face-recognition-models
 , numpy
 , pillow
 
-# tests
+  # tests
 , pytestCheckHook
+, config
+, cudaSupport ? config.cudaSupport
 }:
 
 buildPythonPackage rec {
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   format = "setuptools";
 
-  src = fetchPypi  {
+  src = fetchPypi {
     pname = "face_recognition";
     inherit version;
     hash = "sha256-Xl790WhqpWavDTzBMTsTHksZdleo/9A2aebT+tknBew=";
@@ -35,6 +37,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  # Disables tests when running with cuda due to https://github.com/NixOS/nixpkgs/issues/225912
+  doCheck = !config.cudaSupport;
 
   meta = with lib; {
     license = licenses.mit;

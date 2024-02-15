@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 , pkg-config
 , bzip2
 , xz
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.7.2";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-K+pqyH3Ajfp+tPhAuK7XCNfGdXa15oNqfsQcogvmQ8o=";
+    hash = "sha256-Y4jXAZgJj0d1fUFuM94umlj/JsawWs3KxEQAucsT24s=";
   };
 
-  cargoHash = "sha256-ZJdVhSznznnF1P28XkwtoeWoeymtPNaAZgOaKby+gnk=";
+  cargoHash = "sha256-Jza9U5vL45rvDPLb4/iELneKgy1OTCMBM1JxfuxZigQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,17 +46,18 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  # remove tests that require internet access and a git repo
+  # remove tests that require internet access
   postPatch = ''
     rm cargo-dist/tests/integration-tests.rs
-    rm cargo-dist/tests/cli-tests.rs
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A tool for building final distributable artifacts and uploading them to an archive";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer mistydemeo ];
   };
 }

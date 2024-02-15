@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-8+PdkanodNZW/xeFf+tDm3Ej7DRSpBBtiT/CqjnWthw=";
 
   CGO_ENABLED = "0";
-  ldflags = [ "-s" "-w" "-buildid=" "-X github.com/gomods/athens/pkg/build.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/gomods/athens/pkg/build.version=${version}" ];
 
   subPackages = [ "cmd/proxy" ];
 

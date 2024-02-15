@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "package-project-cmake";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "TheLartians";
     repo = "PackageProject.cmake";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-E7WZSYDlss5bidbiWL1uX41Oh6JxBRtfhYsFU19kzIw=";
+    hash = "sha256-2u7H2ZR7eQ6eoRIVZ1WBxw9K93E8BVYErZNDe1Jl8rg=";
   };
 
   dontConfigure = true;

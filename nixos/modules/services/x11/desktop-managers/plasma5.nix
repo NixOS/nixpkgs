@@ -185,6 +185,8 @@ in
         };
       };
 
+      qt.enable = true;
+
       environment.systemPackages =
         with pkgs.plasma5Packages;
         let
@@ -252,6 +254,9 @@ in
             milou
             plasma-integration
             polkit-kde-agent
+
+            qqc2-breeze-style
+            qqc2-desktop-style
 
             plasma-desktop
             plasma-workspace
@@ -379,6 +384,7 @@ in
       system.userActivationScripts.plasmaSetup = activationScript;
 
       programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
+      programs.chromium.enablePlasmaBrowserIntegration = true;
     })
 
     (mkIf (cfg.kwinrc != {}) {
@@ -480,7 +486,7 @@ in
           pkgs.maliit-framework
           pkgs.maliit-keyboard
         ]
-        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with pkgs.plasma5Packages.plasmaMobileGear; [
           # Additional software made for Plasma Mobile.
           alligator
           angelfish

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pyformlang";
-  version = "1.0.4";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ysX6c8q26bcQyq6GgKBKxTdp00j+4ypb3mgM2cqCmBs=";
+    hash = "sha256-LHQM+Vy8YVfTtpWaveYgBlp74AnS/IF3Y1EbgwVku7I=";
   };
 
   nativeBuildInputs = [

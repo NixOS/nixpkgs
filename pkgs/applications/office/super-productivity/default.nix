@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "super-productivity";
-  version = "7.14.3";
+  version = "7.17.2";
 
   src = fetchurl {
     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
-    sha256 = "sha256-wW72T1+RfejaI9LxSxa/g0lvIRmAeFa2ZaEa8K9mRcw=";
+    sha256 = "sha256-CcgjfA0BRfCrRb8N+KIgheUAF+JJK3yIv9Trp+gg+s0=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ offline ];
+    mainProgram = "super-productivity";
   };
 }

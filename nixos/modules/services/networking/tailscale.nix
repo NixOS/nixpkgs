@@ -74,11 +74,10 @@ in {
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
       path = [
-        config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
         pkgs.getent     # for `getent` to look up user shells
         pkgs.kmod       # required to pass tailscale's v6nat check
-      ];
+      ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''

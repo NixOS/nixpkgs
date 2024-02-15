@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      dst=$out/lib/${python.libPrefix}/site-packages
+      dst=$out/${python.sitePackages}
       mkdir -p $dst
       cp sitecustomize.* $dst/
     '';

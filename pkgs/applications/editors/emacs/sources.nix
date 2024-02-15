@@ -77,10 +77,10 @@ in
 
   emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "29.1";
+    version = "29.2";
     variant = "mainline";
-    rev = "29.1";
-    hash = "sha256-3HDCwtOKvkXwSULf3W7YgTz4GV8zvYnh2RrL28qzGKg=";
+    rev = "29.2";
+    hash = "sha256-qSQmQzVyEGSr4GAI6rqnEwBvhl09D2D8MNasHqZQPL8=";
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {

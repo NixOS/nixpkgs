@@ -26,6 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-B+3egz98/O9nSRJDURlap9zSRmPUkJ/XiY29C2+8Aew=";
   };
 
+  # upstream has an invalid pyproject.toml
+  # https://github.com/visgl/deck.gl/issues/8469
+  postPatch = ''
+    rm pyproject.toml
+  '';
+
   nativeBuildInputs = [
     jinja2
     jupyter

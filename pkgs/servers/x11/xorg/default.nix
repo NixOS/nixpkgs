@@ -998,11 +998,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   imake = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "imake";
-    version = "1.0.9";
+    version = "1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/imake-1.0.9.tar.xz";
-      sha256 = "10wgw3l0rsnvc2191awyg5j24n3g552xgc671qr5vnbliwkrvpkj";
+      url = "mirror://xorg/individual/util/imake-1.0.10.tar.xz";
+      sha256 = "1xgcsamfij22ggc4p8anvvihwyf4adg6gjdd6v7m9cypm37cppkm";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

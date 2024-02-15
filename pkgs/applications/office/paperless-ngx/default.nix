@@ -18,16 +18,17 @@
 , xcbuild
 , pango
 , pkg-config
+, nltk-data
 }:
 
 let
-  version = "2.3.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2XnOap37ZQjT0qx2ygxXo7n1HJcIEoc5TrMI1JIk4G8=";
+    hash = "sha256-f9XMGGNr4qA/twp7Kbv/34mvgNQT+KZ1rYre1BXVWw0=";
   };
 
   python = python3;
@@ -52,7 +53,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-BFfbRrpF8p0AfEdl/KDWWG7qN+F9edvTW3j9jgvLIrc=";
+    npmDepsHash = "sha256-7//VmAgXB4H8hlalfu4JeqFDa8dj1u5Z1kbwp2Wi4cQ=";
 
     nativeBuildInputs = [
       pkg-config
@@ -122,6 +123,7 @@ python.pkgs.buildPythonApplication rec {
     constantly
     cryptography
     dateparser
+    django-allauth
     django-auditlog
     django-celery-results
     django-compression-middleware
@@ -293,6 +295,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python path frontend;
+    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 

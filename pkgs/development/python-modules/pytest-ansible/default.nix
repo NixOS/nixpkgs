@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "24.1.1";
+  version = "24.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "pytest-ansible";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UPQx+CGJgaK4XVNngtzzncSueQN9LWh1gMmH5nGtPNk=";
+    hash = "sha256-NtGk+azpSZZm9PUf6Q1Qipo/zaUH+bed7k3oFnQyKjw=";
   };
 
   postPatch = ''

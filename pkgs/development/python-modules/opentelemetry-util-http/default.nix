@@ -33,6 +33,12 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+  # https://github.com/open-telemetry/opentelemetry-python-contrib/issues/1940
+  disabledTests = [
+    "test_nonstandard_method"
+    "test_nonstandard_method_allowed"
+  ];
+
   pythonImportsCheck = [ "opentelemetry.util.http" ];
 
   meta = opentelemetry-instrumentation.meta // {

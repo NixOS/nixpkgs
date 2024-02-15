@@ -24,8 +24,6 @@ import ../make-test-python.nix (
         virtualisation.podman.enable = true;
 
         virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
-
-        networking.firewall.allowedUDPPorts = [ 53 ];
       };
       docker = { pkgs, ... }: {
         virtualisation.podman.enable = true;

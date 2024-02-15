@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kmsvnc";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "isjerryxiao";
     repo = "kmsvnc";
     rev = "v${version}";
-    hash = "sha256-Dz1y4t8u9/rnmOiYMWMq6aEq3kV47uiIK7K4DSvjZNc=";
+    hash = "sha256-fOryY9pkeRXjfOq4ZcUKBrBDMWEljLChwXSAbeMNXhw=";
   };
 
   nativeBuildInputs = [

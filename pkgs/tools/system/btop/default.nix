@@ -1,4 +1,5 @@
 { lib
+, config
 , stdenv
 , fetchFromGitHub
 , cmake
@@ -6,6 +7,8 @@
 , removeReferencesTo
 , btop
 , testers
+, cudaSupport ? config.cudaSupport
+, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +22,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-QQM2/LO/EHovhj+S+4x3ro/aOVrtuxteVVvYAd6feTk=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreFoundation

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.1.3";
+  version = "2024.2.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -94,6 +94,8 @@
     "airtouch4" = ps: with ps; [
       airtouch4pyapi
     ];
+    "airtouch5" = ps: with ps; [
+    ]; # missing inputs: airtouch5py
     "airvisual" = ps: with ps; [
       pyairvisual
     ];
@@ -157,6 +159,8 @@
       psutil-home-assistant
       sqlalchemy
     ];
+    "analytics_insights" = ps: with ps; [
+    ]; # missing inputs: python-homeassistant-analytics
     "android_ip_webcam" = ps: with ps; [
       pydroid-ipcam
     ];
@@ -183,12 +187,14 @@
     "anwb_energie" = ps: with ps; [
     ];
     "aosmith" = ps: with ps; [
-    ]; # missing inputs: py-aosmith
+      py-aosmith
+    ];
     "apache_kafka" = ps: with ps; [
       aiokafka
     ];
     "apcupsd" = ps: with ps; [
-    ]; # missing inputs: aioapcaccess
+      aioapcaccess
+    ];
     "api" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -226,7 +232,8 @@
       aqualogic
     ];
     "aquostv" = ps: with ps; [
-    ]; # missing inputs: sharp_aquos_rc
+      sharp-aquos-rc
+    ];
     "aranet" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -380,6 +387,8 @@
     "balboa" = ps: with ps; [
       pybalboa
     ];
+    "bang_olufsen" = ps: with ps; [
+    ]; # missing inputs: mozart-api
     "bayesian" = ps: with ps; [
     ];
     "bbox" = ps: with ps; [
@@ -417,7 +426,8 @@
     "bloomsky" = ps: with ps; [
     ];
     "blue_current" = ps: with ps; [
-    ]; # missing inputs: bluecurrent-api
+      bluecurrent-api
+    ];
     "bluemaestro" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -557,6 +567,9 @@
     ];
     "brel_home" = ps: with ps; [
     ];
+    "bring" = ps: with ps; [
+      python-bring-api
+    ];
     "broadlink" = ps: with ps; [
       broadlink
     ];
@@ -676,9 +689,6 @@
     "cisco_mobility_express" = ps: with ps; [
       ciscomobilityexpress
     ];
-    "cisco_webex_teams" = ps: with ps; [
-      webexteamssdk
-    ];
     "citybikes" = ps: with ps; [
     ];
     "clementine" = ps: with ps; [
@@ -714,6 +724,8 @@
     ]; # missing inputs: pycmus
     "co2signal" = ps: with ps; [
       aioelectricitymaps
+    ];
+    "coautilities" = ps: with ps; [
     ];
     "coinbase" = ps: with ps; [
     ]; # missing inputs: coinbase
@@ -1111,6 +1123,7 @@
       pyeconet
     ];
     "ecovacs" = ps: with ps; [
+      deebot-client
     ]; # missing inputs: py-sucks
     "ecowitt" = ps: with ps; [
       aioecowitt
@@ -1166,6 +1179,11 @@
     "elv" = ps: with ps; [
       pypca
     ];
+    "elvia" = ps: with ps; [
+      fnv-hash-fast
+      psutil-home-assistant
+      sqlalchemy
+    ]; # missing inputs: elvia
     "emby" = ps: with ps; [
       pyemby
     ];
@@ -1233,6 +1251,9 @@
     ];
     "ephember" = ps: with ps; [
       pyephember
+    ];
+    "epion" = ps: with ps; [
+      epion
     ];
     "epson" = ps: with ps; [
       epson-projector
@@ -1327,8 +1348,6 @@
       faadelays
     ];
     "facebook" = ps: with ps; [
-    ];
-    "facebox" = ps: with ps; [
     ];
     "fail2ban" = ps: with ps; [
     ];
@@ -1675,6 +1694,7 @@
       aiohttp-zlib-ng
       fnv-hash-fast
       gcal-sync
+      ical
       oauth2client
       psutil-home-assistant
       sqlalchemy
@@ -1782,6 +1802,15 @@
       webrtc-noise-gain
       zeroconf
     ];
+    "govee_light_local" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      ifaddr
+      psutil-home-assistant
+      sqlalchemy
+    ]; # missing inputs: govee-local-api
     "gpsd" = ps: with ps; [
       gps3
     ];
@@ -1893,6 +1922,8 @@
     "hive" = ps: with ps; [
       pyhiveapi
     ];
+    "hko" = ps: with ps; [
+    ]; # missing inputs: hko
     "hlk_sw16" = ps: with ps; [
       hlk-sw16
     ];
@@ -1910,10 +1941,6 @@
       sqlalchemy
     ];
     "home_plus_control" = ps: with ps; [
-      aiohttp-cors
-      aiohttp-fast-url-dispatcher
-      aiohttp-zlib-ng
-      homepluscontrol
     ];
     "homeassistant" = ps: with ps; [
     ];
@@ -2102,6 +2129,9 @@
       aiopvapi
     ];
     "hurrican_shutters_wholesale" = ps: with ps; [
+    ];
+    "huum" = ps: with ps; [
+      huum
     ];
     "hvv_departures" = ps: with ps; [
       pygti
@@ -2537,6 +2567,9 @@
     ];
     "lacrosse_view" = ps: with ps; [
     ]; # missing inputs: lacrosse-view
+    "lamarzocco" = ps: with ps; [
+      lmcloud
+    ];
     "lametric" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -2603,6 +2636,35 @@
       webrtc-noise-gain
       zeroconf
     ];
+    "leaone" = ps: with ps; [
+      aioesphomeapi
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      aioruuvigateway
+      aioshelly
+      bleak
+      bleak-esphome
+      bleak-retry-connector
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      esphome-dashboard-api
+      fnv-hash-fast
+      ha-ffmpeg
+      habluetooth
+      hassil
+      home-assistant-intents
+      ifaddr
+      mutagen
+      psutil-home-assistant
+      pyserial
+      pyudev
+      sqlalchemy
+      webrtc-noise-gain
+      zeroconf
+    ]; # missing inputs: leaone-ble
     "led_ble" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -2645,7 +2707,6 @@
       aiopyarr
     ];
     "life360" = ps: with ps; [
-      life360
     ];
     "lifx" = ps: with ps; [
       aiohttp-cors
@@ -2957,9 +3018,6 @@
     "meteoclimatic" = ps: with ps; [
       pymeteoclimatic
     ];
-    "metoffice" = ps: with ps; [
-      datapoint
-    ];
     "mfi" = ps: with ps; [
     ]; # missing inputs: mficlient
     "microsoft" = ps: with ps; [
@@ -3205,6 +3263,15 @@
     ];
     "mythicbeastsdns" = ps: with ps; [
       mbddns
+    ];
+    "myuplink" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      myuplink
+      psutil-home-assistant
+      sqlalchemy
     ];
     "nad" = ps: with ps; [
       nad-receiver
@@ -3879,6 +3946,17 @@
     "qwikswitch" = ps: with ps; [
       pyqwikswitch
     ];
+    "rabbitair" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      ifaddr
+      psutil-home-assistant
+      python-rabbitair
+      sqlalchemy
+      zeroconf
+    ];
     "rachio" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -3915,6 +3993,16 @@
       aioeagle
       eagle100
     ];
+    "rainforest_raven" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      fnv-hash-fast
+      psutil-home-assistant
+      pyserial
+      pyudev
+      sqlalchemy
+    ]; # missing inputs: aioraven
     "rainmachine" = ps: with ps; [
       regenmaschine
     ];
@@ -4074,6 +4162,8 @@
     "roku" = ps: with ps; [
       rokuecp
     ];
+    "romy" = ps: with ps; [
+    ]; # missing inputs: romy
     "roomba" = ps: with ps; [
       roombapy
     ];
@@ -4507,7 +4597,8 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-    ]; # missing inputs: pysnmp-lextudio
+      pysnmp-lextudio
+    ];
     "snooz" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -4755,7 +4846,8 @@
       zeroconf
     ];
     "switchbot_cloud" = ps: with ps; [
-    ]; # missing inputs: switchbot-api
+      switchbot-api
+    ];
     "switcher_kis" = ps: with ps; [
       aioswitcher
     ];
@@ -4819,8 +4911,7 @@
       tank-utility
     ];
     "tankerkoenig" = ps: with ps; [
-      pytankerkoenig
-    ];
+    ]; # missing inputs: aiotankerkoenig
     "tapsaff" = ps: with ps; [
     ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [
@@ -4836,8 +4927,16 @@
     ];
     "tcp" = ps: with ps; [
     ];
+    "technove" = ps: with ps; [
+    ]; # missing inputs: python-technove
     "ted5000" = ps: with ps; [
       xmltodict
+    ];
+    "tedee" = ps: with ps; [
+      aiohttp-cors
+      aiohttp-fast-url-dispatcher
+      aiohttp-zlib-ng
+      pytedee-async
     ];
     "telegram" = ps: with ps; [
       aiohttp-cors
@@ -4873,6 +4972,9 @@
     ]; # missing inputs: tf-models-official
     "tesla_wall_connector" = ps: with ps; [
       tesla-wall-connector
+    ];
+    "teslemetry" = ps: with ps; [
+      tesla-fleet-api
     ];
     "tessie" = ps: with ps; [
     ]; # missing inputs: tessie-api
@@ -5071,11 +5173,14 @@
       psutil-home-assistant
       python-kasa
       sqlalchemy
-    ]; # missing inputs: python-kasa.optional-dependencies.speedups
+    ]
+    ++ python-kasa.optional-dependencies.speedups;
     "tplink_lte" = ps: with ps; [
     ]; # missing inputs: tp-connected
     "tplink_omada" = ps: with ps; [
       tplink-omada-client
+    ];
+    "tplink_tapo" = ps: with ps; [
     ];
     "traccar" = ps: with ps; [
       aiohttp-cors
@@ -5083,6 +5188,9 @@
       aiohttp-zlib-ng
       pytraccar
       stringcase
+    ];
+    "traccar_server" = ps: with ps; [
+      pytraccar
     ];
     "trace" = ps: with ps; [
     ];
@@ -5125,8 +5233,7 @@
     ];
     "tuya" = ps: with ps; [
       ha-ffmpeg
-      tuya-iot-py-sdk
-    ];
+    ]; # missing inputs: tuya-device-sharing-sdk
     "twentemilieu" = ps: with ps; [
       twentemilieu
     ];
@@ -5254,7 +5361,8 @@
     "valve" = ps: with ps; [
     ];
     "vasttrafik" = ps: with ps; [
-    ]; # missing inputs: vtjp
+      vtjp
+    ];
     "velbus" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -5624,7 +5732,8 @@
       fnv-hash-fast
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: youtubeaio
+      youtubeaio
+    ];
     "zabbix" = ps: with ps; [
       py-zabbix
     ];
@@ -5745,7 +5854,9 @@
     "androidtv_remote"
     "anova"
     "anthemav"
+    "aosmith"
     "apache_kafka"
+    "apcupsd"
     "api"
     "apple_tv"
     "application_credentials"
@@ -5776,6 +5887,7 @@
     "blackbird"
     "blebox"
     "blink"
+    "blue_current"
     "bluemaestro"
     "blueprint"
     "bluetooth"
@@ -5785,6 +5897,7 @@
     "bond"
     "bosch_shc"
     "braviatv"
+    "bring"
     "broadlink"
     "brother"
     "brottsplatskartan"
@@ -5878,6 +5991,7 @@
     "enocean"
     "enphase_envoy"
     "environment_canada"
+    "epion"
     "epson"
     "escea"
     "esphome"
@@ -5888,7 +6002,6 @@
     "ezviz"
     "faa_delays"
     "facebook"
-    "facebox"
     "fail2ban"
     "fan"
     "feedreader"
@@ -5959,6 +6072,7 @@
     "google_travel_time"
     "google_wifi"
     "govee_ble"
+    "gpsd"
     "gpslogger"
     "graphite"
     "gree"
@@ -5982,7 +6096,6 @@
     "hlk_sw16"
     "holiday"
     "home_connect"
-    "home_plus_control"
     "homeassistant"
     "homeassistant_alerts"
     "homeassistant_green"
@@ -6002,6 +6115,7 @@
     "huisbaasje"
     "humidifier"
     "hunterdouglas_powerview"
+    "huum"
     "hvv_departures"
     "hydrawise"
     "hyperion"
@@ -6052,6 +6166,7 @@
     "kostal_plenticore"
     "kraken"
     "kulersky"
+    "lamarzocco"
     "lametric"
     "landisgyr_heat_meter"
     "lastfm"
@@ -6083,6 +6198,8 @@
     "loqed"
     "lovelace"
     "luftdaten"
+    "lupusec"
+    "lutron"
     "lutron_caseta"
     "lyric"
     "mailbox"
@@ -6103,7 +6220,6 @@
     "met_eireann"
     "meteo_france"
     "meteoclimatic"
-    "metoffice"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
@@ -6135,6 +6251,7 @@
     "mysensors"
     "mystrom"
     "mythicbeastsdns"
+    "myuplink"
     "nam"
     "namecheapdns"
     "nanoleaf"
@@ -6231,6 +6348,7 @@
     "qnap"
     "qnap_qsw"
     "qwikswitch"
+    "rabbitair"
     "rachio"
     "radarr"
     "radio_browser"
@@ -6317,6 +6435,7 @@
     "smtp"
     "snapcast"
     "snips"
+    "snmp"
     "snooz"
     "solaredge"
     "solarlog"
@@ -6356,6 +6475,7 @@
     "switch_as_x"
     "switchbee"
     "switchbot"
+    "switchbot_cloud"
     "switcher_kis"
     "syncthing"
     "syncthru"
@@ -6367,16 +6487,17 @@
     "tag"
     "tailscale"
     "tailwind"
-    "tankerkoenig"
     "tasmota"
     "tautulli"
     "tcp"
+    "tedee"
     "telegram"
     "telegram_bot"
     "tellduslive"
     "temper"
     "template"
     "tesla_wall_connector"
+    "teslemetry"
     "text"
     "thermobeacon"
     "thermopro"
@@ -6396,8 +6517,10 @@
     "tomorrowio"
     "toon"
     "totalconnect"
+    "tplink"
     "tplink_omada"
     "traccar"
+    "traccar_server"
     "trace"
     "tractive"
     "tradfri"
@@ -6409,7 +6532,6 @@
     "transport_nsw"
     "trend"
     "tts"
-    "tuya"
     "twentemilieu"
     "twilio"
     "twinkly"
@@ -6490,6 +6612,7 @@
     "yeelight"
     "yolink"
     "youless"
+    "youtube"
     "zamg"
     "zeroconf"
     "zerproc"

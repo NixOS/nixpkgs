@@ -8,13 +8,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "cosmic-icons";
-  version = "unstable-2023-08-30";
+  version = "unstable-2024-02-07";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "14d8e2048087be1ad444f9b3ebb75885509f72c6";
-    sha256 = "sha256-WbdgHmTn403x95x9wEYL0T9ksbN+YLzEB2yE0UrF9T0=";
+    rev = "edd405ed84186ee24307deb7da6f25efc85986e9";
+    sha256 = "sha256-qz39vI9bRac9ZQg8FPrwv3/TW5zGlsvs2me5aE5vvZo=";
   };
 
   nativeBuildInputs = [ just ];

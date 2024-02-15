@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dresden-elektronik/gcfflasher";
     maintainers = with maintainers; [ fleaz ];
     platforms = platforms.all;
+    mainProgram = "GCFFlasher";
   };
 }

@@ -2,16 +2,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpunit";
-  version = "10.5.1";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-uYSVzKLefcBMqfrHaF6pg4gohAeb6LVg8QGaTS8jwfE=";
+    hash = "sha256-k0ox4/Djpu6DoWGzQdo7wYSZHSeaCtNVuEwK3bhBgQQ=";
   };
 
-  vendorHash = "sha256-uUdgz3ZZ+3nU07pUC1sdkNgU1b1beo3sS/yySUzdZwU=";
+  vendorHash = "sha256-2rG0ERgI5oVW3MuU8yFwgssoWX6zwUwXpro2IVkX7ac=";
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";

@@ -102,7 +102,7 @@ let
           --replace 'Name=Neovim' 'Name=Neovim wrapper'
       ''
       + lib.optionalString finalAttrs.withPython3 ''
-        makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH
+        makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH --unset PYTHONSAFEPATH
       ''
       + lib.optionalString (finalAttrs.rubyEnv != null) ''
         ln -s ${finalAttrs.rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby

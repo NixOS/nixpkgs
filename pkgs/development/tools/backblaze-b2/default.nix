@@ -1,4 +1,7 @@
-{ lib, python3Packages, fetchPypi, installShellFiles, testers, backblaze-b2 }:
+{ lib, python3Packages, fetchPypi, installShellFiles, testers, backblaze-b2
+# executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
+, execName ? "backblaze-b2"
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
@@ -68,17 +71,18 @@ python3Packages.buildPythonApplication rec {
     "test/unit/console_tool"
   ];
 
-  postInstall = ''
-    mv "$out/bin/b2" "$out/bin/backblaze-b2"
-
-    installShellCompletion --cmd backblaze-b2 \
-      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2) \
-      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2)
+  postInstall = lib.optionalString (execName != "b2") ''
+    mv "$out/bin/b2" "$out/bin/${execName}"
+  ''
+  + ''
+    installShellCompletion --cmd ${execName} \
+      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName}) \
+      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName})
   '';
 
   passthru.tests.version = (testers.testVersion {
     package = backblaze-b2;
-    command = "backblaze-b2 version --short";
+    command = "${execName} version --short";
   }).overrideAttrs (old: {
     # workaround the error: Permission denied: '/homeless-shelter'
     # backblaze-b2 fails to create a 'b2' directory under the XDG config path

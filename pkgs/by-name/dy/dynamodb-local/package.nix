@@ -1,9 +1,21 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, jre
+, jdk_headless
+, jre_minimal
 , makeBinaryWrapper
 }:
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.logging"
+      "java.xml"
+      "java.desktop"
+      "java.management"
+    ];
+    jdk = jdk_headless;
+  };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
   version = "2023-12-14";

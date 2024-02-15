@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.10.2";
+  version = "0.10.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ep1cman";
     repo = "unifi-protect-backup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EQCI7TkkOhDASMo5yKfAca/gB4ayyPOaDVK6WEaAIgc=";
+    hash = "sha256-KT2saPpkAS/6X491i0Y8+jr8JPD51iQx+YGT5zRTtcU=";
   };
 
   pythonRelaxDeps = [

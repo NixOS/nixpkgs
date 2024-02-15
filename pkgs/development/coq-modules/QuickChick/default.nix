@@ -6,7 +6,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
   owner = "QuickChick";
   inherit version;
   defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
-      { cases = [ (range "8.15" "8.18") pred.true  ]; out = "2.0.2"; }
+      { cases = [ (range "8.15" "8.19") pred.true  ]; out = "2.0.2"; }
       { cases = [ (range "8.13" "8.17") pred.true  ]; out = "1.6.5"; }
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }

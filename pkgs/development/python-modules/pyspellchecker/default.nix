@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyspellchecker";
-  version = "0.7.3";
+  version = "0.8.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "barrust";
     repo = "pyspellchecker";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DUFJGO0Ncobr36k0hQRgeHf77Mds53JJHOMlf4/zfAI=";
+    hash = "sha256-8IwTMj/RqMc9UqhzyvmrirPGuMEwj3iMr+FmF+8312U=";
   };
 
   nativeBuildInputs = [

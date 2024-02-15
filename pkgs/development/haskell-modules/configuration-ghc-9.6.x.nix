@@ -256,7 +256,9 @@ self: super: {
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;
-
+}
+# super.ghc is required to break infinite recursion as Nix is strict in the attrNames
+// lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {
   # The NCG backend for aarch64 generates invalid jumps in some situations,
   # the workaround on 9.6 is to revert to the LLVM backend (which is used
   # for these sorts of situations even on 9.2 and 9.4).

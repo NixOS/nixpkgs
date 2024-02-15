@@ -12,7 +12,7 @@
 , exiftool
 , ghostscript
 , imagemagick
-, mupdf
+, mupdf-headless
 , netpbm
 , numpy
 , poppler_utils
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     exiftool
     ghostscript
     imagemagick
-    mupdf
+    mupdf-headless
     netpbm
     numpy
     poppler_utils

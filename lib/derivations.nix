@@ -98,4 +98,30 @@ in
       # `lazyDerivation` caller knew a shortcut, be taken from there.
       meta = args.meta or checked.meta;
     } // passthru;
+
+  /* Conditionally set a derivation attribute.
+
+     Because `mkDerivation` sets `__ignoreNulls = true`, a derivation
+     attribute set to `null` will not impact the derivation output hash.
+     Thus, this function passes through its `value` argument if the `cond`
+     is `true`, but returns `null` if not.
+
+     Type: optionalDrvAttr :: Bool -> a -> a | Null
+
+     Example:
+       (stdenv.mkDerivation {
+         name = "foo";
+         x = optionalDrvAttr true 1;
+         y = optionalDrvAttr false 1;
+       }).drvPath == (stdenv.mkDerivation {
+         name = "foo";
+         x = 1;
+       }).drvPath
+       => true
+  */
+  optionalDrvAttr =
+    # Condition
+    cond:
+    # Attribute value
+    value: if cond then value else null;
 }

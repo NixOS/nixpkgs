@@ -1,7 +1,8 @@
 { lib
 , stdenv
-, buildPackages
-, targetPackages
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsTargetTarget
 }:
 
 rec {
@@ -16,26 +17,26 @@ rec {
     # As a workaround for https://github.com/rust-lang/rust/issues/89626 use lld on pkgsStatic aarch64
     shouldUseLLD = platform: platform.isAarch64 && platform.isStatic && !stdenv.isDarwin;
 
-    ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
-    cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
+    ccForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}cc";
+    cxxForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}c++";
     linkerForBuild = ccForBuild;
 
     ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
     cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
     linkerForHost = if shouldUseLLD stdenv.targetPlatform
       && !stdenv.cc.bintools.isLLVM
-      then "${buildPackages.lld}/bin/ld.lld"
+      then "${pkgsBuildHost.llvmPackages.bintools}/bin/${stdenv.cc.targetPrefix}ld.lld"
       else ccForHost;
 
-    # Unfortunately we must use the dangerous `targetPackages` here
+    # Unfortunately we must use the dangerous `pkgsTargetTarget` here
     # because hooks are artificially phase-shifted one slot earlier
     # (they go in nativeBuildInputs, so the hostPlatform looks like
     # a targetPlatform to them).
-    ccForTarget = "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForTarget = "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++";
-    linkerForTarget = if shouldUseLLD targetPackages.stdenv.targetPlatform
-      && !targetPackages.stdenv.cc.bintools.isLLVM # whether stdenv's linker is lld already
-      then "${buildPackages.lld}/bin/ld.lld"
+    ccForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc";
+    cxxForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++";
+    linkerForTarget = if shouldUseLLD pkgsTargetTarget.stdenv.targetPlatform
+      && !pkgsTargetTarget.stdenv.cc.bintools.isLLVM # whether stdenv's linker is lld already
+      then "${pkgsBuildTarget.llvmPackages.bintools}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}ld.lld"
       else ccForTarget;
 
     rustBuildPlatform = stdenv.buildPlatform.rust.rustcTarget;
@@ -56,9 +57,9 @@ rec {
     setEnv = ''
     env \
     ''
-    # Due to a bug in how splicing and targetPackages works, in
-    # situations where targetPackages is irrelevant
-    # targetPackages.stdenv.cc is often simply wrong.  We must omit
+    # Due to a bug in how splicing and pkgsTargetTarget works, in
+    # situations where pkgsTargetTarget is irrelevant
+    # pkgsTargetTarget.stdenv.cc is often simply wrong.  We must omit
     # the following lines when rustTargetPlatform collides with
     # rustHostPlatform.
     + lib.optionalString (rustTargetPlatform != rustHostPlatform) ''
@@ -74,8 +75,8 @@ rec {
       "CXX_${stdenv.buildPlatform.rust.cargoEnvVarTarget}=${cxxForBuild}" \
       "CARGO_TARGET_${stdenv.buildPlatform.rust.cargoEnvVarTarget}_LINKER=${linkerForBuild}" \
       "CARGO_BUILD_TARGET=${rustBuildPlatform}" \
-      "HOST_CC=${buildPackages.stdenv.cc}/bin/cc" \
-      "HOST_CXX=${buildPackages.stdenv.cc}/bin/c++" \
+      "HOST_CC=${pkgsBuildHost.stdenv.cc}/bin/cc" \
+      "HOST_CXX=${pkgsBuildHost.stdenv.cc}/bin/c++" \
     '';
   };
 } // lib.mapAttrs (old: new: platform:

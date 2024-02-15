@@ -1902,7 +1902,7 @@ runTests {
     expected = true;
   };
 
-  # lazyDerivation
+  # DERIVATIONS
 
   testLazyDerivationIsLazyInDerivationForAttrNames = {
     expr = attrNames (lazyDerivation {
@@ -1953,6 +1953,24 @@ runTests {
   in {
     expr = lazyDerivation { inherit derivation; };
     expected = derivation;
+  };
+
+  testOptionalDrvAttr = let
+    mkDerivation = args: derivation (args // {
+      builder = "builder";
+      system = "system";
+      __ignoreNulls = true;
+    });
+  in {
+    expr = (mkDerivation {
+      name = "foo";
+      x = optionalDrvAttr true 1;
+      y = optionalDrvAttr false 1;
+    }).drvPath;
+    expected = (mkDerivation {
+      name = "foo";
+      x = 1;
+    }).drvPath;
   };
 
   testTypeDescriptionInt = {

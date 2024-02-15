@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "embedding-reader";
-  version = "1.6.1";
+  version = "1.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-51UQOqXZcI1VBQ1k6omMStI7GZXNDQ6/e3ThafpP61U=";
+    hash = "sha256-paN6rAyH3L7qCfWPr5kXo9Xl57gRMhdcDnoyLJ7II2w=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

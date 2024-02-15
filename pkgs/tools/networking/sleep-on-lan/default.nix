@@ -30,5 +30,6 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ devusb ];
+    mainProgram = "sleep-on-lan";
   };
 }

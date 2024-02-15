@@ -90,6 +90,8 @@ in
         ];
       };
     };
+
+    users.groups.gamemode = { };
   };
 
   meta = {

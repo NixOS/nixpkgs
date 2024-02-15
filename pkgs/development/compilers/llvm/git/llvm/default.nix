@@ -86,10 +86,14 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ cmake ninja python ]
     ++ optionals enableManpages [
-      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-      # splicing does *not* work with the latter. (TODO: fix)
-      python3Packages.sphinx python3Packages.recommonmark
-    ];
+    # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+    # splicing does *not* work with the latter. (TODO: fix)
+    python3Packages.sphinx
+  ] ++ optionals (lib.versionOlder version "18" && enableManpages) [
+    python3Packages.recommonmark
+  ] ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
+    python3Packages.myst-parser
+  ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -329,7 +333,7 @@ stdenv.mkDerivation (rec {
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

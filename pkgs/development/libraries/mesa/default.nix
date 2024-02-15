@@ -60,6 +60,7 @@
 , vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" "intel-nullhw" ] # No Vulkan support on Darwin
 , OpenGL, Xplugin
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
+, withLibunwind ? lib.meta.availableOn stdenv.hostPlatform libunwind
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
@@ -85,8 +86,8 @@
 */
 
 let
-  version = "23.3.3";
-  hash = "sha256-UYMHwAV/o87otY33i+Qx1N9ar6ftxg0JJ4stegqA87Q=";
+  version = "23.3.5";
+  hash = "sha256-acyxJ4ZB/1utccoPhmGIrrGpKq3E27nTX1CuvsW4tQ8=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -120,7 +121,6 @@ self = stdenv.mkDerivation {
     ./musl.patch
 
     ./opencl.patch
-    ./disk_cache-include-dri-driver-path-in-cache-key.patch
 
     # Backports to fix build
     # FIXME: remove when applied upstream
@@ -169,7 +169,6 @@ self = stdenv.mkDerivation {
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
     "-Db_ndebug=true"
 
-    "-Ddisk-cache-key=${placeholder "drivers"}"
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
     "-Dplatforms=${lib.concatStringsSep "," eglPlatforms}"
@@ -217,6 +216,8 @@ self = stdenv.mkDerivation {
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ]  ++ lib.optionals (!withValgrind) [
     "-Dvalgrind=disabled"
+  ]  ++ lib.optionals (!withLibunwind) [
+    "-Dlibunwind=disabled"
   ] ++ lib.optional enablePatentEncumberedCodecs
     "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
   ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
@@ -226,7 +227,10 @@ self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
-    zstd libunwind
+    zstd
+  ] ++ lib.optionals withLibunwind [
+    libunwind
+  ] ++ [
     python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
@@ -310,8 +314,9 @@ self = stdenv.mkDerivation {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # set the default search path for DRI drivers; used e.g. by X server
-    substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
-    [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
+    for pc in lib/pkgconfig/{dri,d3d}.pc; do
+      [ -f "$dev/$pc" ] && substituteInPlace "$dev/$pc" --replace "$drivers" "${libglvnd.driverLink}"
+    done
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
     rm -f $dev/lib/pkgconfig/{gl,egl}.pc

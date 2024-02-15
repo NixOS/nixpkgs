@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.23.0";
+  version = "1.24.0";
   outputs = [ "out" "man" "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GAi5wAp2o95pbjzV2Ez4BaUjLvrzEBIe9umO6Z1aGXE=";
+    hash = "sha256-S5L8efxYpsZn51JvNVeBmA1+KtzpdYcHj7OVaG4Sckc=";
   };
 
-  cargoHash = "sha256-V1S4zQ/a0IAueNt81fAaw8grk7Rm7DM0+KyzzLJg+bg=";
+  cargoHash = "sha256-wlCG3evv5VxtlfznCZSTtorZYLMiH3Wr+t6ZMq+VqFk=";
 
   nativeBuildInputs = [ installShellFiles mdbook ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];

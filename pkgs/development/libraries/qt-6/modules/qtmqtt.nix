@@ -5,12 +5,14 @@
 
 qtModule rec {
   pname = "qtmqtt";
-  version = "6.6.1";
+  version = "6.6.2";
+
   src = fetchFromGitHub {
     owner = "qt";
     repo = "qtmqtt";
     rev = "v${version}";
-    hash = "sha256-6jQrUT1wLk6rhDIns0ubdUCZ7e/m38Oqvl8c1/sfWxI=";
+    hash = "sha256-R8B7Vt/XzI7+17DDZ+TVbqfGKdEfUMiLa1BqzIbo4OM=";
   };
+
   propagatedBuildInputs = [ qtbase ];
 }

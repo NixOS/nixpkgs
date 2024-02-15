@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ory";
-  version = "0.2.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5N69/Gv4eYLbZNN+sEx+RcFyhGCT0hUxDCje1qrbWiY=";
+    hash = "sha256-q7+Fpttgx62GbKxCCiEDlX//e/pNO24e7KhhBeGRDH0=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     "sqlite"
   ];
 
-  vendorHash = "sha256-J9jyeLIT+1pFnHOUHrzmblVCJikvY05Sw9zMz5qaDOk=";
+  vendorHash = "sha256-B0y1JVjJmC5eitn7yIcDpl+9+xaBDJBMdvm+7N/ZxTk=";
 
   postInstall = ''
     mv $out/bin/cli $out/bin/ory
@@ -36,8 +36,8 @@ buildGoModule rec {
   meta = with lib; {
     mainProgram = "ory";
     description = "The Ory CLI";
-    homepage = "https://www.ory.sh/";
+    homepage = "https://www.ory.sh/cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ luleyleo ];
+    maintainers = with maintainers; [ luleyleo nicolas-goudry ];
   };
 }

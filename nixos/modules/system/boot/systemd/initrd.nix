@@ -57,6 +57,7 @@ let
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
     "systemd-halt.service"
+    "systemd-hibernate-resume.service"
     "systemd-journald-audit.socket"
     "systemd-journald-dev-log.socket"
     "systemd-journald.service"
@@ -70,6 +71,7 @@ let
     "systemd-tmpfiles-setup.service"
     "timers.target"
     "umount.target"
+    "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
 
   upstreamWants = [
@@ -424,6 +426,7 @@ in {
 
       storePaths = [
         # systemd tooling
+        "${cfg.package}/lib/systemd/systemd-executor"
         "${cfg.package}/lib/systemd/systemd-fsck"
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
@@ -433,6 +436,7 @@ in {
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
+        "${cfg.package}/lib/systemd/systemd-bsod"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"

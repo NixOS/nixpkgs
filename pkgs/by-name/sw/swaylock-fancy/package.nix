@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation {
   pname = "swaylock-fancy";
-  version = "unstable-2023-11-21";
+  version = "unstable-2023-12-22";
 
   src = fetchFromGitHub {
     owner = "Big-B";
     repo = "swaylock-fancy";
-    rev = "ff37ae3c6d0f100f81ff64fdb9d422c37de2f4f6";
-    hash = "sha256-oS4YCbZOIrMP4QSM5eHWzTn18k3w2OnJ2k+64x/DnuM=";
+    rev = "0b93740e1dfc39883c125c212a1adc16b01c14f1";
+    hash = "sha256-ko4SeHGNBiPMvxFXhD+U2r0Mwc14C2IN5CaJYI0V8u8=";
   };
 
   postPatch = ''

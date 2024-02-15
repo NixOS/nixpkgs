@@ -7,7 +7,7 @@
 }:
 
 let
-  self = stdenv.mkDerivation (rec {
+  self = stdenv.mkDerivation (finalAttrs: rec {
     pname = "clang";
     inherit version;
 
@@ -21,6 +21,7 @@ let
     sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake ninja python3 ]
+      ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -70,7 +71,7 @@ let
       ln -sv $out/bin/clang $out/bin/cpp
 
       mkdir -p $lib/lib/clang
-      mv $lib/lib/18 $lib/lib/clang/18
+      mv $lib/lib/${lib.versions.major version} $lib/lib/clang/${lib.versions.major version}
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
@@ -95,7 +96,12 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [ "fortify3" ];
+      hardeningUnsupportedFlags = [
+        "fortify3"
+      ];
+      hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
+        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
     };
 
     meta = llvm_meta // {

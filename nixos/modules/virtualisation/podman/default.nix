@@ -150,25 +150,32 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable
-    {
+  config =
+    let
+      networkConfig = ({
+        dns_enabled = false;
+        driver = "bridge";
+        id = "0000000000000000000000000000000000000000000000000000000000000000";
+        internal = false;
+        ipam_options = { driver = "host-local"; };
+        ipv6_enabled = false;
+        name = "podman";
+        network_interface = "podman0";
+        subnets = [{ gateway = "10.88.0.1"; subnet = "10.88.0.0/16"; }];
+      } // cfg.defaultNetwork.settings);
+      inherit (networkConfig) dns_enabled network_interface;
+    in
+    lib.mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
       # https://github.com/containers/podman/blob/097cc6eb6dd8e598c0e8676d21267b4edb11e144/docs/tutorials/basic_networking.md#default-network
       environment.etc."containers/networks/podman.json" = lib.mkIf (cfg.defaultNetwork.settings != { }) {
-        source = json.generate "podman.json" ({
-          dns_enabled = false;
-          driver = "bridge";
-          id = "0000000000000000000000000000000000000000000000000000000000000000";
-          internal = false;
-          ipam_options = { driver = "host-local"; };
-          ipv6_enabled = false;
-          name = "podman";
-          network_interface = "podman0";
-          subnets = [{ gateway = "10.88.0.1"; subnet = "10.88.0.0/16"; }];
-        } // cfg.defaultNetwork.settings);
+        source = json.generate "podman.json" networkConfig;
       };
+
+      # containers cannot reach aardvark-dns otherwise
+      networking.firewall.interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration

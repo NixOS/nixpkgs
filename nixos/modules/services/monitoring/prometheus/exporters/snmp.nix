@@ -3,6 +3,7 @@
 with lib;
 
 let
+  logPrefix = "services.prometheus.exporters.snmp";
   cfg = config.services.prometheus.exporters.snmp;
 
   # This ensures that we can deal with string paths, path types and
