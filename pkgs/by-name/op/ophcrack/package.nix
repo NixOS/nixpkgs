@@ -12,7 +12,6 @@
 , makeWrapper
 , pkg-config
 , expat
-, qtcharts
 , wrapQtAppsHook
 , cmake
 }:
@@ -31,11 +30,11 @@ stdenv.mkDerivation rec {
 
  nativeBuildInputs = [ autoreconfHook libtool wrapQtAppsHook ];
 
- buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat qtcharts ];
+ buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat ];
 
  configPhase = ''
    CFLAGS="-I/usr/include/libxml2/libxml/"
-    ./config
+    ./configure
  '';
 
  buildPhase = ''
