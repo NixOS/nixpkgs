@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scaphandre";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "hubblo-org";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cXwgPYTgom4KrL/PH53Fk6ChtALuMYyJ/oTrUKHCrzE=";
+    hash = "sha256-Y3TZJJ6ypZGGIEApDqiID7xWOSFTVjNQeDSomR3v5gY=";
   };
 
-  cargoSha256 = "sha256-Vdkq9ShbHWepvIgHPjhKY+LmhjS+Pl84QelgEpen7Qs=";
+  cargoSha256 = "sha256-MUVZR86bbRKpprtmbkSUi6Vc4gRwD+l17jz+o5aBIOU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     runHook preCheck
 
     # Work around to pass test due to non existing path
-    # https://github.com/hubblo-org/scaphandre/blob/v0.5.0/src/sensors/powercap_rapl.rs#L29
+    # https://github.com/hubblo-org/scaphandre/blob/v1.0.0/src/sensors/powercap_rapl.rs#L29
     export SCAPHANDRE_POWERCAP_PATH="$(mktemp -d)/scaphandre"
 
     mkdir -p "$SCAPHANDRE_POWERCAP_PATH"
