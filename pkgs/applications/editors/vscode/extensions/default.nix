@@ -757,7 +757,7 @@ let
           name = "ruff";
           publisher = "charliermarsh";
           version = "2023.60.0";
-          sha256 = "sha256-zxE4QcWt8M6djTbdIf0YNSpeF1w7vMK4/BW5ArCOYbE=";
+          sha256 = "sha256-qgwud2gzHLHID45VxDlngFMoks5O3pTHQe+Q7bdf8+I=";
         };
         meta = {
           license = lib.licenses.mit;

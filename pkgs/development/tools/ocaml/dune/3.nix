@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, darwin, ocaml-lsp }:
+{ lib, stdenv, fetchurl, ocaml, findlib, darwin, ocaml-lsp, dune-release }:
 
 if lib.versionOlder ocaml.version "4.08"
 then throw "dune 3 is not available for OCaml ${ocaml.version}"
@@ -6,11 +6,11 @@ else
 
 stdenv.mkDerivation rec {
   pname = "dune";
-  version = "3.13.1";
+  version = "3.14.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-    hash = "sha256-L+CvG0z5hknHVVtVXZ9PgdXe2HcYqJ30mI4hSlbIqRY=";
+    hash = "sha256-9NCdiRYmIf3/QkwlP6UMSSDSF5+1s9Heure76Xxosvw=";
   };
 
   nativeBuildInputs = [ ocaml findlib ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=${placeholder "out"}" "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 
   passthru.tests = {
-    inherit ocaml-lsp;
+    inherit ocaml-lsp dune-release;
   };
 
   meta = {

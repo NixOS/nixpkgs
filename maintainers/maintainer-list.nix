@@ -11745,12 +11745,6 @@
     githubId = 1729331;
     name = "Dominique Martinet";
   };
-  martingms = {
-    email = "martin@mg.am";
-    github = "martingms";
-    githubId = 458783;
-    name = "Martin Gammelsæter";
-  };
   martinjlowm = {
     email = "martin@martinjlowm.dk";
     github = "martinjlowm";

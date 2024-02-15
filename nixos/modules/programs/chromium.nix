@@ -23,7 +23,7 @@ in
 
       enablePlasmaBrowserIntegration = mkEnableOption (lib.mdDoc "Native Messaging Host for Plasma Browser Integration");
 
-      plasmaBrowserIntegrationPackage = mkPackageOption pkgs "plasma5Packages.plasma-browser-integration" { };
+      plasmaBrowserIntegrationPackage = mkPackageOption pkgs [ "plasma5Packages" "plasma-browser-integration" ] { };
 
       extensions = mkOption {
         type = with types; nullOr (listOf str);

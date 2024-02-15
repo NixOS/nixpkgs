@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , stdenvNoCC
-, gcc13Stdenv
 , fetchFromGitHub
 , substituteAll
 , makeWrapper
@@ -123,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
         libpulseaudio
         libnotify
         pipewire
-        gcc13Stdenv.cc.cc.lib
+        stdenv.cc.cc.lib
       ] ++ lib.optional withTTS speechd);
     in
     ''

@@ -20,6 +20,7 @@
 , traitlets
 , importlib-metadata
 , flaky
+, ipykernel
 , ipywidgets
 , pytestCheckHook
 }:
@@ -32,14 +33,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.14.2";
+  version = "7.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p/iAj9TggkMWc6xThAAhjdRe/QdvvrB8xuWqWjpOlJ4=";
+    hash = "sha256-gT5lU3ljYkia5XLjm6G/+XhTYZL7UY4QgmsOjK3wPsg=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -84,6 +85,7 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     flaky
+    ipykernel
     ipywidgets
     pytestCheckHook
   ];
