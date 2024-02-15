@@ -78,6 +78,9 @@ buildPythonPackage rec {
 
     # set the environment variable, CC, which conflicts with standard environment
     "test_patch_environment_key_exists"
+
+    # ptxas is not available
+    "test_dynamo_extract_model"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"
