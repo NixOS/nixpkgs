@@ -13,11 +13,13 @@
 , tornado
 , trio
 , twisted
+, typing-extensions
+, wcwidth
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.4.3";
+  version = "2.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
     owner = "urwid";
     repo = "urwid";
     rev = "refs/tags/${version}";
-    hash = "sha256-raDsUZaXBC4s/48KNH8Thrpm8Bq8wj9+Rahk+LkxcDo=";
+    hash = "sha256-NtgfB/5gY9nCC2ZdV5WABxsj/2tcXTheToKpxTuKdKI=";
   };
 
   postPatch = ''
@@ -36,6 +38,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+    wcwidth
   ];
 
   passthru.optional-dependencies = {
