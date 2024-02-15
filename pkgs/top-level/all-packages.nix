@@ -36416,14 +36416,6 @@ with pkgs;
 
   x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
 
-  picom = callPackage ../applications/window-managers/picom { };
-
-  picom-allusive = callPackage ../applications/window-managers/picom/picom-allusive.nix { };
-
-  picom-jonaburg = callPackage ../applications/window-managers/picom/picom-jonaburg.nix { };
-
-  picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
-
   xd = callPackage ../applications/networking/p2p/xd { };
 
   xdaliclock = callPackage ../tools/misc/xdaliclock { };
