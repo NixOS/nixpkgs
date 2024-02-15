@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
  nativeBuildInputs = [ autoreconfHook libtool wrapQtAppsHook ];
 
- buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat qtcharts qtbase ];
+ buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat qtcharts ];
 
  configPhase = ''
    CFLAGS="-I/usr/include/libxml2/libxml/"
