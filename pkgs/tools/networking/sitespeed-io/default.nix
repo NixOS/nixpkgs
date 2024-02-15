@@ -9,6 +9,7 @@
 , procps
 , python3
 , xorg
+, nix-update-script
 
 # chromedriver is more efficient than geckodriver, but is available on less platforms.
 
@@ -80,6 +81,10 @@ buildNpmPackage rec {
         ${lib.optionalString (!withFirefox && withChromium) "--add-flags '-b chrome'"} \
         ${lib.optionalString (withFirefox && !withChromium) "--add-flags '-b firefox'"}
     '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "An open source tool that helps you monitor, analyze and optimize your website speed and performance";
