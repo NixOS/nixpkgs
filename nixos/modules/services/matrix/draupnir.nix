@@ -51,7 +51,7 @@ in
           };
 
           options = lib.mkOption {
-            type = lib.types.submodule (import ./pantalaimon-options.nix);
+            type = lib.types.submodule (import ./pantalaimon-options.nix { name = "draupnir"; });
             default = { };
             description = ''
               Pass through additional options to the `pantalaimon` service.
