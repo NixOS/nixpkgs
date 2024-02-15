@@ -1,6 +1,7 @@
 { lib
 , pkgs # for passthru.plugins
 , stdenv
+, fetchpatch
 , fetchurl
 , pkg-config
 , libusb-compat-0_1
@@ -47,12 +48,21 @@ let rizin = stdenv.mkDerivation rec {
     "-Dportable=true"
   ];
 
-  # Normally, Rizin only looks for files in the install prefix. With
-  # portable=true, it instead looks for files in relation to the parent
-  # of the directory of the binary file specified in /proc/self/exe,
-  # caching it. This patch replaces the entire logic to only look at
-  # the env var NIX_RZ_PREFIX
-  patches = [ ./librz-wrapper-support.patch ];
+  patches = [
+    # Normally, Rizin only looks for files in the install prefix. With
+    # portable=true, it instead looks for files in relation to the parent
+    # of the directory of the binary file specified in /proc/self/exe,
+    # caching it. This patch replaces the entire logic to only look at
+    # the env var NIX_RZ_PREFIX
+    ./librz-wrapper-support.patch
+    # Fix tree-sitter 0.20.9 build failure: https://github.com/rizinorg/rizin/pull/4165
+    (fetchpatch {
+      name = "tree-sitter-0.20.9.patch";
+      url = "https://github.com/rizinorg/rizin/commit/1bb08712dbc9e062bb439a65dcebeb4221ded699.patch";
+      hash = "sha256-mE0eQAFhyxX5bwrz+S1IVl6HNV9ITQ+tRRvGLLif5VI=";
+    })
+  ];
+
 
   nativeBuildInputs = [
     pkg-config
