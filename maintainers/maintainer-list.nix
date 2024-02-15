@@ -15467,6 +15467,12 @@
     githubId = 61306;
     name = "Rene Treffer";
   };
+  rucadi = {
+    github = "ruben.canodiaz@gmail.com";
+    github = "rucadi";
+    githubId = 6445619;
+    name = "Ruben Cano Diaz";
+  };
   ruby0b = {
     github = "ruby0b";
     githubId = 106119328;
