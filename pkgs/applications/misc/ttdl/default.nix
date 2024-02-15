@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/VladimirMarkelov/ttdl/blob/v${version}/changelog";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    mainProgram = "ttdl";
   };
 }

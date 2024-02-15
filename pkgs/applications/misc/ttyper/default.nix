@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/max-niederman/ttyper/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda max-niederman ];
+    mainProgram = "ttyper";
   };
 }

@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rycee sikmir ];
     platforms = platforms.all;
+    mainProgram = "josm";
   };
 }

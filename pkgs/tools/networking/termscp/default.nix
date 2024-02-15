@@ -60,5 +60,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "termscp";
   };
 }

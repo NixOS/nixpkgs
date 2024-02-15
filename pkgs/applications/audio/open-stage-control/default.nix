@@ -90,5 +90,6 @@ buildNpmPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lilyinstarlight ];
     platforms = platforms.linux;
+    mainProgram = "open-stage-control";
   };
 }

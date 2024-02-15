@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/wakatara/harsh/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ laurailway ];
+    mainProgram = "harsh";
   };
 }

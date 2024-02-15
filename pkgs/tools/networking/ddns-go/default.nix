@@ -28,5 +28,6 @@ buildGoModule rec {
     description = "Simple and easy to use DDNS";
     license = licenses.mit;
     maintainers = with maintainers; [ oluceps ];
+    mainProgram = "ddns-go";
   };
 }

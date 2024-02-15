@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsl11;
     maintainers = with maintainers; [ jk techknowlogick ];
     platforms = platforms.unix;
+    mainProgram = "boundary";
   };
 }

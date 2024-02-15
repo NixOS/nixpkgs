@@ -29,5 +29,6 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/robinovitch61/wander";
     maintainers = teams.c3d2.members;
+    mainProgram = "wander";
   };
 }

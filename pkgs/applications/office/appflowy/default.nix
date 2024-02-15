@@ -79,5 +79,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${version}";
     maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "appflowy";
   };
 }
