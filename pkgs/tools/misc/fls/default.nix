@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   # Cargo.lock is outdated
   cargoPatches = [ ./update-cargo-lock.diff ];
 
-  cargoSha256 = "sha256-MfcrmolPKka9MHCCCvvzRZXC2vl0/XYUz5Bq0C9J5p0=";
+  cargoHash = "sha256-MfcrmolPKka9MHCCCvvzRZXC2vl0/XYUz5Bq0C9J5p0=";
 
   buildNoDefaultFeatures = true;
 
