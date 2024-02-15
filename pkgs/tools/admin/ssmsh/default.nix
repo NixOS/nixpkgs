@@ -28,5 +28,6 @@ buildGoModule rec {
     description = "An interactive shell for AWS Parameter Store";
     license = licenses.mit;
     maintainers = with maintainers; [ dbirks ];
+    mainProgram = "ssmsh";
   };
 }

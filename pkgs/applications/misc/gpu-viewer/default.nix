@@ -71,5 +71,6 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ GaetanLepage ];
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "gpu-viewer";
   };
 }

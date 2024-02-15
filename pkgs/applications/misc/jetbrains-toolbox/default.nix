@@ -72,5 +72,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ AnatolyPopov ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "jetbrains-toolbox";
   };
 }

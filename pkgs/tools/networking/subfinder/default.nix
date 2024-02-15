@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/projectdiscovery/subfinder";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz Br1ght0ne Misaka13514 ];
+    mainProgram = "subfinder";
   };
 }

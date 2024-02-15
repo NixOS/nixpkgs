@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/osmcode/osmium-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus mit bsd3 ];
     maintainers = with maintainers; [ das-g ];
+    mainProgram = "osmium";
   };
 }

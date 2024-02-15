@@ -74,5 +74,6 @@ in {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "logseq";
   };
 })

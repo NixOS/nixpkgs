@@ -28,5 +28,6 @@ in appimageTools.wrapType2 {
     license = licenses.unfree;
     maintainers = with maintainers; [ sei40kr ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "notion-app-enhanced";
   };
 }

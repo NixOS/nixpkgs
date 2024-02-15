@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/scaleway/netbox2netshot";
     license = licenses.asl20;
     maintainers = with maintainers; [ janik ];
+    mainProgram = "netbox2netshot";
   };
 }

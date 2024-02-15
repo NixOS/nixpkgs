@@ -34,5 +34,6 @@ buildGoModule rec {
     changelog = "https://github.com/TimothyYe/godns/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ yinfeng ];
+    mainProgram = "godns";
   };
 }

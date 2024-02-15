@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;
+    mainProgram = "mkgmap";
   };
 }

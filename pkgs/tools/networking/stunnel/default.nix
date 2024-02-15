@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.thoughtpolice ];
     platforms = lib.platforms.unix;
+    mainProgram = "stunnel";
   };
 })

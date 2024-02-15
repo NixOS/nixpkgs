@@ -66,6 +66,7 @@ stdenvNoCC.mkDerivation rec {
     maintainers = teams.wdz.members;
     license = licenses.mit;
     inherit (electron.meta) platforms;
+    mainProgram = "camunda-modeler";
   };
 }
 

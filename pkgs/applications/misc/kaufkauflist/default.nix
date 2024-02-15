@@ -48,5 +48,6 @@ in buildNpmPackage rec {
     description = "A to-do list for shopping or other use cases";
     license = licenses.mit;
     maintainers = with maintainers; [ annaaurora ];
+    mainProgram = "kaufdbclean";
   };
 }
