@@ -3,14 +3,14 @@
 , cmake
 , setuptools
 , wheel
-, pkgs
+, xrootd
 }:
 
 buildPythonPackage rec {
   pname = "xrootd";
   pyproject = true;
 
-  inherit (pkgs.xrootd) version src;
+  inherit (xrootd) version src;
 
   sourceRoot = "${src.name}/bindings/python";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    pkgs.xrootd
+    xrootd
   ];
 
   dontUseCmakeConfigure = true;
