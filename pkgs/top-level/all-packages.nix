@@ -38013,6 +38013,8 @@ with pkgs;
 
   quantumminigolf = callPackage ../games/quantumminigolf { };
 
+  qwalkingpad = qt6.callPackage ../applications/misc/qwalkingpad { };
+
   r2mod_cli = callPackage ../games/r2mod_cli { };
 
   r2modman = callPackage ../games/r2modman { };
