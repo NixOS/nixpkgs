@@ -683,6 +683,10 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = optionalString (stdenv.isLinux && withLib) ''
     addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
     addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
+  ''
+  # https://trac.ffmpeg.org/ticket/10809
+  + optionalString (versionAtLeast version "5.0" && withVulkan) ''
+    patchelf $lib/lib/libavcodec.so --add-needed libvulkan.so --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   enableParallelBuilding = true;
