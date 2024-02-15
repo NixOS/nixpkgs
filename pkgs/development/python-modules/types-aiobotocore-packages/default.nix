@@ -46,7 +46,7 @@ in
 rec {
   types-aiobotocore-accessanalyzer = buildTypesAiobotocorePackage "accessanalyzer" "2.11.2" "sha256-hUS1ZTj9CbC74Aiinmeh2BEQ2KymcqxuYVSeD12s5xg";
 
-  types-aiobotocore-account = buildTypesAiobotocorePackage "account" "2.8.0" "sha256-rVwj3gN9+U5m6xXwytQpE8mSVPTlezzeNIwNH2vgR4Y=";
+  types-aiobotocore-account = buildTypesAiobotocorePackage "account" "2.11.2" "sha256-XtL7R0UrgI/9rSxfNYbA0Lez+DiVyB7R+rhn49Nxerc=";
 
   types-aiobotocore-acm = buildTypesAiobotocorePackage "acm" "2.8.0" "sha256-VzV8viXJpHfI1aD1UtCX+GSSZKhRSTzMX5dnkGhm+9Y=";
 
