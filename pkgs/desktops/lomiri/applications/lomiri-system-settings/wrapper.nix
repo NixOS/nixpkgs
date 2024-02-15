@@ -1,5 +1,6 @@
 { stdenvNoCC
 , lib
+, nixosTests
 , glib
 , lndir
 , lomiri-system-settings-unwrapped
@@ -59,6 +60,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --set NIX_LSS_PREFIX "$out"
     )
   '';
+
+  passthru.tests.standalone = nixosTests.lomiri-system-settings;
 
   meta = lomiri-system-settings-unwrapped.meta // {
     description = "System Settings application for Lomiri (wrapped)";
