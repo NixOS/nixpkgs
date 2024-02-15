@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
  buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat qtcharts qtbase ];
 
  configPhase = ''
-   CFLAGS="-I/usr/include/libxml2/libxml/"
     ./config
  '';
 
