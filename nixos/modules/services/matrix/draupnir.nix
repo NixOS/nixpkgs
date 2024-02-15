@@ -16,6 +16,7 @@ in
       default = null;
       description = ''
         File containing the access token for Draupnir's Matrix account.
+        Make sure this does not contain newlines if writing manually: `:set nofixeol` for vim or -L for nano.
       '';
     };
 
@@ -47,6 +48,7 @@ in
             default = null;
             description = ''
               File containing the password for the Matrix account.
+              Make sure this does not contain newlines if writing manually: `:set nofixeol` for vim or -L for nano.
             '';
           };
 

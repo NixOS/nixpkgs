@@ -32,7 +32,7 @@ The Draupnir Matrix user expects to be free of any rate limiting.
 See [Synapse #6286](https://github.com/matrix-org/synapse/issues/6286)
 for an example on how to achieve this.
 
-If you want Draupnir to be able to deactivate users, move room aliases, shutdown rooms, etc.
+If you want Draupnir to be able to deactivate users, move room aliases, shut down rooms, etc.
 you'll need to make the Draupnir user a Matrix server admin.
 
 Now invite the Draupnir user to the management room.
@@ -54,13 +54,16 @@ will be configured to connect to the new Pantalaimon instance.
        enable = true;
        username = "draupnir";
        passwordFile = "/run/secrets/draupnir-password";
+       options = {
+        homeserver = "http://localhost:8008";
+        ssl = false;
+       }
     };
     settings = {
-      homeserverUrl = "https://matrix.domain.tld";
+      managementRoom = "!yyy:domain.tld";
       protectedRooms = [
         "https://matrix.to/#/!xxx:domain.tld"
       ];
-      managementRoom = "!yyy:domain.tld";
     };
   };
 }
