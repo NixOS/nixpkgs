@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '>= 2.5.0', '< 3.2.0'
 gem 'bundler', '>= 1.12.0'
 
-gem 'rails', '6.1.7.2'
+gem 'rails', '6.1.7.6'
 gem 'globalid', '~> 0.4.2' if Gem.ruby_version < Gem::Version.new('2.6.0')
 gem 'rouge', '~> 3.28.0'
 gem 'request_store', '~> 1.5.0'
@@ -13,10 +13,16 @@ gem 'roadie-rails', (Gem.ruby_version < Gem::Version.new('2.6.0') ? '~> 2.2.0' :
 gem 'marcel'
 gem "mail", "~> 2.7.1"
 gem 'csv', '~> 3.2.0'
-gem 'nokogiri', (Gem.ruby_version < Gem::Version.new('2.6.0') ? '~> 1.12.5' : '~> 1.13.10')
-gem "rexml"
+gem 'nokogiri', (if Gem.ruby_version < Gem::Version.new('2.6.0')
+                   '~> 1.12.5'
+                 elsif Gem.ruby_version < Gem::Version.new('2.7.0')
+                   '~> 1.13.10'
+                 else
+                   '~> 1.15.2'
+                 end)
+gem "rexml", require: false if Gem.ruby_version >= Gem::Version.new('3.0')
 gem 'i18n', '~> 1.10.0'
-gem 'rbpdf', '~> 1.21.0'
+gem 'rbpdf', '~> 1.21.3'
 gem 'addressable'
 gem 'rubyzip', '~> 2.3.0'
 gem 'net-smtp', '~> 0.3.0'
@@ -70,9 +76,10 @@ end
 
 group :test do
   gem "rails-dom-testing"
-  gem 'mocha', (Gem.ruby_version < Gem::Version.new('2.7.0') ? ['>= 1.4.0', '< 2.0.0'] : '>= 1.4.0')
+  gem 'mocha', '>= 2.0.1'
   gem 'simplecov', '~> 0.21.2', :require => false
   gem "ffi", platforms: [:mri, :mingw, :x64_mingw, :mswin]
+  # For running system tests
   gem 'puma', (Gem.ruby_version < Gem::Version.new('2.7') ? '< 6.0.0' : '>= 0')
   gem 'capybara', (if Gem.ruby_version < Gem::Version.new('2.6')
                      '~> 3.35.3'

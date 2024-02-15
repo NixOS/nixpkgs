@@ -13,7 +13,7 @@ If you find you are lacking inspiration for packing javascript applications, the
 ### Github {#javascript-finding-examples-github}
 
 - Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
-- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
+- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+path%3A**%2Fflake.nix&type=code>
 
 ### Gitlab {#javascript-finding-examples-gitlab}
 
@@ -209,6 +209,8 @@ In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json
 * `npmPackFlags`: Flags to pass to `npm pack`.
 * `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
 * `makeWrapperArgs`: Flags to pass to `makeWrapper`, added to executable calling the generated `.js` with `node` as an interpreter. These scripts are defined in `package.json`.
+* `nodejs`: The `nodejs` package to build against, using the corresponding `npm` shipped with that version of `node`. Defaults to `pkgs.nodejs`.
+* `npmDeps`: The dependencies used to build the npm package. Especially useful to not have to recompute workspace depedencies.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
@@ -352,6 +354,7 @@ mkYarnPackage rec {
 
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
+- `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
 
 ## Outside Nixpkgs {#javascript-outside-nixpkgs}
 

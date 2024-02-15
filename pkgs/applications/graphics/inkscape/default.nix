@@ -6,6 +6,7 @@
 , cmake
 , desktopToDarwinBundle
 , fetchurl
+, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -40,6 +41,7 @@
 , python3
 , substituteAll
 , wrapGAppsHook
+, libepoxy
 , zlib
 }:
 let
@@ -48,12 +50,17 @@ let
       appdirs
       beautifulsoup4
       cachecontrol
-      filelock
+    ]
+    # CacheControl requires extra runtime dependencies for FileCache
+    # https://gitlab.com/inkscape/extras/extension-manager/-/commit/9a4acde6c1c028725187ff5972e29e0dbfa99b06
+    ++ cachecontrol.optional-dependencies.filecache
+    ++ [
       numpy
       lxml
       packaging
       pillow
       scour
+      pyparsing
       pyserial
       requests
       pygobject3
@@ -61,11 +68,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.2.2";
+  version = "1.3.2";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/inkscape-${version}.tar.xz";
-    sha256 = "oMf9DQPAohU15kjvMB3PgN18/B81ReUQZfvxuj7opcQ=";
+    url = "https://inkscape.org/release/inkscape-${version}/source/archive/xz/dl/inkscape-${version}.tar.xz";
+    sha256 = "sha256-29GETcRD/l4Q0+mohxROX7ciOFL/8ZHPte963qsOCGs=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -85,6 +92,13 @@ stdenv.mkDerivation rec {
       # Fix path to ps2pdf binary
       src = ./fix-ps2pdf-path.patch;
       inherit ghostscript;
+    })
+
+    # Fix build with libxml2 2.12
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/6089
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/694d8ae43d06efff21adebf377ce614d660b24cd.patch";
+      hash = "sha256-9IXJzpZbNU5fnt7XKgqCzUDrwr08qxGwo8TqnL+xc6E=";
     })
   ];
 
@@ -143,6 +157,7 @@ stdenv.mkDerivation rec {
     potrace
     python3Env
     zlib
+    libepoxy
   ] ++ lib.optionals (!stdenv.isDarwin) [
     gspell
   ] ++ lib.optionals stdenv.isDarwin [
@@ -152,8 +167,9 @@ stdenv.mkDerivation rec {
 
   # Make sure PyXML modules can be found at run-time.
   postInstall = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
-    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
+    for f in $out/lib/inkscape/*.dylib; do
+      ln -s $f $out/lib/$(basename $f)
+    done
   '';
 
   meta = with lib; {

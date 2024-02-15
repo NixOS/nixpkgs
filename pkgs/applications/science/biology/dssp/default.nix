@@ -3,6 +3,7 @@
 , cmake
 , eigen
 , fetchFromGitHub
+, fetchpatch
 , libcifpp
 , libmcfp
 , zlib
@@ -15,18 +16,26 @@ let
       inherit (oldAttrs.src) owner repo rev;
       hash = "sha256-Sj10j6HxUoUvQ66cd2B8CO7CVBRd7w9CTovxkwPDOvs=";
     };
+    patches = [
+      (fetchpatch {
+        # https://github.com/PDB-REDO/libcifpp/issues/51
+        name = "fix-build-on-darwin.patch";
+        url = "https://github.com/PDB-REDO/libcifpp/commit/641f06a7e7c0dc54af242b373820f2398f59e7ac.patch";
+        hash = "sha256-eWNfp9nA/+2J6xjZR6Tj+5OM3L5MxdfRi0nBzyaqvS0=";
+      })
+    ];
   });
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dssp";
-  version = "4.4.3";
+  version = "4.4.5";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = "dssp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-zPmRR7sxVNErwabLqA5CNMO4K1qHdmC9FBPjcx91KuM=";
+    hash = "sha256-X0aMWqoMhmQVRHWKVm2S6JAOYiBuBBMzMoivMdpNx0M=";
   };
 
   nativeBuildInputs = [

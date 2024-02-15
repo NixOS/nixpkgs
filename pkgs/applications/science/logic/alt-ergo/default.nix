@@ -1,12 +1,12 @@
-{ fetchurl, fetchpatch, lib, ocamlPackages }:
+{ darwin, fetchurl, lib, ocamlPackages, stdenv }:
 
 let
   pname = "alt-ergo";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${version}/alt-ergo-${version}.tbz";
-    hash = "sha256-nPjWmg5FepObhquioYxhVPq6UdOHtCo2Hs5V0yndYB0=";
+    hash = "sha256-9GDBcBH49sheO5AjmDsznMEbw0JSrnSOcIIRN40/aJU=";
   };
 in
 
@@ -28,7 +28,7 @@ ocamlPackages.buildDunePackage {
 
   inherit pname version src;
 
-  nativeBuildInputs = [ ocamlPackages.menhir ];
+  nativeBuildInputs = [ ocamlPackages.menhir ] ++ lib.optionals stdenv.isDarwin [ darwin.sigtool ];
   buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ]);
 
   meta = {

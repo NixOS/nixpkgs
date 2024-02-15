@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ma9e ] ++ teams.podman.members;
     platforms = platforms.linux;
     inherit (src.meta) homepage;
+    mainProgram = "fuse-overlayfs";
   };
 }

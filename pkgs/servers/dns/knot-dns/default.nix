@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.3.1";
+  version = "3.3.4";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "f3f4b1d49ec9b81113b14a38354b823bd4a470356ed7e8e555595b6fd1ac80c9";
+    sha256 = "2a771b43ce96b6b48d53b29f2086528732e6ac067bc71a3be934f859d1302fc0";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     inherit knot-resolver;
   } // lib.optionalAttrs stdenv.isLinux {
     inherit (nixosTests) knot kea;
+    prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped
     # or embedded after some update, even if the nixPackagers didn't intend to.
     # For non-linux I don't know a good replacement for `ldd`.

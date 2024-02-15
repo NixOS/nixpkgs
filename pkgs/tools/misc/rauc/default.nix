@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KxU8/ExRsyqhV3np1EqAzpFm0Uy4fY/oi9lS2GBYHZE=";
+    sha256 = "sha256-xvuBMOAXnuRYCkripjwfv64BCTLySNxebyHF3sB8EQw=";
   };
 
   passthru = {
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
+    mainProgram = "rauc";
   };
 }

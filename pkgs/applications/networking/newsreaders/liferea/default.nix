@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , intltool
 , python3Packages
@@ -24,12 +25,22 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
-  version = "1.15.3";
+  version = "1.15.5";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-FKjsosSSW0U8fQwV6QYhsbuuaTeCt6SfHEcY0v5xUO4=";
+    hash = "sha256-7lanrs63N6ZnqxvjcW/+cUZVDqUbML2gftQUc/sLr3Q=";
   };
+
+  patches = [
+    # Pull upstream fix for libxml2-2.12 compatibility:
+    #   https://github.com/lwindolf/liferea/pull/1329
+    (fetchpatch {
+      name = "libxml2-2.12.patch";
+      url = "https://github.com/lwindolf/liferea/commit/be8ef494586d9ef73c04ec4ca058a9a158ae3562.patch";
+      hash = "sha256-K1R7dJMm7ui6QKQqAHCo/ZrLCW3PhPU1EKRPEICtCsQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -60,14 +71,11 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  pythonPath = with python3Packages; [
-    pygobject3
-    pycairo
-  ];
+  enableParallelBuilding = true;
 
-  preFixup = ''
-    buildPythonPath "$out $pythonPath"
-    gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
+  postFixup = ''
+    buildPythonPath ${python3Packages.pycairo}
+    patchPythonScript $out/lib/liferea/plugins/trayicon.py
   '';
 
   passthru.updateScript = gitUpdater {

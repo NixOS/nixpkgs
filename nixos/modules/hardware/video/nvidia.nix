@@ -24,7 +24,7 @@ in {
   options = {
     hardware.nvidia = {
       datacenter.enable = lib.mkEnableOption (lib.mdDoc ''
-        Data Center drivers for NVIDIA cards on a NVLink topology.
+        Data Center drivers for NVIDIA cards on a NVLink topology
       '');
       datacenter.settings = lib.mkOption {
         type = settingsFormat.type;
@@ -47,7 +47,8 @@ in {
           TRUNK_LINK_FAILURE_MODE=0;
           NVSWITCH_FAILURE_MODE=0;
           ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-          TOPOLOGY_FILE_PATH=nvidia_x11.fabricmanager + "/share/nvidia-fabricmanager/nvidia/nvswitch";
+          TOPOLOGY_FILE_PATH="${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+          DATABASE_PATH="${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         };
         defaultText = lib.literalExpression ''
         {
@@ -69,7 +70,8 @@ in {
           TRUNK_LINK_FAILURE_MODE=0;
           NVSWITCH_FAILURE_MODE=0;
           ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-          TOPOLOGY_FILE_PATH=nvidia_x11.fabricmanager + "/share/nvidia-fabricmanager/nvidia/nvswitch";
+          TOPOLOGY_FILE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+          DATABASE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         }
         '';
         description = lib.mdDoc ''
@@ -79,18 +81,18 @@ in {
 
       powerManagement.enable = lib.mkEnableOption (lib.mdDoc ''
         experimental power management through systemd. For more information, see
-        the NVIDIA docs, on Chapter 21. Configuring Power Management Support.
+        the NVIDIA docs, on Chapter 21. Configuring Power Management Support
       '');
 
       powerManagement.finegrained = lib.mkEnableOption (lib.mdDoc ''
         experimental power management of PRIME offload. For more information, see
-        the NVIDIA docs, on Chapter 22. PCI-Express Runtime D3 (RTD3) Power Management.
+        the NVIDIA docs, on Chapter 22. PCI-Express Runtime D3 (RTD3) Power Management
       '');
 
       dynamicBoost.enable = lib.mkEnableOption (lib.mdDoc ''
         dynamic Boost balances power between the CPU and the GPU for improved
         performance on supported laptops using the nvidia-powerd daemon. For more
-        information, see the NVIDIA docs, on Chapter 23. Dynamic Boost on Linux.
+        information, see the NVIDIA docs, on Chapter 23. Dynamic Boost on Linux
       '');
 
       modesetting.enable = lib.mkEnableOption (lib.mdDoc ''
@@ -99,7 +101,7 @@ in {
         Enabling this fixes screen tearing when using Optimus via PRIME (see
         {option}`hardware.nvidia.prime.sync.enable`. This is not enabled
         by default because it is not officially supported by NVIDIA and would not
-        work with SLI.
+        work with SLI
       '');
 
       prime.nvidiaBusId = lib.mkOption {
@@ -153,11 +155,11 @@ in {
 
         Note that this configuration will only be successful when a display manager
         for which the {option}`services.xserver.displayManager.setupCommands`
-        option is supported is used.
+        option is supported is used
       '');
 
       prime.allowExternalGpu = lib.mkEnableOption (lib.mdDoc ''
-        configuring X to allow external NVIDIA GPUs when using Prime [Reverse] sync optimus.
+        configuring X to allow external NVIDIA GPUs when using Prime [Reverse] sync optimus
       '');
 
       prime.offload.enable = lib.mkEnableOption (lib.mdDoc ''
@@ -166,7 +168,7 @@ in {
         If this is enabled, then the bus IDs of the NVIDIA and Intel/AMD GPUs have to
         be specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
         {option}`hardware.nvidia.prime.intelBusId` or
-        {option}`hardware.nvidia.prime.amdgpuBusId`).
+        {option}`hardware.nvidia.prime.amdgpuBusId`)
       '');
 
       prime.offload.enableOffloadCmd = lib.mkEnableOption (lib.mdDoc ''
@@ -174,7 +176,7 @@ in {
         for offloading programs to an nvidia device. To work, should have also enabled
         {option}`hardware.nvidia.prime.offload.enable` or {option}`hardware.nvidia.prime.reverseSync.enable`.
 
-        Example usage `nvidia-offload sauerbraten_client`.
+        Example usage `nvidia-offload sauerbraten_client`
       '');
 
       prime.reverseSync.enable = lib.mkEnableOption (lib.mdDoc ''
@@ -202,25 +204,25 @@ in {
 
         Note that this configuration will only be successful when a display manager
         for which the {option}`services.xserver.displayManager.setupCommands`
-        option is supported is used.
+        option is supported is used
       '');
 
       nvidiaSettings =
         (lib.mkEnableOption (lib.mdDoc ''
-          nvidia-settings, NVIDIA's GUI configuration tool.
+          nvidia-settings, NVIDIA's GUI configuration tool
         ''))
         // {default = true;};
 
       nvidiaPersistenced = lib.mkEnableOption (lib.mdDoc ''
         nvidia-persistenced a update for NVIDIA GPU headless mode, i.e.
-        It ensures all GPUs stay awake even during headless mode.
+        It ensures all GPUs stay awake even during headless mode
       '');
 
       forceFullCompositionPipeline = lib.mkEnableOption (lib.mdDoc ''
         forcefully the full composition pipeline.
         This sometimes fixes screen tearing issues.
         This has been reported to reduce the performance of some OpenGL applications and may produce issues in WebGL.
-        It also drastically increases the time the driver needs to clock down after load.
+        It also drastically increases the time the driver needs to clock down after load
       '');
 
       package = lib.mkOption {
@@ -261,7 +263,16 @@ in {
         ];
         boot = {
           blacklistedKernelModules = ["nouveau" "nvidiafb"];
-          kernelModules = [ "nvidia-uvm" ];
+
+          # Don't add `nvidia-uvm` to `kernelModules`, because we want
+          # `nvidia-uvm` be loaded only after `udev` rules for `nvidia` kernel
+          # module are applied.
+          #
+          # Instead, we use `softdep` to lazily load `nvidia-uvm` kernel module
+          # after `nvidia` kernel module is loaded and `udev` rules are applied.
+          extraModprobeConfig = ''
+            softdep nvidia post: nvidia-uvm
+          '';
         };
         systemd.tmpfiles.rules =
           lib.optional config.virtualisation.docker.enableNvidia
@@ -269,9 +280,9 @@ in {
         services.udev.extraRules =
         ''
           # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
-          KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 255'"
-          KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do mknod -m 666 /dev/nvidia$${i} c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) $${i}; done'"
-          KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 254'"
+          KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
+          KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do mknod -m 666 /dev/nvidia$${i} c 195 $${i}; done'"
+          KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c 195 254'"
           KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
           KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
         '';
@@ -575,24 +586,50 @@ in {
         boot.extraModulePackages = [
           nvidia_x11.bin
         ];
-        systemd.services.nvidia-fabricmanager = {
-          enable = true;
-          description = "Start NVIDIA NVLink Management";
-          wantedBy = [ "multi-user.target" ];
-          unitConfig.After = [ "network-online.target" ];
-          unitConfig.Requires = [ "network-online.target" ];
-          serviceConfig = {
-            Type = "forking";
-            TimeoutStartSec = 240;
-            ExecStart = let
-              nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
-              in
-                nvidia_x11.fabricmanager + "/bin/nv-fabricmanager -c " + nv-fab-conf;
-            LimitCORE="infinity";
-          };
-        };
-        environment.systemPackages =
-          lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager;
-      })
-    ]);
+
+        systemd = {
+          tmpfiles.rules =
+            lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+            "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
+          services = lib.mkMerge [
+            ({
+              nvidia-fabricmanager = {
+                enable = true;
+                description = "Start NVIDIA NVLink Management";
+                wantedBy = [ "multi-user.target" ];
+                unitConfig.After = [ "network-online.target" ];
+                unitConfig.Requires = [ "network-online.target" ];
+                serviceConfig = {
+                  Type = "forking";
+                  TimeoutStartSec = 240;
+                  ExecStart = let
+                    nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
+                    in
+                      "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                  LimitCORE="infinity";
+                };
+              };
+            })
+            (lib.mkIf cfg.nvidiaPersistenced {
+              "nvidia-persistenced" = {
+                description = "NVIDIA Persistence Daemon";
+                wantedBy = ["multi-user.target"];
+                serviceConfig = {
+                  Type = "forking";
+                  Restart = "always";
+                  PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+                  ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                  ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+                };
+              };
+            })
+          ];
+      };
+
+      environment.systemPackages =
+        lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
+        ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+    })
+  ]);
 }

@@ -34,12 +34,13 @@ let
           };
         });
         default = { };
-        example = lib.literalExpression '' {
-          "/EFI/BOOT/BOOTX64.EFI".source =
-            "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+        example = lib.literalExpression ''
+          {
+            "/EFI/BOOT/BOOTX64.EFI".source =
+              "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
 
-          "/loader/entries/nixos.conf".source = systemdBootEntry;
-        }
+            "/loader/entries/nixos.conf".source = systemdBootEntry;
+          }
         '';
         description = lib.mdDoc "The contents to end up in the filesystem image.";
       };
@@ -65,7 +66,53 @@ in
 
     name = lib.mkOption {
       type = lib.types.str;
-      description = lib.mdDoc "The name of the image.";
+      description = lib.mdDoc ''
+        Name of the image.
+
+        If this option is unset but config.system.image.id is set,
+        config.system.image.id is used as the default value.
+      '';
+    };
+
+    version = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = config.system.image.version;
+      defaultText = lib.literalExpression "config.system.image.version";
+      description = lib.mdDoc "Version of the image";
+    };
+
+    imageFileBasename = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      description = lib.mdDoc ''
+        Basename of the image filename without any extension (e.g. `image_1`).
+      '';
+    };
+
+    imageFile = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      description = lib.mdDoc ''
+        Filename of the image including all extensions (e.g `image_1.raw` or
+        `image_1.raw.zst`).
+      '';
+    };
+
+    compression = {
+      enable = lib.mkEnableOption (lib.mdDoc "Image compression");
+
+      algorithm = lib.mkOption {
+        type = lib.types.enum [ "zstd" "xz" ];
+        default = "zstd";
+        description = lib.mdDoc "Compression algorithm";
+      };
+
+      level = lib.mkOption {
+        type = lib.types.int;
+        description = lib.mdDoc ''
+          Compression level. The available range depends on the used algorithm.
+        '';
+      };
     };
 
     seed = lib.mkOption {
@@ -88,36 +135,47 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs "systemd-repart" {
-      default = "systemd";
-      example = lib.literalExpression ''
-        pkgs.systemdMinimal.override { withCryptsetup = true; }
+    sectorSize = lib.mkOption {
+      type = with lib.types; nullOr int;
+      default = 512;
+      example = lib.literalExpression "4096";
+      description = lib.mdDoc ''
+        The sector size of the disk image produced by systemd-repart. This
+        value must be a power of 2 between 512 and 4096.
       '';
+    };
+
+    package = lib.mkPackageOption pkgs "systemd-repart" {
+      # We use buildPackages so that repart images are built with the build
+      # platform's systemd, allowing for cross-compiled systems to work.
+      default = [ "buildPackages" "systemd" ];
+      example = "pkgs.buildPackages.systemdMinimal.override { withCryptsetup = true; }";
     };
 
     partitions = lib.mkOption {
       type = with lib.types; attrsOf (submodule partitionOptions);
       default = { };
-      example = lib.literalExpression '' {
-        "10-esp" = {
-          contents = {
-            "/EFI/BOOT/BOOTX64.EFI".source =
-              "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
-          }
-          repartConfig = {
-            Type = "esp";
-            Format = "fat";
+      example = lib.literalExpression ''
+        {
+          "10-esp" = {
+            contents = {
+              "/EFI/BOOT/BOOTX64.EFI".source =
+                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+            }
+            repartConfig = {
+              Type = "esp";
+              Format = "fat";
+            };
+          };
+          "20-root" = {
+            storePaths = [ config.system.build.toplevel ];
+            repartConfig = {
+              Type = "root";
+              Format = "ext4";
+              Minimize = "guess";
+            };
           };
         };
-        "20-root" = {
-          storePaths = [ config.system.build.toplevel ];
-          repartConfig = {
-            Type = "root";
-            Format = "ext4";
-            Minimize = "guess";
-          };
-        };
-      };
       '';
       description = lib.mdDoc ''
         Specify partitions as a set of the names of the partitions with their
@@ -129,23 +187,37 @@ in
 
   config = {
 
+    image.repart =
+      let
+        version = config.image.repart.version;
+        versionInfix = if version != null then "_${version}" else "";
+        compressionSuffix = lib.optionalString cfg.compression.enable
+          {
+            "zstd" = ".zst";
+            "xz" = ".xz";
+          }."${cfg.compression.algorithm}";
+      in
+      {
+        name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
+        imageFileBasename = cfg.name + versionInfix;
+        imageFile = cfg.imageFileBasename + ".raw" + compressionSuffix;
+
+        compression = {
+          # Generally default to slightly faster than default compression
+          # levels under the assumption that most of the building will be done
+          # for development and release builds will be customized.
+          level = lib.mkOptionDefault {
+            "zstd" = 3;
+            "xz" = 3;
+          }."${cfg.compression.algorithm}";
+        };
+      };
+
     system.build.image =
       let
-        fileSystemToolMapping = with pkgs; {
-          "vfat" = [ dosfstools mtools ];
-          "ext4" = [ e2fsprogs.bin ];
-          "squashfs" = [ squashfsTools ];
-          "erofs" = [ erofs-utils ];
-          "btrfs" = [ btrfs-progs ];
-          "xfs" = [ xfsprogs ];
-        };
-
         fileSystems = lib.filter
           (f: f != null)
           (lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions);
-
-        fileSystemTools = builtins.concatMap (f: fileSystemToolMapping."${f}") fileSystems;
-
 
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
 
@@ -157,22 +229,7 @@ in
             { closure = "${makeClosure partitionConfig.storePaths}/store-paths"; }
         );
 
-
         finalPartitions = lib.mapAttrs addClosure cfg.partitions;
-
-
-        amendRepartDefinitions = pkgs.runCommand "amend-repart-definitions.py"
-          {
-            nativeBuildInputs = with pkgs; [ black ruff mypy ];
-            buildInputs = [ pkgs.python3 ];
-          } ''
-          install ${./amend-repart-definitions.py} $out
-          patchShebangs --host $out
-
-          black --check --diff $out
-          ruff --line-length 88 $out
-          mypy --strict $out
-        '';
 
         format = pkgs.formats.ini { };
 
@@ -183,35 +240,13 @@ in
 
         partitions = pkgs.writeText "partitions.json" (builtins.toJSON finalPartitions);
       in
-      pkgs.runCommand cfg.name
-        {
-          nativeBuildInputs = [
-            cfg.package
-            pkgs.fakeroot
-            pkgs.util-linux
-          ] ++ fileSystemTools;
-        } ''
-        amendedRepartDefinitions=$(${amendRepartDefinitions} ${partitions} ${definitionsDirectory})
+      pkgs.callPackage ./repart-image.nix {
+        systemd = cfg.package;
+        inherit (cfg) imageFileBasename compression split seed sectorSize;
+        inherit fileSystems definitionsDirectory partitions;
+      };
 
-        mkdir -p $out
-        cd $out
-
-        unshare --map-root-user fakeroot systemd-repart \
-          --dry-run=no \
-          --empty=create \
-          --size=auto \
-          --seed="${cfg.seed}" \
-          --definitions="$amendedRepartDefinitions" \
-          --split="${lib.boolToString cfg.split}" \
-          --json=pretty \
-          image.raw \
-          | tee repart-output.json
-      '';
-
-    meta = {
-      maintainers = with lib.maintainers; [ nikstur ];
-      doc = ./repart.md;
-    };
+    meta.maintainers = with lib.maintainers; [ nikstur ];
 
   };
 }

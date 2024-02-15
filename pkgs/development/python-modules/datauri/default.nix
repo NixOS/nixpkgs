@@ -1,31 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+, pydantic
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "datauri";
-  version = "1.1.0";
+  version = "2.0.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
-    rev = "v${version}";
-    hash = "sha256-Eevd/xxKgxvvsAfI/L/KShH+PfxffBGyVwKewLgyEu0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-k4tlWRasGa2oQykCD9QJl65UAoZQMJVdyCfqlUBBgqY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [
     "datauri"
   ];
 
   nativeCheckInputs = [
+    pydantic
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # UnicodeDecodeError: 'utf-8' codec can't decode
-    "tests/test_file_ebcdic.txt"
+  disabledTests = [
+    "test_pydantic" # incompatible with pydantic v2
   ];
 
   meta = with lib; {

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swww";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
-    owner = "Horus645";
+    owner = "LGFae";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9c/qBmk//NpfvPYjK2QscubFneiQYBU/7PLtTvVRmTA=";
+    hash = "sha256-n7YdUmIZGu7W7cX6OvVW+wbkKjFvont4hEAhZXYDQd8=";
   };
 
-  cargoSha256 = "sha256-AE9bQtW5r1cjIsXA7YEP8TR94wBjaM7emOroVFq9ldE=";
+  cargoSha256 = "sha256-lZC71M3lbsI+itMydAp5VCz0cpSHo/FpkQFC1NlN4DU=";
 
   buildInputs = [
     lz4
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Efficient animated wallpaper daemon for wayland, controlled at runtime";
-    homepage = "https://github.com/Horus645/swww";
+    homepage = "https://github.com/LGFae/swww";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mateodd25 donovanglover ];
     platforms = platforms.linux;

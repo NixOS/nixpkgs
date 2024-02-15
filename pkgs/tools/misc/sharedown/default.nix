@@ -6,7 +6,7 @@
 , libsecret
 , python3
 , pkg-config
-, nodejs
+, nodePackages
 , electron
 , makeWrapper
 , makeDesktopItem
@@ -63,6 +63,7 @@ stdenvNoCC.mkDerivation rec {
             nativeBuildInputs = [
               python3
               pkg-config
+              nodePackages.node-gyp
             ];
             buildInputs = [
               libsecret
@@ -74,17 +75,6 @@ stdenvNoCC.mkDerivation rec {
             '';
           };
         };
-
-        preBuild = ''
-          # Set up headers for node-gyp, which is needed to build keytar.
-          mkdir -p "$HOME/.cache/node-gyp/${nodejs.version}"
-
-          # Set up version which node-gyp checks in <https://github.com/nodejs/node-gyp/blob/4937722cf597ccd1953628f3d5e2ab5204280051/lib/install.js#L87-L96> against the version in <https://github.com/nodejs/node-gyp/blob/4937722cf597ccd1953628f3d5e2ab5204280051/package.json#L15>.
-          echo 9 > "$HOME/.cache/node-gyp/${nodejs.version}/installVersion"
-
-          # Link node headers so that node-gyp does not try to download them.
-          ln -sfv "${nodejs}/include" "$HOME/.cache/node-gyp/${nodejs.version}"
-        '';
 
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
@@ -124,5 +114,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [
     ];
     platforms = platforms.unix;
+    mainProgram = "Sharedown";
   };
 }

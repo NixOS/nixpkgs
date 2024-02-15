@@ -14,10 +14,15 @@
   inherit (cudaPackages) backendStdenv cudaFlags;
 
   cuda-common-redist = with cudaPackages; [
-    cuda_cudart # cuda_runtime.h
-    libcublas # cublas_v2.h
-    libcusolver # cusolverDn.h
-    libcusparse # cusparse.h
+    cuda_cudart.dev # cuda_runtime.h
+    cuda_cudart.lib
+    cuda_cccl.dev # <nv/target>
+    libcublas.dev # cublas_v2.h
+    libcublas.lib
+    libcusolver.dev # cusolverDn.h
+    libcusolver.lib
+    libcusparse.dev # cusparse.h
+    libcusparse.lib
   ];
 
   cuda-native-redist = symlinkJoin {

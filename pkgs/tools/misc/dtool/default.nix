@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/guoxbin/dtool";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linuxissuper ];
+    mainProgram = "dtool";
   };
 }

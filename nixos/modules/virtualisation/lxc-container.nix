@@ -1,25 +1,18 @@
 { lib, config, pkgs, ... }:
 
-let
-  cfg = config.virtualisation.lxc;
-in {
+{
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   imports = [
     ./lxc-instance-common.nix
+
+    (lib.mkRemovedOptionModule [ "virtualisation" "lxc" "nestedContainer" ] "")
+    (lib.mkRemovedOptionModule [ "virtualisation" "lxc" "privilegedContainer" ] "")
   ];
 
-  options = {
-    virtualisation.lxc = {
-      privilegedContainer = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether this LXC container will be running as a privileged container or not. If set to `true` then
-          additional configuration will be applied to the `systemd` instance running within the container as
-          recommended by [distrobuilder](https://linuxcontainers.org/distrobuilder/introduction/).
-        '';
-      };
-    };
-  };
+  options = { };
 
   config = {
     boot.isContainer = true;
@@ -36,7 +29,6 @@ in {
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
 
-    # TODO: build rootfs as squashfs for faster unpack
     system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
       extraArgs = "--owner=0";
 
@@ -63,37 +55,32 @@ in {
       extraCommands = "mkdir -p proc sys dev";
     };
 
+    system.build.squashfs = pkgs.callPackage ../../lib/make-squashfs.nix {
+      fileName = "nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}";
+
+      noStrip = true; # keep directory structure
+      comp = "zstd -Xcompression-level 6";
+
+      storeContents = [config.system.build.toplevel];
+
+      pseudoFiles = [
+        "/sbin d 0755 0 0"
+        "/sbin/init s 0555 0 0 ${config.system.build.toplevel}/init"
+        "/dev d 0755 0 0"
+        "/proc d 0555 0 0"
+        "/sys d 0555 0 0"
+      ];
+    };
+
     system.build.installBootLoader = pkgs.writeScript "install-lxd-sbin-init.sh" ''
       #!${pkgs.runtimeShell}
-      ln -fs "$1/init" /sbin/init
+      ${pkgs.coreutils}/bin/ln -fs "$1/init" /sbin/init
     '';
 
-    # Add the overrides from lxd distrobuilder
-    # https://github.com/lxc/distrobuilder/blob/05978d0d5a72718154f1525c7d043e090ba7c3e0/distrobuilder/main.go#L630
-    systemd.packages = [
-      (pkgs.writeTextFile {
-        name = "systemd-lxc-service-overrides";
-        destination = "/etc/systemd/system/service.d/zzz-lxc-service.conf";
-        text = ''
-          [Service]
-          ProcSubset=all
-          ProtectProc=default
-          ProtectControlGroups=no
-          ProtectKernelTunables=no
-          NoNewPrivileges=no
-          LoadCredential=
-        '' + lib.optionalString cfg.privilegedContainer ''
-          # Additional settings for privileged containers
-          ProtectHome=no
-          ProtectSystem=no
-          PrivateDevices=no
-          PrivateTmp=no
-          ProtectKernelLogs=no
-          ProtectKernelModules=no
-          ReadWritePaths=
-        '';
-      })
-    ];
+    # networkd depends on this, but systemd module disables this for containers
+    systemd.additionalUpstreamSystemUnits = ["systemd-udev-trigger.service"];
+
+    systemd.packages = [ pkgs.distrobuilder.generator ];
 
     system.activationScripts.installInitScript = lib.mkForce ''
       ln -fs $systemConfig/init /sbin/init

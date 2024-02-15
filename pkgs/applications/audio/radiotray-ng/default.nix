@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkg-config
 # Transport
 , curl
@@ -17,7 +17,9 @@
 , libxdg_basedir
 , wxGTK
 # GStreamer
+, glib-networking
 , gst_all_1
+, libsoup_3
 # User-agent info
 , lsb-release
 # rt2rtng
@@ -58,10 +60,19 @@ stdenv.mkDerivation rec {
     libxdg_basedir
     lsb-release
     wxGTK
+    # for https gstreamer / libsoup
+    glib-networking
   ] ++ gstInputs
     ++ pythonInputs;
 
-  patches = [ ./no-dl-googletest.patch ];
+  patches = [
+    ./no-dl-googletest.patch
+    (fetchpatch {
+      name = "gcc13-fixes.patch";
+      url = "https://github.com/ebruck/radiotray-ng/commit/7a99bfa784f77be8f160961d25ab63dc2d5ccde0.patch";
+      hash = "sha256-7x3v0dp9WPgd/vsnxezgXIZGsBrIHkTwIiu+FMlLmyA=";
+    })
+  ];
 
   postPatch = ''
     for x in package/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
@@ -89,6 +100,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
+    # for GStreamer
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib")
   '';
 
   meta = with lib; {

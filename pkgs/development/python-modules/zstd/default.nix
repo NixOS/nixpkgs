@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "zstd";
   version = "1.5.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

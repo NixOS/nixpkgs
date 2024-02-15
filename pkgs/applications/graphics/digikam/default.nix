@@ -1,4 +1,4 @@
-{ mkDerivation, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, config, lib, fetchpatch, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -66,6 +66,14 @@ mkDerivation rec {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
     hash = "sha256-BQPANORF/0JPGKZxXAp6eb5KXgyCs+vEYaIc7DdFpbM=";
   };
+
+  # Fix build against exiv2 0.28.1
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/digikam/-/commit/f5ea91a7f6c1926815ec68f3e0176d6c15b83051.patch";
+      hash = "sha256-5g2NaKKNKVfgW3dTO/IP/H/nZ0YAIOmdPAumy3NEaNg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -150,6 +158,7 @@ mkDerivation rec {
     description = "Photo Management Program";
     license = licenses.gpl2;
     homepage = "https://www.digikam.org";
+    maintainers = with maintainers; [ spacefault ];
     platforms = platforms.linux;
     mainProgram = "digikam";
   };

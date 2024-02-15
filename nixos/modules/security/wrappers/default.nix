@@ -275,33 +275,40 @@ in
       mrpx ${wrap.source},
     '') wrappers;
 
-    ###### wrappers activation script
-    system.activationScripts.wrappers =
-      lib.stringAfter [ "specialfs" "users" ]
-        ''
-          chmod 755 "${parentWrapperDir}"
+    systemd.services.suid-sgid-wrappers = {
+      description = "Create SUID/SGID Wrappers";
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      after = [ "systemd-sysusers.service" ];
+      unitConfig.DefaultDependencies = false;
+      unitConfig.RequiresMountsFor = [ "/nix/store" "/run/wrappers" ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        chmod 755 "${parentWrapperDir}"
 
-          # We want to place the tmpdirs for the wrappers to the parent dir.
-          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-          chmod a+rx "$wrapperDir"
+        # We want to place the tmpdirs for the wrappers to the parent dir.
+        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+        chmod a+rx "$wrapperDir"
 
-          ${lib.concatStringsSep "\n" mkWrappedPrograms}
+        ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
-          if [ -L ${wrapperDir} ]; then
-            # Atomically replace the symlink
-            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-            old=$(readlink -f ${wrapperDir})
-            if [ -e "${wrapperDir}-tmp" ]; then
-              rm --force --recursive "${wrapperDir}-tmp"
-            fi
-            ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
-            mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
-            rm --force --recursive "$old"
-          else
-            # For initial setup
-            ln --symbolic "$wrapperDir" "${wrapperDir}"
+        if [ -L ${wrapperDir} ]; then
+          # Atomically replace the symlink
+          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+          old=$(readlink -f ${wrapperDir})
+          if [ -e "${wrapperDir}-tmp" ]; then
+            rm --force --recursive "${wrapperDir}-tmp"
           fi
-        '';
+          ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+          mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+          rm --force --recursive "$old"
+        else
+          # For initial setup
+          ln --symbolic "$wrapperDir" "${wrapperDir}"
+        fi
+      '';
+    };
 
     ###### wrappers consistency checks
     system.checks = lib.singleton (pkgs.runCommandLocal

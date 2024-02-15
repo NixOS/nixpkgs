@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , gitUpdater
 , cmake
 , SDL2
@@ -16,6 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-Pe+TSu9FBUhxtACq+6jMbrUxiwKLOJgQbEcmUrcrjMs=";
   };
+
+  patches = [
+    # Remove when version > 1.2
+    (fetchpatch {
+      name = "0001-nuked-md-Fix-missing-string-h-include.patch";
+      url = "https://github.com/nukeykt/Nuked-MD/commit/b875cd79104217af581131b22f4111409273617a.patch";
+      hash = "sha256-Mx3jmrlBbxdz3ZBr4XhmBk1S04xB0uaxzPXpXSlipV4=";
+    })
+  ];
 
   # Interesting detail about our SDL2 packaging:
   # Because we build it with the configure script instead of CMake, we ship sdl2-config.cmake instead of SDL2Config.cmake

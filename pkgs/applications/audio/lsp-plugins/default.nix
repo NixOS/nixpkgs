@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, makeWrapper
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, makeWrapper
 , libsndfile, jack2
 , libGLU, libGL, lv2, cairo
 , ladspaH, php, libXrandr }:
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.2.11";
+  version = "1.2.14";
 
   src = fetchurl {
     url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-9zLs1J7rZkMaVQxOwihjCsKSLyb9q64pTZLVg/UVf2o=";
+    sha256 = "sha256-GjNZ7ouKgpcb1+nuq+Q/WM5rSkeT2F+xb5exAOTt7po=";
   };
 
   outputs = [ "out" "dev" "doc" ];

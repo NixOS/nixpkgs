@@ -19,11 +19,12 @@
 , yarn2nix-moretea
 , v8
 , cacert
+, redis
 }:
 
 let
   pname = "zammad";
-  version = "5.4.1";
+  version = "6.2.0";
 
   src = applyPatches {
 
@@ -100,7 +101,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-HI4RR4/ll/zNBNtDCb8OvEsG/BMVYacM0CcYqbkNHEY=";
+      hash = "sha256-u72ZTpcUvFa1gaWi4lzTQa+JsI85jU4n8r1JhqFnCj4=";
     };
 
     yarnPreBuild = ''
@@ -124,13 +125,26 @@ stdenv.mkDerivation {
     cacert
   ];
 
+  nativeBuildInputs = [
+    redis
+  ];
+
   RAILS_ENV = "production";
 
   buildPhase = ''
     node_modules=${yarnEnv}/libexec/Zammad/node_modules
     ${yarn2nix-moretea.linkNodeModulesHook}
 
+    mkdir redis-work
+    pushd redis-work
+    redis-server &
+    REDIS_PID=$!
+    popd
+
     rake DATABASE_URL="nulldb://user:pass@127.0.0.1/dbname" assets:precompile
+
+    kill $REDIS_PID
+    rm -r redis-work
   '';
 
   installPhase = ''
@@ -151,6 +165,6 @@ stdenv.mkDerivation {
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ n0emis garbas taeer ];
+    maintainers = with maintainers; [ n0emis taeer netali ];
   };
 }

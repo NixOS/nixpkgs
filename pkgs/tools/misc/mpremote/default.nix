@@ -9,17 +9,16 @@
 }:
 buildPythonApplication rec {
   pname = "mpremote";
-  version = "1.20.0";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
-    rev = "v${version}";
-    hash = "sha256-udIyNcRjwwoWju0Qob0CFtMibbVKwc7j2ji83BC1rX0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tGFXJW1RkUs/64Yatgg/1zZFPDQdu76uiMjNU8ebdvg=";
   };
   sourceRoot = "source/tools/mpremote";
   format = "pyproject";
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling
@@ -39,5 +38,6 @@ buildPythonApplication rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ _999eagle ];
+    mainProgram = "mpremote";
   };
 }

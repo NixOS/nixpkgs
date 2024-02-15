@@ -5,14 +5,18 @@
 , pkg-config
 , IOKit
 , Foundation
+, libclang
 , nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_formats";
   inherit (nushell) version src;
-  cargoHash = "sha256-WS8VRpJnn/VWS7GUkGowFf51ifUx0SbEZzcoTfx2dp0=";
+  cargoHash = "sha256-81U7Ul6LPubTshxW2/c+Pmz8UolmM42sFEt2igmDgGY=";
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    LIBCLANG_PATH = "${libclang.lib}/lib";
+  };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit Foundation ];
   cargoBuildFlags = [ "--package nu_plugin_formats" ];

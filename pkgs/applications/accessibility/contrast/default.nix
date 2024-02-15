@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "contrast";
-  version = "0.0.8";
+  version = "0.0.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     owner = "design";
     repo = "contrast";
     rev = version;
-    hash = "sha256-5OFmLsP+Xk3sKJcUG/s8KwedvfS8ri+JoinliyJSmrY=";
+    hash = "sha256-Y0CynBvnCOBesONpxUicR7PgMJgmM0ZQX/uOwIppj7w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-8WukhoKMyApkwqPQ6KeWMsL40sMUcD4I4l7UqXf2Ld0=";
+    hash = "sha256-BdwY2YDJyDApGgE0Whz3xRU/0gRbkwbKUvPbWEObXE8=";
   };
 
   nativeBuildInputs = [
@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin;
+    mainProgram = "contrast";
   };
 }

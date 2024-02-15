@@ -1,12 +1,14 @@
 source 'https://rubygems.org'
-gem "fusuma"
+gem "fusuma", ">=3.0.0"
 gem "fusuma-plugin-appmatcher"
 gem "fusuma-plugin-keypress"
 gem "fusuma-plugin-sendkey"
-gem "fusuma-plugin-tap"
 gem "fusuma-plugin-wmctrl"
 
 # I've not activated the following plugins for the reasons given below.
+
+# tap has been archived by upstream
+# gem "fusuma-plugin-tap"
 
 # touchscreen needs specific h/w support I don't have access to, so I can't confirm
 # if it's problem free.  A quick check didn't reveal any problems.

@@ -10,8 +10,8 @@
 , cleo
 , crashtest
 , dulwich
+, fastjsonschema
 , installer
-, jsonschema
 , keyring
 , packaging
 , pexpect
@@ -37,11 +37,12 @@
 , pytest-mock
 , pytest-xdist
 , pythonAtLeast
+, darwin
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.6.1";
+  version = "1.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/OvYT4Vix1t5Yx/Tx0z3E9L9qJ4OdI4maQqUVl8H524=";
+    hash = "sha256-PM3FIZYso7p0Oe0RpiPuxHrQrgnMlkT5SVeaJPK/J94=";
   };
 
   nativeBuildInputs = [
@@ -59,8 +60,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # only pinned to avoid dependency on Rust
-    "jsonschema"
+    # platformdirs 4.x is backwards compatible; https://github.com/python-poetry/poetry/commit/eb80d10846f7336b0b2a66ce2964e72dffee9a1c
+    "platformdirs"
+    # xattr 1.0 is backwards compatible modulo dropping Python 2 support: https://github.com/xattr/xattr/compare/v0.10.0...v1.0.0
+    "xattr"
   ];
 
   propagatedBuildInputs = [
@@ -69,8 +72,8 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
+    fastjsonschema
     installer
-    jsonschema
     keyring
     packaging
     pexpect
@@ -108,6 +111,8 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.ps
   ];
 
   preCheck = (''
@@ -122,6 +127,8 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_env_system_packages_are_relative_to_lib"
+    "test_install_warning_corrupt_root"
     "test_installer_with_pypi_repository"
     # touches network
     "git"
@@ -138,6 +145,7 @@ buildPythonPackage rec {
     # fs permission errors
     "test_builder_should_execute_build_scripts"
     # poetry.installation.chef.ChefBuildError: Backend 'poetry.core.masonry.api' is not available.
+    "test_isolated_env_install_success"
     "test_prepare_sdist"
     "test_prepare_directory"
     "test_prepare_directory_with_extensions"
@@ -163,5 +171,6 @@ buildPythonPackage rec {
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum dotlambda ];
+    mainProgram = "poetry";
   };
 }

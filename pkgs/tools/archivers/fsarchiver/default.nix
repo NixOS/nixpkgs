@@ -40,5 +40,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "fsarchiver";
   };
 }

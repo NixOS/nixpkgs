@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.14.4";
+  version = "2.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,8 +30,14 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2XC5k546JvqUV4xeL1SRQOHDzItL1CE3bJQMjva3IkY=";
+    hash = "sha256-Q8cSgupfj6xKD0bYgL6bvYBwdYDdNaiWEWWUrRvwc4g=";
   };
+
+  # remove pyarrow<14.0.1 vulnerability fix
+  postPatch = ''
+    substituteInPlace src/datasets/features/features.py \
+      --replace "import pyarrow_hotfix" "#import pyarrow_hotfix"
+  '';
 
   propagatedBuildInputs = [
     aiohttp

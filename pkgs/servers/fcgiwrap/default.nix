@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
     license = licenses.mit;
+    mainProgram = "fcgiwrap";
   };
 }

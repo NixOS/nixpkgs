@@ -18,17 +18,19 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.10.6";
-  format = "pyproject";
+  version = "2024.2.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
-    repo = pname;
+    repo = "hahomematic";
     rev = "refs/tags/${version}";
-    hash = "sha256-uNf98q4x1usoYWvbDKt2yuTObyUjGgy7aK+VRrpM8wI=";
+    hash = "sha256-T2318TnVzvteRADOjoTP7ulIhTyeTbCFX1/KpwWXjlI=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \

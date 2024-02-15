@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-zigbuild";
-  version = "0.17.3";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "messense";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-l9uPn5eLGfCq2E6gogXCefbhxro6iOOYraeIPj9/S50=";
+    hash = "sha256-wL6Rmw5hJI8cJDw2WO9CDOyeOuZv6QoFxrn81JrYBR4=";
   };
 
-  cargoHash = "sha256-2mbGwElBfo4L/iGZm3iRBR5UGeMFlfaSp79vVvCAIo0=";
+  cargoHash = "sha256-uCZYDh4+Pri77DzqZj12cav7o8eDY2+fgwIwVBdcbHg=";
 
   nativeBuildInputs = [ makeWrapper ];
 

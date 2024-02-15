@@ -1,30 +1,58 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, requests, zeroconf, wakeonlan
-, python }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+
+# build-system
+, setuptools
+
+# dependencies
+, aiohttp
+, yarl
+
+# tests
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "openwebifpy";
-  version = "3.2.7";
-  disabled = pythonOlder "3.6";
+  version = "4.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n9vi6b0y8b41fd7m9p361y3qb5m3b9p9d8g4fasqi7yy4mw2hns";
+    hash = "sha256-dCgbMyyVmYGPV8GyZUrMR+IO8nGoQ//dnmHmhFH2iJo=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    zeroconf
-    wakeonlan
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  propagatedBuildInputs = [
+    aiohttp
+    yarl
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "openwebif"
+  ];
+
+  disabledTests = [
+    # https://github.com/autinerd/openwebifpy/issues/1
+    "test_get_picon_name"
+  ];
 
   meta = with lib; {
     description = "Provides a python interface to interact with a device running OpenWebIf";
+    downloadPage = "https://github.com/autinerd/openwebifpy";
     homepage = "https://openwebifpy.readthedocs.io/";
+    changelog = "https://github.com/autinerd/openwebifpy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

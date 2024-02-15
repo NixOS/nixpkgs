@@ -2,26 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , appdirs
-, requests
+, httpx
 , setuptools
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyradios";
-  version = "1.0.2";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O30ExmvWu4spwDytFVPWGjR8w3XSTaWd2Z0LGQibq9g=";
+    hash = "sha256-XTpw8bgFZo35PJngr9oweU6fY3KAphJsrEhkKzWHLIA=";
   };
 
   propagatedBuildInputs = [
     appdirs
-    requests
+    httpx
     setuptools
   ];
 

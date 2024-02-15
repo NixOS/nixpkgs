@@ -55,7 +55,7 @@ in {
             ensureDatabases = [ "hockeypuck" ];
             ensureUsers = [{
               name = "hockeypuck";
-              ensurePermissions."DATABASE hockeypuck" = "ALL PRIVILEGES";
+              ensureDBOwnership = true;
             }];
           };
         ```

@@ -1,14 +1,10 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , makeWrapper
 , mkYarnPackage
 , nodejs
-, sqlite
 , fetchYarnDeps
 , python3
-, pkg-config
-, glib
 }:
 
 let
@@ -89,5 +85,6 @@ mkYarnPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ camillemndn ];
     platforms = platforms.linux;
+    mainProgram = "jellyseerr";
   };
 }

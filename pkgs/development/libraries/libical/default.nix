@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.16";
+  version = "3.0.17";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-3D/0leI3LLKDFOXkKSrmMamLoaXdi/2Z4iPUXqgwtg8=";
+    sha256 = "sha256-GqPCjI40kkqNv9zTnLdJgZVBxS4eZRHl+k/BN9vGnDo=";
   };
 
   strictDeps = true;
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
   nativeInstallCheckInputs = [
     # running libical-glib tests
-    (python3.pythonForBuild.withPackages (pkgs: with pkgs; [
+    (python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [
       pygobject3
     ]))
   ];
@@ -105,6 +105,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
+    changelog = "https://github.com/libical/libical/raw/v${version}/ReleaseNotes.txt";
     license = licenses.mpl20;
     platforms = platforms.unix;
   };

@@ -11,21 +11,20 @@
 , segno
 , setuptools
 , trustme
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "63";
-  format = "pyproject";
+  version = "70";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Kane610";
-    repo = pname;
+    repo = "aiounifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-am11pFgYMRccUNaK/iKdp6mfk5NQ4QnU41xbFiGCMPs=";
+    hash = "sha256-yLqGqRWzuMqymGqGR1mA4oQb+tWt58lA7C/kXC5bYz8=";
   };
 
   postPatch = ''
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -68,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Kane610/aiounifi";
     changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ ];
   };
 }

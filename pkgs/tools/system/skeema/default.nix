@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "skeema";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
-    hash = "sha256-BXjcn9oakTvaWPYIsAsjYRwQ1aKhZ4PAV2AkxSVOF/I=";
+    hash = "sha256-S7eMqaz8BZ80AwIrVmX+rnEgIwEdy8q65FIy6Mac4CY=";
   };
 
   vendorHash = null;
@@ -53,5 +53,6 @@ buildGoModule rec {
     homepage = "https://skeema.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "skeema";
   };
 }

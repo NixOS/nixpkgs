@@ -1,4 +1,4 @@
-{ mkDerivation, backintime-common, python3 }:
+{ lib, mkDerivation, backintime-common, python3, polkit, which, su, coreutils, util-linux }:
 
 let
   python' = python3.withPackages (ps: with ps; [ pyqt5 backintime-common packaging ]);
@@ -21,6 +21,29 @@ mkDerivation {
 
   preFixup = ''
     wrapQtApp "$out/bin/backintime-qt" \
-      --prefix PATH : "${backintime-common}/bin:$PATH"
+      --prefix PATH : "${lib.getBin backintime-common}/bin:$PATH"
+
+    substituteInPlace "$out/share/polkit-1/actions/net.launchpad.backintime.policy" \
+      --replace "/usr/bin/backintime-qt" "$out/bin/backintime-qt"
+
+    substituteInPlace "$out/share/applications/backintime-qt-root.desktop" \
+      --replace "/usr/bin/backintime-qt" "backintime-qt"
+
+    substituteInPlace "$out/share/backintime/qt/serviceHelper.py" \
+      --replace "'which'" "'${lib.getBin which}/bin/which'" \
+      --replace "/bin/su" "${lib.getBin su}/bin/su" \
+      --replace "/usr/bin/backintime" "${lib.getBin backintime-common}/bin/backintime" \
+      --replace "/usr/bin/nice" "${lib.getBin coreutils}/bin/nice" \
+      --replace "/usr/bin/ionice" "${lib.getBin util-linux}/bin/ionice"
+
+    substituteInPlace "$out/share/dbus-1/system-services/net.launchpad.backintime.serviceHelper.service" \
+      --replace "/usr/bin/python3" "${lib.getBin python'}/bin/python3" \
+      --replace "/usr/share/backintime" "$out/share/backintime"
+
+    substituteInPlace "$out/bin/backintime-qt_polkit" \
+      --replace "/usr/bin/backintime-qt" "$out/bin/backintime-qt"
+
+    wrapProgram "$out/bin/backintime-qt_polkit" \
+      --prefix PATH : "${lib.getBin polkit}/bin:$PATH"
   '';
 }

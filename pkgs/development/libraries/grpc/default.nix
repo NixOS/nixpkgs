@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.57.0"; # N.B: if you change this, please update:
+  version = "1.61.0"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-ZPhPi4ODAAohCySVKeypaDID4ZUXvnfidOGK5EMXvh4=";
+    hash = "sha256-NLxcGFQ1F5RLoSFC0XYMjvGXkSWc/vLzgtk5qsOndEo=";
     fetchSubmodules = true;
   };
 
@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       # armv6l support, https://github.com/grpc/grpc/pull/21341
       name = "grpc-link-libatomic.patch";
-      url = "https://github.com/lopsided98/grpc/commit/164f55260262c816e19cd2c41b564486097d62fe.patch";
-      hash = "sha256-d6kMyjL5ZnEnEz4XZfRgXJBH53gp1r7q1tlwh+HM6+Y=";
+      url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
+      hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
     })
-    # Fix generated CMake config file
-    # FIXME: remove when merged
     (fetchpatch {
-      url = "https://github.com/grpc/grpc/pull/33361/commits/117dc80eb43021dd5619023ef6d02d0d6ec7ae7a.patch";
-      hash = "sha256-VBk3ZD5h9uOQVN0st+quUQK/wXqvfFNk8G8AN4f2MQo=";
+      # Fix compatibility with Abseil 202401. Remove with the next release.
+      url = "https://github.com/grpc/grpc/commit/bc044174401a0842b36b8682936fc93b5041cf88.patch";
+      hash = "sha256-VKAuPtLqsR2dmrpKuFXq2HIhuDxPJVSH2w1G00N07RI=";
+      excludes = [ "src/core/lib/transport/message.cc" ];
     })
   ];
 
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
   ]
   # The build scaffold defaults to c++14 on darwin, even when the compiler uses
   # a more recent c++ version by default [1]. However, downgrades are
@@ -94,18 +95,17 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=unknown-warning-option"
-    ] ++ lib.optionals stdenv.isAarch64 [
-      "-Wno-error=format-security"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-error"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Workaround for https://github.com/llvm/llvm-project/issues/48757
+    "-Wno-elaborated-enum-base"
+  ]);
 
   enableParallelBuilds = true;
 
   passthru.tests = {
-    inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
     inherit arrow-cpp;
   };
 

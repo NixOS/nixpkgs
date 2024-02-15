@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
+    mainProgram = "unzoo";
   };
 }

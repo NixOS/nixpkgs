@@ -44,5 +44,6 @@ buildGoModule rec {
     license = licenses.isc;
     maintainers = [ maintainers.ajgrf ];
     platforms = platforms.linux;
+    mainProgram = "darkman";
   };
 }

@@ -1,14 +1,13 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
+, autoPatchelfHook
 , fontconfig
 , freetype
-, lib
 , libICE
 , libSM
-, udev
 , libX11
 , libXcursor
-, libXext
 , libXfixes
 , libXrandr
 , libXrender
@@ -16,42 +15,45 @@
 
 stdenv.mkDerivation rec {
   pname = "segger-ozone";
-  version = "3.28e";
+  version = "3.30b";
 
-  src = fetchurl {
-    url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${(lib.replaceStrings ["."] [""] version)}_x86_64.tgz";
-    sha256 = "BfmKBAKyTA0V31zkwFLrbT0Xob221KfHa6v0VxKFsSI=";
-  };
+  src = {
+    x86_64-linux = fetchurl {
+      url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${builtins.replaceStrings ["."] [""] version}_x86_64.tgz";
+      hash = "sha256-W8Fo0q58pAn1aB92CjYARcN3vMLEguvsyozsS7VRArQ=";
+    };
+    i686-linux = fetchurl {
+      url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${builtins.replaceStrings ["."] [""] version}_i386.tgz";
+      hash = "sha256-Xq/69lwF2Ll5VdkYMDNRtc0YUUvWc+XR0FHJXxOLNQ4=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  rpath = lib.makeLibraryPath [
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
     fontconfig
     freetype
     libICE
     libSM
-    udev
     libX11
     libXcursor
-    libXext
     libXfixes
     libXrandr
     libXrender
-  ]
-  + ":${stdenv.cc.cc.lib}/lib64";
+    stdenv.cc.cc.lib
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv Lib lib
     mv * $out
     ln -s $out/Ozone $out/bin
-  '';
 
-  postFixup = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/Ozone" \
-      --set-rpath ${rpath}:$out/lib "$out/Ozone"
-
-    for file in $(find $out/lib -maxdepth 1 -type f -and -name \*.so\*); do
-      patchelf --set-rpath ${rpath}:$out/lib $file
-    done
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -80,6 +82,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.bmilanov ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

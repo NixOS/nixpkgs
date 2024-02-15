@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/lightninglabs/aperture";
     license = licenses.mit;
     maintainers = with maintainers; [ sputn1ck ];
+    mainProgram = "aperture";
   };
 }

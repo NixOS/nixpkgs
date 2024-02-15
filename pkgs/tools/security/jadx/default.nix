@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , gradle
 , jdk
+, quark-engine
 , makeWrapper
 , perl
 , imagemagick
@@ -114,7 +115,9 @@ in stdenv.mkDerivation (finalAttrs: {
     cp -R build/jadx/lib $out
     for prog in jadx jadx-gui; do
       cp build/jadx/bin/$prog $out/bin
-      wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
+      wrapProgram $out/bin/$prog \
+        --set JAVA_HOME ${jdk.home} \
+        --prefix PATH : "${lib.makeBinPath [ quark-engine ]}"
     done
 
     for size in 16 32 48; do
@@ -153,6 +156,6 @@ in stdenv.mkDerivation (finalAttrs: {
     ];
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ delroth emilytrau ];
   };
 })

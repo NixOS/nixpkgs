@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "tfautomv";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "busser";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-A1/sf+QjxQ8S2Cqmw9mD0r4aqA2Ssopeni0YNLND9L8=";
+    hash = "sha256-irB0Kfd8eqIKq0ooJRxB0X4t2/1aFCNYRwaG6lAw3ic=";
   };
 
-  vendorHash = "sha256-zAshnSqZT9lx9EWvJsMwi6rqvhUWJ/3uJnk+44TGzlU=";
+  vendorHash = "sha256-Wc5hpiHL5I01IodcHX0IzeKfthkFS7SuUxmaxOU6WkA=";
 
   ldflags = [ "-s" "-w" ];
 

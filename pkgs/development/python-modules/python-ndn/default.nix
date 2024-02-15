@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-ArTP4LQu7VNjI/N13gMTc1SDiNmW5l4GdLYOk8JEfKg=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "lark"
   ];
 
-  pythonImportChecks = [ "ndn" ];
+  pythonImportsCheck = [ "ndn" ];
 
   meta = with lib; {
     description = "An NDN client library with AsyncIO support";

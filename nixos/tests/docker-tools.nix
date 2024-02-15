@@ -11,7 +11,7 @@ let
       # Rootfs diffs for layers 1 and 2 are identical (and empty)
       layer1 = pkgs.dockerTools.buildImage {  name = "empty";  };
       layer2 = layer1.overrideAttrs (_: { fromImage = layer1; });
-      repeatedRootfsDiffs = pkgs.runCommandNoCC "image-with-links.tar" {
+      repeatedRootfsDiffs = pkgs.runCommand "image-with-links.tar" {
         nativeBuildInputs = [pkgs.jq];
       } ''
         mkdir contents
@@ -71,12 +71,27 @@ in {
             docker.succeed("${examples.helloOnRoot} | docker load")
             docker.succeed("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+
         with subtest("includeStorePath = false; breaks example"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
             docker.fail("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; breaks example (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
+            docker.fail("docker run --rm hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+
+        with subtest("Ensure ZERO paths are added to the store"):
+            docker.fail("${examples.helloOnRootNoStore} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+        with subtest("Ensure ZERO paths are added to the store (fakechroot)"):
+            docker.fail("${examples.helloOnRootNoStoreFakechroot} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+
         with subtest("includeStorePath = false; works with mounted store"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
+            docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; works with mounted store (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
             docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
 

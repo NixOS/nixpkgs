@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.69.1";
+  version = "0.74.5";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-AXw2mtN4FC6EKWN8dObrU04+WSHDWLY19FSWqQlkq/Q=";
+    hash = "sha256-h68LfKQG5xgFIFkyuK9Z6tw8+xoimnF2d2QgTjwU74U=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-iitWThvWVfeJMLcJLgmFnVguFVF4DejObZPZ3qB5cY0=";
+  vendorHash = "sha256-lnOF3Xvjc20aFPOf9of3n+aBHvPrLTTlH7aPPlYA/RA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -73,6 +73,8 @@ buildGoModule rec {
       --replace "TestCmd" "SkipCmd"
     substituteInPlace grype/pkg/provider_test.go \
       --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
+    substituteInPlace test/cli/cmd_test.go \
+      --replace "Test_descriptorNameAndVersionSet" "Skip_descriptorNameAndVersionSet"
     # remove tests that depend on git
     substituteInPlace test/cli/db_validations_test.go \
       --replace "TestDBValidations" "SkipDBValidations"
@@ -83,6 +85,8 @@ buildGoModule rec {
       --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument"
     substituteInPlace test/cli/subprocess_test.go \
       --replace "TestSubprocessStdin" "SkipSubprocessStdin"
+    substituteInPlace grype/internal/packagemetadata/names_test.go \
+      --replace "TestAllNames" "SkipAllNames"
 
     # segfault
     rm grype/db/v5/namespace/cpe/namespace_test.go

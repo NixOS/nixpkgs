@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DMSGPACK_BUILD_EXAMPLES=OFF" # examples are not installed even if built
-  ] ++ lib.optional (!finalAttrs.doCheck) "-DMSGPACK_BUILD_TESTS=OFF";
+  ] ++ lib.optional (!finalAttrs.finalPackage.doCheck) "-DMSGPACK_BUILD_TESTS=OFF";
 
   checkInputs = [
     gtest

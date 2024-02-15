@@ -3,6 +3,7 @@
 , lua
 , wrapLua
 , luarocks
+, writeTextFile
 
 # Whether the derivation provides a lua module or not.
 , luarocksCheckHook
@@ -56,8 +57,6 @@
 
 # relative to srcRoot, path to the rockspec to use when using rocks
 , rockspecFilename ? null
-# relative to srcRoot, path to folder that contains the expected rockspec
-, rockspecDir ?  "."
 
 # must be set for packages that don't have a rock
 , knownRockspec ? null
@@ -83,10 +82,10 @@ let
 
   __structuredAttrs = true;
   env = {
-    LUAROCKS_CONFIG="$PWD/${luarocks_config}";
+    LUAROCKS_CONFIG = self.configFile;
   } // attrs.env or {};
 
-  generatedRockspecFilename = "${rockspecDir}/${pname}-${rockspecVersion}.rockspec";
+  generatedRockspecFilename = "./${self.pname}-${self.rockspecVersion}.rockspec";
 
   nativeBuildInputs = [
     wrapLua
@@ -111,6 +110,12 @@ let
   # explicitly inherit this for it to be available as a shell variable in the
   # builder
   rocksSubdir = "${self.pname}-${self.version}-rocks";
+
+  configFile = writeTextFile {
+    name = pname + "-luarocks-config.lua";
+    text = self.luarocks_content;
+  };
+
   luarocks_content = let
       externalDepsGenerated = lib.filter (drv: !drv ? luaModule)
         (self.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs);
@@ -131,12 +136,6 @@ let
 
   configurePhase = ''
     runHook preConfigure
-
-    cat > ${luarocks_config} <<EOF
-    ${self.luarocks_content}
-    EOF
-    export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
-    cat "$LUAROCKS_CONFIG"
   ''
   + lib.optionalString (self.rockspecFilename == null) ''
     rockspecFilename="${self.generatedRockspecFilename}"

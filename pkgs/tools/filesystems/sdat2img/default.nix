@@ -22,5 +22,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.unix;
+    mainProgram = "sdat2img";
   };
 }

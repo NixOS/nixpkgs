@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EKvDH7RwOC4Gu/lturrfnGpzXnJ9azIwAFeuVoa6L/Y=";
+    hash = "sha256-QFK8mEMcqQwALFNvAdD8yWixwMYHSbeo6xqx86PvejU=";
   };
 
   patches = [ ./version.patch ];
@@ -106,10 +106,12 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    homepage = "https://github.com/duckdb/duckdb";
+    changelog = "https://github.com/duckdb/duckdb/releases/tag/v${version}";
     description = "Embeddable SQL OLAP Database Management System";
+    homepage = "https://duckdb.org/";
     license = licenses.mit;
-    platforms = platforms.all;
+    mainProgram = "duckdb";
     maintainers = with maintainers; [ costrouc cpcloud ];
+    platforms = platforms.all;
   };
 }

@@ -6,7 +6,7 @@
 , nest-asyncio
 , qiskit-terra
 , requests
-, requests_ntlm
+, requests-ntlm
 , websocket-client
   # Visualization inputs
 , withVisualization ? true
@@ -40,7 +40,8 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.20.1";
+  version = "0.20.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BFiGMPiO9Xcl8EiTZYiwHCpo7z+tRaBkIb8GTo01rBA=";
+    hash = "sha256-7dIspeJpukLDfICoBPPZZWdzkVumtvh+NRxvtmnvWH0=";
   };
 
   propagatedBuildInputs = [
@@ -56,7 +57,7 @@ buildPythonPackage rec {
     nest-asyncio
     qiskit-terra
     requests
-    requests_ntlm
+    requests-ntlm
     websocket-client
     websockets
   ] ++ lib.optionals withVisualization visualizationPackages;

@@ -1,15 +1,21 @@
-From: Jack Baldry <jack.baldry@grafana.com>
-Date: Tue, 15 Nov 2022 14:34:33 -0400
-Subject: [PATCH] Use locale.h instead of removed xlocale.h header
-
-https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
-
-Signed-off-by: Jack Baldry <jack.baldry@grafana.com>
----
- libraries/cmake/source/augeas/gnulib/generated/linux/x86_64/lib/locale.h  | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
+diff --git a/libraries/cmake/source/augeas/gnulib/generated/linux/aarch64/lib/locale.h b/libraries/cmake/source/augeas/gnulib/generated/linux/aarch64/lib/locale.h
+index 4f9baece2..afe947956 100644
+--- a/libraries/cmake/source/augeas/gnulib/generated/linux/aarch64/lib/locale.h
++++ b/libraries/cmake/source/augeas/gnulib/generated/linux/aarch64/lib/locale.h
+@@ -48,9 +48,9 @@
+ /* NetBSD 5.0 mis-defines NULL.  */
+ #include <stddef.h>
+ 
+-/* Mac OS X 10.5 defines the locale_t type in <xlocale.h>.  */
++/* Mac OS X 10.5 defines the locale_t type in <locale.h>.  */
+ #if 1
+-# include <xlocale.h>
++# include <locale.h>
+ #endif
+ 
+ /* The definitions of _GL_FUNCDECL_RPL etc. are copied here.  */
 diff --git a/libraries/cmake/source/augeas/gnulib/generated/linux/x86_64/lib/locale.h b/libraries/cmake/source/augeas/gnulib/generated/linux/x86_64/lib/locale.h
+index 4f9baece2..afe947956 100644
 --- a/libraries/cmake/source/augeas/gnulib/generated/linux/x86_64/lib/locale.h
 +++ b/libraries/cmake/source/augeas/gnulib/generated/linux/x86_64/lib/locale.h
 @@ -48,9 +48,9 @@
@@ -24,6 +30,3 @@ diff --git a/libraries/cmake/source/augeas/gnulib/generated/linux/x86_64/lib/loc
  #endif
  
  /* The definitions of _GL_FUNCDECL_RPL etc. are copied here.  */
--- 
-2.38.1
-

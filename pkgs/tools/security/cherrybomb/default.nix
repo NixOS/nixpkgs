@@ -1,30 +1,22 @@
 { lib
 , rustPlatform
 , fetchCrate
-, pkg-config
-, openssl
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cherrybomb";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-qZ1eKcRAwCzrzvw6QR28oZ8sGnsXmoOW/bWLQTlpqlo=";
+    hash = "sha256-MHKBP102U1Ug9wZm9x4+opZgG8f6Hx03FvoLV4qaDgY=";
   };
 
-  cargoHash = "sha256-eosK7MQ3UB8rxKHCrb3s3+BVarv19h0cL+uzwg95Hc8=";
+  cargoHash = "sha256-pj4+rG8XbrxVuNgnTVUTPmgrPBRSnoBnqFhOO/JGGWI=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

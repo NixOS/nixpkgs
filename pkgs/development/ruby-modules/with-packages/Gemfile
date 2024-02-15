@@ -66,7 +66,7 @@ gem 'glib2'
 # gem 'gobject-introspection' fails on require
 gem 'gpgme'
 # gem 'grpc' fails to build
-gem 'gtk2'
+gem 'gtk3'
 gem 'hashie'
 gem 'highline'
 gem 'hike'

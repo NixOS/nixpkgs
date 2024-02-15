@@ -26,8 +26,6 @@
 
 // aborts when false, printing the failed expression
 #define ASSERT(expr) ((expr) ? (void) 0 : assert_failure(#expr))
-// aborts when returns non-zero, printing the failed expression and errno
-#define MUSTSUCCEED(expr) ((expr) ? print_errno_and_die(#expr) : (void) 0)
 
 extern char **environ;
 
@@ -44,12 +42,6 @@ static char *wrapper_debug = "WRAPPER_DEBUG";
 
 static noreturn void assert_failure(const char *assertion) {
     fprintf(stderr, "Assertion `%s` in NixOS's wrapper.c failed.\n", assertion);
-    fflush(stderr);
-    abort();
-}
-
-static noreturn void print_errno_and_die(const char *assertion) {
-    fprintf(stderr, "Call `%s` in NixOS's wrapper.c failed: %s\n", assertion, strerror(errno));
     fflush(stderr);
     abort();
 }
@@ -179,6 +171,13 @@ static int make_caps_ambient(const char *self_path) {
 
 int main(int argc, char **argv) {
     ASSERT(argc >= 1);
+
+    // argv[0] goes into a lot of places, to a far greater degree than other elements
+    // of argv. glibc has had buffer overflows relating to argv[0], eg CVE-2023-6246.
+    // Since we expect the wrappers to be invoked from either $PATH or /run/wrappers/bin,
+    // there should be no reason to pass any particularly large values here, so we can
+    // be strict for strictness' sake.
+    ASSERT(strlen(argv[0]) < 512);
 
     int debug = getenv(wrapper_debug) != NULL;
 

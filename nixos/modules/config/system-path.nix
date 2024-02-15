@@ -89,12 +89,6 @@ in
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 
-          Note: If `pkgs.nano` is removed from this list,
-          make sure another editor is installed and the
-          `EDITOR` environment variable is set to it.
-          Environment variables can be set using
-          {option}`environment.variables`.
-
           Like with systemPackages, packages are installed to
           {file}`/run/current-system/sw`. They are
           automatically available to all users, and are

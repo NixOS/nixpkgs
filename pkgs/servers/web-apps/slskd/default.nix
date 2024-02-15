@@ -1,8 +1,6 @@
-{ lib, stdenv
+{ lib
 , buildNpmPackage
 , fetchFromGitHub
-, fetchurl
-, unzip
 , dotnetCorePackages
 , buildDotnetModule
 , mono
@@ -10,13 +8,13 @@
 }:
 let
   pname = "slskd";
-  version = "0.18.2";
+  version = "0.19.5";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-hWK6nbXAZTjxukx9EzkJkyEFlqXUkjanmv4VfHZxW24=";
+    sha256 = "sha256-Vm+nA3yKiCMpQ41GTQF6Iuat89QrUtstQdHmX/DyU9g=";
   };
 
   meta = with lib; {
@@ -27,15 +25,14 @@ let
     platforms = platforms.linux;
   };
 
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-
-  wwwroot = buildNpmPackage' {
+  wwwroot = buildNpmPackage {
     inherit meta version;
 
     pname = "slskd-web";
     src = "${src}/src/web";
     npmFlags = [ "--legacy-peer-deps" ];
-    npmDepsHash = "sha256-+2g3pCaGFbzQjKwhjmD6viuzVE5pRg+qSOXMrCtLQkI=";
+    nodejs = nodejs_18;
+    npmDepsHash = "sha256-E1J4fYcY1N+UmN4Ch4Ss6ty+nYlmrv3ngvCJ8YCjPfI=";
     installPhase = ''
       cp -r build $out
     '';

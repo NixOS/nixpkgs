@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "django-sites";
   version = "0.11";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "niwinz";

@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, pythonPackages, mopidy }:
+{ lib, fetchFromGitHub, pythonPackages, mopidy, unstableGitUpdater }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
-  version = "unstable-2023-04-21";
+  version = "unstable-2024-02-11";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
-    rev = "984151ac96c5f9c35892055bff20cc11f46092d5";
-    hash = "sha256-4e9Aj0AOFR4/FK54gr1ZyPt0nYZDMrMetV4FPtBxapU=";
+    rev = "fc6ffb3bbbae9224316e2a888db08ef56608966a";
+    hash = "sha256-V1SW8OyuBKLbUoQ4O5iiS4mq3MOXidcVKpiw125vxjQ=";
   };
 
   propagatedBuildInputs = [
@@ -21,6 +21,8 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "mopidy_spotify" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-spotify";

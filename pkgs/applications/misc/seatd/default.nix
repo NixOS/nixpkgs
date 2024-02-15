@@ -6,6 +6,7 @@
 , scdoc
 , stdenv
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, nixosTests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,8 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dserver=enabled"
   ];
 
+  passthru.tests.basic = nixosTests.seatd;
+
   meta = {
-    description = "A universal seat management library";
+    description = "A minimal seat management daemon, and a universal seat management library";
     changelog = "https://git.sr.ht/~kennylevinsen/seatd/refs/${finalAttrs.version}";
     homepage = "https://sr.ht/~kennylevinsen/seatd/";
     license = lib.licenses.mit;

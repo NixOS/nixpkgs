@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , msgpack
 , greenlet
 , pythonOlder
@@ -9,20 +10,26 @@
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.4.3";
-  format = "setuptools";
+  version = "0.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OnlTeL3l6AkvvrOhqZvpxhPSaFVC8dsOXG/UZ+7Vbf8=";
+  src = fetchFromGitHub {
+    owner = "neovim";
+    repo = "pynvim";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3LqgKENFzdfCjMlD6Xzv5W23yvIkNMUYo2+LlzKZ3cc=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace " + pytest_runner" ""
   '';
+
+  buildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     msgpack

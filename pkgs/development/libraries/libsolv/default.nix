@@ -16,14 +16,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.25";
+  version = "0.7.28";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
     rev = version;
-    sha256 = "sha256-OSYfv8dTyoa2f1T/zCEruKczickP5jS05xjYLQQiFaY=";
+    sha256 = "sha256-cL7SDwCzXM2qJQfiu/3nfAiFbcFNn1YXD23Sl3n9nzY=";
   };
 
   cmakeFlags = [

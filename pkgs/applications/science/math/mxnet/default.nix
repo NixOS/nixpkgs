@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, fetchpatch, bash, cmake
-, opencv3, gtest, blas, gomp, llvmPackages, perl
+, opencv4, gtest, blas, gomp, llvmPackages, perl
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }, nvidia_x11
 , cudnnSupport ? cudaSupport
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl ];
 
-  buildInputs = [ opencv3 gtest blas.provider ]
+  buildInputs = [ opencv4 gtest blas.provider ]
     ++ lib.optional stdenv.cc.isGNU gomp
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
     # FIXME: when cuda build is fixed, remove nvidia_x11, and use /run/opengl-driver/lib

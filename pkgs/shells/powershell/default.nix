@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.3.7";
+  version = "7.4.1";
 
   src = passthru.sources.${stdenv.hostPlatform.system}
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -70,10 +70,6 @@ stdenv.mkDerivation rec {
       --set POWERSHELL_TELEMETRY_OPTOUT 1 \
       --set DOTNET_CLI_TELEMETRY_OPTOUT 1
 
-  '' + lib.optionalString (stdenv.isLinux && stdenv.isx86_64) ''
-    patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext} $out/share/powershell/libmi.so
-    patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext} $out/share/powershell/libmi.so
-
   '' + lib.optionalString stdenv.isLinux ''
     patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $out/share/powershell/libcoreclrtraceptprovider.so
 
@@ -88,19 +84,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-KSBsYw369fURSmoD/YyZm9CLEIbhDR12mRp1xLCJ4Wc=";
+        hash = "sha256-Q10TWUPw8eOmb+76AlHXPp6AdvUS3pxGnNsgXFvnGWc=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-GaAu3nD0xRqqE0Lm7Z5Da6YUQGiCFc5xHuJYDLKySGc=";
+        hash = "sha256-cZwRVEofYyLyxY9Vkf96u3dorvl+8KOC43Efifoq3iI=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-+6cy4PLpt3ZR7ui3H9rAg3C39kVryPtqE5HKzMpBa24=";
+        hash = "sha256-H63q4MY00o8OIISTv7VBnSZd8FdwLEuoCyErZE2X3AA=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-GKsAH+A89/M1fxvw4C4yb7+ITcfD6Y4Oicb1K8AswwI=";
+        hash = "sha256-i+q6xEMbdem2fG2fr9iwLMAZ8h8jDqPZSuwTSMUFKdM=";
       };
     };
     tests.version = testers.testVersion {

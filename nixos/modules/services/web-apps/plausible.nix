@@ -9,14 +9,7 @@ in {
   options.services.plausible = {
     enable = mkEnableOption (lib.mdDoc "plausible");
 
-    package = mkPackageOptionMD pkgs "plausible" { };
-
-    releaseCookiePath = mkOption {
-      type = with types; either str path;
-      description = lib.mdDoc ''
-        The path to the file with release cookie. (used for remote connection to the running node).
-      '';
-    };
+    package = mkPackageOption pkgs "plausible" { };
 
     adminUser = {
       name = mkOption {
@@ -78,9 +71,9 @@ in {
     server = {
       disableRegistration = mkOption {
         default = true;
-        type = types.bool;
+        type = types.enum [true false "invite_only"];
         description = lib.mdDoc ''
-          Whether to prohibit creating an account in plausible's UI.
+          Whether to prohibit creating an account in plausible's UI or allow on `invite_only`.
         '';
       };
       secretKeybaseFile = mkOption {
@@ -90,6 +83,13 @@ in {
           how to generate one are documented in the
           [
           framework docs](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content).
+        '';
+      };
+      listenAddress = mkOption {
+        default = "127.0.0.1";
+        type = types.str;
+        description = lib.mdDoc ''
+          The IP address on which the server is listening.
         '';
       };
       port = mkOption {
@@ -162,6 +162,10 @@ in {
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "plausible" "releaseCookiePath" ] "Plausible uses no distributed Erlang features, so this option is no longer necessary and was removed")
+  ];
+
   config = mkIf cfg.enable {
     assertions = [
       { assertion = cfg.adminUser.activate -> cfg.database.postgres.setup;
@@ -179,8 +183,6 @@ in {
     services.clickhouse = mkIf cfg.database.clickhouse.setup {
       enable = true;
     };
-
-    services.epmd.enable = true;
 
     environment.systemPackages = [ cfg.package ];
 
@@ -209,7 +211,33 @@ in {
             # Configuration options from
             # https://plausible.io/docs/self-hosting-configuration
             PORT = toString cfg.server.port;
-            DISABLE_REGISTRATION = boolToString cfg.server.disableRegistration;
+            LISTEN_IP = cfg.server.listenAddress;
+
+            # Note [plausible-needs-no-erlang-distributed-features]:
+            # Plausible does not use, and does not plan to use, any of
+            # Erlang's distributed features, see:
+            #     https://github.com/plausible/analytics/pull/1190#issuecomment-1018820934
+            # Thus, disable distribution for improved simplicity and security:
+            #
+            # When distribution is enabled,
+            # Elixir spwans the Erlang VM, which will listen by default on all
+            # interfaces for messages between Erlang nodes (capable of
+            # remote code execution); it can be protected by a cookie; see
+            # https://erlang.org/doc/reference_manual/distributed.html#security).
+            #
+            # It would be possible to restrict the interface to one of our choice
+            # (e.g. localhost or a VPN IP) similar to how we do it with `listenAddress`
+            # for the Plausible web server; if distribution is ever needed in the future,
+            # https://github.com/NixOS/nixpkgs/pull/130297 shows how to do it.
+            #
+            # But since Plausible does not use this feature in any way,
+            # we just disable it.
+            RELEASE_DISTRIBUTION = "none";
+            # Additional safeguard, in case `RELEASE_DISTRIBUTION=none` ever
+            # stops disabling the start of EPMD.
+            ERL_EPMD_ADDRESS = "127.0.0.1";
+
+            DISABLE_REGISTRATION = if isBool cfg.server.disableRegistration then boolToString cfg.server.disableRegistration else cfg.server.disableRegistration;
 
             RELEASE_TMP = "/var/lib/plausible/tmp";
             # Home is needed to connect to the node with iex
@@ -238,7 +266,10 @@ in {
           path = [ cfg.package ]
             ++ optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
-            export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
+            # Elixir does not start up if `RELEASE_COOKIE` is not set,
+            # even though we set `RELEASE_DISTRIBUTION=none` so the cookie should be unused.
+            # Thus, make a random one, which should then be ignored.
+            export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
             export ADMIN_USER_PWD="$(< $CREDENTIALS_DIRECTORY/ADMIN_USER_PWD )"
             export SECRET_KEY_BASE="$(< $CREDENTIALS_DIRECTORY/SECRET_KEY_BASE )"
 
@@ -265,7 +296,6 @@ in {
             LoadCredential = [
               "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
               "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
-              "RELEASE_COOKIE:${cfg.releaseCookiePath}"
             ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
           };
         };
@@ -296,6 +326,6 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ ma27 ];
+  meta.maintainers = with maintainers; [ ];
   meta.doc = ./plausible.md;
 }

@@ -25,6 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-T0im8zKyNLbskAEDeUUFS/daJtvttlHlttjscqP8iSk=";
   };
 
+  postPatch = ''
+    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+    substituteInPlace bleak/backends/bluezdbus/version.py \
+      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -39,12 +45,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
-    substituteInPlace bleak/backends/bluezdbus/__init__.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-  '';
 
   pythonImportsCheck = [
     "bleak"

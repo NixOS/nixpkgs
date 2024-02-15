@@ -1,7 +1,28 @@
-{ stdenv, lib
-, pkg-config, autoreconfHook, pandoc
-, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
-, sqlite, zstd, libcap
+{ stdenv
+, lib
+, pkg-config
+, autoreconfHook
+, pandoc
+, fetchurl
+, cpio
+, zlib
+, bzip2
+, file
+, elfutils
+, libbfd
+, libgcrypt
+, libarchive
+, nspr
+, nss
+, popt
+, db
+, xz
+, python
+, lua
+, llvmPackages
+, sqlite
+, zstd
+, libcap
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +39,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
-                ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-                ++ lib.optional stdenv.isLinux libcap;
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+    ++ lib.optional stdenv.isLinux libcap;
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
@@ -72,5 +93,8 @@ stdenv.mkDerivation rec {
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
+    # Support for darwin was removed in https://github.com/NixOS/nixpkgs/pull/196350.
+    # This can be re-enables for apple_sdk.version >= 13.0.
+    badPlatforms = platforms.darwin;
   };
 }

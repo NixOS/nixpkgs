@@ -1,13 +1,17 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.services.matrix-synapse.sliding-sync;
+  cfg = config.services.matrix-sliding-sync;
 in
 {
-  options.services.matrix-synapse.sliding-sync = {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "matrix-synapse" "sliding-sync" ] [ "services" "matrix-sliding-sync" ])
+  ];
+
+  options.services.matrix-sliding-sync = {
     enable = lib.mkEnableOption (lib.mdDoc "sliding sync");
 
-    package = lib.mkPackageOptionMD pkgs "matrix-sliding-sync" { };
+    package = lib.mkPackageOption pkgs "matrix-sliding-sync" { };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -74,14 +78,18 @@ in
     services.postgresql = lib.optionalAttrs cfg.createDatabase {
       enable = true;
       ensureDatabases = [ "matrix-sliding-sync" ];
-      ensureUsers = [ rec {
+      ensureUsers = [ {
         name = "matrix-sliding-sync";
-        ensurePermissions."DATABASE \"${name}\"" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       } ];
     };
 
-    systemd.services.matrix-sliding-sync = {
-      after = lib.optional cfg.createDatabase "postgresql.service";
+    systemd.services.matrix-sliding-sync = rec {
+      after =
+        lib.optional cfg.createDatabase "postgresql.service"
+        ++ lib.optional config.services.dendrite.enable "dendrite.service"
+        ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
+      wants = after;
       wantedBy = [ "multi-user.target" ];
       environment = cfg.settings;
       serviceConfig = {
@@ -90,6 +98,8 @@ in
         ExecStart = lib.getExe cfg.package;
         StateDirectory = "matrix-sliding-sync";
         WorkingDirectory = "%S/matrix-sliding-sync";
+        Restart = "on-failure";
+        RestartSec = "1s";
       };
     };
   };

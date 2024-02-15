@@ -5,6 +5,7 @@ let
     attrValues
     literalExpression
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     types;
@@ -20,14 +21,8 @@ in
 
       enable = mkEnableOption (lib.mdDoc "filebeat");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.filebeat;
-        defaultText = literalExpression "pkgs.filebeat";
-        example = literalExpression "pkgs.filebeat7";
-        description = lib.mdDoc ''
-          The filebeat package to use.
-        '';
+      package = mkPackageOption pkgs "filebeat" {
+        example = "filebeat7";
       };
 
       inputs = mkOption {

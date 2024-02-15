@@ -12,7 +12,7 @@ let
     mkOption
     mdDoc
     mkEnableOption
-    mkPackageOptionMD
+    mkPackageOption
     types
     ;
 
@@ -24,7 +24,7 @@ in
 
 {
   options.services.wyoming.faster-whisper = with types; {
-    package = mkPackageOptionMD pkgs "wyoming-faster-whisper" { };
+    package = mkPackageOption pkgs "wyoming-faster-whisper" { };
 
     servers = mkOption {
       default = {};
@@ -37,6 +37,9 @@ in
             enable = mkEnableOption (mdDoc "Wyoming faster-whisper server");
 
             model = mkOption {
+              # Intersection between available and referenced models here:
+              # https://github.com/rhasspy/models/releases/tag/v1.0
+              # https://github.com/rhasspy/rhasspy3/blob/wyoming-v1/programs/asr/faster-whisper/server/wyoming_faster_whisper/download.py#L17-L27
               type = enum [
                 "tiny"
                 "tiny-int8"
@@ -44,7 +47,6 @@ in
                 "base-int8"
                 "small"
                 "small-int8"
-                "medium"
                 "medium-int8"
               ];
               default = "tiny-int8";
@@ -119,6 +121,7 @@ in
   in mkIf (cfg.servers != {}) {
     systemd.services = mapAttrs' (server: options:
       nameValuePair "wyoming-faster-whisper-${server}" {
+        inherit (options) enable;
         description = "Wyoming faster-whisper server instance ${server}";
         after = [
           "network-online.target"
@@ -136,6 +139,7 @@ in
               --data-dir $STATE_DIRECTORY \
               --download-dir $STATE_DIRECTORY \
               --uri ${options.uri} \
+              --device ${options.device} \
               --model ${options.model} \
               --language ${options.language} \
               --beam-size ${options.beamSize} ${options.extraArgs}
@@ -143,6 +147,8 @@ in
           CapabilityBoundingSet = "";
           DeviceAllow = if builtins.elem options.device [ "cuda" "auto" ] then [
             # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+            # CUDA not working? Check DeviceAllow and PrivateDevices first!
+            "/dev/nvidia0"
             "/dev/nvidia1"
             "/dev/nvidia2"
             "/dev/nvidia3"
@@ -157,7 +163,6 @@ in
           DevicePolicy = "closed";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
-          PrivateDevices = true;
           PrivateUsers = true;
           ProtectHome = true;
           ProtectHostname = true;

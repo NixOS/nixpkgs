@@ -23,7 +23,7 @@
 , at-spi2-atk
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , fribidi
 , xorg
@@ -64,7 +64,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.38";
+  version = "3.24.39";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
   in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-zhHezwGLJb3YUFVEpPhyQoVOyIvgVNmt5fOiBETdjuc=";
+    sha256 = "sha256-HKw+VmubLzZTpFjAjC3N/cqfkIA3rAPJ2FZLQpV3jXk=";
   };
 
   patches = [

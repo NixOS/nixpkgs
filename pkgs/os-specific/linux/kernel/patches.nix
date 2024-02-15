@@ -44,8 +44,6 @@
       patch = ./modinst-arg-list-too-long.patch;
     };
 
-  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
-
   hardened = let
     mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
       name = lib.removeSuffix ".patch" src.name;
@@ -66,5 +64,19 @@
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
+  };
+
+  rust_1_74 = {
+    name = "rust-1.74.patch";
+    patch = fetchpatch {
+      name = "rust-1.74.patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=80fe9e51510b23472ad0f97175556490549ed714";
+      hash = "sha256-yGt7PwqN/G+ZtZSt6eARvVFdkC8tnUiu0Fz4cFCyguM=";
+    };
+  };
+
+  rust_1_75 = {
+    name = "rust-1.75.patch";
+    patch = ./rust-1.75.patch;
   };
 }

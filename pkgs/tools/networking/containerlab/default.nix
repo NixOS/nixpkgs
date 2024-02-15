@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "containerlab";
-  version = "0.46.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     rev = "v${version}";
-    hash = "sha256-uBT9whv1qL3yfO6VoeW2SqLIzG11mk+SU09c/xqboM8=";
+    hash = "sha256-dSy+4hsuigBSULDfsUW/kArcQByrtUeF3InMRuqFtu4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-mkQR0lZXYe6Dz4PngxF7d7Bkr4R3HmL/imQDLridmlA=";
+  vendorHash = "sha256-mm3D8WQtgWT9LCWlTZIV5GJ9rIyd3iX8b6zWIpqEwnk=";
 
   ldflags = [
     "-s"
@@ -41,6 +41,7 @@ buildGoModule rec {
     changelog = "https://github.com/srl-labs/containerlab/releases/tag/${src.rev}";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ janik ];
+    maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "containerlab";
   };
 }

@@ -1,16 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "process-tests";
-  version = "2.1.2";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a3747ad947bdfc93e5c986bdb17a6d718f3f26e8577a0807a00962f29e26deba";
+    hash = "sha256-5dV96nFhJR6RytuEvz7MhSdfsSH9R45Xn4AHd7HUJL0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # No tests
   doCheck = false;

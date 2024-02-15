@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://contextfreeart.org/";
     license = licenses.gpl2Only;
+    mainProgram = "cfdg";
   };
 }

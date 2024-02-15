@@ -6,6 +6,7 @@
 , aiohttp
 , aiohttp-socks
 , aioredis
+, aiofiles
 , aresponses
 , babel
 , certifi
@@ -13,34 +14,37 @@
 , pytest-asyncio
 , pytest-lazy-fixture
 , redis
+, hatchling
+, pydantic
+, pytz
+, gitUpdater
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "2.25.1";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
-    rev = "v${version}";
-    hash = "sha256-g8nuvna7DpXElvjBehnGKHUsrf+nyQcoKNnyR59RALo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TD4pDmM899zBOxllM0iju2u6IhmXxLYWBpjfWhewVFc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp>=3.8.0,<3.9.0" "aiohttp" \
-      --replace "Babel>=2.9.1,<2.10.0" "Babel" \
-      --replace "magic-filter>=1.0.9" "magic-filter"
-  '';
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
+    aiofiles
     aiohttp
     babel
     certifi
     magic-filter
+    pydantic
   ];
 
   nativeCheckInputs = [
@@ -50,16 +54,19 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
+    pytz
     redis
   ];
 
-  # requires network
+  # import failures
   disabledTests = [
-    "test_download_file_404"
-    "test_download_404"
+    "test_aiohtt_server"
+    "test_deep_linking"
   ];
 
   pythonImportsCheck = [ "aiogram" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Modern and fully asynchronous framework for Telegram Bot API";

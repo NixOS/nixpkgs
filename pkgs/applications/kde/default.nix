@@ -94,12 +94,14 @@ let
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
+      itinerary = callPackage ./itinerary.nix {};
       juk = callPackage ./juk.nix {};
       k3b = callPackage ./k3b.nix {};
       kaccounts-integration = callPackage ./kaccounts-integration.nix {};
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
+      kalgebra = callPackage ./kalgebra.nix {};
       merkuro = callPackage ./merkuro.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
@@ -179,10 +181,13 @@ let
       kontact = callPackage ./kontact.nix {};
       konversation = callPackage ./konversation.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
+      kopeninghours = callPackage ./kopeninghours.nix {};
       korganizer = callPackage ./korganizer.nix {};
+      kosmindoormap = callPackage ./kosmindoormap.nix {};
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpmcore = callPackage ./kpmcore {};
       kpublictransport = callPackage ./kpublictransport.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
@@ -226,6 +231,7 @@ let
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
       palapeli = callPackage ./palapeli.nix {};
+      partitionmanager = callPackage ./partitionmanager {};
       picmi = callPackage ./picmi.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

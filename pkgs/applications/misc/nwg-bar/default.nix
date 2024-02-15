@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "nwg-bar";
-  version = "0.1.3";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/GkusNhHprXwGMNDruEEuFC2ULVIHBN5F00GNex/uq4=";
+    sha256 = "sha256-5N+WKZ+fuHQ0lVLd95/KkNAwzg/C4ImZ4DnSuKNGunk=";
   };
 
   patches = [ ./fix-paths.patch ];
@@ -24,7 +24,7 @@ buildGoModule rec {
     substituteInPlace tools.go --subst-var out
   '';
 
-  vendorHash = "sha256-mqcXhnja8ed7vXIqOKBsNrcbrcaycTQXG1jqdc6zcyI=";
+  vendorHash = "sha256-/kqhZcIuoN/XA0i1ua3lzVGn4ghkekFYScL1o3kgBX4=";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 

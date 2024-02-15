@@ -29,5 +29,6 @@ buildGoModule rec {
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "pgcenter";
   };
 }

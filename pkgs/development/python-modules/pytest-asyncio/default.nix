@@ -2,17 +2,14 @@
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
-, flaky
-, hypothesis
 , pytest
-, pytestCheckHook
 , pythonOlder
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.21.1";
+  version = "0.21.1"; # N.B.: when updating, tests bleak and aioesphomeapi tests
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +25,6 @@ buildPythonPackage rec {
     "out"
     "testout"
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm

@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "web-cache";
   version = "1.1.0";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -20,6 +21,6 @@ buildPythonPackage rec {
     description = "Simple Python key-value storage backed up by sqlite3 database";
     homepage = "https://github.com/desbma/web_cache";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
   };
 }

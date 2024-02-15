@@ -11,14 +11,7 @@ in
     services.xserver.windowManager.herbstluftwm = {
       enable = mkEnableOption (lib.mdDoc "herbstluftwm");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.herbstluftwm;
-        defaultText = literalExpression "pkgs.herbstluftwm";
-        description = lib.mdDoc ''
-          Herbstluftwm package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "herbstluftwm" { };
 
       configFile = mkOption {
         default     = null;

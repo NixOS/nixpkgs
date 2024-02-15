@@ -17,13 +17,13 @@
 assert lib.elem lineEditingLibrary [ "isocline" "readline" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.28.12";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uWCpCjYFtK2pNeHHZWhWI6YZ+cllQpkKz//nHracl5s=";
+    hash = "sha256-cqIiPeQO/M8MtpHRomN/fzxIq7TgUwZSvL3PFCVsEnY=";
   };
 
   postPatch = ''
@@ -38,21 +38,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optional enableFFI libffi
-    ++ lib.optional enableSSL openssl
-    ++ lib.optional (lineEditingLibrary == "readline") readline;
+    lib.optionals enableFFI [ libffi ]
+    ++ lib.optionals enableSSL [ openssl ]
+    ++ lib.optionals (lineEditingLibrary == "readline") [ readline ];
 
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [ valgrind ];
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [ valgrind ];
 
   strictDeps = true;
 
   makeFlags = [
     "GIT_VERSION=\"v${finalAttrs.version}\""
   ]
-  ++ lib.optional (lineEditingLibrary == "isocline") "ISOCLINE=1"
-  ++ lib.optional (!enableFFI) "NOFFI=1"
-  ++ lib.optional (!enableSSL) "NOSSL=1"
-  ++ lib.optional enableThreads "THREADS=1";
+  ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
+  ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
+  ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
+  ++ lib.optionals enableThreads [ "THREADS=1" ];
 
   enableParallelBuilding = true;
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkFlags = [
     "test"
-  ] ++ lib.optional checkLeaks "leaks";
+  ] ++ lib.optionals checkLeaks [ "leaks" ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

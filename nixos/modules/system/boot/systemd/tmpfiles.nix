@@ -20,6 +20,102 @@ in
       '';
     };
 
+    systemd.tmpfiles.settings = mkOption {
+      description = lib.mdDoc ''
+        Declare systemd-tmpfiles rules to create, delete, and clean up volatile
+        and temporary files and directories.
+
+        Even though the service is called `*tmp*files` you can also create
+        persistent files.
+      '';
+      example = {
+        "10-mypackage" = {
+          "/var/lib/my-service/statefolder".d = {
+            mode = "0755";
+            user = "root";
+            group = "root";
+          };
+        };
+      };
+      default = {};
+      type = types.attrsOf (types.attrsOf (types.attrsOf (types.submodule ({ name, config, ... }: {
+        options.type = mkOption {
+          type = types.str;
+          default = name;
+          example = "d";
+          description = lib.mdDoc ''
+            The type of operation to perform on the file.
+
+            The type consists of a single letter and optionally one or more
+            modifier characters.
+
+            Please see the upstream documentation for the available types and
+            more details:
+            <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
+          '';
+        };
+        options.mode = mkOption {
+          type = types.str;
+          default = "-";
+          example = "0755";
+          description = lib.mdDoc ''
+            The file access mode to use when creating this file or directory.
+          '';
+        };
+        options.user = mkOption {
+          type = types.str;
+          default = "-";
+          example = "root";
+          description = lib.mdDoc ''
+            The user of the file.
+
+            This may either be a numeric ID or a user/group name.
+
+            If omitted or when set to `"-"`, the user and group of the user who
+            invokes systemd-tmpfiles is used.
+          '';
+        };
+        options.group = mkOption {
+          type = types.str;
+          default = "-";
+          example = "root";
+          description = lib.mdDoc ''
+            The group of the file.
+
+            This may either be a numeric ID or a user/group name.
+
+            If omitted or when set to `"-"`, the user and group of the user who
+            invokes systemd-tmpfiles is used.
+          '';
+        };
+        options.age = mkOption {
+          type = types.str;
+          default = "-";
+          example = "10d";
+          description = lib.mdDoc ''
+            Delete a file when it reaches a certain age.
+
+            If a file or directory is older than the current time minus the age
+            field, it is deleted.
+
+            If set to `"-"` no automatic clean-up is done.
+          '';
+        };
+        options.argument = mkOption {
+          type = types.str;
+          default = "";
+          example = "";
+          description = lib.mdDoc ''
+            An argument whose meaning depends on the type of operation.
+
+            Please see the upstream documentation for the meaning of this
+            parameter in different situations:
+            <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
+          '';
+        };
+      }))));
+    };
+
     systemd.tmpfiles.packages = mkOption {
       type = types.listOf types.package;
       default = [];
@@ -53,6 +149,41 @@ in
       "systemd-tmpfiles-clean.timer"
       "systemd-tmpfiles-setup.service"
     ];
+
+    # Allow systemd-tmpfiles to be restarted by switch-to-configuration. This
+    # service is not pulled into the normal boot process. It only exists for
+    # switch-to-configuration.
+    #
+    # This needs to be a separate unit because it does not execute
+    # systemd-tmpfiles with `--boot` as that is supposed to only be executed
+    # once at boot time.
+    #
+    # Keep this aligned with the upstream `systemd-tmpfiles-setup.service` unit.
+    systemd.services."systemd-tmpfiles-resetup" = {
+      description = "Re-setup tmpfiles on a system that is already running.";
+
+      requiredBy = [ "sysinit-reactivation.target" ];
+      after = [ "local-fs.target" "systemd-sysusers.service" "systemd-journald.service" ];
+      before = [ "sysinit-reactivation.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
+      restartTriggers = [ config.environment.etc."tmpfiles.d".source ];
+
+      unitConfig.DefaultDependencies = false;
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "systemd-tmpfiles --create --remove --exclude-prefix=/dev";
+        SuccessExitStatus = "DATAERR CANTCREAT";
+        ImportCredential = [
+          "tmpfiles.*"
+          "loging.motd"
+          "login.issue"
+          "network.hosts"
+          "ssh.authorized_keys.root"
+        ];
+      };
+    };
 
     environment.etc = {
       "tmpfiles.d".source = (pkgs.symlinkJoin {
@@ -100,7 +231,13 @@ in
           ${concatStringsSep "\n" cfg.rules}
         '';
       })
-    ];
+    ] ++ (mapAttrsToList (name: paths:
+      pkgs.writeTextDir "lib/tmpfiles.d/${name}.conf" (concatStrings (mapAttrsToList (path: types:
+        concatStrings (mapAttrsToList (_type: entry: ''
+          '${entry.type}' '${path}' '${entry.mode}' '${entry.user}' '${entry.group}' '${entry.age}' ${entry.argument}
+        '') types)
+      ) paths ))
+    ) cfg.settings);
 
     systemd.tmpfiles.rules = [
       "d  /nix/var                           0755 root root - -"

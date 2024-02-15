@@ -1,13 +1,17 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
 , cython
+, cython_3
+, meson-python
+, meson
 , oldest-supported-numpy
-, setuptools
+, pkg-config
 , versioneer
 , wheel
 
@@ -21,7 +25,6 @@
 , beautifulsoup4
 , bottleneck
 , blosc2
-, brotlipy
 , fsspec
 , gcsfs
 , html5lib
@@ -37,7 +40,6 @@
 , pymysql
 , pyqt5
 , pyreadstat
-, python-snappy
 , qtpy
 , s3fs
 , scipy
@@ -61,26 +63,41 @@
 , runtimeShell
 }:
 
-buildPythonPackage rec {
+let pandas = buildPythonPackage rec {
   pname = "pandas";
-  version = "2.0.3";
-  format = "pyproject";
+  version = "2.1.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wC83Kojg0X820wk6ZExzz8F4jodqfEvLQCCndRLiBDw=";
+  src = fetchFromGitHub {
+    owner = "pandas-dev";
+    repo = "pandas";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-okGYzPJC3mpG+Sq4atjWwLlocUDnpjgGRPmQ+4ehQX0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "Cython>=0.29.33,<3" "Cython" \
+      --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
+      --replace "meson==1.2.1" "meson>=1.2.1"
+  '';
+
   nativeBuildInputs = [
-    setuptools
-    cython
+    # TODO: hack to support pandas on python3.12, remove with pandas 2.2.0
+    (if pythonAtLeast "3.12" then cython_3 else cython)
+    meson-python
+    meson
     numpy
-    oldest-supported-numpy
+    pkg-config
     versioneer
     wheel
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml
+  ++ lib.optionals (pythonOlder "3.12") [
+    oldest-supported-numpy
+  ];
 
   enableParallelBuilding = true;
 
@@ -101,8 +118,6 @@ buildPythonPackage rec {
         qtpy
       ];
       compression = [
-        brotlipy
-        python-snappy
         zstandard
       ];
       computation = [
@@ -172,16 +187,23 @@ buildPythonPackage rec {
     all = lib.concatLists (lib.attrValues extras);
   };
 
+  doCheck = false; # various infinite recursions
+
+  passthru.tests.pytest = pandas.overridePythonAttrs (_: { doCheck = true; });
+
   nativeCheckInputs = [
     glibcLocales
     hypothesis
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ]
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (stdenv.isLinux) [
     # for locale executable
     glibc
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ]
+  ++ lib.optionals (stdenv.isDarwin) [
     # for locale executable
     adv_cmds
   ];
@@ -193,10 +215,9 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
-    "--skip-db"
-    "--skip-slow"
-    "--skip-network"
-    "-m" "'not single_cpu and not slow_arm'"
+    "-m" "'not single_cpu and not slow and not network and not db and not slow_arm'"
+    # https://github.com/pandas-dev/pandas/issues/54907
+    "--no-strict-data-files"
     "--numprocesses" "4"
   ];
 
@@ -208,6 +229,9 @@ buildPythonPackage rec {
     "test_binops"
     # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
     "test_rolling"
+  ] ++ lib.optional stdenv.is32bit [
+    # https://github.com/pandas-dev/pandas/issues/37398
+    "test_rolling_var_numerical_issues"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions
@@ -232,9 +256,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    # https://github.com/pandas-dev/pandas/issues/14866
-    # pandas devs are no longer testing i686 so safer to assume it's broken
-    broken = stdenv.isi686;
+    # pandas devs no longer test i686, it's commonly broken
+    # broken = stdenv.isi686;
     changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
     description = "Powerful data structures for data analysis, time series, and statistics";
     downloadPage = "https://github.com/pandas-dev/pandas";
@@ -247,4 +270,5 @@ buildPythonPackage rec {
     '';
     maintainers = with maintainers; [ raskin fridh knedlsepp ];
   };
-}
+};
+in pandas

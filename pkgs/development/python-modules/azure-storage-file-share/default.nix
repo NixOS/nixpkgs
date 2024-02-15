@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.14.1";
+  version = "12.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f1vV13c/NEUYWZ0Tgha+CwpHZJ5AZWdbhFPrTmf5hGA=";
+    hash = "sha256-AJjxz6k0TE94HODNUE/zo1JVdRVTwB5yDczQyqjYqio=";
   };
 
   propagatedBuildInputs = [

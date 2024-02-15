@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkg";
-  version = "1.20.7";
+  version = "1.20.8";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "pkg";
     rev = finalAttrs.version;
-    sha256 = "sha256-k7QDdHwxM1RYoZy37rzhJunk3RQXVC3rkdoXUVL00wQ=";
+    sha256 = "sha256-pQgZMCd4PEjNZKm9V35Rca7Miblv1EgkH+CxaiKvhpY=";
   };
 
   setOutputFlags = false;
@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ qyliss ];
     platforms = with platforms; darwin ++ freebsd ++ linux ++ netbsd ++ openbsd;
     license = licenses.bsd2;
+    mainProgram = "pkg";
   };
 })

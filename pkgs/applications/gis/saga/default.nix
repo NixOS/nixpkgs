@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.1.1";
+  version = "9.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    sha256 = "sha256-VXupgjoiexZZ1kLXAbbQMW7XQ7FWjd1ejZPeeTffUhM=";
+    sha256 = "sha256-QrpEbb8zN003Afnu9UZUanWE0lIiy95POSWd1jB8EtA=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";

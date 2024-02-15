@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
     repo = "zf";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-qzGr72EnWlGZgd7/r+8Iv+1i/Q9qvWpf/cgkr+TrgkE=";
+    hash = "sha256-JPv/59ELh+CS1/akuLNy0qSimMEJsypPO8hiHFAOirI=";
   };
 
   nativeBuildInputs = [
@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dit7ya figsoda mmlb ];
+    mainProgram = "zf";
   };
 })

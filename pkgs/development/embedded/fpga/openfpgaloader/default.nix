@@ -31,16 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
     libftdi1
     libusb1
-    udev
     zlib
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform udev) [
+    udev
   ];
 
   meta = {
-    broken = stdenv.isDarwin; # error: Package ‘systemd-253.6’ is not available on the requested Darwin platform.
     description = "Universal utility for programming FPGAs";
     homepage = "https://github.com/trabucayre/openFPGALoader";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ danderson ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })

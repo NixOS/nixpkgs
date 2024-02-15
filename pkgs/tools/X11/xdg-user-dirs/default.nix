@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxslt, docbook_xsl, makeWrapper }:
+{ lib, stdenv, fetchurl, libxslt, docbook_xsl, gettext, libiconv, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-user-dirs";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
   };
 
-  nativeBuildInputs = [ makeWrapper libxslt docbook_xsl ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  nativeBuildInputs = [ makeWrapper libxslt docbook_xsl ] ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   preFixup = ''
     # fallback values need to be last
@@ -22,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "A tool to help manage well known user directories like the desktop folder and the music folder";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

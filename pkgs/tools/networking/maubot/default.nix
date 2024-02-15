@@ -1,6 +1,7 @@
 { lib
 , fetchPypi
 , fetchpatch
+, callPackage
 , runCommand
 , python3
 , encryptionSupport ? true
@@ -15,25 +16,6 @@ let
         src = old.src.override {
           rev = "refs/tags/v${version}";
           hash = "sha256-yPGSKqjOz1EY5/V0oKz2EiZ90q2O4TINoXdxHuB7Gqk=";
-        };
-      });
-      # mautrix>=0.19.8,<0.20
-      mautrix = prev.mautrix.overridePythonAttrs (old: rec {
-        version = "0.19.16";
-        disabled = final.pythonOlder "3.8";
-        checkInputs = old.checkInputs ++ [ final.sqlalchemy ];
-        SQLALCHEMY_SILENCE_UBER_WARNING = true;
-        src = old.src.override {
-          rev = "refs/tags/v${version}";
-          hash = "sha256-aZlc4+J5Q+N9qEzGUMhsYguPdUy+E5I06wrjVyqvVDk=";
-        };
-      });
-      # mautrix has a runtime error with new ruamel-yaml since 0.17.22 changed the interface
-      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: rec {
-        version = "0.17.21";
-        src = prev.src.override {
-          version = version;
-          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
       # SQLAlchemy>=1,<1.4
@@ -60,12 +42,12 @@ let
 
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
-    version = "0.4.1";
-    disabled = python.pythonOlder "3.8";
+    version = "0.4.2";
+    disabled = python.pythonOlder "3.9";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-Ro2PPgF8818F8JewPZ3AlbfWFNNHKTZkQq+1zpm3kk4=";
+      hash = "sha256-svdg7KpCy/+T9Hu+FbsgLNU8nVuIn0flPg7qyn7I+30=";
     };
 
     patches = [
@@ -74,8 +56,6 @@ let
         url = "https://github.com/maubot/maubot/commit/283f0a3ed5dfae13062b6f0fd153fbdc477f4381.patch";
         sha256 = "0yn5357z346qzy5v5g124mgiah1xsi9yyfq42zg028c8paiw8s8x";
       })
-      # allow running "mbc build" in a nix derivation
-      ./allow-building-plugins-from-nix-store.patch
     ];
 
     propagatedBuildInputs = with python.pkgs; [
@@ -107,18 +87,41 @@ let
       rm $out/example-config.yaml
     '';
 
-    passthru.tests = {
-      simple = runCommand "${pname}-tests" { } ''
-        ${maubot}/bin/mbc --help > $out
-      '';
-    };
-
     # Setuptools is trying to do python -m maubot test
     dontUseSetuptoolsCheck = true;
 
     pythonImportsCheck = [
       "maubot"
     ];
+
+    passthru = let
+      wrapper = callPackage ./wrapper.nix {
+        unwrapped = maubot;
+        python3 = python;
+      };
+    in
+    {
+      tests = {
+        simple = runCommand "${pname}-tests" { } ''
+          ${maubot}/bin/mbc --help > $out
+        '';
+      };
+
+      inherit python;
+
+      plugins = callPackage ./plugins {
+        maubot = maubot;
+        python3 = python;
+      };
+
+      withPythonPackages = pythonPackages: wrapper { inherit pythonPackages; };
+
+      # This adds the plugins to lib/maubot-plugins
+      withPlugins = plugins: wrapper { inherit plugins; };
+
+      # This changes example-config.yaml in module directory
+      withBaseConfig = baseConfig: wrapper { inherit baseConfig; };
+    };
 
     meta = with lib; {
       description = "A plugin-based Matrix bot system written in Python";

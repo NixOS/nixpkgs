@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.5.3";
+  version = "1.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-mzqUdT+dI7U0tHHcr0joIB1UCfKXrDdqhtVFShjIKus=";
+    hash = "sha256-CzRcnS/aECBq/9L8U+mLuHYo00HyBtKK6jmU8S03feM=";
   };
 
   nativeBuildInputs = [

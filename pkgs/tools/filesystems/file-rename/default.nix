@@ -26,5 +26,6 @@ perlPackages.buildPerlPackage {
     description = "Perl extension for renaming multiple files";
     license = licenses.artistic1;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "rename";
   };
 }

@@ -9,14 +9,15 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , voluptuous
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.36.5";
-  format = "setuptools";
+  version = "0.38.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,8 +25,18 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "bellows";
     rev = "refs/tags/${version}";
-    hash = "sha256-f4AgYpqb4s5F46nGi0FjLQ9YRHetLfaA/jLydiewxOM=";
+    hash = "sha256-7aqzhujTn1TMYBA6+79Ok76yv8hXszuuZ7TjhJ6zbQw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"setuptools-git-versioning<2"' "" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     click

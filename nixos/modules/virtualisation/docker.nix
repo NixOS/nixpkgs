@@ -93,8 +93,18 @@ in
         default = null;
         description =
           lib.mdDoc ''
-            This option determines which Docker storage driver to use. By default
-            it let's docker automatically choose preferred storage driver.
+            This option determines which Docker
+            [storage driver](https://docs.docker.com/storage/storagedriver/select-storage-driver/)
+            to use.
+            By default it lets docker automatically choose the preferred storage
+            driver.
+            However, it is recommended to specify a storage driver explicitly, as
+            docker's default varies over versions.
+
+            ::: {.warning}
+            Changing the storage driver will cause any existing containers
+            and images to become inaccessible.
+            :::
           '';
       };
 
@@ -150,14 +160,7 @@ in
       };
     };
 
-    package = mkOption {
-      default = pkgs.docker;
-      defaultText = literalExpression "pkgs.docker";
-      type = types.package;
-      description = lib.mdDoc ''
-        Docker package to be used in the module.
-      '';
-    };
+    package = mkPackageOption pkgs "docker" { };
 
     extraPackages = mkOption {
       type = types.listOf types.package;

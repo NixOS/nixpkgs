@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+, setuptools
 , googleapis-common-protos
 , grpcio
 , protobuf
@@ -10,15 +11,21 @@
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "9.8.4";
-  format = "setuptools";
+  version = "10.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-j+dtcNInkTcgcLt6IOjqVeI/qSczRNs9PhS9iPoUF+c=";
+  src = fetchFromGitHub {
+    owner = "Clarifai";
+    repo = "clarifai-python-grpc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wQhTPqqSSWQCguI6UC/meFLcDZpGGCZZ44VvTklb/SQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     googleapis-common-protos

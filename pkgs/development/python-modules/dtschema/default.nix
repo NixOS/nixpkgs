@@ -29,8 +29,6 @@ buildPythonPackage rec {
     ./fix_libfdt_name.patch
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];

@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ erosennin ] ++ teams.podman.members;
     platforms = platforms.linux;
+    mainProgram = "catatonit";
   };
 }

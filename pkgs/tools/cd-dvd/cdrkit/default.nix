@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon IOKit iconv ]);
 
   hardeningDisable = [ "format" ];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-D__THROW=";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isMusl [
+    "-D__THROW="
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=int-conversion"
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
   patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch ];

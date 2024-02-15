@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , aiohttp
-, alexapy
 , async-timeout
 , buildPythonPackage
 , click
@@ -20,8 +19,8 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.34.6";
-  format = "pyproject";
+  version = "0.39.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -29,12 +28,12 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-c55E5J0PKk9FG3KDIO0R3vGQjYjj8u7zXz8o9oA1Grc=";
+    hash = "sha256-iFLzrjbCwBuV9RQSHoP5LOG0PIPjiTMCpvk3wqGtMgk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry-core==1.6.1" "poetry-core"
+      --replace "poetry-core==1.7.1" "poetry-core"
   '';
 
   pythonRelaxDeps = [
@@ -47,7 +46,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    alexapy
     aiohttp
     async-timeout
     click

@@ -1,71 +1,36 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, olm, libsignal-ffi }:
 
-python3.pkgs.buildPythonPackage rec {
+buildGoModule {
   pname = "mautrix-signal";
-  version = "0.4.3";
+  # mautrix-signal's latest released version v0.4.3 still uses the Python codebase
+  # which is broken for new devices, see https://github.com/mautrix/signal/issues/388.
+  # The new Go version fixes this by using the official libsignal as a library and
+  # can be upgraded to directly from the Python version.
+  version = "unstable-2024-01-31";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-QShyuwHiWRcP1hGkvCQfixvoUQ/FXr2DYC5VrcMKX48=";
+    rev = "103666990f30a692c63dd84a499b0dd390cef8a4";
+    hash = "sha256-UttLMI+jX5PNG02vs7Dty8pxdko2aM0sVB/90eWwmYw=";
   };
 
-  postPatch = ''
-    # the version mangling in mautrix_signal/get_version.py interacts badly with pythonRelaxDepsHook
-    substituteInPlace setup.py \
-      --replace 'version=version' 'version="${version}"'
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
+  buildInputs = [
+    olm
+    # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
+    # see https://github.com/mautrix/signal/issues/401
+    libsignal-ffi
   ];
 
-  pythonRelaxDeps = [
-    "mautrix"
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    commonmark
-    aiohttp
-    aiosqlite
-    asyncpg
-    attrs
-    commonmark
-    mautrix
-    phonenumbers
-    pillow
-    prometheus-client
-    pycryptodome
-    python-olm
-    python-magic
-    qrcode
-    ruamel-yaml
-    unpaddedbase64
-    yarl
-  ];
+  vendorHash = "sha256-LKs/9yCJ7alKQh1VYQsPEg7y+ugZwUnnJh2l4IEjbaQ=";
 
   doCheck = false;
-
-  postInstall = ''
-    mkdir -p $out/bin
-
-    # Make a little wrapper for running mautrix-signal with its dependencies
-    echo "$mautrixSignalScript" > $out/bin/mautrix-signal
-    echo "#!/bin/sh
-      exec python -m mautrix_signal \"\$@\"
-    " > $out/bin/mautrix-signal
-    chmod +x $out/bin/mautrix-signal
-    wrapProgram $out/bin/mautrix-signal \
-      --prefix PATH : "${python3}/bin" \
-      --prefix PYTHONPATH : "$PYTHONPATH"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";
     description = "A Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 niklaskorz ma27 ];
+    mainProgram = "mautrix-signal";
   };
 }

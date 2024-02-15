@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kool";
-  version = "2.1.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "kool-dev";
     repo = "kool";
     rev = version;
-    hash = "sha256-Gtw+47EQVPxiW9xjY/cWlE4aJ1aYYhpvsVQzt0EnI8I=";
+    hash = "sha256-+vdizU2/q2nrEanpRPy1scgfTYh/I7feW4jz8efelWY=";
   };
 
-  vendorHash = "sha256-8t+OZB9jrlOVHLURPmtz0ent6COEOVMFfObe2LH1jRM=";
+  vendorHash = "sha256-PmS96KVhe9TDmtYBx2hROLCbGMQ0OY3MN405dUmxPzk=";
 
   ldflags = [
     "-s"

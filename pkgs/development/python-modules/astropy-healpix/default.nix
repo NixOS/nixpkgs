@@ -5,6 +5,7 @@
 , numpy
 , astropy
 , astropy-extension-helpers
+, setuptools
 , setuptools-scm
 , pytestCheckHook
 , pytest-doctestplus
@@ -13,16 +14,18 @@
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
-  version = "1.0.0";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = lib.replaceStrings ["-"] ["_"] pname;
-    hash = "sha256-9ILvYqEOaGMD84xm8I3xe53e5a2CIZwjVx7oDXar7qM=";
+    hash = "sha256-BW+m7ZOWvtx3HTdNh3zeg9lGCj9ip4/gXb+boDlAMjo=";
   };
 
   nativeBuildInputs = [
     astropy-extension-helpers
+    setuptools
     setuptools-scm
   ];
 

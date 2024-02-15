@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "intbitset";
-  version = "3.0.2";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-owCy1aSYmFf/HQw5cWJHZqiadR4xWqCAwHhlAxrmN6c=";
+    hash = "sha256-boPFun/aJSCqhWVCi7r4Qt63KT1mXzzYKByzklTS/3E=";
   };
 
   nativeCheckInputs = [

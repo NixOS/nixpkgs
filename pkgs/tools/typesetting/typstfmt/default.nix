@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typstfmt";
-  version = "0.2.5";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "astrale-sharp";
     repo = "typstfmt";
     rev = version;
-    hash = "sha256-+iQOS+WPCWevUFurLfuC5mhuRdJ/1ZsekFoFDzZviag=";
+    hash = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
   };
 
   cargoLock = {
@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/astrale-sharp/typstfmt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda geri1701 ];
+    mainProgram = "typstfmt";
   };
 }

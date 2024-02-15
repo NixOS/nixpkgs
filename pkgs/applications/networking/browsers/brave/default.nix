@@ -15,6 +15,7 @@
 , gnome
 , gsettings-desktop-schemas
 , gtk3
+, gtk4
 , libX11
 , libXScrnSaver
 , libXcomposite
@@ -71,7 +72,7 @@ let
 
   deps = [
     alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
-    fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11 libGL
+    fontconfig freetype gdk-pixbuf glib gtk3 gtk4 libdrm libX11 libGL
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
@@ -92,11 +93,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.58.137";
+  version = "1.62.162";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-6vsdQU9NbEKFp/1A0bNQvutF4I+vI0zfrx70QvU1KV4=";
+    hash = "sha256-hQG6LHYPhqzfgR0Z7R+hXB1vEVDd6VEyIttSae15Mpo=";
   };
 
   dontConfigure = true;
@@ -111,7 +112,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    glib gsettings-desktop-schemas gtk3
+    glib gsettings-desktop-schemas gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
@@ -205,7 +206,8 @@ stdenv.mkDerivation rec {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm buckley310 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "brave";
   };
 }

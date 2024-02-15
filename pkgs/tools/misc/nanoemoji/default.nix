@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     toml
     tomlkit
     ufo2ft
-    ufoLib2
+    ufolib2
     zopfli
   ];
 

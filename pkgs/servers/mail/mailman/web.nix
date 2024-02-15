@@ -1,17 +1,18 @@
 { lib, python3, fetchPypi
 , sassc, hyperkitty, postorius
+, nixosTests
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman-web";
-  version = "0.0.6";
+  version = "0.0.8";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UWdqrcx529r6kwgf0YEHiDrpZlGoUBR6OdYtHMTPMGY=";
+    hash = "sha256-nN/L+X2Rvm6rqkscns4Tn2TAr59O5lCJObvcJp6M0+Q=";
   };
 
   postPatch = ''
@@ -37,6 +38,8 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     "--suffix PATH : ${lib.makeBinPath [ sassc ]}"
   ];
+
+  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = with lib; {
     homepage = "https://gitlab.com/mailman/mailman-web";

@@ -5,6 +5,14 @@
 , python3
 , bubblewrap
 , systemd
+, pandoc
+, kmod
+, gnutar
+, util-linux
+, cpio
+, bash
+, coreutils
+, btrfs-progs
 
   # Python packages
 , setuptools
@@ -22,20 +30,7 @@
 let
   # For systemd features used by mkosi, see
   # https://github.com/systemd/mkosi/blob/19bb5e274d9a9c23891905c4bcbb8f68955a701d/action.yaml#L64-L72
-  systemdForMkosi = (systemd.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches ++ [
-      # Enable setting a deterministic verity seed for systemd-repart. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/81e04781106e3db24e9cf63c1d5fdd8215dc3f42.patch";
-        hash = "sha256-KO3poIsvdeepPmXWQXNaJJCPpmBb4sVmO+ur4om9f5k=";
-      })
-      # Propagate SOURCE_DATE_EPOCH to mcopy. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/4947de275a5553399854cc748f4f13e4ae2ba069.patch";
-        hash = "sha256-YIZZyc3f8pQO9fMAxiNhDdV8TtL4pXoh+hwHBzRWtfo=";
-      })
-    ];
-  })).override {
+  systemdForMkosi = systemd.override {
     withRepart = true;
     withBootloader = true;
     withSysusers = true;
@@ -50,15 +45,26 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "18";
+  version = "20.2";
   format = "pyproject";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-bnd2P6lq1XqKed3m4hDYrR9IcdrPaJxNBL2Z6jCruV4=";
+    hash = "sha256-+mvepzoswDVIHzj+rEnlr0ouphGv5unpaNX3U8x517Y=";
   };
+
+  patches = [
+    # sandbox: Deal correctly with unmerged-usr.
+    # Remove on next release after v20.2.
+    (fetchpatch {
+      url = "https://github.com/systemd/mkosi/commit/5a708efdb432dee9c6e5a9a4754752359cac8944.patch";
+      hash = "sha256-dXkY8Hha6y9CoZC1WdtZuI/YJsOQ1fOt4o4RsPkGWYQ=";
+    })
+  ];
 
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
@@ -74,29 +80,46 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    pandoc
     setuptools
     setuptools-scm
     wheel
   ];
 
-  makeWrapperArgs = [
-    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
-  ];
-
   propagatedBuildInputs = [
-    systemdForMkosi
+    bash
+    btrfs-progs
     bubblewrap
+    coreutils
+    cpio
+    gnutar
+    kmod
+    systemdForMkosi
+    util-linux
   ] ++ lib.optional withQemu [
     qemu
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/mkosi \
-      --prefix PYTHONPATH : "$PYTHONPATH"
+  postBuild = ''
+    ./tools/make-man-page.sh
   '';
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mkosi"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    mv mkosi/resources/mkosi.1 $out/share/man/man1/
+  '';
+
+  makeWrapperArgs = [
+    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
+    "--prefix PYTHONPATH : \"$PYTHONPATH\""
   ];
 
   meta = with lib; {

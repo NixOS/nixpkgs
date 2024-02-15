@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, procps, file, gnused, bash }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, procps, file, gnused, bash, binutils }:
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.08";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    sha256 = "sha256-jN8x5qd9zRr0bpjGYOWfFbiXbWSDDQ8CLZJo79fnegI=";
+    hash = "sha256-jJrKiRdrargk0JzcPWxBZGyOpMfTIONHG8HNRecazVo=";
   };
 
   nativeBuildInputs = [ perl makeWrapper ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for f in lesspipe.sh lesscomplete; do
-      wrapProgram "$out/bin/$f" --prefix-each PATH : "${lib.makeBinPath [ file gnused procps ]}"
+      wrapProgram "$out/bin/$f" --prefix-each PATH : "${lib.makeBinPath [ binutils file gnused procps ]}"
     done
   '';
 

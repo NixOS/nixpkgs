@@ -14,13 +14,12 @@
 , pythonOlder
 , setuptools
 , voluptuous
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.57.2";
-  format = "pyproject";
+  version = "0.62.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-v4H8syWbXqmfvOznRECgSjYi246+socPJTffb79MXK4=";
+    hash = "sha256-LMcyYDUH/jGrDW8sjrT9kHdIWQ20fOOcOJRhUpKMGi8=";
   };
 
   postPatch = ''
@@ -39,7 +38,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.28.1";
+  version = "0.29.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ebZayF5VGHXjBFO3k2KegCNqAFygB3BXKvdvr8mF/Ss=";
+    hash = "sha256-cIfX9MpRMXtBfLKHKTzCLkv31fBIyanTQHEs8hHk7aQ=";
   };
 
   propagatedBuildInputs = [

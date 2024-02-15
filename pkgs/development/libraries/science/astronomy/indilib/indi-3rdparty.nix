@@ -1,6 +1,8 @@
 { stdenv
 , lib
+, bash
 , cmake
+, coreutils
 , cfitsio
 , libusb1
 , zlib
@@ -18,23 +20,29 @@
 , gpsd
 , ffmpeg
 , limesuite
+, pkg-config
+, zeromq
 , version
 , src
 , withFirmware ? false
 , firmware ? null
 }:
 
+let
+  libusb-with-fxload = libusb1.override { withExamples = true;};
+in
+
 stdenv.mkDerivation rec {
   pname = "indi-3rdparty";
 
   inherit version src;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
     libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
-    limesuite
+    limesuite zeromq
   ] ++ lib.optionals withFirmware [
     firmware
   ];
@@ -67,6 +75,19 @@ stdenv.mkDerivation rec {
     "-DWITH_FISHCAMP=off"
     "-DWITH_SBIG=off"
   ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    for f in $out/lib/udev/rules.d/*.rules
+    do
+      substituteInPlace $f --replace "/sbin/fxload" "${libusb-with-fxload}/sbin/fxload" \
+                           --replace "/lib/firmware/" "$out/lib/firmware/" \
+                           --replace "/bin/sleep" "${coreutils}/bin/sleep" \
+                           --replace "/bin/cat" "${coreutils}/bin/cat" \
+                           --replace "/bin/echo" "${coreutils}/bin/echo" \
+                           --replace "/bin/sh" "${bash}/bin/sh"
+    done
+  '';
+
 
   meta = with lib; {
     homepage = "https://www.indilib.org/";

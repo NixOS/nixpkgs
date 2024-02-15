@@ -46,5 +46,6 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.eelco ];
     license = licenses.lgpl21;
     platforms = nix.meta.platforms;
+    mainProgram = "nix-serve";
   };
 }

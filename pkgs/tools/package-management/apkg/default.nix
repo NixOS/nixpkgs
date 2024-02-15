@@ -47,5 +47,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://pkg.labs.nic.cz/pages/apkg";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vcunat /* close to upstream */ ];
+    mainProgram = "apkg";
   };
 }

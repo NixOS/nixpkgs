@@ -2,6 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , mongoc
+, openssl
+, cyrus_sasl
 , cmake
 , validatePkgConfig
 , testers
@@ -9,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongocxx";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-cxx-driver";
     rev = "refs/tags/r${finalAttrs.version}";
-    hash = "sha256-7pMVBWMIGV6k04/0rKULwNcl0NMO4hqMnOzWv+0/DrA=";
+    hash = "sha256-fBZg69jsvXzhllpcPBGXkjYyvUQImnGNkb2Ek5Oi0p4=";
   };
 
   postPatch = ''
@@ -31,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     mongoc
+    openssl
+    cyrus_sasl
   ];
 
   cmakeFlags = [

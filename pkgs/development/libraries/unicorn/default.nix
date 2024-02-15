@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     IOKit
   ];
 
+  # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+
   cmakeFlags = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Some x86 tests are interrupted by signal 10
     "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;test_x86"

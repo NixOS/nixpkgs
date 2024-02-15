@@ -12,16 +12,17 @@
 , django
 , pytest-django
 , pytestCheckHook
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.9";
+  version = "1.3.11";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GpI1W0O9aJpLF/mcS23ktJDZsP69S2zQy7drOiWBnTM=";
+    hash = "sha256-uIjJaZHWL2evj+oISLprvKWT5Sm5f2EKgUD1twL1VbQ=";
   };
 
   postPatch = ''
@@ -46,10 +47,12 @@ buildPythonPackage rec {
     "django_mailman3"
   ];
 
+  passthru.tests = { inherit (nixosTests) mailman; };
+
   meta = with lib; {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin qyliss ];
+    maintainers = with maintainers; [ qyliss ];
   };
 }

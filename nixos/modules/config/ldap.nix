@@ -226,18 +226,6 @@ in
       "ldap.conf" = ldapConfig;
     };
 
-    system.activationScripts = mkIf (!cfg.daemon.enable) {
-      ldap = stringAfter [ "etc" "groups" "users" ] ''
-        if test -f "${cfg.bind.passwordFile}" ; then
-          umask 0077
-          conf="$(mktemp)"
-          printf 'bindpw %s\n' "$(cat ${cfg.bind.passwordFile})" |
-          cat ${ldapConfig.source} - >"$conf"
-          mv -fT "$conf" /etc/ldap.conf
-        fi
-      '';
-    };
-
     system.nssModules = mkIf cfg.nsswitch (singleton (
       if cfg.daemon.enable then nss_pam_ldapd else nss_ldap
     ));
@@ -258,42 +246,63 @@ in
       };
     };
 
-    systemd.services = mkIf cfg.daemon.enable {
-      nslcd = {
-        wantedBy = [ "multi-user.target" ];
-
-        preStart = ''
-          umask 0077
-          conf="$(mktemp)"
-          {
-            cat ${nslcdConfig}
-            test -z '${cfg.bind.distinguishedName}' -o ! -f '${cfg.bind.passwordFile}' ||
-            printf 'bindpw %s\n' "$(cat '${cfg.bind.passwordFile}')"
-            test -z '${cfg.daemon.rootpwmoddn}' -o ! -f '${cfg.daemon.rootpwmodpwFile}' ||
-            printf 'rootpwmodpw %s\n' "$(cat '${cfg.daemon.rootpwmodpwFile}')"
-          } >"$conf"
-          mv -fT "$conf" /run/nslcd/nslcd.conf
-        '';
-
-        restartTriggers = [
-          nslcdConfig
-          cfg.bind.passwordFile
-          cfg.daemon.rootpwmodpwFile
-        ];
-
-        serviceConfig = {
-          ExecStart = "${nslcdWrapped}/bin/nslcd";
-          Type = "forking";
-          Restart = "always";
-          User = "nslcd";
-          Group = "nslcd";
-          RuntimeDirectory = [ "nslcd" ];
-          PIDFile = "/run/nslcd/nslcd.pid";
-          AmbientCapabilities = "CAP_SYS_RESOURCE";
+    systemd.services = mkMerge [
+      (mkIf (!cfg.daemon.enable) {
+        ldap-password = {
+          wantedBy = [ "sysinit.target" ];
+          before = [ "sysinit.target" "shutdown.target" ];
+          conflicts = [ "shutdown.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true;
+          script = ''
+            if test -f "${cfg.bind.passwordFile}" ; then
+              umask 0077
+              conf="$(mktemp)"
+              printf 'bindpw %s\n' "$(cat ${cfg.bind.passwordFile})" |
+              cat ${ldapConfig.source} - >"$conf"
+              mv -fT "$conf" /etc/ldap.conf
+            fi
+          '';
         };
-      };
+      })
 
-    };
+      (mkIf cfg.daemon.enable {
+        nslcd = {
+          wantedBy = [ "multi-user.target" ];
+
+          preStart = ''
+            umask 0077
+            conf="$(mktemp)"
+            {
+              cat ${nslcdConfig}
+              test -z '${cfg.bind.distinguishedName}' -o ! -f '${cfg.bind.passwordFile}' ||
+              printf 'bindpw %s\n' "$(cat '${cfg.bind.passwordFile}')"
+              test -z '${cfg.daemon.rootpwmoddn}' -o ! -f '${cfg.daemon.rootpwmodpwFile}' ||
+              printf 'rootpwmodpw %s\n' "$(cat '${cfg.daemon.rootpwmodpwFile}')"
+            } >"$conf"
+            mv -fT "$conf" /run/nslcd/nslcd.conf
+          '';
+
+          restartTriggers = [
+            nslcdConfig
+            cfg.bind.passwordFile
+            cfg.daemon.rootpwmodpwFile
+          ];
+
+          serviceConfig = {
+            ExecStart = "${nslcdWrapped}/bin/nslcd";
+            Type = "forking";
+            Restart = "always";
+            User = "nslcd";
+            Group = "nslcd";
+            RuntimeDirectory = [ "nslcd" ];
+            PIDFile = "/run/nslcd/nslcd.pid";
+            AmbientCapabilities = "CAP_SYS_RESOURCE";
+          };
+        };
+      })
+    ];
 
   };
 

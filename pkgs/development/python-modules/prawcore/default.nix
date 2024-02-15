@@ -45,6 +45,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # tests requiring network
+    "tests/integration"
+  ];
+
   pythonImportsCheck = [
     "prawcore"
   ];

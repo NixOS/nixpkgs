@@ -11,10 +11,10 @@ in {
     enable = lib.mkEnableOption (lib.mdDoc ''
       direnv integration. Takes care of both installation and
       setting up the sourcing of the shell. Additionally enables nix-direnv
-      integration. Note that you need to logout and login for this change to apply.
+      integration. Note that you need to logout and login for this change to apply
     '');
 
-    package = lib.mkPackageOptionMD pkgs "direnv" {};
+    package = lib.mkPackageOption pkgs "direnv" {};
 
     direnvrcExtra = lib.mkOption {
       type = lib.types.lines;
@@ -49,12 +49,19 @@ in {
           default = true;
         };
 
-      package = lib.mkPackageOptionMD pkgs "nix-direnv" {};
+      package = lib.mkOption {
+        default = pkgs.nix-direnv.override { nix = config.nix.package; };
+        defaultText = "pkgs.nix-direnv";
+        type = lib.types.package;
+        description = lib.mdDoc ''
+          The nix-direnv package to use
+        '';
+      };
     };
   };
 
   imports = [
-    (lib.mkRemovedOptionModule ["programs" "direnv" "persistDerivations"] "persistDerivations was removed as it is on longer necessary")
+    (lib.mkRemovedOptionModule ["programs" "direnv" "persistDerivations"] "persistDerivations was removed as it is no longer necessary")
   ];
 
   config = lib.mkIf cfg.enable {

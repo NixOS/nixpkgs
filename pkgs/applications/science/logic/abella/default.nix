@@ -1,21 +1,22 @@
 { lib, stdenv, fetchurl, rsync, ocamlPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abella";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchurl {
-    url = "http://abella-prover.org/distributions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/eOiebMFHgrurtrSHPlgZO3xmmxBOUmyAzswXZLd3Yc=";
+    url = "http://abella-prover.org/distributions/abella-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-80b/RUpE3KRY0Qu8eeTxAbk6mwGG6jVTPOP0qFjyj2M=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ rsync ] ++ (with ocamlPackages; [ ocaml ocamlbuild findlib ]);
+  nativeBuildInputs = [ rsync ] ++ (with ocamlPackages; [ ocaml dune_3 menhir findlib ]);
+  buildInputs = with ocamlPackages; [ cmdliner yojson ];
 
   installPhase = ''
     mkdir -p $out/bin
-    rsync -av abella    $out/bin/
+    rsync -av _build/default/src/abella.exe    $out/bin/abella
 
     mkdir -p $out/share/emacs/site-lisp/abella/
     rsync -av emacs/    $out/share/emacs/site-lisp/abella/
@@ -32,9 +33,9 @@ stdenv.mkDerivation rec {
       of programming languages and other logical systems which manipulate
       objects with binding.
     '';
-    homepage = "http://abella-prover.org/";
+    homepage = "https://abella-prover.org";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ bcdarwin ciil ];
     platforms = lib.platforms.unix;
   };
-}
+})

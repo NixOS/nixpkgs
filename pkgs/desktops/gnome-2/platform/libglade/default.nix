@@ -11,10 +11,18 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 gettext ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config gettext ];
+  buildInputs = [ gtk2 ];
+  propagatedBuildInputs = [ libxml2 ];
+
+  postPatch = ''
+    # uses pkg-config in some places and uses the correct $PKG_CONFIG in some
+    # it's an ancient library so it has very old configure scripts and m4
+    substituteInPlace ./configure \
+      --replace "pkg-config" "$PKG_CONFIG"
+  '';
 
   NIX_LDFLAGS = "-lgmodule-2.0";
-
-  propagatedBuildInputs = [ libxml2 ];
 }

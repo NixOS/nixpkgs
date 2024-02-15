@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "phone-modem";
   version = "0.1.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

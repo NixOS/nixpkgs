@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.218.0";
+  version = "0.229.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "sha256-QmC1K2msiIN7bBwlrsQ8in3YGUoVqf2w21HbiLULWhM=";
+    hash = "sha256-V2U53zby0XfAlKqfqUE7f6zvuwWFU2CCOy34KguZqLc=";
   };
 
   postPatch = ''
@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "FLOW_RELEASE=1" ];
+
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   installPhase = ''
     install -Dm755 bin/flow $out/bin/flow

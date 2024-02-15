@@ -7,7 +7,10 @@
 }:
 buildGoModule rec {
   pname = "dcgm-exporter";
-  version = "3.2.5-3.1.7";
+
+  # The first portion of this version string corresponds to a compatible DCGM
+  # version.
+  version = "3.2.5-3.1.7"; # N.B: If you change this, update dcgm as well to the matching version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

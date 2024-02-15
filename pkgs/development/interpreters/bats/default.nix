@@ -140,6 +140,7 @@ resholve.mkDerivation rec {
         bats_load_library bats-support
         bats_load_library bats-assert
         bats_load_library bats-file
+        bats_load_library bats-detik/detik.bash
 
         bats_require_minimum_version 1.5.0
 
@@ -170,7 +171,7 @@ resholve.mkDerivation rec {
     '';
     passAsFile = [ "testScript" ];
   } ''
-    ${bats.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ])}/bin/bats "$testScriptPath"
+    ${bats.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file p.bats-detik ])}/bin/bats "$testScriptPath"
     touch "$out"
   '';
 

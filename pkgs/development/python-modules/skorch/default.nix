@@ -19,6 +19,7 @@
 buildPythonPackage rec {
   pname = "skorch";
   version = "0.15.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

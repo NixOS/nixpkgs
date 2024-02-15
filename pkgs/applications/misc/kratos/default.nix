@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://www.ory.sh/kratos/";
     license = licenses.asl20;
     description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";
+    mainProgram = "kratos";
   };
 }

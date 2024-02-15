@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
       license = licenses.gpl2;
       maintainers = [ maintainers.zohl ];
       platforms = platforms.all;
+      mainProgram = "dumptorrent";
     };
 }

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flowblade";
-  version = "2.10.0.4";
+  version = "2.12.0.2";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IjutDCp+wrvXSQzvELuPMdW/16Twi0ee8VjdAFyi+OE=";
+    sha256 = "sha256-SZ/J03PYeAbqQlNQXdqLSduo/5VjQ7VH4eErJqO3Ua0=";
   };
 
   buildInputs = [
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ polygon ];
+    mainProgram = "flowblade";
   };
 }

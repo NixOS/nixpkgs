@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-R+PvD7E/z+Gc7h2y0pUYaCkzfgpxzwToOr4pKSrOnxU=";
+    sha256 = "sha256-S2LMD15MYd/t/Z8B1OQ0hVrZQLR6Gf4LB45mhmDwblg=";
   };
 
   strictDeps = true;

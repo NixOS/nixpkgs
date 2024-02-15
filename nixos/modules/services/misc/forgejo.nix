@@ -21,7 +21,7 @@ let
     mkIf
     mkMerge
     mkOption
-    mkPackageOptionMD
+    mkPackageOption
     mkRemovedOptionModule
     mkRenamedOptionModule
     optionalAttrs
@@ -57,7 +57,7 @@ in
     services.forgejo = {
       enable = mkEnableOption (mdDoc "Forgejo");
 
-      package = mkPackageOptionMD pkgs "forgejo" { };
+      package = mkPackageOption pkgs "forgejo" { };
 
       useWizard = mkOption {
         default = false;
@@ -357,6 +357,14 @@ in
         assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.forgejo.database.user must match services.forgejo.user if the database is to be automatically provisioned";
       }
+      { assertion = cfg.database.createDatabase && usePostgresql -> cfg.database.user == cfg.database.name;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.forgejo.createDatabase` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.forgejo.settings = {
@@ -423,7 +431,7 @@ in
       ensureUsers = [
         {
           name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -621,6 +629,8 @@ in
       };
     };
 
+    services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.START_SSH_SERVER or false) "GIT_PROTOCOL";
+
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {
         home = cfg.stateDir;
@@ -664,5 +674,6 @@ in
     };
   };
 
+  meta.doc = ./forgejo.md;
   meta.maintainers = with lib.maintainers; [ bendlas emilylange ];
 }

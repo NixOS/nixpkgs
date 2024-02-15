@@ -1,26 +1,27 @@
 { lib
-, buildGo121Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , nodejs
+, python3
 , runtimeShell
 , stdenv
 , testers
 , runme
 }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "runme";
-  version = "1.7.6";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-gYaC1ROvW4wFrOKt1Wjl/ExhWX0ZQXHW6n6N70tXa+E=";
+    hash = "sha256-y8UjSxYHWf+HnSDN7p6Y6iheTFaYXOCYsOImk/BuvKU=";
   };
 
-  vendorHash = "sha256-/eofPpXmfpc7Vjz97hjKXH/Fl/EAk0zrnI279iit7MI=";
+  vendorHash = "sha256-QoZzEq1aC7cjY/RVp5Z5HhSuTFf2BSYQnfg0jSaeTJU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,6 +29,7 @@ buildGo121Module rec {
 
   nativeCheckInputs = [
     nodejs
+    python3
   ];
 
   subPackages = [
@@ -42,14 +44,12 @@ buildGo121Module rec {
     "-X=github.com/stateful/runme/internal/version.Commit=${src.rev}"
   ];
 
-  postPatch = ''
-    substituteInPlace testdata/script/basic.txtar \
-      --replace /bin/bash "${runtimeShell}"
-  '';
+  # tests fail to access /etc/bashrc on darwin
+  doCheck = !stdenv.isDarwin;
 
-  # version test assumes `ldflags` is unspecified
-  preCheck = ''
-    unset ldflags
+  postPatch = ''
+    substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \
+      --replace /bin/bash "${runtimeShell}"
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

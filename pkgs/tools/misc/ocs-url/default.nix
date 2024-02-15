@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SohamG ];
     platforms = platforms.linux;
+    mainProgram = "ocs-url";
   };
 }

@@ -188,7 +188,7 @@ def get_gn_source(repo):
             "version": datetime.fromisoformat(gn["date"]).date().isoformat(),
             "url": gn["url"],
             "rev": gn["rev"],
-            "sha256": gn["sha256"]
+            "hash": gn["hash"]
         }
     }
 
@@ -268,7 +268,7 @@ def update(version):
 
 @cli.command("update-all")
 def update_all():
-    repos = Parallel(n_jobs=2, require='sharedmem')(delayed(get_electron_info)(major_version) for major_version in range(27, 24, -1))
+    repos = Parallel(n_jobs=2, require='sharedmem')(delayed(get_electron_info)(major_version) for major_version in range(28, 24, -1))
     out = {n[0]: n[1] for n in Parallel(n_jobs=2, require='sharedmem')(delayed(get_update)(repo) for repo in repos)}
 
     with open('info.json', 'w') as f:

@@ -22,6 +22,7 @@
 , aioresponses
 , vdirsyncer
 , testers
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,11 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "aiostream"
   ];
 
   propagatedBuildInputs = [
@@ -85,5 +91,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ loewenheim ];
+    mainProgram = "vdirsyncer";
   };
 }

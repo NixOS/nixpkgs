@@ -3,24 +3,25 @@
 , fetchFromGitHub
 , stdenv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.13.0";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XqT2l839fRDNj6zJB0vlVMmoRB2Lz61cN297PNIvFX8=";
+    hash = "sha256-PgV+sjCf4O24v0i9P7RJIcn28OWMUcPSwy+P5n8RwS4=";
   };
 
-  cargoSha256 = "sha256-PzPQnexT1oeZ0FkTLyZiQJlMx+WDoSHD+J1JzoME6sA=";
+  cargoHash = "sha256-6dhM+FzuLtKtRp2mpE9nlpT+0PBcgGqvBa9vqs6Rs7s=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   preCheck = "HOME=$(mktemp -d)";
 

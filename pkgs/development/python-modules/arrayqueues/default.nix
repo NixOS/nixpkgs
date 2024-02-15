@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "arrayqueues";
   version = "1.4.1";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

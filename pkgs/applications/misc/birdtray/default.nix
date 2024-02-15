@@ -33,7 +33,7 @@ mkDerivation rec {
     description = "Mail system tray notification icon for Thunderbird";
     homepage = "https://github.com/gyunaev/birdtray";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Flakebi oxalica ];
+    maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;
   };
 }

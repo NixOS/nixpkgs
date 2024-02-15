@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     license = licenses.gpl2;
     platforms = platforms.unix;
+    mainProgram = "lzop";
   };
 }

@@ -43,6 +43,7 @@
 , valgrind
 
 , stable
+, testing
 , baseName
 , kicadSrc
 , kicadVersion
@@ -56,6 +57,8 @@
 
 assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
   "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
+assert testing -> !stable
+  -> throw "testing implies stable and cannot be used with stable = false";
 
 let
   inherit (lib) optional optionals optionalString;
@@ -69,12 +72,14 @@ stdenv.mkDerivation rec {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
+    # https://gitlab.com/kicad/code/kicad/-/issues/15687
+    ./runtime_stock_data_path.patch
   ];
 
   # tagged releases don't have "unknown"
-  # kicad nightlies use git describe --dirty
+  # kicad testing and nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  postPatch = lib.optionalString (!stable) ''
+  postPatch = lib.optionalString (!stable || testing) ''
     substituteInPlace cmake/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
 
@@ -90,7 +95,7 @@ stdenv.mkDerivation rec {
   ]
   ++ optionals (stable) [
     # https://gitlab.com/kicad/code/kicad/-/issues/12491
-    # should be resolved in the next release
+    # should be resolved in the next major? release
     "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
   ]
   ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"

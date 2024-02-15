@@ -6,6 +6,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, removeReferencesTo
 , makeWrapper
 , which
 , writeTextFile
@@ -20,7 +21,8 @@
 , installShellFiles
 , git
 , unzip
-, dmd_bin ? "${callPackage ./bootstrap.nix { }}/bin"
+, dmdBootstrap ? callPackage ./bootstrap.nix { }
+, dmd_bin ? "${dmdBootstrap}/bin"
 }:
 
 let
@@ -94,6 +96,7 @@ stdenv.mkDerivation rec {
     rm dmd/compiler/test/runnable/gdb15729.sh
     rm dmd/compiler/test/runnable/gdb4149.d
     rm dmd/compiler/test/runnable/gdb4181.d
+    rm dmd/compiler/test/compilable/ddocYear.d
 
     # Disable tests that rely on objdump whitespace until fixed upstream:
     #   https://issues.dlang.org/show_bug.cgi?id=23317
@@ -101,12 +104,7 @@ stdenv.mkDerivation rec {
     rm dmd/compiler/test/compilable/cdcmp.d
   ''
 
-  + lib.optionalString (lib.versionOlder version "2.091.0") ''
-    # This one has tested against a hardcoded year, then against a current year on
-    # and off again. It just isn't worth it to patch all the historical versions
-    # of it, so just remove it until the most recent change.
-    rm dmd/compiler/test/compilable/ddocYear.d
-  '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
+  + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
     rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
     substituteInPlace dmd/compiler/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
@@ -155,6 +153,7 @@ stdenv.mkDerivation rec {
     fi
 
     ${dmd_bin}/rdmd dmd/compiler/src/build.d -j$buildJobs HOST_DMD=${dmd_bin}/dmd $buildFlags
+    make -C dmd/druntime -f posix.mak DMD=${pathToDmd} $buildFlags -j$buildJobs
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
     echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
     make -C phobos -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
@@ -195,7 +194,7 @@ stdenv.mkDerivation rec {
     installManPage dmd/docs/man/man*/*
 
     mkdir -p $out/include/dmd
-    cp -r {druntime/import/*,phobos/{std,etc}} $out/include/dmd/
+    cp -r {dmd/druntime/import/*,phobos/{std,etc}} $out/include/dmd/
 
     mkdir $out/lib
     cp phobos/generated/${osname}/release/${bits}/libphobos2.* $out/lib/
@@ -208,6 +207,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${dmd_bin}/dmd '{}' +
+  '';
+
+  disallowedReferences = [ dmdBootstrap ];
 
   meta = with lib; {
     description = "Official reference compiler for the D language";

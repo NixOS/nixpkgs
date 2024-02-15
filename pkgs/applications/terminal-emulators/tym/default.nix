@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ wesleyjrz kashw2 ];
     platforms = platforms.linux;
+    mainProgram = "tym";
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, lib, tlpdb, bin, tlpdbxz, tl
 , installShellFiles
 , coreutils, findutils, gawk, getopt, ghostscript_headless, gnugrep
-, gnumake, gnupg, gnused, gzip, ncurses, perl, python3, ruby, zip
+, gnumake, gnupg, gnused, gzip, html-tidy, ncurses, perl, python3, ruby, zip
 }:
 
 oldTlpdb:
@@ -26,7 +26,8 @@ in lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
-  context.scriptsFolder = "context/stubs/unix";
+  context.scriptsFolder = "context/stubs-mkiv/unix";
+  context-legacy.scriptsFolder = "context/stubs/unix";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -66,7 +67,8 @@ in lib.recursiveUpdate orig rec {
   bibexport.extraBuildInputs = [ gnugrep ];
   checklistings.extraBuildInputs = [ coreutils ];
   cjk-gs-integrate.extraBuildInputs = [ ghostscript_headless ];
-  context.extraBuildInputs = [ coreutils ruby ];
+  context.extraBuildInputs = [ coreutils ];
+  context-legacy.extraBuildInputs = [ ruby ];
   cyrillic-bin.extraBuildInputs = [ coreutils gnused ];
   dtxgen.extraBuildInputs = [ coreutils getopt gnumake zip ];
   dviljk.extraBuildInputs = [ coreutils ];
@@ -88,7 +90,7 @@ in lib.recursiveUpdate orig rec {
   pkfix-helper.extraBuildInputs = [ ghostscript_headless ];
   ps2eps.extraBuildInputs = [ ghostscript_headless ];
   pst2pdf.extraBuildInputs = [ ghostscript_headless ];
-  tex4ht.extraBuildInputs = [ ruby ];
+  tex4ebook.extraBuildInputs = [ html-tidy ];
   texlive-scripts.extraBuildInputs = [ gnused ];
   texlive-scripts-extra.extraBuildInputs = [ coreutils findutils ghostscript_headless gnused ];
   thumbpdf.extraBuildInputs = [ ghostscript_headless ];
@@ -117,8 +119,23 @@ in lib.recursiveUpdate orig rec {
     clxelatex = "cluttex";
   };
 
+  context.binlinks = {
+    context = "luametatex";
+    "context.lua" = tl.context.tex + "/scripts/context/lua/context.lua";
+    mtxrun = "luametatex";
+    "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
+  };
+
   epstopdf.binlinks.repstopdf = "epstopdf";
   pdfcrop.binlinks.rpdfcrop = "pdfcrop";
+
+  # TODO: handle symlinks in bin.core
+  ptex.binlinks = {
+    pbibtex = tl.uptex + "/bin/upbibtex";
+    pdvitype = tl.uptex + "/bin/updvitype";
+    ppltotf = tl.uptex + "/bin/uppltotf";
+    ptftopl = tl.uptex + "/bin/uptftopl";
+  };
 
   texdef.binlinks = {
     latexdef = "texdef";
@@ -126,7 +143,7 @@ in lib.recursiveUpdate orig rec {
 
   texlive-scripts.binlinks = {
     mktexfmt = "fmtutil";
-    texhash = (lib.last tl."texlive.infra".pkgs) + "/bin/mktexlsr";
+    texhash = tl."texlive.infra" + "/bin/mktexlsr";
   };
 
   texlive-scripts-extra.binlinks = {
@@ -154,8 +171,11 @@ in lib.recursiveUpdate orig rec {
   '';
 
   context.postFixup = ''
-    sed -i '2iPATH="${lib.makeBinPath [ coreutils ]}''${PATH:+:$PATH}"' "$out"/bin/{contextjit,mtxrunjit}
-    sed -i '2iPATH="${lib.makeBinPath [ ruby ]}''${PATH:+:$PATH}"' "$out"/bin/texexec
+    sed -i '2iPATH="${lib.makeBinPath context.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/{contextjit,mtxrunjit}
+  '';
+
+  context-legacy.postFixup = ''
+    sed -i '2iPATH="${lib.makeBinPath context-legacy.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/texexec
   '';
 
   cyrillic-bin.postFixup = ''
@@ -241,8 +261,8 @@ in lib.recursiveUpdate orig rec {
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath pst2pdf.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/pst2pdf
   '';
 
-  tex4ht.postFixup = ''
-    sed -i -e '2iPATH="${lib.makeBinPath tex4ht.extraBuildInputs}''${PATH:+:$PATH}"' -e 's/\\rubyCall//g;' "$out"/bin/htcontext
+  tex4ebook.postFixup = ''
+    sed -i '2ios.setenv("PATH","${lib.makeBinPath tex4ebook.extraBuildInputs}" .. (os.getenv("PATH") and ":" .. os.getenv("PATH") or ""))' "$out"/bin/tex4ebook
   '';
 
   texlive-scripts.postFixup = ''
@@ -271,6 +291,11 @@ in lib.recursiveUpdate orig rec {
   '';
 
   #### other script fixes
+  # wrong $0 expectations
+  bibcop.postFixup = ''
+    substituteInPlace "$out"/bin/bibcop --replace "basename(\$0) eq 'bibcop.pl'" "basename(\$0) eq 'bibcop'"
+  '';
+
   # misc tab and python3 fixes
   ebong.postFixup = ''
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
@@ -287,6 +312,9 @@ in lib.recursiveUpdate orig rec {
   latexindent.postFixup = ''
     substituteInPlace "$out"/bin/latexindent --replace 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
   '';
+
+  # flag lua dependency
+  texblend.scriptExts = [ "lua" ];
 
   # Patch texlinks.sh back to 2015 version;
   # otherwise some bin/ links break, e.g. xe(la)tex.
@@ -311,8 +339,8 @@ in lib.recursiveUpdate orig rec {
       --replace '[dict get $::pkgs texlive.infra localrev]' '${toString orig."texlive.infra".revision}' \
       --replace '[dict get $::pkgs tlshell localrev]' '${toString orig.tlshell.revision}'
   '';
-  #### dependency changes
 
+  #### dependency changes
   # it seems to need it to transform fonts
   xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
 
@@ -333,10 +361,6 @@ in lib.recursiveUpdate orig rec {
   # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
   arabi-add.license = [  "lppl13c" ];
 
-  # TODO: remove this when updating to texlive-2023, npp-for-context is no longer in texlive
-  # tlpdb lists license as "noinfo", but it's gpl3: https://github.com/luigiScarso/context-npp
-  npp-for-context.license = [  "gpl3Only" ];
-
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";
     extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
@@ -352,7 +376,7 @@ in lib.recursiveUpdate orig rec {
         mkdir -p support/texdoc
         touch support/texdoc/NEWS
 
-        TEXMFCNF="${lib.head tl.kpathsea.pkgs}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
+        TEXMFCNF="${tl.kpathsea.tex}/web2c" TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
           "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
           -c texlive_tlpdb=texlive.tlpdb -lM texdoc
 
@@ -362,7 +386,7 @@ in lib.recursiveUpdate orig rec {
 
     # install zsh completion
     postFixup = ''
-      TEXMFCNF="${lib.head tl.kpathsea.pkgs}"/web2c TEXMF="$scriptsFolder/../.." \
+      TEXMFCNF="${tl.kpathsea.tex}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
       substituteInPlace "$TMPDIR"/_texdoc \
         --replace 'compdef __texdoc texdoc' '#compdef texdoc' \
@@ -381,14 +405,14 @@ in lib.recursiveUpdate orig rec {
     license = [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
 
     scriptsFolder = "texlive";
-    extraBuildInputs = [ coreutils gnused gnupg (lib.last tl.kpathsea.pkgs) (perl.withPackages (ps: with ps; [ Tk ])) ];
+    extraBuildInputs = [ coreutils gnused gnupg tl.kpathsea (perl.withPackages (ps: with ps; [ Tk ])) ];
 
     # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
     postFixup = ''
       substituteInPlace "$out"/bin/tlmgr \
         --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
       sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
-      sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused (lib.last tl.kpathsea.pkgs) ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
+      sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused tl.kpathsea ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
     '';
 
     # add minimal texlive.tlpdb

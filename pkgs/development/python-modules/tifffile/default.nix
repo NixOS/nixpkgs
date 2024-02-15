@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2023.7.18";
+  version = "2023.9.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WlpiSy96t/N+nsQXSuLfGAW5ZY+JAT+bS1VQZy9l8qE=";
+    hash = "sha256-Z+NV5Flaqzl/hAXQSv4bSufG9ipE4i2TP+4aVxpIx64=";
   };
 
   propagatedBuildInputs = [

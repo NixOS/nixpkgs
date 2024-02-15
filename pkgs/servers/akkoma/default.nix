@@ -1,7 +1,7 @@
 { lib
 , beamPackages
 , fetchFromGitea, fetchFromGitHub, fetchFromGitLab
-, cmake, file, libxcrypt
+, cmake, file
 , writeText
 , nixosTests
 , ...
@@ -48,6 +48,9 @@ beamPackages.mixRelease rec {
           rev = "3bbfa8b5ea13accc1b1c40579a380d8e5cfd6ad2";
           hash = "sha256-skZ0QwF46lUTfsgACMR0AR5ymY2F50BQy1AUBjWVdro=";
         };
+
+        # the binary is not getting installed by default
+        postInstall = "mv priv/* $out/lib/erlang/lib/${name}-${version}/priv/";
       };
       concurrent_limiter = beamPackages.buildMix rec {
         name = "concurrent_limiter";
@@ -169,6 +172,10 @@ beamPackages.mixRelease rec {
   passthru = {
     tests = with nixosTests; { inherit akkoma akkoma-confined; };
     inherit mixNixDeps;
+
+    # Used to make sure the service uses the same version of elixir as
+    # the package
+    elixirPackage = beamPackages.elixir;
   };
 
   meta = with lib; {

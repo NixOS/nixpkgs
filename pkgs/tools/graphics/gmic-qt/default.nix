@@ -17,7 +17,6 @@
 , libtiff
 , ninja
 , nix-update
-, opencv3
 , openexr
 , pkg-config
 , qtbase
@@ -55,11 +54,11 @@ assert lib.assertMsg
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.6";
+  version = "3.3.3";
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
-    hash = "sha256-asB1YftHfdb7JG87WJ+ggyMCu7qb0f+aCanl5LLi9VE=";
+    hash = "sha256-LkWQ3fSHJSaXztX+soGZ+pl3MnXNgw6tV09356bAfYY=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libtiff
     libpng
-    opencv3
     openexr
     graphicsmagick
     curl

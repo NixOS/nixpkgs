@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "2.12.18";
+  version = "2.13.15";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "1fwcqgqni7d9x0prdy3p8ccc5lzgn57rhph4498vs1q40kyq8823";
-      x86_64-darwin = "sha256-atd7nkefLvilTq39nTLbXQhm1zzBCHOLL7MRJwlTSMk=";
-      aarch64-darwin = "sha256-xiWXD+ULSVJ80uruYz0uRFkDRT1QOUd6FSWDKK9yLMc=";
+      x86_64-linux = "sha256-5tLONAChZaiJqvK/lg1NGTH3LYBlezIAmtQvng0nNNc=";
+      x86_64-darwin = "sha256-MFBOYA6weAwGLp/ezfU58RvSlGFFlkg0Flcx64q7Wo8=";
+      aarch64-darwin = "sha256-6CKXa/td567NtzTV7laU7l9xw8WOB9RZR6I1vXeLuyo=";
     }.${system} or throwSystem;
   };
 
@@ -54,7 +54,7 @@ let
       mv $out/bin/{${pname}-${version},${pname}}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \

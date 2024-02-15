@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "cachelib";
   version = "0.10.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

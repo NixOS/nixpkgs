@@ -6,10 +6,8 @@
 , isPyPy
 , pythonOlder
 
-# https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
 # build-system
 , certifi
-, oldest-supported-numpy
 , pkg-config
 , pybind11
 , setuptools
@@ -79,7 +77,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.7.2";
+  version = "3.8.2";
   pname = "matplotlib";
   format = "pyproject";
 
@@ -87,7 +85,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qM25Hd2wRDa9LwmLj99LgTUuaM9NLGdW/MQUeRB2Vps=";
+    hash = "sha256-Aal4uHG4ge52AXFS8fGgy/a9X3uP+Mlt8N8b1X2HVaE=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -109,19 +107,11 @@ buildPythonPackage rec {
       substituteInPlace src/_c_internal_utils.c \
         --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
         --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
-    '' +
-    # bring our own system libraries
-    # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst#c-libraries
-    ''
-      echo "[libs]
-      system_freetype=true
-      system_qhull=true" > mplsetup.cfg
     '';
 
   nativeBuildInputs = [
     certifi
     numpy
-    oldest-supported-numpy # TODO remove after updating to 3.8.0
     pkg-config
     pybind11
     setuptools
@@ -184,16 +174,17 @@ buildPythonPackage rec {
     libs = {
       system_freetype = true;
       system_qhull = true;
-    } // lib.optionalAttrs stdenv.isDarwin {
       # LTO not working in darwin stdenv, see #19312
-      enable_lto = false;
+      enable_lto = !stdenv.isDarwin;
     };
   };
 
   env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 
-  # Matplotlib needs to be built against a specific version of freetype in
-  # order for all of the tests to pass.
+  # Encountering a ModuleNotFoundError, as describved and investigated at:
+  # https://github.com/NixOS/nixpkgs/issues/255262 . It could be that some of
+  # which may fail due to a freetype version that doesn't match the freetype
+  # version used by upstream.
   doCheck = false;
 
   meta = with lib; {

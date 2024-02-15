@@ -59,6 +59,12 @@ buildPythonPackage rec {
     "textnets"
   ];
 
+  disabledTests = [
+    # Test fails: A warning is triggered because of a deprecation notice by pandas.
+    # TODO: Try to re-enable it when pandas is updated to 2.1.1
+    "test_corpus_czech"
+  ];
+
   meta = with lib; {
     description = "Text analysis with networks";
     homepage = "https://textnets.readthedocs.io";

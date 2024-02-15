@@ -88,13 +88,26 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
+  nativeBuildInputs = [
+    asciidoctor
+    cmake
+    wrapQtAppsHook
+    qttools
+    pkg-config
+  ]
+  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook;
 
   dontWrapGApps = true;
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '' + lib.optionalString stdenv.isDarwin ''
     wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
+  '';
+
+  # See https://github.com/keepassxreboot/keepassxc/blob/cd7a53abbbb81e468efb33eb56eefc12739969b8/src/browser/NativeMessageInstaller.cpp#L317
+  postInstall = lib.optionalString withKeePassBrowser ''
+    mkdir -p "$out/lib/mozilla/native-messaging-hosts"
+    substituteAll "${./firefox-native-messaging-host.json}" "$out/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
   '';
 
   buildInputs = [
@@ -129,7 +142,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jonafato srapenne blankparticle ];
+    maintainers = with maintainers; [ jonafato blankparticle ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

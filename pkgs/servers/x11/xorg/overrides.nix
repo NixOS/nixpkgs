@@ -304,7 +304,7 @@ self: super:
     postInstall = ''
       sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
     '';
-    passthru = {
+    passthru = attrs.passthru // {
       inherit freetype fontconfig;
     };
   });
@@ -570,17 +570,6 @@ self: super:
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
   });
 
-  xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
-    patches = [
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/commit/e0511968d04b42abf11bc0ffb387f143582bc144.patch";
-        sha256 = "sha256-79nqKuJRgMYXDEMB8IWxdmbxtI/m+Oca1wSLYeGMuEk=";
-      })
-    ];
-  });
-
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
     buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
@@ -834,7 +823,9 @@ self: super:
             done
           )
         '';
-        passthru.version = version; # needed by virtualbox guest additions
+        passthru = attrs.passthru // {
+          inherit version; # needed by virtualbox guest additions
+        };
       } else {
         nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook bootstrap_cmds xorg.utilmacros xorg.fontutil ];
         buildInputs = commonBuildInputs ++ [
@@ -904,7 +895,9 @@ self: super:
 
           cp ${darwinOtherX}/share/man -rT $out/share/man
         '' ;
-        passthru.version = version;
+        passthru = attrs.passthru // {
+          inherit version;
+        };
       }));
 
   lndir = super.lndir.overrideAttrs (attrs: {

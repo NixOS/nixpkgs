@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-codspeed";
-  version = "2.2.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "codspeed-rust";
     rev = "v${version}";
-    hash = "sha256-AGbo38weLBPxkaXgJpi+FXGuhPh7nyZcJOhw6BCDYOc=";
+    hash = "sha256-8wbJFvAXicchxI8FTthCiuYCZ2WA4nMUJTUD4WKG5FI=";
   };
 
-  cargoHash = "sha256-NR+Z5oMaReEOZrLk7d/pB1F37k8tE7FXh4HdVnh+YFc=";
+  cargoHash = "sha256-HkFROhjx4bh9QMUlCT1xj3s7aUQxn0ef3FCXoEsYCnY=";
 
   nativeBuildInputs = [
     curl
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   cargoBuildFlags = [ "-p=cargo-codspeed" ];

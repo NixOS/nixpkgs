@@ -8,6 +8,8 @@
 , flask
 , flask-httpauth
 , flask-socketio
+, gevent-socketio
+, gevent-websocket
 , cepa
 , psutil
 , pyqt5
@@ -55,7 +57,8 @@ let
     homepage = "https://onionshare.org/";
 
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
+    mainProgram = "onionshare-cli";
   };
 
   # TODO: package meek https://support.torproject.org/glossary/meek/
@@ -75,12 +78,13 @@ rec {
         inherit (tor) geoip;
       })
     ];
-    disable = !isPy3k;
     propagatedBuildInputs = [
       colorama
       flask
       flask-httpauth
       flask-socketio
+      gevent-socketio
+      gevent-websocket
       cepa
       psutil
       pycrypto
@@ -127,7 +131,6 @@ rec {
       ./fix-qrcode-gui.patch
     ];
 
-    disable = !isPy3k;
     propagatedBuildInputs = [
       onionshare
       pyqt5

@@ -2,24 +2,24 @@
 , lib
 , libffi
 , libxml2
-, llvmPackages_13
+, llvmPackages_16
 , ncurses
 , rustPlatform
 }:
 
 rustPlatform.buildRustPackage {
   pname = "ante";
-  version = "unstable-2022-08-22";
+  version = "unstable-2023-12-18";
   src = fetchFromGitHub {
     owner = "jfecher";
     repo = "ante";
-    rev = "8b708d549c213c34e4ca62d31cf0dd25bfa7b548";
-    sha256 = "sha256-s8nDuG32lI4pBLsOzgfyUGpc7/r0j4EhzH54ErBK7A0=";
+    rev = "e38231ffa51b84a2ca53b4b0439d1ca5e0dea32a";
+    hash = "sha256-UKEoOm+Jc0YUwO74Tn038MLeX/c3d2z8I0cTBVfX61U=";
   };
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "inkwell-0.1.0" = "sha256-vWrpF66r5HalGQz2jSmQljfz0EgS7shLw7A8q75j3tE=";
+      "inkwell-0.2.0" = "sha256-eMoclRtekg8v+m5KsTcjB3zCdPkcJy42NALEEuT/fw8=";
     };
   };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
      llvm-sys requires a specific version of llvmPackages,
      that is not the same as the one included by default with rustPlatform.
   */
-  nativeBuildInputs = [ llvmPackages_13.llvm ];
+  nativeBuildInputs = [ llvmPackages_16.llvm ];
   buildInputs = [ libffi libxml2 ncurses ];
 
   postPatch = ''
@@ -37,13 +37,13 @@ rustPlatform.buildRustPackage {
   '';
   preBuild =
     let
-      major = lib.versions.major llvmPackages_13.llvm.version;
-      minor = lib.versions.minor llvmPackages_13.llvm.version;
+      major = lib.versions.major llvmPackages_16.llvm.version;
+      minor = lib.versions.minor llvmPackages_16.llvm.version;
       llvm-sys-ver = "${major}${builtins.substring 0 1 minor}";
     in
     ''
       # On some architectures llvm-sys is not using the package listed inside nativeBuildInputs
-      export LLVM_SYS_${llvm-sys-ver}_PREFIX=${llvmPackages_13.llvm.dev}
+      export LLVM_SYS_${llvm-sys-ver}_PREFIX=${llvmPackages_16.llvm.dev}
       export ANTE_STDLIB_DIR=$out/lib
       mkdir -p $ANTE_STDLIB_DIR
       cp -r $src/stdlib/* $ANTE_STDLIB_DIR

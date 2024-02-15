@@ -24,14 +24,14 @@ evalConfig() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode
+    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode --json
 }
 
 reportFailure() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only"
+    echo 2>&1 "$ nix-instantiate -E '$script' -A '$attr' --eval-only --json"
     evalConfig "$attr" "$@" || true
     ((++fail))
 }
@@ -94,6 +94,15 @@ checkConfigOutput '^true$' config.result ./module-argument-default.nix
 # gvariant
 checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
+# https://github.com/NixOS/nixpkgs/pull/131205
+# We currently throw this error already in `config`, but throwing in `config.wrong1` would be acceptable.
+checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix
+# We currently throw this error already in `config`, but throwing in `config.nest.wrong2` would be acceptable.
+checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.nest.wrong2 ./error-mkOption-in-config.nix
+checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' config.sub ./error-mkOption-in-submodule-config.nix
+checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
+checkConfigError '.*A definition for option .bad. is not of type .non-empty .list of .submodule...\.' config.bad ./error-nonEmptyListOf-submodule.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
@@ -110,6 +119,12 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: 
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
 checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
 checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
+
+# Check boolByOr type.
+checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueFalse ./boolByOr.nix
+checkConfigOutput '^true$' config.value.falseTrue ./boolByOr.nix
+checkConfigOutput '^true$' config.value.trueTrue ./boolByOr.nix
 
 checkConfigOutput '^1$' config.bare-submodule.nested ./declare-bare-submodule.nix ./declare-bare-submodule-nested-option.nix
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix
@@ -134,7 +149,7 @@ checkConfigOutput '^42$' config.value ./declare-either.nix ./define-value-int-po
 checkConfigOutput '^"24"$' config.value ./declare-either.nix ./define-value-string.nix
 # types.oneOf
 checkConfigOutput '^42$' config.value ./declare-oneOf.nix ./define-value-int-positive.nix
-checkConfigOutput '^\[ \]$' config.value ./declare-oneOf.nix ./define-value-list.nix
+checkConfigOutput '^\[\]$' config.value ./declare-oneOf.nix ./define-value-list.nix
 checkConfigOutput '^"24"$' config.value ./declare-oneOf.nix ./define-value-string.nix
 
 # Check mkForce without submodules.
@@ -227,8 +242,16 @@ checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-overrid
 
 # Check mkPackageOption
 checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.namedPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
 checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
+checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
 
 # submoduleWith
 
@@ -306,7 +329,7 @@ checkConfigOutput '^"24"$' config.value ./freeform-attrsOf.nix ./define-value-st
 # Shorthand modules interpret `meta` and `class` as config items
 checkConfigOutput '^true$' options._module.args.value.result ./freeform-attrsOf.nix ./define-freeform-keywords-shorthand.nix
 # No freeform assignments shouldn't make it error
-checkConfigOutput '^{ }$' config ./freeform-attrsOf.nix
+checkConfigOutput '^{}$' config ./freeform-attrsOf.nix
 # but only if the type matches
 checkConfigError 'A definition for option .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
 # and properties should be applied
@@ -344,19 +367,19 @@ checkConfigError 'The option .* has conflicting definitions' config.value ./type
 checkConfigOutput '^0$' config.value.int ./types-anything/equal-atoms.nix
 checkConfigOutput '^false$' config.value.bool ./types-anything/equal-atoms.nix
 checkConfigOutput '^""$' config.value.string ./types-anything/equal-atoms.nix
-checkConfigOutput '^/$' config.value.path ./types-anything/equal-atoms.nix
+checkConfigOutput '^"/[^"]+"$' config.value.path ./types-anything/equal-atoms.nix
 checkConfigOutput '^null$' config.value.null ./types-anything/equal-atoms.nix
 checkConfigOutput '^0.1$' config.value.float ./types-anything/equal-atoms.nix
 # Functions can't be merged together
 checkConfigError "The option .value.multiple-lambdas.<function body>. has conflicting option types" config.applied.multiple-lambdas ./types-anything/functions.nix
-checkConfigOutput '^<LAMBDA>$' config.value.single-lambda ./types-anything/functions.nix
+checkConfigOutput '^true$' config.valueIsFunction.single-lambda ./types-anything/functions.nix
 checkConfigOutput '^null$' config.applied.merging-lambdas.x ./types-anything/functions.nix
 checkConfigOutput '^null$' config.applied.merging-lambdas.y ./types-anything/functions.nix
 # Check that all mk* modifiers are applied
 checkConfigError 'attribute .* not found' config.value.mkiffalse ./types-anything/mk-mods.nix
-checkConfigOutput '^{ }$' config.value.mkiftrue ./types-anything/mk-mods.nix
+checkConfigOutput '^{}$' config.value.mkiftrue ./types-anything/mk-mods.nix
 checkConfigOutput '^1$' config.value.mkdefault ./types-anything/mk-mods.nix
-checkConfigOutput '^{ }$' config.value.mkmerge ./types-anything/mk-mods.nix
+checkConfigOutput '^{}$' config.value.mkmerge ./types-anything/mk-mods.nix
 checkConfigOutput '^true$' config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput '^1$' config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput '^"baz"$' config.value.nested.bar.baz ./types-anything/mk-mods.nix
@@ -376,16 +399,26 @@ checkConfigOutput '^"a b y z"$' config.resultFooBar ./declare-variants.nix ./def
 checkConfigOutput '^"a b c"$' config.resultFooFoo ./declare-variants.nix ./define-variant.nix
 
 ## emptyValue's
-checkConfigOutput "[ ]" config.list.a ./emptyValues.nix
-checkConfigOutput "{ }" config.attrs.a ./emptyValues.nix
+checkConfigOutput "\[\]" config.list.a ./emptyValues.nix
+checkConfigOutput "{}" config.attrs.a ./emptyValues.nix
 checkConfigOutput "null" config.null.a ./emptyValues.nix
-checkConfigOutput "{ }" config.submodule.a ./emptyValues.nix
+checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 # These types don't have empty values
 checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
 
+# types.unique
+#   requires a single definition
+checkConfigError 'The option .examples\.merged. is defined multiple times while it.s expected to be unique' config.examples.merged.a ./types-unique.nix
+#   user message is printed
+checkConfigError 'We require a single definition, because seeing the whole value at once helps us maintain critical invariants of our system.' config.examples.merged.a ./types-unique.nix
+#   let the inner merge function check the values (on demand)
+checkConfigError 'A definition for option .examples\.badLazyType\.a. is not of type .string.' config.examples.badLazyType.a ./types-unique.nix
+#   overriding still works (unlike option uniqueness)
+checkConfigOutput '^"bee"$' config.examples.override.b ./types-unique.nix
+
 ## types.raw
-checkConfigOutput "{ foo = <CODE>; }" config.unprocessedNesting ./raw.nix
+checkConfigOutput '^true$' config.unprocessedNestingEvaluates.success ./raw.nix
 checkConfigOutput "10" config.processedToplevel ./raw.nix
 checkConfigError "The option .multiple. is defined multiple times" config.multiple ./raw.nix
 checkConfigOutput "bar" config.priorities ./raw.nix
@@ -419,13 +452,13 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
 
 # Class checks, evalModules
-checkConfigOutput '^{ }$' config.ok.config ./class-check.nix
+checkConfigOutput '^{}$' config.ok.config ./class-check.nix
 checkConfigOutput '"nixos"' config.ok.class ./class-check.nix
 checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.fail.config ./class-check.nix
 checkConfigError 'The module foo.nix#darwinModules.default was imported into nixos instead of darwin.' config.fail-anon.config ./class-check.nix
 
 # Class checks, submoduleWith
-checkConfigOutput '^{ }$' config.sub.nixosOk ./class-check.nix
+checkConfigOutput '^{}$' config.sub.nixosOk ./class-check.nix
 checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.sub.nixosFail.config ./class-check.nix
 
 # submoduleWith type merge with different class
@@ -442,6 +475,9 @@ checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. has been renamed to `c\.d\.e.\."$' \
   config.result \
   ./doRename-warnings.nix
+checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-enable.nix
+checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-no-enable.nix
+checkConfigOutput "^true$" config.result ./doRename-condition.nix ./doRename-condition-migrated.nix
 
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix

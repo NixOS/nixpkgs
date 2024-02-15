@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/MichaelMure/mdr";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "mdr";
   };
 }

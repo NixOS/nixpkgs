@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "upcloud-api";
   version = "2.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";

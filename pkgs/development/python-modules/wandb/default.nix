@@ -9,7 +9,7 @@
 , boto3
 , buildPythonPackage
 , click
-, docker_pycreds
+, docker-pycreds
 , fetchFromGitHub
 , flask
 , git
@@ -18,12 +18,14 @@
 , google-cloud-compute
 , google-cloud-storage
 , hypothesis
+, imageio
 , jsonref
 , jsonschema
 , keras
 , kubernetes
 , matplotlib
 , mlflow
+, moviepy
 , nbclient
 , nbformat
 , pandas
@@ -45,6 +47,7 @@
 , sentry-sdk
 , setproctitle
 , setuptools
+, soundfile
 , substituteAll
 , torch
 , tqdm
@@ -52,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.15.11";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -61,7 +64,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WaVgyF+pQgFCqIsi5Tcu+btyUKU2e3/qJi4Ma8dnx8M=";
+    hash = "sha256-XXs9KjiAPzZ932r4UJ87RpM+qhg/bNDWEYsq2Ua6SRw=";
   };
 
   patches = [
@@ -81,7 +84,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     appdirs
     click
-    docker_pycreds
+    docker-pycreds
     gitpython
     pathtools
     protobuf
@@ -107,12 +110,14 @@ buildPythonPackage rec {
     google-cloud-compute
     google-cloud-storage
     hypothesis
+    imageio
     jsonref
     jsonschema
     keras
     kubernetes
     matplotlib
     mlflow
+    moviepy
     nbclient
     nbformat
     pandas
@@ -124,6 +129,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     scikit-learn
+    soundfile
     torch
     tqdm
   ];
@@ -150,8 +156,6 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/test_file_upload.py"
     "tests/pytest_tests/unit_tests_old/test_footer.py"
     "tests/pytest_tests/unit_tests_old/test_internal_api.py"
-    "tests/pytest_tests/unit_tests_old/test_keras.py"
-    "tests/pytest_tests/unit_tests_old/test_logging.py"
     "tests/pytest_tests/unit_tests_old/test_metric_internal.py"
     "tests/pytest_tests/unit_tests_old/test_public_api.py"
     "tests/pytest_tests/unit_tests_old/test_runtime.py"
@@ -160,7 +164,6 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/test_tb_watcher.py"
     "tests/pytest_tests/unit_tests_old/test_time_resolution.py"
     "tests/pytest_tests/unit_tests_old/test_wandb_agent.py"
-    "tests/pytest_tests/unit_tests_old/test_wandb_artifacts.py"
     "tests/pytest_tests/unit_tests_old/test_wandb_integration.py"
     "tests/pytest_tests/unit_tests_old/test_wandb_run.py"
     "tests/pytest_tests/unit_tests_old/test_wandb.py"
@@ -181,6 +184,9 @@ buildPythonPackage rec {
 
     # Requires docker access
     "tests/pytest_tests/system_tests/test_artifacts/test_artifact_saver.py"
+    "tests/pytest_tests/system_tests/test_artifacts/test_misc.py"
+    "tests/pytest_tests/system_tests/test_artifacts/test_misc2.py"
+    "tests/pytest_tests/system_tests/test_artifacts/test_object_references.py"
     "tests/pytest_tests/system_tests/test_artifacts/test_wandb_artifacts_full.py"
     "tests/pytest_tests/system_tests/test_artifacts/test_wandb_artifacts.py"
     "tests/pytest_tests/system_tests/test_core/test_cli_full.py"
@@ -198,7 +204,6 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_core/test_public_api.py"
     "tests/pytest_tests/system_tests/test_core/test_redir_full.py"
     "tests/pytest_tests/system_tests/test_core/test_report_api.py"
-    "tests/pytest_tests/system_tests/test_core/test_runtime.py"
     "tests/pytest_tests/system_tests/test_core/test_save_policies.py"
     "tests/pytest_tests/system_tests/test_core/test_sender.py"
     "tests/pytest_tests/system_tests/test_core/test_start_method.py"
@@ -216,15 +221,8 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_core/test_wandb_verify.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb.py"
     "tests/pytest_tests/system_tests/test_importers/test_import_mlflow.py"
-    "tests/pytest_tests/system_tests/test_nexus/test_nexus.py"
-    "tests/pytest_tests/system_tests/test_sweep/test_public_api.py"
-    "tests/pytest_tests/system_tests/test_sweep/test_sweep_scheduler.py"
-    "tests/pytest_tests/system_tests/test_sweep/test_sweep_utils.py"
-    "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent_full.py"
-    "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent.py"
-    "tests/pytest_tests/system_tests/test_sweep/test_wandb_sweep.py"
-    "tests/pytest_tests/system_tests/test_system_metrics/test_open_metrics.py"
     "tests/pytest_tests/system_tests/test_launch/test_github_reference.py"
+    "tests/pytest_tests/system_tests/test_launch/test_job_status_tracker.py"
     "tests/pytest_tests/system_tests/test_launch/test_job.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_add.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_cli.py"
@@ -234,8 +232,18 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_launch/test_launch_sagemaker.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_sweep_cli.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch_sweep.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_vertex.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch.py"
     "tests/pytest_tests/system_tests/test_launch/test_wandb_reference.py"
+    "tests/pytest_tests/system_tests/test_nexus/test_nexus.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_public_api.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_sweep_scheduler.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_sweep_utils.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent_full.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_wandb_sweep.py"
+    "tests/pytest_tests/system_tests/test_system_metrics/test_open_metrics.py"
+    "tests/pytest_tests/system_tests/test_system_metrics/test_system_monitor.py"
 
     # Tries to access /homeless-shelter
     "tests/pytest_tests/unit_tests/test_tables.py"
@@ -248,11 +256,15 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests/test_launch/test_runner/test_vertex.py"
 
     # Requires google-cloud-artifact-registry which is not packaged as of 2023-04-25.
-    "tests/pytest_tests/unit_tests_old/tests_launch/test_kaniko_build.py"
     "tests/pytest_tests/unit_tests/test_launch/test_registry/test_gcp_artifact_registry.py"
 
     # Requires kfp which is not packaged as of 2023-04-25.
     "tests/pytest_tests/system_tests/test_core/test_kfp.py"
+
+    # Requires kubernetes_asyncio which is not packaged as of 2024-01-14.
+    "tests/pytest_tests/unit_tests/test_launch/test_builder/test_kaniko.py"
+    "tests/pytest_tests/unit_tests/test_launch/test_runner/test_kubernetes.py"
+    "tests/pytest_tests/unit_tests/test_launch/test_runner/test_safe_watch.py"
 
     # Requires metaflow which is not packaged as of 2023-04-25.
     "tests/pytest_tests/unit_tests/test_metaflow.py"
@@ -266,6 +278,9 @@ buildPythonPackage rec {
     # See https://github.com/wandb/wandb/issues/5423
     "tests/pytest_tests/unit_tests/test_docker.py"
     "tests/pytest_tests/unit_tests/test_library_public.py"
+
+    # See https://github.com/wandb/wandb/issues/6836
+    "tests/pytest_tests/unit_tests_old/test_logging.py"
   ] ++ lib.optionals stdenv.isLinux [
     # Same as above
     "tests/pytest_tests/unit_tests/test_artifacts/test_storage.py"

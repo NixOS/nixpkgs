@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.bsd3;
     platforms = platforms.linux;
+    mainProgram = "sommelier";
   };
 }

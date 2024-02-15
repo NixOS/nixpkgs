@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "3.4.2";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${version}";
-    hash = "sha256-i+RD0f3WxdW0PgMNynsIXnOfEdh3vS3NufJyXpw0EU0=";
+    hash = "sha256-I42f7cV5QsUIPkcc6YDTboS4/LrObHAE3w9S48jsaKM=";
   };
 
-  vendorHash = "sha256-lrK4L7oTR5qP34Df0UJnTJATmKUmHVZeGrD9kD+sZFw=";
+  vendorHash = "sha256-6xofWf5WFE1wuCwx8iOMcC3gxDzZB3uw3WErLWluBM8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,6 +37,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/Desktop-Bridge $out/bin/protonmail-bridge # The cli is named like that in other distro packages
+    install -Dm444 dist/proton-bridge.desktop -t $out/share/applications
+    install -Dm444 dist/bridge.svg $out/share/icons/hicolor/scalable/apps/protonmail-bridge.svg
   '';
 
   meta = with lib; {
@@ -52,5 +54,6 @@ buildGoModule rec {
 
       To work, use secret-service freedesktop.org API (e.g. Gnome keyring) or pass.
     '';
+    mainProgram = "protonmail-bridge";
   };
 }

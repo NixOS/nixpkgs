@@ -1,23 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+
+# build-system
 , flit-core
+
+# tests
 , pretend
 , pytestCheckHook
-, pythonOlder
 }:
 
 let
   packaging = buildPythonPackage rec {
     pname = "packaging";
-    version = "23.1";
-    format = "pyproject";
+    version = "23.2";
+    pyproject = true;
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-o5KYDSts/6ZEQxiYvlSwBFFRMZ0efsNPDP7Uh2fdM08=";
+      hash = "sha256-BI+w6UBQNlGOqvSKVZU8dQwR4aG2jg3RqdYu0MCSz8U=";
     };
 
     nativeBuildInputs = [
@@ -29,18 +33,27 @@ let
       pretend
     ];
 
+    pythonImportsCheck = [
+      "packaging"
+      "packaging.metadata"
+      "packaging.requirements"
+      "packaging.specifiers"
+      "packaging.tags"
+      "packaging.version"
+    ];
+
     # Prevent circular dependency with pytest
     doCheck = false;
-
-    pythonImportsCheck = [ "packaging" ];
 
     passthru.tests = packaging.overridePythonAttrs (_: { doCheck = true; });
 
     meta = with lib; {
+      changelog = "https://github.com/pypa/packaging/blob/${version}/CHANGELOG.rst";
       description = "Core utilities for Python packages";
-      homepage = "https://github.com/pypa/packaging";
+      downloadPage = "https://github.com/pypa/packaging";
+      homepage = "https://packaging.pypa.io/";
       license = with licenses; [ bsd2 asl20 ];
-      maintainers = with maintainers; [ bennofs ];
+      maintainers = teams.python.members ++ (with maintainers; [ bennofs ]);
     };
   };
 in

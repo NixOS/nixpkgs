@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "dtw-python";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "pyproject";
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";
     repo = "dtw-python";
-    rev = "v${version}";
-    hash = "sha256-7hQuo7dES9f08YZhCf+kxUkMlrr+bg1P7HHRCMv3bLk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XO6uyQjWRPCZ7txsBJpFxr5fcNlwt+CBmV6AAWoxaHI=";
   };
 
   nativeBuildInputs = [

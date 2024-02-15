@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml
-, qtquick1, libGLU }:
+, libGLU }:
 
 stdenv.mkDerivation rec {
   pname = "qxmledit";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml qtquick1 libGLU ];
+  buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml libGLU ];
 
   qmakeFlags = [ "CONFIG+=release" ];
 
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     platforms = platforms.unix;
     changelog = "https://github.com/lbellonda/qxmledit/blob/${version}/NEWS";
+    mainProgram = "qxmledit";
   };
 }

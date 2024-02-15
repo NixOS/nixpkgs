@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     description = "Powerful tool to generate web server statistics";
     platforms = lib.platforms.all;
+    mainProgram = "analog";
   };
 
 }

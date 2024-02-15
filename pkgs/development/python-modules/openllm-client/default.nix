@@ -5,7 +5,10 @@
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
+, anyio
+, distro
 , httpx
+, httpx-auth
 , openllm-core
 , soundfile
 , transformers
@@ -14,7 +17,7 @@
 buildPythonPackage rec {
   inherit (openllm-core) src version;
   pname = "openllm-client";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,6 +30,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    anyio
+    distro
     httpx
     openllm-core
   ];
@@ -35,11 +40,14 @@ buildPythonPackage rec {
     grpc = [
       bentoml
     ] ++ bentoml.optional-dependencies.grpc;
+    auth = [
+      httpx-auth
+    ];
     agents = [
       transformers
       # diffusers
       soundfile
-    ] ++ transformers.agents;
+    ] ++ transformers.optional-dependencies.agents;
     full = passthru.optional-dependencies.grpc ++ passthru.optional-dependencies.agents;
   };
 

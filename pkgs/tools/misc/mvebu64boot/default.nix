@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lukegb ];
     platforms = platforms.all;
+    mainProgram = "mvebu64boot";
   };
 }

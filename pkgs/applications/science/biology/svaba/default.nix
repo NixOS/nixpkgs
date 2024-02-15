@@ -14,6 +14,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib bzip2 xz ];
 
+  postPatch = ''
+    # Fix gcc-13 build failure due to missing includes
+    sed -e '1i #include <cstdint>' -i \
+      SeqLib/src/non_api/Histogram.h \
+      src/svaba/Histogram.h
+  '';
+
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: ./libfml.a(rle.o):/build/source/SeqLib/fermi-lite/rle.h:33: multiple definition of

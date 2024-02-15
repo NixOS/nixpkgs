@@ -37,5 +37,6 @@ buildGoModule rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ otini ];
     platforms = platforms.linux;
+    mainProgram = "gopsuinfo";
   };
 }

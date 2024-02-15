@@ -9,6 +9,7 @@
 , gtk2-x11
 , withGTK3 ? true
 , gtk3
+, libglvnd
 , libXt
 , libpulseaudio
 , makeDesktopItem
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.4.1";
+  version = "33.0.0";
 
   src = fetchzip {
     urls = [
@@ -26,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
       "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
-      "sha256-c/rfnMpiLWqlNZppqPRNWXsgAQ1FofAdel5EFnK+mrY="
+      "sha256-qZX23dsKNg5AOIaBAAmTWT6VDEl3OGz3kb3idtvJElw="
     else
-      "sha256-27njFdqq2DUctlz/UOtH5tlOduQNpoapuCYS+48K9dk=";
+      "sha256-Lz1+5I8Rj0GrBUBTJoRsatpyzkqVHZuWbKARkuWFs5U=";
   };
 
   preferLocalBuild = true;
@@ -147,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         ffmpeg
+        libglvnd
         libpulseaudio
       ]}"
     )

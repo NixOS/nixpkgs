@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     for f in $out/bin/*; do
       wrapProgram $f \
-        --prefix GUILE_LOAD_PATH : "${gash}/${guile.siteDir}"
+        --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
+        --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
     done
   '';
 

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -12,7 +11,7 @@
 , curl
 , enet
 , ffmpeg
-, fmt_8
+, fmt_10
 , gtest
 , hidapi
 , libevdev
@@ -24,9 +23,9 @@
 , libXdmcp
 , libXext
 , libXrandr
+, lz4
 , lzo
 , mbedtls_2
-, mgba
 , miniupnpc
 , minizip-ng
 , openal
@@ -38,7 +37,6 @@
 , vulkan-loader
 , xxHash
 , xz
-, zlib-ng
 
   # Used in passthru
 , common-updater-scripts
@@ -59,24 +57,22 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-19870";
+  version = "5.0-20347";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "032c77b462a220016f23c5079e71bb23e0ad2adf";
-    sha256 = "sha256-TgRattksYsMGcbfu4T5mCFO9BkkHRX0NswFxGwZWjEw=";
+    rev = "dc0814ae4622313d513468bdc377ee9c031de199";
+    hash = "sha256-s3mGwXkgdoLLfPEUVyjaqXb+a5KPKC3dhHIyKC2BF1w=";
     fetchSubmodules = true;
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/dolphin-emu/dolphin/commit/c43c9101c07376297abbbbc40ef9a1965a1681cd.diff";
-      sha256 = "sha256-yHlyG86ta76YKrJsyefvFh521dNbQOqiPOpRUVxKuZM=";
-    })
     # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
     ./find-minizip-ng.patch
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     stdenv.cc
@@ -99,7 +95,7 @@ stdenv.mkDerivation rec {
     curl
     enet
     ffmpeg
-    fmt_8
+    fmt_10
     gtest
     hidapi
     libiconv
@@ -107,6 +103,7 @@ stdenv.mkDerivation rec {
     libspng
     libusb1
     libXdmcp
+    lz4
     lzo
     mbedtls_2
     miniupnpc
@@ -118,7 +115,6 @@ stdenv.mkDerivation rec {
     sfml
     xxHash
     xz # LibLZMA
-    zlib-ng
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     bluez
@@ -175,6 +171,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = dolphin-emu;
       command = "dolphin-emu-nogui --version";
+      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
     };
 
     updateScript = writeShellScript "dolphin-update-script" ''

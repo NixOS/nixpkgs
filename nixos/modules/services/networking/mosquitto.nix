@@ -482,14 +482,7 @@ let
   globalOptions = with types; {
     enable = mkEnableOption (lib.mdDoc "the MQTT Mosquitto broker");
 
-    package = mkOption {
-      type = package;
-      default = pkgs.mosquitto;
-      defaultText = literalExpression "pkgs.mosquitto";
-      description = lib.mdDoc ''
-        Mosquitto package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "mosquitto" { };
 
     bridges = mkOption {
       type = attrsOf bridgeOptions;
@@ -603,6 +596,7 @@ in
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         Type = "notify";

@@ -10,6 +10,7 @@
 , qtscxml
 , qtsvg
 , qtdeclarative
+, qtwayland
 , qt5compat
 , wrapQtAppsHook
 , nix-update-script
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.22.13";
+  version = "0.22.17";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IZpIgU/cf25XxH8J0xQJLASu0YmTmcHY5RxUcbKrtvA=";
+    sha256 = "sha256-2wu4bOQDKoZ4DDzTttXXRNDluvuJth7M1pCvJmYQ+f4=";
     fetchSubmodules = true;
   };
 
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtscxml
     qtsvg
     qtdeclarative
+    qtwayland
     qt5compat
   ] ++ (with python3Packages; [ python pybind11 ]);
 

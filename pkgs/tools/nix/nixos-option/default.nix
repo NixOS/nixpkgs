@@ -31,6 +31,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     license = licenses.lgpl2Plus;
+    mainProgram = "nixos-option";
     maintainers = with maintainers; [ ];
     inherit (nix.meta) platforms;
   };

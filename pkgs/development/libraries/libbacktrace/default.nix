@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "libbacktrace";
-  version = "unstable-2022-12-16";
+  version = "unstable-2023-11-30";
 
   src = fetchFromGitHub {
     owner = "ianlancetaylor";
     repo = "libbacktrace";
-    rev = "da7eff2f37e38136c5a0c8922957b9dfab5483ef";
-    sha256 = "ADp8n1kUf8OysFY/Jv1ytxKjqgz1Nu2VRcFGlt1k/HM=";
+    rev = "14818b7783eeb9a56c3f0fca78cefd3143f8c5f6";
+    sha256 = "DQZQsqzeQ/0v87bfqs6sXqS2M5Tunc1OydTWRSB3PCw=";
   };
 
   patches = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     (lib.enableFeature enableShared "shared")
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.isLinux && !stdenv.hostPlatform.isMusl;
 
   passthru = {
     updateScript = unstableGitUpdater { };

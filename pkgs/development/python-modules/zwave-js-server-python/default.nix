@@ -6,12 +6,13 @@
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "zwave-js-server-python";
-  version = "0.52.1";
-  format = "setuptools";
+  version = "0.55.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -19,8 +20,12 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+zGLWti99mYTyPkSxiYgE5RqVvEr2PGt8vFwesjcquo=";
+    hash = "sha256-FTcj0xZnIt0P6J/QRMC0bwcbRIVmpSWTorvE/AV/5PU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

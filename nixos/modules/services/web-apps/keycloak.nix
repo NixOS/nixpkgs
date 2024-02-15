@@ -11,6 +11,7 @@ let
     mkChangedOptionModule
     mkRenamedOptionModule
     mkRemovedOptionModule
+    mkPackageOption
     concatStringsSep
     mapAttrsToList
     escapeShellArg
@@ -24,7 +25,6 @@ let
     maintainers
     catAttrs
     collect
-    splitString
     hasPrefix
     ;
 
@@ -246,14 +246,7 @@ in
         };
       };
 
-      package = mkOption {
-        type = package;
-        default = pkgs.keycloak;
-        defaultText = literalExpression "pkgs.keycloak";
-        description = lib.mdDoc ''
-          Keycloak package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "keycloak" { };
 
       initialAdminPassword = mkOption {
         type = str;
@@ -335,7 +328,8 @@ in
             };
 
             hostname = mkOption {
-              type = str;
+              type = nullOr str;
+              default = null;
               example = "keycloak.example.com";
               description = lib.mdDoc ''
                 The hostname part of the public URL used as base for
@@ -457,7 +451,7 @@ in
 
       keycloakConfig = lib.generators.toKeyValue {
         mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
-          mkValueString = v: with builtins;
+          mkValueString = v:
             if isInt v then toString v
             else if isString v then v
             else if true == v then "true"
@@ -485,6 +479,14 @@ in
           {
             assertion = createLocalPostgreSQL -> config.services.postgresql.settings.standard_conforming_strings or true;
             message = "Setting up a local PostgreSQL db for Keycloak requires `standard_conforming_strings` turned on to work reliably";
+          }
+          {
+            assertion = cfg.settings.hostname != null || cfg.settings.hostname-url or null != null;
+            message = "Setting the Keycloak hostname is required, see `services.keycloak.settings.hostname`";
+          }
+          {
+            assertion = !(cfg.settings.hostname != null && cfg.settings.hostname-url or null != null);
+            message = "`services.keycloak.settings.hostname` and `services.keycloak.settings.hostname-url` are mutually exclusive";
           }
         ];
 

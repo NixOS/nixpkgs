@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.3.0";
+  version = "8.3.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-YHQtvp/AYMWme46yIc4lE/izjqVePnPxn3GY5RRfPq4=";
+    hash = "sha256-SoJq4SuDYImfkM2e991s47vYusrmnrQaXn7p3xwyOOQ=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmysqlclient # for `mysql_config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+  ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -81,12 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # On Darwin the installer tries to symlink the help files into a system
-  # directory
-  patches = [ ./no_symbolic_links.patch ];
+  patches = lib.optionals stdenv.isDarwin [
+    # Fix conversion of const char* to unsigned int.
+    ./clang-integer-conversion.patch
+  ];
 
   # Correct mysql_config query
-  patchPhase = ''
+  postPatch = ''
       substituteInPlace configure --replace "--libmysqld-libs" "--libs"
   '';
 
@@ -151,5 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
     platforms = platforms.all;
+    mainProgram = "grass";
   };
 })

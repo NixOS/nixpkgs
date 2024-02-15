@@ -15,6 +15,7 @@
 , libpcap
 , icu
 , thrift
+, gnuradioAtLeast
 }:
 
 let
@@ -53,7 +54,7 @@ mkDerivation {
   pname = "gr-grnet";
   version = version.name;
   inherit src;
-  disabledForGRafter = "3.10";
+  disabled = gnuradioAtLeast "3.10";
 
   patches = [
     # Use cross platform struct ip instead of iphdr
@@ -73,7 +74,7 @@ mkDerivation {
     gmp
     libpcap
     icu
-  ] ++ (if lib.versionAtLeast gnuradio.versionAttr.major "3.9" then with python.pkgs; [
+  ] ++ (if gnuradioAtLeast "3.9" then with python.pkgs; [
     pybind11
     numpy
   ] else [

@@ -11,6 +11,7 @@
 , packaging
 , psutil
 , pyyaml
+, safetensors
 , torch
 , evaluate
 , parameterized
@@ -19,25 +20,17 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.21.0";
-  format = "pyproject";
+  version = "0.26.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BwM3gyNhsRkxtxLNrycUGwBmXf8eq/7b56/ykMryt5w=";
+    hash = "sha256-l0RSBVAa2u3bGDLbg/e/1UP5WO8z2+YBqzwdviAcMA0=";
   };
-
-  patches = [
-    # fix import error when torch>=2.0.1 and torch.distributed is disabled
-    # https://github.com/huggingface/accelerate/pull/1800
-    (fetchpatch {
-      url = "https://github.com/huggingface/accelerate/commit/32701039d302d3875c50c35ab3e76c467755eae9.patch";
-      hash = "sha256-Hth7qyOfx1sC8UaRdbYTnyRXD/VRKf41GtLc0ee1t2I=";
-    })
-  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -46,6 +39,7 @@ buildPythonPackage rec {
     packaging
     psutil
     pyyaml
+    safetensors
     torch
   ];
 
@@ -64,15 +58,25 @@ buildPythonPackage rec {
     # try to download data:
     "FeatureExamplesTests"
     "test_infer_auto_device_map_on_t0pp"
+
+    # require socket communication
+    "test_explicit_dtypes"
+    "test_gated"
+    "test_invalid_model_name"
+    "test_invalid_model_name_transformers"
+    "test_no_metadata"
+    "test_no_split_modules"
+    "test_remote_code"
+    "test_transformers_model"
+
+    # set the environment variable, CC, which conflicts with standard environment
+    "test_patch_environment_key_exists"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
     "CheckpointTest"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # python3.11 not yet supported for torch.compile
-    "test_dynamo_extract_model"
   ];
 
   disabledTestPaths = lib.optionals (!(stdenv.isLinux && stdenv.isx86_64)) [

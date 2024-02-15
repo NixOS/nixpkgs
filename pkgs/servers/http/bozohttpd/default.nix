@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # bozohttpd is developed in-tree in pkgsrc, canonical hashes can be found at:
   # http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/www/bozohttpd/distinfo
   src = fetchurl {
-    url = "http://www.eterna.com.au/${pname}/${pname}-${version}.tar.bz2";
+    url = "http://eterna23.net/${pname}/${pname}-${version}.tar.bz2";
     hash = "sha512-J1uPqzzy5sWXIWgsrpUtuV2lvTsfIGgCQMbPEClGNpP2/soEf77146PnUotAt7LoeypW/YALYS5nmhbySJDltg==";
   };
 

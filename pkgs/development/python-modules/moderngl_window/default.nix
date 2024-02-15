@@ -2,6 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
+, setuptools
 , glfw
 , moderngl
 , numpy
@@ -19,17 +21,26 @@
 
 buildPythonPackage rec {
   pname = "moderngl-window";
-  version = "2.4.4";
-  format = "setuptools";
+  version = "2.4.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "moderngl_window";
     rev = "refs/tags/${version}";
-    hash = "sha256-mg3j5ZoMwdk39L5xjcoEJo9buqssM1VLJtndSFsuCB0=";
+    hash = "sha256-OfvIxezeZyuv5LLbe+4o1X2UCGnXT2DNvAF7t2Isw6Y=";
   };
+
+  pythonRelaxDeps = [
+    "pillow"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -75,6 +86,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
     platforms = platforms.mesaPlatforms;
-    broken = versionAtLeast pillow.version "2" || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }

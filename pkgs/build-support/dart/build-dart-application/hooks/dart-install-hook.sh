@@ -5,8 +5,8 @@ dartInstallHook() {
 
     runHook preInstall
 
+    # Install snapshots and executables.
     mkdir -p "$out"
-
     while IFS=$'\t' read -ra target; do
         dest="${target[0]}"
         # Wrap with runtime command, if it's defined
@@ -24,6 +24,20 @@ dartInstallHook() {
     echo "Finished dartInstallHook"
 }
 
+dartInstallCacheHook() {
+    echo "Executing dartInstallCacheHook"
+
+    # Install the package_config.json file.
+    mkdir -p "$pubcache"
+    cp .dart_tool/package_config.json "$pubcache/package_config.json"
+
+    echo "Finished dartInstallCacheHook"
+}
+
 if [ -z "${dontDartInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=dartInstallHook
+fi
+
+if [ -z "${dontDartInstallCache-}" ]; then
+    postInstallHooks+=(dartInstallCacheHook)
 fi

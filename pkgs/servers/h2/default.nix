@@ -1,47 +1,45 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
-stdenv.mkDerivation rec {
-  pname = "h2";
-  version = "2.2.220";
+{ lib, maven, fetchFromGitHub, jre, makeWrapper, nix-update-script }:
 
-  src = fetchzip {
-    url = "https://github.com/h2database/h2database/releases/download/version-${version}/h2-2023-07-04.zip";
-    hash = "sha256-nSOkCZuHcy0GR4SRjx524+MLqxJyO1PRkImPOFR1yts=";
-  };
+maven.buildMavenPackage rec {
+  pname = "h2";
+  version = "2.2.224";
 
   outputs = [ "out" "doc" ];
 
+  src = fetchFromGitHub {
+    owner = "h2database";
+    repo = "h2database";
+    rev = "refs/tags/version-${version}";
+    hash = "sha256-pS9jSiuInA0eULPOZK5cjwr9y5KDVY51blhZ9vs4z+g=";
+  };
+
+  mvnParameters = "-f h2/pom.xml -DskipTests";
+  mvnHash = "sha256-hUzE4F+RNCAfoY836pjrivf04xqN4m9SkiLXhmVzZRA=";
+
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase =
-    let
-      h2ToolScript = ''
-        #!/usr/bin/env bash
-        dir=$(dirname "$0")
+  installPhase = ''
+    mkdir -p $out/share/java
+    install -Dm644 h2/target/h2-${version}.jar $out/share/java
 
-        if [ -n "$1" ]; then
-          ${jre}/bin/java -cp "$dir/h2-${version}.jar:$H2DRIVERS:$CLASSPATH" $1 "''${@:2}"
-        else
-          echo "You have to provide the full java class path for the h2 tool you want to run. E.g. 'org.h2.tools.Server'"
-        fi
-      '';
-    in ''
-      mkdir -p $out $doc/share/doc/
-      cp -R bin $out/
-      cp -R docs $doc/share/doc/h2
+    makeWrapper ${jre}/bin/java $out/bin/h2 \
+      --add-flags "-cp \"$out/share/java/h2-${version}.jar:\$H2DRIVERS:\$CLASSPATH\" org.h2.tools.Console"
 
-      echo '${h2ToolScript}' > $out/bin/h2tool.sh
+    mkdir -p $doc/share/doc/h2
+    cp -r h2/src/docsrc/* $doc/share/doc/h2
+  '';
 
-      substituteInPlace $out/bin/h2.sh --replace "java" "${jre}/bin/java"
-
-      chmod +x $out/bin/*.sh
-    '';
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "^version-([0-9.]+)$" ];
+  };
 
   meta = with lib; {
     description = "The Java SQL database";
-    homepage = "http://www.h2database.com/html/main.html";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    homepage = "https://h2database.com/html/main.html";
+    changelog = "https://h2database.com/html/changelog.html";
     license = licenses.mpl20;
-    platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ mahe ];
+    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [ mahe anthonyroussel ];
+    mainProgram = "h2";
   };
 }

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sanic-routing";
-  version = "23.6.0";
+  version = "23.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = "sanic-routing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ual/vjL3M/nqlaRttJPoBcOYE3L/OAahbBLceUEVLXc=";
+    hash = "sha256-IUubPd6mqtCfY4ruI/8wkFcAcS0xXHWbe9RzDac5kRc=";
   };
 
   nativeCheckInputs = [

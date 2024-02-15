@@ -58,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pdf_viewer_build_config.pro \
-      --replace "-lmupdf-threads" "-lgumbo -lharfbuzz -lfreetype -ljbig2dec -ljpeg -lopenjp2"
+      --replace "-lmupdf-threads" "-lgumbo -lharfbuzz -lfreetype -ljbig2dec -ljpeg -lopenjp2" \
+      --replace "-lmupdf-third" ""
     substituteInPlace pdf_viewer/main.cpp \
       --replace "/usr/share/sioyek" "$out/share" \
       --replace "/etc/sioyek" "$out/etc"

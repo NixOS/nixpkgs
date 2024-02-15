@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "22.7.1";
+  version = "22.8.0";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TSi537RLZGwnyC1nL/Ge3lTlV2FmH1nmAzFSHmaTv04=";
+    hash = "sha256-nFqYpt9OWEPgSbaNsHLhs9mg7ChQcmfcgHh7nFfQh18=";
   };
 
   nativeBuildInputs = [

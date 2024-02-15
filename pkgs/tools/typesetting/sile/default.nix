@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.11";
+  version = "0.14.17";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-JXlgiK1XyZZSe5QXz06zwEAnVYhiIZhhIaBmfxAgRS4=";
+    sha256 = "sha256-f4m+3s7au1FoJQrZ3YDAntKJyOiMPQ11bS0dku4GXgQ=";
   };
 
   configureFlags = [
@@ -137,5 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
+    mainProgram = "sile";
   };
 })

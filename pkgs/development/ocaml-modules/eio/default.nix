@@ -1,4 +1,6 @@
 { lib
+, ocaml
+, version ? if lib.versionAtLeast ocaml.version "5.1" then "0.14" else "0.12"
 , buildDunePackage
 , bigstringaf
 , cstruct
@@ -16,16 +18,26 @@
 , mdx
 }:
 
+let
+  param = {
+    "0.12" = {
+      minimalOCamlVersion = "5.0";
+      hash = "sha256-2EhHzoX/t4ZBSWrSS+PGq1zCxohc7a1q4lfsrFnZJqA=";
+    };
+    "0.14" = {
+      minimalOCamlVersion = "5.1";
+      hash = "sha256-UvhblH0+DecJQLW7qsDT54hB/qVkjnOvfYp1SrUchxs=";
+    };
+  }."${version}";
+in
 buildDunePackage rec {
   pname = "eio";
-  version = "0.12";
-
-  minimalOCamlVersion = "5.0";
-  duneVersion = "3";
+  inherit version;
+  inherit (param) minimalOCamlVersion;
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "2EhHzoX/t4ZBSWrSS+PGq1zCxohc7a1q4lfsrFnZJqA=";
+    inherit (param) hash;
   };
 
   propagatedBuildInputs = [

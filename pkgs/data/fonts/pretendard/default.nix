@@ -1,7 +1,7 @@
 { lib, stdenvNoCC, fetchzip }:
 
 let
-  version = "1.3.8";
+  version = "1.3.9";
 
   mkPretendard = { pname, typeface, hash }:
     stdenvNoCC.mkDerivation {
@@ -35,24 +35,24 @@ in
   pretendard = mkPretendard {
     pname = "pretendard";
     typeface = "Pretendard";
-    hash = "sha256-Re4Td9uA8Qn/xv39Bo9i3gShYWQ1mRX44Vyx7/i4xwI=";
+    hash = "sha256-n7RQApffpL/8ojHcZbdxyanl9Tlc8HP8kxLFBdArUfY=";
   };
 
   pretendard-gov = mkPretendard {
     pname = "pretendard-gov";
     typeface = "PretendardGOV";
-    hash = "sha256-GQv/Ia91QgXZwFX+WdE7aRFUJFWhCMLFY86gu4Ii2w8=";
+    hash = "sha256-qoDUBOmrk6WPKQgnapThfKC01xWup+HN82hcoIjEe0M=";
   };
 
   pretendard-jp = mkPretendard {
     pname = "pretendard-jp";
     typeface = "PretendardJP";
-    hash = "sha256-7OLInF1XUQxyHyb9a0zyfCLZrdcxMTM2QeBe3lwLJ0A=";
+    hash = "sha256-1nTk1LPoRSfSDgDuGWkcs6RRIY4ZOqDBPMsxezMos6Q=";
   };
 
   pretendard-std = mkPretendard {
     pname = "pretendard-std";
     typeface = "PretendardStd";
-    hash = "sha256-DCR6KUAblVjhapqMn2p0nzndEJm4OCawGV3nAWZvSBs=";
+    hash = "sha256-gkYqqxSICmSIrBuPRzBaOlGGM/rJU1z7FiFvu9RhK5s=";
   };
 }

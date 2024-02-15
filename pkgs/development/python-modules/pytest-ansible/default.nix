@@ -1,30 +1,30 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
+{ lib
+, stdenv
+, ansible-compat
 , ansible-core
+, buildPythonPackage
 , coreutils
-, coverage
+, fetchFromGitHub
+, packaging
 , pytest
 , pytestCheckHook
 , pythonOlder
 , setuptools
 , setuptools-scm
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "3.2.1";
-  format = "pyproject";
+  version = "24.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ansible";
-    repo = pname;
+    repo = "pytest-ansible";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fSerRbd7QeEdTfyy2lVLq7FKHWWT0MlutonunHhM5M4=";
+    hash = "sha256-NtGk+azpSZZm9PUf6Q1Qipo/zaUH+bed7k3oFnQyKjw=";
   };
 
   postPatch = ''
@@ -32,12 +32,9 @@ buildPythonPackage rec {
       --replace '/usr/bin/env' '${coreutils}/bin/env'
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   buildInputs = [
@@ -46,10 +43,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ansible-core
+    ansible-compat
+    packaging
   ];
 
   nativeCheckInputs = [
-    coverage
     pytestCheckHook
   ];
 
@@ -74,10 +72,16 @@ buildPythonPackage rec {
     "test_param_override_with_marker"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = [
+    # Test want s to execute pytest in a subprocess
+    "tests/integration/test_molecule.py"
+  ] ++ lib.optionals stdenv.isDarwin [
     # These tests fail in the Darwin sandbox
     "tests/test_adhoc.py"
     "tests/test_adhoc_result.py"
+  ] ++ lib.optionals (lib.versionAtLeast ansible-core.version "2.16") [
+    # Test fail in the NixOS environment
+    "tests/test_adhoc.py"
   ];
 
   pythonImportsCheck = [
@@ -85,7 +89,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
+    description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/v${version}";
     license = licenses.mit;

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , openssl
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.39.0";
+  version = "0.40.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "M2Crypto";
     inherit version;
-    hash = "sha256-JMD0cTWLixmtTIqp2hLoaAMLZcH9syedAG32DJUBM4o=";
+    hash = "sha256-u/0RPsVXCMBYFiUqTwnkI33087v8gXHLvDMFfSV7uzA=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,11 @@ buildPythonPackage rec {
     openssl
     parameterized
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=incompatible-pointer-types"
+  ]);
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -63,7 +63,7 @@ in
         # make available for D-BUS user services
         #export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}:${config.system.path}/share:${e.efl}/share
 
-        # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+        # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
       fi
     '';
@@ -90,7 +90,7 @@ in
         };
     };
 
-    environment.etc."X11/xkb".source = xcfg.xkbDir;
+    environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
     fonts.packages = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 

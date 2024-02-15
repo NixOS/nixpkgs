@@ -10,6 +10,7 @@
 , go
 , nodejs
 , perl
+, cabal-install
 , testers
 , pre-commit
 }:
@@ -17,21 +18,22 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.3.3";
+  version = "3.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "v${version}";
-    hash = "sha256-6FKf4jLHUt2c7LSxFcq53IsfHOWeUSI+P9To0eh48+o=";
+    hash = "sha256-OTduVg8uhMdXs2gQ7KaMVOO1zQK4m489W9SU7PWIvcM=";
   };
 
   patches = [
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
     ./hook-tmpl.patch
+    ./pygrep-pythonpath.patch
   ];
 
   propagatedBuildInputs = [
@@ -58,6 +60,7 @@ buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
     re-assert
+    cabal-install
   ];
 
   # i686-linux: dotnet-sdk not available
@@ -156,6 +159,8 @@ buildPythonApplication rec {
     "test_run_versioned_node_hook"
     "test_rust_cli_additional_dependencies"
     "test_swift_language"
+    "test_run_example_executable"
+    "test_run_dep"
 
     # i don't know why these fail
     "test_install_existing_hooks_no_overwrite"
@@ -181,5 +186,6 @@ buildPythonApplication rec {
     homepage = "https://pre-commit.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ borisbabic ];
+    mainProgram = "pre-commit";
   };
 }

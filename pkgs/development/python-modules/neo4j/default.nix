@@ -1,15 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, numpy
+, pandas
+, pyarrow
 , pythonOlder
 , pytz
+, setuptools
 , tomlkit
 }:
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.13.0";
-  format = "setuptools";
+  version = "5.17.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,13 +21,38 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-ykbKNLMnbAGUavyfRtF3q97FRLaeuKOt0pcWHtJ9mCY=";
+    hash = "sha256-BZo4TzFrH1ATl09zRXy+1AFJSBopmByDHe7oITZy7pA=";
   };
+
+  postPatch = ''
+    # The dynamic versioning adds a postfix (.dev0) to the version
+    substituteInPlace pyproject.toml \
+      --replace '"tomlkit ~= 0.11.6"' '"tomlkit >= 0.11.6"' \
+      --replace 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
+      --replace '#readme = "README.rst"' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pytz
     tomlkit
   ];
+
+  passthru.optional-dependencies = {
+    numpy = [
+      numpy
+    ];
+    pandas = [
+      numpy
+      pandas
+    ];
+    pyarrow = [
+      pyarrow
+    ];
+  };
 
   # Missing dependencies
   doCheck = false;

@@ -11,7 +11,7 @@ let
   mkListen = kind: addr: let
     al_v4 = builtins.match "([0-9.]+):([0-9]+)($)" addr;
     al_v6 = builtins.match "\\[(.+)]:([0-9]+)(%.*|$)" addr;
-    al_portOnly = builtins.match "([0-9]+)" addr;
+    al_portOnly = builtins.match "(^)([0-9]+)" addr;
     al = findFirst (a: a != null)
       (throw "services.kresd.*: incorrect address specification '${addr}'")
       [ al_v4 al_v6 al_portOnly ];
@@ -57,14 +57,8 @@ in {
         and give commands interactively to kresd@1.service.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      description = lib.mdDoc ''
-        knot-resolver package to use.
-      '';
-      default = pkgs.knot-resolver;
-      defaultText = literalExpression "pkgs.knot-resolver";
-      example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";
+    package = mkPackageOption pkgs "knot-resolver" {
+      example = "knot-resolver.override { extraFeatures = true; }";
     };
     extraConfig = mkOption {
       type = types.lines;

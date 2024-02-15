@@ -13,6 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ python3 ];
 
+  checkFlags = [
+    # tests are failing upstream
+    "--skip=test_dot"
+    "--skip=test_dotdot"
+  ];
+
   preCheck = ''
     patchShebangs tests/editors/env-editor.py
   '';

@@ -1,24 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, flit-core
+, hatchling
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.148";
-  format = "pyproject";
+  version = "2.1.162";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XRER28ObI9TsZ5h5LkAXhExGq+c4hpoEun2hagkpUXk=";
+    hash = "sha256-XeAOEhmNEACr+KrIYaclDH7EW2XQeobIAQvm99hn24M=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    hatchling
   ];
 
   # A few more dependencies I don't want to handle right now...

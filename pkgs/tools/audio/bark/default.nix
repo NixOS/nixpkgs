@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ samw ];
     platforms = lib.platforms.linux;
+    mainProgram = "bark";
   };
 }
 

@@ -1,13 +1,13 @@
 with import ../../../../.. { };
 
 with lib; let
-  isFod = p: p.tlType != "bin" && isDerivation p;
+  getFods = drv: lib.optional (isDerivation drv.tex) (drv.tex // { tlType = "run"; })
+    ++ lib.optional (drv ? texdoc) (drv.texdoc // { tlType = "doc"; })
+    ++ lib.optional (drv ? texsource) (drv.texsource // { tlType = "source"; })
+    ++ lib.optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; });
 
-  # ugly hack to extract combine from collection-latexextra, since it is masked by texlive.combine
-  combine = lib.findFirst (p: (lib.head p.pkgs).pname == "combine") { pkgs = [ ]; } (lib.head texlive.collection-latexextra.pkgs).tlDeps;
-  all = filter (p: p ? pkgs) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ])) ++ [ combine ];
-  sorted = sort (a: b: (head a.pkgs).pname < (head b.pkgs).pname) all;
-  fods = filter isFod (concatMap (p: p.pkgs or [ ]) all);
+  sorted = sort (a: b: a.pname < b.pname) (attrValues texlive.pkgs);
+  fods = concatMap getFods sorted;
 
   computeHash = fod: runCommand "${fod.pname}-${fod.tlType}-fixed-hash"
     { buildInputs = [ nix ]; inherit fod; }
@@ -15,18 +15,17 @@ with lib; let
 
   hash = fod: fod.outputHash or (builtins.readFile (computeHash fod));
 
-  hashes = { pkgs }:
-    concatMapStrings ({ tlType, ... }@p: lib.optionalString (isFod p) (''${tlType}="${hash p}";'')) pkgs;
+  hashes = fods:
+    concatMapStrings ({ tlType, ... }@p: ''${tlType}="${hash p}";'') fods;
 
-  hashLine = { pkgs }@pkg:
+  hashLine = { pname, revision, extraRevision ? "", ... }@drv:
     let
-      fods = lib.filter isFod pkgs;
-      first = lib.head fods;
+      fods = getFods drv;
       # NOTE: the fixed naming scheme must match default.nix
-      fixedName = with first; "${pname}-${toString revision}${first.extraRevision or ""}";
+      fixedName = "${pname}-${toString revision}${extraRevision}";
     in
-    lib.optionalString (fods != [ ]) ''
-      ${strings.escapeNixIdentifier fixedName}={${hashes pkg}};
+    optionalString (fods != [ ]) ''
+      ${strings.escapeNixIdentifier fixedName}={${hashes fods}};
     '';
 in
 {
@@ -37,6 +36,6 @@ in
   fixedHashesNix = writeText "fixed-hashes.nix"
     ''
       {
-      ${lib.concatMapStrings hashLine sorted}}
+      ${concatMapStrings hashLine sorted}}
     '';
 }

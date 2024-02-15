@@ -2,22 +2,23 @@
 , fetchFromGitHub
 , buildPythonPackage
 , substituteAll
-, cudaSupport ? false
+
+# build-system
+, setuptools
 
 # runtime
 , ffmpeg-headless
 
 # propagates
-, numpy
-, torch
-, torchWithCuda
-, tqdm
 , more-itertools
-, transformers
 , numba
+, numpy
 , openai-triton
 , scipy
 , tiktoken
+, torch
+, tqdm
+, transformers
 
 # tests
 , pytestCheckHook
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20230918";
-  format = "setuptools";
+  version = "20231117";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wBAanFVEIIzTcoX40P9eI26UdEu0SC/xuife/zi2Xho=";
+    hash = "sha256-MJ1XjB/GuYUiECCuuHS0NWHvvs+ko0oTvLuDI7zLNiY=";
   };
 
   patches = [
@@ -42,31 +43,21 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    tqdm
-    more-itertools
-    transformers
-    numba
-    scipy
-    tiktoken
-  ] ++ lib.optionals (!cudaSupport) [
-    torch
-  ] ++ lib.optionals (cudaSupport) [
-    openai-triton
-    torchWithCuda
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "tiktoken==0.3.3" "tiktoken>=0.3.3"
-  ''
-  # openai-triton is only needed for CUDA support.
-  # triton needs CUDA to be build.
-  # -> by making it optional, we can build whisper without unfree packages enabled
-  + lib.optionalString (!cudaSupport) ''
-    sed -i '/if sys.platform.startswith("linux") and platform.machine() == "x86_64":/{N;d}' setup.py
-  '';
+  propagatedBuildInputs = [
+    more-itertools
+    numba
+    numpy
+    openai-triton
+    scipy
+    tiktoken
+    torch
+    tqdm
+    transformers
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -85,7 +76,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/openai/whisper/blob/v$[version}/CHANGELOG.md";
+    changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;

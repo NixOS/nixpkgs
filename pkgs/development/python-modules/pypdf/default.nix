@@ -19,13 +19,14 @@
 , pillow
 
 # tests
+, fpdf2
 , pytestCheckHook
 , pytest-timeout
 }:
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "3.15.1";
+  version = "3.17.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-0KMZnMIeTkra2Il4HGDBtm8HLP8zpMXgUD4V5U5fYy0=";
+    hash = "sha256-2FKTBN1VZX0LGiDEghix4DBt1gO9NRNB/lAUefu5EUA=";
   };
 
   outputs = [
@@ -75,6 +76,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    (fpdf2.overridePythonAttrs { doCheck = false; })  # avoid reference loop
     pytestCheckHook
     pytest-timeout
   ] ++ passthru.optional-dependencies.full;
@@ -87,6 +89,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires fpdf2 which we don't package yet
     "test_compression"
+    # infinite recursion when including fpdf2
+    "test_merging_many_temporary_files"
   ];
 
   meta = with lib; {
@@ -94,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

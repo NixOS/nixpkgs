@@ -20,28 +20,14 @@
 , pytestCheckHook
 , pytest-asyncio
 , pydub
+, rich
+, tomlkit
 , gradio
 }:
 
-let
-
-  # Cyclic dependencies are fun!
-  # This is gradio without gradio-client, only needed for checkPhase
-  gradio' = (gradio.override (old: {
-    gradio-client = null;
-  })).overridePythonAttrs (old: {
-    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ pythonRelaxDepsHook ];
-    pythonRemoveDeps = (old.pythonRemoveDeps or []) ++ [ "gradio_client" ];
-    doInstallCheck = false;
-    doCheck = false;
-    pythonImportsCheck = null;
-  });
-
-in
-
 buildPythonPackage rec {
-  pname = "gradio_client";
-  version = "0.5.0";
+  pname = "gradio-client";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -51,18 +37,26 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     #rev = "refs/tags/v${gradio.version}";
-    rev = "ba4c6d9e65138c97062d1757d2a588c4fc449daa"; # v3.43.1 is not tagged...
+    rev = "dc131b64f05062447643217819ca630e483a11df"; # v4.9.1 is not tagged...
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-savka4opyZKSWPeBqc2LZqvwVXLYIZz5dS1OWJSwvHo=";
+    hash = "sha256-Zp1Zl53Va0pyyZEHDUpnldi4dtH2uss7PZQD+Le8+cA=";
   };
   prePatch = ''
     cd client/python
   '';
 
+  # upstream adds upper constraints because they can, not because the need to
+  # https://github.com/gradio-app/gradio/pull/4885
+  pythonRelaxDeps = [
+    # only backward incompat is dropping py3.7 support
+    "websockets"
+  ];
+
   nativeBuildInputs = [
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -71,20 +65,20 @@ buildPythonPackage rec {
     httpx
     huggingface-hub
     packaging
-    requests
     typing-extensions
     websockets
   ];
 
-  nativeCheckInputs =[
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pydub
-    gradio'
+    rich
+    tomlkit
+    gradio.sans-reverse-dependencies
   ];
-  disallowedReferences = [
-    gradio' # ensuring we don't propagate this intermediate build
-  ];
+  # ensuring we don't propagate this intermediate build
+  disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
@@ -94,11 +88,13 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "test/"
-    #"-m" "not flaky" # doesn't work, even when advertised
+    "-m 'not flaky'"
     #"-x" "-W" "ignore" # uncomment for debugging help
   ];
 
   pythonImportsCheck = [ "gradio_client" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";

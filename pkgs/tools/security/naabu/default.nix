@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "naabu";
-  version = "2.1.8";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/EVlg0NhWJRowHttwYq+i/3BhO5o8w74kRLWIjSI6AQ=";
+    hash = "sha256-z81LL+tx15Zo6OWj4gRSodo7Dk763M+QQ5kYgjrWO3Q=";
   };
 
-  vendorHash = "sha256-LoYArDsCJCDSI02nFSUVemYNeF+q5xAjV2QyWjMOXIY=";
+  vendorHash = "sha256-nwrqxlbvr9FZXJpzmcn0IBEtlJfeYCy8DJsBvxEgj6k=";
 
   buildInputs = [
     libpcap
@@ -25,6 +25,11 @@ buildGoModule rec {
 
   subPackages = [
     "cmd/naabu/"
+  ];
+
+  ldflags = [
+    "-w"
+    "-s"
   ];
 
   meta = with lib; {

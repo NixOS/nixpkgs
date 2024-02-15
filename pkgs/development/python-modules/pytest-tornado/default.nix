@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pytest-tornado";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,6 +26,5 @@ buildPythonPackage rec {
     description = "A py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications.";
     homepage =  "https://github.com/eugeniy/pytest-tornado";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

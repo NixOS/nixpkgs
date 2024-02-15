@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "calmjs";
   version = "3.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

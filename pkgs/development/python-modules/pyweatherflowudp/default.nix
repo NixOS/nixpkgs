@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyweatherflowudp";
-  version = "1.4.4";
+  version = "1.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "briis";
     repo = "pyweatherflowudp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5WdkT4U/+uO9UUIxumrxCKZnK9MdQcvfaO9UfpmpxJE=";
+    hash = "sha256-aTwGFYTtd07BsWFaFc7ns+8oh2AxTUfRFSu81Zv5OoA=";
   };
 
   nativeBuildInputs = [

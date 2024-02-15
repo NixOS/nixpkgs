@@ -1,10 +1,11 @@
 { lib
 , autograd
 , buildPythonPackage
+, fetchFromGitHub
 , cupy
 , cvxopt
 , cython
-, fetchPypi
+, oldest-supported-numpy
 , matplotlib
 , numpy
 , tensorflow
@@ -19,20 +20,21 @@
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "0.9.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    pname = "POT";
-    inherit version;
-    hash = "sha256-PKmuPI83DPy7RkOgHHPdPJJz5NT/fpr123AVTzTLwgQ=";
+  src = fetchFromGitHub {
+    owner = "PythonOT";
+    repo = "POT";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fdqDM0V6zTFe1lcqi53ZZNHAfmuR2I7fdX4SN9qeNn8=";
   };
 
   nativeBuildInputs = [
-    numpy
     cython
+    oldest-supported-numpy
   ];
 
   propagatedBuildInputs = [
@@ -59,17 +61,19 @@ buildPythonPackage rec {
       --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
-    substituteInPlace setup.py \
-      --replace '"oldest-supported-numpy", ' ""
 
     # we don't need setup.py to find the macos sdk for us
     sed -i '/sdk_path/d' setup.py
   '';
 
-  # To prevent importing of an incomplete package from the build directory
-  # instead of nix store (`ot` is the top-level package name).
+  # need to run the tests with the built package next to the test directory
   preCheck = ''
-    rm -r ot
+    pushd build/lib.*
+    ln -s -t . "$OLDPWD/test"
+  '';
+
+  postCheck = ''
+    popd
   '';
 
   disabledTests = [
@@ -100,15 +104,7 @@ buildPythonPackage rec {
     "test_emd1d_device_tf"
   ];
 
-  disabledTestPaths = [
-    # AttributeError: module pytest has no attribute skip_backend
-    "test/test_bregman.py"
-    "test/test_da.py"
-    "test/test_utils.py"
-    "test/test_gromov.py"
-    "test/test_helpers.py"
-    "test/test_unbalanced.py"
-  ] ++ lib.optionals (!enableDimensionalityReduction) [
+  disabledTestPaths = lib.optionals (!enableDimensionalityReduction) [
     "test/test_dr.py"
   ];
 

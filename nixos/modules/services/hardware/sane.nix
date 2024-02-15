@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  pkg = pkgs.sane-backends.override {
+  pkg = config.hardware.sane.backends-package.override {
     scanSnapDriversUnfree = config.hardware.sane.drivers.scanSnap.enable;
     scanSnapDriversPackage = config.hardware.sane.drivers.scanSnap.package;
   };
@@ -55,6 +55,13 @@ in
         Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
         :::
       '';
+    };
+
+    hardware.sane.backends-package = mkOption {
+      type = types.package;
+      default = pkgs.sane-backends;
+      defaultText = literalExpression "pkgs.sane-backends";
+      description = lib.mdDoc "Backends driver package to use.";
     };
 
     hardware.sane.snapshot = mkOption {
@@ -114,14 +121,11 @@ in
       '';
     };
 
-    hardware.sane.drivers.scanSnap.package = mkOption {
-      type = types.package;
-      default = pkgs.sane-drivers.epjitsu;
-      defaultText = literalExpression "pkgs.sane-drivers.epjitsu";
-      description = lib.mdDoc ''
-        Epjitsu driver package to use. Useful if you want to extract the driver files yourself.
+    hardware.sane.drivers.scanSnap.package = mkPackageOption pkgs [ "sane-drivers" "epjitsu" ] {
+      extraDescription = ''
+        Useful if you want to extract the driver files yourself.
 
-        The process is described in the `/etc/sane.d/epjitsu.conf` file in
+        The process is described in the {file}`/etc/sane.d/epjitsu.conf` file in
         the `sane-backends` package.
       '';
     };

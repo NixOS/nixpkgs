@@ -2,6 +2,7 @@
 , stdenv
 , fetchPypi
 , buildPythonPackage
+, fetchpatch
 , appdirs
 , cffi
 , decorator
@@ -26,13 +27,21 @@ let
     if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
 in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2023.1.2";
+  version = "2023.1.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6wDNV0BJ1ZK2edz4v+erSjbJSjn9Gssaa0XWwNe+mmg=";
+    hash = "sha256-IgF078qQDp1d5a7yqht3pvJVBQHekrA1qRATrq5NTF4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-conditions-for-CL_UNORM_INT24-availability.patch";
+      url = "https://github.com/inducer/pyopencl/pull/706.patch";
+      hash = "sha256-31aiqYlhbEw3F2k/x3W2rbOX0A90cHwIlfXMivFucMA=";
+    })
+  ];
 
   nativeBuildInputs = [
     oldest-supported-numpy

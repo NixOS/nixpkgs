@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "owntracks-recorder";
-  version = "0.9.3";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "owntracks";
     repo = "recorder";
     rev = finalAttrs.version;
-    hash = "sha256-w0wk69hERGz6fs6uXBYiomcVlQeeTGCfTICu2q7ryNg=";
+    hash = "sha256-QpPZDh++WHIvIgml32UWtAe3tzh2x7lFUu2xdioNGW4=";
   };
 
   nativeBuildInputs = [

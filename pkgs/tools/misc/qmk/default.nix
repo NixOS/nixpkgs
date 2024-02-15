@@ -5,6 +5,7 @@
 , avrdude
 , dfu-programmer
 , dfu-util
+, wb32-dfu-updater
 , gcc-arm-embedded
 , gnumake
 , teensy-loader-cli
@@ -38,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     avrdude
     dfu-programmer
     dfu-util
+    wb32-dfu-updater
     teensy-loader-cli
     gcc-arm-embedded
     gnumake
@@ -69,5 +71,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple babariviere ekleog ];
+    mainProgram = "qmk";
   };
 }

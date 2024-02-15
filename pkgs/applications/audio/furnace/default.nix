@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, gitUpdater
 , testers
 , furnace
 , fetchFromGitHub
@@ -28,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-8we7vKyGWjM9Rx0MJjSKLJcKBHiHt5vjuy17HHx/pP8=";
+    hash = "sha256-QUOZGUyZp20ls7rtDK+cmg3Smbd+hl1m9aMhHQmMMbY=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -104,9 +103,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = furnace;
     };
@@ -119,5 +116,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
+    mainProgram = "furnace";
   };
 }

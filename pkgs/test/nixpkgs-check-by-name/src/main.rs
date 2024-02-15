@@ -1,28 +1,52 @@
+use crate::nix_file::NixFileStore;
 mod eval;
+mod nix_file;
+mod nixpkgs_problem;
+mod ratchet;
 mod references;
 mod structure;
 mod utils;
+mod validation;
 
+use crate::structure::check_structure;
+use crate::validation::Validation::Failure;
+use crate::validation::Validation::Success;
 use anyhow::Context;
 use clap::Parser;
 use colored::Colorize;
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
-use structure::Nixpkgs;
-use utils::ErrorWriter;
 
 /// Program to check the validity of pkgs/by-name
+///
+/// This CLI interface may be changed over time if the CI workflow making use of
+/// it is adjusted to deal with the change appropriately.
+///
+/// Exit code:
+/// - `0`: If the validation is successful
+/// - `1`: If the validation is not successful
+/// - `2`: If an unexpected I/O error occurs
+///
+/// Standard error:
+/// - Informative messages
+/// - Detected problems if validation is not successful
 #[derive(Parser, Debug)]
-#[command(about)]
-struct Args {
-    /// Path to nixpkgs
+#[command(about, verbatim_doc_comment)]
+pub struct Args {
+    /// Path to the main Nixpkgs to check.
+    /// For PRs, this should be set to a checkout of the PR branch.
     nixpkgs: PathBuf,
+
+    /// Path to the base Nixpkgs to run ratchet checks against.
+    /// For PRs, this should be set to a checkout of the PRs base branch.
+    #[arg(long)]
+    base: PathBuf,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match check_nixpkgs(&args.nixpkgs, vec![], &mut io::stderr()) {
+    match process(&args.base, &args.nixpkgs, false, &mut io::stderr()) {
         Ok(true) => {
             eprintln!("{}", "Validated successfully".green());
             ExitCode::SUCCESS
@@ -38,54 +62,91 @@ fn main() -> ExitCode {
     }
 }
 
-/// Checks whether the pkgs/by-name structure in Nixpkgs is valid.
+/// Does the actual work. This is the abstraction used both by `main` and the tests.
 ///
 /// # Arguments
-/// - `nixpkgs_path`: The path to the Nixpkgs to check
-/// - `eval_accessible_paths`:
-///   Extra paths that need to be accessible to evaluate Nixpkgs using `restrict-eval`.
-///   This is used to allow the tests to access the mock-nixpkgs.nix file
+/// - `base_nixpkgs`: Path to the base Nixpkgs to run ratchet checks against.
+/// - `main_nixpkgs`: Path to the main Nixpkgs to check.
+/// - `keep_nix_path`: Whether the value of the NIX_PATH environment variable should be kept for
+/// the evaluation stage, allowing its contents to be accessed.
+///   This is used to allow the tests to access e.g. the mock-nixpkgs.nix file
 /// - `error_writer`: An `io::Write` value to write validation errors to, if any.
 ///
 /// # Return value
 /// - `Err(e)` if an I/O-related error `e` occurred.
-/// - `Ok(false)` if the structure is invalid, all the structural errors have been written to `error_writer`.
-/// - `Ok(true)` if the structure is valid, nothing will have been written to `error_writer`.
-pub fn check_nixpkgs<W: io::Write>(
-    nixpkgs_path: &Path,
-    eval_accessible_paths: Vec<&Path>,
+/// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
+/// - `Ok(true)` if there are no problems
+pub fn process<W: io::Write>(
+    base_nixpkgs: &Path,
+    main_nixpkgs: &Path,
+    keep_nix_path: bool,
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
-    let nixpkgs_path = nixpkgs_path.canonicalize().context(format!(
-        "Nixpkgs path {} could not be resolved",
-        nixpkgs_path.display()
-    ))?;
+    // Check the main Nixpkgs first
+    let main_result = check_nixpkgs(main_nixpkgs, keep_nix_path, error_writer)?;
+    let check_result = main_result.result_map(|nixpkgs_version| {
+        // If the main Nixpkgs doesn't have any problems, run the ratchet checks against the base
+        // Nixpkgs
+        check_nixpkgs(base_nixpkgs, keep_nix_path, error_writer)?.result_map(
+            |base_nixpkgs_version| {
+                Ok(ratchet::Nixpkgs::compare(
+                    base_nixpkgs_version,
+                    nixpkgs_version,
+                ))
+            },
+        )
+    })?;
 
-    // Wraps the error_writer to print everything in red, and tracks whether anything was printed
-    // at all. Later used to figure out if the structure was valid or not.
-    let mut error_writer = ErrorWriter::new(error_writer);
-
-    if !nixpkgs_path.join(structure::BASE_SUBPATH).exists() {
-        eprintln!(
-            "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
-            structure::BASE_SUBPATH
-        );
-    } else {
-        let nixpkgs = Nixpkgs::new(&nixpkgs_path, &mut error_writer)?;
-
-        if error_writer.empty {
-            // Only if we could successfully parse the structure, we do the semantic checks
-            eval::check_values(&mut error_writer, &nixpkgs, eval_accessible_paths)?;
-            references::check_references(&mut error_writer, &nixpkgs)?;
+    match check_result {
+        Failure(errors) => {
+            for error in errors {
+                writeln!(error_writer, "{}", error.to_string().red())?
+            }
+            Ok(false)
         }
+        Success(()) => Ok(true),
     }
-    Ok(error_writer.empty)
+}
+
+/// Checks whether the pkgs/by-name structure in Nixpkgs is valid.
+///
+/// This does not include ratchet checks, see ../README.md#ratchet-checks
+/// Instead a `ratchet::Nixpkgs` value is returned, whose `compare` method allows performing the
+/// ratchet check against another result.
+pub fn check_nixpkgs<W: io::Write>(
+    nixpkgs_path: &Path,
+    keep_nix_path: bool,
+    error_writer: &mut W,
+) -> validation::Result<ratchet::Nixpkgs> {
+    let mut nix_file_store = NixFileStore::default();
+
+    Ok({
+        let nixpkgs_path = nixpkgs_path.canonicalize().with_context(|| {
+            format!(
+                "Nixpkgs path {} could not be resolved",
+                nixpkgs_path.display()
+            )
+        })?;
+
+        if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
+            writeln!(
+                error_writer,
+                "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
+                utils::BASE_SUBPATH
+            )?;
+            Success(ratchet::Nixpkgs::default())
+        } else {
+            check_structure(&nixpkgs_path, &mut nix_file_store)?.result_map(|package_names|
+                // Only if we could successfully parse the structure, we do the evaluation checks
+                eval::check_values(&nixpkgs_path, &mut nix_file_store, package_names, keep_nix_path))?
+        }
+    })
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::check_nixpkgs;
-    use crate::structure;
+    use crate::process;
+    use crate::utils;
     use anyhow::Context;
     use std::fs;
     use std::path::Path;
@@ -112,7 +173,7 @@ mod tests {
 
     // tempfile::tempdir needs to be wrapped in temp_env lock
     // because it accesses TMPDIR environment variable.
-    fn tempdir() -> anyhow::Result<TempDir> {
+    pub fn tempdir() -> anyhow::Result<TempDir> {
         let empty_list: [(&str, Option<&str>); 0] = [];
         Ok(temp_env::with_vars(empty_list, tempfile::tempdir)?)
     }
@@ -129,7 +190,7 @@ mod tests {
             return Ok(());
         }
 
-        let base = path.join(structure::BASE_SUBPATH);
+        let base = path.join(utils::BASE_SUBPATH);
 
         fs::create_dir_all(base.join("fo/foo"))?;
         fs::write(base.join("fo/foo/package.nix"), "{ someDrv }: someDrv")?;
@@ -169,13 +230,18 @@ mod tests {
     }
 
     fn test_nixpkgs(name: &str, path: &Path, expected_errors: &str) -> anyhow::Result<()> {
-        let extra_nix_path = Path::new("tests/mock-nixpkgs.nix");
+        let base_path = path.join("base");
+        let base_nixpkgs = if base_path.exists() {
+            base_path.as_path()
+        } else {
+            Path::new("tests/empty-base")
+        };
 
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            check_nixpkgs(&path, vec![&extra_nix_path], &mut writer)
-                .context(format!("Failed test case {name}"))?;
+            process(base_nixpkgs, &path, true, &mut writer)
+                .with_context(|| format!("Failed test case {name}"))?;
             Ok(writer)
         })?;
 

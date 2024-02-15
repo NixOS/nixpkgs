@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pyls-spyder";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spyder-ide";

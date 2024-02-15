@@ -48,9 +48,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-fY4+jFEhrsCWXfcfWb7fRgUsbPFPljZcRBHsPeCkwaU=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     asciidoc
     installShellFiles
+    libarchive
     makeWrapper
     meson
     ninja

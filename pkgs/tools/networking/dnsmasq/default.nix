@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, nettle
-, libidn, libnetfilter_conntrack, buildPackages
+, libidn, libnetfilter_conntrack, nftables, buildPackages
 , dbusSupport ? stdenv.isLinux
 , dbus
 , nixosTests
@@ -13,6 +13,7 @@ let
     "-DHAVE_DBUS"
   ] ++ lib.optionals stdenv.isLinux [
     "-DHAVE_CONNTRACK"
+    "-DHAVE_NFTSET"
   ]);
 in
 stdenv.mkDerivation rec {
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nettle libidn ]
     ++ lib.optionals dbusSupport [ dbus ]
-    ++ lib.optionals stdenv.isLinux [ libnetfilter_conntrack ];
+    ++ lib.optionals stdenv.isLinux [ libnetfilter_conntrack nftables ];
 
   passthru.tests = {
     prometheus-exporter = nixosTests.prometheus-exporters.dnsmasq;

@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "opuslib";
   version = "3.0.3";
+  format = "setuptools";
 
   disabled = isPy27;
 

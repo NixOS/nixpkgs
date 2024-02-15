@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, zope_interface
-, zope_schema
+, zope-interface
+, zope-schema
 , zope-cachedescriptors
 , pytz
 , webtest
@@ -12,21 +12,21 @@
 , wsgiproxy2
 , six
 , mock
-, zope_testing
-, zope_testrunner
+, zope-testing
+, zope-testrunner
 , python
 }:
 
 buildPythonPackage rec {
   pname = "zope-testbrowser";
-  version = "5.6.1";
+  version = "6.0";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.testbrowser";
     inherit version;
-    sha256 = "035bf63d9f7244e885786c3327448a7d9fff521dba596429698b8474961b05e7";
+    sha256 = "sha256-RLd6XpA3q+3DZHai6j3H6XTWE85Sk913zAL4iO4x+ho=";
   };
 
   postPatch = ''
@@ -37,8 +37,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     setuptools
-    zope_interface
-    zope_schema
+    zope-interface
+    zope-schema
     zope-cachedescriptors
     pytz
     webtest
@@ -50,8 +50,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    zope_testing
-    zope_testrunner
+    zope-testing
+    zope-testrunner
   ];
 
   checkPhase = ''

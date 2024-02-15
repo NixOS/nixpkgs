@@ -17,7 +17,7 @@ let
   src = tuxedo-rs.src;
   sourceRoot = "source/tailor_gui";
   pname = "tailor_gui";
-  version = tuxedo-rs.version;
+  version = "0.2.3";
 in
 stdenv.mkDerivation {
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-DUaSLv1V6skWXQ7aqD62uspq+I9KiWmjlwwxykVve5A=";
+    hash = "sha256-mt4YQ0iB/Mlnm+o9sGgYVEdbxjF7qArxA5FIK4MAZ8M=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mrcjkb ];
+    maintainers = with maintainers; [ mrcjkb xaverdh ];
     platforms = platforms.linux;
   };
 }

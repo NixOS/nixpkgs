@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.40";
+  version = "0.0.52";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
-    rev = "v${version}";
-    hash = "sha256-CQ4SDIGhUTn7fdvoGag+XM7HcY+qJyp9McyzpoTQ0tM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-T18c0vKy/RUWiDjX2oScVxgVIhlj7t3M/+IoKsQ0N4w=";
   };
 
   postPatch = ''
@@ -64,10 +64,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     description = "A Language Server Protocol implementation for Ruff";
     homepage = "https://github.com/astral-sh/ruff-lsp";
-    changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "ruff-lsp";
     maintainers = with maintainers; [ figsoda kalekseev ];
   };
 }

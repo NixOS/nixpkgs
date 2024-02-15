@@ -71,18 +71,18 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "94ef3776ad7bebfb5780dfc9632e04d20d5c9a6c";
+  commit = "0c98611e6b43803a9d5dba222d7023b569abfb49";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.16.1";
+  version = "4.19.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-h4AooHHKV/EfN2S1z7CQKqnYW3uA3sKhSW4senlzjxI=";
+    hash = "sha256-J+6zuqVf1YKQjiRiqO4867DEwYzZsgQYgbsRXPo2hwY=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-vkju+oxEYrEXFAnjz/Mf1g0ZhxBALLAaRuWE0swSWwM=";
+    outputHash = "sha256-g2rwB+PuWuYgrzIuW0ngia7cdPMC8s7ffBEkbmPPzB4=";
   };
 
   nativeBuildInputs = [

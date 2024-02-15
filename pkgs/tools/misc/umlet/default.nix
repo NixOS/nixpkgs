@@ -50,5 +50,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.all;
+    mainProgram = "umlet";
   };
 }

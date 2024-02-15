@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , qmake
+, pkg-config
 , qtbase
 , qtquickcontrols2
 , qtwebsockets
@@ -10,22 +11,23 @@
 , wrapQtAppsHook
 , makeDesktopItem
 , copyDesktopItems
+, libvlc
 }:
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "1.2.10";
+  version = "1.2.14";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
-    rev = version;
-    sha256 = "sha256-mCDw8V/Uzewm32rj+mkkm5atS5nJAFJ3ry1boTn+gqI=";
+    rev = "d941607f078c72fca104ee1e7916cc0ddcc0acf5";
+    sha256 = "sha256-G4KlYAjOT1UV29vcX7Q8dMTj0BX0rsJcLtK2MQag5nU=";
   };
 
   sourceRoot = "source/src";
 
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
+  qmakeFlags = [ "PREFIX=${placeholder "out"}" "CONFIG+=unixvlc" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
@@ -49,6 +51,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
+    pkg-config
     wrapQtAppsHook
     copyDesktopItems
   ];
@@ -58,6 +61,7 @@ mkDerivation rec {
     qtquickcontrols2
     qtwebsockets
     qtmultimedia
+    libvlc
   ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-good

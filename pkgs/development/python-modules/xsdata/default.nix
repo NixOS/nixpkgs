@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
+, substituteAll
+, ruff
 , click
 , click-default-group
 , docformatter
@@ -12,20 +14,28 @@
 , requests
 , pytestCheckHook
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "23.8";
-  format = "pyproject";
+  version = "24.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VfA9TIgjbwRyZq/+VQug3RlHat/OagHz4K76x8gHjlY=";
+  src = fetchFromGitHub {
+    owner = "tefra";
+    repo = "xsdata";
+    rev = "v${version}";
+    hash = "sha256-vdcCTJqvaRehGWfTd9GR/DypF9ftY4ite7SDMPc2Ups=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      ruff = lib.getExe ruff;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -34,7 +44,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -83,9 +92,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Python XML Binding";
+    description = "Naive XML & JSON bindings for Python";
     homepage = "https://github.com/tefra/xsdata";
-    changelog = "https://github.com/tefra/xsdata/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

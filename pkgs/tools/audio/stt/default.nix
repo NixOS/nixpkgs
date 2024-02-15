@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ rvolosatovs ];
+    mainProgram = "stt";
   };
 }

@@ -19,34 +19,20 @@ It returns a Nixpkgs-like function that can be auto-called and evaluates to an a
   overlays ? [],
   # Passed by the checker to make sure a real Nixpkgs isn't influenced by impurities
   config ? {},
+  # Passed by the checker to make sure a real Nixpkgs isn't influenced by impurities
+  system ? null,
 }:
 let
 
   # Simplified versions of lib functions
-  lib = {
-    fix = f: let x = f x; in x;
-
-    extends = overlay: f: final:
-      let
-        prev = f final;
-      in
-      prev // overlay final prev;
-
-    callPackageWith = autoArgs: fn: args:
-      let
-        f = if builtins.isFunction fn then fn else import fn;
-        fargs = builtins.functionArgs f;
-        allArgs = builtins.intersectAttrs fargs autoArgs // args;
-      in
-      f allArgs;
-
-    isDerivation = value: value.type or null == "derivation";
-  };
+  lib = import <test-nixpkgs/lib>;
 
   # The base fixed-point function to populate the resulting attribute set
   pkgsFun = self: {
     inherit lib;
-    callPackage = lib.callPackageWith self;
+    newScope = extra: lib.callPackageWith (self // extra);
+    callPackage = self.newScope { };
+    callPackages = lib.callPackagesWith self;
     someDrv = { type = "derivation"; };
   };
 
@@ -75,14 +61,27 @@ let
 
   # Turns autoCalledPackageFiles into an overlay that `callPackage`'s all of them
   autoCalledPackages = self: super:
-    builtins.mapAttrs (name: file:
-      self.callPackage file { }
-    ) autoCalledPackageFiles;
+    {
+      # Needed to be able to detect empty arguments in all-packages.nix
+      # See a more detailed description in pkgs/top-level/by-name-overlay.nix
+      _internalCallByNamePackageFile = file: self.callPackage file { };
+    }
+    // builtins.mapAttrs
+      (name: self._internalCallByNamePackageFile)
+      autoCalledPackageFiles;
 
   # A list optionally containing the `all-packages.nix` file from the test case as an overlay
   optionalAllPackagesOverlay =
     if builtins.pathExists (root + "/all-packages.nix") then
       [ (import (root + "/all-packages.nix")) ]
+    else
+      [ ];
+
+  # A list optionally containing the `aliases.nix` file from the test case as an overlay
+  # But only if config.allowAliases is not false
+  optionalAliasesOverlay =
+    if (config.allowAliases or true) && builtins.pathExists (root + "/aliases.nix") then
+      [ (import (root + "/aliases.nix")) ]
     else
       [ ];
 
@@ -92,6 +91,7 @@ let
       autoCalledPackages
     ]
     ++ optionalAllPackagesOverlay
+    ++ optionalAliasesOverlay
     ++ overlays;
 
   # Apply all the overlays in order to the base fixed-point function pkgsFun

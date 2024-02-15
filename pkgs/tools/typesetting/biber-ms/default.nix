@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, perlPackages, shortenPerlShebang, texlive }:
 
 let
-  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.biber-ms.pkgs);
+  biberSource = texlive.pkgs.biber-ms.texsource;
   # missing test file
   multiscriptBltxml = (fetchFromGitHub {
     owner = "plk";
@@ -12,8 +12,7 @@ let
 in
 
 perlPackages.buildPerlModule {
-  pname = "biber-ms";
-  inherit (biberSource) version;
+  inherit (biberSource) pname version;
 
   src = "${biberSource}/source/bibtex/biber-ms/biblatex-biber-ms.tar.gz";
 
@@ -51,5 +50,6 @@ perlPackages.buildPerlModule {
     license = biberSource.meta.license;
     platforms = platforms.unix;
     maintainers = [ maintainers.xworld21 ];
+    mainProgram = "biber-ms";
   };
 }

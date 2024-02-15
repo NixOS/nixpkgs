@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "logilab-constraint";
-  version = "0.6.2";
+  version = "1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jk6wvvcDEeHfy7dUcjbnzFIeGBYm5tXzCI26yy+t2qs=";
+    hash = "sha256-UiE1FsHYJxvJd+lqCQKJQkAHXa5iRQYEzU9nDgrR6YY=";
   };
 
   nativeBuildInputs = [

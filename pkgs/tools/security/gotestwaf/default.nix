@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gotestwaf";
-  version = "0.4.6";
+  version = "0.4.12";
 
   src = fetchFromGitHub {
     owner = "wallarm";
-    repo = pname;
+    repo = "gotestwaf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jiEs5/HWNZ3DmahWVC6j2eJqFyCAibp1rFS+gtK7haI=";
+    hash = "sha256-av6N6RQ+9iW+xG1FpmFjBHL1leU4P0IPiqf7kvJxm6M=";
   };
 
   vendorHash = null;
@@ -22,6 +22,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
+    "-w"
+    "-s"
     "-X=github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
   ];
 

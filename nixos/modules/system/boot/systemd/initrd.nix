@@ -57,6 +57,7 @@ let
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
     "systemd-halt.service"
+    "systemd-hibernate-resume.service"
     "systemd-journald-audit.socket"
     "systemd-journald-dev-log.socket"
     "systemd-journald.service"
@@ -70,6 +71,7 @@ let
     "systemd-tmpfiles-setup.service"
     "timers.target"
     "umount.target"
+    "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
 
   upstreamWants = [
@@ -89,8 +91,6 @@ let
   };
 
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
-
-  needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
@@ -128,10 +128,6 @@ in {
         stage 2 counterparts such as {option}`systemd.services`,
         except that `restartTriggers` and `reloadTriggers` are not
         supported.
-
-        Note: This is experimental. Some of the `boot.initrd` options
-        are not supported when this is enabled, and the options under
-        `boot.initrd.systemd` are subject to change.
       '';
     };
 
@@ -348,17 +344,39 @@ in {
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
+    assertions = map (name: {
+      assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
+      message = ''
+        systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
+          convert it to analogous systemd units in 'boot.initrd.systemd'.
+
+            Definitions:
+        ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}") (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations}
+      '';
+    }) [
+      [ "preFailCommands" ]
+      [ "preDeviceCommands" ]
+      [ "preLVMCommands" ]
+      [ "postDeviceCommands" ]
+      [ "postResumeCommands" ]
+      [ "postMountCommands" ]
+      [ "extraUdevRulesCommands" ]
+      [ "extraUtilsCommands" ]
+      [ "extraUtilsCommandsTest" ]
+      [ "network" "postCommands" ]
+    ];
+
     system.build = { inherit initialRamdisk; };
 
     boot.initrd.availableKernelModules = [
       # systemd needs this for some features
-      "autofs4"
+      "autofs"
       # systemd-cryptenroll
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
     ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";
 
     boot.initrd.systemd = {
-      initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
+      initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package];
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
@@ -380,8 +398,7 @@ in {
           ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
         '';
 
-        "/lib/modules".source = "${modulesClosure}/lib/modules";
-        "/lib/firmware".source = "${modulesClosure}/lib/firmware";
+        "/lib".source = "${modulesClosure}/lib";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
@@ -409,15 +426,17 @@ in {
 
       storePaths = [
         # systemd tooling
+        "${cfg.package}/lib/systemd/systemd-executor"
         "${cfg.package}/lib/systemd/systemd-fsck"
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
-        (lib.mkIf needMakefs "${cfg.package}/lib/systemd/systemd-makefs")
+        "${cfg.package}/lib/systemd/systemd-makefs"
         "${cfg.package}/lib/systemd/systemd-modules-load"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
+        "${cfg.package}/lib/systemd/systemd-bsod"
 
         # generators
         "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"

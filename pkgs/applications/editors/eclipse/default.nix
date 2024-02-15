@@ -9,15 +9,15 @@
 # use ./update.sh to help with updating for each quarterly release
 #
 # then, to test:
-# for e in cpp modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
+# for e in cpp dsl modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
 
 let
   platform_major = "4";
-  platform_minor = "28";
+  platform_minor = "30";
   year = "2023";
-  month = "06"; #release month
-  buildmonth = "06"; #sometimes differs from release month
-  timestamp = "${year}${buildmonth}050440";
+  month = "12"; #release month
+  buildmonth = "12"; #sometimes differs from release month
+  timestamp = "${year}${buildmonth}010110";
   gtk = gtk3;
   arch = if stdenv.hostPlatform.isx86_64 then
     "x86_64"
@@ -43,8 +43,23 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-0VFg68+M84SEPbLv2f3hNTK1tvUjN3u0X3DYFCMAFX8=";
-          aarch64 = "sha256-K1e1Q//X+R4FfY60eE4nPgEaF0wUkUIO/AFzzjIrGRY=";
+          x86_64 = "sha256-a5GqbghNlyvU/S36NcFSel1GRf/vZp01aaCxAswqyng=";
+          aarch64 = "sha256-w2bzolYBA4bf4kfcPza0LDLViKqXQkbZR07STN94nrY=";
+        }.${arch};
+      };
+  };
+
+  ### Eclipse DSL
+
+  eclipse-dsl = buildEclipse {
+    name = "eclipse-dsl-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Java and DSL Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-dsl-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-U9CMwcDZP1ptnc+C7gTfTOcyppe7r6RtgPp65b3A7Qk=";
+          aarch64 = "sha256-wuh6IZtRPDNJAVcfukFjZfuOVJgfj2zI616YNDnRgWM=";
         }.${arch};
       };
   };
@@ -58,8 +73,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-wdZninKynNQ5o2nxyOxA7GDQ75tWs1TB2jh21O0fEpg=";
-          aarch64 = "sha256-5iAoMyesBjmdAy/eSMkgtuYv5rnXAEjgLb0yNX02mdw=";
+          x86_64 = "sha256-h1d0LTBKBKcYxeLr0QEK7VG3q8cKeHQPaKzoPU6qlkI=";
+          aarch64 = "sha256-nCkNNmL924I8Q6wjAmik7d3K4T4j0/Biyr4d9Y0KfSg=";
         }.${arch};
       };
   };
@@ -73,8 +88,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-SYeCXWGSi8bPbqngGC+ZSBQaKyZrDTFeT+RLKC+ZsDk=";
-          aarch64 = "sha256-DN6fl7p+q96wsg9Mq6v3lTV0/7b87MFKTJSFuNrjLgs=";
+          x86_64 = "sha256-FbcSbDFyjx2uG0T844cBwAdaBZc2k/c4aogsCVYI7+E=";
+          aarch64 = "sha256-COQipICwcM7+gbpiD/G31bsW+9NDz8wt+HyY6FFkKos=";
         }.${arch};
       };
   };
@@ -105,8 +120,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-QY16KSNZj6rq7YL+gOajI80XVtSdCh7MJGPscRJuf1o=";
-          aarch64 = "sha256-oZXx87dlLZ61ezwDD0WnV48ZMjcK0FkSGl83LhkJvmc=";
+          x86_64 = "sha256-3UfaIwUpgD+VWB7Ar5by78zldqmrlg9csINkre+m8i0=";
+          aarch64 = "sha256-5wIlnTItwEstUHitlVPIxY7ayvxV4yI/8ID8WQ3mnDI=";
         }.${arch};
       };
   };
@@ -120,8 +135,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-FC4zgx+75S9TJVp0azWgON/wNmoEy0074tj+DOdvNOg=";
-          aarch64 = "sha256-wnRQKqg1V4hrD9VAg6sw8yypB97Wcivt4cH6MFP4KPs=";
+          x86_64 = "sha256-Cf2jrNjakRteGO/W18oneE9EDM3VLyi/lIafgffprUc=";
+          aarch64 = "sha256-j0i1k3fHQ/+P5y6aRKUZM8uBQJOLweDtkjneqlx/kuQ=";
         }.${arch};
       };
   };
@@ -135,8 +150,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-jee-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-eSYWuw6s3H1ht4zPDwjd4oZ49KhIn1OaywtwKHyS0wI=";
-          aarch64 = "sha256-9O0+S3G3vtjN1Vd4euf3gYRPPtrVxoBB+Uj7BlDAS5M=";
+          x86_64 = "sha256-pN+x63J8+GhGmfsdzLknJXWCnvhS8VeLizmyqWM8XUA=";
+          aarch64 = "sha256-QVW2nx5P6mkj4oJ1qHs5D2TZBuBuxayhiJHh0VgAghU=";
         }.${arch};
       };
   };
@@ -150,8 +165,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-kJoXaSwsjArpe4tqeSkZiU4AcR5dLBvdsyU7tBTiTdc=";
-          aarch64 = "sha256-qydFxa0lQEwsxZQPlBXV/wiuXGuIcBHRasKZEmXJaOk=";
+          x86_64 = "sha256-Qj9Omc3+HP3twF0evhkRKE8PH/i4+eGtnkfjUu9+lY4=";
+          aarch64 = "sha256-DqkwHyEbttFBA9HM3GdqxxZNjCiKf6gS7KNQYIUBAGE=";
         }.${arch};
       };
   };
@@ -165,8 +180,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-BAEXN6sx4f+BJnKz0lkPoAmRXnlbl5s5ETAyfE/AZak=";
-          aarch64 = "sha256-xayvsFAglBxAB49j2tnt52d6KX6LxMBRfx0wR/p8K70=";
+          x86_64 = "sha256-zhQU7hSF3KWJ0Q2TRzvGhL76Mxhhh/HS/wT/ahkFHXk=";
+          aarch64 = "sha256-XSqWx1V0XjtuYbZlRcJf7Xu1yL1VazT5Z/BcGkkXzb8=";
         }.${arch};
       };
   };
@@ -211,6 +226,6 @@ in rec {
 
   ### Plugins
 
-  plugins = callPackage ./plugins.nix { };
+  plugins = callPackage ./plugins.nix { } // { __attrsFailEvaluation = true; };
 
 }

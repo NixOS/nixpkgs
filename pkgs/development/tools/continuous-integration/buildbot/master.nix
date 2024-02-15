@@ -9,7 +9,7 @@
 , twisted
 , jinja2
 , msgpack
-, zope_interface
+, zope-interface
 , sqlalchemy
 , alembic
 , python-dateutil
@@ -24,13 +24,18 @@
 , moto
 , markdown
 , lz4
-, setuptoolsTrial
+, setuptools-trial
 , buildbot-worker
 , buildbot-plugins
 , buildbot-pkg
 , parameterized
 , git
 , openssh
+, setuptools
+, croniter
+, importlib-resources
+, packaging
+, unidiff
 , glibcLocales
 , nixosTests
 , callPackage
@@ -65,14 +70,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.9.2";
-    format = "setuptools";
+    version = "3.11.0";
+    format = "pyproject";
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.8";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-7QhIMUpzmxbh8qjz0hgqzibLkWADhTV523neo1wpGSA=";
+      hash = "sha256-0TW14K0Cp3Ylk+JDNV9x7a8Ul7EC5FTTVvSGccXv6JU=";
     };
 
     propagatedBuildInputs = [
@@ -80,7 +85,7 @@ let
       twisted
       jinja2
       msgpack
-      zope_interface
+      zope-interface
       sqlalchemy
       alembic
       python-dateutil
@@ -88,6 +93,11 @@ let
       autobahn
       pyjwt
       pyyaml
+      setuptools
+      croniter
+      importlib-resources
+      packaging
+      unidiff
     ]
       # tls
       ++ twisted.optional-dependencies.tls;
@@ -100,7 +110,7 @@ let
       moto
       markdown
       lz4
-      setuptoolsTrial
+      setuptools-trial
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www
@@ -146,7 +156,7 @@ let
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
       homepage = "https://buildbot.net/";
       changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-      maintainers = with maintainers; [ ryansydnor lopsided98 ];
+      maintainers = teams.buildbot.members;
       license = licenses.gpl2Only;
       broken = stdenv.isDarwin;
     };

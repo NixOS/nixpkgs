@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
-  version = "42.6";
+  version = "42.8";
 
   # TODO: split out "lib"
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "WGT+bx5xhxXbJrYiAbdaWQIM9CR/7DdkWzVZzS26WdA=";
+    sha256 = "dsJB6MosmxA1NkU1yiYIT4n8XA4YKVEPiQlYMRX8wts=";
   };
 
   nativeBuildInputs = [

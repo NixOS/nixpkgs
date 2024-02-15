@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/42wim/matterbridge";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ ryantm ];
+    mainProgram = "matterbridge";
   };
 }

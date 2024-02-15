@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 
 # build-system
 , poetry-core
 
 # propagates
 , flet-core
+, flet-runtime
 , httpx
 , oauthlib
 , packaging
-, typing-extensions
+, qrcode
+, cookiecutter
 , watchdog
 , websocket-client
 , websockets
@@ -19,33 +22,34 @@
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.7.4";
-  format = "pyproject";
+  version = "0.19.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vFPjN+5wIygtP035odAOSdF9PQe6eXz6CJ9Q0d8ScFo=";
+    hash = "sha256-YpML/NIUiL1WYg6zR6l60nJ6KRBfjMOjRbPDdjhR3/Q=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'httpx = "^0.23' 'httpx = ">=0.23' \
-      --replace 'watchdog = "^2' 'watchdog = ">=2'
-  '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "websockets"
   ];
 
   propagatedBuildInputs = [
     flet-core
-    typing-extensions
+    flet-runtime
     websocket-client
     watchdog
     oauthlib
     websockets
     httpx
     packaging
+    qrcode
+    cookiecutter
   ];
 
   doCheck = false;

@@ -98,7 +98,7 @@ self: let
         '';
 
         postInstall = (old.postInstall or "") + "\n" + ''
-          ./install.sh --prefix=$out
+          ./install.sh "$out"
         '';
 
         meta = old.meta // {
@@ -118,7 +118,7 @@ self: let
       });
 
       jinx = super.jinx.overrideAttrs (old: let
-        libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
       in {
         dontUnpack = false;
 
@@ -159,7 +159,7 @@ self: let
       );
 
       xeft = super.xeft.overrideAttrs (old: let
-        libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
       in {
         dontUnpack = false;
 
@@ -181,4 +181,4 @@ self: let
 
   in elpaPackages // { inherit elpaBuild; });
 
-in generateElpa { }
+in (generateElpa { }) // { __attrsFailEvaluation = true; }

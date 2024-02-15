@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "django-annoying";
   version = "0.10.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "skorokithakis";

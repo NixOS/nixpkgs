@@ -10,7 +10,7 @@ in
     services.openvscode-server = {
       enable = lib.mkEnableOption (lib.mdDoc "openvscode-server");
 
-      package = lib.mkPackageOptionMD pkgs "openvscode-server" { };
+      package = lib.mkPackageOption pkgs "openvscode-server" { };
 
       extraPackages = lib.mkOption {
         default = [ ];
@@ -159,6 +159,7 @@ in
     systemd.services.openvscode-server = {
       description = "OpenVSCode server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = cfg.extraPackages;
       environment = cfg.extraEnvironment;

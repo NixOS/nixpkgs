@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "txzmq";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

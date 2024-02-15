@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;
+    mainProgram = "attract";
   };
 }

@@ -7,8 +7,8 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
-, electron_24
+, prefetch-yarn-deps
+, electron
 , libpulseaudio
 , pipewire
 , alsa-utils
@@ -19,28 +19,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.13";
+  version = "1.4.10";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WF2jWP6utopAMZPP/ZWOhqVGZJmACwHyLLE+HQaHJjg=";
+    hash = "sha256-dR9YJJBBxvnJkD42+MwIql3B1dlA6WUSLJ//lW22mmc=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-vgjPGO5qa4IYfW1svClJ+wP/KtIFFd3P02T2sht69C8=";
+    hash = "sha256-Z2vnLr14F/Etuq9yWH7ygQwa54an7v99LbU3gPcEuII=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron_24}/libexec/electron \
-      -c.electronVersion=${electron_24.version}
+      -c.electronDist=${electron}/libexec/electron \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
-    makeWrapper '${electron_24}/bin/electron' "$out/bin/teams-for-linux" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

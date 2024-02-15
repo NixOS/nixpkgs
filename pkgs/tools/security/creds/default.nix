@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "creds";
-  version = "0.5";
+  version = "0.5.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ihebski";
     repo = "DefaultCreds-cheat-sheet";
-    rev = "refs/tags/creds-${version}";
-    hash = "sha256-s9ja2geFTnul7vUlGI4Am+IG3C0igICf0whnyd3SHdQ=";
+    rev = "refs/tags/creds-v${version}";
+    hash = "sha256-CtwGSF3EGcPqL49paNRCsB2qxYjKpCLqyRsC67nAyVk=";
   };
 
   postPatch = ''

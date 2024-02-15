@@ -23,5 +23,6 @@ buildGoModule {
     homepage = "https://github.com/muesli/smartcrop";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "smartcrop";
   };
 }

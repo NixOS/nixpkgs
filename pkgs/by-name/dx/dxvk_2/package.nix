@@ -19,7 +19,6 @@
 assert !sdl2Support || !glfwSupport;
 
 let
-  isCross = stdenv.hostPlatform != stdenv.targetPlatform;
   isWindows = stdenv.hostPlatform.uname.system == "Windows";
 in
 stdenv.mkDerivation (finalAttrs:  {
@@ -51,18 +50,12 @@ stdenv.mkDerivation (finalAttrs:  {
     mkdir -p include/spirv/include include/vulkan/include
   '';
 
-  mesonFlags =
-    let
-      arch = if stdenv.is32bit then "32" else "64";
-    in
-    [
-      "--buildtype" "release"
-      "--prefix" "${placeholder "out"}"
-    ]
-    ++ lib.optionals isCross [ "--cross-file" "build-win${arch}.txt" ]
-    ++ lib.optional glfwSupport "-Ddxvk_native_wsi=glfw";
+  mesonFlags = [
+    "--buildtype" "release"
+    "--prefix" "${placeholder "out"}"
+  ] ++ lib.optional glfwSupport "-Ddxvk_native_wsi=glfw";
 
-  doCheck = !isCross;
+  doCheck = true;
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

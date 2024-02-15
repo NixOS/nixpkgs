@@ -34,5 +34,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
     broken = stdenv.isDarwin;
+    mainProgram = "cod";
   };
 }

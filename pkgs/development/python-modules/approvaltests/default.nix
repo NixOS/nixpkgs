@@ -10,41 +10,46 @@
 , numpy
 , pyperclip
 , pytest
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , testfixtures
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "9.0.0";
-  format = "setuptools";
+  version = "10.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tyUPXeMdFuzlBY/HrGHLDEwYngzBELayaVVfEh92lbE=";
+    hash = "sha256-/UsrUzCd4aYEQ4epZggk2O2esJCUG0DxRseK+s6yJd4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     allpairspy
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest
     testfixtures
-    typing-extensions
   ];
 
   nativeCheckInputs = [
-    mock
     numpy
+    pytest-asyncio
     pytestCheckHook
   ];
 

@@ -25,14 +25,20 @@ let
 
   pname = "wire-desktop";
 
-  version = {
-    x86_64-darwin = "3.31.4556";
-    x86_64-linux = "3.31.3060";
+  version = let
+    x86_64-darwin = "3.32.4589";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
+    x86_64-linux = "3.32.3079";
   }.${system} or throwSystem;
 
-  hash = {
-    x86_64-darwin = "sha256-qRRdt/TvSvQ3RiO/I36HT+C88+ev3gFcj+JaEG38BfU=";
-    x86_64-linux = "sha256-9LdTsBOE1IJH0OM+Ag7GJADsFRgYMjbPXBH6roY7Msg=";
+  hash = let
+    x86_64-darwin = "sha256-PDAZCnkgzlausdtwycK+PHfp+zmL33VnX6RzCsgBTZ4=";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
+    x86_64-linux = "sha256-+4aRis141ctI50BtBwipoVtPoMGRs82ENqZ+y2ZlL58=";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -57,10 +63,10 @@ let
       kiwi
       toonn
     ];
-    platforms = [
-      "x86_64-darwin"
+    platforms = platforms.darwin ++ [
       "x86_64-linux"
     ];
+    hydraPlatforms = [];
   };
 
   linux = stdenv.mkDerivation rec {

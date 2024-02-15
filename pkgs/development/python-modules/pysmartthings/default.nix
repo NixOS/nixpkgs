@@ -21,19 +21,22 @@ buildPythonPackage rec {
     hash = "sha256-r+f2+vEXJdQGDlbs/MhraFgEmsAf32PU282blLRLjzc=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
+  '';
+
   propagatedBuildInputs = [
     aiohttp
   ];
+
+  # https://github.com/andrewsayre/pysmartthings/issues/80
+  doCheck = lib.versionOlder aiohttp.version "3.9.0";
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
-  '';
 
   pythonImportsCheck = [
     "pysmartthings"

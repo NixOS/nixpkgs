@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ kira-bruneau pshirshov raskin ];
     platforms = python3.meta.platforms;
     homepage = "https://gist.github.com/Tblue/62ff47bef7f894e92ed5";
+    mainProgram = "mozlz4a";
   };
 }

@@ -42,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.205.0";
+  version = "0.217.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-58pBsTQM3t5rj4AywhMqmCUzUQB4BH9FAF7J3p6Qkok=";
+    hash = "sha256-Rorbqh/YwBlrkVgS7rV5vb4n773V/EmGAMGP0fuF6V4=";
   };
 
   patches = [
@@ -60,6 +60,12 @@ buildPythonPackage rec {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
       hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
+    })
+    (fetchpatch {
+      # https://github.com/strawberry-graphql/strawberry/pull/3255
+      name = "fix-tests-with-pydantic_2.patch";
+      url = "https://github.com/strawberry-graphql/strawberry/commit/0a0dc284ee6d31d4e82ac7ff1ed9fea4dff39fa6.patch";
+      hash = "sha256-LACWD7XA6YL/apJwhpx3LPCKxKUfa+XWyTLK+Zkxlaw=";
     })
   ];
 
@@ -175,6 +181,8 @@ buildPythonPackage rec {
     "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A GraphQL library for Python that leverages type annotations";

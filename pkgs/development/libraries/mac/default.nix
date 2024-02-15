@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.deb-multimedia.org/dists/testing/main/binary-amd64/package/monkeys-audio.php";
     license = licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

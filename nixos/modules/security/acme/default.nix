@@ -184,6 +184,7 @@ let
   certToConfig = cert: data: let
     acmeServer = data.server;
     useDns = data.dnsProvider != null;
+    useDnsOrS3 = useDns || data.s3Bucket != null;
     destPath = "/var/lib/acme/${cert}";
     selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
@@ -219,7 +220,8 @@ let
       [ "--dns" data.dnsProvider ]
       ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
       ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
-    ) else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
+    ) else if data.s3Bucket != null then [ "--http" "--http.s3-bucket" data.s3Bucket ]
+    else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
     else [ "--http" "--http.webroot" data.webroot ];
 
     commonOpts = [
@@ -343,6 +345,10 @@ let
       serviceConfig = commonServiceConfig // {
         Group = data.group;
 
+        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
+        # This avoids eating them all up if something is misconfigured upon the first try.
+        RestartSec = 15 * 60;
+
         # Keep in mind that these directories will be deleted if the user runs
         # systemctl clean --what=state
         # acme/.lego/${cert} is listed for this reason.
@@ -362,13 +368,12 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        # Only try loading the environmentFile if the dns challenge is enabled
-        EnvironmentFile = mkIf useDns data.environmentFile;
+        EnvironmentFile = mkIf useDnsOrS3 data.environmentFile;
 
-        Environment = mkIf useDns
+        Environment = mkIf useDnsOrS3
           (mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
 
-        LoadCredential = mkIf useDns
+        LoadCredential = mkIf useDnsOrS3
           (mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
 
         # Run as root (Prefixed with +)
@@ -540,12 +545,14 @@ let
       };
 
       server = mkOption {
-        type = types.nullOr types.str;
-        inherit (defaultAndText "server" null) default defaultText;
+        type = types.str;
+        inherit (defaultAndText "server" "https://acme-v02.api.letsencrypt.org/directory") default defaultText;
+        example = "https://acme-staging-v02.api.letsencrypt.org/directory";
         description = lib.mdDoc ''
-          ACME Directory Resource URI. Defaults to Let's Encrypt's
-          production endpoint,
-          <https://acme-v02.api.letsencrypt.org/directory>, if unset.
+          ACME Directory Resource URI.
+          Defaults to Let's Encrypt's production endpoint.
+          For testing Let's Encrypt's [staging endpoint](https://letsencrypt.org/docs/staging-environment/)
+          should be used to avoid the rather tight rate limit on the production endpoint.
         '';
       };
 
@@ -592,7 +599,7 @@ let
         description = lib.mdDoc ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
-          at <https://go-acme.github.io/lego/usage/cli/#usage>.
+          at <https://go-acme.github.io/lego/usage/cli/options/>.
         '';
       };
 
@@ -755,6 +762,15 @@ let
         '';
       };
 
+      s3Bucket = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "acme";
+        description = lib.mdDoc ''
+          S3 bucket name to use for HTTP-01 based challenges. Challenges will be written to the S3 bucket.
+        '';
+      };
+
       inheritDefaults = mkOption {
         default = true;
         example = true;
@@ -883,10 +899,10 @@ in {
         certs = attrValues cfg.certs;
       in [
         {
-          assertion = cfg.email != null || all (certOpts: certOpts.email != null) certs;
+          assertion = cfg.defaults.email != null || all (certOpts: certOpts.email != null) certs;
           message = ''
             You must define `security.acme.certs.<name>.email` or
-            `security.acme.email` to register with the CA. Note that using
+            `security.acme.defaults.email` to register with the CA. Note that using
             many different addresses for certs may trigger account rate limits.
           '';
         }
@@ -928,35 +944,20 @@ in {
             and remove the wildcard from the path.
           '';
         }
-        {
-          assertion = data.dnsProvider == null || data.webroot == null;
+        (let exclusiveAttrs = {
+          inherit (data) dnsProvider webroot listenHTTP s3Bucket;
+        }; in {
+          assertion = lib.length (lib.filter (x: x != null) (builtins.attrValues exclusiveAttrs)) == 1;
           message = ''
-            Options `security.acme.certs.${cert}.dnsProvider` and
-            `security.acme.certs.${cert}.webroot` are mutually exclusive.
+            Exactly one of the options
+            `security.acme.certs.${cert}.dnsProvider`,
+            `security.acme.certs.${cert}.webroot`,
+            `security.acme.certs.${cert}.listenHTTP` and
+            `security.acme.certs.${cert}.s3Bucket`
+            is required.
+            Current values: ${(lib.generators.toPretty {} exclusiveAttrs)}.
           '';
-        }
-        {
-          assertion = data.webroot == null || data.listenHTTP == null;
-          message = ''
-            Options `security.acme.certs.${cert}.webroot` and
-            `security.acme.certs.${cert}.listenHTTP` are mutually exclusive.
-          '';
-        }
-        {
-          assertion = data.listenHTTP == null || data.dnsProvider == null;
-          message = ''
-            Options `security.acme.certs.${cert}.listenHTTP` and
-            `security.acme.certs.${cert}.dnsProvider` are mutually exclusive.
-          '';
-        }
-        {
-          assertion = data.dnsProvider != null || data.webroot != null || data.listenHTTP != null;
-          message = ''
-            One of `security.acme.certs.${cert}.dnsProvider`,
-            `security.acme.certs.${cert}.webroot`, or
-            `security.acme.certs.${cert}.listenHTTP` must be provided.
-          '';
-        }
+        })
         {
           assertion = all (hasSuffix "_FILE") (attrNames data.credentialFiles);
           message = ''

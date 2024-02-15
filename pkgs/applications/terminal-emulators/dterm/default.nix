@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ auchter ];
     platforms = platforms.unix;
+    mainProgram = "dterm";
   };
 }

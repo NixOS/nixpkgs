@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
       generates corresponding HTML, PostScript, or PDF files with an optional
       table of contents.
     '';
+    mainProgram = "htmldoc";
   };
 }

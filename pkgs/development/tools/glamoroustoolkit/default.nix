@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchzip
+, wrapGAppsHook
 , cairo
 , dbus
 , fontconfig
@@ -13,21 +14,23 @@
 , libXi
 , libXrandr
 , libXrender
+, libgit2
 , libglvnd
 , libuuid
 , libxcb
-, makeWrapper
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.0.1";
+  version = "1.0.11";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-v63sV0HNHSU9H5rhtJcwZCuIXEGe1+BDyxV0/EqBk2E=";
+    hash = "sha256-GQeYR232zoHLIt1AzznD7rp6u4zMiAdj1+0OfXfT6AQ=";
   };
+
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   sourceRoot = ".";
 
@@ -89,7 +92,8 @@ preFixup = let
 
     ln -s $out/lib/libcrypto.so $out/lib/libcrypto.so.1.1
     ln -s $out/lib/libcairo.so $out/lib/libcairo.so.2
-    ln -s $out/lib/libgit2.so $out/lib/libgit2.so.1.1
+    rm $out/lib/libgit2.so
+    ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
   '';
 
   meta = {

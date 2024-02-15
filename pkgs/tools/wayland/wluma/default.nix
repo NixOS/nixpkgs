@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
     rev = version;
-    sha256 = "sha256-6qZlwjzBPDkr2YHzDYeKQOuoozV7rpl8dojqTTzInqg=";
+    sha256 = "sha256-FaX87k8LdBhrBX4qvokSHkcNaQZ0+oSbkn9d0dK6FGo=";
   };
 
   cargoLock = {
@@ -51,5 +51,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [ yshym jmc-figueira ];
     platforms = platforms.linux;
+    mainProgram = "wluma";
   };
 }

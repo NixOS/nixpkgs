@@ -5,7 +5,7 @@
 , postgresql
 , geos
 , proj
-, gdal
+, gdalMinimal
 , json_c
 , pkg-config
 , file
@@ -14,15 +14,19 @@
 , pcre2
 , nixosTests
 }:
+
+let
+  gdal = gdalMinimal;
+in
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.4.0";
+  version = "3.4.2";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-rum2CmyITTVBZLMJbEZX8yRFQYZgf4WdHOBdiZeYr50=";
+    sha256 = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
@@ -31,7 +35,10 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
-  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
+  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib"
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+    + lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) " -l${stdenv.cc.libcxx.cxxabi.libName}";
+
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
@@ -74,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2;
-    maintainers = [ maintainers.marcweber ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
     inherit (postgresql.meta) platforms;
     broken = versionOlder postgresql.version "12";
   };

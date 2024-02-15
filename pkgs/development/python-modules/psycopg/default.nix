@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -35,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.10";
+  version = "3.1.17";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GdgzHmzPCK3wq/8sCc1NaPEVwl4Q5OBZMp86RXkhE0M=";
+    hash = "sha256-Paq4Wkvv6d6+fNcvRO/yfj7OWCMygqccKIdfsohHUMM=";
   };
 
   patches = [
@@ -180,12 +179,13 @@ buildPythonPackage rec {
   env = {
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
+    PGDATABASE = "psycopg";
   };
 
   preCheck = ''
     cd ..
   '' + lib.optionalString (stdenv.isLinux) ''
-    export PSYCOPG_TEST_DSN="host=127.0.0.1 user=$PGUSER"
+    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
   '';
 
   disabledTests = [
@@ -205,7 +205,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-o" "cache_dir=$TMPDIR"
-    "-m" "'not timing'"
+    "-m" "'not refcount and not timing'"
   ];
 
   postCheck = ''

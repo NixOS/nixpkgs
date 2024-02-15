@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gotify-server";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [ ];
   };
 
   nodes.machine = { pkgs, ... }: {

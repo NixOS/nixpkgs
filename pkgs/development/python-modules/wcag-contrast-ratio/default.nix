@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "wcag-contrast-ratio";
   version = "0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional stdenv.isLinux xorg.xorgserver.propagatedBuildInputs;
 
-  passthru.tests.tigervnc = nixosTests.vnc.testTigerVNC;
+  passthru.tests.tigervnc = nixosTests.tigervnc;
 
   meta = {
     homepage = "https://tigervnc.org/";

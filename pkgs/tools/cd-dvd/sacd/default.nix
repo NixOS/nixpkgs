@@ -17,8 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Makefile prefix, otherwise `/usr` prefix is enforced
+    # https://github.com/Sound-Linux-More/sacd/pull/1
     (fetchpatch {
-      url = "https://github.com/Sound-Linux-More/sacd/pull/1.patch";
+      url = "https://github.com/Sound-Linux-More/sacd/commit/a72def4fab234bcd68b444cf7447a8876b4e2ce8.patch";
       name = "makefile-prefix.patch";
       sha256 = "0a7r4x0yqpg6l4vr84dq4wbrypabqm4vvcjv91am068gqjiw6w64";
     })
@@ -38,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     maintainers = [ maintainers.doronbehar ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "sacd";
   };
 })

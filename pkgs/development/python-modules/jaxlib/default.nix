@@ -35,7 +35,6 @@
   # Runtime dependencies:
 , double-conversion
 , giflib
-, grpc
 , libjpeg_turbo
 , python
 , snappy
@@ -44,17 +43,17 @@
 , config
   # CUDA flags:
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackagesGoogle
 
   # MKL:
 , mklSupport ? true
 }:
 
 let
-  inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
+  inherit (cudaPackagesGoogle) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.4.18";
+  version = "0.4.24";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -65,7 +64,8 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    broken = stdenv.isDarwin;
+    # NOTE: We always build with NCCL; if it is unsupported, then our build is broken.
+    broken = stdenv.isDarwin || nccl.meta.unsupported;
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -95,11 +95,11 @@ let
     "absl_py"
     "astor_archive"
     "astunparse_archive"
-    "boringssl"
     # Not packaged in nixpkgs
     # "com_github_googleapis_googleapis"
     # "com_github_googlecloudplatform_google_cloud_cpp"
-    "com_github_grpc_grpc"
+    # Issue with transitive dependencies after https://github.com/grpc/grpc/commit/f1d14f7f0b661bd200b7f269ef55dec870e7c108
+    # "com_github_grpc_grpc"
     # ERROR: /build/output/external/bazel_tools/tools/proto/BUILD:25:6: no such target '@com_google_protobuf//:cc_toolchain':
     # target 'cc_toolchain' not declared in package '' defined by /build/output/external/com_google_protobuf/BUILD.bazel
     # "com_google_protobuf"
@@ -137,8 +137,8 @@ let
 
   arch =
     # KeyError: ('Linux', 'arm64')
-    if stdenv.targetPlatform.isLinux && stdenv.targetPlatform.linuxArch == "arm64" then "aarch64"
-    else stdenv.targetPlatform.linuxArch;
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.linuxArch == "arm64" then "aarch64"
+    else stdenv.hostPlatform.linuxArch;
 
   bazel-build = buildBazelPackage rec {
     name = "bazel-build-${pname}-${version}";
@@ -151,7 +151,7 @@ let
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
-      hash = "sha256-rDvWHa8jYCAA9iKbWaFUXdE/9L7AepFiNzmqOcc/090=";
+      hash = "sha256-hmx7eo3pephc6BQfoJ3U0QwWBWmhkAc+7S4QmW32qQs=";
     };
 
     nativeBuildInputs = [
@@ -170,7 +170,6 @@ let
       curl
       double-conversion
       giflib
-      grpc
       jsoncpp
       libjpeg_turbo
       numpy
@@ -196,7 +195,12 @@ let
     '';
 
     bazelRunTarget = "//jaxlib/tools:build_wheel";
-    runTargetFlags = [ "--output_path=$out" "--cpu=${arch}" ];
+    runTargetFlags = [
+      "--output_path=$out"
+      "--cpu=${arch}"
+      # This has no impact whatsoever...
+      "--jaxlib_git_hash='12345678'"
+    ];
 
     removeRulesCC = false;
 
@@ -220,7 +224,7 @@ let
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
       build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
-    '' + lib.optionalString (stdenv.targetPlatform.avxSupport && stdenv.targetPlatform.isUnix) ''
+    '' + lib.optionalString (stdenv.hostPlatform.avxSupport && stdenv.hostPlatform.isUnix) ''
       build --config=avx_posix
     '' + lib.optionalString mklSupport ''
       build --config=mkl_open_source_only
@@ -264,10 +268,10 @@ let
       ];
 
       sha256 = (if cudaSupport then {
-        x86_64-linux = "sha256-0CfGWlwKsUFP1DHUN6+6wX3cHr5x3TE6NbqYlV5me1E=";
+        x86_64-linux = "sha256-c0avcURLAYNiLASjIeu5phXX3ze5TR812SW5SCG/iwk=";
       } else {
-        x86_64-linux = "sha256-sljmyIligXC7d9fdlpqR32xyMR0UslWs04gXJBD8FTA=";
-        aarch64-linux = "sha256-eJ4KIkHdcA2EVvyBoNum2cOPcHPFoBOtUTAGufO8FJA=";
+        x86_64-linux = "sha256-1hrQ9ehFy3vBJxKNUzi/T0l+eZxo26Th7i5VRd/9U+0=";
+        aarch64-linux = "sha256-3QVYJOj1lNHgYVV9rOzVdfhq5q6GDwpcWCjKNrSZ4aU=";
       }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
     };
 
@@ -283,7 +287,6 @@ let
       #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
       # 2) Patch python path in the compiler driver.
       preBuild = lib.optionalString cudaSupport ''
-        export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
         patchShebangs ../output/external/xla/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook
@@ -293,25 +296,19 @@ let
           --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
           --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
-      '' + (if stdenv.cc.isGNU then ''
-        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-      '' else if stdenv.cc.isClang then ''
-        sed -i 's@-lprotobuf@${pkgs.protobuf}/lib/libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@${pkgs.protobuf}/lib/libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
-      '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
+      '';
     };
 
     inherit meta;
   };
   platformTag =
-    if stdenv.targetPlatform.isLinux then
+    if stdenv.hostPlatform.isLinux then
       "manylinux2014_${arch}"
     else if stdenv.system == "x86_64-darwin" then
       "macosx_10_9_${arch}"
     else if stdenv.system == "aarch64-darwin" then
       "macosx_11_0_${arch}"
-    else throw "Unsupported target platform: ${stdenv.targetPlatform}";
+    else throw "Unsupported target platform: ${stdenv.hostPlatform}";
 
 in
 buildPythonPackage {
@@ -343,7 +340,6 @@ buildPythonPackage {
     double-conversion
     flatbuffers
     giflib
-    grpc
     jsoncpp
     libjpeg_turbo
     ml-dtypes

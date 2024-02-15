@@ -21,19 +21,21 @@ trap finish EXIT
 mkdir $scratch/src
 cd $scratch/src
 
-token=$(curl https://highlightjs.org/download/ -c "$scratch/jar" \
-    | grep csrf \
-    | cut -d"'" -f6)
+curl \
+    -X POST \
+    -H 'Content-Type: application/json' \
+    --data-raw '{
+      "api": 2,
+      "languages": ["bash", "nix", "shell"]
+    }' \
+    https://highlightjs.org/api/download > $scratch/out.zip
 
-curl --header "Referer: https://highlightjs.org/download/"\
-    -b "$scratch/jar" \
-    --data "csrfmiddlewaretoken=$token&nix.js=on&bash.js=on" \
-    https://highlightjs.org/download/ > $scratch/out.zip
 
 unzip "$scratch/out.zip"
 out="$root/"
 mkdir -p "$out"
-cp ./{highlight.pack.js,LICENSE,styles/mono-blue.css} "$out"
+cp ./highlight.min.js "$out/highlight.pack.js"
+cp ./{LICENSE,styles/mono-blue.css} "$out"
 
 (
     echo "This file was generated with pkgs/misc/documentation-highlighter/update.sh"

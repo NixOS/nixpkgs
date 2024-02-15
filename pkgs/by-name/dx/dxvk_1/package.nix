@@ -9,9 +9,6 @@
 , enableMoltenVKCompat ? false
 }:
 
-let
-  isCross = stdenv.hostPlatform != stdenv.targetPlatform;
-in
 stdenv.mkDerivation (finalAttrs:  {
   pname = "dxvk";
   version = "1.10.3";
@@ -36,15 +33,10 @@ stdenv.mkDerivation (finalAttrs:  {
   nativeBuildInputs = [ glslang meson ninja ];
   buildInputs = [ windows.pthreads ];
 
-  mesonFlags =
-    let
-      arch = if stdenv.is32bit then "32" else "64";
-    in
-    [
-      "--buildtype" "release"
-      "--prefix" "${placeholder "out"}"
-    ]
-    ++ lib.optionals isCross [ "--cross-file" "build-win${arch}.txt" ];
+  mesonFlags = [
+    "--buildtype" "release"
+    "--prefix" "${placeholder "out"}"
+  ];
 
   meta = {
     description = "A Vulkan-based translation layer for Direct3D 9/10/11";

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , writeShellScript
 , pkg-config
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-26157.patch";
+      url = "https://github.com/LibreDWG/libredwg/commit/c8cf03ce4c2315b146caf582ea061c0460193bcc.patch";
+      hash = "sha256-EEF3YYPW+6SvXRiAw3zz6tWU9w/qmGtc09Tf8wn7hVc=";
+    })
+  ];
+
   postPatch = let
     printVersion = writeShellScript "print-version" ''
       echo -n ${lib.escapeShellArg version}
@@ -34,6 +43,8 @@ stdenv.mkDerivation rec {
   in ''
     # avoid git dependency
     cp ${printVersion} build-aux/git-version-gen
+    # failing to build otherwise since glibc-2.38
+    sed '1i#include <string.h>' -i programs/dwg2SVG.c
   '';
 
   preConfigure = lib.optionalString (stdenv.isDarwin && enablePython) ''

@@ -26,7 +26,7 @@
 , pyarrow
 , pytz
 , pyyaml
-, querystring_parser
+, querystring-parser
 , requests
 , scikit-learn
 , scipy
@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.5.0";
+  version = "2.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+ZKujqnHNQI0S69IxOxEeqnvv6iWW8CQho5hYyNPTrA=";
+    hash = "sha256-5OW90tnvsLOG7Lzi335D8ExGoyCAIIQU3FO1/XFVlng=";
   };
 
   postPatch = ''
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     pyarrow
     pytz
     pyyaml
-    querystring_parser
+    querystring-parser
     requests
     scikit-learn
     scipy

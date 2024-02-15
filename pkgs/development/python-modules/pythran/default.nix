@@ -2,14 +2,22 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, isPy3k
+, substituteAll
+
+# build-system
+, setuptools
+
+# native dependencies
 , openmp
+, xsimd
+
+# dependencies
 , ply
 , gast
 , numpy
 , beniget
-, xsimd
-, isPy3k
-, substituteAll
 }:
 
 let
@@ -17,13 +25,14 @@ let
 
 in buildPythonPackage rec {
   pname = "pythran";
-  version = "0.13.1";
+  version = "0.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     rev = version;
-    hash = "sha256-baDrReJgQXbaKA8KNhHiFjr0X34yb8WK/nUJmiM9EZs=";
+    hash = "sha256-TpD8YZnnv48PKYrUqR0/qvJG1XRbcMBcrkcERh6Q4q0=";
   };
 
   patches = [
@@ -36,15 +45,20 @@ in buildPythonPackage rec {
 
   # xsimd: unvendor this header-only C++ lib
   postPatch = ''
-    rm -r third_party/xsimd
-    ln -s '${lib.getDev xsimd}'/include/xsimd third_party/
+    rm -r pythran/xsimd
+    ln -s '${lib.getDev xsimd}'/include/xsimd pythran/
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     ply
     gast
     numpy
     beniget
+    setuptools
   ];
 
   pythonImportsCheck = [
@@ -65,5 +79,6 @@ in buildPythonPackage rec {
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

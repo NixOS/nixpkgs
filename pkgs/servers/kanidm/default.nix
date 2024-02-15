@@ -11,6 +11,7 @@
 , sqlite
 , pam
 , bashInteractive
+, rust-jemalloc-sys
 }:
 
 let
@@ -18,17 +19,22 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-beta.13";
+  version = "1.1.0-rc.16";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    # Latest 1.1.0-beta.13 tip
-    rev = "5d1e2f90e6901017ab3ef9b5fbc10e25a5451fd2";
-    hash = "sha256-70yeHVOrCuC+H96UC84kly3CCQ+y1RGzF5K/2FIag/o=";
+    rev = version;
+    hash = "sha256-UavMiHe91UrCZfmG6b+yhdduOY2eKMev9HSjtXq1Tlw=";
   };
 
-  cargoHash = "sha256-Qdc+E5+k9NNE4s6eAnpkam56pc2JJPahkuT4lB328cY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "base64urlsafedata-0.1.3" = "sha256-lYVWuKqF4c34LpFmTIg98TEXIlP4dHen0XkGnLOiq8Q=";
+      "sshkeys-0.3.2" = "sha256-CNG9HW8kSwezAdIYW+CR5rqFfmuso4R0+m4OpIyXbSM=";
+    };
+  };
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
@@ -59,6 +65,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     pam
+    rust-jemalloc-sys
   ];
 
   # The UI needs to be in place before the tests are run.

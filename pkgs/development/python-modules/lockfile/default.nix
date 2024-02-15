@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "lockfile";
   version = "0.12.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

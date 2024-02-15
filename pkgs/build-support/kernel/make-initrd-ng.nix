@@ -8,7 +8,7 @@ let
   # compression type and filename extension.
   compressorName = fullCommand: builtins.elemAt (builtins.match "([^ ]*/)?([^ ]+).*" fullCommand) 1;
 in
-{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, binutils, runCommand
+{ stdenvNoCC, libarchive, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, binutils, runCommand
 # Name of the derivation (not of the resulting file!)
 , name ? "initrd"
 
@@ -74,18 +74,18 @@ in
   passAsFile = ["contents"];
   contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${lib.optionalString (symlink != null) symlink}") contents + "\n";
 
-  nativeBuildInputs = [makeInitrdNGTool cpio] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
+  nativeBuildInputs = [makeInitrdNGTool libarchive] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 
   STRIP = if strip then "${pkgsBuildHost.binutils.targetPrefix}strip" else null;
 }) ''
   mkdir -p ./root/var/empty
   make-initrd-ng "$contentsPath" ./root
   mkdir "$out"
-  (cd root && find * .[^.*] -exec touch -h -d '@1' '{}' +)
+  (cd root && find . -exec touch -h -d '@1' '{}' +)
   for PREP in $prepend; do
     cat $PREP >> $out/initrd
   done
-  (cd root && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
+  (cd root && find . -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- | eval -- $compress >> "$out/initrd")
 
   if [ -n "$makeUInitrd" ]; then
       mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img

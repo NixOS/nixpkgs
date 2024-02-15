@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "9.0.1";
+  version = "11.1.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-JvN7te59uRMC0TOWsBUYNEPLIn4nLlIvXI5gOQfQaCU=";
+    hash = "sha256-QQ+sIZzkzecs+pZBzsmCL048JZpMPvdYi0PRtMN4AhY=";
   };
 
   vendorHash = null;
@@ -55,7 +55,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = git-town;
-    command = "git-town version";
+    command = "git-town --version";
     version = "v${version}";
   };
 
@@ -64,5 +64,6 @@ buildGoModule rec {
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ allonsy blaggacao ];
+    mainProgram = "git-town";
   };
 }

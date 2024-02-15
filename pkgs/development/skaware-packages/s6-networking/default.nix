@@ -19,8 +19,8 @@ assert sslSupportEnabled -> sslLibs ? ${sslSupport};
 
 buildPackage {
   pname = "s6-networking";
-  version = "2.5.1.3";
-  sha256 = "oJ5DyVn/ngyqj/QAJgjnPA9X+H8EqNnCTmya/v5F6Xc=";
+  version = "2.7.0.1";
+  sha256 = "36SWTU8b2umrX8RQh2n9b+/DOlJ9UVOjd3xrBG7upWQ=";
 
   description = "A suite of small networking utilities for Unix systems";
 

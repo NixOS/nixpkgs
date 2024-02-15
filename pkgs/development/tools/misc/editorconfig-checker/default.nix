@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "editorconfig-checker";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     rev = version;
-    hash = "sha256-TycKc6Zgf9QFTH3lfNC+/O52cp2xhKsKflxuQTac794=";
+    hash = "sha256-CVstdtFPt/OlvJE27O+CqqDpUqp9bQl18IGyf8nputM=";
   };
 
-  vendorHash = "sha256-S93ZvC92V9nrBicEv1yQ3DEuf1FmxtvFoKPR15e8VmA=";
+  vendorHash = "sha256-t2h9jtGfips+cpN1ckVhVgpg4egIYVXd89ahyDzV060=";
 
   doCheck = false;
 

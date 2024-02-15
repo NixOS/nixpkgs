@@ -11,7 +11,7 @@ in
     services.mediamtx = {
       enable = lib.mkEnableOption (lib.mdDoc "MediaMTX");
 
-      package = lib.mkPackageOptionMD pkgs "mediamtx" { };
+      package = lib.mkPackageOption pkgs "mediamtx" { };
 
       settings = lib.mkOption {
         description = lib.mdDoc ''
@@ -40,7 +40,7 @@ in
       };
 
       allowVideoAccess = lib.mkEnableOption (lib.mdDoc ''
-        Enable access to video devices like cameras on the system.
+        access to video devices like cameras on the system
       '');
     };
   };

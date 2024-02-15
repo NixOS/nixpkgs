@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , cmake
 , ninja
 , extra-cmake-modules
@@ -25,6 +26,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-aAmpFKIIFZLPWUaOcf4V1d/wVQ7xRcnXFsqFjROsabg=";
   };
+
+  patches = [
+    # itemfakevim: fix build with qt 6.6.0
+    # https://github.com/hluk/CopyQ/pull/2508
+    (fetchpatch2 {
+      url = "https://github.com/hluk/CopyQ/commit/a20bfff0d78296b334ff8cabb047ab5d842b7311.patch";
+      hash = "sha256-F/6cQ8+O1Ttd4EFFxQas5ES6U+qxWdmYqUWRQLsVMa4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

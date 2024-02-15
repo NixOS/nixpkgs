@@ -3,11 +3,14 @@
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "118.0.1";
+    version = "122.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "b1efa1afea70434dc2a18d335bb8b526883cde200f1503b8c5fd2e7db8285e6a999cfa3aac354ea1c15a91d13a46d68db37023235314240b59eb8f55e01554ad";
+      sha512 = "1d4fe1ed351edd748ede2ef6448798a32de9ed7a075a54a7ed5f7baa7b0c4c7f932c2e29f443c9066829e39f22a1dc94be5d00cc994193e949b72aa4a1c8ba41";
     };
+
+    extraPatches = [
+    ];
 
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
@@ -30,14 +33,15 @@
 
   firefox-beta = buildMozillaMach rec {
     pname = "firefox-beta";
-    version = "119.0b4";
+    version = "121.0b9";
     applicationName = "Mozilla Firefox Beta";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "7c067d759602608e527d032f7a3772df827a5b5c4270992c05abda726fcd665f4f2c5380e684623ed108364ace4afaed8b5959f75a4b0540edd5ae30422b0e54";
+      sha512 = "a107ba7127f40763325335136c5aeaf6d873dd9ca1c8ca95d93e96b377b41a0974056c84e8323c51ed57e01a2e4ef9996ef2ee2d804053aa2226bd837026523a";
     };
 
     meta = {
+      changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
       description = "A web browser built from Firefox Beta Release source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ jopejoe1 ];
@@ -56,17 +60,19 @@
     };
   };
 
-  firefox-devedition = (buildMozillaMach rec {
+  firefox-devedition = buildMozillaMach rec {
     pname = "firefox-devedition";
-    version = "119.0b4";
+    version = "121.0b9";
     applicationName = "Mozilla Firefox Developer Edition";
+    requireSigning = false;
     branding = "browser/branding/aurora";
     src = fetchurl {
       url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "ded00bc1e090bdca5f32160d980cec47590bb952a6c7f1dc8f4df30fa452cad8c47a3c6d20cf3e8345fd5811777b475354d71d704c866fb49396a83c8a795bcb";
+      sha512 = "732c2b3f1e47512bee9af696e8763ce13b39497a6ec9af0de9904ce4f55b03bc799e628e17e84ce7062ebd5a7dc50290fbbfa17b0f41622ce5088f1d548897b5";
     };
 
     meta = {
+      changelog = "https://www.mozilla.org/en-US/firefox/${lib.versions.majorMinor version}beta/releasenotes/";
       description = "A web browser built from Firefox Developer Edition source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
       maintainers = with lib.maintainers; [ jopejoe1 ];
@@ -84,17 +90,15 @@
       versionSuffix = "b[0-9]*";
       baseUrl = "https://archive.mozilla.org/pub/devedition/releases/";
     };
-  }).overrideAttrs (prev: {
-    env.MOZ_REQUIRE_SIGNING = "";
-  });
+  };
 
   firefox-esr-115 = buildMozillaMach rec {
     pname = "firefox-esr-115";
-    version = "115.3.1esr";
+    version = "115.7.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "65cb6fc46bba03eed742bd67f8e36b63b19f2ad7b85d2f503595704a4e88f554758a1e66ba548c8efe97a76322fb2514db72e6ff4bb2992d1aaa86edc3af85f1";
+      sha512 = "d468d8ef117d76e0660c5359c3becf0502354c61bdaaeb4137d86f52b50143abec2ac4578af69afa5670700b57efff1c7323ca23e3339a9eaaa888dee7e8e922";
     };
 
     meta = {

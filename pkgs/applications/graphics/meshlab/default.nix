@@ -14,7 +14,7 @@
 , levmar
 , qhull
 , cmake
-, cgal_5
+, cgal
 , boost179
 , mpfr
 , xercesc
@@ -45,7 +45,7 @@ mkDerivation rec {
     gmp
     levmar
     qhull
-    cgal_5
+    cgal
     boost179
     mpfr
     xercesc
@@ -73,6 +73,11 @@ mkDerivation rec {
     # some plugins are disabled unless these are on
     "-DALLOW_BUNDLED_NEWUOA=ON"
     "-DALLOW_BUNDLED_LEVMAR=ON"
+  ];
+
+  CXXFLAGS = [
+    # GCC 13: error: 'int16_t' has not been declared in 'std'
+    "-include cstdint"
   ];
 
   postFixup = ''

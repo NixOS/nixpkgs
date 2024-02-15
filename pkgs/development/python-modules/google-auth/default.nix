@@ -5,6 +5,7 @@
 , buildPythonPackage
 , cachetools
 , cryptography
+, fetchpatch
 , fetchPypi
 , flask
 , freezegun
@@ -36,6 +37,18 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-so6ASOV3J+fPDlvY5ydrISrvR2ZUoJURNUqoJ1O0XGY=";
   };
+
+  patches = [
+    # Although the migration to urllib3-2.0.0 is incomplete,
+    # the discussion in the following PR has addressed the concerns.
+    # https://github.com/googleapis/google-auth-library-python/pull/1290
+    (fetchpatch {
+      name = "support-urllib3_2.patch";
+      url = "https://github.com/googleapis/google-auth-library-python/commit/9ed006d02d7c9de3e6898ee819648c2fd3367c1d.patch";
+      hash = "sha256-64g0GzZeyO8l/s1jqfsogr8pTOBbG9xfp/UeVZNA4q8=";
+      includes = [ "google/auth/transport/urllib3.py" ];
+    })
+  ];
 
   propagatedBuildInputs = [
     cachetools

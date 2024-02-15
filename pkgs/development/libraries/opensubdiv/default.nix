@@ -1,9 +1,7 @@
 { config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
-, cudaSupport ? config.cudaSupport, cudatoolkit
-  # For visibility mostly. The whole approach to cuda architectures and capabilities
-  # will be reworked soon.
-, cudaArch ? "compute_37"
+, cudaSupport ? config.cudaSupport
+, cudaPackages
 , openclSupport ? !cudaSupport
 , darwin
 }:
@@ -21,7 +19,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ lib.optional cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
   buildInputs =
     [ libGLU libGL python3
       # FIXME: these are not actually needed, but the configure script wants them.
@@ -30,22 +33,37 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (openclSupport && !stdenv.isDarwin) ocl-icd
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [OpenCL Cocoa CoreVideo IOKit AppKit AGL ])
-    ++ lib.optional cudaSupport cudatoolkit;
+    ++ lib.optional cudaSupport [
+      cudaPackages.cuda_cudart
+    ];
+
+  # It's important to set OSD_CUDA_NVCC_FLAGS,
+  # because otherwise OSD might piggyback unwanted architectures:
+  # https://github.com/PixarAnimationStudios/OpenSubdiv/blob/7d0ab5530feef693ac0a920585b5c663b80773b3/CMakeLists.txt#L602
+  preConfigure = lib.optionalString cudaSupport ''
+    cmakeFlagsArray+=(
+      -DOSD_CUDA_NVCC_FLAGS="${lib.concatStringsSep " " cudaPackages.cudaFlags.gencode}"
+    )
+  '';
 
   cmakeFlags =
     [ "-DNO_TUTORIALS=1"
       "-DNO_REGRESSION=1"
       "-DNO_EXAMPLES=1"
       "-DNO_METAL=1" # don’t have metal in apple sdk
+      (lib.cmakeBool "NO_OPENCL" (!openclSupport))
+      (lib.cmakeBool "NO_CUDA" (!cudaSupport))
     ] ++ lib.optionals (!stdenv.isDarwin) [
       "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
       "-DGLEW_LIBRARY=${glew.dev}/lib"
     ] ++ lib.optionals cudaSupport [
-      "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=${cudaArch}"
-      "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     ] ++ lib.optionals (!openclSupport) [
-      "-DNO_OPENCL=1"
     ];
+
+  preBuild = let maxBuildCores = 16; in lib.optionalString cudaSupport ''
+    # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
+    NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
+  '';
 
   postInstall = "rm $out/lib/*.a";
 

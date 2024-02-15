@@ -43,5 +43,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/EMPRI-DEVOPS/git-privacy";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "git-privacy";
   };
 }

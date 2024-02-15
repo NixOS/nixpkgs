@@ -6,27 +6,27 @@
 , pkg-config
 , openssl
 , Security
-, libiconv
 , nix-update-script
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
-  version = "0.31.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MLR7gY4NPb223NiPvTih88DQO2LvaYHsduWSH9QQa6M=";
+    hash = "sha256-cqJNNSN3x2tr6/i7kXAlvIaU9SfyPWBE4c6twc/p1lY=";
   };
 
   nativeBuildInputs = [ git pkg-config ];
 
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [ Security libiconv ];
+    lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoHash = "sha256-I+5Vrpy5/9wFMB2dQYH9aqf/VonkDyIAyJmSHm5S6mk=";
+  cargoHash = "sha256-mCMfVYbpUik8oc7TLLAXPBmBUchy+quAZLmd9pqCZ7Y=";
 
   passthru.updateScript = nix-update-script { };
 

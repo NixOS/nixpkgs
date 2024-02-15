@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/google/git-appraise";
     license = licenses.asl20;
     maintainers = with maintainers; [ vdemeester ];
+    mainProgram = "git-appraise";
   };
 }

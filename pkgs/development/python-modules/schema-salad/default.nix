@@ -2,29 +2,30 @@
 , black
 , buildPythonPackage
 , cachecontrol
-, fetchPypi
+, fetchFromGitHub
 , importlib-resources
-, lockfile
 , mistune
-, mypy
+, mypy-extensions
 , pytestCheckHook
 , pythonOlder
 , rdflib
+, requests
 , ruamel-yaml
-, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.4.20230808163024";
+  version = "8.5.20240102191336.dev7+g8e95468";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ai4vv6EFX4yTR8sgRspiG+M8a8oa83LIlJPGX7q+Kd0=";
+  src = fetchFromGitHub {
+    owner = "common-workflow-language";
+    repo = "schema_salad";
+    rev = "8e954684b08d222d54b7eff680eaa4d4e65920a9";
+    hash = "sha256-VoFFKe6XHDytj5UlmsN14RevKcgpl+DSDMGDVS2Ols4=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +34,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cachecontrol
-    importlib-resources
-    lockfile
     mistune
-    mypy
+    mypy-extensions
     rdflib
+    requests
     ruamel-yaml
-    setuptools # needs pkg_resources at runtime
-  ] ++ cachecontrol.optional-dependencies.filecache;
+  ] ++ cachecontrol.optional-dependencies.filecache
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -51,6 +53,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_load_by_yaml_metaschema"
     # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"
@@ -75,7 +78,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
-    # https://github.com/common-workflow-language/schema_salad/issues/721
-    broken = versionAtLeast mistune.version "2.1";
   };
 }

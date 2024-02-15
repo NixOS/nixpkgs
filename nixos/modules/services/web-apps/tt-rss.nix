@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.services.tt-rss;
 
+  inherit (cfg) phpPackage;
+
   configVersion = 26;
 
   dbPort = if cfg.database.port == null
@@ -26,7 +28,7 @@ let
       ;
   in pkgs.writeText "config.php" ''
     <?php
-      putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
+      putenv('TTRSS_PHP_EXECUTABLE=${phpPackage}/bin/php');
 
       putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
       putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
@@ -430,7 +432,7 @@ let
           background processes while not running tt-rss, this method is generally
           viable to keep your feeds up to date.
           Still, there are more robust (and recommended) updating methods
-          available, you can read about them here: http://tt-rss.org/wiki/UpdatingFeeds
+          available, you can read about them here: <https://tt-rss.org/wiki/UpdatingFeeds>
         '';
       };
 
@@ -453,6 +455,15 @@ let
           Enabling this can break tt-rss in several httpd/php configurations,
           if you experience weird errors and tt-rss failing to start, blank pages
           after login, or content encoding errors, disable it.
+        '';
+      };
+
+      phpPackage = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.php;
+        defaultText = "pkgs.php";
+        description = lib.mdDoc ''
+          php package to use for php fpm and update daemon.
         '';
       };
 
@@ -529,12 +540,21 @@ let
         assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
         message = "Cannot set both password and passwordFile";
       }
+      {
+        assertion = cfg.database.createLocally -> cfg.database.name == cfg.user && cfg.database.user == cfg.user;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.tt-rss.database.createLocally` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         inherit (cfg) user;
-        phpPackage = pkgs.php81;
+        inherit phpPackage;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";
@@ -596,13 +616,13 @@ let
         description = "Tiny Tiny RSS feeds update daemon";
 
         preStart = ''
-          ${pkgs.php81}/bin/php ${cfg.root}/www/update.php --update-schema
+          ${phpPackage}/bin/php ${cfg.root}/www/update.php --update-schema --force-yes
         '';
 
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
+          ExecStart = "${phpPackage}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";
@@ -632,8 +652,8 @@ let
       enable = mkDefault true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+        { name = cfg.database.user;
+          ensureDBOwnership = true;
         }
       ];
     };

@@ -1,52 +1,48 @@
 { lib
-, pkgs
-, stdenv
-, fetchFromGitHub
 , dataDir ? "/var/lib/snipe-it"
+, fetchFromGitHub
 , mariadb
 , nixosTests
 , php
-, phpPackages
 }:
 
-let
-  package = (import ./composition.nix {
-    inherit pkgs php phpPackages;
-    inherit (stdenv.hostPlatform) system;
-    noDev = true; # Disable development dependencies
-  }).overrideAttrs (attrs : {
-    installPhase = attrs.installPhase + ''
-      # Before symlinking the following directories, copy the invalid_barcode.gif
-      # to a different location. The `snipe-it-setup` oneshot service will then
-      # copy the file back during bootstrap.
-      mkdir -p $out/share/snipe-it
-      cp $out/public/uploads/barcodes/invalid_barcode.gif $out/share/snipe-it/
-
-      rm -R $out/storage $out/public/uploads $out/bootstrap/cache
-      ln -s ${dataDir}/.env $out/.env
-      ln -s ${dataDir}/storage $out/
-      ln -s ${dataDir}/public/uploads $out/public/uploads
-      ln -s ${dataDir}/bootstrap/cache $out/bootstrap/cache
-
-      chmod +x $out/artisan
-
-      substituteInPlace config/database.php --replace "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
-    '';
-  });
-
-in package.override rec {
+php.buildComposerProject (finalAttrs: {
   pname = "snipe-it";
   version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "snipe";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "11i9ijkl7am5k48y7r5k6nki2827cd7mw3dr1xj8dvb8diwaskqi";
+    repo = "snipe-it";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-EU+teGxo7YZkD7kNXk9jRyARpzWz5OMRmaWqQ6eMKYY=";
   };
 
-  passthru.tests = nixosTests.snipe-it;
-  passthru.phpPackage = php;
+  vendorHash = "sha256-JcBcrETbjGJFlG1dH/XXqmb9MlKr0ICdnEx7/61Z5io=";
+
+  postInstall = ''
+    snipe_it_out="$out/share/php/snipe-it"
+
+    # Before symlinking the following directories, copy the invalid_barcode.gif
+    # to a different location. The `snipe-it-setup` oneshot service will then
+    # copy the file back during bootstrap.
+    mkdir -p $out/share/snipe-it
+    cp $snipe_it_out/public/uploads/barcodes/invalid_barcode.gif $out/share/snipe-it/
+
+    rm -R $snipe_it_out/storage $snipe_it_out/public/uploads $snipe_it_out/bootstrap/cache
+    ln -s ${dataDir}/.env $snipe_it_out/.env
+    ln -s ${dataDir}/storage $snipe_it_out/
+    ln -s ${dataDir}/public/uploads $snipe_it_out/public/uploads
+    ln -s ${dataDir}/bootstrap/cache $snipe_it_out/bootstrap/cache
+
+    chmod +x $snipe_it_out/artisan
+
+    substituteInPlace $snipe_it_out/config/database.php --replace "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
+  '';
+
+  passthru = {
+    tests = nixosTests.snipe-it;
+    phpPackage = php;
+  };
 
   meta = with lib; {
     description = "A free open source IT asset/license management system";
@@ -62,4 +58,4 @@ in package.override rec {
     maintainers = with maintainers; [ yayayayaka ];
     platforms = platforms.linux;
   };
-}
+})

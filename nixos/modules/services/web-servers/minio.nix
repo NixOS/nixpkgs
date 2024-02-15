@@ -85,12 +85,7 @@ in
       description = lib.mdDoc "Enable or disable access to web UI.";
     };
 
-    package = mkOption {
-      default = pkgs.minio;
-      defaultText = literalExpression "pkgs.minio";
-      type = types.package;
-      description = lib.mdDoc "Minio package to use.";
-    };
+    package = mkPackageOption pkgs "minio" { };
   };
 
   config = mkIf cfg.enable {
@@ -103,6 +98,7 @@ in
 
       services.minio = {
         description = "Minio Object Storage";
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {

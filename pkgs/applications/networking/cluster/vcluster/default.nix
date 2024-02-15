@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles, testers, vcluster }:
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.15.6";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-frYE/0PcVNlk+hwSCoPwSbL2se4dEP9g6aLDMGdn6x8=";
+    hash = "sha256-TJjMB7x8MOlr3GexsnOZBFPJovVkf4ByRn1aGprvZFQ=";
   };
 
   vendorHash = null;
@@ -17,7 +17,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s" "-w"
+    "-X main.version=${version}"
+    "-X main.goVersion=${lib.getVersion go}"
+  ];
 
   # Test is disabled because e2e tests expect k8s.
   doCheck = false;
@@ -32,8 +36,14 @@ buildGoModule rec {
   postInstall = ''
     installShellCompletion --cmd vcluster \
       --bash <($out/bin/vcluster completion bash) \
+      --fish <($out/bin/vcluster completion fish) \
       --zsh <($out/bin/vcluster completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = vcluster;
+    command = "vcluster --version";
+  };
 
   meta = with lib; {
     description = "Create fully functional virtual Kubernetes clusters";

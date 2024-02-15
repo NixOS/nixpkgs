@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.2";
+  version = "2.9.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kbzqriybzN/86vov3Q+kH2lj9plK1GzWPlc/Nc/nWF0=";
+    hash = "sha256-qMcO0TTbMPjc+r2IOlwJqbaSOztat9MmYWH4kgy9vwA=";
   };
 
   propagatedBuildInputs = [

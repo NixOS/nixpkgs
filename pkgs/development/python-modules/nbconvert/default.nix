@@ -20,8 +20,8 @@
 , traitlets
 , importlib-metadata
 , flaky
+, ipykernel
 , ipywidgets
-, pyppeteer
 , pytestCheckHook
 }:
 
@@ -33,15 +33,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.7.3";
+  version = "7.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  format = "pyproject";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SlmWv1880WqgQxiXuhqkxkhCwgefQ0s9xrjEslLvM1U=";
+    hash = "sha256-gT5lU3ljYkia5XLjm6G/+XhTYZL7UY4QgmsOjK3wPsg=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -86,8 +85,8 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     flaky
+    ipykernel
     ipywidgets
-    pyppeteer
     pytestCheckHook
   ];
 
@@ -105,8 +104,9 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Converting Jupyter Notebooks";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/nbconvert";
+    changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

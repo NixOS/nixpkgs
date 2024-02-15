@@ -53,15 +53,15 @@
 }:
 
 let
-  pythonForDocs = python3.pythonForBuild.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  pythonForDocs = python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.42.8";
+  version = "1.44.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-AzfnWD0uxa3iui6MYl0vCe7M2h0ig27imqcpJdOZw1M=";
+    sha256 = "sha256-S1i/OsV+LO+1ZS79CUXrC0vDamPZKmGrRx2LssmkIOE=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
     "-Dkernel_firmware_dir=/run/current-system/firmware"
 
     # Platform
+    "-Dmodprobe=${kmod}/bin/modprobe"
     "-Dsession_tracking=systemd"
     "-Dlibaudit=yes-disabled-by-default"
     "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
@@ -118,7 +119,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit iputils kmod openconnect ethtool gnused systemd;
+      inherit iputils openconnect ethtool gnused systemd;
       inherit runtimeShell;
     })
 

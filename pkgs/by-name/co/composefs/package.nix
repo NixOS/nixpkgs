@@ -3,11 +3,10 @@
 , fetchFromGitHub
 
 , autoreconfHook
-, pandoc
+, go-md2man
 , pkg-config
 , openssl
 , fuse3
-, yajl
 , libcap
 , libseccomp
 , python3
@@ -19,21 +18,18 @@
 , testers
 
 , fuseSupport ? lib.meta.availableOn stdenv.hostPlatform fuse3
-, yajlSupport ? lib.meta.availableOn stdenv.hostPlatform yajl
 , enableValgrindCheck ? false
 , installExperimentalTools ? false
 }:
-# https://github.com/containers/composefs/issues/204
-assert installExperimentalTools -> (!stdenv.hostPlatform.isMusl);
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OjayMhLc3otqQjHsbLN8nm9D9yGOifBcrSLixjnJmvE=";
+    hash = "sha256-ViZkmuLFV5DN1nqWKGl+yaqhYUEOztZ1zGpxjr1U/dw=";
   };
 
   strictDeps = true;
@@ -43,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s/noinst_PROGRAMS +\?=/bin_PROGRAMS +=/g" tools/Makefile.am
   '';
 
-  configureFlags = lib.optionals enableValgrindCheck [
-    (lib.enableFeature true "valgrind-test")
+  configureFlags = [
+    (lib.enableFeature true "man")
+    (lib.enableFeature enableValgrindCheck "valgrind-test")
   ];
 
-  nativeBuildInputs = [ autoreconfHook pandoc pkg-config ];
+  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config ];
   buildInputs = [ openssl ]
     ++ lib.optional fuseSupport fuse3
-    ++ lib.optional yajlSupport yajl
     ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
     [
       libcap
@@ -58,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  # yajl is required to read the test json files
   doCheck = true;
   nativeCheckInputs = [ python3 which ]
     ++ lib.optional enableValgrindCheck valgrind
@@ -70,16 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/*.sh \
       --replace " /tmp" " $TMPDIR" \
       --replace " /var/tmp" " $TMPDIR"
-  '' + lib.optionalString (stdenv.hostPlatform.isMusl || !yajlSupport) ''
-    # test relies on `composefs-from-json` tool
-    # MUSL: https://github.com/containers/composefs/issues/204
-    substituteInPlace tests/Makefile \
-      --replace " check-checksums" ""
-  '' + lib.optionalString (stdenv.hostPlatform.isMusl || enableValgrindCheck) ''
-    # seccomp sandbox breaks these tests
-    # MUSL: https://github.com/containers/composefs/issues/206
-    substituteInPlace tests/test-checksums.sh \
-      --replace "composefs-from-json" "composefs-from-json --no-sandbox"
   '';
 
   passthru = {

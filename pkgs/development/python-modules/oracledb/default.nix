@@ -4,22 +4,26 @@
 , cython_3
 , fetchPypi
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "oracledb";
-  version = "1.4.1";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v2IlgQNsfTdWZDOANv4X7/0SStEjyDZeIvJ0LQvSN68=";
+    hash = "sha256-wSI1qe7xIwOBhOV/O5sUXhSbImVOgkICTPToHNiQ9SM=";
   };
 
   nativeBuildInputs = [
     cython_3
+    setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

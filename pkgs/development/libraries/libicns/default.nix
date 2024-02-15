@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "libicns";
-  version = "unstable-2022-04-10";
+  version = "0.8.1-unstable-2022-04-10";
 
   src = fetchgit {
     name = "libicns";

@@ -1,13 +1,12 @@
-{
+{ hostPlatform
 }:
 
 rec {
-  name = "stage0-posix-${version}-${rev}-source";
-  # Pinned from https://github.com/oriansj/stage0-posix/commit/3189b5f325b7ef8b88e3edec7c1cde4fce73c76c
-  version = "unstable-2023-05-02";
-  rev = "3189b5f325b7ef8b88e3edec7c1cde4fce73c76c";
+  name = "stage0-posix-${version}-source";
+  version = "1.6.0";
+  rev = "Release_${version}";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-7Y9+csTwZIQp0WGbagX+Q4f2zavN7AUk1TSBp/H5Xks=";
+  outputHash = "sha256-epUaShjKiAd749ICvc6rS6WhUkS8R4heKuPdwUjEtsQ=";
 
   /*
   Since `make-minimal-bootstrap-sources` requires nixpkgs and nix it
@@ -65,7 +64,7 @@ rec {
   */
   minimal-bootstrap-sources = derivation {
     inherit name;
-    system = builtins.currentSystem;
+    system = hostPlatform.system;
     outputHashMode = "recursive";
     inherit outputHashAlgo outputHash;
 

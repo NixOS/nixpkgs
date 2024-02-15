@@ -1,3 +1,3 @@
 self: super: {
-  nonDerivation = self.callPackage ({ }: { }) { };
+  nonDerivation = self.callPackage ({ someDrv }: someDrv) { };
 }

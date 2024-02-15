@@ -22,5 +22,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wavm.github.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ereslibre ];
+    platforms = platforms.unix;
   };
 })

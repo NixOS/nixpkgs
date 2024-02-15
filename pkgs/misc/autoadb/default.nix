@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rom1v/autoadb";
     license = licenses.asl20;
     maintainers = with maintainers; [ shawn8901 ];
+    mainProgram = "autoadb";
   };
 }

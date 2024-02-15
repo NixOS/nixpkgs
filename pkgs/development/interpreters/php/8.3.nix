@@ -1,14 +1,9 @@
-{ callPackage, fetchurl, ... }@_args:
+{ callPackage, ... }@_args:
 
 let
-  base = (callPackage ./generic.nix (_args // {
-    version = "8.3.0RC3";
-    hash = null;
-  })).overrideAttrs (oldAttrs: {
-    src = fetchurl {
-      url = "https://downloads.php.net/~jakub/php-8.3.0RC3.tar.xz";
-      hash = "sha256-64JwXVR7WzfeXhq5qOW0cqpzcX09G9t9R2daQyRyRMQ=";
-    };
+  base = callPackage ./generic.nix (_args // {
+    version = "8.3.2";
+    hash = "sha256-WCs8g3qNlS7//idKXklwbEOojBYoMMKow1gIn+dEkoQ=";
   });
 in
 base.withExtensions ({ all, ... }: with all; ([

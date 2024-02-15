@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchurl
+, runCommand
 , cmake
 , ffmpeg_4
 , libdrm
@@ -12,6 +13,7 @@
 , libXdmcp
 , libxcb
 , makeWrapper
+, mesa
 , ninja
 , pkg-config
 , python3
@@ -37,16 +39,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.6.3";
+  version = "1.3.7.3";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-jpKPmUduH3IuUYzBAZJFl/w1FqjGC8sXSTnet8YEZ0I=";
+    hash = "sha256-YtfUnrqWZwPMkLr3ovJz8Xr2ES1piW0yB+rBAaiQKoQ=";
   };
-
-  outputs = [ "out" "lib" ];
 
   prePatch = ''
     mkdir -p external/renderdoc/src
@@ -92,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mv $out $lib
+    # Check that nothing was installed so far
+    ! test -e $out
 
     mkdir -p $out/bin $out/archive-dir
     cp -a external/vulkancts/modules/vulkan/deqp-vk external/vulkancts/modules/vulkan/deqp-vksc $out/bin/
@@ -105,6 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+    # Expand the wildcard to pick the existing architecture
+    export VK_ICD_FILENAMES=$(echo ${mesa.drivers}/share/vulkan/icd.d/lvp_icd.*.json)
+    deqp-vk -n dEQP-VK.api.smoke.triangle
+    touch $out
+  '';
 
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";

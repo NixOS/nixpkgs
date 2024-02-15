@@ -32,5 +32,7 @@ with lib;
     systemd.packages = [ pkgs.gnome.gpaste ];
     # gnome-control-center crashes in Keyboard Shortcuts pane without the GSettings schemas.
     services.xserver.desktopManager.gnome.sessionPath = [ pkgs.gnome.gpaste ];
+    # gpaste-reloaded applet doesn't work without the typelib
+    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gnome.gpaste ];
   };
 }

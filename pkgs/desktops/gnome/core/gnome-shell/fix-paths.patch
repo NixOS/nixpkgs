@@ -39,8 +39,8 @@ index fff4e73c2..92859b099 100644
          if (xkbVariant.length > 0)
              description = `${description}\t${xkbVariant}`;
  
--        Util.spawn(['gkbd-keyboard-display', '-l', description]);
-+        Util.spawn(['@gkbd_keyboard_display@', '-l', description]);
+-        Util.spawn(['tecla', description]);
++        Util.spawn(['@tecla@', description]);
      }
  });
 diff --git a/subprojects/extensions-tool/src/command-install.c b/subprojects/extensions-tool/src/command-install.c

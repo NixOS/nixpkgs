@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "topicctl";
-  version = "1.10.2";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = "topicctl";
     rev = "v${version}";
-    sha256 = "sha256-VyzWaoGOGDtB4fe0Wa6ldeOSEN+Ihu8xapiHcHJos0w=";
+    sha256 = "sha256-Vmx+6UXNWCnVmLskk1J4Pug3+99cdk4WXjA2zO4agvU=";
   };
 
-  vendorHash = "sha256-UJ7U9CfQHKgK7wfb8zqLZ7na4OBBZBYiGayII3RTaiQ=";
+  vendorHash = "sha256-+mnnvdna1g6JE29weOJZmdO3jFp2a75dV9wK2XcWJ9s=";
 
   ldflags = [
     "-X main.BuildVersion=${version}"
@@ -27,5 +27,6 @@ buildGoModule rec {
     inherit (src.meta) homepage;
     license = licenses.mit;
     maintainers = with maintainers; [ eskytthe srhb ];
+    mainProgram = "topicctl";
   };
 }

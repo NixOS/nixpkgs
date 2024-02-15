@@ -4,9 +4,9 @@
 , backoff
 , beautifulsoup4
 , buildPythonPackage
+, certifi
 , docutils
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -20,31 +20,18 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2023.08.0";
-  format = "pyproject";
+  version = "2024.01.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "simplisafe-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-DExMa9z/VYAMoqUmr/gfZzYFWfTxnC+Cz4rRTaNSLBM=";
+    hash = "sha256-ewbR2FI0t2F8HF0ZL5omsclB9OPAjHygGLPtSkVlvgM=";
   };
 
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/simplisafe-python/pull/596
-    #
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/simplisafe-python/commit/60f41c690fac7acb614490b542cbbf2fa0052266.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -54,6 +41,7 @@ buildPythonPackage rec {
     aiohttp
     backoff
     beautifulsoup4
+    certifi
     docutils
     pytz
     voluptuous

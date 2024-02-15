@@ -35,7 +35,7 @@ buildPythonPackage rec {
   patches = [
     # mysql-connector overrides MACOSX_DEPLOYMENT_TARGET to 11.
     # This makes the installation with nixpkgs fail. I suspect, that's
-    # because stdenv.targetPlatform.darwinSdkVersion is (currently) set to
+    # because stdenv.hostPlatform.darwinSdkVersion is (currently) set to
     # 10.12. The patch reverts
     # https://github.com/mysql/mysql-connector-python/commit/d1e89fd3d7391084cdf35b0806cb5d2a4b413654
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch

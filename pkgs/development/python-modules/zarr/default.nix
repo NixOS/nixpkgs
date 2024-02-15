@@ -4,6 +4,7 @@
 , fasteners
 , fetchPypi
 , numcodecs
+, msgpack
 , numpy
 , pytestCheckHook
 , pythonOlder
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.16.0";
+  version = "2.16.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hONraVvaDs6lKvmGEnGYTLIqXIZGeZB7e5uj95toT34=";
+    hash = "sha256-QnbPS0plNDEELNU/8igrxNKSpoQkEeiFKZZFBPsHMoY=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     numpy
     fasteners
     numcodecs
-  ];
+  ] ++ numcodecs.optional-dependencies.msgpack;
 
   nativeCheckInputs = [
     pytestCheckHook

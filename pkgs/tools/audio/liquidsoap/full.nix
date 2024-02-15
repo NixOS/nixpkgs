@@ -1,35 +1,68 @@
-{ lib, stdenv, makeWrapper, fetchurl, which, pkg-config
+{ lib, stdenv, makeWrapper, fetchFromGitHub, which, pkg-config
 , libjpeg
 , ocamlPackages
-, awscli2, curl, ffmpeg, youtube-dl
-, runtimePackages ? [ awscli2 curl ffmpeg youtube-dl ]
+, awscli2, bubblewrap, curl, ffmpeg, yt-dlp
+, runtimePackages ? [ awscli2 bubblewrap curl ffmpeg yt-dlp ]
 }:
 
 let
   pname = "liquidsoap";
-  version = "2.1.4";
+  version = "2.2.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = fetchurl {
-    url = "https://github.com/savonet/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-GQuG7f9U+/HqPcuj6hnBoH5mWEhxSwWgBnkCuLqHTAc=";
+  src = fetchFromGitHub {
+    owner = "savonet";
+    repo = "liquidsoap";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oCMSdmdU3oHrq3QFEDQLdb3CLFYcWylxTqKWtGOoQW8=";
   };
 
-  postFixup = ''
+  postPatch = ''
+    substituteInPlace src/lang/dune \
+      --replace "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
+  '';
+
+  dontConfigure = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    dune build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    dune install --prefix "$out"
+
+    runHook postInstall
+  '';
+
+  fixupPhase = ''
+    runHook preFixup
+
     wrapProgram $out/bin/liquidsoap \
       --set LIQ_LADSPA_PATH /run/current-system/sw/lib/ladspa \
       --prefix PATH : ${lib.makeBinPath runtimePackages}
-  '';
 
+    runHook postFixup
+  '';
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [ makeWrapper pkg-config which
-      ocamlPackages.ocaml ocamlPackages.findlib ocamlPackages.menhir
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    which
+    ocamlPackages.ocaml
+    ocamlPackages.dune_3
+    ocamlPackages.findlib
+    ocamlPackages.menhir
+  ];
 
   buildInputs = [
     libjpeg
@@ -38,29 +71,36 @@ stdenv.mkDerivation {
     ocamlPackages.dtools
     ocamlPackages.duppy
     ocamlPackages.mm
-    ocamlPackages.ocaml_pcre
-    ocamlPackages.menhir ocamlPackages.menhirLib
-    (ocamlPackages.camomile.override { version = "1.0.2"; })
     ocamlPackages.ocurl
+    ocamlPackages.cry
+    ocamlPackages.camomile
     ocamlPackages.uri
-    ocamlPackages.sedlex
+    ocamlPackages.fileutils
+    ocamlPackages.menhir # liquidsoap-lang
+    ocamlPackages.menhirLib
+    ocamlPackages.metadata
+    ocamlPackages.dune-build-info
+    ocamlPackages.re
+    ocamlPackages.sedlex # liquidsoap-lang
+    ocamlPackages.ppx_string
 
     # Recommended dependencies
     ocamlPackages.ffmpeg
 
     # Optional dependencies
-    ocamlPackages.camlimages
-    ocamlPackages.gd4o
     ocamlPackages.alsa
     ocamlPackages.ao
     ocamlPackages.bjack
-    ocamlPackages.cry
+    ocamlPackages.camlimages
     ocamlPackages.dssi
     ocamlPackages.faad
     ocamlPackages.fdkaac
     ocamlPackages.flac
     ocamlPackages.frei0r
+    ocamlPackages.gd4o
+    ocamlPackages.graphics
     ocamlPackages.gstreamer
+    ocamlPackages.imagelib
     ocamlPackages.inotify
     ocamlPackages.ladspa
     ocamlPackages.lame
@@ -72,25 +112,22 @@ stdenv.mkDerivation {
     ocamlPackages.ogg
     ocamlPackages.opus
     ocamlPackages.portaudio
+    ocamlPackages.posix-time2
     ocamlPackages.pulseaudio
-    ocamlPackages.shine
     ocamlPackages.samplerate
+    ocamlPackages.shine
     ocamlPackages.soundtouch
     ocamlPackages.speex
     ocamlPackages.srt
     ocamlPackages.ssl
     ocamlPackages.taglib
     ocamlPackages.theora
-    ocamlPackages.vorbis
-    ocamlPackages.xmlplaylist
-    ocamlPackages.posix-time2
     ocamlPackages.tsdl
     ocamlPackages.tsdl-image
     ocamlPackages.tsdl-ttf
-
-    # Undocumented dependencies
-    ocamlPackages.graphics
-    ocamlPackages.cohttp-lwt-unix
+    ocamlPackages.vorbis
+    ocamlPackages.xmlplaylist
+    ocamlPackages.yaml
   ];
 
   meta = with lib; {

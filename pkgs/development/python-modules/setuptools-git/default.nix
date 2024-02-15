@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "setuptools-git";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

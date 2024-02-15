@@ -7,7 +7,7 @@ in
 
   options.services.netclient = {
     enable = lib.mkEnableOption (lib.mdDoc "Netclient Daemon");
-    package = lib.mkPackageOptionMD pkgs "netclient" { };
+    package = lib.mkPackageOption pkgs "netclient" { };
   };
 
   config = lib.mkIf cfg.enable {

@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/pop-os/tensorman";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ thefenriswolf ];
+    mainProgram = "tensorman";
   };
 }

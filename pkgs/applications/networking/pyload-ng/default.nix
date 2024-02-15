@@ -1,14 +1,22 @@
-{ lib, fetchPypi, python3 }:
+{ lib, fetchPypi, nixosTests, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.5.0b3.dev72";
+  version = "0.5.0b3.dev75";
   pname = "pyload-ng";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pcbJc23Fylh/JoWRmbZmC8xUzUqh2ej6gT+B2w8DHFQ=";
+    hash = "sha256-1lPIKkZESonDaVCnac0iUu/gCqXVDBhNZrk5S0eC6F0=";
   };
+
+  patches = [
+    # Makes it possible to change the default username/password in the module
+    ./declarative-default-user.patch
+    # Makes it possible to change the configuration through environment variables
+    # in the NixOS module (aimed mostly at listen address/port)
+    ./declarative-env-config.patch
+  ];
 
   postPatch = ''
     # relax version bounds
@@ -35,14 +43,20 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
-    plugins = with python3.pkgs; [
-      beautifulsoup4 # for some plugins
-      colorlog # colorful console logging
-      pillow # for some CAPTCHA plugin
-      send2trash # send some files to trash instead of deleting them
-      slixmpp # XMPP plugin
-    ];
+  passthru = {
+    optional-dependencies = {
+      plugins = with python3.pkgs; [
+        beautifulsoup4 # for some plugins
+        colorlog # colorful console logging
+        pillow # for some CAPTCHA plugin
+        send2trash # send some files to trash instead of deleting them
+        slixmpp # XMPP plugin
+      ];
+    };
+
+    tests = {
+      inherit (nixosTests) pyload;
+    };
   };
 
   meta = with lib; {
@@ -50,5 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pyload/pyload";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ ruby0b ];
+    mainProgram = "pyload";
   };
 }

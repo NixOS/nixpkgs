@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "rke";
-  version = "1.4.10";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rr6CN5ik4vuLNqzNPvISfRfOjTcD48pSre2K6xr6xSk=";
+    hash = "sha256-p1hkiXHwh8Vo2LIP1BeE5XSc/gKjn9XN30usGwCVj7w=";
   };
 
-  vendorHash = "sha256-3bivFrn2xDyILD1ugSr7IehhNq4vkqShFQI3sbeY0iY=";
+  vendorHash = "sha256-eH4FBfX9LNb1UgSRsYSd1Fn2Ju+cL6t64u+/sf9uzNM=";
 
   subPackages = [ "." ];
 

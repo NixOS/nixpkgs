@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.9.2";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    hash = "sha256-C2VPEtHJyO7azDmvH74AoCnNaCeJ7XOLlIIe3nay4Po=";
+    hash = "sha256-IEfHww+kAPKcTe5bWM+YuDe6PHlSdZQVEunlBMQ29Ic=";
     fetchSubmodules = true;
   };
 
@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
+    mainProgram = "crun";
   };
 }

@@ -11,12 +11,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "2.17.0";
+  version = "2.19.4";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5rhsYKYKKOxv9aL2dPcFehdHcO58+ptG4CWaSYR6lfo=";
+    hash = "sha256-97ZqhTMqnAr1rzEy96faceWzFyWexnYbH1aTfc1y0JE=";
   };
   buildInputs = [
     boost
@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ adisbladis mic92 ];
     platforms = lib.platforms.unix;
+    mainProgram = "nix-eval-jobs";
   };
 }

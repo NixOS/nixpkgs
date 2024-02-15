@@ -74,6 +74,18 @@ in
   };
 
   config = lib.mkIf (cfg.enable || initrdCfg.enable) {
+    assertions = [
+      {
+        assertion = initrdCfg.enable -> config.boot.initrd.systemd.enable;
+        message = ''
+          'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
+        '';
+      }
+    ];
+
+    # systemd-repart uses loopback devices for partition creation
+    boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";
+
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"

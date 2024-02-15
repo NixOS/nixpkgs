@@ -122,6 +122,16 @@ let
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
       ];
+
+      # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
+      ipVlanVtapChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "Flags"
+        ])
+        (assertValueOneOf "Mode" ["L2" "L3" "L3S" ])
+        (assertValueOneOf "Flags" ["private" "vepa" "bridge" ])
+      ];
     in {
 
       sectionNetdev = checkUnitConfig "Netdev" [
@@ -146,6 +156,7 @@ let
           "ip6gretap"
           "ipip"
           "ipvlan"
+          "ipvtap"
           "macvlan"
           "macvtap"
           "sit"
@@ -159,6 +170,7 @@ let
           "geneve"
           "l2tp"
           "macsec"
+          "wlan"
           "vrf"
           "vcan"
           "vxcan"
@@ -189,6 +201,10 @@ let
         (assertValueOneOf "LooseBinding" boolValues)
         (assertValueOneOf "ReorderHeader" boolValues)
       ];
+
+      sectionIPVLAN = checkUnitConfig "IPVLAN" ipVlanVtapChecks;
+
+      sectionIPVTAP = checkUnitConfig "IPVTAP" ipVlanVtapChecks;
 
       sectionMACVLAN = checkUnitConfig "MACVLAN" [
         (assertOnlyFields [
@@ -468,6 +484,30 @@ let
         (assertMinimum "Table" 0)
       ];
 
+      sectionWLAN = checkUnitConfig "WLAN" [
+        (assertOnlyFields [
+          "PhysicalDevice"  # systemd supports both strings ("phy0") and indexes (0) here.
+          "Type"
+          "WDS"
+        ])
+        # See https://github.com/systemd/systemd/blob/main/src/basic/linux/nl80211.h#L3382
+        (assertValueOneOf "Type" [
+          "ad-hoc"
+          "station"
+          "ap"
+          "ap-vlan"
+          "wds"
+          "monitor"
+          "mesh-point"
+          "p2p-client"
+          "p2p-go"
+          "p2p-device"
+          "ocb"
+          "nan"
+        ])
+        (assertValueOneOf "WDS" boolValues)
+      ];
+
       sectionBatmanAdvanced = checkUnitConfig "BatmanAdvanced" [
         (assertOnlyFields [
           "GatewayMode"
@@ -557,6 +597,8 @@ let
           "DHCP"
           "DHCPServer"
           "LinkLocalAddressing"
+          "IPv6LinkLocalAddressGenerationMode"
+          "IPv6StableSecretAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -590,6 +632,7 @@ let
           "VRF"
           "VLAN"
           "IPVLAN"
+          "IPVTAP"
           "MACVLAN"
           "MACVTAP"
           "VXLAN"
@@ -607,6 +650,7 @@ let
         (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
         (assertValueOneOf "DHCPServer" boolValues)
         (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6" "fallback" "ipv4-fallback"])
+        (assertValueOneOf "IPv6LinkLocalAddressGenerationMode" ["eui64" "none" "stable-privacy" "random"])
         (assertValueOneOf "IPv4LLRoute" boolValues)
         (assertValueOneOf "DefaultRouteOnDevice" boolValues)
         (assertValueOneOf "LLMNR" (boolValues ++ ["resolve"]))
@@ -995,7 +1039,7 @@ let
           "MulticastToUnicast"
           "NeighborSuppression"
           "Learning"
-          "Hairpin"
+          "HairPin"
           "Isolated"
           "UseBPDU"
           "FastLeave"
@@ -1011,7 +1055,7 @@ let
         (assertValueOneOf "MulticastToUnicast" boolValues)
         (assertValueOneOf "NeighborSuppression" boolValues)
         (assertValueOneOf "Learning" boolValues)
-        (assertValueOneOf "Hairpin" boolValues)
+        (assertValueOneOf "HairPin" boolValues)
         (assertValueOneOf "Isolated" boolValues)
         (assertValueOneOf "UseBPDU" boolValues)
         (assertValueOneOf "FastLeave" boolValues)
@@ -1252,6 +1296,7 @@ let
           "FirewallMark"
           "Wash"
           "SplitGSO"
+          "AckFilter"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
@@ -1284,6 +1329,7 @@ let
         (assertRange "FirewallMark" 1 4294967295)
         (assertValueOneOf "Wash" boolValues)
         (assertValueOneOf "SplitGSO" boolValues)
+        (assertValueOneOf "AckFilter" (boolValues ++ ["aggressive"]))
       ];
 
       sectionControlledDelay = checkUnitConfig "ControlledDelay" [
@@ -1569,7 +1615,7 @@ let
         description = lib.mdDoc ''
           Each attribute in this set specifies an option in the
           `[WireGuardPeer]` section of the unit.  See
-          {manpage}`systemd.network(5)` for details.
+          {manpage}`systemd.netdev(5)` for details.
         '';
       };
     };
@@ -1595,6 +1641,26 @@ let
         Each attribute in this set specifies an option in the
         `[VLAN]` section of the unit.  See
         {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "L2"; Flags = "private"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipvtapConfig = mkOption {
+      default = {};
+      example = { Mode = "L3"; Flags = "vepa"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVTAP;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVTAP]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -1776,6 +1842,16 @@ let
         {manpage}`systemd.netdev(5)` for details.
         A detailed explanation about how VRFs work can be found in the
         [kernel docs](https://www.kernel.org/doc/Documentation/networking/vrf.txt).
+      '';
+    };
+
+    wlanConfig = mkOption {
+      default = {};
+      example = { PhysicalDevice = 0; Type = "station"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[WLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -2913,15 +2989,9 @@ let
 
       systemd.services.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        # These before and conflicts lines can be removed when this PR makes it into a release:
-        # https://github.com/systemd/systemd/pull/27791
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
       systemd.sockets.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
-        before = ["initrd-switch-root.target"];
-        conflicts = ["initrd-switch-root.target"];
       };
 
       systemd.services.systemd-network-generator.wantedBy = [ "sysinit.target" ];
@@ -2950,10 +3020,10 @@ in
     stage2Config
     (mkIf config.boot.initrd.systemd.enable {
       assertions = [{
-        assertion = config.boot.initrd.network.udhcpc.extraArgs == [];
+        assertion = !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [];
         message = ''
-          boot.initrd.network.udhcpc.extraArgs is not supported when
-          boot.initrd.systemd.enable is enabled
+          systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
+          DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
         '';
       }];
 

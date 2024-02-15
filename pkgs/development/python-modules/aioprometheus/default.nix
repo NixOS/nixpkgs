@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "unstable-2023-03-14";
   format = "setuptools";
 
-  disable = pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "claws";

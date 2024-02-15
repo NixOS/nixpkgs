@@ -2,11 +2,12 @@
 , python3Packages, wrapGAppsHook, gobject-introspection
 , gtk-layer-shell, pango, gdk-pixbuf, atk
 # Extra packages called by various internal nwg-panel modules
+, hyprland         # hyprctl
 , sway             # swaylock, swaymsg
 , systemd          # systemctl
 , wlr-randr        # wlr-randr
 , nwg-menu         # nwg-menu
-, light            # light
+, brightnessctl    # brightnessctl
 , pamixer          # pamixer
 , pulseaudio       # pactl
 , libdbusmenu-gtk3 # tray
@@ -15,13 +16,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.9.13";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
     rev = "v${version}";
-    hash = "sha256-dP/FbMrjPextwedQeLJHM6f/a+EuZ+hQSLrH/rF2XOg=";
+    hash = "sha256-2O3FMPA/QD+ZUmLvot+MMwbUo3zT6ZN5NIbulh2oGYk=";
   };
 
   # No tests
@@ -40,15 +41,15 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}
-    cp $src/nwg-panel-config.desktop $out/share/applications/
-    cp $src/nwg-shell.svg $src/nwg-panel.svg $out/share/pixmaps/
+    cp $src/nwg-panel-config.desktop nwg-processes.desktop $out/share/applications/
+    cp $src/nwg-shell.svg $src/nwg-panel.svg nwg-processes.svg $out/share/pixmaps/
   '';
 
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       --prefix XDG_DATA_DIRS : "$out/share"
-      --prefix PATH : "${lib.makeBinPath [ light nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
+      --prefix PATH : "${lib.makeBinPath [ brightnessctl hyprland nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
     )
   '';
 

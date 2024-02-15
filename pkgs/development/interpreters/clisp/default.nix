@@ -29,6 +29,7 @@
 , x11Support ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
 , dllSupport ? true
 , withModules ? [
+    "asdf"
     "pcre"
     "rawsock"
   ]
@@ -41,6 +42,8 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
 
 let
   ffcallAvailable = stdenv.isLinux && (libffcall != null);
+  # Some modules need autoreconf called in their directory.
+  shouldReconfModule = name: name != "asdf";
 in
 
 stdenv.mkDerivation {
@@ -55,7 +58,7 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ autoconf269 automake libtool ];
+  nativeBuildInputs = [ autoconf269 automake libtool ];
   buildInputs = [libsigsegv]
   ++ lib.optional (gettext != null) gettext
   ++ lib.optional (ncurses != null) ncurses
@@ -78,6 +81,7 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -e 's@9090@64237@g' -i tests/socket.tst
     sed -i 's@/bin/pwd@${coreutils}&@' src/clisp-link.in
+    sed -i 's@1\.16\.2@${automake.version}@' src/aclocal.m4
     find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
   '';
 
@@ -92,7 +96,7 @@ stdenv.mkDerivation {
       cd modules/${x}
       autoreconf -f -i -I "$root/src" -I "$root/src/m4" -I "$root/src/glm4"
     )
-  '') withModules);
+  '') (builtins.filter shouldReconfModule withModules));
 
   configureFlags = [ "builddir" ]
   ++ lib.optional (!dllSupport) "--without-dynamic-modules"
@@ -109,6 +113,8 @@ stdenv.mkDerivation {
     sed -i -re '/ cfree /d' -i modules/bindings/glibc/linux.lisp
     cd builddir
   '';
+
+  doCheck = true;
 
   postInstall =
     lib.optionalString (withModules != [])

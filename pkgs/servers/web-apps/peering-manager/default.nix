@@ -9,23 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-N34piaSP+QKZzjT42nAR47DTtqGtZ/GMeTeTyRQw3/4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UV1zSX9C9y5faOBUQ7bfj2DT6ffhMW28MIT7SaYjMgw=";
   };
-
-  patches = [
-    # restore support unix sockets for redis connections
-    # https://github.com/peering-manager/peering-manager/pull/773
-    (fetchpatch {
-      url = "https://github.com/peering-manager/peering-manager/commit/ff66823c04d8c545a46dcec91d61eda7c21f99aa.patch";
-      hash = "sha256-x5E0LFhGrc5LPY4pwAMNUtigltLGqqbRCe1PIm0yLA8=";
-    })
-  ];
 
   format = "other";
 

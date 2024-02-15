@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "prison";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "betodealmeida";

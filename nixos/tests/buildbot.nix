@@ -1,11 +1,6 @@
 # Test ensures buildbot master comes up correctly and workers can connect
 
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
-
-import ./make-test-python.nix {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "buildbot";
 
   nodes = {
@@ -76,6 +71,7 @@ import ./make-test-python.nix {
     gitrepo.wait_for_unit("multi-user.target")
 
     with subtest("Repo is accessible via git daemon"):
+        bbmaster.systemctl("start network-online.target")
         bbmaster.wait_for_unit("network-online.target")
         bbmaster.succeed("rm -rfv /tmp/fakerepo")
         bbmaster.succeed("git clone git://gitrepo/fakerepo /tmp/fakerepo")
@@ -83,6 +79,7 @@ import ./make-test-python.nix {
     with subtest("Master service and worker successfully connect"):
         bbmaster.wait_for_unit("buildbot-master.service")
         bbmaster.wait_until_succeeds("curl --fail -s --head http://bbmaster:8010")
+        bbworker.systemctl("start network-online.target")
         bbworker.wait_for_unit("network-online.target")
         bbworker.succeed("nc -z bbmaster 8010")
         bbworker.succeed("nc -z bbmaster 9989")
@@ -109,5 +106,5 @@ import ./make-test-python.nix {
         bbworker.fail("nc -z bbmaster 8011")
   '';
 
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
-} {}
+  meta.maintainers = pkgs.lib.teams.buildbot.members;
+})

@@ -7,20 +7,23 @@
 , nbval
 , numpy
 , parameterized
-, protobuf
+, protobuf_21
 , pybind11
 , pytestCheckHook
 , pythonOlder
 , tabulate
 , typing-extensions
 , abseil-cpp
+, google-re2
+, pillow
+, protobuf
 }:
 
 let
   gtestStatic = gtest.override { static = true; };
 in buildPythonPackage rec {
   pname = "onnx";
-  version = "1.14.1";
+  version = "1.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -29,7 +32,7 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+    hash = "sha256-Jzga1IiUO5LN5imSUmnbsjYtapRatTihx38EOUjm9Os=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +42,13 @@ in buildPythonPackage rec {
 
   buildInputs = [
     abseil-cpp
+    protobuf
+    google-re2
+    pillow
   ];
 
   propagatedBuildInputs = [
+    protobuf_21
     protobuf
     numpy
     typing-extensions
@@ -66,14 +73,6 @@ in buildPythonPackage rec {
       --replace 'include(googletest)' ""
     substituteInPlace cmake/unittest.cmake \
       --replace 'googletest)' ')'
-  '' + lib.optionalString stdenv.isLinux ''
-      # remove this override in 1.15 that will enable to set the CMAKE_CXX_STANDARD with cmakeFlags
-      substituteInPlace CMakeLists.txt \
-        --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
-  '' + lib.optionalString stdenv.isDarwin ''
-      # remove this override in 1.15 that will enable to set the CMAKE_CXX_STANDARD with cmakeFlags
-      substituteInPlace CMakeLists.txt \
-        --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 14'
   '';
 
   preConfigure = ''

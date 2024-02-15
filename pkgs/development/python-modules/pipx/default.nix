@@ -10,11 +10,12 @@
 , pytestCheckHook
 , pythonOlder
 , userpath
+, git
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.2.0";
+  version = "1.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-lm/Q+8nNubhaUR1pUbSIoD4DEUEkK+pQvvUdWNquW4Q=";
+    hash = "sha256-JZt4I0zw/Kmdgpd5tw6c+fHrHuxkN6jvN3fDmk0//vc=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    git
   ];
 
   preCheck = ''

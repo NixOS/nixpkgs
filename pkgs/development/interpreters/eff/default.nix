@@ -1,30 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, which, ocamlPackages }:
+{ lib, fetchFromGitHub, ocamlPackages }:
 
-stdenv.mkDerivation rec {
+with ocamlPackages; buildDunePackage rec {
   pname = "eff";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "matijapretnar";
     repo = "eff";
     rev = "v${version}";
-    sha256 = "1fslfj5d7fhj3f7kh558b8mk5wllwyq4rnhfkyd96fpy144sdcka";
+    hash = "sha256-0U61y41CA0YaoNk9Hsj7j6eb2V6Ku3MAjW9lMEimiC0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.ml --replace js_of_ocaml.ocamlbuild js_of_ocaml-ocamlbuild
-  '';
+  nativeBuildInputs = [ menhir ];
 
-  strictDeps = true;
-
-  nativeBuildInputs = [ which ] ++ (with ocamlPackages; [
-    ocaml findlib ocamlbuild menhir
-  ]);
-
-  buildInputs = with ocamlPackages; [ js_of_ocaml js_of_ocaml-ocamlbuild ];
+  buildInputs = [ js_of_ocaml ];
 
   doCheck = true;
-  checkTarget = "test";
 
   meta = with lib; {
     homepage = "https://www.eff-lang.org";
@@ -36,7 +27,6 @@ stdenv.mkDerivation rec {
       backtracking, multi-threading, and much more...
     '';
     license = licenses.bsd2;
-    inherit (ocamlPackages.ocaml.meta) platforms;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , faker
 , fetchPypi
 , httpretty
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     faker
     httpretty
     jsondate

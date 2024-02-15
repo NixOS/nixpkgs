@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ndd7xv/heh/releases/tag/${src.rev}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ piturnah ];
+    mainProgram = "heh";
   };
 }

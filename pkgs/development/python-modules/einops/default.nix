@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
-, chainer
 , fetchFromGitHub
 , hatchling
+, jupyter
 , nbconvert
 , numpy
 , parameterized
+, pillow
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "einops";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,21 +22,21 @@ buildPythonPackage rec {
     owner = "arogozhnikov";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/bnp8IhDxp8EB/PoW5Dz+7rOru0/odOrts84aq4qyJw=";
+    hash = "sha256-wCs3rMnYCk07kJ3iPItxwCQATflKBYHk6tfBCjiF+bc=";
   };
 
   nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
-    chainer
+    jupyter
     nbconvert
     numpy
     parameterized
+    pillow
     pytestCheckHook
   ];
 
-  # No CUDA in sandbox
-  EINOPS_SKIP_CUPY = 1;
+  env.EINOPS_TEST_BACKENDS = "numpy";
 
   preCheck = ''
     export HOME=$(mktemp -d);

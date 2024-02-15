@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-utility-libraries";
-  version = "1.3.261";
+  version = "1.3.275.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Utility-Libraries";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-szkBKNcxTHMYhhHFWr5WjD91Vf/AyZaGymvlDU9ff7s=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-gvia+Xb9BpOjPARKo3Sgp85Bfh1roFZ2PzCtXVFYeIU=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
@@ -19,6 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/KhronosGroup/Vulkan-Utility-Libraries";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = with maintainers; [ nickcao ];
   };
 })

@@ -1,22 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , regex
 , pytestCheckHook
 , js2py
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.1.5";
+  version = "1.1.8";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = "refs/tags/${version}";
-    hash = "sha256-drvF+0PSOdrha2rfpntrM8xIbeb0S7eNtfioxkdjEKw=";
+    hash = "sha256-bGNoQeiAC2JIFOhgYUnc+nApa2ovFzXnpl9JQAE11hM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
   propagatedBuildInputs = [ regex ];

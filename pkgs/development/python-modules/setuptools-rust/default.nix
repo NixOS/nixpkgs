@@ -6,25 +6,40 @@
 , semantic-version
 , setuptools
 , setuptools-scm
+, tomli
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.6.0";
+  version = "1.8.1";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yG5zTerDMFl5mL+8CNpFGH5rJ4N+I72R6tsyBzI5ImI=";
+    hash = "sha256-lLHdXVMIsxONW5M8OitV5taSfRoiYy5Qn86p3dD35IY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ semantic-version setuptools typing-extensions ];
+  propagatedBuildInputs = [
+    semantic-version
+    setuptools
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  pythonImportsCheck = [
+    "setuptools_rust"
+  ];
 
   doCheck = false;
-  pythonImportsCheck = [ "setuptools_rust" ];
 
   passthru.tests.pyo3 = callPackage ./pyo3-test { };
 

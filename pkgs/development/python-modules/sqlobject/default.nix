@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sqlobject";
-  version = "3.10.2";
+  version = "3.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SQLObject";
     inherit version;
-    hash = "sha256-dW9IsIdOSnCG3thWhYwIsz0Oa5runnXD84S5ITPH3ww=";
+    hash = "sha256-QrGyrM6e1cxCtF4GxoivXU/Gj2H8VnG7EFcgimLfdng=";
   };
 
   propagatedBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object Relational Manager for providing an object interface to your database";
-    homepage = "http://www.sqlobject.org/";
+    homepage = "https://www.sqlobject.org/";
     changelog = "https://github.com/sqlobject/sqlobject/blob/${version}/docs/News.rst";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ ];

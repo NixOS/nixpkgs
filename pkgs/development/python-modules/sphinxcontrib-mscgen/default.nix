@@ -30,6 +30,8 @@ buildPythonPackage rec {
     "sphinxcontrib.mscgen"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx extension using mscgen to render diagrams";
     homepage = "https://github.com/sphinx-contrib/mscgen";

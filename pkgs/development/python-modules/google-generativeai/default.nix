@@ -8,11 +8,12 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , tqdm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.2.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "generative-ai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zlLfA8wlXCsBXvzTHNW8y30/DvWMgf7DnpShsvjZXZ4=";
+    hash = "sha256-SL0jnuDHjeiqDq1VvWr4vQPFZ5yyea/OAGArmxztwB4=";
   };
 
   pythonRelaxDeps = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     google-api-core
     protobuf
     tqdm
+    typing-extensions
   ];
 
   # Issue with the google.ai module. Check with the next release

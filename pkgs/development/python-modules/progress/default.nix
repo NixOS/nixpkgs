@@ -6,6 +6,7 @@
 
 buildPythonPackage rec {
   version = "1.6";
+  format = "setuptools";
   pname = "progress";
 
   src = fetchPypi {

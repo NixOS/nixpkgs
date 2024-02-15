@@ -1,7 +1,6 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
-, fetchurl
 , gtk3
 , libX11
 , libXrandr
@@ -13,24 +12,24 @@
 , makeDesktopItem
 , nixosTests
 , wrapGAppsHook
-, dpkg
+, jq
+, coreutils
 }:
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.6.3.0";
+  version = "0.6.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    hash = "sha256-v41qYNBgOXcFnDOJpQYitql1IZP3p8b3may5Pr04dbg=";
+    hash = "sha256-zK+feU96JOXjmkTndM9VyUid3z+MZFxJGH+MXaB6kzk=";
   };
 
-  debPkg = fetchurl {
-    url = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
-    hash = "sha256-zWSJlkn7K/meTycWNTinC0hp0JubF22dJNOJeEIfGtI=";
-  };
+  patches = [
+    ./remove-git-from-generate-rules.patch
+  ];
 
   dotnetInstallFlags = [ "--framework=net6.0" ];
 
@@ -42,7 +41,8 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook
-    dpkg
+    # Dependency of generate-rules.sh
+    jq
   ];
 
   runtimeDeps = [
@@ -76,7 +76,13 @@ buildDotnetModule rec {
     "OpenTabletDriver.Tests.ConfigurationTest.Configurations_DeviceIdentifier_IsNotConflicting"
     # Depends on processor load
     "OpenTabletDriver.Tests.TimerTests.TimerAccuracy"
+    # Can't find Configurations directory
+    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_Verify_Configs_With_Schema"
   ];
+
+  preBuild = ''
+    patchShebangs generate-rules.sh
+  '';
 
   postFixup = ''
     # Give a more "*nix" name to the binaries
@@ -86,9 +92,10 @@ buildDotnetModule rec {
 
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
-    # TODO: Ideally this should be build from OpenTabletDriver/OpenTabletDriver-udev instead
-    dpkg-deb --fsys-tarfile ${debPkg} | tar xf - ./usr/lib/udev/rules.d/99-opentabletdriver.rules
-    install -Dm644 ./usr/lib/udev/rules.d/99-opentabletdriver.rules -t $out/lib/udev/rules.d
+    mkdir -p $out/lib/udev/rules.d
+    ./generate-rules.sh \
+      | sed 's@/usr/bin/env rm@${lib.getExe' coreutils "rm"}@' \
+      > $out/lib/udev/rules.d/70-opentabletdriver.rules
   '';
 
   desktopItems = [
@@ -113,7 +120,7 @@ buildDotnetModule rec {
     description = "Open source, cross-platform, user-mode tablet driver";
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ gepbird thiagokokada ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "otd";
   };

@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "11.1.0";
+  version = "12.1.1";
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     rev = finalAttrs.version;
-    sha256 = "sha256-l6IRzndjb95hIcFCCm8zmlNHWtKduqy2t/oml/9Xp+w=";
+    hash = "sha256-ofUFieeRtpnzNv3Ad5oYwKWb2XcqQHoj601TIhydJyI=";
   };
   patches = [
     # Ideally, Accelerate/Accelerate.h should be used for this implementation,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if (finalAttrs.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
+    "-DBUILD_TESTS=${if (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
   ];
 
   doCheck = true;
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ wrappers for SIMD intrinsics";
     homepage = "https://github.com/xtensor-stack/xsimd";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ tobim ];
+    maintainers = with maintainers; [ tobim doronbehar ];
     platforms = platforms.all;
   };
 })

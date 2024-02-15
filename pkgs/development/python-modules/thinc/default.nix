@@ -21,6 +21,7 @@
 , pytestCheckHook
 , python
 , pythonOlder
+, setuptools
 , srsly
 , tqdm
 , typing-extensions
@@ -29,15 +30,24 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.1.10";
+  version = "8.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bEpI19oH4EToSmjLubIvMvhJCZWiurC/xg5BLRSvuZE=";
+    hash = "sha256-boW5RGcsD5UkGnH2f5iC4asxnESaR3QLDRWfTPhtFYc=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "preshed>=3.0.2,<3.1.0" "preshed"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     cython
@@ -87,6 +97,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
+    changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];
   };

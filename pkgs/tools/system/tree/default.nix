@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://mama.indstate.edu/users/ice/tree/";
+    homepage = "https://oldmanprogrammer.net/source.php?dir=projects/tree";
     description = "Command to produce a depth indented directory listing";
     license = licenses.gpl2;
     longDescription = ''

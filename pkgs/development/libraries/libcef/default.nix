@@ -30,6 +30,10 @@
 }:
 
 let
+  gl_rpath = lib.makeLibraryPath [
+    stdenv.cc.cc.lib
+  ];
+
   rpath = lib.makeLibraryPath [
     glib
     nss
@@ -69,7 +73,7 @@ let
   platforms."aarch64-linux".sha256 = "12sp58nxa3nv800badv62vpvc30hyb0ykywdaxgv9y8pswp9lq0z";
   platforms."x86_64-linux".sha256 = "0vzzwq1k6bv9d209yg3samvfnfwj7s58y9r3p3pd98wxa9iyzf4j";
 
-  platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
+  platformInfo = builtins.getAttr stdenv.hostPlatform.system platforms;
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
@@ -92,7 +96,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ $out/share/cef/
     cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
     cp ../Release/libcef.so $out/lib/
+    cp ../Release/libEGL.so $out/lib/
+    cp ../Release/libGLESv2.so $out/lib/
     patchelf --set-rpath "${rpath}" $out/lib/libcef.so
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libEGL.so
+    patchelf --set-rpath "${gl_rpath}" $out/lib/libGLESv2.so
     cp ../Release/*.bin $out/share/cef/
     cp -r ../Resources/* $out/share/cef/
     cp -r ../include $out/

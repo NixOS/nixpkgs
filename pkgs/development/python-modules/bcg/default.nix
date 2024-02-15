@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "bcg";
   version = "1.17.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";

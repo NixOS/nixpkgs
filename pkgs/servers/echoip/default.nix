@@ -32,5 +32,6 @@ buildGoModule {
     homepage = "https://github.com/mpolden/echoip";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvolosatovs SuperSandro2000 ];
+    mainProgram = "echoip";
   };
 }

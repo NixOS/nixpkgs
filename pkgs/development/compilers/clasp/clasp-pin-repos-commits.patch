@@ -1,15 +1,19 @@
 diff --git a/repos.sexp b/repos.sexp
-index 2b2459655..ad346d8e5 100644
+index d31d4d62d..cd3238585 100644
 --- a/repos.sexp
 +++ b/repos.sexp
-@@ -7,15 +7,15 @@
+@@ -5,17 +5,17 @@
+ ;;;;   4. src/ - C/C++ dependencies for iclasp
+ ;;;;   5. extensions/ - extensions and their dependencies
  ((:name :ansi-test
-   :repository "https://gitlab.common-lisp.net/yitzchak/ansi-test"
+-  :repository "https://gitlab.common-lisp.net/yitzchak/ansi-test"
++  :repository "https://github.com/clasp-developers/ansi-test.git"
    :directory "dependencies/ansi-test/"
 -  :branch "add-expected-failures")
-+  :commit "346cf2eb1133942054df8ce2125ed7e999b6d82b")
++  :commit "33ae7c1ddd3e814bbe6f55b9e7a6a92b39404664")
   (:name :cl-bench
-   :repository "https://gitlab.common-lisp.net/ansi-test/cl-bench.git"
+-  :repository "https://gitlab.common-lisp.net/ansi-test/cl-bench.git"
++  :repository "https://github.com/clasp-developers/cl-bench.git"
    :directory "dependencies/cl-bench/"
 -  :branch "master")
 +  :commit "7d184b4ef2a6272f0e3de88f6c243edb20f7071a")
@@ -21,7 +25,7 @@ index 2b2459655..ad346d8e5 100644
   (:name :quicklisp-client
    :repository "https://github.com/quicklisp/quicklisp-client.git"
    :directory "dependencies/quicklisp-client/"
-@@ -23,15 +23,15 @@
+@@ -23,21 +23,21 @@
   (:name :shasht
    :repository "https://github.com/yitzchak/shasht.git"
    :directory "dependencies/shasht/"
@@ -40,6 +44,13 @@ index 2b2459655..ad346d8e5 100644
   (:name :acclimation
    :repository "https://github.com/robert-strandh/Acclimation.git"
    :directory "src/lisp/kernel/contrib/Acclimation/"
+   :commit "dd15c86b0866fc5d8b474be0da15c58a3c04c45c")
+  (:name :alexandria
+-  :repository "https://gitlab.common-lisp.net/alexandria/alexandria.git"
++  :repository "https://github.com/clasp-developers/alexandria.git"
+   :directory "src/lisp/kernel/contrib/alexandria/"
+   :commit "v1.4")
+  (:name :anaphora
 @@ -128,7 +128,7 @@
   (:name :lparallel
    :repository "https://github.com/yitzchak/lparallel.git"
@@ -49,12 +60,31 @@ index 2b2459655..ad346d8e5 100644
    :extension :cando)
   (:name :parser.common-rules
    :repository "https://github.com/scymtym/parser.common-rules.git"
-@@ -152,7 +152,7 @@
+@@ -150,9 +150,9 @@
+   :commit "87a447a8eaef9cf4fd1c16d407a49f9adaf8adad"
+   :extension :cando)
   (:name :trivial-features ; Needed both by the host and eclasp
-   :repository "https://github.com/yitzchak/trivial-features.git"
+-  :repository "https://github.com/yitzchak/trivial-features.git"
++  :repository "https://github.com/trivial-features/trivial-features.git"
    :directory "src/lisp/kernel/contrib/trivial-features/"
 -  :branch "asdf-feature")
-+  :commit "0008ef4f3376fb76f63c35ecee6573d0d0f98d57")
++  :commit "d249a62aaf022902398a7141ae17217251fc61db")
   (:name :trivial-garbage
    :repository "https://github.com/trivial-garbage/trivial-garbage.git"
    :directory "src/lisp/kernel/contrib/trivial-garbage/"
+@@ -176,7 +176,7 @@
+   :directory "src/lisp/kernel/contrib/usocket/"
+   :commit "7ad6582cc1ce9e7fa5931a10e73b7d2f2688fa81")
+  (:name :asdf
+-  :repository "https://gitlab.common-lisp.net/asdf/asdf.git"
++  :repository "https://github.com/clasp-developers/asdf.git"
+   :directory "src/lisp/modules/asdf/"
+   :commit "3.3.5")
+  (:name :mps
+@@ -205,4 +205,4 @@
+   :repository "https://github.com/seqan/seqan.git"
+   :directory "extensions/seqan-clasp/seqan/"
+   :commit "f5f658343c366c9c3d44ba358ffc9317e78a09ed"
+-  :extension :seqan-clasp))
+\ No newline at end of file
++  :extension :seqan-clasp))

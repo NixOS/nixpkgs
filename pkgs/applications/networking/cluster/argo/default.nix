@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildGoModule
-, buildGoPackage
 , fetchFromGitHub
 , installShellFiles
 , pkgsBuildBuild
@@ -35,16 +34,16 @@ let
 in
 buildGoModule rec {
   pname = "argo";
-  version = "3.4.10";
+  version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uhXwCaAVFLlGeqkBbeA5DINo9CjNMzU9rRmOYoYJASI=";
+    hash = "sha256-23O8YNnMONrlWcTj6gxXQ0xJw0s0pa/ZoY0OKhzEv5o=";
   };
 
-  vendorHash = "sha256-0563OHMNkKZcmLY1nHS70pbtrufY1d1WNXrxcCl6MKY=";
+  vendorHash = "sha256-bUCbrHr7N3IB0tnnQ0TlHjaW7tp4iIGFO28KoJEj2sg=";
 
   doCheck = false;
 

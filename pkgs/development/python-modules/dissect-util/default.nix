@@ -9,19 +9,17 @@
 
 buildPythonPackage rec {
   pname = "dissect-util";
-  version = "3.11";
+  version = "3.14";
   format = "pyproject";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";
     rev = "refs/tags/${version}";
-    hash = "sha256-PtmvXnmZ6f8YxEejqaVwtaoV7d1Oa7063ZFagH110yk=";
+    hash = "sha256-NzqQW6OFv+CtAxa5J2X/XGS9UCFfhMp4elvgcTrA1Wg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

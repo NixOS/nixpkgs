@@ -26,5 +26,7 @@ in
       ''
         sed -i -e 's,^#!.*,#!'$out/bin/sh, $out/bin/fsck.xfs
       '';
+
+    boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.xfsprogs.bin ];
   };
 }

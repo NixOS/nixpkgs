@@ -10,7 +10,6 @@
 , fetchCrate
 , pkgsBuildBuild
 , rustc
-, rust
 , cargo
 , jq
 , libiconv
@@ -71,18 +70,14 @@ let
   inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
   configureCrate = import ./configure-crate.nix {
-    inherit lib stdenv rust echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
+    inherit lib stdenv echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
   };
 
   buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI rust;
+    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
   };
 
   installCrate = import ./install-crate.nix { inherit stdenv; };
-
-  # Allow access to the rust attribute set from inside buildRustCrate, which
-  # has a parameter that shadows the name.
-  rustAttrs = rust;
 in
 
   /* The overridable pkgs.buildRustCrate function.
@@ -240,6 +235,7 @@ crate_: lib.makeOverridable
         "edition"
         "buildTests"
         "codegenUnits"
+        "links"
       ];
       extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
@@ -310,7 +306,7 @@ crate_: lib.makeOverridable
           depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
           hashedMetadata = builtins.hashString "sha256"
             (crateName + "-" + crateVersion + "___" + toString (mkRustcFeatureArgs crateFeatures) +
-              "___" + depsMetadata + "___" + rustAttrs.toRustTarget stdenv.hostPlatform);
+              "___" + depsMetadata + "___" + stdenv.hostPlatform.rust.rustcTarget);
         in
         lib.substring 0 10 hashedMetadata;
 
@@ -318,10 +314,16 @@ crate_: lib.makeOverridable
       # Either set to a concrete sub path to the crate root
       # or use `null` for auto-detect.
       workspace_member = crate.workspace_member or ".";
-      crateVersion = crate.version;
-      crateDescription = crate.description or "";
       crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [ ];
+      crateDescription = crate.description or "";
       crateHomepage = crate.homepage or "";
+      crateLicense = crate.license or "";
+      crateLicenseFile = crate.license-file or "";
+      crateLinks = crate.links or "";
+      crateReadme = crate.readme or "";
+      crateRepository = crate.repository or "";
+      crateRustVersion = crate.rust-version or "";
+      crateVersion = crate.version;
       crateType =
         if lib.attrByPath [ "procMacro" ] false crate then [ "proc-macro" ] else
         if lib.attrByPath [ "plugin" ] false crate then [ "dylib" ] else
@@ -342,8 +344,9 @@ crate_: lib.makeOverridable
 
       configurePhase = configureCrate {
         inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
-          crateFeatures crateRenames libName build workspace_member release libPath crateVersion
+          crateFeatures crateRenames libName build workspace_member release libPath crateVersion crateLinks
           extraLinkFlags extraRustcOptsForBuildRs
+          crateLicense crateLicenseFile crateReadme crateRepository crateRustVersion
           crateAuthors crateHomepage verbose colors codegenUnits;
       };
       buildPhase = buildCrate {
@@ -366,6 +369,10 @@ crate_: lib.makeOverridable
 
       meta = {
         mainProgram = crateName;
+        badPlatforms = [
+          # Rust is currently unable to target the n32 ABI
+          lib.systems.inspect.patterns.isMips64n32
+        ];
       };
     } // extraDerivationAttrs
     )

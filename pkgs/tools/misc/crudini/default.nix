@@ -22,8 +22,6 @@ python3Packages.buildPythonApplication rec {
     patchShebangs crudini.py crudini-help tests/test.sh
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     help2man
     installShellFiles

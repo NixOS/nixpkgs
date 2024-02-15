@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.8.2";
+  version = "4.8.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Oxc/2kxRuwe1pR2MWZ7t15YqAgVrQQ48nZ1p7Ze+Nbk=";
+    hash = "sha256-f0DIy8RlDQb+Sau6eZAuurs4Q2Pau9XO8nGWSgfDZFw=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];

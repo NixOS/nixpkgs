@@ -16,5 +16,6 @@ python3Packages.buildPythonApplication rec {
     description = "Record terminal sessions as SVG animations";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    mainProgram = "termtosvg";
   };
 }

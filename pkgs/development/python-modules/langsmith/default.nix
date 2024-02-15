@@ -12,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.35";
-  format = "pyproject";
+  version = "0.0.83";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TR4vBsRImMLs7CTlBt1NHL+n65jXxBNbOY7wIlfFBfM=";
+    hash = "sha256-WRrwekh4pcn3I0U/A2Q91ePrRx2RUC3XX+z4bez0BzU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -44,11 +44,25 @@ buildPythonPackage rec {
   disabledTests = [
     # These tests require network access
     "integration_tests"
+    # due to circular import
+    "test_as_runnable"
+    "test_as_runnable_batch"
+    "test_as_runnable_async"
+    "test_as_runnable_async_batch"
+    # requires git repo
+    "test_git_info"
+  ];
+
+  disabledTestPaths = [
+    # due to circular import
+    "tests/integration_tests/test_client.py"
   ];
 
   pythonImportsCheck = [
     "langsmith"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";

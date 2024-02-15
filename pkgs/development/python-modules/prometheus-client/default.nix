@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.17.1";
+  version = "0.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "prometheus";
     repo = "client_python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ag9gun47Ar0Sw3ZGIXAHjtv4GdhX8x51UVkgwdQ8A+s=";
+    hash = "sha256-7mVqfzK0E8RQAlQyQD8/DIcPJZ52V13JqU22tsQJp+Q=";
   };
 
   __darwinAllowLocalNetworking = true;

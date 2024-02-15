@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
     substituteInPlace wlr-protocols.pc.in \
       --replace '=''${pc_sysrootdir}' "=" \
       --replace '=@prefix@' "=$out"
-
-    substituteInPlace Makefile \
-      --replace 'wlr-output-power-management-v1.xml' 'wlr-output-power-management-unstable-v1.xml'
   '';
 
   doCheck = true;

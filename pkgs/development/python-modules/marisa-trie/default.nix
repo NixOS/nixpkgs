@@ -4,7 +4,7 @@
 , cython
 , pytestCheckHook
 , hypothesis
-, readme_renderer
+, readme-renderer
 , pythonOlder
 }:
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    readme_renderer
+    readme-renderer
     hypothesis
   ];
 
@@ -66,6 +66,5 @@ buildPythonPackage rec {
     homepage =  "https://github.com/kmike/marisa-trie";
     changelog = "https://github.com/pytries/marisa-trie/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

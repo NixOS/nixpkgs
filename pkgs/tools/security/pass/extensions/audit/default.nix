@@ -41,12 +41,12 @@ in stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
   postInstall = ''
     wrapProgram $out/lib/password-store/extensions/audit.bash \
-      --prefix PYTHONPATH : "$out/lib/${pythonEnv.libPrefix}/site-packages" \
+      --prefix PYTHONPATH : "$out/${pythonEnv.sitePackages}" \
       --run "export COMMAND"
   '';
 
   meta = with lib; {
-    description = "Pass extension for auditing your password repository.";
+    description = "Pass extension for auditing your password repository";
     homepage = "https://github.com/roddhjav/pass-audit";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

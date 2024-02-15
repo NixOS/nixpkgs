@@ -11,7 +11,9 @@
 , ncurses
 , pcre
 , pkg-config
-, buildPackages }:
+, buildPackages
+, nixosTests
+}:
 
 let
   version = "5.9";
@@ -143,5 +145,8 @@ EOF
 
   passthru = {
     shellPath = "/bin/zsh";
+    tests = {
+      inherit (nixosTests) zsh-history oh-my-zsh;
+    };
   };
 }

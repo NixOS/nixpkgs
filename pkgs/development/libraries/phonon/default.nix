@@ -50,7 +50,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  env.NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-fPIC"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=enum-constexpr-conversion"
+  ]);
 
   cmakeBuildType = if debug then "Debug" else "Release";
 

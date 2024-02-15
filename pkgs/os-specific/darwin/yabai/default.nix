@@ -17,7 +17,7 @@
 
 let
   pname = "yabai";
-  version = "5.0.9";
+  version = "6.0.12";
 
   test-version = testers.testVersion {
     package = yabai;
@@ -53,7 +53,7 @@ in
 
     src = fetchzip {
       url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
-      hash = "sha256-6dqQ+kau/aUAM4oPSkcgZJlJModcjKOXPlTB32MvoLQ=";
+      hash = "sha256-wCxx/XqUrdD2xyoS6VCKMt6PhiQ8ALM6PHkv9lSCYsM=";
     };
 
     nativeBuildInputs = [
@@ -89,7 +89,7 @@ in
       owner = "koekeishiya";
       repo = "yabai";
       rev = "v${version}";
-      hash = "sha256-uy1KOBJa9BNK5bd+5q5okMouAV0H3DUXrG3Mvr5U6oc=";
+      hash = "sha256-acoMOM0vaMHUXmgSToFa4PYEIUWfOiD5+ewsqB3DX+E=";
     };
 
     nativeBuildInputs = [
@@ -107,6 +107,11 @@ in
 
     dontConfigure = true;
     enableParallelBuilding = true;
+
+    env = {
+      # silence service.h error
+      NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+    };
 
     postPatch = ''
       # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.

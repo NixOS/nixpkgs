@@ -97,8 +97,8 @@ class HTMLRenderer(Renderer):
     def strong_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return "</strong></span>"
     def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        # TODO use token.info. docbook doesn't so we can't yet.
-        return f'<pre class="programlisting">\n{escape(token.content)}</pre>'
+        info = f" {escape(token.info, True)}" if token.info != "" else ""
+        return f'<pre><code class="programlisting{info}">{escape(token.content)}</code></pre>'
     def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '<div class="blockquote"><blockquote class="blockquote">'
     def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:

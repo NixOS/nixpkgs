@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "2.4.4";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NjuwoOFZTLaRY3RkGS9PGZaQlUaSUiQrQ8CSvzBaJd0=";
+    hash = "sha256-M2hCbARFfgIRiE6SdPpH61ViUrpMBz3ydeg8Zd97oqE=";
   };
 
   propagatedBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     description = "Jupyter kernels for Spyder's console";
     homepage = "https://docs.spyder-ide.org/current/ipythonconsole.html";
     downloadPage = "https://github.com/spyder-ide/spyder-kernels/releases";
-    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };

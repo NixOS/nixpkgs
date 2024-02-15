@@ -27,5 +27,6 @@ buildGoModule rec {
     changelog = "https://github.com/Rolix44/Kubestroyer/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kubestroyer";
   };
 }

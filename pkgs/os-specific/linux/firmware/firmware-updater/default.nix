@@ -8,9 +8,11 @@ flutter.buildFlutterApplication rec {
   pname = "firmware-updater";
   version = "unstable-2023-09-17";
 
-  pubspecLockFile = ./pubspec.lock;
-  depsListFile = ./deps.json;
-  vendorHash = "sha256-5xd9ppnWleKVA69DJWVdY+rZziu4dQBCu16I0ivD8kE=";
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = {
+    fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";
+  };
 
   src = fetchFromGitHub {
     owner = "canonical";

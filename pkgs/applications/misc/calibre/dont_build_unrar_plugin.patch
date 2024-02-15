@@ -1,12 +1,12 @@
 diff --git a/src/calibre/ebooks/metadata/archive.py b/src/calibre/ebooks/metadata/archive.py
-index 938ab24..1e095f8 100644
+index 50b4750124..858e39eece 100644
 --- a/src/calibre/ebooks/metadata/archive.py
 +++ b/src/calibre/ebooks/metadata/archive.py
-@@ -44,7 +44,7 @@
+@@ -99,7 +99,7 @@ class ArchiveExtract(FileTypePlugin):
      description = _('Extract common e-book formats from archive files '
-         '(ZIP/RAR). Also try to autodetect if they are actually '
-         'CBZ/CBR files.')
--    file_types = {'zip', 'rar'}
-+    file_types = {'zip'}
+         '(ZIP/RAR/7z). Also try to autodetect if they are actually '
+         'CBZ/CBR/CB7 files.')
+-    file_types = {'zip', 'rar', '7z'}
++    file_types = {'zip', '7z'}
      supported_platforms = ['windows', 'osx', 'linux']
      on_import = True
