@@ -23775,7 +23775,7 @@ with pkgs;
 
   mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
 
-  memorymapping = disable-warnings-if-gcc13 (callPackage ../development/libraries/memorymapping { });
+  memorymapping = callPackage ../development/libraries/memorymapping { };
   memorymappingHook = makeSetupHook {
     name = "memorymapping-hook";
     propagatedBuildInputs = [ memorymapping ];
