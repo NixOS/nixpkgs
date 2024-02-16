@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, openjdk11_headless, openjdk17_headless, systemd, nixosTests}:
 
-{ version, sha256, maintainers, license }:
+{ version, sha256, maintainers, license, knownVulnerabilities ? [] }:
 stdenv.mkDerivation rec {
   pname = "graylog_${lib.versions.majorMinor version}";
   inherit version;
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     inherit license;
     inherit maintainers;
+    inherit knownVulnerabilities;
     mainProgram = "graylogctl";
     platforms   = platforms.unix;
   };
