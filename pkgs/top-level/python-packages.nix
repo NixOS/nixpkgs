@@ -7182,6 +7182,8 @@ self: super: with self; {
 
   microsoft-kiota-abstractions = callPackage ../development/python-modules/microsoft-kiota-abstractions { };
 
+  microsoft-kiota-authentication-azure = callPackage ../development/python-modules/microsoft-kiota-authentication-azure { };
+
   midiutil = callPackage ../development/python-modules/midiutil { };
 
   mido = callPackage ../development/python-modules/mido { };
