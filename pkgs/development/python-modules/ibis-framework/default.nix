@@ -31,6 +31,7 @@
 , pooch
 , psycopg2
 , pyarrow
+, pyarrow-hotfix
 , pydata-google-auth
 , pydruid
 , pymysql
@@ -63,7 +64,7 @@ let
     name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
-    # https://github.com/ibis-project/ibis/blob/7.1.0/nix/overlay.nix#L20-L26
+    # https://github.com/ibis-project/ibis/blob/8.0.0/nix/overlay.nix#L20-L26
     rev = "2c6a4bb5d5d525058d8d5b2312a9fee5dafc5476";
     hash = "sha256-Lq503bqh9ESZJSk6yVq/uZwkAubzmSmoTBZSsqMm0DY=";
   };
@@ -71,7 +72,7 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "7.1.0";
+  version = "8.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -81,7 +82,7 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = "refs/tags/${version}";
-    hash = "sha256-E7jryoidw6+CjTIex4wcTXcU+8Kg8LDwg7wJvcwj+7Q=";
+    hash = "sha256-KcNZslqmSbu8uPYKpkyvd7d8Fsf0nQt80y0auXsI8fs=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +102,7 @@ buildPythonPackage rec {
     parsy
     pooch
     pyarrow
+    pyarrow-hotfix
     python-dateutil
     pytz
     rich
@@ -120,6 +122,7 @@ buildPythonPackage rec {
     pytest-randomly
     pytest-snapshot
     pytest-xdist
+    black
   ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
 
   pytestFlagsArray = [
@@ -142,28 +145,14 @@ buildPythonPackage rec {
     "--deselect=ibis/backends/tests/test_udf.py::test_udf"
     "--deselect=ibis/backends/tests/test_udf.py::test_map_udf"
 
-    # pyarrow13 is not supported yet.
-    "--deselect=ibis/backends/tests/test_temporal.py::test_date_truncate"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_interval_add_cast_column"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_filter_before_window"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
-    "--deselect=ibis/backends/tests/test_timecontext.py::test_context_adjustment_window_udf"
-    "--deselect=ibis/backends/tests/test_aggregation.py::test_aggregate_grouped"
+    # these tests are supposed to xfail, but they are failing instead:
+    # > pluggy.PluggyTeardownRaisedWarning: A plugin raised an exception during an old-style hookwrapper teardown.
+    # > Plugin: /private/tmp/nix-build-python3.11-ibis-framework-8.0.0.drv-0/ibis-source/ibis/tests/expr/conftest.py, Hook: pytest_pyfunc_call
+    # > TypeError: unsupported operand type(s) for -: 'IntervalScalar' and 'TimestampColumn'
+    # > For more information see https://pluggy.readthedocs.io/en/stable/api_reference.html#pluggy.PluggyTeardownRaisedWarning
+    "--deselect=ibis/tests/expr/test_temporal.py::test_interval_arithmetic"
+    "--deselect=ibis/tests/expr/test_interactive.py::test_repr_png_is_not_none_in_not_interactive"
   ];
-
-  # patch out tests that check formatting with black
-  postPatch = ''
-    find ibis/tests -type f -name '*.py' -exec sed -i \
-      -e '/^ *assert_decompile_roundtrip/d' \
-      -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
-    substituteInPlace pyproject.toml --replace 'sqlglot = ">=10.4.3,<12"' 'sqlglot = "*"'
-  '';
 
   preCheck = ''
     HOME="$TMPDIR"
