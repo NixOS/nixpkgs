@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "MariaDB Connector/Python";
     homepage = "https://github.com/mariadb-corporation/mariadb-connector-python";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ vanilla ];
+    maintainers = with maintainers; [ ];
   };
 }
