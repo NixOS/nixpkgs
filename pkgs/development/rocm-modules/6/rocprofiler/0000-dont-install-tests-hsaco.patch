@@ -1,8 +1,8 @@
 diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-index 8473a42..07ea873 100644
+index 46efbd5..ca2cc3b 100644
 --- a/test/CMakeLists.txt
 +++ b/test/CMakeLists.txt
-@@ -112,10 +112,6 @@ function(generate_hsaco TARGET_ID INPUT_FILE OUTPUT_FILE)
+@@ -127,10 +127,6 @@ function(generate_hsaco TARGET_ID INPUT_FILE OUTPUT_FILE)
          DEPENDS ${INPUT_FILE} clang
          COMMENT "Building ${OUTPUT_FILE}..."
          VERBATIM)

@@ -64,6 +64,9 @@ in stdenv.mkDerivation (finalAttrs: {
       src = ./0001-fix-shell-scripts.patch;
       rocmtoolkit_merged = rocmtoolkit-merged;
     })
+
+    # Fix for missing uint32_t not defined
+    ./0002-include-stdint-in-version.patch
   ];
 
   nativeBuildInputs = [
@@ -74,6 +77,7 @@ in stdenv.mkDerivation (finalAttrs: {
     python3Packages.cppheaderparser
     python3Packages.pyyaml
     python3Packages.barectf
+    python3Packages.pandas
   ];
 
   buildInputs = [
