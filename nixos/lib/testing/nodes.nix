@@ -43,7 +43,7 @@ let
         [
           ./nixos-test-base.nix
           { key = "nodes"; _module.args.nodes = config.nodesCompat; }
-          ({ config, pkgs, ... }:
+          ({ config, ... }:
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
               virtualisation.host.pkgs = hostPkgs;
