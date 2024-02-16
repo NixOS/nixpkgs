@@ -7186,6 +7186,8 @@ self: super: with self; {
 
   microsoft-kiota-http = callPackage ../development/python-modules/microsoft-kiota-http { };
 
+  microsoft-kiota-serialization-json = callPackage ../development/python-modules/microsoft-kiota-serialization-json { };
+
   midiutil = callPackage ../development/python-modules/midiutil { };
 
   mido = callPackage ../development/python-modules/mido { };
