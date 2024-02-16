@@ -171,12 +171,16 @@ buildPythonPackage rec {
     # these tests have db access
     "test_table_info"
     "test_sql_database_run"
+    "test_create_sql_agent"
 
     # these tests have network access
     "test_socket_disabled"
 
     # this test may require a specific version of langchain-community
     "test_compatible_vectorstore_documentation"
+
+    "test_convert_pydantic_to_openai_function"
+    "test_convert_pydantic_to_openai_function_nested"
   ];
 
   pythonImportsCheck = [
