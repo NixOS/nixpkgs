@@ -25,7 +25,7 @@ mkDerivation rec {
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "sha256-00lPgiE3hsP3SL96ygBP91CaAWi1IGOYUO7zC/ORG1U=";
+    hash = "sha256-00lPgiE3hsP3SL96ygBP91CaAWi1IGOYUO7zC/ORG1U=";
   };
 
   patches = [
@@ -67,21 +67,20 @@ mkDerivation rec {
     "BOOST_DIR=${boost.dev}"
   ];
 
-  qtWrapperArgs =
-    lib.optionals stdenv.isLinux [ "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib" ]
-    ++
-    lib.optionals stdenv.isDarwin [ "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib" ];
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
+    "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
+  ];
 
   installPhase = ''
     runHook preInstall
-
   '' + lib.optionalString stdenv.isLinux ''
     install -Dm555 release/qcad-bin $out/bin/qcad
   '' + lib.optionalString stdenv.isDarwin ''
     install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
     mkdir -p $out/lib
-  '' +
-  ''
+  '' + ''
     install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}
@@ -121,11 +120,12 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ yvesf ];
+    license = lib.licenses.gpl3Only;
+    mainProgram = "qcad";
+    maintainers = with lib.maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
   };
 }
