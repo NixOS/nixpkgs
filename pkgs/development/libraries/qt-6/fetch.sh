@@ -1,1 +1,1 @@
-WGET_ARGS=( https://download.qt.io/official_releases/qt/6.6/6.6.2/submodules/ -A '*.tar.xz' )
+WGET_ARGS=( https://download.qt.io/development_releases/qt/6.7/6.7.0-rc2/submodules/ -A '*.tar.xz' )
