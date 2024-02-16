@@ -336,7 +336,25 @@ cfgtail = """  # Some programs need SUID wrappers, can be configured further or 
 
 }
 """
+def env_is_set(name):
+    envValue = os.environ.get(name)
+    return not (envValue is None or envValue == "")
 
+def generateProxyStrings():
+    proxyEnv = []
+    if env_is_set('http_proxy'):
+        proxyEnv.append('http_proxy={}'.format(os.environ.get('http_proxy')))
+    if env_is_set('https_proxy'):
+        proxyEnv.append('https_proxy={}'.format(os.environ.get('https_proxy')))
+    if env_is_set('HTTP_PROXY'):
+        proxyEnv.append('HTTP_PROXY={}'.format(os.environ.get('HTTP_PROXY')))
+    if env_is_set('HTTPS_PROXY'):
+        proxyEnv.append('HTTPS_PROXY={}'.format(os.environ.get('HTTPS_PROXY')))
+
+    if len(proxyEnv) > 0:
+        proxyEnv.insert(0, "env")
+
+    return proxyEnv
 
 def pretty_name():
     return _("Installing NixOS.")
@@ -791,13 +809,25 @@ def run():
     status = _("Installing NixOS")
     libcalamares.job.setprogress(0.3)
 
+    # build nixos-install command
+    nixosInstallCmd = [ "pkexec" ]
+    nixosInstallCmd.extend(generateProxyStrings())
+    nixosInstallCmd.extend(
+        [
+            "nixos-install",
+            "--no-root-passwd",
+            "--root",
+            root_mount_point
+        ]
+    )
+
     # Install customizations
     try:
         output = ""
         proc = subprocess.Popen(
-            ["pkexec", "nixos-install", "--no-root-passwd", "--root", root_mount_point],
+            nixosInstallCmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
+            stderr=subprocess.STDOUT
         )
         while True:
             line = proc.stdout.readline().decode("utf-8")
