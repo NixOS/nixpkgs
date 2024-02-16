@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # trigger-rebuild 0
   '';
 
   nativeBuildInputs = [ cmake ninja ];
@@ -54,7 +56,12 @@ stdenv.mkDerivation rec {
 
   installCheckPhase =
     let
-      excludes = map (pattern: "exclude:'${pattern}'") [
+      aarch64Excludes = [
+        "test/sql/aggregate/aggregates/test_kurtosis.test"
+        "test/sql/aggregate/aggregates/test_skewness.test"
+        "test/sql/function/list/aggregates/skewness.test"
+      ];
+      excludes = map (pattern: "exclude:'${pattern}'") ([
         "[s3]"
         "Test closing database during long running query"
         "Test using a remote optimizer pass in case thats important to someone"
@@ -91,11 +98,8 @@ stdenv.mkDerivation rec {
         "[!hide]"
         # this test apparently never terminates
         "test/sql/copy/csv/auto/test_csv_auto.test"
-      ] ++ lib.optionals stdenv.isAarch64 [
-        "test/sql/aggregate/aggregates/test_kurtosis.test"
-        "test/sql/aggregate/aggregates/test_skewness.test"
-        "test/sql/function/list/aggregates/skewness.test"
-      ];
+      ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) aarch64Excludes
+      ) ++ lib.optionals (stdenv.isAarch64 && !stdenv.isDarwin) aarch64Excludes;
     in
     ''
       runHook preInstallCheck

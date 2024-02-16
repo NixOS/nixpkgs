@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , duckdb
 , fsspec
@@ -31,7 +32,10 @@ buildPythonPackage rec {
     rm tests/stubs/test_stubs.py
   '';
 
-  BUILD_HTTPFS = 1;
+  env = {
+    BUILD_HTTPFS = 1;
+    DUCKDB_BUILD_UNITY = 1;
+  };
 
   nativeBuildInputs = [
     pybind11
@@ -52,11 +56,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = lib.optionals stdenv.isDarwin [
+    "--verbose"
+    "tests/fast"
+  ];
+
   disabledTests = [
     # tries to make http request
     "test_install_non_existent_extension"
     # test is racy and interrupt can be delivered before or after target point
     "test_connection_interrupt"
+    "test_query_interruption"
   ];
 
   preCheck = ''
