@@ -4116,6 +4116,12 @@
     github = "D3vil0p3r";
     githubId = 83867734;
   };
+  d4ilyrun = {
+    name = "Léo Duboin";
+    email = "leo@duboin.com";
+    github = "d4ilyrun";
+    githubId = 34611103;
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
