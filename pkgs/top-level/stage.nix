@@ -194,7 +194,7 @@ let
 
     # This maps each entry in lib.systems.examples to its own package set where
     # packages are built and run on that system.  For example,
-    # pkgsNative.x86_64-linux.hello will refer to the "hello" package bult for
+    # pkgsNative.x86_64-linux.hello will refer to the "hello" package built for
     # x86_64-linux.
     #
     # This is essentially the same thing as pkgsCross except for localSystem
