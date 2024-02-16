@@ -67,7 +67,7 @@ with lib;
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       pango = super.pango.override { x11Support = false; };
       pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
-      pipewire = super.pipewire.override { x11Support = false; };
+      pipewire = super.pipewire.override { vulkanSupport = false; x11Support = false; };
       pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
         (python-final: python-prev: {
           # tk feature requires wayland which fails to compile
