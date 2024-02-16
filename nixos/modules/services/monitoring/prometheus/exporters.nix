@@ -56,6 +56,7 @@ let
     "mikrotik"
     "modemmanager"
     "mongodb"
+    "mqtt"
     "mysqld"
     "nats"
     "nextcloud"
