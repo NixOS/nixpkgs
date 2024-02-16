@@ -9558,6 +9558,8 @@ self: super: with self; {
 
   msgraph-core = callPackage ../development/python-modules/msgraph-core { };
 
+  msgraph-sdk = callPackage ../development/python-modules/msgraph-sdk { };
+
   multipart = callPackage ../development/python-modules/multipart { };
 
   netmap = callPackage ../development/python-modules/netmap { };
