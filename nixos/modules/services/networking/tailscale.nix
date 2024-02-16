@@ -17,12 +17,6 @@ in {
       description = lib.mdDoc "The port to listen on for tunnel traffic (0=autoselect).";
     };
 
-    interfaceName = mkOption {
-      type = types.str;
-      default = "tailscale0";
-      description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
-    };
-
     permitCertUid = mkOption {
       type = types.nullOr types.nonEmptyStr;
       default = null;
@@ -66,6 +60,13 @@ in {
       default = [];
       example = ["--ssh"];
     };
+
+    extraDaemonFlags = mkOption {
+      description = lib.mdDoc "Extra flags to pass to {command}`tailscaled`.";
+      type = types.listOf types.str;
+      default = [];
+      example = ["--state=mem:"];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -80,7 +81,7 @@ in {
       ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
+        ''"FLAGS=${lib.escapeShellArg cfg.extraDaemonFlags}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
       ]);
