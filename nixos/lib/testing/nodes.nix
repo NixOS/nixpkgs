@@ -14,7 +14,7 @@ let
     types
     ;
 
-  inherit (hostPkgs) hostPlatform pkgsLocal;
+  inherit (hostPkgs) hostPlatform pkgsNative;
 
   guestPkgs =
     if hostPlatform.isLinux
@@ -22,8 +22,8 @@ let
     else
       let
         hostToGuest = {
-          "x86_64-darwin" = pkgsLocal.gnu64;
-          "aarch64-darwin" = pkgsLocal.aarch64-multiplatform;
+          "x86_64-darwin" = pkgsNative.gnu64;
+          "aarch64-darwin" = pkgsNative.aarch64-multiplatform;
         };
 
         supportedHosts = lib.concatStringsSep ", " (lib.attrNames hostToGuest);
