@@ -985,6 +985,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    Cyclops = old.Cyclops.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
     RcppParallel = old.RcppParallel.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
