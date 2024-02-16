@@ -93,19 +93,25 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
       std::cout << std::format("Error: Failed to explore {} free blocks allocator ({})\n", prettify_path(path),
                                e.what());
     }
-    auto shadow_dir_1 = area->GetShadowDirectory1();
-    if (shadow_dir_1.has_value()) {
-      exploreDir(*shadow_dir_1, path / ".shadow_dir_1", true);
-    } else {
-      std::cout << std::format("Error: Failed to explore {} shadow dir 1 ({})\n", prettify_path(path),
-                               WfsException(shadow_dir_1.error()).what());
+    try {
+      exploreDir(throw_if_error(area->GetShadowDirectory1()), path / ".shadow_dir_1", true);
+    } catch (const WfsException& e) {
+      std::cout << std::format("Error: Failed to explore {} shadow dir 12 ({})\n", prettify_path(path), e.what());
     }
-    auto shadow_dir_2 = area->GetShadowDirectory1();
-    if (shadow_dir_2.has_value()) {
-      exploreDir(*shadow_dir_1, path / ".shadow_dir_1", true);
-    } else {
-      std::cout << std::format("Error: Failed to explore {} shadow dir 2 ({})\n", prettify_path(path),
-                               WfsException(shadow_dir_2.error()).what());
+    try {
+      exploreDir(throw_if_error(area->GetShadowDirectory2()), path / ".shadow_dir_2", true);
+    } catch (const WfsException& e) {
+      std::cout << std::format("Error: Failed to explore {} shadow dir 2 ({})\n", prettify_path(path), e.what());
+    }
+    try {
+      area->GetTransactionsArea1();
+    } catch (const WfsException& e) {
+      std::cout << std::format("Error: Failed to explore {} transactions area 1 ({})\n", prettify_path(path), e.what());
+    }
+    try {
+      area->GetTransactionsArea2();
+    } catch (const WfsException& e) {
+      std::cout << std::format("Error: Failed to explore {} transactions area 2 ({})\n", prettify_path(path), e.what());
     }
   }
   for (auto [name, item_or_error] : *dir) {
