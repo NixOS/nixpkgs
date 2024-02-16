@@ -9341,6 +9341,8 @@ self: super: with self; {
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
+  pyprobables = callPackage ../development/python-modules/pyprobables { };
+
   pyproject-api = callPackage ../development/python-modules/pyproject-api { };
 
   pyproject-hooks = callPackage ../development/python-modules/pyproject-hooks { };
