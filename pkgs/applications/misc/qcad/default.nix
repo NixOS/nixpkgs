@@ -65,6 +65,7 @@ mkDerivation rec {
     "MUPARSER_DIR=${muparser}"
     "INSTALLROOT=$(out)"
     "BOOST_DIR=${boost.dev}"
+    "QMAKE_CXXFLAGS=-std=c++14"
   ];
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
