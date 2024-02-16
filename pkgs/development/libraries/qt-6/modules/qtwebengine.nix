@@ -122,9 +122,6 @@ qtModule {
   hardeningDisable = [ "format" ];
 
   patches = [
-    # removes macOS 12+ dependencies
-    ../patches/qtwebengine-darwin-no-low-latency-flag.patch
-    ../patches/qtwebengine-darwin-no-copy-certificate-chain.patch
     # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
