@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , poetry-core
 , click
 , textual
@@ -10,6 +11,8 @@ buildPythonPackage rec {
   pname = "trogon";
   version = "0.5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Textualize";
