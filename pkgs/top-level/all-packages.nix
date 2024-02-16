@@ -41926,5 +41926,5 @@ with pkgs;
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
 
-  ophcrack = libsForQt5.callPackage ../tools/security/ophcrack
+  ophcrack = libsForQt5.callPackage ../tools/security/ophcrack {};
 }
