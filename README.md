@@ -45,11 +45,11 @@ Allowed options:
 ### wfs-reencryptor
 A tool reencrypt a disk with a new key.
 ```
-Usage: wfs-reencryptor --input <input file> --output <output file> --input-otp <input otp path> --output-otp <output otp path> [--input-seeprom <input seeprom path> --output-seeprom <outpu seeprom path>] [--mlc] [--usb]
+Usage: wfs-reencryptor --input <input file> [--output <output file>] --input-otp <input otp path> --output-otp <output otp path> [--input-seeprom <input seeprom path> --output-seeprom <outpu seeprom path>] [--mlc] [--usb]
 Allowed options:
   --help                produce help message
   --input arg           input file
-  --output arg          output file
+  --output arg          output file (if not specified, reencrypt the input file)
   --input-otp arg       input otp file
   --input-seeprom arg   input seeprom file (required if usb)
   --output-otp arg      output otp file

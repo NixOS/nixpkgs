@@ -141,7 +141,8 @@ int main(int argc, char* argv[]) {
     std::string wfs_path;
     desc.add_options()("help", "produce help message")("input", boost::program_options::value<std::string>(),
                                                        "input file")(
-        "output", boost::program_options::value<std::string>(), "output file")(
+        "output", boost::program_options::value<std::string>(),
+        "output file (if not specified, reencrypt the input file)")(
         "input-otp", boost::program_options::value<std::string>(), "input otp file")(
         "input-seeprom", boost::program_options::value<std::string>(), "input seeprom file (required if usb)")(
         "output-otp", boost::program_options::value<std::string>(), "output otp file")(
@@ -155,10 +156,6 @@ int main(int argc, char* argv[]) {
     bool bad = false;
     if (!vm.count("input")) {
       std::cerr << "Missing input file (--input)" << std::endl;
-      bad = true;
-    }
-    if (!vm.count("output")) {
-      std::cerr << "Missing output file (--output)" << std::endl;
       bad = true;
     }
     if (!vm.count("input-otp")) {
@@ -182,7 +179,7 @@ int main(int argc, char* argv[]) {
       bad = true;
     }
     if (vm.count("help") || bad) {
-      std::cout << "Usage: wfs-reencryptor --input <input file> --output <output file> --input-otp <input otp path> "
+      std::cout << "Usage: wfs-reencryptor --input <input file> [--output <output file>] --input-otp <input otp path> "
                    "--output-otp "
                    "<output otp path> [--input-seeprom <input seeprom path> --output-seeprom <outpu seeprom path>] "
                    "[--mlc] [--usb]"
@@ -219,11 +216,15 @@ int main(int argc, char* argv[]) {
       input_key = input_seeprom->GetUSBKey(*input_otp);
       output_key = output_seeprom->GetUSBKey(*output_otp);
     }
-    auto input_device = std::make_shared<FileDevice>(vm["input"].as<std::string>(), 9);
+    auto input_device = std::make_shared<FileDevice>(vm["input"].as<std::string>(), 9, 0, vm.count("output"));
     Wfs::DetectDeviceSectorSizeAndCount(input_device, input_key);
+
     auto output_device =
-        std::make_shared<FileDevice>(vm["output"].as<std::string>(), input_device->Log2SectorSize(),
-                                     input_device->SectorsCount(), /*read_only=*/false, /*create=*/true);
+        vm.count("output")
+            ? std::make_shared<FileDevice>(vm["output"].as<std::string>(), input_device->Log2SectorSize(),
+                                           input_device->SectorsCount(), /*read_only=*/false, /*open_create=*/true)
+            : input_device;
+
     std::cout << "Exploring blocks..." << std::endl;
     auto reencryptor = std::make_shared<ReencryptorBlocksDevice>(input_device, input_key);
     exploreDir(throw_if_error(Wfs(reencryptor).GetRootArea()->GetRootDirectory()), {});
