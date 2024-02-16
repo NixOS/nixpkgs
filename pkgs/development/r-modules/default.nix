@@ -526,6 +526,7 @@ let
     chebpol = [ pkgs.pkg-config ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
+    archive = [ pkgs.libarchive];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
