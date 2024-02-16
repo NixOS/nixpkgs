@@ -5,8 +5,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include <boost/algorithm/string/case_conv.hpp>
-#include <boost/algorithm/string/trim.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <filesystem>

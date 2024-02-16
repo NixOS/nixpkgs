@@ -5,7 +5,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include <boost/algorithm/string/case_conv.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>
 #include <fstream>
@@ -103,7 +102,7 @@ int main(int argc, char* argv[]) {
 
     auto device = std::make_shared<FileDevice>(vm["image"].as<std::string>(), 9, 0, false);
     Wfs::DetectDeviceSectorSizeAndCount(device, key);
-    auto file = Wfs(device, key).GetFile(boost::to_lower_copy(vm["inject-path"].as<std::string>()));
+    auto file = Wfs(device, key).GetFile(vm["inject-path"].as<std::string>());
     if (!file) {
       std::cerr << "Error: Didn't find file " << vm["inject-path"].as<std::string>() << " in wfs" << std::endl;
       return 1;

@@ -4,7 +4,6 @@
   "dependencies": [
     "boost-algorithm",
     "boost-dynamic-bitset",
-    "boost-endian",
     "boost-iostreams",
     "boost-program-options",
     "cryptopp"

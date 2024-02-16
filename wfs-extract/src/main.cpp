@@ -5,7 +5,6 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>
@@ -141,7 +140,7 @@ int main(int argc, char* argv[]) {
     Wfs::DetectDeviceSectorSizeAndCount(device, key);
     auto dump_path = std::filesystem::path(vm["dump-path"].as<std::string>()).generic_string();
     boost::trim_if(dump_path, boost::is_any_of("/"));
-    auto dir = Wfs(device, key).GetDirectory(boost::to_lower_copy(dump_path));
+    auto dir = Wfs(device, key).GetDirectory(dump_path);
     if (!dir) {
       std::cerr << "Error: Didn't find directory " << vm["dump-path"].as<std::string>() << " in wfs" << std::endl;
       return 1;
