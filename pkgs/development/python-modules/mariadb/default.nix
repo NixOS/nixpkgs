@@ -1,20 +1,22 @@
-{ buildPythonPackage, fetchPypi, libmysqlclient, lib, pythonOlder }:
+{ buildPythonPackage, fetchPypi, libmysqlclient, wheel, setuptools, packaging, lib, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mariadb";
-  version = "1.1.4";
+  version = "1.1.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c6CsvSrOOB7BvPxhztenmlGeZsAsJOEq5tJ7qgNxeHY=";
-    extension = "zip";
+    hash = "sha256-ozKJPj73zreXCrS9fIRLy0vWigUcpRMTVm+YCNdBHy0=";
   };
 
   nativeBuildInputs = [
     libmysqlclient
+    setuptools
+    wheel
+    packaging
   ];
 
   # Requires a running MariaDB instance
