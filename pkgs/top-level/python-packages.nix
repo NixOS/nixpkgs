@@ -1457,7 +1457,6 @@ self: super: with self; {
 
   better-bencode = callPackage ../development/python-modules/better-bencode { };
 
-
   betamax-matchers = callPackage ../development/python-modules/betamax-matchers { };
 
   betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
