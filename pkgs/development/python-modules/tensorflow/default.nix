@@ -103,7 +103,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.14.0";
+  version = "2.15.0";
   format = "setuptools";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
@@ -269,7 +269,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "refs/tags/v${version}";
-      hash = "sha256-OvYb1YkYT9xeUGz3yBRdgNd/0s4YNhXPlw7yOR7pxB0=";
+      hash = "sha256-tCFLEvJ1lHy7NcHDW9Dkd+2D60x+AvOB8EAwmUSQCtM=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -348,7 +348,6 @@ let
       "jsoncpp_git"
       "libjpeg_turbo"
       "nasm"
-      "opt_einsum_archive"
       "org_sqlite"
       "pasta"
       "png"
@@ -402,13 +401,14 @@ let
         hash = "sha256-/7buV6DinKnrgfqbe7KKSh9rCebeQdXv2Uj+Xg/083w=";
       })
       ./fix-syslib-references.patch
+      ./protobuf_lite.patch
+      ./protobuf_cc_toolchain.patch
       ./pybind11-osx.patch
       ./com_google_absl_add_log.patch
+      ./core-riegeli-proto.patch
       ./protobuf_python.patch
       ./pybind11_protobuf_python_runtime_dep.patch
       ./pybind11_protobuf_newer_version.patch
-      # the implementation from upstream using realpath breaks in the sandbox
-      ./compute-links.patch
     ] ++ lib.optionals (!stdenv.isDarwin) [
       # we override Python in the bazel build anyway, but we also need
       # a usable Python during deps fetching
@@ -419,9 +419,7 @@ let
       # bazel 3.3 should work just as well as bazel 3.1
       rm -f .bazelversion
       patchShebangs .
-      sed 's,@bash@,${stdenv.shell},g' < ${./compute-relative.sh} \
-        > tensorflow/compute-relative.sh
-      chmod +x tensorflow/compute-relative.sh
+      ln -s ${./riegeli-proto.patch} third_party/riegeli-proto.patch
     '' + lib.optionalString (!stdenv.isDarwin) ''
       sed \
         -e 's,@python@,${python},g' \
@@ -436,9 +434,6 @@ let
       # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
       sed -i '/tensorboard ~=/d' tensorflow/tools/pip_package/setup.py
     '';
-
-    # https://github.com/tensorflow/tensorflow/pull/39470
-    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-stringop-truncation" ];
 
     preConfigure = let
       opt_flags = []
@@ -504,12 +499,12 @@ let
       sha256 = {
       x86_64-linux = if cudaSupport
         then "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-        else "sha256-Cr5iG0iMnaI6Ju+g1hKVhiQzlOs52HN4OhNV7IjJWsE=";
+        else "sha256-fNCrXblaeORuRSpJEtCj0W2bz3rZlCzmoFWg7pTrokk=";
       aarch64-linux = if cudaSupport
         then "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-        else "sha256-WG3/Q4fQ2ZtxrAgzmMGmvo4TgNh0GePj+Bic63X4owM=";
+        else "sha256-YpozmvGht0Txq9Q00C9OLQOzkFiWjrWjD1+CbP/SyhY=";
       x86_64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-      aarch64-darwin = "sha256-7SwkyRdeTveml70/JXOZ11pPA+4jkUbt+cLPvEj+YX0=";
+      aarch64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
@@ -589,10 +584,6 @@ in buildPythonPackage {
 
   src = bazel-build.python;
 
-  patches = [
-    ./remove-keras-dependency.patch
-  ];
-
   # Adjust dependency requirements:
   # - Drop tensorflow-io dependency until we get it to build
   # - Relax flatbuffers and gast version requirements
@@ -645,7 +636,11 @@ in buildPythonPackage {
     tensorboard
   ];
 
-  nativeBuildInputs = lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ] ++ lib.optionals cudaSupport [
+    addOpenGLRunpath
+  ];
 
   postFixup = lib.optionalString cudaSupport (''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
