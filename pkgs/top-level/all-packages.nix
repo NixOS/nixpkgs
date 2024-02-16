@@ -7577,6 +7577,9 @@ with pkgs;
 
   dub = callPackage ../development/tools/build-managers/dub { };
 
+  inherit (callPackage ../build-support/dlang/dub-support.nix { })
+    buildDubPackage dub-to-nix makeDubDep;
+
   duc = callPackage ../tools/misc/duc { };
 
   duff = callPackage ../tools/filesystems/duff {
