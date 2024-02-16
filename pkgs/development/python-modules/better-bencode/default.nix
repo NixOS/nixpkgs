@@ -1,7 +1,7 @@
 { lib
-, python3Packages
 , fetchFromGitHub
-}: python3Packages.buildPythonPackage {
+, buildPythonPackage
+}: buildPythonPackage {
   pname = "better-bencode";
   version = "0.2.1";
 
