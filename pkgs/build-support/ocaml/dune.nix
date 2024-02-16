@@ -20,7 +20,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    dune build -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+    dune build --display=short -p ${pname} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postBuild
   '';
   checkPhase = ''
