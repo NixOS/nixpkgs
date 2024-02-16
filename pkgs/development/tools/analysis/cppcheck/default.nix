@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danmar";
     repo = "cppcheck";
     rev = finalAttrs.version;
-    hash = "sha256-YCE4TAi5eNUosQMsTn0kEcUh1AVw4rssrj+xB+ef4bE=";
+    hash = "sha256-Bz8ACCsxKfN1Y8TpS+oD/6lixLItL1TQR0Ud4gj1txk=";
   };
 
   nativeBuildInputs = [
