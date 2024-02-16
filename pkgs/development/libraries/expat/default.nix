@@ -26,6 +26,11 @@ in stdenv.mkDerivation rec {
     hash = "sha256-y19ajqIR4cq9Wb4KkzpS48Aswyboak04fY0hjn7kej4=";
   };
 
+  patches = [
+    # Fix tests flakiness on some platforms (like aarch64-darwin), should be released in 2.6.1
+    ./2.6.0-fix-tests-flakiness.patch
+  ];
+
   strictDeps = true;
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
