@@ -21,16 +21,16 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2024-02-04T22-36-13Z";
+  version = "2024-02-14T21-36-02Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    hash = "sha256-vA1xrwvHyhqrdWjEXqs0MUaPq8S3J2r1uE0IndpwdjQ=";
+    hash = "sha256-tXLdK5+akZ1ChUqs8i7Qb32E7ZoMfHk1kgDS+8RiRH4=";
   };
 
-  vendorHash = "sha256-eE8F/cG7SdSHrFW4qg+MBdS/rxoz4xB0JbCQ3vi38ok=";
+  vendorHash = "sha256-4/fW2mKzgwcRHigksAsk7bXS0Leak8rZdzoQ6mK2ksA=";
 
   doCheck = false;
 
