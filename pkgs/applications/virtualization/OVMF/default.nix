@@ -45,6 +45,10 @@ let
     aarch64 = {
       projectDscPath = "ArmVirtPkg/ArmVirtQemu.dsc";
       fwPrefix = "AAVMF";
+      msVarsArgs = {
+        flavor = "AAVMF";
+        archDir = "AARCH64";
+      };
     };
     riscv64 = {
       projectDscPath = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";

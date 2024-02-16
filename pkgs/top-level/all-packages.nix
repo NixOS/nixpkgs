@@ -26904,7 +26904,7 @@ with pkgs;
     httpSupport = true;
     tpmSupport = true;
     tlsSupport = true;
-    msVarsTemplate = stdenv.isx86_64;
+    msVarsTemplate = stdenv.isx86_64 || stdenv.isAarch64;
   };
 
   ops = callPackage ../applications/virtualization/ops { };
