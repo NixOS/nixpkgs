@@ -55,6 +55,7 @@ let
     "minio"
     "modemmanager"
     "mongodb"
+    "mqtt"
     "mysqld"
     "nats"
     "nextcloud"
