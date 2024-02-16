@@ -23,13 +23,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "ff2mpv-rust";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "ryze312";
     repo = "ff2mpv-rust";
     rev = version;
-    hash = "sha256-+snuKd6onuoDS8rY7zvRw1WKslcsDSoaIVppcvaMnK0=";
+    hash = "sha256-gk3MqoMCau6RTlttTLqFtlXhrYMOf89YFg8aAlh++9s=";
   };
 
   cargoLock = {
