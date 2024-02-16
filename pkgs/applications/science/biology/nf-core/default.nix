@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , setuptools
 , wheel
+, pythonRelaxDepsHook
 , click
 , filetype
 , gitpython
@@ -18,8 +19,6 @@
 , pytest-workflow
 , pyyaml
 , questionary
-# NOTE Not going to support as it requires 10+ packages and is a niche feature
-# refgenie
 , requests
 , requests-cache
 , rich
@@ -43,6 +42,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+    pythonRelaxDepsHook
+  ];
+
+  # NOTE Not going to support as it requires 10+ packages and is a niche feature
+  pythonRemoveDeps = [
+    "refgenie"
   ];
 
   propagatedBuildInputs = [
@@ -69,11 +74,6 @@ buildPythonPackage rec {
     tabulate
     trogon
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "refgenie" ""
-  '';
 
   pythonImportsCheck = [ "nf_core" ];
 
