@@ -78,6 +78,7 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/tchx84/Portfolio/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "dev.tchx84.Portfolio";
     maintainers = with maintainers; [ dotlambda chuangzhu ];
   };
 }
