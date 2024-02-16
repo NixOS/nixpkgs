@@ -1,19 +1,27 @@
-{ lib, stdenv, fetchurl, libpng, netpbm }:
+{ lib
+, stdenv
+, fetchurl
+, libpng
+, netpbm
+, asciidoctor
+}:
 
 stdenv.mkDerivation rec {
   pname = "sng";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sng/sng-${version}.tar.gz";
-    sha256 = "06a6ydvx9xb3vxvrzdrg3hq0rjwwj9ibr7fyyxjxq6qx1j3mb70i";
+    url = "mirror://sourceforge/sng/sng-${version}.tar.xz";
+    hash = "sha256-yb37gPWhfbGquTN7rtZKjr6lwN34KRXGiHuM+4fs5h4=";
   };
 
+  nativeBuildInputs = [ asciidoctor ];
   buildInputs = [ libpng ];
 
   configureFlags = [
     "--with-rgbtxt=${netpbm.out}/share/netpbm/misc/rgb.txt"
   ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "Minilanguage designed to represent the entire contents of a PNG file in an editable form";
