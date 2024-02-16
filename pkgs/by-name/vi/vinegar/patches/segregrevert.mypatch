@@ -1,0 +1,350 @@
+diff --git a/dlls/ntdll/signal_x86_64.c b/dlls/ntdll/signal_x86_64.c
+index 2f7715a0a60..66cabfd5e64 100644
+--- a/dlls/ntdll/signal_x86_64.c
++++ b/dlls/ntdll/signal_x86_64.c
+@@ -559,6 +559,10 @@ NTSTATUS WINAPI dispatch_exception( EXCEPTION_RECORD *rec, CONTEXT *context )
+                      context->R12, context->R13, context->R14, context->R15 );
+     }
+
++    /* Legends of Runeterra depends on having SegDs == SegSs in an exception
++     * handler. */
++    context->SegDs = context->SegSs;
++
+     if (call_vectored_handlers( rec, context ) == EXCEPTION_CONTINUE_EXECUTION)
+         NtContinue( context, FALSE );
+
+diff --git a/dlls/ntdll/tests/exception.c b/dlls/ntdll/tests/exception.c
+index 3c4d6620fe8..cccd62ae8c0 100644
+--- a/dlls/ntdll/tests/exception.c
++++ b/dlls/ntdll/tests/exception.c
+@@ -1825,8 +1825,8 @@ static void test_thread_context(void)
+     ok( context.SegDs == LOWORD(expect.SegDs), "wrong SegDs %08lx/%08lx\n", context.SegDs, expect.SegDs );
+     ok( context.SegEs == LOWORD(expect.SegEs), "wrong SegEs %08lx/%08lx\n", context.SegEs, expect.SegEs );
+     ok( context.SegFs == LOWORD(expect.SegFs), "wrong SegFs %08lx/%08lx\n", context.SegFs, expect.SegFs );
+-    if (LOWORD(expect.SegGs)) ok( context.SegGs == LOWORD(expect.SegGs), "wrong SegGs %08lx/%08lx\n", context.SegGs, expect.SegGs );
+-    ok( context.SegSs == LOWORD(expect.SegSs), "wrong SegSs %08lx/%08lx\n", context.SegSs, expect.SegSs );
++    ok( context.SegGs == LOWORD(expect.SegGs), "wrong SegGs %08lx/%08lx\n", context.SegGs, expect.SegGs );
++    ok( context.SegSs == LOWORD(expect.SegSs), "wrong SegSs %08lx/%08lx\n", context.SegSs, expect.SegGs );
+
+     ok( LOWORD(context.FloatSave.ControlWord) == LOWORD(expect.x87_control),
+             "wrong x87 control word %#lx/%#lx.\n", context.FloatSave.ControlWord, expect.x87_control );
+@@ -3278,9 +3278,9 @@ static DWORD WINAPI handler( EXCEPTION_RECORD *rec, ULONG64 frame,
+     ok( context->SegSs == ss, "ss %#x does not match %#x\n", context->SegSs, ss );
+     ok( context->SegDs == context->SegSs,
+         "ds %#x does not match ss %#x\n", context->SegDs, context->SegSs );
+-    ok( context->SegEs == context->SegSs,
++    todo_wine ok( context->SegEs == context->SegSs,
+         "es %#x does not match ss %#x\n", context->SegEs, context->SegSs );
+-    ok( context->SegGs == context->SegSs,
++    todo_wine ok( context->SegGs == context->SegSs,
+         "gs %#x does not match ss %#x\n", context->SegGs, context->SegSs );
+     todo_wine ok( context->SegFs && context->SegFs != context->SegSs,
+         "got fs %#x\n", context->SegFs );
+@@ -3618,12 +3618,13 @@ static void test_exceptions(void)
+     ok( ctx.SegDs == ds, "wrong ds %04x / %04x\n", ctx.SegDs, ds );
+     ok( ctx.SegEs == es, "wrong es %04x / %04x\n", ctx.SegEs, es );
+     ok( ctx.SegFs == fs, "wrong fs %04x / %04x\n", ctx.SegFs, fs );
+-    ok( ctx.SegGs == gs || !gs, "wrong gs %04x / %04x\n", ctx.SegGs, gs );
++    ok( ctx.SegGs == gs, "wrong gs %04x / %04x\n", ctx.SegGs, gs );
+     ok( ctx.SegSs == ss, "wrong ss %04x / %04x\n", ctx.SegSs, ss );
+-    ok( ctx.SegDs == ctx.SegSs, "wrong ds %04x / %04x\n", ctx.SegDs, ctx.SegSs );
+-    ok( ctx.SegEs == ctx.SegSs, "wrong es %04x / %04x\n", ctx.SegEs, ctx.SegSs );
++    todo_wine ok( ctx.SegEs == ctx.SegSs, "wrong es %04x / %04x\n", ctx.SegEs, ctx.SegSs );
+     ok( ctx.SegFs != ctx.SegSs, "wrong fs %04x / %04x\n", ctx.SegFs, ctx.SegSs );
+-    ok( ctx.SegGs == ctx.SegSs, "wrong gs %04x / %04x\n", ctx.SegGs, ctx.SegSs );
++    todo_wine ok( ctx.SegGs == ctx.SegSs, "wrong gs %04x / %04x\n", ctx.SegGs, ctx.SegSs );
++    if (ctx.SegDs == ctx.SegSs)  /* FIXME: remove once Wine is fixed */
++    {
+     ctx.SegDs = 0;
+     ctx.SegEs = ctx.SegFs;
+     ctx.SegFs = ctx.SegSs;
+@@ -3639,12 +3640,13 @@ static void test_exceptions(void)
+     ok( ctx.SegDs == ds, "wrong ds %04x / %04x\n", ctx.SegDs, ds );
+     ok( ctx.SegEs == es, "wrong es %04x / %04x\n", ctx.SegEs, es );
+     ok( ctx.SegFs == fs, "wrong fs %04x / %04x\n", ctx.SegFs, fs );
+-    ok( ctx.SegGs == gs || !gs, "wrong gs %04x / %04x\n", ctx.SegGs, gs );
++    ok( ctx.SegGs == gs, "wrong gs %04x / %04x\n", ctx.SegGs, gs );
+     ok( ctx.SegSs == ss, "wrong ss %04x / %04x\n", ctx.SegSs, ss );
+     ok( ctx.SegDs == ctx.SegSs, "wrong ds %04x / %04x\n", ctx.SegDs, ctx.SegSs );
+     ok( ctx.SegEs == ctx.SegSs, "wrong es %04x / %04x\n", ctx.SegEs, ctx.SegSs );
+     ok( ctx.SegFs != ctx.SegSs, "wrong fs %04x / %04x\n", ctx.SegFs, ctx.SegSs );
+-    ok( ctx.SegGs == ctx.SegSs, "wrong gs %04x / %04x\n", ctx.SegGs, ctx.SegSs );
++    todo_wine ok( ctx.SegGs == ctx.SegSs, "wrong gs %04x / %04x\n", ctx.SegGs, ctx.SegSs );
++    }
+ }
+
+ static DWORD WINAPI simd_fault_handler( EXCEPTION_RECORD *rec, ULONG64 frame,
+@@ -4403,7 +4405,7 @@ static void test_thread_context(void)
+     COMPARE( SegDs );
+     COMPARE( SegEs );
+     COMPARE( SegFs );
+-    if (expect.SegGs) COMPARE( SegGs );
++    COMPARE( SegGs );
+     COMPARE( SegSs );
+
+     /* AMD CPUs don't save the opcode or data pointer if no exception is
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index 53827629af4..526885221b3 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -413,16 +413,20 @@ struct syscall_frame
+     ULONG64               r14;           /* 0060 */
+     ULONG64               r15;           /* 0068 */
+     ULONG64               rip;           /* 0070 */
+-    ULONG64               cs;            /* 0078 */
++    WORD                  cs;            /* 0078 */
++    WORD                  ds;            /* 007a */
++    WORD                  es;            /* 007c */
++    WORD                  fs;            /* 007e */
+     ULONG64               eflags;        /* 0080 */
+     ULONG64               rsp;           /* 0088 */
+-    ULONG64               ss;            /* 0090 */
++    WORD                  ss;            /* 0090 */
++    WORD                  gs;            /* 0092 */
++    DWORD                 restore_flags; /* 0094 */
+     ULONG64               rbp;           /* 0098 */
+     struct syscall_frame *prev_frame;    /* 00a0 */
+     void                 *syscall_cfa;   /* 00a8 */
+     DWORD                 syscall_flags; /* 00b0 */
+-    DWORD                 restore_flags; /* 00b4 */
+-    DWORD                 align[2];      /* 00b8 */
++    DWORD                 align[3];      /* 00b4 */
+     XMM_SAVE_AREA32       xsave;         /* 00c0 */
+     DECLSPEC_ALIGN(64) XSTATE xstate;    /* 02c0 */
+ };
+@@ -809,7 +813,17 @@ static inline void set_sigcontext( const CONTEXT *context, ucontext_t *sigcontex
+     RIP_sig(sigcontext) = context->Rip;
+     CS_sig(sigcontext)  = context->SegCs;
+     FS_sig(sigcontext)  = context->SegFs;
++    GS_sig(sigcontext)  = context->SegGs;
+     EFL_sig(sigcontext) = context->EFlags;
++    #ifdef DS_sig
++        DS_sig(sigcontext) = context->SegDs;
++    #endif
++    #ifdef ES_sig
++        ES_sig(sigcontext) = context->SegEs;
++    #endif
++    #ifdef SS_sig
++        SS_sig(sigcontext) = context->SegSs;
++    #endif
+ }
+
+
+@@ -838,16 +852,6 @@ static inline void leave_handler( ucontext_t *sigcontext )
+     if (fs32_sel && !is_inside_signal_stack( (void *)RSP_sig(sigcontext )) && !is_inside_syscall(sigcontext))
+         __asm__ volatile( "movw %0,%%fs" :: "r" (fs32_sel) );
+ #endif
+-#ifdef DS_sig
+-    DS_sig(sigcontext) = ds64_sel;
+-#else
+-    __asm__ volatile( "movw %0,%%ds" :: "r" (ds64_sel) );
+-#endif
+-#ifdef ES_sig
+-    ES_sig(sigcontext) = ds64_sel;
+-#else
+-    __asm__ volatile( "movw %0,%%es" :: "r" (ds64_sel) );
+-#endif
+ }
+
+
+@@ -880,11 +884,23 @@ static void save_context( struct xcontext *xcontext, const ucontext_t *sigcontex
+     context->Rip    = RIP_sig(sigcontext);
+     context->SegCs  = CS_sig(sigcontext);
+     context->SegFs  = FS_sig(sigcontext);
++    context->SegGs  = GS_sig(sigcontext);
+     context->EFlags = EFL_sig(sigcontext);
+-    context->SegDs  = ds64_sel;
+-    context->SegEs  = ds64_sel;
+-    context->SegGs  = ds64_sel;
+-    context->SegSs  = ds64_sel;
++    #ifdef DS_sig
++        context->SegDs  = DS_sig(sigcontext);
++    #else
++        __asm__("movw %%ds,%0" : "=m" (context->SegDs));
++    #endif
++    #ifdef ES_sig
++        context->SegEs  = ES_sig(sigcontext);
++    #else
++        __asm__("movw %%es,%0" : "=m" (context->SegEs));
++    #endif
++    #ifdef SS_sig
++        context->SegSs  = SS_sig(sigcontext);
++    #else
++        __asm__("movw %%ss,%0" : "=m" (context->SegSs));
++    #endif
+     context->Dr0    = amd64_thread_data()->dr0;
+     context->Dr1    = amd64_thread_data()->dr1;
+     context->Dr2    = amd64_thread_data()->dr2;
+@@ -1041,6 +1057,15 @@ NTSTATUS WINAPI NtSetContextThread( HANDLE handle, const CONTEXT *context )
+         frame->rbp    = context->Rbp;
+         frame->rip    = context->Rip;
+         frame->eflags = context->EFlags;
++        frame->cs     = context->SegCs;
++        frame->ss     = context->SegSs;
++    }
++    if (flags & CONTEXT_SEGMENTS)
++    {
++        frame->ds = context->SegDs;
++        frame->es = context->SegEs;
++        frame->fs = context->SegFs;
++        frame->gs = context->SegGs;
+     }
+     if (flags & CONTEXT_FLOATING_POINT)
+     {
+@@ -1108,16 +1133,16 @@ NTSTATUS WINAPI NtGetContextThread( HANDLE handle, CONTEXT *context )
+         context->Rbp    = frame->rbp;
+         context->Rip    = frame->rip;
+         context->EFlags = frame->eflags;
+-        context->SegCs  = cs64_sel;
+-        context->SegSs  = ds64_sel;
++        context->SegCs  = frame->cs;
++        context->SegSs  = frame->ss;
+         context->ContextFlags |= CONTEXT_CONTROL;
+     }
+     if (needed_flags & CONTEXT_SEGMENTS)
+     {
+-        context->SegDs  = ds64_sel;
+-        context->SegEs  = ds64_sel;
+-        context->SegFs  = amd64_thread_data()->fs;
+-        context->SegGs  = ds64_sel;
++        context->SegDs  = frame->ds;
++        context->SegEs  = frame->es;
++        context->SegFs  = frame->fs;
++        context->SegGs  = frame->gs;
+         context->ContextFlags |= CONTEXT_SEGMENTS;
+     }
+     if (needed_flags & CONTEXT_FLOATING_POINT)
+@@ -1345,16 +1370,16 @@ NTSTATUS get_thread_wow64_context( HANDLE handle, void *ctx, ULONG size )
+         context->Ebp    = wow_frame->Ebp;
+         context->Eip    = wow_frame->Eip;
+         context->EFlags = wow_frame->EFlags;
+-        context->SegCs  = cs32_sel;
+-        context->SegSs  = ds64_sel;
++        context->SegCs  = wow_frame->SegCs;
++        context->SegSs  = wow_frame->SegSs;
+         context->ContextFlags |= CONTEXT_I386_CONTROL;
+     }
+     if (needed_flags & CONTEXT_I386_SEGMENTS)
+     {
+-        context->SegDs = ds64_sel;
+-        context->SegEs = ds64_sel;
+-        context->SegFs = amd64_thread_data()->fs;
+-        context->SegGs = ds64_sel;
++        context->SegDs = wow_frame->SegDs;
++        context->SegEs = wow_frame->SegEs;
++        context->SegFs = wow_frame->SegFs;
++        context->SegGs = wow_frame->SegGs;
+         context->ContextFlags |= CONTEXT_I386_SEGMENTS;
+     }
+     if (needed_flags & CONTEXT_I386_EXTENDED_REGISTERS)
+@@ -2523,11 +2548,11 @@ void call_init_thunk( LPTHREAD_START_ROUTINE entry, void *arg, BOOL suspend, TEB
+         wow_context->Esp = get_wow_teb( teb )->Tib.StackBase - 16;
+         wow_context->Eip = pLdrSystemDllInitBlock->pRtlUserThreadStart;
+         wow_context->SegCs = cs32_sel;
+-        wow_context->SegDs = ds64_sel;
+-        wow_context->SegEs = ds64_sel;
+-        wow_context->SegFs = thread_data->fs;
+-        wow_context->SegGs = ds64_sel;
+-        wow_context->SegSs = ds64_sel;
++        wow_context->SegDs = context.SegDs;
++        wow_context->SegEs = context.SegEs;
++        wow_context->SegFs = context.SegFs;
++        wow_context->SegGs = context.SegGs;
++        wow_context->SegSs = context.SegSs;
+         wow_context->EFlags = 0x202;
+         wow_context->FloatSave.ControlWord = context.FltSave.ControlWord;
+         *(XSAVE_FORMAT *)wow_context->ExtendedRegisters = context.FltSave;
+@@ -2541,8 +2566,6 @@ void call_init_thunk( LPTHREAD_START_ROUTINE entry, void *arg, BOOL suspend, TEB
+     memset( frame, 0, sizeof(*frame) );
+     NtSetContextThread( GetCurrentThread(), ctx );
+
+-    frame->cs  = cs64_sel;
+-    frame->ss  = ds64_sel;
+     frame->rsp = (ULONG64)ctx - 8;
+     frame->rip = (ULONG64)pLdrInitializeThunk;
+     frame->rcx = (ULONG64)ctx;
+@@ -2606,7 +2629,7 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+                    __ASM_CFI(".cfi_adjust_cfa_offset 8\n\t")
+                    "popq 0x80(%rcx)\n\t"
+                    __ASM_CFI(".cfi_adjust_cfa_offset -8\n\t")
+-                   "movl $0,0xb4(%rcx)\n\t"        /* frame->restore_flags */
++                   "movl $0,0x94(%rcx)\n\t"        /* frame->restore_flags */
+                    __ASM_LOCAL_LABEL("__wine_syscall_dispatcher_prolog_end") ":\n\t"
+                    "movq %rax,0x00(%rcx)\n\t"
+                    "movq %rbx,0x08(%rcx)\n\t"
+@@ -2625,9 +2648,13 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+                    "movq %r15,0x68(%rcx)\n\t"
+                    __ASM_CFI_REG_IS_AT2(r15, rcx, 0xe8, 0x00)
+                    "movw %cs,0x78(%rcx)\n\t"
++                   "movw %ds,0x7a(%rcx)\n\t"
++                   "movw %es,0x7c(%rcx)\n\t"
++                   "movw %fs,0x7e(%rcx)\n\t"
+                    "movq %rsp,0x88(%rcx)\n\t"
+                    __ASM_CFI_CFA_IS_AT2(rcx, 0x88, 0x01)
+                    "movw %ss,0x90(%rcx)\n\t"
++                   "movw %gs,0x92(%rcx)\n\t"
+                    "movq %rbp,0x98(%rcx)\n\t"
+                    __ASM_CFI_REG_IS_AT2(rbp, rcx, 0x98, 0x01)
+                    /* Legends of Runeterra hooks the first system call return instruction, and
+@@ -2732,7 +2759,7 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+                    "callq *(%r10,%rax,8)\n\t"
+                    "leaq -0x98(%rbp),%rcx\n\t"
+                    __ASM_LOCAL_LABEL("__wine_syscall_dispatcher_return") ":\n\t"
+-                   "movl 0xb4(%rcx),%edx\n\t"      /* frame->restore_flags */
++                   "movl 0x94(%rcx),%edx\n\t"  /* frame->restore_flags */
+                    "testl $0x48,%edx\n\t"          /* CONTEXT_FLOATING_POINT | CONTEXT_XSTATE */
+                    "jnz 2f\n\t"
+                    "movaps 0x1c0(%rcx),%xmm6\n\t"
+@@ -2753,7 +2780,7 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+                    "xorl %edx,%edx\n\t"
+                    "xrstor64 0xc0(%rcx)\n\t"
+                    "movq %r11,%rax\n\t"
+-                   "movl 0xb4(%rcx),%edx\n\t"      /* frame->restore_flags */
++                   "movl 0x94(%rcx),%edx\n\t"
+                    "jmp 4f\n"
+                    "3:\tfxrstor64 0xc0(%rcx)\n"
+                    "4:\tmovq 0x98(%rcx),%rbp\n\t"
+@@ -2771,7 +2798,7 @@ __ASM_GLOBAL_FUNC( __wine_syscall_dispatcher,
+ #ifdef __linux__
+                    "testl $12,%r14d\n\t"           /* SYSCALL_HAVE_PTHREAD_TEB | SYSCALL_HAVE_WRFSGSBASE */
+                    "jz 1f\n\t"
+-                   "movw %gs:0x338,%fs\n"          /* amd64_thread_data()->fs */
++                   "movw 0x7e(%rcx),%fs\n"
+                    "1:\n\t"
+ #endif
+                    "movq 0x60(%rcx),%r14\n\t"
+@@ -2844,7 +2871,7 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+                    "popq 0x70(%rcx)\n\t"           /* frame->rip */
+                    __ASM_CFI(".cfi_adjust_cfa_offset -8\n\t")
+                    __ASM_CFI_REG_IS_AT2(rip, rcx, 0xf0,0x00)
+-                   "movl $0,0xb4(%rcx)\n\t"        /* frame->restore_flags */
++                   "movl $0,0x94(%rcx)\n\t"        /* frame->restore_flags */
+                    __ASM_LOCAL_LABEL("__wine_unix_call_dispatcher_prolog_end") ":\n\t"
+                    "movq %rbx,0x08(%rcx)\n\t"
+                    __ASM_CFI_REG_IS_AT1(rbx, rcx, 0x08)
+@@ -2892,6 +2919,7 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+ #ifdef __linux__
+                    "testl $12,%r14d\n\t"           /* SYSCALL_HAVE_PTHREAD_TEB | SYSCALL_HAVE_WRFSGSBASE */
+                    "jz 2f\n\t"
++                   "movw %fs,0x7e(%rcx)\n\t"
+                    "movq %gs:0x320,%rsi\n\t"       /* amd64_thread_data()->pthread_teb */
+                    "testl $8,%r14d\n\t"            /* SYSCALL_HAVE_WRFSGSBASE */
+                    "jz 1f\n\t"
+@@ -2915,7 +2943,7 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+                    "movdqa 0x230(%rcx),%xmm13\n\t"
+                    "movdqa 0x240(%rcx),%xmm14\n\t"
+                    "movdqa 0x250(%rcx),%xmm15\n\t"
+-                   "testl $0xffff,0xb4(%rcx)\n\t"  /* frame->restore_flags */
++                   "testl $0xffff,0x94(%rcx)\n\t"  /* frame->restore_flags */
+                    "jnz " __ASM_LOCAL_LABEL("__wine_syscall_dispatcher_return") "\n\t"
+                    /* switch to user stack */
+                    "movq 0x88(%rcx),%rsp\n\t"
+@@ -2923,7 +2951,7 @@ __ASM_GLOBAL_FUNC( __wine_unix_call_dispatcher,
+ #ifdef __linux__
+                    "testl $12,%r14d\n\t"           /* SYSCALL_HAVE_PTHREAD_TEB | SYSCALL_HAVE_WRFSGSBASE */
+                    "jz 1f\n\t"
+-                   "movw %gs:0x338,%fs\n"          /* amd64_thread_data()->fs */
++                   "movw 0x7e(%rcx),%fs\n"
+                    "1:\n\t"
+ #endif
+                    "movq 0x60(%rcx),%r14\n\t"
