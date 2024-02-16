@@ -86,5 +86,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/nf-core/tools/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ edmundmiller ];
+    mainProgram = "nf-core";
   };
 }
