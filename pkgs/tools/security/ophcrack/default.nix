@@ -13,7 +13,6 @@
 , pkg-config
 , expat
 , qtcharts
-, qtbase
 , wrapQtAppsHook
 , cmake
 }:
@@ -30,12 +29,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-94zEr7aBeqMjy5Ma50W3qv1S5yx090bYuTieoZaXFcc=";
   };
 
- nativeBuildInputs = [ autoreconfHook libtool wrapQtAppsHook ];
-
- buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat qtcharts qtbase ];
+ buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat qtcharts ];
+ 
+ nativeBuildInputs = [ autoreconfHook libtool wrapQtAppsHook];
 
  configPhase = ''
-    ./config
+   CFLAGS="-I/usr/include/libxml2/libxml"
+    ./configure
  '';
 
  buildPhase = ''
