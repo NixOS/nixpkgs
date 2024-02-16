@@ -21,8 +21,8 @@ let
         # Here are the currently applied patches for Roblox to run under WINE:
         (fetchpatch {
           name = "vinegar-wine-segrevert.patch";
-          url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/8fc153c492542a522d6cc2dff7d1af0e030a529a/patches/wine/temp.patch";
-          hash = "sha256-AnEBBhB8leKP0xCSr6UsQK7CN0NDbwqhe326tJ9dDjc=";
+          url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/e24cb9dfa996bcfeaa46504c0375660fe271148d/patches/wine/segregrevert.patch";
+          hash = "sha256-+3Nld81nG3GufI4jAF6yrWfkJmsSCOku39rx0Hov29c=";
         })
       ];
   });
@@ -57,7 +57,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram $out/bin/vinegar \
-      --prefix PATH : ${lib.makeBinPath [wine]}
+      --prefix PATH : ${lib.makeBinPath [ wine ]}
   '';
 
   meta = with lib; {
