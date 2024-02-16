@@ -18141,8 +18141,6 @@ with pkgs;
 
   adreaper = callPackage ../tools/security/adreaper { };
 
-  adtool = callPackage ../tools/admin/adtool { };
-
   aeron = callPackage ../servers/aeron { };
 
   inherit (callPackage ../development/tools/alloy { })
@@ -35088,7 +35086,7 @@ with pkgs;
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
-  spike = pin-to-gcc12-if-gcc13 (callPackage ../applications/virtualization/spike { });
+  spike = callPackage ../applications/virtualization/spike { };
 
   tensorman = callPackage ../tools/misc/tensorman { };
 
