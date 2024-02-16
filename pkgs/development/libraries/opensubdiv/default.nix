@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uDKCT0Uoa5WQekMUFm2iZmzm+oWAZ6IWMwfpchkUZY0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "static" ];
 
   nativeBuildInputs = [
     cmake
@@ -65,7 +65,9 @@ stdenv.mkDerivation rec {
     NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
   '';
 
-  postInstall = "rm $out/lib/*.a";
+  postInstall = ''
+    moveToOutput "lib/*.a" $static
+  '';
 
   meta = {
     description = "An Open-Source subdivision surface library";
