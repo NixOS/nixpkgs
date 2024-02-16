@@ -2,8 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
-, pythonAtLeast
 , pythonOlder
 , pytestCheckHook
 , setuptools
@@ -13,6 +11,7 @@
 , pyyaml
 , safetensors
 , torch
+, cudatoolkit
 , evaluate
 , parameterized
 , transformers
@@ -52,6 +51,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH=$out/bin:$PATH
+  '' + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform cudatoolkit) ''
+    export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
   '';
   pytestFlagsArray = [ "tests" ];
   disabledTests = [
@@ -74,6 +75,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"
+    # requires ptxas from cudatoolkit, which is unavailable on aarch64-linux
+    "test_dynamo_extract_model"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # RuntimeError: torch_shm_manager: execl failed: Permission denied
     "CheckpointTest"
