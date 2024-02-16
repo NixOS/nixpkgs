@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , setuptools
 , wheel
 , pythonRelaxDepsHook
@@ -31,6 +32,8 @@ buildPythonPackage rec {
   pname = "nf-core";
   version = "2.12.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nf-core";
