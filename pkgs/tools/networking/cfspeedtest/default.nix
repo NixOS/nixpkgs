@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ colemickens ];
+    mainProgram = "cfspeedtest";
   };
 }

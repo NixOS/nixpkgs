@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.astsmtl ];
     platforms = platforms.linux;
+    mainProgram = "epdfview";
   };
 }

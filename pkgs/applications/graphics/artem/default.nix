@@ -48,5 +48,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/finefindus/artem/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "artem";
   };
 }

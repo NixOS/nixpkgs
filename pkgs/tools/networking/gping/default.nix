@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orf/gping/releases/tag/gping-v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
+    mainProgram = "gping";
   };
 }

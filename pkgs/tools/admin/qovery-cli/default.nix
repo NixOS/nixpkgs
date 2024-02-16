@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "qovery-cli";
-  version = "0.84.0";
+  version = "0.84.1";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2cG/aG1WXNmXqoJ+N2vmq2SBfIeCI1hac8y2vLy7Dyk=";
+    hash = "sha256-Dq62LXa0hZrpfQ7WQuCelLxWS7Lhn6SH61cNTsYI/mw=";
   };
 
   vendorHash = "sha256-XG0dOEpu+NoQmklsukxev1gc2OsZc7fLEkv0AGwkh7o=";
@@ -41,5 +41,6 @@ buildGoModule rec {
     changelog = "https://github.com/Qovery/qovery-cli/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "qovery-cli";
   };
 }

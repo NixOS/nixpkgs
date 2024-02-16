@@ -58,6 +58,7 @@ mapAliases ({
 
   AusweisApp2 = ausweisapp; # Added 2023-11-08
   a4term = a4; # Added 2023-10-06
+  adtool = throw "'adtool' has been removed, as it was broken and unmaintained";
   aether = throw "aether has been removed from nixpkgs; upstream unmaintained, security issues"; # Added 2023-10-03
   airfield = throw "airfield has been removed due to being unmaintained"; # Added 2023-05-19
   alertmanager-bot = throw "alertmanager-bot is broken and has been archived by upstream"; # Added 2023-07-28
@@ -825,6 +826,9 @@ mapAliases ({
   pharo-spur64 = pharo; # Added 2022-08-03
   phodav_2_0 = throw "'phodav_2_0' has been renamed to/replaced by 'phodav'"; # Added 2023-02-21
   photoflow = throw "photoflow was removed because it was broken and unmaintained by upstream"; # Added 2023-03-10
+  picom-allusive = throw "picom-allusive was renamed to compfy and is being abandoned by upstream"; # Added 2024-02-13
+  picom-jonaburg = throw "picom-jonaburg was removed because it is unmaintained by upstream"; # Added 2024-02-13
+  picom-next = picom; # Added 2024-02-13
 
   # Obsolete PHP version aliases
   php80 = throw "php80 has been dropped due to the lack of maintenance from upstream for future releases"; # Added 2023-06-21

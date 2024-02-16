@@ -1,10 +1,12 @@
 { lib
 , anysqlite
+, boto3
 , buildPythonPackage
 , fetchFromGitHub
 , hatch-fancy-pypi-readme
 , hatchling
 , httpx
+, moto
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -15,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.22";
+  version = "0.0.24";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     owner = "karpetrosyan";
     repo = "hishel";
     rev = "refs/tags/${version}";
-    hash = "sha256-2GboU1J0jvZUz20+KpDYnfDqc+qi0tmlypbWeOoYjX0=";
+    hash = "sha256-wup1rQ5MHjsBaTdfueP9y7QhutoO0xYeexZPDQpUEJk=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +42,9 @@ buildPythonPackage rec {
     redis = [
       redis
     ];
+    s3 = [
+      boto3
+    ];
     sqlite = [
       anysqlite
     ];
@@ -49,6 +54,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    moto
     pytest-asyncio
     pytestCheckHook
     trio

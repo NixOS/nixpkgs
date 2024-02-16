@@ -192,7 +192,8 @@ in
         mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
-        else
+        elif [ ! -f "${certmgrAPITokenPath}" ]; then
+          # Don't remove the token if it already exists
           install -m 600 /dev/null "${certmgrAPITokenPath}"
         fi
       ''

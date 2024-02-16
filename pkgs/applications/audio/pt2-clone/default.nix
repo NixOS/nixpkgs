@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
     platforms = platforms.littleEndian;
+    mainProgram = "pt2-clone";
   };
 }
 

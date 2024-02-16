@@ -18,5 +18,6 @@ buildGoModule rec {
     license = licenses.mpl20;
     description = "A terminal UI (TUI) for HashiCorp Nomad";
     maintainers = teams.iog.members;
+    mainProgram = "damon";
   };
 }

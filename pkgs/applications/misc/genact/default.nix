@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/svenstaro/genact/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "genact";
   };
 }

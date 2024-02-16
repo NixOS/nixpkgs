@@ -44,5 +44,6 @@ buildGoModule rec {
     changelog = "https://github.com/aws/copilot-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jiegec ];
+    mainProgram = "copilot";
   };
 }

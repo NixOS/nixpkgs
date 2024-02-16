@@ -2250,6 +2250,12 @@
     githubId = 24027;
     name = "Bruno Bigras";
   };
+  bbjubjub = {
+    name = "Julie B.";
+    email = "julie+nixpkgs@bbjubjub.fr";
+    github = "bbjubjub2494";
+    githubId = 15657735;
+  };
   bburdette = {
     email = "bburdette@protonmail.com";
     github = "bburdette";
@@ -3215,6 +3221,13 @@
     matrix = "@donnellycolton:matrix.org";
     github = "cdmistman";
     githubId = 23486351;
+  };
+  cdombroski = {
+    name = "Chris Dombroski";
+    email = "cdombroski@gmail.com";
+    matrix = "@cdombroski:kow.is";
+    github = "cdombroski";
+    githubId = 244909;
   };
   ceedubs = {
     email = "ceedubs@gmail.com";
@@ -4289,6 +4302,15 @@
     githubId = 34766150;
     name = "datafoo";
   };
+  DataHearth = {
+    email = "dev@antoine-langlois.net";
+    github = "DataHearth";
+    githubId = 28595242;
+    name = "DataHearth";
+    keys = [{
+      fingerprint = "A129 2547 0298 BFEE 7EE0  92B3 946E 2D0C 410C 7B3D";
+    }];
+  };
   davegallant = {
     name = "Dave Gallant";
     email = "davegallant@gmail.com";
@@ -4781,6 +4803,12 @@
     github = "DiegoLelis";
     githubId = 8404455;
     name = "Diego Lelis";
+  };
+  diegs = {
+    email = "dpontor@gmail.com";
+    github = "diegs";
+    githubId = 74719;
+    name = "Diego Pontoriero";
   };
   DieracDelta = {
     email = "justin@restivo.me";
@@ -5303,6 +5331,12 @@
     github = "ebzzry";
     githubId = 7875;
     name = "Rommel Martinez";
+  };
+  ecklf = {
+    email = "ecklf@icloud.com";
+    github = "ecklf";
+    githubId = 8146736;
+    name = "Florentin Eckl";
   };
   eclairevoyant = {
     github = "eclairevoyant";
@@ -11066,15 +11100,6 @@
     github = "LouisDK1";
     githubId = 4969294;
     name = "Louis Tim Larsen";
-  };
-  lourkeur = {
-    name = "Louis Bettens";
-    email = "louis@bettens.info";
-    github = "lourkeur";
-    githubId = 15657735;
-    keys = [{
-      fingerprint = "5B93 9CFA E8FC 4D8F E07A  3AEA DFE1 D4A0 1733 7E2A";
-    }];
   };
   loveisgrief = {
     name = "LoveIsGrief";
@@ -17450,6 +17475,12 @@
     github = "shymega";
     githubId = 1334592;
   };
+  siddarthkay = {
+    email = "siddarthkay@gmail.com";
+    github = "siddarthkay";
+    githubId = 64726664;
+    name = "Siddarth Kumar";
+  };
   siddharthdhakane = {
     email = "siddharthdhakane@gmail.com";
     github = "siddharthdhakane";
@@ -18319,6 +18350,13 @@
     github = "SuperBo";
     githubId = 2666479;
     name = "Y Nguyen";
+  };
+  superherointj = {
+    email = "sergiomarcelo@yandex.com";
+    github = "superherointj";
+    githubId = 5861043;
+    matrix = "@superherointj:matrix.org";
+    name = "Sérgio Marcelo";
   };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";

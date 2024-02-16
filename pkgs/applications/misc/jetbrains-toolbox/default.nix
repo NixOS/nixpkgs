@@ -10,11 +10,11 @@
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "2.1.3.18901";
+  version = "2.2.1.19765";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    sha256 = "sha256-XZEpzzFm0DA6iiPGOKbmsuNlpIlt7Qa2A+jEqU6GqgE=";
+    sha256 = "sha256-53CsE1hmtys5hNY2V+tskgwKg9jDLrEsYF6iY2fJGHU=";
     stripRoot = false;
   };
 
@@ -72,5 +72,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ AnatolyPopov ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "jetbrains-toolbox";
   };
 }

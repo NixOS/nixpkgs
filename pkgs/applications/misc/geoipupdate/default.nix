@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/maxmind/geoipupdate";
     license = with licenses; [ asl20 ];
     maintainers = teams.helsinki-systems.members;
+    mainProgram = "geoipupdate";
   };
 }

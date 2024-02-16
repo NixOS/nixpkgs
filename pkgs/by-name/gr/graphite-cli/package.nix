@@ -42,6 +42,6 @@ buildNpmPackage rec {
     homepage = "https://graphite.dev/docs/graphite-cli";
     license = lib.licenses.unfree; # no license specified
     mainProgram = "gt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ diegs ];
   };
 }

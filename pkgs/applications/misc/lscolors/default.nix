@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "lscolors";
   };
 }

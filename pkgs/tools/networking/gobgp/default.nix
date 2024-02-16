@@ -28,5 +28,6 @@ buildGoModule rec {
     homepage = "https://osrg.github.io/gobgp/";
     license = licenses.asl20;
     maintainers = with maintainers; [ higebu ];
+    mainProgram = "gobgp";
   };
 }

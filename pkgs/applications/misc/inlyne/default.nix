@@ -65,5 +65,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "inlyne";
   };
 }

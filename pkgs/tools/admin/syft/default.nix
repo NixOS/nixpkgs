@@ -76,5 +76,6 @@ buildGoModule rec {
     '';
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ jk developer-guy kashw2 ];
+    mainProgram = "syft";
   };
 }

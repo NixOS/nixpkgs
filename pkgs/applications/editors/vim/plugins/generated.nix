@@ -9459,6 +9459,18 @@ final: prev:
     meta.homepage = "https://github.com/luukvbaal/stabilize.nvim/";
   };
 
+  staline-nvim = buildVimPlugin {
+    pname = "staline.nvim";
+    version = "2024-02-14";
+    src = fetchFromGitHub {
+      owner = "tamton-aquib";
+      repo = "staline.nvim";
+      rev = "a53f869278b8b186a5afd6f21680cd103c381599";
+      hash = "sha256-GDMKzxFDtQk5LL+rMsxTGTyLv69w5NUd+u19noeO5ws=";
+    };
+    meta.homepage = "https://github.com/tamton-aquib/staline.nvim/";
+  };
+
   stan-vim = buildVimPlugin {
     pname = "stan-vim";
     version = "2023-12-13";
@@ -16477,6 +16489,30 @@ final: prev:
       sha256 = "1wpn6gfw1r89232d779lz8wy19asrribindlcsaikrsqvml3a0hr";
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
+  };
+
+  baleia-nvim = buildVimPlugin {
+    pname = "baleia-nvim";
+    version = "2024-01-06";
+    src = fetchFromGitHub {
+      owner = "m00qek";
+      repo = "baleia.nvim";
+      rev = "6d9cbdaca3a428bc7296f838fdfce3ad01ee7495";
+      sha256 = "sha256-0NmiGzMFvL1awYOVtiaSd+O4sAR524x68xwWLgArlqs=";
+    };
+    meta.homepage = "https://github.com/m00qek/baleia.nvim/";
+  };
+
+  nvim-bacon = buildVimPlugin {
+    pname = "nvim-bacon";
+    version = "2024-02-12";
+    src = fetchFromGitHub {
+      owner = "Canop";
+      repo = "nvim-bacon";
+      rev = "3f8e7a80a0e715952a3066fefe7447f1347207ca";
+      sha256 = "sha256-jIoRzMjOZlTHR7q4piyY7MjEUgZIR5pjobfOdY/IpeM=";
+    };
+    meta.homepage = "https://github.com/Canop/nvim-bacon";
   };
 
 
