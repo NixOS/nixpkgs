@@ -29,7 +29,7 @@ let
         supportedHosts = lib.concatStringsSep ", " (lib.attrNames hostToGuest);
 
         message =
-          "Unsupported non-Linux host system: ${hostPlatform.system}, supported: ${supportedHosts}";
+          "NixOS Test: don't know which VM guest system to pair with VM host system: ${hostPlatform.system}. Perhaps you intended to run the tests on a Linux host, or one of the following systems that may run NixOS tests: ${supportedHosts}";
       in
         hostToGuest.${hostPlatform.system} or (throw message);
 
