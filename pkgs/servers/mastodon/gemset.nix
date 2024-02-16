@@ -1891,13 +1891,11 @@
     groups = ["default"];
     platforms = [];
     source = {
-      fetchSubmodules = false;
-      rev = "e020fcc3a54d993ab45b7194d89ab720296c111b";
-      sha256 = "18pbm9qkancy38v0gpb6f5k0xd8r347jl4xvj4jn98ihfhzgwygj";
-      type = "git";
-      url = "https://github.com/jhawthorn/nsa.git";
+      remotes = ["https://rubygems.org"];
+      sha256 = "1narh0bj0c9pg8cb2jhpydfa9mnm3dclckzk5s6xrwa2gm99hnk4";
+      type = "gem";
     };
-    version = "0.2.8";
+    version = "0.3.0";
   };
   oj = {
     groups = ["default"];
@@ -2065,10 +2063,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pfj771p5a29yyyw58qacks464sl86d5m3jxjl5rlqqw2m3v5xq4";
+      sha256 = "0s4vskbydg5k0z86v2g5drf03lslkr4b1l421vz29531jlrsljvy";
       type = "gem";
     };
-    version = "1.5.4";
+    version = "1.5.5";
   };
   pghero = {
     dependencies = ["activerecord"];

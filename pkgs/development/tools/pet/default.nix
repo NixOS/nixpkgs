@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pet";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "knqyf263";
     repo = "pet";
     rev = "v${version}";
-    sha256 = "sha256-+SjeQJXWoyNVb9AUB0BlXUJpHYRLhvVjteZypjV0FtE=";
+    sha256 = "sha256-upBncIJvgTvBj/PB3b7LnxY+yDnFfeNZdL97GwGxCqA=";
   };
 
   vendorHash = "sha256-A3VHpSJc6NJz8ojg6iSnQlIXbf9m1JCzg9Vnoie0ffU=";

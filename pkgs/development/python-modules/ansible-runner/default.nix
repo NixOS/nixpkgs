@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.3.4";
+  version = "2.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eaG9E02BPI6jdAWZxv2WGhFCXOd1fy/XJc9W1qGnI2w=";
+    hash = "sha256-zZ3dV2WHDqPFRbbLR6qtXwTZowpijdP82082eijCIIU=";
   };
 
   patches = [

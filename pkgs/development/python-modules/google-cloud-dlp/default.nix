@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.13.0";
-  format = "setuptools";
+  version = "3.15.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mFqptqEvHQAKNevzawDOfQsH0SCn9EanJ2js4vIpCGo=";
+    hash = "sha256-kZjw+TBXVX5O/OufGN/Y/J0NDX30RiqFqwndnGkUjBE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core

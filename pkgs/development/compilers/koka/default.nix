@@ -31,12 +31,12 @@
 }:
 
 let
-  version = "3.0.4";
+  version = "3.1.0";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-U8BW1Aq9t3je0YDV8NkE0MzdnjwXBJQbmekh5ufOs3k=";
+    sha256 = "sha256-Twm2Hr8BQ0xTdA30e2Az/57525jTUkmv2Zs/+SNiQns=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
