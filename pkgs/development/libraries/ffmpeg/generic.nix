@@ -1,8 +1,12 @@
-{ version, hash, extraPatches ? [] }:
+{ version
+, hash
+, extraPatches ? []
+, variant ? "small" # Decides which dependencies are enabled by default
+}:
 
 { lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 
-, ffmpegVariant ? "small" # Decides which dependencies are enabled by default
+, ffmpegVariant ? variant
 
   # Build with headless deps; excludes dependencies that are only necessary for
   # GUI applications. To be used for purposes that don't generally need such
