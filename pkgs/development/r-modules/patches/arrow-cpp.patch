@@ -1,0 +1,18 @@
+diff --git a/pkgs/by-name/ar/arrow-cpp/package.nix b/pkgs/by-name/ar/arrow-cpp/package.nix
+index 23a2432c824e..54a5ce395807 100644
+--- a/pkgs/by-name/ar/arrow-cpp/package.nix
++++ b/pkgs/by-name/ar/arrow-cpp/package.nix
+@@ -79,11 +79,11 @@ let
+ in
+ stdenv.mkDerivation (finalAttrs: {
+   pname = "arrow-cpp";
+-  version = "15.0.0";
++  version = "14.0.0";
+ 
+   src = fetchurl {
+     url = "mirror://apache/arrow/arrow-${finalAttrs.version}/apache-arrow-${finalAttrs.version}.tar.gz";
+-    hash = "sha256-Ad0/cOhdm1uTPsksDbik71BKUQX3jS2GIuhCeftFwl0=";
++    hash = "sha256-TrDaUOwHG68V/BY8tIBYkx4AbxyGLI3vDhgP0H1TECE=";
+   };
+ 
+   sourceRoot = "apache-arrow-${finalAttrs.version}/cpp";

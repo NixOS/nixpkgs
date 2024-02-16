@@ -309,7 +309,7 @@ let
   };
 
   packagesWithNativeBuildInputs = {
-    arrow = [ pkgs.pkg-config pkgs.arrow-cpp ];
+    arrow = [ pkgs.pkg-config pkgs.arrow-cpp __darwinAllowLocalNetworking pkgs.cmake pkgs.zstd pkgs.lz4];
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     audio = [ pkgs.portaudio ];
@@ -505,6 +505,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    arrow = [ pkgs.arrow-cpp ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
@@ -1287,7 +1288,14 @@ let
         substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
       '';
     });
-
+    
+    # arrow 14.0.0.2 on CRAN is lagging
+    # https://github.com/apache/arrow/issues/39698
+    # here one would need to patch arrow-cpp as buildInputs and nativeBuildInputs
+    arrow-cpp = old.pkgs.arrow-cpp.overrideAttrs (attrs: {
+      patches = [ ./patches/arrow-cpp.patch ];
+    });
+    
     arrow = old.arrow.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
