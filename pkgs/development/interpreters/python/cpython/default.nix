@@ -270,7 +270,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
+  ] ++ optionals (pythonOlder "3.13") [
     ./virtualenv-permissions.patch
+  ] ++ optionals (pythonAtLeast "3.13") [
+    ./3.13/virtualenv-permissions.patch
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
