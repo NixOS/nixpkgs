@@ -2,7 +2,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "2.1.0";
+  version = "2.2.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -10,7 +10,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-1DobGm6nI14951KNKEE0D3AF1TFsWQUEhe4L1PdWBDw=";
+    hash = "sha256-v6V9+/Ra19Xy6nCLe/ODJ1uVBwNkQO4lKcxcr2pmxIY=";
   };
 
   nativeBuildInputs = [ python3 dune_3 makeWrapper ];
