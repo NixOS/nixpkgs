@@ -9,19 +9,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oLqRmxNPbb+nUMN70kGlAtBCji4wXrbRv2DhNMcZV5c=";
+    hash = "sha256-4O62hAl6uRz74up/AIwq22VSDQDlTwmm8ywKAik4QrQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
