@@ -41925,4 +41925,6 @@ with pkgs;
   insulator2 = callPackage ../applications/misc/insulator2 {};
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
+
+  ophcrack = libsForQt5.callPackage ../tools/security/ophcrack
 }
