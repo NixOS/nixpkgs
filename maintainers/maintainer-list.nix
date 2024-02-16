@@ -11191,6 +11191,12 @@
     githubId = 35580196;
     name = "Luca Guerra";
   };
+  lucasbergman = {
+    email = "lucas@bergmans.us";
+    github = "lucasbergman";
+    githubId = 3717454;
+    name = "Lucas Bergman";
+  };
   lucasew = {
     email = "lucas59356@gmail.com";
     github = "lucasew";
