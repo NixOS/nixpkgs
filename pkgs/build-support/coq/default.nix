@@ -110,7 +110,7 @@ stdenv.mkDerivation (removeAttrs ({
 // (optionalAttrs useDune {
   buildPhase = ''
     runHook preBuild
-    dune build -p ${opam-name} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+    dune build --display=short -p ${opam-name} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postBuild
   '';
   installPhase = ''
