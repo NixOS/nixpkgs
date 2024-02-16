@@ -12,14 +12,14 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.3";
+  version = "1.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SmD3Dq5LicPRe3lWFsq4zqM/yDZ1LsgRwSUA5/RbN9I=";
+    hash = "sha256-heVFum+Eaofd9L0dNHqD9GgHP+ckGwJi+NfeFci+ESc=";
   };
 
   postPatch = ''

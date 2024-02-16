@@ -7,19 +7,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.12.0";
-  format = "setuptools";
+  version = "2.13.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-efuO/hWDM+aMBXR+nqhrWYsvQpoS83FJ2DrG+hhFlio=";
+    hash = "sha256-8ZU9aJPTXNQ9CLK1UgwWWnAOSt584lyiKEAXiQsOWhU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
