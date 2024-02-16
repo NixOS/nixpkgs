@@ -309,7 +309,6 @@ let
   };
 
   packagesWithNativeBuildInputs = {
-    arrow = [ pkgs.pkg-config pkgs.arrow-cpp __darwinAllowLocalNetworking pkgs.cmake pkgs.zstd pkgs.lz4];
     adimpro = [ pkgs.imagemagick ];
     animation = [ pkgs.which ];
     audio = [ pkgs.portaudio ];
@@ -505,7 +504,6 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
-    arrow = [ pkgs.arrow-cpp ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
@@ -1288,18 +1286,26 @@ let
         substituteInPlace src/Makefile --replace "-lcurses" "-lncurses"
       '';
     });
-    
-    # arrow 14.0.0.2 on CRAN is lagging
+
+    # arrow 14.0.0.2 on CRAN is lagging behind current libarrow release number
     # https://github.com/apache/arrow/issues/39698
-    # here one would need to patch arrow-cpp as buildInputs and nativeBuildInputs
-    arrow-cpp = old.pkgs.arrow-cpp.overrideAttrs (attrs: {
-      patches = [ ./patches/arrow-cpp.patch ];
+    arrow = let
+      arrow-cpp = pkgs.arrow-cpp.overrideAttrs (finalAttrs: previousAttrs: {
+        version = "14.0.0";
+        src = fetchurl {
+          url = "mirror://apache/arrow/arrow-${finalAttrs.version}/apache-arrow-${finalAttrs.version}.tar.gz";
+          hash = "sha256-TrDaUOwHG68V/BY8tIBYkx4AbxyGLI3vDhgP0H1TECE=";
+        };
     });
-    
-    arrow = old.arrow.overrideAttrs (attrs: {
+    in old.arrow.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
       '';
+      # OpenSSL and CURL to support reading AWS S3 and Google Cloud Storage
+      # R is needed at compile time; otherwise: "> /nix/store/zf8hff9bnlfix7l7gjsnv3jc22lxzzxx-stdenv-darwin/setup: line 1593: R: command not found"
+      nativeBuildInputs = [ pkgs.pkg-config pkgs.cmake pkgs.curl pkgs.openssl arrow-cpp pkgs.R pkgs.zstd pkgs.lz4];
+      buildInputs = [ arrow-cpp pkgs.R];
+      passthru.arrow-cpp = arrow-cpp;
     });
 
     ROracle = old.ROracle.overrideAttrs (attrs: {
