@@ -29,25 +29,35 @@
 
 let
 
-  projectDscPath = if stdenv.isi686 then
-    "OvmfPkg/OvmfPkgIa32.dsc"
-  else if stdenv.isx86_64 then
-    "OvmfPkg/OvmfPkgX64.dsc"
-  else if stdenv.hostPlatform.isAarch then
-    "ArmVirtPkg/ArmVirtQemu.dsc"
-  else if stdenv.hostPlatform.isRiscV then
-    "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc"
-  else
-    throw "Unsupported architecture";
+  platformSpecific = {
+    i686 = {
+      projectDscPath = "OvmfPkg/OvmfPkgIa32.dsc";
+      fwPrefix = "OVMF";
+    };
+    x86_64 = {
+      projectDscPath = "OvmfPkg/OvmfPkgX64.dsc";
+      fwPrefix = "OVMF";
+      msVarsArgs = {
+        flavor = "OVMF_4M";
+        archDir = "X64";
+      };
+    };
+    aarch64 = {
+      projectDscPath = "ArmVirtPkg/ArmVirtQemu.dsc";
+      fwPrefix = "AAVMF";
+    };
+    riscv64 = {
+      projectDscPath = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
+      fwPrefix = "RISCV_VIRT";
+    };
+  };
+
+  cpuName = stdenv.hostPlatform.parsed.cpu.name;
+
+  inherit (platformSpecific.${cpuName})
+    projectDscPath fwPrefix msVarsArgs;
 
   version = lib.getVersion edk2;
-
-  suffixes = {
-    i686 = "FV/OVMF";
-    x86_64 = "FV/OVMF";
-    aarch64 = "FV/AAVMF";
-    riscv64 = "FV/RISCV_VIRT";
-  };
 
   OvmfPkKek1AppPrefix = "4e32566d-8e9e-4f52-81d3-5bb9715f9727";
 
@@ -60,14 +70,10 @@ let
 
 in
 
+assert platformSpecific ? ${cpuName};
 assert systemManagementModeRequired -> stdenv.hostPlatform.isx86;
 assert msVarsTemplate -> fdSize4MB;
-# TODO: Support other platforms.
-#
-# Need to set the --flavor flag to edk2-vars-generator
-# (currently supports AAVMF, but not RISCV_VIRT), and
-# need to adjust the locations passed to edk2-vars-generator.
-assert msVarsTemplate -> stdenv.isx86_64;
+assert msVarsTemplate -> platformSpecific.${cpuName} ? msVarsArgs;
 
 edk2.mkDerivation projectDscPath (finalAttrs: {
   pname = "OVMF";
@@ -116,57 +122,53 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     export PYTHONPATH=$NIX_BUILD_TOP/debian/python:$PYTHONPATH
   '';
 
-  postBuild = lib.optionalDrvAttr msVarsTemplate ''
+  postBuild = lib.optionalString stdenv.hostPlatform.isAarch ''
+    (
+    cd ${buildPrefix}/FV
+    cp QEMU_EFI.fd ${fwPrefix}_CODE.fd
+    cp QEMU_VARS.fd ${fwPrefix}_VARS.fd
+
+    # QEMU expects 64MiB CODE and VARS files on ARM/AARCH64 architectures
+    # Truncate the firmware files to the expected size
+    truncate -s 64M ${fwPrefix}_CODE.fd
+    truncate -s 64M ${fwPrefix}_VARS.fd
+    )
+  '' + lib.optionalString stdenv.hostPlatform.isRiscV ''
+    truncate -s 32M ${buildPrefix}/FV/${fwPrefix}_CODE.fd
+    truncate -s 32M ${buildPrefix}/FV/${fwPrefix}_VARS.fd
+  '' + lib.optionalString msVarsTemplate ''
+    (
+    cd ${buildPrefix}
     python3 $NIX_BUILD_TOP/debian/edk2-vars-generator.py \
-      --flavor OVMF_4M \
-      --enrolldefaultkeys ${buildPrefix}/X64/EnrollDefaultKeys.efi \
-      --shell ${buildPrefix}/X64/Shell.efi \
-      --code ${buildPrefix}/FV/OVMF_CODE.fd \
-      --vars-template ${buildPrefix}/FV/OVMF_VARS.fd \
-      --certificate `< vendor-cert-string` \
-      --out-file OVMF_VARS.ms.fd
+      --flavor ${msVarsArgs.flavor} \
+      --enrolldefaultkeys ${msVarsArgs.archDir}/EnrollDefaultKeys.efi \
+      --shell ${msVarsArgs.archDir}/Shell.efi \
+      --code FV/${fwPrefix}_CODE.fd \
+      --vars-template FV/${fwPrefix}_VARS.fd \
+      --certificate `< $NIX_BUILD_TOP/$sourceRoot/vendor-cert-string` \
+      --out-file FV/${fwPrefix}_VARS.ms.fd
+    )
   '';
 
-  postInstall = lib.optionalDrvAttr msVarsTemplate ''
+  postInstall = ''
     mkdir -vp $fd/FV
-    install -v -m644 OVMF_VARS.ms.fd $fd/FV
-    ln -sv $fd/FV/OVMF_CODE{,.ms}.fd
-  '';
-
-  postFixup = (
-    if stdenv.hostPlatform.isAarch then ''
-    mkdir -vp $fd/FV
-    mkdir -vp $fd/AAVMF
+    mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
+  '' + lib.optionalString msVarsTemplate ''
+    mv -v $out/FV/${fwPrefix}_VARS.ms.fd $fd/FV
+    ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
+  '' + lib.optionalString stdenv.hostPlatform.isAarch ''
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
-
-    # Use Debian dir layout: https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
-    dd of=$fd/FV/AAVMF_CODE.fd  if=/dev/zero bs=1M    count=64
-    dd of=$fd/FV/AAVMF_CODE.fd  if=$fd/FV/QEMU_EFI.fd conv=notrunc
-    dd of=$fd/FV/AAVMF_VARS.fd  if=/dev/zero bs=1M    count=64
-
-    # Also add symlinks for Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
+    # Add symlinks for Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
+    mkdir -vp $fd/AAVMF
     ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
     ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
-  ''
-  else if stdenv.hostPlatform.isRiscV then ''
-    mkdir -vp $fd/FV
-
-    mv -v $out/FV/RISCV_VIRT_{CODE,VARS}.fd $fd/FV/
-    truncate -s 32M $fd/FV/RISCV_VIRT_CODE.fd
-    truncate -s 32M $fd/FV/RISCV_VIRT_VARS.fd
-  ''
-  else ''
-    mkdir -vp $fd/FV
-    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
-  '');
+  '';
 
   dontPatchELF = true;
 
   passthru =
   let
-    cpuName = stdenv.hostPlatform.parsed.cpu.name;
-    suffix = suffixes."${cpuName}" or (throw "Host cpu name `${cpuName}` is not supported in this OVMF derivation!");
-    prefix = "${finalAttrs.finalPackage.fd}/${suffix}";
+    prefix = "${finalAttrs.finalPackage.fd}/FV/${fwPrefix}";
   in {
     firmware  = "${prefix}_CODE.fd";
     variables = "${prefix}_VARS.fd";
