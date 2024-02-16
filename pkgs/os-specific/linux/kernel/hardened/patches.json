@@ -42,12 +42,12 @@
     "6.1": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.1.76-hardened1.patch",
-            "sha256": "1hybya6kxcy90cnc7m1gzykbbarqmbybmgrsbanb3gvlbvjghizx",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.1.76-hardened1/linux-hardened-6.1.76-hardened1.patch"
+            "name": "linux-hardened-6.1.77-hardened1.patch",
+            "sha256": "0gi7sahy24158hsfx6yhlzxg152ipn918nzg6nv4633b7vg6g90f",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.1.77-hardened1/linux-hardened-6.1.77-hardened1.patch"
         },
-        "sha256": "1zdi4xbk7zyiab7x8z12xqg72zaw3j61slvrbwjfx6pzh47cr005",
-        "version": "6.1.76"
+        "sha256": "07grng6rrgpy6c3465hwqhn3gcdam1c8rwya30vgpk8nfxbfqm1v",
+        "version": "6.1.77"
     },
     "6.5": {
         "patch": {
@@ -62,21 +62,21 @@
     "6.6": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.6.15-hardened1.patch",
-            "sha256": "0yj821zaqxhk4yk1fgv1l5kcqsl05nvq8l6djbvhs0nnlmfd85yf",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.6.15-hardened1/linux-hardened-6.6.15-hardened1.patch"
+            "name": "linux-hardened-6.6.16-hardened1.patch",
+            "sha256": "04k340nilrlarsh47gpdj5qzcy2h8z4nkr5945j40qa7nkj58ncd",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.6.16-hardened1/linux-hardened-6.6.16-hardened1.patch"
         },
-        "sha256": "1ajzby6isqji1xlp660m4qj2i2xs003vsjp1jspziwl7hrzhqadb",
-        "version": "6.6.15"
+        "sha256": "0c5a9agdr27bwd1z6790whczb858z8i34hhn548lzbdylfamf7dj",
+        "version": "6.6.16"
     },
     "6.7": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.7.3-hardened1.patch",
-            "sha256": "03jdch5fx6ly0haa2jrbjzyjnfv66dh1gkbhy1y79v3ylr4x29x4",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.7.3-hardened1/linux-hardened-6.7.3-hardened1.patch"
+            "name": "linux-hardened-6.7.4-hardened1.patch",
+            "sha256": "1g3waasdsba65rgb6f58drj5qd61b0072hfmzl783jphj8iq045x",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.7.4-hardened1/linux-hardened-6.7.4-hardened1.patch"
         },
-        "sha256": "0i1bfkawyp917d9v3qa5nqzspzr3ixx7scbfl8x4lms74xjqrw5p",
-        "version": "6.7.3"
+        "sha256": "036nk3h7vqzd7gnxan2173kpss5qm2pci1lvd58gh90azigrz3gn",
+        "version": "6.7.4"
     }
 }
