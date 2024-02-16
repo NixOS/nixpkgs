@@ -3,7 +3,7 @@
 , fetchPypi
 , pbr
 , flake8
-, stestr
+, stestrCheckHook
 , ddt
 , testscenarios
 }:
@@ -34,15 +34,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     ddt
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # tries to trigger flake8 and fails
     rm hacking/tests/test_doctest.py
-
-    stestr run
   '';
 
   pythonImportsCheck = [ "hacking" ];

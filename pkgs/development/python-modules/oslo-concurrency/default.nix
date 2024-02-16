@@ -13,7 +13,7 @@
 , oslo-utils
 , oslotest
 , pbr
-, stestr
+, stestrCheckHook
 }:
 
 buildPythonPackage rec {
@@ -53,19 +53,13 @@ buildPythonPackage rec {
     eventlet
     fixtures
     oslotest
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase = ''
-    echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
-
-    stestr run -e <(echo "
-    oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn
-    oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n
-    ")
-  '';
+  disabledTests = [
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn"
+    "oslo_concurrency.tests.unit.test_lockutils_eventlet.TestInternalLock.test_fair_lock_with_spawn_n"
+  ];
 
   pythonImportsCheck = [ "oslo_concurrency" ];
 

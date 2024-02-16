@@ -1,7 +1,7 @@
 { buildPythonPackage
 , cliff
 , docutils
-, stestr
+, stestrCheckHook
 , testscenarios
 }:
 
@@ -22,11 +22,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     cliff
     docutils
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

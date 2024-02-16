@@ -7,7 +7,7 @@
 , pbr
 , python-keystoneclient
 , pythonOlder
-, stestr
+, stestrCheckHook
 }:
 
 buildPythonPackage rec {
@@ -41,17 +41,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     openstacksdk
-    stestr
+    stestrCheckHook
   ];
 
   postInstall = ''
     installShellCompletion --cmd swift \
       --bash tools/swift.bash_completion
     installManPage doc/manpages/*
-  '';
-
-  checkPhase = ''
-    stestr run
   '';
 
   pythonImportsCheck = [

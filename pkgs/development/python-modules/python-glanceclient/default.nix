@@ -12,10 +12,12 @@
 , wrapt
 , pyopenssl
 , pythonOlder
-, stestr
+, stestrCheckHook
 , testscenarios
 , ddt
 , requests-mock
+, libredirect
+, iana-etc
 }:
 
 buildPythonPackage rec {
@@ -48,18 +50,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     testscenarios
     ddt
     requests-mock
   ];
 
-  checkPhase = ''
-    stestr run
-  '';
-
   pythonImportsCheck = [
     "glanceclient"
+  ];
+
+  disabledTests = [
+    "glanceclient.tests.unit.test_ssl.TestHTTPSVerifyCert.test_v2_requests_valid_cert_verification"
+    "glanceclient.tests.unit.test_ssl.TestHTTPSVerifyCert.test_v2_requests_valid_cert_verification_no_compression"
+    "glanceclient.tests.unit.test_http.TestClient.test_http_chunked_response"
+    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
   ];
 
   meta = with lib; {

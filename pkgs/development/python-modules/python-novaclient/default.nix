@@ -11,7 +11,7 @@
 , prettytable
 , pythonOlder
 , requests-mock
-, stestr
+, stestrCheckHook
 , testscenarios
 }:
 
@@ -40,16 +40,14 @@ buildPythonPackage rec {
     ddt
     openssl
     requests-mock
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    stestr run -e <(echo "
-    novaclient.tests.unit.test_shell.ShellTest.test_osprofiler
-    novaclient.tests.unit.test_shell.ShellTestKeystoneV3.test_osprofiler
-    ")
-  '';
+  disabledTests = [
+    "novaclient.tests.unit.test_shell.ShellTest.test_osprofiler"
+    "novaclient.tests.unit.test_shell.ShellTestKeystoneV3.test_osprofiler"
+  ];
 
   pythonImportsCheck = [ "novaclient" ];
 

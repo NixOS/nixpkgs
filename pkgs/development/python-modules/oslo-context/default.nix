@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, debtcollector, oslotest, stestr, pbr }:
+{ lib, buildPythonPackage, fetchPypi, debtcollector, oslotest, stestrCheckHook, pbr }:
 
 buildPythonPackage rec {
   pname = "oslo.context";
@@ -22,12 +22,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 
   pythonImportsCheck = [ "oslo_context" ];
 

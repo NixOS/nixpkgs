@@ -13,7 +13,7 @@
 , pyyaml
 , requests
 , stevedore
-, stestr
+, stestrCheckHook
 , requests-mock
 , oslotest
 }:
@@ -44,14 +44,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     requests-mock
     oslotest
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 
   pythonImportsCheck = [ "ironicclient" ];
 

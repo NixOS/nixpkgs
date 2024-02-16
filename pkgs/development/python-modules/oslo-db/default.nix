@@ -13,7 +13,7 @@
 , setuptools
 , sqlalchemy
 , stevedore
-, stestr
+, stestrCheckHook
 , testresources
 , testscenarios
 }:
@@ -47,15 +47,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     oslo-context
     oslotest
-    stestr
+    stestrCheckHook
     psycopg2
     testresources
     testscenarios
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 
   pythonImportsCheck = [ "oslo_db" ];
 

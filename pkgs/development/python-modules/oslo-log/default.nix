@@ -11,7 +11,7 @@
 , pbr
 , pyinotify
 , python-dateutil
-, pytestCheckHook
+, stestrCheckHook
 , pythonOlder
 }:
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     eventlet
     oslotest
-    pytestCheckHook
+    stestrCheckHook
   ];
 
   disabledTests = [

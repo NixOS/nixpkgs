@@ -4,7 +4,7 @@
 , gnupg
 , pbr
 , sphinx
-, stestr
+, stestrCheckHook
 , testresources
 , testscenarios
 , virtualenv
@@ -33,18 +33,16 @@ buildPythonPackage {
     git
     gnupg
     sphinx
-    stestr
+    stestrCheckHook
     testresources
     testscenarios
     virtualenv
   ];
 
-  checkPhase = ''
-    stestr run -e <(echo "
-    pbr.tests.test_core.TestCore.test_console_script_develop
-    pbr.tests.test_core.TestCore.test_console_script_install
-    pbr.tests.test_wsgi.TestWsgiScripts.test_with_argument
-    pbr.tests.test_wsgi.TestWsgiScripts.test_wsgi_script_run
-    ")
-  '';
+  disabledTests = [
+    "pbr.tests.test_core.TestCore.test_console_script_develop"
+    "pbr.tests.test_core.TestCore.test_console_script_install"
+    "pbr.tests.test_wsgi.TestWsgiScripts.test_with_argument"
+    "pbr.tests.test_wsgi.TestWsgiScripts.test_wsgi_script_run"
+  ];
 }
