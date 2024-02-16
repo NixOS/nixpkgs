@@ -60,6 +60,6 @@ buildPythonPackage rec {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor version != versions.minor stdenv.cc.version || versionAtLeast version "6.0.0";
+    broken = versions.minor version != versions.minor stdenv.cc.version || versionAtLeast version "7.0.0";
   };
 }
