@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   };
 
  buildInputs = [ pkg-config zlib openssl freetype fontconfig libpthreadstubs gcc expat qtcharts ];
- 
  nativeBuildInputs = [ autoreconfHook libtool wrapQtAppsHook ];
 
  configPhase = ''
