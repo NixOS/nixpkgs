@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch2
 , appdirs
 , pytz
 , requests
@@ -23,6 +24,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-zUvwfBwJe8SaB96/Jz7Qeanz1mHmLVp2JW9qkR2dRnY=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Hardcode version (instead of using versioneer)
+      url = "https://github.com/EJEP/datapoint-python/commit/57e649b26ecf39fb11f507eb920b1d059d433721.patch";
+      hash = "sha256-trOPtwlaJDeA4Kau4fwZCxqJiw96+T/le461t09O8io=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
