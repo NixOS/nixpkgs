@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glog";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+    sha256 = "sha256-CDiEiTO8jwSL7StCoxUOvGKcFtSCOWRqKmuRw9Cdzjo=";
   };
 
   nativeBuildInputs = [ cmake ];
