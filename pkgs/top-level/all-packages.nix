@@ -24067,10 +24067,8 @@ with pkgs;
   nv-codec-headers-11 = callPackage ../development/libraries/nv-codec-headers/11_x.nix { };
   nv-codec-headers-12 = callPackage ../development/libraries/nv-codec-headers/12_x.nix { };
 
-  nvidia-container-toolkit = callPackage ../applications/virtualization/nvidia-container-toolkit { };
-
   nvidiaCtkPackages =
-    callPackage ../applications/virtualization/nvidia-container-toolkit/packages.nix
+    callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix
       { };
   inherit (nvidiaCtkPackages)
     nvidia-docker
