@@ -1,20 +1,21 @@
 { buildGoModule, buildNpmPackage, fetchFromGitHub, lib }:
 
 let
+  version = "2.28.0";
+  src = fetchFromGitHub {
+    owner = "filebrowser";
+    repo = "filebrowser";
+    rev = "v${version}";
+    hash = "sha256-ubfNGsVClMIq7u0DQVrR4Hdr8NNf76QXqLxnRVJHaCM=";
+  };
+
   frontend = buildNpmPackage rec {
     pname = "filebrowser-frontend";
-    version = "2.23.0";
-
-    src = fetchFromGitHub {
-      owner = "filebrowser";
-      repo = "filebrowser";
-      rev = "v${version}";
-      hash = "sha256-xhBIJcEtxDdMXSgQtLAV0UWzPtrvKEil0WV76K5ycBc=";
-    };
+    inherit version src;
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-acNIMKHc4q7eiFLPBtKZBNweEsrt+//0VR6dqwXHTvA=";
+    npmDepsHash = "sha256-h2Sqco7NHLnaMNgh9Ykggarv6cS0NrA6M9/2nv2RU28=";
 
     NODE_OPTIONS = "--openssl-legacy-provider";
 
@@ -30,16 +31,9 @@ let
 in
 buildGoModule rec {
   pname = "filebrowser";
-  version = "2.23.0";
+  inherit version src;
 
-  src = fetchFromGitHub {
-    owner = "filebrowser";
-    repo = "filebrowser";
-    rev = "v${version}";
-    hash = "sha256-xhBIJcEtxDdMXSgQtLAV0UWzPtrvKEil0WV76K5ycBc=";
-  };
-
-  vendorHash = "sha256-MR0ju2Nomb3j78Z+1YcJY+jPd40MZpuOTuQJM94AM8A=";
+  vendorHash = "sha256-pDQyJ0F6gCkJtUnaoSe+lWpgNbk/2GDGQ67S3G+VudE=";
 
   excludedPackages = [ "tools" ];
 
