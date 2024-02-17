@@ -457,6 +457,8 @@ Python 2 namespace packages may provide `__init__.py` that collide. In that case
 The following are setup hooks specifically for Python packages. Most of these
 are used in [`buildPythonPackage`](#buildpythonpackage-function).
 
+- `editableInstallHook` to use `pip install -e .` to install the current package
+  in development/editable mode.
 - `eggUnpackhook` to move an egg to the correct folder so it can be installed
   with the `eggInstallHook`
 - `eggBuildHook` to skip building for eggs.
@@ -486,11 +488,9 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 
 ### Development mode {#development-mode}
 
-Development or editable mode is supported. To develop Python packages
-[`buildPythonPackage`](#buildpythonpackage-function) has additional logic inside `shellPhase` to run `pip
-install -e . --prefix $TMPDIR/`for the package.
-
-Warning: `shellPhase` is executed only if `setup.py` exists.
+Development or editable mode is supported. To develop Python packages,
+`editableInstallHook` is required. This adds a `shellPhase` to run `pip
+install -e .` into a temporary prefix for the package.
 
 Given a `default.nix`:
 
@@ -499,7 +499,7 @@ with import <nixpkgs> {};
 
 python3Packages.buildPythonPackage {
   name = "myproject";
-  buildInputs = with python3Packages; [ pyramid ];
+  buildInputs = with python3Packages; [ editableInstallHook pyramid ];
 
   src = ./.;
 }
@@ -1444,23 +1444,26 @@ referencing it using `sphinxHook` from top-level.
 
 ### Develop local package {#develop-local-package}
 
-As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
-(`python setup.py develop`); instead of installing the package this command
-creates a special link to the project code. That way, you can run updated code
-without having to reinstall after each and every change you make. Development
-mode is also available. Let's see how you can use it.
+As a Python developer you're likely aware of
+[development mode](https://setuptools.pypa.io/en/latest/userguide/development_mode.html)
+(`pip install -e`). Instead of installing the package this command creates a
+special link to the project code. That way, you can run updated code without
+having to reinstall after each and every change you make. Development mode is
+also available in Nix. Let's see how you can use it.
 
 In the previous Nix expression the source was fetched from a url. We can also
 refer to a local source instead using `src = ./path/to/source/tree;`
 
-If we create a `shell.nix` file which calls [`buildPythonPackage`](#buildpythonpackage-function), and if `src`
-is a local source, and if the local source has a `setup.py`, then development
-mode is activated.
+If we create a `shell.nix` file which calls
+[`buildPythonPackage`](#buildpythonpackage-function) and if
+`editableInstallHook` is added, then development mode will be activated when
+`nix-shell` is run using that file.
 
 In the following example, we create a simple environment that has a Python 3.11
 version of our package in it, as well as its dependencies and other packages we
-like to have in the environment, all specified with [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
-Indeed, we can just add any package we like to have in our environment to
+like to have in the environment, all specified with
+[`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs). Indeed, we can
+just add any package we like to have in our environment to
 [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
 
 ```nix
@@ -1470,6 +1473,8 @@ with python311Packages;
 buildPythonPackage rec {
   name = "mypackage";
   src = ./path/to/package/source;
+  nativeBuildInputs = [ editableInstallHook ];
+
   propagatedBuildInputs = [
     pytest
     numpy
@@ -1479,7 +1484,8 @@ buildPythonPackage rec {
 ```
 
 It is important to note that due to how development mode is implemented on Nix
-it is not possible to have multiple packages simultaneously in development mode.
+it is not possible to have multiple packages simultaneously in development mode
+using this method.
 
 ### Organising your packages {#organising-your-packages}
 
