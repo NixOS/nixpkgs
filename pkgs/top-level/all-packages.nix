@@ -897,7 +897,9 @@ with pkgs;
 
   docker-slim = callPackage ../applications/virtualization/docker-slim { };
 
-  doc2go = callPackage ../development/tools/doc2go { };
+  doc2go = callPackage ../development/tools/doc2go {
+    buildGoModule = buildGo122Module;
+  };
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
@@ -2232,7 +2234,9 @@ with pkgs;
 
   commitlint = nodePackages."@commitlint/cli";
 
-  conform = callPackage ../applications/version-management/conform { };
+  conform = callPackage ../applications/version-management/conform {
+    buildGoModule = buildGo122Module;
+  };
 
   datalad = callPackage ../applications/version-management/datalad { };
 
@@ -15728,6 +15732,7 @@ with pkgs;
 
   flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
+  flutter319 = flutterPackages.v3_19;
   flutter316 = flutterPackages.v3_16;
   flutter313 = flutterPackages.v3_13;
 

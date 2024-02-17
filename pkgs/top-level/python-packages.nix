@@ -6347,6 +6347,8 @@ self: super: with self; {
 
   lexid = callPackage ../development/python-modules/lexid { };
 
+  lexilang = callPackage ../development/python-modules/lexilang { };
+
   lhapdf = toPythonModule (pkgs.lhapdf.override {
     inherit python;
   });
