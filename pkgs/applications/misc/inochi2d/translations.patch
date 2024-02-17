@@ -1,0 +1,35 @@
+diff --git a/source/creator/core/i18n.d b/source/creator/core/i18n.d
+index 38761dd..f276ca1 100644
+--- a/source/creator/core/i18n.d
++++ b/source/creator/core/i18n.d
+@@ -132,7 +132,7 @@ void markDups(TLEntry[] entries) {
+         // If prevEntry has same humanName as entry before prevEntry, or as this entry,
+         // disambiguate with the source folder
+         if (prevIsDup || entryIsDup) {
+-            prevEntry.humanName ~= " (" ~ prevEntry.path ~ ")";
++            prevEntry.humanName ~= " (" ~ prevEntry.code ~ ")";
+             prevEntry.humanNameC = prevEntry.humanName.toStringz;
+         }
+         prevIsDup = entryIsDup;
+@@ -140,7 +140,7 @@ void markDups(TLEntry[] entries) {
+     }
+ 
+     if (prevIsDup) {
+-        prevEntry.humanName ~= " (" ~ prevEntry.path ~ ")";
++        prevEntry.humanName ~= " (" ~ prevEntry.code ~ ")";
+         prevEntry.humanNameC = prevEntry.humanName.toStringz;
+     }
+ }
+diff --git a/source/creator/core/path.d b/source/creator/core/path.d
+index 850ba23..7579aee 100644
+--- a/source/creator/core/path.d
++++ b/source/creator/core/path.d
+@@ -151,8 +151,8 @@ string incGetAppLocalePath() {
+     Gets special directory for locales
+ */
+ string incGetAppLocalePathExtra() {
+-    
++    return "@i18n_dir@";
+     // AppImage locale dir is the root of the appimage
+     version(linux) {
+         auto here = environment.get("HERE");
