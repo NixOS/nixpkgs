@@ -138,7 +138,7 @@ rustPlatform.buildRustPackage {
   ];
 
   meta = with lib; {
-    description = "10x easier, 🚀 140x lower storage cost, 🚀 high performance,  🚀 petabyte scale - Elasticsearch/Splunk/Datadog alternative for 🚀 (logs, metrics, traces";
+    description = "A cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring.";
     homepage = "https://github.com/openobserve/openobserve";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
