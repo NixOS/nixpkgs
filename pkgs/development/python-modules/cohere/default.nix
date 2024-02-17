@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "4.37";
+  version = "4.47";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eIAh2dmSxsMdGYXZXMyyd8cmWILErNekmz5H2ne0vsg=";
+    hash = "sha256-1okhIHnBpUW9SXsUPP96pWMoMfps9Bv3rMk7Sm7/uDk=";
   };
 
   nativeBuildInputs = [
