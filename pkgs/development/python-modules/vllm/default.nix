@@ -133,7 +133,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
     homepage = "https://github.com/vllm-project/vllm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [ happysalada lach ];
     broken = !cudaSupport && !rocmSupport;
   };
 }
