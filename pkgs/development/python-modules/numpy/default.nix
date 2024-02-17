@@ -167,6 +167,9 @@ in buildPythonPackage rec {
     "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_big_arrays" # OOM on a 16G machine
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # can fail on virtualized machines confused over their cpu identity
+    "test_dispatcher"
   ];
 
   passthru = {
