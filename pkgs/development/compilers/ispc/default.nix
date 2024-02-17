@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
     "-DFILE_CHECK_EXECUTABLE=${llvmPackages.llvm}/bin/FileCheck"
     "-DLLVM_AS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-as"
     "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
-    "-DLLVM_DIS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-dis"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
