@@ -7,6 +7,7 @@
 , bzip3
 , lz4
 , pcre2
+, testers
 , xz
 , zlib
 , zstd
@@ -34,6 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Ultra fast grep with interactive query UI";
