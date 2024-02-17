@@ -1120,6 +1120,7 @@ in
       nix-store = mkIf cfg.mountHostNixStore {
         source = builtins.storeDir;
         target = "/nix/store";
+        securityModel = "none";
       };
       xchg = {
         source = ''"$TMPDIR"/xchg'';
