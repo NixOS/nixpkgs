@@ -65,12 +65,12 @@ final: prev:
 
   Coqtail = buildVimPlugin {
     pname = "Coqtail";
-    version = "2024-01-28";
+    version = "2024-02-17";
     src = fetchFromGitHub {
       owner = "whonore";
       repo = "Coqtail";
-      rev = "ede74fbc261e21fc9c3deb1f98238df5487fdf65";
-      sha256 = "0f4sf4n3vkiqbhf28wjir69ji60vnyaikh64mqmw8bknayr3nxbr";
+      rev = "e52c456d44e2e3c580428e54182a59d82009c3e2";
+      sha256 = "025l8y4i5a0zlvm1f0nqliqvqwn1cf2xas3ikiyf6cn749ar7pjw";
     };
     meta.homepage = "https://github.com/whonore/Coqtail/";
   };
