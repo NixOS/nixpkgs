@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.1.16";
+  version = "0.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+L5Rre6LHpSlc+yzdQpMLSvURLHd412apDes5zwzdgc=";
+    hash = "sha256-pbQkMSwISwK2+Ywev7avKBMvwB5dcZgX+kmeeMh+BLc=";
   };
 
   propagatedBuildInputs = [
