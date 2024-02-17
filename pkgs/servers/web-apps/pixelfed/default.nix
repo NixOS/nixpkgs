@@ -10,13 +10,13 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.11.11";
+  version = "0.11.12";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ytE1ZCKQvoigC8jKPfQ/17jYA0XYOzospq7wY18o2Nk=";
+    hash = "sha256-tHwNchnB5z21Q1I8qwKn2s5rfHFvMxRLAyPkUEhC6qQ=";
   };
 
   vendorHash = "sha256-nRCrmF1p+fZI+iyrM5I3bVCSwjQdn8BSW8Jj62lpn8E=";

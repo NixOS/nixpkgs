@@ -9560,6 +9560,8 @@ self: super: with self; {
 
   pynobo = callPackage ../development/python-modules/pynobo { };
 
+  pynose = callPackage ../development/python-modules/pynose { };
+
   pynuki = callPackage ../development/python-modules/pynuki { };
 
   pynut2 = callPackage ../development/python-modules/pynut2 { };
