@@ -12,7 +12,7 @@
 buildPythonApplication rec {
   pname = "zfs_replicate";
   version = "3.2.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
