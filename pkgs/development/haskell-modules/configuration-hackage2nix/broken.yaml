@@ -917,7 +917,6 @@ broken-packages:
   - consul-haskell # failure in job https://hydra.nixos.org/build/233195306 at 2023-09-02
   - Consumer # failure in job https://hydra.nixos.org/build/233227840 at 2023-09-02
   - containers-benchmark # failure in job https://hydra.nixos.org/build/233244707 at 2023-09-02
-  - containers-unicode-symbols # failure in job https://hydra.nixos.org/build/233206693 at 2023-09-02
   - containers-verified # failure in job https://hydra.nixos.org/build/233228855 at 2023-09-02
   - ContArrow # failure in job https://hydra.nixos.org/build/233215540 at 2023-09-02
   - ContextAlgebra # failure in job https://hydra.nixos.org/build/233197054 at 2023-09-02
