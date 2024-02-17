@@ -1,40 +1,33 @@
-{ yarn2nix-moretea
-, fetchFromGitHub
+{ mkYarnPackage
 , fetchYarnDeps
 , meta
+, version
+, src
 }:
 
-yarn2nix-moretea.mkYarnPackage rec {
+mkYarnPackage {
   pname = "listmonk-frontend";
-  version = "2.5.1";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "knadh";
-    repo = "listmonk";
-    rev = "v${version}";
-    sha256 = "sha256-gCnIblc83CmG1auvYYxqW/xBl6Oy1KHGkqSY/3yIm3I=";
-  };
-
+  src = "${src}/frontend";
   packageJSON = ./package.json;
-  yarnLock = "${src}/frontend/yarn.lock";
 
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
-    hash = "sha256-KKNk4lrM7unMFClkY6F3nqhKx5xfx87Ac+rug9sOwvI=";
+    yarnLock = "${src}/frontend/yarn.lock";
+    hash = "sha256-TdrglyRtb2Q8SFtoiCoDj/zBV2+7DwzIm/Fzlt0ZvSo=";
   };
 
-  # For Node.js v17+, this is necessary.
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  configurePhase = ''
+    ln -s $node_modules node_modules
+  '';
+
+  buildPhase = ''
+    yarn --offline build
+  '';
 
   installPhase = ''
-    runHook preInstall
-
-    cd deps/listmonk-frontend/frontend
-    npm run build
-
-    mv dist $out
-
-    runHook postInstall
+    mkdir $out
+    cp -R dist/* $out
   '';
 
   doDist = false;
