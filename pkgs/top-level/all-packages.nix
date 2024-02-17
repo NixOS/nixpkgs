@@ -17917,8 +17917,8 @@ with pkgs;
     ruby_3_2
     ruby_3_3;
 
-  ruby = ruby_3_1;
-  rubyPackages = rubyPackages_3_1;
+  ruby = ruby_3_2;
+  rubyPackages = rubyPackages_3_2;
 
   rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
