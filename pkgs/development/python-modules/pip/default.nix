@@ -41,7 +41,7 @@ buildPythonPackage rec {
     wheel
 
     # docs
-    (sphinx.override { sphinxcontrib-apidoc = null; }) # avoid pbr dependency pn 3.12, remove once the situtation around that is improved
+    sphinx
   ];
 
   outputs = [
