@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.8.2";
+  version = "0.10.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = pname;
-    rev = version;
-    hash = "sha256-sdoPjkZHN5wVCK9V6V+fkGvQvEQo2ABy2lqefEKfg6o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-21xycx1+84uY4gFr7N+ra98dpsEwxy9zeSl4QA66nUc=";
   };
 
   propagatedBuildInputs = [ botocore ];
