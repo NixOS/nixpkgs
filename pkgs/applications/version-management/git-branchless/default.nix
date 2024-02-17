@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
       libiconv
     ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (with stdenv; buildPlatform.canExecute hostPlatform) ''
     $out/bin/git-branchless install-man-pages $out/share/man
   '';
 
@@ -63,6 +63,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       nh2
       hmenke
+      bryango
     ];
   };
 }
