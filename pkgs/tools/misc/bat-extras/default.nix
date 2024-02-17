@@ -94,7 +94,7 @@ let
     name: # the name of the script
     dependencies: # the tools we need to prefix onto PATH
     stdenv.mkDerivation {
-      pname = "${core.pname}-${name}";
+      pname = name;
       inherit (core) version;
 
       src = core;
@@ -133,7 +133,9 @@ let
       # We already patched
       dontPatchShebangs = true;
 
-      inherit (core) meta;
+      meta = core.meta // {
+        mainProgram = name;
+      };
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;

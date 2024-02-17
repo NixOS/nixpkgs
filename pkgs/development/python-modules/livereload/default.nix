@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
 , django
+, pytestCheckHook
 , tornado
 , six
 }:
@@ -23,13 +23,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tornado six ];
 
-  nativeCheckInputs = [ nose ];
-  # TODO: retry running all tests after v2.6.1
-  checkPhase = "NOSE_EXCLUDE=test_watch_multiple_dirs nosetests -s";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    "test_watch_multiple_dirs"
+  ];
 
   meta = {
     description = "Runs a local server that reloads as you develop";
     homepage = "https://github.com/lepture/python-livereload";
     license = lib.licenses.bsd3;
+    maintainers = with lib; [ ];
   };
 }
