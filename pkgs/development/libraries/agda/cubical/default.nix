@@ -26,6 +26,6 @@ mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice ryanorendorff ncfavier ];
+    maintainers = with maintainers; [ alexarice ryanorendorff ncfavier phijor ];
   };
 }
