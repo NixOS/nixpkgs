@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ numkem mikaelfangel ];
     license = licenses.bsd3;
     platforms = platforms.all;
+    mainProgram = "ug";
   };
 })
