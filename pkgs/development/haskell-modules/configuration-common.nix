@@ -318,6 +318,9 @@ self: super: {
     '';
   } super.containers-unicode-symbols;
 
+  # Test file not included on hackage
+  numerals-base = dontCheck (doJailbreak super.numerals-base);
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
