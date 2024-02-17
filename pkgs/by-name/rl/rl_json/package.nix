@@ -5,14 +5,14 @@
 , tcl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rl_json";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "RubyLane";
     repo = "rl_json";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-FkOsdOHPE75bSkKw3cdaech6jAv0f/RJ9tgRVzPSAdA=";
     fetchSubmodules = true;
   };
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     # From version 0.15.1: 'endian.h' file not found
     broken = stdenv.isDarwin;
   };
-}
+})
