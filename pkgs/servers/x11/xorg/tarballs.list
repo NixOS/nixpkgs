@@ -8,7 +8,7 @@ mirror://xorg/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz
 mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.10.tar.xz
 mirror://xorg/individual/xcb/xcb-util-wm-0.4.2.tar.xz
 mirror://xorg/individual/app/appres-1.0.6.tar.xz
-mirror://xorg/individual/app/bitmap-1.1.0.tar.xz
+mirror://xorg/individual/app/bitmap-1.1.1.tar.xz
 mirror://xorg/individual/app/editres-1.0.8.tar.xz
 mirror://xorg/individual/app/fonttosfnt-1.2.3.tar.xz
 mirror://xorg/individual/app/iceauth-1.0.9.tar.xz
@@ -48,7 +48,7 @@ mirror://xorg/individual/app/xinput-1.6.4.tar.xz
 mirror://xorg/individual/app/xkbcomp-1.4.7.tar.xz
 mirror://xorg/individual/app/xkbevd-1.1.5.tar.xz
 mirror://xorg/individual/app/xkbprint-1.0.6.tar.xz
-mirror://xorg/individual/app/xkbutils-1.0.5.tar.xz
+mirror://xorg/individual/app/xkbutils-1.0.6.tar.xz
 mirror://xorg/individual/app/xkill-1.0.6.tar.xz
 mirror://xorg/individual/app/xload-1.1.4.tar.xz
 mirror://xorg/individual/app/xlsatoms-1.1.4.tar.xz
@@ -57,9 +57,9 @@ mirror://xorg/individual/app/xlsfonts-1.0.7.tar.xz
 mirror://xorg/individual/app/xmag-1.0.7.tar.xz
 mirror://xorg/individual/app/xmessage-1.0.6.tar.xz
 mirror://xorg/individual/app/xmodmap-1.0.11.tar.xz
-mirror://xorg/individual/app/xmore-1.0.3.tar.bz2
+mirror://xorg/individual/app/xmore-1.0.4.tar.xz
 mirror://xorg/individual/app/xpr-1.1.0.tar.xz
-mirror://xorg/individual/app/xprop-1.2.6.tar.xz
+mirror://xorg/individual/app/xprop-1.2.7.tar.xz
 mirror://xorg/individual/app/xrandr-1.5.2.tar.xz
 mirror://xorg/individual/app/xrdb-1.2.2.tar.xz
 mirror://xorg/individual/app/xrefresh-1.0.7.tar.xz
@@ -171,7 +171,7 @@ mirror://xorg/individual/lib/libdmx-1.1.5.tar.xz
 mirror://xorg/individual/lib/libfontenc-1.1.7.tar.xz
 mirror://xorg/individual/lib/libFS-1.0.9.tar.xz
 mirror://xorg/individual/lib/libICE-1.1.1.tar.xz
-mirror://xorg/individual/lib/libpciaccess-0.17.tar.xz
+mirror://xorg/individual/lib/libpciaccess-0.18.tar.xz
 mirror://xorg/individual/lib/libSM-1.2.4.tar.xz
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
 mirror://xorg/individual/lib/libX11-1.8.7.tar.xz
@@ -215,7 +215,7 @@ mirror://xorg/individual/util/bdftopcf-1.1.1.tar.xz
 mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2
 mirror://xorg/individual/util/imake-1.0.10.tar.xz
 mirror://xorg/individual/util/lndir-1.0.4.tar.xz
-mirror://xorg/individual/util/makedepend-1.0.8.tar.xz
+mirror://xorg/individual/util/makedepend-1.0.9.tar.xz
 mirror://xorg/individual/util/util-macros-1.20.0.tar.xz
 mirror://xorg/individual/util/xorg-cf-files-1.0.8.tar.xz
 mirror://xorg/individual/xserver/xorg-server-21.1.11.tar.xz

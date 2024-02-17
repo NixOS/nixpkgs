@@ -48,11 +48,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "bitmap";
-    version = "1.1.0";
+    version = "1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/bitmap-1.1.0.tar.xz";
-      sha256 = "141nhfmrg14axvix2mc34vfs07gmki3k14qq1vqy7v7f5yf8g1lf";
+      url = "mirror://xorg/individual/app/bitmap-1.1.1.tar.xz";
+      sha256 = "1ri66kxa9m6s3xw25mz85k34qhjyksa4kbs4jfrri0g47yv2xm33";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1756,19 +1756,18 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, hwdata, zlib, testers }: stdenv.mkDerivation (finalAttrs: {
+  libpciaccess = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libpciaccess";
-    version = "0.17";
+    version = "0.18";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libpciaccess-0.17.tar.xz";
-      sha256 = "0wsvv5d05maqbidvnavka7n0fnql55m4jix5wwlk14blr6ikna3l";
+      url = "mirror://xorg/individual/lib/libpciaccess-0.18.tar.xz";
+      sha256 = "1ab2qbksf15jrpzd6x9ncri64d2bnhlw7aajdws58lj9gljv0qal";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ hwdata zlib ];
-    configureFlags = [ "--with-pciids-path=${hwdata}/share/hwdata" ];
+    buildInputs = [ ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ "pciaccess" ];
@@ -1937,18 +1936,18 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  makedepend = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
+  makedepend = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "makedepend";
-    version = "1.0.8";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/makedepend-1.0.8.tar.xz";
-      sha256 = "0nxs5ibrghym3msbnh0b8i3yd3xgqandmrkc500jm6qq4n06zcmz";
+      url = "mirror://xorg/individual/util/makedepend-1.0.9.tar.xz";
+      sha256 = "1m1dg32z22fw9shg0wsxw7dvdcnfm16gq9qxpkfxixpzb6vdxl4j";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto ];
+    buildInputs = [ ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -3879,11 +3878,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbutils = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXaw, libXt, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xkbutils";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbutils-1.0.5.tar.xz";
-      sha256 = "197f4pgw3jdnlp7sj37f3xf15ayad20sl7vvg2rvx0j5qplsi97n";
+      url = "mirror://xorg/individual/app/xkbutils-1.0.6.tar.xz";
+      sha256 = "0pp2bsksblvvw0fx667k2bl5sm0baj7pp2cjvq0vmk093vpbp8ii";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -4077,18 +4076,18 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook, testers }: stdenv.mkDerivation (finalAttrs: {
+  xmore = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, xorgproto, libXt, wrapWithXFileSearchPathHook, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xmore";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xmore-1.0.3.tar.bz2";
-      sha256 = "06r514p30v87vx00ddlck9mwazaqk9bx08ip866p1mw2a46iwjk4";
+      url = "mirror://xorg/individual/app/xmore-1.0.4.tar.xz";
+      sha256 = "16havfffngvx5kc9lam8rhsdfabsj1rsv4g49z346knyq7dn1dby";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
-    buildInputs = [ libXaw libXt ];
+    buildInputs = [ libXaw xorgproto libXt ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -4219,11 +4218,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xprop = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xprop";
-    version = "1.2.6";
+    version = "1.2.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xprop-1.2.6.tar.xz";
-      sha256 = "0vjqnn42gscw1z2wdj24kdwjwvd7mw58pj0nm9203k1fn4jqa2sq";
+      url = "mirror://xorg/individual/app/xprop-1.2.7.tar.xz";
+      sha256 = "0pw2iv7dcy2xq5fh3427nx88pjj9d9rry3930qj1c6mricaf6dj4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
