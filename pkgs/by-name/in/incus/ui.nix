@@ -9,8 +9,8 @@ lxd.ui.overrideAttrs(prev: rec {
   zabbly = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus";
-    rev = "141fb0736cc12083b086c389c68c434f86d5749e";
-    hash = "sha256-6o1LhqGTpuZNdSVbT8wAVcN5A3CwiXcwVOz0AqDxCPw=";
+    rev = "8bbe23f42beedd845bd95069c06f4d0c85e450b6";
+    hash = "sha256-X0I8vrhvg5mLGAY8oEU/nr2pvDJ8ZqLUSY9WBqwmolE=";
   };
 
   nativeBuildInputs = prev.nativeBuildInputs ++ [

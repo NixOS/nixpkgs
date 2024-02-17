@@ -16,7 +16,14 @@ in
   meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin ];
 
   nodes = {
-    database = { config, ... }: {
+    databases = { config, ... }: {
+      environment = {
+        etc = {
+          "redis/password-redis-db".text = ''
+            ogjhJL8ynrP7MazjYOF6
+          '';
+        };
+      };
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
@@ -24,7 +31,17 @@ in
           ];
         };
         extraHosts = hosts;
-        firewall.allowedTCPPorts = [ config.services.postgresql.port ];
+        firewall.allowedTCPPorts = [
+          config.services.redis.servers.mastodon.port
+          config.services.postgresql.port
+        ];
+      };
+
+      services.redis.servers.mastodon = {
+        enable = true;
+        bind = "0.0.0.0";
+        port = 31637;
+        requirePassFile = "/etc/redis/password-redis-db";
       };
 
       services.postgresql = {
@@ -83,6 +100,9 @@ in
 
       environment = {
         etc = {
+          "mastodon/password-redis-db".text = ''
+            ogjhJL8ynrP7MazjYOF6
+          '';
           "mastodon/password-posgressql-db".text = ''
             SoDTZcISc3f1M1LJsRLT
           '';
@@ -108,6 +128,12 @@ in
         localDomain = "mastodon.local";
         enableUnixSocket = false;
         streamingProcesses = 2;
+        redis = {
+          createLocally = false;
+          host = "192.168.2.102";
+          port = 31637;
+          passwordFile = "/etc/mastodon/password-redis-db";
+        };
         database = {
           createLocally = false;
           host = "192.168.2.102";
@@ -151,12 +177,14 @@ in
     extraInit = ''
       nginx.wait_for_unit("nginx.service")
       nginx.wait_for_open_port(443)
-      database.wait_for_unit("postgresql.service")
-      database.wait_for_open_port(5432)
+      databases.wait_for_unit("redis-mastodon.service")
+      databases.wait_for_unit("postgresql.service")
+      databases.wait_for_open_port(31637)
+      databases.wait_for_open_port(5432)
     '';
     extraShutdown = ''
       nginx.shutdown()
-      database.shutdown()
+      databases.shutdown()
     '';
   };
 })
