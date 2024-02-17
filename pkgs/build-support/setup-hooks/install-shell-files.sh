@@ -219,6 +219,11 @@ installShellCompletion() {
         else
             install -Dm644 -T "$arg" "$outPath"
         fi || return
+
+        if [ ! -s "$outPath" ]; then
+            echo "installShellCompletion: error: installed shell completion file \`$outPath' does not exist or has zero size" >&2
+            return 1
+        fi
         # Clear the per-path flags
         name=
     done
