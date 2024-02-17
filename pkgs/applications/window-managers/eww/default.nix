@@ -5,7 +5,6 @@
 , wrapGAppsHook
 , gtk3
 , librsvg
-, withWayland ? false
 , gtk-layer-shell
 , stdenv
 }:
@@ -25,12 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 librsvg ] ++ lib.optional withWayland gtk-layer-shell;
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    (if withWayland then "wayland" else "x11")
-  ];
+  buildInputs = [ gtk3 librsvg gtk-layer-shell ];
 
   cargoBuildFlags = [ "--bin" "eww" ];
 
