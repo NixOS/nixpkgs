@@ -6,4 +6,8 @@ in buildGraylog {
   sha256 = "sha256-TGJm2PGoXaLhlzyfSWKScEJxEGObTVttpEEaczsXHiA=";
   maintainers = [ lib.maintainers.f2k1de ];
   license = lib.licenses.sspl;
+  knownVulnerabilities = [
+    "CVE-2024-24823"
+    "CVE-2024-24824"
+  ];
 }

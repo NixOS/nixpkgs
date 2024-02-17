@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "10.2.2";
+  version = "10.2.4";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" "modowners" ];
 
@@ -10,19 +10,19 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-MlrGBa/ZQwfETr5vt7CyJxtvZC021aeWsgKtfuc8wAc=";
+    hash = "sha256-pD0u36ibXIQA729p86ieQ/PIRru3yNKK9jOF5g1qieY=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    hash = "sha256-Mt0si5TxkXGQp5vmVD37fl3WKXuuIcJNtiTcEYCroZ8=";
+    hash = "sha256-ZpaIbk6UXbKNaWVDypaY0dbry22fQFLOEBonaIMISvc=";
   };
 
-  vendorHash = "sha256-z2eDbnezG9TWrqLPxAXHBgdtXvaEf8ccUQUe9MnhjtQ=";
+  vendorHash = "sha256-rQOnuh6t+cUqyAAnUhGgxMaW88pawnauAGQd6w0T57Q=";
 
   nativeBuildInputs = [ wire ];
 
-  preBuild = ''
+  postConfigure = ''
     # Generate DI code that's required to compile the package.
     # From https://github.com/grafana/grafana/blob/v8.2.3/Makefile#L33-L35
     wire gen -tags oss ./pkg/server
