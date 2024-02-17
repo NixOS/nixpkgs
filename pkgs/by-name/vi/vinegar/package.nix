@@ -28,11 +28,6 @@ let
           url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/e24cb9dfa996bcfeaa46504c0375660fe271148d/patches/wine/mouselock.patch";
           hash = "sha256-0AGA4AQbxTL5BGVbm072moav7xVA3zpotYqM8pcEDa4=";
         })
-        (fetchpatch {
-          name = "vinegar-wine-loader-prefer-winedllpath.patch";
-          url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/e24cb9dfa996bcfeaa46504c0375660fe271148d/patches/wine/loader-prefer-winedllpath.patch";
-          hash = "sha256-KscGMMSmjnQEBjNSHECw9VCX2H6z7fKxrqxEfElGwJQ=";
-        })
       ];
   });
 in
