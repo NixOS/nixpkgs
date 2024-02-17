@@ -640,8 +640,8 @@
         "src": {
             "owner": "jpd002",
             "repo": "Play-",
-            "rev": "691a893400ef3ca515cb39c7552a8f04bb2d55fa",
-            "hash": "sha256-42d++0R+LcFuFT9T1+9/0eot+IdBDbqoA/axeHTWZfk=",
+            "rev": "2462fe76ebf86fe1dd4da8d79b99872f14e987bf",
+            "hash": "sha256-08srcJwhvOw6AER36+ar2SXjKR1jO568lRl63B7zRio=",
             "fetchSubmodules": true
         },
         "version": "unstable-2024-02-14"
