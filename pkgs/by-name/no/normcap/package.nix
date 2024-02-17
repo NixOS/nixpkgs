@@ -25,7 +25,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.5.2";
+  version = "0.5.4";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -34,7 +34,7 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WkC9sdi6fKEHnf2j+p8KjO+MNbHWDYn5HnjeYBZLUj4=";
+    hash = "sha256-bYja05U/JBwSij1J2LxN+c5Syrb4qzWSZY5+HNmC9Zo=";
   };
 
   postPatch = ''
@@ -42,6 +42,14 @@ ps.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace "addopts = [" "addopts_ = ["
   '';
+
+  pythonRemoveDeps = [
+    "pyside6-essentials"
+  ];
+
+  pythonRelaxDeps = [
+    "shiboken6"
+  ];
 
   nativeBuildInputs = [
     ps.pythonRelaxDepsHook
@@ -51,6 +59,7 @@ ps.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     ps.pyside6
+    ps.jeepney
   ];
 
   preFixup = ''
