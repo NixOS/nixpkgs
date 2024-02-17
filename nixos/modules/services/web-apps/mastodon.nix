@@ -90,6 +90,11 @@ let
     SystemCallArchitectures = "native";
   };
 
+  # Services that all Mastodon units After= and Requires= on
+  commonServices = lib.optional redisActuallyCreateLocally "redis-mastodon.service"
+    ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+    ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
       lib.optional (value != null) ''${name}="${toString value}"''
@@ -117,14 +122,8 @@ let
       jobClassLabel = toString ([""] ++ processCfg.jobClasses);
       threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
     in {
-      after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
+      requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
       description = "Mastodon sidekiq${jobClassLabel}";
       wantedBy = [ "mastodon.target" ];
       environment = env // {
@@ -149,14 +148,8 @@ let
       (map (i: {
         name = "mastodon-streaming-${toString i}";
         value = {
-          after = [ "network.target" "mastodon-init-dirs.service" ]
-            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-            ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-            ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-          requires = [ "mastodon-init-dirs.service" ]
-            ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-            ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-            ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+          after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
+          requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
           wantedBy = [ "mastodon.target" "mastodon-streaming.target" ];
           description = "Mastodon streaming ${toString i}";
           environment = env // { SOCKET = "/run/mastodon-streaming/streaming-${toString i}.socket"; };
@@ -803,14 +796,8 @@ in {
     };
 
     systemd.services.mastodon-web = {
-      after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional redisActuallyCreateLocally "redis-mastodon.service"
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      after = [ "network.target" "mastodon-init-dirs.service" ] ++ commonServices;
+      requires = [ "mastodon-init-dirs.service" ] ++ commonServices;
       wantedBy = [ "mastodon.target" ];
       description = "Mastodon web";
       environment = env // (if cfg.enableUnixSocket
