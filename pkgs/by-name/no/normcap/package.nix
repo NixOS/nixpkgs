@@ -135,5 +135,6 @@ ps.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk pbsds ];
     mainProgram = "normcap";
+    broken = stdenv.isDarwin;
   };
 }
