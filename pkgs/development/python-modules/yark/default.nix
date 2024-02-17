@@ -25,7 +25,9 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
+    "flask"
     "requests"
+    "yt-dlp"
   ];
 
   nativeBuildInputs = [

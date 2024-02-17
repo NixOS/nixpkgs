@@ -43,5 +43,6 @@ buildGoModule rec {
     homepage = "https://github.com/Checkmarx/kics";
     license = licenses.asl20;
     maintainers = with maintainers; [ patryk4815 ];
+    mainProgram = "kics";
   };
 }

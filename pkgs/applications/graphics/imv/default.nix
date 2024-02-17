@@ -16,7 +16,8 @@
 , libxkbcommon
 , libGLU
 , wayland
-, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
+# "libnsgif" is disabled until https://todo.sr.ht/~exec64/imv/55 is solved
+, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libheif" ]
 , freeimage
 , libtiff
 , libjpeg_turbo

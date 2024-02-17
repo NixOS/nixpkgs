@@ -1,8 +1,9 @@
 { lib
 , symlinkJoin
+, tectonic
 , tectonic-unwrapped
 , biber-for-tectonic
-, makeWrapper
+, makeBinaryWrapper
 , callPackage
 }:
 
@@ -10,35 +11,32 @@ symlinkJoin {
   name = "${tectonic-unwrapped.pname}-wrapped-${tectonic-unwrapped.version}";
   paths = [ tectonic-unwrapped ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   passthru = {
     unwrapped = tectonic-unwrapped;
     biber = biber-for-tectonic;
     tests = callPackage ./tests.nix { };
+
+    # The version locked tectonic web bundle, redirected from:
+    #   https://relay.fullyjustified.net/default_bundle_v33.tar
+    # To check for updates, see:
+    #   https://github.com/tectonic-typesetting/tectonic/blob/master/crates/bundles/src/lib.rs
+    # ... and look up `get_fallback_bundle_url`.
+    bundleUrl = "https://data1.fullyjustified.net/tlextras-2022.0r0.tar";
   };
 
   # Replace the unwrapped tectonic with the one wrapping it with biber
   postBuild = ''
     rm $out/bin/{tectonic,nextonic}
   ''
-    # Ideally, we would have liked to also pin the version of the online TeX
-    # bundle that Tectonic's developer distribute, so that the `biber` version
-    # and the `biblatex` version distributed from there are compatible.
-    # However, that is not currently possible, due to lack of upstream support
-    # for specifying this in runtime, there were 2 suggestions sent upstream
-    # that suggested a way of improving the situation:
+    # Pin the version of the online TeX bundle that Tectonic's developer
+    # distribute, so that the `biber` version and the `biblatex` version
+    # distributed from there are compatible.
     #
-    # - https://github.com/tectonic-typesetting/tectonic/pull/1132
-    # - https://github.com/tectonic-typesetting/tectonic/pull/1131
-    #
-    # The 1st suggestion seems more promising as it'd allow us to simply use
-    # makeWrapper's --add-flags option. However, the PR linked above is not
-    # complete, and as of currently, upstream hasn't even reviewed it, or
-    # commented on the idea.
-    #
-    # Note also that upstream has announced that they will put less time and
-    # energy for the project:
+    # Upstream is updating it's online TeX bundle slower then
+    # https://github.com/plk/biber. That's why we match here the `bundleURL`
+    # version with that of `biber-for-tectonic`. See also upstream discussion:
     #
     # https://github.com/tectonic-typesetting/tectonic/discussions/1122
     #
@@ -47,7 +45,8 @@ symlinkJoin {
     # won't require a higher version of biber.
   + ''
     makeWrapper ${lib.getBin tectonic-unwrapped}/bin/tectonic $out/bin/tectonic \
-      --prefix PATH : "${lib.getBin biber-for-tectonic}/bin"
+      --prefix PATH : "${lib.getBin biber-for-tectonic}/bin" \
+      --add-flags "--web-bundle ${tectonic.passthru.bundleUrl}"
     ln -s $out/bin/tectonic $out/bin/nextonic
   '';
 

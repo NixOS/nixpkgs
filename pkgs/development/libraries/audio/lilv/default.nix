@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lilv";
-  version = "0.24.22";
+  version = "0.24.24";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-dvlJ0OWfyDNjQJtexeFcEEb7fdZYnTwbkgzsH9Kfn/M=";
+    hash = "sha256-a7a+n4hQQXbQZC8S3oCbK54txVYhporbjH7bma76u08=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];

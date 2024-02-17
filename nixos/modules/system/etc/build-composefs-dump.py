@@ -58,7 +58,7 @@ class ComposefsPath:
     ):
         if path is None:
             path = attrs["target"]
-        self.path = "/" + path
+        self.path = path
         self.size = size
         self.filetype = filetype
         self.mode = mode
@@ -83,8 +83,12 @@ class ComposefsPath:
         return " ".join(line_list)
 
 
-def eprint(*args, **kwargs) -> None:
-    print(args, **kwargs, file=sys.stderr)
+def eprint(*args: Any, **kwargs: Any) -> None:
+    print(*args, **kwargs, file=sys.stderr)
+
+
+def normalize_path(path: str) -> str:
+    return str("/" + os.path.normpath(path).lstrip("/"))
 
 
 def leading_directories(path: str) -> list[str]:
@@ -145,6 +149,10 @@ def main() -> None:
 
     paths: dict[str, ComposefsPath] = {}
     for attrs in config:
+        # Normalize the target path to work around issues in how targets are
+        # declared in `environment.etc`.
+        attrs["target"] = normalize_path(attrs["target"])
+
         target = attrs["target"]
         source = attrs["source"]
         mode = attrs["mode"]

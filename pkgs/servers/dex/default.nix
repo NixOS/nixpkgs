@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, testers, dex-oidc }:
 
 buildGoModule rec {
   pname = "dex";
@@ -18,7 +18,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-w" "-s" "-X github.com/dexidp/dex/version.Version=${src.rev}"
+    "-w" "-s" "-X main.version=${src.rev}"
   ];
 
   postInstall = ''
@@ -26,7 +26,14 @@ buildGoModule rec {
     cp -r $src/web $out/share/web
   '';
 
-  passthru.tests = { inherit (nixosTests) dex-oidc; };
+  passthru.tests = {
+    inherit (nixosTests) dex-oidc;
+    version = testers.testVersion {
+      package = dex-oidc;
+      command = "dex version";
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";

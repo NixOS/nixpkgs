@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication {
   ];
 
   installPhase = ''
-    libdir="$out/lib/${python3Packages.python.libPrefix}/site-packages/arubaotp-seed-extractor"
+    libdir="$out/${python3Packages.python.sitePackages}/arubaotp-seed-extractor"
     mkdir -p "$libdir"
     cp scripts/* "$libdir"
     chmod +x "$libdir/main.py"

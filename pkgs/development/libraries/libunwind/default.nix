@@ -45,18 +45,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ orivej ];
     # https://github.com/libunwind/libunwind#libunwind
     platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd13" "i686-linux" "loongarch64-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "s390x-linux" "x86_64-freebsd13" "x86_64-linux" "x86_64-solaris" ];
-    # libunwind relies on getcontext/setcontext,
-    # and only has a musl implementation for some platforms
-    # https://github.com/libunwind/libunwind/issues/33
-    # https://github.com/libunwind/libunwind/issues/69
-    badPlatforms = [ {
-      isAarch64 = false;
-      isRiscV64 = false;
-      isS390x = false;
-      isx86_64 = false;
-      isMusl = true;
-      parsed = {};
-    } ];
     license = licenses.mit;
   };
 }

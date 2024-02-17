@@ -72,7 +72,8 @@ with python3Packages; buildPythonApplication rec {
     uvicorn
     wsproto
     zeroconf
-
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    chardet
   ];
 
   preCheck = ''

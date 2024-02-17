@@ -68,5 +68,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jpochyla/psst";
     license = licenses.mit;
     maintainers = with maintainers; [ vbrandl peterhoeg ];
+    mainProgram = "psst-gui";
   };
 }

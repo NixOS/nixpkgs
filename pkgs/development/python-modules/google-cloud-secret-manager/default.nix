@@ -8,19 +8,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.17.0";
-  format = "setuptools";
+  version = "2.18.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-glTilgwGqNyRrqw8iUr7oIk6Z0WC8ODs/CL4lOYXPC8=";
+    hash = "sha256-MQVV88jLl39KRtRFTsosg/7WoJ88SzW4T2+h+P71UCQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core

@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/tmccombs/hcl2json";
     license = licenses.asl20;
     maintainers = with maintainers; [ jonringer ];
+    mainProgram = "hcl2json";
   };
 }

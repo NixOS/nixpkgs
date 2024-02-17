@@ -134,10 +134,6 @@ qtModule {
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
-
-    # Cherry-pick libxml 2.12 build fix
-    # FIXME: remove for 6.7
-    ../patches/qtwebengine-libxml-2.12.patch
   ];
 
   postPatch = ''
@@ -204,7 +200,7 @@ qtModule {
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
   ];
 
   propagatedBuildInputs = [

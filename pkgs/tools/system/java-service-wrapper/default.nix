@@ -58,5 +58,9 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = [ maintainers.suhr ];
     mainProgram = "wrapper";
+    # Broken for Musl at 2024-01-17. Errors as:
+    # logger.c:81:12: fatal error: gnu/libc-version.h: No such file or directory
+    # Tracking issue: https://github.com/NixOS/nixpkgs/issues/281557
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

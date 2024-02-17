@@ -71,7 +71,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/NickvisionApps/Parabolic";
     license = licenses.mit;
     maintainers = with maintainers; [ ewuuwe ];
-    mainProgram = "parabolic";
+    mainProgram = "NickvisionTubeConverter.GNOME";
     platforms = platforms.linux;
   };
 }

@@ -70,6 +70,7 @@ let
     "pve"
     "py-air-control"
     "redis"
+    "restic"
     "rspamd"
     "rtl_433"
     "sabnzbd"

@@ -74,6 +74,15 @@ in rec {
       '';
     };
 
+    upheldBy = mkOption {
+      default = [];
+      type = types.listOf unitNameType;
+      description = lib.mdDoc ''
+        Keep this unit running as long as the listed units are running. This is a continuously
+        enforced version of wantedBy.
+      '';
+    };
+
     wantedBy = mkOption {
       default = [];
       type = types.listOf unitNameType;
@@ -144,6 +153,14 @@ in rec {
         type = types.listOf unitNameType;
         description = lib.mdDoc ''
           Start the specified units when this unit is started.
+        '';
+      };
+
+      upholds = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = lib.mdDoc ''
+          Keeps the specified running while this unit is running. A continuous version of `wants`.
         '';
       };
 

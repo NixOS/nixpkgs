@@ -343,6 +343,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
+
+    zstd = callPackage ../development/php-packages/zstd { };
   } // lib.optionalAttrs config.allowAliases {
     php-spx = throw "php-spx is deprecated, use spx instead";
   } // (
@@ -370,7 +372,8 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--enable-dom"
           ];
-          patches = lib.optionals (lib.versionOlder php.version "8.2.14") [
+          # Add a PHP lower version bound constraint to avoid applying the patch on older PHP versions.
+          patches = lib.optionals (lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.1") [
             # Fix tests with libxml 2.12
             # Part of 8.3.1RC1+, 8.2.14RC1+
             (fetchpatch {

@@ -68,16 +68,17 @@
 , libpwquality
 , qrencode
 
-  # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
+  # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to
+  # be available during build time.
   # Only libbpf should be a runtime dependency.
   # Note: llvmPackages is explicitly taken from buildPackages instead of relying
   # on splicing. Splicing will evaluate the adjacent (pkgsHostTarget) llvmPackages
   # which is sometimes problematic: llvmPackages.clang looks at targetPackages.stdenv.cc
-  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we explicitly
-  # take buildPackages.llvmPackages, this is no problem because
-  # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to us. Working
-  # around this is important, because systemd is in the dependency closure of
-  # GHC via emscripten and jdk.
+  # which, in the unfortunate case of pkgsCross.ghcjs, `throw`s. If we
+  # explicitly take buildPackages.llvmPackages, this is no problem because
+  # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to
+  # us. Working around this is important, because systemd is in the dependency
+  # closure of GHC via emscripten and jdk.
 , bpftools
 , libbpf
 
@@ -93,14 +94,16 @@
     && !stdenv.hostPlatform.isMusl
     # "Unknown 64-bit data model"
     && !stdenv.hostPlatform.isRiscV32
-, withCompression ? true  # adds bzip2, lz4, xz and zstd
+  # adds bzip2, lz4, xz and zstd
+, withCompression ? true
 , withCoredump ? true
 , withCryptsetup ? true
 , withRepart ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
-, withFirstboot ? false # conflicts with the NixOS /etc management
+  # conflicts with the NixOS /etc management
+, withFirstboot ? false
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
@@ -108,8 +111,10 @@
 , withIptables ? true
 , withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
-    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
-    && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # assumes hard floats
+    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6")
+    # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    && !stdenv.hostPlatform.isMips64
     # can't find gnu/stubs-32.h
     && (stdenv.hostPlatform.isPower64 -> stdenv.hostPlatform.isBigEndian)
     # https://reviews.llvm.org/D43106#1019077
@@ -139,7 +144,8 @@
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
-, withUkify ? false  # adds python to closure which is too much by default
+  # adds python to closure which is too much by default
+, withUkify ? false
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
 , withVmspawn ? true
@@ -148,7 +154,7 @@
   # build only libudev and libsystemd
 , buildLibsOnly ? false
 
-  # name argument
+  # yes, pname is an argument here
 , pname ? "systemd"
 
 , libxslt
@@ -171,7 +177,8 @@ let
   wantGcrypt = withResolved || withImportd;
   version = "255.2";
 
-  # Bump this variable on every (major) version change. See below (in the meson options list) for why.
+  # Use the command below to update `releaseTimestamp` on every (major) version
+  # change. More details in the commentary at mesonFlags.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
@@ -189,11 +196,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8SfJY/pcH4yrDeJi0GfIUpetTbpMwyswvSu+RSfgqfY=";
   };
 
-  # On major changes, or when otherwise required, you *must* reformat the patches,
-  # `git am path/to/00*.patch` them into a systemd worktree, rebase to the more recent
-  # systemd version, and export the patches again via
-  # `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
-  # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
+  # On major changes, or when otherwise required, you *must* :
+  # 1. reformat the patches,
+  # 2. `git am path/to/00*.patch` them into a systemd worktree,
+  # 3. rebase to the more recent systemd version,
+  # 4. and export the patches again via
+  #   `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
+  # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
+  # patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
@@ -262,8 +272,8 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/systemd/boot/efi"
   '' + (
     let
-      # The following patches references to dynamic libraries to ensure that
-      # all the features that are implemented via dlopen(3) are available (or
+      # The following patches references to dynamic libraries to ensure that all
+      # the features that are implemented via dlopen(3) are available (or
       # explicitly deactivated) by pointing dlopen to the absolute store path
       # instead of relying on the linkers runtime lookup code.
       #
@@ -275,11 +285,11 @@ stdenv.mkDerivation (finalAttrs: {
       # found` when using e.g. --grep with journalctl. Those errors should
       # become less unexpected now.
       #
-      # There are generally two classes of dlopen(3) calls. Those that we want to
-      # support and those that should be deactivated / unsupported. This change
-      # enforces that we handle all dlopen calls explicitly. Meaning: There is
-      # not a single dlopen call in the source code tree that we did not
-      # explicitly handle.
+      # There are generally two classes of dlopen(3) calls. Those that we want
+      # to support and those that should be deactivated / unsupported. This
+      # change enforces that we handle all dlopen calls explicitly. Meaning:
+      # There is not a single dlopen call in the source code tree that we did
+      # not explicitly handle.
       #
       # In order to do this we introduced a list of attributes that maps from
       # shared object name to the package that contains them. The package can be
@@ -288,7 +298,8 @@ stdenv.mkDerivation (finalAttrs: {
       # path location).
       #
       # To get a list of dynamically loaded libraries issue something like
-      # `grep -ri '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"'' $src` and update the below list.
+      #   `grep -ri '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"'' $src`
+      # and update the list below.
       dlopenLibs =
         let
           opt = condition: pkg: if condition then pkg else null;
@@ -374,7 +385,8 @@ stdenv.mkDerivation (finalAttrs: {
     # patch all the dlopen calls to contain absolute paths to the libraries
     lib.concatMapStringsSep "\n" patchDlOpen dlopenLibs
   )
-  # finally ensure that there are no left-over dlopen calls (or rather strings pointing to shared libraries) that we didn't handle
+  # finally ensure that there are no left-over dlopen calls (or rather strings
+  # pointing to shared libraries) that we didn't handle
   + ''
     if grep -qr '"lib[a-zA-Z0-9-]*\.so[\.0-9a-zA-z]*"' src; then
       echo "Found unhandled dynamic library calls: "
@@ -461,12 +473,13 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # Options
 
-    # We bump this variable on every (major) version change to ensure
-    # that we have known-good value for a timestamp that is in the (not so distant) past.
-    # This serves as a lower bound for valid system timestamps during startup. Systemd will
-    # reset the system timestamp if this date is +- 15 years from the system time.
+    # We bump this attribute on every (major) version change to ensure that we
+    # have known-good value for a timestamp that is in the (not so distant)
+    # past. This serves as a lower bound for valid system timestamps during
+    # startup. Systemd will reset the system timestamp if this date is +- 15
+    # years from the system time.
     # See the systemd v250 release notes for further details:
-    # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
+    #   https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
 
     (lib.mesonOption "version-tag" version)
@@ -616,11 +629,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preConfigure =
     let
-      # A list of all the runtime binaries that the systemd executables, tests and libraries are referencing in their source code, scripts and unit files.
-      # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
+      # A list of all the runtime binaries referenced by the source code (plus
+      # scripts and unit files) of systemd executables, tests and libraries.
+      # As soon as a dependency is lo longer required we should remove it from
+      # the list.
+      # The `where` attribute for each of the replacement patterns must be
+      # exhaustive. If another (unhandled) case is found in the source code the
+      # build fails with an error message.
       binaryReplacements = [
-        { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
-
+        {
+          search = "/usr/bin/getent";
+          replacement = "${getent}/bin/getent";
+          where = [ "src/nspawn/nspawn-setuid.c" ];
+        }
         {
           search = "/sbin/mkswap";
           replacement = "${lib.getBin util-linux}/sbin/mkswap";
@@ -628,8 +649,19 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        {
+          search = "/sbin/swapon";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon";
+          where = [
+            "src/core/swap.c"
+            "src/basic/unit-def.h"
+          ];
+        }
+        {
+          search = "/sbin/swapoff";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff";
+          where = [ "src/core/swap.c" ];
+        }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
@@ -646,14 +678,15 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [
+            "test/test-execute/exec-noexecpaths-simple.service"
+            "src/journal/cat.c"
+          ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
-          where = [
-            "man/systemd-fsck@.service.xml"
-          ];
+          where = [ "man/systemd-fsck@.service.xml" ];
         }
       ] ++ lib.optionals withImportd [
         {
@@ -682,10 +715,14 @@ stdenv.mkDerivation (finalAttrs: {
           ];
         }
       ] ++ lib.optionals withKmod [
-        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
+        {
+          search = "/sbin/modprobe";
+          replacement = "${lib.getBin kmod}/sbin/modprobe";
+          where = [ "units/modprobe@.service" ];
+        }
       ];
 
-      # { replacement, search, where } -> List[str]
+      # { replacement, search, where, ignore } -> List[str]
       mkSubstitute = { replacement, search, where, ignore ? [ ] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
       mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
@@ -778,11 +815,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/sysusers.d $out/example
   '';
 
-  # Avoid *.EFI binary stripping. At least on aarch64-linux strip
-  # removes too much from PE32+ files:
+  # Avoid *.EFI binary stripping.
+  # At least on aarch64-linux strip removes too much from PE32+ files:
   #   https://github.com/NixOS/nixpkgs/issues/169693
-  # The hack is to move EFI file out of lib/ before doStrip
-  # run and return it after doStrip run.
+  # The hack is to move EFI file out of lib/ before doStrip run and return it
+  # after doStrip run.
   preFixup = lib.optionalString withBootloader ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
@@ -807,15 +844,15 @@ stdenv.mkDerivation (finalAttrs: {
     (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
 
   passthru = {
-    # The interface version prevents NixOS from switching to an
-    # incompatible systemd at runtime.  (Switching across reboots is
-    # fine, of course.)  It should be increased whenever systemd changes
-    # in a backwards-incompatible way.  If the interface version of two
-    # systemd builds is the same, then we can switch between them at
-    # runtime; otherwise we can't and we need to reboot.
+    # The `interfaceVersion` attribute below points out the incompatibilities
+    # between systemd versions. When the new systemd build is
+    # backwards-compatible with the previous one, then they can be switched at
+    # runtime (the reboot being optional in this case); otherwise, a reboot is
+    # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled
+      withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests)
@@ -823,19 +860,53 @@ stdenv.mkDerivation (finalAttrs: {
         systemd-journal
         systemd-journal-gateway
         systemd-journal-upload;
-      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
+      cross =
+        let
+          systemString =
+            if stdenv.buildPlatform.isAarch64
+            then "gnu64"
+            else "aarch64-multiplatform";
+        in
+        pkgsCross.${systemString}.systemd;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    longDescription = ''
+      systemd is a suite of basic building blocks for a Linux system. It
+      provides a system and service manager that runs as PID 1 and starts the
+      rest of the system. systemd provides aggressive parallelization
+      capabilities, uses socket and D-Bus activation for starting services,
+      offers on-demand starting of daemons, keeps track of processes using Linux
+      control groups, maintains mount and automount points, and implements an
+      elaborate transactional dependency-based service control logic. systemd
+      supports SysV and LSB init scripts and works as a replacement for
+      sysvinit. Other parts include a logging daemon, utilities to control basic
+      system configuration like the hostname, date, locale, maintain a list of
+      logged-in users and running containers and virtual machines, system
+      accounts, runtime directories and settings, and daemons to manage simple
+      network configuration, network time synchronization, log forwarding, and
+      name resolution.
+    '';
+    license = with lib.licenses; [
+      # Taken from https://raw.githubusercontent.com/systemd/systemd-stable/${finalAttrs.src.rev}/LICENSES/README.md
+      bsd2
+      bsd3
+      cc0
+      lgpl21Plus
+      lgpl2Plus
+      mit
+      mit0
+      ofl
+      publicDomain
+    ];
+    maintainers = with lib.maintainers; [ flokli kloenk ];
+    platforms = lib.platforms.linux;
+    priority = 10;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
-    priority = 10;
-    maintainers = with maintainers; [ flokli kloenk ];
   };
 })

@@ -8,6 +8,7 @@
 , fetchFromGitHub
 , numpy
 , pillow
+, pycountry
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "5.0.0";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-fBRP3ieeTIVtyNtRapmAr1utuLMp44C1hK/TAExy4Ok=";
+    hash = "sha256-HNJYhc87wteDeadJLkXyC6Cr8/sd2eNPnw3TEOOAnH8=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     docker
+    pycountry
     pytest-asyncio
     pytestCheckHook
     testfixtures

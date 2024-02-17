@@ -50,5 +50,6 @@ in mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ nagisa ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "ODAFileConverter";
   };
 }

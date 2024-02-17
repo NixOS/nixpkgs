@@ -549,6 +549,12 @@
       '';
   });
 
+  elixir-tools-nvim = super.elixir-tools-nvim.overrideAttrs {
+    fixupPhase = ''
+      patchShebangs $(find $out/bin/ -type f -not -name credo-language-server)
+    '';
+  };
+
   executor-nvim = super.executor-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim ];
   };
@@ -668,6 +674,10 @@
 
   harpoon2 = super.harpoon2.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
+  };
+
+  haskell-snippets-nvim = super.haskell-snippets-nvim.overrideAttrs {
+    dependencies = [ self.luasnip ];
   };
 
   haskell-scope-highlighting-nvim = super.haskell-scope-highlighting-nvim.overrideAttrs {
@@ -984,7 +994,7 @@
         inherit (old) version src;
         sourceRoot = "source/spectre_oxi";
 
-        cargoHash = "sha256-y2ZIgOApIShkIesXmItPKDO6XjFrG4GS5HCPncJUmN8=";
+        cargoHash = "sha256-822+3s6FJVqBRYJAL/89bJfGv8fNhSN3nQelB29mXvQ=";
 
 
         preCheck = ''
@@ -1120,7 +1130,7 @@
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-BDNFZ/7nnfvtBA7T6a7MDNJsq/cOI9tgW0kxUoIcbV8=";
+        cargoHash = "sha256-nlPSsp/HbS1DxhOHh5+7x1re46oiQa9FQMLClc7TQLg=";
 
         nativeBuildInputs = [ pkg-config ];
 

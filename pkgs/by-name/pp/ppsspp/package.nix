@@ -34,14 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
           + lib.optionalString enableQt "-qt"
           + lib.optionalString (!enableQt) "-sdl"
           + lib.optionalString forceWayland "-wayland";
-  version = "1.17";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-BJWcaxUUxNDiSX3YnhwXhgbp3iymcrR493BKrtivn3U=";
+    hash = "sha256-I84zJqEE1X/eo/ukeGA2iZe3lWKvilk+RNGUzl2wZXY=";
   };
 
   postPatch = ''

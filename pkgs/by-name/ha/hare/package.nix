@@ -16,7 +16,7 @@
 , riscv64PkgsCrossToolchain ? pkgsCross.riscv64
 }:
 
-# There's no support for `aarch64-freebsd` or `riscv64-freebsd` on nix.
+# There's no support for `aarch64` or `riscv64` for freebsd nor for openbsd on nix.
 # See `lib.systems.doubles.aarch64` and `lib.systems.doubles.riscv64`.
 assert let
   inherit (stdenv.hostPlatform) isLinux is64bit;
@@ -33,7 +33,6 @@ let
   # We use harec's override of qbe until 1.2 is released, but the `qbe` argument
   # is kept to avoid breakage.
   qbe = harec.qbeUnstable;
-  # https://harelang.org/platforms/
   arch = stdenv.hostPlatform.uname.processor;
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   embeddedOnBinaryTools =
@@ -60,15 +59,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2023-11-27";
+  version = "unstable-2024-02-08";
 
   outputs = [ "out" "man" ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "d94f355481a320fb2aec13ef62cb3bfe2416f5e4";
-    hash = "sha256-Mpl3VO4xvLCKHeYr/FPuS6jl8CkyeqDz18mQ6Zv05oc=";
+    rev = "5f65a5c112dd15efc0f0223ee895c2582e8f4915";
+    hash = "sha256-Ic/2Gn3ZIJ5wKXBsNS4MHoBUfvbH3ZqAsuj7tOlDtW4=";
   };
 
   patches = [
@@ -96,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "HARECACHE=.harecache"
     "PREFIX=${builtins.placeholder "out"}"
-    "PLATFORM=${platform}"
     "ARCH=${arch}"
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
@@ -122,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  preConfigure = ''
-    ln -s config.example.mk config.mk
+  postConfigure = ''
+    ln -s configs/${platform}.mk config.mk
   '';
 
   postFixup = ''

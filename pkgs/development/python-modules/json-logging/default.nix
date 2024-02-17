@@ -6,6 +6,7 @@
 , httpx
 , pytestCheckHook
 , pythonOlder
+, quart
 , requests
 , sanic
 , uvicorn
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     flask
     httpx
     pytestCheckHook
-    # quart
+    quart
     requests
     sanic
     uvicorn
