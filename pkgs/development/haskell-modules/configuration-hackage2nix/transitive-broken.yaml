@@ -2844,7 +2844,6 @@ dont-distribute-packages:
  - nri-prelude
  - nri-redis
  - nri-test-encoding
- - numerals-base
  - numeric-kinds
  - numeric-ode
  - numerical
