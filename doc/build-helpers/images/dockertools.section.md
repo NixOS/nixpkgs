@@ -178,6 +178,13 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
   _Default value:_ 0.
 
+`compressor` (String; _optional_)
+
+: Selects the algorithm used to compress the image.
+
+  _Default value:_ `"gz"`.\
+  _Possible values:_ `"none"`, `"gz"`, `"zstd"`.
+
 `contents` **DEPRECATED**
 
 : This attribute is deprecated, and users are encouraged to use `copyToRoot` instead.

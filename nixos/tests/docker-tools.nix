@@ -128,6 +128,15 @@ in {
         docker.succeed("docker images --format '{{.Tag}}' | grep -F '${examples.nixLayered.imageTag}'")
         docker.succeed("docker rmi ${examples.nixLayered.imageName}")
 
+    with subtest("Check that images with alternative compression schemas load"):
+        docker.succeed(
+            "docker load --input='${examples.bashZstdCompressed}'",
+            "docker rmi ${examples.bashZstdCompressed.imageName}",
+        )
+        docker.succeed(
+            "docker load --input='${examples.bashUncompressed}'",
+            "docker rmi ${examples.bashUncompressed.imageName}",
+        )
 
     with subtest(
         "Check if the nix store is correctly initialized by listing "
@@ -448,6 +457,18 @@ in {
         docker.succeed(
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} /hello/bin/layeredImageWithFakeRootCommands-hello"
         )
+
+    with subtest("mergeImage correctly deals with varying compression schemas in inputs"):
+        docker.succeed("docker load --input='${examples.mergeVaryingCompressor}'")
+
+        for sub_image, tag in [
+            ("${examples.redis.imageName}", "${examples.redis.imageTag}"),
+            ("${examples.bashUncompressed.imageName}", "${examples.bashUncompressed.imageTag}"),
+            ("${examples.bashZstdCompressed.imageName}", "${examples.bashZstdCompressed.imageTag}"),
+        ]:
+            docker.succeed(f"docker images --format '{{{{.Repository}}}}-{{{{.Tag}}}}' | grep -F '{sub_image}-{tag}'")
+            docker.succeed(f"docker rmi {sub_image}")
+
 
     with subtest("exportImage produces a valid tarball"):
         docker.succeed(
