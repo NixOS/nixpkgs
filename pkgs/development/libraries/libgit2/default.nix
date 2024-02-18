@@ -16,8 +16,21 @@
 , libgit2-glib
 , python3Packages
 , gitstatus
+, pkgs
 }:
 
+let
+  # TODO: move findVariants to pkgs.testers?
+  inherit (lib.strings) hasPrefix;
+  findVariants = name:
+    let prefix = "${name}_";
+    in
+      lib.recurseIntoAttrs
+        (lib.filterAttrs
+          (name: _v: hasPrefix prefix name)
+          pkgs
+        );
+in
 stdenv.mkDerivation rec {
   pname = "libgit2";
   version = "1.7.1";
@@ -70,6 +83,7 @@ stdenv.mkDerivation rec {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
     inherit gitstatus;
+    variants = findVariants "libgit2";
   };
 
   meta = with lib; {
