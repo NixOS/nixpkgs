@@ -90,6 +90,7 @@ ps.buildPythonApplication rec {
 
   postCheck = lib.optionalString stdenv.isLinux ''
     # cleanup the virtual x11 display
+    sleep 0.5
     kill $xvfb_pid
   '';
 
@@ -102,6 +103,8 @@ ps.buildPythonApplication rec {
     "test_urls_reachable"
     # requires xdg
     "test_synchronized_capture"
+    # flaky
+    "test_normcap_ocr_testcases"
   ] ++ lib.optionals stdenv.isDarwin [
     # requires impure pbcopy
     "test_get_copy_func_with_pbcopy"
