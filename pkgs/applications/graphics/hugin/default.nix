@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/hugin/files/hugin-2022.0.0-exiv2-0.28.patch?id=d18335caa756f5e5c1478d5fe3ba17f011a78c80";
       hash = "sha256-Y+79bFb926GW5oLOL0e5y7kLhqU/vZcry+kLL4H2fUE=";
     })
+    ./CVE-2024-25442.CVE-2024-25443.CVE-2024-25445.CVE-2024-25446.part-1.patch
+    ./CVE-2024-25442.CVE-2024-25443.CVE-2024-25445.CVE-2024-25446.part-2.patch
   ];
 
   buildInputs = [
