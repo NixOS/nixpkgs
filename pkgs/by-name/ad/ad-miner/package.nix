@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-eAcnGS0HLrTqc/WVKNNwYA89GK233QZj4Gfggt4S8R8=";
   };
 
-  # ALl requirements are pinned
+  # All requirements are pinned
   pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Active Directory audit tool that leverages cypher queries to crunch data from Bloodhound";
     homepage = "https://github.com/Mazars-Tech/AD_Miner";
-    changelog = "https://github.com/Mazars-Tech/AD_Miner/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Mazars-Tech/AD_Miner/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "AD-miner";
