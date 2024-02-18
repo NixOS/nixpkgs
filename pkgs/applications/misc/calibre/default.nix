@@ -33,12 +33,26 @@
 , fetchFromGitHub
 , sphinx
 , liberation_ttf
-, mathjax-src ? null
-, hyphenation-src ? null
-, translations-src ? null
+, mathjax ? fetchFromGitHub {
+    repo = "MathJax";
+    owner = "mathjax";
+    rev = "3.1.4";
+    hash = "sha256-viEg8xBUAsrMRH2m5fMXhcejMuN5bR+EntIGgP0Rb+c=";
+  }
+, hyphenation ? fetchFromGitHub {
+    owner = "LibreOffice";
+    repo = "dictionaries";
+    rev = "libreoffice-7.6.5.2";
+    sha256 = "sha256-hGXumAvZXa5Rl/PANLsEV23YE50QjPmzA51DYKhvQBk=";
+  }
+, translations ? fetchFromGitHub {
+    owner = "kovidgoyal";
+    repo = "calibre-translations";
+    rev = "bce1a26a9be187e6daf57fb6548d3fc7ad5a709a";
+    sha256 = "sha256-2rMosLGcJNFQPlAjHI+ft+IApdsERdK4aVLgcrGShzc=";
+  }
 }:
 let
-  nullOrX = x: y: if x == null then y else x;
   iso-codes-zip = stdenv.mkDerivation rec {
     pname = "iso-codes-zip";
     inherit (isocodes) src version;
@@ -50,25 +64,7 @@ let
     '';
     installPhase = "cp main.zip $out";
   };
-  mathjax = nullOrX mathjax-src (fetchFromGitHub {
-    repo = "MathJax";
-    owner = "mathjax";
-    rev = "3.1.4";
-    hash = "sha256-viEg8xBUAsrMRH2m5fMXhcejMuN5bR+EntIGgP0Rb+c=";
-  });
   liberation_fonts = "${liberation_ttf}/share/fonts/truetype";
-  hyphenation = nullOrX hyphenation-src (fetchFromGitHub {
-    owner = "LibreOffice";
-    repo = "dictionaries";
-    rev = "libreoffice-7.6.5.2";
-    sha256 = "sha256-hGXumAvZXa5Rl/PANLsEV23YE50QjPmzA51DYKhvQBk=";
-  });
-  translations = nullOrX translations-src (fetchFromGitHub {
-    owner = "kovidgoyal";
-    repo = "calibre-translations";
-    rev = "bce1a26a9be187e6daf57fb6548d3fc7ad5a709a";
-    sha256 = "sha256-2rMosLGcJNFQPlAjHI+ft+IApdsERdK4aVLgcrGShzc=";
-  });
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -277,4 +273,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
+  passthru.updateScript = ./fetch-ua.py;
 })

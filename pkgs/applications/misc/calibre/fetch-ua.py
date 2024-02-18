@@ -1,8 +1,8 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i python -p python3 nix
+
 import bz2
-import ssl
-from urllib.request import urlopen
 import subprocess
-import json
 
 subprocess.check_call(['nix', 'build', '.#calibre.src'])
 from result.setup.browser_data import download_from_calibre_server
