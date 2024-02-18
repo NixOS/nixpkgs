@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "dundee";
-    repo = pname;
+    repo = "gdu";
     rev = "refs/tags/v${version}";
     hash = "sha256-hQyvYLegGimYTRz0J/2tmaC6N4LfjB1ivWgN29DwNhA=";
   };
@@ -27,11 +27,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
+    "-X=github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
   ];
 
   postPatch = ''
-    substituteInPlace cmd/gdu/app/app_test.go --replace "development" "${version}"
+    substituteInPlace cmd/gdu/app/app_test.go \
+      --replace-fail "development" "${version}"
   '';
 
   postInstall = ''
