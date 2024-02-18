@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "hatchling==" "hatchling>="
+      --replace-fail "hatchling==" "hatchling>="
   '';
 
   nativeBuildInputs = [
