@@ -112,20 +112,25 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
-  installPhase = ''
+  installPhase = let
+    library_ext = if stdenv.isDarwin then "dylib" else "so";
+  in ''
     runHook preInstall
 
     mkdir -p $out/bin
     ${lib.optionalString (!static) ''
       mkdir $out/lib
-      cp libggml_shared.so $out/lib
-      cp libllama.so $out/lib
+      cp libggml_shared.${library_ext} $out/lib
+      cp libllama.${library_ext} $out/lib
     ''}
 
     for f in bin/*; do
       test -x "$f" || continue
-      ${lib.optionalString (!static) ''
+      ${lib.optionalString (!static && stdenv.isLinux) ''
         ${patchelf}/bin/patchelf "$f" --set-rpath "$out/lib"
+      ''}
+      ${lib.optionalString (!static && stdenv.isDarwin) ''
+        install_name_tool -add_rpath "$out/lib/" "$f"
       ''}
       cp "$f" $out/bin/llama-cpp-"$(basename "$f")"
     done
