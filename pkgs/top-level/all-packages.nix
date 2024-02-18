@@ -21996,6 +21996,9 @@ with pkgs;
   icu73 = callPackage ../development/libraries/icu/73.nix ({
     nativeBuildRoot = buildPackages.icu72.override { buildRootOnly = true; };
   });
+  icu74 = callPackage ../development/libraries/icu/74.nix ({
+    nativeBuildRoot = buildPackages.icu74.override { buildRootOnly = true; };
+  });
 
   icu = icu73;
 
