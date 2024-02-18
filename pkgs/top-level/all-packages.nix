@@ -20426,6 +20426,8 @@ with pkgs;
 
   argparse = callPackage ../development/libraries/argparse { };
 
+  argparse-manpage = with python3Packages; toPythonApplication argparse-manpage;
+
   argp-standalone = callPackage ../development/libraries/argp-standalone { };
 
   aribb25 = callPackage ../development/libraries/aribb25 {
@@ -35669,9 +35671,9 @@ with pkgs;
 
   tofi = callPackage ../applications/misc/tofi { };
 
-  tokyo-night-gtk = tokyo-night-gtk-variants.full;
+  tokyonight-gtk-theme = tokyonight-gtk-theme-variants.full;
 
-  tokyo-night-gtk-variants = recurseIntoAttrs (callPackage ../data/themes/tokyo-night-gtk { });
+  tokyonight-gtk-theme-variants = recurseIntoAttrs (callPackage ../data/themes/tokyonight-gtk-theme { });
 
   topydo = callPackage ../applications/misc/topydo { };
 

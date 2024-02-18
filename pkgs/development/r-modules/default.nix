@@ -343,6 +343,7 @@ let
     GLAD = [ pkgs.gsl ];
     glpkAPI = with pkgs; [ gmp glpk ];
     gmp = [ pkgs.gmp.dev ];
+    GPBayes = [ pkgs.gsl ];
     graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];

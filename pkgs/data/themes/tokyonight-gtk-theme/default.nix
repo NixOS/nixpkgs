@@ -6,7 +6,7 @@
 }:
 
 let
-  prefix = "tokyo-night-gtk";
+  prefix = "tokyonight-gtk-theme";
 
   packages = lib.mapAttrs' (type: content: {
     name = type;

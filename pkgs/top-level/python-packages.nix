@@ -721,6 +721,8 @@ self: super: with self; {
 
   argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
 
+  argparse-manpage = callPackage ../development/python-modules/argparse-manpage { };
+
   args = callPackage ../development/python-modules/args { };
 
   aria2p = callPackage ../development/python-modules/aria2p { };
@@ -4582,6 +4584,8 @@ self: super: with self; {
   georss-tfs-incidents-client = callPackage ../development/python-modules/georss-tfs-incidents-client { };
 
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
+
+  gerbonara = callPackage ../development/python-modules/gerbonara { };
 
   getjump = callPackage ../development/python-modules/getjump { };
 

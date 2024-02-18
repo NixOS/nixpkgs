@@ -8300,6 +8300,12 @@
       fingerprint = "E864 BDFA AB55 36FD C905  5195 DBF2 52AF FB26 19FD";
     }];
   };
+  ironicbadger = {
+    email = "alexktz@gmail.com";
+    github = "ironicbadger";
+    githubId = 2773080;
+    name = "Alex Kretzschmar";
+  };
   ironpinguin = {
     email = "michele@catalano.de";
     github = "ironpinguin";
@@ -9525,6 +9531,16 @@
     github = "jtrees";
     githubId = 5802758;
     name = "Joshua Trees";
+  };
+  juancmuller = {
+    email = "nix@juancmuller.com";
+    githubId = 208500;
+    github = "jcmuller";
+    matrix = "@jcmuller@beeper.com";
+    name = "Juan C. Müller";
+    keys = [{
+      fingerprint = "D78D 25D8 A1B8 2596 267F  35B8 F44E A51A 28F9 B4A7";
+    }];
   };
   juaningan = {
     email = "juaningan@gmail.com";
@@ -18635,6 +18651,12 @@
     github = "taranarmo";
     githubId = 11619234;
     name = "Sergey Volkov";
+  };
+  tarantoj = {
+    email = "taranto.james@gmail.com";
+    github = "tarantoj";
+    githubId = 13129552;
+    name = "James Taranto";
   };
   tari = {
     email = "peter@taricorp.net";
