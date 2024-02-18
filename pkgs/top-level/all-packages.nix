@@ -41889,7 +41889,7 @@ with pkgs;
 
   weggli = callPackage ../tools/security/weggli { };
 
-  yazi = callPackage ../applications/file-managers/yazi { inherit (darwin.apple_sdk.frameworks) Foundation; };
+  yazi-unwrapped = callPackage ../by-name/ya/yazi-unwrapped/package.nix { inherit (darwin.apple_sdk.frameworks) Foundation; };
 
   ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
 
