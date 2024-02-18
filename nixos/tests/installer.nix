@@ -526,8 +526,7 @@ let
             curl
           ]
           ++ optionals (bootLoader == "grub") (let
-            zfsSupport = lib.any (x: x == "zfs")
-              (extraInstallerConfig.boot.supportedFilesystems or []);
+            zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })

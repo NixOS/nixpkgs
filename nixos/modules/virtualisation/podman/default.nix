@@ -9,7 +9,7 @@ let
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
-      ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
+      ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
   });
 
   # Provides a fake "docker" binary mapping to podman

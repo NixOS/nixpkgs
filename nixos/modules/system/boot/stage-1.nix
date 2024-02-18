@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, lib, utils, pkgs, ... }:
+{ config, options, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -636,10 +636,8 @@ in
       };
 
     boot.initrd.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc "Names of supported filesystem types in the initial ramdisk.";
+      default = { };
+      inherit (options.boot.supportedFilesystems) example type description;
     };
 
     boot.initrd.verbose = mkOption {
