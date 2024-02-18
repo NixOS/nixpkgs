@@ -8402,7 +8402,7 @@ with pkgs;
   fverb = callPackage ../applications/audio/fverb { };
 
   fwknop = callPackage ../tools/security/fwknop {
-    texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
+    texinfo = texinfo_6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
 
   elastic = callPackage ../applications/misc/elastic { };
@@ -20113,14 +20113,21 @@ with pkgs;
 
   tesh = callPackage ../tools/text/tesh {};
 
-  texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
-  texinfo4 = texinfo413;
-  texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
-  texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { }; # needed for allegro
-  texinfo6_7 = callPackage ../development/tools/misc/texinfo/6.7.nix { }; # needed for gpm, iksemel and fwknop
-  texinfo6 = callPackage ../development/tools/misc/texinfo/6.8.nix { };
-  texinfo7 = callPackage ../development/tools/misc/texinfo/7.0.nix { };
+  texinfo-versions = callPackages ../development/tools/misc/texinfo { };
+  inherit (texinfo-versions)
+    texinfo_4_13
+    texinfo_5_2
+    texinfo_6_5 # needed for allegro
+    texinfo_6_7 # needed for gpm, iksemel, and fwknop
+    texinfo_6_8
+    texinfo_7_0
+  ;
+  texinfo4 = texinfo_4_13; # needed for eukleides and singular
+  texinfo5 = texinfo_5_2; # needed for gcc48
+  texinfo6 = texinfo_6_8; # needed for ne
+  texinfo7 = texinfo_7_0;
   texinfo = texinfo7;
+
   texinfoInteractive = texinfo.override { interactive = true; };
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
@@ -27715,7 +27722,7 @@ with pkgs;
 
     # latest 6.8 mysteriously fails to parse '@headings single':
     #   https://lists.gnu.org/archive/html/bug-texinfo/2021-09/msg00011.html
-    texinfo = buildPackages.texinfo6_7;
+    texinfo = buildPackages.texinfo_6_7;
   };
 
   gpm-ncurses = gpm.override { withNcurses = true; };
@@ -32581,7 +32588,7 @@ with pkgs;
   };
 
   iksemel = callPackage ../development/libraries/iksemel {
-    texinfo = buildPackages.texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
+    texinfo = buildPackages.texinfo_6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
 
   avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy {
