@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+    -DDEFAULT_LOADABLE_BUILTINS_PATH="${placeholder "out"}/lib/bash:."
   '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
