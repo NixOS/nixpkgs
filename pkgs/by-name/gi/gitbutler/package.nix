@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
       genericName = "Git client";
       categories = [ "Development" ];
       comment = meta.description;
-      exec = "GitButler";
+      exec = meta.mainProgram;
       icon = "gitbutler";
       terminal = false;
       type = "Application";
@@ -82,5 +82,6 @@ rustPlatform.buildRustPackage rec {
   meta = gitbutler-ui.meta // {
     description = "A Git client for simultaneous branches on top of your existing workflow.";
     platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "gitbutler-app";
   };
 }
