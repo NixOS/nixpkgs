@@ -111,6 +111,7 @@ mapAliases {
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
+  inherit (pkgs) parcel; # added 2024-01-30
   parcel-bundler = parcel; # added 2023-09-04
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
