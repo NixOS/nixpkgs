@@ -38,6 +38,12 @@ void dumpArea(int depth, const std::filesystem::path& path, const std::shared_pt
                            area->AbsoluteBlockNumber(allocator->header()->free_metadata_block.value()));
   std::cout << std::format("{}Unknown: 0x{:08x}\n", padding, allocator->header()->unknown.value());
 
+  if (depth == 0) {
+    auto transactions_area = throw_if_error(area->GetTransactionsArea1());
+    std::cout << std::format("{}Transactions area [0x{:08x}-0x{:08x}]\n", padding, transactions_area->BlockNumber(),
+                             transactions_area->AbsoluteBlockNumber(transactions_area->BlocksCount()));
+  }
+
   std::map<uint32_t, uint32_t> free_ranges;
   for (const auto& [tree_block_number, free_tree] : allocator->tree()) {
     int size = 0;
