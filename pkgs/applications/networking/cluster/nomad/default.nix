@@ -9,8 +9,8 @@
 
 let
   generic =
-    { buildGoModule, version, sha256, vendorHash, license, ... }@attrs:
-    let attrs' = builtins.removeAttrs attrs [ "buildGoModule" "version" "sha256" "vendorHash" "license" ];
+    { buildGoModule, version, sha256, vendorHash, license, knownVulnerabilities ? [], ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "buildGoModule" "version" "sha256" "vendorHash" "license" "knownVulnerabilities" ];
     in
     buildGoModule (rec {
       pname = "nomad";
@@ -38,6 +38,7 @@ let
       '';
 
       meta = with lib; {
+        inherit knownVulnerabilities;
         homepage = "https://www.nomadproject.io/";
         description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
         inherit license;
@@ -61,6 +62,7 @@ rec {
     vendorHash = "sha256-D5TcTZa64Jr47u4mrTXK4lUIC5gfBQNVgL6QKh1CaQM=";
     license = lib.licenses.mpl20;
     passthru.tests.nomad = nixosTests.nomad;
+    knownVulnerabilities = [ "CVE-2024-1329" ];
   };
 
   nomad_1_5 = generic {
