@@ -32,9 +32,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gk3MqoMCau6RTlttTLqFtlXhrYMOf89YFg8aAlh++9s=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-NjzqzfueqR1MNR23lRYj7IYIa+OHzVhpuAo18avKMUk=";
 
   postInstall = ''
     $out/bin/ff2mpv-rust manifest > manifest.json
