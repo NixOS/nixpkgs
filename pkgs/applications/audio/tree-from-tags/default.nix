@@ -34,5 +34,6 @@ EOF
     platforms = ruby.meta.platforms;
     maintainers = [ maintainers.livnev maintainers.dbrock ];
     license = licenses.gpl2Plus;
+    mainProgram = "tree-from-tags";
   };
 }

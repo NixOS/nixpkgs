@@ -12,21 +12,20 @@
 , certifi
 , appdirs
 , aiohttp
-, httpx
 }:
 let
-  version = "1.19.0";
+  version = "1.23.0";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "litellm";
-  format = "pyproject";
   inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cHGLOcOC9G6FlJfyrf+owURfGtn/gCAJuhSPt9lJS0o=";
+    hash = "sha256-Pl3Fet0TvGrNHNw4ssUMqa+UhzBYgqTydNfD96TeY7I=";
   };
 
   postPatch = ''

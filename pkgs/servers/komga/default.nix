@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "komga";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "https://github.com/gotson/${pname}/releases/download/${version}/${pname}-${version}.jar";
-    sha256 = "sha256-fgboHXS5lBvhnAfKUbCmKVjvRp+WF7kuU/VTEgky3VI=";
+    sha256 = "sha256-t/nwqEVrsBeELJLLtizDI737VnODRsuPfQlnDUBfoKc=";
   };
 
   nativeBuildInputs = [

@@ -35,10 +35,6 @@ jobs:
         pairs:
           - from: master
             into: haskell-updates
-          - from: release-23.05
-            into: staging-next-23.05
-          - from: staging-next-23.05
-            into: staging-23.05
           - from: release-23.11
             into: staging-next-23.11
           - from: staging-next-23.11

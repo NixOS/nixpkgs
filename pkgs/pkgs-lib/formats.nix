@@ -41,6 +41,8 @@ rec {
 
   libconfig = (import ./formats/libconfig/default.nix { inherit lib pkgs; }).format;
 
+  hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
+
   json = {}: {
 
     type = with lib.types; let

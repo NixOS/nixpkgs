@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
-  version = "1.25";
+  version = "1.26";
 
   src = fetchgit {
     url = "https://salsa.debian.org/debian/${pname}.git";
     rev = "debian/${version}";
-    sha256 = "sha256-FDrwd5kahIfKGfUBIm7BBuqHwrQ/+UE1gRQrJNd031o=";
+    sha256 = "sha256-CVy5mOX3jNM1cNIn8HhVs8Mhh70pkz9pG08muFuPNfk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

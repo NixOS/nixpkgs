@@ -7,12 +7,12 @@
 , stdenv
 }:
 let
-  version = "23.3.4";
+  version = "23.3.5";
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";
     rev = "v${version}";
-    sha256 = "sha256-Bcr+bMqurwpd7IFTBR73RcgekkiuQQ3JPjvrp03fpJ0=";
+    sha256 = "sha256-rERKoaSZ/lscMW9IcHU00+l4BzvFCz3RMDCQyiEam0E=";
   };
   server = callPackage ./server.nix { inherit src version; };
 in

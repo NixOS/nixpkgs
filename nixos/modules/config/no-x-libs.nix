@@ -30,6 +30,7 @@ with lib;
       beam = super.beam_nox;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
+      fastfetch = super.fastfetch.override { vulkanSupport = false; waylandSupport = false; x11Support = false; };
       ffmpeg_4 = super.ffmpeg_4.override { ffmpegVariant = "headless"; };
       ffmpeg_5 = super.ffmpeg_5.override { ffmpegVariant = "headless"; };
       # dep of graphviz, libXpm is optional for Xpm support
@@ -37,6 +38,7 @@ with lib;
       ghostscript = super.ghostscript.override { cupsSupport = false; x11Support = false; };
       gjs = super.gjs.overrideAttrs { doCheck = false; installTests = false; }; # avoid test dependency on gtk3
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      gpg-tui = super.gpg-tui.override { x11Support = false; };
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
@@ -81,6 +83,7 @@ with lib;
       # translateManpages -> perlPackages.po4a -> texlive-combined-basic -> texlive-core-big -> libX11
       util-linux = super.util-linux.override { translateManpages = false; };
       vim-full = super.vim-full.override { guiSupport = false; };
+      vte = super.vte.override { gtkVersion = null; };
       zbar = super.zbar.override { enableVideo = false; withXorg = false; };
     }));
   };

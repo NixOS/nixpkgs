@@ -58,6 +58,6 @@ stdenv.mkDerivation {
     description = "Code completion LSP for Helix with support for Copilot + OpenAI";
     maintainers = with maintainers; [ happysalada ];
     license = with licenses; [ mit ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

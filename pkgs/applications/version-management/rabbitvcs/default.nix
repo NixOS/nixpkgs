@@ -40,5 +40,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mathnerd314 ];
+    # ModuleNotFoundError: No module named 'rabbitvcs'
+    broken = true; # Added 2024-01-28
   };
 }

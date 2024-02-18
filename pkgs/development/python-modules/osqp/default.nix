@@ -5,6 +5,7 @@
 , fetchPypi
 , future
 , numpy
+, oldest-supported-numpy
 , pytestCheckHook
 , pythonOlder
 , qdldl
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "osqp";
   version = "0.6.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    oldest-supported-numpy
     setuptools-scm
   ];
 
@@ -50,6 +52,14 @@ buildPythonPackage rec {
   disabledTests = [
     # Need an unfree license package - mkl
     "test_issue14"
+  ]
+  # disable tests failing after scipy 1.12 update
+  # https://github.com/osqp/osqp-python/issues/121
+  # re-enable once unit tests fixed
+  ++ [
+    "feasibility_tests"
+    "polish_tests"
+    "update_matrices_tests"
   ];
 
   meta = with lib; {

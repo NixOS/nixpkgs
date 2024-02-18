@@ -29,6 +29,7 @@ in {
       packages = with pkgs; [
         ayatana-indicator-datetime
         ayatana-indicator-messages
+        ayatana-indicator-session
       ] ++ (with pkgs.lomiri; [
         lomiri-indicator-network
         telephony-service

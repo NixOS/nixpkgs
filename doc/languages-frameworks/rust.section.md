@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
-`buildRustPackage` requires either the `cargoHash` or the `cargoSha256`
-attribute which is computed over all crate sources of this package.
-`cargoSha256` is used for traditional Nix SHA-256 hashes. `cargoHash` should
-instead be used for [SRI](https://www.w3.org/TR/SRI/) hashes and should be
-preferred. For example:
+`buildRustPackage` requires either a `cargoHash` (preferred) or a
+`cargoSha256` attribute, computed over all crate sources of this package.
+`cargoHash` supports [SRI](https://www.w3.org/TR/SRI/) hashes and should be
+preferred over `cargoSha256` which was used for traditional Nix SHA-256 hashes.
+For example:
 
 ```nix
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
@@ -64,16 +64,16 @@ Both types of hashes are permitted when contributing to nixpkgs. The
 Cargo hash is obtained by inserting a fake checksum into the
 expression and building the package once. The correct checksum can
 then be taken from the failed build. A fake hash can be used for
-`cargoSha256` as follows:
-
-```nix
-  cargoSha256 = lib.fakeSha256;
-```
-
-For `cargoHash` you can use:
+`cargoHash` as follows:
 
 ```nix
   cargoHash = lib.fakeHash;
+```
+
+For `cargoSha256` you can use:
+
+```nix
+  cargoSha256 = lib.fakeSha256;
 ```
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
@@ -90,7 +90,7 @@ directory into a tar.gz archive.
 The tarball with vendored dependencies contains a directory with the
 package's `name`, which is normally composed of `pname` and
 `version`. This means that the vendored dependencies hash
-(`cargoSha256`/`cargoHash`) is dependent on the package name and
+(`cargoHash`/`cargoSha256`) is dependent on the package name and
 version. The `cargoDepsName` attribute can be used to use another name
 for the directory of vendored dependencies. For example, the hash can
 be made invariant to the version by setting `cargoDepsName` to
@@ -115,7 +115,7 @@ rustPlatform.buildRustPackage rec {
 
 ### Importing a `Cargo.lock` file {#importing-a-cargo.lock-file}
 
-Using `cargoSha256` or `cargoHash` is tedious when using
+Using a vendored hash (`cargoHash`/`cargoSha256`) is tedious when using
 `buildRustPackage` within a project, since it requires that the hash
 is updated after every change to `Cargo.lock`. Therefore,
 `buildRustPackage` also supports vendoring dependencies directly from

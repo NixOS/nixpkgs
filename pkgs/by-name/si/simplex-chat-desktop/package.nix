@@ -1,15 +1,16 @@
 { lib
 , appimageTools
 , fetchurl
+, gitUpdater
 }:
 
 let
   pname = "simplex-chat-desktop";
-  version = "5.4.2";
+  version = "5.4.4";
 
   src = fetchurl {
     url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-    hash = "sha256-t9wFOKGmy/mGFtETv1EkturAM4Swq1q/zoegpQ7dcrc=";
+    hash = "sha256-f4P31e099bKBKsavP5f+xBGsqQfM6CYgUtUIOLe+cAE=";
   };
 
   appimageContents = appimageTools.extract {
@@ -42,5 +43,12 @@ in appimageTools.wrapType2 {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ yuu ];
     platforms = [ "x86_64-linux" ];
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/simplex-chat/simplex-chat";
+    rev-prefix = "v";
+    # skip tags that does not correspond to official releases, like vX.Y.Z-(beta,fdroid,armv7a).
+    ignoredVersions = "-";
   };
 }

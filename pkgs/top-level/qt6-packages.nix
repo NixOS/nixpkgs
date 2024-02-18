@@ -70,6 +70,10 @@ makeScopeWithSplicing' {
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
+  qwlroots = callPackage ../development/libraries/qwlroots {
+    wlroots = pkgs.wlroots_0_17;
+  };
+
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
   qzxing = callPackage ../development/libraries/qzxing { };
@@ -83,6 +87,10 @@ makeScopeWithSplicing' {
   # Not a library, but we do want it to be built for every qt version there
   # is, to allow users to choose the right build if needed.
   sddm = callPackage ../applications/display-managers/sddm {};
+
+  waylib = callPackage ../development/libraries/waylib { };
+
+  wayqt = callPackage ../development/libraries/wayqt { };
 
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Convert to a throw on 01-01-2023.

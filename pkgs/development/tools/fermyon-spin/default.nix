@@ -17,7 +17,7 @@ let
   }.${system} or (throw "Unsupported system: ${system}");
 
   packageHash = {
-    x86_64-linux = "sha256-i06Zp176zl7y8P32Hss64QkMc/+vXtkQy/tkOPSX3dc=";
+    x86_64-linux = "sha256-Y0Inew0PncpnEpdLWtl/85t93eGSRewKh5mvGnn+yck=";
     aarch64-linux = "sha256-HEm3TaLeaws8G73CU9BmxeplQdeF9nQbBSnbctaVhqI=";
     x86_64-darwin = "sha256-mlshpN/4Od4qrXiqIEYo7G84Dtb+tp2nK2VnrRG2rto=";
     aarch64-darwin = "sha256-aJH/vOidj0vbkttGDgelaAC/dMYguQPLjxl+V3pOVzI=";
@@ -25,7 +25,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "fermyon-spin";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchzip {
     url = "https://github.com/fermyon/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";

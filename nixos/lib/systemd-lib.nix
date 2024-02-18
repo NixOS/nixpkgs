@@ -242,13 +242,19 @@ in rec {
             ln -sfn '${name}' $out/'${name2}'
           '') (unit.aliases or [])) units)}
 
-      # Create .wants and .requires symlinks from the wantedBy and
+      # Create .wants, .upholds and .requires symlinks from the wantedBy, upheldBy and
       # requiredBy options.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
           '') (unit.wantedBy or [])) units)}
+
+      ${concatStrings (mapAttrsToList (name: unit:
+          concatMapStrings (name2: ''
+            mkdir -p $out/'${name2}.upholds'
+            ln -sfn '../${name}' $out/'${name2}.upholds'/
+          '') (unit.upheldBy or [])) units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
@@ -289,6 +295,8 @@ in rec {
           { Requires = toString config.requires; }
         // optionalAttrs (config.wants != [])
           { Wants = toString config.wants; }
+        // optionalAttrs (config.upholds != [])
+          { Upholds = toString config.upholds; }
         // optionalAttrs (config.after != [])
           { After = toString config.after; }
         // optionalAttrs (config.before != [])

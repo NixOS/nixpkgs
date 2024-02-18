@@ -1,40 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, python, pythonOlder
-, fonttools, lxml, fs, unicodedata2
-, defcon, fontpens, fontmath, booleanoperations
-, pytest, setuptools-scm
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, pythonOlder
+
+# build-system
+, setuptools
+, setuptools-scm
+
+# dependencies
+, fonttools
+, defcon
+, fontmath
+, booleanoperations
+
+# tests
+, python
 }:
 
 buildPythonPackage rec {
-  pname = "fontParts";
+  pname = "fontparts";
   version = "0.12.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "fontParts";
+    inherit version;
     hash = "sha256-eeU13S1IcC+bsiK3YDlT4rVDeXDGcxx1wY/is8t5pCA=";
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  patches = [
+    (fetchpatch2 {
+      # replace remaining usage of assertEquals for Python 3.12 support
+      # https://github.com/robotools/fontParts/pull/720
+      url = "https://github.com/robotools/fontParts/commit/d7484cd98051aa1588683136da0bb99eac31523b.patch";
+      hash = "sha256-maoUgbmXY/RC4TUZI4triA9OIfB4T98qjUaQ94uhsbg=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     booleanoperations
-    fonttools
-    unicodedata2  # fonttools[unicode] extra
-    lxml          # fonttools[lxml] extra
-    fs            # fonttools[ufo] extra
     defcon
-    fontpens      # defcon[pens] extra
     fontmath
-  ];
+    fonttools
+  ]
+  ++ defcon.optional-dependencies.pens
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.unicode;
 
   checkPhase = ''
     runHook preCheck
     ${python.interpreter} Lib/fontParts/fontshell/test.py
     runHook postCheck
   '';
-  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "An API for interacting with the parts of fonts during the font development process.";

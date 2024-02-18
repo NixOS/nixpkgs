@@ -125,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     "--disable-jemalloc"
     "--disable-strip"
     "--disable-tests"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Spidermonkey seems to use different host/build terminology for cross
     # compilation here.
     "--host=${stdenv.buildPlatform.config}"

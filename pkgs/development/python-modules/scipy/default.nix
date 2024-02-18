@@ -76,6 +76,11 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
+    (fetchpatch {
+      name = "openblas-0.3.26-compat.patch";
+      url = "https://github.com/scipy/scipy/commit/8c96a1f742335bca283aae418763aaba62c03378.patch";
+      hash = "sha256-SGoYDxwSAkr6D5/XEqHLerF4e4nmmI+PX+z+3taWAps=";
+    })
   ];
 
   # Upstream complicated numpy version pinning is causing issues in the

@@ -13,7 +13,7 @@ let
 in
 rec {
   # Base implementation for non-compiled executables.
-  # Takes an interpreter, for example `${pkgs.bash}/bin/bash`
+  # Takes an interpreter, for example `${lib.getExe pkgs.bash}`
   #
   # Examples:
   #   writeBash = makeScriptWriter { interpreter = "${pkgs.bash}/bin/bash"; }
@@ -116,7 +116,7 @@ rec {
   #     echo hello world
   #   ''
   writeBash = makeScriptWriter {
-    interpreter = "${pkgs.bash}/bin/bash";
+    interpreter = "${lib.getExe pkgs.bash}";
   };
 
   # Like writeScriptBin but the first line is a shebang to bash
@@ -130,7 +130,7 @@ rec {
   #     echo hello world
   #   ''
   writeDash = makeScriptWriter {
-    interpreter = "${pkgs.dash}/bin/dash";
+    interpreter = "${lib.getExe pkgs.dash}";
   };
 
   # Like writeScriptBin but the first line is a shebang to dash
@@ -144,8 +144,8 @@ rec {
   #     echo hello world
   #   ''
   writeFish = makeScriptWriter {
-    interpreter = "${pkgs.fish}/bin/fish --no-config";
-    check = "${pkgs.fish}/bin/fish --no-config --no-execute";  # syntax check only
+    interpreter = "${lib.getExe pkgs.fish} --no-config";
+    check = "${lib.getExe pkgs.fish} --no-config --no-execute";  # syntax check only
   };
 
   # Like writeScriptBin but the first line is a shebang to fish
@@ -175,7 +175,7 @@ rec {
     in makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
+        ${(ghc.withPackages (_: libraries ))}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit strip;
@@ -184,6 +184,85 @@ rec {
   # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   writeHaskellBin = name:
     writeHaskell "/bin/${name}";
+
+  # Like writeScript but the first line is a shebang to nu
+  #
+  # Example:
+  #   writeNu "example" ''
+  #     echo hello world
+  #   ''
+  writeNu = makeScriptWriter {
+    interpreter = "${lib.getExe pkgs.nushell} --no-config-file";
+  };
+
+  # Like writeScriptBin but the first line is a shebang to nu
+  writeNuBin = name:
+    writeNu "/bin/${name}";
+
+  # makeRubyWriter takes ruby and compatible rubyPackages and produces ruby script writer,
+  # If any libraries are specified, ruby.withPackages is used as interpreter, otherwise the "bare" ruby is used.
+  makeRubyWriter = ruby: rubyPackages: buildRubyPackages: name: { libraries ? [], }:
+  makeScriptWriter {
+    interpreter =
+      if libraries == []
+      then "${ruby}/bin/ruby"
+      else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
+    # Rubocop doesnt seem to like running in this fashion.
+    #check = (writeDash "rubocop.sh" ''
+    #  exec ${lib.getExe buildRubyPackages.rubocop} "$1"
+    #'');
+  } name;
+
+  # Like writeScript but the first line is a shebang to ruby
+  #
+  # Example:
+  #   writeRuby "example" ''
+  #    puts "hello world"
+  #   ''
+  writeRuby = makeRubyWriter pkgs.ruby pkgs.rubyPackages buildPackages.rubyPackages;
+
+  writeRubyBin = name:
+    writeRuby "/bin/${name}";
+
+  # makeLuaWriter takes lua and compatible luaPackages and produces lua script writer,
+  # which validates the script with luacheck at build time. If any libraries are specified,
+  # lua.withPackages is used as interpreter, otherwise the "bare" lua is used.
+  makeLuaWriter = lua: luaPackages: buildLuaPackages: name: { libraries ? [], }:
+  makeScriptWriter {
+    interpreter = lua.interpreter;
+      # if libraries == []
+      # then lua.interpreter
+      # else (lua.withPackages (ps: libraries)).interpreter
+      # This should support packages! I just cant figure out why some dependency collision happens whenever I try to run this.
+    check = (writeDash "luacheck.sh" ''
+      exec ${buildLuaPackages.luacheck}/bin/luacheck "$1"
+    '');
+  } name;
+
+  # writeLua takes a name an attributeset with libraries and some lua source code and
+  # returns an executable (should also work with luajit)
+  #
+  # Example:
+  # writeLua "test_lua" { libraries = [ pkgs.luaPackages.say ]; } ''
+  #   s = require("say")
+  #   s:set_namespace("en")
+  #
+  #   s:set('money', 'I have %s dollars')
+  #   s:set('wow', 'So much money!')
+  #
+  #   print(s('money', {1000})) -- I have 1000 dollars
+  #
+  #   s:set_namespace("fr") -- switch to french!
+  #   s:set('wow', "Tant d'argent!")
+  #
+  #   print(s('wow')) -- Tant d'argent!
+  #   s:set_namespace("en")  -- switch back to english!
+  #   print(s('wow')) -- So much money!
+  # ''
+  writeLua = makeLuaWriter pkgs.lua pkgs.luaPackages buildPackages.luaPackages;
+
+  writeLuaBin = name:
+    writeLua "/bin/${name}";
 
   writeRust = name: {
       rustc ? pkgs.rustc,
@@ -196,7 +275,7 @@ rec {
     makeBinWriter {
       compileScript = ''
         cp "$contentPath" tmp.rs
-        PATH=${lib.makeBinPath [pkgs.gcc]} ${lib.getBin rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} ${lib.escapeShellArgs darwinArgs} -o "$out" tmp.rs
+        PATH=${lib.makeBinPath [pkgs.gcc]} ${rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} ${lib.escapeShellArgs darwinArgs} -o "$out" tmp.rs
       '';
       inherit strip;
     } name;
@@ -225,7 +304,7 @@ rec {
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content} "$@"
+    exec ${lib.getExe pkgs.nodejs} ${pkgs.writeText "js" content} "$@"
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
@@ -260,7 +339,7 @@ rec {
   #   ''
   writePerl = name: { libraries ? [] }:
     makeScriptWriter {
-      interpreter = "${pkgs.perl.withPackages (p: libraries)}/bin/perl";
+      interpreter = "${lib.getExe (pkgs.perl.withPackages (p: libraries))}";
     } name;
 
   # writePerlBin takes the same arguments as writePerl but outputs a directory (like writeScriptBin)
@@ -276,9 +355,11 @@ rec {
   in
   makeScriptWriter {
     interpreter =
-      if libraries == []
-      then python.interpreter
-      else (python.withPackages (ps: libraries)).interpreter
+      if pythonPackages != pkgs.pypy2Packages || pythonPackages != pkgs.pypy3Packages then
+        if libraries == []
+        then python.interpreter
+        else (python.withPackages (ps: libraries)).interpreter
+      else python.interpreter
     ;
     check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
       exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
@@ -358,7 +439,7 @@ rec {
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
       export DOTNET_NOLOGO=1
       script="$1"; shift
-      ${dotnet-sdk}/bin/dotnet fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
+      ${lib.getExe dotnet-sdk} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
     '';
 
   in content: makeScriptWriter {

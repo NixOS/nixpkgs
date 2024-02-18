@@ -18,22 +18,22 @@
 , setuptools
 }:
 let
-  version = "0.64.8";
+  version = "0.68.5";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.36"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    hash = "sha256-eiNvoy68PvjZ3iwdeNPjsXJjxAXb2PMF1/HvJquWa/U=";
+    hash = "sha256-mwUqBzi7nMTZL7uwv7hBjGkO8U3krXXpvfUCaYHgHBU=";
   };
 
   metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
     modRoot = "api";
-    vendorHash = "sha256-D3stDSb99uXze49kKZgGrAq5Zmg6hkIzIpsQKlnKVtE=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
-
+    vendorHash = "sha256-4T1xnHDjxsIyddA51exNwwz6ZWeuT7N8LBsCJ7c8sRI=";
+  } // gqlgen);
 in
 buildPythonPackage rec {
   pname = "metasrht";
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
 }

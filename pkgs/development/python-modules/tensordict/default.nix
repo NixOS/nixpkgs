@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "tensordict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+Osoz1632F/dEkG/o8RUqCIDok2Qc9Qdak+CCr9m26g=";
+    hash = "sha256-XTFUzPs/fqX3DPtu/qSE1hY+7r/HToPVPaTyVRzDT/E=";
   };
 
   nativeBuildInputs = [

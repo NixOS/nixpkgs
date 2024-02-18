@@ -7,19 +7,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.14.0";
-  format = "setuptools";
+  version = "2.15.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TzuRWGGdQrsmOLidvLiC80e9t9VVu8LUNhq2Ikk0Pco=";
+    hash = "sha256-RTDYMmkRjkP5VhN74Adlvm/vpqXd9lnu3ckjmItIi+Y=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core

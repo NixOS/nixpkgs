@@ -3,12 +3,12 @@
 let
   generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-domain-list-community";
-    version = "20240123112230";
+    version = "20240208184303";
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "domain-list-community";
       rev = version;
-      hash = "sha256-tt6/JEX1WM6ayBU4NnY/yjz9S6IDAfr6hJmyF9mPHAo=";
+      hash = "sha256-pKijinMAnDIjOtLYJ8jcsIc5W1tEw6RA/inDm7Lqa1Q=";
     };
     vendorHash = "sha256-azvMUi8eLNoNofRa2X4SKTTiMd6aOyO6H/rOiKjkpIY=";
     meta = with lib; {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   inherit (generator) pname version src meta;
   buildPhase = ''
     runHook preBuild
-    ${generator}/bin/domain-list-community -datapath $src/data --exportlists=category-ads-all,tld-cn,cn,tld-\!cn,geolocation-\!cn,apple,icloud
+    ${generator}/bin/domain-list-community -datapath $src/data
     runHook postBuild
   '';
   installPhase = ''

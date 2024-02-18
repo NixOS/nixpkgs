@@ -18,7 +18,7 @@ from dataclasses import dataclass
 # These values will be replaced with actual values during the package build
 EFI_SYS_MOUNT_POINT = "@efiSysMountPoint@"
 TIMEOUT = "@timeout@"
-EDITOR = bool("@editor@")
+EDITOR = "@editor@" == "1"
 CONSOLE_MODE = "@consoleMode@"
 BOOTSPEC_TOOLS = "@bootspecTools@"
 DISTRO_NAME = "@distroName@"

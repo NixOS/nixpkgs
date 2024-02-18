@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoPackage
 , fetchFromGitHub
 }:
@@ -14,18 +13,11 @@ buildGoPackage rec {
     hash = "sha256-fFlTBOz127le2Y7F9KKhbcldcyFEpAU5QiJ4VCAPs9Y=";
   };
 
-  patchPhase = ''
-    runHook prePatch
-
-    substituteInPlace snicat.go \
-      --replace-warn "v0.0.0" "v${version}"
-
-    runHook postPatch
-  '';
-
   goPackagePath = "github.com/CTFd/snicat";
 
   goDeps = ./deps.nix;
+
+  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   installPhase = ''
     runHook preInstall

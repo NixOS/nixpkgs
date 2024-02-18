@@ -22,11 +22,9 @@ let
 
     timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
-    editor = if cfg.editor then "True" else "False";
-
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful;
+    inherit (cfg) consoleMode graceful editor;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 

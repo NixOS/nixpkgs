@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/abdfnx/tran";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "tran";
   };
 }

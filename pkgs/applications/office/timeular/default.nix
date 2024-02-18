@@ -42,5 +42,6 @@ in appimageTools.wrapType2 rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ ktor ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "timeular";
   };
 }

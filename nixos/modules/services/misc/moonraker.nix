@@ -103,17 +103,18 @@ in {
 
   config = mkIf cfg.enable {
     warnings = []
-      ++ optional (cfg.settings.update_manager.enable_system_updates or false)
-        ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.''
-      ++ optional (cfg.configDir != null)
-        ''
-          services.moonraker.configDir has been deprecated upstream and will be removed.
+      ++ (optional (head (cfg.settings.update_manager.enable_system_updates or [false])) ''
+        Enabling system updates is not supported on NixOS and will lead to non-removable warnings in some clients.
+      '')
+      ++ (optional (cfg.configDir != null) ''
+        services.moonraker.configDir has been deprecated upstream and will be removed.
 
-          Action: ${
-            if cfg.configDir == unifiedConfigDir then "Simply remove services.moonraker.configDir from your config."
-            else "Move files from `${cfg.configDir}` to `${unifiedConfigDir}` then remove services.moonraker.configDir from your config."
-          }
-        '';
+        Action: ${
+          if cfg.configDir == unifiedConfigDir
+          then "Simply remove services.moonraker.configDir from your config."
+          else "Move files from `${cfg.configDir}` to `${unifiedConfigDir}` then remove services.moonraker.configDir from your config."
+        }
+        '');
 
     assertions = [
       {

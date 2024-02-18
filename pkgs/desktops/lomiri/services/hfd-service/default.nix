@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfd-service";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/hfd-service";
     rev = finalAttrs.version;
-    hash = "sha256-KcHwLTSdo86YCteUsPndoxmLf23SOEhROc5cJQ8GS1Q=";
+    hash = "sha256-OpT1vNjnyq66v54EoGOZOUb4HECD4WRJRh9hYMB0GI0=";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_LIBHYBRIS=OFF"
+    (lib.cmakeBool "ENABLE_LIBHYBRIS" false)
   ];
 
   dontWrapQtApps = true;
@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "DBus-activated service that manages human feedback devices such as LEDs and vibrators on mobile devices";
     homepage = "https://gitlab.com/ubports/development/core/hfd-service";
+    changelog = "https://gitlab.com/ubports/development/core/hfd-service/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.lgpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

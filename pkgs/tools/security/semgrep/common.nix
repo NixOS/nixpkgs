@@ -1,9 +1,9 @@
 { lib }:
 
 rec {
-  version = "1.37.0";
+  version = "1.61.1";
 
-  srcHash = "sha256-oFJ43dq3DAhux0UEFDKFZnxruoRdOfCndKY6XgG3d5I=";
+  srcHash = "sha256-muTw6rj9FuSSXvUzdP4QRQogzmUPlrvGARRK/Jqg+Gc=";
 
   # submodule dependencies
   # these are fetched so we:
@@ -11,10 +11,10 @@ rec {
   #   2. avoid fetchSubmodules since it's prone to impurities
   submodules = {
     "cli/src/semgrep/semgrep_interfaces" = {
-      owner = "returntocorp";
+      owner = "semgrep";
       repo = "semgrep-interfaces";
-      rev = "331603197022625f50a64dd5e3029a96a5f03ada";
-      hash = "sha256-UAcWbTSCIdBGvgGSbdQ+miFOEuBvQ6m42MkU3VeErKY=";
+      rev = "bbfd1c5b91bd411bceffc3de73f5f0b37f04433d";
+      hash = "sha256-wrhV5bBuIpVYehzVTxussiED//ObJXQSfPiiKnIR/DM=";
     };
   };
 
@@ -25,22 +25,22 @@ rec {
   core = {
     x86_64-linux = {
       platform = "any";
-      hash = "sha256-Sj/6tzZMyRQAJL09X/3zgvdGTIhNibqO8usKsus9Xss=";
+      hash = "sha256-lX/zRgkEyoln69pf4fWtb8f9wffBOI/KkCegn8kFmj4=";
     };
     x86_64-darwin = {
       platform = "macosx_10_14_x86_64";
-      hash = "sha256-hC04VknZG6aYYNX7lqvkcOoVslewNqlYax+o1nV2TcM=";
+      hash = "sha256-Rk4qP/iKpRUbqdry6V/NmXRQLkA0e9ltIOdYiO5DuTg=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-0F+ndM4+0dnxf9acwWvGdIy9iYWSqixS9IzOxa95/yM=";
+      hash = "sha256-Gqq9LGwZ96i8LU8Z8qSN3TxuUUTDYrJiVCY9rm7aNzI=";
     };
   };
 
   meta = with lib; {
     homepage = "https://semgrep.dev/";
-    downloadPage = "https://github.com/returntocorp/semgrep/";
-    changelog = "https://github.com/returntocorp/semgrep/blob/v${version}/CHANGELOG.md";
+    downloadPage = "https://github.com/semgrep/semgrep/";
+    changelog = "https://github.com/semgrep/semgrep/blob/v${version}/CHANGELOG.md";
     description = "Lightweight static analysis for many languages";
     longDescription = ''
       Semgrep is a fast, open-source, static analysis tool for finding bugs and

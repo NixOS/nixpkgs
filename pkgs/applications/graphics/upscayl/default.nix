@@ -38,5 +38,6 @@ in
       maintainers = with maintainers; [icy-thought];
       license = licenses.agpl3Plus;
       platforms = platforms.linux;
+      mainProgram = "upscayl";
     };
   }

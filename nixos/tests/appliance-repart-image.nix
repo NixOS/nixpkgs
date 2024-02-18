@@ -40,6 +40,8 @@ in
 
     image.repart = {
       name = "appliance-gpt-image";
+      # OVMF does not work with the default repart sector size of 4096
+      sectorSize = 512;
       partitions = {
         "esp" = {
           contents =

@@ -14,12 +14,13 @@
 , pythonOlder
 , pytz
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "8.12.0";
-  format = "setuptools";
+  version = "8.13.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,8 +28,12 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-I2ktLhlSFeQ3f7/zcm5NKLv5Pm1R7EPkeMPREMa9bBA=";
+    hash = "sha256-HlHT7fJbDz8+7pTWHortK2xKDzoIQElJPbUTxmIdGCs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

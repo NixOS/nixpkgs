@@ -176,7 +176,7 @@ with lib.maintainers; {
 
   cosmopolitan = {
     members = [
-      lourkeur
+      bbjubjub
       tomberek
     ];
     scope = "Maintain the Cosmopolitan LibC and related programs.";
@@ -339,7 +339,6 @@ with lib.maintainers; {
 
   geospatial = {
     members = [
-      das-g
       imincik
       nh2
       nialov
@@ -822,12 +821,18 @@ with lib.maintainers; {
 
   qt-kde = {
     members = [
+      ilya-fedin
+      k900
+      LunNova
+      mjm
+      nickcao
+      SuperSandro2000
       ttuegel
     ];
     githubTeams = [
       "qt-kde"
     ];
-    scope = "Maintain the KDE desktop environment and Qt.";
+    scope = "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects.";
     shortName = "Qt / KDE";
     enableFeatureFreezePing = true;
   };

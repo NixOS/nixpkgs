@@ -38,5 +38,6 @@ buildGoModule rec {
     changelog = "https://github.com/antoniomika/sish/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sish";
   };
 }

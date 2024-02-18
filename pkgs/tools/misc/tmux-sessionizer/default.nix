@@ -10,7 +10,8 @@
 }: let
 
   name = "tmux-sessionizer";
-  version = "0.3.2";
+  # v0.4.1 is not released yet, but v0.4.0 has version discrepancy between Cargo.toml and Cargo.lock and does not build
+  version = "0.4.0-unstable-2024-02-06";
 
 in rustPlatform.buildRustPackage {
   pname = name;
@@ -19,15 +20,19 @@ in rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "jrmoulton";
     repo = name;
-    rev = "v${version}";
-    hash = "sha256-8RQ67v2Cw681zikxYnq0Pb2ybh26w8mUbHKAC4TjYWA=";
+    rev = "79ab43a4087aa7e4e865cab6a181dfd24c6e7a90";
+    hash = "sha256-gzbCeNZML2ygIy/H3uT9apahqI+4hmrTwgXvcZq4Xog=";
   };
 
-  cargoHash = "sha256-ZOWoUBna8U0A/sYwXMf4Z7Vi+KqM7VinWhmtO8Q0HtU=";
+  cargoHash = "sha256-Zvr2OH2pKtX60EApUSWhBV4cACMLl750UOiS3nN3J3Q=";
 
   passthru.tests.version = testers.testVersion {
     package = tmux-sessionizer;
+    version = "0.4.1";
   };
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];

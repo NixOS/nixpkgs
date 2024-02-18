@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-v${version}";
-    hash = "sha256-myQ1TIkytEGdaR3KZOMXK7JK83/Qx46UVhp2GFG7LiA=";
+    hash = "sha256-YjA69i1cnnMlH/3U40s/qUi+u1IKFvlGUjsDVJuBgBE=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -41,10 +41,8 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "amcl-0.3.0" = "sha256-EWXQddOskhc07ufRDihn91YRk1fdrLw20N/IoppiWyo=";
       "ark-secret-scalar-0.0.2" = "sha256-91sODxaj0psMw0WqigMCGO5a7+NenAsRj5ZmW6C7lvc=";
       "common-0.1.0" = "sha256-LHz2dK1p8GwyMimlR7AxHLz1tjTYolPwdjP7pxork1o=";
-      "ethabi-decode-1.4.0" = "sha256-4sDCsr7OPaaDTs2phA5fdGKqSReYf2HD2IUUh7B43GU=";
       "fflonk-0.1.0" = "sha256-+BvZ03AhYNP0D8Wq9EMsP+lSgPA6BBlnWkoxTffVLwo=";
       "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
       "sp-ark-bls12-381-0.4.2" = "sha256-nNr0amKhSvvI9BlsoP+8v6Xppx/s7zkf0l9Lm3DW8w8=";

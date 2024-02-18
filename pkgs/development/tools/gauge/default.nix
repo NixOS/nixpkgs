@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gauge";
-  version = "1.5.7";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge";
     rev = "v${version}";
-    hash = "sha256-9zoZKd/mubm64Pb95iUFZK622hTqm3A+U0OOX3uDtd8=";
+    hash = "sha256-dgSrjSAO0MwVML07gIqI9hIgRu+Pgv2jZOItSFd0DVU=";
   };
 
-  vendorHash = "sha256-BQkQ6huTm3hI1MQvq2VffCrxCQyDJb/S7yxvPpfQaGI=";
+  vendorHash = "sha256-IGxETjZ2RCvhcA7XUQYbr2jf+9P/WReuAOLIpE3kyes=";
 
   excludedPackages = [ "build" "man" ];
 

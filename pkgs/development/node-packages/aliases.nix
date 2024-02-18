@@ -50,6 +50,7 @@ mapAliases {
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
+  "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
   alloy = pkgs.titanium-alloy; # added 2023-08-17
   antennas = pkgs.antennas; # added 2023-07-30
@@ -82,6 +83,7 @@ mapAliases {
   inherit (pkgs) gitmoji-cli; # added 2023-09-23
   glob = pkgs.node-glob; # added 2023-08-18
   inherit (pkgs) gqlint; # added 2023-08-19
+  inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
   hs-client = pkgs.hsd; # added 2023-08-20
