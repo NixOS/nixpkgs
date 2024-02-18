@@ -11,33 +11,28 @@
 , pytest-golden
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , python-dateutil
 , pyyaml
 , setuptools
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "6.1.1";
+  version = "7.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
-    repo = pname;
+    repo = "ical";
     rev = "refs/tags/${version}";
-    hash = "sha256-pFmJYXIhc9jhpc9ZjSNaol5h5Jb8ZvxuQsQL/2Rjryc=";
+    hash = "sha256-S/6zyUFXSWcnnLNSwz1smovSyodhKeRVbT9lj7+KLWo=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
-  ];
-
-  pythonRelaxDeps = [
-    "tzdata"
   ];
 
   propagatedBuildInputs = [
@@ -55,6 +50,7 @@ buildPythonPackage rec {
     pytest-golden
     pytestCheckHook
     pyyaml
+    syrupy
   ];
 
   pythonImportsCheck = [
