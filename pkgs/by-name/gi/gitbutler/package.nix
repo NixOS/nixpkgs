@@ -11,6 +11,7 @@
 , moreutils
 , libsoup
 , webkitgtk
+, glib-networking
 , libayatana-appindicator
 , git
 }:
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ copyDesktopItems wrapGAppsHook pkg-config perl jq moreutils ];
 
-  buildInputs = [ libsoup webkitgtk ];
+  buildInputs = [ libsoup webkitgtk glib-networking ];
 
   nativeCheckInputs = [ git ];
 
