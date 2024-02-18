@@ -4911,7 +4911,8 @@
       tank-utility
     ];
     "tankerkoenig" = ps: with ps; [
-    ]; # missing inputs: aiotankerkoenig
+      aiotankerkoenig
+    ];
     "tapsaff" = ps: with ps; [
     ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [
@@ -6487,6 +6488,7 @@
     "tag"
     "tailscale"
     "tailwind"
+    "tankerkoenig"
     "tasmota"
     "tautulli"
     "tcp"
