@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tplink-omada-client";
-  version = "1.3.7";
+  version = "1.3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit version;
-    hash = "sha256-iSCrFrcj6csslIkd8yt0wvvOSTCHRiMnsMOeUDcsE4U=";
+    hash = "sha256-/hWlBuqj8RuoOfY2qmha3kkqXIixwWTPKi7TjciB6Rk=";
   };
 
   nativeBuildInputs = [
