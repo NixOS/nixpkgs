@@ -2178,6 +2178,21 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
+  gi-gtk_4 = self.gi-gtk_4_0_8;
+  gi-gtk_4_0_8 = doDistribute (super.gi-gtk_4_0_8.override {
+    gi-gdk = self.gi-gdk_4;
+  });
+  gi-gdk_4 = self.gi-gdk_4_0_7;
+  gi-gdk_4_0_7 = doDistribute super.gi-gdk_4_0_7;
+  # GSK is only used for GTK 4.
+  gi-gsk = super.gi-gsk.override {
+    gi-gdk = self.gi-gdk_4;
+  };
+  gi-adwaita = super.gi-adwaita.override {
+    gi-gdk = self.gi-gdk_4;
+    gi-gtk = self.gi-gtk_4;
+  };
+
   # Missing dependency on gi-cairo
   # https://github.com/haskell-gi/haskell-gi/pull/420
   gi-vte =
