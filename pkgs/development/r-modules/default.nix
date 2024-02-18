@@ -430,6 +430,7 @@ let
     strawr = with pkgs; [ curl.dev ];
     terra = with pkgs; [ gdal proj geos ];
     apcf = with pkgs; [ geos ];
+    SemiCompRisks = [ pkgs.gsl ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
     simplexreg = [ pkgs.gsl ];
     spate = [ pkgs.fftw.dev ];
