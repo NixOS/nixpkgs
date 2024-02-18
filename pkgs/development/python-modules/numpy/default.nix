@@ -53,20 +53,17 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.26.2";
+  version = "1.26.4";
   pyproject = true;
   disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-9lc4RHZ2q1d38R5ru9uM4Rt4XhBfaQvEWWZXSBa20+o=";
+    hash = "sha256-KgKrqe0S5KxOs+qUIcQgMBoMZGDZgw10qd+H76SRIBA=";
   };
 
   patches = [
-    # Remove last usage of distutils to enable numpy on Python 3.12
-    ./0001-BLD-remove-last-usage-of-distutils-in-_core-code_gen.patch
-
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
     # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
     # 80-bit long double complex numbers.
