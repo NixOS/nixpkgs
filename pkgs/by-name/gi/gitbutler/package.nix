@@ -4,6 +4,7 @@
 , makeDesktopItem
 , gitbutler-ui
 , copyDesktopItems
+, wrapGAppsHook
 , pkg-config
 , perl
 , jq
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ copyDesktopItems pkg-config perl jq moreutils ];
+  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook pkg-config perl jq moreutils ];
 
   buildInputs = [ libsoup webkitgtk ];
 
