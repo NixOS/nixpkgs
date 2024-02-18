@@ -6238,6 +6238,8 @@ self: super: with self; {
 
   labmath = callPackage ../development/python-modules/labmath { };
 
+  laces = callPackage ../development/python-modules/laces { };
+
   lakeside = callPackage ../development/python-modules/lakeside { };
 
   langchain = callPackage ../development/python-modules/langchain { };
