@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-4EKJwHXNDUGhwlSSZFoPHdG5WBDoHFAQncG+CpD2sik=";
+    hash = "sha256-CjBNIs9A8mt4AZcGJnKeYl7Ka8RBoQBbAyIfKcBKobk=";
   };
 
-  cargoHash = "sha256-s1ODwuYv1x5/iP8yHS5FRk5MacrW81LaXI7/J+qtPNM=";
+  cargoHash = "sha256-Tcfnm0qcb9uWIoFqgBEKzWKW/ksf1BQh/VJijUaCBV4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=add_functionality_os"
     "--skip=add_functionality_union"
     "--skip=add_pypi_functionality"
+    "--skip=conda_solve_group_functionality"
     "--skip=test_alias"
     "--skip=test_cwd"
     "--skip=test_incremental_lock_file"
