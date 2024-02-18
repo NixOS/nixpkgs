@@ -63,6 +63,6 @@ mkYarnPackage rec {
     };
     maintainers = with lib.maintainers; [ hacker1024 ];
     platforms = with lib.platforms; all;
-    sourceProvenance = lib.sourceTypes.fromSource;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 }
