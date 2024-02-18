@@ -8837,11 +8837,11 @@ with pkgs;
   );
 
   graphviz = callPackage ../tools/graphics/graphviz {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   };
 
   graphviz-nox = callPackage ../tools/graphics/graphviz {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
     withXorg = false;
   };
 
@@ -14484,7 +14484,7 @@ with pkgs;
 
   watchlog = callPackage ../tools/misc/watchlog { };
 
-  watchman = callPackage ../development/tools/watchman {
+  watchman = darwin.apple_sdk_11_0.callPackage ../development/tools/watchman {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
   };
 
@@ -20971,7 +20971,7 @@ with pkgs;
 
   editline = callPackage ../development/libraries/editline { };
 
-  edencommon = callPackage ../development/libraries/edencommon { };
+  edencommon = darwin.apple_sdk_11_0.callPackage ../development/libraries/edencommon { };
 
   eigen = callPackage ../development/libraries/eigen { };
 
@@ -21052,9 +21052,9 @@ with pkgs;
 
   fastcdr = callPackage ../development/libraries/fastcdr { };
 
-  fbthrift = callPackage ../development/libraries/fbthrift { };
+  fbthrift = darwin.apple_sdk_11_0.callPackage ../development/libraries/fbthrift { };
 
-  fb303 = callPackage ../development/libraries/fb303 { };
+  fb303 = darwin.apple_sdk_11_0.callPackage ../development/libraries/fb303 { };
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
@@ -21136,7 +21136,7 @@ with pkgs;
 
   filtron = callPackage ../servers/filtron { };
 
-  fizz = callPackage ../development/libraries/fizz { };
+  fizz = darwin.apple_sdk_11_0.callPackage ../development/libraries/fizz { };
 
   flann = callPackage ../development/libraries/flann { };
 
@@ -21210,7 +21210,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
-  folly = callPackage ../development/libraries/folly { };
+  folly = darwin.apple_sdk_11_0.callPackage ../development/libraries/folly { };
 
   folks = callPackage ../development/libraries/folks { };
 
@@ -23960,6 +23960,8 @@ with pkgs;
 
   mvapich = callPackage ../development/libraries/mvapich { };
 
+  mvfst = darwin.apple_sdk_11_0.callPackage ../development/libraries/mvfst { };
+
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
@@ -24214,8 +24216,6 @@ with pkgs;
   ois = callPackage ../development/libraries/ois {
     inherit (darwin.apple_sdk.frameworks) Cocoa IOKit Kernel;
   };
-
-  openh264 = callPackage ../development/libraries/openh264 { };
 
   openjpeg = callPackage ../development/libraries/openjpeg { };
 
@@ -25413,7 +25413,7 @@ with pkgs;
   wally-cli = callPackage ../development/tools/wally-cli { };
   zsa-udev-rules = callPackage ../os-specific/linux/zsa-udev-rules { };
 
-  wangle = callPackage ../development/libraries/wangle { };
+  wangle = darwin.apple_sdk_11_0.callPackage ../development/libraries/wangle { };
 
   wapp = callPackage ../development/libraries/wapp { };
 

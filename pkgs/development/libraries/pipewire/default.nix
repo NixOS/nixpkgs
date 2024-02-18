@@ -18,6 +18,7 @@
 , libusb1
 , udev
 , libsndfile
+, vulkanSupport ? true
 , vulkan-headers
 , vulkan-loader
 , webrtc-audio-processing
@@ -125,8 +126,6 @@ stdenv.mkDerivation(finalAttrs: {
     ncurses
     readline
     udev
-    vulkan-headers
-    vulkan-loader
     tinycompress
   ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
   ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
@@ -140,6 +139,7 @@ stdenv.mkDerivation(finalAttrs: {
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
   ++ lib.optional rocSupport roc-toolkit
+  ++ lib.optionals vulkanSupport [ vulkan-headers vulkan-loader ]
   ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
   ++ lib.optional mysofaSupport libmysofa
   ++ lib.optional ffadoSupport ffado;
@@ -175,7 +175,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)
     (lib.mesonOption "session-managers" "")
-    (lib.mesonEnable "vulkan" true)
+    (lib.mesonEnable "vulkan" vulkanSupport)
     (lib.mesonEnable "x11" x11Support)
     (lib.mesonEnable "x11-xfixes" x11Support)
     (lib.mesonEnable "libcanberra" x11Support)

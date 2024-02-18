@@ -49,6 +49,7 @@
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
+, withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
@@ -201,6 +202,7 @@
 , game-music-emu
 , gnutls
 , gsm
+, harfbuzz
 , intel-media-sdk
 , ladspaH
 , lame
@@ -482,6 +484,9 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withGme "libgme")
     (enableFeature withGnutls "gnutls")
     (enableFeature withGsm "libgsm")
+  ] ++ optionals (versionAtLeast finalAttrs.version "6.1") [
+    (enableFeature withHarfbuzz "libharfbuzz")
+  ] ++ [
     (enableFeature withIconv "iconv")
     (enableFeature withJack "libjack")
     (enableFeature withLadspa "ladspa")
@@ -598,6 +603,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withGme [ game-music-emu ]
   ++ optionals withGnutls [ gnutls ]
   ++ optionals withGsm [ gsm ]
+  ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]

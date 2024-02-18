@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , python-dateutil
 , jmespath
@@ -11,12 +12,14 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.33.6"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.34.21"; # N.B: if you change this, change boto3 and awscli to a matching version
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k4BWurgxgp+Q4J7NcN1rKVr9UrFIL1WC7noR2CQ9lmE=";
+    hash = "sha256-IZg7sEc6GRMBksUOxpdNVfDEqkinCUvPQPeILItpuPE=";
   };
 
   propagatedBuildInputs = [

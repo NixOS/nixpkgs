@@ -2,7 +2,7 @@
 
 let
   dict = variant: a: stdenv.mkDerivation ({
-    inherit (hspell) version src patchPhase nativeBuildInputs;
+    inherit (hspell) version src patches postPatch nativeBuildInputs;
     buildFlags = [ variant ];
 
     meta = hspell.meta // {
