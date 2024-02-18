@@ -19,12 +19,16 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
+  makeFlags = [
+    "CC=cc"
+  ];
+
   meta = with lib; {
     description = "Deepmagic Information Gathering Tool";
     mainProgram = "dmitry";
     homepage = "https://github.com/jaygreig86/dmitry";
     maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl2Plus;
   };
 }
