@@ -14104,7 +14104,8 @@
     githubId = 332423;
   };
   nu-nu-ko = {
-    email = "host@nuko.city";
+    email = "nuko@shimeji.cafe";
+    matrix = "@nuko:shimeji.cafe";
     github = "nu-nu-ko";
     githubId = 153512689;
     name = "nuko";
