@@ -12,7 +12,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "${prefix}_${type}-${variantName}";
-  version = "unstable-2023-05-30";
+  version = "unstable-2023-05-31";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
