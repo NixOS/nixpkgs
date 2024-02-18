@@ -4850,6 +4850,8 @@ self: super: with self; {
 
   govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
 
+  govee-local-api = callPackage ../development/python-modules/govee-local-api { };
+
   goveelights = callPackage ../development/python-modules/goveelights { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
