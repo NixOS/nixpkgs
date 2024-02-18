@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.3";
+  version = "3.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mSZQKPvcbhIknFMwXkYfeaEDY3sOaGbCivDkY2X3UeE=";
+    hash = "sha256-Ul8s7S5AdhViyMrOk+9qHm6MSD8nvVZLwbFfYI776Fs=";
   };
 
   pythonRelaxDeps = [
