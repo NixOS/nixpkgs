@@ -1,8 +1,8 @@
-{ version, sha256, patches ? [], patchFlags ? [] }:
-{ stdenv, lib, fetchurl, fixDarwinDylibNames
-  # Cross-compiled icu4c requires a build-root of a native compile
+{ stdenv, lib, fetchurl, fixDarwinDylibNames, testers }:
+
+{ version, hash, patches ? [], patchFlags ? []
+# Cross-compiled icu4c requires a build-root of a native compile
 , buildRootOnly ? false, nativeBuildRoot
-, testers
 }:
 
 let
@@ -11,7 +11,7 @@ let
   baseAttrs = {
     src = fetchurl {
       url = "https://github.com/unicode-org/icu/releases/download/release-${lib.replaceStrings [ "." ] [ "-" ] version}/icu4c-${lib.replaceStrings [ "." ] [ "_" ] version}-src.tgz";
-      inherit sha256;
+      inherit hash;
     };
 
     postUnpack = ''
