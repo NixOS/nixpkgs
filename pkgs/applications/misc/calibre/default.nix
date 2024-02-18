@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , cmake
 , fetchpatch
 , fontconfig
@@ -28,15 +27,59 @@
 , xdg-utils
 , wrapGAppsHook
 , unrarSupport ? false
+, isocodes
+, cacert
+, zip
+, fetchFromGitHub
+, sphinx
+, liberation_ttf
+, mathjax-src ? null
+, hyphenation-src ? null
+, translations-src ? null
 }:
+let
+  nullOrX = x: y: if x == null then y else x;
+  iso-codes-zip = stdenv.mkDerivation rec {
+    pname = "iso-codes-zip";
+    inherit (isocodes) src version;
+    nativeBuildInputs = [ zip ];
+    unpackPhase = "true";
+    buildPhase = ''
+      tar xzf ${src}
+      zip main.zip $(tar tf ${src})
+    '';
+    installPhase = "cp main.zip $out";
+  };
+  mathjax = nullOrX mathjax-src (fetchFromGitHub {
+    repo = "MathJax";
+    owner = "mathjax";
+    rev = "3.1.4";
+    hash = "sha256-viEg8xBUAsrMRH2m5fMXhcejMuN5bR+EntIGgP0Rb+c=";
+  });
+  liberation_fonts = "${liberation_ttf}/share/fonts/truetype";
+  hyphenation = nullOrX hyphenation-src (fetchFromGitHub {
+    owner = "LibreOffice";
+    repo = "dictionaries";
+    rev = "libreoffice-7.6.5.2";
+    sha256 = "sha256-hGXumAvZXa5Rl/PANLsEV23YE50QjPmzA51DYKhvQBk=";
+  });
+  translations = nullOrX translations-src (fetchFromGitHub {
+    owner = "kovidgoyal";
+    repo = "calibre-translations";
+    rev = "bce1a26a9be187e6daf57fb6548d3fc7ad5a709a";
+    sha256 = "sha256-2rMosLGcJNFQPlAjHI+ft+IApdsERdK4aVLgcrGShzc=";
+  });
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
   version = "7.5.1";
 
-  src = fetchurl {
-    url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pGo9fWyeX5hpw5YOV05tWy/0YxHShStKN96LMPnqIiA=";
+  src = fetchFromGitHub {
+    owner = "kovidgoyal";
+    repo = "calibre";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-FH9+MHJkHJYEaxoqTTlm6gJkq+RpdXoK5F2erZP+ECI=";
   };
 
   patches = [
@@ -50,6 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
+    })
+    (fetchpatch {
+      name = "build-from-git-without-internet";
+      url = "https://github.com/kovidgoyal/calibre/commit/4b7c79f71821e9d13edff5d04249c5decf1093a0.patch";
+      hash = "sha256-1czbc5Z5BsvtyVWnQwFH3Wsn+31RfahjulwtXHJVQKA=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -72,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
     wrapGAppsHook
     wrapQtAppsHook
+    sphinx
   ];
 
   buildInputs = [
@@ -134,20 +183,39 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optional (unrarSupport) unrardll
   );
 
+  env = {
+    POPPLER_INC_DIR = "${poppler_utils.dev}/include/poppler";
+    POPPLER_LIB_DIR = "${poppler_utils.out}/lib";
+    MAGICK_INC = "${imagemagick.dev}/include/ImageMagick";
+    MAGICK_LIB = "${imagemagick.out}/lib";
+    FC_INC_DIR = "${fontconfig.dev}/include/fontconfig";
+    FC_LIB_DIR = "${fontconfig.lib}/lib";
+    PODOFO_INC_DIR = "${podofo.dev}/include/podofo";
+    PODOFO_LIB_DIR = "${podofo.lib}/lib";
+    ISOCODE_ZIP = "${iso-codes-zip}";
+    ISOCODE_VERSION = iso-codes-zip.version;
+    CACERT = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    TRANSLATIONS = "${translations}";
+    # this is get from https://code.calibre-ebook.com/ua-popularity
+    # It's not reproducible, so we have to pack it in repo
+    # this file can be generated using `python fetch-ua.py`
+    UA_POPULARITY = "${./ua-popularity.txt}";
+  };
+
+  buildPhase = ''
+    mkdir temp
+    cp "${cacert}/etc/ssl/certs/ca-bundle.crt" resources/mozilla-ca-certs.pem
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py bootstrap \
+      --path-to-mathjax=${mathjax} \
+      --path-to-liberation_fonts=${liberation_fonts} \
+      --path-to-hyphenation=${hyphenation}
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py man_pages
+  '';
+
   installPhase = ''
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
-    export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
-    export MAGICK_LIB=${imagemagick.out}/lib
-    export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
-    export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo.lib}/lib
-    export XDG_DATA_HOME=$out/share
-    export XDG_UTILS_INSTALL_MODE="user"
 
     ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --root=$out \
       --prefix=$out \
@@ -201,9 +269,10 @@ stdenv.mkDerivation (finalAttrs: {
       free and open source and great for both casual users and computer experts.
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
-    license = if unrarSupport
-              then lib.licenses.unfreeRedistributable
-              else lib.licenses.gpl3Plus;
+    license =
+      if unrarSupport
+      then lib.licenses.unfreeRedistributable
+      else lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
