@@ -5,6 +5,7 @@
 , fetchCrate
 , fetchFromGitHub
 , nix-update-script
+, nixosTests
 , openssl
 , pkg-config
 , postgresql
@@ -98,7 +99,12 @@ in
     RUSTC_BOOTSTRAP = 1;
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      pgvecto-rs = nixosTests.pgvecto-rs;
+    };
+  };
 
   meta = with lib; {
     # The pgrx 0.11.2 dependency is broken in aarch64-linux: https://github.com/pgcentralfoundation/pgrx/issues/1429
