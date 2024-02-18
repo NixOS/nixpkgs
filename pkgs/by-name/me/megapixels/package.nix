@@ -27,14 +27,14 @@ let
     ++ optionals jpgSupport [ graphicsmagick exiftool ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "megapixels";
   version = "1.7.0";
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "megapixels";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ejTCYZMDkqz8P3vroq8XAl+pUGgcS56cm3tzOTE3rfc=";
   };
 
@@ -64,12 +64,15 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  strictDeps = true;
+
   meta = with lib; {
     description = "GTK4 camera application that knows how to deal with the media request api";
     homepage = "https://gitlab.com/postmarketOS/megapixels";
-    changelog = "https://gitlab.com/postmarketOS/megapixels/-/tags/${version}";
+    changelog = "https://gitlab.com/postmarketOS/megapixels/-/tags/${finalAttrs.version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda Luflosi ];
     platforms = platforms.linux;
+    mainProgram = "megapixels";
   };
-}
+})
