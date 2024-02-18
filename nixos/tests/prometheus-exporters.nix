@@ -218,6 +218,9 @@ let
         services.dnsmasq.enable = true;
       };
       exporterTest = ''
+        wait_for_unit("dnsmasq.service")
+        wait_for_open_port(53)
+        wait_for_file("/var/lib/dnsmasq/dnsmasq.leases")
         wait_for_unit("prometheus-dnsmasq-exporter.service")
         wait_for_open_port(9153)
         succeed("curl -sSf http://localhost:9153/metrics | grep 'dnsmasq_leases 0'")
