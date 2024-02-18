@@ -4921,9 +4921,7 @@ self: super: with self; {
 
   graphtage = callPackage ../development/python-modules/graphtage { };
 
-  graphviz = callPackage ../development/python-modules/graphviz {
-    inherit (pkgs) graphviz;
-  };
+  graphviz = callPackage ../development/python-modules/graphviz { };
 
   grappelli-safe = callPackage ../development/python-modules/grappelli-safe { };
 
