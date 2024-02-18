@@ -16613,6 +16613,12 @@
     github = "shymega";
     githubId = 1334592;
   };
+  siddarthkay = {
+    email = "siddarthkay@gmail.com";
+    github = "siddarthkay";
+    githubId = 64726664;
+    name = "Siddarth Kumar";
+  };
   siddharthist = {
     email = "langston.barrett@gmail.com";
     github = "langston-barrett";
