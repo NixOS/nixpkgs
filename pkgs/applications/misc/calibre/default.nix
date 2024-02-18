@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (fetchpatch {
       name = "build-from-git-without-internet";
-      url = "https://github.com/kovidgoyal/calibre/commit/4b7c79f71821e9d13edff5d04249c5decf1093a0.patch";
+      url = "https://github.com/wrvsrx/calibre/commit/4b7c79f71821e9d13edff5d04249c5decf1093a0.patch";
       hash = "sha256-1czbc5Z5BsvtyVWnQwFH3Wsn+31RfahjulwtXHJVQKA=";
     })
   ]
