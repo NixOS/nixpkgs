@@ -10991,6 +10991,8 @@ self: super: with self; {
 
   pyocd = callPackage ../development/python-modules/pyocd { };
 
+  pyocd-pemicro = callPackage ../development/python-modules/pyocd-pemicro { };
+
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;
   };
