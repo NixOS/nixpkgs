@@ -13,49 +13,38 @@ WFS (WiiU File System) Tools based on [wfslib](https://github.com/koolkdev/wfsli
 wfs-extract --help
 ```
 ```
-Usage: wfs-extract --input <input file> --output <output directory> --otp <opt path> [--seeprom <seeprom path>] [--mlc] [--usb] [--dump-path <directory to dump>] [--verbose]
-Allowed options:
+usage: wfs-extract --input <input file> [--type <type>]
+                   [--otp <path> [--seeprom <path>]]
+                   [--dump-path <directory to dump>] [--verbose]
+
+options:
   --help                produce help message
   --input arg           input file
+  --type arg (=usb)     file type (usb/mlc/plain)
+  --otp arg             otp file (for usb/mlc types)
+  --seeprom arg         seeprom file (for usb type)
   --output arg          ouput directory
-  --otp arg             otp file
-  --seeprom arg         seeprom file (required if usb)
   --dump-path arg (=/)  directory to dump (default: "/")
-  --mlc                 device is mlc (default: device is usb)
-  --usb                 device is usb
   --verbose             verbose output
-```
-
-### wfs-file-injector
-Change the content of files in wfs image. The injected file size must be smaller than the allocated size on the disk.
-**WARNING: May corrupt the file system, Use at your own risk. Make sure to backup the wfs image.**
-```
-Usage: wfs-file-injector --image <wfs image> --inject-file <file to inject> --inject-path <file path in wfs> --otp <opt path> [--seeprom <seeprom path>] [--mlc] [--usb]
-Allowed options:
-  --help                produce help message
-  --image arg           wfs image file
-  --inject-file arg     file to inject
-  --inject-path arg     wfs file path to replace
-  --otp arg             otp file
-  --seeprom arg         seeprom file (required if usb)
-  --mlc                 device is mlc (default: device is usb)
-  --usb                 device is usb
 ```
 
 ### wfs-reencryptor
 A tool reencrypt a disk with a new key.
 ```
-Usage: wfs-reencryptor --input <input file> [--output <output file>] --input-otp <input otp path> --output-otp <output otp path> [--input-seeprom <input seeprom path> --output-seeprom <outpu seeprom path>] [--mlc] [--usb]
-Allowed options:
-  --help                produce help message
-  --input arg           input file
-  --output arg          output file (if not specified, reencrypt the input file)
-  --input-otp arg       input otp file
-  --input-seeprom arg   input seeprom file (required if usb)
-  --output-otp arg      output otp file
-  --output-seeprom arg  output seeprom file (required if usb)
-  --mlc                 device is mlc (default: device is usb)
-  --usb                 device is usb
+usage: wfs-reencryptor --input <input file> [--output <output file>]
+                       [--input-type <type>] [--input-otp <path> [--input-seeprom <path>]]
+                       [--output-type <type>] [--output-otp <path> [--output-seeprom <path>]]
+
+options:
+  --help                  produce help message
+  --input arg             input file
+  --input-type arg (=usb) input file type (usb/mlc/plain)
+  --input-otp arg         input otp file (for usb/mlc types)
+  --input-seeprom arg     input seeprom file (for usb type)
+  --output arg            output file (default: reencrypt the input file)
+  --output-type arg       output file type (default: same as input)
+  --output-otp arg        output otp file (for usb/mlc types)
+  --output-seeprom arg    output seeprom file (for usb type)
 ```
 
 ### wfs-fuse (Linux/MacOS only)
@@ -63,26 +52,42 @@ Allowed options:
 wfs-fuse --help
 ```
 ```
-usage: wfs-fuse <device_file> <mountpoint> --otp <otp_path> [--seeprom <seeprom_path>] [--usb] [--mlc] [fuse options]
+usage: wfs-fuse <device_file> <mountpoint> [--type <file type>] [--otp <otp_path> [--seeprom <seeprom_path>]] [fuse options]
 
 options:
     --help|-h              print this help message
-    --otp <path>           otp file
-    --seeprom <path>       seeprom file (required if usb)
-    --usb                  device is usb (default)
-    --mlc                  device is mlc
+    --type [usb/mlc/plain] type of device
+    --otp <path>           otp file (for mlc and usb modes)
+    --seeprom <path>       seeprom file (for usb mode)
     -d   -o debug          enable debug output (implies -f)
     -o default_permissions check access permission instead the operation system
     -o allow_other         allow access to the mount for all users
     -f                     foreground operation
     -s                     disable multi-threaded operation
+```
 
+### wfs-file-injector
+Change the content of files in wfs image. The injected file size must be smaller than the allocated size on the disk.
+**WARNING: May corrupt the file system, Use at your own risk. Make sure to backup the wfs image.**
+```
+usage: wfs-file-injector --image <wfs image> [--type <type>]
+                         [--otp <path> [--seeprom <path>]]
+                         --inject-file <file to inject> --inject-path <file path in wfs>
+
+options:
+  --help                produce help message
+  --image arg           wfs image file
+  --type arg (=usb)     file type (usb/mlc/plain)
+  --otp arg             otp file (for usb/mlc types)
+  --seeprom arg         seeprom file (for usb type)
+  --inject-file arg     file to inject
+  --inject-path arg     wfs file path to replace
 ```
 
 ### Example
 #### Dump mlc from backup
 ```
-wfs-extract --input mlc.full.img --output dump_dir --otp otp.bin --mlc
+wfs-extract --input mlc.full.img --output dump_dir --type mlc --otp otp.bin
 ```
 
 #### Dump USB device under Windows

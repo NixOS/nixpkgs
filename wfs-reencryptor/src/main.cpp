@@ -29,8 +29,8 @@ class ReencryptorBlocksDevice final : public BlocksDevice {
     uint32_t iv;
     bool encrypted;
   };
-  ReencryptorBlocksDevice(const std::shared_ptr<Device>& device, const std::span<std::byte>& key)
-      : BlocksDevice(device, key) {}
+  ReencryptorBlocksDevice(std::shared_ptr<Device> device, std::optional<std::vector<std::byte>> key = std::nullopt)
+      : BlocksDevice(std::move(device), std::move(key)) {}
   ~ReencryptorBlocksDevice() final override = default;
 
   bool ReadBlock(uint32_t block_number,
@@ -139,101 +139,115 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
   }
 }
 
+std::optional<std::vector<std::byte>> get_key(std::string type,
+                                              std::optional<std::string> otp_path,
+                                              std::optional<std::string> seeprom_path) {
+  if (type == "mlc") {
+    if (!otp_path)
+      throw std::runtime_error("missing otp");
+    std::unique_ptr<OTP> otp(OTP::LoadFromFile(*otp_path));
+    return otp->GetMLCKey();
+  } else if (type == "usb") {
+    if (!otp_path || !seeprom_path)
+      throw std::runtime_error("missing seeprom");
+    std::unique_ptr<OTP> otp(OTP::LoadFromFile(*otp_path));
+    std::unique_ptr<SEEPROM> seeprom(SEEPROM::LoadFromFile(*seeprom_path));
+    return seeprom->GetUSBKey(*otp);
+  } else if (type == "plain") {
+    return std::nullopt;
+  } else {
+    throw std::runtime_error("unexpected type");
+  }
+}
+
 int main(int argc, char* argv[]) {
   try {
-    boost::program_options::options_description desc("Allowed options");
-    std::string wfs_path;
-    desc.add_options()("help", "produce help message")("input", boost::program_options::value<std::string>(),
-                                                       "input file")(
-        "output", boost::program_options::value<std::string>(),
-        "output file (if not specified, reencrypt the input file)")(
-        "input-otp", boost::program_options::value<std::string>(), "input otp file")(
-        "input-seeprom", boost::program_options::value<std::string>(), "input seeprom file (required if usb)")(
-        "output-otp", boost::program_options::value<std::string>(), "output otp file")(
-        "output-seeprom", boost::program_options::value<std::string>(), "output seeprom file (required if usb)")(
-        "mlc", "device is mlc (default: device is usb)")("usb", "device is usb");
+    std::string input_path, input_type, output_type;
+    std::optional<std::string> output_path, input_seeprom_path, input_otp_path, output_seeprom_path, output_otp_path;
 
-    boost::program_options::variables_map vm;
-    boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
-    boost::program_options::notify(vm);
-
-    bool bad = false;
-    if (!vm.count("input")) {
-      std::cerr << "Missing input file (--input)" << std::endl;
-      bad = true;
-    }
-    if (!vm.count("input-otp")) {
-      std::cerr << "Missing input otp file (--input-otp)" << std::endl;
-      bad = true;
-    }
-    if (!vm.count("output-otp")) {
-      std::cerr << "Missing output otp file (--output-otp)" << std::endl;
-      bad = true;
-    }
-    if ((!vm.count("input-seeprom") && !vm.count("mlc"))) {
-      std::cerr << "Missing input seeprom file (--input-seeprom)" << std::endl;
-      bad = true;
-    }
-    if ((!vm.count("output-seeprom") && !vm.count("mlc"))) {
-      std::cerr << "Missing output seeprom file (--output-seeprom)" << std::endl;
-      bad = true;
-    }
-    if (vm.count("mlc") + vm.count("usb") > 1) {
-      std::cerr << "Can't specify both --mlc and --usb" << std::endl;
-      bad = true;
-    }
-    if (vm.count("help") || bad) {
-      std::cout << "Usage: wfs-reencryptor --input <input file> [--output <output file>] --input-otp <input otp path> "
-                   "--output-otp "
-                   "<output otp path> [--input-seeprom <input seeprom path> --output-seeprom <outpu seeprom path>] "
-                   "[--mlc] [--usb]"
-                << std::endl;
-      std::cout << desc << "\n";
-      return 1;
-    }
-
-    std::vector<std::byte> input_key, output_key;
-    std::unique_ptr<OTP> input_otp, output_otp;
-    // open otp
     try {
-      input_otp.reset(OTP::LoadFromFile(vm["input-otp"].as<std::string>()));
-      output_otp.reset(OTP::LoadFromFile(vm["output-otp"].as<std::string>()));
-    } catch (std::exception& e) {
-      std::cerr << "Failed to open OTP: " << e.what() << std::endl;
+      boost::program_options::options_description desc("options");
+      desc.add_options()("help", "produce help message");
+
+      desc.add_options()("input", boost::program_options::value<std::string>(&input_path)->required(), "input file")(
+          "input-type", boost::program_options::value<std::string>(&input_type)->default_value("usb")->required(),
+          "input file type (usb/mlc/plain)")("input-otp", boost::program_options::value<std::string>(),
+                                             "input otp file (for usb/mlc types)")(
+          "input-seeprom", boost::program_options::value<std::string>(), "input seeprom file (for usb type)");
+
+      desc.add_options()("output", boost::program_options::value<std::string>(),
+                         "output file (default: reencrypt the input file)")(
+          "output-type", boost::program_options::value<std::string>(), "output file type (default: same as input)")(
+          "output-otp", boost::program_options::value<std::string>(), "output otp file (for usb/mlc types)")(
+          "output-seeprom", boost::program_options::value<std::string>(), "output seeprom file (for usb type)");
+
+      boost::program_options::variables_map vm;
+      boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
+
+      if (vm.count("help")) {
+        std::cout << "usage: wfs-reencryptor --input <input file> [--output <output file>]" << std::endl
+                  << "                       [--input-type <type>] [--input-otp <path> [--input-seeprom <path>]]"
+                  << std::endl
+                  << "                       [--output-type <type>] [--output-otp <path> [--output-seeprom <path>]]"
+                  << std::endl
+                  << std::endl;
+        std::cout << desc << std::endl;
+        return 0;
+      }
+
+      boost::program_options::notify(vm);
+
+      // Fill arguments
+
+      if (vm.count("output"))
+        output_path = vm["output"].as<std::string>();
+
+      output_type = vm.count("output-type") ? vm["output-type"].as<std::string>() : input_type;
+
+      if (vm.count("input-otp"))
+        input_otp_path = vm["input-otp"].as<std::string>();
+      if (vm.count("input-seeprom"))
+        input_seeprom_path = vm["input-seeprom"].as<std::string>();
+      if (vm.count("output-otp"))
+        output_otp_path = vm["output-otp"].as<std::string>();
+      if (vm.count("output-seeprom"))
+        output_seeprom_path = vm["output-seeprom"].as<std::string>();
+
+      if (input_type != "usb" && input_type != "mlc" && input_type != "plain")
+        throw boost::program_options::error("Invalid input type (valid types: usb/mlc/plain)");
+      if (output_type != "usb" && output_type != "mlc" && output_type != "plain")
+        throw boost::program_options::error("Invalid output type (valid types: usb/mlc/plain)");
+      if (input_type != "plain" && !input_otp_path)
+        throw boost::program_options::error("Missing --input-otp");
+      if (output_type != "plain" && !output_otp_path)
+        throw boost::program_options::error("Missing --output-otp");
+      if (input_type == "usb" && !input_seeprom_path)
+        throw boost::program_options::error("Missing --input-seeprom");
+      if (output_type == "usb" && !output_seeprom_path)
+        throw boost::program_options::error("Missing --output-seeprom");
+
+    } catch (const boost::program_options::error& e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      std::cerr << "Use --help to display program options" << std::endl;
       return 1;
     }
 
-    if (vm.count("mlc")) {
-      // mlc
-      input_key = input_otp->GetMLCKey();
-      output_key = output_otp->GetMLCKey();
-    } else {
-      // usb
-      std::unique_ptr<SEEPROM> input_seeprom, output_seeprom;
-      try {
-        input_seeprom.reset(SEEPROM::LoadFromFile(vm["input-seeprom"].as<std::string>()));
-        output_seeprom.reset(SEEPROM::LoadFromFile(vm["output-seeprom"].as<std::string>()));
-      } catch (std::exception& e) {
-        std::cerr << "Failed to open SEEPROM: " << e.what() << std::endl;
-        return 1;
-      }
-      input_key = input_seeprom->GetUSBKey(*input_otp);
-      output_key = output_seeprom->GetUSBKey(*output_otp);
-    }
-    auto input_device = std::make_shared<FileDevice>(vm["input"].as<std::string>(), 9, 0, vm.count("output"));
+    auto input_key = get_key(input_type, input_otp_path, input_seeprom_path);
+    auto output_key = get_key(output_type, output_otp_path, output_seeprom_path);
+
+    auto input_device = std::make_shared<FileDevice>(input_path, 9, 0, !!output_path);
     Wfs::DetectDeviceSectorSizeAndCount(input_device, input_key);
 
-    auto output_device =
-        vm.count("output")
-            ? std::make_shared<FileDevice>(vm["output"].as<std::string>(), input_device->Log2SectorSize(),
-                                           input_device->SectorsCount(), /*read_only=*/false, /*open_create=*/true)
-            : input_device;
+    auto output_device = output_path ? std::make_shared<FileDevice>(*output_path, input_device->Log2SectorSize(),
+                                                                    input_device->SectorsCount(),
+                                                                    /*read_only=*/false, /*open_create=*/true)
+                                     : input_device;
 
     std::cout << "Exploring blocks..." << std::endl;
     auto reencryptor = std::make_shared<ReencryptorBlocksDevice>(input_device, input_key);
     exploreDir(throw_if_error(Wfs(reencryptor).GetRootArea()->GetRootDirectory()), {});
     std::cout << std::format("Found {} blocks! Reencrypting...\n", reencryptor->blocks().size());
-    reencryptor->Reencrypt(std::make_shared<BlocksDevice>(output_device, output_key));
+    reencryptor->Reencrypt(std::make_shared<ReencryptorBlocksDevice>(output_device, output_key));
     std::cout << "Done!" << std::endl;
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;

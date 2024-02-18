@@ -14,80 +14,85 @@
 
 #include <wfslib/wfslib.h>
 
+std::optional<std::vector<std::byte>> get_key(std::string type,
+                                              std::optional<std::string> otp_path,
+                                              std::optional<std::string> seeprom_path) {
+  if (type == "mlc") {
+    if (!otp_path)
+      throw std::runtime_error("missing otp");
+    std::unique_ptr<OTP> otp(OTP::LoadFromFile(*otp_path));
+    return otp->GetMLCKey();
+  } else if (type == "usb") {
+    if (!otp_path || !seeprom_path)
+      throw std::runtime_error("missing seeprom");
+    std::unique_ptr<OTP> otp(OTP::LoadFromFile(*otp_path));
+    std::unique_ptr<SEEPROM> seeprom(SEEPROM::LoadFromFile(*seeprom_path));
+    return seeprom->GetUSBKey(*otp);
+  } else if (type == "plain") {
+    return std::nullopt;
+  } else {
+    throw std::runtime_error("unexpected type");
+  }
+}
+
 int main(int argc, char* argv[]) {
   try {
-    boost::program_options::options_description desc("Allowed options");
-    std::string wfs_path;
-    desc.add_options()("help", "produce help message")("image", boost::program_options::value<std::string>(),
-                                                       "wfs image file")(
-        "inject-file", boost::program_options::value<std::string>(), "file to inject")(
-        "inject-path", boost::program_options::value<std::string>(), "wfs file path to replace")(
-        "otp", boost::program_options::value<std::string>(), "otp file")(
-        "seeprom", boost::program_options::value<std::string>(), "seeprom file (required if usb)")(
-        "mlc", "device is mlc (default: device is usb)")("usb", "device is usb");
+    std::string input_path, type, inject_file, inject_path;
+    std::optional<std::string> seeprom_path, otp_path;
 
-    boost::program_options::variables_map vm;
-    boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
-    boost::program_options::notify(vm);
-
-    bool bad = false;
-    if (!vm.count("image")) {
-      std::cerr << "Missing wfs image file (--image)" << std::endl;
-      bad = true;
-    }
-    if (!vm.count("inject-file")) {
-      std::cerr << "Missing file to inject (--inject-file)" << std::endl;
-      bad = true;
-    }
-    if (!vm.count("inject-path")) {
-      std::cerr << "Missing wfs file path (--inject-path)" << std::endl;
-      bad = true;
-    }
-    if (!vm.count("otp")) {
-      std::cerr << "Missing otp file (--otp)" << std::endl;
-      bad = true;
-    }
-    if ((!vm.count("seeprom") && !vm.count("mlc"))) {
-      std::cerr << "Missing seeprom file (--seeprom)" << std::endl;
-      bad = true;
-    }
-    if (vm.count("mlc") + vm.count("usb") > 1) {
-      std::cerr << "Can't specify both --mlc and --usb" << std::endl;
-      bad = true;
-    }
-    if (vm.count("help") || bad) {
-      std::cout << "Usage: wfs-file-injector --image <wfs image> --inject-file <file to inject> --inject-path <file "
-                   "path in wfs> --otp <opt path> [--seeprom <seeprom path>] [--mlc] [--usb]"
-                << std::endl;
-      std::cout << desc << "\n";
-      return 1;
-    }
-
-    std::vector<std::byte> key;
-    std::unique_ptr<OTP> otp;
-    // open otp
     try {
-      otp.reset(OTP::LoadFromFile(vm["otp"].as<std::string>()));
-    } catch (std::exception& e) {
-      std::cerr << "Failed to open OTP: " << e.what() << std::endl;
+      boost::program_options::options_description desc("options");
+      desc.add_options()("help", "produce help message");
+
+      desc.add_options()("image", boost::program_options::value<std::string>(&input_path)->required(),
+                         "wfs image file")(
+          "type", boost::program_options::value<std::string>(&type)->default_value("usb")->required(),
+          "file type (usb/mlc/plain)")("otp", boost::program_options::value<std::string>(),
+                                       "otp file (for usb/mlc types)")(
+          "seeprom", boost::program_options::value<std::string>(), "seeprom file (for usb type)");
+
+      desc.add_options()("inject-file", boost::program_options::value<std::string>(&inject_file)->required(),
+                         "file to inject")("inject-path",
+                                           boost::program_options::value<std::string>(&inject_path)->required(),
+                                           "wfs file path to replace");
+
+      boost::program_options::variables_map vm;
+      boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
+
+      if (vm.count("help")) {
+        std::cout << "usage: wfs-file-injector --image <wfs image> [--type <type>]" << std::endl
+                  << "                         [--otp <path> [--seeprom <path>]]" << std::endl
+                  << "                         --inject-file <file to inject> --inject-path <file path in wfs>"
+                  << std::endl
+                  << std::endl;
+        std::cout << desc << std::endl;
+        return 0;
+      }
+
+      boost::program_options::notify(vm);
+
+      // Fill arguments
+      if (vm.count("otp"))
+        otp_path = vm["otp"].as<std::string>();
+      if (vm.count("seeprom"))
+        seeprom_path = vm["seeprom"].as<std::string>();
+
+      if (type != "usb" && type != "mlc" && type != "plain")
+        throw boost::program_options::error("Invalid input type (valid types: usb/mlc/plain)");
+      if (type != "plain" && !otp_path)
+        throw boost::program_options::error("Missing --otp");
+      if (type == "usb" && !seeprom_path)
+        throw boost::program_options::error("Missing --seeprom");
+
+    } catch (const boost::program_options::error& e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      std::cerr << "Use --help to display program options" << std::endl;
       return 1;
     }
 
-    if (vm.count("mlc")) {
-      // mlc
-      key = otp->GetMLCKey();
-    } else {
-      // usb
-      std::unique_ptr<SEEPROM> seeprom;
-      try {
-        seeprom.reset(SEEPROM::LoadFromFile(vm["seeprom"].as<std::string>()));
-      } catch (std::exception& e) {
-        std::cerr << "Failed to open SEEPROM: " << e.what() << std::endl;
-        return 1;
-      }
-      key = seeprom->GetUSBKey(*otp);
-    }
-    std::ifstream input_file(vm["inject-file"].as<std::string>(), std::ios::binary | std::ios::in);
+    auto key = get_key(type, otp_path, seeprom_path);
+
+    std::ifstream input_file(inject_file, std::ios::binary | std::ios::in);
     if (input_file.fail()) {
       std::cerr << "Failed to open file to inject" << std::endl;
       return 1;
@@ -100,11 +105,11 @@ int main(int argc, char* argv[]) {
     size_t file_size = static_cast<size_t>(input_file.tellg());
     input_file.seekg(0, std::ios::beg);
 
-    auto device = std::make_shared<FileDevice>(vm["image"].as<std::string>(), 9, 0, false);
+    auto device = std::make_shared<FileDevice>(input_path, 9, 0, false);
     Wfs::DetectDeviceSectorSizeAndCount(device, key);
-    auto file = Wfs(device, key).GetFile(vm["inject-path"].as<std::string>());
+    auto file = Wfs(device, key).GetFile(inject_path);
     if (!file) {
-      std::cerr << "Error: Didn't find file " << vm["inject-path"].as<std::string>() << " in wfs" << std::endl;
+      std::cerr << "Error: Didn't find file " << inject_path << " in wfs" << std::endl;
       return 1;
     }
     if (file_size > file->SizeOnDisk()) {
