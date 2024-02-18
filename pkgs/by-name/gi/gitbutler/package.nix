@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # Use the correct path to the prebuilt UI assets.
     substituteInPlace gitbutler-app/tauri.conf.json \
-      --replace-fail '../gitbutler-ui/build' '${gitbutler-ui}' 
+      --replace-fail '../gitbutler-ui/build' '${gitbutler-ui}'
 
     # Since `cargo build` is used instead of `tauri build`, configs are merged manually.
     # Disable the updater, as it is not needed for Nixpkgs.

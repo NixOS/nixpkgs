@@ -17,6 +17,8 @@ mkYarnPackage rec {
 
   sourceRoot = "${src.name}/gitbutler-ui";
 
+  # The package.json must use spaces instead of upstream's tabs to pass Nixpkgs
+  # CI.
   # To generate the Yarn lockfile, run `yarn install`.
   # There is no way to import the tagged pnpm lockfile, so make sure to test the
   # result thoughly as dependency versions may differ from the release.
