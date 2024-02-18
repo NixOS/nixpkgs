@@ -1,65 +1,48 @@
 --- a/plugins/remote-dev-server/bin/launcher.sh
 +++ b/plugins/remote-dev-server/bin/launcher.sh
-@@ -213,35 +213,6 @@
+@@ -218,10 +218,11 @@
    exit 1
  fi
 
--# ---------------------------------------------------------------------
--# Configure fonts and fontconfig
--# ---------------------------------------------------------------------
++
+ # ---------------------------------------------------------------------
+ # Configure fonts and fontconfig
+ # ---------------------------------------------------------------------
 -if [ $IS_DARWIN -ne 1 ]; then
--  FONTS_CONFIGURATION_SOURCE_PATH="$REMOTE_DEV_SERVER_DIR/selfcontained/fontconfig"
--  if [ ! -d "$FONTS_CONFIGURATION_SOURCE_PATH" ]; then
--    echo "ERROR! Unable to locate font configuration source directory in self-contained distribution: '$FONTS_CONFIGURATION_SOURCE_PATH'." 1>&2
--    exit 1
--  fi
--
--  export INTELLIJ_ORIGINAL_ENV_FONTCONFIG_PATH="${FONTCONFIG_PATH:-}"
--  if [ -z "${FONTCONFIG_PATH:-}" ]; then
--    export FONTCONFIG_PATH="$FONTS_CONFIGURATION_SOURCE_PATH"
--  else
--    export FONTCONFIG_PATH="$FONTCONFIG_PATH:$FONTS_CONFIGURATION_SOURCE_PATH"
--  fi
--
--  export INTELLIJ_ORIGINAL_ENV_XDG_DATA_DIRS="${XDG_DATA_DIRS:-}"
--  # fontconfig checks default fonts in "$XDG_DATA_HOME/fonts" path.
--  # Set this variable to use self-contained default fonts in case no others exist.
--  # Note: XDG_DATA_HOME specify a single path entry that could be re-used in IDEs.
--  #       Use XDG_DATA_DIRS variable to combine with existing paths.
--  if [ -z "${XDG_DATA_DIRS:-}" ]; then
--    export XDG_DATA_DIRS="$FONTS_CONFIGURATION_SOURCE_PATH"
--  else
--    export XDG_DATA_DIRS="$XDG_DATA_DIRS:$FONTS_CONFIGURATION_SOURCE_PATH"
--  fi
--fi
--
- # Handle old names of these vars
- REMOTE_DEV_NON_INTERACTIVE="${REMOTE_DEV_NON_INTERACTIVE:-${CWM_NON_INTERACTIVE:-}}"
- REMOTE_DEV_TRUST_PROJECTS="${REMOTE_DEV_TRUST_PROJECTS:-${CWM_TRUST_PROJECTS:-}}"
-@@ -366,6 +366,8 @@
++if false; then
+   FONTS_CONFIGURATION_BASE_PATH="$REMOTE_DEV_SERVER_DIR/selfcontained/fontconfig"
+   if [ ! -d "$FONTS_CONFIGURATION_BASE_PATH" ]; then
+     echo "ERROR! Unable to locate font configuration source directory in self-contained distribution: '$FONTS_CONFIGURATION_BASE_PATH'." 1>&2
+@@ -350,7 +351,10 @@
+ fi
+
+ # -------------------------------------------------------------------------------------
+ # Patch JBR to make self-contained JVM (requires nothing from host system except glibc)
++#
++# Patch for nixpkgs: due to the model of nix, this should not be allowed.
+ # -------------------------------------------------------------------------------------
++
+ if [ -n "${REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS:-}" ]; then
+   # already set by environment
+   echo "\$REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=$REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS"
+@@ -366,7 +370,9 @@
+ else
    REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=1
  fi
 
+-if [ $REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS -eq 1 ]; then
 +REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=0
 +
- if [ $REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS -eq 1 ]; then
++if false; then
    SELFCONTAINED_LIBS="$REMOTE_DEV_SERVER_DIR/selfcontained/lib"
    if [ ! -d "$SELFCONTAINED_LIBS" ]; then
-@@ -573,11 +544,6 @@
- # Run the IDE.
- # ---------------------------------------------------------------------
-
--if [ $IS_DARWIN -ne 1 ]; then
--  # will get a crash otherwise due to fontconfig paths being relative
--  cd "$FONTS_CONFIGURATION_SOURCE_PATH" || exit 1
--fi
--
- if [ $IS_DARWIN -eq 1 ]; then
-   LAUNCHER="$IDE_BIN_DIR/../MacOS/$IDE_SCRIPT_NAME"
+     echo "ERROR! Unable to locate libraries for self-contained idea distribution. Directory not found: '$SELFCONTAINED_LIBS'." 1>&2
+@@ -588,6 +594,7 @@
+ if [ $PER_PROJECT_CONFIGS -eq 1 ]; then
+       "$LAUNCHER" "$STARTER_COMMAND" "$PROJECT_PATH" "$@"
+       ;;
+   esac
++  unset REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS
  else
-@@ -596,3 +598,5 @@
-     "$LAUNCHER" "$STARTER_COMMAND" "$PROJECT_PATH" "$@"
-     ;;
- esac
-+
-+unset REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS
+   # for compatibility with old launcher arguments
+   if [ "$STARTER_COMMAND" = "warmup" ]; then
