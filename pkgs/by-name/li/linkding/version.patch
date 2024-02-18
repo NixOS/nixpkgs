@@ -1,0 +1,18 @@
+diff --git a/bookmarks/utils.py b/bookmarks/utils.py
+index a09d847..67c4cec 100644
+--- a/bookmarks/utils.py
++++ b/bookmarks/utils.py
+@@ -7,12 +7,7 @@ from dateutil.relativedelta import relativedelta
+ from django.template.defaultfilters import pluralize
+ from django.utils import timezone, formats
+ 
+-try:
+-    with open("version.txt", "r") as f:
+-        app_version = f.read().strip("\n")
+-except Exception as exc:
+-    logging.exception(exc)
+-    app_version = ""
++app_version = "@version@"
+ 
+ 
+ def unique(elements, key):

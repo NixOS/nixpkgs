@@ -1,0 +1,31 @@
+diff --git a/siteroot/settings/base.py b/siteroot/settings/base.py
+index a2096e3..db4d015 100644
+--- a/siteroot/settings/base.py
++++ b/siteroot/settings/base.py
+@@ -211,7 +211,7 @@ if trusted_origins:
+ 
+ LD_DB_ENGINE = os.getenv("LD_DB_ENGINE", "sqlite")
+ LD_DB_HOST = os.getenv("LD_DB_HOST", "localhost")
+-LD_DB_DATABASE = os.getenv("LD_DB_DATABASE", "linkding")
++LD_DB_DATABASE = os.getenv("LD_DB_DATABASE")
+ LD_DB_USER = os.getenv("LD_DB_USER", "linkding")
+ LD_DB_PASSWORD = os.getenv("LD_DB_PASSWORD", None)
+ LD_DB_PORT = os.getenv("LD_DB_PORT", None)
+@@ -220,7 +220,7 @@ LD_DB_OPTIONS = json.loads(os.getenv("LD_DB_OPTIONS") or "{}")
+ if LD_DB_ENGINE == "postgres":
+     default_database = {
+         "ENGINE": "django.db.backends.postgresql_psycopg2",
+-        "NAME": LD_DB_DATABASE,
++        "NAME": LD_DB_DATABASE or 'linkding',
+         "USER": LD_DB_USER,
+         "PASSWORD": LD_DB_PASSWORD,
+         "HOST": LD_DB_HOST,
+@@ -230,7 +230,7 @@ if LD_DB_ENGINE == "postgres":
+ else:
+     default_database = {
+         "ENGINE": "django.db.backends.sqlite3",
+-        "NAME": os.path.join(BASE_DIR, "data", "db.sqlite3"),
++        "NAME": LD_DB_DATABASE or "db.sqlite3",
+         "OPTIONS": LD_DB_OPTIONS,
+         # Creating a connection loads the ICU extension into the SQLite
+         # connection, and also loads an ICU collation. The latter causes a
