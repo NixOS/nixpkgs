@@ -494,7 +494,7 @@ let
     RDieHarder = [ pkgs.gsl ];
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
-    RcppCWB = [ pkgs.pkg-config ];
+    RcppCWB = [ pkgs.pkg-config pkgs.pcre2 ];
     redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
     trackViewer = [ pkgs.zlib.dev ];
