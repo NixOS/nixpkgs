@@ -102,12 +102,12 @@ void exploreDir(const std::shared_ptr<Directory>& dir, const std::filesystem::pa
       std::cout << std::format("Error: Failed to explore {} shadow dir 2 ({})\n", prettify_path(path), e.what());
     }
     try {
-      area->GetTransactionsArea1();
+      throw_if_error(area->GetTransactionsArea1());
     } catch (const WfsException& e) {
       std::cout << std::format("Error: Failed to explore {} transactions area 1 ({})\n", prettify_path(path), e.what());
     }
     try {
-      area->GetTransactionsArea2();
+      throw_if_error(area->GetTransactionsArea2());
     } catch (const WfsException& e) {
       std::cout << std::format("Error: Failed to explore {} transactions area 2 ({})\n", prettify_path(path), e.what());
     }
