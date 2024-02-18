@@ -75,7 +75,6 @@ rustPlatform.buildRustPackage rec {
       icon = "gitbutler";
       terminal = false;
       type = "Application";
-      mimeTypes = [ "x-scheme-handler/gitbutler" ];
     })
   ];
 
