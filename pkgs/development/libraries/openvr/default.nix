@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "1.26.7";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-verVIRyDdpF8lIjjjG8GllDJG7nhqByIfs/8O5TMOyc=";
+    hash = "sha256-Dpl88Te+EoVasoCtwERGrYt3xK8o03h15r8IVxxPPCw=";
   };
 
   patches = [
