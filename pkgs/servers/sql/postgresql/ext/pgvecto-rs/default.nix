@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , pkg-config
+, nix-update-script
+, nixosTests
 , buildPgrxExtension
 , postgresql
 , rustPlatform
@@ -35,6 +37,13 @@ buildPgrxExtension rec {
 
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      pgvecto-rs = nixosTests.pgvecto-rs;
+    };
+  };
 
   # pgvecto.rs requires clang 16 to be built.
   postPatch = ''
