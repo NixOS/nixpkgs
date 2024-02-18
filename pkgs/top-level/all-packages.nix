@@ -20120,12 +20120,12 @@ with pkgs;
     texinfo_6_5 # needed for allegro
     texinfo_6_7 # needed for gpm, iksemel, and fwknop
     texinfo_6_8
-    texinfo_7_0
+    texinfo_7_1
   ;
   texinfo4 = texinfo_4_13; # needed for eukleides and singular
   texinfo5 = texinfo_5_2; # needed for gcc48
   texinfo6 = texinfo_6_8; # needed for ne
-  texinfo7 = texinfo_7_0;
+  texinfo7 = texinfo_7_1;
   texinfo = texinfo7;
 
   texinfoInteractive = texinfo.override { interactive = true; };

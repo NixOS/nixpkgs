@@ -47,8 +47,8 @@ stdenv.mkDerivation {
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch
-  NATIVE_TOOLS_CFLAGS = if crossBuildTools then "-I${lib.getDev buildPackages.ncurses}/include" else null;
-  NATIVE_TOOLS_LDFLAGS = if crossBuildTools then "-L${lib.getLib buildPackages.ncurses}/lib" else null;
+  NATIVE_TOOLS_CFLAGS = lib.optionalString crossBuildTools "-I${lib.getDev buildPackages.ncurses}/include";
+  NATIVE_TOOLS_LDFLAGS = lib.optionalString crossBuildTools "-L${lib.getLib buildPackages.ncurses}/lib";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -64,8 +64,8 @@ stdenv.mkDerivation {
     # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
     # fallbacks.
     # Also prevent the buildPlatform's awk being used in the texindex script
-    ++ lib.optionals crossBuildTools [ "--enable-perl-xs=no" "TI_AWK=${gawk}/bin/awk" ]
-    ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
+    ++ lib.optionals crossBuildTools [ "--enable-perl-xs=no" "TI_AWK=${lib.getExe gawk}" ]
+    ++ lib.optional stdenv.isSunOS "AWK=${lib.getExe gawk}";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [ "install" "install-tex" ];

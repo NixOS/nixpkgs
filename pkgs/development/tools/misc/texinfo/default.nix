@@ -21,7 +21,7 @@ let
     changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ vrthra oxij ];
+    maintainers = with lib.maintainers; [ oxij ];
     # see comment in patches section of make-texinfo.nix
 
     longDescription = ''
@@ -80,8 +80,8 @@ in
     hash = "sha256-jrdT7Si8oh+PVsGhgDYq7XiSKb1i//WL+DaOm+tZ/sQ=";
     patches = [ ./fix-glibc-2.34.patch ];
   };
-  texinfo_7_0 = make-texinfo {
-    version = "7.0.3";
-    hash = "sha256-dLQg0J1/Uo6E+XqjMPDdaamKYFPnpOAXZ+7RFQOIB78=";
+  texinfo_7_1 = make-texinfo {
+    version = "7.1";
+    hash = "sha256-3u7J8Z8VngRv34rSIjGYGAbawzLMNy8cdjUErYKzCVM=";
   };
 }
