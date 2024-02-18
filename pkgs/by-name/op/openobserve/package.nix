@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , protobuf
 , bzip2
@@ -11,17 +10,17 @@
 , zlib
 , zstd
 , stdenv
-, apple_sdk
+, darwin
 , buildNpmPackage
 }:
 
 let
-  version = "0.8.1";
+  version = "0.7.2";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     rev = "v${version}";
-    hash = "sha256-J8TuaWjtuR39XA7tizyI+DFkpOaLFweM+/9VImGj8UE=";
+    hash = "sha256-BFLQL3msDuurRSFOCbqN0vK4NrTS9M6k1hNwet/9mnw=";
   };
   web = buildNpmPackage {
     inherit src version;
@@ -29,7 +28,7 @@ let
 
     sourceRoot = "source/web";
 
-    npmDepsHash = "sha256-RNUCR80ewFt9F/VHv7kXLa87h0fz0YBp+9gSOUhtrdU=";
+    npmDepsHash = "sha256-eYrspgejb5VR51wAXdGr+pSXDdGnRyX5cwwopK3Kex8=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -38,7 +37,6 @@ let
     '';
 
     env = {
-      NODE_OPTIONS = "--max-old-space-size=8192";
       # cypress tries to download binaries otherwise
       CYPRESS_INSTALL_BINARY = 0;
     };
@@ -55,14 +53,8 @@ rustPlatform.buildRustPackage {
   pname = "openobserve";
   inherit version src;
 
+  # prevent using git to determine version info during build time
   patches = [
-    (fetchpatch {
-      name = "fix-test-hash-partition.patch";
-      url = "https://github.com/openobserve/openobserve/commit/24919333d6b6696f0f9d9aff0a883431481e8fce.patch";
-      includes = ["src/common/meta/stream.rs"];
-      hash = "sha256-GB3Pgmp1swJt6ESgKL2eWOZ3jBcsN0r+5Dxasgg50D4=";
-    })
-    # prevent using git to determine version info during build time
     ./build.rs.patch
   ];
 
@@ -73,6 +65,7 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "enrichment-0.1.0" = "sha256-FDPSCBkx+DPeWwTBz9+ORcbbiSBC2a8tJaay9Pxwz4w=";
+      "datafusion-33.0.0" = "sha256-RZAgk7up83zxPbmNzdnzB6M0yjjK9MYms+6TpXVDJ1o=";
     };
   };
 
@@ -88,9 +81,8 @@ rustPlatform.buildRustPackage {
     xz
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin (with apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreFoundation
-    CoreServices
     IOKit
     Security
     SystemConfiguration
@@ -138,7 +130,7 @@ rustPlatform.buildRustPackage {
   ];
 
   meta = with lib; {
-    description = "A cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring.";
+    description = "10x easier, 🚀 140x lower storage cost, 🚀 high performance,  🚀 petabyte scale - Elasticsearch/Splunk/Datadog alternative for 🚀 (logs, metrics, traces";
     homepage = "https://github.com/openobserve/openobserve";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
