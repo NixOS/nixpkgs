@@ -3287,6 +3287,8 @@ self: super: with self; {
 
   django-redis = callPackage ../development/python-modules/django-redis { };
 
+  django-registration = callPackage ../development/python-modules/django-registration { };
+
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
