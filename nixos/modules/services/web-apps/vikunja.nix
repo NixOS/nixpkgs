@@ -11,8 +11,7 @@ let
 in {
   options.services.vikunja = with lib; {
     enable = mkEnableOption (lib.mdDoc "vikunja service");
-    package-api = mkPackageOption pkgs "vikunja-api" { };
-    package-frontend = mkPackageOption pkgs "vikunja-frontend" { };
+    package = mkPackageOption pkgs "vikunja" { };
     environmentFiles = mkOption {
       type = types.listOf types.path;
       default = [ ];
@@ -104,18 +103,18 @@ in {
       };
     };
 
-    systemd.services.vikunja-api = {
-      description = "vikunja-api";
+    systemd.services.vikunja = {
+      description = "vikunja";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ cfg.package-api ];
+      path = [ cfg.package ];
       restartTriggers = [ configFile ];
 
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "vikunja";
-        ExecStart = "${cfg.package-api}/bin/vikunja";
+        ExecStart = "${cfg.package}/bin/vikunja";
         Restart = "always";
         EnvironmentFile = cfg.environmentFiles;
       };
@@ -124,10 +123,6 @@ in {
     services.nginx.virtualHosts."${cfg.frontendHostname}" = mkIf cfg.setupNginx {
       locations = {
         "/" = {
-          root = cfg.package-frontend;
-          tryFiles = "try_files $uri $uri/ /";
-        };
-        "~* ^/(api|dav|\\.well-known)/" = {
           proxyPass = "http://localhost:${toString cfg.port}";
           extraConfig = ''
             client_max_body_size 20M;
@@ -139,7 +134,7 @@ in {
     environment.etc."vikunja/config.yaml".source = configFile;
 
     environment.systemPackages = [
-      cfg.package-api # for admin `vikunja` CLI
+      cfg.package # for admin `vikunja` CLI
     ];
   };
 }
