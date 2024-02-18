@@ -25,6 +25,7 @@ assert if type == "sdk" then packages != null else true;
 , writeShellScript
 , mkNugetDeps
 , callPackage
+, installShellFiles
 }:
 
 let
@@ -51,6 +52,7 @@ mkCommon type rec {
   # Some of these dependencies are `dlopen()`ed.
   nativeBuildInputs = [
     makeWrapper
+    installShellFiles
   ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   buildInputs = [
@@ -82,6 +84,11 @@ mkCommon type rec {
     mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
 
     ln -s $out/dotnet $out/bin/dotnet
+    # completions snippets taken from https://learn.microsoft.com/en-us/dotnet/core/tools/enable-tab-autocomplete
+    installShellCompletion --cmd dotnet \
+      --bash ${./completions/dotnet.bash} \
+      --zsh ${./completions/dotnet.zsh} \
+      --fish ${./completions/dotnet.fish}
 
     runHook postInstall
   '';
