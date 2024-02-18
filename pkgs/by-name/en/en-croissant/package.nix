@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "en-croissant";
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "franciscoBSalgueiro";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-imM7sPV2Yfmi2N/YqOhbiVRBGE/bzuIaqHI0aBHLmTU=";
+    hash = "sha256-5Qt/OvsMw5G6Q9WN+OTdWVlJQlEz/F6C6z3zO05uOlM=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
@@ -70,13 +70,15 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-VfX5333MYqjCI2+8cTlr6313TojDFSYlytYb0Us2olA=";
+    outputHash = {
+      x86_64-linux = "sha256-Q1VyEUFeUrcyGkMDl360839QHfzSbbWthqj6akYaP+k=";
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "specta-2.0.0-rc.5" = "sha256-ddavOnvUg1LwPJDBIrwydJKYU2E1d5SwHNF6InMvphQ=";
+      "vampirc-uci-0.11.1" = "sha256-I6Wgshyztuh5nEfTjd4ISqef8nXj1SOxi+fwbhO+1ic=";
       "tauri-plugin-log-0.0.0" = "sha256-vNX3Sv3AcmaoejC7ulkznXmWLmjKVtL2z40cQ6fPjWM=";
     };
   };
