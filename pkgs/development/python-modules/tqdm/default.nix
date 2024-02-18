@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W" "ignore::FutureWarning"
+    "-W" "ignore::DeprecationWarning"
   ];
 
   # Remove performance testing.
