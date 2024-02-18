@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://cataclysmdda.org/";
     license = licenses.cc-by-sa-30;
-    maintainers = with maintainers; [ mnacamura DeeUnderscore ];
+    maintainers = with maintainers; [ mnacamura DeeUnderscore rardiol ];
     platforms = platforms.unix;
   };
 }
