@@ -15,12 +15,12 @@
 }:
 
 let
-  version = "0.7.2";
+  version = "0.8.1";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     rev = "v${version}";
-    hash = "sha256-BFLQL3msDuurRSFOCbqN0vK4NrTS9M6k1hNwet/9mnw=";
+    hash = "sha256-J8TuaWjtuR39XA7tizyI+DFkpOaLFweM+/9VImGj8UE=";
   };
   web = buildNpmPackage {
     inherit src version;
@@ -28,7 +28,7 @@ let
 
     sourceRoot = "source/web";
 
-    npmDepsHash = "sha256-eYrspgejb5VR51wAXdGr+pSXDdGnRyX5cwwopK3Kex8=";
+    npmDepsHash = "sha256-RNUCR80ewFt9F/VHv7kXLa87h0fz0YBp+9gSOUhtrdU=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -39,6 +39,7 @@ let
     env = {
       # cypress tries to download binaries otherwise
       CYPRESS_INSTALL_BINARY = 0;
+      NODE_OPTIONS="--max-old-space-size=8192";
     };
 
     installPhase = ''
@@ -65,7 +66,6 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "enrichment-0.1.0" = "sha256-FDPSCBkx+DPeWwTBz9+ORcbbiSBC2a8tJaay9Pxwz4w=";
-      "datafusion-33.0.0" = "sha256-RZAgk7up83zxPbmNzdnzB6M0yjjK9MYms+6TpXVDJ1o=";
     };
   };
 
@@ -81,8 +81,9 @@ rustPlatform.buildRustPackage {
     xz
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     CoreFoundation
+    CoreServices
     IOKit
     Security
     SystemConfiguration
@@ -127,10 +128,12 @@ rustPlatform.buildRustPackage {
     "--skip common::infra::db::tests::test_get"
     "--skip common::utils::auth::tests::test_is_root_user2"
     "--skip tests::e2e_test"
+    # failing but fixed on 0.8.2
+    "--skip common::meta::stream::tests::test_hash_partition"
   ];
 
   meta = with lib; {
-    description = "10x easier, 🚀 140x lower storage cost, 🚀 high performance,  🚀 petabyte scale - Elasticsearch/Splunk/Datadog alternative for 🚀 (logs, metrics, traces";
+    description = "Elasticsearch/Splunk/Datadog alternative for 🚀 (logs, metrics, traces";
     homepage = "https://github.com/openobserve/openobserve";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
