@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "napari-console";
-  version = "0.0.7";
-  format = "pyproject";
+  version = "0.0.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
+    repo = "napari-console";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vHLCVMgrcs54pGb48wQpc0h7QBIfE6r7hCSoDNI3QvA=";
+    hash = "sha256-3gOfiPx06G5c4eaLQ5kP45hUr6yw91esznJFacpO66Q=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +35,6 @@ buildPythonPackage rec {
     napari-plugin-engine
     qtconsole
   ];
-
-  # Circular dependency: napari
-  doCheck = false;
 
   pythonImportsCheck = [
     "napari_console"
