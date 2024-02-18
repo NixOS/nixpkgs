@@ -1,44 +1,46 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools-scm
+, hatch-vcs
+, hatchling
+, packaging
+, pygments
 , pyqt5
 , qtpy
 , typing-extensions
-, pytestCheckHook
-, pygments
 }:
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.3.8";
-  format = "pyproject";
+  version = "0.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "napari";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zEMG2zscGDlRxtLn/lUTEjZBPabcwzMcj/kMcy3yOs8=";
+    owner = "pyapp-kit";
+    repo = "superqt";
+    rev = "v${version}";
+    hash = "sha256-kSu3QAr9GHmTkH9fyOuuI9UGSUgsYDUROOeQppXFQZg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     pyqt5
+    packaging
+    pygments
     qtpy
     typing-extensions
-    pygments
   ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  doCheck = false; # Segfaults...
 
   pythonImportsCheck = [ "superqt" ];
 
   meta = with lib; {
-    description = "Missing widgets and components for Qt-python (napari/superqt)";
-    homepage = "https://github.com/napari/superqt";
+    description = "Missing widgets and components for Qt-python";
+    homepage = "https://github.com/pyapp-kit/superqt";
+    changelog = "https://github.com/pyapp-kit/superqt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };
