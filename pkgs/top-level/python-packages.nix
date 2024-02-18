@@ -721,6 +721,8 @@ self: super: with self; {
 
   argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
 
+  argparse-manpage = callPackage ../development/python-modules/argparse-manpage { };
+
   args = callPackage ../development/python-modules/args { };
 
   aria2p = callPackage ../development/python-modules/aria2p { };
@@ -4583,6 +4585,8 @@ self: super: with self; {
 
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
+  gerbonara = callPackage ../development/python-modules/gerbonara { };
+
   getjump = callPackage ../development/python-modules/getjump { };
 
   getmac = callPackage ../development/python-modules/getmac { };
@@ -6347,6 +6351,8 @@ self: super: with self; {
 
   lexid = callPackage ../development/python-modules/lexid { };
 
+  lexilang = callPackage ../development/python-modules/lexilang { };
+
   lhapdf = toPythonModule (pkgs.lhapdf.override {
     inherit python;
   });
@@ -7039,7 +7045,7 @@ self: super: with self; {
 
   meshtastic = callPackage ../development/python-modules/meshtastic { };
 
-  meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
+  meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overridePythonAttrs
     (oldAttrs: { # We do not want the setup hook in Python packages because the build is performed differently.
       setupHook = null;
     }));
@@ -9559,6 +9565,8 @@ self: super: with self; {
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
+
+  pynose = callPackage ../development/python-modules/pynose { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
 

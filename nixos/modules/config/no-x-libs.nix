@@ -83,6 +83,7 @@ with lib;
       # translateManpages -> perlPackages.po4a -> texlive-combined-basic -> texlive-core-big -> libX11
       util-linux = super.util-linux.override { translateManpages = false; };
       vim-full = super.vim-full.override { guiSupport = false; };
+      vte = super.vte.override { gtkVersion = null; };
       zbar = super.zbar.override { enableVideo = false; withXorg = false; };
     }));
   };
