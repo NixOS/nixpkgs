@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , cairocffi
-, cython
+, cython_3
 , fetchPypi
 , igraph
 , leidenalg
@@ -9,6 +9,7 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , scipy
 , setuptools
 , spacy
@@ -21,19 +22,24 @@
 
 buildPythonPackage rec {
   pname = "textnets";
-  version = "0.9.3";
+  version = "0.9.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fx2S43IqpSMsfJow26jB/D27dyUFQ1PlXP1rbUIZPPQ=";
+    hash = "sha256-4154ytzo1QpwhKA1BkVMss9fNIkysnClW/yfSVlX33M=";
   };
 
+  pythonRelaxDeps = [
+    "igraph"
+  ];
+
   nativeBuildInputs = [
-    cython
+    cython_3
     poetry-core
+    pythonRelaxDepsHook
     setuptools
   ];
 
