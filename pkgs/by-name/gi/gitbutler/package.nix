@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
       genericName = "Git client";
       categories = [ "Development" ];
       comment = meta.description;
-      exec = "GitButler %u";
+      exec = "GitButler";
       icon = "gitbutler";
       terminal = false;
       type = "Application";
