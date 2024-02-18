@@ -8,7 +8,9 @@ let
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
-  makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
+  makePythonHook = let
+    defaultArgs = { passthru.provides.setupHook = true; };
+  in args: pkgs.makeSetupHook (lib.recursiveUpdate defaultArgs args);
 
   condaInstallHook = callPackage ({ makePythonHook, gnutar, lbzip2 }:
     makePythonHook {
@@ -68,8 +70,8 @@ in {
       # Such conflicts don't happen within the standard nixpkgs python package
       #   set, but in downstream projects that build packages depending on other
       #   versions of this hook's dependencies.
-      passthru.tests = import ./pypa-build-hook-test.nix {
-        inherit pythonOnBuildForHost runCommand;
+      passthru.tests = callPackage ./pypa-build-hook-test.nix {
+        inherit pythonOnBuildForHost;
       };
     } ./pypa-build-hook.sh) {
       inherit (pythonOnBuildForHost.pkgs) build;

@@ -12680,6 +12680,8 @@ self: super: with self; {
 
   reretry = callPackage ../development/python-modules/reretry { };
 
+  rerun-sdk = callPackage ../development/python-modules/rerun-sdk { };
+
   resampy = callPackage ../development/python-modules/resampy { };
 
   resize-right = callPackage ../development/python-modules/resize-right { };
