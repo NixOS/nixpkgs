@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dnsmasq";
-  version = "2.90";
+  version = "2.89";
 
   src = fetchurl {
     url = "https://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
-    hash = "sha256-jlAwm9g3v+yWSagS4GbAm2mItz10m30pPAbFfUahCeQ=";
+    sha256 = "sha256-Ar0jA0bPC51ZCfXhUd8WiycHEDeF62FrVmhYVa3rtgk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
