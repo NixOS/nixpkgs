@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "netaddr";
-  version = "0.9.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e0b6mxotcf1d6eSjeE7zOXAKU6CMgEDwi69fEZTaASg=";
+    sha256 = "sha256-brj+3wQSxtKU0GiFwRDelFz00i0rUQ0EBPTgaVCFeYc=";
   };
 
   nativeBuildInputs = [
