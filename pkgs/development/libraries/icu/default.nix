@@ -6,6 +6,11 @@ let
   };
 in
 {
+  icu74 = make-icu {
+    version = "74.2";
+    hash = "sha256-aNsIIhKpbW9T411g9H04uWLp+dIHp0z6x4Apro/14Iw=";
+    nativeBuildRoot = buildPackages.icu74.override { buildRootOnly = true; };
+  };
   icu73 = make-icu {
     version = "73.2";
     hash = "sha256-gYqAcS7TyqzZtlIwXgGvx/oWfm8ulJltpEuQwqtgTOE=";

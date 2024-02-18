@@ -21974,6 +21974,7 @@ with pkgs;
     icu71
     icu72
     icu73
+    icu74
   ;
 
   icu = icu73;
