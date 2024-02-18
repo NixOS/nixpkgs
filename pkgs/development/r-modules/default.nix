@@ -497,6 +497,7 @@ let
     RcppCWB = [ pkgs.pkg-config ];
     redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
+    Rbwa = [ pkgs.zlib.dev ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
     NanoMethViz = [ pkgs.zlib.dev ];
