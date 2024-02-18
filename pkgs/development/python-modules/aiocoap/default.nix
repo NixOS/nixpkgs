@@ -65,6 +65,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/chrysn/aiocoap/issues/339
+    "--deselect=tests/test_server.py::TestServerTCP::test_big_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_empty_accept"
+    "--deselect=tests/test_server.py::TestServerTCP::test_error_resources"
+    "--deselect=tests/test_server.py::TestServerTCP::test_fast_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_js_accept"
+    "--deselect=tests/test_server.py::TestServerTCP::test_manualbig_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_nonexisting_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_replacing_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_root_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_slow_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_slowbig_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_spurious_resource"
+    "--deselect=tests/test_server.py::TestServerTCP::test_unacceptable_accept"
+  ];
+
   disabledTestPaths = [
     # Don't test the plugins
     "tests/test_tls.py"
