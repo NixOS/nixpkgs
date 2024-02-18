@@ -16,8 +16,8 @@
   },
   "qtbase": {
     "url": "https://invent.kde.org/qt/qt/qtbase.git",
-    "rev": "f2e586366678383a0fe25fbcd4ecd5d55e7b61cd",
-    "sha256": "1f1r7n2aa5wdhfgqplz05l84x59ykim2i8z15apqdyq0cas278rg"
+    "rev": "a43df98d037ad07cf096ef2f775958ceba743613",
+    "sha256": "01bjkfb7ql1f168q67d5jr2xjfrn8bvh1ggiba0algkgll8alad4"
   },
   "qtcharts": {
     "url": "https://invent.kde.org/qt/qt/qtcharts.git",
