@@ -67,10 +67,15 @@ in {
       example = ["--ssh"];
     };
 
-    inMemoryState = mkOption {
+    state = mkOption {
       description = lib.mdDoc "Use -state=mem: with tailscaled";
-      type = types.bool;
-      default = false;
+      type = with lib.types; nullOr (oneOf [
+        path
+        (strMatching "arn:aws:ssm:[^\s]+")
+        (strMatching "kube:[^\s]+")
+        (enum [ "mem:" ])
+      ]);
+      default = null;
     };
   };
 
@@ -86,7 +91,7 @@ in {
       ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun=${lib.escapeShellArg cfg.interfaceName} ${lib.optionalString cfg.inMemoryState "--state=mem:"}"''
+        ''"FLAGS=--tun=${lib.escapeShellArg cfg.interfaceName} ${(lib.optionalString (cfg.state != null) "--state=${cfg.state}")}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
       ]);
