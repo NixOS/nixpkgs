@@ -62,6 +62,7 @@ mkYarnPackage rec {
       fullName = "Functional Source License, Version 1.0, MIT Change License";
       url = "https://github.com/gitbutlerapp/gitbutler/blob/master/LICENSE.md";
       free = false;
+      redistributable = true;
     };
     maintainers = with lib.maintainers; [ hacker1024 ];
     platforms = with lib.platforms; all;
