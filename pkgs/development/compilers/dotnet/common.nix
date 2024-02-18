@@ -6,6 +6,7 @@
 , runCommand
 , expect
 , curl
+, installShellFiles
 }: type: args: stdenv.mkDerivation (finalAttrs: args // {
   doInstallCheck = true;
 
@@ -26,6 +27,16 @@
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
     export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1 # Skip integrity check on first run, which fails due to read-only directory
   '' + args.setupHook or "");
+
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ installShellFiles ];
+
+  postInstall = ''
+    # completions snippets taken from https://learn.microsoft.com/en-us/dotnet/core/tools/enable-tab-autocomplete
+    installShellCompletion --cmd dotnet \
+      --bash ${./completions/dotnet.bash} \
+      --zsh ${./completions/dotnet.zsh} \
+      --fish ${./completions/dotnet.fish}
+  '';
 
 } // lib.optionalAttrs (type == "sdk") {
   passthru = {
