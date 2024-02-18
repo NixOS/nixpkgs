@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg_4, libui, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, ffmpeg_4, libui, unstableGitUpdater, wrapGAppsHook }:
 
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
@@ -29,6 +29,8 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
