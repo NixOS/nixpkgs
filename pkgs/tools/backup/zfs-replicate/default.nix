@@ -11,12 +11,12 @@
 
 buildPythonApplication rec {
   pname = "zfs_replicate";
-  version = "3.2.6";
-  format = "pyproject";
+  version = "3.2.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K+OCJmx0KfFTuaP3c5oFJqWa+zqYJtoruO2v/F0FtfA=";
+    hash = "sha256-+FJuV9BVfG2LbakE4Pw5ZhooSGq8xey9f3ATPTlCSkg=";
   };
 
   postPatch = ''
