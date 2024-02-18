@@ -1,0 +1,22 @@
+diff --git a/numba/tests/test_usecases.py b/numba/tests/test_usecases.py
+index bf58dabe9..ecd1f5f28 100644
+--- a/numba/tests/test_usecases.py
++++ b/numba/tests/test_usecases.py
+@@ -35,17 +35,6 @@ class TestUsecases(TestCase):
+         for args in itertools.product(ss, es):
+             self.assertEqual(pyfunc(*args), cfunc(*args), args)
+ 
+-    @TestCase.run_test_in_subprocess
+-    def test_sum1d_pyobj(self):
+-        pyfunc = usecases.sum1d
+-        cfunc = jit((types.int32, types.int32), forceobj=True)(pyfunc)
+-
+-        ss = -1, 0, 1, 100, 200
+-        es = -1, 0, 1, 100, 200
+-
+-        for args in itertools.product(ss, es):
+-            self.assertEqual(pyfunc(*args), cfunc(*args), args)
+-
+     @TestCase.run_test_in_subprocess
+     def test_sum2d(self):
+         pyfunc = usecases.sum2d

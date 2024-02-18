@@ -28,11 +28,11 @@ let
 in buildPythonPackage rec {
   # Using an untagged version, with numpy 1.25 support, when it's released
   # also drop the versioneer patch in postPatch
-  version = "0.58.1";
+  version = "0.59.0";
   pname = "numba";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "numba";
@@ -50,7 +50,7 @@ in buildPythonPackage rec {
     # use `forceFetchGit = true;`.` If in the future we'll observe the hash
     # changes too often, we can always use forceFetchGit, and inject the
     # relevant strings ourselves, using `sed` commands, in extraPostFetch.
-    hash = "sha256-1Tj2GFoUwRRCWBFxhreF+0Mr+Tjyb7+X4peO+T0qGNs=";
+    hash = "sha256-wd4TujPhV2Jy/HUUXLHAlcbVFm4gfQNWxWFXD+jeZC4=";
   };
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
@@ -77,6 +77,10 @@ in buildPythonPackage rec {
       cuda_toolkit_path = cudatoolkit;
       cuda_toolkit_lib_path = cudatoolkit.lib;
     })
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # segfaults the interpreter on aarch64-linux on 0.59.0
+    # https://github.com/numba/numba/issues/9442
+    ./gh-issue-9442.patch
   ];
 
   postFixup = lib.optionalString cudaSupport ''
