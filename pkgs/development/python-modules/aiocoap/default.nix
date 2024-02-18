@@ -1,15 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, pygments
+, pythonAtLeast
 , pythonOlder
+
+# build-system
+, setuptools
+
+# optionals
+, cbor2
+, cbor-diag
+, cryptography
+, filelock
+, ge25519
+, dtlssocket
+, websockets
+, termcolor
+, pygments
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aiocoap";
   version = "0.4.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,9 +36,30 @@ buildPythonPackage rec {
     hash = "sha256-4iwoPfmIwk+PlWUp60aqA5qZgzyj34pnZHf9uH5UhnY=";
   };
 
-  propagatedBuildInputs = [
-    pygments
+  nativeBuildInputs = [
+    setuptools
   ];
+
+  passthru.optional-dependencies = {
+    oscore = [
+      cbor2
+      cryptography
+      filelock
+      ge25519
+    ];
+    tinydtls = [
+      dtlssocket
+    ];
+    ws = [
+      websockets
+    ];
+    prettyprint = [
+      termcolor
+      cbor2
+      pygments
+      cbor-diag
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
