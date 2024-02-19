@@ -31701,13 +31701,11 @@ with pkgs;
 
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) { };
 
-  firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {});
-
-  firefox-unwrapped = firefoxPackages.firefox;
-  firefox-beta-unwrapped = firefoxPackages.firefox-beta;
-  firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
-  firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
+  firefox-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox.nix { };
+  firefox-beta-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-beta.nix { };
+  firefox-devedition-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-devedition.nix { };
+  firefox-esr-115-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-esr-115.nix { };
+  firefox-esr-unwrapped = firefox-esr-115-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped {
