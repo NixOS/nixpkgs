@@ -1,0 +1,9 @@
+{
+  "name": "com.8bit.bitwarden",
+  "description": "Bitwarden desktop <-> browser bridge",
+  "path": "@out@/bin/goldwarden",
+  "type": "stdio",
+  "allowed_extensions": [
+    "{446900e4-71c2-419f-a6a7-df9c091e268b}"
+  ]
+}
