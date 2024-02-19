@@ -2,12 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "elementpath";
   version = "4.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-DE8XAZwYzbYaTJoBNqHR0x4Wigmke+/zgj562X391qM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
