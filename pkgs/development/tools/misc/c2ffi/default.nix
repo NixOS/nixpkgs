@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , cmake
 , llvmPackages_16
