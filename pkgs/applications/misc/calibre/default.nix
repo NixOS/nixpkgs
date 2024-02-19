@@ -90,11 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
     })
-    (fetchpatch {
-      name = "build-from-git-without-internet";
-      url = "https://github.com/wrvsrx/calibre/compare/v7.5.1...build-from-source-simple.patch";
-      hash = "sha256-Trkkk9iz4QtRzpnY/WcbAm/qAsBKKFOWjaWI8oQbSTw=";
-    })
+    ./build-from-git-source.patch
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
