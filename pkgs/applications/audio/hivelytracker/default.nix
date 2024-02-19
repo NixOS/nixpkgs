@@ -6,6 +6,7 @@
 , SDL_image
 , SDL_ttf
 , gtk3
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
