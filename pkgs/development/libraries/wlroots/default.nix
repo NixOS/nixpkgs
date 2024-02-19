@@ -25,6 +25,7 @@
 , libliftoff
 , libdisplay-info
 , nixosTests
+, testers
 
 , enableXWayland ? true
 , xwayland ? null
@@ -95,7 +96,12 @@ let
       '';
 
       # Test via TinyWL (the "minimum viable product" Wayland compositor based on wlroots):
-      passthru.tests.tinywl = nixosTests.tinywl;
+      passthru.tests = {
+        tinywl = nixosTests.tinywl;
+        pkg-config = testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+        };
+      };
 
       meta = {
         description = "A modular Wayland compositor library";
@@ -108,6 +114,7 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.linux;
         maintainers = with lib.maintainers; [ primeos synthetica rewine ];
+        pkgConfigModules = [ "wlroots" ];
       };
     });
 
