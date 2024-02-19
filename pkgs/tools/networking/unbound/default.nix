@@ -51,12 +51,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qXUyRohUxhwt5IykFw3oVP07yVyAQ7sM+w/iZgWWZiQ=";
+    hash = "sha256-vB1Xbz3YRqBzmtxB/6pwJATGdn0rYILeufL5fLsko6k=";
   };
+
+  patches = [
+    ./use-pkg-config-protobuf-c.patch
+  ];
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
@@ -97,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium=${symlinkJoin { name = "libsodium-full"; paths = [ libsodium.dev libsodium.out ]; }}"
   ] ++ lib.optionals withDNSTAP [
     "--enable-dnstap"
-    "--with-protobuf-c=${protobufc}"
   ] ++ lib.optionals withTFO [
     "--enable-tfo-client"
     "--enable-tfo-server"
