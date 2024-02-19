@@ -1,0 +1,21 @@
+--- a/llm/generate/gen_common.sh
++++ b/llm/generate/gen_common.sh
+@@ -60,6 +60,9 @@
+ }
+ 
+ apply_patches() {
++    patch -i '@cmakeIncludePatch@' "${LLAMACPP_DIR}/examples/server/CMakeLists.txt"
++    return
++    
+     # Wire up our CMakefile
+     if ! grep ollama ${LLAMACPP_DIR}/examples/server/CMakeLists.txt; then
+         echo 'include (../../../ext_server/CMakeLists.txt) # ollama' >>${LLAMACPP_DIR}/examples/server/CMakeLists.txt
+@@ -113,6 +116,8 @@
+ 
+ # Keep the local tree clean after we're done with the build
+ cleanup() {
++    return
++
+     (cd ${LLAMACPP_DIR}/examples/server/ && git checkout CMakeLists.txt server.cpp)
+ 
+     if [ -n "$(ls -A ../patches/*.diff)" ]; then

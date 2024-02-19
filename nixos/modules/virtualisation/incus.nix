@@ -97,6 +97,12 @@ in
           considered failed and systemd will attempt to restart it.
         '';
       };
+
+      ui = {
+        enable = lib.mkEnableOption (lib.mdDoc "(experimental) Incus UI");
+
+        package = lib.mkPackageOption pkgs [ "incus" "ui" ] { };
+      };
     };
   };
 
@@ -165,10 +171,12 @@ in
         "${config.boot.zfs.package}/lib/udev"
       ];
 
-      environment = {
+      environment = lib.mkMerge [ {
         # Override Path to the LXC template configuration directory
         INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
-      };
+      } (lib.mkIf (cfg.ui.enable) {
+        "INCUS_UI" = cfg.ui.package;
+      }) ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";

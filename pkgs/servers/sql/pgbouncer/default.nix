@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, libevent, c-ares, pkg-config, nixosTests }:
+{ lib, stdenv, fetchurl, openssl, libevent, c-ares, pkg-config, systemd, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "pgbouncer";
@@ -10,8 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl c-ares ];
+  buildInputs = [ libevent openssl c-ares ]
+    ++ lib.optional stdenv.isLinux systemd;
   enableParallelBuilding = true;
+  configureFlags = lib.optional stdenv.isLinux "--with-systemd";
 
   passthru.tests = {
     pgbouncer = nixosTests.pgbouncer;

@@ -121,9 +121,13 @@ stdenvNoCC.mkDerivation rec {
     mv -v $out/share/themes/Nordic/kde/colorschemes/* $out/share/color-schemes/
     mv -v $out/share/themes/Nordic/kde/konsole $out/share/
     mv -v $out/share/themes/Nordic/kde/kvantum/* $out/share/Kvantum/
-    mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
+    cp -vr $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/look-and-feel/
+    mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/desktoptheme/
     mv -v $out/share/themes/Nordic/kde/folders/* $out/share/icons/
     mv -v $out/share/themes/Nordic/kde/cursors/*-cursors $out/share/icons/
+
+    rm -rf $out/share/plasma/look-and-feel/*/contents/{logout,osd,components}
+    rm -rf $out/share/plasma/desktoptheme/*/contents/{{defaults,splash,previews}
 
     mkdir -p $sddm/share/sddm/themes
     mv -v $out/share/themes/Nordic/kde/sddm/* $sddm/share/sddm/themes/
