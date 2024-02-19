@@ -44,6 +44,11 @@ pub enum NixpkgsProblem {
         relative_package_file: PathBuf,
         package_name: String,
     },
+    NonSyntacticCallPackage {
+        package_name: String,
+        location: String,
+        definition: String,
+    },
     NonDerivation {
         relative_package_file: PathBuf,
         package_name: String,
@@ -163,6 +168,14 @@ impl fmt::Display for NixpkgsProblem {
                     f,
                     "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}` with a non-empty second argument.",
                     relative_package_file.display()
+                ),
+            NixpkgsProblem::NonSyntacticCallPackage { package_name, location, definition } =>
+                write!(
+                    f,
+                    "Because {} exists, the attribute `pkgs.{package_name}` must be defined as `callPackage {} {{ ... }}`. This is however not the case: The attribute is defined in {location} as\n\t{}",
+                    structure::relative_dir_for_package(package_name).display(),
+                    structure::relative_file_for_package(package_name).display(),
+                    definition,
                 ),
             NixpkgsProblem::NonDerivation { relative_package_file, package_name } =>
                 write!(

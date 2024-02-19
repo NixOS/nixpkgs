@@ -51,6 +51,26 @@ struct Location {
     pub column: usize,
 }
 
+impl Location {
+    // Creates a [String] from a [Location], in a format like `{file}:{line}:{column}`,
+    // where `file` is relative to the given [Path].
+    fn to_relative_string(&self, nixpkgs_path: &Path) -> anyhow::Result<String> {
+        let relative = self.file.strip_prefix(nixpkgs_path).with_context(|| {
+            format!(
+                "An attributes location ({}) is outside Nixpkgs ({})",
+                self.file.display(),
+                nixpkgs_path.display()
+            )
+        })?;
+        Ok(format!(
+            "{}:{}:{}",
+            relative.display(),
+            self.line,
+            self.column
+        ))
+    }
+}
+
 #[derive(Deserialize)]
 pub enum AttributeVariant {
     /// The attribute is not an attribute set, we're limited in the amount of information we can get
@@ -289,37 +309,47 @@ fn by_name(
                         // At this point, we completed two different checks for whether it's a
                         // `callPackage`
                         match (is_semantic_call_package, optional_syntactic_call_package) {
-                            // Something like `<attr> = { ... }`
-                            (false, None)
+                            // Something like `<attr> = foo`
+                            (_, Err(definition)) => NixpkgsProblem::NonSyntacticCallPackage {
+                                package_name: attribute_name.to_owned(),
+                                location: location.to_relative_string(nixpkgs_path)?,
+                                definition,
+                            }
+                            .into(),
                             // Something like `<attr> = pythonPackages.callPackage ...`
-                            | (false, Some(_))
-                            // Something like `<attr> = bar` where `bar = pkgs.callPackage ...`
-                            | (true, None) => {
+                            (false, Ok(_)) => {
                                 // All of these are not of the expected form, so error out
                                 // TODO: Make error more specific, don't lump everything together
                                 NixpkgsProblem::WrongCallPackage {
-                                      relative_package_file: relative_package_file.to_owned(),
-                                      package_name: attribute_name.to_owned(),
-                                }.into()
+                                    relative_package_file: relative_package_file.to_owned(),
+                                    package_name: attribute_name.to_owned(),
+                                }
+                                .into()
                             }
                             // Something like `<attr> = pkgs.callPackage ...`
-                            (true, Some(syntactic_call_package)) => {
+                            (true, Ok(syntactic_call_package)) => {
                                 if let Some(path) = syntactic_call_package.relative_path {
                                     if path == relative_package_file {
                                         // Manual definitions with empty arguments are not allowed
                                         // anymore
-                                        Success(if syntactic_call_package.empty_arg { Loose(()) } else { Tight })
+                                        Success(if syntactic_call_package.empty_arg {
+                                            Loose(())
+                                        } else {
+                                            Tight
+                                        })
                                     } else {
                                         NixpkgsProblem::WrongCallPackage {
-                                              relative_package_file: relative_package_file.to_owned(),
-                                              package_name: attribute_name.to_owned(),
-                                        }.into()
+                                            relative_package_file: relative_package_file.to_owned(),
+                                            package_name: attribute_name.to_owned(),
+                                        }
+                                        .into()
                                     }
                                 } else {
                                     NixpkgsProblem::WrongCallPackage {
-                                          relative_package_file: relative_package_file.to_owned(),
-                                          package_name: attribute_name.to_owned(),
-                                    }.into()
+                                        relative_package_file: relative_package_file.to_owned(),
+                                        package_name: attribute_name.to_owned(),
+                                    }
+                                    .into()
                                 }
                             }
                         }
@@ -423,16 +453,16 @@ fn handle_non_by_name_attribute(
         // `callPackage`
         match (is_semantic_call_package, optional_syntactic_call_package) {
             // Something like `<attr> = { }`
-            (false, None)
+            (false, Err(_))
             // Something like `<attr> = pythonPackages.callPackage ...`
-            | (false, Some(_))
+            | (false, Ok(_))
             // Something like `<attr> = bar` where `bar = pkgs.callPackage ...`
-            | (true, None) => {
+            | (true, Err(_)) => {
                 // In all of these cases, it's not possible to migrate the package to `pkgs/by-name`
                 NonApplicable
             }
             // Something like `<attr> = pkgs.callPackage ...`
-            (true, Some(syntactic_call_package)) => {
+            (true, Ok(syntactic_call_package)) => {
                 // It's only possible to migrate such a definitions if..
                 match syntactic_call_package.relative_path {
                     Some(ref rel_path) if rel_path.starts_with(utils::BASE_SUBPATH) => {

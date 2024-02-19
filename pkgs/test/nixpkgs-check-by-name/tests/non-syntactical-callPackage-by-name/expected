@@ -1,1 +1,2 @@
-pkgs.foo: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/fo/foo/package.nix { ... }` with a non-empty second argument.
+Because pkgs/by-name/fo/foo exists, the attribute `pkgs.foo` must be defined as `callPackage pkgs/by-name/fo/foo/package.nix { ... }`. This is however not the case: The attribute is defined in all-packages.nix:4:3 as
+	foo = self.bar;

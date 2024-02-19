@@ -86,8 +86,9 @@ pub struct CallPackageArgumentInfo {
 impl NixFile {
     /// Returns information about callPackage arguments for an attribute at a specific line/column
     /// index.
-    /// If the location is not of the form `<attr> = callPackage <arg1> <arg2>;`, `None` is
-    /// returned.
+    /// If the location is not of the form `<attr> = callPackage <arg1> <arg2>;`, `Ok(Err(String))` is
+    /// returned, with String being how the definition looks like.
+    ///
     /// This function only returns `Err` for problems that can't be caused by the Nix contents,
     /// but rather problems in this programs code itself.
     ///
@@ -108,7 +109,7 @@ impl NixFile {
     ///
     /// You'll get back
     /// ```rust
-    /// Some(CallPackageArgumentInfo { path = Some("default.nix"), empty_arg: true })
+    /// Ok(Ok(CallPackageArgumentInfo { path = Some("default.nix"), empty_arg: true }))
     /// ```
     ///
     /// Note that this also returns the same for `pythonPackages.callPackage`. It doesn't make an
@@ -118,11 +119,15 @@ impl NixFile {
         line: usize,
         column: usize,
         relative_to: &Path,
-    ) -> anyhow::Result<Option<CallPackageArgumentInfo>> {
-        let Some(attrpath_value) = self.attrpath_value_at(line, column)? else {
-            return Ok(None);
-        };
-        self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)
+    ) -> anyhow::Result<Result<CallPackageArgumentInfo, String>> {
+        Ok(match self.attrpath_value_at(line, column)? {
+            Err(definition) => Err(definition),
+            Ok(attrpath_value) => {
+                let definition = attrpath_value.to_string();
+                self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)?
+                    .ok_or(definition)
+            }
+        })
     }
 
     // Internal function mainly to make it independently testable
@@ -130,7 +135,7 @@ impl NixFile {
         &self,
         line: usize,
         column: usize,
-    ) -> anyhow::Result<Option<ast::AttrpathValue>> {
+    ) -> anyhow::Result<Result<ast::AttrpathValue, String>> {
         let index = self.line_index.fromlinecolumn(line, column);
 
         let token_at_offset = self
@@ -164,7 +169,7 @@ impl NixFile {
             // This is the only other way how `builtins.unsafeGetAttrPos` can return
             // attribute positions, but we only look for ones like `<attr-path> = <value>`, so
             // ignore this
-            return Ok(None);
+            return Ok(Err(node.to_string()));
         } else {
             // However, anything else is not expected and smells like a bug
             anyhow::bail!(
@@ -208,7 +213,7 @@ impl NixFile {
         // unwrap is fine because we confirmed that we can cast with the above check.
         // We could avoid this `unwrap` for a `clone`, since `cast` consumes the argument,
         // but we still need it for the error message when the cast fails.
-        Ok(Some(ast::AttrpathValue::cast(attrpath_value_node).unwrap()))
+        Ok(Ok(ast::AttrpathValue::cast(attrpath_value_node).unwrap()))
     }
 
     // Internal function mainly to make attrpath_value_at independently testable
@@ -437,14 +442,14 @@ mod tests {
 
         // These are builtins.unsafeGetAttrPos locations for the attributes
         let cases = [
-            (2, 3, Some("foo = 1;")),
-            (3, 3, Some(r#""bar" = 2;"#)),
-            (4, 3, Some(r#"${"baz"} = 3;"#)),
-            (5, 3, Some(r#""${"qux"}" = 4;"#)),
-            (8, 3, Some("quux\n  # B\n  =\n  # C\n  5\n  # D\n  ;")),
-            (17, 7, Some("quuux/**/=/**/5/**/;")),
-            (19, 10, None),
-            (20, 22, None),
+            (2, 3, Ok("foo = 1;")),
+            (3, 3, Ok(r#""bar" = 2;"#)),
+            (4, 3, Ok(r#"${"baz"} = 3;"#)),
+            (5, 3, Ok(r#""${"qux"}" = 4;"#)),
+            (8, 3, Ok("quux\n  # B\n  =\n  # C\n  5\n  # D\n  ;")),
+            (17, 7, Ok("quuux/**/=/**/5/**/;")),
+            (19, 10, Err("inherit toInherit;")),
+            (20, 22, Err("inherit (toInherit) toInherit;")),
         ];
 
         for (line, column, expected_result) in cases {
@@ -452,7 +457,13 @@ mod tests {
                 .attrpath_value_at(line, column)
                 .context(format!("line {line}, column {column}"))?
                 .map(|node| node.to_string());
-            assert_eq!(actual_result.as_deref(), expected_result);
+            let owned_expected_result = expected_result
+                .map(|x| x.to_string())
+                .map_err(|x| x.to_string());
+            assert_eq!(
+                actual_result, owned_expected_result,
+                "line {line}, column {column}"
+            );
         }
 
         Ok(())
@@ -481,41 +492,41 @@ mod tests {
         let nix_file = NixFile::new(&file)?;
 
         let cases = [
-            (2, None),
-            (3, None),
-            (4, None),
-            (5, None),
+            (2, Err("a.sub = null;")),
+            (3, Err("b = null;")),
+            (4, Err("c = import ./file.nix;")),
+            (5, Err("d = import ./file.nix { };")),
             (
                 6,
-                Some(CallPackageArgumentInfo {
+                Ok(CallPackageArgumentInfo {
                     relative_path: Some(PathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
             (
                 7,
-                Some(CallPackageArgumentInfo {
+                Ok(CallPackageArgumentInfo {
                     relative_path: Some(PathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
             (
                 8,
-                Some(CallPackageArgumentInfo {
+                Ok(CallPackageArgumentInfo {
                     relative_path: None,
                     empty_arg: true,
                 }),
             ),
             (
                 9,
-                Some(CallPackageArgumentInfo {
+                Ok(CallPackageArgumentInfo {
                     relative_path: Some(PathBuf::from("file.nix")),
                     empty_arg: false,
                 }),
             ),
             (
                 10,
-                Some(CallPackageArgumentInfo {
+                Ok(CallPackageArgumentInfo {
                     relative_path: None,
                     empty_arg: false,
                 }),
@@ -525,8 +536,10 @@ mod tests {
         for (line, expected_result) in cases {
             let actual_result = nix_file
                 .call_package_argument_info_at(line, 3, temp_dir.path())
-                .context(format!("line {line}"))?;
-            assert_eq!(actual_result, expected_result);
+                .context(format!("line {line}"))?
+                .map_err(|x| x);
+            let owned_expected_result = expected_result.map_err(|x| x.to_string());
+            assert_eq!(actual_result, owned_expected_result, "line {line}");
         }
 
         Ok(())
