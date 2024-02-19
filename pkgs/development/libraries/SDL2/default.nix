@@ -49,7 +49,7 @@
 , audiofile
 , libiconv
 , withStatic ? false
-# passthru.tests
+  # passthru.tests
 , testers
 }:
 
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit openglSupport;
-    updateScript = nix-update-script { extraArgs = ["--version-regex" "release-(.*)"]; };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex" "release-(.*)" ]; };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
