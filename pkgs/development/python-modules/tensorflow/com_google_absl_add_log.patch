@@ -1,7 +1,7 @@
 diff -Naurd x/third_party/absl/system.absl.base.BUILD y/third_party/absl/system.absl.base.BUILD
 --- x/third_party/absl/system.absl.base.BUILD	2023-09-17 09:12:05.499753364 +0000
 +++ y/third_party/absl/system.absl.base.BUILD	2023-09-17 09:16:01.200082822 +0000
-@@ -22,7 +22,12 @@
+@@ -22,7 +22,13 @@
  
  cc_library(
      name = "raw_logging_internal",
@@ -11,6 +11,7 @@ diff -Naurd x/third_party/absl/system.absl.base.BUILD y/third_party/absl/system.
 +        "-labsl_log_internal_conditions",
 +        "-labsl_log_internal_message",
 +        "-labsl_log_internal_nullguard",
++        "-labsl_log_internal_check_op",
 +    ],
      visibility = [
          "//absl:__subpackages__",

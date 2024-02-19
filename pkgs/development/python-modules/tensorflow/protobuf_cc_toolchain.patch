@@ -1,0 +1,27 @@
+diff -Naurd x/third_party/systemlibs/protobuf.BUILD y/third_party/systemlibs/protobuf.BUILD
+--- x/third_party/systemlibs/protobuf.BUILD	2023-12-03 15:39:27.742087246 +0000
++++ y/third_party/systemlibs/protobuf.BUILD	2023-12-04 13:25:41.777638732 +0000
+@@ -1,4 +1,8 @@
+-load("@rules_proto//proto:defs.bzl", "proto_library")
++load(
++    "@rules_proto//proto:defs.bzl",
++    "proto_lang_toolchain",
++    "proto_library",
++)
+ load(
+     "@com_google_protobuf//:protobuf.bzl",
+     "cc_proto_library",
+@@ -118,3 +122,13 @@
+     srcs = [proto[1][0] for proto in WELL_KNOWN_PROTO_MAP.items()],
+     visibility = ["//visibility:public"],
+ )
++
++proto_lang_toolchain(
++    name = "cc_toolchain",
++    blacklisted_protos = [
++        "//:compiler_plugin_proto",
++        "//:descriptor_proto",
++    ],
++    command_line = "--cpp_out=$(OUT)",
++    visibility = ["//visibility:public"],
++)

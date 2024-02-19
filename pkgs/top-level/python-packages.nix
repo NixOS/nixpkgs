@@ -14311,6 +14311,7 @@ self: super: with self; {
     inherit (pkgs.darwin) cctools;
     inherit (pkgs.config) cudaSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    clang = pkgs.clang_16;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
     protobuf-core = compat.protobufTF;
