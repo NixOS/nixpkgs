@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (fetchpatch {
       name = "build-from-git-without-internet";
-      url = "https://github.com/wrvsrx/calibre/commit/4b7c79f71821e9d13edff5d04249c5decf1093a0.patch";
-      hash = "sha256-1czbc5Z5BsvtyVWnQwFH3Wsn+31RfahjulwtXHJVQKA=";
+      url = "https://github.com/wrvsrx/calibre/compare/v7.5.1...build-from-source-simple.patch";
+      hash = "sha256-Trkkk9iz4QtRzpnY/WcbAm/qAsBKKFOWjaWI8oQbSTw=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -190,17 +190,17 @@ stdenv.mkDerivation (finalAttrs: {
     PODOFO_LIB_DIR = "${podofo.lib}/lib";
     ISOCODE_ZIP = "${iso-codes-zip}";
     ISOCODE_VERSION = iso-codes-zip.version;
-    CACERT = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    TRANSLATIONS = "${translations}";
-    # this is get from https://code.calibre-ebook.com/ua-popularity
-    # It's not reproducible, so we have to pack it in repo
-    # this file can be generated using `python fetch-ua.py`
-    UA_POPULARITY = "${./ua-popularity.txt}";
   };
 
   buildPhase = ''
-    mkdir temp
-    cp "${cacert}/etc/ssl/certs/ca-bundle.crt" resources/mozilla-ca-certs.pem
+    # manually copy some generated files here
+    cp ${cacert}/etc/ssl/certs/ca-bundle.crt resources/mozilla-ca-certs.pem
+    # this is get from https://code.calibre-ebook.com/ua-popularity
+    # It's not reproducible, so we have to pack it in repo
+    # this file can be generated using `python fetch-ua.py`
+    cp ${./user-agent-data.json} resources/user-agent-data.json
+    cp -r --no-preserve=mode ${translations} translations
+
     ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py bootstrap \
       --path-to-mathjax=${mathjax} \
       --path-to-liberation_fonts=${liberation_fonts} \
@@ -212,6 +212,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
+    export XDG_DATA_HOME=$out/share
+    export XDG_UTILS_INSTALL_MODE="user"
 
     ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --root=$out \
       --prefix=$out \
