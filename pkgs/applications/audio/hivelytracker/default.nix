@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     platforms = platforms.all;
+    mainProgram = "hivelytracker";
     maintainers = with maintainers; [ fgaz ];
     broken = stdenv.isDarwin; # TODO: try to use xcbuild
   };
