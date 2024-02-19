@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ruby, gnugrep, diffutils, git, darcs }:
+{ lib, stdenv, fetchFromGitHub, ruby, gnugrep, diffutils, git, darcs, unstableGitUpdater }:
 
 stdenv.mkDerivation {
   pname = "darcs-to-git";
@@ -71,6 +71,8 @@ stdenv.mkDerivation {
     cd "$orig_dir"
     rm -rf "$darcs_repos" "$git_repos" "$test_home"
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Converts a Darcs repository into a Git repository";
