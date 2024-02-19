@@ -252,7 +252,8 @@ sdk_packages () {
       "Microsoft.NETCore.App.Crossgen2.linux-arm64" \
       "Microsoft.NETCore.App.Crossgen2.linux-x64" \
       "Microsoft.NETCore.App.Crossgen2.osx-x64" \
-      "Microsoft.NETCore.App.Crossgen2.osx-arm64"
+      "Microsoft.NETCore.App.Crossgen2.osx-arm64" \
+      "Microsoft.NET.ILLink.Tasks"
     )
 
     # These packages were removed on .NET 8
