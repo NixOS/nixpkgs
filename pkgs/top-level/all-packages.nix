@@ -19882,10 +19882,14 @@ with pkgs;
 
   sca2d = callPackage ../development/tools/sca2d {  };
 
+  scons-versions = callPackages ../development/tools/build-managers/scons { };
+  inherit (scons-versions)
+    scons_3_1_2
+    scons_4_1_0
+    scons_4_5_2;
+
   scons = scons_4_5_2;
-  scons_3_1_2 = callPackage ../development/tools/build-managers/scons/3.1.2.nix { };
-  scons_4_1_0 = callPackage ../development/tools/build-managers/scons/4.1.0.nix { };
-  scons_4_5_2 = callPackage ../development/tools/build-managers/scons/4.5.2.nix { };
+
 
   mill = callPackage ../development/tools/build-managers/mill { };
 

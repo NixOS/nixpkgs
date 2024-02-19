@@ -1,28 +1,28 @@
 { lib, fetchFromGitHub, python3 }:
 
-let
-  pname = "scons";
-  version = "3.1.2";
+{ pname ? "scons"
+, version
+, hash
+, patches ? [ ]
+, setupHook ? ./setup-hook.sh
+, doCheck ? false
+, postPatch ? ""
+, preConfigure ? ""
+, postInstall ? ""
+}:
+
+python3.pkgs.buildPythonApplication {
+  inherit pname version
+    patches postPatch preConfigure postInstall setupHook doCheck;
+
   src = fetchFromGitHub {
     owner = "Scons";
     repo = "scons";
     rev = version;
-    hash = "sha256-C3U4N7+9vplzoJoevQe5Zeuz0TDmB6/miMwBJLzA3WA=";
+    inherit hash;
   };
-in
-python3.pkgs.buildPythonApplication {
-  inherit pname version src;
 
   outputs = [ "out" "man" ];
-
-  preConfigure = ''
-    python bootstrap.py
-    cd build/scons
-  '';
-
-  setupHook = ./setup-hook.sh;
-
-  doCheck = true;
 
   passthru = {
     # expose the used python version so tools using this (and extensing scos
