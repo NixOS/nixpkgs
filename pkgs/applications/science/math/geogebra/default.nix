@@ -4,7 +4,7 @@ let
   version = "5-0-785-0";
 
   srcIcon = fetchurl {
-    url = "http://static.geogebra.org/images/geogebra-logo.svg";
+    url = "https://web.archive.org/web/20200227000442if_/https://static.geogebra.org/images/geogebra-logo.svg";
     hash = "sha256-Vd7Wteya04JJT4WNirXe8O1sfVKUgc0hKGOy7d47Xgc=";
   };
 
