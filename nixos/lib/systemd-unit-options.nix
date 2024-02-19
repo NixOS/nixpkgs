@@ -6,7 +6,7 @@ with lib;
 let
   checkService = checkUnitConfig "Service" [
     (assertValueOneOf "Type" [
-      "exec" "simple" "forking" "oneshot" "dbus" "notify" "idle"
+      "exec" "simple" "forking" "oneshot" "dbus" "notify" "notify-reload" "idle"
     ])
     (assertValueOneOf "Restart" [
       "no" "on-success" "on-failure" "on-abnormal" "on-abort" "always"

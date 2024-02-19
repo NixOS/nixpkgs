@@ -11467,6 +11467,10 @@ with pkgs;
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
+  openobserve = darwin.apple_sdk_11_0.callPackage ../servers/monitoring/openobserve {
+    apple_sdk = darwin.apple_sdk_11_0;
+  };
+
   obexfs = callPackage ../tools/bluetooth/obexfs { };
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };

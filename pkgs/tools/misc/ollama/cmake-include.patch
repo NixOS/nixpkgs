@@ -1,0 +1,7 @@
+--- a/llm/llama.cpp/examples/server/CMakeLists.txt
++++ b/llm/llama.cpp/examples/server/CMakeLists.txt
+@@ -11,3 +11,4 @@
+     TARGET_LINK_LIBRARIES(${TARGET} PRIVATE ws2_32)
+ endif()
+ target_compile_features(${TARGET} PRIVATE cxx_std_11)
++include (../../../ext_server/CMakeLists.txt) # ollama

@@ -2,9 +2,9 @@
 
 buildDotnetGlobalTool {
   pname = "fable";
-  version = "4.11.0";
+  version = "4.12.2";
 
-  nugetSha256 = "sha256-AOsCthGk4YiTcKjIdCE1nnADWLqfd80vPFMmo9YLGUA=";
+  nugetSha256 = "sha256-HgGQRHmyZGaG3HZdzUAP/WwWAR+VoS+UpnApvgxtwXU=";
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
