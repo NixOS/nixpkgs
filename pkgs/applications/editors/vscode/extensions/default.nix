@@ -787,18 +787,36 @@ let
       };
 
       charliermarsh.ruff = buildVscodeMarketplaceExtension {
-        mktplcRef = {
+        mktplcRef = let
+          sources = {
+            "x86_64-linux" = {
+              arch = "linux-x64";
+              sha256 = "sha256-2c0tH/MlDOqeyffcV8ZCy4woogBTcf1GCuPPO8JXaWc=";
+            };
+            "x86_64-darwin" = {
+              arch = "darwin-x64";
+              sha256 = "sha256-euvGIlO7931N56R5BWKu3F9nSEoDgf+DXk7Hgl1qSUw=";
+            };
+            "aarch64-linux" = {
+              arch = "linux-arm64";
+              sha256 = "sha256-dGpIHChnfrQbxRZDuoAi4imgStyyPdxdvTQ3lknMYu0=";
+            };
+            "aarch64-darwin" = {
+              arch = "darwin-arm64";
+              sha256 = "sha256-tElX4C0I5AmpxSHMtqOsxSAUImD1tqArB5fnvhw4LFc=";
+            };
+          };
+        in {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.60.0";
-          sha256 = "sha256-qgwud2gzHLHID45VxDlngFMoks5O3pTHQe+Q7bdf8+I=";
-        };
+          version = "2024.4.0";
+        } // sources.${stdenv.system} or (throw "Unsupported system ${stdenv.system}");
         meta = {
           license = lib.licenses.mit;
-          changelog = "https://github.com/astral-sh/ruff-vscode/releases";
-          description = "Ruff extension for Visual Studio Code";
+          changelog = "https://marketplace.visualstudio.com/items/charliermarsh.ruff/changelog";
+          description = "A Visual Studio Code extension with support for the Ruff linter.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
-          homepage = "https://github.com/astral-sh/ruff-vscode/";
+          homepage = "https://github.com/astral-sh/ruff-vscode";
           maintainers = [ lib.maintainers.azd325 ];
         };
       };
@@ -2286,6 +2304,16 @@ let
         meta = {
           license = lib.licenses.asl20;
         };
+      };
+
+      karunamurti.haml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "haml";
+          publisher = "karunamurti";
+          version = "1.4.1";
+          sha256 = "123cwfajakkg2pr0z4v289fzzlhwbxx9dvb5bjc32l3pzvbhq4gv";
+        };
+        meta.license = lib.licenses.mit;
       };
 
       kddejong.vscode-cfn-lint =

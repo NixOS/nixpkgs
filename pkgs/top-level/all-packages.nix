@@ -11467,8 +11467,6 @@ with pkgs;
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
-  openobserve = darwin.apple_sdk_11_0.callPackage ../by-name/op/openobserve/package.nix { apple_sdk = darwin.apple_sdk_11_0; };
-
   obexfs = callPackage ../tools/bluetooth/obexfs { };
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
@@ -24433,9 +24431,7 @@ with pkgs;
 
   protobuf = protobuf_24;
 
-  protobuf_25 = callPackage ../development/libraries/protobuf/25.nix {
-    abseil-cpp = abseil-cpp_202308;
-  };
+  protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
   protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
   protobuf_23 = callPackage ../development/libraries/protobuf/23.nix { };
   protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
