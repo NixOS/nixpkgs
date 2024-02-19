@@ -1807,10 +1807,11 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       fnv-hash-fast
+      govee-local-api
       ifaddr
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: govee-local-api
+    ];
     "gpsd" = ps: with ps; [
       gps3
     ];
@@ -6077,6 +6078,7 @@
     "google_travel_time"
     "google_wifi"
     "govee_ble"
+    "govee_light_local"
     "gpsd"
     "gpslogger"
     "graphite"
