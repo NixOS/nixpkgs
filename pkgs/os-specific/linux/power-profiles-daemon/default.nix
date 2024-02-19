@@ -27,16 +27,16 @@
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.13";
+  version = "0.20";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "hadess";
+    owner = "upower";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-ErHy+shxZQ/aCryGhovmJ6KmAMt9OZeQGDbHIkC0vUE=";
+    sha256 = "sha256-8wSRPR/1ELcsZ9K3LvSNlPcJvxRhb/LRjTIxKtdQlCA=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsNoGuiHook
     python3.pkgs.wrapPython
+    argparse-manpage
     # checkInput but cheked for during the configuring
     (python3.pythonOnBuildForHost.withPackages (ps: with ps; [
       pygobject3
@@ -100,6 +101,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build \
+      src/powerprofilesctl \
       tests/integration-test.py \
       tests/unittest_inspector.py
   '';
