@@ -71,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Fitting and data analysis for small angle scattering data";
     homepage = "https://www.sasview.org";
+    changelog = "https://github.com/SasView/sasview/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rprospero ];
   };
