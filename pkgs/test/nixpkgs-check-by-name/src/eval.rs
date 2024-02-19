@@ -195,7 +195,6 @@ fn by_name(
     use ByNameAttribute::*;
 
     let relative_package_file = structure::relative_file_for_package(attribute_name);
-    let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
     // At this point we know that `pkgs/by-name/fo/foo/package.nix` has to exists.
     // This match decides whether the attribute `foo` is defined accordingly
@@ -284,23 +283,17 @@ fn by_name(
                             .call_package_argument_info_at(
                             location.line,
                             location.column,
-                            // We're passing `pkgs/by-name/fo/foo/package.nix` here, which causes
-                            // the function to verify that `<arg1>` is the same path,
-                            // making `syntactic_call_package.relative_path` end up as `""`
-                            // TODO: This is confusing and should be improved
-                            &absolute_package_file,
+                            nixpkgs_path,
                         )?;
 
                         // At this point, we completed two different checks for whether it's a
                         // `callPackage`
                         match (is_semantic_call_package, optional_syntactic_call_package) {
                             // Something like `<attr> = { ... }`
-                            // or a `pkgs.callPackage` but with the wrong file
                             (false, None)
-                            // Something like `<attr> = pythonPackages.callPackage ./pkgs/by-name/...`
+                            // Something like `<attr> = pythonPackages.callPackage ...`
                             | (false, Some(_))
                             // Something like `<attr> = bar` where `bar = pkgs.callPackage ...`
-                            // or a `callPackage` but with the wrong file
                             | (true, None) => {
                                 // All of these are not of the expected form, so error out
                                 // TODO: Make error more specific, don't lump everything together
@@ -309,18 +302,25 @@ fn by_name(
                                       package_name: attribute_name.to_owned(),
                                 }.into()
                             }
-                            // Something like `<attr> = pkgs.callPackage ./pkgs/by-name/...`,
-                            // with the correct file
+                            // Something like `<attr> = pkgs.callPackage ...`
                             (true, Some(syntactic_call_package)) => {
-                                Success(
-                                    // Manual definitions with empty arguments are not allowed
-                                    // anymore
-                                    if syntactic_call_package.empty_arg {
-                                        Loose(())
+                                if let Some(path) = syntactic_call_package.relative_path {
+                                    if path == relative_package_file {
+                                        // Manual definitions with empty arguments are not allowed
+                                        // anymore
+                                        Success(if syntactic_call_package.empty_arg { Loose(()) } else { Tight })
                                     } else {
-                                        Tight
+                                        NixpkgsProblem::WrongCallPackage {
+                                              relative_package_file: relative_package_file.to_owned(),
+                                              package_name: attribute_name.to_owned(),
+                                        }.into()
                                     }
-                                )
+                                } else {
+                                    NixpkgsProblem::WrongCallPackage {
+                                          relative_package_file: relative_package_file.to_owned(),
+                                          package_name: attribute_name.to_owned(),
+                                    }.into()
+                                }
                             }
                         }
                     } else {
