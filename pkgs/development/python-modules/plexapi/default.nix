@@ -1,16 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , requests
+, setuptools
 , tqdm
 , websocket-client
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "plexapi";
   version = "4.15.10";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-3qvAf3oray3Fm3No6ixv/D1mY4lipt5pixgpyXNCRoc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
