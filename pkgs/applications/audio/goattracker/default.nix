@@ -43,10 +43,14 @@ in stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)/bin/" ];
 
   # The zip contains some build artifacts.
-  prePatch = "make clean";
+  prePatch = ''
+    make clean
+  '';
 
   # The destination does not get created automatically.
-  preBuild = "mkdir -p $out/bin";
+  preBuild = ''
+    mkdir -p $out/bin
+  '';
 
   # Other files get installed during the build phase.
   installPhase = ''
