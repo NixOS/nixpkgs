@@ -16105,6 +16105,8 @@ self: super: with self; {
 
   wagtail-localize = callPackage ../development/python-modules/wagtail-localize { };
 
+  wagtail-modeladmin = callPackage ../development/python-modules/wagtail-modeladmin { };
+
   waitress = callPackage ../development/python-modules/waitress { };
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
