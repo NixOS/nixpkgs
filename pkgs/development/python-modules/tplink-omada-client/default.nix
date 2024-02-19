@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "tplink-omada-client";
   version = "1.3.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
