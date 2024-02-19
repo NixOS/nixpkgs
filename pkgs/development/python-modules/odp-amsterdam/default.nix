@@ -4,6 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pythonRelaxDepsHook
 , pythonOlder
 , pytest-asyncio
 , pytestCheckHook
@@ -26,12 +27,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"'
+      --replace-fail '"0.0.0"' '"${version}"'
     sed -i '/addopts/d' pyproject.toml
   '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pytz"
   ];
 
   propagatedBuildInputs = [
