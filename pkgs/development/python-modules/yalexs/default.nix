@@ -39,6 +39,9 @@ buildPythonPackage rec {
     requests
   ];
 
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [
     aioresponses
     aiounittest
