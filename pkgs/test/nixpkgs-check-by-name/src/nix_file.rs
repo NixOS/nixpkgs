@@ -5,7 +5,6 @@ use anyhow::Context;
 use rnix::ast;
 use rnix::ast::Expr;
 use rnix::ast::HasEntry;
-use rnix::SyntaxKind;
 use rowan::ast::AstNode;
 use rowan::TextSize;
 use rowan::TokenAtOffset;
@@ -158,6 +157,22 @@ impl NixFile {
             )
         };
 
+        if ast::Attr::can_cast(node.kind()) {
+            // Something like `foo`, `"foo"` or `${"foo"}`
+        } else if ast::Inherit::can_cast(node.kind()) {
+            // Something like `inherit <attr>` or `inherit (<source>) <attr>`
+            // This is the only other way how `builtins.unsafeGetAttrPos` can return
+            // attribute positions, but we only look for ones like `<attr-path> = <value>`, so
+            // ignore this
+            return Ok(None);
+        } else {
+            // However, anything else is not expected and smells like a bug
+            anyhow::bail!(
+                "Node in {} is neither an attribute node, nor an inherit node: {node:?}",
+                self.path.display()
+            )
+        }
+
         // node looks like "foo"
         let Some(attrpath_node) = node.parent() else {
             anyhow::bail!(
@@ -166,10 +181,14 @@ impl NixFile {
             )
         };
 
-        if attrpath_node.kind() != SyntaxKind::NODE_ATTRPATH {
-            // This can happen for e.g. `inherit foo`, so definitely not a syntactic `callPackage`
-            return Ok(None);
+        if !ast::Attrpath::can_cast(attrpath_node.kind()) {
+            // We know that `node` is an attribute, its parent should be an attribute path
+            anyhow::bail!(
+                "In {}, attribute parent node is not an attribute path node: {attrpath_node:?}",
+                self.path.display()
+            )
         }
+
         // attrpath_node looks like "foo.bar"
         let Some(attrpath_value_node) = attrpath_node.parent() else {
             anyhow::bail!(
@@ -408,6 +427,7 @@ mod tests {
               /**/quuux/**/=/**/5/**/;/*E*/
 
               inherit toInherit;
+              inherit (toInherit) toInherit;
             }
         "#};
 
@@ -424,11 +444,13 @@ mod tests {
             (8, 3, Some("quux\n  # B\n  =\n  # C\n  5\n  # D\n  ;")),
             (17, 7, Some("quuux/**/=/**/5/**/;")),
             (19, 10, None),
+            (20, 22, None),
         ];
 
         for (line, column, expected_result) in cases {
             let actual_result = nix_file
-                .attrpath_value_at(line, column)?
+                .attrpath_value_at(line, column)
+                .context(format!("line {line}, column {column}"))?
                 .map(|node| node.to_string());
             assert_eq!(actual_result.as_deref(), expected_result);
         }
@@ -501,7 +523,9 @@ mod tests {
         ];
 
         for (line, expected_result) in cases {
-            let actual_result = nix_file.call_package_argument_info_at(line, 3, temp_dir.path())?;
+            let actual_result = nix_file
+                .call_package_argument_info_at(line, 3, temp_dir.path())
+                .context(format!("line {line}"))?;
             assert_eq!(actual_result, expected_result);
         }
 
