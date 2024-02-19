@@ -16564,6 +16564,12 @@
     github = "rubyowo";
     githubId = 105302757;
   };
+  rucadi = {
+    email = "ruben.canodiaz@gmail.com";
+    github = "rucadi";
+    githubId = 6445619;
+    name = "Ruben Cano Diaz";
+  };
   rudolfvesely = {
     name = "Rudolf Vesely";
     email = "i@rudolfvesely.com";
