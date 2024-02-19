@@ -22,14 +22,14 @@ let
     keywords = [ "tracker" "music" ];
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = if isStereo
     then "2.77"  # stereo
     else "2.76"; # normal
 
   src = fetchurl {
-    url = "mirror://sourceforge/goattracker2/GoatTracker_${version}${lib.optionalString isStereo "_Stereo"}.zip";
+    url = "mirror://sourceforge/goattracker2/GoatTracker_${finalAttrs.version}${lib.optionalString isStereo "_Stereo"}.zip";
     sha256 = if isStereo
       then "1hiig2d152sv9kazwz33i56x1c54h5sh21ipkqnp6qlnwj8x1ksy"  # stereo
       else "0d7a3han4jw4bwiba3j87racswaajgl3pj4sb5lawdqdxicv3dn1"; # normal
@@ -69,4 +69,4 @@ in stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})
