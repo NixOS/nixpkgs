@@ -77,10 +77,6 @@ in buildPythonPackage rec {
       cuda_toolkit_path = cudatoolkit;
       cuda_toolkit_lib_path = cudatoolkit.lib;
     })
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # segfaults the interpreter on aarch64-linux on 0.59.0
-    # https://github.com/numba/numba/issues/9442
-    ./gh-issue-9442.patch
   ];
 
   postFixup = lib.optionalString cudaSupport ''
