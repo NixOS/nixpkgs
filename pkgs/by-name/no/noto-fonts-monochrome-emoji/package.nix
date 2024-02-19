@@ -1,45 +1,31 @@
 { lib
 , stdenvNoCC
-, fetchurl
+, fetchFromGitHub
+, rename
 }:
 
-# Metadata fetched from
-#  https://www.googleapis.com/webfonts/v1/webfonts?key=${GOOGLE_FONTS_TOKEN}&family=Noto+Emoji
-let
-  metadata = with builtins; head (fromJSON (readFile ./noto-emoji.json)).items;
-  urlHashes = with builtins; fromJSON (readFile ./noto-emoji.hashes.json);
-in
 stdenvNoCC.mkDerivation {
   pname = "noto-fonts-monochrome-emoji";
-  version = "${lib.removePrefix "v" metadata.version}.${metadata.lastModified}";
-  preferLocalBuild = true;
+  version = "3.000";
 
-  dontUnpack = true;
-  srcs =
-    let
-      weightNames = {
-        "300" = "Light";
-        regular = "Regular";
-        "500" = "Medium";
-        "600" = "SemiBold";
-        "700" = "Bold";
-      };
-    in
-    lib.mapAttrsToList
-      (variant: url: fetchurl {
-        name = "NotoEmoji-${weightNames.${variant}}.ttf";
-        hash = urlHashes.${url};
-        inherit url;
-      })
-      metadata.files;
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "fonts";
+    rev = "a73b9ab0a5df191bcfed817159a903911ea7958a";
+    hash = "sha256-qVFU4uZius8oFPJCIL9ek2YdS3jru5mmTHp2L9RIXfg=";
+    sparseCheckout = [ "ofl/notoemoji" ];
+  };
 
   installPhase = ''
     runHook preInstall
-    for src in $srcs; do
-      install -D $src $out/share/fonts/noto/$(stripHash $src)
-    done
+
+    install -m444 -Dt $out/share/fonts/noto ofl/notoemoji/*.ttf
+    ${rename}/bin/rename 's/\[.*\]//' $out/share/fonts/noto/*
+
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Monochrome emoji font";
