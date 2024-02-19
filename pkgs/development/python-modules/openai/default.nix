@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pythonRelaxDepsHook
 , hatchling
 # propagated
 , httpx
@@ -11,6 +10,7 @@
 , anyio
 , distro
 , sniffio
+, cached-property
 , tqdm
 # optional
 , numpy
@@ -26,9 +26,8 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.6.1";
+  version = "1.11.1";
   pyproject = true;
-
 
   disabled = pythonOlder "3.7.1";
 
@@ -36,28 +35,23 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w5jj2XWTAbiu64NerLvDyGe9PybeE/WHkukoWT97SJE=";
+    hash = "sha256-PtxKQQfcM4aOlqU0qIJDpB/24Wkt/omx+uDk4mRZU4s=";
   };
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    # https://github.com/openai/openai-python/issues/921
-    "anyio"
   ];
 
   propagatedBuildInputs = [
     httpx
     pydantic
+    typing-extensions
     anyio
     distro
     sniffio
     tqdm
   ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+    cached-property
   ];
 
   passthru.optional-dependencies = {
@@ -80,15 +74,13 @@ buildPythonPackage rec {
     dirty-equals
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+  disabledTests = [
+    # makes network requests
+    "test_streaming_response"
   ];
-
-  OPENAI_API_KEY = "sk-foo";
 
   disabledTestPaths = [
     # makes network requests
-    "tests/test_client.py"
     "tests/api_resources"
   ];
 

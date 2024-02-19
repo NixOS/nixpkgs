@@ -4,6 +4,7 @@
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
 , jemalloc, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
+, fstrm, protobufc # more optionals
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -17,11 +18,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "383ef6db1cccabd2dd788ea9385f05e98a2bafdfeb7f0eda57ff9d572f4fad71";
+    sha256 = "da14b415c61d53747a991f12d6209367ef826a13dc6bf4eeaf5d88760294c3a2";
   };
 
   outputs = [ "out" "dev" ];
@@ -62,9 +63,10 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
+    ## the rest are optional dependencies
     ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ jemalloc nghttp2 ]
-    ## optional dependencies; TODO: dnstap
+    ++ [ fstrm protobufc ] # dnstap support
     ;
 
   mesonFlags = [

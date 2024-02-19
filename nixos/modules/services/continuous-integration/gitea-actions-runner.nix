@@ -188,6 +188,7 @@ in
         nameValuePair "gitea-runner-${escapeSystemdPath name}" {
           inherit (instance) enable;
           description = "Gitea Actions Runner";
+          wants = [ "network-online.target" ];
           after = [
             "network-online.target"
           ] ++ optionals (wantsDocker) [

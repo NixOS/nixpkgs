@@ -37,16 +37,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
-  version = "8.0.35";
+  version = "8.0.36";
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-      hash = "sha256-kXxe04cE6ZIRGFzkviTjOowZyRJB7XOvQYGm840VdMI=";
+      hash = "sha256-9PJwa5WKinOA72yVjdlyMHvb7qRR76/DQuTEbim36d0=";
     })
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-2Dn/RR5BWHMsD/QzKYPo8tqyAQGmHCGwVl2+bzNfy5I=";
+      hash = "sha256-s0+7dbcLcgS8u/6p7vpVAV9sR2gf2j9VDnSCJvw77fQ=";
     })
   ];
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Build MySQL
     echo "Building mysqlclient mysqlxclient"
 
-    cmake -DWITH_BOOST=system -DWITH_SYSTEM_LIBS=ON -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
+    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_BOOST=system -DWITH_FIDO=system -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
 
     cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient

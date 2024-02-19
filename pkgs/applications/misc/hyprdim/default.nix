@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprdim";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "hyprdim";
     rev = version;
-    hash = "sha256-b2T/ueinKiheuK+siV29vJfEsEodq6qT2J3XxvoD/14=";
+    hash = "sha256-Eeh0D3DkC4ureDUE+BXTGcMFNmZ0hLSidlKlL4ZDgsQ=";
   };
 
-  cargoHash = "sha256-Sf32vaqcxVdg6/kDidxBSr5XDWg3aNEBpEl31do2ZJ8=";
+  cargoHash = "sha256-hgcGzRLB1L3yxJjw1ECDJPmbl1W+2OS4KDojclyVYrc=";
 
   nativeBuildInputs = [
     installShellFiles

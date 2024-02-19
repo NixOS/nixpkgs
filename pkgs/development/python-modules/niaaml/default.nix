@@ -5,28 +5,34 @@
 , numpy
 , pandas
 , poetry-core
-, scikit-learn
-, toml-adapt
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
+, scikit-learn
+, toml-adapt
 }:
 
 buildPythonPackage rec {
   pname = "niaaml";
   version = "1.1.12";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "lukapecnik";
     repo = "NiaAML";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-GAUXEkUOD04DQtRG/RAeeeLmenBd25h18Lmrxbm4X3A=";
   };
 
+  pythonRelaxDeps = [
+    "pandas"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
     toml-adapt
   ];
 
@@ -54,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python automated machine learning framework";
     homepage = "https://github.com/lukapecnik/NiaAML";
+    changelog = "https://github.com/lukapecnik/NiaAML/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };

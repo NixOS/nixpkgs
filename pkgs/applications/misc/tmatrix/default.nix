@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ infinisil Br1ght0ne ];
+    mainProgram = "tmatrix";
   };
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "boschshcpy";
-  version = "0.2.88";
+  version = "0.2.90";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tschamm";
     repo = "boschshcpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-tyx7VJGsU9YYNJQy1mly0AgwKULZ1BWeRzz1BDgXrUU=";
+    hash = "sha256-qI8fpQJ7fyZ6CX010cyPuoFj9UQM+jHOJ201GCjIwBU=";
   };
 
   nativeBuildInputs = [

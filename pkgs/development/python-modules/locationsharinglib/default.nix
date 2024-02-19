@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "locationsharinglib";
-  version = "5.0.2";
+  version = "5.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ydwtcIJ2trQ6xg2r5kU/ogvjdBwUZhYhBdc6nBmSGcg=";
+    hash = "sha256-ar5/gyDnby0aceqqHe8lTQaHafOub+IPKglmct4xEGM=";
   };
 
   propagatedBuildInputs = [

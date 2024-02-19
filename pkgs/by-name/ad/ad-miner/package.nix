@@ -5,18 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ad-miner";
-  version = "0.6.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mazars-Tech";
     repo = "AD_Miner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Iwg00vAnCs9FbEAmB54vNDLmxyZeCtZMl/VEFoYeEcM=";
+    hash = "sha256-HM7PR1i7/L3MuUaTBPcDblflCH40NmEYSCTJUB06Fjg=";
   };
+
+  # ALl requirements are pinned
+  pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

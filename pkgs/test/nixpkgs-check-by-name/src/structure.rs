@@ -3,6 +3,7 @@ use crate::references;
 use crate::utils;
 use crate::utils::{BASE_SUBPATH, PACKAGE_NIX_FILENAME};
 use crate::validation::{self, ResultIteratorExt, Validation::Success};
+use crate::NixFileStore;
 use itertools::concat;
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -34,7 +35,10 @@ pub fn relative_file_for_package(package_name: &str) -> PathBuf {
 
 /// Check the structure of Nixpkgs, returning the attribute names that are defined in
 /// `pkgs/by-name`
-pub fn check_structure(path: &Path) -> validation::Result<Vec<String>> {
+pub fn check_structure(
+    path: &Path,
+    nix_file_store: &mut NixFileStore,
+) -> validation::Result<Vec<String>> {
     let base_dir = path.join(BASE_SUBPATH);
 
     let shard_results = utils::read_dir_sorted(&base_dir)?
@@ -88,7 +92,13 @@ pub fn check_structure(path: &Path) -> validation::Result<Vec<String>> {
                 let package_results = entries
                     .into_iter()
                     .map(|package_entry| {
-                        check_package(path, &shard_name, shard_name_valid, package_entry)
+                        check_package(
+                            nix_file_store,
+                            path,
+                            &shard_name,
+                            shard_name_valid,
+                            package_entry,
+                        )
                     })
                     .collect_vec()?;
 
@@ -102,6 +112,7 @@ pub fn check_structure(path: &Path) -> validation::Result<Vec<String>> {
 }
 
 fn check_package(
+    nix_file_store: &mut NixFileStore,
     path: &Path,
     shard_name: &str,
     shard_name_valid: bool,
@@ -161,6 +172,7 @@ fn check_package(
         });
 
         let result = result.and(references::check_references(
+            nix_file_store,
             &relative_package_dir,
             &path.join(&relative_package_dir),
         )?);

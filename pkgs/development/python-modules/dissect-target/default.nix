@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.14";
+  version = "3.15";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -48,8 +48,13 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-vp1upVwohMXFKxlHy5lWmigdq9MUk1UknSsPpCXt50s=";
+    hash = "sha256-1uWKlp0t1mVtt3lbjl4U1TMxE2YHN/GzGs8OuoVTRqc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-warn "flow.record~=" "flow.record>="
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -105,12 +110,13 @@ buildPythonPackage rec {
     # Test requires rdump
     "test_exec_target_command"
     # Issue with tar file
-    "test_tar_sensitive_drive_letter"
     "test_dpapi_decrypt_blob"
-    "test_notifications_appdb"
     "test_md"
-    "test_notifications_wpndatabase"
     "test_nested_md_lvm"
+    "test_notifications_appdb"
+    "test_notifications_wpndatabase"
+    "test_tar_anonymous_filesystems"
+    "test_tar_sensitive_drive_letter"
     # Tests compare dates and times
     "yum"
     # Filesystem access, windows defender tests

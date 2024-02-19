@@ -2,7 +2,7 @@
 
 buildNimPackage (finalAttrs: {
   pname = "nimlsp";
-  version = "0.4.4";
+  version = "0.4.6";
 
   requiredNimVersion = 1;
 
@@ -10,7 +10,7 @@ buildNimPackage (finalAttrs: {
     owner = "PMunch";
     repo = "nimlsp";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Z67iKlL+dnRbxdFt/n/fsUcb2wpZwzPpL/G29jfCaMY=";
+    hash = "sha256-MCtpCx8jMQp0VXuMowh69d1DQreU5cDftBf0lww7PUM=";
   };
 
   lockFile = ./lock.json;

@@ -4,22 +4,33 @@
 , SDL2
 , makeWrapper
 , wget
+, which
 , Accelerate
 , CoreGraphics
 , CoreML
 , CoreVideo
 , MetalKit
+
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? {}
 }:
 
-stdenv.mkDerivation rec {
+let
+  # It's necessary to consistently use backendStdenv when building with CUDA support,
+  # otherwise we get libstdc++ errors downstream.
+  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
-    rev = "refs/tags/v${version}" ;
-    hash = "sha256-7pJbROifDajBJUE07Nz8tARB901fWCB+TS4okcnEsvc=";
+    rev = "refs/tags/v${finalAttrs.version}" ;
+    hash = "sha256-9H2Mlua5zx2WNXbz2C5foxIteuBgeCNALdq5bWyhQCk=";
   };
 
   # The upstream download script tries to download the models to the
@@ -28,13 +39,51 @@ stdenv.mkDerivation rec {
   # the models to the current directory of where it is being run from.
   patches = [ ./download-models.patch ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+      which
+      makeWrapper
+    ] ++ lib.optionals cudaSupport ( with cudaPackages ;[
+      cuda_nvcc
 
-  buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreML CoreVideo MetalKit ];
+      # TODO: Replace with autoAddDriverRunpath
+      # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
+      autoAddOpenGLRunpathHook
+    ]);
+
+  buildInputs = [
+      SDL2
+    ] ++ lib.optionals stdenv.isDarwin [
+      Accelerate
+      CoreGraphics
+      CoreML
+      CoreVideo
+      MetalKit
+    ] ++ lib.optionals cudaSupport ( with cudaPackages; [
+
+      # A temporary hack for reducing the closure size, remove once cudaPackages
+      # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
+      cuda_cccl.dev # provides nv/target
+      cuda_cudart.dev
+      cuda_cudart.lib
+      cuda_cudart.static
+      libcublas.dev
+      libcublas.lib
+      libcublas.static
+    ]);
+
+  postPatch = let
+    cudaOldStr = "-lcuda ";
+    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart.lib}/lib/stubs ";
+  in lib.optionalString cudaSupport ''
+    substituteInPlace Makefile \
+      --replace '${cudaOldStr}' '${cudaNewStr}'
+  '';
 
   env = lib.optionalAttrs stdenv.isDarwin {
     WHISPER_COREML = "1";
     WHISPER_COREML_ALLOW_FALLBACK = "1";
+  } // lib.optionalAttrs cudaSupport {
+    WHISPER_CUBLAS = "1";
   };
 
   makeFlags = [ "main" "stream" "command" ];
@@ -75,4 +124,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ dit7ya hughobrien ];
   };
-}
+})

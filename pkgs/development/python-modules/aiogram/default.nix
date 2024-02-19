@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8SYrg+gfNSTR0CTPf4cYDa4bfA0LPBmZtPcATF22fqw=";
+    hash = "sha256-TD4pDmM899zBOxllM0iju2u6IhmXxLYWBpjfWhewVFc=";
   };
 
   nativeBuildInputs = [

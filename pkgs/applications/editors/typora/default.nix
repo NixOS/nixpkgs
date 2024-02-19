@@ -22,10 +22,10 @@
 
 let
   pname = "typora";
-  version = "1.7.6";
+  version = "1.8.9";
   src = fetchurl {
     url = "https://download.typora.io/linux/typora_${version}_amd64.deb";
-    hash = "sha256-o91elUN8sFlzVfIQj29amsiUdSBjZc51tLCO+Qfar6c=";
+    hash = "sha256-1FAVY9NSvpZOCZJmNadx5ZlqfaCc2N3D+T/08F4TOzY=";
   };
 
   typoraBase = stdenv.mkDerivation {

@@ -47,7 +47,7 @@ buildPythonPackage rec {
       transformers
       # diffusers
       soundfile
-    ];
+    ] ++ transformers.optional-dependencies.agents;
     full = passthru.optional-dependencies.grpc ++ passthru.optional-dependencies.agents;
   };
 

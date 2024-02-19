@@ -17,6 +17,6 @@ stdenv.mkDerivation (finalAttrs: ((mecab-base finalAttrs) // {
     license = licenses.bsd3;
     platforms = platforms.unix;
     mainProgram = "mecab";
-    maintainers = with maintainers; [ auntie paveloom ];
+    maintainers = with maintainers; [ auntie ];
   };
 }))

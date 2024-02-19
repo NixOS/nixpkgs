@@ -8,19 +8,19 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.2.1";
-  format = "pyproject";
+  version = "5.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     rev = version;
-    hash = "sha256-CUe/oB/+Hq9evnLwl8r0k5ObhI3vDt7oX79+20yMfjY=";
+    hash = "sha256-c5edonnvvGIZ6SJ6+gd2xcAy0/HiAEUEPMGQzOKK2Sw=";
   };
 
   postPatch = ''
     substituteInPlace "ykman/pcsc/__init__.py" \
-      --replace 'pkill' '${if stdenv.isLinux then "${procps}" else "/usr"}/bin/pkill'
+      --replace 'pkill' '${if stdenv.isLinux then procps else "/usr"}/bin/pkill'
   '';
 
   nativeBuildInputs = with python3Packages; [

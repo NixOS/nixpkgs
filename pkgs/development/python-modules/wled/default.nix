@@ -9,6 +9,7 @@
 , yarl
 , aresponses
 , pytest-asyncio
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 }:
@@ -49,6 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ];
 

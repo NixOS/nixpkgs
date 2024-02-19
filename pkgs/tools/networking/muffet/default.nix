@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/raviqqe/muffet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "muffet";
   };
 }

@@ -16,7 +16,8 @@
 , libxkbcommon
 , libGLU
 , wayland
-, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
+# "libnsgif" is disabled until https://todo.sr.ht/~exec64/imv/55 is solved
+, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libheif" ]
 , freeimage
 , libtiff
 , libjpeg_turbo
@@ -78,9 +79,10 @@ stdenv.mkDerivation rec {
     "-Dman=enabled"
   ] ++ backendFlags;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     asciidoc
-    cmocka
     docbook_xsl
     libxslt
     meson
@@ -89,6 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cmocka
     icu
     libxkbcommon
     pango

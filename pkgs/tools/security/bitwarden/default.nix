@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_27
+, electron_28
 , fetchFromGitHub
 , fetchpatch2
 , glib
@@ -27,16 +27,16 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_27;
+  electron = electron_28;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2024.1.0";
+  version = "2024.2.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-lDDy1b1yfw3nZrwEEkpvh6xYucgn20XHsGACc45eb2w=";
+    hash = "sha256-nCjcwe+7Riml/J0hAVv/t6/oHIDPhwFD5A3iQ/LNR5Y=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-RR8Ua41D9SXymiPuabOnIab3byu8DR63rOfdeTaQpy4=";
+  npmDepsHash = "sha256-GJl9pVwFWEg9yku9IXLcu2XMJZz+ZoQOxCf1TrW715Y=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -68,7 +68,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-EiJjIWiyu8MvX3Tj0Fkeh0T0El5kdCko2maiY6kkPPA=";
+    hash = "sha256-KJUz5hvdsurnohUWRZedXvuWMnLtR0dcdTeHtJGrZBs=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

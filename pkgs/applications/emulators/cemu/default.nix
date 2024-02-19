@@ -1,4 +1,5 @@
 { lib, stdenv, fetchFromGitHub
+, fetchpatch
 , addOpenGLRunpath
 , wrapGAppsHook
 , cmake
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-61";
+  version = "2.0-65";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-oKVVBie3Q3VtsHbh0wJfdlx1YnF424hib8mFRYnbgXY=";
+    hash = "sha256-jsDmxol3zZMmpo4whDeUXTzfO+QVK/h6lItXTyJyoak=";
   };
 
   patches = [
@@ -47,6 +48,13 @@ stdenv.mkDerivation rec {
     # > The following imported targets are referenced, but are missing:
     # > SPIRV-Tools-opt
     ./cmakelists.patch
+
+    # Remove on next release
+    # https://github.com/cemu-project/Cemu/pull/1076
+    (fetchpatch {
+      url = "https://github.com/cemu-project/Cemu/commit/72aacbdcecc064ea7c3b158c433e4803496ac296.patch";
+      hash = "sha256-x+ZVqXgGRSv0VYwJAX35C1p7PnmCHS7iEO+4k8j0/ug=";
+    })
   ];
 
   nativeBuildInputs = [

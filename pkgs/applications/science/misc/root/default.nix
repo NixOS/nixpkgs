@@ -58,7 +58,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.30.02";
+  version = "6.30.04";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-eWWkVtGtHuDV/kdpv1qP7Cka9oTtk9sPMICpw2JDUYM=";
+    hash = "sha256-K0GAtpjznMZdkQhNgzqIRRWzJbxfZzyOOavoGLAl2Mw=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -111,11 +111,15 @@ stdenv.mkDerivation rec {
   patches = [
     ./sw_vers.patch
 
-    # Fix for builtin_llvm=OFF
-    # https://github.com/root-project/root/pull/14238
+    # compatibility with recent XRootD
+    # https://github.com/root-project/root/pull/13752
     (fetchpatch {
-      url = "https://github.com/root-project/root/commit/1477d3adebf27a19f3a8b85f21c27a0a5649c7ff.diff";
-      hash = "sha256-g+FqXBTWXA7t7F/rMarnmOK2014oCNnNJbHhjH+Tvjw=";
+      url = "https://github.com/root-project/root/commit/3d3cda6c520791282298782189cdb8ca07ace4b9.diff";
+      hash = "sha256-O3aXzrOEQiPjZgbAj9TL6Wt/adN1kKFwjooeaFRyT4I=";
+    })
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/6e7798e62dbed1ffa8b91a180fa5a080b7c04ba3.diff";
+      hash = "sha256-47/J631DBnVlvM1Pm9iicKXDKAqN8v9hjAstQuHmH8Q=";
     })
   ];
 

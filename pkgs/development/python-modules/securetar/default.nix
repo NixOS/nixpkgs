@@ -4,21 +4,26 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2023.3.0";
-  format = "setuptools";
+  version = "2024.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pvizeli";
-    repo = pname;
+    repo = "securetar";
     rev = "refs/tags/${version}";
-    hash = "sha256-3bDboggvKbpWyjpUOrUmtJx3Nj/6Uvut2nEQLYJubDA=";
+    hash = "sha256-rYRbrpXo2oVW8SpddNsKb0FBdscovNUaGXLHy7WBiVU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography

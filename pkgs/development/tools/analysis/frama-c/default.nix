@@ -20,7 +20,7 @@ let
     ppx_deriving_yojson
     ppx_import
     stdlib-shims
-    why3
+    why3.dev
     re
     result
     seq
@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
     hash = "sha256-KWEogjMOy27d0LTKOvwEkrcND+szeaG46JMZTG4XOYM=";
   };
+
+  preConfigure = ''
+    substituteInPlace src/dune --replace " bytes " " "
+  '';
 
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 

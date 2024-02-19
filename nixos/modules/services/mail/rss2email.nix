@@ -95,9 +95,11 @@ in {
 
     services.rss2email.config.to = cfg.to;
 
-    systemd.tmpfiles.rules = [
-      "d /var/rss2email 0700 rss2email rss2email - -"
-    ];
+    systemd.tmpfiles.settings."10-rss2email"."/var/rss2email".d = {
+      user = "rss2email";
+      group = "rss2email";
+      mode = "0700";
+    };
 
     systemd.services.rss2email = let
       conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({

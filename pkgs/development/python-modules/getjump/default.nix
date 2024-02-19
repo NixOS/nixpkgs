@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.4.1";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rNMhyUqrliKf6CPhZfyUwN00D4TgOWjPCoqihOB0PDE=";
+    hash = "sha256-WSLfhVCqP+N+2Rs2PUXOknnlNx3UtWdFYrK1lTW1fqQ=";
   };
 
   nativeBuildInputs = [

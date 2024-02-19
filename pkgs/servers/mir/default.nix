@@ -150,6 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
     # These get built but don't get executed by default, yet they get installed when tests are enabled
     "-DMIR_BUILD_PERFORMANCE_TESTS=OFF"
     "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
+    # https://github.com/MirServer/mir/issues/2987
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
+    "-DMIR_USE_PRECOMPILED_HEADERS=OFF"
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

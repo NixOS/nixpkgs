@@ -1,0 +1,12 @@
+diff --git a/cmake/Pcsx2Utils.cmake b/cmake/Pcsx2Utils.cmake
+index 87f012c..052f1be 100644
+--- a/cmake/Pcsx2Utils.cmake
++++ b/cmake/Pcsx2Utils.cmake
+@@ -44,7 +44,6 @@ function(detect_compiler)
+ endfunction()
+ 
+ function(get_git_version_info)
+-	set(PCSX2_GIT_REV "")
+ 	set(PCSX2_GIT_TAG "")
+ 	set(PCSX2_GIT_HASH "")
+ 	if (GIT_FOUND AND EXISTS ${PROJECT_SOURCE_DIR}/.git)

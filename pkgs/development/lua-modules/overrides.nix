@@ -32,6 +32,7 @@
 , libuv
 , libxcrypt
 , libyaml
+, luajitPackages
 , mariadb
 , magic-enum
 , mpfr
@@ -153,6 +154,13 @@ with prev;
       nativeBuildInputs = [ pandoc ];
       makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
+  });
+
+  image-nvim = prev.image-nvim.overrideAttrs (oa: {
+    propagatedBuildInputs = [
+      lua
+      luajitPackages.magick
+    ];
   });
 
   ldbus = prev.ldbus.overrideAttrs (oa: {

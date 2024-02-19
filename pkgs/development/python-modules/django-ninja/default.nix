@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "django-ninja";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";
-    rev = "v${version}";
-    hash = "sha256-hF6Z8i8M4mQtVPIupTSEIkJh0i/oMFFuE9PpODxq4fw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pvpYDuUZi0Gr5RbBWc91LzgmRLhihrhsKaD/AWN5+Bo=";
   };
 
   propagatedBuildInputs = [ django pydantic ];

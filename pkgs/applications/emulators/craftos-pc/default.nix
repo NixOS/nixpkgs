@@ -16,18 +16,18 @@
 }:
 
 let
-  version = "2.7.5";
+  version = "2.8.1";
   craftos2-lua = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2-lua";
     rev = "v${version}";
-    hash = "sha256-JMBsSoO/yTLw7K1Ri3BzKr5bz5UirXiPr/Q0YoMumhY=";
+    hash = "sha256-8bl83AOIWtUQ06F2unYEF08VT13o9EGo9YDZpdNxd8w=";
   };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
-    rev = "v${version}.1"; # Author released a hotfix; remove trailing '.1' on next update
-    hash = "sha256-WZs/KIdpqLLzvpH2hiJpe/AehluoQMtewBbAb4htz8k=";
+    rev = "v${version}";
+    hash = "sha256-aCRJ3idSrRM8ydt8hP8nA1RR0etPnWpQKphXcOGgTfk=";
   };
 in
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    hash = "sha256-t2yhSuNPFCF2NaQFWuN9Nos5ZPinAvecV6EZNO0Cy9I=";
+    hash = "sha256-iQCv4EDdqmnU0fYxMwpCZ2Z5p43P0MGBNIG/dZrWndg=";
   };
 
   buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
     cp -R ${craftos2-lua}/* ./craftos2-lua/
     chmod -R u+w ./craftos2-lua
     make -C craftos2-lua linux
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    make
+    runHook postBuild
   '';
 
   dontStrip = true;

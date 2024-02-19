@@ -237,6 +237,30 @@ rec {
       });
     });
 
+  useLibsFrom = modelStdenv: targetStdenv:
+    let
+      ccForLibs = modelStdenv.cc.cc;
+      cc = pkgs.wrapCCWith {
+        /* NOTE: cc.cc is the unwrapped compiler. Should we respect the old
+         * wrapper instead? */
+        cc = targetStdenv.cc.cc;
+
+        /* NOTE(originally by rrbutani):
+         * Normally the `useCcForLibs`/`gccForLibs` mechanism is used to get a
+         * clang based `cc` to use `libstdc++` (from gcc).
+         *
+         * Here we (ab)use it to use a `libstdc++` from a different `gcc` than our
+         * `cc`.
+         *
+         * Note that this does not inhibit our `cc`'s lib dir from being added to
+         * cflags/ldflags (see `cc_solib` in `cc-wrapper`) but this is okay: our
+         * `gccForLibs`'s paths should take precedence. */
+        useCcForLibs = true;
+        gccForLibs = ccForLibs;
+      };
+    in
+    overrideCC targetStdenv cc;
+
   useMoldLinker = stdenv: let
     bintools = stdenv.cc.bintools.override {
       extraBuildCommands = ''

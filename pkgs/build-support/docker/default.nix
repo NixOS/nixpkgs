@@ -805,6 +805,7 @@ rec {
   '';
 
   # This provides /bin/sh, pointing to bashInteractive.
+  # The use of bashInteractive here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
     ln -s ${bashInteractive}/bin/bash $out/bin/sh
@@ -915,13 +916,14 @@ rec {
 
             mkdir $out
             ${if enableFakechroot then ''
-              proot -r $PWD/old_out ${bind-paths} --pwd=/ --root-id bash -c '
+              proot -r $PWD/old_out ${bind-paths} --pwd=/ fakeroot bash -c '
                 source $stdenv/setup
                 eval "$fakeRootCommands"
                 tar \
                   --sort name \
                   --exclude=./proc \
                   --exclude=./sys \
+                  --exclude=.${builtins.storeDir} \
                   --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                   --hard-dereference \
                   -cf $out/layer.tar .

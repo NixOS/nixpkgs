@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
     "-DSURGE_JUCE_PATH=${juce-lv2}"
   ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' has not been declared
+    "-include cstdint"
+  ];
+
   # JUCE dlopen's these at runtime, crashes without them
   NIX_LDFLAGS = (toString [
     "-lX11"

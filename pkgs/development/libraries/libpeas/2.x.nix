@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, substituteAll
 , pkg-config
 , gi-docgen
 , gobject-introspection
@@ -24,6 +25,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-ndwdUfOGY9pN9SFjBRt7LOo6JCz67p9afhQPB4TIqnc=";
   };
+
+  patches = [
+    # Make PyGObject’s gi library available.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
+        python3.pkgs.pygobject3
+      ];
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config

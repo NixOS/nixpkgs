@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "4";
+  version = "1.3.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
-    rev = "refs/tags/release-test-${version}";
-    hash = "sha256-YO0FnmIEt+88f6k2mdXDSQg7UKq1Swr8wqVUGdRyQR4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Tp6BSU33FaszrIXQgU0Asb7IMue0C939o/atAKz+3Q4=";
   };
 
   patches = [

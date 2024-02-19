@@ -5,39 +5,24 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "gphotos-sync";
-  version = "3.1.2";
+  version = "3.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "gilesknap";
     repo = "gphotos-sync";
     rev = version;
-    hash = "sha256-lLw450Rk7tIENFTZWHoinkhv3VtctDv18NKxhox+NgI=";
+    hash = "sha256-iTqD/oUQqC7Fju8SEPkSZX7FC9tE4eRCewiJR8STmEw=";
   };
 
   patches = [
     ./skip-network-tests.patch
   ];
 
-  # Consider fixing this upstream by following up on:
-  # https://github.com/gilesknap/gphotos-sync/issues/441
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "setuptools<57" "setuptools" \
-      --replace "wheel==0.33.1" "wheel"
-  '';
-
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
-  ];
-
-  pythonRelaxDeps = [
-    "psutil"
-    "exif"
-    "pyyaml"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -63,9 +48,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   preCheck = ''
+    export PY_IGNORE_IMPORTMISMATCH=1
     export HOME=$(mktemp -d)
-    substituteInPlace setup.cfg \
-      --replace "--cov=gphotos_sync --cov-report term --cov-report xml:cov.xml" ""
   '';
 
   meta = with lib; {

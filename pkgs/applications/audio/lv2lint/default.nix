@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.artistic2;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.all;
+    mainProgram = "lv2lint";
   };
 }

@@ -57,7 +57,7 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
-        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false
+        -p:UseAppHost=false
      }
 
      buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher

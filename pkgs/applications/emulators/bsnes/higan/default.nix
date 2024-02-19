@@ -18,17 +18,18 @@
 # Darwin dependencies
 , libicns
 , darwin
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "higan";
-  version = "115+unstable=2021-08-18";
+  version = "115-unstable-2023-11-13";
 
   src = fetchFromGitHub {
     owner = "higan-emu";
     repo = "higan";
-    rev = "9bf1b3314b2bcc73cbc11d344b369c31562aff10";
-    hash = "sha256-HZItJ97x20OjFKv2OVbMja7g+c1ZXcgcaC/XDe3vMZM=";
+    rev = "993368d917cb750107390effe2cd394ba8710208";
+    hash = "sha256-D21DFLnYl2J4JhwmVmEKHhtglZWxVBrl/kOcvxJYbnA=";
   };
 
   nativeBuildInputs = [
@@ -131,6 +132,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
     homepage = "https://github.com/higan-emu/higan";

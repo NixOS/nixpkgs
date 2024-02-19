@@ -2,11 +2,11 @@
 , lib
 , fetchFromGitHub
 , fetchFromGitLab
-, fetchpatch
-, fetchurl
 , Foundation
 , abseil-cpp
 , cmake
+, eigen
+, gtest
 , libpng
 , nlohmann_json
 , nsync
@@ -16,7 +16,6 @@
 , zlib
 , microsoft-gsl
 , iconv
-, gtest
 , protobuf_21
 , pythonSupport ? true
 }:
@@ -30,25 +29,18 @@ let
     sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
   };
 
-  eigen = fetchFromGitLab {
-    owner = "libeigen";
-    repo = "eigen";
-    rev = "d10b27fe37736d2944630ecd7557cefa95cf87c9";
-    sha256 = "sha256-Lmco0s9gIm9sIw7lCr5Iewye3RmrHEE4HLfyzRkQCm0=";
-  };
-
   mp11 = fetchFromGitHub {
     owner = "boostorg";
     repo = "mp11";
     rev = "boost-1.79.0";
-    sha256 = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
+    hash = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
   };
 
   safeint = fetchFromGitHub {
     owner = "dcleblanc";
     repo = "safeint";
     rev = "ff15c6ada150a5018c5ef2172401cb4529eac9c0";
-    sha256 = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
+    hash = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
   };
 
   pytorch_cpuinfo = fetchFromGitHub {
@@ -56,14 +48,14 @@ let
     repo = "cpuinfo";
     # There are no tags in the repository
     rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
-    sha256 = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
+    hash = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
   };
 
   flatbuffers = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v1.12.0";
-    sha256 = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
+    hash = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
   };
 
   gtest' = gtest.overrideAttrs (oldAttrs: rec {
@@ -74,19 +66,37 @@ let
       rev = "v${version}";
       hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
     };
-    });
+  });
+
+  onnx = fetchFromGitHub {
+    owner = "onnx";
+    repo = "onnx";
+    rev = "refs/tags/v1.14.1";
+    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.15.1";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
-    rev = "v${version}";
-    sha256 = "sha256-SnHo2sVACc++fog7Tg6f2LK/Sv/EskFzN7RZS7D113s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bTW9Pc3rvH+c8VIlDDEtAXyA3sajVyY5Aqr6+SxaMF4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # If you stumble on these patches trying to update onnxruntime, check
+    # `git blame` and ping the introducers.
+
+    # Context: we want the upstream to
+    # - always try find_package first (FIND_PACKAGE_ARGS),
+    # - use MakeAvailable instead of the low-level Populate,
+    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
+    ./0001-eigen-allow-dependency-injection.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -94,24 +104,24 @@ stdenv.mkDerivation rec {
     python3Packages.python
     protobuf_21
   ] ++ lib.optionals pythonSupport (with python3Packages; [
+    pip
+    python
+    pythonOutputDistHook
     setuptools
     wheel
-    pip
-    pythonOutputDistHook
   ]);
 
   buildInputs = [
+    eigen
     libpng
     zlib
     nlohmann_json
-    nsync
-    re2
     microsoft-gsl
-  ] ++ lib.optionals pythonSupport [
-    python3Packages.numpy
-    python3Packages.pybind11
-    python3Packages.packaging
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
+    numpy
+    pybind11
+    packaging
+  ]) ++ lib.optionals stdenv.isDarwin [
     Foundation
     iconv
   ];
@@ -137,11 +147,10 @@ stdenv.mkDerivation rec {
     "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
     "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
-    "-DFETCHCONTENT_SOURCE_DIR_EIGEN=${eigen}"
     "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
-    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${python3Packages.onnx.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
     "-DFETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO=${pytorch_cpuinfo}"
     "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
@@ -165,14 +174,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
   '' + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
     # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
     rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
   '';
 
   postBuild = lib.optionalString pythonSupport ''
-    python ../setup.py bdist_wheel
+    ${python3Packages.python.interpreter} ../setup.py bdist_wheel
   '';
 
   postInstall = ''

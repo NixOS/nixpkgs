@@ -24,7 +24,7 @@
 , libpulseaudio
 , libupnp
 , yaml-cpp
-, msgpack
+, msgpack-cxx
 , openssl
 , restinio
 , secp256k1
@@ -50,6 +50,7 @@
 , qtsvg
 , qtwebengine
 , qtwebchannel
+, wrapGAppsHook
 , withWebengine ? true
 
   # for pjsip
@@ -125,7 +126,7 @@ stdenv.mkDerivation rec {
       http-parser
       jsoncpp
       libupnp
-      msgpack
+      msgpack-cxx
       opendht-jami
       openssl
       pjsip-jami
@@ -177,7 +178,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libupnp
       yaml-cpp
-      msgpack
+      msgpack-cxx
       opendht-jami
       openssl
       pjsip-jami
@@ -200,7 +201,10 @@ stdenv.mkDerivation rec {
     ln -s ${daemon} $out/daemon
   '';
 
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
+    wrapGAppsHook
     wrapQtAppsHook
     pkg-config
     cmake
@@ -233,6 +237,10 @@ stdenv.mkDerivation rec {
     # With wayland the titlebar is not themed and the wmclass is wrong.
     "--set-default QT_QPA_PLATFORM xcb"
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "stable/";

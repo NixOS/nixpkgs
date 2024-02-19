@@ -7,32 +7,32 @@
 , pycryptodome
 , pydantic
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pykoplenti";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stegm";
-    repo = pname;
+    repo = "pykoplenti";
     rev = "refs/tags/v${version}";
     hash = "sha256-2sGkHCIGo1lzLurvQBmq+16sodAaK8v+mAbIH/Gd3+E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  pythonRelaxDeps = [
+    "pydantic"
   ];
 
-  postPatch = ''
-    # remove with 1.1.0
-    substituteInPlace setup.cfg \
-      --replace 'version = unreleased' 'version = ${version}'
-  '';
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -50,11 +50,14 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "pykoplenti" ];
+  pythonImportsCheck = [
+    "pykoplenti"
+  ];
 
   meta = with lib; {
     description = "Python REST client API for Kostal Plenticore Inverters";
     homepage = "https://github.com/stegm/pykoplenti/";
+    changelog = "https://github.com/stegm/pykoplenti/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

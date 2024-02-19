@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
 , libxkbcommon
 , pam
 , pkg-config
@@ -12,14 +12,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "0.6.4";
+  version = "0.6.5";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "ifreund";
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RSAUSlsBB9IphvdSiFqJIvyhhJoAKKb+KyGhdoTa3vs=";
+    hash = "sha256-wvZrRPZobDh+rB3RSaRrz0xDHuYwT2eoQEu3AbYKn8Y=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigBuildFlags = [ "-Dman-pages" ];
 
+  passthru.updateScript = ./update.nu;
+
   meta = {
-    homepage = "https://github.com/ifreund/waylock";
+    homepage = "https://codeberg.org/ifreund/waylock";
+    changelog = "https://codeberg.org/ifreund/waylock/releases/tag/v${finalAttrs.version}";
     description = "A small screenlocker for Wayland compositors";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ jordanisaacs ];
+    maintainers = with lib.maintainers; [ adamcstephens jordanisaacs ];
     mainProgram = "waylock";
     platforms = lib.platforms.linux;
   };

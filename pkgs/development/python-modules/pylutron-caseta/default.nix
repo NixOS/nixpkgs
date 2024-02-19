@@ -1,36 +1,49 @@
 { lib
 , async-timeout
 , buildPythonPackage
+, click
 , cryptography
 , fetchFromGitHub
+, hatchling
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
-, setuptools
+, xdg
+, zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.18.3";
-  format = "pyproject";
+  version = "0.19.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gurumitts";
-    repo = pname;
+    repo = "pylutron-caseta";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tjmMu7LUne+hLLTXGqHhci9/PZiuQ10mQaARvL2sdIM=";
+    hash = "sha256-/xTHtzXEFGL2/oP1oVxJj7GO3fSZ5CwjXDdp6OLhlzM=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    hatchling
   ];
 
   propagatedBuildInputs = [
     cryptography
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
+
+  passthru.optional-dependencies = {
+    cli = [
+      click
+      xdg
+      zeroconf
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio

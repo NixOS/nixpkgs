@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "command_runner";
-  version = "1.5.2";
+  version = "1.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jzTckxDQxY8nIvQE3l0RTfpOH8RVIylS3YN3izr7Ns8=";
+    sha256 = "sha256-lzt1UhhrPqQrBKsRmPhqhtOIfFlCteQqo6sZ6rOut0A=";
   };
 
   propagatedBuildInputs = [ psutil ];

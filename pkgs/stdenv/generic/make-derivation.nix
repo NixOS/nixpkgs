@@ -249,10 +249,12 @@ let
     "relro"
     "stackprotector"
     "strictoverflow"
+    "zerocallusedregs"
   ];
-  defaultHardeningFlags = stdenv.cc.defaultHardeningFlags or
-    # fallback safe-ish set of flags
-    (remove "pie" knownHardeningFlags);
+  defaultHardeningFlags =
+    (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
+      # fallback safe-ish set of flags
+      (remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []

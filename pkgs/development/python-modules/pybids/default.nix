@@ -26,13 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-pahl8wi6Sf8AuVqkvi7H90ViHr+9utb14ZVmKK3rFm4=";
   };
 
+  pythonRelaxDeps = [
+    "formulaic"
+    "sqlalchemy"
+  ];
+
   nativeBuildInputs = [
     pythonRelaxDepsHook
     setuptools
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
-
-  pythonRelaxDeps = [ "sqlalchemy" ];
 
   propagatedBuildInputs = [
     bids-validator
@@ -65,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
     homepage = "https://github.com/bids-standard/pybids";
+    changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

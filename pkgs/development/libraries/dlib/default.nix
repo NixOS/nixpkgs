@@ -3,28 +3,27 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, fftw
 , libpng
 , libjpeg
 , libwebp
-, openblas
+, blas
+, lapack
+, config
 , guiSupport ? false
 , libX11
-
-  # see http://dlib.net/compile.html
 , sse4Support ? stdenv.hostPlatform.sse4_1Support
 , avxSupport ? stdenv.hostPlatform.avxSupport
-, cudaSupport ? true
-}:
-
-stdenv.mkDerivation rec {
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+}@inputs:
+(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
   version = "19.24.2";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    rev ="v${version}";
+    rev = "v${version}";
     sha256 = "sha256-Z1fScuaIHjj2L1uqLIvsZ7ARKNjM+iaA8SAtWUTPFZk=";
   };
 
@@ -33,20 +32,53 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "USE_DLIB_USE_CUDA" cudaSupport)
     (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
+    (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)))
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_nvcc
+  ]);
 
   buildInputs = [
-    fftw
     libpng
     libjpeg
     libwebp
-    openblas
-  ] ++ lib.optional guiSupport libX11;
+    blas
+    lapack
+  ]
+  ++ lib.optionals guiSupport [ libX11 ]
+  ++ lib.optionals config.cudaSupport (with cudaPackages; [
+    cuda_cudart.dev
+    cuda_cudart.lib
+    cuda_cudart.static
+    cuda_nvcc.dev
+    libcublas.dev
+    libcublas.lib
+    libcublas.static
+    libcurand.dev
+    libcurand.lib
+    libcurand.static
+    libcusolver.dev
+    libcusolver.lib
+    libcusolver.static
+    cudnn.dev
+    cudnn.lib
+    cudnn.static
+    cuda_cccl.dev
+  ]);
+
+  passthru = {
+    inherit
+      cudaSupport cudaPackages
+      sse4Support avxSupport;
+  };
 
   meta = with lib; {
     description = "A general purpose cross-platform C++ machine learning library";

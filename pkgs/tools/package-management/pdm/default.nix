@@ -32,13 +32,14 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.10.4";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "2.12.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bf2dTLWQQ+3sstC0fSCOVdidMzunGX3rBcyi37x6S/s=";
+    hash = "sha256-U82rcnwUaf3Blu/Y1/+EBKPKke5DwKVxRzbyAg0KXd8=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,7 @@ buildPythonApplication rec {
     blinker
     certifi
     cachecontrol
+    dep-logic
     findpython
     installer
     packaging
@@ -69,6 +71,9 @@ buildPythonApplication rec {
   ]
   ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
+  ]
+  ++ lib.optionals (pythonAtLeast "3.10") [
+    truststore
   ];
 
   nativeCheckInputs = [

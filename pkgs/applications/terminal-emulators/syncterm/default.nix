@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, unzip, autoPatchelfHook, ncurses, SDL2, alsa-lib }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, perl, unzip, autoPatchelfHook, ncurses, SDL2, alsa-lib }:
 
 stdenv.mkDerivation rec {
   pname = "syncterm";
@@ -8,7 +8,18 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/${pname}/${pname}-${version}-src.tgz";
     sha256 = "19m76bisipp1h3bc8mbq83b851rx3lbysxb0azpbr5nbqr2f8xyi";
   };
-  sourceRoot = "${pname}-${version}/src/syncterm";
+
+  patches = [
+    # Cherry-picks from the upstream Synchronet tree, removing calls to `pthread_yield`.
+    # See upstream issue: https://gitlab.synchro.net/main/sbbs/-/issues/299
+    (fetchpatch {
+        url = "https://gitlab.synchro.net/main/sbbs/-/commit/851627df99f48d8eaad33d3a98ef309b4371f359.patch";
+        hash = "sha256-DbFAeJnrwFyfEpZgZFN8etqX6vQ3ca2TJwaqp0aHeo4=";
+    })
+    ./0001-use-sched-yield-53264f2b.patch
+  ];
+  # We can't use sourceRoot, as the cherry-picked patches apply to files outside of it.
+  postPatch = ''cd src/syncterm'';
 
   CFLAGS = [
     "-DHAS_INTTYPES_H"
@@ -32,8 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     # error: unsupported option '-fsanitize=safe-stack' for target 'x86_64-apple-darwin'
-    # broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
-    broken = true; # sendmsg.c:(.text+0x1099): undefined reference to `pthread_yield'
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://syncterm.bbsdev.net/";
     description = "BBS terminal emulator";
     maintainers = with maintainers; [ embr ];

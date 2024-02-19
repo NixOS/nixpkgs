@@ -142,6 +142,8 @@ stdenv.mkDerivation {
   ] ++ lists.optionals rocmSupport [
     "-DCMAKE_C_COMPILER=${rocmPackages.clr}/bin/hipcc"
     "-DCMAKE_CXX_COMPILER=${rocmPackages.clr}/bin/hipcc"
+  ] ++ lists.optionals (cudaPackages.cudaAtLeast "12.0.0") [
+    (lib.cmakeBool "USE_FORTRAN" false)
   ];
 
   buildFlags = [

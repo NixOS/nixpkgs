@@ -1,11 +1,9 @@
 # Name-based package directories
 
 The structure of this directory maps almost directly to top-level package attributes.
-This is the recommended way to add new top-level packages to Nixpkgs [when possible](#limitations).
+Add new top-level packages to Nixpkgs using this mechanism [whenever possible](#limitations).
 
-Packages found in the named-based structure do not need to be explicitly added to the
-`top-level/all-packages.nix` file unless they require overriding the default value
-of an implicit attribute (see below).
+Packages found in the name-based structure are automatically included, without needing to be added to `all-packages.nix`. However if the implicit attribute defaults need to be changed for a package, this [must still be declared in `all-packages.nix`](#changing-implicit-attribute-defaults).
 
 ## Example
 
