@@ -50,7 +50,7 @@ let
     mate-user-share = callPackage ./mate-user-share { };
     mate-utils = callPackage ./mate-utils { };
     mozo = callPackage ./mozo { };
-    pluma = callPackage ./pluma { inherit (pkgs.gnome) adwaita-icon-theme; };
+    pluma = callPackage ./pluma { };
     python-caja = callPackage ./python-caja { };
 
     basePackages = [
