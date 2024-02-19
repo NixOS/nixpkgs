@@ -3,14 +3,15 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-client";
   version = "0.20.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "prometheus";
@@ -20,6 +21,10 @@ buildPythonPackage rec {
   };
 
   __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
