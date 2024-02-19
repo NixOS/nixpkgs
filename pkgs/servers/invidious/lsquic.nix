@@ -2,10 +2,10 @@
 let
   versions = lib.importJSON ./versions.json;
 
-  fetchGitilesPatch = { name, url, sha256 }:
+  fetchGitilesPatch = { name, url, hash }:
     fetchurl {
       url = "${url}%5E%21?format=TEXT";
-      inherit name sha256;
+      inherit name hash;
       downloadToTemp = true;
       postFetch = ''
         base64 -d < $downloadedFile > $out
@@ -17,7 +17,7 @@ let
     version = versions.boringssl.rev;
     src = fetchgit {
       url = "https://boringssl.googlesource.com/boringssl";
-      inherit (versions.boringssl) rev sha256;
+      inherit (versions.boringssl) rev hash;
     };
 
     patches = [
@@ -30,12 +30,12 @@ let
       (fetchGitilesPatch {
         name = "fix-mismatch-between-header-and-implementation-of-bn_sqr_comba8.patch";
         url = "https://boringssl.googlesource.com/boringssl/+/139adff9b27eaf0bdaac664ec4c9a7db2fe3f920";
-        sha256 = "05sp602dvh50v46jkzmh4sf4wqnq5bwy553596g2rhxg75bailjj";
+        hash = "sha256-UtKoVjmvwyyeSWWU4vkq2GJOnCaw/ikN2aDA3QQwVxc=sha256-UtKoVjmvwyyeSWWU4vkq2GJOnCaw/ikN2aDA3QQwVxc=";
       })
       (fetchGitilesPatch {
         name = "use-an-unsized-helper-for-truncated-SHA-512-variants.patch";
         url = "https://boringssl.googlesource.com/boringssl/+/a24ab549e6ae246b391155d7bed3790ac0e07de2";
-        sha256 = "0483jkpg4g64v23ln2blb74xnmzdjcn3r7w4zk7nfg8j3q5f9lxm";
+        hash = "sha256-tdPkCh4SPWfP/ISfPCyT7VfbyVl0CUuH2MQ88u6UAxE=";
       })
 /*
       # the following patch is too complex, so we will modify the build flags
@@ -50,7 +50,7 @@ let
       (fetchGitilesPatch {
         name = "fix-array-parameter-warnings.patch";
         url = "https://boringssl.googlesource.com/boringssl/+/92c6fbfc4c44dc8462d260d836020d2b793e7804";
-        sha256 = "0h4sl95i8b0dj0na4ngf50wg54raxyjxl1zzwdc810abglp10vnv";
+        hash = "sha256-224QLn1LgYBY4/8H2qXvKpPyOCjuWaIskA0sFEuimkA=";
       })
     ];
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     owner = "litespeedtech";
     repo = pname;
     rev = "v${version}";
-    inherit (versions.lsquic) sha256;
+    inherit (versions.lsquic) hash;
     fetchSubmodules = true;
   };
 

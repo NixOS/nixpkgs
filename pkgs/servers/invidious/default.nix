@@ -3,9 +3,9 @@ let
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
   #   * pick the latest commit
-  #   * update .invidious.rev, .invidious.version, and .invidious.sha256
+  #   * update .invidious.rev, .invidious.version, and .invidious.hash
   #   * prefetch the videojs dependencies with scripts/fetch-player-dependencies.cr
-  #     and update .videojs.sha256 (they are normally fetched during build
+  #     and update .videojs.hash (they are normally fetched during build
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
@@ -23,7 +23,7 @@ crystal.buildCrystalPackage rec {
     owner = "iv-org";
     repo = pname;
     fetchSubmodules = true;
-    inherit (versions.invidious) rev sha256;
+    inherit (versions.invidious) rev hash;
   };
 
   postPatch =
