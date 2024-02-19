@@ -76,6 +76,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 lom ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
