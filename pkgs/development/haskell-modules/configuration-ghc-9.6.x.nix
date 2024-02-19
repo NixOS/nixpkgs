@@ -75,6 +75,8 @@ self: super: {
 
   # Forbids transformers >= 0.6
   quickcheck-classes-base = doJailbreak super.quickcheck-classes-base;
+  # https://github.com/Gabriella439/Haskell-Break-Library/pull/3
+  break = doJailbreak super.break;
   # Forbids mtl >= 2.3
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   # Forbids base >= 4.18
