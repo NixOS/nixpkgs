@@ -12,6 +12,7 @@
 , fetchpatch
 }:
 let
+  # wine-staging doesn't support overrideAttrs for now
   wine = wine64Packages.staging.overrideDerivation (oldAttrs: {
     patches =
       (oldAttrs.patches or [])
