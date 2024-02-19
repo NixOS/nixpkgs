@@ -35,13 +35,14 @@ if [ ! -d "$git_dir" ]; then
     git init --initial-branch="$git_branch" "$git_dir"
     git -C "$git_dir" remote add origin "$git_url"
 fi
-git -C "$git_dir" fetch origin "$git_branch"
+git -C "$git_dir" fetch origin --tags "$git_branch"
 
 # use latest commit before today, we should not call the version *today*
 # because there might still be commits coming
 # use the day of the latest commit we picked as version
 new_rev=$(git -C "$git_dir" log -n 1 --format='format:%H' --before="${today}T00:00:00Z" "origin/$git_branch")
-new_version="unstable-$(TZ=UTC git -C "$git_dir" log -n 1 --date='format-local:%Y-%m-%d' --format='%cd' "$new_rev")"
+new_tag=$(git -C "$git_dir" describe --tags --abbrev=0 "$new_rev")
+new_version="$new_tag-unstable-$(TZ=UTC git -C "$git_dir" log -n 1 --date='format-local:%Y-%m-%d' --format='%cd' "$new_rev")"
 info "latest commit before $today: $new_rev"
 
 if [ "$new_rev" = "$old_rev" ]; then

@@ -45,7 +45,7 @@ crystal.buildCrystalPackage rec {
       substituteInPlace src/invidious.cr \
           --replace ${lib.escapeShellArg branchTemplate} '"master"' \
           --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
-          --replace ${lib.escapeShellArg versionTemplate} '"${lib.replaceStrings ["-"] ["."] (lib.substring 9 10 version)}"' \
+          --replace ${lib.escapeShellArg versionTemplate} '"${lib.concatStringsSep "." (lib.drop 2 (lib.splitString "-" version))}"' \
           --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
 
       # Patch the assets and locales paths to be absolute
@@ -91,11 +91,13 @@ crystal.buildCrystalPackage rec {
   # environment variable. Even though the database and hmac_key are
   # bogus, --help still works.
   installCheckPhase = ''
-    INVIDIOUS_CONFIG="$(cat <<EOF
+    export INVIDIOUS_CONFIG="$(cat <<EOF
     database_url: sqlite3:///dev/null
     hmac_key: "this-is-required"
     EOF
-    )" $out/bin/invidious --help
+    )"
+    $out/bin/invidious --help
+    $out/bin/invidious --version
   '';
 
   passthru = {
