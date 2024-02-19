@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, qmake, wrapQtAppsHook
-, mpv, qtwebengine, qtwebchannel, nodejs
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, mpv
+, nodejs
+, qmake
+, qtwebchannel
+, qtwebengine
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
