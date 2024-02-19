@@ -310,7 +310,11 @@ stdenv.mkDerivation rec {
       bazelTest = { name, bazelScript, workspaceDir, bazelPkg, buildInputs ? [] }:
         let
           be = extracted bazelPkg;
-        in runLocal name { inherit buildInputs; } (
+        in runLocal name {
+          inherit buildInputs;
+          # Necessary for the tests to pass on Darwin with sandbox enabled.
+          __darwinAllowLocalNetworking = true;
+        } (
           # skip extraction caching on Darwin, because nobody knows how Darwin works
           (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
             # set up home with pre-unpacked bazel
