@@ -9,6 +9,10 @@ let
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "vikunja" "setupNginx" ] "services.vikunja no longer supports the automatic set up of a nginx virtual host. Set up your own webserver config with a proxy pass to the vikunja service.")
+  ];
+
   options.services.vikunja = with lib; {
     enable = mkEnableOption (lib.mdDoc "vikunja service");
     package = mkPackageOption pkgs "vikunja" { };
@@ -20,25 +24,10 @@ in {
         For example passwords should be set in one of these files.
       '';
     };
-    setupNginx = mkOption {
-      type = types.bool;
-      default = config.services.nginx.enable;
-      defaultText = literalExpression "config.services.nginx.enable";
-      description = lib.mdDoc ''
-        Whether to setup NGINX.
-        Further nginx configuration can be done by changing
-        {option}`services.nginx.virtualHosts.<frontendHostname>`.
-        This does not enable TLS or ACME by default. To enable this, set the
-        {option}`services.nginx.virtualHosts.<frontendHostname>.enableACME` to
-        `true` and if appropriate do the same for
-        {option}`services.nginx.virtualHosts.<frontendHostname>.forceSSL`.
-      '';
-    };
     frontendScheme = mkOption {
       type = types.enum [ "http" "https" ];
       description = lib.mdDoc ''
         Whether the site is available via http or https.
-        This does not configure https or ACME in nginx!
       '';
     };
     frontendHostname = mkOption {
@@ -117,17 +106,6 @@ in {
         ExecStart = "${cfg.package}/bin/vikunja";
         Restart = "always";
         EnvironmentFile = cfg.environmentFiles;
-      };
-    };
-
-    services.nginx.virtualHosts."${cfg.frontendHostname}" = mkIf cfg.setupNginx {
-      locations = {
-        "/" = {
-          proxyPass = "http://localhost:${toString cfg.port}";
-          extraConfig = ''
-            client_max_body_size 20M;
-          '';
-        };
       };
     };
 

@@ -13,7 +13,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         frontendScheme = "http";
         frontendHostname = "localhost";
       };
-      services.nginx.enable = true;
+      services.nginx = {
+        enable = true;
+        virtualHosts."http://localhost" = {
+          locations."/".proxyPass = "http://localhost:3456";
+        };
+      };
     };
     vikunjaPostgresql = { pkgs, ... }: {
       services.vikunja = {
@@ -37,7 +42,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           }
         ];
       };
-      services.nginx.enable = true;
+      services.nginx = {
+        enable = true;
+        virtualHosts."http://localhost" = {
+          locations."/".proxyPass = "http://localhost:9090";
+        };
+      };
     };
   };
 
