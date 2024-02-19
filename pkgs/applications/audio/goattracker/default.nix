@@ -67,6 +67,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cadaver.github.io/tools.html";
     downloadPage = "https://sourceforge.net/projects/goattracker2/";
     license = lib.licenses.gpl2Plus;
+    mainProgram = if isStereo then "gt2stereo" else "goattrk2";
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
