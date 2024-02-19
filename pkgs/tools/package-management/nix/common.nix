@@ -56,13 +56,7 @@ in
 , util-linuxMinimal
 , xz
 
-, enableDocumentation ? !atLeast24 || (
-    (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    # mdbook errors out on risc-v due to a rustc bug
-    # https://github.com/NixOS/nixpkgs/pull/242019
-    # https://github.com/rust-lang/rust/issues/114473
-    !stdenv.buildPlatform.isRiscV
-  )
+, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
