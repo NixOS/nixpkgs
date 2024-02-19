@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./tests-skip-double-test-on-stub-locale-impls.patch
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # The relative location of LD_PRELOAD works for Glibc but not for other loaders (e.g. pkgsMusl)
     substituteInPlace tests/meson.build \
       --replace "LD_PRELOAD=libumockdev-preload.so.0" "LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0"

@@ -81,9 +81,9 @@ let
                 , # `class`:
                   # A nominal type for modules. When set and non-null, this adds a check to
                   # make sure that only compatible modules are imported.
-                  # This would be remove in the future, Prefer _module.args option instead.
                   class ? null
-                , args ? {}
+                , # This would be remove in the future, Prefer _module.args option instead.
+                  args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
                 }:
