@@ -2,6 +2,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , gitUpdater
+, rename
 , variants ? [ ]
 , suffix ? ""
 , longDescription ? ''
@@ -60,7 +61,9 @@ stdenvNoCC.mkDerivation rec {
         install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
       fi
     done
-  '');
+  '') + ''
+    ${rename}/bin/rename 's/\[.*\]//' $out/share/fonts/noto/*
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "noto-monthly-release-";
