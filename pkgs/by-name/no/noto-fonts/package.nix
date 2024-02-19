@@ -38,7 +38,9 @@ stdenvNoCC.mkDerivation rec {
     local out_font=$out/share/fonts/noto
   '' + (if _variants == [ ] then ''
     for folder in $(ls -d fonts/*/); do
-      if [[ -d "$folder"unhinted/variable-ttf ]]; then
+      if [[ -d "$folder"unhinted/variable ]]; then
+        install -m444 -Dt $out_font "$folder"unhinted/variable/*
+      elif [[ -d "$folder"unhinted/variable-ttf ]]; then
         install -m444 -Dt $out_font "$folder"unhinted/variable-ttf/*.ttf
       elif [[ -d "$folder"unhinted/otf ]]; then
         install -m444 -Dt $out_font "$folder"unhinted/otf/*.otf
@@ -48,7 +50,9 @@ stdenvNoCC.mkDerivation rec {
     done
   '' else ''
     for variant in $_variants; do
-      if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
+      if [[ -d fonts/"$variant"/unhinted/variable ]]; then
+        install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable/*
+      elif [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
         install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
       elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
         install -m444 -Dt $out_font fonts/"$variant"/unhinted/otf/*.otf
