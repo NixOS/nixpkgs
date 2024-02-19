@@ -25,13 +25,13 @@
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
 stdenv.mkDerivation rec {
   pname = "proxmark3";
-  version = "4.17768";
+  version = "4.18218";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
     rev = "v${version}";
-    hash = "sha256-4x8GN4Jsk9xqk4MbGu8SpE4Zh0Opb3akCH5NlASzLQo=";
+    hash = "sha256-LltTTmYEF1JsqkVaj7Z19qGR+dEUj6Hwr6T5Z1eDzZc=";
   };
 
   patches = [
