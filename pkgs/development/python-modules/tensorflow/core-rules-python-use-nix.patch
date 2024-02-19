@@ -1,0 +1,13 @@
+diff -Naurd x/WORKSPACE y/WORKSPACE
+--- x/WORKSPACE	2023-11-16 08:55:37.370373002 +0000
++++ y/WORKSPACE	2023-11-20 01:55:57.812931627 +0000
+@@ -17,6 +17,9 @@
+     sha256 = "84aec9e21cc56fbc7f1335035a71c850d1b9b5cc6ff497306f84cced9a769841",
+     strip_prefix = "rules_python-0.23.1",
+     url = "https://github.com/bazelbuild/rules_python/releases/download/0.23.1/rules_python-0.23.1.tar.gz",
++    patches = [
++        "//tensorflow:rules-python-use-nix.patch"
++    ],
+ )
+ 
+ load("@rules_python//python:repositories.bzl", "python_register_toolchains")

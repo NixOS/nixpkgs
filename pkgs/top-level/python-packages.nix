@@ -14268,6 +14268,31 @@ self: super: with self; {
       protobufTF = pkgs.protobuf_21.override {
         abseil-cpp = pkgs.abseil-cpp_202301;
       };
+      ml-dtypesTF = (self.ml-dtypes.overrideAttrs (
+        oldAttrs: rec {
+          # recent versions deprecated float8_e4m3b11
+          version = "0.1.0";
+          name = "${oldAttrs.pname}-${version}";
+          src = pkgs.fetchFromGitHub {
+            owner = "jax-ml";
+            repo = "ml_dtypes";
+            rev = "v${version}";
+            hash = "sha256-3rs48WtXAfP5g15j8BDSd0ee+c6CPy+OTfUB3HLgPm8=";
+            fetchSubmodules = true;
+          };
+          postPatch = oldAttrs.postPatch + ''
+            substituteInPlace pyproject.toml \
+              --replace "pybind11~=2.10.0" "pybind11" \
+              --replace "setuptools~=67.6.0" "setuptools"
+          '';
+          disabledTests = oldAttrs.disabledTests or []
+          # these fail on Darwin:
+          # https://github.com/jax-ml/ml_dtypes/issues/47#issuecomment-1483821629
+          ++ lib.optionals stdenv.isDarwin [
+            "testBetweenCustomTypes_bfloat16" "testPredicateUfunc_bfloat16"
+          ];
+        })
+      );
       grpcTF = (pkgs.grpc.overrideAttrs (
         oldAttrs: rec {
           # nvcc fails on recent grpc versions, so we use the latest patch level
@@ -14311,12 +14336,14 @@ self: super: with self; {
     inherit (pkgs.darwin) cctools;
     inherit (pkgs.config) cudaSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    clang = pkgs.clang_16;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
     protobuf-core = compat.protobufTF;
     protobuf-python = compat.protobuf-pythonTF;
     grpc = compat.grpcTF;
     grpcio = compat.grpcioTF;
+    ml-dtypes = compat.ml-dtypesTF;
     tensorboard = compat.tensorboardTF;
     abseil-cpp = pkgs.abseil-cpp_202301;
 
