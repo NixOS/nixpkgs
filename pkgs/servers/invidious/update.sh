@@ -52,8 +52,8 @@ fi
 
 json_set '.invidious.version' "$new_version"
 json_set '.invidious.rev' "$new_rev"
-new_sha256=$(nix-prefetch -I 'nixpkgs=../../..' "$pkg")
-json_set '.invidious.sha256' "$new_sha256"
+new_hash=$(nix-prefetch -I 'nixpkgs=../../..' "$pkg")
+json_set '.invidious.hash' "$new_hash"
 commit_msg="$pkg: $old_version -> $new_version"
 
 # fetch video.js dependencies
@@ -61,8 +61,8 @@ info "Running scripts/fetch-player-dependencies.cr..."
 git -C "$git_dir" reset --hard "$new_rev"
 (cd "$git_dir" && crystal run scripts/fetch-player-dependencies.cr -- --minified)
 rm -f "$git_dir/assets/videojs/.gitignore"
-videojs_new_sha256=$(nix-hash --type sha256 --base32 "$git_dir/assets/videojs")
-json_set '.videojs.sha256' "$videojs_new_sha256"
+videojs_new_hash=$(nix-hash --type sha256 --sri "$git_dir/assets/videojs")
+json_set '.videojs.hash' "$videojs_new_hash"
 
 if git -C "$git_dir" diff-tree --quiet "${old_rev}..${new_rev}" -- 'shard.lock'; then
     info "shard.lock did not change since $old_rev."
