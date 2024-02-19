@@ -118,6 +118,8 @@ let
           substituteInPlace pyproject.toml \
             --replace-fail 'dumb-init = "*"' "" \
             --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
+          substituteInPlace authentik/stages/email/utils.py \
+            --replace-fail 'web/' '${webui}/'
         '';
 
         nativeBuildInputs = [ prev.poetry-core ];
