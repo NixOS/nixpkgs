@@ -68,29 +68,6 @@ if git -C "$git_dir" diff-tree --quiet "${old_rev}..${new_rev}" -- 'shard.lock';
 else
     info "Updating shards.nix..."
     crystal2nix -- "$git_dir/shard.lock"  # argv's index seems broken
-
-    lsquic_old_version=$(json_get '.lsquic.version')
-    # lsquic.cr's version tracks lsquic's, so lsquic must be updated to the
-    # version in the shards file
-    lsquic_new_version=$(nix eval --raw -f 'shards.nix' lsquic.rev \
-        | sed -e 's/^v//' -e 's/-[0-9]*$//')
-    if [ "$lsquic_old_version" != "$lsquic_new_version" ]; then
-        info "Updating lsquic to $lsquic_new_version..."
-        json_set '.lsquic.version' "$lsquic_new_version"
-        lsquic_new_sha256=$(nix-prefetch -I 'nixpkgs=../../..' "${pkg}.lsquic")
-        json_set '.lsquic.sha256' "$lsquic_new_sha256"
-
-        info "Updating boringssl..."
-        # lsquic specifies the boringssl commit it requires in its README
-        boringssl_new_rev=$(curl -LSsf "https://github.com/litespeedtech/lsquic/raw/v${lsquic_new_version}/README.md" \
-            | grep -Pom1 '(?<=^git checkout ).*')
-        json_set '.boringssl.rev' "$boringssl_new_rev"
-        boringssl_new_sha256=$(nix-prefetch -I 'nixpkgs=../../..' "${pkg}.lsquic.boringssl")
-        json_set '.boringssl.sha256' "$boringssl_new_sha256"
-        commit_msg="$commit_msg
-
-lsquic: $lsquic_old_version -> $lsquic_new_version"
-    fi
 fi
 
 git commit --verbose --message "$commit_msg" -- versions.json shards.nix

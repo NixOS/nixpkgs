@@ -1,4 +1,4 @@
-{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
+{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, videojs, nixosTests }:
 let
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
@@ -75,19 +75,8 @@ crystal.buildCrystalPackage rec {
       "--verbose"
       "--no-debug"
       "-Dskip_videojs_download"
-      "-Ddisable_quic"
     ];
   };
-
-  postConfigure = ''
-    # lib includes nix store paths which can’t be patched, so the links have to
-    # be dereferenced first.
-    cp -rL lib lib2
-    rm -r lib
-    mv lib2 lib
-    chmod +w -R lib
-    cp ${lsquic}/lib/liblsquic.a lib/lsquic/src/lsquic/ext
-  '';
 
   postInstall = ''
     mkdir -p $out/share/invidious/config
@@ -110,7 +99,6 @@ crystal.buildCrystalPackage rec {
   '';
 
   passthru = {
-    inherit lsquic;
     tests = { inherit (nixosTests) invidious; };
     updateScript = ./update.sh;
   };
