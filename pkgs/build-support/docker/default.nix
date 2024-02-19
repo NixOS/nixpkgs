@@ -8,6 +8,7 @@
 , proot
 , fakeNss
 , fakeroot
+, file
 , go
 , jq
 , jshon
@@ -34,6 +35,7 @@
 , writeText
 , writeTextDir
 , writePython3
+, zstd
 }:
 
 let
@@ -75,6 +77,30 @@ let
   # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
   # mapping from the go package.
   defaultArchitecture = go.GOARCH;
+
+  compressors = {
+    none = {
+      ext = "";
+      nativeInputs = [ ];
+      compress = "cat";
+      decompress = "cat";
+    };
+    gz = {
+      ext = ".gz";
+      nativeInputs = [ pigz ];
+      compress = "pigz -p$NIX_BUILD_CORES -nTR";
+      decompress = "pigz -d -p$NIX_BUILD_CORES";
+    };
+    zstd = {
+      ext = ".zst";
+      nativeInputs = [ zstd ];
+      compress = "zstd -T$NIX_BUILD_CORES";
+      decompress = "zstd -d -T$NIX_BUILD_CORES";
+    };
+  };
+
+  compressorForImage = compressor: imageName: compressors.${compressor} or
+    (throw "in docker image ${imageName}: compressor must be one of: [${toString builtins.attrNames compressors}]");
 
 in
 rec {
@@ -487,16 +513,17 @@ rec {
       '';
     };
 
-  buildLayeredImage = lib.makeOverridable ({ name, ... }@args:
+  buildLayeredImage = lib.makeOverridable ({ name, compressor ? "gz", ... }@args:
     let
       stream = streamLayeredImage args;
+      compress = compressorForImage compressor name;
     in
-    runCommand "${baseNameOf name}.tar.gz"
+    runCommand "${baseNameOf name}.tar${compress.ext}"
       {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
-        nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nTR > $out"
+        nativeBuildInputs = compress.nativeInputs;
+      } "${stream} | ${compress.compress} > $out"
   );
 
   # 1. extract the base image
@@ -539,6 +566,8 @@ rec {
       buildVMMemorySize ? 512
     , # Time of creation of the image.
       created ? "1970-01-01T00:00:01Z"
+    , # Compressor to use. One of: none, gz, zstd.
+      compressor ? "gz"
     , # Deprecated.
       contents ? null
     ,
@@ -574,6 +603,8 @@ rec {
         in
         if created == "now" then impure else pure;
 
+      compress = compressorForImage compressor name;
+
       layer =
         if runAsRoot == null
         then
@@ -590,9 +621,9 @@ rec {
               extraCommands;
             copyToRoot = rootContents;
           };
-      result = runCommand "docker-image-${baseName}.tar.gz"
+      result = runCommand "docker-image-${baseName}.tar${compress.ext}"
         {
-          nativeBuildInputs = [ jshon pigz jq moreutils ];
+          nativeBuildInputs = [ jshon jq moreutils ] ++ compress.nativeInputs;
           # Image name must be lowercase
           imageName = lib.toLower name;
           imageTag = lib.optionalString (tag != null) tag;
@@ -746,7 +777,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
+        tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | ${compress.compress} > $out
 
         echo "Finished."
       '';
@@ -761,16 +792,28 @@ rec {
   mergeImages = images: runCommand "merge-docker-images"
     {
       inherit images;
-      nativeBuildInputs = [ pigz jq ];
+      nativeBuildInputs = [ file jq ]
+        ++ compressors.none.nativeInputs
+        ++ compressors.gz.nativeInputs
+        ++ compressors.zstd.nativeInputs;
     } ''
     mkdir image inputs
     # Extract images
     repos=()
     manifests=()
+    last_image_mime="application/gzip"
     for item in $images; do
       name=$(basename $item)
       mkdir inputs/$name
-      tar -I pigz -xf $item -C inputs/$name
+
+      last_image_mime=$(file --mime-type -b $item)
+      case $last_image_mime in
+        "application/x-tar") ${compressors.none.decompress};;
+        "application/zstd") ${compressors.zstd.decompress};;
+        "application/gzip") ${compressors.gz.decompress};;
+        *) echo "error: unexpected layer type $last_image_mime" >&2; exit 1;;
+      esac < $item | tar -xC inputs/$name
+
       if [ -f inputs/$name/repositories ]; then
         repos+=(inputs/$name/repositories)
       fi
@@ -787,7 +830,14 @@ rec {
     mv repositories image/repositories
     mv manifest.json image/manifest.json
     # Create tarball and gzip
-    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | pigz -nTR > $out
+    tar -C image --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'^./':: -c . | (
+      case $last_image_mime in
+        "application/x-tar") ${compressors.none.compress};;
+        "application/zstd") ${compressors.zstd.compress};;
+        "application/gzip") ${compressors.gz.compress};;
+        # `*)` not needed; already checked.
+      esac
+    ) > $out
   '';
 
 
@@ -1239,14 +1289,15 @@ rec {
       };
 
   # Wrapper around streamNixShellImage to build an image from the result
-  buildNixShellImage = { drv, ... }@args:
+  buildNixShellImage = { drv, compressor ? "gz", ... }@args:
     let
       stream = streamNixShellImage args;
+      compress = compressorForImage compressor drv.name;
     in
-    runCommand "${drv.name}-env.tar.gz"
+    runCommand "${drv.name}-env.tar${compress.ext}"
       {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
-        nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nTR > $out";
+        nativeBuildInputs = compress.nativeInputs;
+      } "${stream} | ${compress.compress} > $out";
 }
