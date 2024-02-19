@@ -6588,6 +6588,8 @@ self: super: with self; {
 
   limnoria = callPackage ../development/python-modules/limnoria { };
 
+  linear-garage-door = callPackage ../development/python-modules/linear-garage-door { };
+
   linear-operator = callPackage ../development/python-modules/linear-operator { };
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
