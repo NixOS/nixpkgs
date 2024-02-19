@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "spark2014";
+  pname = "gnatprove";
   version = "unstable-2022-05-25";
 
   src = fetchFromGitHub {
