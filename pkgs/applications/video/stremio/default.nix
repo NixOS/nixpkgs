@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, ffmpeg
 , mpv
 , nodejs
 , qmake
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     install -Dm 644 images/stremio_window.png $out/share/pixmaps/smartcode-stremio.png
     ln -s ${nodejs}/bin/node $out/opt/stremio/node
     ln -s $server $out/opt/stremio/server.js
+    wrapProgram $out/bin/stremio \
+      --suffix PATH ":" ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   meta = with lib; {
