@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , stdenv
 , darwin
@@ -11,33 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VcDDGi6fPGZ75+J7aOSr7S6Gt5bpr0vM2Sk/Utlmf4k=";
+    hash = "sha256-wCjPlKlw0IAh5oH4W7DUw3KBxR4bt9Ho7ncRL5TbD/0=";
   };
 
-  patches = [
-    # TODO: remove at next release
-    (fetchpatch {
-      name = "filter-out-test-rules-in-ruleselector-json-schema";
-      url = "https://github.com/astral-sh/ruff/commit/49c5e715f9c85aa8d0412b2ec9b1dd6f7ae24c5c.patch";
-      hash = "sha256-s0Nv5uW3TKfKgro3V3E8Q0c8uOTgOKZQx9CxXge4YWE=";
-    })
-  ];
-
-  # The following specific substitution is not working as the current directory is `/build/source` and thus has no mention of `ruff` in it.
-  # https://github.com/astral-sh/ruff/blob/866bea60a5de3c59d2537b0f3a634ae0ac9afd94/crates/ruff/tests/show_settings.rs#L12
-  # -> Just patch it so that it expects the actual current directory and not `"[BASEPATH]"`.
-  postPatch = ''
-    substituteInPlace crates/ruff/tests/snapshots/show_settings__display_default_settings.snap \
-      --replace '"[BASEPATH]"' '"'$PWD'"'
-  '';
-
-  cargoHash = "sha256-B7AiDNWEN4i/Lz9yczlRNXczQph52SMa3pcxK2AtO2A=";
+  cargoHash = "sha256-EHAlsEh3YnAhjIGC9rSgyK3gbKPCJqI6F3uAqZxv2nU=";
 
   nativeBuildInputs = [
     installShellFiles

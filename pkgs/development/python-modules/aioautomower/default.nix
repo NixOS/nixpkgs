@@ -9,11 +9,12 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.2.4";
+  version = "2024.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     rev = "refs/tags/${version}";
-    hash = "sha256-bgNfV87rHMbNGy8azCS0b6PgkalY2RrbSW2VtjtgPrw=";
+    hash = "sha256-iYC2bYkO9INbSeny9gy/I0cDSYeyrJiD9MJddUFIlhg=";
   };
 
   postPatch = ''
@@ -45,10 +46,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [
     "aioautomower"
+  ];
+
+  pytestFlagsArray = [
+    "--snapshot-update"
   ];
 
   meta = with lib; {

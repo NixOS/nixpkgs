@@ -1,8 +1,9 @@
 { lib, stdenv, fetchurl, makeWrapper
-, pkg-config, fuse3
+, pkg-config
 , cabextract ? null
 , cdrkit ? null
 , mtools ? null
+, fuse3 ? null
 , ntfs3g ? null
 , syslinux ? null
 }:
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "wimlib";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ fuse3 ntfs3g ];
+  buildInputs = [ ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ fuse3 ];
 
   src = fetchurl {
     url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = let
-    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ cdrkit syslinux ]);
+    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ cdrkit syslinux fuse3 ]);
   in ''
     for prog in $out/bin/*; do
       wrapProgram $prog --prefix PATH : $out/bin:${path}

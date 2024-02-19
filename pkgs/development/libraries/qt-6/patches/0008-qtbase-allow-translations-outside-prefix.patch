@@ -7,11 +7,11 @@ Subject: [PATCH 08/11] qtbase: allow translations outside prefix
  cmake/QtBuild.cmake | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/cmake/QtBuild.cmake b/cmake/QtBuild.cmake
-index 1dc576d27af..4348eb97c37 100644
---- a/cmake/QtBuild.cmake
-+++ b/cmake/QtBuild.cmake
-@@ -30,7 +30,7 @@ function(qt_configure_process_path name default docstring)
+diff --git a/cmake/QtBuildPathsHelpers.cmake b/cmake/QtBuildPathsHelpers.cmake
+index edc43f2f14..78fa219515 100644
+--- a/cmake/QtBuildPathsHelpers.cmake
++++ b/cmake/QtBuildPathsHelpers.cmake
+@@ -134,7 +134,7 @@ function(qt_configure_process_path name default docstring)
              set(rel_path ".")
          elseif(rel_path MATCHES "^\.\./")
              # INSTALL_SYSCONFDIR is allowed to be outside the prefix.
@@ -20,6 +20,3 @@ index 1dc576d27af..4348eb97c37 100644
                  message(FATAL_ERROR
                      "Path component '${name}' is outside computed install prefix: ${rel_path} ")
                  return()
--- 
-2.42.0
-

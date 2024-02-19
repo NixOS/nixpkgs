@@ -136,6 +136,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://electrum-ltc.org/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
   };
 }
