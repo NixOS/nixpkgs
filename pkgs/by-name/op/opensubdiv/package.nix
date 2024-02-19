@@ -44,9 +44,11 @@ stdenv.mkDerivation rec {
     ];
   buildInputs =
     [
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isUnix [
       libGLU
       libGL
-      python3
       # FIXME: these are not actually needed, but the configure script wants them.
       glew
       xorg.libX11
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
       xorg.libXinerama
       xorg.libXi
     ]
-    ++ lib.optionals (openclSupport && !stdenv.hostPlatform.isDarwin) [ ocl-icd ]
+    ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [ ocl-icd ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
@@ -87,11 +89,12 @@ stdenv.mkDerivation rec {
       "-DNO_TUTORIALS=1"
       "-DNO_REGRESSION=1"
       "-DNO_EXAMPLES=1"
+      (lib.cmakeBool "NO_DX" stdenv.hostPlatform.isWindows)
       (lib.cmakeBool "NO_METAL" (!stdenv.hostPlatform.isDarwin))
       (lib.cmakeBool "NO_OPENCL" (!openclSupport))
       (lib.cmakeBool "NO_CUDA" (!cudaSupport))
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [
       "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
       "-DGLEW_LIBRARY=${glew.dev}/lib"
     ]
@@ -109,15 +112,21 @@ stdenv.mkDerivation rec {
       NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
     '';
 
-  postInstall = ''
-    moveToOutput "lib/*.a" $static
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isWindows then
+      ''
+        ln -s $out $static
+      ''
+    else
+      ''
+        moveToOutput "lib/*.a" $static
+      '';
 
   meta = {
     description = "Open-Source subdivision surface library";
     homepage = "http://graphics.pixar.com/opensubdiv";
     broken = openclSupport && cudaSupport;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
