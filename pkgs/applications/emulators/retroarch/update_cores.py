@@ -50,6 +50,7 @@ CORES = {
     "dolphin": {"repo": "dolphin"},
     "dosbox": {"repo": "dosbox-libretro"},
     "dosbox-pure": {"repo": "dosbox-pure", "owner": "schellingb"},
+    "easyrpg": {"repo": "Player", "owner": "EasyRPG", "fetch_submodules": True, "rev": "0.8"},
     "eightyone": {"repo": "81-libretro"},
     "fbalpha2012": {"repo": "fbalpha2012"},
     "fbneo": {"repo": "fbneo"},
