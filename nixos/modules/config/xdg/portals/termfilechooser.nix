@@ -5,7 +5,6 @@
 }:
 let
   cfg = config.xdg.portal.termfilechooser;
-  package = pkgs.xdg-desktop-portal-termfilechooser;
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "xdg-desktop-portal-termfilechooser.ini" cfg.settings;
 in
@@ -22,6 +21,16 @@ in
       the {option}`xdg.portal.extraPortals` option, and provide the
       configuration file
     '');
+
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.xdg-desktop-portal-termfilechooser;
+      defaultText = lib.literalExpression "pkgs.xdg-desktop-portal-termfilechooser";
+      description = lib.mdDoc ''
+        The package to use for the portal. If you would like to use a fork of the portal,
+        add it here.
+      '';
+    };
 
     logLevel = lib.mkOption {
       description = lib.mdDoc ''
@@ -62,7 +71,7 @@ in
   config = lib.mkIf cfg.enable {
     xdg.portal = {
       enable = true;
-      extraPortals = [ package ];
+      extraPortals = [ cfg.package ];
     };
 
     systemd.user.services.xdg-desktop-portal-termfilechooser = {
@@ -72,7 +81,7 @@ in
       serviceConfig.ExecStart = [
         # Empty ExecStart value to override the field
         ""
-        "${package}/libexec/xdg-desktop-portal-termfilechooser --config=${configFile} --loglevel=${cfg.logLevel}"
+        "${cfg.package}/libexec/xdg-desktop-portal-termfilechooser --config=${configFile} --loglevel=${cfg.logLevel}"
       ];
     };
   };
