@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://intelliscapesolutions.com/apps/caffeine";
     license = licenses.mit;
     maintainers = with maintainers; [ emilytrau Enzime ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
