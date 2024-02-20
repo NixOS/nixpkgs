@@ -8,6 +8,12 @@ fixCmakeFiles() {
     find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
         while read fn; do
             sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
+            if ! diff -u "$fn.tmp" "$fn"; then
+                echo "fixCmakeFiles actually fixed something"
+                if [ -z "${dontFailFixCmake-}" ]; then
+                    exit 123
+                fi
+            fi
             mv "$fn.tmp" "$fn"
         done
 }
