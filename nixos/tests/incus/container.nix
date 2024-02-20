@@ -1,11 +1,11 @@
-import ../make-test-python.nix ({ pkgs, lib, ... } :
+import ../make-test-python.nix ({ pkgs, lib, extra ? {}, ... } :
 
 let
   releases = import ../../release.nix {
     configuration = {
       # Building documentation makes the test unnecessarily take a longer time:
       documentation.enable = lib.mkForce false;
-    };
+    } // extra;
   };
 
   container-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
