@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     done
 
     # Override the symlinks otherwise they mess with the wrapping
-    cp --remove-destination $out/bin/byobu $out/bin/byobu-screen                   
+    cp --remove-destination $out/bin/byobu $out/bin/byobu-screen
     cp --remove-destination $out/bin/byobu $out/bin/byobu-tmux
 
     for i in $out/bin/byobu*; do
