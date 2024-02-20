@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "a2wsgi";
   version = "1.10.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
