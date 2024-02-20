@@ -59,6 +59,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
+    mv "$out"/bin/{gitbutler-app,'${meta.mainProgram}'}
+
     for size in 128x128@2x 128x128 32x32; do
       install -DT "gitbutler-app/icons/$size.png" "$out/share/icons/hicolor/$size/apps/gitbutler.png"
     done
@@ -81,6 +83,6 @@ rustPlatform.buildRustPackage rec {
   meta = gitbutler-ui.meta // {
     description = "A Git client for simultaneous branches on top of your existing workflow.";
     platforms = with lib.platforms; linux ++ darwin;
-    mainProgram = "gitbutler-app";
+    mainProgram = "git-butler";
   };
 }
