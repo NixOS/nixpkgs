@@ -40,6 +40,10 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ gtk3 sassc ];
 
+  patches = [
+    ./colloid-src-git-reset.patch
+  ];
+
   buildInputs = [
     gnome-themes-extra
     (python3.withPackages (ps: [ ps.catppuccin ]))
@@ -54,7 +58,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   postPatch = ''
-    patchShebangs --build colloid/install.sh
+    patchShebangs --build colloid/install.sh colloid/build.sh
   '';
 
   dontConfigure = true;
@@ -63,6 +67,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    cp -r colloid colloid-base
     mkdir -p $out/share/themes
     export HOME=$(mktemp -d)
 
