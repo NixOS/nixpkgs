@@ -229,22 +229,6 @@ in
         EOF
       '';
     };
-    # overlayfs requires the mutable directories, but
-    # won't create them by itself.
-    boot.initrd.systemd.services.mkdir-rw-store = {
-      description = "Store Overlay Mutable Directories";
-      requiredBy = [ "sysroot-nix-store.mount" ];
-      before = [ "sysroot-nix-store.mount" ];
-      unitConfig.RequiresMountsFor = "/nix/.rw-store";
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
-      script = ''
-        mkdir -p /nix/.rw-store/{work,store}
-      '';
-    };
-
     boot.loader.grub.enable = false;
 
     lib.isoFileSystems = mkImageMediaOverride {
