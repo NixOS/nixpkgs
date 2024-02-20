@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-openwakeword";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-openwakeword";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NceUFsIKZO6DOXae3QJ7JJGc7QdDHkMh20eLvl12p4U=";
+    hash = "sha256-5suYJ+Z6ofVAysoCdHi5b5K0JTYaqeFZ32Cm76wC5LU=";
   };
 
   nativeBuildInputs = with python3Packages; [
