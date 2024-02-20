@@ -1032,7 +1032,9 @@ let
 
     mccs = callPackage ../development/ocaml-modules/mccs { };
 
-    mdx = callPackage ../development/ocaml-modules/mdx { };
+    mdx = callPackage ../development/ocaml-modules/mdx {
+      logs = logs.override { jsooSupport = false; lwtSupport = false; };
+    };
 
     mec = callPackage ../development/ocaml-modules/mec { };
 
