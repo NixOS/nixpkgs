@@ -1807,10 +1807,11 @@
       aiohttp-fast-url-dispatcher
       aiohttp-zlib-ng
       fnv-hash-fast
+      govee-local-api
       ifaddr
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: govee-local-api
+    ];
     "gpsd" = ps: with ps; [
       gps3
     ];
@@ -2731,7 +2732,8 @@
       limitlessled
     ];
     "linear_garage_door" = ps: with ps; [
-    ]; # missing inputs: linear-garage-door
+      linear-garage-door
+    ];
     "linksys_smart" = ps: with ps; [
     ];
     "linode" = ps: with ps; [
@@ -4914,7 +4916,8 @@
       tank-utility
     ];
     "tankerkoenig" = ps: with ps; [
-    ]; # missing inputs: aiotankerkoenig
+      aiotankerkoenig
+    ];
     "tapsaff" = ps: with ps; [
     ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [
@@ -6076,6 +6079,7 @@
     "google_travel_time"
     "google_wifi"
     "govee_ble"
+    "govee_light_local"
     "gpsd"
     "gpslogger"
     "graphite"
@@ -6185,6 +6189,7 @@
     "life360"
     "lifx"
     "light"
+    "linear_garage_door"
     "litterrobot"
     "livisi"
     "local_calendar"
@@ -6492,6 +6497,7 @@
     "tag"
     "tailscale"
     "tailwind"
+    "tankerkoenig"
     "tasmota"
     "tautulli"
     "tcp"

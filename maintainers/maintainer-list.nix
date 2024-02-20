@@ -385,6 +385,13 @@
     githubId = 2526296;
     name = "Adrien Bustany";
   };
+  abysssol = {
+    name = "abysssol";
+    email = "abysssol@pm.me";
+    matrix = "@abysssol:tchncs.de";
+    github = "abysssol";
+    githubId = 76763323;
+  };
   acairncross = {
     email = "acairncross@gmail.com";
     github = "acairncross";
@@ -16612,6 +16619,12 @@
     email = "perhaps-you-know@what-is.ml";
     github = "rubyowo";
     githubId = 105302757;
+  };
+  rucadi = {
+    email = "ruben.canodiaz@gmail.com";
+    github = "rucadi";
+    githubId = 6445619;
+    name = "Ruben Cano Diaz";
   };
   rudolfvesely = {
     name = "Rudolf Vesely";

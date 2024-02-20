@@ -415,6 +415,8 @@ self: super: with self; {
 
   aiosyncthing = callPackage ../development/python-modules/aiosyncthing { };
 
+  aiotankerkoenig = callPackage ../development/python-modules/aiotankerkoenig { };
+
   aiotractive = callPackage ../development/python-modules/aiotractive { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
@@ -3352,6 +3354,8 @@ self: super: with self; {
 
   docloud = callPackage ../development/python-modules/docloud { };
 
+  docstr-coverage = callPackage ../development/python-modules/docstr-coverage { };
+
   docstring-to-markdown = callPackage ../development/python-modules/docstring-to-markdown { };
 
   docstring-parser = callPackage ../development/python-modules/docstring-parser { };
@@ -3945,6 +3949,8 @@ self: super: with self; {
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
+  fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
@@ -4395,6 +4401,8 @@ self: super: with self; {
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
   fschat = callPackage ../development/python-modules/fschat { };
+
+  fsspec-xrootd = callPackage ../development/python-modules/fsspec-xrootd { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
 
@@ -4849,6 +4857,8 @@ self: super: with self; {
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
   govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
+
+  govee-local-api = callPackage ../development/python-modules/govee-local-api { };
 
   goveelights = callPackage ../development/python-modules/goveelights { };
 
@@ -6581,6 +6591,8 @@ self: super: with self; {
   limits = callPackage ../development/python-modules/limits { };
 
   limnoria = callPackage ../development/python-modules/limnoria { };
+
+  linear-garage-door = callPackage ../development/python-modules/linear-garage-door { };
 
   linear-operator = callPackage ../development/python-modules/linear-operator { };
 
@@ -9909,6 +9921,8 @@ self: super: with self; {
 
   priority = callPackage ../development/python-modules/priority { };
 
+  prisma = callPackage ../development/python-modules/prisma { };
+
   prison = callPackage ../development/python-modules/prison { };
 
   proboscis = callPackage ../development/python-modules/proboscis { };
@@ -12475,6 +12489,8 @@ self: super: with self; {
 
   rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
 
+  rangeparser = callPackage ../development/python-modules/rangeparser { };
+
   rank-bm25 = callPackage ../development/python-modules/rank-bm25 { };
 
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
@@ -12683,6 +12699,8 @@ self: super: with self; {
   rerun-sdk = callPackage ../development/python-modules/rerun-sdk { };
 
   resampy = callPackage ../development/python-modules/resampy { };
+
+  resend = callPackage ../development/python-modules/resend { };
 
   resize-right = callPackage ../development/python-modules/resize-right { };
 
@@ -16096,6 +16114,8 @@ self: super: with self; {
   wagtail-factories = callPackage ../development/python-modules/wagtail-factories { };
 
   wagtail-localize = callPackage ../development/python-modules/wagtail-localize { };
+
+  wagtail-modeladmin = callPackage ../development/python-modules/wagtail-modeladmin { };
 
   waitress = callPackage ../development/python-modules/waitress { };
 
