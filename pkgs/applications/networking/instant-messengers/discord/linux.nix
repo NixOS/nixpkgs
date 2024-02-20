@@ -25,6 +25,18 @@ let
     substituteAllInPlace $out/bin/disable-breaking-updates.py
     chmod +x $out/bin/disable-breaking-updates.py
   '';
+  fixKrisp = runCommand "fix-krisp.py"
+    {
+      pythonInterpreter = lib.getExe (python3.withPackages(ps: with ps; [ pyelftools capstone ]));
+      configDirName = lib.toLower binaryName;
+      version = version;
+      meta.mainProgram = "fix-krisp.py";
+    } ''
+    mkdir -p $out/bin
+    cp ${./fix-krisp.py} $out/bin/fix-krisp.py
+    substituteAllInPlace $out/bin/fix-krisp.py
+    chmod +x $out/bin/fix-krisp.py
+  '';
 in
 
 stdenv.mkDerivation rec {
@@ -109,7 +121,8 @@ stdenv.mkDerivation rec {
         ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
-        --run "${lib.getExe disableBreakingUpdates}"
+        --run "${lib.getExe disableBreakingUpdates}" \
+        --run "${lib.getExe fixKrisp} $out/opt/${binaryName}/.${binaryName}-wrapped"
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
