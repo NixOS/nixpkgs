@@ -21,9 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dversion_data_path=${zig_0_13.src}/doc/langref.html.in"
   ];
 
-  nativeBuildInputs = [
-    zig_0_13.hook
-  ];
+  nativeBuildInputs = [ zig_0_13.hook ];
 
   postPatch = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
