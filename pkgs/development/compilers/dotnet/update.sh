@@ -263,6 +263,15 @@ sdk_packages () {
       "Microsoft.NETCore.App.Crossgen2.osx-arm64"
     )
 
+    # These packages were removed on .NET 9
+    if ! version_older "$version" "9"; then
+      local newpkgs=()
+      for pkg in "${pkgs[@]}"; do
+        [[ "$pkg" = *Microsoft.NETCore.DotNetHost* ]] || newpkgs+=("$pkg")
+      done
+      pkgs=("${newpkgs[@]}")
+    fi
+
     # These packages were removed on .NET 8
     if version_older "$version" "8"; then
         pkgs+=( \
