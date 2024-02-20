@@ -16670,8 +16670,6 @@ with pkgs;
 
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
 
-  zls = callPackage ../development/tools/language-servers/zls { };
-
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 
   ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
