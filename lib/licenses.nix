@@ -498,6 +498,13 @@ in mkLicense lset) ({
     fullName = "GNU Free Documentation License v1.3 or later";
   };
 
+  fsl-10-mit = {
+    fullName = "Functional Source License, Version 1.0, MIT Change License";
+    url = "https://github.com/getsentry/fsl.software/blob/7a73b65596671c42fa8df81a42731cb1c226d8fa/FSL-1.0-MIT.template.md";
+    free = false;
+    redistributable = true;
+  };
+
   ffsl = {
     fullName = "Floodgap Free Software License";
     url = "https://www.floodgap.com/software/ffsl/license.html";
