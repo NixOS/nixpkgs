@@ -17,12 +17,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.65.0";
+  version = "1.66.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    sha256 = "sha256-RYQAnvU+yoHGrU9zVvrD1/O80ioHEq2Cvo/MIjI6uTo=";
+    sha256 = "sha256-7O2YUZq0GBS2xvsXg0v55XZXAzqsbHjeKNgqMbNRT8E=";
     fetchSubmodules = true;
   };
 
