@@ -251,6 +251,17 @@
         },
         "version": "unstable-2023-12-29"
     },
+    "easyrpg": {
+        "fetcher": "fetchFromGitHub",
+        "src": {
+            "owner": "EasyRPG",
+            "repo": "Player",
+            "rev": "f8e41f43b619413f95847536412b56f85307d378",
+            "hash": "sha256-nvWM4czTv/GxY9raomBEn7dmKBeLtSA9nvjMJxc3Q8s=",
+            "fetchSubmodules": true
+        },
+        "version": "unstable-2023-04-29"
+    },
     "eightyone": {
         "fetcher": "fetchFromGitHub",
         "src": {
