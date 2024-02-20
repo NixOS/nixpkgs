@@ -2551,6 +2551,12 @@
     githubId = 185443;
     name = "Alexey Lebedeff";
   };
+  binarycat = {
+      email = "binarycat@envs.net";
+      github = "lolbinarycat";
+      githubId = 19915050;
+      name = "binarycat";
+  };
   binsky = {
     email = "timo@binsky.org";
     github = "binsky08";
