@@ -5612,6 +5612,12 @@
     githubId = 2536303;
     name = "Enno Lohmeier";
   };
+  elpdt852 = {
+    email = "nix@pdtpartners.com";
+    github = "elpdt852";
+    githubId = 122112154;
+    name = "Edgar Lee";
+  };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
     matrix = "@elvishjerricco:matrix.org";
