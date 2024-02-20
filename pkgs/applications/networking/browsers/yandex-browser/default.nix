@@ -54,13 +54,13 @@
 
 let
   version = {
-    corporate = "23.9.1.1016-1";
+    corporate = "23.11.1.822-1";
     beta = "24.1.1.939-1";
     stable = "24.1.1.917-1";
   }.${edition};
 
   hash = {
-    corporate = "sha256-A/MjphA6vefDzPmShpPbgjDTl4WnCiZWuHofy1Djrzc=";
+    corporate = "sha256-OOcz2dQeVea0vBjF1FyrCsnRR+WrCzfLTd+YXpLJCsI=";
     beta = "sha256-Meswp1aeNTBr79l7XGWqJT9qqUdOfSzIpdL1L29UfJw=";
     stable = "sha256-szi6rQs6K00Wrd/liYroMwD9OqwYWCrQFmZBjRTGESo=";
   }.${edition};
