@@ -58,12 +58,7 @@ mkYarnPackage rec {
     homepage = "https://gitbutler.com";
     downloadPage = homepage;
     changelog = "https://github.com/gitbutlerapp/gitbutler/releases/tag/release/${version}";
-    license = {
-      fullName = "Functional Source License, Version 1.0, MIT Change License";
-      url = "https://github.com/gitbutlerapp/gitbutler/blob/master/LICENSE.md";
-      free = false;
-      redistributable = true;
-    };
+    license = lib.licenses.fsl-10-mit;
     maintainers = with lib.maintainers; [ hacker1024 ];
     platforms = with lib.platforms; all;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
