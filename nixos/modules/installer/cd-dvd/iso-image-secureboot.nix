@@ -194,38 +194,10 @@ in
         };
       }
       {
-        where = "/sysroot/run";
-        what = "/run";
-        wantedBy = ["initrd-fs.target"];
-        mountConfig = {
-          Options = ["rbind"];
-        };
-      }
-      {
         where = "/run/iso";
         what = "/dev/disk/by-label/${config.isoImage.volumeID}";
         mountConfig = {
           Type = "iso9660";
-        };
-      }
-      # Workaround for https://github.com/systemd/systemd/issues/30943
-      # If this is fixed in the way I currently think it should be fixed,
-      # the fstab entry generated via fileSystems should be enough.
-      {
-        where = "/sysroot/nix/store";
-        what = "overlay";
-        unitConfig.RequiresMountsFor = [
-          "/sysroot/run/nix/.ro-store"
-          "/sysroot/run/nix/.rw-store/store"
-          "/sysroot/run/nix/.rw-store/work"
-        ];
-        mountConfig = {
-          Type = "overlay";
-          Options = lib.concatStringsSep "," [
-            "lowerdir=/sysroot/run/nix/.ro-store"
-            "upperdir=/sysroot/run/nix/.rw-store/store"
-            "workdir=/sysroot/run/nix/.rw-store/work"
-          ];
         };
       }
     ];
@@ -253,7 +225,7 @@ in
           false
         fi
         sha256sum -c <<EOF
-        $hash ${config.fileSystems."/run/nix/.ro-store".device}
+        $hash ${config.fileSystems."/nix/.ro-store".device}
         EOF
       '';
     };
@@ -263,13 +235,13 @@ in
       description = "Store Overlay Mutable Directories";
       requiredBy = [ "sysroot-nix-store.mount" ];
       before = [ "sysroot-nix-store.mount" ];
-      unitConfig.RequiresMountsFor = "/run/nix/.rw-store";
+      unitConfig.RequiresMountsFor = "/nix/.rw-store";
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
       };
       script = ''
-        mkdir -p /run/nix/.rw-store/{work,store}
+        mkdir -p /nix/.rw-store/{work,store}
       '';
     };
 
@@ -292,7 +264,7 @@ in
 
       # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
       # image) to make this a live CD.
-      "/run/nix/.ro-store" = mkImageMediaOverride
+      "/nix/.ro-store" = mkImageMediaOverride
         {
           fsType = "squashfs";
           device = "/run/iso/nix-store.squashfs";
@@ -301,7 +273,7 @@ in
           depends = ["/run/iso"];
         };
 
-      "/run/nix/.rw-store" = mkImageMediaOverride
+      "/nix/.rw-store" = mkImageMediaOverride
         {
           fsType = "tmpfs";
           options = [ "mode=0755" ];
@@ -310,18 +282,11 @@ in
 
       "/nix/store" = mkImageMediaOverride
         {
-          fsType = "overlay";
-          device = "overlay";
-          options = [
-            "lowerdir=/run/nix/.ro-store"
-            "upperdir=/run/nix/.rw-store/store"
-            "workdir=/run/nix/.rw-store/work"
-          ];
-          depends = [
-            "/run/nix/.ro-store"
-            "/run/nix/.rw-store/store"
-            "/run/nix/.rw-store/work"
-          ];
+          overlay = {
+            lowerdir = ["/nix/.ro-store"];
+            upperdir = "/nix/.rw-store/store";
+            workdir = "/nix/.rw-store/work";
+          };
           neededForBoot = true;
         };
 
