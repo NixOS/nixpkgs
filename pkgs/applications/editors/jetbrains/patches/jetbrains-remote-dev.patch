@@ -13,18 +13,6 @@
    FONTS_CONFIGURATION_BASE_PATH="$REMOTE_DEV_SERVER_DIR/selfcontained/fontconfig"
    if [ ! -d "$FONTS_CONFIGURATION_BASE_PATH" ]; then
      echo "ERROR! Unable to locate font configuration source directory in self-contained distribution: '$FONTS_CONFIGURATION_BASE_PATH'." 1>&2
-@@ -350,7 +351,10 @@
- fi
-
- # -------------------------------------------------------------------------------------
- # Patch JBR to make self-contained JVM (requires nothing from host system except glibc)
-+#
-+# Patch for nixpkgs: due to the model of nix, this should not be allowed.
- # -------------------------------------------------------------------------------------
-+
- if [ -n "${REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS:-}" ]; then
-   # already set by environment
-   echo "\$REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=$REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS"
 @@ -366,7 +370,9 @@
  else
    REMOTE_DEV_SERVER_USE_SELF_CONTAINED_LIBS=1
