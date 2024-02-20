@@ -78,14 +78,14 @@ stdenv.mkDerivation {
     "-DUSE_FAUDIO=${if faudioSupport then "ON" else "OFF"}"
   ];
 
-  nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook qtwayland ];
 
   buildInputs = [
     qtbase qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
     libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
   ] ++ cubeb.passthru.backendLibs
     ++ lib.optionals faudioSupport [ faudio SDL2 ]
-    ++ lib.optional waylandSupport wayland;
+    ++ lib.optional waylandSupport [ wayland qtwayland ];
 
   postInstall = ''
     # Taken from https://wiki.rpcs3.net/index.php?title=Help:Controller_Configuration
