@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YJqbmFcqal6kd/kSz/uXMQntTQpqaz+eI1PSzcBIcI4=";
   };
 
+  dontFailFixCmake = true;
+
   patches = [
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
