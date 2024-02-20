@@ -29,9 +29,9 @@ in rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JOl/hhyuc6vqeK6/oXXMB3fGRapBsuOTaUG+BQ9QSnk=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
-  buildInputs = [ curl installShellFiles ] ++ (if stdenv.isDarwin
+  buildInputs = [ curl ] ++ (if stdenv.isDarwin
     then [ libiconv Security SystemConfiguration ]
     else [ openssl ]);
 
