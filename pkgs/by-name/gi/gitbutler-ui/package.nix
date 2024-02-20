@@ -17,16 +17,18 @@ mkYarnPackage rec {
 
   sourceRoot = "${src.name}/gitbutler-ui";
 
-  # The package.json must use spaces instead of upstream's tabs to pass Nixpkgs
-  # CI.
-  # To generate the Yarn lockfile, run `yarn install`.
-  # There is no way to import the tagged pnpm lockfile, so make sure to test the
-  # result thoughly as dependency versions may differ from the release.
+  # The package.json comes from the gitbutler-ui directory, and must use spaces
+  # instead of upstream's tabs to pass Nixpkgs CI.
+  #
+  # To generate the Yarn lockfile, run:
+  # pnpm-lock-export --schema yarn.lock@v1 < pnpm-lock.yaml
+  # Then, fix Git dependencies, e.g. "tauri-plugin-store-api@0.0.0" -> "tauri-plugin-store-api@github:tauri-apps/tauri-plugin-store#v1".
+  # Remove any 'integrity "undefined"' lines as well.
   packageJSON = ./package.json;
   yarnLock = ./yarn.lock;
   offlineCache = fetchYarnDeps {
     inherit yarnLock;
-    hash = "sha256-ZN0vMus7iuXsjnq9d+egDQAg54aJl0v85dicVhE1MQI=";
+    hash = "sha256-5QBWzAtFXhSVJUalmLa2Wq8DH/D4ZB/7DPR0VeWf0wg=";
   };
 
   preConfigure = ''
