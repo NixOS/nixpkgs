@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, requests
 , setuptools
+, tls-client
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    requests
+    tls-client
   ];
 
   # Module has no tests
