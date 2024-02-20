@@ -15878,7 +15878,7 @@
     githubId = 10837173;
   };
   qjoly = {
-    email = "github@thoughtless.eu";
+    email = "github@une-pause-cafe.fr";
     github = "qjoly";
     githubId = 82603435;
     name = "Quentin JOLY";
