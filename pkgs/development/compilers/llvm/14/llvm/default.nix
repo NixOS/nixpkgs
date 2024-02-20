@@ -94,6 +94,12 @@ in stdenv.mkDerivation (rec {
       relative = "llvm";
       hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
     })
+    # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
+      relative = "llvm";
+      hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
+    })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''
