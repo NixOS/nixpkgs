@@ -1,23 +1,21 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, python3, perl, textual-window-manager
-, gettext, vim, bc, screen }:
-
-let
-  pythonEnv = python3.withPackages (ps: with ps; [ snack ]);
-in
-stdenv.mkDerivation rec {
-  version = "5.133";
+{ lib, stdenv, fetchFromGitHub, makeWrapper, python3, perl
+, textual-window-manager, gettext, vim, autoreconfHook, bc, screen }:
+let pythonEnv = python3.withPackages (ps: with ps; [ snack ]);
+in stdenv.mkDerivation rec {
+  version = "6.12";
   pname = "byobu";
 
-  src = fetchurl {
-    url = "https://launchpad.net/byobu/trunk/${version}/+download/byobu_${version}.orig.tar.gz";
-    sha256 = "0qvmmdnvwqbgbhn5c8asmrmjhclcl029py2d2zvmd7h5ij7s93jd";
+  src = fetchFromGitHub {
+    owner = "dustinkirkland";
+    repo = pname;
+    rev = version;
+    hash = "sha256-NzC9Njsnz14mfKnERGDZw8O3vux0wnfCKwjUeTBQswc=";
   };
 
   doCheck = true;
 
   strictdeps = true;
-  nativeBuildInputs = [ makeWrapper gettext ];
+  nativeBuildInputs = [ makeWrapper gettext autoreconfHook ];
   buildInputs = [ perl ]; # perl is needed for `lib/byobu/include/*` scripts
   propagatedBuildInputs = [ textual-window-manager screen ];
 
@@ -39,7 +37,7 @@ stdenv.mkDerivation rec {
     done
 
     # Override the symlinks otherwise they mess with the wrapping
-    cp --remove-destination $out/bin/byobu $out/bin/byobu-screen
+    cp --remove-destination $out/bin/byobu $out/bin/byobu-screen                   
     cp --remove-destination $out/bin/byobu $out/bin/byobu-tmux
 
     for i in $out/bin/byobu*; do
