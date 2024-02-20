@@ -3,16 +3,16 @@
 let
   args = rec {
     pname = "cargo-auditable";
-    version = "0.6.1";
+    version = "0.6.2";
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-MKMPLv8jeST0l4tq+MMPC18qfZMmBixdj6Ng19YKepU=";
+      sha256 = "sha256-ERIzx9Fveanq7/aWcB2sviTxIahvSu0sTwgpGf/aYE8=";
     };
 
-    cargoSha256 = "sha256-6/f7pNaTL+U6bI6jMakU/lfwYYxN/EM3WkKZcydsyLk=";
+    cargoHash = "sha256-4o3ctun/8VcBRuj+j0Yaawdkyn6Z6LPp+FTyhPxQWU8=";
 
     # Cargo.lock is outdated
     preConfigure = ''
