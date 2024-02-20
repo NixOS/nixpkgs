@@ -31029,8 +31029,6 @@ with pkgs;
 
   dsf2flac = callPackage ../applications/audio/dsf2flac { };
 
-  dunst = callPackage ../applications/misc/dunst { };
-
   dust = callPackage ../by-name/du/dust/package.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
   };
