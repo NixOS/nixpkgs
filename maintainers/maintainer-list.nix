@@ -20839,6 +20839,13 @@
     githubId = 31734358;
     name = "Xavier Groleau";
   };
+  xgwq = {
+    name = "XGWQ";
+    email = "nixos@xnee.de";
+    matrix = "@xgwq:nerdberg.de";
+    github = "peterablehmann";
+    githubId = 36541313;
+  };
   xiorcale = {
     email = "quentin.vaucher@pm.me";
     github = "xiorcale";
