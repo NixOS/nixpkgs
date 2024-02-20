@@ -11,7 +11,14 @@
 , ocl-icd
 , rocmPackages
 , pytestCheckHook
+, gpuctypes
+, testCudaRuntime ? false
+, testOpenclRuntime ? false
+, testRocmRuntime ? false
 }:
+assert testCudaRuntime -> cudaSupport;
+assert testRocmRuntime -> rocmSupport;
+
 buildPythonPackage rec {
   pname = "gpuctypes";
   version = "0.3.0";
@@ -61,7 +68,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
+  disabledTestPaths = lib.optionals (!testOpenclRuntime) [
     "test/test_opencl.py"
   ] ++ lib.optionals (!rocmSupport) [
     "test/test_hip.py"
@@ -70,17 +77,46 @@ buildPythonPackage rec {
   ];
 
   # Require GPU access to run (not available in the sandbox)
-  pytestFlagsArray = [
+  pytestFlagsArray = lib.optionals (!testCudaRuntime) [
     "-k" "'not TestCUDADevice'"
+  ] ++ lib.optionals (!testRocmRuntime) [
     "-k" "'not TestHIPDevice'"
+  ] ++ lib.optionals (testCudaRuntime || testOpenclRuntime || testRocmRuntime) [
+    "-v"
   ];
 
-  preCheck = lib.optionalString cudaSupport ''
+  # Running these tests requires special configuration on the builder.
+  # e.g. https://github.com/NixOS/nixpkgs/pull/256230 implements a nix
+  # pre-build hook which exposes the devices and the drivers in the sandbox
+  # based on requiredSystemFeatures:
+  requiredSystemFeatures = lib.optionals testCudaRuntime [
+    "cuda"
+  ] ++ lib.optionals testOpenclRuntime [
+    "opencl"
+  ] ++ lib.optionals testRocmRuntime [
+    "rocm"
+  ];
+
+  passthru.gpuChecks = {
+    cuda = gpuctypes.override {
+      cudaSupport = true;
+      testCudaRuntime = true;
+    };
+    opencl = gpuctypes.override {
+      testOpenclRuntime = true;
+    };
+    rocm = gpuctypes.override {
+      rocmSupport = true;
+      testRocmRuntime = true;
+    };
+  };
+
+  preCheck = lib.optionalString (cudaSupport && !testCudaRuntime) ''
     addToSearchPath LD_LIBRARY_PATH ${lib.getLib cudaPackages.cuda_cudart}/lib/stubs
   '';
 
   # If neither rocmSupport or cudaSupport is enabled, no tests are selected
-  dontUsePytestCheck = !(rocmSupport || cudaSupport);
+  dontUsePytestCheck = !(rocmSupport || cudaSupport) && (!testOpenclRuntime);
 
   meta = with lib; {
     description = "Ctypes wrappers for HIP, CUDA, and OpenCL";
