@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , SDL2
 , cmake
+, fmt
 , libpng
 , libzip
 , openal
@@ -13,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openloco";
-  version = "23.02";
+  version = "24.01.1";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
     rev = "v${version}";
-    hash = "sha256-35g7tnKez4tnTdZzavfU+X8f3btFG6EbLkU+cqL6Qek=";
+    hash = "sha256-QkJmJGObp5irk66SSGTxjydcp3sPaCbxcjcU3XGTVfo=";
   };
 
   # the upstream build process determines the version tag from git; since we
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     SDL2
+    fmt
     libpng
     libzip
     openal
