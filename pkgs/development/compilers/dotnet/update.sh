@@ -85,7 +85,7 @@ version_older () {
     cur_version=$1
     max_version=$2
     result=$(nix-instantiate -I ../../../../. \
-        --eval -E "(import <nixpkgs> {}).lib.versionOlder \"$cur_version\" \"$max_version\"")
+        --eval -E "(import ../../../../. {}).lib.versionOlder \"$cur_version\" \"$max_version\"")
     if [[ "$result" == "true" ]]; then
         return 0
     else
