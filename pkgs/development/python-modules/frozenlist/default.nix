@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, cython
+, cython_3
 , expandvars
 , fetchFromGitHub
 , pep517
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     expandvars
-    cython
+    cython_3
     pep517
     setuptools
     wheel
