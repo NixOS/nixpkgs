@@ -2,7 +2,6 @@
 , stdenv
 , fetchzip
 , callPackage
-,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbe";
