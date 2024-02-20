@@ -17,7 +17,7 @@
 }:
 
 let
-  version = "0.10.10";
+  version = "0.10.11";
 in
 assert lib.assertMsg (version == gitbutler-ui.version) "The GitButler version does not match the GitButler UI version!";
 rustPlatform.buildRustPackage rec {
