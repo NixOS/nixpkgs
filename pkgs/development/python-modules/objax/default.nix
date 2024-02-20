@@ -70,6 +70,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires internet access for prefetching some weights
     "test_pretrained_keras_weight_0_ResNet50V2"
+    # ModuleNotFoundError: No module named 'tree'
+    "TestResNetV2Pretrained"
   ];
 
   meta = with lib; {
