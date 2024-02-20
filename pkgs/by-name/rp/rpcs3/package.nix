@@ -26,7 +26,7 @@
 , faudio
 , SDL2
 , waylandSupport ? true
-, wayland
+, qtwayland
 }:
 
 let
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
   ] ++ cubeb.passthru.backendLibs
     ++ lib.optionals faudioSupport [ faudio SDL2 ]
-    ++ lib.optional waylandSupport wayland;
+    ++ lib.optional waylandSupport qtwayland;
 
   postInstall = ''
     # Taken from https://wiki.rpcs3.net/index.php?title=Help:Controller_Configuration
