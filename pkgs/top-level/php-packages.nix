@@ -198,13 +198,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phive = callPackage ../development/php-packages/phive { };
 
+    php-codesniffer = callPackage ../development/php-packages/php-codesniffer { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
-
-    phpcbf = callPackage ../development/php-packages/phpcbf { };
-
-    phpcs = callPackage ../development/php-packages/phpcs { };
 
     phpmd = callPackage ../development/php-packages/phpmd { };
 
@@ -215,9 +213,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     psalm = callPackage ../development/php-packages/psalm { };
 
     psysh = callPackage ../development/php-packages/psysh { };
+  } // lib.optionalAttrs config.allowAliases {
+    phpcbf = throw "`phpcbf` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
+    phpcs = throw "`phpcs` is now deprecated, use `php-codesniffer` instead which contains both `phpcs` and `phpcbf`.";
   };
-
-
 
   # This is a set of PHP extensions meant to be used in php.buildEnv
   # or php.withExtensions to extend the functionality of the PHP
