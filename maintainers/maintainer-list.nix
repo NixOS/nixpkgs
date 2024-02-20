@@ -15814,6 +15814,12 @@
     github = "rafaelrc7";
     githubId = 5376043;
   };
+  rafameou = {
+    email = "rafaelmazz22@gmail.com";
+    name = "Rafael Mazzutti";
+    github = "rafameou";
+    githubId = 26395874;
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";
