@@ -32,7 +32,7 @@ let
       callPackage = self.newScope ({
         inherit (self) qtModule;
         inherit srcs python3;
-        stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in
     {
@@ -109,7 +109,7 @@ let
         qtwebengine
         qtwebsockets
         qtwebview
-      ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ])) { };
+      ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwayland libglvnd ])) { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
@@ -163,7 +163,7 @@ let
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
         qtModule = callPackage ({ qtModule }: qtModule.override {
-          stdenv = if stdenv.isDarwin
+          stdenv = if stdenv.hostPlatform.isDarwin
             then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
             else stdenv;
         }) { };

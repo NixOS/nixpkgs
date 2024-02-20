@@ -955,6 +955,10 @@
     dependencies = with self; [ nui-nvim ];
   };
 
+  none-ls-nvim = super.none-ls-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
