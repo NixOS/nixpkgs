@@ -14585,6 +14585,8 @@ self: super: with self; {
 
   tlslite-ng = callPackage ../development/python-modules/tlslite-ng { };
 
+  tls-client = callPackage ../development/python-modules/tls-client { };
+
   tls-parser = callPackage ../development/python-modules/tls-parser { };
 
   tlv8 = callPackage ../development/python-modules/tlv8 { };
