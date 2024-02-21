@@ -2708,6 +2708,8 @@ self: super: with self; {
 
   dawg-python = callPackage ../development/python-modules/dawg-python { };
 
+  dazl = callPackage ../development/python-modules/dazl { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
