@@ -12620,6 +12620,8 @@ self: super: with self; {
 
   referencing = callPackage ../development/python-modules/referencing { };
 
+  refery = callPackage ../development/python-modules/refery { };
+
   reflink = callPackage ../development/python-modules/reflink { };
 
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
