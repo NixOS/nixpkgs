@@ -1,0 +1,15 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index b763f26..63c02a5 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -6,6 +6,10 @@ authors = [
+     "Maxim Mityutko <m@brhd.io>",
+     "Dani Hodovic <dani.hodovic@gmail.com>"
+ ]
++packages = [{include = "src"}]
++
++[tool.poetry.scripts]
++borgmatic-exporter = 'src.cli:cli'
+ 
+ [tool.poetry.dependencies]
+ python = "<3.13,>=3.8"
