@@ -6,24 +6,26 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiocsv";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MKuranowski";
-    repo = pname;
+    repo = "aiocsv";
     rev = "refs/tags/v${version}";
     hash = "sha256-5jMmT7XY+1VNbDNciZS6B/oQJFj4XmGvhDITKWHCuOQ=";
   };
 
   nativeBuildInputs = [
     cython
+    setuptools
   ];
 
   nativeCheckInputs = [
