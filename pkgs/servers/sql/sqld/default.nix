@@ -12,20 +12,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sqld";
-  version = "0.17.2";
+  version = "0.22.22";
 
   src = fetchFromGitHub {
-    owner = "libsql";
-    repo = "sqld";
-    rev = "v${version}";
-    hash = "sha256-KoEscrzkFJnxxJKL/2r4cY0oLpKdQMjFR3daryzrVKQ=";
+    owner = "tursodatabase";
+    repo = "libsql";
+    rev = "libsql-server-v${version}";
+    hash = "sha256-lMuHskx9Sth8v813UeQR/emXkjJYa+NH/lWMQE+8Vw0=";
   };
 
+  patchPhase = ''
+    cp Cargo.lock libsql-server
+  '';
+
+  cargoRoot = "libsql-server";
+
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = "${src}/Cargo.lock";
     outputHashes = {
-      "libsqlite3-sys-0.26.0" = "sha256-JzSGpqYtkIq0mVYD0kERIB6rmZUttqkCGne+M4vqTJU=";
-      "octopod-0.1.0" = "sha256-V16fOlIp9BCpyzgh1Aei3Mra/y15v8dQFA8tHdOwZm4=";
+      "console-api-0.5.0" = "sha256-MfaxtzOqyblk6aTMqJGRP+123aK0Kq7ODNp/3lehkpQ=";
+      "hyper-rustls-0.24.1" = "sha256-dYN42bnbY+4+etmimrnoyzmrKvCZ05fYr1qLQFvzRTk=";
     };
   };
 
@@ -40,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     sqlite
     zstd
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
