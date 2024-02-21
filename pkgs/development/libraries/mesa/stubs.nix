@@ -1,50 +1,37 @@
 { stdenv
+, lib
 , libglvnd
-, mesa
 , OpenGL
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libGL";
-  inherit (if stdenv.hostPlatform.isDarwin then mesa else libglvnd) version;
+  version = if stdenv.hostPlatform.isDarwin then "4.1" else libglvnd.version;
   outputs = [ "out" "dev" ];
 
-  # On macOS, libglvnd is not supported, so we just use what mesa
-  # build. We need to also include OpenGL.framework, and some
-  # extra tricks to go along with. We add mesa’s libGLX to support
-  # the X extensions to OpenGL.
-  buildCommand = if stdenv.hostPlatform.isDarwin then ''
-    mkdir -p $out/nix-support $dev
-    echo ${OpenGL} >> $out/nix-support/propagated-build-inputs
-    ln -s ${mesa.out}/lib $out/lib
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ OpenGL ];
 
+  # On macOS, provide the OpenGL framework as well as a pkg-config file for OpenGL.framework.
+  # Packages that still need GL_X_ specifically can pull in libGLX instead, which will be
+  # Mesa, as libglvnd does not work on macOS.
+  buildCommand = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $dev/lib/pkgconfig $dev/nix-support
+
     echo "$out" > $dev/nix-support/propagated-build-inputs
-    ln -s ${mesa.dev}/include $dev/include
+
+    mkdir -p $out/lib
+    ln -s ${OpenGL}/Library/Frameworks/OpenGL.framework/Libraries/libGL.tbd $out/lib/libGL.tbd
+
+    mkdir -p $dev/include
+    ln -s ${OpenGL}/Library/Frameworks/OpenGL.framework/Headers $dev/include/GL
 
     cat <<EOF >$dev/lib/pkgconfig/gl.pc
   Name: gl
   Description: gl library
-  Version: ${mesa.version}
-  Libs: -L${mesa.out}/lib -lGL
-  Cflags: -I${mesa.dev}/include
-  EOF
-
-    cat <<EOF >$dev/lib/pkgconfig/glesv1_cm.pc
-  Name: glesv1_cm
-  Description: glesv1_cm library
-  Version: ${mesa.version}
-  Libs: -L${mesa.out}/lib -lGLESv1_CM
-  Cflags: -I${mesa.dev}/include
-  EOF
-
-    cat <<EOF >$dev/lib/pkgconfig/glesv2.pc
-  Name: glesv2
-  Description: glesv2 library
-  Version: ${mesa.version}
-  Libs: -L${mesa.out}/lib -lGLESv2
-  Cflags: -I${mesa.dev}/include
+  Version: 4.1
+  Libs: -F${OpenGL} -framework OpenGL
+  Cflags: -F${OpenGL}
   EOF
   ''
 
@@ -79,10 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    description = "Stub bindings using " + (if stdenv.hostPlatform.isDarwin then "mesa" else "libglvnd");
-    pkgConfigModules = [ "gl" "egl" "glesv1_cm" "glesv2" ];
-  } // {
-    inherit (if stdenv.hostPlatform.isDarwin then mesa.meta else libglvnd.meta)
-      homepage license platforms badPlatforms;
-  };
+    description = "Stub bindings using " + (if stdenv.hostPlatform.isDarwin then "OpenGL.framework" else "libglvnd");
+    pkgConfigModules = [ "gl" ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "egl" "glesv1_cm" "glesv2" ];
+  } // (if stdenv.hostPlatform.isDarwin
+    then { inherit (OpenGL.meta) platforms; }
+    else { inherit (libglvnd.meta) homepage license platforms badPlatforms; });
 })
