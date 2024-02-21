@@ -20,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     echo ${OpenGL} >> $out/nix-support/propagated-build-inputs
     echo "$out" > $dev/nix-support/propagated-build-inputs
 
+    mkdir -p $out/lib
+    ln -s ${OpenGL}/Library/Frameworks/OpenGL.framework/OpenGL.tbd $out/lib/libGL.tbd
+
     mkdir -p $dev/include
     ln -s ${OpenGL}/Library/Frameworks/OpenGL.framework/Headers $dev/include/GL
 
