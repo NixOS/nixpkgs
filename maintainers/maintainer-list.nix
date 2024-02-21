@@ -16521,6 +16521,12 @@
     github = "RossComputerGuy";
     githubId = 19699320;
   };
+  rostan-t = {
+    name = "Rostan Tabet";
+    email = "rostan.tabet@gmail.com";
+    github = "rostan-t";
+    githubId = 30502549;
+  };
   rotaerk = {
     name = "Matthew Stewart";
     email = "m.scott.stewart@gmail.com";
