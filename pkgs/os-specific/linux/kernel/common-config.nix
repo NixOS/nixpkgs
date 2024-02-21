@@ -213,6 +213,9 @@ let
       NET_CLS_BPF                 = module;
       NET_ACT_BPF                 = module;
       NET_SCHED                   = yes;
+      # fq_codel has been the default qdisc in systemd since 2014:
+      # https://github.com/systemd/systemd/commit/e6c253e363dee77ef7e5c5f44c4ca55cded3fd47
+      NET_SCH_FQ_CODEL            = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
       L2TP_ETH                    = module;
