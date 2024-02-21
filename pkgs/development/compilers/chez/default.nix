@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , coreutils, cctools
-, ncurses, libiconv, libX11, libuuid
+, ncurses, libiconv, libX11, libuuid, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description  = "A powerful and incredibly fast R6RS Scheme compiler";
