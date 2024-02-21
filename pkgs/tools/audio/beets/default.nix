@@ -70,12 +70,12 @@ lib.makeExtensible (self: {
 
   beets-unstable = callPackage ./common.nix {
     inherit python3Packages;
-    version = "unstable-2023-10-26";
+    version = "unstable-2024-01-17";
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
-      rev = "6655760732100f5387fad2d2890c015ee5039981";
-      hash = "sha256-Nz9BHtacYpJMLmB3f9WFg6GvMa+BuUhiNbJ9cyannek=";
+      rev = "7f1250dd0a286b099d032fe65d1c287b0ed37d46";
+      hash = "sha256-XZEJeG0s6xEjhzxYvroGhFJ9hrIRZfVyccA1RkL1Vxc=";
     };
     extraPatches = [
       # Bash completion fix for Nix
