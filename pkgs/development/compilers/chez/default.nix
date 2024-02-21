@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers  = with lib.maintainers; [ thoughtpolice ];
     platforms    = lib.platforms.unix;
     badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
+    mainProgram  = "scheme";
   };
 })
