@@ -1046,26 +1046,14 @@ in
 
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
-    boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
-      ''
-        # Mark this as a NixOS machine.
-        mkdir -p $targetRoot/etc
-        echo -n > $targetRoot/etc/NIXOS
+    boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable && cfg.writableStore) ''
+      echo "mounting overlay filesystem on /nix/store..."
+      mkdir -p -m 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
+      mount -t overlay overlay $targetRoot/nix/store \
+        -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
+    '';
 
-        # Fix the permissions on /tmp.
-        chmod 1777 $targetRoot/tmp
-
-        mkdir -p $targetRoot/boot
-
-        ${optionalString cfg.writableStore ''
-          echo "mounting overlay filesystem on /nix/store..."
-          mkdir -p -m 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
-          mount -t overlay overlay $targetRoot/nix/store \
-            -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
-        ''}
-      '';
-
-    systemd.tmpfiles.settings."10-qemu-vm" = lib.mkIf config.boot.initrd.systemd.enable {
+    systemd.tmpfiles.settings."10-qemu-vm" = {
       "/etc/NIXOS".f = {
         mode = "0644";
         user = "root";
