@@ -24,7 +24,7 @@ buildGoModule rec {
     description = "Simple DNS proxy with DoH, DoT, and DNSCrypt support";
     homepage = "https://github.com/AdguardTeam/dnsproxy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ contrun ];
+    maintainers = with maintainers; [ contrun diogotcorreia ];
     mainProgram = "dnsproxy";
   };
 }
