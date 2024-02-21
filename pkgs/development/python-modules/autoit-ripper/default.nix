@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "autoit-ripper";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a30SDJdKoljWjV0O1sZ35NnQPFcJ0XOPcmTanozWpHY=";
+    hash = "sha256-+BHWDkeVewoRUgaHln5TyoajpCvJiowCiC2dFYyp1MA=";
   };
 
   propagatedBuildInputs = [
