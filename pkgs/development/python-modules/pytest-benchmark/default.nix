@@ -1,8 +1,8 @@
 { lib
 , aspectlib
 , buildPythonPackage
-, elasticsearch
 , elastic-transport
+, elasticsearch
 , fetchFromGitHub
 , fetchpatch
 , freezegun
@@ -11,32 +11,37 @@
 , py-cpuinfo
 , pygal
 , pytest
-, pytestCheckHook
 , pytest-xdist
+, pytestCheckHook
+, pythonAtLeast
 , pythonOlder
-, isPy311
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pytest-benchmark";
   version = "4.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ionelmc";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pytest-benchmark";
+    rev = "refs/tags/v${version}";
     hash = "sha256-f9Ty4+5PycraxoLUSa9JFusV5Cot6bBWKfOGHZIRR3o=";
   };
 
   patches = [
     (fetchpatch {
+      # Replace distutils.spawn.find_executable with shutil.which, https://github.com/ionelmc/pytest-benchmark/pull/234
       url = "https://github.com/ionelmc/pytest-benchmark/commit/728752d2976ef53fde7e40beb3e55f09cf4d4736.patch";
       hash = "sha256-WIQADCLey5Y79UJUj9J5E02HQ0O86xBh/3IeGLpVrWI=";
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   buildInputs = [
@@ -70,18 +75,24 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  disabledTests = [
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/ionelmc/pytest-benchmark/issues/231
+
+    # Failed: nomatch: '*collected 5 items'
+    "test_abort_broken"
+    # TypeError
+    "test_clonefunc"
+  ] ++ lib.optionals (pythonOlder "3.12") [
     # AttributeError: 'PluginImportFixer' object has no attribute 'find_spec'
     "test_compare_1"
     "test_compare_2"
     "test_regression_checks"
     "test_rendering"
-  ]
-  # tests are broken in 3.11
-  # https://github.com/ionelmc/pytest-benchmark/issues/231
-  ++ lib.optionals isPy311 [
-    "test_abort_broken"
-    "test_clonefunc"
   ];
 
   meta = with lib; {
