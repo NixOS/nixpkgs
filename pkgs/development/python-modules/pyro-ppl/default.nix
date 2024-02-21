@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pyro-ppl";
-  version = "1.8.6";
+  version = "1.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-ANL03ailPmbZVRJNxuSektz1cM071waCUJHbdk2TzQc=";
+    hash = "sha256-QfTABRWVaCgPvFEWSJYKmKKxpBACfYvQpDIgrJsQLN8=";
   };
 
   propagatedBuildInputs = [
