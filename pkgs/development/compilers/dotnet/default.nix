@@ -19,6 +19,7 @@ let
   dotnet_7_0 = import ./versions/7.0.nix buildAttrs;
   dotnet_8_0 = import ./versions/8.0.nix buildAttrs;
   dotnet_8_0_102 = import ./versions/8.0.102.nix buildAttrs;
+  dotnet_9_0 = import ./versions/9.0.nix buildAttrs;
 
   runtimeIdentifierMap = {
     "x86_64-linux" = "linux-x64";
@@ -45,4 +46,4 @@ in
   sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
   sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
-} // dotnet_6_0 // dotnet_7_0 // dotnet_8_0
+} // dotnet_6_0 // dotnet_7_0 // dotnet_8_0 // dotnet_9_0
