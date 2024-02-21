@@ -35,7 +35,9 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./library-paths.patch;
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
-      gl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
+      gl = if stdenv.isDarwin
+        then "/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL"
+        else "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
