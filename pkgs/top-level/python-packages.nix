@@ -10253,6 +10253,8 @@ self: super: with self; {
 
   pybravia = callPackage ../development/python-modules/pybravia { };
 
+  pybrowsers = callPackage ../development/python-modules/pybrowsers { };
+
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
   pybtex = callPackage ../development/python-modules/pybtex { };
