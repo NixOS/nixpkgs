@@ -39,6 +39,7 @@ in
   combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
 
   dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0_102.sdk_8_0; });
+  dotnet_9 = recurseIntoAttrs (callPackage ./9 {});
 } // lib.optionalAttrs config.allowAliases {
   # EOL
   sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
