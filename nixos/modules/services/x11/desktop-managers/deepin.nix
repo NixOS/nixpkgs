@@ -173,19 +173,20 @@ in
           ];
           optionalPackages = [
             onboard # dde-dock plugin
-            deepin-camera
             deepin-calculator
             deepin-compressor
             deepin-editor
             deepin-picker
             deepin-draw
-            deepin-album
-            deepin-image-viewer
             deepin-music
             deepin-movie-reborn
             deepin-system-monitor
-            deepin-screen-recorder
             deepin-shortcut-viewer
+            # freeimage has knownVulnerabilties, don't install packages using freeiamge by default
+            # deepin-album
+            # deepin-camera
+            # deepin-image-viewer
+            # deepin-screen-recorder
           ];
         in
         requiredPackages

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "goldwarden";
-  version = "0.2.10";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "quexten";
     repo = "goldwarden";
     rev = "v${version}";
-    hash = "sha256-NYK9H9BCjUweip8HjxHqN2wjUGmg0zicJSC/S1hpvx8=";
+    hash = "sha256-W6dqxHGZGHuVOUNYWMpfswzG2bSCRyY58ya/ZqAMxyY=";
   };
 
-  vendorHash = "sha256-AiYgI2dBhVYxGNU7t4dywi8KWiffO6V05KFYoGzA0t4=";
+  vendorHash = "sha256-IH0p7t1qInA9rNYv6ekxDN/BT5Kguhh4cZfmL+iqwVU=";
 
   ldflags = [ "-s" "-w" ];
 

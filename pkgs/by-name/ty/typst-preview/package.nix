@@ -14,14 +14,20 @@
 let
   # Keep the vscode "mgt19937.typst-preview" extension in sync when updating
   # this package at pkgs/applications/editors/vscode/extensions/default.nix
-  version = "0.10.5";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typst-preview";
     rev = "v${version}";
-    hash = "sha256-BebOwlY2hm/SGYCtmsQICbo1V8sbUMYVWSM773Qmh04=";
+    hash = "sha256-n3lrJpCe/+THYepiiWIlTEMSMZPX7Qiucbg1ouU1ZEs=";
     fetchSubmodules = true;
+
+    postFetch = ''
+      cd $out
+      substituteInPlace addons/frontend/yarn.lock \
+        --replace-fail '"typst-dom@link:../typst-dom"' '"typst-dom@file:../typst-dom"'
+    '';
   };
 
   frontendSrc = "${src}/addons/frontend";
@@ -35,7 +41,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${domSrc}/yarn.lock";
-      hash = "sha256-SxOQ/RABUkiqE7dLaDS0kETGiir4SMWJ2w7i7zMEl7U=";
+      hash = "sha256-+xn2SmpYdAb1nZkTOURqR5teu3dx2AKaiGoa9AmPA7o=";
     };
 
     buildPhase = ''
@@ -61,7 +67,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${frontendSrc}/yarn.lock";
-      hash = "sha256-6e3UNd8gIBnTtllpo/1AC1XzeZ88rdUiechoQfo5V1Y=";
+      hash = "sha256-o8zWMLt6WqYWhcC7rqSeue6TxN20lYIjGqMxLApy5l0=";
     };
 
     packageResolutions = { inherit typst-dom; };
@@ -90,8 +96,7 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "typst-0.10.0" = "sha256-/Oy4KigXu1E/S9myd+eigqlNvk5x+Ld9gTL9dtpoyqk=";
-      "typst-ts-compiler-0.4.2-rc5" =
-        "sha256-fhwTaAK19Nb7AKNJ9QBZgK1MO7g7s5AdSDqaBjLxT3w=";
+      "typst-ts-compiler-0.4.2-rc6" = "sha256-mDQDxqXp38+Omt7D7kO2cUAVzG+h3JOs4tBdrbHH/lA=";
     };
   };
 

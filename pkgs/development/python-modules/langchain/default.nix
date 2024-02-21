@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pythonRelaxDepsHook
 , poetry-core
 , aiohttp
 , async-timeout
@@ -52,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.1.6";
+  version = "0.1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -61,14 +60,13 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DMUf1dW1/Xl8OKRDb2o9NFgFE4rEgsCBZEPejGz1tQQ=";
+    hash = "sha256-zZkz7KlRikUySLlGyoc2a+DRhPahjytV5AowpU8yiRg=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [
@@ -76,18 +74,18 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    langchain-core
-    langchain-community
-    pydantic
-    sqlalchemy
-    requests
-    pyyaml
-    numpy
     aiohttp
-    tenacity
-    jsonpatch
     dataclasses-json
+    jsonpatch
+    langchain-community
+    langchain-core
     langsmith
+    numpy
+    pydantic
+    pyyaml
+    requests
+    sqlalchemy
+    tenacity
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
   ];

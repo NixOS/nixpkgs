@@ -5,17 +5,17 @@
 
 (php.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ])).buildComposerProject (finalAttrs: {
   pname = "paratest";
-  version = "7.4.2";
+  version = "7.4.3";
 
   src = fetchFromGitHub {
     owner = "paratestphp";
     repo = "paratest";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Sd7S51SjI8g2Qz/NAeKKpxpSyBhvlrtJFbazbPJf2N0=";
+    hash = "sha256-Shf/fsGhDmupFn/qERzXGg3ko7mBgUqYzafO/VPqmoU=";
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-O8iEkvXIkkaQxcKfhm0Z4EZOtLolNsTPaPkXekpxkqs=";
+  vendorHash = "sha256-9KFh6Vwzt17v6WlEutRpwCauLOcj05hR4JGDcPbYL1U=";
 
   meta = {
     changelog = "https://github.com/paratestphp/paratest/releases/tag/v${finalAttrs.version}";

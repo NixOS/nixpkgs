@@ -2551,6 +2551,12 @@
     githubId = 185443;
     name = "Alexey Lebedeff";
   };
+  binarycat = {
+      email = "binarycat@envs.net";
+      github = "lolbinarycat";
+      githubId = 19915050;
+      name = "binarycat";
+  };
   binsky = {
     email = "timo@binsky.org";
     github = "binsky08";
@@ -16514,6 +16520,12 @@
     email = "tristan.ross@midstall.com";
     github = "RossComputerGuy";
     githubId = 19699320;
+  };
+  rostan-t = {
+    name = "Rostan Tabet";
+    email = "rostan.tabet@gmail.com";
+    github = "rostan-t";
+    githubId = 30502549;
   };
   rotaerk = {
     name = "Matthew Stewart";

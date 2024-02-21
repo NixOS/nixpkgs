@@ -12620,6 +12620,8 @@ self: super: with self; {
 
   referencing = callPackage ../development/python-modules/referencing { };
 
+  refery = callPackage ../development/python-modules/refery { };
+
   reflink = callPackage ../development/python-modules/reflink { };
 
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
@@ -14614,6 +14616,8 @@ self: super: with self; {
   tlsh = callPackage ../development/python-modules/tlsh { };
 
   tlslite-ng = callPackage ../development/python-modules/tlslite-ng { };
+
+  tls-client = callPackage ../development/python-modules/tls-client { };
 
   tls-parser = callPackage ../development/python-modules/tls-parser { };
 

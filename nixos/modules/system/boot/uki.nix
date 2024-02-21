@@ -27,6 +27,20 @@ in
         description = lib.mdDoc "Version of the image or generation the UKI belongs to";
       };
 
+      tries = lib.mkOption {
+        type = lib.types.nullOr lib.types.ints.unsigned;
+        default = null;
+        description = lib.mdDoc ''
+          Number of boot attempts before this UKI is considered bad.
+
+          If no tries are specified (the default) automatic boot assessment remains inactive.
+
+          See documentation on [Automatic Boot Assessment](https://systemd.io/AUTOMATIC_BOOT_ASSESSMENT/) and
+          [boot counting](https://uapi-group.org/specifications/specs/boot_loader_specification/#boot-counting)
+          for more information.
+        '';
+      };
+
       settings = lib.mkOption {
         type = format.type;
         description = lib.mdDoc ''
@@ -69,8 +83,9 @@ in
         name = config.boot.uki.name;
         version = config.boot.uki.version;
         versionInfix = if version != null then "_${version}" else "";
+        triesInfix = if cfg.tries != null then "+${builtins.toString cfg.tries}" else "";
       in
-      name + versionInfix + ".efi";
+      name + versionInfix + triesInfix + ".efi";
 
     system.build.uki = pkgs.runCommand config.system.boot.loader.ukiFile { } ''
       mkdir -p $out
