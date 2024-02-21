@@ -23,7 +23,7 @@
 
 let
   pname = "ollama";
-  version = "0.1.24";
+  version = "0.1.26";
 
   warnIfNotLinux = warning: (lib.warnIfNot stdenv.isLinux warning stdenv.isLinux);
   gpuWarning = api: "building ollama with ${api} is only supported on linux; falling back to cpu";
@@ -43,7 +43,7 @@ let
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-GwZA1QUH8I8m2bGToIcMMaB5MBnioQP4+n1SauUJYP8=";
+    hash = "sha256-Kw3tt9ayEMgI2V6OeaOkWfNwqfCL7MDD/nN5iXk5LnY=";
     fetchSubmodules = true;
   };
   preparePatch = patch: hash: fetchpatch {
@@ -55,7 +55,7 @@ let
   inherit (lib) licenses platforms maintainers;
   ollama = {
     inherit pname version src;
-    vendorHash = "sha256-wXRbfnkbeXPTOalm7SFLvHQ9j46S/yLNbFy+OWNSamQ=";
+    vendorHash = "sha256-zTrBighPBqZ9hhkEV3UawJZUYyPRay7+P6wkhDtpY7M=";
 
     nativeBuildInputs = [
       cmake
@@ -73,8 +73,8 @@ let
 
       # ollama's patches of llama.cpp's example server
       # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
-      (preparePatch "01-cache.diff" "sha256-PC4yN98hFvK+PEITiDihL8ki3bJuLVXrAm0CGf8GPJE=")
-      (preparePatch "02-shutdown.diff" "sha256-cElAp9Z9exxN964vB/YFuBhZoEcoAwGSMCnbh+l/V4Q=")
+      (preparePatch "01-cache.diff" "sha256-MTTln2G0G8dntihUzEjPM1ruTsApb4ZToBczJb8EG68=")
+      (preparePatch "02-cudaleaks.diff" "sha256-Cu7E9iEcvddPL9mPPI5Z96qmwWigi3f0WgSpPRjGc88=")
     ];
     postPatch = ''
       # use a patch from the nix store in the `go generate` script
