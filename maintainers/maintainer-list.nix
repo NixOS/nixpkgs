@@ -5917,6 +5917,15 @@
     githubId = 965612;
     name = "York Wong";
   };
+  ethnt = {
+    email = "ethan.turkeltaub@hey.com";
+    github = "ethnt";
+    githubId = 137037;
+    name = "Ethan Turkeltaub";
+    keys = [{
+      fingerprint = "F9C8 B00B 4A57 FA27 1F7A  896B 690F EBBF 6380 166A";
+    }];
+  };
   Etjean = {
     email = "et.jean@outlook.fr";
     github = "Etjean";
