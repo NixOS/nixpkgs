@@ -255,7 +255,13 @@ self = stdenv.mkDerivation {
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
 
-  depsBuildBuild = [ pkg-config buildPackages.stdenv.cc ];
+  depsBuildBuild = [ pkg-config ]
+    # Adding this unconditionally makes x86_64-darwin pick up an older toolchain, as
+    # we explicitly call Mesa with 11.0 stdenv, but buildPackages is still 10.something,
+    # and Mesa can't build with that.
+    # FIXME: figure this out, or figure out how to get rid of Mesa on Darwin,
+    # whichever is easier.
+    ++ lib.optional (!stdenv.isDarwin) buildPackages.stdenv.cc;
 
   nativeBuildInputs = [
     meson pkg-config ninja
