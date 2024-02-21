@@ -38,6 +38,8 @@ let
       fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
       mixRelease = callPackage ./mix-release.nix { };
 
+      credo = callPackage ./credo { };
+
       erlang-ls = callPackage ./erlang-ls { };
       erlfmt = callPackage ./erlfmt { };
       elvis-erlang = callPackage ./elvis-erlang { };
