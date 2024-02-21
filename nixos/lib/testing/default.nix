@@ -14,7 +14,6 @@ let
     ./legacy.nix
     ./meta.nix
     ./name.nix
-    ./macos-host.nix
     ./network.nix
     ./nodes.nix
     ./pkgs.nix
