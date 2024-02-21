@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-studio-client";
-  version = "0.19.0";
+  version = "0.20.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4qyFB2J46xT+iwgvsOBUUqsjtg4YlbbkNA8uaEaUvtw=";
+    hash = "sha256-JLrsbgifoUnN1Mwml9tO3/SkA6miE14AGjxrFwEcRks=";
   };
 
   nativeBuildInputs = [
