@@ -52,7 +52,12 @@
           run ? null,
         }:
         let
-          built = runCommand "dotnet-test-${name}" { buildInputs = [ finalAttrs.finalPackage ]; } (''
+          sdk = finalAttrs.finalPackage;
+          built = runCommand "dotnet-test-${name}" {
+            buildInputs = [ sdk ];
+            # make sure ICU works in a sandbox
+            propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
+          } (''
             HOME=$PWD/.home
             dotnet new nugetconfig
             dotnet nuget disable source nuget
@@ -65,11 +70,13 @@
           if run == null
             then built
           else
-            runCommand "${built.name}-run" { src = built; nativeBuildInputs = runInputs; } (
-              lib.optionalString (runtime != null) ''
-                # TODO: use runtime here
-                export DOTNET_ROOT=${runtime}
-              '' + run);
+            runCommand "${built.name}-run" {
+              src = built;
+              nativeBuildInputs = [ built ] ++ runInputs;
+            } (lib.optionalString (runtime != null) ''
+              # TODO: use runtime here
+              export DOTNET_ROOT=${runtime}
+            '' + run);
 
       # Setting LANG to something other than 'C' forces the runtime to search
       # for ICU, which will be required in most user environments.
