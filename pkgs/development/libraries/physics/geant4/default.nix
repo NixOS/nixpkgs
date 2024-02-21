@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
   ] ++ lib.optionals (enableOpenGLX11 && stdenv.isDarwin) [
-    "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
-    "-DXQuartzGL_gl_LIBRARY=${libGL}/lib/libGL.dylib"
+    "-DXQuartzGL_INCLUDE_DIR=${mesa.dev}/include"
+    "-DXQuartzGL_gl_LIBRARY=${mesa}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
     "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
   ] ++ lib.optionals enableInventor [
