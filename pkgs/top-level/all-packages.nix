@@ -4508,8 +4508,6 @@ with pkgs;
 
   bws = callPackage ../tools/security/bws { };
 
-  byobu = callPackage ../tools/misc/byobu { };
-
   bsh = fetchurl {
     url = "http://www.beanshell.org/bsh-2.0b5.jar";
     hash = "sha256-YjIZlWOAc1SzvLWs6z3BNlAvAixrDvdDmHqD9m/uWlw=";
