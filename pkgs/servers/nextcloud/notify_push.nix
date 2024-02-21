@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage rec {
       buildAndTestSubdir = "test_client";
 
       cargoHash = "sha256-OUALNd64rr2qXyRNV/O+pi+dE0HYogwlbWx5DCACzyk=";
+
+      meta = meta // {
+        mainProgram = "test_client";
+      };
     };
     tests = {
       inherit (nixosTests.nextcloud)
