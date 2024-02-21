@@ -1,76 +1,98 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, python3, perl, textual-window-manager
-, gettext, vim, bc, screen }:
+{ lib
+, autoreconfHook
+, bc
+, fetchFromGitHub
+, gettext
+, makeWrapper
+, perl
+, python3
+, screen
+, stdenv
+, vim
+, tmux
+}:
 
 let
   pythonEnv = python3.withPackages (ps: with ps; [ snack ]);
 in
-stdenv.mkDerivation rec {
-  version = "5.133";
+stdenv.mkDerivation (finalAttrs: {
   pname = "byobu";
+  version = "6.12";
 
-  src = fetchurl {
-    url = "https://launchpad.net/byobu/trunk/${version}/+download/byobu_${version}.orig.tar.gz";
-    sha256 = "0qvmmdnvwqbgbhn5c8asmrmjhclcl029py2d2zvmd7h5ij7s93jd";
+  src = fetchFromGitHub {
+    owner = "dustinkirkland";
+    repo = "byobu";
+    rev = finalAttrs.version;
+    hash = "sha256-NzC9Njsnz14mfKnERGDZw8O3vux0wnfCKwjUeTBQswc=";
   };
 
-  doCheck = true;
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    makeWrapper
+  ];
 
-  strictdeps = true;
-  nativeBuildInputs = [ makeWrapper gettext ];
-  buildInputs = [ perl ]; # perl is needed for `lib/byobu/include/*` scripts
-  propagatedBuildInputs = [ textual-window-manager screen ];
+  buildInputs = [
+    perl # perl is needed for `lib/byobu/include/*` scripts
+    screen
+    tmux
+  ];
+
+  doCheck = true;
+  strictDeps = true;
 
   postPatch = ''
-    substituteInPlace usr/bin/byobu-export.in \
-      --replace "gettext" "${gettext}/bin/gettext"
-    substituteInPlace usr/lib/byobu/menu \
-      --replace "gettext" "${gettext}/bin/gettext"
+    for file in usr/bin/byobu-export.in usr/lib/byobu/menu; do
+      substituteInPlace $file \
+        --replace "gettext" "${gettext}/bin/gettext"
+    done
   '';
 
   postInstall = ''
-    # Byobu does not compile its po files for some reason
+    # By some reason the po files are not being compiled
     for po in po/*.po; do
       lang=''${po#po/}
       lang=''${lang%.po}
-      # Path where byobu looks for translations as observed in the source code and strace
+      # Path where byobu looks for translations, as observed in the source code
+      # and strace
       mkdir -p $out/share/byobu/po/$lang/LC_MESSAGES/
-      msgfmt $po -o $out/share/byobu/po/$lang/LC_MESSAGES/byobu.mo
+      msgfmt --verbose $po -o $out/share/byobu/po/$lang/LC_MESSAGES/byobu.mo
     done
 
-    # Override the symlinks otherwise they mess with the wrapping
+    # Override the symlinks, otherwise they mess with the wrapping
     cp --remove-destination $out/bin/byobu $out/bin/byobu-screen
     cp --remove-destination $out/bin/byobu $out/bin/byobu-tmux
 
-    for i in $out/bin/byobu*; do
-      # We don't use the usual ".$package-wrapped" because arg0 within the shebang scripts
-      # points to the filename and byobu matches against this to know which backend
-      # to start with
-      file=".$(basename $i)"
-      mv $i $out/bin/$file
-      makeWrapper "$out/bin/$file" "$out/bin/$(basename $i)" --argv0 $(basename $i) \
-        --set BYOBU_PATH ${lib.escapeShellArg (lib.makeBinPath [ vim bc ])} \
+    for file in $out/bin/byobu*; do
+      # We don't use the usual "-wrapped" suffix because arg0 within the shebang
+      # scripts points to the filename and byobu matches against this to know
+      # which backend to start with
+      bname="$(basename $file)"
+      mv "$file" "$out/bin/.$bname"
+      makeWrapper "$out/bin/.$bname" "$out/bin/$bname" \
+        --argv0 $bname \
+        --prefix PATH ":" "$out/bin" \
+        --set BYOBU_PATH ${lib.makeBinPath [ vim bc ]} \
         --set BYOBU_PYTHON "${pythonEnv}/bin/python"
     done
   '';
 
-  meta = with lib; {
-    homepage = "https://launchpad.net/byobu/";
+  meta = {
+    homepage = "https://www.byobu.org/";
     description = "Text-based window manager and terminal multiplexer";
-
-    longDescription =
-      ''Byobu is a GPLv3 open source text-based window manager and terminal multiplexer.
-        It was originally designed to provide elegant enhancements to the otherwise functional,
-        plain, practical GNU Screen, for the Ubuntu server distribution.
-        Byobu now includes an enhanced profiles, convenient keybindings,
-        configuration utilities, and toggle-able system status notifications for both
-        the GNU Screen window manager and the more modern Tmux terminal multiplexer,
-        and works on most Linux, BSD, and Mac distributions.
-      '';
-
-    license = licenses.gpl3;
-
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ qknight berbiche ];
+    longDescription = ''
+      Byobu is a text-based window manager and terminal multiplexer. It was
+      originally designed to provide elegant enhancements to the otherwise
+      functional, plain, practical GNU Screen, for the Ubuntu server
+      distribution. Byobu now includes an enhanced profiles, convenient
+      keybindings, configuration utilities, and toggle-able system status
+      notifications for both the GNU Screen window manager and the more modern
+      Tmux terminal multiplexer, and works on most Linux, BSD, and Mac
+      distributions.
+    '';
+    license = with lib.licenses; [ gpl3Plus ];
+    mainProgram = "byobu";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
