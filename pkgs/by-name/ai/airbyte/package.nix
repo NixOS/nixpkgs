@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "airbyte";
-  version = "v0.50.44";
+  version = "v0.50.50";
 
   src = fetchFromGitHub {
     owner = "airbytehq";
     repo = pname;
     rev = version;
-    hash = "sha256-0urotetI/y3iuRo00SGuuST3dbdZAzoQPR/Pva2PJKU=";
+    hash = "sha256-FV6mz9354gd0YYG385DAN1v/SG2e+NNqEStnAub2Zac=";
   };
 
   base_github_url = "https://raw.githubusercontent.com/airbytehq/airbyte-platform/${
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   docker-compose-yaml = fetchurl {
     url = base_github_url + "docker-compose.yaml";
-    hash = "sha256-mYfKGNlKWG3c+Re52VouQa3uJLj5+mA7QY1+Cvnz21A=";
+    hash = "sha256-c+/daTFmc6B/aPTmhgvqAQjhClZF79HOykJCs+MkBPM=";
   };
 
   docker-compose-debug-yaml = fetchurl {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   dot-env = fetchurl {
     url = base_github_url + ".env";
-    hash = "sha256-aNWpaDG1tMlycpGYPEa8FqSJzkxdzzgpUMfZ8W7P+ao=";
+    hash = "sha256-ihDmLc9oXItBIE0Cj5gLznejsNcqyYWy8kbUm5fm7Lw=";
   };
 
   dot-env-dev = fetchurl {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   flags = fetchurl {
     url = base_github_url + "flags.yml";
-    hash = "sha256-r73o3CTq/A/DeyD89cQ+u/RHqcZtD5HSsC2bomN0Tt0=";
+    hash = "sha256-5OkCrhOlU9oxztGII314yuI3/QY+XxWDiyoiqNFFGp4=";
   };
 
   temporal-yaml = fetchurl {
