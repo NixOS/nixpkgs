@@ -64,6 +64,10 @@ stdenv.mkDerivation rec {
     ocamlPackages.zarith
   ];
 
+  propagatedBuildInputs = [
+    gprbuild
+  ];
+
   postPatch = ''
     # gnat2why/gnat_src points to the GNAT sources
     tar xf ${gnat.cc.src} gcc-${gnat.cc.version}/gcc/ada
@@ -77,6 +81,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install-all
     cp -a ./install/. $out
+    mkdir $out/share/gpr
+    ln -s $out/lib/gnat/* $out/share/gpr/
   '';
 
   meta = with lib; {
