@@ -58,6 +58,6 @@ rustPlatform.buildRustPackage rec {
     description = "LibSQL with extended capabilities like HTTP protocol, replication, and more";
     homepage = "https://github.com/libsql/sqld";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya shyim ];
   };
 }
