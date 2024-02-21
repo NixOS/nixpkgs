@@ -134,6 +134,8 @@ in
             Group = cfg.group;
             RemoveIPC = true;
             PrivateTmp = true;
+            # https://github.com/twosigma/nsncd/pull/33/files#r1496927653
+            Environment = [ "NSNCD_HANDOFF_TIMEOUT=10" ];
             NoNewPrivileges = true;
             RestrictSUIDSGID = true;
             ProtectSystem = "strict";
