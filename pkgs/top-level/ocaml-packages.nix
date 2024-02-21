@@ -667,6 +667,8 @@ let
 
     ### I ###
 
+    icalendar = callPackage ../development/ocaml-modules/icalendar { };
+
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
     index = callPackage ../development/ocaml-modules/index { mtime = mtime_1; };
