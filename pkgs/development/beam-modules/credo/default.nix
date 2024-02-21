@@ -43,8 +43,7 @@ beamPackages.mixRelease rec {
   preFixup = ''
     wrapProgram $out/bin/credo \
       --suffix PATH : ${lib.makeBinPath [ elixir ]} \
-      --set MIX_REBAR3 ${rebar3}/bin/rebar3 \
-      --set color_prompt yes
+      --set MIX_REBAR3 ${rebar3}/bin/rebar3
   '';
 
   meta = with lib; {
