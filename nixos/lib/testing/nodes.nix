@@ -16,14 +16,14 @@ let
 
   inherit (hostPkgs) hostPlatform pkgsNative;
 
-  guestPkgs =
+  guestSystem =
     if hostPlatform.isLinux
-    then hostPkgs
+    then hostPkgs.system
     else
       let
         hostToGuest = {
-          "x86_64-darwin" = pkgsNative.gnu64;
-          "aarch64-darwin" = pkgsNative.aarch64-multiplatform;
+          "x86_64-darwin" = "x86_64-linux";
+          "aarch64-darwin" = "aarch64-linux";
         };
 
         supportedHosts = lib.concatStringsSep ", " (lib.attrNames hostToGuest);
@@ -47,14 +47,13 @@ let
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
               virtualisation.host.pkgs = hostPkgs;
-              nixpkgs.pkgs = guestPkgs;
             })
           ({ options, ... }: {
             key = "nodes.nix-pkgs";
             config = optionalAttrs (!config.node.pkgsReadOnly) (
               mkIf (!options.nixpkgs.pkgs.isDefined) {
                 # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
-                nixpkgs.system = hostPlatform.system;
+                nixpkgs.system = guestSystem;
               }
             );
           })
