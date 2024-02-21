@@ -62,7 +62,6 @@ get_imds() {
 
 try_decompress() {
   ftype=$(file --brief "$1")
-  echo "ftype: $ftype"
   case $ftype in
     gzip*)
       echo "decompressing: $1"
