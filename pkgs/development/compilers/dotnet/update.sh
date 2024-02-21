@@ -359,6 +359,13 @@ Examples:
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
 
+    aspnetcore_sources="$(platform_sources "$aspnetcore_files")"
+    runtime_sources="$(platform_sources "$runtime_files")"
+    sdk_sources="$(platform_sources "$sdk_files")"
+
+    aspnetcore_packages="$(aspnetcore_packages "${aspnetcore_version}")"
+    sdk_packages="$(sdk_packages "${runtime_version}")"
+
     result=$(mktemp)
     trap "rm -f $result" TERM INT EXIT
 
@@ -368,20 +375,20 @@ Examples:
 {
   aspnetcore_$major_minor_underscore = buildAspNetCore {
     version = \"${aspnetcore_version}\";
-    $(platform_sources "$aspnetcore_files")
+    $aspnetcore_sources
   };
 
   runtime_$major_minor_underscore = buildNetRuntime {
     version = \"${runtime_version}\";
-    $(platform_sources "$runtime_files")
+    $runtime_sources
   };
 
   sdk_$major_minor_underscore = buildNetSdk {
     version = \"${sdk_version}\";
-    $(platform_sources "$sdk_files")
+    $sdk_sources
     packages = { fetchNuGet }: [
-$(aspnetcore_packages "${aspnetcore_version}")
-$(sdk_packages "${runtime_version}")
+$aspnetcore_packages
+$sdk_packages
     ];
   };
 }" > "${result}"
