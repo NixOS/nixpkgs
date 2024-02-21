@@ -8642,6 +8642,7 @@ with pkgs;
   };
 
   gnucap = callPackage ../applications/science/electronics/gnucap { };
+  gnucap-full = gnucap.withPlugins(p: [ p.verilog ]);
 
   gnu-cim = callPackage ../development/compilers/gnu-cim { };
 
@@ -11652,6 +11653,8 @@ with pkgs;
   openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
     stdenv = clangStdenv;
   };
+
+  namespaced-openvpn = python3Packages.callPackage ../tools/networking/namespaced-openvpn { };
 
   oq = callPackage ../development/tools/oq { };
 
@@ -16296,6 +16299,8 @@ with pkgs;
   gnostic = callPackage ../development/compilers/gnostic { };
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
+
+  gocover-cobertura = callPackage ../development/tools/gocover-cobertura { };
 
   gobang = callPackage ../development/tools/database/gobang {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
@@ -31032,8 +31037,6 @@ with pkgs;
 
   dsf2flac = callPackage ../applications/audio/dsf2flac { };
 
-  dunst = callPackage ../applications/misc/dunst { };
-
   dust = callPackage ../by-name/du/dust/package.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit;
   };
@@ -31760,7 +31763,7 @@ with pkgs;
   firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (gnome) adwaita-icon-theme;
     channel = "developer-edition";
-    generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
+    generated = import ../applications/networking/browsers/firefox-bin/developer-edition_sources.nix;
   };
 
   firefox-devedition-bin = res.wrapFirefox firefox-devedition-bin-unwrapped {

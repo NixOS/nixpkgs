@@ -90,8 +90,6 @@ let
     inherit (cfg) packages package;
   };
 
-  fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
-
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;

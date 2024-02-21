@@ -18,6 +18,8 @@ buildGoModule rec {
     export HOME="$(mktemp -d)"
   '';
 
+  subPackages = [ "." ];
+
   ldflags = [
     "-s"
     "-w"
