@@ -52,7 +52,6 @@ let
     pkgsMusl = true;
     pkgsStatic = true;
     pkgsCross = true;
-    pkgsNative = true;
     pkgsi686Linux = true;
   };
 
