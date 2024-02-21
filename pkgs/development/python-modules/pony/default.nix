@@ -32,6 +32,14 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests are outdated
     "test_method"
+    # https://github.com/ponyorm/pony/issues/704
+    "test_composite_param"
+    "test_equal_json"
+    "test_equal_list"
+    "test_len"
+    "test_ne"
+    "test_nonzero"
+    "test_query"
   ];
 
   pythonImportsCheck = [
