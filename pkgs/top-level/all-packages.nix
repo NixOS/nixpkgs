@@ -40621,8 +40621,6 @@ with pkgs;
 
   nut = callPackage ../applications/misc/nut { };
 
-  nhentai = callPackage ../applications/misc/nhentai { };
-
   nsncd = callPackage ../os-specific/linux/nsncd { };
 
   nvd = callPackage ../tools/package-management/nvd { };
