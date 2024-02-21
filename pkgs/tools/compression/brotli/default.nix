@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MvceRcle2dSkkucC2PlsCizsIf8iv95d8Xjqew266wc=";
   };
 
+  dontFixCmake = true;
+
   patches = [
     # revert runpath change, breaks curl on darwin:
     #   https://github.com/NixOS/nixpkgs/pull/254532#issuecomment-1722337476
