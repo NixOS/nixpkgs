@@ -12374,6 +12374,8 @@ self: super: with self; {
 
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
+  qcs-sdk-python = callPackage ../development/python-modules/qcs-sdk-python { };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   qdldl = callPackage ../development/python-modules/qdldl { };
@@ -12484,6 +12486,8 @@ self: super: with self; {
   questionary = callPackage ../development/python-modules/questionary { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
+
+  quil = callPackage ../development/python-modules/quil { };
 
   qutip = callPackage ../development/python-modules/qutip { };
 
