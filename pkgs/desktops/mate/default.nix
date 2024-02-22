@@ -87,7 +87,6 @@ let
       mate-netbook
       mate-power-manager
       mate-screensaver
-      mate-sensors-applet
       mate-system-monitor
       mate-terminal
       mate-user-guide
