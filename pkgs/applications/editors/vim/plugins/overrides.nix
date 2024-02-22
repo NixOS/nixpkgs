@@ -674,6 +674,10 @@
     dependencies = with self; [ denops-vim ];
   };
 
+  ddc-filter-sorter_rank = super.ddc-filter-sorter_rank.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };

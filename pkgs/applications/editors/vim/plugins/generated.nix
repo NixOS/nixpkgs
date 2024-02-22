@@ -2922,6 +2922,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/ddc-filter-matcher_head/";
   };
 
+  ddc-filter-sorter_rank = buildVimPlugin {
+    pname = "ddc-filter-sorter_rank";
+    version = "2023-09-11";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-filter-sorter_rank";
+      rev = "fccbd5892dc57f44f07cddcbef9d465838b36cee";
+      sha256 = "1cs4c7q8r60q7pxacl0f091ap9kjsqmc19mlb2rwrwi76v6x1avs";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-filter-sorter_rank/";
+  };
+
   ddc-source-lsp = buildVimPlugin {
     pname = "ddc-source-lsp";
     version = "2024-01-15";
