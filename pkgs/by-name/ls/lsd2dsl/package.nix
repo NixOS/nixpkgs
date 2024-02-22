@@ -1,21 +1,21 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeDesktopItem, copyDesktopItems, cmake
-, boost, libvorbis, libsndfile, minizip, gtest, qtwebkit }:
+, boost, libvorbis, libsndfile, minizip, gtest, qt5 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lsd2dsl";
   version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "nongeneric";
-    repo = pname;
+    repo = "lsd2dsl";
     rev = "v${version}";
     sha256 = "sha256-PLgfsVVrNBTxI4J0ukEOFRoBkbmB55/sLNn5KyiHeAc=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isLinux copyDesktopItems;
+  nativeBuildInputs = [ cmake qt5.wrapQtAppsHook ] ++ lib.optional stdenv.isLinux copyDesktopItems;
 
-  buildInputs = [ boost libvorbis libsndfile minizip gtest qtwebkit ];
+  buildInputs = [ boost libvorbis libsndfile minizip gtest qt5.qtwebkit ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=missing-braces";
 
