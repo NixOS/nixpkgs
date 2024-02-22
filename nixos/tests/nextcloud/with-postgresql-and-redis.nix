@@ -40,7 +40,7 @@ in {
         };
         extraAppsEnable = true;
         extraApps = {
-          inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push;
+          inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push notes;
         };
       };
 
@@ -92,5 +92,7 @@ in {
 
     # redis cache should not be empty
     nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
+
+    nextcloud.fail("curl -f http://nextcloud/nix-apps/notes/lib/AppInfo/Application.php")
   '';
 })) args
