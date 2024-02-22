@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , fetchpatch
 , gitUpdater
+, nixosTests
 , cmake
 , content-hub
 , gettext
@@ -121,7 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/share/{morph-browser/morph-browser-splash.svg,lomiri-app-launch/splash/morph-browser.svg}
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    tests.standalone = nixosTests.morph-browser;
+  };
 
   meta = with lib; {
     description = "Lightweight web browser tailored for Ubuntu Touch";
