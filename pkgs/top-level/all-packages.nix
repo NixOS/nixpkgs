@@ -4972,8 +4972,6 @@ with pkgs;
 
   dapr-cli = callPackage ../development/tools/dapr/cli { };
 
-  das = callPackage ../tools/security/das { };
-
   dasel = callPackage ../applications/misc/dasel { };
 
   dasher = callPackage ../applications/accessibility/dasher { };
@@ -23679,8 +23677,6 @@ with pkgs;
   libwacom = callPackage ../development/libraries/libwacom { };
 
   libwacom-surface = callPackage ../development/libraries/libwacom/surface.nix { };
-
-  lightning = callPackage ../development/libraries/lightning { };
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
