@@ -2910,6 +2910,18 @@ final: prev:
     meta.homepage = "https://github.com/nvimdev/dashboard-nvim/";
   };
 
+  ddc-vim = buildVimPlugin {
+    pname = "ddc.vim";
+    version = "2024-02-09";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc.vim";
+      rev = "e5daae126a42e6c736af9743fbb69263d117f328";
+      sha256 = "0iq3bbf07g12mn8m2jz7w2phr3sb2gzy6ajc00316dvy4l65x5jh";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc.vim/";
+  };
+
   debugprint-nvim = buildVimPlugin {
     pname = "debugprint.nvim";
     version = "2024-07-28";

@@ -662,6 +662,10 @@
     '';
   };
 
+  ddc-vim = super.ddc-vim.overrideAttrs {
+    dependencies = with self; [ denops-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };
