@@ -27,6 +27,20 @@ in
     touch $out
   '';
 
+  compress-lerc = runCommand "${gdal.pname}-compress-lerc" { } ''
+    ${gdal}/bin/gdal_create \
+      -a_srs "EPSG:4326" \
+      -of GTiff \
+      -ot UInt16 \
+      -a_nodata 255 \
+      -burn 0 \
+      -outsize 800 600 \
+      -co COMPRESS=LERC \
+      test.tif
+    ${gdal}/bin/gdalinfo ./test.tif
+    touch $out
+  '';
+
   vector-file = runCommand "${pname}-vector-file" { } ''
     echo -e "Latitude,Longitude,Name\n48.1,0.25,'Test point'" > test.csv
     ${lib.getExe' gdal "ogrinfo"} ./test.csv
