@@ -19,6 +19,10 @@
 , cpuAcceleration ? null
 }:
 
+
+# CUDA is only implemented for single precission
+assert enableCuda -> singlePrec;
+
 let
   inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot;
 
