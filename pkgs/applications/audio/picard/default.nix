@@ -60,7 +60,7 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
   ];
 
-  setupPyGlobalFlags = [ "build" "--disable-autoupdate" ];
+  setupPyGlobalFlags = [ "build" "--disable-autoupdate" "--localedir=$out/share/locale" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
