@@ -34,10 +34,14 @@ beamPackages.mixRelease rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mix escript.build
 
     mkdir -p $out/bin
     mv ./credo $out/bin
+
+    runHook postInstall
   '';
 
   preFixup = ''
