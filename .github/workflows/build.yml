@@ -46,14 +46,14 @@ jobs:
     runs-on: ${{matrix.platform}}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: "true"
 
       - uses: lukka/get-cmake@latest
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@v10
+        uses: lukka/run-vcpkg@v11
         with:
           vcpkgJsonGlob: "vcpkg.json"
 
@@ -101,28 +101,28 @@ jobs:
           buildPreset: ${{matrix.build_preset}}
 
       - name: Upload wfs-extract
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: wfs-extract-${{matrix.release_name}}
           path: build/${{matrix.configure_preset}}/wfs-extract/Release
       - name: Upload wfs-file-injector
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: wfs-file-injector-${{matrix.release_name}}
           path: build/${{matrix.configure_preset}}/wfs-file-injector/Release
       - name: Upload wfs-fuse
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: wfs-fuse-${{matrix.release_name}}
           path: build/${{matrix.configure_preset}}/wfs-fuse/Release
         if: matrix.platform != 'windows-latest'
       - name: Upload wfs-info
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: wfs-info-${{matrix.release_name}}
           path: build/${{matrix.configure_preset}}/wfs-info/Release
       - name: Upload wfs-reencryptor
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: wfs-reencryptor-${{matrix.release_name}}
           path: build/${{matrix.configure_preset}}/wfs-reencryptor/Release
