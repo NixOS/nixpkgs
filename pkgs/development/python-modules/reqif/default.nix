@@ -9,11 +9,12 @@
 , python
 , pythonOlder
 , pythonRelaxDepsHook
+, xmlschema
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.35";
+  version = "0.0.40";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "strictdoc-project";
     repo = "reqif";
     rev = "refs/tags/${version}";
-    hash = "sha256-3yOLOflPqzJRv3qCQXFK3rIFftBq8FkYy7XhOfWH82Y=";
+    hash = "sha256-VQvwynFv/DN5RHT00rxtDcJ9wsEpKdsh3rdyUakBr2Q=";
   };
 
   postPatch = ''
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     beautifulsoup4
     lxml
     jinja2
+    xmlschema
   ];
 
   nativeCheckInputs = [
