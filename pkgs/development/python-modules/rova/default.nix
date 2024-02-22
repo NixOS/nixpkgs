@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "rova";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "GidoHakvoort";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TLL9Ta+7Xd55hGTTXjc6CBMj+tW1LpFrprpsnGqZvkQ=";
+    hash = "sha256-6tICjph+ffS6OSMxzR4ANB4Q6sG1AKAgUN83DyEGpvo=";
   };
 
   propagatedBuildInputs = [
