@@ -1,23 +1,39 @@
 { lib
-, stdenv
 , fetchurl
 , libopcodes
+, libiberty
+, stdenv
+, libbfd
+, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lightning";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchurl {
-    url = "mirror://gnu/lightning/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-CsqCQt6tF9YhF7z8sHjmqeqFbMgXQoE8noOUvM5zs+I=";
+    url = "mirror://gnu/lightning/lightning-${finalAttrs.version}.tar.gz";
+    hash = "sha256-wEXHozoAr/v+sRBm+lAsA5kuR0piupWXeq0G28FMaCk=";
   };
 
-  nativeCheckInputs = [ libopcodes ];
+  outputs = [ "out" "dev" "info" ];
+
+  buildInputs = [
+    libopcodes
+    libbfd
+    libiberty
+    zlib
+  ];
+
+  strictDeps = true;
+
+  configureFlags = [
+    (lib.enableFeature true "disassembler")
+  ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/lightning/";
     description = "Run-time code generation library";
     longDescription = ''
@@ -26,9 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
       it abstracts over the target CPU, as it exposes to the clients a
       standardized RISC instruction set inspired by the MIPS and SPARC chips.
     '';
-    maintainers = with maintainers; [ AndersonTorres ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = with lib.licenses; [ lgpl3Plus ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin; # failing tests
   };
 })
