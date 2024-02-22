@@ -1,2 +1,8 @@
-Because pkgs/by-name/fo/foo exists, the attribute `pkgs.foo` must be defined as `callPackage pkgs/by-name/fo/foo/package.nix { ... }`. This is however not the case: The attribute is defined in all-packages.nix:4:3 as
-	foo = self.bar;
+- Because pkgs/by-name/fo/foo exists, the attribute `pkgs.foo` must be defined like
+
+    foo = callPackage pkgs/by-name/fo/foo/package.nix { /* ... */ };
+
+  This is however not the case.
+  It is defined in all-packages.nix:4 as
+
+    foo = self.bar;

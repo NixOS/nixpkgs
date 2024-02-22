@@ -188,28 +188,50 @@ impl fmt::Display for NixpkgsProblem {
                     "
                     - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
 
-                        {package_name} = callPackage {} {{ /* ... */ }}
+                        {package_name} = callPackage {} {{ /* ... */ }};
 
                       This is however not the case: The first `callPackage` argument is the wrong path.
                       It is defined in {}:{}:{} as
 
-                        {package_name} = callPackage {} {{ /* ... */ }}",
+                        {package_name} = callPackage {} {{ /* ... */ }};",
                     structure::relative_dir_for_package(package_name).display(),
                     create_path_expr(file, expected_path),
                     file.display(), line, column,
                     create_path_expr(file, actual_path),
                 },
-            NixpkgsProblem::NonSyntacticCallPackage { package_name, file, line, column, definition } =>
-                write!(
+            NixpkgsProblem::NonSyntacticCallPackage { package_name, file, line, column, definition } => {
+                // This is needed such multi-line definitions don't look odd
+                // A bit round-about, but it works and we might not need anything more complicated
+                let definition_indented =
+                    // The entire code should be indented 4 spaces
+                    textwrap::indent(
+                        // But first we want to strip the code's natural indentation
+                        &textwrap::dedent(
+                            // The definition _doesn't_ include the leading spaces, but we can
+                            // recover those from the column
+                            &format!("{}{definition}",
+                            " ".repeat(column - 1)),
+                        ),
+                        "    ",
+                    );
+                writedoc!(
                     f,
-                    "Because {} exists, the attribute `pkgs.{package_name}` must be defined as `callPackage {} {{ ... }}`. This is however not the case: The attribute is defined in {}:{}:{} as\n\t{}",
+                    "
+                    - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
+
+                        {package_name} = callPackage {} {{ /* ... */ }};
+
+                      This is however not the case.
+                      It is defined in {}:{} as
+
+                    {}",
                     structure::relative_dir_for_package(package_name).display(),
                     structure::relative_file_for_package(package_name).display(),
                     file.display(),
                     line,
-                    column,
-                    definition,
-                ),
+                    definition_indented,
+                )
+            }
             NixpkgsProblem::NonDerivation { relative_package_file, package_name } =>
                 write!(
                     f,
