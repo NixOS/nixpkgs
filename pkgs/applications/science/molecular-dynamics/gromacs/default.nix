@@ -75,6 +75,7 @@ in stdenv.mkDerivation rec {
     lapack
   ] ++ lib.optional enableMpi mpi
   ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cccl
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api
