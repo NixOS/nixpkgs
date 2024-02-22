@@ -6,8 +6,8 @@
 , linkFarm
 , writeShellScript
 , formats
-, containerRuntimePath
-, configTemplate
+, containerRuntimePath ? null
+, configTemplate ? null
 , configTemplatePath ? null
 , libnvidia-container
 , cudaPackages
@@ -91,7 +91,7 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  preConfigure = ''
+  preConfigure = lib.optionalString (containerRuntimePath != null) ''
     # Ensure the runc symlink isn't broken:
     if ! readlink --quiet --canonicalize-existing "${isolatedContainerRuntimePath}/runc" ; then
       echo "${isolatedContainerRuntimePath}/runc: broken symlink" >&2
@@ -109,7 +109,7 @@ buildGoModule rec {
     in
     [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (containerRuntimePath != null) ''
     mkdir -p $out/etc/nvidia-container-runtime
 
     # nvidia-container-runtime invokes docker-runc or runc if that isn't
