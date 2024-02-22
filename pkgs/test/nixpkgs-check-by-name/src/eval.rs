@@ -52,22 +52,19 @@ struct Location {
 }
 
 impl Location {
-    // Creates a [String] from a [Location], in a format like `{file}:{line}:{column}`,
-    // where `file` is relative to the given [Path].
-    fn to_relative_string(&self, nixpkgs_path: &Path) -> anyhow::Result<String> {
-        let relative = self.file.strip_prefix(nixpkgs_path).with_context(|| {
-            format!(
-                "An attributes location ({}) is outside Nixpkgs ({})",
-                self.file.display(),
-                nixpkgs_path.display()
-            )
-        })?;
-        Ok(format!(
-            "{}:{}:{}",
-            relative.display(),
-            self.line,
-            self.column
-        ))
+    // Returns the [file] field, but relative to Nixpkgs
+    fn relative_file(&self, nixpkgs_path: &Path) -> anyhow::Result<PathBuf> {
+        Ok(self
+            .file
+            .strip_prefix(nixpkgs_path)
+            .with_context(|| {
+                format!(
+                    "The file ({}) is outside Nixpkgs ({})",
+                    self.file.display(),
+                    nixpkgs_path.display()
+                )
+            })?
+            .to_path_buf())
     }
 }
 
@@ -295,16 +292,24 @@ fn by_name(
                     // We should expect manual definitions to have a location, otherwise we can't
                     // enforce the expected format
                     if let Some(location) = location {
-                        // Parse the Nix file in the location and figure out whether it's an
-                        // attribute definition of the form `= callPackage <arg1> <arg2>`,
+                        // Parse the Nix file in the location
+                        let nix_file = nix_file_store.get(&location.file)?;
+
+                        // The relative path of the Nix file, for error messages
+                        let relative_file =
+                            location.relative_file(nixpkgs_path).with_context(|| {
+                                format!(
+                                    "Failed to resolve location file of attribute {attribute_name}"
+                                )
+                            })?;
+
+                        // Figure out whether it's an attribute definition of the form `= callPackage <arg1> <arg2>`,
                         // returning the arguments if so.
-                        let optional_syntactic_call_package = nix_file_store
-                            .get(&location.file)?
-                            .call_package_argument_info_at(
+                        let optional_syntactic_call_package = nix_file.call_package_argument_info_at(
                             location.line,
                             location.column,
                             nixpkgs_path,
-                        )?;
+                        ).with_context(|| format!("Failed to get the definition info for attribute {attribute_name}"))?;
 
                         // At this point, we completed two different checks for whether it's a
                         // `callPackage`
@@ -312,7 +317,9 @@ fn by_name(
                             // Something like `<attr> = foo`
                             (_, Err(definition)) => NixpkgsProblem::NonSyntacticCallPackage {
                                 package_name: attribute_name.to_owned(),
-                                location: location.to_relative_string(nixpkgs_path)?,
+                                file: relative_file,
+                                line: location.line,
+                                column: location.column,
                                 definition,
                             }
                             .into(),
@@ -338,13 +345,19 @@ fn by_name(
                                             Tight
                                         })
                                     } else {
-                                        NixpkgsProblem::WrongCallPackage {
-                                            relative_package_file: relative_package_file.to_owned(),
+                                        // Wrong path
+                                        NixpkgsProblem::WrongCallPackagePath {
                                             package_name: attribute_name.to_owned(),
+                                            file: relative_file,
+                                            line: location.line,
+                                            column: location.column,
+                                            actual_path: path,
+                                            expected_path: relative_package_file,
                                         }
                                         .into()
                                     }
                                 } else {
+                                    // No path
                                     NixpkgsProblem::WrongCallPackage {
                                         relative_package_file: relative_package_file.to_owned(),
                                         package_name: attribute_name.to_owned(),

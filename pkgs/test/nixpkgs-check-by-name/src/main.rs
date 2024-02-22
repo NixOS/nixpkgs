@@ -249,7 +249,7 @@ mod tests {
 
         if actual_errors != expected_errors {
             panic!(
-                "Failed test case {name}, expected these errors:\n\n{}\n\nbut got these:\n\n{}",
+                "Failed test case {name}, expected these errors:\n=======\n{}\n=======\nbut got these:\n=======\n{}\n=======",
                 expected_errors, actual_errors
             );
         }

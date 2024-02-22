@@ -299,6 +299,7 @@ dependencies = [
  "itertools",
  "lazy_static",
  "regex",
+ "relative-path",
  "rnix",
  "rowan",
  "serde",
@@ -391,6 +392,12 @@ name = "regex-syntax"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5ea92a5b6195c6ef2a0295ea818b312502c6fc94dde986c5553242e18fd4ce2"
+
+[[package]]
+name = "relative-path"
+version = "1.9.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e898588f33fdd5b9420719948f9f2a32c922a246964576f71ba7f24f80610fbc"
 
 [[package]]
 name = "rnix"

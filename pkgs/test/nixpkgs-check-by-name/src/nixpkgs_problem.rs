@@ -1,8 +1,11 @@
 use crate::structure;
 use crate::utils::PACKAGE_NIX_FILENAME;
+use indoc::writedoc;
+use relative_path::RelativePath;
 use std::ffi::OsString;
 use std::fmt;
 use std::io;
+use std::path::Path;
 use std::path::PathBuf;
 
 /// Any problem that can occur when checking Nixpkgs
@@ -44,9 +47,19 @@ pub enum NixpkgsProblem {
         relative_package_file: PathBuf,
         package_name: String,
     },
+    WrongCallPackagePath {
+        package_name: String,
+        file: PathBuf,
+        line: usize,
+        column: usize,
+        actual_path: PathBuf,
+        expected_path: PathBuf,
+    },
     NonSyntacticCallPackage {
         package_name: String,
-        location: String,
+        file: PathBuf,
+        line: usize,
+        column: usize,
         definition: String,
     },
     NonDerivation {
@@ -169,12 +182,32 @@ impl fmt::Display for NixpkgsProblem {
                     "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}` with a non-empty second argument.",
                     relative_package_file.display()
                 ),
-            NixpkgsProblem::NonSyntacticCallPackage { package_name, location, definition } =>
+            NixpkgsProblem::WrongCallPackagePath { package_name, file, line, column, actual_path, expected_path } =>
+                writedoc! {
+                    f,
+                    "
+                    - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
+
+                        {package_name} = callPackage {} {{ /* ... */ }}
+
+                      This is however not the case: The first `callPackage` argument is the wrong path.
+                      It is defined in {}:{}:{} as
+
+                        {package_name} = callPackage {} {{ /* ... */ }}",
+                    structure::relative_dir_for_package(package_name).display(),
+                    create_path_expr(file, expected_path),
+                    file.display(), line, column,
+                    create_path_expr(file, actual_path),
+                },
+            NixpkgsProblem::NonSyntacticCallPackage { package_name, file, line, column, definition } =>
                 write!(
                     f,
-                    "Because {} exists, the attribute `pkgs.{package_name}` must be defined as `callPackage {} {{ ... }}`. This is however not the case: The attribute is defined in {location} as\n\t{}",
+                    "Because {} exists, the attribute `pkgs.{package_name}` must be defined as `callPackage {} {{ ... }}`. This is however not the case: The attribute is defined in {}:{}:{} as\n\t{}",
                     structure::relative_dir_for_package(package_name).display(),
                     structure::relative_file_for_package(package_name).display(),
+                    file.display(),
+                    line,
+                    column,
                     definition,
                 ),
             NixpkgsProblem::NonDerivation { relative_package_file, package_name } =>
@@ -283,4 +316,18 @@ impl fmt::Display for NixpkgsProblem {
                 ),
        }
     }
+}
+
+/// Creates a Nix path expression that when put into Nix file `from_file`, would point to the `to_file`.
+fn create_path_expr(from_file: impl AsRef<Path>, to_file: impl AsRef<Path>) -> String {
+    // FIXME: Clean these unwrap's up
+    // But these should never trigger because we only call this function with relative paths, and only
+    // with `from_file` being an actual file (so there's always a parent)
+    let from = RelativePath::from_path(&from_file)
+        .unwrap()
+        .parent()
+        .unwrap();
+    let to = RelativePath::from_path(&to_file).unwrap();
+    let rel = from.relative(to);
+    format!("./{rel}")
 }
