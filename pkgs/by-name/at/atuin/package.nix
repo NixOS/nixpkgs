@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , rustPlatform
 , libiconv
@@ -18,6 +19,15 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-fuVSn1vhKn2+Tw5f6zBYHFW3QSL4eisZ6d5pxsj5hh4=";
   };
+
+  patches = [
+    # atuin with bash-preexec wasn't recording history properly after searching,
+    # backport recent fix until next release
+    (fetchpatch {
+      url = "https://github.com/atuinsh/atuin/commit/cb11af25afddbad552d337a9c82e74ac4302feca.patch";
+      sha256 = "sha256-cG99aLKs5msatT7vXiX9Rn5xur2WUjQ/U33nOxuon7I=";
+    })
+  ];
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
