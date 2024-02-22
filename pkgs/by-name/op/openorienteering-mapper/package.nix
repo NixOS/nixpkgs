@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , fetchpatch
 , clipper
@@ -10,14 +9,11 @@
 , gdal
 , ninja
 , proj
-, qtimageformats
-, qtlocation
-, qtsensors
-, qttools
+, qt5
 , zlib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
   version = "0.9.5";
 
@@ -40,7 +36,8 @@ mkDerivation rec {
     cmake
     doxygen
     ninja
-    qttools
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -48,9 +45,9 @@ mkDerivation rec {
     cups
     gdal
     proj
-    qtimageformats
-    qtlocation
-    qtsensors
+    qt5.qtimageformats
+    qt5.qtlocation
+    qt5.qtsensors
     zlib
   ];
 
