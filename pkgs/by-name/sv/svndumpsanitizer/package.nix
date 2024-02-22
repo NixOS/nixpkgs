@@ -9,6 +9,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "dsuni";
     repo = "svndumpsanitizer";
+    # https://github.com/dsuni/svndumpsanitizer/issues/22
     rev = "cbf917c000ee42fbb31a8667014a4357bbfdd6a6";
     hash = "sha256-lkVX11t0AF4y1EQQFXjPTrJmsfJhgx5Y1xj1VDlsbH0=";
   };
