@@ -5,6 +5,7 @@
 , meson
 , ninja
 , pkg-config
+, gi-docgen
 , gobject-introspection
 , lcms2
 , vala
@@ -12,19 +13,20 @@
 
 stdenv.mkDerivation rec {
   pname = "babl";
-  version = "0.1.106";
+  version = "0.1.108";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/babl-${version}.tar.xz";
-    hash = "sha256-0yUTXTME8IjBNMxiABOs8DXeLl0SWlCi2RBU5zd8QV8=";
+    hash = "sha256-Jt7+neqresTQ4HbKtJwqDW69DfDDH9IJklpfB+3uFHU=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    gi-docgen
     gobject-introspection
     vala
   ];
@@ -32,6 +34,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     lcms2
   ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   meta = with lib; {
     description = "Image pixel format conversion library";
