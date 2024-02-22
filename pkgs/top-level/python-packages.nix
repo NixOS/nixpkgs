@@ -10255,6 +10255,8 @@ self: super: with self; {
 
   pybravia = callPackage ../development/python-modules/pybravia { };
 
+  pybrowsers = callPackage ../development/python-modules/pybrowsers { };
+
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
   pybtex = callPackage ../development/python-modules/pybtex { };
@@ -16247,6 +16249,8 @@ self: super: with self; {
   webdav4 = callPackage ../development/python-modules/webdav4 { };
 
   webdavclient3 = callPackage ../development/python-modules/webdavclient3 { };
+
+  webdriver-manager = callPackage ../development/python-modules/webdriver-manager { };
 
   webencodings = callPackage ../development/python-modules/webencodings { };
 
