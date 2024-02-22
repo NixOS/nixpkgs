@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2023.12.1";
+  version = "2024.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pyschlage";
     rev = "refs/tags/${version}";
-    hash = "sha256-RWM/76uqljWgKBWsMvGTggJllX0Qa9QaMM0hJbCvZgQ=";
+    hash = "sha256-kjAV7VHKp7WpT6dNjuzYMTlcXbyIB2MNZQXOckDLWF8=";
   };
 
   nativeBuildInputs = [
