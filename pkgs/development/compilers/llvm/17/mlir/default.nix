@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "-DLLVM_LINK_LLVM_DYLIB=off"
   ] ++ lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-    #"-DMLIR_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/mlir-tblgen"
+    "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.mlir}/bin/mlir-tblgen"
   ];
 
   outputs = [ "out" "dev" ];
