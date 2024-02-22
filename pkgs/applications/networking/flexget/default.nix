@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.18";
+  version = "3.11.19";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ykHBGZS/1cRBdMuZ6tz+3QY5cOBxt+Z2Dp3lKuTKj7w=";
+    hash = "sha256-XqZPhjuk3f9EbDTu+iX2U6uOXTn3rFdYjQNx5Prte88=";
   };
 
   postPatch = ''
