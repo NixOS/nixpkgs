@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, rocmPackages, python3, cargo, rustc, cmake, clang, zlib, libxml2, libedit, pkgs }:
+{ lib, fetchFromGitHub, rocmPackages, python3, cargo, rustc, cmake, clang, zlib, libxml2, libedit, rustPlatform }:
 
-pkgs.rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "zluda";
   version = "3";
 
@@ -24,6 +24,9 @@ pkgs.rustPlatform.buildRustPackage rec {
     rocmPackages.hipblas
     rocmPackages.rocm-cmake
     rocmPackages.hipfft
+  ];
+
+  nativeBuildInputs = [
     python3
     cargo
     rustc
@@ -52,7 +55,7 @@ pkgs.rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/vosen/ZLUDA";
     license = licenses.mit;
     maintainers = [
-      stdenv.lib.maintainers.errnoh
+      lib.maintainers.errnoh
     ];
   };
 }
