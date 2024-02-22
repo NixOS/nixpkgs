@@ -2958,6 +2958,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/ddc-ui-native/";
   };
 
+  ddc-ui-pum = buildVimPlugin {
+    pname = "ddc-ui-pum";
+    version = "2023-10-07";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-ui-pum";
+      rev = "6fd98ba227889883bbf75405506c451feaae6ef8";
+      sha256 = "1yy572i672ha5zlxkda6lv5mp2y5yq0sd1ffpa6my59rzv86ixr7";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-ui-pum/";
+  };
+
   ddc-vim = buildVimPlugin {
     pname = "ddc.vim";
     version = "2024-02-09";

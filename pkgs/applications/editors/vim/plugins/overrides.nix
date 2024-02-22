@@ -682,6 +682,10 @@
     dependencies = with self; [ ddc-vim ];
   };
 
+  ddc-ui-pum = super.ddc-ui-pum.overrideAttrs {
+    dependencies = with self; [ ddc-vim pum-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };
