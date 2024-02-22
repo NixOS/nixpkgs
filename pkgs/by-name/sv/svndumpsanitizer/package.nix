@@ -25,6 +25,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Alternative to svndumpfilter that discovers which nodes should actually be kept";
     homepage = "https://miria.homelinuxserver.org/svndumpsanitizer";
+    downloadPage = "https://github.com/dsuni/svndumpsanitizer";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lafrenierejm ];
     mainProgram = "svndumpsanitizer";
