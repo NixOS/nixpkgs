@@ -2910,6 +2910,18 @@ final: prev:
     meta.homepage = "https://github.com/nvimdev/dashboard-nvim/";
   };
 
+  ddc-source-lsp = buildVimPlugin {
+    pname = "ddc-source-lsp";
+    version = "2024-01-15";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-source-lsp";
+      rev = "ad43a10726ebdacea80fafee5034247816fb099d";
+      sha256 = "1agrpcq75j4m5ac7qs292kyq8aqwmm0filvpkw3775hcgv1gkxz3";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-source-lsp/";
+  };
+
   ddc-vim = buildVimPlugin {
     pname = "ddc.vim";
     version = "2024-02-09";

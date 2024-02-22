@@ -662,6 +662,10 @@
     '';
   };
 
+  ddc-source-lsp = super.ddc-source-lsp.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
   ddc-vim = super.ddc-vim.overrideAttrs {
     dependencies = with self; [ denops-vim ];
   };
