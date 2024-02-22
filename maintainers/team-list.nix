@@ -775,7 +775,6 @@ with lib.maintainers; {
     members = [
       aanderse
       drupol
-      etu
       ma27
       talyz
     ];
