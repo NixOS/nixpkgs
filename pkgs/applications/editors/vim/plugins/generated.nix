@@ -8833,6 +8833,18 @@ final: prev:
     meta.homepage = "https://github.com/frigoeu/psc-ide-vim/";
   };
 
+  pum-vim = buildVimPlugin {
+    pname = "pum.vim";
+    version = "2024-01-18";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "pum.vim";
+      rev = "19988d249e618808404c8d3fe70e7dcc9b51b784";
+      sha256 = "1q0dh929nz5qmfnv2wvz6fmr0rjy72cky5vv6s8c22p4bc249xx4";
+    };
+    meta.homepage = "https://github.com/Shougo/pum.vim/";
+  };
+
   purescript-vim = buildVimPlugin {
     pname = "purescript-vim";
     version = "2023-02-06";
