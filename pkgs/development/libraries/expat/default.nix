@@ -7,6 +7,7 @@
 , haskellPackages
 , luaPackages
 , ocamlPackages
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -14,12 +15,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
+    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
     sha256 = "1gnwihpfz4x18rwd6cbrdggmfqjzwsdfh1gpmc0ph21c4gq2097g";
   };
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   # CMake files incorrectly calculate library path from dev prefix
   # https://github.com/libexpat/libexpat/issues/501
   postFixup = ''
-    substituteInPlace $dev/lib/cmake/expat-${version}/expat-noconfig.cmake \
+    substituteInPlace $dev/lib/cmake/expat-${finalAttrs.version}/expat-noconfig.cmake \
       --replace "$"'{_IMPORT_PREFIX}' $out
   '';
 
@@ -54,6 +55,9 @@ stdenv.mkDerivation rec {
     inherit (perlPackages) XMLSAXExpat XMLParser;
     inherit (luaPackages) luaexpat;
     inherit (ocamlPackages) ocaml_expat;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -61,5 +65,6 @@ stdenv.mkDerivation rec {
     description = "A stream-oriented XML parser library written in C";
     platforms = platforms.all;
     license = licenses.mit; # expat version
+    pkgConfigModules = [ "expat" ];
   };
-}
+})

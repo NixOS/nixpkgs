@@ -23617,8 +23617,8 @@ with pkgs;
   in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
-    # Avoid update.nix conflicts with libxml2.
-    passthru = builtins.removeAttrs libxml2.passthru [ "updateScript" ];
+    # Avoid update.nix/tests conflicts with libxml2.
+    passthru = builtins.removeAttrs libxml2.passthru [ "updateScript" "tests" ];
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
       mkdir "$out/nix-support"
