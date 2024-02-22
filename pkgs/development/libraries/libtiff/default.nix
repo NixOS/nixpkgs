@@ -7,6 +7,7 @@
 , pkg-config
 , sphinx
 
+, lerc
 , libdeflate
 , libjpeg
 , xz
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
 
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
+    lerc
     libdeflate
     libjpeg
     xz
