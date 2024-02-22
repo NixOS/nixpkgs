@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     $AR rcs libmemstream.a memstream.o
+    sed -i memstream.h \
+      -e '1i#ifndef __ASSEMBLER__' \
+      -e '$a#endif'
   '';
 
   doCheck = true;
