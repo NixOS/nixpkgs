@@ -2946,6 +2946,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/ddc-source-lsp/";
   };
 
+  ddc-ui-native = buildVimPlugin {
+    pname = "ddc-ui-native";
+    version = "2024-01-10";
+    src = fetchFromGitHub {
+      owner = "Shougo";
+      repo = "ddc-ui-native";
+      rev = "3f370d0da93bd47bb3a937a0c8f8193582eee8c8";
+      sha256 = "1knfvwcd7wfiy1vh2m9gwr5wh1crn60mmvpjwdqa739m8nrdfw79";
+    };
+    meta.homepage = "https://github.com/Shougo/ddc-ui-native/";
+  };
+
   ddc-vim = buildVimPlugin {
     pname = "ddc.vim";
     version = "2024-02-09";

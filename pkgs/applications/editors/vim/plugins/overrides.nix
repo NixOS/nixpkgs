@@ -678,6 +678,10 @@
     dependencies = with self; [ ddc-vim ];
   };
 
+  ddc-ui-native = super.ddc-ui-native.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = with self; [ nvim-yarp ];
   };
