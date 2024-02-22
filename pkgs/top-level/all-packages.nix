@@ -10221,6 +10221,9 @@ with pkgs;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
 
+  inherit (callPackages ../build-support/node/fetch-pnpm-deps { })
+    fetchPnpmDeps pnpmConfigHook;
+
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs // { __attrsFailEvaluation = true; };
 
   nodePackages = dontRecurseIntoAttrs nodejs.pkgs // { __attrsFailEvaluation = true; };
