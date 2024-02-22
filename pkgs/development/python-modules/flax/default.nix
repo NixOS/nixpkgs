@@ -7,6 +7,7 @@
 , jax
 , msgpack
 , numpy
+, orbax-checkpoint
 , optax
 , pyyaml
 , rich
@@ -21,7 +22,7 @@
 , tensorflow
 }:
 
-buildPythonPackage rec {
+let flax = buildPythonPackage rec {
   pname = "flax";
   version = "0.7.5";
   pyproject = true;
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     jax
     msgpack
     numpy
+    orbax-checkpoint
     optax
     pyyaml
     rich
@@ -91,6 +93,21 @@ buildPythonPackage rec {
     "tests/checkpoints_test.py"
   ];
 
+  # Two clashing versions of protobuf (one provided by tensorflow, and the other one by orbax-checkpoint)
+  doCheck = false;
+  passthru.tests.check = flax.overridePythonAttrs (_: {
+    pname = "${pname}-check";
+    doCheck = true;
+    # We don't have to install because the only purpose
+    # of this passthru test is to, well, test.
+    # This fixes having to set `catchConflicts` to false.
+    # dontInstall = true;
+    catchConflicts = false;
+  });
+
+
+
+
   meta = with lib; {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
@@ -98,4 +115,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };
-}
+}; in flax
