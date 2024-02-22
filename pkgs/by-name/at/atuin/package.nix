@@ -25,6 +25,13 @@ rustPlatform.buildRustPackage rec {
     then "sha256-lHWgsVnjSeBmd7O4Fn0pUtTn4XbkBOAouaRHRozil50="
     else "sha256-LxfpllzvgUu7ZuD97n3W+el3bdOt5QGXzJbDQ0w8seo=";
 
+  # atuin's default features include 'check-updates', which do not make sense
+  # for distribution builds. List all other default features.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "client" "sync" "server" "clipboard"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
