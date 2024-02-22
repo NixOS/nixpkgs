@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     #"-DMLIR_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/mlir-tblgen"
   ];
 
-  outputs = [ "out" ];
+  outputs = [ "out" "dev" ];
 
   meta = llvm_meta // {
     homepage = "https://mlir.llvm.org/";
