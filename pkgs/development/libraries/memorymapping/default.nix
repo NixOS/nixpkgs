@@ -18,7 +18,10 @@ stdenv.mkDerivation {
 
     $CC -c src/fmemopen.c
     $AR rcs libmemorymapping.a fmemopen.o
-    sed -e '1i#include <stdio.h>' -i src/fmemopen.h
+    sed -i src/fmemopen.h \
+      -e '1i#ifndef __ASSEMBLER__' \
+      -e '1i#include <stdio.h>' \
+      -e '$a#endif'
 
     runHook postBuild
   '';
