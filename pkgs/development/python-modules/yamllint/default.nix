@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.33.0";
+  version = "1.35.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "adrienverge";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hWN5PhEAhckp250Dj7h5PpyH/E1jCi38O4VmMYgPtzE=";
+    hash = "sha256-+7Q2cPl4XElI2IfLAkteifFVTrGkj2IjZk7nPuc6eYM=";
   };
 
   nativeBuildInputs = [
