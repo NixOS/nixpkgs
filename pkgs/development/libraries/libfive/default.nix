@@ -2,6 +2,7 @@
 , stdenv
 , wrapQtAppsHook
 , fetchFromGitHub
+, unstableGitUpdater
 , cmake
 , ninja
 , pkg-config
@@ -17,7 +18,7 @@
 
 stdenv.mkDerivation {
   pname = "libfive";
-  version = "unstable-2023-06-07";
+  version = "0-unstable-2024-02-14";
 
   src = fetchFromGitHub {
     owner = "libfive";
@@ -94,6 +95,8 @@ stdenv.mkDerivation {
     "libfive.shape"
     "libfive.stdlib"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";

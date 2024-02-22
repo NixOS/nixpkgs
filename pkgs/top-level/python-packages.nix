@@ -10255,6 +10255,8 @@ self: super: with self; {
 
   pybravia = callPackage ../development/python-modules/pybravia { };
 
+  pybrowsers = callPackage ../development/python-modules/pybrowsers { };
+
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
   pybtex = callPackage ../development/python-modules/pybtex { };
@@ -12372,6 +12374,8 @@ self: super: with self; {
 
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
+  qcs-sdk-python = callPackage ../development/python-modules/qcs-sdk-python { };
+
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
   qdldl = callPackage ../development/python-modules/qdldl { };
@@ -12482,6 +12486,8 @@ self: super: with self; {
   questionary = callPackage ../development/python-modules/questionary { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
+
+  quil = callPackage ../development/python-modules/quil { };
 
   qutip = callPackage ../development/python-modules/qutip { };
 
@@ -16248,6 +16254,8 @@ self: super: with self; {
 
   webdavclient3 = callPackage ../development/python-modules/webdavclient3 { };
 
+  webdriver-manager = callPackage ../development/python-modules/webdriver-manager { };
+
   webencodings = callPackage ../development/python-modules/webencodings { };
 
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
@@ -16319,6 +16327,8 @@ self: super: with self; {
   whois = callPackage ../development/python-modules/whois { };
 
   whois-api = callPackage ../development/python-modules/whois-api { };
+
+  whoisdomain = callPackage ../development/python-modules/whoisdomain { };
 
   whoosh = callPackage ../development/python-modules/whoosh { };
 
