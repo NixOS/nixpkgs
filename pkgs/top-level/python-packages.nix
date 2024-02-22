@@ -2708,6 +2708,8 @@ self: super: with self; {
 
   dawg-python = callPackage ../development/python-modules/dawg-python { };
 
+  dazl = callPackage ../development/python-modules/dazl { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
@@ -16299,6 +16301,8 @@ self: super: with self; {
   wheezy-captcha = callPackage ../development/python-modules/wheezy-captcha { };
 
   wheezy-template = callPackage ../development/python-modules/wheezy-template { };
+
+  whenever = callPackage ../development/python-modules/whenever { };
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 

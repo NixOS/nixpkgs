@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "1.10.2";
+  version = "2.0.3";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -11,10 +11,12 @@ python3Packages.buildPythonApplication rec {
     owner = "hyprland-community";
     repo = "pyprland";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZbxrfxgURs+XHegsdZ7Z42o7flQ8Jt2rfR2RwDmGpls=";
+    hash = "sha256-9adWd3UizJReftp7riMq4Fyp2dnmv+xtHoEQ2cycYFM=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
+
+  propagatedBuildInputs = with python3Packages; [ aiofiles ];
 
   postInstall = ''
     # file has shebang but cant be run due to a relative import, has proper entrypoint in /bin
@@ -26,12 +28,15 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [
     "pyprland"
+    "pyprland.adapters"
+    "pyprland.adapters.menus"
     "pyprland.command"
     "pyprland.common"
     "pyprland.ipc"
     "pyprland.plugins"
     "pyprland.plugins.experimental"
     "pyprland.plugins.expose"
+    "pyprland.plugins.fetch_client_menu"
     "pyprland.plugins.interface"
     "pyprland.plugins.layout_center"
     "pyprland.plugins.lost_windows"
@@ -41,6 +46,8 @@ python3Packages.buildPythonApplication rec {
     "pyprland.plugins.pyprland"
     "pyprland.plugins.scratchpads"
     "pyprland.plugins.shift_monitors"
+    "pyprland.plugins.shortcuts_menu"
+    "pyprland.plugins.system_notifier"
     "pyprland.plugins.toggle_dpms"
     "pyprland.plugins.toggle_special"
     "pyprland.plugins.workspaces_follow_focus"

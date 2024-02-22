@@ -5,6 +5,7 @@
 , harec
 , makeWrapper
 , qbe
+, gitUpdater
 , scdoc
 , tzdata
 , substituteAll
@@ -30,9 +31,6 @@ in
 '';
 
 let
-  # We use harec's override of qbe until 1.2 is released, but the `qbe` argument
-  # is kept to avoid breakage.
-  qbe = harec.qbeUnstable;
   arch = stdenv.hostPlatform.uname.processor;
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   embeddedOnBinaryTools =
@@ -59,15 +57,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2024-02-08";
+  version = "0.24.0";
 
   outputs = [ "out" "man" ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "5f65a5c112dd15efc0f0223ee895c2582e8f4915";
-    hash = "sha256-Ic/2Gn3ZIJ5wKXBsNS4MHoBUfvbH3ZqAsuj7tOlDtW4=";
+    rev = finalAttrs.version;
+    hash = "sha256-3T+BdNj+Th8QXrcsPMWlN9GBfuMF1ulneWHpDEtyBU8=";
   };
 
   patches = [
@@ -96,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     "HARECACHE=.harecache"
     "PREFIX=${builtins.placeholder "out"}"
     "ARCH=${arch}"
+    "VERSION=${finalAttrs.version}-nixpkgs"
     # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
     # not follow the FHS.
     "HAREPATH=$(SRCDIR)/hare/stdlib"
@@ -132,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   passthru = {
+    updateScript = gitUpdater { };
     tests = lib.optionalAttrs enableCrossCompilation {
       crossCompilation = callPackage ./cross-compilation-tests.nix {
         hare = finalAttrs.finalPackage;

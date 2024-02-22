@@ -27,13 +27,13 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-XbsebaplhLWPXpdwZyMbxsRyuvaBHtO2WtMoFzN7yXA=";
+    hash = "sha256-02Ykj4qo821iJa4AqS3XfSBm1nqBxRKC2IgTgbdiRss=";
   };
 
   hardeningEnable = [ "pie" ];
