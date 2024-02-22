@@ -5931,7 +5931,7 @@
   };
   etu = {
     email = "elis@hirwing.se";
-    matrix = "@etu:semi.social";
+    matrix = "@etu:failar.nu";
     github = "etu";
     githubId = 461970;
     name = "Elis Hirwing";
