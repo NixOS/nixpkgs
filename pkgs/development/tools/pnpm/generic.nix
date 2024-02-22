@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  callPackages,
   fetchurl,
   nodejs,
   testers,
@@ -8,9 +9,7 @@
 
   version,
   hash,
-}:
-
-stdenvNoCC.mkDerivation (finalAttrs: {
+}: stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pnpm";
   inherit version;
 
@@ -32,7 +31,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
+  passthru = let
+    fetchDepsAttrs = callPackages ./fetch-deps { pnpm = finalAttrs.finalPackage; };
+  in {
+    inherit (fetchDepsAttrs) fetchDeps configHook;
+
     tests.version = lib.optionalAttrs withNode (
       testers.testVersion { package = finalAttrs.finalPackage; }
     );
