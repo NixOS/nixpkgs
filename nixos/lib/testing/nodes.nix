@@ -18,7 +18,7 @@ let
 
   guestSystem =
     if hostPlatform.isLinux
-    then hostPkgs.system
+    then hostPlatform.system
     else
       let
         hostToGuest = {
