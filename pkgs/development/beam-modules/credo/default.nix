@@ -56,5 +56,6 @@ beamPackages.mixRelease rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with lib.maintainers; [ ethnt ];
+    mainProgram = "credo";
   };
 }
