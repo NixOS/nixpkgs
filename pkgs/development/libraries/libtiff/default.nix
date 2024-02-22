@@ -7,6 +7,7 @@
 , pkg-config
 , sphinx
 
+, lerc
 , libdeflate
 , libjpeg
 , xz
@@ -61,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   # If you want to change to a different build system, please make
   # sure cross-compilation works first!
   nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
+
+  buildInputs = [
+    lerc
+  ];
 
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
