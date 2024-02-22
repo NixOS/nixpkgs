@@ -14,7 +14,7 @@ let
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
-    caja-with-extensions = callPackage ./caja-with-extensions { };
+    caja-with-extensions = callPackage ./caja/with-extensions.nix { };
     engrampa = callPackage ./engrampa { };
     eom = callPackage ./eom { };
     libmatekbd = callPackage ./libmatekbd { };
@@ -96,6 +96,9 @@ let
       pluma
     ];
 
+    cajaExtensions = [
+      caja-extensions
+    ];
   };
 
 in lib.makeScope pkgs.newScope packages
