@@ -1,7 +1,8 @@
 { lib
 , stdenv
-, stdenvNoCC
 , fetchFromGitHub
+, fetchPnpmDeps
+, pnpmConfigHook
 , substituteAll
 , makeWrapper
 , makeDesktopItem
@@ -12,9 +13,6 @@
 , libpulseaudio
 , libicns
 , libnotify
-, jq
-, moreutils
-, cacert
 , nodePackages
 , speechd
 , withTTS ? true
@@ -33,54 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OyAGzlwwdEKBbJJ7h3glwx/THy2VvUn/kA/Df3arWQU=";
   };
 
-  # NOTE: This requires pnpm 8.10.0 or newer
-  # https://github.com/pnpm/pnpm/pull/7214
-  pnpmDeps =
-    assert lib.versionAtLeast nodePackages.pnpm.version "8.10.0";
-    stdenvNoCC.mkDerivation {
-      pname = "${finalAttrs.pname}-pnpm-deps";
-      inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
-
-      nativeBuildInputs = [
-        jq
-        moreutils
-        nodePackages.pnpm
-        cacert
-      ];
-
-      pnpmPatch = builtins.toJSON {
-        pnpm.supportedArchitectures = {
-          os = [ "linux" ];
-          cpu = [ "x64" "arm64" ];
-        };
-      };
-
-      postPatch = ''
-        mv package.json package.json.orig
-        jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
-      '';
-
-      # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-      installPhase = ''
-        export HOME=$(mktemp -d)
-
-        pnpm config set store-dir $out
-        pnpm install --frozen-lockfile --ignore-script
-
-        rm -rf $out/v3/tmp
-        for f in $(find $out -name "*.json"); do
-          sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-          jq --sort-keys . $f | sponge $f
-        done
-      '';
-
-      dontBuild = true;
-      dontFixup = true;
-      outputHashMode = "recursive";
-      outputHash = "sha256-JLjJZYFMH4YoIFuyXbGUp6lIy+VlYZtmwk2+oUwtTxQ=";
-    };
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) src pname patches ELECTRON_SKIP_BINARY_DOWNLOAD;
+    hash = "sha256-J5QAv6xJZ4f/HMrVABoADpiEDHa3xB3JprrY+rTSejw=";
+  };
 
   nativeBuildInputs = [
+    pnpmConfigHook
     copyDesktopItems
     nodePackages.pnpm
     nodePackages.nodejs
@@ -92,18 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional withSystemVencord (substituteAll { inherit vencord; src = ./use_system_vencord.patch; });
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-    export STORE_PATH=$(mktemp -d)
-
-    cp -Tr "$pnpmDeps" "$STORE_PATH"
-    chmod -R +w "$STORE_PATH"
-
-    pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script
-    patchShebangs node_modules/{*,.*}
-  '';
 
   postBuild = ''
     pnpm build
