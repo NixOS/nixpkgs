@@ -5,24 +5,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "das";
-  version = "0.3.8";
-  format = "pyproject";
+  version = "1.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snovvcrash";
     repo = "DivideAndScan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a9gnEBTvZshw42M/GrpCgjZh6FOzL45aZqGRyeHO0ec=";
+    hash = "sha256-WZmWpcBqxsNH96nVWwoepFhsvdxZpYKmAjNd7ghIJMA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'networkx = "^2.8.4"' 'networkx = "*"' \
-      --replace 'pandas = "^1.4.2"' 'pandas = "*"'
+      --replace 'netaddr = "^0.8.0"' 'netaddr = "*"'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
+  nativeBuildInputs = [
+    python3.pkgs.poetry-core
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -47,5 +47,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/snovvcrash/DivideAndScan";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "das";
   };
 }
