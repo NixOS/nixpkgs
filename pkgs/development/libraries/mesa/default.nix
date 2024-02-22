@@ -141,6 +141,13 @@ self = stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    # can't use the current version of memstreamHook, so let's disable open_memstream
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/c0dd2eabaaca939883a6c9b73ea7bfc476907e36.diff";
+      hash = "sha256-9M2+sqdO+F8tYDBCR14jehPn9lrZL3vGXDkcfWiyFT0=";
+      revert = true;
+    })
   ];
 
   postPatch = ''
