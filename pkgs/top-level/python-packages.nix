@@ -5558,6 +5558,8 @@ self: super: with self; {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  import-expression = callPackage ../development/python-modules/import-expression { };
+
   importlab = callPackage ../development/python-modules/importlab { };
 
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
@@ -5890,6 +5892,8 @@ self: super: with self; {
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
   jira = callPackage ../development/python-modules/jira { };
+
+  jishaku = callPackage ../development/python-modules/jishaku { };
 
   jiwer = callPackage ../development/python-modules/jiwer { };
 
