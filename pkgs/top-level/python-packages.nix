@@ -16324,6 +16324,8 @@ self: super: with self; {
 
   whois-api = callPackage ../development/python-modules/whois-api { };
 
+  whoisdomain = callPackage ../development/python-modules/whoisdomain { };
+
   whoosh = callPackage ../development/python-modules/whoosh { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
