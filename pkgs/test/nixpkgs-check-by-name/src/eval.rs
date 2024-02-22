@@ -305,7 +305,7 @@ fn by_name(
 
                         // Figure out whether it's an attribute definition of the form `= callPackage <arg1> <arg2>`,
                         // returning the arguments if so.
-                        let optional_syntactic_call_package = nix_file.call_package_argument_info_at(
+                        let (optional_syntactic_call_package, definition) = nix_file.call_package_argument_info_at(
                             location.line,
                             location.column,
                             nixpkgs_path,
@@ -315,7 +315,7 @@ fn by_name(
                         // `callPackage`
                         match (is_semantic_call_package, optional_syntactic_call_package) {
                             // Something like `<attr> = foo`
-                            (_, Err(definition)) => NixpkgsProblem::NonSyntacticCallPackage {
+                            (_, None) => NixpkgsProblem::NonSyntacticCallPackage {
                                 package_name: attribute_name.to_owned(),
                                 file: relative_file,
                                 line: location.line,
@@ -324,17 +324,16 @@ fn by_name(
                             }
                             .into(),
                             // Something like `<attr> = pythonPackages.callPackage ...`
-                            (false, Ok(_)) => {
-                                // All of these are not of the expected form, so error out
-                                // TODO: Make error more specific, don't lump everything together
-                                NixpkgsProblem::WrongCallPackage {
-                                    relative_package_file: relative_package_file.to_owned(),
-                                    package_name: attribute_name.to_owned(),
-                                }
-                                .into()
+                            (false, Some(_)) => NixpkgsProblem::NonToplevelCallPackage {
+                                package_name: attribute_name.to_owned(),
+                                file: relative_file,
+                                line: location.line,
+                                column: location.column,
+                                definition,
                             }
+                            .into(),
                             // Something like `<attr> = pkgs.callPackage ...`
-                            (true, Ok(syntactic_call_package)) => {
+                            (true, Some(syntactic_call_package)) => {
                                 if let Some(path) = syntactic_call_package.relative_path {
                                     if path == relative_package_file {
                                         // Manual definitions with empty arguments are not allowed
@@ -358,9 +357,12 @@ fn by_name(
                                     }
                                 } else {
                                     // No path
-                                    NixpkgsProblem::WrongCallPackage {
-                                        relative_package_file: relative_package_file.to_owned(),
+                                    NixpkgsProblem::NonPath {
                                         package_name: attribute_name.to_owned(),
+                                        file: relative_file,
+                                        line: location.line,
+                                        column: location.column,
+                                        definition,
                                     }
                                     .into()
                                 }
@@ -451,7 +453,7 @@ fn handle_non_by_name_attribute(
         // Parse the Nix file in the location and figure out whether it's an
         // attribute definition of the form `= callPackage <arg1> <arg2>`,
         // returning the arguments if so.
-        let optional_syntactic_call_package = nix_file_store
+        let (optional_syntactic_call_package, _definition) = nix_file_store
             .get(&location.file)?
             .call_package_argument_info_at(
                 location.line,
@@ -466,16 +468,16 @@ fn handle_non_by_name_attribute(
         // `callPackage`
         match (is_semantic_call_package, optional_syntactic_call_package) {
             // Something like `<attr> = { }`
-            (false, Err(_))
+            (false, None)
             // Something like `<attr> = pythonPackages.callPackage ...`
-            | (false, Ok(_))
+            | (false, Some(_))
             // Something like `<attr> = bar` where `bar = pkgs.callPackage ...`
-            | (true, Err(_)) => {
+            | (true, None) => {
                 // In all of these cases, it's not possible to migrate the package to `pkgs/by-name`
                 NonApplicable
             }
             // Something like `<attr> = pkgs.callPackage ...`
-            (true, Ok(syntactic_call_package)) => {
+            (true, Some(syntactic_call_package)) => {
                 // It's only possible to migrate such a definitions if..
                 match syntactic_call_package.relative_path {
                     Some(ref rel_path) if rel_path.starts_with(utils::BASE_SUBPATH) => {

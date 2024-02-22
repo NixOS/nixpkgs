@@ -119,13 +119,14 @@ impl NixFile {
         line: usize,
         column: usize,
         relative_to: &Path,
-    ) -> anyhow::Result<Result<CallPackageArgumentInfo, String>> {
+    ) -> anyhow::Result<(Option<CallPackageArgumentInfo>, String)> {
         Ok(match self.attrpath_value_at(line, column)? {
-            Err(definition) => Err(definition),
+            Err(definition) => (None, definition),
             Ok(attrpath_value) => {
                 let definition = attrpath_value.to_string();
-                self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)?
-                    .ok_or(definition)
+                let attrpath_value =
+                    self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)?;
+                (attrpath_value, definition)
             }
         })
     }
@@ -492,41 +493,41 @@ mod tests {
         let nix_file = NixFile::new(&file)?;
 
         let cases = [
-            (2, Err("a.sub = null;")),
-            (3, Err("b = null;")),
-            (4, Err("c = import ./file.nix;")),
-            (5, Err("d = import ./file.nix { };")),
+            (2, None),
+            (3, None),
+            (4, None),
+            (5, None),
             (
                 6,
-                Ok(CallPackageArgumentInfo {
+                Some(CallPackageArgumentInfo {
                     relative_path: Some(PathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
             (
                 7,
-                Ok(CallPackageArgumentInfo {
+                Some(CallPackageArgumentInfo {
                     relative_path: Some(PathBuf::from("file.nix")),
                     empty_arg: true,
                 }),
             ),
             (
                 8,
-                Ok(CallPackageArgumentInfo {
+                Some(CallPackageArgumentInfo {
                     relative_path: None,
                     empty_arg: true,
                 }),
             ),
             (
                 9,
-                Ok(CallPackageArgumentInfo {
+                Some(CallPackageArgumentInfo {
                     relative_path: Some(PathBuf::from("file.nix")),
                     empty_arg: false,
                 }),
             ),
             (
                 10,
-                Ok(CallPackageArgumentInfo {
+                Some(CallPackageArgumentInfo {
                     relative_path: None,
                     empty_arg: false,
                 }),
@@ -534,12 +535,10 @@ mod tests {
         ];
 
         for (line, expected_result) in cases {
-            let actual_result = nix_file
+            let (actual_result, _definition) = nix_file
                 .call_package_argument_info_at(line, 3, temp_dir.path())
-                .context(format!("line {line}"))?
-                .map_err(|x| x);
-            let owned_expected_result = expected_result.map_err(|x| x.to_string());
-            assert_eq!(actual_result, owned_expected_result, "line {line}");
+                .context(format!("line {line}"))?;
+            assert_eq!(actual_result, expected_result, "line {line}");
         }
 
         Ok(())

@@ -47,6 +47,20 @@ pub enum NixpkgsProblem {
         relative_package_file: PathBuf,
         package_name: String,
     },
+    NonToplevelCallPackage {
+        package_name: String,
+        file: PathBuf,
+        line: usize,
+        column: usize,
+        definition: String,
+    },
+    NonPath {
+        package_name: String,
+        file: PathBuf,
+        line: usize,
+        column: usize,
+        definition: String,
+    },
     WrongCallPackagePath {
         package_name: String,
         file: PathBuf,
@@ -182,6 +196,42 @@ impl fmt::Display for NixpkgsProblem {
                     "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}` with a non-empty second argument.",
                     relative_package_file.display()
                 ),
+            NixpkgsProblem::NonToplevelCallPackage { package_name, file, line, column, definition } =>
+                writedoc!(
+                    f,
+                    "
+                    - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
+
+                        {package_name} = callPackage {} {{ /* ... */ }};
+
+                      This is however not the case: A different `callPackage` is used.
+                      It is defined in {}:{} as
+
+                    {}",
+                    structure::relative_dir_for_package(package_name).display(),
+                    structure::relative_file_for_package(package_name).display(),
+                    file.display(),
+                    line,
+                    indent_definition(*column, definition.clone()),
+                ),
+            NixpkgsProblem::NonPath { package_name, file, line, column, definition } =>
+                writedoc!(
+                    f,
+                    "
+                    - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
+
+                        {package_name} = callPackage {} {{ /* ... */ }};
+
+                      This is however not the case: The first callPackage argument is not right:
+                      It is defined in {}:{} as
+
+                    {}",
+                    structure::relative_dir_for_package(package_name).display(),
+                    structure::relative_file_for_package(package_name).display(),
+                    file.display(),
+                    line,
+                    indent_definition(*column, definition.clone()),
+                ),
             NixpkgsProblem::WrongCallPackagePath { package_name, file, line, column, actual_path, expected_path } =>
                 writedoc! {
                     f,
@@ -200,20 +250,6 @@ impl fmt::Display for NixpkgsProblem {
                     create_path_expr(file, actual_path),
                 },
             NixpkgsProblem::NonSyntacticCallPackage { package_name, file, line, column, definition } => {
-                // This is needed such multi-line definitions don't look odd
-                // A bit round-about, but it works and we might not need anything more complicated
-                let definition_indented =
-                    // The entire code should be indented 4 spaces
-                    textwrap::indent(
-                        // But first we want to strip the code's natural indentation
-                        &textwrap::dedent(
-                            // The definition _doesn't_ include the leading spaces, but we can
-                            // recover those from the column
-                            &format!("{}{definition}",
-                            " ".repeat(column - 1)),
-                        ),
-                        "    ",
-                    );
                 writedoc!(
                     f,
                     "
@@ -229,7 +265,7 @@ impl fmt::Display for NixpkgsProblem {
                     structure::relative_file_for_package(package_name).display(),
                     file.display(),
                     line,
-                    definition_indented,
+                    indent_definition(*column, definition.clone()),
                 )
             }
             NixpkgsProblem::NonDerivation { relative_package_file, package_name } =>
@@ -338,6 +374,19 @@ impl fmt::Display for NixpkgsProblem {
                 ),
        }
     }
+}
+
+fn indent_definition(column: usize, definition: String) -> String {
+    // The entire code should be indented 4 spaces
+    textwrap::indent(
+        // But first we want to strip the code's natural indentation
+        &textwrap::dedent(
+            // The definition _doesn't_ include the leading spaces, but we can
+            // recover those from the column
+            &format!("{}{definition}", " ".repeat(column - 1)),
+        ),
+        "    ",
+    )
 }
 
 /// Creates a Nix path expression that when put into Nix file `from_file`, would point to the `to_file`.

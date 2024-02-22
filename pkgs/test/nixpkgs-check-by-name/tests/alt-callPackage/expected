@@ -1,0 +1,8 @@
+- Because pkgs/by-name/fo/foo exists, the attribute `pkgs.foo` must be defined like
+
+    foo = callPackage pkgs/by-name/fo/foo/package.nix { /* ... */ };
+
+  This is however not the case: A different `callPackage` is used.
+  It is defined in all-packages.nix:5 as
+
+    foo = self.alt.callPackage ({ }: self.someDrv) { };
