@@ -54,6 +54,14 @@ Keep an old app running and swap the ports when the new one is booted
                   type = lib.types.port;
                   description = lib.mdDoc "port";
                 };
+                key = lib.mkOption {
+                  type = lib.types.str;
+                  description = lib.mdDoc "key";
+                };
+                certificate = lib.mkOption {
+                  type = lib.types.str;
+                  description = lib.mdDoc "certificate";
+                };
               };
             });
             description = lib.mdDoc ''
