@@ -3,10 +3,31 @@
     {
       "method": "fetchzip",
       "packages": [
+        "atlas"
+      ],
+      "path": "/nix/store/v015scfifr10ialyimn7xxm0rdg4dha2-source",
+      "rev": "60681b93af4c8914afbd8eae9fc9820ba4d198a0",
+      "sha256": "1kc47w20ipbdh31s1gcblcikzlvlagmmha1qw3by70fc7mgazrxf",
+      "srcDir": "src",
+      "url": "https://github.com/nim-lang/atlas/archive/60681b93af4c8914afbd8eae9fc9820ba4d198a0.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "bigints"
+      ],
+      "path": "/nix/store/jvrm392g8adfsgf36prgwkbyd7vh5jsw-source",
+      "rev": "86ea14d31eea9275e1408ca34e6bfe9c99989a96",
+      "sha256": "15pcpmnk1bnw3k8769rjzcpg00nahyrypwbxs88jnwr4aczp99j4",
+      "srcDir": "src",
+      "url": "https://github.com/ehmry/nim-bigints/archive/86ea14d31eea9275e1408ca34e6bfe9c99989a96.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
         "npeg"
       ],
       "path": "/nix/store/ffkxmjmigfs7zhhiiqm0iw2c34smyciy-source",
-      "ref": "1.2.1",
       "rev": "26d62fdc40feb84c6533956dc11d5ee9ea9b6c09",
       "sha256": "0xpzifjkfp49w76qmaylan8q181bs45anmp46l4bwr3lkrr7bpwh",
       "srcDir": "src",
@@ -17,12 +38,11 @@
       "packages": [
         "preserves"
       ],
-      "path": "/nix/store/nrcpzf9hx70kry3gwhrdzcs3qicjncjh-source",
-      "ref": "20231021",
-      "rev": "edece399be70818208bf2263c30cb2bcf435bbff",
-      "sha256": "0xmw35wmw3a4lja9q4qvlvpxv3xk0hnkjg4fwfw6f3inh6zfiqki",
+      "path": "/nix/store/6nnn5di5vip1vladlb7z56rbw18d1y7j-source",
+      "rev": "2825bceecf33a15b9b7942db5331a32cbc39b281",
+      "sha256": "145vf46fy3wc52j6vs509fm9bi5lx7c53gskbkpcfbkv82l86dgk",
       "srcDir": "src",
-      "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/edece399be70818208bf2263c30cb2bcf435bbff.tar.gz"
+      "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/2825bceecf33a15b9b7942db5331a32cbc39b281.tar.gz"
     }
   ]
 }
