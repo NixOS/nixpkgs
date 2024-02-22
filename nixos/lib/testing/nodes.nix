@@ -14,7 +14,7 @@ let
     types
     ;
 
-  inherit (hostPkgs) hostPlatform pkgsNative;
+  inherit (hostPkgs) hostPlatform;
 
   guestSystem =
     if hostPlatform.isLinux
