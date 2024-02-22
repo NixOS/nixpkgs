@@ -2,12 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "peaqevcore";
   version = "19.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,6 +20,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i "/extras_require/d" setup.py
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Tests are not shipped and source is not tagged
   # https://github.com/elden1337/peaqev-core/issues/4
