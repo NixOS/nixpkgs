@@ -400,7 +400,7 @@ in
             The path (inside the VM) to the device containing the EFI System Partition (ESP).
 
             If you are *not* booting from a UEFI firmware, this value is, by
-            default, `null`. The ESP is mounted under `/boot`.
+            default, `null`. The ESP is mounted to `boot.loader.efi.efiSysMountpoint`.
           '';
       };
 
@@ -1064,11 +1064,6 @@ in
         user = "root";
         group = "root";
       };
-      "${config.boot.loader.efi.efiSysMountPoint}".d = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
     };
 
     # After booting, register the closure of the paths in
@@ -1243,7 +1238,7 @@ in
           options = [ "mode=0755" ];
           neededForBoot = true;
         };
-        "/boot" = lib.mkIf (cfg.useBootLoader && cfg.bootPartition != null) {
+        "${config.boot.loader.efi.efiSysMountPoint}" = lib.mkIf (cfg.useBootLoader && cfg.bootPartition != null) {
           device = cfg.bootPartition;
           fsType = "vfat";
         };
