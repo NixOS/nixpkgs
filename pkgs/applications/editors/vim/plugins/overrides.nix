@@ -662,6 +662,10 @@
     '';
   };
 
+  ddc-filter-matcher_head = super.ddc-filter-matcher_head.overrideAttrs {
+    dependencies = with self; [ ddc-vim ];
+  };
+
   ddc-source-lsp = super.ddc-source-lsp.overrideAttrs {
     dependencies = with self; [ ddc-vim ];
   };
