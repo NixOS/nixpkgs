@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyschlage";
   version = "2024.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
