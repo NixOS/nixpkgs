@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "ollama";
-  version = "0.1.7";
+  version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
