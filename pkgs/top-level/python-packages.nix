@@ -4804,6 +4804,8 @@ self: super: with self; {
 
   google-cloud-securitycenter = callPackage ../development/python-modules/google-cloud-securitycenter { };
 
+  google-cloud-shell = callPackage ../development/python-modules/google-cloud-shell { };
+
   google-cloud-spanner = callPackage ../development/python-modules/google-cloud-spanner { };
 
   google-cloud-speech = callPackage ../development/python-modules/google-cloud-speech { };
