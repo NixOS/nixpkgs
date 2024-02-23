@@ -1,16 +1,20 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , google-api-core
+, google-auth
 , grpc-google-iam-v1
-, lib
+, proto-plus
+, protobuf
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-artifact-registry";
   version = "1.11.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,9 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-5ASS7Lt6F7dWBhc82bW+0FBSDCePax2YF5hr+BAGabs=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     google-api-core
+    google-auth
     grpc-google-iam-v1
+    proto-plus
+    protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
