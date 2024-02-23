@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    name = "audio-sharing-${finalAttrs.version}";
     hash = "sha256-c19DxHF4HFN0qTqC2CNzwko79uVeLeyrrXAvuyxeiOQ=";
   };
 

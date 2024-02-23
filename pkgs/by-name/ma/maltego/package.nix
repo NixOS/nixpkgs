@@ -26,10 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
+      name = "maltego";
       desktopName = "Maltego";
       exec = finalAttrs.meta.mainProgram;
-      icon = finalAttrs.pname;
+      icon = "maltego";
       comment = "An open source intelligence and forensics application";
       categories = [ "Network" "Security" ];
       startupNotify = false;

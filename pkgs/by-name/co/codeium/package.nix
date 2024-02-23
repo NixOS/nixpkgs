@@ -25,8 +25,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "codeium";
   version = "1.6.39";
+
   src = fetchurl {
-    name = "${finalAttrs.pname}-${finalAttrs.version}.gz";
+    name = "codeium-${finalAttrs.version}.gz";
     url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${finalAttrs.version}/language_server_${plat}.gz";
     inherit hash;
   };

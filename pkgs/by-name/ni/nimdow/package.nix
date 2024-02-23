@@ -2,14 +2,13 @@
 
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
-
   version = "0.7.37";
 
   requiredNimVersion = 1;
 
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
-    repo = finalAttrs.pname;
+    repo = "nimdow";
     rev = "v${finalAttrs.version}";
     hash = "sha256-930wDS0UW65QzpUHHOuM25oi/OhFmG0Q7N05ftu7XlI=";
   };
