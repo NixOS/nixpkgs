@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 , pkg-config
 , bzip2
 , xz
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.4.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-QN+fO8aH4z0gtbDhS3BLKpiWMFoYP1JjPehWHUjR9z4=";
+    hash = "sha256-Y4jXAZgJj0d1fUFuM94umlj/JsawWs3KxEQAucsT24s=";
   };
 
-  cargoHash = "sha256-tNRZx5i5noahhoxJ15rBSnPxqoJ4MlBRjcuUYmrNDVg=";
+  cargoHash = "sha256-Jza9U5vL45rvDPLb4/iELneKgy1OTCMBM1JxfuxZigQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,6 +50,8 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     rm cargo-dist/tests/integration-tests.rs
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A tool for building final distributable artifacts and uploading them to an archive";
