@@ -59,7 +59,11 @@ in {
           "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           "/etc"
-        ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
+        ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder
+          ++ lib.optionals config.services.resolved.enable [
+            "/run/systemd/resolve/stub-resolv.conf"
+            "/run/systemd/resolve/resolv.conf"
+        ];
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
