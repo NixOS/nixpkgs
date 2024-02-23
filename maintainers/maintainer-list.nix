@@ -4433,6 +4433,12 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+  dawoox = {
+    email = "contact@antoinebellanger.fr";
+    github = "dawoox";
+    githubId = 48325941;
+    name = "Dawoox";
+  };
   daylinmorgan = {
     email = "daylinmorgan@gmail.com";
     github = "daylinmorgan";
