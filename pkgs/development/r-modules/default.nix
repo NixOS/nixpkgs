@@ -349,6 +349,7 @@ let
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
+    highs = [ pkgs.which pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
     iBMQ = [ pkgs.gsl ];
@@ -362,6 +363,7 @@ let
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
     rvg = [ pkgs.libpng.dev ];
+    MAGEE = [ pkgs.zlib.dev pkgs.bzip2.dev ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
@@ -372,6 +374,7 @@ let
     nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
+    pak = [ pkgs.curl.dev ];
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
@@ -467,6 +470,7 @@ let
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
+    vcfppR = [ pkgs.curl.dev pkgs.bzip2 pkgs.zlib.dev pkgs.xz];
     hdf5r = [ pkgs.hdf5.dev ];
     httpgd = with pkgs; [ cairo.dev ];
     SymTS = [ pkgs.gsl ];
@@ -1420,6 +1424,15 @@ let
     torch = old.torch.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
+      '';
+    });
+
+    pak = old.pak.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        patchShebangs src/library/curl/configure
+        patchShebangs src/library/pkgdepends/configure
+        patchShebangs src/library/ps/configure
       '';
     });
   };

@@ -17,9 +17,10 @@
 , xvfb-run
 , AppKit
 , Foundation
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
   version = "1.4.3";
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ctHAN0SY6k68jaBpmIpMm8DngC9DPiL1vAmGhECpNic=";
   };
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-  ] ++ lib.optionals (!doCheck) [
+  ] ++ lib.optionals (!finalAttrs.doCheck) [
     "-Dtests=false"
   ];
 
@@ -106,16 +107,20 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
   meta = with lib; {
-    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${src.rev}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.rev}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
     platforms = platforms.unix;
+    pkgConfigModules = [ "libadwaita-1" ];
   };
-}
+})

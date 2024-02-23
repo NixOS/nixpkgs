@@ -168,6 +168,9 @@ mapAliases ({
   flask-basicauth = throw "flask-basicauth was removed, as it is not compatible with flask 3.0 and unmaintained since 2016.";
   flask-sessionstore = throw "flask-sessionstore was removed, as it is not compatible with flask 3.0 and unmaintained since 2017.";
   flowlogs_reader = flowlogs-reader; # added 2024-01-03
+  flufl_bounce = flufl-bounce; # added 2023-11-03
+  flufl_i18n = flufl-i18n; # added 2023-11-03
+  flufl_lock = flufl-lock; # added 2023-11-03
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
