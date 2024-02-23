@@ -4826,6 +4826,8 @@ self: super: with self; {
 
   google-cloud-websecurityscanner = callPackage ../development/python-modules/google-cloud-websecurityscanner { };
 
+  google-cloud-workflows = callPackage ../development/python-modules/google-cloud-workflows { };
+
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
   google-crc32c = callPackage ../development/python-modules/google-crc32c {
