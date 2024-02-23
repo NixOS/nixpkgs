@@ -12,13 +12,13 @@
 buildPythonPackage rec {
   pname = "pytest-httpserver";
   version = "1.0.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "csernazs";
-    repo = pname;
+    repo = "pytest-httpserver";
     rev = "refs/tags/${version}";
     hash = "sha256-9DRvGR78ETxi0sxkeP38CLiazuVxZUt/kSRfe3dM50Q=";
   };
