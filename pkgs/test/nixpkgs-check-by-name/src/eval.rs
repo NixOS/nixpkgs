@@ -504,7 +504,7 @@ fn handle_non_by_name_attribute(
                     _ => {
                         // Otherwise, the path is outside `pkgs/by-name`, which means it can be
                         // migrated
-                        Loose(syntactic_call_package)
+                        Loose((syntactic_call_package, location.file))
                     }
                 }
             }

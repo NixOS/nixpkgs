@@ -6,7 +6,12 @@
   It is defined in all-packages.nix:2 as
 
     a = self.callPackage ./pkgs/by-name/a/a/package.nix { };
-pkgs.b: This is a new top-level package of the form `callPackage ... { }`. Please define it in pkgs/by-name/b/b/package.nix instead. See `pkgs/by-name/README.md` for more details. Since the second `callPackage` argument is `{ }`, no manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is needed anymore.
+
+- Attribute `pkgs.b` is a new top-level package using `pkgs.callPackage ... { /* ... */ }`.
+  Please define it in pkgs/by-name/b/b/package.nix instead.
+  See `pkgs/by-name/README.md` for more details.
+  Since the second `callPackage` argument is `{ }`, no manual `callPackage` in /home/tweagysil/src/nixpkgs/by-name-improv/pkgs/test/nixpkgs-check-by-name/tests/sorted-order/all-packages.nix is needed anymore.
+
 - Because pkgs/by-name/c/c exists, the attribute `pkgs.c` must be defined like
 
     c = callPackage ./pkgs/by-name/c/c/package.nix { /* ... */ };
@@ -15,5 +20,10 @@ pkgs.b: This is a new top-level package of the form `callPackage ... { }`. Pleas
   It is defined in all-packages.nix:4 as
 
     c = self.callPackage ./pkgs/by-name/c/c/package.nix { };
-pkgs.d: This is a new top-level package of the form `callPackage ... { }`. Please define it in pkgs/by-name/d/d/package.nix instead. See `pkgs/by-name/README.md` for more details. Since the second `callPackage` argument is `{ }`, no manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is needed anymore.
+
+- Attribute `pkgs.d` is a new top-level package using `pkgs.callPackage ... { /* ... */ }`.
+  Please define it in pkgs/by-name/d/d/package.nix instead.
+  See `pkgs/by-name/README.md` for more details.
+  Since the second `callPackage` argument is `{ }`, no manual `callPackage` in /home/tweagysil/src/nixpkgs/by-name-improv/pkgs/test/nixpkgs-check-by-name/tests/sorted-order/all-packages.nix is needed anymore.
+
 This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch

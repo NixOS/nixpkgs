@@ -6,6 +6,7 @@ use crate::nix_file::CallPackageArgumentInfo;
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::validation::{self, Validation, Validation::Success};
 use std::collections::HashMap;
+use std::path::PathBuf;
 
 /// The ratchet value for the entirety of Nixpkgs.
 #[derive(Default)]
@@ -145,24 +146,26 @@ impl ToNixpkgsProblem for ManualDefinition {
 pub enum UsesByName {}
 
 impl ToNixpkgsProblem for UsesByName {
-    type ToContext = CallPackageArgumentInfo;
+    type ToContext = (CallPackageArgumentInfo, PathBuf);
 
     fn to_nixpkgs_problem(
         name: &str,
         optional_from: Option<()>,
-        to: &Self::ToContext,
+        (to, file): &Self::ToContext,
     ) -> NixpkgsProblem {
         if let Some(()) = optional_from {
             NixpkgsProblem::MovedOutOfByName {
                 package_name: name.to_owned(),
                 call_package_path: to.relative_path.clone(),
                 empty_arg: to.empty_arg,
+                file: file.to_owned(),
             }
         } else {
             NixpkgsProblem::NewPackageNotUsingByName {
                 package_name: name.to_owned(),
                 call_package_path: to.relative_path.clone(),
                 empty_arg: to.empty_arg,
+                file: file.to_owned(),
             }
         }
     }

@@ -121,11 +121,13 @@ pub enum NixpkgsProblem {
         package_name: String,
         call_package_path: Option<PathBuf>,
         empty_arg: bool,
+        file: PathBuf,
     },
     NewPackageNotUsingByName {
         package_name: String,
         call_package_path: Option<PathBuf>,
         empty_arg: bool,
+        file: PathBuf,
     },
     InternalCallPackageUsed {
         attr_name: String,
@@ -340,7 +342,7 @@ impl fmt::Display for NixpkgsProblem {
                     subpath.display(),
                     text,
                 ),
-            NixpkgsProblem::MovedOutOfByName { package_name, call_package_path, empty_arg } => {
+            NixpkgsProblem::MovedOutOfByName { package_name, call_package_path, empty_arg, file } => {
                 let call_package_arg =
                     if let Some(path) = &call_package_path {
                         format!("./{}", path.display())
@@ -348,22 +350,30 @@ impl fmt::Display for NixpkgsProblem {
                         "...".into()
                     };
                 if *empty_arg {
-                    write!(
+                    writedoc!(
                         f,
-                        "pkgs.{package_name}: This top-level package was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ }}` (e.g. in `pkgs/top-level/all-packages.nix`). Please move the package back and remove the manual `callPackage`.",
+                        "
+                        - Attribute `pkgs.{package_name} was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ /* ... */ }}` in {}.
+                          Please move the package back and remove the manual `callPackage`.
+                        ",
                         structure::relative_file_for_package(package_name).display(),
+                        file.display(),
                         )
                 } else {
                     // This can happen if users mistakenly assume that for custom arguments,
                     // pkgs/by-name can't be used.
-                    write!(
+                    writedoc!(
                         f,
-                        "pkgs.{package_name}: This top-level package was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ ... }}` (e.g. in `pkgs/top-level/all-packages.nix`). While the manual `callPackage` is still needed, it's not necessary to move the package files.",
+                        "
+                        - Attribute `pkgs.{package_name}` was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ ... }}` in {}.
+                          While the manual `callPackage` is still needed, it's not necessary to move the package files.
+                        ",
                         structure::relative_file_for_package(package_name).display(),
+                        file.display(),
                         )
                 }
             },
-            NixpkgsProblem::NewPackageNotUsingByName { package_name, call_package_path, empty_arg } => {
+            NixpkgsProblem::NewPackageNotUsingByName { package_name, call_package_path, empty_arg, file } => {
                 let call_package_arg =
                     if let Some(path) = &call_package_path {
                         format!("./{}", path.display())
@@ -372,13 +382,18 @@ impl fmt::Display for NixpkgsProblem {
                     };
                 let extra =
                     if *empty_arg {
-                        "Since the second `callPackage` argument is `{ }`, no manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is needed anymore."
+                        format!("Since the second `callPackage` argument is `{{ }}`, no manual `callPackage` in {} is needed anymore.", file.display())
                     } else {
-                        "Since the second `callPackage` argument is not `{ }`, the manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is still needed."
+                        format!("Since the second `callPackage` argument is not `{{ }}`, the manual `callPackage` in {} is still needed.", file.display())
                     };
-                write!(
+                writedoc!(
                     f,
-                    "pkgs.{package_name}: This is a new top-level package of the form `callPackage {call_package_arg} {{ }}`. Please define it in {} instead. See `pkgs/by-name/README.md` for more details. {extra}",
+                    "
+                    - Attribute `pkgs.{package_name}` is a new top-level package using `pkgs.callPackage {call_package_arg} {{ /* ... */ }}`.
+                      Please define it in {} instead.
+                      See `pkgs/by-name/README.md` for more details.
+                      {extra}
+                    ",
                     structure::relative_file_for_package(package_name).display(),
                 )
             },
