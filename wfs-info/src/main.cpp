@@ -164,7 +164,14 @@ int main(int argc, char* argv[]) {
 
     auto key = get_key(type, otp_path, seeprom_path);
     auto device = std::make_shared<FileDevice>(input_path, 9);
-    Wfs::DetectDeviceSectorSizeAndCount(device, key);
+    auto detection_result = Recovery::DetectDeviceParams(device, key);
+    if (detection_result.has_value()) {
+      if (*detection_result == WfsError::kInvalidWfsVersion)
+        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+      else
+        throw WfsException(*detection_result);
+      return 1;
+    }
     std::cout << "Allocator state:" << std::endl;
     dumpdir(0, throw_if_error(Wfs(device, key).GetRootArea()->GetRootDirectory()), {});
     std::cout << "Done!" << std::endl;

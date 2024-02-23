@@ -106,7 +106,14 @@ int main(int argc, char* argv[]) {
     input_file.seekg(0, std::ios::beg);
 
     auto device = std::make_shared<FileDevice>(input_path, 9, 0, false);
-    Wfs::DetectDeviceSectorSizeAndCount(device, key);
+    auto detection_result = Recovery::DetectDeviceParams(device, key);
+    if (detection_result.has_value()) {
+      if (*detection_result == WfsError::kInvalidWfsVersion)
+        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+      else
+        throw WfsException(*detection_result);
+      return 1;
+    }
     auto file = Wfs(device, key).GetFile(inject_path);
     if (!file) {
       std::cerr << "Error: Didn't find file " << inject_path << " in wfs" << std::endl;

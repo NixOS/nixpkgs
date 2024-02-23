@@ -224,7 +224,14 @@ int main(int argc, char* argv[]) {
   try {
     auto key = get_key(param.type, otp_path, seeprom_path);
     auto device = std::make_shared<FileDevice>(param.file, 9);
-    Wfs::DetectDeviceSectorSizeAndCount(device, key);
+    auto detection_result = Recovery::DetectDeviceParams(device, key);
+    if (detection_result.has_value()) {
+      if (*detection_result == WfsError::kInvalidWfsVersion)
+        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+      else
+        throw WfsException(*detection_result);
+      return 1;
+    }
     wfs.reset(new Wfs(device, key));
   } catch (std::exception& e) {
     std::cerr << "Error: " << e.what() << std::endl;

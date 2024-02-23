@@ -89,7 +89,7 @@ std::optional<std::vector<std::byte>> get_key(std::string type,
 
 int main(int argc, char* argv[]) {
   try {
-    bool verbose;
+    bool verbose, dump_usr_dir;
     std::string input_path, output_path, type, dump_path;
     std::optional<std::string> seeprom_path, otp_path;
 
@@ -106,7 +106,8 @@ int main(int argc, char* argv[]) {
       desc.add_options()("output", boost::program_options::value<std::string>(&output_path)->required(),
                          "ouput directory")("dump-path",
                                             boost::program_options::value<std::string>(&dump_path)->default_value("/"),
-                                            "directory to dump (default: \"/\")")("verbose", "verbose output");
+                                            "directory to dump (default: \"/\")")("verbose", "verbose output")(
+          "dump-usr-dir", "skip wfs header and extract the /usr dir (recover from wfs corruptions)");
       boost::program_options::variables_map vm;
       boost::program_options::store(boost::program_options::parse_command_line(argc, argv, desc), vm);
 
@@ -128,6 +129,7 @@ int main(int argc, char* argv[]) {
         seeprom_path = vm["seeprom"].as<std::string>();
 
       verbose = vm.count("verbose");
+      dump_usr_dir = vm.count("dump-usr-dir");
 
       if (type != "usb" && type != "mlc" && type != "plain")
         throw boost::program_options::error("Invalid input type (valid types: usb/mlc/plain)");
@@ -144,9 +146,52 @@ int main(int argc, char* argv[]) {
 
     auto key = get_key(type, otp_path, seeprom_path);
     auto device = std::make_shared<FileDevice>(input_path, 9);
-    Wfs::DetectDeviceSectorSizeAndCount(device, key);
     dump_path = std::filesystem::path(dump_path).generic_string();
     boost::trim_if(dump_path, boost::is_any_of("/"));
+
+    // Recovery mode
+    if (dump_usr_dir) {
+      auto wfs_with_usr_dir = Recovery::OpenUsrDirectoryWithoutWfsHeader(device, key);
+      if (!wfs_with_usr_dir.has_value()) {
+        if (wfs_with_usr_dir.error() == WfsError::kInvalidWfsVersion) {
+          std::cerr
+              << "Error: Didn't find directory at the expected location, either the /usr dir is also corrupted or "
+                 "the keys are wrong";
+        } else {
+          throw WfsException(wfs_with_usr_dir.error());
+        }
+        return 1;
+      }
+      // Adjust the dump path, as our dir is /usr
+      if (!dump_path.empty()) {
+        if (dump_path == "usr") {
+          dump_path = "";
+        } else if (dump_path.starts_with("usr/")) {
+          dump_path = dump_path.substr(4);
+        } else {
+          std::cerr << "Error: can only dump the /usr directory in this mode";
+          return 1;
+        }
+      }
+      auto dir = (*wfs_with_usr_dir)->GetDirectory(dump_path);
+      if (!dir) {
+        std::cerr << "Error: Didn't find directory /usr/" << dump_path << " in wfs" << std::endl;
+        return 1;
+      }
+      dumpdir(std::filesystem::path(output_path), dir, "usr/" + dump_path, verbose);
+      std::cout << "Done!" << std::endl;
+      return 0;
+    }
+
+    // Regular mode
+    auto detection_result = Recovery::DetectDeviceParams(device, key);
+    if (detection_result.has_value()) {
+      if (*detection_result == WfsError::kInvalidWfsVersion)
+        std::cerr << "Error: Incorrect WFS version, possible wrong keys";
+      else
+        throw WfsException(*detection_result);
+      return 1;
+    }
     auto dir = Wfs(device, key).GetDirectory(dump_path);
     if (!dir) {
       std::cerr << "Error: Didn't find directory " << dump_path << " in wfs" << std::endl;
