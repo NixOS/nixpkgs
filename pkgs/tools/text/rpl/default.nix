@@ -31,6 +31,6 @@ python3Packages.buildPythonApplication rec {
     description = "Replace strings in files";
     homepage = "https://github.com/rrthomas/rpl";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [ cbley ];
   };
 }
