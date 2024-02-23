@@ -4972,8 +4972,6 @@ with pkgs;
 
   dapr-cli = callPackage ../development/tools/dapr/cli { };
 
-  das = callPackage ../tools/security/das { };
-
   dasel = callPackage ../applications/misc/dasel { };
 
   dasher = callPackage ../applications/accessibility/dasher { };
@@ -16569,6 +16567,8 @@ with pkgs;
   llvm_16 = llvmPackages_16.llvm;
   llvm_17 = llvmPackages_17.llvm;
 
+  mlir_17 = llvmPackages_17.mlir;
+
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
@@ -17759,43 +17759,43 @@ with pkgs;
   python3Full = python3.override {
     self = python3Full;
     pythonAttr = "python3Full";
-    bluezSupport = true;
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
   python38Full = python38.override {
     self = python38Full;
     pythonAttr = "python38Full";
-    bluezSupport = true;
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
   python39Full = python39.override {
     self = python39Full;
     pythonAttr = "python39Full";
-    bluezSupport = true;
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
   python310Full = python310.override {
     self = python310Full;
     pythonAttr = "python310Full";
-    bluezSupport = true;
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
   python311Full = python311.override {
     self = python311Full;
     pythonAttr = "python311Full";
-    bluezSupport = true;
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
   python312Full = python312.override {
     self = python312Full;
     pythonAttr = "python312Full";
-    bluezSupport = true;
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
   python313Full = python313.override {
     self = python313Full;
     pythonAttr = "python313Full";
-    bluezSupport = true;
+    bluezSupport = lib.meta.availableOn stdenv.hostPlatform bluez;
     x11Support = true;
   };
 
@@ -23621,8 +23621,8 @@ with pkgs;
   in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
-    # Avoid update.nix conflicts with libxml2.
-    passthru = builtins.removeAttrs libxml2.passthru [ "updateScript" ];
+    # Avoid update.nix/tests conflicts with libxml2.
+    passthru = builtins.removeAttrs libxml2.passthru [ "updateScript" "tests" ];
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
       mkdir "$out/nix-support"
@@ -23684,8 +23684,6 @@ with pkgs;
   libwacom = callPackage ../development/libraries/libwacom { };
 
   libwacom-surface = callPackage ../development/libraries/libwacom/surface.nix { };
-
-  lightning = callPackage ../development/libraries/lightning { };
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
@@ -23768,7 +23766,7 @@ with pkgs;
 
   mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
 
-  memorymapping = disable-warnings-if-gcc13 (callPackage ../development/libraries/memorymapping { });
+  memorymapping = callPackage ../development/libraries/memorymapping { };
   memorymappingHook = makeSetupHook {
     name = "memorymapping-hook";
     propagatedBuildInputs = [ memorymapping ];
@@ -24062,7 +24060,7 @@ with pkgs;
   nv-codec-headers-12 = callPackage ../development/libraries/nv-codec-headers/12_x.nix { };
 
   nvidiaCtkPackages =
-    callPackage ../applications/virtualization/nvidia-container-toolkit/packages.nix
+    callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix
       { };
   inherit (nvidiaCtkPackages)
     nvidia-docker
@@ -24561,8 +24559,6 @@ with pkgs;
   raylib = callPackage ../development/libraries/raylib { };
 
   readline = readline82;
-
-  readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 
@@ -32785,7 +32781,7 @@ with pkgs;
   }) k3s_1_26 k3s_1_27 k3s_1_28;
   inherit (callPackage ../applications/networking/cluster/k3s { }) k3s_1_29;
 
-  k3s = k3s_1_27;
+  k3s = k3s_1_28;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 

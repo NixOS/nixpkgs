@@ -1321,6 +1321,23 @@ let
         };
       };
 
+      earthly.earthfile-syntax-highlighting = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "earthfile-syntax-highlighting";
+          publisher = "earthly";
+          version = "0.0.16";
+          sha256 = "c54d6fd4d2f503a1031be92ff118b5eb1b997907511734e730e08b1a90a6960f";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/earthly.earthfile-syntax-highlighting/changelog";
+          description = "Syntax highlighting for Earthly build Earthfiles.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=earthly.earthfile-syntax-highlighting";
+          homepage = "https://github.com/earthly/earthfile-grammar";
+          license = lib.licenses.mpl20;
+          maintainers = [ lib.maintainers.DataHearth ];
+        };
+      };
+
       ecmel.vscode-html-css = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-html-css";
@@ -1383,8 +1400,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.19.0";
-          sha256 = "sha256-31eenBOVUEY3MFaVmAjZsypr7U0d6IfVR3ZJfDqi3OY=";
+          version = "0.20.0";
+          sha256 = "sha256-p+YNBRzzA/EezBMxI5Rmdb8SdJgFV7QwuLVi1mcJV+E=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";

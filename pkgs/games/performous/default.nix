@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "performous";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "performous";
     repo = "performous";
     rev = "refs/tags/${version}";
-    hash = "sha256-y7kxLht15vULN9NxM0wzj9+7Uq4/3D5j9oBEnrTIwQ8=";
+    hash = "sha256-f70IHA8LqIlkMRwJqSmszx3keStSx50nKcEWLGEjc3g=";
   };
 
   cedSrc = fetchFromGitHub {

@@ -9,6 +9,7 @@ let
   in {
     #### Core Apps
     lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
+    morph-browser = callPackage ./applications/morph-browser { };
 
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };

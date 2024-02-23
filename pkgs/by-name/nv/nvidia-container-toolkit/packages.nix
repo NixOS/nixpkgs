@@ -29,7 +29,7 @@ lib.makeScope newScope (
         ldconfig = "@@glibcbin@/bin/ldconfig";
       };
     };
-    nvidia-container-toolkit-docker = self.callPackage ./. {
+    nvidia-container-toolkit-docker = self.callPackage ./package.nix {
       containerRuntimePath = "${docker}/libexec/docker/docker";
       configTemplate = self.dockerConfig;
     };
@@ -65,7 +65,8 @@ lib.makeScope newScope (
       ];
       inherit (self.nvidia-docker-unwrapped) meta;
     };
-    nvidia-docker-unwrapped = self.callPackage ../nvidia-docker { };
+    nvidia-docker-unwrapped =
+      self.callPackage ./nvidia-docker.nix { };
 
     nvidia-podman = symlinkJoin {
       name = "nvidia-podman";

@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
       "https://github.com/osmcode/libosmium/releases/tag/v${version}"
       "https://github.com/osmcode/libosmium/blob/v${version}/CHANGELOG.md"
     ];
-    maintainers = with maintainers; [ das-g ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
   };
 }
