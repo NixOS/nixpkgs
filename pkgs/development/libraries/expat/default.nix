@@ -15,12 +15,16 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
+let
+  version = "2.6.0";
+  tag = "R_${lib.replaceStrings ["."] ["_"] version}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
-  version = "2.6.0";
+  inherit version;
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
+    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
     hash = "sha256-y19ajqIR4cq9Wb4KkzpS48Aswyboak04fY0hjn7kej4=";
   };
 
