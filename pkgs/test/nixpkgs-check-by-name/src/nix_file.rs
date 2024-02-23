@@ -86,7 +86,7 @@ pub struct CallPackageArgumentInfo {
 impl NixFile {
     /// Returns information about callPackage arguments for an attribute at a specific line/column
     /// index.
-    /// If the location is not of the form `<attr> = callPackage <arg1> <arg2>;`, `Ok(Err(String))` is
+    /// If the location is not of the form `<attr> = callPackage <arg1> <arg2>;`, `Ok((None, String))` is
     /// returned, with String being how the definition looks like.
     ///
     /// This function only returns `Err` for problems that can't be caused by the Nix contents,
@@ -109,7 +109,10 @@ impl NixFile {
     ///
     /// You'll get back
     /// ```rust
-    /// Ok(Ok(CallPackageArgumentInfo { path = Some("default.nix"), empty_arg: true }))
+    /// Ok((
+    ///   Some(CallPackageArgumentInfo { path = Some("default.nix"), empty_arg: true }),
+    ///   "foo = self.callPackage ./default.nix { };",
+    /// ))
     /// ```
     ///
     /// Note that this also returns the same for `pythonPackages.callPackage`. It doesn't make an
