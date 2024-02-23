@@ -6,6 +6,7 @@
   It is defined in all-packages.nix:9 as
 
     noEval = self.callPackage ./pkgs/by-name/no/noEval/package.nix { };
+
 - Because pkgs/by-name/on/onlyMove exists, the attribute `pkgs.onlyMove` must be defined like
 
     onlyMove = callPackage ./pkgs/by-name/on/onlyMove/package.nix { /* ... */ };
@@ -14,4 +15,5 @@
   It is defined in all-packages.nix:7 as
 
     onlyMove = self.callPackage ./pkgs/by-name/on/onlyMove/package.nix { };
+
 This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch

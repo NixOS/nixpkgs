@@ -6,4 +6,5 @@
   It is defined in all-packages.nix:3 as
 
     foo = self.callPackage ({ someDrv, someFlag }: someDrv) { someFlag = true; };
+
 This PR introduces the above problems, merging would break the base branch

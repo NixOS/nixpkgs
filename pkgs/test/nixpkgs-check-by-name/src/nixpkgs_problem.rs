@@ -204,7 +204,8 @@ impl fmt::Display for NixpkgsProblem {
                       Notably the second argument must not be empty, which is not the case.
                       It is defined in {}:{} as
 
-                    {}",
+                    {}
+                    ",
                     structure::relative_dir_for_package(package_name).display(),
                     structure::relative_file_for_package(package_name).display(),
                     file.display(),
@@ -222,7 +223,8 @@ impl fmt::Display for NixpkgsProblem {
                       This is however not the case: A different `callPackage` is used.
                       It is defined in {}:{} as
 
-                    {}",
+                    {}
+                    ",
                     structure::relative_dir_for_package(package_name).display(),
                     structure::relative_file_for_package(package_name).display(),
                     file.display(),
@@ -240,7 +242,8 @@ impl fmt::Display for NixpkgsProblem {
                       This is however not the case: The first callPackage argument is not right:
                       It is defined in {}:{} as
 
-                    {}",
+                    {}
+                    ",
                     structure::relative_dir_for_package(package_name).display(),
                     structure::relative_file_for_package(package_name).display(),
                     file.display(),
@@ -258,7 +261,8 @@ impl fmt::Display for NixpkgsProblem {
                       This is however not the case: The first `callPackage` argument is the wrong path.
                       It is defined in {}:{}:{} as
 
-                        {package_name} = callPackage {} {{ /* ... */ }};",
+                        {package_name} = callPackage {} {{ /* ... */ }};
+                    ",
                     structure::relative_dir_for_package(package_name).display(),
                     create_path_expr(file, expected_path),
                     file.display(), line, column,
@@ -275,7 +279,8 @@ impl fmt::Display for NixpkgsProblem {
                       This is however not the case.
                       It is defined in {}:{} as
 
-                    {}",
+                    {}
+                    ",
                     structure::relative_dir_for_package(package_name).display(),
                     structure::relative_file_for_package(package_name).display(),
                     file.display(),

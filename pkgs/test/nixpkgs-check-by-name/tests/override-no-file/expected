@@ -6,4 +6,5 @@
   It is defined in all-packages.nix:2 as
 
     nonDerivation = self.callPackage ({ someDrv }: someDrv) { };
+
 This PR introduces the above problems, merging would break the base branch

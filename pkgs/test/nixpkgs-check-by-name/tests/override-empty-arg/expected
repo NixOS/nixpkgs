@@ -6,4 +6,5 @@
   It is defined in all-packages.nix:2 as
 
     nonDerivation = self.callPackage ./pkgs/by-name/no/nonDerivation/package.nix { };
+
 This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch
