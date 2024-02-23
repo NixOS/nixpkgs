@@ -14287,6 +14287,8 @@ self: super: with self; {
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
+  tencentcloud-sdk-python = callPackage ../development/python-modules/tencentcloud-sdk-python { };
+
   tensorboard-data-server = callPackage ../development/python-modules/tensorboard-data-server { };
 
   tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
