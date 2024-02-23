@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.17.1";
+  version = "1.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0DXo2h2gqO1z5quUyWI1Qb/CNaqyy1SNinyaPyRWuR0=";
+    hash = "sha256-d6LvrMM+n0PKd751zafDHrtUZUBpip/Nf+PcD6MuEsg=";
   };
 
   nativeBuildInputs = [

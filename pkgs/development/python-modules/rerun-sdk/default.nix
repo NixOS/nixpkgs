@@ -54,8 +54,8 @@ buildPythonPackage {
     torch
   ];
 
-  inherit (rerun) addBuildInputRunpathsPhase;
-  postPhases = lib.optionals stdenv.isLinux [ "addBuildInputRunpathsPhase" ];
+  inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
+  postPhases = lib.optionals stdenv.isLinux [ "addDlopenRunpathsPhase" ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
