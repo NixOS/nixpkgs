@@ -39,7 +39,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) vault-ssh-helper; };
 
   meta = with lib; {
-    description = "Vault SSH Agent is used to enable one time keys and passwords ";
+    description = "SSH agent to use one time keys and passwords with HashiCorp Vault";
     homepage = "https://github.com/hashicorp/vault-ssh-helper";
     license = licenses.mpl20;
     changelog = "https://github.com/hashicorp/vault-ssh-helper/blob/v${version}/CHANGELOG.md";
