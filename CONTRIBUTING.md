@@ -439,14 +439,14 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging` | `staging-next` |
+| branch | `master` | `staging-next` | `staging` |
 | --- | --- | --- | --- |
-| Used for development | ✔️ | ✔️ | ❌ |
-| Built by Hydra | ✔️ | ❌ | ✔️ |
-| [Mass rebuilds][mass-rebuild] | ❌ | ✔️ | ⚠️  Only to fix Hydra builds |
-| Critical security fixes | ✔️ for non-mass-rebuilds | ❌ | ✔️ for mass-rebuilds |
-| Automatically merged into | `staging-next` | - | `staging` |
-| Manually merged into | - | `staging-next` | `master` |
+| Used for development | ✔️ | ❌ | ✔️ |
+| Built by Hydra | ✔️ | ✔️ | ❌ |
+| [Mass rebuilds][mass-rebuild] | ❌ | ⚠️  Only to fix Hydra builds | ✔️ |
+| Critical security fixes | ✔️ for non-mass-rebuilds | ✔️ for mass-rebuilds | ❌ |
+| Automatically merged into | `staging-next` | `staging` | - |
+| Manually merged into | - | `master` | `staging-next` |
 
 The staging workflow is used for all main branches, `master` and `release-YY.MM`, with corresponding names:
 - `master`/`release-YY.MM`

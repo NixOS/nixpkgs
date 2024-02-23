@@ -900,7 +900,6 @@
   ./services/networking/autossh.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/babeld.nix
-  ./services/networking/bee-clef.nix
   ./services/networking/bee.nix
   ./services/networking/biboumi.nix
   ./services/networking/bind.nix

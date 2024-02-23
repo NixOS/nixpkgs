@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, grpc-google-iam-v1
+, google-auth
 , mock
 , proto-plus
 , protobuf
@@ -13,15 +13,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "google-cloud-iam-logging";
-  version = "1.3.2";
+  pname = "google-cloud-vpc-access";
+  version = "1.10.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qJcZHghAWG04PogbCY2JHsoPEoifHVOzsfUbemo5pi4=";
+    hash = "sha256-KFOyq/vpfNWaFpKJ0AAupVn3XiTP3V95x/5M6LkJtAQ=";
   };
 
   nativeBuildInputs = [
@@ -30,26 +30,26 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     google-api-core
-    grpc-google-iam-v1
+    google-auth
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
-    "google.cloud.iam_logging"
-    "google.cloud.iam_logging_v1"
+    "google.cloud.vpcaccess"
+    "google.cloud.vpcaccess_v1"
   ];
 
   meta = with lib; {
-    description = "IAM Service Logging client library";
-    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-iam-logging";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-iam-logging-v${version}/packages/google-cloud-iam-logging/CHANGELOG.md";
+    description = "Python Client for Virtual Private Cloud";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-vpc-access";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vpc-access-v${version}/packages/google-cloud-vpc-access/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

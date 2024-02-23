@@ -1866,12 +1866,6 @@
     github = "Atry";
     githubId = 601530;
   };
-  attila-lendvai = {
-    name = "Attila Lendvai";
-    email = "attila@lendvai.name";
-    github = "attila-lendvai";
-    githubId = 840345;
-  };
   auchter = {
     name = "Michael Auchter";
     email = "a@phire.org";
