@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub
+, fetchpatch
+, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
@@ -63,6 +65,14 @@ let
       rev     = "${version}-${rel}-Alpha1";
       sha256  = "sha256-EQHmmWnDw+/udKYq7Nrf00nL7I5XWUtmzdauDryfTII=";
     };
+    patches = [
+      # Backport fix for binutils-2.41.
+      (fetchpatch {
+        name = "binutils-2.41.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+        hash = "sha256-vlBUMJ1bORQHRNpuzc5iXsTWwS/CN5BmGIA8g7H7mJE=";
+      })
+    ];
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
       sed -i 's/ --cpu=''${CPU}//' CMakeLists.txt
