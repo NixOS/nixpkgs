@@ -4832,6 +4832,8 @@ self: super: with self; {
 
   google-cloud-workflows = callPackage ../development/python-modules/google-cloud-workflows { };
 
+  google-cloud-workstations = callPackage ../development/python-modules/google-cloud-workstations { };
+
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
   google-crc32c = callPackage ../development/python-modules/google-crc32c {
