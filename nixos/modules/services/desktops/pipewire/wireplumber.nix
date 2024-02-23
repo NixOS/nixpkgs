@@ -14,14 +14,14 @@ in
         type = lib.types.bool;
         default = config.services.pipewire.enable;
         defaultText = lib.literalExpression "config.services.pipewire.enable";
-        description = lib.mdDoc "Whether to enable Wireplumber, a modular session / policy manager for PipeWire";
+        description = lib.mdDoc "Whether to enable WirePlumber, a modular session / policy manager for PipeWire";
       };
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.wireplumber;
         defaultText = lib.literalExpression "pkgs.wireplumber";
-        description = lib.mdDoc "The wireplumber derivation to use.";
+        description = lib.mdDoc "The WirePlumber derivation to use.";
       };
     };
   };
@@ -30,7 +30,7 @@ in
     assertions = [
       {
         assertion = !config.hardware.bluetooth.hsphfpd.enable;
-        message = "Using Wireplumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
+        message = "Using WirePlumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
       }
     ];
 
@@ -38,7 +38,7 @@ in
 
     environment.etc."wireplumber/main.lua.d/80-nixos.lua" = lib.mkIf (!pwUsedForAudio) {
       text = ''
-        -- Pipewire is not used for audio, so prevent it from grabbing audio devices
+        -- PipeWire is not used for audio, so prevent it from grabbing audio devices
         alsa_monitor.enable = function() end
       '';
     };
@@ -66,7 +66,7 @@ in
     systemd.user.services.wireplumber.wantedBy = [ "pipewire.service" ];
 
     systemd.services.wireplumber.environment = lib.mkIf config.services.pipewire.systemWide {
-      # Force wireplumber to use system dbus.
+      # Force WirePlumber to use system dbus.
       DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
     };
   };

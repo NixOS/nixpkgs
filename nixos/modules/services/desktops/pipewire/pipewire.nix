@@ -1,4 +1,4 @@
-# pipewire service.
+# PipeWire service.
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -25,7 +25,7 @@ in {
   ###### interface
   options = {
     services.pipewire = {
-      enable = mkEnableOption (lib.mdDoc "pipewire service");
+      enable = mkEnableOption (lib.mdDoc "PipeWire service");
 
       package = mkPackageOption pkgs "pipewire" { };
 
@@ -33,7 +33,7 @@ in {
         default = true;
         type = types.bool;
         description = lib.mdDoc ''
-          Automatically run pipewire when connections are made to the pipewire socket.
+          Automatically run PipeWire when connections are made to the PipeWire socket.
         '';
       };
 
@@ -301,7 +301,7 @@ in {
           "audio"
           "video"
         ] ++ lib.optional config.security.rtkit.enable "rtkit";
-        description = "Pipewire system service user";
+        description = "PipeWire system service user";
         isSystemUser = true;
         home = "/var/lib/pipewire";
         createHome = true;
