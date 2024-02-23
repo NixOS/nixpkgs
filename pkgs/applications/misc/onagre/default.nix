@@ -15,20 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onagre";
-  version = "1.0.0-alpha.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oknozor";
-    repo = pname;
+    repo = "onagre";
     rev = version;
-    hash = "sha256-hP+slfCWgsTgR2ZUjAmqx9f7+DBu3MpSLvaiZhqNK1Q=";
+    hash = "sha256-FqmOcmq0yNxTXZRNPA5MpsTAm4cxXpvU99yPPhihayI=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pop-launcher-1.2.1" = "sha256-LeKaJIvooD2aUlY113P0mzxOcj63sGkrA0SIccNqCLY=";
-    };
   };
 
   cargoSha256 = "sha256-IOhAGrAiT2mnScNP7k7XK9CETUr6BjGdQVdEUvTYQT4=";
@@ -39,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/onagre \
       --prefix LD_LIBRARY_PATH ":" ${lib.makeLibraryPath [ libX11 libXcursor libXi libXrandr ]} \
-      --prefix PATH ":" ${lib.getExe pop-launcher}
+      --prefix PATH : ${pop-launcher}/bin
   '';
 
   meta = with lib; {
