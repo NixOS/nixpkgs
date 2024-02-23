@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-session";
-  version = "23.10.3";
+  version = "24.2.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-session";
     rev = finalAttrs.version;
-    hash = "sha256-m2+qZxBrarenR41M41mCteFRXIEGkVDavRWQwM3G4tk=";
+    hash = "sha256-XHJhzL7B+4FnUHbsJVywELoY7xxG19RRryaPYZVao1I=";
   };
 
   postPatch = ''
