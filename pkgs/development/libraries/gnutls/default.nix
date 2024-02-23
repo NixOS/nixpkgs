@@ -64,7 +64,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-90/FlUsn1Oxt+7Ed6ph4iLWxJCiaNwOvytoO5SD0Fz4=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  outputs = [ "bin" "dev" "out" ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [ "man" "devdoc" ];
+
   # Not normally useful docs.
   outputInfo = "devdoc";
   outputDoc = "devdoc";
@@ -98,6 +100,8 @@ stdenv.mkDerivation rec {
       "--with-unbound-root-key-file=${dns-root-data}/root.key"
       (lib.withFeature withP11-kit "p11-kit")
       (lib.enableFeature cxxBindings "cxx")
+    ] ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+      "--disable-doc"
     ];
 
   enableParallelBuilding = true;
