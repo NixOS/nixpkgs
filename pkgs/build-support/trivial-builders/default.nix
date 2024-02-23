@@ -910,16 +910,16 @@ rec {
     if patches == [ ] && postPatch == ""
     then src # nothing to do, so use original src to avoid additional drv
     else stdenvNoCC.mkDerivation
-      {
+      ({
         inherit name src patches postPatch;
         preferLocalBuild = true;
         allowSubstitutes = false;
         phases = "unpackPhase patchPhase installPhase";
         installPhase = "cp -R ./ $out";
       }
-    # Carry `meta` information from the underlying `src` if present.
-    // (optionalAttrs (src?meta) { inherit (src) meta; })
-    // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
+      # Carry `meta` information from the underlying `src` if present.
+      // (optionalAttrs (src?meta) { inherit (src) meta; })
+      // (removeAttrs args [ "src" "name" "patches" "postPatch" ]));
 
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file"
