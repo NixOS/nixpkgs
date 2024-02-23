@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, nixosTests
 , makeWrapper
 , gawk
 , glibc
