@@ -12,11 +12,11 @@ let
   ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "units";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchurl {
     url = "mirror://gnu/units/units-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XRPhIHch/ncm2Qa6HZLcDt2qn8JnWe0i47jRp5MSWEg=";
+    hash = "sha256-2Ve0USRZJcnmFMRRM5dEljDq+SvWK4SVugm741Ghc3A=";
   };
 
   outputs = [ "out" "info" "man" ];
