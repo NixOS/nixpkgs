@@ -11,13 +11,13 @@
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "5.5.0.11";
+  version = "5.5.2.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-VlJiTCdoH6hlVtQgECIlbsQvg3S58B5IIy1zRxh1eOg=";
+    hash = "sha256-8MrVeJ4XVU7WdYv0mbwz64hIGglisb6+vUoicl4/WC0=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -76,6 +76,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 lom ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
