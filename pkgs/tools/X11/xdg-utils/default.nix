@@ -2,7 +2,7 @@
 # docs deps
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
-, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, xdg-user-dirs
+, resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, lockfileProgs, nettools, procmail, procps, which, xdg-user-dirs
 , perl, perlPackages
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
@@ -209,6 +209,25 @@ let
         "$handler" = true;
       };
     }
+
+    {
+      scripts = [ "bin/xdg-terminal" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = commonDeps ++ [ bash glib.bin which ];
+      fake.external = commonFakes ++ [
+        "gconftool-2"    # GNOME
+        "exo-open"       # XFCE
+        "lxterminal"     # LXQT
+        "qterminal"      # LXQT
+        "terminology"    # Englightenment
+      ];
+      keep = {
+        "$command" = true;
+        "$kreadconfig" = true;
+        "$terminal_exec" = true;
+      };
+      prologue = commonPrologue;
+    }
   ];
 in
 
@@ -229,6 +248,12 @@ stdenv.mkDerivation rec {
     # Upstream PR: https://github.com/freedesktop/xdg-utils/pull/12
     ./allow-forcing-portal-use.patch
   ];
+
+  # enable xdg-terminal build
+  postPatch = ''
+    substituteInPlace scripts/Makefile.in \
+      --replace-fail "    xdg-settings" "    xdg-settings xdg-terminal"
+  '';
 
   # just needed when built from git
   nativeBuildInputs = [ libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl xmlto ];
