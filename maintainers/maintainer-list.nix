@@ -7737,6 +7737,14 @@
       fingerprint = "7FC7 98AB 390E 1646 ED4D  8F1F 797F 6238 68CD 00C2";
     }];
   };
+  greaka = {
+    email = "git@greaka.de";
+    github = "greaka";
+    githubId = 2805834;
+    name = "Greaka";
+    keys =
+      [{ fingerprint = "6275 FB5C C9AC 9D85 FF9E  44C5 EE92 A5CD C367 118C"; }];
+  };
   greg = {
     email = "greg.hellings@gmail.com";
     github = "greg-hellings";
