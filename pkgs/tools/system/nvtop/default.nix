@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvtop";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    hash = "sha256-SHKdjzbc3ZZfOW2p8RLFRKKBfLnO+Z8/bKVxcdLLqxw=";
+    hash = "sha256-MkkBY2PR6FZnmRMqv9MWqwPWRgixfkUQW5TWJtHEzwA=";
   };
 
   cmakeFlags = with lib; [
