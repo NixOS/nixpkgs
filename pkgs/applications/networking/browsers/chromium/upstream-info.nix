@@ -15,9 +15,9 @@
         version = "2024-01-22";
       };
     };
-    hash = "sha256-VvurD1r89dI0ahaVDQ3yinGlHOfzzm7TkL09tF4nebE=";
-    hash_deb_amd64 = "sha256-Q3AUKzUsRzW00+WLhuri86QzBGk/rlq5Hk+NdoRbbM4=";
-    version = "122.0.6261.57";
+    hash = "sha256-uEN1hN6DOLgw4QDrMBZdiLLPx+yKQc5MimIf/vbCC84=";
+    hash_deb_amd64 = "sha256-k3/Phs72eIMB6LAU4aU0+ze/cRu6KlRhpBshKhmq9N4=";
+    version = "122.0.6261.69";
   };
   ungoogled-chromium = {
     deps = {
