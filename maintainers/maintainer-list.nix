@@ -17735,6 +17735,12 @@
     githubId = 321799;
     name = "Paul Colomiets";
   };
+  takac = {
+    email = "cammann.tom@gmail.com";
+    github = "takac";
+    githubId = 1015381;
+    name = "Tom Cammann";
+  };
   takagiy = {
     email = "takagiy.4dev@gmail.com";
     github = "takagiy";
