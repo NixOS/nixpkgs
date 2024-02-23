@@ -9,7 +9,7 @@
 let
 
   pname = "1password";
-  version = if channel == "stable" then "8.10.26" else "8.10.26-38.BETA";
+  version = if channel == "stable" then "8.10.26" else "8.10.28-1.BETA";
 
   sources = {
     stable = {
@@ -33,19 +33,19 @@ let
     beta = {
       x86_64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-        hash = "sha256-7+rwEX/BP5KD77djrJXCl41zviwHfiEi+WZfQeOQksc=";
+        hash = "sha256-2XwSBJHvv0YYMQUHw2baiMJm5FizmxbaKoQaCIRc5UY=";
       };
       aarch64-linux = {
         url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
-        hash = "sha256-ELnO6cRgyZQHWTdB0143Z37Tdkc2iZUauFWTf3eL8AE=";
+        hash = "sha256-pxEGRpzMaxxJ+W2lSDZ7jNKHLQ22pgOKqD/Bt6ot2lk=";
       };
       x86_64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
-        hash = "sha256-fTpz1POmnqWcMtKCfkwyEFoyrZcpV5y7UP4DamsKbzU=";
+        hash = "sha256-WoitPHQ6yW5jmCGL976am73TTGbcqBfCvYnDKUORAVU=";
       };
       aarch64-darwin = {
         url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
-        hash = "sha256-vAWPcOrjrcY8rC0N9PuNe+vivOkWvB6etW2QQWJJz1k=";
+        hash = "sha256-YE0TvbA7jXpISywC/AWFBfV09jjgY+DLHhRUYbxpaXE=";
       };
     };
   };
