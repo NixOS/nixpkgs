@@ -50,11 +50,10 @@ python3Packages.buildPythonPackage rec {
       inherit version;
     })
 
-     # patch to prevent update
-    ./prevent-update.patch
-
     # patch to prevent script copying and to disable install
     ./prevent-install-and-copy.patch
+     # patch to prevent update
+    ./prevent-update.patch
  ];
 
   postPatch = ''
