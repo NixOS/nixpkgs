@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/mfontanini/libtins/commit/812be7966d445ec56e88eab512f8fd2d57152427.patch";
       hash = "sha256-5RCFPe95r1CBrAocjTPR2SvUlgaGa1aBc8RazyxUj3M=";
     })
+    # Required for gtest 1.13+.
+    ./0001-force-cpp-14.patch
   ];
 
   postPatch = ''
