@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.5.1";
+  version = "0.6.0";
   format = "other";
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-tHBEz4sZsWOxDkdUd/3zMta8vOhuzv4G01dtjKBX/D0=";
+    hash = "sha256-MfffIqxfelwP+9wsFvQfEIMkav7j5LJEHjLPOsuYdtQ=";
   };
 
   postPatch = ''
