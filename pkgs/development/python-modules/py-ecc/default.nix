@@ -5,6 +5,7 @@
 , eth-typing
 , eth-utils
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , setuptools
 }:
@@ -34,6 +35,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/ethereum/py_ecc/issues/133
+    "test_FQ2_object"
+    "test_pairing_bilinearity_on_G1"
+    "test_pairing_bilinearity_on_G2"
+    "test_pairing_composit_check"
+    "test_pairing_is_non_degenerate"
+    "test_pairing_negative_G1"
+    "test_pairing_negative_G2"
+    "test_pairing_output_order"
   ];
 
   pythonImportsCheck = [ "py_ecc" ];
