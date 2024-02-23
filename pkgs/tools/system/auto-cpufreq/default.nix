@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
-    repo = pname;
+    repo = "auto-cpufreq";
     rev = "v${version}";
     hash = "sha256-lwimP4+qRFNQN+uHSFJHdkXYREWGwtoEc7U+bN5TDcc=";
   };
