@@ -12,13 +12,13 @@ python3Packages.buildPythonPackage rec {
   format = "pyproject";
 
   pname = "auto-cpufreq";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cALWWcmT1fVOof4Kgsbs+TMKB2dBpUF5VpFU3JM20Uc=";
+    hash = "sha256-lwimP4+qRFNQN+uHSFJHdkXYREWGwtoEc7U+bN5TDcc=";
   };
 
   nativeBuildInputs = [ 
@@ -52,7 +52,7 @@ python3Packages.buildPythonPackage rec {
 
     # patch to prevent script copying and to disable install
     ./prevent-install-and-copy.patch
-     # patch to prevent update
+    # patch to prevent update
     ./prevent-update.patch
  ];
 
@@ -61,9 +61,9 @@ python3Packages.buildPythonPackage rec {
     substituteInPlace scripts/org.auto-cpufreq.pkexec.policy --replace "/opt/auto-cpufreq/venv/bin/auto-cpufreq" $out/bin/auto-cpufreq
 
     substituteInPlace auto_cpufreq/gui/app.py auto_cpufreq/gui/objects.py \
-      --replace-fail "/usr/local/share/auto-cpufreq/images/icon.png" $out/share/pixmaps/auto-cpufreq.png
+      --replace "/usr/local/share/auto-cpufreq/images/icon.png" $out/share/pixmaps/auto-cpufreq.png
     substituteInPlace auto_cpufreq/gui/app.py \
-      --replace-fail "/usr/local/share/auto-cpufreq/scripts/style.css" $out/share/auto-cpufreq/scripts/style.css
+      --replace "/usr/local/share/auto-cpufreq/scripts/style.css" $out/share/auto-cpufreq/scripts/style.css
 
     '';
 

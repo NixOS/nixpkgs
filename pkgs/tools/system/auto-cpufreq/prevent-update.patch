@@ -65,3 +65,49 @@ index db2b84d..0425338 100755
  
          elif completions:
              if completions == "bash":
+diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
+index e355ff3..a0e9c48 100755
+--- a/auto_cpufreq/core.py
++++ b/auto_cpufreq/core.py
+@@ -167,40 +167,8 @@ def app_version():
+             pass
+ 
+ def check_for_update():
+-    # returns True if a new release is available from the GitHub repo
++    pass
+ 
+-    # Specify the repository and package name
+-    # IT IS IMPORTANT TO  THAT IF THE REPOSITORY STRUCTURE IS CHANGED, THE FOLLOWING FUNCTION NEEDS TO BE UPDATED ACCORDINGLY
+-    # Fetch the latest release information from GitHub API
+-    latest_release_url = f"https://api.github.com/repos/AdnanHodzic/auto-cpufreq/releases/latest"
+-    try:
+-        latest_release = requests.get(latest_release_url).json()
+-    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout,
+-            requests.exceptions.RequestException, requests.exceptions.HTTPError) as err:
+-        print ("Error Connecting to server!")
+-        return False
+-
+-    latest_version =  latest_release["tag_name"]
+-
+-    # Get the current version of auto-cpufreq
+-    # Extract version number from the output string
+-    output = check_output(['auto-cpufreq', '--version']).decode('utf-8')
+-    try:
+-        version_line = next((re.search(r'\d+\.\d+\.\d+', line).group() for line in output.split('\n') if line.startswith('auto-cpufreq version')), None)
+-    except AttributeError:
+-        print("Error Retrieving Current Version!")
+-        exit(1)
+-    installed_version = "v" + version_line
+-    #Check whether the same is installed or not
+-    # Compare the latest version with the installed version and perform update if necessary
+-    if latest_version == installed_version:
+-        print("auto-cpufreq is up to date")
+-        return False
+-    else:
+-        print(f"Updates are available,\nCurrent version: {installed_version}\nLatest version: {latest_version}")
+-        print("Note that your previous custom settings might be erased with the following update")
+-        return True
+-    
+ def new_update(custom_dir):
+     os.chdir(custom_dir)
+     print(f"Cloning the latest release to {custom_dir}")
