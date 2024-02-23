@@ -45,17 +45,6 @@ stdenv.mkDerivation rec {
     chmod -R u+w .
   '';
 
-  patches = [
-    # fix for https://github.com/NixOS/nixpkgs/issues/269548
-    # https://github.com/llvm/llvm-project/pull/77218
-    (fetchpatch {
-      name = "darwin-system-libcxxabi-link-flags.patch";
-      url = "https://github.com/llvm/llvm-project/commit/c5b89b29ee6e3c444a355fd1cf733ce7ab2e316a.patch";
-      hash = "sha256-LNoPg1KCoP8RWxU/AzHR52f4Dww24I9BGQJedMhFxyQ=";
-      relative = "libcxx";
-    })
-  ];
-
   postPatch = ''
     cd ../runtimes
   '';
@@ -82,7 +71,9 @@ stdenv.mkDerivation rec {
     "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
   ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+    ++ lib.optionals (lib.versionAtLeast version "18" && !(stdenv.hostPlatform.useLLVM or false) && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
+    "-DLIBCXX_ADDITIONAL_LIBRARIES=gcc_s"
+  ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
       "-DLIBCXX_USE_COMPILER_RT=ON"
       # There's precedent for this in llvm-project/libcxx/cmake/caches.
       # In a monorepo build you might do the following in the libcxxabi build:
