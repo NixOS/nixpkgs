@@ -21,23 +21,23 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-lwimP4+qRFNQN+uHSFJHdkXYREWGwtoEc7U+bN5TDcc=";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook
   ];
 
-  buildInputs = [ 
-    gtk3 
+  buildInputs = [
+    gtk3
     python3Packages.poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [ 
-    click 
-    distro 
-    psutil 
-    pygobject3 
+  propagatedBuildInputs = with python3Packages; [
+    click
+    distro
+    psutil
+    pygobject3
     poetry-dynamic-versioning
-    setuptools 
+    setuptools
   ];
 
   doCheck = false;
