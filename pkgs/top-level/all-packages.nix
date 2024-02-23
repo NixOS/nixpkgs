@@ -14715,8 +14715,6 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
-  units = callPackage ../tools/misc/units { };
-
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
   unnaturalscrollwheels = callPackage ../tools/inputmethods/unnaturalscrollwheels { };
