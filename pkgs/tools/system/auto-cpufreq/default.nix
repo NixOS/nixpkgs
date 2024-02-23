@@ -1,4 +1,11 @@
-{ lib, python3Packages, fetchFromGitHub, substituteAll, wrapGAppsHook, gobject-introspection, gtk3 }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+, substituteAll
+, wrapGAppsHook
+, gobject-introspection
+, gtk3
+}:
 
 python3Packages.buildPythonPackage rec {
   # use pyproject.toml instead of setup.py
@@ -14,11 +21,24 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-cALWWcmT1fVOof4Kgsbs+TMKB2dBpUF5VpFU3JM20Uc=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ 
+    gobject-introspection
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 python3Packages.poetry-core ];
+  buildInputs = [ 
+    gtk3 
+    python3Packages.poetry-core
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ setuptools click distro psutil pygobject3 poetry-dynamic-versioning];
+  propagatedBuildInputs = with python3Packages; [ 
+    click 
+    distro 
+    psutil 
+    pygobject3 
+    poetry-dynamic-versioning
+    setuptools 
+  ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
@@ -41,8 +61,10 @@ python3Packages.buildPythonPackage rec {
     substituteInPlace auto_cpufreq/core.py --replace '/opt/auto-cpufreq/override.pickle' /var/run/override.pickle
     substituteInPlace scripts/org.auto-cpufreq.pkexec.policy --replace "/opt/auto-cpufreq/venv/bin/auto-cpufreq" $out/bin/auto-cpufreq
 
-    substituteInPlace auto_cpufreq/gui/app.py auto_cpufreq/gui/objects.py --replace "/usr/local/share/auto-cpufreq/images/icon.png" $out/share/pixmaps/auto-cpufreq.png
-    substituteInPlace auto_cpufreq/gui/app.py --replace "/usr/local/share/auto-cpufreq/scripts/style.css" $out/share/auto-cpufreq/scripts/style.css
+    substituteInPlace auto_cpufreq/gui/app.py auto_cpufreq/gui/objects.py \
+      --replace-fail "/usr/local/share/auto-cpufreq/images/icon.png" $out/share/pixmaps/auto-cpufreq.png
+    substituteInPlace auto_cpufreq/gui/app.py \
+      --replace-fail "/usr/local/share/auto-cpufreq/scripts/style.css" $out/share/auto-cpufreq/scripts/style.css
 
     '';
 
