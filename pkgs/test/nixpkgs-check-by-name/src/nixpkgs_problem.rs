@@ -202,7 +202,7 @@ impl fmt::Display for NixpkgsProblem {
                     "
                     - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
 
-                        {package_name} = callPackage {} {{ /* ... */ }};
+                        {package_name} = callPackage ./{} {{ /* ... */ }};
 
                       This is however not the case: A different `callPackage` is used.
                       It is defined in {}:{} as
@@ -220,7 +220,7 @@ impl fmt::Display for NixpkgsProblem {
                     "
                     - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
 
-                        {package_name} = callPackage {} {{ /* ... */ }};
+                        {package_name} = callPackage ./{} {{ /* ... */ }};
 
                       This is however not the case: The first callPackage argument is not right:
                       It is defined in {}:{} as
@@ -255,7 +255,7 @@ impl fmt::Display for NixpkgsProblem {
                     "
                     - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
 
-                        {package_name} = callPackage {} {{ /* ... */ }};
+                        {package_name} = callPackage ./{} {{ /* ... */ }};
 
                       This is however not the case.
                       It is defined in {}:{} as
