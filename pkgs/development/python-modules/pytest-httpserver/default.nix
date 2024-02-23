@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.0.8";
+  version = "1.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "csernazs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-hbhS1kL5VNiGjvnYkDI1LwgkqqfBMqgcao3zy716q+A=";
+    hash = "sha256-9DRvGR78ETxi0sxkeP38CLiazuVxZUt/kSRfe3dM50Q=";
   };
 
   nativeBuildInputs = [
