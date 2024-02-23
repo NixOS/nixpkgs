@@ -1,2 +1,3 @@
 pkgs.noEval: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/no/noEval/package.nix { ... }` with a non-empty second argument.
 pkgs.onlyMove: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/on/onlyMove/package.nix { ... }` with a non-empty second argument.
+This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch

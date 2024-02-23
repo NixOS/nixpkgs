@@ -6,3 +6,4 @@
   It is defined in all-packages.nix:4 as
 
     foo = self.bar;
+This PR introduces the above problems, merging would break the base branch

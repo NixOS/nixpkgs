@@ -6,3 +6,4 @@
   It is defined in all-packages.nix:5 as
 
     foo = self.alt.callPackage ({ }: self.someDrv) { };
+This PR introduces the above problems, merging would break the base branch
