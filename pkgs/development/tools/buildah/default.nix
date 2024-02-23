@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.34.0";
+  version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-LX7yc2FnCiquHV/tESJV/VkuUYXbRNSxmMzVpSz/F8w=";
+    hash = "sha256-0mH6s9BSTkXutwYVG3EpqEcildO3g37Us4pdTmLPcAQ=";
   };
 
   outputs = [ "out" "man" ];
