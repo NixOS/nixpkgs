@@ -339,7 +339,13 @@ fn by_name(
                                         // Manual definitions with empty arguments are not allowed
                                         // anymore
                                         Success(if syntactic_call_package.empty_arg {
-                                            Loose(())
+                                            Loose(NixpkgsProblem::EmptyArgument {
+                                                package_name: attribute_name.to_owned(),
+                                                file: relative_file,
+                                                line: location.line,
+                                                column: location.column,
+                                                definition,
+                                            })
                                         } else {
                                             Tight
                                         })

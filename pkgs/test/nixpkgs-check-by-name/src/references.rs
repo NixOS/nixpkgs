@@ -66,7 +66,7 @@ fn check_path(
             Err(io_error) => NixpkgsProblem::UnresolvableSymlink {
                 relative_package_dir: relative_package_dir.to_path_buf(),
                 subpath: subpath.to_path_buf(),
-                io_error,
+                io_error: io_error.to_string(),
             }
             .into(),
         }
@@ -160,7 +160,7 @@ fn check_nix_file(
                     subpath: subpath.to_path_buf(),
                     line,
                     text,
-                    io_error: e,
+                    io_error: e.to_string(),
                 }
                 .into(),
                 ResolvedPath::Within(..) => {

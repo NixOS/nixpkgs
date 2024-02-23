@@ -4,7 +4,6 @@
 
 use crate::nix_file::CallPackageArgumentInfo;
 use crate::nixpkgs_problem::NixpkgsProblem;
-use crate::structure;
 use crate::validation::{self, Validation, Validation::Success};
 use std::collections::HashMap;
 
@@ -127,17 +126,14 @@ impl<Context: ToNixpkgsProblem> RatchetState<Context> {
 pub enum ManualDefinition {}
 
 impl ToNixpkgsProblem for ManualDefinition {
-    type ToContext = ();
+    type ToContext = NixpkgsProblem;
 
     fn to_nixpkgs_problem(
-        name: &str,
+        _name: &str,
         _optional_from: Option<()>,
-        _to: &Self::ToContext,
+        to: &Self::ToContext,
     ) -> NixpkgsProblem {
-        NixpkgsProblem::WrongCallPackage {
-            relative_package_file: structure::relative_file_for_package(name),
-            package_name: name.to_owned(),
-        }
+        (*to).clone()
     }
 }
 

@@ -1,3 +1,17 @@
-pkgs.noEval: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/no/noEval/package.nix { ... }` with a non-empty second argument.
-pkgs.onlyMove: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/on/onlyMove/package.nix { ... }` with a non-empty second argument.
+- Because pkgs/by-name/no/noEval exists, the attribute `pkgs.noEval` must be defined like
+
+    noEval = callPackage ./pkgs/by-name/no/noEval/package.nix { /* ... */ };
+
+  Notably the second argument must not be empty, which is not the case.
+  It is defined in all-packages.nix:9 as
+
+    noEval = self.callPackage ./pkgs/by-name/no/noEval/package.nix { };
+- Because pkgs/by-name/on/onlyMove exists, the attribute `pkgs.onlyMove` must be defined like
+
+    onlyMove = callPackage ./pkgs/by-name/on/onlyMove/package.nix { /* ... */ };
+
+  Notably the second argument must not be empty, which is not the case.
+  It is defined in all-packages.nix:7 as
+
+    onlyMove = self.callPackage ./pkgs/by-name/on/onlyMove/package.nix { };
 This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch

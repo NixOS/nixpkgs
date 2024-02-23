@@ -4,11 +4,11 @@ use indoc::writedoc;
 use relative_path::RelativePath;
 use std::ffi::OsString;
 use std::fmt;
-use std::io;
 use std::path::Path;
 use std::path::PathBuf;
 
 /// Any problem that can occur when checking Nixpkgs
+#[derive(Clone)]
 pub enum NixpkgsProblem {
     ShardNonDir {
         relative_shard_path: PathBuf,
@@ -43,9 +43,12 @@ pub enum NixpkgsProblem {
         relative_package_file: PathBuf,
         package_name: String,
     },
-    WrongCallPackage {
-        relative_package_file: PathBuf,
+    EmptyArgument {
         package_name: String,
+        file: PathBuf,
+        line: usize,
+        column: usize,
+        definition: String,
     },
     NonToplevelCallPackage {
         package_name: String,
@@ -87,7 +90,7 @@ pub enum NixpkgsProblem {
     UnresolvableSymlink {
         relative_package_dir: PathBuf,
         subpath: PathBuf,
-        io_error: io::Error,
+        io_error: String,
     },
     PathInterpolation {
         relative_package_dir: PathBuf,
@@ -112,7 +115,7 @@ pub enum NixpkgsProblem {
         subpath: PathBuf,
         line: usize,
         text: String,
-        io_error: io::Error,
+        io_error: String,
     },
     MovedOutOfByName {
         package_name: String,
@@ -190,11 +193,23 @@ impl fmt::Display for NixpkgsProblem {
                     "pkgs.{package_name}: This attribute is not defined but it should be defined automatically as {}",
                     relative_package_file.display()
                 ),
-            NixpkgsProblem::WrongCallPackage { relative_package_file, package_name } =>
-                write!(
+            NixpkgsProblem::EmptyArgument { package_name, file, line, column, definition } =>
+                writedoc!(
                     f,
-                    "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}` with a non-empty second argument.",
-                    relative_package_file.display()
+                    "
+                    - Because {} exists, the attribute `pkgs.{package_name}` must be defined like
+
+                        {package_name} = callPackage ./{} {{ /* ... */ }};
+
+                      Notably the second argument must not be empty, which is not the case.
+                      It is defined in {}:{} as
+
+                    {}",
+                    structure::relative_dir_for_package(package_name).display(),
+                    structure::relative_file_for_package(package_name).display(),
+                    file.display(),
+                    line,
+                    indent_definition(*column, definition.clone()),
                 ),
             NixpkgsProblem::NonToplevelCallPackage { package_name, file, line, column, definition } =>
                 writedoc!(

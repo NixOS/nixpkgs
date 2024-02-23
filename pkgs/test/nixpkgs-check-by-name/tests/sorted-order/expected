@@ -1,5 +1,19 @@
-pkgs.a: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/a/a/package.nix { ... }` with a non-empty second argument.
+- Because pkgs/by-name/a/a exists, the attribute `pkgs.a` must be defined like
+
+    a = callPackage ./pkgs/by-name/a/a/package.nix { /* ... */ };
+
+  Notably the second argument must not be empty, which is not the case.
+  It is defined in all-packages.nix:2 as
+
+    a = self.callPackage ./pkgs/by-name/a/a/package.nix { };
 pkgs.b: This is a new top-level package of the form `callPackage ... { }`. Please define it in pkgs/by-name/b/b/package.nix instead. See `pkgs/by-name/README.md` for more details. Since the second `callPackage` argument is `{ }`, no manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is needed anymore.
-pkgs.c: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage pkgs/by-name/c/c/package.nix { ... }` with a non-empty second argument.
+- Because pkgs/by-name/c/c exists, the attribute `pkgs.c` must be defined like
+
+    c = callPackage ./pkgs/by-name/c/c/package.nix { /* ... */ };
+
+  Notably the second argument must not be empty, which is not the case.
+  It is defined in all-packages.nix:4 as
+
+    c = self.callPackage ./pkgs/by-name/c/c/package.nix { };
 pkgs.d: This is a new top-level package of the form `callPackage ... { }`. Please define it in pkgs/by-name/d/d/package.nix instead. See `pkgs/by-name/README.md` for more details. Since the second `callPackage` argument is `{ }`, no manual `callPackage` (e.g. in `pkgs/top-level/all-packages.nix`) is needed anymore.
 This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch
