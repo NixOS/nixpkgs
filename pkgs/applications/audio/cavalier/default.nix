@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Audio visualizer based on CAVA with customizable LibAdwaita interface";
-    homepage = "https://github.com/fsobolev/cavalier";
+    homepage = "https://github.com/NickvisionApps/Cavalier";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zendo ];
