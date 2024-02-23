@@ -2,13 +2,13 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpunit";
-  version = "11.0.2";
+  version = "11.0.3";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-k0ox4/Djpu6DoWGzQdo7wYSZHSeaCtNVuEwK3bhBgQQ=";
+    hash = "sha256-ASeALfqcDUoK2PSl88AJ3UgrLdesuH1o5UNq+ceGbxI=";
   };
 
   vendorHash = "sha256-2rG0ERgI5oVW3MuU8yFwgssoWX6zwUwXpro2IVkX7ac=";
