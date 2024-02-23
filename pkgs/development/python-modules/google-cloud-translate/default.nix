@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.14.0";
+  version = "3.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZI2t9/iZEkDHMF4CyLGmrikGOSe0/gKBFjU0svUlxu0=";
+    hash = "sha256-bUwkR7wviOxeDTpneMPYX6s22iFLk4SxBlmyno259ZQ=";
   };
 
   nativeBuildInputs = [
