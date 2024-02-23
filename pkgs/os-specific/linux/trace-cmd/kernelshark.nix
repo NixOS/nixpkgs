@@ -1,22 +1,22 @@
-{ lib, mkDerivation, fetchzip, qtbase, cmake, asciidoc
+{ lib, stdenv, fetchzip, qtbase, qtscxml, cmake, asciidoc
 , docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config
-, libtraceevent, libtracefs, freefont_ttf
+, libtraceevent, libtracefs, freefont_ttf, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kernelshark";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernelshark-v${version}.tar.gz";
-    hash = "sha256-V25IzPDOt6V03wgIa/AJ0T8mRaGmXYuMCcvbSOKleY0=";
+    hash = "sha256-y4UpDcKnOgErgRTIYTWP6mFhdlsMP/Y214ZqCRxTAF0=";
   };
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
 
-  buildInputs = [ qtbase json_c mesa_glu freeglut libtraceevent libtracefs trace-cmd ];
+  buildInputs = [ qtbase qtscxml json_c mesa_glu freeglut libtraceevent libtracefs trace-cmd ];
 
   cmakeFlags = [
     "-D_INSTALL_PREFIX=${placeholder "out"}"
