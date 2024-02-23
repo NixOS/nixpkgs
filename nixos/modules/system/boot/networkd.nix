@@ -797,6 +797,7 @@ let
           "UseHostname"
           "Hostname"
           "UseDomains"
+          "UseGateway"
           "UseRoutes"
           "UseTimezone"
           "ClientIdentifier"
@@ -829,6 +830,7 @@ let
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
