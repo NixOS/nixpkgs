@@ -14715,10 +14715,7 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
-  units = callPackage ../tools/misc/units {
-    enableCurrenciesUpdater = true;
-    pythonPackages = python3Packages;
-  };
+  units = callPackage ../tools/misc/units { };
 
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
