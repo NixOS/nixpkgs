@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "1gnwihpfz4x18rwd6cbrdggmfqjzwsdfh1gpmc0ph21c4gq2097g";
+    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
+    hash = "sha256-y19ajqIR4cq9Wb4KkzpS48Aswyboak04fY0hjn7kej4=";
   };
 
   patches = [
