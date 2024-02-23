@@ -67,6 +67,8 @@ in
           description = lib.mdDoc ''
             A file containing the password corresponding to
             [](#opt-services.castopod.database.user).
+
+            This file is loaded using systemd LoadCredentials.
           '';
         };
       };
@@ -93,6 +95,8 @@ in
           Environment file to inject e.g. secrets into the configuration.
           See [](https://code.castopod.org/adaures/castopod/-/blob/main/.env.example)
           for available environment variables.
+
+          This file is loaded using systemd LoadCredentials.
         '';
       };
       configureNginx = lib.mkOption {
@@ -207,19 +211,23 @@ in
           echo "analytics.salt=$(cat ${cfg.dataDir}/salt)" >> ${envFile}
 
           ${if (cfg.database.passwordFile != null) then ''
-            echo "database.default.password=$(cat ${lib.escapeShellArg cfg.database.passwordFile})" >> ${envFile}
+            echo "database.default.password=$(cat "$CREDENTIALS_DIRECTORY/dbpasswordfile)" >> ${envFile}
           '' else ''
             echo "database.default.password=" >> ${envFile}
           ''}
 
           ${lib.optionalString (cfg.environmentFile != null) ''
-            cat ${lib.escapeShellArg cfg.environmentFile} >> ${envFile}
+            cat "$CREDENTIALS_DIRECTORY/envfile" >> ${envFile}
           ''}
 
           php ${cfg.package}/share/castopod/spark castopod:database-update
         '';
       serviceConfig = {
         StateDirectory = "castopod";
+        LoadCredential = lib.optional (cfg.environmentFile != null)
+          "envfile:${cfg.environmentFile}"
+        ++ (lib.optional (cfg.database.passwordFile != null)
+          "dbpasswordfile:${cfg.database.passwordFile}");
         WorkingDirectory = "${cfg.package}/share/castopod";
         Type = "oneshot";
         RemainAfterExit = true;
