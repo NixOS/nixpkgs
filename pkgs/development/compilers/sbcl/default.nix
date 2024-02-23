@@ -108,7 +108,6 @@ stdenv.mkDerivation (self: rec {
   # upstream--somehow some way) in due time.
   disabledTestFiles = lib.optionals (builtins.elem stdenv.hostPlatform.system [
     "x86_64-linux"
-    "x86_64-darwin"
     "aarch64-linux"
   ]) [
     "foreign-stack-alignment.impure.lisp"
@@ -188,7 +187,11 @@ stdenv.mkDerivation (self: rec {
     runHook postBuild
   '';
 
-  doCheck = true;
+  # Tests on ofBorg’s x86_64-darwin platforms are so unstable that a random one
+  # will fail every other run. There’s a deeper problem here; we might as well
+  # disable them entirely so at least the other platforms get to benefit from
+  # testing.
+  doCheck = stdenv.hostPlatform.system != "x86_64-darwin";
 
   # From the INSTALL docs
   checkPhase = ''
