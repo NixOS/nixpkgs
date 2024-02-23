@@ -3227,8 +3227,6 @@ with pkgs;
 
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
-  api-linter = callPackage ../development/tools/api-linter { };
-
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
