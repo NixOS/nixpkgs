@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , fetchpatch
 , clipper
@@ -10,14 +9,11 @@
 , gdal
 , ninja
 , proj
-, qtimageformats
-, qtlocation
-, qtsensors
-, qttools
+, qt5
 , zlib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
   version = "0.9.5";
 
@@ -36,11 +32,19 @@ mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "find_package(ClangTidy" "#find_package(ClangTidy"
+    substituteInPlace packaging/custom_install.cmake.in \
+      --replace "fixup_bundle_portable(" "#fixup_bundle_portable("
+  '';
+
   nativeBuildInputs = [
     cmake
     doxygen
     ninja
-    qttools
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -48,35 +52,34 @@ mkDerivation rec {
     cups
     gdal
     proj
-    qtimageformats
-    qtlocation
-    qtsensors
+    qt5.qtimageformats
+    qt5.qtlocation
+    qt5.qtsensors
     zlib
   ];
 
   cmakeFlags = [
     # Building the manual and bundling licenses fails
     # See https://github.com/NixOS/nixpkgs/issues/85306
-    "-DLICENSING_PROVIDER:BOOL=OFF"
-    "-DMapper_MANUAL_QTHELP:BOOL=OFF"
+    (lib.cmakeBool "LICENSING_PROVIDER" false)
+    (lib.cmakeBool "Mapper_MANUAL_QTHELP" false)
   ] ++ lib.optionals stdenv.isDarwin [
     # FindGDAL is broken and always finds /Library/Framework unless this is
     # specified
-    "-DGDAL_INCLUDE_DIR=${gdal}/include"
-    "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
-    "-DGDAL_LIBRARY=${gdal}/lib/libgdal.dylib"
+    (lib.cmakeFeature "GDAL_INCLUDE_DIR" "${gdal}/include")
+    (lib.cmakeFeature "GDAL_CONFIG" "${gdal}/bin/gdal-config")
+    (lib.cmakeFeature "GDAL_LIBRARY" "${gdal}/lib/libgdal.dylib")
     # Don't bundle libraries
-    "-DMapper_PACKAGE_PROJ=0"
-    "-DMapper_PACKAGE_QT=0"
-    "-DMapper_PACKAGE_ASSISTANT=0"
-    "-DMapper_PACKAGE_GDAL=0"
+    (lib.cmakeBool "Mapper_PACKAGE_PROJ" false)
+    (lib.cmakeBool "Mapper_PACKAGE_QT" false)
+    (lib.cmakeBool "Mapper_PACKAGE_ASSISTANT" false)
+    (lib.cmakeBool "Mapper_PACKAGE_GDAL" false)
   ];
 
   postInstall = with stdenv; lib.optionalString isDarwin ''
-    mkdir -p $out/Applications
+    mkdir -p $out/{Applications,bin}
     mv $out/Mapper.app $out/Applications
-    mkdir -p $out/bin
-    ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
+    ln -s $out/Applications/Mapper.app/Contents/MacOS/Mapper $out/bin/Mapper
   '';
 
   meta = with lib; {
@@ -86,7 +89,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mpickering sikmir ];
     platforms = with platforms; unix;
-    broken = stdenv.isDarwin;
     mainProgram = "Mapper";
   };
 }
