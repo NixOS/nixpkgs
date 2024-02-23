@@ -58,6 +58,12 @@ let
         src = fetchgit {
           inherit (upstream-info.deps.gn) url rev hash;
         };
+        # Backport of https://github.com/NixOS/nixpkgs/commit/6de0b4ce3f0ef1aa8a298a7af0bef36b02e2f8c5 (more of less).
+        # Since this hasn't been backported before branch-off and prevents building our overwritten gn on 23.11 with
+        # gn 2024-01-22 (chromium M122).
+        env = oldAttrs.env or {} // {
+          NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -Wno-error";
+        };
       });
       recompressTarball = callPackage ./recompress-tarball.nix { };
     });
