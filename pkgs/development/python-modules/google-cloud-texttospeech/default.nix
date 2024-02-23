@@ -8,19 +8,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.16.1";
-  format = "setuptools";
+  version = "2.16.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Mgf83pd3FFokpnb1g8DDthVBBY+hvBMmjdf2fpQswQ=";
+    hash = "sha256-6qyAnZp9B8XJ61hhORZULLL6UsFPnzHaf/SYn3F/jgw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core
