@@ -3,10 +3,13 @@
 , src
 , lib
 , stdenv
+, autoconf
 , gradle
 , rsync
 , runCommand
 , testers
+, which
+, xcbuild
 }:
 
 # Each Corretto version is based on a corresponding OpenJDK version. So
@@ -26,7 +29,7 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ];
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin [ autoconf which xcbuild ];
 
   dontConfigure = true;
 
@@ -49,14 +52,20 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
       # one is at mac/tar.
       task =
         if stdenv.isDarwin then
-          ":installers:mac:tar:packageBuildResults"
+          ":installers:mac:tar:packaging"
         else ":installers:linux:universal:tar:packageBuildResults";
     in
     ''
       runHook preBuild
 
+      # Fix "Failed to load native library 'libnative-platform.dylib' for Mac
+      # OS X ..." because $HOME/.gradle is not accessible.
+      export GRADLE_USER_HOME=$(mktemp -d)
+
       # Corretto's actual built is triggered via `gradle`.
       gradle --console=plain --no-daemon ${task}
+
+      set -xv
 
       # Prepare for the installPhase so that it looks like if a normal
       # OpenJDK had been built.

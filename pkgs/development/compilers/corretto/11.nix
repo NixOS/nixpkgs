@@ -1,17 +1,19 @@
-{ corretto11
-, fetchFromGitHub
-, gradle_7
+{ fetchFromGitHub
 , jdk11
 , lib
 , stdenv
+, autoconf
+, gradle_7
 , rsync
 , runCommand
 , testers
+, which
+, xcbuild
 }:
 
 let
   corretto = import ./mk-corretto.nix {
-    inherit lib stdenv rsync runCommand testers;
+    inherit lib stdenv autoconf rsync runCommand testers which xcbuild;
     jdk = jdk11;
     gradle = gradle_7;
     version = "11.0.20.9.1";
