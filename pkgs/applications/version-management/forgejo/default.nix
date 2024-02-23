@@ -39,13 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.20.6-1";
+  version = "1.20.6-1-unstable-2024-02-22";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
-    rev = "v${version}";
+    # latest commit from 1.20.x branch (2024-02-22) with 1.21.6-0's XSS fix backported.
+    # coordinated with upstream in #forgejo-development:matrix.org :)
+    # https://codeberg.org/forgejo/forgejo/pulls/2443
+    # https://codeberg.org/forgejo/forgejo/commit/2fe5f6f73283c2f6935ded62440a1f15ded12dcd
+    rev = "2fe5f6f73283c2f6935ded62440a1f15ded12dcd";
     hash = "sha256-s+hYFpgQ6MJgQBRW3Ze7BIjvsc765D5sAcrtO/wmIgo=";
   };
 
