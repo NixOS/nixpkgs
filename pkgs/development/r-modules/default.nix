@@ -483,7 +483,7 @@ let
     affyio = [ pkgs.zlib.dev ];
     snpStats = [ pkgs.zlib.dev ];
     vcfppR = [ pkgs.curl.dev pkgs.bzip2 pkgs.zlib.dev pkgs.xz];
-    hdf5r = [ pkgs.hdf5.dev ];
+    hdf5r = [ pkgs.hdf5_1_10.dev ];
     httpgd = with pkgs; [ cairo.dev ];
     SymTS = [ pkgs.gsl ];
     VBLPCM = [ pkgs.gsl ];
