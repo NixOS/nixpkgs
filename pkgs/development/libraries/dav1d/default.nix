@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , meson, ninja, nasm, pkg-config
 , xxHash
 , withTools ? false # "dav1d" binary
@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-RrEim3HXXjx2RUU7K3wPH3QbhNTRN9ZX/oAcyE9aV8I=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-1580.patch";
+      url = "https://code.videolan.org/videolan/dav1d/-/commit/2b475307dc11be9a1c3cc4358102c76a7f386a51.patch";
+      hash = "sha256-QexrqCBqWdXc9NyVyNNkGMe6yJVZlJI3h0/xK23d97E=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
