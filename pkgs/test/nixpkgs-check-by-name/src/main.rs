@@ -1,4 +1,5 @@
 use crate::nix_file::NixFileStore;
+use std::panic;
 mod eval;
 mod nix_file;
 mod nixpkgs_problem;
@@ -17,6 +18,7 @@ use colored::Colorize;
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
+use std::thread;
 
 /// Program to check the validity of pkgs/by-name
 ///
@@ -46,7 +48,7 @@ pub struct Args {
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match process(&args.base, &args.nixpkgs, false, &mut io::stderr()) {
+    match process(args.base, args.nixpkgs, false, &mut io::stderr()) {
         Ok(true) => ExitCode::SUCCESS,
         Ok(false) => ExitCode::from(1),
         Err(e) => {
@@ -71,15 +73,19 @@ fn main() -> ExitCode {
 /// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
 /// - `Ok(true)` if there are no problems
 pub fn process<W: io::Write>(
-    base_nixpkgs: &Path,
-    main_nixpkgs: &Path,
+    base_nixpkgs: PathBuf,
+    main_nixpkgs: PathBuf,
     keep_nix_path: bool,
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
+    // Very easy to parallelise this, since it's totally independent
+    let base_thread = thread::spawn(move || check_nixpkgs(&base_nixpkgs, keep_nix_path));
+    let main_result = check_nixpkgs(&main_nixpkgs, keep_nix_path)?;
 
-    // TODO: Run in parallel
-    let base_result = check_nixpkgs(base_nixpkgs, keep_nix_path)?;
-    let main_result = check_nixpkgs(main_nixpkgs, keep_nix_path)?;
+    let base_result = match base_thread.join() {
+        Ok(res) => res?,
+        Err(e) => panic::resume_unwind(e),
+    };
 
     match (base_result, main_result) {
         (Failure(_), Failure(errors)) => {
@@ -262,7 +268,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            process(base_nixpkgs, &path, true, &mut writer)
+            process(base_nixpkgs.to_owned(), path.to_owned(), true, &mut writer)
                 .with_context(|| format!("Failed test case {name}"))?;
             Ok(writer)
         })?;
