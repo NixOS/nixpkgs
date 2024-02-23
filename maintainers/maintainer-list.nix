@@ -4421,6 +4421,12 @@
     githubId = 11422515;
     name = "David Sánchez";
   };
+  dav-wolff = {
+    email = "dav-wolff@outlook.com";
+    github = "dav-wolff";
+    githubId = 130931508;
+    name = "David Wolff";
+  };
   dawidd6 = {
     email = "dawidd0811@gmail.com";
     github = "dawidd6";
