@@ -76,6 +76,8 @@ let
 
   upstreamWants = [
     "sysinit.target.wants"
+    "initrd-root-fs.target.wants"
+    "initrd.target.wants"
   ];
 
   enabledUpstreamUnits = filter (n: ! elem n cfg.suppressedUnits) upstreamUnits;
