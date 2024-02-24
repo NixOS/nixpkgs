@@ -86,7 +86,7 @@ in stdenv.mkDerivation (rec {
     # of the flags used for the normal LLVM build. To avoid the need for building
     # a native libLLVM.so (which would fail) we force llvm-config to be linked
     # statically against the necessary LLVM components always.
-    ../../llvm-config-link-static.patch
+    ../../common/llvm/llvm-config-link-static.patch
 
     # Fix missing includes for GCC 10
     (fetchpatch {
@@ -139,7 +139,7 @@ in stdenv.mkDerivation (rec {
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
