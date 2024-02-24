@@ -11,27 +11,27 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "itch";
-  version = "26.1.2";
+  version = "26.1.3";
 
   # TODO: Using kitch instead of itch, revert when possible
   src = fetchzip {
-    url = "https://broth.itch.ovh/k${pname}/linux-amd64/${version}/archive/default#.zip";
+    url = "https://broth.itch.ovh/kitch/linux-amd64/${version}/archive/default#.zip";
     stripRoot = false;
-    sha256 = "sha256-thXe+glpltSiKNGIRgvOZQZPJWfDHWo3dLdziyp2BM4=";
+    hash = "sha256-FHwbzLPMzIpyg6KyYTq6/rSNRH76dytwb9D5f9vNKkU=";
   };
 
   itch-setup = fetchzip {
     url = "https://broth.itch.ovh/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
     stripRoot = false;
-    sha256 = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
+    hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
   };
 
   icons = let sparseCheckout = "/release/images/itch-icons"; in
     fetchFromGitHub {
         owner = "itchio";
-        repo = pname;
+        repo = "itch";
         rev = "v${version}-canary";
-        sha256 = "sha256-veZiKs9qHge+gCEpJ119bAT56ssXJAH3HBcYkEHqBFg=";
+        hash = "sha256-0AMyDZ5oI7/pSvudoEqXnMZJtpcKVlUSR6YVm+s4xv0=";
         sparseCheckout = [ sparseCheckout ];
       } + sparseCheckout;
 
@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "itch";
       exec = "itch %U";
-      tryExec = pname;
-      icon = pname;
-      desktopName = pname;
+      tryExec = "itch";
+      icon = "itch";
+      desktopName = "itch";
       mimeTypes = [ "x-scheme-handler/itchio" "x-scheme-handler/itch" ];
       comment = "Install and play itch.io games easily";
       categories = [ "Game" ];
@@ -58,8 +58,8 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace ./resources/app/package.json \
       --replace "kitch" "itch"
 
-    mkdir -p $out/bin $out/share/${pname}/resources/app
-    cp -r resources/app "$out/share/${pname}/resources/"
+    mkdir -p $out/bin $out/share/itch/resources/app
+    cp -r resources/app "$out/share/itch/resources/"
 
     install -Dm644 LICENSE -t "$out/share/licenses/$pkgname/"
     install -Dm644 LICENSES.chromium.html -t "$out/share/licenses/$pkgname/"
@@ -76,9 +76,9 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${steam-run}/bin/steam-run $out/bin/${pname} \
+    makeWrapper ${steam-run}/bin/steam-run $out/bin/itch \
       --add-flags ${electron}/bin/electron \
-      --add-flags $out/share/${pname}/resources/app \
+      --add-flags $out/share/itch/resources/app \
       --set BROTH_USE_LOCAL butler,itch-setup \
       --prefix PATH : ${butler}/bin/:${itch-setup}
   '';
@@ -90,5 +90,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with maintainers; [ pasqui23 ];
+    mainProgram = "itch";
   };
 }
