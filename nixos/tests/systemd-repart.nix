@@ -26,7 +26,7 @@ let
       "-f",
       "raw",
       tmp_disk_image.name,
-      "+32M",
+      "+64M",
     ])
 
     # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
