@@ -11987,8 +11987,6 @@ with pkgs;
 
   pg_top = callPackage ../tools/misc/pg_top { };
 
-  pgagroal = callPackage ../development/tools/database/pgagroal { };
-
   pgcenter = callPackage ../tools/misc/pgcenter { };
 
   pgmetrics = callPackage ../tools/misc/pgmetrics { };
