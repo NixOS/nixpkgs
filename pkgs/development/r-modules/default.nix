@@ -1478,6 +1478,12 @@ let
         patchShebangs src/library/ps/configure
       '';
     });
+
+    pkgdepends = old.pkgdepends.overrideAttrs (attrs: {
+      postPatch = ''
+        patchShebangs configure
+      '';
+    });
   };
 in
   self
