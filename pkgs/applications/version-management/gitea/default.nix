@@ -38,6 +38,7 @@ buildGoModule rec {
       url = "https://patch-diff.githubusercontent.com/raw/go-gitea/gitea/pull/28877.patch";
       hash = "sha256-cThW3EnHR695thajbnmfNziVB/iBP9OPeDgWbszYIeg=";
     })
+    ./XSS-vulnerabilities-1.21.6.patch
   ];
 
   postPatch = ''
