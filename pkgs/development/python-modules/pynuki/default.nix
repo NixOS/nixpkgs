@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pynuki";
-  version = "1.6.2";
+  version = "1.6.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-I0eAhgThSBEmJF6mYw+0Bh1kCUqEMFnCx+4n7l3Hf14=";
+    hash = "sha256-PF5FmAuPcJXq8gQ8HyzdtL2HiiUjueT+LAS1lYRvrwM=";
   };
 
   nativeBuildInputs = [
