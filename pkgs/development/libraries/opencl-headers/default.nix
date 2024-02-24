@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Khronos OpenCL headers version ${finalAttrs.version}";
     homepage = "https://www.khronos.org/registry/cl/";
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = [ ];
   };
 })

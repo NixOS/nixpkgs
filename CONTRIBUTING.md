@@ -129,19 +129,17 @@ When a PR is created, it will be pre-populated with some checkboxes detailed bel
 
 #### Tested using sandboxing
 
-When sandbox builds are enabled, Nix will setup an isolated environment for each build process. It is used to remove further hidden dependencies set by the build environment to improve reproducibility. This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store. Depending on the operating system access to other resources are blocked as well (ex. inter process communication is isolated on Linux); see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
+When sandbox builds are enabled, Nix will set up an isolated environment for each build process.
+It is used to remove further hidden dependencies set by the build environment to improve reproducibility.
+This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store.
+Depending on the operating system, access to other resources is blocked as well (e.g., inter-process communication is isolated on Linux); see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
 
-Sandboxing is not enabled by default in Nix due to a small performance hit on each build. In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
+In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
 
-Depending if you use NixOS or other platforms you can use one of the following methods to enable sandboxing **before** building the package:
+If you are on Linux, sandboxing is enabled by default.
+On other platforms, sandboxing is disabled by default due to a small performance hit on each build.
 
-- **Globally enable sandboxing on NixOS**: add the following to `configuration.nix`
-
-  ```nix
-  nix.settings.sandbox = true;
-  ```
-
-- **Globally enable sandboxing on non-NixOS platforms**: add the following to: `/etc/nix/nix.conf`
+Please enable sandboxing **before** building the package by adding the following to: `/etc/nix/nix.conf`:
 
   ```ini
   sandbox = true
@@ -441,14 +439,14 @@ gitGraph
 
 Here's an overview of the different branches:
 
-| branch | `master` | `staging` | `staging-next` |
+| branch | `master` | `staging-next` | `staging` |
 | --- | --- | --- | --- |
-| Used for development | ✔️ | ✔️ | ❌ |
-| Built by Hydra | ✔️ | ❌ | ✔️ |
-| [Mass rebuilds][mass-rebuild] | ❌ | ✔️ | ⚠️  Only to fix Hydra builds |
-| Critical security fixes | ✔️ for non-mass-rebuilds | ❌ | ✔️ for mass-rebuilds |
-| Automatically merged into | `staging-next` | - | `staging` |
-| Manually merged into | - | `staging-next` | `master` |
+| Used for development | ✔️ | ❌ | ✔️ |
+| Built by Hydra | ✔️ | ✔️ | ❌ |
+| [Mass rebuilds][mass-rebuild] | ❌ | ⚠️  Only to fix Hydra builds | ✔️ |
+| Critical security fixes | ✔️ for non-mass-rebuilds | ✔️ for mass-rebuilds | ❌ |
+| Automatically merged into | `staging-next` | `staging` | - |
+| Manually merged into | - | `master` | `staging-next` |
 
 The staging workflow is used for all main branches, `master` and `release-YY.MM`, with corresponding names:
 - `master`/`release-YY.MM`

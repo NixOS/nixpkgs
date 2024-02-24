@@ -1815,6 +1815,8 @@ let
 
     type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
+    type_id = callPackage ../development/ocaml-modules/type_id { };
+
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
     tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
