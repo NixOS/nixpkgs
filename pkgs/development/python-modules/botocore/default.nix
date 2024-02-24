@@ -7,23 +7,29 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.34.21"; # N.B: if you change this, change boto3 and awscli to a matching version
-  format = "setuptools";
+  version = "1.34.49"; # N.B: if you change this, change boto3 and awscli to a matching version
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IZg7sEc6GRMBksUOxpdNVfDEqkinCUvPQPeILItpuPE=";
+    hash = "sha256-2JQQvGBnPq/xaZ8/H9yw46Xh96agSMDYjDzlw1SUM+w=";
   };
 
+  pythonRelaxDeps = [
+    "urllib3"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
