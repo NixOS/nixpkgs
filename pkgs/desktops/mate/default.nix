@@ -54,7 +54,7 @@ let
     python-caja = callPackage ./python-caja { };
 
     basePackages = [
-      caja
+      caja-with-extensions
       libmatekbd
       libmatemixer
       libmateweather
@@ -75,7 +75,7 @@ let
 
     extraPackages = [
       atril
-      caja-extensions
+      caja-extensions # for caja-sendto
       engrampa
       eom
       mate-applets
