@@ -98,7 +98,9 @@ buildPythonPackage rec {
     # from panda[test]
     hypothesis
     pytest-asyncio
-  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+  ]
+  ++ passthru.optional-dependencies.dataframe
+  ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
     pyarrow
   ];
 
