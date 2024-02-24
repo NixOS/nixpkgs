@@ -1,20 +1,19 @@
 { lib
 , botocore
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , jmespath
 , pytestCheckHook
 , pythonOlder
-, s3transfer
 , pythonRelaxDepsHook
+, s3transfer
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.34.21"; # N.B: if you change this, change botocore and awscli to a matching version
-  format = "pyproject";
+  version = "1.34.49"; # N.B: if you change this, change botocore and awscli to a matching version
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-oOrUVBh1sbaOibU8A+bGZ4z7IEiE4gjHwZ+8889Hv60=";
+    hash = "sha256-/pgbLSL5RJ5RrKUAfQ1QNJykBdICrpqnuziHOVHt1JI=";
   };
 
   nativeBuildInputs = [
