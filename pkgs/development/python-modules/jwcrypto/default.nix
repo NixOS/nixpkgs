@@ -3,6 +3,7 @@
 , fetchPypi
 , cryptography
 , deprecated
+, pytestCheckHook
 , pythonOlder
 , setuptools
 , typing-extensions
@@ -29,6 +30,8 @@ buildPythonPackage rec {
     deprecated
     typing-extensions
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "jwcrypto"
