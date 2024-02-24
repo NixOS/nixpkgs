@@ -74,6 +74,10 @@ buildPythonPackage rec {
     dirty-equals
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Tests make network requests
     "test_streaming_response"
