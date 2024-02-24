@@ -9,12 +9,19 @@
 let
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  arch = let inherit (stdenv.targetPlatform) system;
-         in if system == "x86_64-linux" then "x64"
-            else if system == "aarch64=linux" then "arm64"
-            else throw "Unsupported system";
+  version = "2023.9-b109";
 
-  version = "2023.9-b107";
+  arches = {
+    aarch64-linux = "arm64";
+    x86_64-linux = "x64";
+  };
+
+  arch = arches.${stdenv.targetPlatform.system} or (throw "Unsupported system");
+
+  hashes = {
+    arm64 = "sha256-t6ly8Beu6Hrqy1W2pG9Teks+QSZxbN/KeVxKvCDuTmg=";
+    x64 = "sha256-utV8x2V8MXkG0H/fJ9sScykH5OtPqxbx+RW+1ePYUog=";
+  };
 
   desktopItem = makeDesktopItem {
     name = "YourKit Java Profiler";
@@ -27,14 +34,14 @@ let
     startupWMClass = "YourKit Java Profiler";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
 
   pname = "yourkit-java";
 
   src = fetchzip {
     url = "https://download.yourkit.com/yjp/${vPath version}/YourKit-JavaProfiler-${version}-${arch}.zip";
-    hash = "sha256-vlYmGAp8wURcNN+0Qxj+fWjLXwkAgkRnRdUMvg2TM+k=";
+    hash = hashes.${arch};
   };
 
   nativeBuildInputs = [ copyDesktopItems imagemagick ];
@@ -50,7 +57,8 @@ stdenv.mkDerivation rec {
     cp -pr bin lib license.html license-redist.txt probes samples $out
     cp ${./forbid-desktop-item-creation} $out/bin/forbid-desktop-item-creation
     for i in attach integrate; do
-        sed -i -e 's|profiler.sh|yourkit-java-profiler|' $out/bin/$i.sh
+        substituteInPlace $out/bin/$i.sh \
+            --replace profiler.sh yourkit-java-profiler
     done
     for i in attach integrate profiler; do
         mv $out/bin/$i.sh $out/bin/yourkit-java-$i
@@ -60,8 +68,8 @@ stdenv.mkDerivation rec {
             -size 256x256 \
             $out/share/icons/yourkit-java-profiler.png
     rm $out/bin/profiler.ico
-    sed -i -e 's|JAVA_EXE="$YD/jre64/bin/java"|JAVA_EXE=${jre}/bin/java|' \
-        $out/bin/yourkit-java-profiler
+    substituteInPlace $out/bin/yourkit-java-profiler \
+        --replace 'JAVA_EXE="$YD/jre64/bin/java"' JAVA_EXE=${jre}/bin/java
     # Use our desktop item, which will be purged when this package
     # gets removed
     sed -i -e "/^YD=/isource $out/bin/forbid-desktop-item-creation\\
