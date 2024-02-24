@@ -8640,6 +8640,8 @@ self: super: with self; {
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
+  python-secp256k1-cardano = callPackage ../development/python-modules/python-secp256k1-cardano { };
+
   python-tds = callPackage ../development/python-modules/python-tds { };
 
   python-yate = callPackage ../development/python-modules/python-yate { };
