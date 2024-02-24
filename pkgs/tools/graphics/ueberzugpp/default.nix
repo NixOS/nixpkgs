@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, cli11
 , openssl
 , zeromq
 , cppzmq
@@ -16,6 +15,9 @@
 , libsixel
 , microsoft-gsl
 , chafa
+, cli11
+, libexif
+, range-v3
 , enableOpencv ? stdenv.isLinux
 , opencv
 , enableWayland ? stdenv.isLinux
@@ -28,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-yIohpJRytmwt+6DLCWpmBiuCm9GcCHsGmpTI64/3d8U=";
+    hash = "sha256-jNiDQy9el9fUK03Dt55wPb4LFB1iDiytUxg8zM4Bj6E=";
   };
 
   strictDeps = true;
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
     microsoft-gsl
     chafa
     cli11
+    libexif
+    range-v3
   ] ++ lib.optionals enableOpencv [
     opencv
   ] ++ lib.optionals enableWayland [
