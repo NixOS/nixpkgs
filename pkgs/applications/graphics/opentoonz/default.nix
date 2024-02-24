@@ -39,6 +39,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DTIFF_INCLUDE_DIR=${libtiff.dev}/include"
     "-DTIFF_LIBRARY=${libtiff.out}/lib/libtiff.so"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   postInstall = ''
