@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_net";
-  version = "0.7.3";
+  version = "0.8.0";
 
   buildInputs = [ curl postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "supabase";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    hash   = "sha256-j5qLgn/i4ljysuwgT46579N+9VpGr483vQEX/3lUYFA=";
+    hash   = "sha256-ZPsRPWV1G3lMM2mT+H139Wvgoy8QnmeUbzEnGeDJmZA=";
   };
 
   installPhase = ''
