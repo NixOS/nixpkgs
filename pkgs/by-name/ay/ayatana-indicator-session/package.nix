@@ -73,13 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # Currently broken: https://github.com/AyatanaIndicators/ayatana-indicator-session/issues/90
-        "^test-service"
-      ]})")
-    ]))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
