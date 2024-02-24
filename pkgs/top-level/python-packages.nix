@@ -8974,6 +8974,8 @@ self: super: with self; {
 
   osc-lib = callPackage ../development/python-modules/osc-lib { };
 
+  osc-sdk-python = callPackage ../development/python-modules/osc-sdk-python { };
+
   oscpy = callPackage ../development/python-modules/oscpy { };
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };

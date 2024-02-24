@@ -29367,8 +29367,6 @@ with pkgs;
 
   lmodern = callPackage ../data/fonts/lmodern { };
 
-  logiops = callPackage ../misc/drivers/logiops { };
-
   # ltunifi and solaar both provide udev rules but solaar's rules are more
   # up-to-date so we simply use that instead of having to maintain our own rules
   logitech-udev-rules = solaar.udev;
@@ -30610,8 +30608,6 @@ with pkgs;
   catt = callPackage ../applications/video/catt { };
 
   cava = callPackage ../applications/audio/cava { };
-
-  cavalier = callPackage ../applications/audio/cavalier { };
 
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
