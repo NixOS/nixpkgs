@@ -20,10 +20,10 @@
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "7";
+        patch = "8";
         suffix = "";
       };
-      hash = "sha256-GOGqfmb/OlhCPVntIoFaaVTlM0ISLEXfIMlod8Biubc=";
+      hash = "sha256-ngYAjIkBkkOVvB2jA+rFZ6cprgErqhgqs5Jp9lA4O7M=";
     };
   };
 
@@ -92,10 +92,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "12";
-      patch = "1";
+      patch = "2";
       suffix = "";
     };
-    hash = "sha256-jfuPQm/NImZX+eK9Xx6W5TJkllF2+hfTJljoc1ka6yE=";
+    hash = "sha256-vigRLayBPSBTVFwUvxOhZAGiGHfxpp626l2ExKDz2HA=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
