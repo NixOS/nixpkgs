@@ -9,8 +9,23 @@
 , fetchpatch
 , makeBinaryWrapper
 , nixosTests
+, enableLocalIcons ? false
 }:
+let
+  dashboardIcons = fetchFromGitHub {
+    owner = "walkxcode";
+    repo = "dashboard-icons";
+    rev = "a02a5999fe56948671721da8b0830cdd5b609ed7"; # Until 2024-02-25
+    hash = "sha256-s0Doh4j6CH66fZoQKMt4yc7aLStNFGMVoDp5dvs7+pk=";
+  };
 
+  installLocalIcons = ''
+    mkdir -p $out/share/homepage/public/icons
+    cp ${dashboardIcons}/png/* $out/share/homepage/public/icons
+    cp ${dashboardIcons}/svg/* $out/share/homepage/public/icons
+    cp ${dashboardIcons}/LICENSE $out/share/homepage/public/icons/
+  '';
+in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
   version = "0.8.8";
@@ -62,6 +77,8 @@ buildNpmPackage rec {
     makeWrapper $out/share/homepage/server.js $out/bin/homepage \
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard
+
+    ${if enableLocalIcons then installLocalIcons else ""}
 
     runHook postInstall
   '';
