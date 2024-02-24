@@ -1,13 +1,14 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, python-dateutil
-, jmespath
-, urllib3
-, pytestCheckHook
-, jsonschema
 , awscrt
+, buildPythonPackage
+, fetchPypi
+, jmespath
+, jsonschema
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -22,15 +23,19 @@ buildPythonPackage rec {
     hash = "sha256-IZg7sEc6GRMBksUOxpdNVfDEqkinCUvPQPeILItpuPE=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    python-dateutil
     jmespath
+    python-dateutil
     urllib3
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     jsonschema
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
@@ -46,14 +51,16 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    crt = [ awscrt ];
+    crt = [
+      awscrt
+    ];
   };
 
   meta = with lib; {
+    description = "A low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
     changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    description = "A low-level interface to a growing number of Amazon Web Services";
     maintainers = with maintainers; [ anthonyroussel ];
   };
 }
