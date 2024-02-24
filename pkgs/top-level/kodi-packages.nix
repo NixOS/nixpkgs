@@ -83,6 +83,8 @@ let self = rec {
 
   mediacccde = callPackage ../applications/video/kodi/addons/mediacccde { };
 
+  mediathekview = callPackage ../applications/video/kodi/addons/mediathekview { };
+
   netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
   orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };

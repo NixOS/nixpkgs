@@ -16856,6 +16856,12 @@
     github = "samalws";
     githubId = 20981725;
   };
+  samasaur = {
+    name = "Samasaur";
+    email = "sam@samasaur.com";
+    github = "Samasaur1";
+    githubId = 30577766;
+  };
   samb96 = {
     email = "samb96@gmail.com";
     github = "samb96";
