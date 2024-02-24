@@ -35,6 +35,7 @@ let
     mate-netbook = callPackage ./mate-netbook { };
     mate-notification-daemon = callPackage ./mate-notification-daemon { };
     mate-panel = callPackage ./mate-panel { };
+    mate-panel-with-applets = callPackage ./mate-panel/with-applets.nix { };
     mate-polkit = callPackage ./mate-polkit { };
     mate-power-manager = callPackage ./mate-power-manager { };
     mate-sensors-applet = callPackage ./mate-sensors-applet { };
@@ -98,6 +99,17 @@ let
 
     cajaExtensions = [
       caja-extensions
+    ];
+
+    panelApplets = [
+      mate-applets
+      mate-indicator-applet
+      mate-netbook
+      mate-notification-daemon
+      mate-media
+      mate-power-manager
+      mate-sensors-applet
+      mate-utils
     ];
   };
 
