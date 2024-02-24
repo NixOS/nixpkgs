@@ -49,17 +49,17 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -r .next/standalone $out/bin
-    cp -r public $out/bin/public
+    mkdir -p $out/{share,bin}
 
-    mkdir -p $out/bin/.next
-    cp -r .next/static $out/bin/.next/static
+    cp -r .next/standalone $out/share/homepage/
+    cp -r public $out/share/homepage/public
 
-    mv $out/bin/server.js $out/bin/homepage
-    chmod +x $out/bin/homepage
+    mkdir -p $out/share/homepage/.next
+    cp -r .next/static $out/share/homepage/.next/static
 
-    wrapProgram $out/bin/homepage \
+    chmod +x $out/share/homepage/server.js
+
+    makeWrapper $out/share/homepage/server.js $out/bin/homepage \
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard
 
