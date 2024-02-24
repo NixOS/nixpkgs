@@ -1,15 +1,30 @@
-{ stdenv, fetchFromGitHub, lib, xmrig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, xmrig
+}:
 
 xmrig.overrideAttrs (oldAttrs: rec {
   pname = "xmrig-mo";
-  version = "6.20.0-mo1";
+  version = "6.21.0-mo2";
 
   src = fetchFromGitHub {
     owner = "MoneroOcean";
     repo = "xmrig";
     rev = "v${version}";
-    sha256 = "sha256-yHAipyZJXwH21u4YwjUqDCsXHVrI+eSnp4Iqt3AZC9A=";
+    hash = "sha256-OKyJcmhlY8gfDKyBf83KHhokp4qA8EDyessTwKReaD8=";
   };
+
+  patches = [
+    # Fix build against gcc-13 due to missing <stdexcept> include
+    #   https://github.com/MoneroOcean/xmrig/pull/123
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/MoneroOcean/xmrig/commit/7d3ea51d68049c35e9d4c75732c751eefbc5ab29.patch";
+      hash = "sha256-iNrtZ8LxNJMzn8kXLhYGEFAy0ughfOZobDVRImpVPC0=";
+    })
+  ];
 
   meta = with lib; {
     description = "A fork of the XMRig CPU miner with support for algorithm switching";

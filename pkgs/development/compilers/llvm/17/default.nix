@@ -144,7 +144,7 @@ in let
       inherit llvm_meta;
     };
 
-    mlir = callPackage ./mlir {
+    mlir = callPackage ../common/mlir {
       inherit llvm_meta;
     };
 

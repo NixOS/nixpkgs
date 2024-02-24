@@ -33,7 +33,7 @@ buildType = if stdenv.isDarwin then
 
 edk2 = stdenv.mkDerivation rec {
   pname = "edk2";
-  version = "202311";
+  version = "202402";
 
   patches = [
     # pass targetPrefix as an env var
@@ -48,7 +48,7 @@ edk2 = stdenv.mkDerivation rec {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-gC/If8U9qo70rGvNl3ld/mmZszwY0w/5Ge/K21mhzYw=";
+    hash = "sha256-Nurm6QNKCyV6wvbj0ELdYAL7mbZ0yg/tTwnEJ+N18ng=";
   };
 
   # We don't want EDK2 to keep track of OpenSSL,

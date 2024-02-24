@@ -29,5 +29,6 @@ buildGoModule rec {
     changelog = "https://github.com/googleapis/api-linter/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ xrelkd ];
+    mainProgram = "api-linter";
   };
 }

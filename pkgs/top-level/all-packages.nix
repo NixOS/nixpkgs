@@ -3227,8 +3227,6 @@ with pkgs;
 
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
-  api-linter = callPackage ../development/tools/api-linter { };
-
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
@@ -9400,8 +9398,6 @@ with pkgs;
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
   invidious = callPackage ../servers/invidious {
-    # needs a specific version of lsquic
-    lsquic = callPackage ../servers/invidious/lsquic.nix { };
     # normally video.js is downloaded at build time
     videojs = callPackage ../servers/invidious/videojs.nix { };
   };
@@ -11988,8 +11984,6 @@ with pkgs;
   pg_flame = callPackage ../tools/misc/pg_flame { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
-
-  pgagroal = callPackage ../development/tools/database/pgagroal { };
 
   pgcenter = callPackage ../tools/misc/pgcenter { };
 
