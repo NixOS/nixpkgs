@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cheroot
+, fetchpatch
 , fetchPypi
 , jaraco-collections
 , more-itertools
@@ -35,6 +36,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-awbBkc5xqGRh8wVyoatX/8CfQxQ7qOQsEDx7M0ciDrE=";
   };
+
+  patches = [
+    # Replace distutils.spawn.find_executable with shutil.which, https://github.com/cherrypy/cherrypy/pull/2023
+    (fetchpatch {
+      name = "remove-distutils.patch";
+      url = "https://github.com/cherrypy/cherrypy/commit/8a19dd5f1e712a326a3613b17e6fc900012ed09a.patch";
+      hash = "sha256-fXECX0CdU74usiq9GEkIG9CF+dueszblT4qOeF6B700=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
