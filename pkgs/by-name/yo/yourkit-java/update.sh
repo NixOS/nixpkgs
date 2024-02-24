@@ -1,12 +1,13 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused gawk nix-prefetch
+#!nix-shell -i bash -p coreutils curl gawk gnused nix-prefetch
 
 set -euo pipefail
 
 ROOT="$(dirname "$(readlink -f "$0")")"
-NIX_DRV="$ROOT/package.nix"
+DRV_BASE=package.nix
+NIX_DRV="$ROOT/$DRV_BASE"
 if [[ ! -f "$NIX_DRV" ]]; then
-  echo "ERROR: cannot find default.nix in $ROOT"
+  echo "ERROR: cannot find $DRV_BASE in $ROOT"
   exit 1
 fi
 
@@ -41,6 +42,7 @@ function update_hash () {
 }
 
 version=$(retrieve_latest_version)
+sed -i -e "s|^.*version.*=.*\".*$|  version = \"$version\";|" $NIX_DRV
 for arch in arm64 x64; do
     update_hash $arch $version
 done
