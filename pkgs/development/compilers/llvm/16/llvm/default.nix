@@ -287,6 +287,8 @@ in
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
+  hardeningDisable = [ "trivialautovarinit" ];
+
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 
   cmakeFlags = with stdenv; let
