@@ -17,6 +17,7 @@
 , pythonOlder
 , requests-toolbelt
 , routes
+, setuptools
 , setuptools-scm
 , simplejson
 , zc-lockfile
@@ -25,7 +26,7 @@
 buildPythonPackage rec {
   pname = "cherrypy";
   version = "18.8.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -38,22 +39,23 @@ buildPythonPackage rec {
   postPatch = ''
     # Disable doctest plugin because times out
     substituteInPlace pytest.ini \
-      --replace "--doctest-modules" "-vvv" \
-      --replace "-p pytest_cov" "" \
-      --replace "--no-cov-on-fail" ""
+      --replace-fail "--doctest-modules" "-vvv" \
+      --replace-fail "-p pytest_cov" "" \
+      --replace-fail "--no-cov-on-fail" ""
     sed -i "/--cov/d" pytest.ini
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
     cheroot
-    portend
-    more-itertools
-    zc-lockfile
     jaraco-collections
+    more-itertools
+    portend
+    zc-lockfile
   ];
 
   nativeCheckInputs = [
@@ -115,10 +117,18 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    json = [ simplejson ];
-    memcached_session = [ python-memcached ];
-    routes_dispatcher = [ routes ];
-    ssl = [ pyopenssl ];
+    json = [
+      simplejson
+    ];
+    memcached_session = [
+      python-memcached
+    ];
+    routes_dispatcher = [
+      routes
+    ];
+    ssl = [
+      pyopenssl
+    ];
     # not packaged yet
     xcgi = [ /* flup */ ];
   };
@@ -126,6 +136,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Object-oriented HTTP framework";
     homepage = "https://cherrypy.dev/";
+    changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
