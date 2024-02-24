@@ -7,6 +7,7 @@
 , pkgs
 , sqlite
 , stdenv
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -39,6 +41,13 @@ rustPlatform.buildRustPackage rec {
   # in "checkPhase", hence fails in sandbox of "nix".
   doCheck = false;
 
+  postInstall = ''
+    installShellCompletion --cmd sn0int \
+      --bash <($out/bin/sn0int completions bash) \
+      --fish <($out/bin/sn0int completions fish) \
+      --zsh  <($out/bin/sn0int completions zsh)
+  '';
+
   meta = with lib; {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
@@ -46,5 +55,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab xrelkd ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "sn0int";
   };
 }
