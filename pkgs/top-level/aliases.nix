@@ -97,6 +97,8 @@ mapAliases ({
   bash_5 = bash; # Added 2021-08-20
   bazel_3 = throw "bazel 3 is past end of life as it is not an lts version"; # Added 2023-02-02
   bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
+  bee-unstable = throw "bee-unstable has been removed, use 'bee' instead"; # Added 2024-02-12
+  bee-clef = throw "bee-clef has been removed as the upstream project was archived"; # Added 2024-02-12
   beignet = throw "beignet was removed as it was never ported from old llvmPackages_6 upstream"; # added 2024-01-08
   binance = throw "binance has been removed, because it depends on a very outdated and insecure version of electron"; # Added 2023-11-09
   bird2 = bird; # Added 2022-02-21

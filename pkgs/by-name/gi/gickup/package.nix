@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gickup";
-  version = "0.10.26";
+  version = "0.10.27";
 
   src = fetchFromGitHub {
     owner = "cooperspencer";
     repo = "gickup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GYYmoGNYiwarMZw1w8tdH8zKl19XQ2R+EaJFK8iacwI=";
+    hash = "sha256-ExSTvIq5u5Zmep/tipAJOHcXMxtESLQlEVMWnD8/rSI=";
   };
 
-  vendorHash = "sha256-vyDzGho9vcdCmBP7keccp5w3tXWHlSaFoncS1hqnBoc=";
+  vendorHash = "sha256-riRFDhVOMdqwgGd6wowSDNgt8lZPzagCvKPWTHSqm6U=";
 
   ldflags = ["-X main.version=${version}"];
 

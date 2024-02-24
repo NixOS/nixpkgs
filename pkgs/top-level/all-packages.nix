@@ -6614,15 +6614,7 @@ with pkgs;
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
-  bee = callPackage ../applications/networking/bee/bee.nix {
-    version = "release";
-  };
-
-  bee-unstable = bee.override {
-    version = "unstable";
-  };
-
-  bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
+  bee = callPackage ../applications/networking/bee/bee.nix { };
 
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
@@ -8637,7 +8629,6 @@ with pkgs;
     jdk = graalvm-ce;
   };
 
-  gnucap = callPackage ../applications/science/electronics/gnucap { };
   gnucap-full = gnucap.withPlugins(p: [ p.verilog ]);
 
   gnu-cim = callPackage ../development/compilers/gnu-cim { };
@@ -14713,11 +14704,6 @@ with pkgs;
   unicorn = callPackage ../development/libraries/unicorn {
     inherit (darwin.apple_sdk.frameworks) IOKit;
     inherit (darwin) cctools;
-  };
-
-  units = callPackage ../tools/misc/units {
-    enableCurrenciesUpdater = true;
-    pythonPackages = python3Packages;
   };
 
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
@@ -21054,8 +21040,6 @@ with pkgs;
       gst-libav;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
-
-  fastcdr = callPackage ../development/libraries/fastcdr { };
 
   fbthrift = darwin.apple_sdk_11_0.callPackage ../development/libraries/fbthrift { };
 
@@ -29388,8 +29372,6 @@ with pkgs;
 
   lmodern = callPackage ../data/fonts/lmodern { };
 
-  logiops = callPackage ../misc/drivers/logiops { };
-
   # ltunifi and solaar both provide udev rules but solaar's rules are more
   # up-to-date so we simply use that instead of having to maintain our own rules
   logitech-udev-rules = solaar.udev;
@@ -30078,8 +30060,6 @@ with pkgs;
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
-  openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
-
   qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
 
   qgis = callPackage ../applications/gis/qgis { };
@@ -30633,8 +30613,6 @@ with pkgs;
   catt = callPackage ../applications/video/catt { };
 
   cava = callPackage ../applications/audio/cava { };
-
-  cavalier = callPackage ../applications/audio/cavalier { };
 
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
@@ -34175,7 +34153,7 @@ with pkgs;
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
   obsidian = callPackage ../applications/misc/obsidian {
-    electron = electron_25;
+    electron = electron_28;
   };
 
   octoprint = callPackage ../applications/misc/octoprint { };
