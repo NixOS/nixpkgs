@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.8.0";
+  version = "18.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -33,10 +33,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "CherryPy";
     inherit version;
-    hash = "sha256-m0jPuoovFtW2QZzGV+bVHbAFujXF44JORyi7A7vH75s=";
+    hash = "sha256-awbBkc5xqGRh8wVyoatX/8CfQxQ7qOQsEDx7M0ciDrE=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools_scm_git_archive >= 1.1",' ""
     # Disable doctest plugin because times out
     substituteInPlace pytest.ini \
       --replace-fail "--doctest-modules" "-vvv" \
