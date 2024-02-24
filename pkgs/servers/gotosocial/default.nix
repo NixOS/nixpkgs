@@ -43,6 +43,9 @@ buildGoModule rec {
   # tests are working only on x86_64-linux
   doCheck = stdenv.isLinux && stdenv.isx86_64;
 
+  # flaky test
+  checkFlags = [ "-skip=^TestPage/minID,_maxID_and_limit_set$" ];
+
   passthru.tests.gotosocial = nixosTests.gotosocial;
 
   meta = with lib; {

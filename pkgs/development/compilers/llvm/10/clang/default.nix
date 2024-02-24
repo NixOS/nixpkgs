@@ -45,7 +45,7 @@ let
       ./compiler-rt-baremetal.patch
       ./gnu-install-dirs.patch
       (substituteAll {
-        src = ../../clang-6-10-LLVMgold-path.patch;
+        src = ../../common/clang/clang-6-10-LLVMgold-path.patch;
         libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
