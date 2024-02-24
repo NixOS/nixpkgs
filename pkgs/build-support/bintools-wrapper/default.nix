@@ -43,6 +43,7 @@
     "pic"
     "relro"
     "stackprotector"
+    "stackclashprotection"
     "strictoverflow"
   ] ++ lib.optional (
     # Musl-based platforms will keep "pie", other platforms will not.

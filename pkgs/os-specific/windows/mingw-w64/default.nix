@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ windows.mingw_w64_headers ];
-  hardeningDisable = [ "stackprotector" "fortify" ];
+  hardeningDisable = [ "stackprotector" "stackclashprotection" "fortify" ];
 
   meta = {
     platforms = lib.platforms.windows;

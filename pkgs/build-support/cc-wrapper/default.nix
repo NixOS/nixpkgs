@@ -663,6 +663,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     '' + optionalString targetPlatform.isMicroBlaze ''
       hardening_unsupported_flags+=" stackprotector"
+    '' + optionalString targetPlatform.isAarch32 ''
+      hardening_unsupported_flags + =" stackclashprotection"
     ''
 
     + optionalString stdenv.targetPlatform.isDarwin ''

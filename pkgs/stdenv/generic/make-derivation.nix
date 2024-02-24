@@ -248,6 +248,7 @@ let
     "pie"
     "relro"
     "stackprotector"
+    "stackclashprotection"
     "strictoverflow"
     "zerocallusedregs"
   ];

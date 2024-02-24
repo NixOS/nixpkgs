@@ -97,7 +97,7 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" ];
+      hardeningUnsupportedFlags = [ "fortify3" "zerocallusedregs" "stackclashprotection" ];
     };
 
     meta = llvm_meta // {
