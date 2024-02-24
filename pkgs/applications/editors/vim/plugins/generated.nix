@@ -1339,12 +1339,12 @@ final: prev:
 
   ccc-nvim = buildVimPlugin {
     pname = "ccc.nvim";
-    version = "2023-12-16";
+    version = "2024-02-24";
     src = fetchFromGitHub {
       owner = "uga-rosa";
       repo = "ccc.nvim";
-      rev = "ec6e23fd2c0bf4ffcf71c1271acdcee6e2c6f49c";
-      sha256 = "1y3ns91ysx684ryxv1zjaw8ghrm2ry4rswhm87im4rwghnwvnrwx";
+      rev = "392ef0640b96684e88b3965f32f3bc42530f66c3";
+      sha256 = "124chgrnznl75wmkk6slrjld3mc0q7ycpcb507iimyyw70vc3gm3";
     };
     meta.homepage = "https://github.com/uga-rosa/ccc.nvim/";
   };
