@@ -96,14 +96,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
-  ]
-  ++ optionals (stable) [
-    # https://gitlab.com/kicad/code/kicad/-/issues/12491
-    # should be resolved in the next major? release
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
-  ]
-  ++ optionals (!stable) [
-    # 8 failures, not finding files, some wrong calculations; but upstream runs the tests...
+    # https://gitlab.com/kicad/code/kicad/-/issues/17133
     "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_spice'"
   ]
   ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
@@ -134,8 +127,6 @@ stdenv.mkDerivation rec {
     doxygen
     graphviz
     pkg-config
-  ]
-  ++ optionals (!stable) [
     libgit2
     libsecret
     libgcrypt
@@ -194,13 +185,14 @@ stdenv.mkDerivation rec {
   doInstallCheck = !(debug);
   installCheckTarget = "test";
 
-  pythonForTests = python.withPackages(ps: with ps; [
-    numpy
-    pytest
-    cairosvg
-    pytest-image-diff
-  ]);
-  nativeInstallCheckInputs = optional (!stable) pythonForTests;
+  nativeInstallCheckInputs = [
+    (python.withPackages(ps: with ps; [
+      numpy
+      pytest
+      cairosvg
+      pytest-image-diff
+    ]))
+  ];
 
   dontStrip = debug;
 
