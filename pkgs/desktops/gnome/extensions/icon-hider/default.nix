@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-icon-hider";
-  version = "23";
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "gnome-shell-extension-icon-hider";
     rev = "v${version}";
-    sha256 = "18c8zkdrmdbghqqz7b450vhgpykgz25mgigwn2nggcb2lxmvm9ks";
+    sha256 = "sha256-/QwVIjmz4S9rN/tMBFUq3QZsuTASBPSrO1XPZLFw5wA=";
   };
 
   passthru = {
