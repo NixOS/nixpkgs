@@ -5,6 +5,8 @@ let
   inherit (self) callPackage;
 in
 {
+  writeMelpaRecipe =  callPackage ./write-melpa-recipe.nix { };
+
   acm = callPackage ./manual-packages/acm { };
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };

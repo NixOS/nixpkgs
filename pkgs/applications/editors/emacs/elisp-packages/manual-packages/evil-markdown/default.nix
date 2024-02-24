@@ -1,34 +1,41 @@
 { lib
-, trivialBuild
-, fetchFromGitHub
-, emacs
 , evil
+, fetchFromGitHub
 , markdown-mode
+, melpaBuild
+, writeMelpaRecipe
 }:
 
-trivialBuild rec {
+let
   pname = "evil-markdown";
-  version = "0.pre+unstable=2021-07-21";
-
+  version = "20210721.723";
   src = fetchFromGitHub {
     owner = "Somelauw";
     repo = "evil-markdown";
     rev = "8e6cc68af83914b2fa9fd3a3b8472573dbcef477";
     hash = "sha256-HBBuZ1VWIn6kwK5CtGIvHM1+9eiNiKPH0GUsyvpUVN8=";
   };
+in
+melpaBuild {
+  inherit pname version src;
 
-  buildInputs = propagatedUserEnvPkgs;
-
-  propagatedUserEnvPkgs = [
+  packageRequires = [
     evil
     markdown-mode
   ];
 
-  meta = with lib; {
+  commit = src.rev;
+
+  recipe = writeMelpaRecipe {
+    package-name = "evil-markdown";
+    fetcher = "github";
+    repo = "Somelauw/evil-markdown";
+  };
+
+  meta = {
     homepage = "https://github.com/Somelauw/evil-markdown";
     description = "Integrates Emacs evil and markdown";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leungbk ];
-    inherit (emacs.meta) platforms;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ leungbk ];
   };
 }
