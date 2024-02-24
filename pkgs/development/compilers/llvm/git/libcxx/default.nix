@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
     chmod -R u+w .
   '';
 
+  patches = lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+    # https://github.com/llvm/llvm-project/issues/64226
+    ./0001-darwin-10.12-mbstate_t-fix.patch
+  ];
+
   postPatch = ''
     cd ../runtimes
   '';

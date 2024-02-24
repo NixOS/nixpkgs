@@ -1,13 +1,13 @@
 { lib, fetchPypi, nixosTests, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.5.0b3.dev75";
+  version = "0.5.0b3.dev80";
   pname = "pyload-ng";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1lPIKkZESonDaVCnac0iUu/gCqXVDBhNZrk5S0eC6F0=";
+    hash = "sha256-1vIkEctoj6udowYxFwY42f/zL9Elw2Nl6ZaL2x30k/M=";
   };
 
   patches = [
