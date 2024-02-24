@@ -8,7 +8,6 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,15 +24,19 @@ buildPythonPackage rec {
     hash = "sha256-Fwo76tvkLLx8QJeokuGohhnt83eGBMyWIUSHJGuQWJ4=";
   };
 
+  patches = [
+    ./pytest-asyncio-0.22-compat.patch
+  ];
+
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
-    async-timeout
     cryptography
     ifaddr
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
