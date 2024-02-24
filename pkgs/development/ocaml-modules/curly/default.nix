@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "curly";
-  version = "0.2.0";
+  version = "0.3.0";
 
   minimalOCamlVersion = "4.02";
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/rgrinberg/curly/releases/download/${version}/curly-${version}.tbz";
-    hash = "sha256-01D1+03CqxLrPoBbNWpSKOzABJf63DhQLA1kRWdueB8=";
+    hash = "sha256-Qn/PKBNOcMt3dk2f7uJD8x0yo4RHobXSjTQck7fcXTw=";
   };
 
   propagatedBuildInputs = [ result ];
