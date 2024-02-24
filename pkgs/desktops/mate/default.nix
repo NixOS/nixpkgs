@@ -66,7 +66,7 @@ let
       mate-icon-theme
       mate-menus
       mate-notification-daemon
-      mate-panel
+      mate-panel-with-applets
       mate-polkit
       mate-session-manager
       mate-settings-daemon
