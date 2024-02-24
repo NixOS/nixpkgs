@@ -1,8 +1,15 @@
 { lib
-, pkgs
 , stdenv
+, cmake
+, pkg-config
+, python3
+, ruby
+, rake
+, git
+, curl
 , fetchFromGitHub
 , libGL
+, libGLU
 , alsa-lib
 , libX11
 , xorgproto
@@ -24,75 +31,77 @@
 , pipewire
 , libpulseaudio
 , libiconv
-, ...
 }:
-with pkgs;
+let
+  major = "1";
+  minor = "1";
+  revision = "2837";
+  year = "2023";
+in
+
 stdenv.mkDerivation rec {
   pname = "tic-80";
-  version = "1.1.2837";
+  version = "${major}.${minor}.${revision}";
 
   src = fetchFromGitHub {
     owner = "nesbox";
     repo = "TIC-80";
     rev = "v" + version;
-    sha256 = "sha256-2hSaLWw57F19tSfgJvBgbqW52vCu8p/TmoybYzQEybE=";
+    sha256 = "sha256-p7OyuD/4KxAzylQDlXW681TvEZwKYDD4zq2KDRkcv48=";
     fetchSubmodules = true;
-    leaveDotGit = true; # Required for TIC-80's version detection via CMake.
   };
 
+  # TIC-80 tries to determine the revision part of the version using its Git history.
+  # Because using leaveDotGit tends be non-reproducible with submodules, we just
+  # hardcode it.
   # To avoid the awkward copyright range of "2017-1980", which would be caused by the
   # sandbox environment, hardcode the year of the release.
-  postUnpack = ''
-    YEAR_OF_LAST_COMMIT=$(git -C source log -1 --format=%ad --date=format:%Y)
-    sed -E -i \
-      -e "s|string\(TIMESTAMP VERSION_YEAR \"%Y\"\)|set(VERSION_YEAR \"$YEAR_OF_LAST_COMMIT\")|" \
-      "source/CMakeLists.txt"
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(VERSION_REVISION 0)' 'set(VERSION_REVISION ${revision})' \
+      --replace-fail 'string(TIMESTAMP VERSION_YEAR "%Y")' 'set(VERSION_YEAR "${year}")'
   '';
 
   # Taken from pkgs/development/compilers/mruby; necessary so it uses `gcc` instead of `ld` for linking.
   # https://github.com/mruby/mruby/blob/e502fd88b988b0a8d9f31b928eb322eae269c45a/tasks/toolchains/gcc.rake#L30
-  preBuild = "unset LD";
+  preBuild = ''
+    unset LD
+  '';
 
   cmakeFlags = [ "-DBUILD_PRO=On" "-DBUILD_SDLGPU=On" ];
-  enableParallelBuilding = true;
-  dontStrip = true;
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
+    curl
     pkg-config
-    wayland-protocols
     python3
-    ruby
     rake
-    git
-  ] ++ dlopenBuildInputs;
-  dlopenBuildInputs = [
+  ];
+  buildInputs = [
+    alsa-lib
+    dbus
+    libdecor
     libGL
     libGLU
-    alsa-lib
-    libX11
     libICE
-    libXi
-    libXScrnSaver
-    libXcursor
-    libXinerama
-    libXext
-    libXxf86vm
-    libXrandr
-    wayland
-    libxkbcommon
-    wayland-scanner
-    curl
-    dbus
-    udev
-    libdecor
-    pipewire
     libpulseaudio
+    libX11
+    libXcursor
+    libXext
+    libXi
+    libXinerama
+    libxkbcommon
+    libXrandr
+    libXScrnSaver
+    libXxf86vm
+    pipewire
+    udev
+    wayland
+    wayland-protocols
+    wayland-scanner
   ];
-  dlopenPropagatedBuildInputs = [ libGL libX11 ];
-  propagatedBuildInputs = [ xorgproto ] ++ dlopenPropagatedBuildInputs;
 
   # This package borrows heavily from pkgs/development/libraries/SDL2/default.nix
-  # because TIC-80 vendors SDL2, which means we need to take care and implemment
+  # because TIC-80 vendors SDL2, which means we need to take care and implement
   # a similar environment in TIC-80's vendored copy of SDL2.
   #
   # SDL is weird in that instead of just dynamically linking with
@@ -110,7 +119,7 @@ stdenv.mkDerivation rec {
   # list the symbols used in this way.
   postFixup =
     let
-      rpath = lib.makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
+      rpath = lib.makeLibraryPath buildInputs;
     in
     ''
       patchelf --set-rpath "$(patchelf --print-rpath $out/bin/tic80):${rpath}" "$out/bin/tic80"
