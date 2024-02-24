@@ -82,6 +82,14 @@ in {
       '';
     };
 
+    localNetworkGameTransfers.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open ports in the firewall for Steam Local Network Game Transfers.
+      '';
+    };
+
     gamescopeSession = mkOption {
       description = mdDoc "Run a GameScope driven Steam session from your display-manager";
       default = {};
@@ -139,14 +147,22 @@ in {
     ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope;
 
     networking.firewall = lib.mkMerge [
+      (mkIf (cfg.remotePlay.openFirewall || cfg.localNetworkGameTransfers.openFirewall) {
+        allowedUDPPorts = [ 27036 ]; # Peer discovery
+      })
+
       (mkIf cfg.remotePlay.openFirewall {
         allowedTCPPorts = [ 27036 ];
-        allowedUDPPortRanges = [ { from = 27031; to = 27036; } ];
+        allowedUDPPortRanges = [ { from = 27031; to = 27035; } ];
       })
 
       (mkIf cfg.dedicatedServer.openFirewall {
         allowedTCPPorts = [ 27015 ]; # SRCDS Rcon port
         allowedUDPPorts = [ 27015 ]; # Gameplay traffic
+      })
+
+      (mkIf cfg.localNetworkGameTransfers.openFirewall {
+        allowedTCPPorts = [ 27040 ]; # Data transfers
       })
     ];
   };
