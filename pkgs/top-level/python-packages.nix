@@ -15958,6 +15958,8 @@ self: super: with self; {
 
   update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
+  uplc = callPackage ../development/python-modules/uplc { };
+
   upnpy = callPackage ../development/python-modules/upnpy { };
 
   uproot = callPackage ../development/python-modules/uproot { };
