@@ -4402,6 +4402,8 @@ self: super: with self; {
 
   frozenlist = callPackage ../development/python-modules/frozenlist { };
 
+  frozenlist2 = callPackage ../development/python-modules/frozenlist2 { };
+
   fs = callPackage ../development/python-modules/fs { };
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
