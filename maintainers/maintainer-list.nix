@@ -15173,6 +15173,13 @@
     githubId = 4056630;
     name = "Patrick Steinhardt";
   };
+  pkulak = {
+    name = "Phil Kulak";
+    email = "phil@kulak.us";
+    matrix = "@phil:kulak.us";
+    github = "pkulak";
+    githubId = 502905;
+  };
   plabadens = {
     name = "Pierre Labadens";
     email = "labadens.pierre+nixpkgs@gmail.com";
