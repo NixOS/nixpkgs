@@ -8,6 +8,7 @@
 , makeWrapper
 , stdenv
 
+, pkgs
 , cmake
 , gcc12
 , clblast
@@ -162,6 +163,12 @@ goBuild ((lib.optionalAttrs enableRocm {
     "-X=github.com/jmorganca/ollama/version.Version=${version}"
     "-X=github.com/jmorganca/ollama/server.mode=release"
   ];
+
+  # for now, just test that rocm and cuda build
+  passthru.tests = lib.optionalAttrs stdenv.isLinux {
+    rocm = pkgs.ollama.override { acceleration = "rocm"; };
+    cuda = pkgs.ollama.override { acceleration = "cuda"; };
+  };
 
   meta = {
     description = "Get up and running with large language models locally";
