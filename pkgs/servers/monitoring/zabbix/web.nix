@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, writeText }:
 
-import ./versions.nix ({ version, sha256, ... }:
+import ./versions.nix ({ version, hash, ... }:
   stdenv.mkDerivation rec {
     pname = "zabbix-web";
     inherit version;
 
     src = fetchurl {
       url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     phpConfig = writeText "zabbix.conf.php" ''
