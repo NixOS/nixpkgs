@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption mkPackageOption literalExpression types;
+
   cfg = config.services.traefik;
 
   configFormat = pkgs.formats.toml {};
