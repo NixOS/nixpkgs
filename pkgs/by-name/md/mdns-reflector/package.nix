@@ -18,7 +18,7 @@
     description = "A lightweight and performant multicast DNS (mDNS) reflector";
     homepage = "https://github.com/vfreex/mdns-reflector";
     license = licenses.gpl3Only;
-    meta.platforms = platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ bcnelson ];
     mainProgram = "mdns-reflector";
   };
