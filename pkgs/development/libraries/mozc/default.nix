@@ -231,7 +231,7 @@ buildBazelPackage {
       gpl2Only # mozcdic-ut-alt-cannadic.txt
       gpl2Plus # mozcdic-ut-skk-jisyo.txt
       mit # wil
-      publicDomain # src/data/test/stress_test, mozcdic-ut-place-names.txt, jp-zip-codes
+      publicDomain # src/data/test/stress_test, mozcdic-ut-place-names.txt, jp-zip-codes, Okinawa dictionary
     ];
     maintainers = with maintainers; [ musjj ];
     platforms = platforms.linux;
