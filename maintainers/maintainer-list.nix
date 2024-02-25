@@ -2281,6 +2281,13 @@
     githubId = 164148;
     name = "Ben Darwin";
   };
+  bcnelson = {
+    email = "bradely@nel.family";
+    github = "bcnelson";
+    githubId = 5659892;
+    matrix = "@bcnelson:matrix.org";
+    name = "Bradley Nelson";
+  };
   bdd = {
     email = "bdd@mindcast.org";
     github = "bdd";
