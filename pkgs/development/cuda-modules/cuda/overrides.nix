@@ -241,6 +241,8 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
           for path in $rmPatterns ; do
             rm -r "$path"
           done
+        '' + ''
+          patchShebangs nsight-systems
         '';
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ qt.wrapQtAppsHook ];
       buildInputs = prevAttrs.buildInputs ++ [
@@ -265,6 +267,20 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
         (qt.qtsvg or qt.full)
         qtWaylandPlugins
       ];
+
+      postInstall =
+        # 1. Move dependencies of nsys, nsys-ui binaries to bin output
+        # 2. Fix paths in wrapper scripts
+        let inherit (prev.nsight_systems) version;
+          versionString = with lib.versions; "${majorMinor version}.${patch version}";
+        in
+        ''
+          moveToOutput 'nsight-systems/${versionString}/host-linux-*' "''${!outputBin}"
+          moveToOutput 'nsight-systems/${versionString}/target-linux-*' "''${!outputBin}"
+
+          substituteInPlace $bin/bin/nsys $bin/bin/nsys-ui \
+            --replace-fail 'nsight-systems-#VERSION_RSPLIT#' nsight-systems/${versionString}
+        '';
 
       # Older releases require boost 1.70 deprecated in Nixpkgs
       meta.broken = prevAttrs.meta.broken or false || lib.versionOlder final.cudaVersion "11.8";
