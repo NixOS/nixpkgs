@@ -2920,6 +2920,8 @@ self: super: with self; {
 
   dirty-equals = callPackage ../development/python-modules/dirty-equals { };
 
+  dirtyjson = callPackage ../development/python-modules/dirtyjson { };
+
   discid = callPackage ../development/python-modules/discid { };
 
   discogs-client = callPackage ../development/python-modules/discogs-client { };
