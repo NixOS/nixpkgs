@@ -416,7 +416,7 @@ let
     # note that calling faketime and fmtutil is fragile (faketime uses LD_PRELOAD, fmtutil calls /bin/sh, causing potential glibc issues on non-NixOS)
     # so we patch fmtutil to use faketime, rather than calling faketime fmtutil
     substitute "$TEXMFDIST"/scripts/texlive/fmtutil.pl fmtutil \
-      --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
+      --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@'"$(date +'%F %T' --date=@"$SOURCE_DATE_EPOCH")"' x0.001'"'"' $eng -ini '
     FORCE_SOURCE_DATE=1 TZ= perl fmtutil --sys --all | grep '^fmtutil' # too verbose
   '' +
     # if generating formats only, delete everything else
