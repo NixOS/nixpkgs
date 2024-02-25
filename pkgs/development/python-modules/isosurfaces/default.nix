@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "isosurfaces";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa1b44e5e59d2f429add49289ab89e36f8dcda49b7badd99e0beea273be331f4";
+    sha256 = "sha256-GKq07HFIqDdgl7SQBuoOnsB+Ro+l/GEz19nu+Xf+OE0=";
   };
 
   propagatedBuildInputs = [ numpy ];
