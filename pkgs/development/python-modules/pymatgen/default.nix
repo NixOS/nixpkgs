@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2022.3.29";
+  version = "2024.2.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "materialsproject";
     repo = "pymatgen";
     rev= "v${version}";
-    hash = "sha256-B2piRWx9TfKlGTPOAAGsq2GxyfHIRBVFpk6dxES0WF0=";
+    hash = "sha256-eswoup9ACj/PHVW3obcnZjD4tWemsmROZFtwGGigEYE=";
   };
 
   nativeBuildInputs = [
