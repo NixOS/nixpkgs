@@ -46,7 +46,12 @@ buildPythonPackage rec {
     "test_dynamic_http_port"
     "test_environment_variables"
     "test_verbosity"
-  ];
+  ] ++ (lib.optionals (lib.versionOlder version "0.35.3") [
+    # the following tests require older Pandas, in a future version they will not
+    # https://github.com/crate/crate-python/commit/db7ba4d0e1f4f4087739a8f9ebe1d71946333979
+    "test_bulk_save_dask"
+    "test_bulk_save_pandas"
+  ]);
 
   disabledTestPaths = [
     # imports setuptools.ssl_support, which doesn't exist anymore
