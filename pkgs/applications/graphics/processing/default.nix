@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildPhase = ''
+    runHook preBuild
+
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
     cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
@@ -78,9 +80,13 @@ stdenv.mkDerivation rec {
     cd build
     ant build
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
     mkdir -p $out/share/applications/
     cp -dp build/linux/${pname}.desktop $out/share/applications/
@@ -95,6 +101,8 @@ stdenv.mkDerivation rec {
       ''${gappsWrapperArgs[@]} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
+
+    runHook postInstall
   '';
 
   meta = with lib; {
