@@ -10,6 +10,16 @@
 , qtwayland
 , ruby
 , wrapQtAppsHook
+, dictionaries ? [
+    "alt-cannadic"
+    "edict2"
+    "jawiki"
+    "neologd"
+    "personal-names"
+    "place-names"
+    "skk-jisyo"
+    "sudachidict"
+  ]
 }:
 
 buildBazelPackage {
@@ -176,20 +186,12 @@ buildBazelPackage {
 
         [[ -e mozcdic-ut.txt ]] && rm mozcdic-ut.txt
 
-        dicts=(
-          alt-cannadic
-          edict2
-          jawiki
-          neologd
-          personal-names
-          place-names
-          skk-jisyo
-          sudachidict
+        dictionaries=(
+          ${lib.escapeShellArgs dictionaries}
         )
-
-        for dict in "''${dicts[@]}"; do
-          tar -xf ../../mozcdic-ut-$dict/mozcdic-ut-$dict.txt.tar.bz2
-          cat mozcdic-ut-$dict.txt >>mozcdic-ut.txt
+        for name in "''${dictionaries[@]}"; do
+          tar -xf ../../mozcdic-ut-$name/mozcdic-ut-$name.txt.tar.bz2
+          cat mozcdic-ut-$name.txt >>mozcdic-ut.txt
         done
 
         ruby remove_duplicate_ut_entries.rb mozcdic-ut.txt
