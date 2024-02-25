@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 , fetchurl
 , nixosTests
 }:
@@ -8,6 +9,9 @@
 buildGoModule rec {
   pname = "mattermost";
   # ESR releases only.
+  # See https://docs.mattermost.com/upgrade/extended-support-release.html
+  # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
+  # the version regex in passthru.updateScript as well.
   version = "9.5.1";
 
   src = fetchFromGitHub {
@@ -63,7 +67,12 @@ buildGoModule rec {
     find $out/{client,i18n,fonts,templates,config} -type f -exec chmod -x {} \;
   '';
 
-  passthru.tests.mattermost = nixosTests.mattermost;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^v(9\.5\.([0-9.]+))" ];
+    };
+    tests.mattermost = nixosTests.mattermost;
+  };
 
   meta = with lib; {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
