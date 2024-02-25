@@ -1,0 +1,223 @@
+From f1ecf76550fe6ae9ddd8e77fa76f0afff248ac72 Mon Sep 17 00:00:00 2001
+From: 6543 <6543@obermui.de>
+Date: Thu, 22 Feb 2024 23:37:21 +0100
+Subject: [PATCH] Fix XSS vulnerabilities (#29336)
+
+- The Wiki page did not sanitize author name
+- the reviewer name on a "dismiss review" comment is also affected
+- the migration page has some spots
+
+---------
+
+Signed-off-by: jolheiser <john.olheiser@gmail.com>
+Co-authored-by: Gusted <postmaster@gusted.xyz>
+Co-authored-by: jolheiser <john.olheiser@gmail.com>
+(cherry picked from commit 4435d8a4b6a2c4a2aa667a9a326e7aaf6a988932)
+---
+ .../repo/issue/view_content/comments.tmpl     |  2 +-
+ templates/repo/migrate/migrating.tmpl         |  6 +-
+ templates/repo/settings/options.tmpl          |  4 +-
+ templates/repo/wiki/revision.tmpl             |  2 +-
+ templates/repo/wiki/view.tmpl                 |  2 +-
+ tests/integration/xss_test.go                 | 85 +++++++++++++++++++
+ 6 files changed, 93 insertions(+), 8 deletions(-)
+
+diff --git a/templates/repo/issue/view_content/comments.tmpl b/templates/repo/issue/view_content/comments.tmpl
+index 0e3fccd1c..ecf77083d 100644
+--- a/templates/repo/issue/view_content/comments.tmpl
++++ b/templates/repo/issue/view_content/comments.tmpl
+@@ -775,7 +775,7 @@
+ 						{{else}}
+ 							{{$reviewerName = .Review.OriginalAuthor}}
+ 						{{end}}
+-						{{$.locale.Tr "repo.issues.review.dismissed" $reviewerName $createdStr | Safe}}
++						{{$.locale.Tr "repo.issues.review.dismissed" ($reviewerName | Escape) $createdStr | Safe}}
+ 					</span>
+ 				</div>
+ 				{{if .Content}}
+diff --git a/templates/repo/migrate/migrating.tmpl b/templates/repo/migrate/migrating.tmpl
+index 58c453fe5..8c8bb9291 100644
+--- a/templates/repo/migrate/migrating.tmpl
++++ b/templates/repo/migrate/migrating.tmpl
+@@ -21,12 +21,12 @@
+ 					<div class="ui stackable middle very relaxed page grid">
+ 						<div class="sixteen wide center aligned centered column">
+ 							<div id="repo_migrating_progress">
+-								<p>{{.locale.Tr "repo.migrate.migrating" .CloneAddr | Safe}}</p>
++								<p>{{.locale.Tr "repo.migrate.migrating" (.CloneAddr | Escape) | Safe}}</p>
+ 								<p id="repo_migrating_progress_message"></p>
+ 							</div>
+ 							<div id="repo_migrating_failed" class="gt-hidden">
+ 								{{if .CloneAddr}}
+-									<p>{{.locale.Tr "repo.migrate.migrating_failed" .CloneAddr | Safe}}</p>
++									<p>{{.locale.Tr "repo.migrate.migrating_failed" (.CloneAddr | Escape) | Safe}}</p>
+ 								{{else}}
+ 									<p>{{.locale.Tr "repo.migrate.migrating_failed_no_addr" | Safe}}</p>
+ 								{{end}}
+@@ -57,7 +57,7 @@
+ 	<div class="content">
+ 		<div class="ui warning message">
+ 			{{.locale.Tr "repo.settings.delete_notices_1" | Safe}}<br>
+-			{{.locale.Tr "repo.settings.delete_notices_2" .Repository.FullName | Safe}}
++			{{.locale.Tr "repo.settings.delete_notices_2" (.Repository.FullName | Escape) | Safe}}
+ 			{{if .Repository.NumForks}}<br>
+ 			{{.locale.Tr "repo.settings.delete_notices_fork_1"}}
+ 			{{end}}
+diff --git a/templates/repo/settings/options.tmpl b/templates/repo/settings/options.tmpl
+index d02254414..c02db1c3e 100644
+--- a/templates/repo/settings/options.tmpl
++++ b/templates/repo/settings/options.tmpl
+@@ -943,7 +943,7 @@
+ 		<div class="content">
+ 			<div class="ui warning message">
+ 				{{.locale.Tr "repo.settings.delete_notices_1" | Safe}}<br>
+-				{{.locale.Tr "repo.settings.delete_notices_2" .Repository.FullName | Safe}}
++				{{.locale.Tr "repo.settings.delete_notices_2" (.Repository.FullName | Escape) | Safe}}
+ 				{{if .Repository.NumForks}}<br>
+ 				{{.locale.Tr "repo.settings.delete_notices_fork_1"}}
+ 				{{end}}
+@@ -978,7 +978,7 @@
+ 		<div class="content">
+ 			<div class="ui warning message">
+ 				{{.locale.Tr "repo.settings.delete_notices_1" | Safe}}<br>
+-				{{.locale.Tr "repo.settings.wiki_delete_notices_1" .Repository.Name | Safe}}
++				{{.locale.Tr "repo.settings.wiki_delete_notices_1" (.Repository.Name | Escape) | Safe}}
+ 			</div>
+ 			<form class="ui form" action="{{.Link}}" method="post">
+ 				{{.CsrfTokenHtml}}
+diff --git a/templates/repo/wiki/revision.tmpl b/templates/repo/wiki/revision.tmpl
+index b2d6e6392..4d8fa25d3 100644
+--- a/templates/repo/wiki/revision.tmpl
++++ b/templates/repo/wiki/revision.tmpl
+@@ -10,7 +10,7 @@
+ 					{{$title}}
+ 					<div class="ui sub header gt-word-break">
+ 						{{$timeSince := TimeSince .Author.When $.locale}}
+-						{{.locale.Tr "repo.wiki.last_commit_info" .Author.Name $timeSince | Safe}}
++						{{.locale.Tr "repo.wiki.last_commit_info" (.Author.Name | Escape) $timeSince | Safe}}
+ 					</div>
+ 				</div>
+ 			</div>
+diff --git a/templates/repo/wiki/view.tmpl b/templates/repo/wiki/view.tmpl
+index c294af316..e64a106bc 100644
+--- a/templates/repo/wiki/view.tmpl
++++ b/templates/repo/wiki/view.tmpl
+@@ -40,7 +40,7 @@
+ 					{{$title}}
+ 					<div class="ui sub header">
+ 						{{$timeSince := TimeSince .Author.When $.locale}}
+-						{{.locale.Tr "repo.wiki.last_commit_info" .Author.Name $timeSince | Safe}}
++						{{.locale.Tr "repo.wiki.last_commit_info" (.Author.Name | Escape) $timeSince | Safe}}
+ 					</div>
+ 				</div>
+ 				<div class="eight wide right aligned column">
+diff --git a/tests/integration/xss_test.go b/tests/integration/xss_test.go
+index e575ed399..9ed4d3560 100644
+--- a/tests/integration/xss_test.go
++++ b/tests/integration/xss_test.go
+@@ -4,13 +4,23 @@
+ package integration
+ 
+ import (
++	"context"
++	"fmt"
+ 	"net/http"
++	"net/url"
++	"os"
++	"path/filepath"
++	"strings"
+ 	"testing"
++	"time"
+ 
+ 	"code.gitea.io/gitea/models/unittest"
+ 	user_model "code.gitea.io/gitea/models/user"
++	"code.gitea.io/gitea/modules/git"
+ 	"code.gitea.io/gitea/tests"
+ 
++	gogit "github.com/go-git/go-git/v5"
++	"github.com/go-git/go-git/v5/plumbing/object"
+ 	"github.com/stretchr/testify/assert"
+ )
+ 
+@@ -37,3 +47,78 @@ func TestXSSUserFullName(t *testing.T) {
+ 		htmlDoc.doc.Find("div.content").Find(".header.text.center").Text(),
+ 	)
+ }
++
++func TestXSSWikiLastCommitInfo(t *testing.T) {
++	onGiteaRun(t, func(t *testing.T, u *url.URL) {
++		// Prepare the environment.
++		dstPath := t.TempDir()
++		r := fmt.Sprintf("%suser2/repo1.wiki.git", u.String())
++		u, err := url.Parse(r)
++		assert.NoError(t, err)
++		u.User = url.UserPassword("user2", userPassword)
++		assert.NoError(t, git.CloneWithArgs(context.Background(), git.AllowLFSFiltersArgs(), u.String(), dstPath, git.CloneRepoOptions{}))
++
++		// Use go-git here, because using git wouldn't work, it has code to remove
++		// `<`, `>` and `\n` in user names. Even though this is permitted and
++		// wouldn't result in a error by a Git server.
++		gitRepo, err := gogit.PlainOpen(dstPath)
++		if err != nil {
++			panic(err)
++		}
++
++		w, err := gitRepo.Worktree()
++		if err != nil {
++			panic(err)
++		}
++
++		filename := filepath.Join(dstPath, "Home.md")
++		err = os.WriteFile(filename, []byte("Oh, a XSS attack?"), 0o644)
++		if !assert.NoError(t, err) {
++			t.FailNow()
++		}
++
++		_, err = w.Add("Home.md")
++		if !assert.NoError(t, err) {
++			t.FailNow()
++		}
++
++		_, err = w.Commit("Yay XSS", &gogit.CommitOptions{
++			Author: &object.Signature{
++				Name:  `Gusted <script class="evil">alert('Oh no!');</script>`,
++				Email: "valid@example.org",
++				When:  time.Date(2024, time.January, 31, 0, 0, 0, 0, time.UTC),
++			},
++		})
++		if !assert.NoError(t, err) {
++			t.FailNow()
++		}
++
++		// Push.
++		_, _, err = git.NewCommand(git.DefaultContext, "push").AddArguments(git.ToTrustedCmdArgs([]string{"origin", "master"})...).RunStdString(&git.RunOpts{Dir: dstPath})
++		assert.NoError(t, err)
++
++		// Check on page view.
++		t.Run("Page view", func(t *testing.T) {
++			defer tests.PrintCurrentTest(t)()
++
++			req := NewRequest(t, http.MethodGet, "/user2/repo1/wiki/Home")
++			resp := MakeRequest(t, req, http.StatusOK)
++			htmlDoc := NewHTMLParser(t, resp.Body)
++
++			htmlDoc.AssertElement(t, "script.evil", false)
++			assert.EqualValues(t, `Gusted edited this page 0001-01-01 00:00:00 +00:00`, strings.TrimSpace(htmlDoc.Find(".ui.sub.header").Text()))
++		})
++
++		// Check on revisions page.
++		t.Run("Revision page", func(t *testing.T) {
++			defer tests.PrintCurrentTest(t)()
++
++			req := NewRequest(t, http.MethodGet, "/user2/repo1/wiki/Home?action=_revision")
++			resp := MakeRequest(t, req, http.StatusOK)
++			htmlDoc := NewHTMLParser(t, resp.Body)
++
++			htmlDoc.AssertElement(t, "script.evil", false)
++			assert.EqualValues(t, `Gusted edited this page 0001-01-01 00:00:00 +00:00`, strings.TrimSpace(htmlDoc.Find(".ui.sub.header").Text()))
++		})
++	})
++}
+-- 
+2.43.2
+
