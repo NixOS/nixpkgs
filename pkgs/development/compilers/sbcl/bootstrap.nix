@@ -26,4 +26,6 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString (!stdenv.isAarch32 && stdenv.isLinux) ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
+
+  meta.sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
 }
