@@ -21,8 +21,6 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # relax version bounds
     sed -i 's/\([A-z0-9]*\)~=.*$/\1/' setup.cfg
-    # not sure what Flask-Session2 is but flask-session works just fine
-    sed -i '/Flask-Session2/d' setup.cfg
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

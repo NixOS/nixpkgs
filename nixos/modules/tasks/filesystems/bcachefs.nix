@@ -118,7 +118,7 @@ let
 in
 
 {
-  config = lib.mkIf (lib.elem "bcachefs" config.boot.supportedFilesystems) (lib.mkMerge [
+  config = lib.mkIf (config.boot.supportedFilesystems.bcachefs or false) (lib.mkMerge [
     {
       inherit assertions;
       # needed for systemd-remount-fs
@@ -133,7 +133,7 @@ in
       };
     }
 
-    (lib.mkIf ((lib.elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+    (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != {})) {
       inherit assertions;
       # chacha20 and poly1305 are required only for decryption attempts
       boot.initrd.availableKernelModules = [ "bcachefs" "sha256" "chacha20" "poly1305" ];
