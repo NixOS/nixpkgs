@@ -4887,8 +4887,9 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
+      systembridgeconnector
       zeroconf
-    ]; # missing inputs: systembridgeconnector
+    ];
     "system_health" = ps: with ps; [
       aiohttp-cors
       aiohttp-fast-url-dispatcher
@@ -6490,6 +6491,7 @@
     "syncthing"
     "syncthru"
     "synology_dsm"
+    "system_bridge"
     "system_health"
     "system_log"
     "systemmonitor"
