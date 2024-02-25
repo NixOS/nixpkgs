@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
     description = "Package and build manager for D applications and libraries";
     homepage = "https://code.dlang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ThomasMader jtbx ];
+    maintainers = with maintainers; [ jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
