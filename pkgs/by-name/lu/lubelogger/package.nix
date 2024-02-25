@@ -6,13 +6,13 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-YxP8XmjYqxuTA2fIV1q7GBsrWPtLr02KkFl4UUNJ2p8=";
+    hash = "sha256-eH8BWTUTzmVTOnn5svSfk8hqf8CjIpQdxoknlkgjVDY=";
   };
 
   projectFile = "CarCareTracker.sln";
