@@ -1,8 +1,7 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , curl
 , duktape
+, fetchFromGitHub
 , html-tidy
 , openssl
 , pcre
@@ -10,17 +9,18 @@
 , pkg-config
 , quickjs
 , readline
+, stdenv
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "edbrowse";
   version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "CMB";
-    repo = pname;
-    rev = "v${version}";
+    repo = "edbrowse";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZXxzQBAmu7kM3sjqg/rDLBXNucO8sFRFKXV8UxQVQZU=";
   };
 
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
   ];
+
   buildInputs = [
     curl
     duktape
@@ -45,10 +46,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace src/makefile --replace\
-      '-L/usr/local/lib/quickjs' '-L${quickjs}/lib/quickjs'
-    for i in $(find ./tools/ -type f ! -name '*.c'); do
-      patchShebangs $i
+    substituteInPlace src/makefile \
+      --replace '-L/usr/local/lib/quickjs' '-L${quickjs}/lib/quickjs'
+    for file in $(find ./tools/ -type f ! -name '*.c'); do
+      patchShebangs $file
     done
   '';
 
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://edbrowse.org/";
     description = "Command Line Editor Browser";
     longDescription = ''
@@ -71,10 +72,14 @@ stdenv.mkDerivation rec {
       send email, with no human intervention whatsoever. edbrowse can also tap
       into databases through odbc. It was primarily written by Karl Dahlke.
     '';
-    license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl1Plus ];
     mainProgram = "edbrowse";
+    maintainers = with lib.maintainers; [
+      schmitthenner
+      equirosa
+      AndersonTorres
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})
 # TODO: send the patch to upstream developers
