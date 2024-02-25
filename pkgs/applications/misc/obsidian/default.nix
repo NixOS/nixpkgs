@@ -28,10 +28,6 @@ let
     hash = if stdenv.isDarwin then "sha256-AXjzQwZxyRaI8mMU2EsNK0fRcXS7UNNBWPXeJzgomlY=" else "sha256-F7nqWOeBGGSmSVNTpcx3lHRejSjNeM2BBqS9tsasTvg=";
   };
 
-  runtimeLibs = lib.makeLibraryPath [
-    libglvnd
-  ];
-
   icon = fetchurl {
     url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
     hash = "sha256-EZsBuWyZ9zYJh0LDKfRAMTtnY70q6iLK/ggXlplDEoA=";
@@ -57,7 +53,7 @@ let
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
-        --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
       install -m 444 -D "${desktopItem}/share/applications/"* \
