@@ -1,69 +1,22 @@
 { lib
-, stdenv
+, appimageTools
 , fetchurl
-, autoPatchelfHook
-, dpkg
-, ffmpeg_5-full
-, glib
-, gtk3
-, wrapGAppsHook
-, nss
-, xdg-utils
-, nspr
-, mesa
-, systemd
-, libglvnd
-, libGL
-, libGLU
+
 }:
-stdenv.mkDerivation rec  {
+appimageTools.wrapType2  rec  {
   pname = "zoho-mail";
   version = "1.6.1";
 
   src = fetchurl {
-    url = "https://downloads.zohocdn.com/zmail-desktop/linux/zoho-mail-desktop-lite-installer-x64-v${version}.deb";
-    hash = "sha256-+c5RyymxeL0vppQpA+zceIlQ8336TLhmFgdgINTAQaY=";
+    url = "https://downloads.zohocdn.com/zmail-desktop/linux/zoho-mail-desktop-lite-x64-v${version}.AppImage";
+    hash = "sha256-dXl46ELcuQS4e9geNPUV0hB+LKOru9q5oCc8ar3/9Mo=";
   };
-
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook ];
-
-	dontWrapGApps = true;
-
-  buildInputs = [ dpkg 
-									ffmpeg_5-full
-									glib
-									gtk3
-									nss
-									xdg-utils
-									nspr
-									mesa
-									libglvnd
-									libGL
-									libGLU
-	];
-
-
-	runtimeDependencies = buildInputs ++ [systemd];
-	
-	dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-		mkdir -p $out/bin/
-		dpkg -x $src $out/bin/
-    cd $out
-
-    runHook postInstall
-  '';
-
   meta = with lib; {
-    description = "CAD for artists";
-    homepage = "https://www.plasticity.xyz";
+    description = "Zoho Mail Desktop Lite client";
+    homepage = "https://www.zoho.com/mail/";
     # license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ imadnyc ];
     platforms = [ "x86_64-linux" ];
   };
 }
-
