@@ -1,6 +1,6 @@
 {
   "name": "multiple-entity-row",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "description": "Show multiple entity states, attributes and icons on entity rows in Home Assistant's Lovelace UI",
   "keywords": [
     "home-assistant",
