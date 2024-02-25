@@ -11,6 +11,7 @@
 , torch
 , scipy
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
@@ -38,6 +40,10 @@ buildPythonPackage rec {
     pyro-ppl
     scipy
     torch
+  ];
+
+  pythonRelaxDeps = [
+    "linear-operator"
   ];
 
   checkInputs = [

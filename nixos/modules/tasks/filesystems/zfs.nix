@@ -20,8 +20,8 @@ let
   clevisDatasets = map (e: e.device) (filter (e: e.device != null && (hasAttr e.device config.boot.initrd.clevis.devices) && e.fsType == "zfs" && (fsNeededForBoot e)) config.system.build.fileSystems);
 
 
-  inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
-  inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.zfs or false;
+  inSystem = config.boot.supportedFilesystems.zfs or false;
 
   autosnapPkg = pkgs.zfstools.override {
     zfs = cfgZfs.package;

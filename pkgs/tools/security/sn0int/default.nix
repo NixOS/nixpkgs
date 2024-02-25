@@ -1,10 +1,12 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
-, libsodium
 , libseccomp
-, sqlite
+, libsodium
 , pkg-config
+, pkgs
+, sqlite
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,8 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libsodium
-    libseccomp
     sqlite
+  ] ++ lib.optionals stdenv.isLinux [
+    libseccomp
+  ] ++ lib.optionals stdenv.isDarwin [
+    pkgs.darwin.apple_sdk.frameworks.Security
   ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"
@@ -40,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab xrelkd ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

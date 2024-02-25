@@ -2,7 +2,6 @@
 , lib
 , fetchzip
 , copyDesktopItems
-, makeDesktopItem
 , makeWrapper
 , runCommand
 , appimageTools
@@ -10,11 +9,11 @@
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "2.1.3.18901";
+  version = "2.2.1.19765";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    sha256 = "sha256-XZEpzzFm0DA6iiPGOKbmsuNlpIlt7Qa2A+jEqU6GqgE=";
+    sha256 = "sha256-53CsE1hmtys5hNY2V+tskgwKg9jDLrEsYF6iY2fJGHU=";
     stripRoot = false;
   };
 
@@ -24,25 +23,19 @@ let
     }
     ''
       appimage-exec.sh -x $out ${src}/${pname}-${version}/${pname}
+
+      # JetBrains ship a broken desktop file. Despite registering a custom
+      # scheme handler for jetbrains:// URLs, they never mark the command as
+      # being suitable for passing URLs to. Ergo, the handler never receives
+      # its payload. This causes various things to break, including login.
+      # Reported upstream at: https://youtrack.jetbrains.com/issue/TBX-11478/
+      sed -Ei '/^Exec=/s/( %U)?$/ %U/' $out/jetbrains-toolbox.desktop
     '';
 
   appimage = appimageTools.wrapAppImage {
     inherit pname version;
     src = appimageContents;
     extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.targetPkgs pkgs);
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "JetBrains Toolbox";
-    exec = "jetbrains-toolbox";
-    comment = "JetBrains Toolbox";
-    desktopName = "JetBrains Toolbox";
-    type = "Application";
-    icon = "jetbrains-toolbox";
-    terminal = false;
-    categories = [ "Development" ];
-    startupWMClass = "jetbrains-toolbox";
-    startupNotify = false;
   };
 in
 stdenv.mkDerivation {
@@ -61,7 +54,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  desktopItems = [ desktopItem ];
+  desktopItems = [ "${appimageContents}/jetbrains-toolbox.desktop" ];
 
   # Disabling the tests, this seems to be very difficult to test this app.
   doCheck = false;
@@ -72,5 +65,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ AnatolyPopov ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "jetbrains-toolbox";
   };
 }

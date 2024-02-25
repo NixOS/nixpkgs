@@ -5,28 +5,34 @@
 , numpy
 , pandas
 , poetry-core
-, scikit-learn
-, toml-adapt
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
+, scikit-learn
+, toml-adapt
 }:
 
 buildPythonPackage rec {
   pname = "niaclass";
   version = "0.1.4";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "lukapecnik";
     repo = "NiaClass";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-md1e/cOIOQKoB760E5hjzjCsC5tS1CzgqAPTeVtrmuo=";
+    hash = "sha256-md1e/cOIOQKoB760E5hjzjCsC5tS1CzgqAPTeVtrmuo=";
   };
+
+  pythonRelaxDeps = [
+    "pandas"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
     toml-adapt
   ];
 
@@ -42,7 +48,7 @@ buildPythonPackage rec {
     toml-adapt -path pyproject.toml -a change -dep scikit-learn -ver X
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -53,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A framework for solving classification tasks using Nature-inspired algorithms";
     homepage = "https://github.com/lukapecnik/NiaClass";
+    changelog = "https://github.com/lukapecnik/NiaClass/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };

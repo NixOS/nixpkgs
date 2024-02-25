@@ -8,21 +8,26 @@
 , isPyPy
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , toolz
 }:
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ethereum";
-    repo = pname;
+    repo = "eth-utils";
     rev = "v${version}";
-    hash = "sha256-Ogp4o99smw5qVwDec6zd/xVqqKMyNk41iBfRNzrwuvE=";
+    hash = "sha256-k2pHM1eKPzoGxZlU6yT7bZMv4CCWGaZaSnFHSbT76Zo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     eth-hash
@@ -44,6 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "eth_utils" ];
 
   meta = {
+    changelog = "https://github.com/ethereum/eth-utils/blob/${src.rev}/docs/release_notes.rst";
     description = "Common utility functions for codebases which interact with ethereum";
     homepage = "https://github.com/ethereum/eth-utils";
     license = lib.licenses.mit;

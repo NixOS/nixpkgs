@@ -5,8 +5,6 @@
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
-# TODO: can be removed since 3.36 since it is the default now.
-, enableDeserialize ? false
 
 , gitUpdater
 }:
@@ -17,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.44.2";
+  version = "3.45.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-HGcZoUi8Qc8PK7vjkm184/XKCdh48SRvzCB2exdbtAc=";
+    url = "https://sqlite.org/2024/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    hash = "sha256-zZwnhBt6WTLJiXZR4guGxwHddAVWmJsByllvz6PUmgo=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -54,9 +52,6 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ] ++ lib.optionals enableDeserialize [
-    # Can be removed in v3.36+, as this will become the default
-    "-DSQLITE_ENABLE_DESERIALIZE"
   ]);
 
   # Test for features which may not be available at compile time

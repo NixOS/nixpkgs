@@ -17,16 +17,16 @@ let
 
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "0.10.7";
+    version = "0.11.0";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-pFVCy6xB7Fhj4OatyNQdjkDpDGtod2nJsg2vdl5ED9s=";
+      hash = "sha256-sOmXLqc1O96/50A08b9Rlk5xlmqg2S+5nWachC74IV8=";
     };
 
-    vendorHash = "sha256-mauaavG3oeUzMrBEiK85Tws++6V1WViczRFhyovUpB4=";
+    vendorHash = "sha256-tZvzCQzYIIqoSefm4ty+RI7fFKWWw2OopYGGX8zS6JM=";
 
     inherit overrideModAttrs;
 

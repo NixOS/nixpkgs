@@ -236,6 +236,11 @@ let
         commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
         hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
       })
+    ] ++ lib.optionals (chromiumVersionAtLeast "121") [
+      # M121 is the first version to require the new rust toolchain.
+      # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
+      # allowing us to use our rustc and our clang.
+      ./patches/chromium-121-rust.patch
     ];
 
     postPatch = ''
@@ -400,11 +405,15 @@ let
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
-      # We do intentionally not set rustc_version as nixpkgs will never do incremental
-      # rebuilds, thus leaving this empty is fine.
       rust_sysroot_absolute = "${buildPackages.rustc}";
-      # Building with rust is disabled for now - this matches the flags in other major distributions.
+      # Rust is enabled for M121+, see next section:
       enable_rust = false;
+    } // lib.optionalAttrs (chromiumVersionAtLeast "121") {
+      # M121 the first version to actually require a functioning rust toolchain
+      enable_rust = true;
+      # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
+      # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
+      rustc_version = buildPackages.rustc.version;
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
       # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
       arm_control_flow_integrity = "none";
@@ -418,6 +427,13 @@ let
       link_pulseaudio = true;
     } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
     // (extraAttrs.gnFlags or {}));
+
+    # We cannot use chromiumVersionAtLeast in mkDerivation's env attrset due
+    # to infinite recursion when chromium.override is used (e.g. electron).
+    # To work aroud this, we use export in the preConfigure phase.
+    preConfigure = lib.optionalString (chromiumVersionAtLeast "121") ''
+      export RUSTC_BOOTSTRAP=1
+    '';
 
     configurePhase = ''
       runHook preConfigure

@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , jaxtyping
 , pytestCheckHook
+, pythonRelaxDepsHook
 , scipy
 , setuptools
 , setuptools-scm
 , torch
+, typeguard
 , wheel
 }:
 
@@ -23,6 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel
@@ -32,6 +35,11 @@ buildPythonPackage rec {
     jaxtyping
     scipy
     torch
+    typeguard
+  ];
+
+  pythonRelaxDeps = [
+    "typeguard"
   ];
 
   pythonImportsCheck = [ "linear_operator" ];
@@ -42,6 +50,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # flaky numerical tests
+    "test_matmul_matrix_broadcast"
     "test_svd"
   ];
 

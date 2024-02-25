@@ -81,11 +81,13 @@ in
       start_all()
 
       # Wait for network and miniupnpd.
+      router.systemctl("start network-online.target")
       router.wait_for_unit("network-online.target")
       # $router.wait_for_unit("nat")
       router.wait_for_unit("${if useNftables then "nftables" else "firewall"}.service")
       router.wait_for_unit("miniupnpd")
 
+      client1.systemctl("start network-online.target")
       client1.wait_for_unit("network-online.target")
 
       client1.succeed("upnpc -a ${internalClient1Address} 9000 9000 TCP")

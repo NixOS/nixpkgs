@@ -66,7 +66,7 @@ final: _: {
 
             # Pre-cuda_compat CUDA release:
             meta.badPlatforms = final.lib.optionals (cuda_compat == null) final.lib.platforms.all;
-            meta.platforms = cuda_compat.platforms or [ ];
+            meta.platforms = cuda_compat.meta.platforms or [ ];
           }
           ./auto-add-cuda-compat-runpath.sh
       )

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
     rev = "refs/tags/${version}";
-    hash = "sha256-EyReCkVRb3CgzIRal5H13OX/UdwWi+evDe7PoS1qP4A=";
+    hash = "sha256-M3ZnDL0Ui3UAa5Jn/Wr5pAHhghP7EAaQD/sx5QZ58ZQ=";
   };
 
   nativeBuildInputs = [

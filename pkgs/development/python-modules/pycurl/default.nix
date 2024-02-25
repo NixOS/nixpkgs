@@ -70,6 +70,7 @@ buildPythonPackage rec {
     # https://github.com/pycurl/pycurl/issues/819
     "test_multi_socket_select"
     # https://github.com/pycurl/pycurl/issues/729
+    "test_easy_pause_unpause"
     "test_multi_socket_action"
     # https://github.com/pycurl/pycurl/issues/822
     "test_request_with_verifypeer"

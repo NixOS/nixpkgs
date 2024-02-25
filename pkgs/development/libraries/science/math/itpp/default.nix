@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
+    "-DCMAKE_CXX_FLAGS=-std=c++14"
     "-DBLAS_FOUND:BOOL=TRUE"
     "-DBLAS_LIBRARIES:STRING=${blas}/lib/libblas.so"
     "-DLAPACK_FOUND:BOOL=TRUE"

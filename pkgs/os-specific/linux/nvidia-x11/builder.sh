@@ -14,6 +14,8 @@ unpackFile() {
 
 
 buildPhase() {
+    runHook preBuild
+
     if [ -n "$bin" ]; then
         # Create the module.
         echo "Building linux driver against kernel: $kernel";
@@ -23,10 +25,14 @@ buildPhase() {
 
         cd ..
     fi
+
+    runHook postBuild
 }
 
 
 installPhase() {
+    runHook preInstall
+
     # Install libGL and friends.
 
     # since version 391, 32bit libraries are bundled in the 32/ sub-directory
@@ -214,6 +220,8 @@ installPhase() {
         # FIXME: needs PATH and other fixes
         # install -Dm755 nvidia-bug-report.sh $bin/bin/nvidia-bug-report.sh
     fi
+
+    runHook postInstall
 }
 
 genericBuild

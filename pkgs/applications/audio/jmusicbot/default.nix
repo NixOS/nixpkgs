@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
     inherit (jre_headless.meta) platforms;
+    mainProgram = "JMusicBot";
   };
 }

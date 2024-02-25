@@ -34,6 +34,7 @@ let
 
         machine = ${hostName}
 
+        machine.systemctl("start network-online.target")
         machine.wait_for_unit("network-online.target")
 
         # Test if NixOS computes the correct FQDN (either a FQDN or an error/null):

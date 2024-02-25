@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     maintainers = with maintainers; [ zowoq ];
     platforms = platforms.all;
+    mainProgram = "saldl";
   };
 }

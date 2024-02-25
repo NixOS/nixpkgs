@@ -6,7 +6,7 @@
 , cryptography
 , fetchFromGitHub
 , pyopenssl
-, pytest-asyncio
+, pytest-asyncio_0_21
 , pytest-mock
 , pytestCheckHook
 , python-dateutil
@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytest-mock
   ];
 

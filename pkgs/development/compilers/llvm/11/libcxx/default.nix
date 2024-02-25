@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     })
     ./gnu-install-dirs.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    ../../libcxx-0001-musl-hacks.patch
+    ../../common/libcxx/libcxx-0001-musl-hacks.patch
   ];
 
   # Prevent errors like "error: 'foo' is unavailable: introduced in macOS yy.zz"

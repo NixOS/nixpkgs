@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  version = "1.3.268.0";
+  version = "1.3.275.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-Bned5Pa6zCFByfNvqD0M5t3l4uAJYkDlpe6wu8e7a3U=";
+    hash = "sha256-RzGvoDt1Qc+f6mZsfs99MxX4YB3yFc5FP92Yx/WGrsI=";
   };
 
   # The cmake options are sufficient for turning on static building, but not

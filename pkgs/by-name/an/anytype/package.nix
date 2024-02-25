@@ -2,17 +2,15 @@
 
 let
   pname = "anytype";
-  version = "0.37.3";
+  version = "0.38.0";
   name = "Anytype-${version}";
-  nameExecutable = pname;
   src = fetchurl {
     url = "https://github.com/anyproto/anytype-ts/releases/download/v${version}/${name}.AppImage";
     name = "Anytype-${version}.AppImage";
-    sha256 = "sha256-W3p67L07XOEtXYluI+TvggXBdaNRadypZc9MO6QTh4M=";
+    hash = "sha256-tcAOj7omrhyyG8elnAvbj/FtYaYOBeBkclpPHhSoass=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
-in
-appimageTools.wrapType2 {
+in appimageTools.wrapType2 {
   inherit name src;
 
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)

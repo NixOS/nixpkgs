@@ -94,6 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/obsproject/obs-studio/commit/6e080a68067b27fe5463f0f4eee7df690451f3d7.patch";
       hash = "sha256-nbn/q3uszoHaDvaW8Et1MS1sgQzMsJRmjGSMHzUxV70=";
     })
+
+    # Fix libobs.pc for plugins on non-x86 systems
+    (fetchpatch {
+      name = "fix-arm64-cmake.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/obs-studio/broken-config.patch?id=a92887564dcc65e07b6be8a6224fda730259ae2b";
+      hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
+      includes = [ "*/CompilerConfig.cmake" ];
+    })
   ];
 
   nativeBuildInputs = [

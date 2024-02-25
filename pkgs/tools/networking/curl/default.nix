@@ -15,6 +15,7 @@
   ), libkrb5
 , http2Support ? true, nghttp2
 , http3Support ? false, nghttp3, ngtcp2
+, websocketSupport ? false
 , idnSupport ? false, libidn2
 , ldapSupport ? false, openldap
 , opensslSupport ? zlibSupport, openssl
@@ -32,6 +33,7 @@
 , haskellPackages
 , ocamlPackages
 , phpExtensions
+, pkgsStatic
 , python3
 , tests
 , testers
@@ -47,21 +49,19 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.4.0";
+  version = "8.6.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-FsYqnErw9wPSi9pte783ukcFWtNBTXDexj4uYzbyqC0=";
+    hash = "sha256-PM1V2Rr5UWU534BiX4GMc03G8uz5utozx2dl6ZEh2xU=";
   };
 
-  patches = [
-    # fix ipv6 autodetect compile error in configure script
-    # remove once https://github.com/curl/curl/pull/12607 released (8.6.0)
-    ./configure-ipv6-autodetect.diff
-  ];
+  postPatch = ''
+    patchShebangs scripts
+  '';
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
@@ -103,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
+  '' + lib.optionalString (pslSupport && stdenv.hostPlatform.isStatic) ''
+    # curl doesn't understand that libpsl2 has deps because it doesn't use
+    # pkg-config.
+    # https://github.com/curl/curl/pull/12919
+    configureFlagsArray+=("LIBS=-lidn2 -lunistring")
   '';
 
   configureFlags = [
@@ -111,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
+      (lib.enableFeature websocketSupport "websockets")
       # --with-ca-fallback is only supported for openssl and gnutls https://github.com/curl/curl/blame/curl-8_0_1/acinclude.m4#L1640
       (lib.withFeature (opensslSupport || gnutlsSupport) "ca-fallback")
       (lib.withFeature http3Support "nghttp3")
@@ -118,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.withFeature rtmpSupport "librtmp")
       (lib.withFeature rustlsSupport "rustls")
       (lib.withFeature zstdSupport "zstd")
+      (lib.withFeature pslSupport "libpsl")
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
       (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
       (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
@@ -178,7 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit opensslSupport openssl;
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
-      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
       curlpp = useThisCurl curlpp;
       coeurl = useThisCurl coeurl;
       haskell-curl = useThisCurl haskellPackages.curl;
@@ -190,6 +196,9 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      static = pkgsStatic.curl;
+    } // lib.optionalAttrs (!stdenv.isDarwin) {
+      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
     };
   };
 

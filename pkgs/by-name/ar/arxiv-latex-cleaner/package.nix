@@ -5,13 +5,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "arxiv-latex-cleaner";
-  version = "1.0.1";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "google-research";
     repo = "arxiv-latex-cleaner";
-    rev = "v${version}";
-    hash = "sha256-1IWSDKEoAM4hBKAEEcPq7X89WYDprifDL2GTEJQtdcQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Dr0GyivoPjQwVYzvN1JIWhuLz60TQtz4MBB8n1hm6Lo=";
   };
 
   propagatedBuildInputs = with python3Packages; [

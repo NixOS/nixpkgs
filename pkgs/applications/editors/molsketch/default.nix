@@ -19,6 +19,10 @@ mkDerivation rec {
     hash = "sha256-Mpx4fHktxqBAkmdwqg2pXvEgvvGUQPbgqxKwXKjhJuQ=";
   };
 
+  patches = [
+    ./openbabel.patch
+  ];
+
   # uses C++17 APIs like std::transform_reduce
   postPatch = ''
     substituteInPlace molsketch/CMakeLists.txt \
@@ -34,7 +38,7 @@ mkDerivation rec {
   '';
 
   postFixup = ''
-    mv $out/lib/molsketch/* $out/lib
+    ln -s $out/lib/molsketch/* $out/lib/.
   '';
 
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];

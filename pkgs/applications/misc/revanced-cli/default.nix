@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ jopejoe1 ];
+    mainProgram = "revanced-cli";
   };
 }

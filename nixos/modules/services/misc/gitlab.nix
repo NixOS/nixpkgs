@@ -1386,10 +1386,8 @@ in {
 
     systemd.services.gitlab-db-config = {
       after = [ "gitlab-config.service" "gitlab-postgresql.service" "postgresql.service" ];
-      bindsTo = [
-        "gitlab-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service"
-        ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+      wants = optional (cfg.databaseHost == "") "postgresql.service" ++ optional databaseActuallyCreateLocally "gitlab-postgresql.service";
+      bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       serviceConfig = {
@@ -1422,10 +1420,10 @@ in {
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      ];
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv // (optionalAttrs cfg.sidekiq.memoryKiller.enable {
@@ -1612,10 +1610,10 @@ in {
         "gitlab-db-config.service"
       ];
       bindsTo = [
-        "redis-gitlab.service"
         "gitlab-config.service"
         "gitlab-db-config.service"
-      ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+      ];
+      wants = [ "redis-gitlab.service" ] ++ optional (cfg.databaseHost == "") "postgresql.service";
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;

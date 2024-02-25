@@ -28,7 +28,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.23";
+  version = "0.4.24";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-PDa3yVH/sszGbWkVkJ+19FdOr3oqdYk+OdbeUTMTDuU=";
+    hash = "sha256-hmx7eo3pephc6BQfoJ3U0QwWBWmhkAc+7S4QmW32qQs=";
   };
 
   nativeBuildInputs = [
@@ -89,6 +89,9 @@ buildPythonPackage rec {
     "testKde3"
     "testKde5"
     "testKde6"
+    # Invokes python manually in a subprocess, which does not have the correct dependencies
+    # ImportError: This version of jax requires jaxlib version >= 0.4.19.
+    "test_no_log_spam"
   ] ++ lib.optionals usingMKL [
     # See
     #  * https://github.com/google/jax/issues/9705

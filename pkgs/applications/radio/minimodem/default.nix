@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ relrod ];
+    mainProgram = "minimodem";
   };
 }
 

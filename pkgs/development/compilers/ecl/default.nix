@@ -65,6 +65,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # ECL’s ‘make check’ only works after install, making it a de-facto
+  # installCheck.
+  doInstallCheck = true;
+  installCheckTarget = "check";
+
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
     wrapProgram "$out/bin/ecl" --prefix PATH ':' "${

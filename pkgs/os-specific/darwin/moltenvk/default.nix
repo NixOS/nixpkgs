@@ -1,7 +1,6 @@
 { lib
 , overrideCC
 , stdenv
-, fetchurl
 , fetchFromGitHub
 , gitUpdater
 , cctools
@@ -24,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.4";
+  version = "1.2.7";
 
   buildInputs = [
     AppKit
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BL46BgZHUpk0dpzmeZ/2W0msHxFwieeGDjmVB8Nb1J4=";
+    hash = "sha256-0+S/kueV+AEVt+oFnh4cgcDRVtEbUH1QiHFPhGhimCA=";
   };
 
   patches = [
@@ -59,17 +58,18 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Move `mvkGitRevDerived.h` to a stable location
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
-      --replace '$'''{BUILT_PRODUCTS_DIR}' "$NIX_BUILD_TOP/$sourceRoot/build/include" \
-      --replace '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
+      --replace-fail '$'''{BUILT_PRODUCTS_DIR}' "$NIX_BUILD_TOP/$sourceRoot/build/include" \
+      --replace-fail '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
     # Use the SPIRV-Cross packaged in nixpkgs instead of one built specifically for MoltenVK.
     substituteInPlace MoltenVK/MoltenVK.xcodeproj/project.pbxproj \
-      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
+      --replace-fail SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
     substituteInPlace MoltenVKShaderConverter/MoltenVKShaderConverter.xcodeproj/project.pbxproj \
-      --replace SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
+      --replace-fail SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
     # Adding all of `usr/include` from the SDK results in header conflicts with `libcxx.dev`.
     # Work around it by symlinking just the SIMD stuff needed by MoltenVK.
     mkdir -p build/include
     ln -s "${MacOSX-SDK}/usr/include/simd" "build/include"
+    ln -s "${glslang.src}" "build/include/glslang"
   '';
 
   dontConfigure = true;
@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS+=" \
       -lMachineIndependent \
       -lGenericCodeGen \
-      -lOGLCompiler \
       -lglslang \
       -lOSDependent \
       -lSPIRV \
@@ -139,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp MoltenVK/MoltenVK/API/* "$dev/include/MoltenVK"
     install -m644 MoltenVK/icd/MoltenVK_icd.json "$out/share/vulkan/icd.d/MoltenVK_icd.json"
     substituteInPlace $out/share/vulkan/icd.d/MoltenVK_icd.json \
-      --replace ./libMoltenVK.dylib "$out/lib/libMoltenVK.dylib"
+      --replace-fail ./libMoltenVK.dylib "$out/lib/libMoltenVK.dylib"
   '';
 
   postFixup = ''

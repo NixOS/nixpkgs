@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.31.5";
+  version = "0.31.9";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
     rev = "v${version}";
-    hash = "sha256-ZNYIGs8oBy4U7y4GiOCcIhnAGRx92V+cQzTE+40QE+A=";
+    hash = "sha256-yPSAHqnGdLW2a2TCR7HPl8e5WlG+ruHwITATtivtBnw=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-RXKotLyH97EgfDxQzFSSgATGu96SnfwZyR3WprhwsMM=";
+  vendorHash = "sha256-roHFUKH72BSzqZp2qh/Hw7rfTXj9yqpJyB2dozUz+Y8=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
@@ -42,6 +42,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
+    # k9s requires a writeable log directory
+    # Otherwise an error message is printed
+    # into the completion scripts
+    export K9S_LOGS_DIR=$(mktemp -d)
+
     installShellCompletion --cmd k9s \
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \

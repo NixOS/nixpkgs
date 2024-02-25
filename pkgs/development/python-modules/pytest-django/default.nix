@@ -7,7 +7,6 @@
 , django-configurations
 , pytest
 , pytestCheckHook
-, pytest-xdist
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     django-configurations
     pytestCheckHook
-    pytest-xdist
   ];
 
   preCheck = ''
@@ -50,6 +48,8 @@ buildPythonPackage rec {
     # AttributeError: type object 'TestLiveServer' has no attribute '_test_settings_before_run'
     "test_settings_restored"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "py.test plugin for testing of Django applications";

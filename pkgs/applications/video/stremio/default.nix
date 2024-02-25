@@ -4,19 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "stremio-shell";
-  version = "4.4.142";
+  version = "4.4.165";
 
   src = fetchFromGitHub {
     owner = "Stremio";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-OyuTFmEIC8PH4PDzTMn8ibLUAzJoPA/fTILee0xpgQI=";
+    sha256 = "sha256-Gky0/HaGm11PeV4twoQV71T99NG2o0mYzQxu/c9x5oE=";
   };
 
   server = fetchurl {
     url = "https://s3-eu-west-1.amazonaws.com/stremio-artifacts/four/v${version}/server.js";
-    sha256 = "sha256-YYeD3SEbLgNQHGP5AI9WiHUU6xLkTeFAqYIuWsIsYSs=";
+    sha256 = "sha256-52Pg0PrV15arGqhD3rXYCl1J6kcoL+/BHRvgiQBO/OA=";
   };
 
   buildInputs = [ qtwebengine mpv ];

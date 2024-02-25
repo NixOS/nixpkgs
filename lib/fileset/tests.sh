@@ -1439,6 +1439,19 @@ if [[ -n "$fetchGitSupportsSubmodules" ]]; then
 fi
 rm -rf -- *
 
+# shallow = true is not supported on all Nix versions
+# and older versions don't support shallow clones at all
+if [[ "$(nix-instantiate --eval --expr "$prefixExpression (versionAtLeast builtins.nixVersion _fetchGitShallowMinver)")" == true ]]; then
+    createGitRepo full
+    # Extra commit such that there's a commit that won't be in the shallow clone
+    git -C full commit --allow-empty -q -m extra
+    git clone -q --depth 1 "file://${PWD}/full" shallow
+    cd shallow
+    checkGitTracked
+    cd ..
+    rm -rf -- *
+fi
+
 # Go through all stages of Git files
 # See https://www.git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
 

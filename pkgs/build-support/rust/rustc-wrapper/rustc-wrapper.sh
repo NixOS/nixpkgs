@@ -4,7 +4,7 @@ defaultSysroot=(@sysroot@)
 
 for arg; do
     case "$arg" in
-        --sysroot)
+        --sysroot|--sysroot=*)
             defaultSysroot=()
             ;;
         --)

@@ -44,6 +44,7 @@
   rdma-core,
   ucx,
   rsync,
+  libglvnd,
 }:
 
 let
@@ -123,6 +124,7 @@ backendStdenv.mkDerivation rec {
       unixODBC
       alsa-lib
       wayland
+      libglvnd
     ]
     ++ lib.optionals (lib.versionAtLeast version "11.8") [
       (lib.getLib libtiff)

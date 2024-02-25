@@ -18,7 +18,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.6.0";
+  version = "3.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -26,13 +26,14 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
-    rev = "v${version}";
-    hash = "sha256-OTduVg8uhMdXs2gQ7KaMVOO1zQK4m489W9SU7PWIvcM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UmQ1GehoMDXKEXo8wgPLxTDbtObk7YC2cfk1yNqesJM=";
   };
 
   patches = [
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
     ./hook-tmpl.patch
+    ./pygrep-pythonpath.patch
   ];
 
   propagatedBuildInputs = [

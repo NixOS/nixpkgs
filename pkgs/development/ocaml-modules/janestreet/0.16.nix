@@ -283,8 +283,8 @@ with self;
 
   core = janePackage {
     pname = "core";
-    version = "0.16.1";
-    hash = "sha256-cKJi67VLIsbLEgIZyFiVz00z/QEvJhNBb8+M+bR4iHU=";
+    version = "0.16.2";
+    hash = "sha256-cyOU++XJJkU2YMHfn8saFOxLoQSFhF7kARJi/9unbFQ=";
     meta.description = "Industrial strength alternative to OCaml's standard library";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base base_bigstring base_quickcheck ppx_jane time_now ];

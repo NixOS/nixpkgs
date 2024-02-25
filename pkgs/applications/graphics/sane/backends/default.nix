@@ -3,6 +3,7 @@
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
 , curl, systemd, libxml2, poppler, gawk
 , sane-drivers
+, nixosTests
 
 # List of { src name backend } attibute sets - see installFirmware below:
 , extraFirmware ? []
@@ -131,6 +132,10 @@ stdenv.mkDerivation {
   # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
   # https://github.com/NixOS/nixpkgs/issues/224569
   enableParallelInstalling = false;
+
+  passthru.tests = {
+    inherit (nixosTests) sane;
+  };
 
   meta = with lib; {
     description = "SANE (Scanner Access Now Easy) backends";

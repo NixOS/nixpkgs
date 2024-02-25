@@ -11,25 +11,16 @@
 
 buildGoModule rec {
   pname = "dive";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
     repo = "dive";
     rev = "v${version}";
-    hash = "sha256-9REthyb+bzsb7NBXkU9XyUZJFQHHrV1cG4//lTLgTgw=";
+    hash = "sha256-CuVRFybsn7PVPgz3fz5ghpjOEOsTYTv6uUAgRgFewFw=";
   };
 
-  patches = [
-    # fixes: unsafe.Slice requires go1.17 or later (-lang was set to go1.16; check go.mod)
-    # https://github.com/wagoodman/dive/pull/461
-    (fetchpatch {
-      url = "https://github.com/wagoodman/dive/commit/555555d777f961ad0a2d1bb843e87f434d731dba.patch";
-      hash = "sha256-tPSgvENiVgrlQSkT7LbQPRYhkkaYQeWRJ0P4bA3XOiI=";
-    })
-  ];
-
-  vendorHash = "sha256-6KIbTrkvdugsUKdFBqtPUFzs/6h2xslLFpr6S2nSBiY=";
+  vendorHash = "sha256-uzzawa/Doo6j/Fh9dJMzGKbpp24UTLAo9VGmuQ80IZE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,6 +31,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A tool for exploring each layer in a docker image";
     homepage = "https://github.com/wagoodman/dive";
+    changelog = "https://github.com/wagoodman/dive/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };

@@ -94,6 +94,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gradio_client" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://www.gradio.app/";
     description = "Lightweight library to use any Gradio app as an API";

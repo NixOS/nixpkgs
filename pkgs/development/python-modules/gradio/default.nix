@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -140,6 +141,9 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
+  '' + lib.optionalString stdenv.isDarwin ''
+    # OSError: [Errno 24] Too many open files
+    ulimit -n 4096
   '';
 
   disabledTests = [

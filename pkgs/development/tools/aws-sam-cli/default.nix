@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.103.0";
+  version = "1.108.0";
   format = "pyproject";
 
   disabled = python3.pythonOlder "3.8";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "aws";
     repo = "aws-sam-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oy0+dAA6x8Jl1nZ1wjsR9xvpR9biemTtqL9B1awz4BM=";
+    hash = "sha256-k6SXCFkISyfr5/0vhe/Dfzs4qsVfu14lFx/bl53QxR4=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "aws-sam-translator"
     "boto3-stubs"
+    "cfn-lint"
     "tzlocal"
     "cookiecutter"
     "docker"
@@ -92,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
     flaky
     parameterized
     psutil
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
   ];

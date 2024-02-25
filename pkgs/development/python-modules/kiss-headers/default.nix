@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, hatchling, requests, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "kiss-headers";
   version = "2.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ousret";
@@ -12,13 +12,15 @@ buildPythonPackage rec {
     hash = "sha256-WeAzlC1yT+0nPSuB278z8T0XvPjbre051f/Rva5ujAk=";
   };
 
+  nativeBuildInputs = [ hatchling ];
+
   propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=kiss_headers --doctest-modules --cov-report=term-missing -rxXs" "--doctest-modules -rxXs"
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=kiss_headers --doctest-modules --cov-report=term-missing -rxXs" "--doctest-modules -rxXs"
   '';
 
   disabledTestPaths = [

@@ -14,27 +14,63 @@
 let
   # Keep the vscode "mgt19937.typst-preview" extension in sync when updating
   # this package at pkgs/applications/editors/vscode/extensions/default.nix
-  version = "0.9.2";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typst-preview";
     rev = "v${version}";
-    hash = "sha256-P11Nkn9Md5xsB9Z7v9O+CRvP18vPEC0Y973Or7i0y/4=";
+    hash = "sha256-n3lrJpCe/+THYepiiWIlTEMSMZPX7Qiucbg1ouU1ZEs=";
+    fetchSubmodules = true;
+
+    postFetch = ''
+      cd $out
+      substituteInPlace addons/frontend/yarn.lock \
+        --replace-fail '"typst-dom@link:../typst-dom"' '"typst-dom@file:../typst-dom"'
+    '';
   };
 
   frontendSrc = "${src}/addons/frontend";
+  domSrc = "${src}/addons/typst-dom";
+
+  typst-dom = mkYarnPackage {
+    inherit version;
+    pname = "typst-dom";
+    src = domSrc;
+    packageJSON = ./dom.json;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${domSrc}/yarn.lock";
+      hash = "sha256-+xn2SmpYdAb1nZkTOURqR5teu3dx2AKaiGoa9AmPA7o=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      yarn --offline build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R deps/typst-dom $out
+      runHook postInstall
+    '';
+
+    doDist = false;
+  };
 
   frontend = mkYarnPackage {
     inherit version;
     pname = "typst-preview-frontend";
     src = frontendSrc;
-    packageJSON = ./package.json;
+    packageJSON = ./frontend.json;
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${frontendSrc}/yarn.lock";
-      hash = "sha256-7a7/UOfau84nLIAKj6Tn9rTUmeBJ7rYDFAdr55ZDLgA=";
+      hash = "sha256-o8zWMLt6WqYWhcC7rqSeue6TxN20lYIjGqMxLApy5l0=";
     };
+
+    packageResolutions = { inherit typst-dom; };
 
     buildPhase = ''
       runHook preBuild
@@ -50,6 +86,7 @@ let
 
     doDist = false;
   };
+
 in
 rustPlatform.buildRustPackage {
   pname = "typst-preview";
@@ -58,9 +95,8 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "hayagriva-0.4.0" = "sha256-377lXL3+TO8U91OopMYEI0NrWWwzy6+O7B65bLhP+X4=";
-      "typst-0.9.0" = "sha256-+rnsUSGi3QZlbC4i8racsM4U6+l8oA9YjjUOtQAIWOk=";
-      "typst-ts-compiler-0.4.0-rc9" = "sha256-NVmbAodDRJBJlGGDRjaEcTHGoCeN4hNjIynIDKqvNbM=";
+      "typst-0.10.0" = "sha256-/Oy4KigXu1E/S9myd+eigqlNvk5x+Ld9gTL9dtpoyqk=";
+      "typst-ts-compiler-0.4.2-rc6" = "sha256-mDQDxqXp38+Omt7D7kO2cUAVzG+h3JOs4tBdrbHH/lA=";
     };
   };
 

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gcfflasher";
-  version = "4.3.0-beta";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-H1CZ7rAM1QpdmSnUpvg6ytln/0MQKju/C4aIk3xl0PA=";
+    hash = "sha256-o0S4NtgQ/Rlpmkk8pTocmP0N+5F7BX8lUsczOKjujwk=";
   };
 
   nativeBuildInputs = [
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dresden-elektronik/gcfflasher";
     maintainers = with maintainers; [ fleaz ];
     platforms = platforms.all;
+    mainProgram = "GCFFlasher";
   };
 }

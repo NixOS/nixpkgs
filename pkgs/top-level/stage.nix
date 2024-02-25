@@ -276,6 +276,19 @@ let
         gcc.abi = "elfv2";
       };
     });
+
+    pkgsExtraHardening = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsExtraHardening = super';
+          stdenv = super'.withDefaultHardeningFlags (
+            super'.stdenv.cc.defaultHardeningFlags ++ [
+              "zerocallusedregs"
+            ]
+          ) super'.stdenv;
+        })
+      ] ++ overlays;
+    };
   };
 
   # The complete chain of package set builders, applied from top to bottom.

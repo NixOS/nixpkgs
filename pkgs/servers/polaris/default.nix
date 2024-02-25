@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "polaris";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
     rev = version;
-    hash = "sha256-mLugPi3Xp46Lh48JQVeyOEGiovSF26gUt25MGBPFfkM=";
+    hash = "sha256-YI2IBlZm+RIFcZgXYh9HdxVpSMjPN/s9oBXDrb2V3iE=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".
     # We're unable to simply patch it in the patch phase due to
@@ -32,9 +32,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "id3-1.4.0" = "sha256-0j2iOd/GkMqLu18Eu8nttmqez0G6fu2m19gsHWMmLds=";
-    };
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [

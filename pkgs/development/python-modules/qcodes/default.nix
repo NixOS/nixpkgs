@@ -48,16 +48,16 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.42.1";
+  version = "0.44.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "QCoDeS";
+    owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oNQLIL5L3gtFS6yxqgLDI1s4s9UYqxGc8ASqHuZv6Rk=";
+    hash = "sha256-AggAVq/yfJUZRwoQb29QoIbVIAdV3solKCjivqucLZk=";
   };
 
   nativeBuildInputs = [
@@ -119,6 +119,8 @@ buildPythonPackage rec {
     "-n"
     "$NIX_BUILD_CORES"
     # Follow upstream with settings
+    "-m 'not serial'"
+    "--hypothesis-profile ci"
     "--durations=20"
   ];
 
@@ -141,11 +143,21 @@ buildPythonPackage rec {
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
     "test_ramp_safely"
+
+    # more flaky tests
+    # https://github.com/microsoft/Qcodes/issues/5551
+    "test_query_close_once_at_init"
+    "test_step_ramp"
   ];
 
   pythonImportsCheck = [
     "qcodes"
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   postInstall = ''
     export HOME="$TMPDIR"

@@ -11,7 +11,7 @@
 , avahi
 , dbus
 , faad2
-, ffmpeg_4
+, ffmpeg
 , flac
 , fluidsynth
 , freefont_ttf
@@ -44,7 +44,7 @@
 , libmtp
 , liboggz
 , libopus
-, libplacebo
+, libplacebo_5
 , libpulseaudio
 , libraw1394
 , librsvg
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0.20";
 
   src = fetchurl {
-    url = "http://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
+    url = "https://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
     hash = "sha256-rccoW00nIc3fQOtScMraKqoQozTLVG/VWgY1NEe6KbU=";
   };
 
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     avahi
     dbus
     faad2
-    ffmpeg_4
+    ffmpeg
     flac
     fluidsynth
     fribidi
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmtp
     liboggz
     libopus
-    libplacebo
+    libplacebo_5
     libpulseaudio
     libraw1394
     librsvg
@@ -287,7 +287,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cross-platform media player and streaming server";
-    homepage = "http://www.videolan.org/vlc/";
+    homepage = "https://www.videolan.org/vlc/";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;

@@ -10,22 +10,24 @@
 }:
 
 let
-  sass-language = fetchFromGitHub {
+  embedded-protocol-version = "2.5.0";
+
+  embedded-protocol = fetchFromGitHub {
     owner = "sass";
     repo = "sass";
-    rev = "refs/tags/embedded-protocol-2.3.0";
-    hash = "sha256-J2heASfIwj4lxjsRs/0zRHSaF2tij9bO7IgXp0u/eiI=";
+    rev = "refs/tags/embedded-protocol-${embedded-protocol-version}";
+    hash = "sha256-ue2yv6jy0J8207Nhc5i8jnBWlNeYmGqexS2f3LDwg18=";
   };
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.69.0";
+  version = "1.71.1";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    hash = "sha256-kn3cwi1k2CkzbS+Q/JaYy8Nq3Ej0GyWifG1Bq5ZEVHA=";
+    hash = "sha256-MFBAc89Ib++Qve+SjkOOeZhdpH8Kwoic9U+d2ldt8W8=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -37,7 +39,7 @@ buildDartApplication rec {
 
   preConfigure = ''
     mkdir -p build
-    ln -s ${sass-language} build/language
+    ln -s ${embedded-protocol} build/language
     HOME="$TMPDIR" buf generate
   '';
 
@@ -51,31 +53,35 @@ buildDartApplication rec {
     maintainers = with maintainers; [ lelgenio ];
   };
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = dart-sass;
-      command = "dart-sass --version";
-    };
+  passthru = {
+    inherit embedded-protocol-version embedded-protocol;
+    updateScript = ./update.sh;
+    tests = {
+      version = testers.testVersion {
+        package = dart-sass;
+        command = "dart-sass --version";
+      };
 
-    simple = testers.testEqualContents {
-      assertion = "dart-sass compiles a basic scss file";
-      expected = writeText "expected" ''
-        body h1{color:#123}
-      '';
-      actual = runCommand "actual"
-        {
-          nativeBuildInputs = [ dart-sass ];
-          base = writeText "base" ''
-            body {
-              $color: #123;
-              h1 {
-                color: $color;
+      simple = testers.testEqualContents {
+        assertion = "dart-sass compiles a basic scss file";
+        expected = writeText "expected" ''
+          body h1{color:#123}
+        '';
+        actual = runCommand "actual"
+          {
+            nativeBuildInputs = [ dart-sass ];
+            base = writeText "base" ''
+              body {
+                $color: #123;
+                h1 {
+                  color: $color;
+                }
               }
-            }
-          '';
-        } ''
-        dart-sass --style=compressed $base > $out
-      '';
+            '';
+          } ''
+          dart-sass --style=compressed $base > $out
+        '';
+      };
     };
   };
 }

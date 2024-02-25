@@ -7,14 +7,15 @@
 }:
 
 let
-  version = "2024.1.0";
+  version = "2024.1.2b";
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-pR5fgpLcxnqURouandGIHRIfc3sn3QcfpU6mF6AxpeA=";
+    hash = "sha256-p5UsI8T2cV5uQnQmOi5WBo2UirLLS83NHoaljxcRkqo=";
   };
+
 in buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
@@ -23,10 +24,10 @@ in buildNpmPackage rec {
     owner = "bitwarden";
     repo = "clients";
     rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-lDDy1b1yfw3nZrwEEkpvh6xYucgn20XHsGACc45eb2w=";
+    hash = "sha256-hzAkVzaCjwoZ/PMnsnSmsqUBWLhqfPWuWVujChy0V38=";
   };
 
-  npmDepsHash = "sha256-RR8Ua41D9SXymiPuabOnIab3byu8DR63rOfdeTaQpy4=";
+  npmDepsHash = "sha256-KTqPf8jy8cgGz0+1GssSzEfPVSSQlLenLPgHggNoGfc=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
@@ -65,6 +66,7 @@ in buildNpmPackage rec {
   meta = with lib; {
     description = "Integrates the web vault into vaultwarden";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
+    changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda msteen mic92 ];

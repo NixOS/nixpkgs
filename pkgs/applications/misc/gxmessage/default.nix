@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [jfb];
     platforms = with lib.platforms; linux;
+    mainProgram = "gxmessage";
   };
 }

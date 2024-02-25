@@ -74,13 +74,13 @@ in
       };
     };
 
-    systemd.services.ntp-rs-metrics = lib.mkIf cfg.metrics.enable {
+    systemd.services.ntpd-rs-metrics = lib.mkIf cfg.metrics.enable {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "";
         Group = "";
         DynamicUser = true;
-        ExecStart = [ "" "${lib.makeBinPath [ cfg.package ]}/bin/ntp-metrics-exporter --config=${configFile}" ];
+        ExecStart = [ "" "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${configFile}" ];
       };
     };
   };

@@ -53,20 +53,17 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.26.2";
+  version = "1.26.4";
   pyproject = true;
   disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-9lc4RHZ2q1d38R5ru9uM4Rt4XhBfaQvEWWZXSBa20+o=";
+    hash = "sha256-KgKrqe0S5KxOs+qUIcQgMBoMZGDZgw10qd+H76SRIBA=";
   };
 
   patches = [
-    # Remove last usage of distutils to enable numpy on Python 3.12
-    ./0001-BLD-remove-last-usage-of-distutils-in-_core-code_gen.patch
-
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
     # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
     # 80-bit long double complex numbers.
@@ -114,7 +111,7 @@ in buildPythonPackage rec {
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/xianyi/OpenBLAS/issues/2993
+  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
@@ -167,6 +164,9 @@ in buildPythonPackage rec {
     "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_big_arrays" # OOM on a 16G machine
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # can fail on virtualized machines confused over their cpu identity
+    "test_dispatcher"
   ];
 
   passthru = {

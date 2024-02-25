@@ -1076,7 +1076,7 @@ in
     boot.initrd.systemd = {
       contents."/etc/crypttab".source = stage1Crypttab;
 
-      extraBin.systemd-cryptsetup = "${config.boot.initrd.systemd.package}/lib/systemd/systemd-cryptsetup";
+      extraBin.systemd-cryptsetup = "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup";
 
       additionalUpstreamUnits = [
         "cryptsetup-pre.target"
@@ -1084,7 +1084,7 @@ in
         "remote-cryptsetup.target"
       ];
       storePaths = [
-        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-cryptsetup"
+        "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
         "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
       ];
 

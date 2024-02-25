@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ madjar ];
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "openfortivpn";
   };
 }

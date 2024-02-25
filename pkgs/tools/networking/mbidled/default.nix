@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     license = licenses.unlicense;
     maintainers = with maintainers; [ laalsaas ];
     platforms = platforms.linux;
+    mainProgram = "mbidled";
   };
 }

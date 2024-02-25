@@ -12,20 +12,6 @@ Both functions have an argument `kernelPatches` which should be a list of `{name
 
 The kernel derivation created with `pkgs.buildLinux` exports an attribute `features` specifying whether optional functionality is or isn’t enabled. This is used in NixOS to implement kernel-specific behaviour.
 
-:::{.example #ex-skip-package-from-kernel-feature}
-
-# Skipping an external package because of a kernel feature
-
-For instance, if the kernel has the `iwlwifi` feature (i.e., has built-in support for Intel wireless chipsets), then NixOS doesn’t have to build the external `iwlwifi` package:
-
-```nix
-modulesTree = [kernel]
-  ++ pkgs.lib.optional (!kernel.features ? iwlwifi) kernelPackages.iwlwifi
-  ++ ...;
-```
-
-:::
-
 If you are using a kernel packaged in Nixpkgs, you can customize it by overriding its arguments. For details on how each argument affects the generated kernel, refer to [the `pkgs.buildLinux` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/generic.nix).
 
 :::{.example #ex-overriding-kernel-derivation}

@@ -50,6 +50,7 @@
 , qtsvg
 , qtwebengine
 , qtwebchannel
+, wrapGAppsHook
 , withWebengine ? true
 
   # for pjsip
@@ -200,7 +201,10 @@ stdenv.mkDerivation rec {
     ln -s ${daemon} $out/daemon
   '';
 
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
+    wrapGAppsHook
     wrapQtAppsHook
     pkg-config
     cmake
@@ -233,6 +237,10 @@ stdenv.mkDerivation rec {
     # With wayland the titlebar is not themed and the wmclass is wrong.
     "--set-default QT_QPA_PLATFORM xcb"
   ];
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "stable/";

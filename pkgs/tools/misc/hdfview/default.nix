@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
     license = lib.licenses.free; # BSD-like
-    homepage = "https://portal.hdfgroup.org/display/HDFVIEW/HDFView";
+    homepage = "https://www.hdfgroup.org/downloads/hdfview";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ jiegec ];
     mainProgram = "HDFView";

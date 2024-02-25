@@ -17,23 +17,25 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2023.03.20.00";
+  version = "2024.01.22.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fizz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oBdTj7IPlmtF5rEgDVN/wwa0ZxkN6h2QMN3PQB0nCgQ=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-17EELvRrWhUprxvm1Ur0FYNimvY1qgK0YH8ehxtLpxM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeDir = "../fizz";
 
-  cmakeFlags = [ "-Wno-dev" ]
-    ++ lib.optionals stdenv.isDarwin [
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -46,7 +48,6 @@ stdenv.mkDerivation rec {
     folly
     glog
     gflags
-    gtest
     libevent
     libiberty
     libsodium
@@ -54,6 +55,24 @@ stdenv.mkDerivation rec {
     zlib
     zstd
   ];
+
+  doCheck = true;
+  checkInputs = [
+    gtest
+  ];
+  preCheck = let
+    disabledTests = [
+      # these don't work with openssl 3.x probably due to
+      # https://github.com/openssl/openssl/issues/13283
+      "DefaultCertificateVerifierTest.TestVerifySuccess"
+      "DefaultCertificateVerifierTest.TestVerifyWithIntermediates"
+
+      # timing-related & flaky
+      "SlidingBloomReplayCacheTest.TestTimeBucketing"
+    ];
+  in ''
+    export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
+  '';
 
   meta = with lib; {
     description = "C++14 implementation of the TLS-1.3 standard";
@@ -63,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ pierreis kylesferrazza ];
   };
-}
+})

@@ -6,7 +6,7 @@ with lib;
 let
   checkService = checkUnitConfig "Service" [
     (assertValueOneOf "Type" [
-      "exec" "simple" "forking" "oneshot" "dbus" "notify" "idle"
+      "exec" "simple" "forking" "oneshot" "dbus" "notify" "notify-reload" "idle"
     ])
     (assertValueOneOf "Restart" [
       "no" "on-success" "on-failure" "on-abnormal" "on-abort" "always"
@@ -71,6 +71,15 @@ in rec {
         Units that require (i.e. depend on and need to go down with) this unit.
         As discussed in the `wantedBy` option description this also creates
         `.requires` symlinks automatically.
+      '';
+    };
+
+    upheldBy = mkOption {
+      default = [];
+      type = types.listOf unitNameType;
+      description = lib.mdDoc ''
+        Keep this unit running as long as the listed units are running. This is a continuously
+        enforced version of wantedBy.
       '';
     };
 
@@ -144,6 +153,14 @@ in rec {
         type = types.listOf unitNameType;
         description = lib.mdDoc ''
           Start the specified units when this unit is started.
+        '';
+      };
+
+      upholds = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = lib.mdDoc ''
+          Keeps the specified running while this unit is running. A continuous version of `wants`.
         '';
       };
 

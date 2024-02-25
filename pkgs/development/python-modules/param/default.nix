@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "2.0.0";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "holoviz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-8R1+utY3e3py4iJTgOVfzt5Y7bp2Rn6OfoITGuOsb5c=";
+    hash = "sha256-kVuab6+l4KOtSvj6aI9zsQJ91tfCDJkHrSTcRL9SViY=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,10 @@ buildPythonPackage rec {
     pandas
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [

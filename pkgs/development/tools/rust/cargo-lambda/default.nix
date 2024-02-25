@@ -10,23 +10,24 @@
 , CoreServices
 , Security
 , zig
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "0.21.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QlTAYfd0taXfK370nzqictwK7bZ4bnh1oPBJKZzhnMo=";
+    hash = "sha256-KSJn8DRvm/ZLikCT8Tp9lb/ej0KSlZqRROs1yLNDa6c=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cargo-test-macro-0.1.0" = "sha256-XvTKAbP/r1BthpEM84CYZ2yfJczxqzscGkN4JXLgvfA=";
+      "cargo-test-macro-0.1.0" = "sha256-s3PM5SHGwZRr1cKt3LTL9fSAhzZ6CaZmDMVUgnOr6R0=";
     };
   };
 
@@ -63,6 +64,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Cargo subcommand to help you work with AWS Lambda";

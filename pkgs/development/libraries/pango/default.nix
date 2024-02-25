@@ -19,16 +19,17 @@
 , x11Support? !stdenv.isDarwin, libXft
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages, gobject-introspection
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
   version = "1.51.0";
 
   outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "dO/BCa5vkDu+avd+qirGCUuO4kWi4j8TKnqPCGLRqfU=";
   };
 
@@ -93,9 +94,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       # 1.90 is alpha for API 2.
       freeze = "1.90.0";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -125,4 +131,4 @@ stdenv.mkDerivation rec {
       "pangoxft"
     ];
   };
-}
+})

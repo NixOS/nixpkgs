@@ -206,6 +206,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   testScript = ''
     # start client and server
     for machine in client, server:
+      machine.systemctl("start network-online.target")
       machine.wait_for_unit("network-online.target")
       machine.log(machine.execute("ip addr")[1])
       machine.log(machine.execute("ip route")[1])
@@ -214,6 +215,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     # test systemd-networkd and nixos-scripts based router
     for router in router_systemd, router_nixos:
       router.start()
+      router.systemctl("start network-online.target")
       router.wait_for_unit("network-online.target")
       router.wait_for_unit("tayga.service")
       router.log(machine.execute("ip addr")[1])

@@ -1,11 +1,11 @@
 diff -Naur source-old/ruby/GNUmakefile source-new/ruby/GNUmakefile
---- source-old/ruby/GNUmakefile	1969-12-31 21:00:01.000000000 -0300
-+++ source-new/ruby/GNUmakefile	2022-11-13 22:43:09.700197748 -0300
-@@ -11,17 +11,9 @@
-     ruby += audio.openal
-     ruby += input.quartz #input.carbon
+--- source-old/ruby/GNUmakefile    2024-01-23 16:12:41.009951705 +0000
++++ source-new/ruby/GNUmakefile    2024-01-23 16:13:54.619174062 +0000
+@@ -29,20 +29,9 @@
+       ruby += input.sdl
+     endif
    else ifeq ($(platform),linux)
--    pkg_check = $(if $(shell pkg-config $1 && echo 1),$2)
+-    pkg_check = $(if $(shell $(pkg_config) $1 && echo 1),$2)
 -    ruby += video.glx video.glx2 video.xshm
 -    ruby += $(call pkg_check,xv,video.xvideo)
 -    ruby += audio.oss audio.alsa
@@ -15,10 +15,13 @@ diff -Naur source-old/ruby/GNUmakefile source-new/ruby/GNUmakefile
 -    ruby += $(call pkg_check,ao,audio.ao)
 -    ruby += input.xlib
 -    ruby += $(call pkg_check,libudev,input.udev)
--    ruby += $(call pkg_check,sdl2,input.sdl)
+-    ifeq ($(sdl2),true)
+-      ruby += $(call pkg_check,sdl2,input.sdl)
+-      ruby += $(call pkg_check,sdl2,audio.sdl)
+-    endif
 +    ruby += video.glx video.glx2 video.xshm video.xvideo
 +    ruby += audio.oss audio.alsa audio.openal audio.pulseaudio audio.pulseaudiosimple audio.ao
 +    ruby += input.xlib input.udev input.sdl
    else ifeq ($(platform),bsd)
-     pkg_check = $(if $(shell pkg-config $1 && echo 1),$2)
+     pkg_check = $(if $(shell $(pkg_config) $1 && echo 1),$2)
      ruby += video.glx video.glx2 video.xshm

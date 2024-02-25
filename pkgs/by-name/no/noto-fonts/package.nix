@@ -18,13 +18,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts${suffix}";
-  version = "24.1.1";
+  version = "24.2.1";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
     rev = "noto-monthly-release-${version}";
-    hash = "sha256-0KghEIuIxEP6vbAuqwA5iiVTpTpZibysIgtjOkV1un0=";
+    hash = "sha256-gOiaV1K7vYp5XguJTKRgUXJA+46p7po972XgCxV68iA=";
   };
 
   _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;

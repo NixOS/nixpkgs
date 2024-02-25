@@ -27,7 +27,7 @@
 , pygobject3
 , pyopenssl
 , qrcode
-, pytest-asyncio
+, pytest-asyncio_0_21
 , python-snappy
 , pytestCheckHook
 , pythonOlder
@@ -72,7 +72,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytestCheckHook
   ] ++ passthru.optional-dependencies.scram
   ++ passthru.optional-dependencies.serialization

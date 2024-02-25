@@ -5,18 +5,18 @@
 
 buildGoModule rec {
   pname = "cel-go";
-  version = "0.18.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cel-go";
     rev = "v${version}";
-    hash = "sha256-c4MVOHkDaUGlRVYb9YS9BH4ld2zS3SR5efP6amLhTig=";
+    hash = "sha256-rjhTKZ2d1jDby4tacLfbKJj0Y7F/KkECWAL/WsqJ6sg=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-Oj/XUUmuj5scD5WT6zBxnU1hSapDyRBBz75rbIdY4Ho=";
+  vendorHash = "sha256-h+f/ILk6mDzRBW1FI1jFyWxkV3bvrJ/BMsCuuf+E+J0=";
 
   subPackages = [
     "main"

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , mashumaro
 , poetry-core
-, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "huum";
-  version = "0.7.9";
+  version = "0.7.10";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "frwickst";
     repo = "pyhuum";
     rev = "refs/tags/${version}";
-    hash = "sha256-wIroT1eMO9VXsPWQkpSBEVN/nR4pg2/Eo4ms81qMaew=";
+    hash = "sha256-INW6d/Zc5UZZOgN6wW+Xbm/wH1K/V6bviu3mID1R+BY=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +47,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/frwickst/pyhuum/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    broken = versionAtLeast pydantic.version "2";
   };
 }

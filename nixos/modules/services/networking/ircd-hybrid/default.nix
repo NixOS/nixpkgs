@@ -125,7 +125,8 @@ in
 
     systemd.services.ircd-hybrid = {
       description = "IRCD Hybrid server";
-      after = [ "started networking" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${ircdService}/bin/control start";
     };

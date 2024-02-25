@@ -12,31 +12,35 @@
 , setuptools
 }:
 
-buildPythonPackage rec {
-  pname = "todosrht";
-  version = "0.74.6";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+let
+  version = "0.75.6";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.36"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    sha256 = "sha256-j12pCGfKf6+9R8NOBIrH2V4OuSMuncU6S1AMWFVoHts=";
+    hash = "sha256-BPJ1M9dX+xNIw++VZ0Si/rjnfI9BY95TE2o+u7JRVAU=";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api" ""
-  '';
 
   todosrht-api = buildGoModule ({
     inherit src version;
     pname = "todosrht-api";
     modRoot = "api";
-    vendorHash = "sha256-rvfG5F6ez8UM0dYVhKfzwtb7ZEJlaKMBAfKDbo3Aofc=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+    vendorHash = "sha256-vTKIJFE8AFR2eZFwG9ba6FWPW02og3ZVcrsqUnOkJIQ=";
+  } // gqlgen);
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "todosrht";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -69,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://todo.sr.ht/~sircmpwn/todo.sr.ht";
     description = "Ticket tracking service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
 }

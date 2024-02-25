@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.6.6";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9wVH+msUh0t0PKz+5044PhT9lGsbfp4u44gX0O70Pbo=";
+    hash = "sha256-Bwneum3X4Gttb5fFhWyCIchGebxH9Rp0Dg10f0NkKCY=";
   };
 
-  cargoHash = "sha256-Q4KA+mc48OfmxYY7vDJ2ZU/Wd+101kbimwAw6ag3d+w=";
+  cargoHash = "sha256-HIt56r2sox9LD6kyJxyGFt9mrH/wrC7QkiycLdUDbPo=";
 
   passthru = rec {
     test_client = rustPlatform.buildRustPackage {
@@ -24,7 +24,11 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-XiaeCVgVjre7NmH/B+dNw0u2HV0vJwlgDjhLXXgJS+Y=";
+      cargoHash = "sha256-OUALNd64rr2qXyRNV/O+pi+dE0HYogwlbWx5DCACzyk=";
+
+      meta = meta // {
+        mainProgram = "test_client";
+      };
     };
     tests = {
       inherit (nixosTests.nextcloud)
@@ -36,9 +40,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
     homepage = "https://github.com/nextcloud/notify_push";
     license = licenses.agpl3Plus;
+    platforms = platforms.linux;
     maintainers = teams.helsinki-systems.members;
   };
 }

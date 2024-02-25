@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.hping.org/wbox/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    mainProgram = "wbox";
   };
 }

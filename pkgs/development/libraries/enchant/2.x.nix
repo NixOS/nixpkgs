@@ -13,14 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.6.3";
+  version = "2.6.7";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-wcVxnypZfOPgbJOM+5n7aX2gk96nuFfMAE3B3PG7oYI=";
+    hash = "sha256-ocLltZrMoAC7+ySBCvShFlcz1AfyFUeGWI4HbIzVe/w=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     groff
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     nuspell
   ];
 
-  nativeCheckInputs = [
+  checkInputs = [
     unittest-cpp
   ];
 

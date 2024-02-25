@@ -10,14 +10,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.19.0";
+  version = "3.19.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WD+OEjePVtqlmn7h1CIfraLuEQlodkvjmYQ8q7nNoGU=";
+    hash = "sha256-+m0gF47l3c9gZ9dLdOUNW0I2W1O+OGrmsdysu7QdjvI=";
   };
 
   postPatch = ''

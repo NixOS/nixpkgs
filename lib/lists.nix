@@ -2,7 +2,7 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min id;
+  inherit (lib.trivial) compare min id warn;
   inherit (lib.attrsets) mapAttrs;
   inherit (lib.lists) sort;
 in
@@ -848,8 +848,8 @@ rec {
       crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
       => [ "13" "14" "23" "24" ]
   */
-  crossLists = builtins.trace
-    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
+  crossLists = warn
+    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead."
     (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
 

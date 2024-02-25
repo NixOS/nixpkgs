@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , dacite
-, pysnmplib
+, pysnmp-lextudio
 , pytest-asyncio
 , pytest-error-for-skips
 , pytestCheckHook
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "3.0.0";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rRzcWT9DcNTBUYxyYYC7WORBbrkgj0toCp2e8ADUN5s=";
+    hash = "sha256-FLaSj1LQy/eWPxU1a4WGpsdoN5Zi4EwrgCmz8AXGeLc=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     dacite
-    pysnmplib
+    pysnmp-lextudio
   ];
 
   nativeCheckInputs = [

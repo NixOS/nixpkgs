@@ -27,5 +27,6 @@ buildGoModule rec {
     description = "Interactive cli tool for HTTP inspection";
     license = licenses.agpl3;
     maintainers = with maintainers; [ pradeepchhetri ];
+    mainProgram = "wuzz";
   };
 }

@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.isc;
     maintainers = with maintainers; [ pmahoney ];
+    mainProgram = "acme-client";
   };
 }
 

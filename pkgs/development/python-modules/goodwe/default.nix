@@ -8,22 +8,22 @@
 
 buildPythonPackage rec {
   pname = "goodwe";
-  version = "0.2.33";
-  format = "pyproject";
+  version = "0.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marcelblijleven";
-    repo = pname;
+    repo = "goodwe";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D2NR31aIl6A3ij8sKOIHPOj3HFQKGwpk6RjA+MB3mMk=";
+    hash = "sha256-6KCIfCyViiBU/cez9m34FMPkTUTkmEYc/e/xYqOyJLY=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "'marcelblijleven@gmail.com" "marcelblijleven@gmail.com" \
-      --replace "version: file: VERSION" "version = ${version}"
+      --replace-fail "'marcelblijleven@gmail.com" "marcelblijleven@gmail.com" \
+      --replace-fail "version: file: VERSION" "version = ${version}"
   '';
 
   nativeBuildInputs = [

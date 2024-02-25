@@ -2,14 +2,17 @@
 , buildPythonPackage
 , fetchPypi
 , alembic
+, debtcollector
 , oslo-config
 , oslo-context
+, oslo-i18n
 , oslo-utils
 , oslotest
 , pbr
+, psycopg2
 , setuptools
 , sqlalchemy
-, sqlalchemy-migrate
+, stevedore
 , stestr
 , testresources
 , testscenarios
@@ -33,18 +36,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alembic
+    debtcollector
     oslo-config
-    oslo-context
+    oslo-i18n
     oslo-utils
     sqlalchemy
-    sqlalchemy-migrate
-    testresources
-    testscenarios
+    stevedore
   ];
 
   nativeCheckInputs = [
+    oslo-context
     oslotest
     stestr
+    psycopg2
+    testresources
+    testscenarios
   ];
 
   checkPhase = ''

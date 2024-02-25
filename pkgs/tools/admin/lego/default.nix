@@ -26,6 +26,7 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://go-acme.github.io/lego/";
     maintainers = teams.acme.members;
+    mainProgram = "lego";
   };
 
   passthru.tests.lego = nixosTests.acme;

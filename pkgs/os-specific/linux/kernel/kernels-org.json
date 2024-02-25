@@ -1,38 +1,38 @@
 {
     "testing": {
-        "version": "6.7-rc8",
-        "hash": "sha256:02drhwl3f53y97gimgclz61zsa57v29vphkbrzr4cwmz4sh1vngk"
+        "version": "6.8-rc5",
+        "hash": "sha256:0cfv90lf0vccpasqxilr62p23qy5in5b9pz2916iifqs9sngj469"
     },
     "6.5": {
         "version": "6.5.13",
         "hash": "sha256:1dfbbydmayfj9npx3z0g38p574pmcx3qgs49dv0npigl48wd9yvq"
     },
     "6.1": {
-        "version": "6.1.72",
-        "hash": "sha256:09h9kzv2xfrn369ynl09dfnjl9025b9vpkcxg75gyp63fy8fdp4q"
+        "version": "6.1.79",
+        "hash": "sha256:16xkd0hcslqlcf55d4ivzhf1fkhfs5yy0m9arbax8pmm5yi9r97s"
     },
     "5.15": {
-        "version": "5.15.146",
-        "hash": "sha256:14nijbspmzd4r38l8cpl4vn9dhawzcfnhyc0gnaxl2m8l9gpm02s"
+        "version": "5.15.149",
+        "hash": "sha256:1c01fnaghj55mkgsgddznq1zq4mswsa05rz00kmh1d3y6sd8115x"
     },
     "5.10": {
-        "version": "5.10.207",
-        "hash": "sha256:06sg6cd7a881yv9kzh4583g6hjv14zflx2blsls1bgwn4a4ykb46"
+        "version": "5.10.210",
+        "hash": "sha256:0vggj3a71awc1w803cdzrnkn88rxr7l1xh9mmdcw9hzxj1d3r9jf"
     },
     "5.4": {
-        "version": "5.4.266",
-        "hash": "sha256:1dmcn9i3nvf1gldm1a32gnl5ybwbk2lizb3wa4gc06g7dxz2y1ys"
+        "version": "5.4.269",
+        "hash": "sha256:1kqqm4hpif3jy2ycnb0dfjgzyn18vqhm1i5q7d7rkisks33bwm7z"
     },
     "4.19": {
-        "version": "4.19.304",
-        "hash": "sha256:165mljr8v1cf4vf4a4b44hx089rprkssvi2azq5wbxxg3basbind"
+        "version": "4.19.307",
+        "hash": "sha256:0lp3fc7sqy48vpcl2g0n1bz7i1hp9k0nlz3i1xfh9l056ihzzvl3"
     },
     "6.6": {
-        "version": "6.6.11",
-        "hash": "sha256:0lhyczcj1fhh52fjf06ikp5yh7kxc1qymsw44rv6v25vc6kfbqmg"
+        "version": "6.6.18",
+        "hash": "sha256:07cv97l5jiakmmv35n0ganvqfr0590b02f3qb617qkx1zg2xhhsf"
     },
     "6.7": {
-        "version": "6.7",
-        "hash": "sha256:0s8hbcsg7fdvspqam8kzcxygjsznr4zfi60nqgc81l3n4m518cgg"
+        "version": "6.7.6",
+        "hash": "sha256:1lrp7pwnxnqyy8c2l4n4nz997039gbnssrfm8ss8kl3h2c7fr2g4"
     }
 }

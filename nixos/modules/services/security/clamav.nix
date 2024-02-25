@@ -196,6 +196,7 @@ in
     systemd.services.clamav-freshclam = mkIf cfg.updater.enable {
       description = "ClamAV virus database updater (freshclam)";
       restartTriggers = [ freshclamConfigFile ];
+      requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
       serviceConfig = {
@@ -243,6 +244,7 @@ in
     systemd.services.clamav-fangfrisch = mkIf cfg.fangfrisch.enable {
       description = "ClamAV virus database updater (fangfrisch)";
       restartTriggers = [ fangfrischConfigFile ];
+      requires = [ "network-online.target" ];
       after = [ "network-online.target" "clamav-fangfrisch-init.service" ];
 
       serviceConfig = {

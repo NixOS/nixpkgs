@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "taproot-assets";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "taproot-assets";
     rev = "v${version}";
-    hash = "sha256-zYS/qLWYzfmLksYLCUWosT287K8La2fuu9TcT4Wytto=";
+    hash = "sha256-KEEecyZA+sVAkg2/i9AcfvPTB26Dk02r77Py87LP758=";
   };
 
   vendorHash = "sha256-jz6q3l2FtkJM3qyaTTqqu3ZG2FeKW9s7WdlW1pHij5k=";

@@ -19,5 +19,6 @@ stdenv.mkDerivation {
     description = "An example package with unfree license (for testing)";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.oxij ];
+    mainProgram = "hello-unfree";
   };
 }

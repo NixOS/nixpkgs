@@ -1,32 +1,39 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
 , click
 , dateutils
+, dbt-postgres
+, fetchFromGitHub
 , hatchling
+, hypothesis
 , importlib-metadata
 , jinja2
 , jsonschema
 , more-itertools
 , pydantic
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , typing-extensions
-, hypothesis
-, dbt-postgres
 }:
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-semantic-interfaces";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q3aKUyXB+HzPCpwbJ66zDv92n04Gb0w7ivWfga3UX3s=";
+    hash = "sha256-mYAOAi0Qb89zp4o7vRdR7fw7vrlXt1TFVqGR09QcRSA=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     click
@@ -38,10 +45,6 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     typing-extensions
-  ];
-
-  nativeBuildInputs = [
-    hatchling
   ];
 
   nativeCheckInputs = [
@@ -59,7 +62,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-semantic-interfaces";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
-    # https://github.com/dbt-labs/dbt-semantic-interfaces/issues/134
-    broken = versionAtLeast pydantic.version "2";
   };
 }

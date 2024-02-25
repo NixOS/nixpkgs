@@ -242,13 +242,19 @@ in rec {
             ln -sfn '${name}' $out/'${name2}'
           '') (unit.aliases or [])) units)}
 
-      # Create .wants and .requires symlinks from the wantedBy and
+      # Create .wants, .upholds and .requires symlinks from the wantedBy, upheldBy and
       # requiredBy options.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
           '') (unit.wantedBy or [])) units)}
+
+      ${concatStrings (mapAttrsToList (name: unit:
+          concatMapStrings (name2: ''
+            mkdir -p $out/'${name2}.upholds'
+            ln -sfn '../${name}' $out/'${name2}.upholds'/
+          '') (unit.upheldBy or [])) units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
@@ -289,6 +295,8 @@ in rec {
           { Requires = toString config.requires; }
         // optionalAttrs (config.wants != [])
           { Wants = toString config.wants; }
+        // optionalAttrs (config.upholds != [])
+          { Upholds = toString config.upholds; }
         // optionalAttrs (config.after != [])
           { After = toString config.after; }
         // optionalAttrs (config.before != [])
@@ -360,9 +368,13 @@ in rec {
     };
   };
 
-  commonUnitText = def: ''
+  commonUnitText = def: lines: ''
       [Unit]
       ${attrsToSection def.unitConfig}
+    '' + lines + lib.optionalString (def.wantedBy != [ ]) ''
+
+      [Install]
+      WantedBy=${concatStringsSep " " def.wantedBy}
     '';
 
   targetToUnit = name: def:
@@ -376,7 +388,7 @@ in rec {
 
   serviceToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def + ''
+      text = commonUnitText def (''
         [Service]
       '' + (let env = cfg.globalEnvironment // def.environment;
         in concatMapStrings (n:
@@ -392,63 +404,57 @@ in rec {
       '' else "")
        + optionalString (def ? stopIfChanged && !def.stopIfChanged) ''
          X-StopIfChanged=false
-      '' + attrsToSection def.serviceConfig;
+      '' + attrsToSection def.serviceConfig);
     };
 
   socketToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Socket]
-          ${attrsToSection def.socketConfig}
-          ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
-          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
-        '';
+      text = commonUnitText def ''
+        [Socket]
+        ${attrsToSection def.socketConfig}
+        ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+        ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
+      '';
     };
 
   timerToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Timer]
-          ${attrsToSection def.timerConfig}
-        '';
+      text = commonUnitText def ''
+        [Timer]
+        ${attrsToSection def.timerConfig}
+      '';
     };
 
   pathToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Path]
-          ${attrsToSection def.pathConfig}
-        '';
+      text = commonUnitText def ''
+        [Path]
+        ${attrsToSection def.pathConfig}
+      '';
     };
 
   mountToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Mount]
-          ${attrsToSection def.mountConfig}
-        '';
+      text = commonUnitText def ''
+        [Mount]
+        ${attrsToSection def.mountConfig}
+      '';
     };
 
   automountToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Automount]
-          ${attrsToSection def.automountConfig}
-        '';
+      text = commonUnitText def ''
+        [Automount]
+        ${attrsToSection def.automountConfig}
+      '';
     };
 
   sliceToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Slice]
-          ${attrsToSection def.sliceConfig}
-        '';
+      text = commonUnitText def ''
+        [Slice]
+        ${attrsToSection def.sliceConfig}
+      '';
     };
 
   # Create a directory that contains systemd definition files from an attrset

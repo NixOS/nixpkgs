@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mopeka-iot-ble";
-  version = "0.5.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-m27As3tB77JbgY0kDDJ6kmYFTv2O/Sh6y9tFiKDIjbI=";
+    hash = "sha256-wF3ZSR9kjn6qWaB7SRKsQuHfbNMwdKS/5qR9nStsw1c=";
   };
 
   postPatch = ''

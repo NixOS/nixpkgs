@@ -62,7 +62,7 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
     "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
-    "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
+    "--prefix PYTHONPATH : $out/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [

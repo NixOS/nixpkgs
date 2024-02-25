@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -21,8 +21,12 @@ in
     programs.chromium = {
       enable = mkEnableOption (lib.mdDoc "{command}`chromium` policies");
 
+      enablePlasmaBrowserIntegration = mkEnableOption (lib.mdDoc "Native Messaging Host for Plasma Browser Integration");
+
+      plasmaBrowserIntegrationPackage = mkPackageOption pkgs [ "plasma5Packages" "plasma-browser-integration" ] { };
+
       extensions = mkOption {
-        type = types.listOf types.str;
+        type = with types; nullOr (listOf str);
         description = lib.mdDoc ''
           List of chromium extensions to install.
           For list of plugins ids see id in url of extensions on
@@ -33,7 +37,7 @@ in
           [ExtensionInstallForcelist](https://cloud.google.com/docs/chrome-enterprise/policies/?policy=ExtensionInstallForcelist)
           for additional details.
         '';
-        default = [];
+        default = null;
         example = literalExpression ''
           [
             "chlffgpmiacpedhhbkiomidkjlcfhogd" # pushbullet
@@ -62,16 +66,14 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc "Chromium default search provider url.";
         default = null;
-        example =
-          "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
+        example = "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
       };
 
       defaultSearchProviderSuggestURL = mkOption {
         type = types.nullOr types.str;
         description = lib.mdDoc "Chromium default search provider url for suggestions.";
         default = null;
-        example =
-          "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
+        example = "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
       };
 
       extraOpts = mkOption {
@@ -90,9 +92,9 @@ in
             "PasswordManagerEnabled" = false;
             "SpellcheckEnabled" = true;
             "SpellcheckLanguage" = [
-                                     "de"
-                                     "en-US"
-                                   ];
+              "de"
+              "en-US"
+            ];
           }
         '';
       };
@@ -101,15 +103,21 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable {
-    # for chromium
-    environment.etc."chromium/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."chromium/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
-    # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-    environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
-    # for brave
-    environment.etc."brave/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."brave/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+  config = {
+    environment.etc = lib.mkIf cfg.enable {
+      # for chromium
+      "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" = lib.mkIf cfg.enablePlasmaBrowserIntegration
+        { source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json"; };
+      "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
+      "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
+      # for google-chrome https://www.chromium.org/administrators/linux-quick-start
+      "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" = lib.mkIf cfg.enablePlasmaBrowserIntegration
+        { source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json"; };
+      "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
+      "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
+      # for brave
+      "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
+      "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
+    };
   };
 }

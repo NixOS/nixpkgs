@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tbillington/kondo";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "kondo";
   };
 }

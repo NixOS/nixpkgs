@@ -110,8 +110,5 @@ stdenv.mkDerivation rec {
     # the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
     maintainers = llvm_meta.maintainers ++ [ lib.maintainers.vlstill ];
-    # Broken until https://github.com/llvm/llvm-project/issues/64226 is resolved
-    # We should check if the version is not 10.13 but that is currently broken.
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

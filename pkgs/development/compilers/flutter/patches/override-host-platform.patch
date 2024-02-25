@@ -13,7 +13,7 @@ index 1ce1951cef..1bd7602318 100644
 +    'x86_64-linux' => HostPlatform.linux_x64,
 +    'aarch64-linux' => HostPlatform.linux_arm64,
 +    'x86_64-darwin' => HostPlatform.darwin_x64,
-+    'arm64-darwin' => HostPlatform.darwin_arm64,
++    'aarch64-darwin' => HostPlatform.darwin_arm64,
 +    String value => throw ArgumentError.value(value, 'NIX_FLUTTER_HOST_PLATFORM', 'Unknown Nix host platform!'),
 +  };
  

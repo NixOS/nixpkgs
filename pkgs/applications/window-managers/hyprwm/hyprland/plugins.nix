@@ -1,13 +1,13 @@
 { lib
 , callPackage
 , pkg-config
-, gcc13Stdenv
+, stdenv
 , hyprland
 }:
 let
   mkHyprlandPlugin =
     args@{ pluginName, ... }:
-    gcc13Stdenv.mkDerivation (args // {
+    stdenv.mkDerivation (args // {
       pname = "${pluginName}";
       nativeBuildInputs = [ pkg-config ] ++ args.nativeBuildInputs or [ ];
       buildInputs = [ hyprland ]
@@ -24,13 +24,13 @@ let
     hy3 = { fetchFromGitHub, cmake, hyprland }:
       mkHyprlandPlugin rec {
         pluginName = "hy3";
-        version = "0.34.0";
+        version = "0.35.0";
 
         src = fetchFromGitHub {
           owner = "outfoxxed";
           repo = "hy3";
           rev = "hl${version}";
-          hash = "sha256-Jd1bSwelh7WA8aeYrV+CxxtpsmSITUDruKdNNLHdV7c=";
+          hash = "sha256-lFe7Lf0K5ePTh4gflnvBohOGH4ayGDtNkbg/XtoNqRo=";
         };
 
         nativeBuildInputs = [ cmake ];

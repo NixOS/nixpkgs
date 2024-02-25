@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.1";
+  version = "24.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
-    rev = "v${version}";
-    hash = "sha256-vdcCTJqvaRehGWfTd9GR/DypF9ftY4ite7SDMPc2Ups=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-o3G0isXShwNHaOiA4TNml0IhStB3X4jB9CgrVKViBlY=";
   };
 
   patches = [
@@ -94,7 +94,7 @@ buildPythonPackage rec {
   meta = {
     description = "Naive XML & JSON bindings for Python";
     homepage = "https://github.com/tefra/xsdata";
-    changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

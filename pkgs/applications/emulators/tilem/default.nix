@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ siraben luc65r ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "tilem2";
   };
 }

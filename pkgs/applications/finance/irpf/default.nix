@@ -72,5 +72,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ atila ];
+    mainProgram = "irpf";
   };
 }

@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    DST_PREFIX=$out/lib/${python.libPrefix}/site-packages/selenium/webdriver/
+    DST_PREFIX=$out/${python.sitePackages}/selenium/webdriver/
     DST_REMOTE=$DST_PREFIX/remote/
     DST_FF=$DST_PREFIX/firefox
     cp ../rb/lib/selenium/webdriver/atoms/getAttribute.js $DST_REMOTE

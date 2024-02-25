@@ -16,13 +16,13 @@
 assert lib.assertOneOf "graphicsLibrary" graphicsLibrary [ "SDL2" "GLFW" ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "jazz2";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
     rev = finalAttrs.version;
-    hash = "sha256-AbB7xtdyin/VySswHoPRq9LmhHLUJfetXqtIxEw+KSI=";
+    hash = "sha256-IFsSIfHmSE6B1bpc5RWetJnlkv/jjlAUvRFV1pvVVNo=";
   };
 
   patches = [ ./nocontent.patch ];

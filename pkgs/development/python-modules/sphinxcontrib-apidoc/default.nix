@@ -2,12 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , pbr
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,8 +20,9 @@ buildPythonPackage rec {
     rm test-requirements.txt requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     pbr
+    setuptools
   ];
 
   # Check is disabled due to circular dependency of sphinx

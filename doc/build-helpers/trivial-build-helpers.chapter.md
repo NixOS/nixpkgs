@@ -502,9 +502,14 @@ concatScript "my-file" [ file1 file2 ]
 
 ## `writeShellApplication` {#trivial-builder-writeShellApplication}
 
-This can be used to easily produce a shell script that has some dependencies (`runtimeInputs`). It automatically sets the `PATH` of the script to contain all of the listed inputs, sets some sanity shellopts (`errexit`, `nounset`, `pipefail`), and checks the resulting script with [`shellcheck`](https://github.com/koalaman/shellcheck).
+`writeShellApplication` is similar to `writeShellScriptBin` and `writeScriptBin` but supports runtime dependencies with `runtimeInputs`.
+Writes an executable shell script to `/nix/store/<store path>/bin/<name>` and checks its syntax with [`shellcheck`](https://github.com/koalaman/shellcheck) and the `bash`'s `-n` option.
+Some basic Bash options are set by default (`errexit`, `nounset`, and `pipefail`), but can be overridden with `bashOptions`.
 
-For example, look at the following code:
+Extra arguments may be passed to `stdenv.mkDerivation` by setting `derivationArgs`; note that variables set in this manner will be set when the shell script is _built,_ not when it's run.
+Runtime environment variables can be set with the `runtimeEnv` argument.
+
+For example, the following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`:
 
 ```nix
 writeShellApplication {
@@ -517,10 +522,6 @@ writeShellApplication {
   '';
 }
 ```
-
-Unlike with normal `writeShellScriptBin`, there is no need to manually write out `${curl}/bin/curl`, setting the PATH
-was handled by `writeShellApplication`. Moreover, the script is being checked with `shellcheck` for more strict
-validation.
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 

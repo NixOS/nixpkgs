@@ -46,6 +46,18 @@ let
         echo 'runAsRoot has run.'
       '';
     };
+
+  chownTestImage =
+    pkgs.dockerTools.streamLayeredImage {
+      name = "chown-test";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        touch /testfile
+        chown 12345:12345 /testfile
+      '';
+      config.Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "/testfile" ];
+    };
 in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
@@ -71,12 +83,27 @@ in {
             docker.succeed("${examples.helloOnRoot} | docker load")
             docker.succeed("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+
         with subtest("includeStorePath = false; breaks example"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
             docker.fail("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; breaks example (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
+            docker.fail("docker run --rm hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+
+        with subtest("Ensure ZERO paths are added to the store"):
+            docker.fail("${examples.helloOnRootNoStore} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+        with subtest("Ensure ZERO paths are added to the store (fakechroot)"):
+            docker.fail("${examples.helloOnRootNoStoreFakechroot} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+
         with subtest("includeStorePath = false; works with mounted store"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
+            docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; works with mounted store (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
             docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
 
@@ -128,6 +155,15 @@ in {
         docker.succeed("docker images --format '{{.Tag}}' | grep -F '${examples.nixLayered.imageTag}'")
         docker.succeed("docker rmi ${examples.nixLayered.imageName}")
 
+    with subtest("Check that images with alternative compression schemas load"):
+        docker.succeed(
+            "docker load --input='${examples.bashZstdCompressed}'",
+            "docker rmi ${examples.bashZstdCompressed.imageName}",
+        )
+        docker.succeed(
+            "docker load --input='${examples.bashUncompressed}'",
+            "docker rmi ${examples.bashUncompressed.imageName}",
+        )
 
     with subtest(
         "Check if the nix store is correctly initialized by listing "
@@ -449,6 +485,18 @@ in {
             "docker run --rm ${examples.layeredImageWithFakeRootCommands.imageName} /hello/bin/layeredImageWithFakeRootCommands-hello"
         )
 
+    with subtest("mergeImage correctly deals with varying compression schemas in inputs"):
+        docker.succeed("docker load --input='${examples.mergeVaryingCompressor}'")
+
+        for sub_image, tag in [
+            ("${examples.redis.imageName}", "${examples.redis.imageTag}"),
+            ("${examples.bashUncompressed.imageName}", "${examples.bashUncompressed.imageTag}"),
+            ("${examples.bashZstdCompressed.imageName}", "${examples.bashZstdCompressed.imageTag}"),
+        ]:
+            docker.succeed(f"docker images --format '{{{{.Repository}}}}-{{{{.Tag}}}}' | grep -F '{sub_image}-{tag}'")
+            docker.succeed(f"docker rmi {sub_image}")
+
+
     with subtest("exportImage produces a valid tarball"):
         docker.succeed(
             "tar -tf ${examples.exportBash} | grep '\./bin/bash' > /dev/null"
@@ -549,6 +597,12 @@ in {
         docker.succeed(
             "${examples.nix-shell-build-derivation} | docker load",
             "docker run --rm -it nix-shell-build-derivation"
+        )
+
+    with subtest("streamLayeredImage: chown is persistent in fakeRootCommands"):
+        docker.succeed(
+            "${chownTestImage} | docker load",
+            "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
   '';
 })

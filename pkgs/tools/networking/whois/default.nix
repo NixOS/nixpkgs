@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+    mainProgram = "whois";
   };
 }

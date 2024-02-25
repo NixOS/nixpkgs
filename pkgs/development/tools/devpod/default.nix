@@ -23,13 +23,13 @@
 
 let
   pname = "devpod";
-  version = "0.4.2";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e9sa9LniG5fj3S+x9T91v6ILPI0CD2y3QnZxXcKy6Ik=";
+    sha256 = "sha256-xvZ9I8VL50yS6tEQizp7bebyZVTCW6y2VOSyVZDJy6M=";
   };
 
   meta = with lib; {
@@ -79,7 +79,7 @@ rec {
 
         offlineCache = fetchYarnDeps {
           yarnLock = "${src}/desktop/yarn.lock";
-          sha256 = "sha256-Nezh2nGhrxmNLLqZVugJqr895CIa2QWE3CNLjkjrEEs=";
+          sha256 = "sha256-I+c0zrybNv3iS+Wy+n+NlBalA6gLYuxBw00mAJbqgfU=";
         };
 
         packageJSON = ./package.json;
@@ -106,7 +106,7 @@ rec {
       cargoLock = {
         lockFile = ./Cargo.lock;
         outputHashes = {
-          "tauri-plugin-log-0.1.0" = "sha256-Ei0j7UNzsK45c8fEV8Yw3pyf4oSG5EYgLB4BRfafq6A=";
+          "tauri-plugin-log-0.0.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
         };
       };
 

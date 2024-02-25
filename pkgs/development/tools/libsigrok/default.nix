@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchurl
+, fetchgit
+, autoreconfHook
 , pkg-config
 , libzip
 , glib
@@ -19,16 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libsigrok";
-  version = "0.5.2";
+  version = "0.5.2-unstable-2024-01-03";
 
-  src = fetchurl {
-    url = "https://sigrok.org/download/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0g6fl684bpqm5p2z4j12c62m45j1dircznjina63w392ns81yd2d";
+  src = fetchgit {
+    url = "git://sigrok.org/libsigrok";
+    rev = "b503d24cdf56abf8c0d66d438ccac28969f01670";
+    hash = "sha256-9EW0UCzU6MqBX6rkT5CrBsDkAi6/CLyS9MZHsDV+1IQ=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ doxygen pkg-config python ];
+  nativeBuildInputs = [ autoreconfHook doxygen pkg-config python ];
   buildInputs = [
     libzip glib libusb1 libftdi1 check libserialport glibmm hidapi
   ] ++ lib.optionals stdenv.isLinux [ libieee1284 bluez ];
@@ -56,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor vifino ];
   };
 }

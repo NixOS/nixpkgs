@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sqlmodel";
-  version = "0.0.14";
+  version = "0.0.16";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "sqlmodel";
     rev = "refs/tags/${version}";
-    hash = "sha256-EEOS7c0ospo7qjqPQkKwYXeVmBR5DueONzmjspV6w7w=";
+    hash = "sha256-hDJcekn0ExYUCs8kBZkJzsWqXsB/cI6RbW3EhRCCioM=";
   };
 
   nativeBuildInputs = [

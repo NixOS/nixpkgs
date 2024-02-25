@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deviceinfo";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/deviceinfo";
     rev = finalAttrs.version;
-    hash = "sha256-x0Xm4Z3hpvO5p/5JxMRloFqn58cRH2ak8rKtuxmmVVQ=";
+    hash = "sha256-wTl+GgNiWzJxGLdU2iMH94UhQ40gjAPTVErouQIGXOA=";
   };
 
   outputs = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Library to detect and configure devices";
     homepage = "https://gitlab.com/ubports/development/core/deviceinfo";
+    changelog = "https://gitlab.com/ubports/development/core/deviceinfo/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

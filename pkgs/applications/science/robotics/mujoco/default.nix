@@ -129,15 +129,15 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.1.0";
+  version = "3.1.2";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
-    repo = pname;
-    rev = version;
-    hash = "sha256-a8h30psoAlj9dI4j8IfY3WzWjY4MrRosGbvgt79s1BQ=";
+    repo = "mujoco";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Zbz6qq2Sjhcrf8QAGFlYkSZ8mA/wQaP81gRzMj3xh+g=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -180,7 +180,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator.";
     homepage = "https://mujoco.org/";
+    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela tmplt ];
+    broken = stdenv.isDarwin;
   };
 }

@@ -1,6 +1,5 @@
 use crate::structure;
 use crate::utils::PACKAGE_NIX_FILENAME;
-use rnix::parser::ParseError;
 use std::ffi::OsString;
 use std::fmt;
 use std::io;
@@ -58,11 +57,6 @@ pub enum NixpkgsProblem {
         subpath: PathBuf,
         io_error: io::Error,
     },
-    CouldNotParseNix {
-        relative_package_dir: PathBuf,
-        subpath: PathBuf,
-        error: ParseError,
-    },
     PathInterpolation {
         relative_package_dir: PathBuf,
         subpath: PathBuf,
@@ -88,9 +82,6 @@ pub enum NixpkgsProblem {
         text: String,
         io_error: io::Error,
     },
-    InternalCallPackageUsed {
-        attr_name: String,
-    },
     MovedOutOfByName {
         package_name: String,
         call_package_path: Option<PathBuf>,
@@ -100,6 +91,12 @@ pub enum NixpkgsProblem {
         package_name: String,
         call_package_path: Option<PathBuf>,
         empty_arg: bool,
+    },
+    InternalCallPackageUsed {
+        attr_name: String,
+    },
+    CannotDetermineAttributeLocation {
+        attr_name: String,
     },
 }
 
@@ -187,14 +184,6 @@ impl fmt::Display for NixpkgsProblem {
                     relative_package_dir.display(),
                     subpath.display(),
                 ),
-            NixpkgsProblem::CouldNotParseNix { relative_package_dir, subpath, error } =>
-                write!(
-                    f,
-                    "{}: File {} could not be parsed by rnix: {}",
-                    relative_package_dir.display(),
-                    subpath.display(),
-                    error,
-                ),
             NixpkgsProblem::PathInterpolation { relative_package_dir, subpath, line, text } =>
                 write!(
                     f,
@@ -226,11 +215,6 @@ impl fmt::Display for NixpkgsProblem {
                     relative_package_dir.display(),
                     subpath.display(),
                     text,
-                ),
-            NixpkgsProblem::InternalCallPackageUsed { attr_name } =>
-                write!(
-                    f,
-                    "pkgs.{attr_name}: This attribute is defined using `_internalCallByNamePackageFile`, which is an internal function not intended for manual use.",
                 ),
             NixpkgsProblem::MovedOutOfByName { package_name, call_package_path, empty_arg } => {
                 let call_package_arg =
@@ -274,6 +258,16 @@ impl fmt::Display for NixpkgsProblem {
                     structure::relative_file_for_package(package_name).display(),
                 )
             },
-        }
+            NixpkgsProblem::InternalCallPackageUsed { attr_name } =>
+                write!(
+                    f,
+                    "pkgs.{attr_name}: This attribute is defined using `_internalCallByNamePackageFile`, which is an internal function not intended for manual use.",
+                ),
+            NixpkgsProblem::CannotDetermineAttributeLocation { attr_name } =>
+                write!(
+                    f,
+                    "pkgs.{attr_name}: Cannot determine the location of this attribute using `builtins.unsafeGetAttrPos`.",
+                ),
+       }
     }
 }

@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "pomerium";
   meta = with lib.maintainers; {
-    maintainers = [ lukegb ];
+    maintainers = [ lukegb devusb ];
   };
 
   nodes = let base = myIP: { pkgs, lib, ... }: {
@@ -103,7 +103,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     with subtest("ui"):
         pomerium.succeed(
           # check for a string that only appears if the UI is displayed correctly
-            "chromium --no-sandbox --headless --disable-gpu --dump-dom --host-resolver-rules='MAP login.required 127.0.0.1:80' http://login.required/.pomerium | grep 'contact your administrator'"
+            "chromium --no-sandbox --headless --disable-gpu --dump-dom --host-resolver-rules='MAP login.required 127.0.0.1:80' http://login.required/.pomerium | grep 'User Details Not Available'"
         )
   '';
 })

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, cmake, perl, pkg-config
-, gtk3, ncurses, darwin
+, gtk3, ncurses, darwin, copyDesktopItems, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +14,30 @@ stdenv.mkDerivation rec {
     hash = "sha256-IBPIOnIbF1NSnpCQ98ODDo/kyAoHDMznZFObrbP2cIE=";
   };
 
-  nativeBuildInputs = [ cmake perl pkg-config ];
+  nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk3 ncurses
   ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "PuTTY SSH Client";
+      exec = "putty";
+      icon = "putty";
+      desktopName = "PuTTY";
+      comment = "Connect to an SSH server with PuTTY";
+      categories = [ "GTK" "Network" ];
+    })
+    (makeDesktopItem {
+      name = "PuTTY Terminal Emulator";
+      exec = "pterm";
+      icon = "pterm";
+      desktopName = "Pterm";
+      comment = "Start a PuTTY terminal session";
+      categories = [ "GTK" "System" "Utility" "TerminalEmulator" ];
+    })
+  ];
 
   meta = with lib; {
     description = "A Free Telnet/SSH Client";

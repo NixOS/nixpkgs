@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
-  version = "0.7.7";
+  version = "0.7.10";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-auth";
     rev = "v${version}";
-    sha256 = "sha256-GO3Sfbi1dwsqQM6rlnEHyE7wolQjdVwD5BAu5ychEuY=";
+    hash = "sha256-yJ0sgw0y9tIiIHgTPVnfYd8zAGjO83qfeeEzstGH9CE=";
   };
 
   nativeBuildInputs = [

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       i686-linux = "sha256-/Q7VZahYhLdKVFB25CanROYxD2etQOcRg+4bXZUMqTc=";
       x86_64-darwin = "sha256-9biFAbFD7Bva7KPKztgCvcaoX8E6AlJBKkjlDQdP6Zw=";
       aarch64-darwin = "sha256-to5Y0R9tm9b7jUQAK3eBylLhpu+w5oDd63FbBCBAvd8=";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
   cargoDeps = rustPlatform.importCargoLock {
