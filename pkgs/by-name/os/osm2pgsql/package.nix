@@ -5,6 +5,7 @@
 , fmt
 , proj
 , bzip2
+, cli11
 , zlib
 , boost
 , postgresql
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-IFAQ7iA37QXnWOSxUjh9EW7ss85k0h948JGuuUcpr5w=";
+    hash = "sha256-95B4WVaf3AwaC+S6dCJpUq/1J47rOZjWUBxmRqHCu4w=";
   };
 
   postPatch = ''
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     bzip2
+    cli11
     expat
     fmt
     libosmium
@@ -56,10 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
-    "-DEXTERNAL_LIBOSMIUM=ON"
-    "-DEXTERNAL_PROTOZERO=ON"
-    "-DEXTERNAL_FMT=ON"
-  ] ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
+    (lib.cmakeBool "EXTERNAL_LIBOSMIUM" true)
+    (lib.cmakeBool "EXTERNAL_PROTOZERO" true)
+    (lib.cmakeBool "EXTERNAL_FMT" true)
+    (lib.cmakeBool "WITH_LUAJIT" withLuaJIT)
+  ];
 
   installFlags = [ "install-gen" ];
 

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , rustPlatform
 , libiconv
@@ -19,11 +20,27 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fuVSn1vhKn2+Tw5f6zBYHFW3QSL4eisZ6d5pxsj5hh4=";
   };
 
+  patches = [
+    # atuin with bash-preexec wasn't recording history properly after searching,
+    # backport recent fix until next release
+    (fetchpatch {
+      url = "https://github.com/atuinsh/atuin/commit/cb11af25afddbad552d337a9c82e74ac4302feca.patch";
+      sha256 = "sha256-cG99aLKs5msatT7vXiX9Rn5xur2WUjQ/U33nOxuon7I=";
+    })
+  ];
+
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.isLinux
     then "sha256-lHWgsVnjSeBmd7O4Fn0pUtTn4XbkBOAouaRHRozil50="
     else "sha256-LxfpllzvgUu7ZuD97n3W+el3bdOt5QGXzJbDQ0w8seo=";
+
+  # atuin's default features include 'check-updates', which do not make sense
+  # for distribution builds. List all other default features.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "client" "sync" "server" "clipboard"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

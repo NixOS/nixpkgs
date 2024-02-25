@@ -31058,7 +31058,9 @@ with pkgs;
 
   edlin = callPackage ../applications/editors/edlin { };
 
-  orbiton = callPackage ../applications/editors/orbiton { };
+  orbiton = callPackage ../applications/editors/orbiton {
+    buildGoModule = buildGo122Module;
+  };
 
   oed = callPackage ../applications/editors/oed { };
 
@@ -33840,8 +33842,6 @@ with pkgs;
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
   opsdroid = callPackage ../applications/networking/opsdroid { };
-
-  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
     protobuf = protobuf_21;
