@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nezha-agent";
-  version = "0.15.17";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-ZoJqO555cQ2jl/ofEOgkorSPJ0H4MFtBFD8KktVvVus=";
+    hash = "sha256-dg6GBNbCnC94h0b/NzFQBBAE8YwfWRtBTlgQ370+zko=";
   };
 
-  vendorHash = "sha256-b2Wqr7j05jkWAIZ+y0abkybQtmEk881KuGwi5FoCdlA=";
+  vendorHash = "sha256-kMRbbaIgP6LiXHAbUw6BBSr9ISNyWSZpFhlQCYQB3ig=";
 
   ldflags = [
     "-s"
