@@ -955,6 +955,54 @@ let
 
       contextmapper.context-mapper-vscode-extension = callPackage ./contextmapper.context-mapper-vscode-extension { };
 
+      continue.continue = buildVscodeMarketplaceExtension {
+        mktplcRef =
+          let
+            sources = {
+              "x86_64-linux" = {
+                arch = "linux-x64";
+                sha256 = "05kh6sf3jv3510q33chf8s5n1kfp9wcm7650va7mcrdkfr9g8ysq";
+              };
+              "x86_64-darwin" = {
+                arch = "darwin-x64";
+                sha256 = "0242h9kq47qvs1xynr5x8dzxkc5pwgb6km0iqpyy9kydg8ng1vp3";
+              };
+              "aarch64-linux" = {
+                arch = "linux-arm64";
+                sha256 = "1qm3f2lh8mi3hnyp2bmx7j2lir6fmbbxkzh6b8zf579khhbapnaz";
+              };
+              "aarch64-darwin" = {
+                arch = "darwin-arm64";
+                sha256 = "18w22z1c5qgkpw2zlwmi9gs9dx1pcm51f0r8my7ynnvgl6mp12sg";
+              };
+            };
+          in
+          {
+            name = "continue";
+            publisher = "Continue";
+            version = "0.8.12";
+          } // sources.${stdenv.system};
+        nativeBuildInputs = [
+          autoPatchelfHook
+        ];
+        buildInputs = [
+          stdenv.cc.cc.lib
+        ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+          substituteInPlace "out/extension.js" \
+            --replace-fail 'await showTutorial();' '//await showTutorial();'
+        '';
+        meta = {
+          description = "Open-source autopilot for software development - bring the power of ChatGPT to your IDE";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
+          homepage = "https://github.com/continuedev/continue";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.raroh73 ];
+          platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+        };
+      };
+
       coolbear.systemd-unit-file = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "coolbear";
