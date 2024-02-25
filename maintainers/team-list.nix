@@ -342,7 +342,6 @@ with lib.maintainers; {
       imincik
       nh2
       nialov
-      r-burns
       sikmir
       willcohen
     ];
