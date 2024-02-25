@@ -50,6 +50,7 @@ let
     mate-user-guide = callPackage ./mate-user-guide { };
     mate-user-share = callPackage ./mate-user-share { };
     mate-utils = callPackage ./mate-utils { };
+    mate-wayland-session = callPackage ./mate-wayland-session { };
     mozo = callPackage ./mozo { };
     pluma = callPackage ./pluma { };
     python-caja = callPackage ./python-caja { };
