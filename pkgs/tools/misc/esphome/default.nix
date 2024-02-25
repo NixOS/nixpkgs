@@ -59,8 +59,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
-    kconfiglib
     icmplib
+    kconfiglib
+    packaging
     paho-mqtt
     pillow
     platformio
