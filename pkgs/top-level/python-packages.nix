@@ -6674,6 +6674,8 @@ self: super: with self; {
 
   lizard = callPackage ../development/python-modules/lizard { };
 
+  llama-index = callPackage ../development/python-modules/llama-index { };
+
   llama-index-agent-openai = callPackage ../development/python-modules/llama-index-agent-openai { };
 
   llama-index-cli = callPackage ../development/python-modules/llama-index-cli { };
