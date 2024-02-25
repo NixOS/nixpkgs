@@ -10,16 +10,15 @@
 
 let
   pname = "decent-sampler";
-  version = "1.9.4";
+  version = "1.10.0";
 
-  decent-sampler = stdenv.mkDerivation {
+  decent-sampler = stdenv.mkDerivation rec {
     inherit pname version;
 
     src = fetchzip {
       # dropbox link: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-
       url = "https://archive.org/download/decent-sampler-linux-static-download-mirror/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
-      hash = "sha256-lTp/mukCwLNyeTcBT68eqa7aD0o11Bylbd93A5VCILU=";
+      hash = "sha256-KYCf/F2/ziuXDHim4FPZQBARiSywvQDJBzKbHua+3SM=";
     };
 
     installPhase = ''
