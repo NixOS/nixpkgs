@@ -330,6 +330,9 @@ filterAndCreateOverrides {
           for path in $rmPatterns; do
             rm -r "$path"
           done
+        ''
+        + ''
+          patchShebangs nsight-systems
         '';
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ qt.wrapQtAppsHook ];
       buildInputs = prevAttrs.buildInputs ++ [
@@ -358,6 +361,17 @@ filterAndCreateOverrides {
         "Qt 5 missing (<2022.4.2.1)" = !(versionOlder version "2022.4.2.1" -> qt5 != null);
         "Qt 6 missing (>=2022.4.2.1)" = !(versionAtLeast version "2022.4.2.1" -> qt6 != null);
       };
+      postInstall =
+        let
+          inherit (prevAttrs) version;
+          versionString = with lib.versions; "${majorMinor version}.${patch version}";
+        in
+        ''
+          moveToOutput 'nsight-systems/*/host-linux-*' "''${!outputBin}"
+          moveToOutput 'nsight-systems/*/target-linux-*' "''${!outputBin}"
+          substituteInPlace $bin/bin/nsys $bin/bin/nsys-ui \
+            --replace-fail 'nsight-systems-#VERSION_RSPLIT#' nsight-systems/${versionString}
+        '';
     };
 
   nvidia_driver =
