@@ -10113,6 +10113,8 @@ self: super: with self; {
 
   pulp = callPackage ../development/python-modules/pulp { };
 
+  pulsar-client = callPackage ../development/python-modules/pulsar-client { };
+
   pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
