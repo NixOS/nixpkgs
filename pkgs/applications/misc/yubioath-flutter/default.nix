@@ -33,7 +33,7 @@ flutter.buildFlutterApplication rec {
     rm -f pubspec.lock
 
     substituteInPlace linux/CMakeLists.txt \
-      --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
+      --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
 
   preInstall = ''
