@@ -10,13 +10,13 @@
 buildPythonPackage rec {
   pname = "pynuki";
   version = "1.6.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
-    repo = pname;
+    repo = "pynuki";
     rev = "refs/tags/${version}";
     hash = "sha256-PF5FmAuPcJXq8gQ8HyzdtL2HiiUjueT+LAS1lYRvrwM=";
   };
