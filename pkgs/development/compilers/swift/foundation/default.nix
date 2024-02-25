@@ -31,6 +31,21 @@ in stdenv.mkDerivation {
       url = "https://github.com/apple/swift-corelibs-foundation/commit/47260803a108c6e0d639adcebeed3ac6a76e8bcd.patch";
       hash = "sha256-1JUSQW86IHKkBZqxvpk0P8zcSKntzOTNlMoGBfgeT4c=";
     })
+    # implicit int build fix. remove on next update
+    (fetchpatch {
+      url = "https://github.com/apple/swift-corelibs-foundation/commit/76058114e5f5b47e02dd4441a6389858bb599bd6.patch";
+      hash = "sha256-N/hdTGCWMz092xh3AI28v3b+zjQHRmsb1F/2Q2u/jik=";
+    })
+    # 1. xml const prototype fixes. remove on next update
+    (fetchpatch {
+      url = "https://github.com/apple/swift-corelibs-foundation/commit/5f3e896e522ff364780e6330df867e20e26269b4.patch";
+      hash = "sha256-AaBWSysNpZ7NV10RGD4TehZqE0k8Sn+TlhlGw1PiRdI=";
+    })
+    # 2. xml const prototype fixes. remove on next update
+    (fetchpatch {
+      url = "https://github.com/apple/swift-corelibs-foundation/commit/5ccd6095c5eb8eeae914d6d3b7a971ed63d19403.patch";
+      hash = "sha256-/p7nzEkIMZAOM9dSKC0bx5WKQokNVZ+CGjiBUiCBYWg=";
+    })
   ];
 
   outputs = [ "out" "dev" ];
