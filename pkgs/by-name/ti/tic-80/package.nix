@@ -31,6 +31,7 @@
 , pipewire
 , libpulseaudio
 , libiconv
+, withPro ? false
 }:
 let
   major = "1";
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     unset LD
   '';
 
-  cmakeFlags = [ "-DBUILD_PRO=On" "-DBUILD_SDLGPU=On" ];
+  cmakeFlags = (if withPro then [ "-DBUILD_PRO=On" ] else [ ]) ++ [ "-DBUILD_SDLGPU=On" ];
   nativeBuildInputs = [
     cmake
     curl
