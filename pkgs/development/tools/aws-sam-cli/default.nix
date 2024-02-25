@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.108.0";
+  version = "1.110.0";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.8";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "aws";
     repo = "aws-sam-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k6SXCFkISyfr5/0vhe/Dfzs4qsVfu14lFx/bl53QxR4=";
+    hash = "sha256-FJHHEsdi2uGP9/GxrANsVEuxZiS4M4BPBGoARQBQpkA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -35,7 +35,9 @@ python3.pkgs.buildPythonApplication rec {
     "cookiecutter"
     "docker"
     "jsonschema"
+    "pyopenssl"
     "rich"
+    "ruamel-yaml"
     "tomlkit"
     "tzlocal"
   ];
