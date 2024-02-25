@@ -25,6 +25,8 @@ let
       runHook preInstall
 
       install -Dm755 DecentSampler $out/bin/decent-sampler
+      install -Dm755 DecentSampler.so -t $out/lib/vst
+      install -d "$out/lib/vst3" && cp -r "DecentSampler.vst3" $out/lib/vst3
 
       runHook postInstall
     '';
@@ -33,7 +35,7 @@ let
 in
 
 buildFHSEnv {
-  inherit pname version;
+  inherit (decent-sampler) pname version;
 
   targetPkgs = pkgs: [
     alsa-lib
@@ -44,6 +46,10 @@ buildFHSEnv {
   ];
 
   runScript = "decent-sampler";
+
+  extraInstallCommands = ''
+    cp -r ${decent-sampler.outPath}/lib $out/lib
+  '';
 
   meta = with lib; {
     description = "An audio sample player";
