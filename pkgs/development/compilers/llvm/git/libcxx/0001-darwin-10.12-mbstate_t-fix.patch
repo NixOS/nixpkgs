@@ -9,13 +9,13 @@ removes space from
 https://github.com/macports/macports-ports/raw/acd8acb171f1658596ed1cf25da48d5b932e2d19/lang/llvm-17/files/0042-mbstate_t-not-defined.patch
 so it applies cleanly
 ---
- include/__mbstate_t.h | 3 +++
+ libcxx/include/__mbstate_t.h | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/include/__mbstate_t.h b/include/__mbstate_t.h
+diff --git a/libcxx/include/__mbstate_t.h b/libcxx/include/__mbstate_t.h
 index bfa6d61..5f51112 100644
---- a/include/__mbstate_t.h
-+++ b/include/__mbstate_t.h
+--- a/libcxx/include/__mbstate_t.h
++++ b/libcxx/include/__mbstate_t.h
 @@ -42,6 +42,9 @@
  #elif __has_include(<bits/types/mbstate_t.h>)
  #  include <bits/types/mbstate_t.h> // works on most Unixes
