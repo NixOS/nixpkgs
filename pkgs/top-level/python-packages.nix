@@ -5724,6 +5724,8 @@ self: super: with self; {
 
   influxdb-client = callPackage ../development/python-modules/influxdb-client { };
 
+  influxdb3-python = callPackage ../development/python-modules/influxdb3-python { };
+
   inform = callPackage ../development/python-modules/inform { };
 
   iniconfig = callPackage ../development/python-modules/iniconfig { };
