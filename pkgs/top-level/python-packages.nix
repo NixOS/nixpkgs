@@ -6684,6 +6684,8 @@ self: super: with self; {
 
   llama-index-indices-managed-llama-cloud = callPackage ../development/python-modules/llama-index-indices-managed-llama-cloud { };
 
+  llama-index-legacy = callPackage ../development/python-modules/llama-index-legacy { };
+
   llama-index-llms-openai = callPackage ../development/python-modules/llama-index-llms-openai { };
 
   llama-index-multi-modal-llms-openai = callPackage ../development/python-modules/llama-index-multi-modal-llms-openai { };
