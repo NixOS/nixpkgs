@@ -10,7 +10,9 @@
 , quickjs
 , readline
 , stdenv
+, unixODBC
 , which
+, withODBC ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +25,23 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-ZXxzQBAmu7kM3sjqg/rDLBXNucO8sFRFKXV8UxQVQZU=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/src";
+
+  patches = [
+    # Fixes some small annoyances on src/makefile
+     ./0001-small-fixes.patch
+  ];
+
+  patchFlags =  [
+    "-p2"
+  ];
+
+  postPatch = ''
+    for file in $(find ./tools/ -type f ! -name '*.c'); do
+      patchShebangs $file
+    done
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -38,25 +57,21 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     quickjs
     readline
+  ] ++ lib.optionals withODBC [
+    unixODBC
   ];
-
-  patches = [
-    # Fixes some small annoyances on src/makefile
-    ./0001-small-fixes.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/makefile \
-      --replace '-L/usr/local/lib/quickjs' '-L${quickjs}/lib/quickjs'
-    for file in $(find ./tools/ -type f ! -name '*.c'); do
-      patchShebangs $file
-    done
-  '';
 
   makeFlags = [
-    "-C" "src"
     "PREFIX=${placeholder "out"}"
   ];
+
+  preBuild = ''
+    buildFlagsArray+=(
+      BUILD_EDBR_ODBC=${if withODBC then "on" else "off"}
+      EBDEMIN=on
+      QUICKJS_LDFLAGS="-L${quickjs}/lib/quickjs -lquickjs -ldl -latomic"
+    )
+  '';
 
   meta = {
     homepage = "https://edbrowse.org/";
