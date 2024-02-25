@@ -12,6 +12,7 @@
   buildNpmPackage,
   rustPlatform,
   lib,
+  stdenv,
 }: let
   pname = "squirreldisk";
   version = "0.3.4";
@@ -57,6 +58,9 @@ in
       cp -r ${frontend-build}/* frontend-build
 
       substituteInPlace tauri.conf.json --replace-fail '"distDir": "../dist"' '"distDir": "./frontend-build"'
+
+      # Copy pdu binary from nixpkgs, since the default packaged binary has issues.
+      cp ${parallel-disk-usage}/bin/pdu bin/pdu-${stdenv.hostPlatform.config}
     '';
 
     nativeBuildInputs = [pkg-config wrapGAppsHook];
@@ -67,8 +71,6 @@ in
 
     postInstall = ''
       mv $out/bin/squirreldisk-tauri $out/bin/squirreldisk
-      # Use pdu binary from nixpkgs, since the default packaged binary has issues.
-      cp ${parallel-disk-usage}/bin/pdu $out/bin/pdu
     '';
 
     # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
