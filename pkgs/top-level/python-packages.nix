@@ -2061,6 +2061,8 @@ self: super: with self; {
 
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
+  chromadb = callPackage ../development/python-modules/chromadb { };
+
   chromaprint = callPackage ../development/python-modules/chromaprint { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
@@ -6687,8 +6689,6 @@ self: super: with self; {
   llama-index-readers-file = callPackage ../development/python-modules/llama-index-readers-file { };
 
   llama-index-readers-llama-parse = callPackage ../development/python-modules/llama-index-readers-llama-parse { };
-
-  llama-index-vector-stores-chroma = callPackage ../development/python-modules/llama-index-vector-stores-chroma { };
 
   llama-parse = callPackage ../development/python-modules/llama-parse { };
 
