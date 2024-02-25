@@ -24069,31 +24069,7 @@ with pkgs;
 
   nvitop = callPackage ../tools/system/nvitop { };
 
-  nvtop = callPackage ../tools/system/nvtop { };
-  nvtop-amd = (callPackage ../tools/system/nvtop {
-    amd = true;
-    intel = false;
-    msm = false;
-    nvidia = false;
-  }).overrideAttrs { pname = "nvtop-amd"; };
-  nvtop-intel = (callPackage ../tools/system/nvtop {
-    amd = false;
-    intel = true;
-    msm = false;
-    nvidia = false;
-  }).overrideAttrs { pname = "nvtop-intel"; };
-  nvtop-msm = (callPackage ../tools/system/nvtop {
-    amd = false;
-    intel = false;
-    msm = true;
-    nvidia = false;
-  }).overrideAttrs { pname = "nvtop-msm"; };
-  nvtop-nvidia = (callPackage ../tools/system/nvtop {
-    amd = false;
-    intel = false;
-    msm = false;
-    nvidia = true;
-  }).overrideAttrs { pname = "nvtop-nvidia"; };
+  nvtopPackages = recurseIntoAttrs (import ../tools/system/nvtop { inherit callPackage; });
 
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
