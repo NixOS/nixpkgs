@@ -1774,6 +1774,10 @@
     dependencies = with self; [ vimwiki fzf-vim ];
   };
 
+  windows-nvim = super.windows-nvim.overrideAttrs {
+    dependencies = with self; [ luaPackages.middleclass animation-nvim ];
+  };
+
   wtf-nvim = super.wtf-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim ];
   };
