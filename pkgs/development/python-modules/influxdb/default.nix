@@ -57,6 +57,8 @@ buildPythonPackage rec {
     "test_write_points_from_dataframe_with_nan_json"
     "test_write_points_from_dataframe_with_tags_and_nan_json"
     "test_write_points_from_dataframe_with_numeric_precision"
+    # FutureWarning: 'H' is deprecated and will be removed in a future version, please use 'h' instead.
+    "test_write_points_from_dataframe_with_tag_escaped"
     # Reponse is not empty but `s = '孝'` and the JSON decoder chokes on that
     "test_query_with_empty_result"
     # Pandas API changes cause it to no longer infer datetimes in the expected manner
