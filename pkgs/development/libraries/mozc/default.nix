@@ -14,7 +14,7 @@
 
 buildBazelPackage {
   pname = "mozc";
-  version = "unstable-2023-08-18";
+  version = "unstable-2024-02-09";
 
   srcs = [
     (fetchFromGitHub rec {
@@ -22,71 +22,71 @@ buildBazelPackage {
       repo = "mozc";
       name = repo;
       fetchSubmodules = true;
-      rev = "89c70080d0102e8ed23cae6c05b535dedf506de4";
-      hash = "sha256-SSAu9gYTfEbfgORSDyqS0Z02bJDCAEy7nYC3ZcjL8gM=";
+      rev = "c2fcbf6515c5884437977de46187c16a8cb7bb50";
+      hash = "sha256-AcIN5sWPBe4JotAUYv1fytgQw+mJzdFhKuVPLR48soA=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "merge-ut-dictionaries";
       name = repo;
-      rev = "dbf3e9ccd711be39749cbf38baee99adbb2bad6f";
-      hash = "sha256-7CfIr7hJChBWFVynCVqw5KYh/lIjl277fqQQ4AuJ7x4=";
+      rev = "a3d6fc4005aff2092657ebca98b9de226e1c617f";
+      hash = "sha256-UK29ACZUK9zGfzW7C85uMw2aF5Gk+0aDeUdNV71PY+0=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-alt-cannadic";
       name = repo;
-      rev = "f59287e569db3e226378380a34e71275654b46d0";
-      hash = "sha256-a9U6mGlGAxbywILeAaWKbt7BFWRPFS+UZvUhliFUseY=";
+      rev = "4e548e6356b874c76e8db438bf4d8a0b452f2435";
+      hash = "sha256-4gzqVoCIhC0k3mh0qbEr8yYttz9YR0fItkFNlu7cYOY=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-edict2";
       name = repo;
-      rev = "e0cbf7d3192b1cdd38629a720b295bcbd67cd8bd";
-      hash = "sha256-jj5eBcmWxLxKC/Q720BPuzxJc9x1Y2RvY0kJfBJkIfE=";
+      rev = "b2eec665b81214082d61acee1c5a1b5b115baf1a";
+      hash = "sha256-LIpGt6xB8dLUnazbJHZk6EH1/ZyAHMIn1m6Qpr2dsHs=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-jawiki";
       name = repo;
-      rev = "be4da36c087e56a3aa5f835f8d9e810fc1a060ba";
-      hash = "sha256-WkP/RugY28TqNwTjbi2V5BsRVLwUIIvOX6zGJmdIDEk=";
+      rev = "6e08b8c823f3d2d09064ad2080e7a16552a7b473";
+      hash = "sha256-0YwAinlcI6yojCdW1MpLgMZfyYV7gk9Q+Wlu4lR3Hrg=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-neologd";
       name = repo;
-      rev = "90e59c7707a5fe250c992c10c6ceb08a7ce7e652";
-      hash = "sha256-zY7K/J4OzBTQHrj8sF4s8xPqakoWHHMxWrvnvHT6oxE=";
+      rev = "bf9d0d217107f2fb2e7d1a26648ef429d9fdcd27";
+      hash = "sha256-e0iM5fohwpNNhPl9CjkD753/Rgatg7GdwN0NSvlN94c=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-personal-names";
       name = repo;
-      rev = "0e51584283f759cb6bfac1f19eda92c2c524eed4";
-      hash = "sha256-8cJmSp7rGxSHy+TElFpkXmNvMxYLw2yiAYJJb2AUyyE=";
+      rev = "8a500f82c553936cbdd33b85955120e731069d44";
+      hash = "sha256-pMyYvl5S0+U++MO5m9rmbtxDzAmO4Xs8sFewOUGqgUA=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-place-names";
       name = repo;
-      rev = "478004504981e094af407f4fbd64cd65cf2d85dd";
-      hash = "sha256-3BwK+RuZMl5+femxQXNhDF/NE3qfX6u/+imqL2Uqd8I=";
+      rev = "a847a02e0137ab9e2fdbbaaf120826f870408ca6";
+      hash = "sha256-B0kW8Wa/nCT4KEYl2Rz6gQcj0Po3GxU6i42unHhgZeU=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-skk-jisyo";
       name = repo;
-      rev = "43518e6ea033681580a515281668c85eb74a5b14";
-      hash = "sha256-05T//ulsS5HvOKPdOEG87/Yp8GgzOB2X3wG8Sds3uUU=";
+      rev = "ee94f6546ce52edfeec0fd203030f52d4d99656f";
+      hash = "sha256-RXxO878ZBkxenrdo7cFom5NjM0m7CdYQk0dFu/HPp/Y=";
     })
     (fetchFromGitHub rec {
       owner = "utuhiro78";
       repo = "mozcdic-ut-sudachidict";
       name = repo;
-      rev = "1b5ad7cb51325fc9b42732887fede29d6a02bb07";
-      hash = "sha256-E4kq3YnxdYRFlv4KLSvf4NRoPhWXL8c89JIvqsjuy3o=";
+      rev = "55f61c3fca81dec661c36c73eb29b2631c8ed618";
+      hash = "sha256-gNnBcuVU1M7rllfZXIrLg7WYUhKqPJsUjR8Scnq3Fw8=";
     })
     (fetchurl rec {
       name = "jawiki";
@@ -103,8 +103,8 @@ buildBazelPackage {
       owner = "musjj";
       repo = "jp-zip-codes";
       name = repo;
-      rev = "be9cd2ac888a34eba30a425c43a7e54f5187a649";
-      hash = "sha256-02CE/DJnqNXUF0OH3ptq2sb8UbtqKjLKx7Hf0izq+X4=";
+      rev = "cfbb54655223d8e2cea6fedbaef202919d8d62fe";
+      hash = "sha256-ZvZL/6yTE6JrBu4ja7HvyBUKWUAIL0jULii5Im+zmLQ=";
     })
   ];
 
@@ -159,7 +159,7 @@ buildBazelPackage {
       rm -rf $bazelOut/external/qt_linux
     '';
 
-    sha256 = "sha256-qvUkld0DJePrXFX5OJ/ZOp2KIF1AjU0I8EbOeSiZLEY=";
+    sha256 = "sha256-gpRLwbYHPW2o9LkOhO10sOVhtXZr7MPfMRdJympwPyk=";
   };
 
   buildAttrs = {
