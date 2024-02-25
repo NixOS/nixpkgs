@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "nest-asyncio";
-  version = "1.5.6";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "erdewit";
     repo = "nest_asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DxIHDU/3OP3AF/abQs3Y6Im6VUiHYgMmVVh4fDeT8gk=";
+    hash = "sha256-5I5WItOl1QpyI4OXZgZf8GiQ7Jlo+SJbDicIbernaU4=";
   };
 
   nativeBuildInputs = [
