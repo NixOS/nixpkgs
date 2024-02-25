@@ -201,6 +201,7 @@
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/i3lock.nix
+  ./programs/imsprog.nix
   ./programs/iotop.nix
   ./programs/java.nix
   ./programs/k3b.nix
