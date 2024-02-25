@@ -178,6 +178,24 @@ in
         description = lib.mdDoc "Whether to run the server in debug mode.";
       };
 
+      maxServers = mkOption {
+        type = types.int;
+        default = 25;
+        description = lib.mdDoc "Maximum number of starman workers to spawn.";
+      };
+
+      minSpareServers = mkOption {
+        type = types.int;
+        default = 4;
+        description = lib.mdDoc "Minimum number of spare starman workers to keep.";
+      };
+
+      maxSpareServers = mkOption {
+        type = types.int;
+        default = 5;
+        description = lib.mdDoc "Maximum number of spare starman workers to keep.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         description = lib.mdDoc "Extra lines for the Hydra configuration.";
@@ -224,6 +242,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.maxServers != 0 && cfg.maxSpareServers != 0 && cfg.minSpareServers != 0;
+        message = "services.hydra.{minSpareServers,maxSpareServers,minSpareServers} cannot be 0";
+      }
+      {
+        assertion = cfg.minSpareServers < cfg.maxSpareServers;
+        message = "services.hydra.minSpareServers cannot be bigger than servives.hydra.maxSpareServers";
+      }
+    ];
 
     users.groups.hydra = {
       gid = config.ids.gids.hydra;
@@ -258,7 +286,7 @@ in
         using_frontend_proxy = 1
         base_uri = ${cfg.hydraURL}
         notification_sender = ${cfg.notificationSender}
-        max_servers = 25
+        max_servers = ${toString cfg.maxServers}
         ${optionalString (cfg.logo != null) ''
           hydra_logo = ${cfg.logo}
         ''}
@@ -359,8 +387,8 @@ in
         serviceConfig =
           { ExecStart =
               "@${hydra-package}/bin/hydra-server hydra-server -f -h '${cfg.listenHost}' "
-              + "-p ${toString cfg.port} --max_spare_servers 5 --max_servers 25 "
-              + "--max_requests 100 ${optionalString cfg.debugServer "-d"}";
+              + "-p ${toString cfg.port} --min_spare_servers ${toString cfg.minSpareServers} --max_spare_servers ${toString cfg.maxSpareServers} "
+              + "--max_servers ${toString cfg.maxServers} --max_requests 100 ${optionalString cfg.debugServer "-d"}";
             User = "hydra-www";
             PermissionsStartOnly = true;
             Restart = "always";
