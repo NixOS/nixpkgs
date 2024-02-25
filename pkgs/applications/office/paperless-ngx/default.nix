@@ -22,13 +22,13 @@
 }:
 
 let
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v6k9clKNBNb2MQp0BTrUL9zfY6SUKfzaaOycmV8RKyk=";
+    hash = "sha256-fZ5grVZjCVkCH6doeqBLHPh9mPvHkiz+QXi/OyoJhR4=";
   };
 
   python = python3;
@@ -280,7 +280,7 @@ python.pkgs.buildPythonApplication rec {
 
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
-      --replace "--cov --cov-report=html --cov-report=xml" ""
+      --replace-fail "--cov --cov-report=html --cov-report=xml" ""
   '';
 
   disabledTests = [
