@@ -6,18 +6,34 @@ let
   cfg = config.programs.dolphin;
 
   dolphin-stylized = pkgs.libsForQt5.dolphin.overrideAttrs (finalAttrs: previousAttrs: {
-    buildInputs = (previousAttrs.buildInputs or []) ++ [
+    buildInputs = (previousAttrs.buildInputs or [ ]) ++ [
       pkgs.libsForQt5.konsole # for terminal panel
     ] ++ cfg.extraPackages
-    ++ cfg.stylePackages;
+      ++ cfg.stylePackages;
 
-    nativeBuildInputs = (previousAttrs.nativeBuildInputs or []) ++ [
+    nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
       pkgs.makeBinaryWrapper
     ];
 
     # This is needed to select the custom theme
     postInstall = ''
       wrapProgram $out/bin/dolphin --set-default QT_STYLE_OVERRIDE "${cfg.style}"
+    '';
+  });
+
+  kate-stylized = pkgs.libsForQt5.kate.overrideAttrs (finalAttrs: previousAttrs: {
+    buildInputs = (previousAttrs.buildInputs or [ ]) ++ [
+      pkgs.libsForQt5.konsole # for terminal panel
+    ] ++ cfg.extraPackages
+      ++ cfg.stylePackages;
+
+    nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
+      pkgs.makeBinaryWrapper
+    ];
+
+    # This is needed to select the custom theme
+    postInstall = ''
+      wrapProgram $out/bin/kate --set-default QT_STYLE_OVERRIDE "${cfg.style}"
     '';
   });
 in
@@ -46,8 +62,8 @@ in
     stylePackages = mkOption {
       type = with types; listOf package;
       default = with pkgs.libsForQt5; [
-          breeze-qt5
-          breeze-icons
+        breeze-qt5
+        breeze-icons
       ];
       defaultText = literalExpression ''
         with pkgs.libsForQt5; [
@@ -90,6 +106,7 @@ in
 
     environment.systemPackages = [
       dolphin-stylized
+      kate-stylized
     ];
 
     # for mounting hard drives
