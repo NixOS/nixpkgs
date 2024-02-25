@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, cacert
+, nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -10,15 +12,19 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "GAM-team";
-    repo = "GAM";
-    rev = "refs/tags/v${version}";
+    repo = "gam";
+    rev = "v${version}";
     sha256 = "sha256-AIaPzYavbBlJyi9arZN8HTmUXM7Tef0SIfE07PmV9Oo=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "source/src";
+
+  patches = [
+    # Also disables update check
+    ./signal_files_as_env_vars.patch
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    chardet
     cryptography
     distro
     filelock
@@ -26,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     google-auth
     google-auth-oauthlib
     httplib2
-    lxml
     passlib
     pathvalidate
     python-dateutil
@@ -40,7 +45,8 @@ python3.pkgs.buildPythonApplication rec {
   # at build time and then single quotes the vars in the wrapper, thus they
   # wouldn't get expanded. But using --run allows setting default vars that are
   # evaluated on run and not during build time.
-   makeWrapperArgs = [
+  makeWrapperArgs = [
+    ''--set-default GAM_CA_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"''
     ''--run 'export GAMUSERCONFIGDIR="''${XDG_CONFIG_HOME:-$HOME/.config}/gam"' ''
     ''--run 'export GAMSITECONFIGDIR="''${XDG_CONFIG_HOME:-$HOME/.config}/gam"' ''
     ''--run 'export GAMCACHEDIR="''${XDG_CACHE_HOME:-$HOME/.cache}/gam"' ''
@@ -51,8 +57,8 @@ python3.pkgs.buildPythonApplication rec {
     runHook preInstall
     mkdir -p $out/bin
     cp gam.py $out/bin/gam
-    mkdir -p $out/${python3.sitePackages}
-    cp -r gam $out/${python3.sitePackages}
+    mkdir -p $out/lib/${python3.libPrefix}/site-packages
+    cp -r gam $out/lib/${python3.libPrefix}/site-packages
     runHook postInstall
   '';
 
@@ -62,12 +68,15 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Command line management for Google Workspace";
     homepage = "https://github.com/GAM-team/GAM/wiki";
     changelog = "https://github.com/GAM-team/GAM/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ thanegill ];
+    mainProgram = "gam";
   };
 
 }
