@@ -18,7 +18,7 @@ php.buildComposerProject (finalAttrs: {
       --replace "@version-placeholder@" "${finalAttrs.version}"
   '';
 
-  passthru.updateScript = writeShellScript "update-${finalAttrs.pname}" ''
+  passthru.updateScript = writeShellScript "update-platformsh" ''
     set -o errexit
     export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
     NEW_VERSION=$(curl -s https://api.github.com/repos/platformsh/legacy-cli/releases/latest | jq .tag_name --raw-output)

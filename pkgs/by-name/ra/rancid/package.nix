@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
 
     substituteInPlace configure.ac \
-      --replace 'm4_esyscmd(configure.vers package_name),' ${finalAttrs.pname}, \
+      --replace 'm4_esyscmd(configure.vers package_name),' rancid, \
       --replace 'm4_esyscmd(configure.vers package_version),' ${finalAttrs.version},
 
     substituteInPlace etc/rancid.conf.sample.in \
