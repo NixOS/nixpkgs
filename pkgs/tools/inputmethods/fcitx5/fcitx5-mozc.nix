@@ -13,14 +13,14 @@
 
 buildBazelPackage {
   pname = "fcitx5-mozc";
-  version = "unstable-2023-08-18";
+  version = "unstable-2024-02-09";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "mozc";
     fetchSubmodules = true;
-    rev = "198608e08393dd26a81cd091e4916dfbc4196e5e";
-    hash = "sha256-6hTFCohmz+ijwWLQu65kKpiihs7XKqph3/JDwQjSHBw=";
+    rev = "c687b82fccd443917359a5c2a7b9b1c5fd3737c9";
+    hash = "sha256-lXEW7F7ctI7kNdKEjdeYHbyeF8hf6C5AohoWVIfDbjM=";
   };
 
   sourceRoot = "source/src";
@@ -62,7 +62,7 @@ buildBazelPackage {
       rm -rf $bazelOut/external/fcitx5
     '';
 
-    sha256 = "sha256-Ix9l9XPySNShThxubBVqHAHSNA/Lp6bJiMP1kVBqNZo=";
+    sha256 = "sha256-nJbxmF5zbPO7HrFDeI5Ur42ID0M4pqGZoxEF+CBRQ/E=";
   };
 
   buildAttrs = {
