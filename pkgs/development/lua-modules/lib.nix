@@ -74,7 +74,11 @@ rec {
       };
     });
 
-  /* generate luarocks config
+
+  /* generate a luarocks config conforming to:
+    https://github.com/luarocks/luarocks/wiki/Config-file-format
+
+    The config lists folders where to find lua dependencies
 
     Example:
       generateLuarocksConfig {
@@ -89,7 +93,6 @@ rec {
       externalDeps ? []
     # a list of lua derivations
     , requiredLuaRocks ? []
-    , extraVariables ? {}
     , rocksSubdir ? "rocks-subdir"
     , ...
     }@args: let
@@ -119,33 +122,37 @@ rec {
       externalDepsDirs = map
         (x: builtins.toString x)
         (lib.filter (lib.isDerivation) externalDeps);
-  in toLua { asBindings = true; } ({
-    local_cache = "";
-    # To prevent collisions when creating environments, we install the rock
-    # files into per-package subdirectories
-    rocks_subdir = rocksSubdir;
-    # first tree is the default target where new rocks are installed,
-    # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
-    rocks_trees = (
-      [{name = "current"; root = "${placeholder "out"}"; rocks_dir = "current"; }] ++
-      rocksTrees
-    );
-  } // lib.optionalAttrs lua.pkgs.isLuaJIT {
-    # Luajit provides some additional functionality built-in; this exposes
-    # that to luarock's dependency system
-    rocks_provided = {
-      jit = "${lua.luaversion}-1";
-      ffi = "${lua.luaversion}-1";
-      luaffi = "${lua.luaversion}-1";
-      bit = "${lua.luaversion}-1";
-    };
-  } // {
-    # For single-output external dependencies
-    external_deps_dirs = externalDepsDirs;
-    # Some needed machinery to handle multiple-output external dependencies,
-    # as per https://github.com/luarocks/luarocks/issues/766
-    variables = (depVariables // extraVariables);
-  }
-  // removeAttrs args [ "rocksSubdir" "extraVariables" "requiredLuaRocks" "externalDeps" ]
-  );
+
+      generatedConfig = ({
+        local_cache = "";
+
+        # To prevent collisions when creating environments, we install the rock
+        # files into per-package subdirectories
+        rocks_subdir = rocksSubdir;
+
+        # first tree is the default target where new rocks are installed,
+        # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
+        rocks_trees = (
+          [{name = "current"; root = "${placeholder "out"}"; rocks_dir = "current"; }] ++
+          rocksTrees
+        );
+      } // lib.optionalAttrs lua.pkgs.isLuaJIT {
+        # Luajit provides some additional functionality built-in; this exposes
+        # that to luarock's dependency system
+        rocks_provided = {
+          jit = "${lua.luaversion}-1";
+          ffi = "${lua.luaversion}-1";
+          luaffi = "${lua.luaversion}-1";
+          bit = "${lua.luaversion}-1";
+        };
+      } // {
+        # For single-output external dependencies
+        external_deps_dirs = externalDepsDirs;
+        # Some needed machinery to handle multiple-output external dependencies,
+        # as per https://github.com/luarocks/luarocks/issues/766
+        variables = depVariables;
+      }
+      // removeAttrs args [ "requiredLuaRocks" "externalDeps" ]
+      );
+  in generatedConfig;
 }

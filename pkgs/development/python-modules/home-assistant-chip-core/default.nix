@@ -8,6 +8,7 @@
 , autoPatchelfHook
 
 # runtime
+, glib
 , libnl
 , openssl_1_1
 
@@ -59,6 +60,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    glib
     libnl
     openssl_1_1
   ];

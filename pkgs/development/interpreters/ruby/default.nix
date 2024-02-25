@@ -202,7 +202,9 @@ let
 
           # Allow to override compiler. This is important for cross compiling as
           # we need to set a compiler that is different from the build one.
-          sed -i 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/'  "$rbConfig"
+          sed -i "$rbConfig" \
+            -e 's/CONFIG\["CC"\] = "\(.*\)"/CONFIG["CC"] = if ENV["CC"].nil? || ENV["CC"].empty? then "\1" else ENV["CC"] end/' \
+            -e 's/CONFIG\["CXX"\] = "\(.*\)"/CONFIG["CXX"] = if ENV["CXX"].nil? || ENV["CXX"].empty? then "\1" else ENV["CXX"] end/'
 
           # Remove unnecessary external intermediate files created by gems
           extMakefiles=$(find $out/${finalAttrs.passthru.gemPath} -name Makefile)

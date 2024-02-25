@@ -130,6 +130,8 @@ stdenv.mkDerivation rec {
     })
     # Ensures generated desktop files work on store path change
     ./0001-NixOS-Use-anbox-from-PATH-in-desktop-files.patch
+    # Allows android-emugl to build with gtest 1.13+
+    ./0002-NixOS-Build-android-emugl-with-cpp-14.patch
     # Provide window icons
     (fetchpatch {
       url = "https://github.com/samueldr/anbox/commit/2387f4fcffc0e19e52e58fb6f8264fbe87aafe4d.patch";

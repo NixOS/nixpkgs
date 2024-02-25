@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "libunwind";
     repo = "libunwind";
     rev = "v${version}";
-    hash = "sha256-z5YCue0zadQnMEbGFniFvDjXNy6dSHQDQnXRXS6Uh/Y=";
+    hash = "sha256-u33JAgxNy45yhIFL5QDsfa7EtLLKWmCv1kO4BxYYuwM=";
   };
 
   postPatch = if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then ''

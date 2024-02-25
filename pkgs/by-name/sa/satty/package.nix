@@ -16,16 +16,16 @@
 rustPlatform.buildRustPackage rec {
 
   pname = "satty";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "gabm";
     repo = "Satty";
     rev = "v${version}";
-    hash = "sha256-640npBvOO4SZfQI5Tq1FY+B7Bg75YsaoGd/XhWAy9Zs=";
+    hash = "sha256-aE0hQla/FwUAUSVodfQz3s8hdYF6tQSIHl6p5gEtONU=";
   };
 
-  cargoHash = "sha256-H+PnZWNaxdNaPLZmKJIcnEBTnpeXCxGC9cXnzR2hfoc=";
+  cargoHash = "sha256-vARrc49+T813uCzIlB1tSS3eNyNeeCvC+G+LFYAsYx8=";
 
   nativeBuildInputs = [
     copyDesktopItems
