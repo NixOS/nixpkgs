@@ -37850,7 +37850,9 @@ with pkgs;
 
   pacvim = callPackage ../games/pacvim { };
 
-  papermc = callPackage ../games/papermc { };
+  papermcServers = callPackages ../games/papermc { };
+
+  papermc = papermcServers.papermc;
 
   path-of-building = qt6Packages.callPackage ../games/path-of-building {};
 
