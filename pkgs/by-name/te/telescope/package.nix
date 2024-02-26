@@ -4,6 +4,7 @@
 , pkg-config
 , bison
 , libevent
+, libgrapheme
 , libressl
 , ncurses
 , autoreconfHook
@@ -13,14 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "telescope";
-  version = "0.8.1";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9gZeBAC7AGU5vb+692npjKbbqFEAr9iGLu1u68EJ0W8=";
+    hash = "sha256-eGntAAaKSwusm3e0zDXZmV9D5uX/uThPvQ5OjPNsxZ8=";
   };
+
+  postPatch = ''
+    # Remove bundled libraries
+    rm -r libgrapheme
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -30,6 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libevent
+    libgrapheme
     libressl
     ncurses
   ] ++ lib.optional stdenv.isDarwin memstreamHook;
