@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl
-, fetchpatch
 , autoreconfHook
 , perl
 , ps
@@ -16,8 +15,8 @@ stdenv.mkDerivation rec {
   # test fixtures that are part of the repository.
   # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
   src = fetchurl {
-    url = "https://github.com/scop/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-PrBbF4PDOe9Z7Vdq+w9nj6TvSabeimljl98xSPg0Wvk=";
+    url = "https://github.com/scop/bash-completion/releases/download/${version}/bash-completion-${version}.tar.xz";
+    hash = "sha256-PrBbF4PDOe9Z7Vdq+w9nj6TvSabeimljl98xSPg0Wvk=";
   };
 
   strictDeps = true;
