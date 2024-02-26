@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: rec {
             --replace '${"$"}{LIBDIR}/opencollada' \
                       '${opencollada}' \
             --replace '${"$"}{PYTHON_LIBPATH}/site-packages/numpy' \
-                      '${python310Packages.numpy}/${python.sitePackages}/numpy'
+                      '${pythonPackages.numpy}/${python.sitePackages}/numpy'
         ''
       else
         ''
@@ -149,8 +149,8 @@ stdenv.mkDerivation (finalAttrs: rec {
       "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
       "-DPYTHON_LIBPATH=${python}/lib"
       "-DPYTHON_LIBRARY=${python.libPrefix}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python310Packages.numpy}/${python.sitePackages}/numpy/core/include"
-      "-DPYTHON_NUMPY_PATH=${python310Packages.numpy}/${python.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${pythonPackages.numpy}/${python.sitePackages}/numpy/core/include"
+      "-DPYTHON_NUMPY_PATH=${pythonPackages.numpy}/${python.sitePackages}"
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
       "-DWITH_CODEC_FFMPEG=ON"
@@ -198,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       cmake
       llvmPackages.llvm.dev
       makeWrapper
-      python310Packages.wrapPython
+      pythonPackages.wrapPython
     ]
     ++ lib.optionals cudaSupport [
       addOpenGLRunpath
@@ -281,7 +281,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optional spaceNavSupport libspnav;
 
-  pythonPath = with python310Packages; [
+  pythonPath = with pythonPackages; [
     numpy
     requests
     zstandard
