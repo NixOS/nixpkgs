@@ -18,7 +18,6 @@
 , pythonOlder
 , requests-toolbelt
 , routes
-, setuptools
 , setuptools-scm
 , simplejson
 , zc-lockfile
@@ -58,7 +57,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    setuptools
     setuptools-scm
   ];
 
@@ -129,18 +127,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    json = [
-      simplejson
-    ];
-    memcached_session = [
-      python-memcached
-    ];
-    routes_dispatcher = [
-      routes
-    ];
-    ssl = [
-      pyopenssl
-    ];
+    json = [ simplejson ];
+    memcached_session = [ python-memcached ];
+    routes_dispatcher = [ routes ];
+    ssl = [ pyopenssl ];
     # not packaged yet
     xcgi = [ /* flup */ ];
   };
