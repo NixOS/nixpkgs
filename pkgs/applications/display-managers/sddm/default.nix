@@ -1,14 +1,17 @@
 {
+  lib,
   callPackage,
   runCommand,
+  qtwayland,
   wrapQtAppsHook,
   unwrapped ? callPackage ./unwrapped.nix {},
+  withWayland ? false,
   extraPackages ? [],
 }:
 runCommand "sddm-wrapped" {
   inherit (unwrapped) version;
 
-  buildInputs = unwrapped.buildInputs ++ extraPackages;
+  buildInputs = unwrapped.buildInputs ++ extraPackages ++ lib.optional withWayland qtwayland;
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   passthru = {

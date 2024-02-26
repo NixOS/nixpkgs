@@ -7,7 +7,10 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = cfg.package.override(old: { extraPackages = old.extraPackages or [] ++ cfg.extraPackages; });
+  sddm = cfg.package.override(old: {
+    withWayland = cfg.wayland.enable;
+    extraPackages = old.extraPackages or [] ++ cfg.extraPackages;
+  });
 
   iniFmt = pkgs.formats.ini { };
 
