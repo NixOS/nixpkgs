@@ -18130,6 +18130,12 @@
     githubId = 248016;
     name = "Solène Rapenne";
   };
+  sreehax = {
+    email = "me@ssree.dev";
+    github = "sreehax";
+    githubId = 23709124;
+    name = "Sreehari Sreedev";
+  };
   srghma = {
     email = "srghma@gmail.com";
     github = "srghma";
