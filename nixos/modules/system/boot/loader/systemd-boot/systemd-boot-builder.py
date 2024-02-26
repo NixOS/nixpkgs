@@ -88,8 +88,7 @@ def generation_conf_filename(profile: str | None, generation: int, specialisatio
 
 def write_loader_conf(profile: str | None, generation: int, specialisation: str | None) -> None:
     with open(f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf.tmp", 'w') as f:
-        if TIMEOUT != "":
-            f.write(f"timeout {TIMEOUT}\n")
+        f.write(f"timeout {TIMEOUT}\n")
         f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
         if not EDITOR:
             f.write("editor 0\n")
