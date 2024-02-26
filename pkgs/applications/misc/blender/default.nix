@@ -99,12 +99,12 @@ let
   };
 in
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
   version = "4.0.2";
 
   src = fetchurl {
-    url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
+    url = "https://download.blender.org/source/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-qqDnKdp1kc+/RXcq92NFl32qp7EaCvNdmPkxPiRgd6M=";
   };
 
@@ -301,7 +301,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       mv $out/Blender.app $out/Applications
     ''
     + ''
-      mv $out/share/blender/${lib.versions.majorMinor version}/python{,-ext}
+      mv $out/share/blender/${lib.versions.majorMinor finalAttrs.version}/python{,-ext}
       buildPythonPath "$pythonPath"
       wrapProgram $blenderExecutable \
         --prefix PATH : $program_PATH \
@@ -332,7 +332,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       };
 
     tests = {
-      render = runCommand "${pname}-test" { } ''
+      render = runCommand "${finalAttrs.pname}-test" { } ''
         set -euo pipefail
 
         export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib/dri
