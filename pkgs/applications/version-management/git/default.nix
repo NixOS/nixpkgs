@@ -323,12 +323,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
-
-    ${lib.optionalString (!sendEmailSupport) ''
-      # Disable sendmail tests
-      disable_test t9001-send-email
-    ''}
-
+  '' + lib.optionalString (!sendEmailSupport) ''
+    # Disable sendmail tests
+    disable_test t9001-send-email
+  '' + ''
     # XXX: I failed to understand why this one fails.
     # Could someone try to re-enable it on the next release ?
     # Tested to fail: 2.18.0 and 2.19.0
@@ -342,12 +340,11 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t0021-conversion
     disable_test t3910-mac-os-precompose
 
-    ${lib.optionalString (!perlSupport) ''
-      # request-pull is a Bash script that invokes Perl, so it is not available
-      # when NO_PERL=1, and the test should be skipped, but the test suite does
-      # not check for the Perl prerequisite.
-      disable_test t5150-request-pull
-    ''}
+  '' + lib.optionalString (!perlSupport) ''
+    # request-pull is a Bash script that invokes Perl, so it is not available
+    # when NO_PERL=1, and the test should be skipped, but the test suite does
+    # not check for the Perl prerequisite.
+    disable_test t5150-request-pull
   '' + lib.optionalString stdenv.isDarwin ''
     # XXX: Some tests added in 2.24.0 fail.
     # Please try to re-enable on the next release.
