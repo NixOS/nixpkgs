@@ -413,25 +413,28 @@ else let
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
     } // optionalAttrs (stdenv.buildPlatform.isDarwin) (
       let
+        allDependencies = concatLists (concatLists dependencies);
+        allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
+
         computedSandboxProfile =
           concatMap (input: input.__propagatedSandboxProfile or [])
             (stdenv.extraNativeBuildInputs
             ++ stdenv.extraBuildInputs
-            ++ concatLists dependencies);
+            ++ allDependencies);
 
         computedPropagatedSandboxProfile =
           concatMap (input: input.__propagatedSandboxProfile or [])
-            (concatLists propagatedDependencies);
+            allPropagatedDependencies;
 
         computedImpureHostDeps =
           unique (concatMap (input: input.__propagatedImpureHostDeps or [])
             (stdenv.extraNativeBuildInputs
             ++ stdenv.extraBuildInputs
-            ++ concatLists dependencies));
+            ++ allDependencies));
 
         computedPropagatedImpureHostDeps =
           unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-            (concatLists propagatedDependencies));
+            allPropagatedDependencies);
     in {
       inherit __darwinAllowLocalNetworking;
       # TODO: remove `unique` once nix has a list canonicalization primitive
