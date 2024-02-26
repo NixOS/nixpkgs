@@ -1085,6 +1085,8 @@ with pkgs;
 
   ruler = callPackage ../tools/security/ruler { };
 
+  magika = with python3Packages; toPythonApplication magika;
+
   mblock-mlink = callPackage ../development/tools/mblock-mlink { };
 
   mod = callPackage ../development/tools/mod { };
