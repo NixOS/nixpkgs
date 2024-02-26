@@ -12700,6 +12700,12 @@
     githubId = 635591;
     name = "Shahar Dawn Or";
   };
+  mihaimaruseac = {
+    email = "mihaimaruseac@gmail.com";
+    github = "mihaimaruseac";
+    githubId = 323199;
+    name = "Mihai Maruseac";
+  };
   mihnea-s = {
     email = "mihn.stn@gmail.com";
     github = "mihnea-s";
