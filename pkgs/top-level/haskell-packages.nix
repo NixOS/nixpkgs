@@ -9,25 +9,18 @@ let
     "ghc8107"
   ];
 
-  nativeBignumIncludes = [
-    "ghc90"
-    "ghc902"
-    "ghc92"
-    "ghc925"
-    "ghc926"
-    "ghc927"
-    "ghc928"
-    "ghc94"
-    "ghc945"
-    "ghc946"
-    "ghc947"
-    "ghc948"
-    "ghc96"
-    "ghc963"
-    "ghc964"
-    "ghc98"
-    "ghc981"
-    "ghcHEAD"
+  nativeBignumExcludes = integerSimpleIncludes ++ [
+    # haskell.compiler sub groups
+    "integer-simple"
+    "native-bignum"
+    # Binary GHCs
+    "ghc865Binary"
+    "ghc8107Binary"
+    "ghc924Binary"
+    "ghc963Binary"
+    # ghcjs
+    "ghcjs"
+    "ghcjs810"
   ];
 
   haskellLibUncomposable = import ../development/haskell-modules/lib {
@@ -357,7 +350,7 @@ in {
     # with "native" and "gmp" backends.
     native-bignum = let
       nativeBignumGhcNames = pkgs.lib.filter
-        (name: builtins.elem name nativeBignumIncludes)
+        (name: !(builtins.elem name nativeBignumExcludes))
         (pkgs.lib.attrNames compiler);
     in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       nativeBignumGhcNames
@@ -502,7 +495,7 @@ in {
     native-bignum =
       let
         nativeBignumGhcNames = pkgs.lib.filter
-          (name: builtins.elem name nativeBignumIncludes)
+          (name: !(builtins.elem name nativeBignumExcludes))
           (pkgs.lib.attrNames compiler);
       in
       pkgs.lib.genAttrs nativeBignumGhcNames
