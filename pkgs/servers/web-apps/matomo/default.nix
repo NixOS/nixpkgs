@@ -3,8 +3,8 @@
 let
   versions = {
     matomo = {
-      version = "4.16.0";
-      hash = "sha256-OFZT4195WTWw2XNAyGiNixW6hSNKC3IyBpa5kM9PCVk=";
+      version = "4.16.1";
+      hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
     };
     matomo_5 = {
       version = "5.0.2";
