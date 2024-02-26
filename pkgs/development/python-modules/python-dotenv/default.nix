@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qN+WA0qubS1QpOvoIWMmxhw+tkg2d2UE/MpBDlk3o7o=";
+    hash = "sha256-4yTukKAj2AjxlZxGvLwERGoQztJ3eD3G7gmYfDfsEMo=";
   };
 
   propagatedBuildInputs = [ click ];
