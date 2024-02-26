@@ -48,7 +48,7 @@
 , OpenGL
 , audiofile
 , libiconv
-, withStatic ? false
+, withStatic ? stdenv.hostPlatform.isMinGW
   # passthru.tests
 , testers
 }:
