@@ -29,6 +29,12 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
+    noCentralLog = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc "Opt-out of centralized logging. If you block client logging, Tailscale may not be able to provide technical support.";
+    };
+
     package = lib.mkPackageOption pkgs "tailscale" {};
 
     openFirewall = mkOption {
@@ -83,6 +89,8 @@ in {
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+      ]) ++ (lib.optionals (cfg.noCentralLog == true) [
+        "TS_NO_LOGS_NO_SUPPORT=true"
       ]);
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
