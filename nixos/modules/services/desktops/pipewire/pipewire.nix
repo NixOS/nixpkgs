@@ -43,6 +43,21 @@ let
       ++ lib.optionals cfg.wireplumber.enable cfg.wireplumber.configPackages;
     pathsToLink = [ "/share/pipewire" ];
   };
+
+  requiredLv2Packages = lib.flatten
+    (
+      lib.concatMap
+      (p:
+        lib.attrByPath ["passthru" "requiredLv2Packages"] [] p
+      )
+      configPackages
+    );
+
+  lv2Plugins = pkgs.buildEnv {
+    name = "pipewire-lv2-plugins";
+    paths = cfg.extraLv2Packages ++ requiredLv2Packages;
+    pathsToLink = [ "/lib/lv2" ];
+  };
 in {
   meta.maintainers = teams.freedesktop.members ++ [ lib.maintainers.k900 ];
 
@@ -233,6 +248,21 @@ in {
           `share/pipewire/*/*.conf` files.
         '';
       };
+
+      extraLv2Packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+        example = lib.literalExpression "[ pkgs.lsp-plugins ]";
+        description = lib.mdDoc ''
+          List of packages that provide LV2 plugins in `lib/lv2` that should
+          be made available to PipeWire for [filter chains][wiki-filter-chain].
+
+          Config packages have their required LV2 plugins added automatically,
+          so they don't need to be specified here.
+
+          [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
+        '';
+      };
     };
   };
 
@@ -281,6 +311,9 @@ in {
     systemd.services.pipewire.enable = cfg.systemWide;
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
     systemd.user.services.pipewire.enable = !cfg.systemWide;
+
+    systemd.services.pipewire.environment.LV2_PATH = lib.mkIf cfg.systemWide "${lv2Plugins}/lib/lv2";
+    systemd.user.services.pipewire.environment.LV2_PATH = lib.mkIf (!cfg.systemWide) "${lv2Plugins}/lib/lv2";
 
     # Mask pw-pulse if it's not wanted
     systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable;
