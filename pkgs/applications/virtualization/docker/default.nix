@@ -120,7 +120,7 @@ rec {
       ];
 
       postPatch = ''
-        patchShebangs hack/make.sh hack/make/
+        patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
       '';
 
       buildPhase = ''
@@ -303,6 +303,20 @@ rec {
     runcHash = "sha256-rDJYEc64KW4Qa3Eg2oUjJqIKrg6THb5hxQFFbvb9Zp4=";
     containerdRev = "v1.7.1";
     containerdHash = "sha256-WwedtcsrDQwMQcKFO5nnPiHyGJpl5hXZlmpbBe1/ftY=";
+    tiniRev = "v0.19.0";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+  };
+
+  docker_25 = callPackage dockerGen rec {
+    version = "25.0.3";
+    cliRev = "v${version}";
+    cliHash = "sha256-Jvb0plV1O/UzrcpzN4zH5OulmTVF+p9UQQQ9xqkiObQ=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-cDlRVdQNzH/X2SJUYHK1QLUHlKQtSyRYCVbz3wPx1ZM=";
+    runcRev = "v1.1.12";
+    runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
+    containerdRev = "v1.7.13";
+    containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
