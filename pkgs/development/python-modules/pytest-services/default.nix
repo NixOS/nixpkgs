@@ -1,23 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
-, requests
+, fetchFromGitHub
 , psutil
+, pylibmc
 , pytest
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
 , setuptools-scm
 , toml
+, mysqlclient
 , zc-lockfile
 }:
 
 buildPythonPackage rec {
   pname = "pytest-services";
   version = "2.2.1";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2da740487d08ea63dfdf718f5d4ba11e590c99ddf5481549edebf7a3a42ca536";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-services";
+    rev = "refs/tags/${version}";
+    hash = "sha256-E/VcKcAb1ekypm5jP4lsSz1LYJTcTSed6i5OY5ihP30=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +41,27 @@ buildPythonPackage rec {
     zc-lockfile
   ];
 
-  # no tests in PyPI tarball
-  doCheck = false;
+  nativeCheckInputs = [
+    mysqlclient
+    pylibmc
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pytest_services" ];
+  pythonImportsCheck = [
+    "pytest_services"
+  ];
+
+  disabledTests = [
+    # Tests require binaries and additional parts
+    "test_memcached"
+    "test_mysql"
+    "test_xvfb "
+  ];
 
   meta = with lib; {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";
+    changelog = "https://github.com/pytest-dev/pytest-services/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
