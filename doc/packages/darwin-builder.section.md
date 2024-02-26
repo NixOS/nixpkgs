@@ -97,6 +97,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
         { virtualisation = {
             host.pkgs = pkgs;
             darwin-builder.workingDirectory = "/var/lib/darwin-builder";
+            darwin-builder.hostPort = 22;
           };
         }
       ];
@@ -110,7 +111,9 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
           {
             nix.distributedBuilds = true;
             nix.buildMachines = [{
-              hostName = "ssh://builder@localhost";
+              hostName = "localhost";
+              sshUser = "builder";
+              sshKey = "/etc/nix/builder_ed25519";
               system = linuxSystem;
               maxJobs = 4;
               supportedFeatures = [ "kvm" "benchmark" "big-parallel" ];
