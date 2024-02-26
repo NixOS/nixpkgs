@@ -35981,7 +35981,7 @@ with pkgs;
 
   vkeybd = callPackage ../applications/audio/vkeybd { };
 
-  vlc = libsForQt5.callPackage ../applications/video/vlc { };
+  vlc = callPackage ../applications/video/vlc { };
 
   libvlc = vlc.override {
     withQt5 = false;
