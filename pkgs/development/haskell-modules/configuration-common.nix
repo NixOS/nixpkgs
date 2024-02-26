@@ -309,6 +309,18 @@ self: super: {
   # > https://github.com/roelvandijk/numerals
   numerals = doJailbreak (dontCheck super.numerals);
 
+  # Bound on containers is too strict but jailbreak doesn't work with conditional flags
+  # https://github.com/NixOS/jailbreak-cabal/issues/24
+  containers-unicode-symbols = overrideCabal {
+    postPatch = ''
+      substituteInPlace containers-unicode-symbols.cabal \
+        --replace 'containers >= 0.5 && < 0.6.5' 'containers'
+    '';
+  } super.containers-unicode-symbols;
+
+  # Test file not included on hackage
+  numerals-base = dontCheck (doJailbreak super.numerals-base);
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
