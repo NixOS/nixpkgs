@@ -281,11 +281,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional jackaudioSupport libjack2
     ++ lib.optional spaceNavSupport libspnav;
 
-  pythonPath = with pythonPackages; [
-    numpy
-    requests
-    zstandard
-  ];
+  pythonPath =
+    let
+      ps = pythonPackages;
+    in
+    [
+      ps.numpy
+      ps.requests
+      ps.zstandard
+    ];
 
   # Since some dependencies are built with gcc 6, we need gcc 6's
   # libstdc++ in our RPATH. Sigh.
@@ -368,20 +372,20 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
-    license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
+    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport unfree;
     platforms = [
       "aarch64-linux"
       "x86_64-darwin"
       "x86_64-linux"
     ];
     broken = stdenv.isDarwin;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       goibhniu
       veprbl
     ];
