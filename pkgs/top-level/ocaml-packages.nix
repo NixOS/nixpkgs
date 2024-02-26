@@ -824,8 +824,6 @@ let
         cfstream = self.cfstream.override { inherit core_kernel; };
       };
 
-      magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
-
       phylogenetics = let
         angstrom = self.angstrom.override { inherit ppx_let; };
       in callPackage ../development/ocaml-modules/phylogenetics {
@@ -1022,7 +1020,7 @@ let
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
-    magic-trace = janeStreet_0_15.magic-trace;
+    magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
 
     mariadb = callPackage ../development/ocaml-modules/mariadb {
       inherit (pkgs) mariadb;
