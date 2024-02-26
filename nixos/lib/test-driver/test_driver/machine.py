@@ -208,7 +208,6 @@ class StartCommand:
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
             shell=True,
             cwd=state_dir,
             env=self.build_environment(state_dir, shared_dir),
