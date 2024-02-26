@@ -408,10 +408,6 @@ in
       ];
 
       services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-workspace ];
-      # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
-      # many tiny bugs.
-      # See: https://github.com/NixOS/nixpkgs/issues/143272
-      services.xserver.displayManager.defaultSession = mkDefault "plasma";
 
       environment.systemPackages =
         with pkgs.plasma5Packages;
