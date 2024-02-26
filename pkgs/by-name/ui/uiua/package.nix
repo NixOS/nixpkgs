@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional audioSupport "audio";
 
+  passthru.updateScript = ./update.sh;
   passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
     uiua init
     diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
