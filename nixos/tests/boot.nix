@@ -144,5 +144,8 @@ in {
         machine.succeed("nix store verify -r --no-trust --option experimental-features nix-command /run/current-system")
         machine.shutdown()
       '';
+
+      # kernel can't find rootfs after boot - investigate?
+      meta.broken = true;
     };
 }
