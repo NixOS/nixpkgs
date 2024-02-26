@@ -2604,6 +2604,8 @@ self: super: with self; {
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
 
+  daff = callPackage ../development/python-modules/daff { };
+
   daiquiri = callPackage ../development/python-modules/daiquiri { };
 
   dalle-mini = callPackage ../development/python-modules/dalle-mini { };
