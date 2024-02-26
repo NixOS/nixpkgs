@@ -1743,6 +1743,12 @@
     githubId = 113123021;
     name = "Ashvith Shetty";
   };
+  asininemonkey = {
+    email = "nixpkgs@asininemonkey.com";
+    github = "asininemonkey";
+    githubId = 65740649;
+    name = "Jose Cardoso";
+  };
   aske = {
     email = "aske@fmap.me";
     github = "aske";
@@ -1754,6 +1760,15 @@
     github = "asppsa";
     githubId = 453170;
     name = "Alastair Pharo";
+  };
+  aspulse = {
+    email = "contact@aspulse.dev";
+    github = "aspulse";
+    githubId = 84216737;
+    name = "AsPulse / あすぱる";
+    keys = [{
+      fingerprint = "C919 E69E A7C0 E147 9E0F  C26E 1EDA D0C6 70BD 062D";
+    }];
   };
   astavie = {
     email = "astavie@pm.me";
@@ -15925,6 +15940,12 @@
     github = "rardiol";
     githubId = 11351304;
     name = "Ricardo Ardissone";
+  };
+  raroh73 = {
+    email = "me@raroh73.com";
+    github = "Raroh73";
+    githubId = 96078496;
+    name = "Raroh73";
   };
   rasendubi = {
     email = "rasen.dubi@gmail.com";

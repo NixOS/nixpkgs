@@ -33,6 +33,7 @@ in
           nativeBuildInputs = oa.nativeBuildInputs or [] ++ [
             lua.pkgs.luarocksMoveDataFolder
           ];
+          version = "${originalLuaDrv.version}-unstable-${oa.version}";
         }));
     in
       finalDrv

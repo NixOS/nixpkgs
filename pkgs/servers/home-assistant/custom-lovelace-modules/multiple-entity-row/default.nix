@@ -6,13 +6,13 @@
 
 mkYarnPackage rec {
   pname = "multiple-entity-row";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "benct";
     repo = "lovelace-multiple-entity-row";
     rev = "v${version}";
-    hash = "sha256-3CkBzxB3bX4jwk71PaRMX1MkAb6UVOBqZCYpTN7VORY=";
+    hash = "sha256-CXRgXyH1NUg7ssQhenqP0tXr1m2qOkHna3Rf30K3SjI=";
   };
 
   packageJSON = ./package.json;

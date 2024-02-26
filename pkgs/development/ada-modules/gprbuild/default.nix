@@ -54,7 +54,10 @@ stdenv.mkDerivation {
   # link gprconfig_kb db from gprbuild-boot into build dir,
   # the install process copies its contents to $out
   preInstall = ''
-    ln -sf ${gprbuild-boot}/share/gprconfig share/gprconfig
+    # Use PATH to discover spliced gprbuild-boot from buildPackages,
+    # since path interpolation would give us gprbuild-boot from pkgsHostTarget
+    gprbuild_boot="$(dirname "$(type -p gprbuild)")/.."
+    ln -sf "$gprbuild_boot/share/gprconfig" share/gprconfig
   '';
 
   # no need for the install script
