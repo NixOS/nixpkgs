@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "duden";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "0.19.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "radomirbosak";
     repo = "duden";
     rev = version;
-    hash = "sha256-ZrarN09Znw4m6YiZxD7q7dTJ49WjmHDobLnOt8JCwvc=";
+    hash = "sha256-c6IItrjFVbsdYg3sDrExcxv7aRcKhd/M5hiZD+wBZ2Y=";
   };
 
   nativeBuildInputs = [
