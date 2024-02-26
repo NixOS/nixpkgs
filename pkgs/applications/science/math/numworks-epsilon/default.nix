@@ -9,17 +9,18 @@
 , imagemagick
 , gcc-arm-embedded
 , pkg-config
+, python311Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "numworks-epsilon";
-  version = "15.5.0";
+  version = "22.2.0";
 
   src = fetchFromGitHub {
     owner = "numworks";
     repo = "epsilon";
     rev = version;
-    sha256 = "fPBO3FzZ4k5OxG+Ifc6R/au4Te974HNKAEdHz+aFdSg=";
+    sha256 = "sha256-E2WaXTn8+Ky9kdZxvQmEt63Ggo6Ns0fZ0Za+rQGIMSg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,17 +32,18 @@ stdenv.mkDerivation rec {
     python3
     imagemagick
     gcc-arm-embedded
+    python311Packages.lz4
   ];
 
   makeFlags = [
     "PLATFORM=simulator"
   ];
 
-  patches = [
-    # Remove make rule Introduced in cba596dde7
-    # which causes it to not build with nix
-    ./0001-ion-linux-makerules.patch
-  ];
+  # patches = [
+  #   # Remove make rule Introduced in cba596dde7
+  #   # which causes it to not build with nix
+  #   ./0001-ion-linux-makerules.patch
+  # ];
 
   installPhase = ''
     runHook preInstall
