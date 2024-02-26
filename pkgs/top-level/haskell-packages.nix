@@ -317,7 +317,7 @@ in {
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc963
         else
-          packages.ghc948;
+          packages.ghc963Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
