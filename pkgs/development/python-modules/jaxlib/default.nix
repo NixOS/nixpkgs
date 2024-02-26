@@ -54,7 +54,7 @@ let
   inherit (cudaPackagesGoogle) autoAddDriverRunpath cudaFlags cudaVersion cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.4.24";
+  version = "0.4.25";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -180,18 +180,9 @@ let
       owner = "openxla";
       repo = "xla";
       # Update this according to https://github.com/google/jax/blob/jaxlib-v${version}/third_party/xla/workspace.bzl.
-      rev = "12eee889e1f2ad41e27d7b0e970cb92d282d3ec5";
-      hash = "sha256-68kjjgwYjRlcT0TVJo9BN6s+WTkdu5UMJqQcfHpBT90=";
+      rev = "541962e88f52237bc6050e4c8d7270e7c7e12b4e";
+      hash = "sha256-0BCQGF3ZruffQ5Rg7alRMaaus9GRdHpdceClWqnCkPQ=";
     };
-
-    patches = [
-      # Resolves "could not convert ‘result’ from ‘SmallVector<[...],6>’ to
-      # ‘SmallVector<[...],4>’" compilation error. See https://github.com/google/jax/issues/19814#issuecomment-1945141259.
-      (fetchpatch {
-        url = "https://github.com/openxla/xla/commit/7a614cd346594fc7ea2fe75570c9c53a4a444f60.patch";
-        hash = "sha256-RtuQTH8wzNiJcOtISLhf+gMlH1gg8hekvxEB+4wX6BM=";
-      })
-    ];
 
     dontBuild = true;
 
@@ -219,7 +210,7 @@ let
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
-      hash = "sha256-hmx7eo3pephc6BQfoJ3U0QwWBWmhkAc+7S4QmW32qQs=";
+      hash = "sha256-poQQo2ZgEhPYzK3aCs+BjaHTNZbezJAECd+HOdY1Yok=";
     };
 
     nativeBuildInputs = [
@@ -363,10 +354,10 @@ let
       ];
 
       sha256 = (if cudaSupport then {
-        x86_64-linux = "sha256-IEKoHjCOtKZKvU/DUUjbvXldORFJuyO1R3F6CZZDXxM=";
+        x86_64-linux = "";
       } else {
-        x86_64-linux = "sha256-IE4+Tk4llo85u3NjakvY04tPw4R1bidyecPpQ4gknR8=";
-        aarch64-linux = "sha256-NehnpA4m+Fynvh0S6WKy/v9ab81487NE9ahvbS70wjY=";
+        x86_64-linux = "sha256-aNhbmz9hWBQHWtZ+L/md86o4BZW5aDzpVTH/uNJDIyw=";
+        aarch64-linux = "sha256-v+s5Gx/Hj9HjwjiIRR8z8LzMHKtrtIO5N1wsLW+a13I=";
       }).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
     };
 
