@@ -266,9 +266,14 @@ in {
   config = let
     cfg = config.services.slskd;
 
-    confWithoutNullValues = (lib.filterAttrsRecursive (key: value: (builtins.tryEval value).success && value != null) cfg.settings);
+    filteredSettings = lib.filterAttrsRecursive (_: value: (builtins.tryEval value).success && value != null) cfg.settings;
+    settingsFile = settingsFormat.generate "slskd.yml" filteredSettings;
 
-    configurationYaml = settingsFormat.generate "slskd.yml" confWithoutNullValues;
+    # Install configuration file (to make it editable at runtime)
+    slskd-prestart = pkgs.writeShellScript "slskd-prestart" ''
+      set -eu
+      install -D -m 600 -o ${cfg.user} -g ${cfg.group} ${settingsFile} /var/lib/slskd/slsksd.yml
+    '';
 
   in lib.mkIf cfg.enable {
 
@@ -306,7 +311,8 @@ in {
         Group = cfg.group;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = "slskd";  # Creates /var/lib/slskd and manages permissions
-        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config ${configurationYaml}";
+        ExecStartPre = "+" + slskd-prestart;
+        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config /var/lib/slskd/slskd.yml";
         Restart = "on-failure";
         ReadOnlyPaths = map (d: builtins.elemAt (builtins.split "[^/]*(/.+)" d) 1) cfg.settings.shares.directories;
         ReadWritePaths =
