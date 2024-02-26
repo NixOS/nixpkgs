@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , fetchFromGitHub
 , gtk3
 , pythonPackages
@@ -10,8 +9,8 @@
 , gobject-introspection
 , wrapGAppsHook
 , gettext
-, # Optional packages:
-  enableOSM ? true
+  # Optional packages:
+, enableOSM ? true
 , osm-gps-map
 , glib-networking
 , enableGraphviz ? true
@@ -21,12 +20,28 @@
 }:
 
 let
-  inherit (pythonPackages) python buildPythonApplication;
+  inherit (pythonPackages) buildPythonApplication pythonOlder;
 in
 buildPythonApplication rec {
-  version = "5.1.6";
+  version = "5.2.0";
   pname = "gramps";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "gramps-project";
+    repo = "gramps";
+    rev = "v${version}";
+    hash = "sha256-8iQcaWLiBegVjcV16TfZbp8/4N/9f5pEl7mdV78CeEY=";
+  };
+
+  patches = [
+    # textdomain doesn't exist as a property on locale when running on Darwin
+    ./check-locale-hasattr-textdomain.patch
+    # disables the startup warning about bad GTK installation
+    ./disable-gtk-warning-dialog.patch
+  ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -38,6 +53,7 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [
     glibcLocales
+    pythonPackages.unittestCheckHook
     pythonPackages.jsonschema
     pythonPackages.mock
     pythonPackages.lxml
@@ -52,55 +68,25 @@ buildPythonApplication rec {
     ++ lib.optional enableGhostscript ghostscript
   ;
 
-  src = fetchFromGitHub {
-    owner = "gramps-project";
-    repo = "gramps";
-    rev = "v${version}";
-    hash = "sha256-BerkDXdFYfZ3rV5AeMo/uk53IN2U5z4GFs757Ar26v0=";
-  };
-
-  pythonPath = with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
     bsddb3
     pyicu
     pygobject3
     pycairo
   ];
 
-  patches = [
-    # fix for running tests with a temporary home - remove next release
-    # https://gramps-project.org/bugs/view.php?id=12577
-    (fetchpatch {
-      url = "https://github.com/gramps-project/gramps/commit/1e95d8a6b5193d655d8caec1e6ab13628ad123db.patch";
-      hash = "sha256-2riWB13Yl+tk9+Tuo0YDLoxY2Rc0xrJKfb+ZU7Puzxk=";
-    })
-  ];
-
-  # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
-  # install flag.
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/${python.sitePackages}"
-
-    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/${python.sitePackages} \
-      --prefix="$out"
-
-    eapth="$out/${python.sitePackages}/easy-install.pth"
-    if [ -e "$eapth" ]; then
-        # move colliding easy_install.pth to specifically named one
-        mv "$eapth" $(dirname "$eapth")/${pname}-${version}.pth
-    fi
-
-    rm -f "$out/${python.sitePackages}"/site.py*
-
-    runHook postInstall
-  '';
 
   preCheck = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
+    mkdir .git # Make gramps think that it's not in an installed state
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+    )
   '';
 
   # https://github.com/NixOS/nixpkgs/issues/149812
@@ -111,8 +97,8 @@ buildPythonApplication rec {
     description = "Genealogy software";
     mainProgram = "gramps";
     homepage = "https://gramps-project.org";
-    maintainers = with maintainers; [ jk pinpox ];
-    changelog = "https://github.com/gramps-project/gramps/blob/v${version}/ChangeLog";
+    maintainers = with maintainers; [ jk pinpox tomasajt ];
+    changelog = "https://github.com/gramps-project/gramps/blob/${src.rev}/ChangeLog";
     longDescription = ''
       Every person has their own story but they are also part of a collective
       family history. Gramps gives you the ability to record the many details of
