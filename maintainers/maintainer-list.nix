@@ -17261,6 +17261,12 @@
     githubId = 1286668;
     name = "Thilo Uttendorfer";
   };
+  sentientmonkey = {
+    email = "swindsor@gmail.com";
+    github = "sentientmonkey";
+    githubId = 9032;
+    name = "Scott Windsor";
+  };
   sents = {
     email = "finn@krein.moe";
     github = "sents";
