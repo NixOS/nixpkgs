@@ -137,10 +137,15 @@ in {
     filteredSettings = lib.filterAttrsRecursive (_: value: value != null) cfg.settings;
     settingsFile = settingsFormat.generate "slskd.yml" filteredSettings;
 
+    # Error redirection to /dev/null prevents unwanted password leak into the
+    # logs through the error message of `jq`, should it happen
     slskd-prestart = pkgs.writeShellScript "slskd-prestart" ''
       set -eu
-      ${pkgs.yq}/bin/yq -Y ".soulseek.password += \"$(< '${cfg.passwordFile}')\"" < '${settingsFile}' |
-        install -D -m 600 -o slskd -g slskd /dev/stdin /var/lib/slskd/slskd.yml
+      ${pkgs.yq}/bin/yq -Y \
+        --arg password "$(<'${cfg.passwordFile}')" \
+        '.soulseek += $ARGS.named' \
+        <'${settingsFile}' 2>/dev/null |
+          install -D -m 600 -o slskd -g slskd /dev/stdin /var/lib/slskd/slskd.yml
     '';
 
   in lib.mkIf cfg.enable {
