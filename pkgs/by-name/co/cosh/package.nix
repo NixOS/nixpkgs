@@ -29,16 +29,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildPhase = ''
-runHook preBuild
-make prefix=$out all
-runHook postBuild
-'';
+    runHook preBuild
+    make prefix=$out all
+    runHook postBuild
+  '';
 
   installPhase = ''
-runHook preInstall
-make prefix=$out install
-runHook postInstall
-'';
+    runHook preInstall
+    make prefix=$out install
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/tomhrr/cosh";
