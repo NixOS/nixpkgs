@@ -5,7 +5,7 @@ let
   defaultUser = "slskd";
 in {
   options.services.slskd = with lib; with types; {
-    enable = mkEnableOption "enable slskd";
+    enable = mkEnableOption "slskd";
 
     package = mkPackageOptionMD pkgs "slskd" { };
 
@@ -21,27 +21,39 @@ in {
       description = "Group under which slskd runs.";
     };
 
-    domain = mkOption {
-      type = types.nullOr types.str;
-      description = ''
-        If non-null, enables an nginx reverse proxy virtual host at this FQDN,
-        at the path configurated with `services.slskd.web.url_base`.
-      '';
-      example = "slskd.example.com";
-    };
-
     nginx = mkOption {
-      type = types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
-      default = {};
-      example = lib.literalExpression ''
-        {
-          enableACME = true;
-          forceHttps = true;
-        }
-      '';
-      description = ''
-        This option customizes the nginx virtual host set up for slskd.
-      '';
+      description = mdDoc "options for nginx";
+      example = {
+        enable = true;
+        domain = "example.com";
+        contextPath = "/slskd";
+      };
+      type = submodule {
+        options = {
+          enable = mkEnableOption "nginx as a reverse proxy";
+
+          domainName = mkOption {
+            type = str;
+            description = "The domain to use";
+          };
+          contextPath = mkOption {
+            type = path;
+            default = "/";
+            description = mdDoc ''
+              The context path, i.e., the last part of the slskd
+              URL. Typically '/' or '/slskd'. Default '/'
+            '';
+          };
+          bindAddress = mkOption {
+            type = str;
+            default = "localhost";
+            example = "10.0.0.1";
+            description = mdDoc ''
+              The address at which slskd serves its web interface.
+            '';
+          };
+        };
+      };
     };
 
     environmentFile = mkOption {
@@ -274,6 +286,16 @@ in {
       "${defaultUser}" = {};
     };
 
+    # Reverse proxy configuration
+    services.nginx = lib.mkIf cfg.nginx.enable {
+      enable = true;
+      virtualHosts.${cfg.nginx.domainName}.locations.${cfg.nginx.contextPath} = {
+        proxyPass =
+          "http://${toString cfg.nginx.bindAddress}:${toString cfg.settings.web.port}";
+        proxyWebsockets = true;
+      };
+    };
+
     systemd.services.slskd = {
       description = "A modern client-server application for the Soulseek file sharing network";
       after = [ "network.target" ];
@@ -312,19 +334,6 @@ in {
     };
 
     networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.settings.soulseek.listen_port;
-
-    services.nginx = lib.mkIf (cfg.domain != null) {
-      enable = lib.mkDefault true;
-      virtualHosts."${cfg.domain}" = lib.mkMerge [
-        cfg.nginx
-        {
-          locations."${cfg.settings.web.url_base}" = {
-            proxyPass = "http://127.0.0.1:${toString cfg.settings.web.port}";
-            proxyWebsockets = true;
-          };
-        }
-      ];
-    };
   };
 
   meta = {
