@@ -3,9 +3,7 @@
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
-, fetchurl
 , buildPackages
-, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , fixDarwinDylibNames
 , glibcLocales ? null, procps ? null
@@ -86,7 +84,7 @@ in {
 
     dontFixCmake = true;
 
-    inherit lua treesitter-parsers;
+    inherit lua;
 
     buildInputs = [
       gperf
@@ -162,18 +160,7 @@ in {
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '' + ''
-      mkdir -p $out/lib/nvim/parser
-    '' + lib.concatStrings (lib.mapAttrsToList
-      (language: src: ''
-        ln -s \
-          ${tree-sitter.buildGrammar {
-            inherit language src;
-            version = "neovim-${finalAttrs.version}";
-          }}/parser \
-          $out/lib/nvim/parser/${language}.so
-      '')
-      finalAttrs.treesitter-parsers);
+    '';
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
