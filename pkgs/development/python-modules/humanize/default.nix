@@ -6,6 +6,7 @@
   gettext,
   pytestCheckHook,
   pythonOlder,
+  python,
   hatch-vcs,
   hatchling,
 }:
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    cp -r 'src/humanize/locale' "$out/lib/"*'/site-packages/humanize/'
+    cp -r 'src/humanize/locale' "$out/${python.sitePackages}/humanize/"
   '';
 
   nativeCheckInputs = [
