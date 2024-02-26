@@ -1522,22 +1522,7 @@ let
         };
       };
 
-      equinusocio.vsc-material-theme = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vsc-material-theme";
-          publisher = "Equinusocio";
-          version = "33.8.0";
-          sha256 = "sha256-+I4AUwsrElT62XNvmuAC2iBfHfjNYY0bmAqzQvfwUYM=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/Equinusocio.vsc-material-theme/changelog";
-          description = "The most epic theme now for Visual Studio Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme";
-          homepage = "https://github.com/material-theme/vsc-material-theme";
-          license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.stunkymonkey ];
-        };
-      };
+      equinusocio.vsc-material-theme = callPackage ./equinusocio.vsc-material-theme { };
 
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {

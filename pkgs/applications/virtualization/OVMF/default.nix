@@ -154,9 +154,14 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     )
   '';
 
+  # TODO: Usage of -bios OVMF.fd is discouraged: https://lists.katacontainers.io/pipermail/kata-dev/2021-January/001650.html
+  # We should remove the isx86-specifc block here once we're ready to update nixpkgs to stop using that and update the
+  # release notes accordingly.
   postInstall = ''
     mkdir -vp $fd/FV
     mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
+  '' + lib.optionalString stdenv.hostPlatform.isx86 ''
+    mv -v $out/FV/${fwPrefix}.fd $fd/FV
   '' + lib.optionalString msVarsTemplate ''
     mv -v $out/FV/${fwPrefix}_VARS.ms.fd $fd/FV
     ln -sv $fd/FV/${fwPrefix}_CODE{,.ms}.fd
