@@ -317,25 +317,28 @@ else let
     ]
   ];
 
+  allDependencies = concatLists (concatLists dependencies);
+  allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
+
   computedSandboxProfile =
     concatMap (input: input.__propagatedSandboxProfile or [])
       (stdenv.extraNativeBuildInputs
        ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies);
+       ++ allDependencies);
 
   computedPropagatedSandboxProfile =
     concatMap (input: input.__propagatedSandboxProfile or [])
-      (concatLists propagatedDependencies);
+      allPropagatedDependencies;
 
   computedImpureHostDeps =
     unique (concatMap (input: input.__propagatedImpureHostDeps or [])
       (stdenv.extraNativeBuildInputs
        ++ stdenv.extraBuildInputs
-       ++ concatLists dependencies));
+       ++ allDependencies));
 
   computedPropagatedImpureHostDeps =
     unique (concatMap (input: input.__propagatedImpureHostDeps or [])
-      (concatLists propagatedDependencies));
+      allPropagatedDependencies);
 
   envIsExportable = isAttrs env && !isDerivation env;
 
