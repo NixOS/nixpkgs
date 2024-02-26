@@ -53,10 +53,10 @@ let
       maintainers = with lib.maintainers; [
         AndersonTorres
         adisbladis
-        atemu
         jwiegley
         lovek323
         matthewbauer
+        # atemu for issues relating to Macport
       ];
       platforms = {
         "mainline" = lib.platforms.all;

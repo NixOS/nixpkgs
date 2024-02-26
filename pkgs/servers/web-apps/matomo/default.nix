@@ -6,6 +6,10 @@ let
       version = "4.15.1";
       hash = "sha256-XnfiprGLqFQqPk30gcAVLdBZ3pYMSdBPfnicm7V1PSc=";
     };
+    matomo_5 = {
+      version = "5.0.2";
+      hash = "sha256-rLAShJLtzd3HB1Je+P+i8GKWdeklyC2sTnmPR07Md+8=";
+    };
     matomo-beta = {
       version = "5.0.0";
       # `beta` examples: "b1", "rc1", null
