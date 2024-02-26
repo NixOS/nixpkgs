@@ -31136,9 +31136,6 @@ with pkgs;
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   eww = callPackage ../applications/window-managers/eww { };
-  eww-wayland = callPackage ../applications/window-managers/eww {
-    withWayland = true;
-  };
 
   exaile = callPackage ../applications/audio/exaile { };
 
