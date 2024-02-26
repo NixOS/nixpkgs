@@ -6682,6 +6682,8 @@ self: super: with self; {
 
   llama-index-core = callPackage ../development/python-modules/llama-index-core { };
 
+  llama-index-embeddings-google = callPackage ../development/python-modules/llama-index-embeddings-google { };
+
   llama-index-embeddings-openai = callPackage ../development/python-modules/llama-index-embeddings-openai { };
 
   llama-index-indices-managed-llama-cloud = callPackage ../development/python-modules/llama-index-indices-managed-llama-cloud { };
