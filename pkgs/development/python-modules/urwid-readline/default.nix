@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "urwid-readline";
-  version = "0.13";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "urwid_readline";
     rev = "refs/tags/${version}";
-    hash = "sha256-D6NHK6jBSsr0yEAqD4wseaBAn9uSrmx5TpnWMK5BM3k=";
+    hash = "sha256-ZTg+GZnu7R6Jf2+SIwVo57yHnjwuY92DElTJs8oRErE=";
   };
 
   nativeBuildInputs = [
