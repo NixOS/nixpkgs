@@ -39,6 +39,39 @@ in
     '';
   };
 
+  lanzaboote = makeTest {
+    name = "systemd-boot-with-secureboot";
+    meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius nikstur ];
+
+    nodes.machine = {
+      imports = [
+        common
+      ];
+
+      virtualisation.useSecureBoot = true;
+      boot.loader.systemd-boot.secureBoot = {
+        enable = true;
+        pkiBundle = ./fixtures/uefi-keys;
+      };
+      boot.loader.systemd-boot.extraInstallCommands =
+      let
+        sbctlWithPki = pkgs.sbctl.override {
+          databasePath = "/tmp/pki";
+        };
+      in
+      ''
+        mkdir -p /tmp/pki
+        cp -r ${./fixtures/uefi-keys}/* /tmp/pki
+        ${sbctlWithPki}/bin/sbctl enroll-keys --yes-this-might-brick-my-machine
+      '';
+    };
+
+    testScript = ''
+      machine.start()
+      assert "Secure Boot: enabled (user)" in machine.succeed("bootctl status")
+    '';
+  };
+
   # Check that specialisations create corresponding boot entries.
   specialisation = makeTest {
     name = "systemd-boot-specialisation";
