@@ -79,6 +79,7 @@ self: super: {
   ormolu = doDistribute self.ormolu_0_7_3_0;
   fourmolu = doDistribute (dontCheck self.fourmolu_0_14_1_0);
   xmonad = doDistribute self.xmonad_0_18_0;
+  hlint = doDistribute self.hlint_3_8;
 
   #
   # Jailbreaks
