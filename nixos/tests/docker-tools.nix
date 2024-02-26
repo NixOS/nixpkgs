@@ -58,6 +58,20 @@ let
       '';
       config.Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "/testfile" ];
     };
+
+  nonRootTestImage =
+    pkgs.dockerTools.streamLayeredImage rec {
+      name = "non-root-test";
+      tag = "latest";
+      uid = 1000;
+      gid = 1000;
+      uname = "user";
+      gname = "user";
+      config = {
+        User = "user";
+        Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "${pkgs.coreutils}/bin/stat" ];
+      };
+    };
 in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
@@ -581,6 +595,12 @@ in {
     with subtest("streamLayeredImage: chown is persistent in fakeRootCommands"):
         docker.succeed(
             "${chownTestImage} | docker load",
+            "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
+        )
+
+    with subtest("streamLayeredImage: with non-root user"):
+        docker.succeed(
+            "${nonRootTestImage} | docker load",
             "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
   '';
