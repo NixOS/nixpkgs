@@ -113,4 +113,12 @@ self: super: {
   # 2023-12-23: It needs this to build under ghc-9.6.3.
   #   A factor of 100 is insufficent, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
+
+  # Fix build with text-2.x.
+  libmpd = appendPatch (pkgs.fetchpatch
+      { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
+        sha256 = "Q4fA2J/Tq+WernBo+UIMdj604ILOMlIYkG4Pr046DfM=";
+      })
+    super.libmpd;
+
 }
