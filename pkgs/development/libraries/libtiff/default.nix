@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
   # TODO: opengl support (bogus configure detection)
-  propagatedBuildInputs = [
+  buildInputs = [
     libdeflate
     libjpeg
     xz
