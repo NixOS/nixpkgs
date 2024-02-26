@@ -1020,6 +1020,11 @@ failing because of e.g. a syntax error in the Haddock documentation.
 : Sets `doCheck` to `false` for `drv`. Useful if a package has a broken,
 flaky or otherwise problematic test suite breaking the build.
 
+`dontCheckIf condition drv`
+: Sets `doCheck` to `false` for `drv`, but only if `condition` applies.
+Otherwise it's a no-op. Useful to conditionally disable tests for a package
+without interfering with previous overrides or default values.
+
 <!-- Purposefully omitting the non-list variants here. They are a bit
 ugly, and we may want to deprecate them at some point. -->
 
