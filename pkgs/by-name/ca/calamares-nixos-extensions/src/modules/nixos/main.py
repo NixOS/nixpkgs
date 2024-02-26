@@ -376,13 +376,13 @@ def run():
 
     # Setup encrypted swap devices. nixos-generate-config doesn't seem to notice them.
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and part["fs"] == "linuxswap":
+        if part["claimed"] == True and (part["fsName"] == "luks" or part["fsName"] == "luks2") and part["device"] is not None and part["fs"] == "linuxswap":
             cfg += """  boot.initrd.luks.devices."{}".device = "/dev/disk/by-uuid/{}";\n""".format(
                 part["luksMapperName"], part["uuid"])
 
     # Check partitions
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and fw_type != "efi":
+        if part["claimed"] == True and (part["fsName"] == "luks" or part["fsName"] == "luks2") and fw_type != "efi":
             cfg += cfgbootgrubcrypt
             status = _("Setting up LUKS")
             libcalamares.job.setprogress(0.15)
@@ -392,6 +392,7 @@ def run():
                     ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], None)
                 libcalamares.utils.host_env_process_output(
                     ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
+                
             except subprocess.CalledProcessError:
                 libcalamares.utils.error(
                     "Failed to create /crypto_keyfile.bin")
@@ -400,13 +401,15 @@ def run():
 
     # Setup keys in /crypto_keyfile if using BIOS and Grub cryptodisk
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and fw_type != "efi":
+        if part["claimed"] == True and (part["fsName"] == "luks" or part["fsName"] == "luks2") and part["device"] is not None and fw_type != "efi":
             cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(part["luksMapperName"])
-
             try:
+                # Grub currently only supports pbkdf2 for luks2
+                libcalamares.utils.host_env_process_output(
+                    ["cryptsetup", "luksConvertKey", "--hash", "sha256", "--pbkdf", "pbkdf2", part["device"]], None, part["luksPassphrase"])
                 # Add luks drives to /crypto_keyfile.bin
                 libcalamares.utils.host_env_process_output(
-                    ["cryptsetup", "luksAddKey", part["device"], root_mount_point+"/crypto_keyfile.bin"], None, part["luksPassphrase"])
+                    ["cryptsetup", "luksAddKey", "--hash", "sha256", "--pbkdf", "pbkdf2", part["device"], root_mount_point+"/crypto_keyfile.bin"], None, part["luksPassphrase"])
             except subprocess.CalledProcessError:
                 libcalamares.utils.error(
                     "Failed to add {} to /crypto_keyfile.bin".format(part["luksMapperName"]))
@@ -590,7 +593,7 @@ def run():
         if part["claimed"] == True and part["fs"] == "linuxswap":
             status = _("Mounting swap")
             libcalamares.job.setprogress(0.2)
-            if part["fsName"] == "luks":
+            if part["fsName"] == "luks" or part["fsName"] == "luks2":
                 try:
                     libcalamares.utils.host_env_process_output(
                         ["swapon", "/dev/mapper/" + part["luksMapperName"]], None)
