@@ -108,6 +108,11 @@ rec {
      of test suites listed in the package description file.
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
+  /* The dontCheckIf variant sets doCheck = false if the condition
+     applies. In any other case the previously set/default value is used.
+     This prevents accidentally re-enabling tests in a later override.
+     */
+  dontCheckIf = condition: if condition then dontCheck else lib.id;
 
   /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
