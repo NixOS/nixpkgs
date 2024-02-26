@@ -877,9 +877,11 @@ in
         type = types.package;
         default = (pkgs.OVMF.override {
           secureBoot = cfg.useSecureBoot;
+          systemManagementModeRequired = cfg.useSecureBoot;
         }).fd;
         defaultText = ''(pkgs.OVMF.override {
           secureBoot = cfg.useSecureBoot;
+          systemManagementModeRequired = cfg.useSecureBoot;
         }).fd'';
         description =
         lib.mdDoc "OVMF firmware package, defaults to OVMF configured with secure boot if needed.";
@@ -1182,6 +1184,10 @@ in
         "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
         "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
+      ])
+      (mkIf (cfg.efi.OVMF.systemManagementModeRequired or false) [
+        "-machine" "q35,smm=on"
+        "-global" "driver=cfi.pflash01,property=secure,value=on"
       ])
     ];
 

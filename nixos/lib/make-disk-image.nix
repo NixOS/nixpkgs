@@ -536,6 +536,9 @@ let format' = format; in let
         concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
         ++ lib.optionals touchEFIVars [
           "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+        ] ++ lib.optionals (OVMF.systemManagementModeRequired or false) [
+          "-machine" "q35,smm=on"
+          "-global" "driver=cfi.pflash01,property=secure,value=on"
         ]
       );
       inherit memSize;
