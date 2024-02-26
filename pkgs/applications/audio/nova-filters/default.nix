@@ -4,7 +4,6 @@
 , scons
 , boost
 , ladspaH
-, libcxxabi
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "-fomit-frame-pointer -ffast-math -mfpmath=sse" "-I${boost.dev}/include -I${ladspaH}/include" \
       --replace "env.has_key('cxx')" "True" \
       --replace "env['cxx']" "'${stdenv.cc.targetPrefix}c++'" \
-      --replace "-Wl,--strip-all" "${lib.optionalString stdenv.isDarwin "-L${libcxxabi}/lib"}"
+      --replace "-Wl,--strip-all" ""
 
     substituteInPlace filters.cpp \
       --replace "LADSPA_HINT_SAMPLE_RATE, 0, 0.5" "LADSPA_HINT_SAMPLE_RATE, 0.0001, 0.5"

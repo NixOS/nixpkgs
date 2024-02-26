@@ -27,12 +27,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  env = {
-    LLVM_SYS_130_PREFIX = llvmPackages_13.llvm.dev;
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
+  env.LLVM_SYS_130_PREFIX = llvmPackages_13.llvm.dev;
 
   # process didn't exit successfully: <...> SIGSEGV
   doCheck = false;

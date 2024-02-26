@@ -13,9 +13,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-6oZCpjQ8t/QLFhEtF7td8KGI/kFE04pg7OELutsrJKo=";
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang { NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}"; };
-
   passthru.tests.version = testers.testVersion {
     package = cbfmt;
   };
