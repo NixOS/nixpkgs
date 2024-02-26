@@ -1205,6 +1205,7 @@ mapAliases ({
   yuzu-early-access = yuzuPackages.early-access; # Added 2023-12-29
   yuzu = yuzuPackages.mainline; # Added 2021-01-25
   yuzu-mainline = yuzuPackages.mainline; # Added 2023-12-29
+  yubioath-flutter = yubico-authenticator; # Added 2024-02-26
 
   ### Z ###
 

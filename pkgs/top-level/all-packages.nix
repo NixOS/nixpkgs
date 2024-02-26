@@ -25513,7 +25513,7 @@ with pkgs;
 
   yubihsm-shell = callPackage ../tools/security/yubihsm-shell { };
 
-  yubioath-flutter = callPackage ../applications/misc/yubioath-flutter { };
+  yubico-authenticator = callPackage ../applications/misc/yubico-authenticator { };
 
   yyjson = callPackage ../development/libraries/yyjson { };
 
