@@ -45,11 +45,11 @@ in {
       };
     };
 
-    environmentFile = mkOption {
+    passwordFile = mkOption {
       type = path;
+      example = "/var/lib/secrets/slskd_password";
       description = ''
-        Path to a file containing secrets.
-        It must at least contain the variable `SLSKD_SLSK_PASSWORD`
+        Password file for slskd; read at service startup.
       '';
     };
 
@@ -134,9 +134,14 @@ in {
   config = let
     cfg = config.services.slskd;
 
-    confWithoutNullValues = (lib.filterAttrs (key: value: value != null) cfg.settings);
+    filteredSettings = lib.filterAttrsRecursive (_: value: value != null) cfg.settings;
+    settingsFile = settingsFormat.generate "slskd.yml" filteredSettings;
 
-    configurationYaml = settingsFormat.generate "slskd.yml" confWithoutNullValues;
+    slskd-prestart = pkgs.writeShellScript "slskd-prestart" ''
+      set -eu
+      ${pkgs.yq}/bin/yq -Y ".soulseek.password += \"$(< '${cfg.passwordFile}')\"" < '${settingsFile}' |
+        install -D -m 600 -o slskd -g slskd /dev/stdin /var/lib/slskd/slskd.yml
+    '';
 
   in lib.mkIf cfg.enable {
 
@@ -171,9 +176,9 @@ in {
       serviceConfig = {
         Type = "simple";
         User = "slskd";
-        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = "slskd";
-        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config ${configurationYaml}";
+        ExecStartPre = "+" + slskd-prestart;
+        ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config /var/lib/slskd/slskd.yml";
         Restart = "on-failure";
         ReadOnlyPaths = map (d: builtins.elemAt (builtins.split "[^/]*(/.+)" d) 1) cfg.settings.shares.directories;
         LockPersonality = true;
