@@ -4658,8 +4658,6 @@ with pkgs;
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
-  clash-meta = callPackage ../tools/networking/clash-meta { };
-
   clash-verge = callPackage ../applications/networking/clash-verge { };
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
