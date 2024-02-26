@@ -1,18 +1,18 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-  enable = config.programs.bash.enableCompletion;
+  cfg = config.programs.bash;
 in
 {
-  options = {
-    programs.bash.enableCompletion = mkEnableOption (lib.mdDoc "Bash completion for all interactive bash shells") // {
+  options.programs.bash = {
+    enableCompletion = lib.mkEnableOption (lib.mdDoc "Bash completion for all interactive bash shells") // {
       default = true;
     };
+
+    completionPackage = lib.mkPackageOption pkgs "bash-completion" { };
   };
 
-  config = mkIf enable {
+  config = lib.mkIf cfg.enableCompletion {
     programs.bash.promptPluginInit = ''
       # Check whether we're running a version of Bash that has support for
       # programmable completion. If we do, enable all modules installed in
@@ -21,7 +21,7 @@ in
       # $XDG_DATA_DIRS/bash-completion/completions/
       # on demand, so they do not need to be sourced here.
       if shopt -q progcomp &>/dev/null; then
-        . "${pkgs.bash-completion}/etc/profile.d/bash_completion.sh"
+        . "${cfg.completionPackage}/etc/profile.d/bash_completion.sh"
         nullglobStatus=$(shopt -p nullglob)
         shopt -s nullglob
         for p in $NIX_PROFILES; do
