@@ -1,12 +1,12 @@
 { wrapGAppsHook
 , lib
-, python3
+, python3Packages
 , fetchFromGitHub
 , rofi
 , gobject-introspection
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "plasma-hud";
   version = "19.10.1";
   format = "other";
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = (with python3.pkgs; [
+  propagatedBuildInputs = (with python3Packages; [
     dbus-python
     pygobject3
     setproctitle
