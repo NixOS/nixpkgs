@@ -1,11 +1,15 @@
-# pipewire service.
+# PipeWire service.
 { config, lib, pkgs, ... }:
 
 with lib;
 
 let
   json = pkgs.formats.json {};
-  mapToFiles = location: config: concatMapAttrs (name: value: { "pipewire/${location}.conf.d/${name}.conf".source = json.generate "${name}" value;}) config;
+  mapToFiles = location: config: concatMapAttrs (name: value: { "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value; }) config;
+  extraConfigPkgFromFiles = locations: filesSet: pkgs.runCommand "pipewire-extra-config" { } ''
+    mkdir -p ${lib.concatMapStringsSep " " (l: "$out/share/pipewire/${l}.conf.d") locations}
+    ${lib.concatMapStringsSep ";" ({name, value}: "ln -s ${value} $out/${name}") (lib.attrsToList filesSet)}
+  '';
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
                            && pkgs.stdenv.isx86_64
@@ -19,13 +23,33 @@ let
     mkdir -p "$out/lib"
     ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
+
+  configPackages = cfg.configPackages;
+
+  extraConfigPkg = extraConfigPkgFromFiles
+    [ "pipewire" "client" "client-rt" "jack" "pipewire-pulse" ]
+    (
+      mapToFiles "pipewire" cfg.extraConfig.pipewire
+      // mapToFiles "client" cfg.extraConfig.client
+      // mapToFiles "client-rt" cfg.extraConfig.client-rt
+      // mapToFiles "jack" cfg.extraConfig.jack
+      // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse
+    );
+
+  configs = pkgs.buildEnv {
+    name = "pipewire-configs";
+    paths = configPackages
+      ++ [ extraConfigPkg ]
+      ++ lib.optionals cfg.wireplumber.enable cfg.wireplumber.configPackages;
+    pathsToLink = [ "/share/pipewire" ];
+  };
 in {
   meta.maintainers = teams.freedesktop.members ++ [ lib.maintainers.k900 ];
 
   ###### interface
   options = {
     services.pipewire = {
-      enable = mkEnableOption (lib.mdDoc "pipewire service");
+      enable = mkEnableOption (lib.mdDoc "PipeWire service");
 
       package = mkPackageOption pkgs "pipewire" { };
 
@@ -33,7 +57,7 @@ in {
         default = true;
         type = types.bool;
         description = lib.mdDoc ''
-          Automatically run pipewire when connections are made to the pipewire socket.
+          Automatically run PipeWire when connections are made to the PipeWire socket.
         '';
       };
 
@@ -200,6 +224,15 @@ in {
           '';
         };
       };
+
+      configPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [];
+        description = lib.mdDoc ''
+          List of packages that provide PipeWire configuration, in the form of
+          `share/pipewire/*/*.conf` files.
+        '';
+      };
     };
   };
 
@@ -283,12 +316,8 @@ in {
       "alsa/conf.d/99-pipewire-default.conf" = mkIf cfg.alsa.enable {
         source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
       };
-    }
-    // mapToFiles "pipewire" cfg.extraConfig.pipewire
-    // mapToFiles "client" cfg.extraConfig.client
-    // mapToFiles "client-rt" cfg.extraConfig.client-rt
-    // mapToFiles "jack" cfg.extraConfig.jack
-    // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse;
+      pipewire.source = "${configs}/share/pipewire";
+    };
 
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.mkIf cfg.jack.enable [ "${cfg.package.jack}/lib" ];
@@ -301,7 +330,7 @@ in {
           "audio"
           "video"
         ] ++ lib.optional config.security.rtkit.enable "rtkit";
-        description = "Pipewire system service user";
+        description = "PipeWire system service user";
         isSystemUser = true;
         home = "/var/lib/pipewire";
         createHome = true;
