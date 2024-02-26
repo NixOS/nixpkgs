@@ -71,13 +71,13 @@ _logHook() {
         else
             while IFS= read -r hookExprLine; do
                 # These lines often have indentation,
-                # so let's removing leading whitespace.
+                # so let's remove leading whitespace.
                 hookExprLine="${hookExprLine#"${hookExprLine%%[![:space:]]*}"}"
                 # If this line wasn't entirely whitespace,
                 # then add it to our output.
-                 if [[ -n "$hookExprLine" ]]; then
-                     exprToOutput+="$hookExprLine\\n "
-                 fi
+                if [[ -n "$hookExprLine" ]]; then
+                    exprToOutput+="$hookExprLine\\n "
+                fi
             done <<< "$hookExpr"
 
             # And then remove the final, unnecessary, \n
