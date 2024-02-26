@@ -29,6 +29,6 @@ runCommand "sddm-wrapped" {
   done
 
   for i in bin/*; do
-    makeQtWrapper ${unwrapped}/$i $out/$i --set SDDM_GREETER $out/bin/sddm-greeter
+    makeQtWrapper ${unwrapped}/$i $out/$i --set SDDM_GREETER_DIR $out/bin
   done
 ''

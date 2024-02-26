@@ -1,32 +1,14 @@
 diff --git a/src/daemon/Greeter.cpp b/src/daemon/Greeter.cpp
-index c0437ae..f814146 100644
+index 07fccde..dd22a07 100644
 --- a/src/daemon/Greeter.cpp
 +++ b/src/daemon/Greeter.cpp
-@@ -85,6 +85,9 @@ namespace SDDM {
-         if (m_started)
-             return false;
+@@ -83,7 +83,8 @@ namespace SDDM {
+     QString Greeter::greeterPathForQt(int qtVersion)
+     {
+         const QString suffix = qtVersion == 5 ? QString() : QStringLiteral("-qt%1").arg(qtVersion);
+-        return QStringLiteral(BIN_INSTALL_DIR "/sddm-greeter%1").arg(suffix);
++        const QString greeterDir = qEnvironmentVariable("SDDM_GREETER_DIR", QStringLiteral(BIN_INSTALL_DIR));
++        return QStringLiteral("%1/sddm-greeter%2").arg(greeterDir).arg(suffix);
+     }
  
-+        // Nixpkgs: use wrapped greeter if available
-+        QString greeter = qEnvironmentVariable("SDDM_GREETER", QStringLiteral("%1/sddm-greeter").arg(QStringLiteral(BIN_INSTALL_DIR)));
-+
-         // themes
-         QString xcursorTheme = mainConfig.Theme.CursorTheme.get();
-         if (m_themeConfig->contains(QLatin1String("cursorTheme")))
-@@ -139,7 +142,7 @@ namespace SDDM {
-                 m_process->setProcessEnvironment(env);
-             }
-             // Greeter command
--            m_process->start(QStringLiteral("%1/sddm-greeter").arg(QStringLiteral(BIN_INSTALL_DIR)), args);
-+            m_process->start(greeter, args);
- 
-             //if we fail to start bail immediately, and don't block in waitForStarted
-             if (m_process->state() == QProcess::NotRunning) {
-@@ -173,7 +176,7 @@ namespace SDDM {
- 
-             // command
-             QStringList cmd;
--            cmd << QStringLiteral("%1/sddm-greeter").arg(QStringLiteral(BIN_INSTALL_DIR))
-+            cmd << greeter
-                 << args;
- 
-             // greeter environment
+     bool Greeter::start() {

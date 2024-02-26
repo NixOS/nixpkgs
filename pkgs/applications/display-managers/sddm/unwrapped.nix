@@ -5,15 +5,15 @@
 }:
 let
   isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation {
+in stdenv.mkDerivation(finalAttrs: {
   pname = "sddm-unwrapped";
-  version = "0.20.0-unstable-2023-12-29";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "sddm";
     repo = "sddm";
-    rev = "501129294be1487f753482c29949fc1c19ef340e";
-    hash = "sha256-mLm987Ah0X9s0tBK2a45iERwYoh5JzWb3TFlSoxi8CA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-r5mnEWham2WnoEqRh5tBj/6rn5mN62ENOCmsLv2Ht+w=";
   };
 
   patches = [
@@ -83,4 +83,4 @@ in stdenv.mkDerivation {
     platforms   = platforms.linux;
     license     = licenses.gpl2Plus;
   };
-}
+})

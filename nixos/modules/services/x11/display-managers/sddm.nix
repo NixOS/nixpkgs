@@ -220,7 +220,7 @@ in
                 keymap_variant = xcfg.xkb.variant;
                 keymap_options = xcfg.xkb.options;
               };
-            }; in "${pkgs.weston}/bin/weston --shell=fullscreen-shell.so -c ${westonIni}";
+            }; in "${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
           description = lib.mdDoc "Command used to start the selected compositor";
         };
       };
