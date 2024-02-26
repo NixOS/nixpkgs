@@ -1732,7 +1732,7 @@ with pkgs;
 
   btc-rpc-explorer = callPackage ../tools/misc/btc-rpc-explorer { };
 
-  butler = callPackage ../games/itch/butler.nix {
+  butler = callPackage ../by-name/bu/butler/package.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     buildGoModule = buildGo120Module;
   };
@@ -3976,8 +3976,6 @@ with pkgs;
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
   ipp-usb = callPackage ../os-specific/linux/ipp-usb { };
-
-  itch = callPackage ../games/itch { };
 
   itchiodl = callPackage ../games/itchiodl { };
 
