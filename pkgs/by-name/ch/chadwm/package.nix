@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
   preBuild = "cd chadwm";
 
-    meta = with lib; {
+  meta = with lib; {
     homepage = "https://github.com/siduck/chadwm";
     description = "Dwm fork that is amazingly efficient";
     license = licenses.mit;
