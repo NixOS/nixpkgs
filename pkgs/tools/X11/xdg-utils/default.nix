@@ -120,7 +120,11 @@ let
         "$KDE_SESSION_VERSION" = true;
         "$KTRADER" = true;
       };
-      prologue = commonPrologue;
+      prologue = "${writeText "xdg-mime-prologue" ''
+        export PERL5LIB=${with perlPackages; makePerlPath [ FileMimeInfo ]}
+        export PATH=$PATH:${coreutils}/bin:${perlPackages.FileMimeInfo}/bin
+      ''}";
+
     }
 
     {
