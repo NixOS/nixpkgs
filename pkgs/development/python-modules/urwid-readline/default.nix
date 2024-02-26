@@ -1,26 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , urwid
-, glibcLocales
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "urwid_readline";
+  pname = "urwid-readline";
   version = "0.13";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AYAgy8hku17Ye+F9wmsGnq4nVcsp86nFaarDve0e+vQ=";
+  src = fetchFromGitHub {
+    owner = "rr-";
+    repo = "urwid_readline";
+    rev = "refs/tags/${version}";
+    hash = "sha256-D6NHK6jBSsr0yEAqD4wseaBAn9uSrmx5TpnWMK5BM3k=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     urwid
   ];
 
+  pythonImportsCheck = [ "urwid_readline" ];
+
   nativeCheckInputs = [
-    glibcLocales
     pytestCheckHook
   ];
 
