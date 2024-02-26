@@ -480,7 +480,7 @@ in {
       ghc = bh.compiler.ghc982;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
     };
-    ghc98 = packages.ghc981;
+    ghc98 = packages.ghc982;
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
