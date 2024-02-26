@@ -2,26 +2,26 @@
 , fetchFromGitHub
 , buildGoModule
 }:
+
 buildGoModule rec {
   pname = "clash-meta";
-  version = "1.16.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
-    repo = "Clash.Meta";
+    repo = "mihomo";
     rev = "v${version}";
-    hash = "sha256-ORyjCYf2OPrSt/juiBk0Gf2Az4XoZipKBWWFXf8nIqE=";
+    hash = "sha256-ezOkDrpytZQdc+Txe4eUyuWY6oipn9jIrmu7aO8lNlQ=";
   };
 
-  vendorHash = "sha256-ySCmHLuMTCxBcAYo7YD8zOpUAa90PQmeLLt+uOn40Pk=";
+  vendorHash = "sha256-tvPR5kAta4MlMTwjfxwVOacRr2nVpfalbN08mfxml64=";
 
-  # Do not build testing suit
   excludedPackages = [ "./test" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/Dreamacro/clash/constant.Version=${version}"
+    "-X github.com/metacubex/mihomo/constant.Version=${version}"
   ];
 
   tags = [
@@ -32,12 +32,12 @@ buildGoModule rec {
   doCheck = false;
 
   postInstall = ''
-    mv $out/bin/clash $out/bin/clash-meta
+    mv $out/bin/mihomo $out/bin/clash-meta
   '';
 
   meta = with lib; {
-    description = "Another Clash Kernel";
-    homepage = "https://github.com/MetaCubeX/Clash.Meta";
+    description = "A rule-based tunnel in Go. Present named mihomo";
+    homepage = "https://github.com/MetaCubeX/mihomo";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ oluceps ];
     mainProgram = "clash-meta";
