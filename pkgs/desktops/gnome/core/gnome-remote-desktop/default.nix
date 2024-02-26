@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , cairo
 , meson
@@ -16,9 +17,10 @@
 , systemd
 , libsecret
 , libnotify
+, libopus
 , libxkbcommon
 , gdk-pixbuf
-, freerdp
+, freerdp3
 , fdk_aac
 , tpm2-tss
 , fuse3
@@ -27,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "45.1";
+  version = "46.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-3NnBisIwZpVjH88AqIZFw443DroFxp3zn1QCBNTq/Y0=";
+    hash = "sha256-sJwuGCjl9ciSBlbcwhwneeozWcdBlB59hh6VV4CLSRw=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    freerdp
+    freerdp3
     fdk_aac
     tpm2-tss
     fuse3
@@ -56,6 +58,7 @@ stdenv.mkDerivation rec {
     libdrm
     nv-codec-headers-11
     libnotify
+    libopus
     libsecret
     libxkbcommon
     pipewire
@@ -63,7 +66,11 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Dconf_dir=/etc/gnome-remote-desktop"
     "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
+    "-Dsystemd_system_unit_dir=${placeholder "out"}/lib/systemd/system"
+    "-Dsystemd_sysusers_dir=${placeholder "out"}/lib/sysusers.d"
+    "-Dsystemd_tmpfiles_dir=${placeholder "out"}/lib/tmpfiles.d"
     "-Dtests=false" # Too deep of a rabbit hole.
   ];
 
