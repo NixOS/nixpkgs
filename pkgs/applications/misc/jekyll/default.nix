@@ -1,4 +1,4 @@
-{ lib, bundlerApp, ruby
+{ lib, stdenv, bundlerApp, ruby, defaultGemConfig
 , writeShellScriptBin, makeWrapper
 , withOptionalDependencies ? false
 }:
@@ -29,6 +29,12 @@ in bundlerApp {
   gemdir = if withOptionalDependencies
     then ./full
     else ./basic;
+
+  gemConfig = defaultGemConfig // lib.optionalAttrs stdenv.cc.isClang {
+    nokogiri = attrs: {
+      buildFlags = [ "--with-cflags=-Wno-error=incompatible-function-pointer-types" ];
+    };
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 
