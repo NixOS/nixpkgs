@@ -187,23 +187,24 @@ class Driver:
             # to swallow them and prevent itself from terminating.
             os.kill(os.getpid(), signal.SIGTERM)
 
-    def create_machine(self, args: Dict[str, Any]) -> Machine:
+    def create_machine(
+        self,
+        start_command: str,
+        *,
+        name: Optional[str] = None,
+        keep_vm_state: bool = False,
+    ) -> Machine:
         tmp_dir = get_tmp_dir()
 
-        if args.get("startCommand"):
-            start_command: str = args.get("startCommand", "")
-            cmd = NixStartScript(start_command)
-            name = args.get("name", cmd.machine_name)
-        else:
-            cmd = Machine.create_startcommand(args)  # type: ignore
-            name = args.get("name", "machine")
+        cmd = NixStartScript(start_command)
+        name = name or cmd.machine_name
 
         return Machine(
             tmp_dir=tmp_dir,
             out_dir=self.out_dir,
             start_command=cmd,
             name=name,
-            keep_vm_state=args.get("keep_vm_state", False),
+            keep_vm_state=keep_vm_state,
         )
 
     def serial_stdout_on(self) -> None:

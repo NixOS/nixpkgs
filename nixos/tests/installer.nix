@@ -110,7 +110,7 @@ let
       startcommand += f" -drive file={disk_image},if=virtio,werror=report"
 
       def create_machine_named(name):
-          return create_machine({"startCommand": startcommand, "name": name})
+          return create_machine(startcommand, name=name)
 
       class Tpm:
             def __init__(self):

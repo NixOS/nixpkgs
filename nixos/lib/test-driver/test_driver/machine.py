@@ -234,77 +234,6 @@ class NixStartScript(StartCommand):
         return name
 
 
-class LegacyStartCommand(StartCommand):
-    """Used in some places to create an ad-hoc machine instead of
-    using nix test instrumentation + module system for that purpose.
-    Legacy.
-    """
-
-    def __init__(
-        self,
-        netBackendArgs: Optional[str] = None,  # noqa: N803
-        netFrontendArgs: Optional[str] = None,  # noqa: N803
-        hda: Optional[Tuple[Path, str]] = None,
-        cdrom: Optional[str] = None,
-        usb: Optional[str] = None,
-        bios: Optional[str] = None,
-        qemuBinary: Optional[str] = None,  # noqa: N803
-        qemuFlags: Optional[str] = None,  # noqa: N803
-    ):
-        if qemuBinary is not None:
-            self._cmd = qemuBinary
-        else:
-            self._cmd = "qemu-kvm"
-
-        self._cmd += " -m 384"
-
-        # networking
-        net_backend = "-netdev user,id=net0"
-        net_frontend = "-device virtio-net-pci,netdev=net0"
-        if netBackendArgs is not None:
-            net_backend += "," + netBackendArgs
-        if netFrontendArgs is not None:
-            net_frontend += "," + netFrontendArgs
-        self._cmd += f" {net_backend} {net_frontend}"
-
-        # hda
-        hda_cmd = ""
-        if hda is not None:
-            hda_path = hda[0].resolve()
-            hda_interface = hda[1]
-            if hda_interface == "scsi":
-                hda_cmd += (
-                    f" -drive id=hda,file={hda_path},werror=report,if=none"
-                    " -device scsi-hd,drive=hda"
-                )
-            else:
-                hda_cmd += f" -drive file={hda_path},if={hda_interface},werror=report"
-        self._cmd += hda_cmd
-
-        # cdrom
-        if cdrom is not None:
-            self._cmd += f" -cdrom {cdrom}"
-
-        # usb
-        usb_cmd = ""
-        if usb is not None:
-            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
-            usb_cmd += (
-                " -device usb-ehci"
-                f" -drive id=usbdisk,file={usb},if=none,readonly"
-                " -device usb-storage,drive=usbdisk "
-            )
-        self._cmd += usb_cmd
-
-        # bios
-        if bios is not None:
-            self._cmd += f" -bios {bios}"
-
-        # qemu flags
-        if qemuFlags is not None:
-            self._cmd += f" {qemuFlags}"
-
-
 class Machine:
     """A handle to the machine with this name, that also knows how to manage
     the machine lifecycle with the help of a start script / command."""
@@ -375,29 +304,6 @@ class Machine:
 
         self.booted = False
         self.connected = False
-
-    @staticmethod
-    def create_startcommand(args: Dict[str, str]) -> StartCommand:
-        rootlog.warning(
-            "Using legacy create_startcommand(), "
-            "please use proper nix test vm instrumentation, instead "
-            "to generate the appropriate nixos test vm qemu startup script"
-        )
-        hda = None
-        if args.get("hda"):
-            hda_arg: str = args.get("hda", "")
-            hda_arg_path: Path = Path(hda_arg)
-            hda = (hda_arg_path, args.get("hdaInterface", ""))
-        return LegacyStartCommand(
-            netBackendArgs=args.get("netBackendArgs"),
-            netFrontendArgs=args.get("netFrontendArgs"),
-            hda=hda,
-            cdrom=args.get("cdrom"),
-            usb=args.get("usb"),
-            bios=args.get("bios"),
-            qemuBinary=args.get("qemuBinary"),
-            qemuFlags=args.get("qemuFlags"),
-        )
 
     def is_up(self) -> bool:
         return self.booted and self.connected
