@@ -78,6 +78,7 @@ self: super: {
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_0_1;
   ormolu = doDistribute self.ormolu_0_7_3_0;
   fourmolu = doDistribute (dontCheck self.fourmolu_0_14_1_0);
+  xmonad = doDistribute self.xmonad_0_18_0;
 
   #
   # Jailbreaks
