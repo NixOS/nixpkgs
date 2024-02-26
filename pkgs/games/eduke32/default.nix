@@ -10,7 +10,6 @@
 , gtk2
 , libvorbis
 , libvpx
-, libGLU
 , libGL
 , SDL2
 , SDL2_mixer
@@ -32,7 +31,7 @@ let
 
   wrapper = "eduke32-wrapper";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
   version = "0-unstable-2024-02-17";
 
@@ -54,7 +53,6 @@ in stdenv.mkDerivation rec {
     alsa-lib
     gtk2
     libGL
-    libGLU
   ] ++ lib.optionals stdenv.isDarwin [
     AGL
     Cocoa
@@ -62,21 +60,24 @@ in stdenv.mkDerivation rec {
     OpenGL
   ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config ]
-    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    copyDesktopItems
+    graphicsmagick
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+    nasm
+  ];
 
   postPatch = ''
     substituteInPlace source/imgui/src/imgui_impl_sdl2.cpp \
-      --replace '#include <SDL.h>' '#include <SDL2/SDL.h>' \
-      --replace '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
-      --replace '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
+      --replace-fail '#include <SDL.h>' '#include <SDL2/SDL.h>' \
+      --replace-fail '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
+      --replace-fail '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
   '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace source/build/src/glbuild.cpp \
-      --replace libGLU.so ${libGLU}/lib/libGLU.so
-
     for f in glad.c glad_wgl.c ; do
       substituteInPlace source/glad/src/$f \
-        --replace libGL.so ${libGL}/lib/libGL.so
+        --replace-fail libGL.so ${libGL}/lib/libGL.so
     done
   '';
 
@@ -114,11 +115,11 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     homepage = "http://eduke32.com";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mikroskeem sander ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ mikroskeem sander ];
+    platforms = lib.platforms.all;
   };
-}
+})
