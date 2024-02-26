@@ -8,7 +8,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosh";
-  version = "unstable-2024-01-27";
+  version = "0.1-unstable-2024-01-27";
   src = fetchFromGitHub {
     repo = "cosh";
     owner = "tomhrr";
