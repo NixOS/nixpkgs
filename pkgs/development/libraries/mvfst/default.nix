@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mvfst";
-  version = "2024.01.22.00";
+  version = "2024.02.19.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "mvfst";
     rev = "v${version}";
-    sha256 = "sha256-vhLwxA91v+vt5PQejhPOaj9YSkulg86hTD9GkpQKB24=";
+    sha256 = "sha256-Y7T38xCKMP0yfDYcEoPCKn+ZZseMAEtvT+iY2RDrRig=";
   };
 
   nativeBuildInputs = [ cmake ];
