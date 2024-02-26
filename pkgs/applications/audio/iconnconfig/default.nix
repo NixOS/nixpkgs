@@ -7,7 +7,7 @@
 }:
 
 mkDerivation rec {
-  pname = "IConnConfig";
+  pname = "iconnconfig";
   version = "0.5.2-beta";
   src = fetchgit {
     url = "https://codeberg.org/dehnhardt/IConnConfig";
