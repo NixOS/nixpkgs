@@ -4,37 +4,45 @@ let
   settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.slskd = with lib; with types; {
-    enable = mkEnableOption "enable slskd";
+    enable = mkEnableOption "slskd";
 
-    rotateLogs = mkEnableOption "enable an unit and timer that will rotate logs in /var/slskd/logs";
+    rotateLogs = mkEnableOption "a unit and a timer that will rotate logs in /var/slskd/logs";
 
     package = mkPackageOption pkgs "slskd" { };
 
     nginx = mkOption {
-      description = lib.mdDoc "options for nginx";
+      description = mdDoc "options for nginx";
       example = {
         enable = true;
         domain = "example.com";
         contextPath = "/slskd";
       };
-      type = submodule ({name, config, ...}: {
+      type = submodule {
         options = {
-          enable = mkEnableOption "enable nginx as a reverse proxy";
+          enable = mkEnableOption "nginx as a reverse proxy";
 
           domainName = mkOption {
             type = str;
-            description = "Domain you want to use";
+            description = "The domain to use";
           };
           contextPath = mkOption {
-            type = types.path;
+            type = path;
             default = "/";
-            description = lib.mdDoc ''
+            description = mdDoc ''
               The context path, i.e., the last part of the slskd
               URL. Typically '/' or '/slskd'. Default '/'
             '';
           };
+          bindAddress = mkOption {
+            type = str;
+            default = "localhost";
+            example = "10.0.0.1";
+            description = mdDoc ''
+              The address at which slskd serves its web interface.
+            '';
+          };
         };
-      });
+      };
     };
 
     environmentFile = mkOption {
@@ -141,15 +149,12 @@ in {
     };
 
     # Reverse proxy configuration
-    services.nginx.enable = true;
-    services.nginx.virtualHosts."${cfg.nginx.domainName}" = {
-      forceSSL = true;
-      enableACME = true;
-      locations = {
-        "${cfg.nginx.contextPath}" = {
-          proxyPass = "http://localhost:${toString cfg.settings.web.port}";
-          proxyWebsockets = true;
-        };
+    services.nginx = lib.mkIf cfg.nginx.enable {
+      enable = true;
+      virtualHosts.${cfg.nginx.domainName}.locations.${cfg.nginx.contextPath} = {
+        proxyPass =
+          "http://${toString cfg.nginx.bindAddress}:${toString cfg.settings.web.port}";
+        proxyWebsockets = true;
       };
     };
 
