@@ -144,14 +144,29 @@ stdenv.mkDerivation (finalAttrs: rec {
         package = finalAttrs.finalPackage;
       };
 
-      smoke-test = runCommand "dotnet-sdk-smoke-test" {
+      console = runCommand "dotnet-test-console" {
         nativeBuildInputs = [ finalAttrs.finalPackage ];
       } ''
         HOME=$(pwd)/fake-home
-        dotnet new console --no-restore
-        dotnet restore --source "$(mktemp -d)"
-        dotnet build --no-restore
-        output="$(dotnet run --no-build)"
+        dotnet new nugetconfig
+        dotnet nuget disable source nuget
+        dotnet new console -n test -o .
+        output="$(dotnet run)"
+        # yes, older SDKs omit the comma
+        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
+      '';
+
+      single-file = let build = runCommand "dotnet-test-build-single-file" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } ''
+        HOME=$(pwd)/fake-home
+        dotnet new nugetconfig
+        dotnet nuget disable source nuget
+        dotnet nuget add source ${finalAttrs.finalPackage.packages}
+        dotnet new console -n test -o .
+        dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out
+      ''; in runCommand "dotnet-test-run-single-file" {} ''
+        output="$(${build}/test)"
         # yes, older SDKs omit the comma
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
