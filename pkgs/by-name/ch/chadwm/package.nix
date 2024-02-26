@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   name = "chadwm";
-  version = "unstable-2024-02-14";
+  version = "0-unstable-2024-02-14";
   src = fetchFromGitHub {
     owner = "siduck";
     repo = "chadwm";
