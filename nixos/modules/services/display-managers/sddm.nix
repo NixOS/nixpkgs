@@ -281,9 +281,9 @@ in
 
     assertions = [
       {
-        assertion = xcfg.enable;
+        assertion = xcfg.enable || cfg.wayland.enable;
         message = ''
-          SDDM requires services.xserver.enable to be true
+          SDDM requires either services.xserver.enable or services.xserver.displayManager.sddm.wayland.enable to be true
         '';
       }
       {
