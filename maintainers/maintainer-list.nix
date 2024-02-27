@@ -7606,6 +7606,12 @@
     githubId = 287769;
     name = "Sergii Paryzhskyi";
   };
+  heijligen = {
+    email = "src@posteo.de";
+    github = "heijligen";
+    githubId = 19170376;
+    name = "Thomas Heijligen";
+  };
   heisfer = {
     email = "heisfer@refract.dev";
     github = "heisfer";

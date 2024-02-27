@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubetail";
-  version = "1.6.19";
+  version = "1.6.20";
 
   src = fetchFromGitHub {
     owner = "johanhaleby";
     repo = "kubetail";
     rev = version;
-    sha256 = "sha256-s+rz30VWG4RijeJuRYEhCmgFDjaxJ+4twgXrGkNc5c8=";
+    sha256 = "sha256-RbbZHKXRtbs42cCbw+xb8TLul6ebUeCiNclMFF39c3M=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
