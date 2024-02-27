@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
 , google-api-core
 , google-auth
 , grpc-google-iam-v1
+, lib
 , proto-plus
 , protobuf
 , pytestCheckHook
