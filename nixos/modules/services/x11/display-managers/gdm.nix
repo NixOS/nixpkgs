@@ -32,7 +32,7 @@ let
     load-module module-position-event-sounds
   '';
 
-  defaultSessionName = config.services.xserver.displayManager.defaultSession;
+  defaultSessionName = config.services.displayManager.defaultSession;
 
   setSessionScript = pkgs.callPackage ./account-service-util.nix { };
 in
@@ -41,14 +41,12 @@ in
   imports = [
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ] [
       "services"
-      "xserver"
       "displayManager"
       "autoLogin"
       "enable"
     ])
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ] [
       "services"
-      "xserver"
       "displayManager"
       "autoLogin"
       "user"
@@ -148,14 +146,14 @@ in
     services.xserver.display = null;
     services.xserver.verbose = null;
 
-    services.xserver.displayManager.job =
+    services.displayManager =
       {
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
           XDG_DATA_DIRS = lib.makeSearchPath "share" [
             gdm # for gnome-login.session
-            cfg.sessionData.desktops
+            config.services.displayManager.sessionData.desktops
             pkgs.gnome.gnome-control-center # for accessibility icon
             pkgs.gnome.adwaita-icon-theme
             pkgs.hicolor-icon-theme # empty icon theme as a base
@@ -169,7 +167,7 @@ in
         execCmd = "exec ${gdm}/bin/gdm";
         preStart = optionalString (defaultSessionName != null) ''
           # Set default session in session chooser to a specified values – basically ignore session history.
-          ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
+          ${setSessionScript}/bin/set-session ${config.services.displayManager.sessionData.autologinSession}
         '';
       };
 
@@ -265,14 +263,14 @@ in
       daemon = mkMerge [
         { WaylandEnable = cfg.gdm.wayland; }
         # nested if else didn't work
-        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
+        (mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
           TimedLoginEnable = true;
-          TimedLogin = cfg.autoLogin.user;
+          TimedLogin = config.services.displayManager.autoLogin.user;
           TimedLoginDelay = cfg.gdm.autoLogin.delay;
         })
-        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
+        (mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
           AutomaticLoginEnable = true;
-          AutomaticLogin = cfg.autoLogin.user;
+          AutomaticLogin = config.services.displayManager.autoLogin.user;
         })
       ];
       debug = mkIf cfg.gdm.debug {
@@ -282,7 +280,7 @@ in
 
     environment.etc."gdm/custom.conf".source = configFile;
 
-    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
+    environment.etc."gdm/Xsession".source = config.services.displayManager.sessionData.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {

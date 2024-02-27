@@ -91,7 +91,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.xserver.displayManager.sessionPackages = with pkgs; [
+    services.displayManager.sessionPackages = with pkgs; [
       budgie.budgie-desktop
     ];
 

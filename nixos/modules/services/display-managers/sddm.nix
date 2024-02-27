@@ -2,7 +2,7 @@
 
 let
   xcfg = config.services.xserver;
-  dmcfg = xcfg.displayManager;
+  dmcfg = config.services.displayManager;
   cfg = config.services.displayManager.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
@@ -21,12 +21,12 @@ let
 
   xserverWrapper = pkgs.writeShellScript "xserver-wrapper" ''
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec systemd-cat -t xserver-wrapper ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
+    exec systemd-cat -t xserver-wrapper ${xcfg.displayManager.xserverBin} ${toString xcfg.displayManager.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeShellScript "Xsetup" ''
     ${cfg.setupScript}
-    ${dmcfg.setupCommands}
+    ${xcfg.displayManager.setupCommands}
   '';
 
   Xstop = pkgs.writeShellScript "Xstop" ''
@@ -40,7 +40,7 @@ let
       Numlock = if cfg.autoNumlock then "on" else "none"; # on, off none
 
       # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
-      DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
+      DefaultSession = optionalString (config.services.displayManager.defaultSession != null) "${config.services.displayManager.defaultSession}.desktop";
 
       DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     } // optionalAttrs (cfg.wayland.compositor == "kwin") {
@@ -283,13 +283,13 @@ in
       {
         assertion = xcfg.enable || cfg.wayland.enable;
         message = ''
-          SDDM requires either services.xserver.enable or services.xserver.displayManager.sddm.wayland.enable to be true
+          SDDM requires either services.xserver.enable or services.displayManager.sddm.wayland.enable to be true
         '';
       }
       {
-        assertion = dmcfg.autoLogin.enable -> autoLoginSessionName != null;
+        assertion = config.services.displayManager.autoLogin.enable -> autoLoginSessionName != null;
         message = ''
-          SDDM auto-login requires that services.xserver.displayManager.defaultSession is set.
+          SDDM auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
     ];

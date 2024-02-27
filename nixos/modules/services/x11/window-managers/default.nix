@@ -77,7 +77,7 @@ in
         default = null;
         example = "wmii";
         description = lib.mdDoc ''
-          **Deprecated**, please use [](#opt-services.xserver.displayManager.defaultSession) instead.
+          **Deprecated**, please use [](#opt-services.displayManager.defaultSession) instead.
 
           Default window manager loaded if none have been chosen.
         '';

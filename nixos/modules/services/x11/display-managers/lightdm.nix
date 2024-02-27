@@ -5,9 +5,9 @@ with lib;
 let
 
   xcfg = config.services.xserver;
-  dmcfg = xcfg.displayManager;
+  dmcfg = config.services.displayManager;
   xEnv = config.systemd.services.display-manager.environment;
-  cfg = dmcfg.lightdm;
+  cfg = xcfg.displayManager.lightdm;
   sessionData = dmcfg.sessionData;
 
   setSessionScript = pkgs.callPackage ./account-service-util.nix { };
@@ -26,7 +26,7 @@ let
       else additionalArgs="-logfile /var/log/X.$display.log"
       fi
 
-      exec ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} $additionalArgs "$@"
+      exec ${xcfg.displayManager.xserverBin} ${toString xcfg.displayManager.xserverArgs} $additionalArgs "$@"
     '';
 
   usersConf = writeText "users.conf"
@@ -58,10 +58,10 @@ let
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${sessionData.autologinSession}
       ''}
-      ${optionalString (dmcfg.setupCommands != "") ''
+      ${optionalString (xcfg.displayManager.setupCommands != "") ''
         display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
           #!${pkgs.bash}/bin/bash
-          ${dmcfg.setupCommands}
+          ${xcfg.displayManager.setupCommands}
         ''}
       ''}
       ${cfg.extraSeatDefaults}
@@ -86,14 +86,12 @@ in
     ./lightdm-greeters/mobile.nix
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ] [
       "services"
-      "xserver"
       "displayManager"
       "autoLogin"
       "enable"
     ])
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "user" ] [
      "services"
-     "xserver"
      "displayManager"
      "autoLogin"
      "user"
@@ -187,7 +185,7 @@ in
       }
       { assertion = dmcfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
-          LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
+          LightDM auto-login requires that services.displayManager.defaultSession is set.
         '';
       }
       { assertion = !cfg.greeter.enable -> (dmcfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
@@ -203,12 +201,12 @@ in
 
     # Set default session in session chooser to a specified values – basically ignore session history.
     # Auto-login is already covered by a config value.
-    services.xserver.displayManager.job.preStart = optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null) ''
+    services.displayManager.preStart = optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null) ''
       ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
     '';
 
     # setSessionScript needs session-files in XDG_DATA_DIRS
-    services.xserver.displayManager.job.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
+    services.displayManager.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
 
     # setSessionScript wants AccountsService
     systemd.services.display-manager.wants = [
@@ -216,7 +214,7 @@ in
     ];
 
     # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
-    services.xserver.displayManager.job.execCmd = ''
+    services.displayManager.execCmd = ''
       export PATH=${lightdm}/sbin:$PATH
       exec ${lightdm}/sbin/lightdm
     '';

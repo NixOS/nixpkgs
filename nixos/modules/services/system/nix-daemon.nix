@@ -247,7 +247,7 @@ in
 
     users.users = nixbldUsers;
 
-    services.xserver.displayManager.hiddenUsers = attrNames nixbldUsers;
+    services.displayManager.hiddenUsers = attrNames nixbldUsers;
 
     # Legacy configuration conversion.
     nix.settings = mkMerge [
