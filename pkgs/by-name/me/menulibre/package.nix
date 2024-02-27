@@ -13,13 +13,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "menulibre";
-  version = "2.2.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "bluesabre";
     repo = "menulibre";
     rev = "menulibre-${version}";
-    hash = "sha256-E0ukq3q4YaakOI2mDs3dh0ncZX/dqspCA+97r3JwWyA=";
+    hash = "sha256-IfsuOYP/H3r1GDWMVVSBfYvQS+01VJaAlZu+c05geWg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
