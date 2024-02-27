@@ -220,7 +220,7 @@ in
       package = mkOption {
         type = types.package;
         default = if cfgZfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
-        defaultText = literalExpression "if zfsUnstable is enabled then pkgs.zfsUnstable else pkgs.zfs";
+        defaultText = literalExpression "if enableUnstable is enabled then pkgs.zfsUnstable else pkgs.zfs";
         description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfsUnstable` if you want to track the latest staging ZFS branch.";
       };
 
