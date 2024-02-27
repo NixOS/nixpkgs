@@ -203,12 +203,12 @@ in {
   };
 
   unstable = makeZfsTest rec {
-    zfsPackage = pkgs.zfsUnstable;
+    zfsPackage = pkgs.zfs_unstable;
     kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
   };
 
   unstableWithSystemdStage1 = makeZfsTest rec {
-    zfsPackage = pkgs.zfsUnstable;
+    zfsPackage = pkgs.zfs_unstable;
     kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
     enableSystemdStage1 = true;
   };

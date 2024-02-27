@@ -219,9 +219,9 @@ in
     boot.zfs = {
       package = mkOption {
         type = types.package;
-        default = if cfgZfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
-        defaultText = literalExpression "if enableUnstable is enabled then pkgs.zfsUnstable else pkgs.zfs";
-        description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfsUnstable` if you want to track the latest staging ZFS branch.";
+        default = if cfgZfs.enableUnstable then pkgs.zfs_unstable else pkgs.zfs;
+        defaultText = literalExpression "if enableUnstable is enabled then pkgs.zfs_unstable else pkgs.zfs";
+        description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfs_unstable` if you want to track the latest staging ZFS branch.";
       };
 
       modulePackage = mkOption {

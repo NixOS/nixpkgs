@@ -569,7 +569,7 @@ in {
       configFile = "kernel";
       inherit pkgs kernel;
     };
-    zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
+    zfs_unstable = callPackage ../os-specific/linux/zfs/unstable.nix {
       configFile = "kernel";
       inherit pkgs kernel;
     };

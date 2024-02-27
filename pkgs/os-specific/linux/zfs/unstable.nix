@@ -12,7 +12,7 @@ in
 callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.
-  kernelModuleAttribute = "zfsUnstable";
+  kernelModuleAttribute = "zfs_unstable";
   # check the release notes for compatible kernels
   kernelCompatible = kernel.kernelOlder "6.9";
 
