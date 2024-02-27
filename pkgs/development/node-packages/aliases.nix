@@ -140,6 +140,7 @@ mapAliases {
   inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
+  inherit (pkgs) typescript-language-server; # added 2024-02-27
   inherit (pkgs) ungit; # added 2023-08-20
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
