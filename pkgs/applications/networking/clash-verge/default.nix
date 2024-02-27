@@ -4,7 +4,7 @@
 , dpkg
 , wrapGAppsHook
 , autoPatchelfHook
-, mihomo
+, clash-meta
 , openssl
 , webkitgtk
 , udev
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    ln -s ${lib.getExe mihomo} $out/bin/clash-meta
+    ln -s ${lib.getExe clash-meta} $out/bin/clash-meta
   '';
 
   meta = with lib; {
