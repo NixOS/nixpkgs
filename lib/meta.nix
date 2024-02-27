@@ -112,6 +112,10 @@ rec {
           platform, or `meta.platforms` is not present.
 
        2. None of `meta.badPlatforms` pattern matches the given platform.
+
+     Example:
+       lib.meta.availableOn { system = "aarch64-darwin"; } pkg.zsh
+       => true
   */
   availableOn = platform: pkg:
     ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
