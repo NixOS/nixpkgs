@@ -10,7 +10,7 @@
 # commit.
 { url ? null # The git url, if empty it will be set to src.gitRepoUrl
 , branch ? null
-, stableVersion ? false # Use version format according to RFC 147 (i.e. LAST_TAG-unstable-YYYY-MM-DD or 0-unstable-YYYY-MM-DD)
+, stableVersion ? true # Use version format according to RFC 147 (i.e. LAST_TAG-unstable-YYYY-MM-DD or 0-unstable-YYYY-MM-DD)
 , tagPrefix ? "" # strip this prefix from a tag name when using stable version
 , shallowClone ? true
 }:
