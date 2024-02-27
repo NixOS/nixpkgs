@@ -51,8 +51,8 @@ getAllOutputNames() {
 # Hook handling.
 
 # Log a hook, to be run before the hook is actually called.
-# logging for "implicit" hooks -- the ones specified directly
-# in derivation's arguments -- is done in _callImplicitHook instead.
+# This only logs explicit hooks; "implicit" hooks, those specified directly
+# in a derivation's arguments, are logged in `_callImplicitHook` instead.
 _logHook() {
     local hookKind="$1"
     local hookExpr="$2"
