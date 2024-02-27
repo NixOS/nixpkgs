@@ -19,11 +19,18 @@
 , pytz
 , xxhash
 , python
+
+# for passthru.tests
+, falcon
+, fastapi
+, gradio
+, mashumaro
+, ufolib2
 }:
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.9.13";
+  version = "3.9.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,13 +39,13 @@ buildPythonPackage rec {
     owner = "ijl";
     repo = "orjson";
     rev = "refs/tags/${version}";
-    hash = "sha256-p6nkzEHFTKCBr7Wte2wvzh1TlzwweADZON8gm2pT224=";
+    hash = "sha256-6fcj64d/uFCxaez+xxOdHd+NqILKOPqK+YlxYX7D0DI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2c8XgQILhAvR8HUqoEIOfYeiV1lR9UyIJXWDuNeVZsE=";
+    hash = "sha256-/Aa3saUP4QjSBIS9T8Vd0yggiJn2SIk7dYMA5icb1yA=";
   };
 
   maturinBuildFlags = [ "--interpreter ${python.executable}" ];
@@ -66,6 +73,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "orjson"
   ];
+
+  passthru.tests = {
+    inherit
+      falcon
+      fastapi
+      gradio
+      mashumaro
+      ufolib2
+    ;
+  };
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
