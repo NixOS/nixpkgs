@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, unstableGitUpdater, cmake, lib }: stdenv.mkDerivation rec {
+{ stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, cmake
+, lib
+}: stdenv.mkDerivation rec {
   pname = "mdns-reflector";
   version = "unstable-2023-09-15";
   src = fetchFromGitHub {
