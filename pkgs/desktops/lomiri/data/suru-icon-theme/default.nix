@@ -50,6 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Suru Icon Theme for Lomiri Operating Environment";
     homepage = "https://gitlab.com/ubports/development/core/suru-icon-theme";
+    changelog = "https://gitlab.com/ubports/development/core/suru-icon-theme/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.cc-by-sa-30;
     maintainers = teams.lomiri.members;
     platforms = platforms.all;
