@@ -19381,8 +19381,6 @@ with pkgs;
 
   lenmus = callPackage ../applications/misc/lenmus { };
 
-  lightningcss = callPackage ../development/tools/lightningcss { };
-
   libtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
@@ -26418,7 +26416,7 @@ with pkgs;
 
   matrix-alertmanager = callPackage ../servers/monitoring/matrix-alertmanager { };
 
-  mattermost = callPackage ../servers/mattermost { };
+  mattermost = callPackage ../servers/mattermost { buildGoModule = buildGo122Module; };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
 
@@ -35572,8 +35570,6 @@ with pkgs;
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
-  tippecanoe = callPackage ../applications/misc/tippecanoe { };
-
   tmatrix = callPackage ../applications/misc/tmatrix { };
 
   tnef = callPackage ../applications/misc/tnef { };
@@ -36907,7 +36903,7 @@ with pkgs;
 
   wasabibackend = callPackage ../applications/blockchains/wasabibackend { };
 
-  wownero = disable-warnings-if-gcc13 (callPackage ../applications/blockchains/wownero { });
+  wownero = callPackage ../applications/blockchains/wownero { };
 
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
