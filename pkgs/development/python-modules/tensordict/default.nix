@@ -10,6 +10,7 @@
 , numpy
 , h5py
 , pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -51,6 +52,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     h5py
     pytestCheckHook
+  ];
+
+
+  # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "test/test_distributed.py"
   ];
 
   meta = with lib; {
