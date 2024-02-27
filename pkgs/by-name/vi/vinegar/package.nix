@@ -34,16 +34,16 @@ let
 in
 buildGoModule rec {
   pname = "vinegar";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     rev = "v${version}";
-    hash = "sha256-aKL+4jw/uMbbvLRCBHstCTrcQ1PTYSCwMNgXTvSvMeY=";
+    hash = "sha256-4tkcrUzW8la5WiDtGUvvsRzFqZM1gqnWWAzXc82hirM=";
   };
 
-  vendorHash = "sha256-OaMfWecOPQh6quXjYkZLyBDHZ9TINSA7Ue/Y0sz5ZYY=";
+  vendorHash = "sha256-pi9FjKYXH8cqTx2rTRCyT4+pOM5HnIKosEcmcpbuywQ=";
 
   nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
   buildInputs = [ libGL libxkbcommon xorg.libX11 xorg.libXcursor xorg.libXfixes wayland vulkan-headers wine ];
