@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.26.8";
+  version = "1.27.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w2d33mYNgQ+S+000ZswyqXE8RxOUQaH89R7M6PHe020=";
+    hash = "sha256-mgBbU5vbSKjJysPQHu2FH7VzB7aCW4XJThNkpMnu1+c=";
   };
 
   postPatch = ''

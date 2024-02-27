@@ -1732,7 +1732,7 @@ with pkgs;
 
   btc-rpc-explorer = callPackage ../tools/misc/btc-rpc-explorer { };
 
-  butler = callPackage ../games/itch/butler.nix {
+  butler = callPackage ../by-name/bu/butler/package.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     buildGoModule = buildGo120Module;
   };
@@ -2804,7 +2804,7 @@ with pkgs;
 
   retrofe = callPackage ../applications/emulators/retrofe { };
 
-  ripes = libsForQt5.callPackage ../applications/emulators/ripes { };
+  ripes = qt6Packages.callPackage ../applications/emulators/ripes { };
 
   rpcemu = callPackage ../applications/emulators/rpcemu { };
 
@@ -3977,8 +3977,6 @@ with pkgs;
 
   ipp-usb = callPackage ../os-specific/linux/ipp-usb { };
 
-  itch = callPackage ../games/itch { };
-
   itchiodl = callPackage ../games/itchiodl { };
 
   itd = callPackage ../applications/misc/itd { };
@@ -4657,8 +4655,6 @@ with pkgs;
   map-cmd = callPackage ../tools/misc/map { };
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
-
-  clash-meta = callPackage ../tools/networking/clash-meta { };
 
   clash-verge = callPackage ../applications/networking/clash-verge { };
 
@@ -13751,8 +13747,6 @@ with pkgs;
 
   teler = callPackage ../tools/security/teler { };
 
-  telescope = callPackage ../applications/networking/browsers/telescope { };
-
   termcolor = callPackage ../development/libraries/termcolor { };
 
   termscp = callPackage ../tools/networking/termscp {
@@ -18953,8 +18947,6 @@ with pkgs;
   drip = callPackage ../development/tools/drip { };
 
   drm_info = callPackage ../development/tools/drm_info { };
-
-  drush = callPackage ../development/tools/misc/drush { };
 
   dura = callPackage ../development/tools/misc/dura {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -26828,12 +26820,16 @@ with pkgs;
 
   rust-hypervisor-firmware = callPackage ../applications/virtualization/rust-hypervisor-firmware { };
 
-  OVMF = callPackage ../applications/virtualization/OVMF { };
+  OVMF = callPackage ../applications/virtualization/OVMF {
+    inherit (python3Packages) pexpect;
+  };
   OVMFFull = callPackage ../applications/virtualization/OVMF {
+    inherit (python3Packages) pexpect;
     secureBoot = true;
     httpSupport = true;
     tpmSupport = true;
     tlsSupport = true;
+    msVarsTemplate = stdenv.isx86_64 || stdenv.isAarch64;
   };
 
   ops = callPackage ../applications/virtualization/ops { };
@@ -30886,7 +30882,7 @@ with pkgs;
   dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_20_10 docker_24;
+    docker_20_10 docker_24 docker_25;
 
   docker = docker_24;
   docker-client = docker.override { clientOnly = true; };
@@ -31143,9 +31139,6 @@ with pkgs;
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   eww = callPackage ../applications/window-managers/eww { };
-  eww-wayland = callPackage ../applications/window-managers/eww {
-    withWayland = true;
-  };
 
   exaile = callPackage ../applications/audio/exaile { };
 

@@ -1522,22 +1522,7 @@ let
         };
       };
 
-      equinusocio.vsc-material-theme = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "vsc-material-theme";
-          publisher = "Equinusocio";
-          version = "33.8.0";
-          sha256 = "sha256-+I4AUwsrElT62XNvmuAC2iBfHfjNYY0bmAqzQvfwUYM=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/Equinusocio.vsc-material-theme/changelog";
-          description = "The most epic theme now for Visual Studio Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme";
-          homepage = "https://github.com/material-theme/vsc-material-theme";
-          license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.stunkymonkey ];
-        };
-      };
+      equinusocio.vsc-material-theme = callPackage ./equinusocio.vsc-material-theme { };
 
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -3952,6 +3937,24 @@ let
           homepage = "https://github.com/uiua-lang/uiua-vscode";
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ tomasajt wackbyte defelo ];
+        };
+      };
+
+      uloco.theme-bluloco-light = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "theme-bluloco-light";
+          publisher = "uloco";
+          version = "3.7.3";
+          sha256 = "1il557x7c51ic9bjq7z431105m582kig9v2vpy3k2z3xhrbb0211";
+        };
+        postInstall = ''
+          rm -r $out/share/vscode/extensions/uloco.theme-bluloco-light/screenshots
+        '';
+        meta = {
+          description = "A fancy but yet sophisticated light designer color scheme / theme for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=uloco.theme-bluloco-light";
+          homepage = "https://github.com/uloco/theme-bluloco-light";
+          license = lib.licenses.lgpl3;
         };
       };
 

@@ -1323,6 +1323,7 @@
   ./services/web-apps/mastodon.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/mattermost.nix
+  ./services/web-apps/mealie.nix
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/meme-bingo-web.nix
   ./services/web-apps/microbin.nix

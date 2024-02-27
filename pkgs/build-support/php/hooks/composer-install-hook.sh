@@ -9,6 +9,8 @@ preBuildHooks+=(composerInstallBuildHook)
 preCheckHooks+=(composerInstallCheckHook)
 preInstallHooks+=(composerInstallInstallHook)
 
+source @phpScriptUtils@
+
 composerInstallConfigureHook() {
     echo "Executing composerInstallConfigureHook"
 
@@ -22,6 +24,8 @@ composerInstallConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
+        setComposeRootVersion
+
         composer \
             --no-ansi \
             --no-install \
@@ -75,6 +79,8 @@ composerInstallConfigureHook() {
 composerInstallBuildHook() {
     echo "Executing composerInstallBuildHook"
 
+    setComposeRootVersion
+
     # Since this file cannot be generated in the composer-repository-hook.sh
     # because the file contains hardcoded nix store paths, we generate it here.
     composer-local-repo-plugin --no-ansi build-local-repo -m "${composerRepository}" .
@@ -90,7 +96,6 @@ composerInstallBuildHook() {
 
     # Since the composer.json file has been modified in the previous step, the
     # composer.lock file needs to be updated.
-    COMPOSER_ROOT_VERSION="${version}" \
     composer \
       --lock \
       --no-ansi \
@@ -134,11 +139,10 @@ composerInstallCheckHook() {
 composerInstallInstallHook() {
     echo "Executing composerInstallInstallHook"
 
+    setComposeRootVersion
+
     # Finally, run `composer install` to install the dependencies and generate
     # the autoloader.
-    # The COMPOSER_ROOT_VERSION environment variable is needed only for
-    # vimeo/psalm.
-    COMPOSER_ROOT_VERSION="${version}" \
     composer \
       --no-ansi \
       --no-interaction \

@@ -234,6 +234,7 @@ mapAliases ({
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1; # Added 2020-01-19
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0; # Added 2020-09-11
   drgeo = throw "'drgeo' has been removed as it is outdated and unmaintained"; # Added 2023-10-15
+  drush = throw "drush as a standalone package has been removed because it's no longer supported as a standalone tool";
   dtv-scan-tables_linuxtv = dtv-scan-tables; # Added 2023-03-03
   dtv-scan-tables_tvheadend = dtv-scan-tables; # Added 2023-03-03
   du-dust = dust; # Added 2024-01-19
@@ -280,6 +281,7 @@ mapAliases ({
   eterm = throw "eterm was removed because it is still insecure: https://github.com/mej/Eterm/issues/7"; # Added 2023-09-10
   exa = throw "'exa' has been removed because it is unmaintained upstream. Consider using 'eza', a maintained fork"; # Added 2023-09-07
   exhibitor = throw "'exhibitor' has been removed because it is unmaintained upstream"; # Added 2023-06-20
+  eww-wayland = lib.warn "eww now can build for X11 and wayland simultaneously, so `eww-wayland` is deprecated, use the normal `eww` package instead." eww;
 
   ### F ###
 
