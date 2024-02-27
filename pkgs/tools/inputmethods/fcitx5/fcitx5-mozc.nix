@@ -69,38 +69,38 @@ buildBazelPackage {
     installPhase = ''
       runHook preInstall
 
-      install -Dm644 ../LICENSE $out/share/licenses/fcitx5-mozc/LICENSE
-      install -Dm644 data/installer/credits_en.html $out/share/licenses/fcitx5-mozc/Submodules
+      install -Dm444 ../LICENSE $out/share/licenses/fcitx5-mozc/LICENSE
+      install -Dm444 data/installer/credits_en.html $out/share/licenses/fcitx5-mozc/Submodules
 
-      install -Dm755 bazel-bin/unix/fcitx5/fcitx5-mozc.so $out/lib/fcitx5/fcitx5-mozc.so
-      install -Dm644 unix/fcitx5/mozc-addon.conf $out/share/fcitx5/addon/mozc.conf
-      install -Dm644 unix/fcitx5/mozc.conf $out/share/fcitx5/inputmethod/mozc.conf
+      install -Dm555 bazel-bin/unix/fcitx5/fcitx5-mozc.so $out/lib/fcitx5/fcitx5-mozc.so
+      install -Dm444 unix/fcitx5/mozc-addon.conf $out/share/fcitx5/addon/mozc.conf
+      install -Dm444 unix/fcitx5/mozc.conf $out/share/fcitx5/inputmethod/mozc.conf
 
       for pofile in unix/fcitx5/po/*.po; do
         filename=$(basename $pofile)
         lang=''${filename/.po/}
         mofile=''${pofile/.po/.mo}
         msgfmt $pofile -o $mofile
-        install -Dm644 $mofile $out/share/locale/$lang/LC_MESSAGES/fcitx5-mozc.mo
+        install -Dm444 $mofile $out/share/locale/$lang/LC_MESSAGES/fcitx5-mozc.mo
       done
 
       msgfmt --xml -d unix/fcitx5/po/ --template unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in -o unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
-      install -Dm644 unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml $out/share/metainfo/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
+      install -Dm444 unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml $out/share/metainfo/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
 
       cd bazel-bin/unix
 
       unzip -o icons.zip
 
-      install -Dm644 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx-mozc.png
-      install -Dm644 alpha_full.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-full.svg
-      install -Dm644 alpha_half.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-half.svg
-      install -Dm644 direct.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-direct.svg
-      install -Dm644 hiragana.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-hiragana.svg
-      install -Dm644 katakana_full.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-full.svg
-      install -Dm644 katakana_half.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-half.svg
-      install -Dm644 outlined/dictionary.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-dictionary.svg
-      install -Dm644 outlined/properties.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-properties.svg
-      install -Dm644 outlined/tool.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-tool.svg
+      install -Dm444 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx-mozc.png
+      install -Dm444 alpha_full.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-full.svg
+      install -Dm444 alpha_half.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-half.svg
+      install -Dm444 direct.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-direct.svg
+      install -Dm444 hiragana.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-hiragana.svg
+      install -Dm444 katakana_full.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-full.svg
+      install -Dm444 katakana_half.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-half.svg
+      install -Dm444 outlined/dictionary.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-dictionary.svg
+      install -Dm444 outlined/properties.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-properties.svg
+      install -Dm444 outlined/tool.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-tool.svg
 
       # These are relative symlinks, they will always resolve to files within $out
       ln -s org.fcitx.Fcitx5.fcitx-mozc.png $out/share/icons/hicolor/128x128/apps/fcitx-mozc.png
