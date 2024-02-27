@@ -3,7 +3,7 @@
 let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
-  cfg = dmcfg.sddm;
+  cfg = config.services.displayManager.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
   sddm = cfg.package.override (old: {
@@ -128,6 +128,19 @@ let
 in
 {
   imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "minimumUid" ] [ "services" "displayManager" "sddm" "autoLogin" "minimumUid" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoLogin" "relogin" ] [ "services" "displayManager" "sddm" "autoLogin" "relogin" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "autoNumlock" ] [ "services" "displayManager" "sddm" "autoNumlock" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "enable" ]      [ "services" "displayManager" "sddm" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "enableHidpi" ] [ "services" "displayManager" "sddm" "enableHidpi" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "extraPackages" ] [ "services" "displayManager" "sddm" "extraPackages" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "package" ]     [ "services" "displayManager" "sddm" "package" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "settings" ]    [ "services" "displayManager" "sddm" "settings" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "setupScript" ] [ "services" "displayManager" "sddm" "setupScript" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "stopScript" ]  [ "services" "displayManager" "sddm" "stopScript" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "theme" ]       [ "services" "displayManager" "sddm" "theme" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "wayland" "enable" ] [ "services" "displayManager" "sddm" "wayland" "enable" ])
+
     (mkRemovedOptionModule
       [ "services" "displayManager" "sddm" "themes" ]
       "Set the option `services.displayManager.sddm.package' instead.")
@@ -144,7 +157,7 @@ in
 
   options = {
 
-    services.xserver.displayManager.sddm = {
+    services.displayManager.sddm = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -281,7 +294,10 @@ in
       }
     ];
 
-    services.displayManager.execCmd = "exec /run/current-system/sw/bin/sddm";
+    services.displayManager = {
+      enable = true;
+      execCmd = "exec /run/current-system/sw/bin/sddm";
+    };
 
     security.pam.services = {
       sddm.text = ''
@@ -340,7 +356,6 @@ in
     services = {
       dbus.packages = [ sddm ];
       xserver = {
-        displayManager.job.execCmd = "exec /run/current-system/sw/bin/sddm";
         # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
         tty = null;
         display = null;
