@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "infobyte";
-    repo = pname;
+    repo = "faraday-cli";
     rev = "refs/tags/${version}";
     hash = "sha256-bCiiX5dYodnWkKeNo2j3PGMz17F5y2X4ECZiStDdK5U=";
   };
