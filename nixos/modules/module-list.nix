@@ -510,6 +510,7 @@
   ./services/development/zammad.nix
   ./services/display-managers/default.nix
   ./services/display-managers/greetd.nix
+  ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
@@ -1445,7 +1446,6 @@
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/lightdm.nix
-  ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
   ./services/x11/display-managers/startx.nix
   ./services/x11/display-managers/sx.nix
