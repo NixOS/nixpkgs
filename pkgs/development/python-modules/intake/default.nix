@@ -21,12 +21,13 @@
 , pyyaml
 , requests
 , setuptools
+, setuptools-scm
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.7.0";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,11 +36,12 @@ buildPythonPackage rec {
     owner = "intake";
     repo = "intake";
     rev = "refs/tags/${version}";
-    hash = "sha256-LK4abwPViEFJZ10bbRofF2aw2Mj0dliKwX6dFy93RVQ=";
+    hash = "sha256-Fyv85HkoE9OPOoSHR1sgCG0iAFuSiQMT7cyZcQyLvv0=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -85,6 +87,20 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
+  disabledTestPaths = [
+    # Missing plusins
+    "intake/catalog/tests/test_alias.py"
+    "intake/catalog/tests/test_gui.py"
+    "intake/catalog/tests/test_local.py"
+    "intake/catalog/tests/test_reload_integration.py"
+    "intake/source/tests/test_csv.py"
+    "intake/source/tests/test_derived.py"
+    "intake/source/tests/test_npy.py"
+    "intake/source/tests/test_text.py"
+    "intake/tests/test_config.py"
+    "intake/tests/test_top_level.py"
+  ];
+
   disabledTests = [
     # Disable tests which touch network
     "http"
@@ -103,34 +119,10 @@ buildPythonPackage rec {
     "test_remote_cat"
     "test_remote_env"
     # ValueError
-    "test_mlist_parameter"
-    # ImportError
-    "test_dataframe"
-    "test_ndarray"
-    "test_python"
+    "test_datasource_python_to_dask"
+    "test_catalog_passthrough"
     # Timing-based, flaky on darwin and possibly others
     "test_idle_timer"
-    # arrow-cpp-13 related
-    "test_read"
-    "test_pickle"
-    "test_read_dask"
-    "test_read_list"
-    "test_read_list_with_glob"
-    "test_to_dask"
-    "test_columns"
-    "test_df_transform"
-    "test_pipeline_apply"
-    # GUI tests, AttributeError: 'MultiSelect' object has no attribute 'set_param'
-    "test_par_selector"
-    "test_gui_open_plot_panel"
-    "test_gui_open_search_panel"
-    "test_gui_close_and_open_cat"
-    "test_gui_close_and_open_source"
-    "test_gui_clone_plot"
-    "test_gui_rename_plot"
-    "test_gui_delete_plot"
-    "test_gui_edit_plot"
-    "test_gui_create_plot"
   ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     # Flaky with older low-res mtime on darwin < 10.13 (#143987)
     "test_second_load_timestamp"
