@@ -415,6 +415,7 @@ let
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = with pkgs; [ postgresql postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
+    RQuantLib = with pkgs; [ quantlib.dev boost.dev ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
@@ -1095,6 +1096,14 @@ let
       NIX_CFLAGS_LINK = "-L${pkgs.libmysqlclient}/lib/mysql -lmysqlclient";
       preConfigure = ''
         patchShebangs configure
+      '';
+    });
+
+    RQuantLib = old.RQuantLib.overrideAttrs (attrs: {
+      # This can be removed when next update hits CRAN
+      postPatch = ''
+        substituteInPlace src/utils.cpp \
+          --replace-fail "QL_PACKAGE_VERSION" "PACKAGE_VERSION"
       '';
     });
 
