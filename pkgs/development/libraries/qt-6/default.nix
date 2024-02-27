@@ -42,7 +42,7 @@ let
       qtModule = callPackage ./qtModule.nix { };
 
       qtbase = callPackage ./modules/qtbase.nix {
-        withGtk3 = true;
+        withGtk3 = !stdenv.hostPlatform.isMinGW;
         inherit (srcs.qtbase) src version;
         inherit developerBuild;
         inherit (darwin.apple_sdk_11_0.frameworks)
