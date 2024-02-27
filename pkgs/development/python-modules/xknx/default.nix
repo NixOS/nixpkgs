@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cryptography
 , ifaddr
-, pytest-asyncio
+, pytest-asyncio_0_21
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytestCheckHook
   ];
 

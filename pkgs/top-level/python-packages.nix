@@ -2007,6 +2007,8 @@ self: super: with self; {
 
   chainmap = callPackage ../development/python-modules/chainmap { };
 
+  chainstream = callPackage ../development/python-modules/chainstream { };
+
   chalice = callPackage ../development/python-modules/chalice { };
 
   chameleon = callPackage ../development/python-modules/chameleon { };
