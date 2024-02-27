@@ -129,17 +129,17 @@ in
 {
   imports = [
     (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "themes" ]
-      "Set the option `services.xserver.displayManager.sddm.package' instead.")
+      [ "services" "displayManager" "sddm" "themes" ]
+      "Set the option `services.displayManager.sddm.package' instead.")
     (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "enable" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "enable" ])
+      [ "services" "displayManager" "sddm" "autoLogin" "enable" ]
+      [ "services" "displayManager" "autoLogin" "enable" ])
     (mkRenamedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "autoLogin" "user" ]
-      [ "services" "xserver" "displayManager" "autoLogin" "user" ])
+      [ "services" "displayManager" "sddm" "autoLogin" "user" ]
+      [ "services" "displayManager" "autoLogin" "user" ])
     (mkRemovedOptionModule
-      [ "services" "xserver" "displayManager" "sddm" "extraConfig" ]
-      "Set the option `services.xserver.displayManager.sddm.settings' instead.")
+      [ "services" "displayManager" "sddm" "extraConfig" ]
+      "Set the option `services.displayManager.sddm.settings' instead.")
   ];
 
   options = {
@@ -280,6 +280,8 @@ in
         '';
       }
     ];
+
+    services.displayManager.execCmd = "exec /run/current-system/sw/bin/sddm";
 
     security.pam.services = {
       sddm.text = ''

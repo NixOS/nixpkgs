@@ -508,6 +508,7 @@
   ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
+  ./services/display-managers/default.nix
   ./services/display-managers/greetd.nix
   ./services/editors/emacs.nix
   ./services/editors/haste.nix
