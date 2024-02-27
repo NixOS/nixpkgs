@@ -4506,11 +4506,6 @@ with pkgs;
 
   bws = callPackage ../tools/security/bws { };
 
-  byobu = callPackage ../tools/misc/byobu {
-    # Choices: [ tmux screen ];
-    textual-window-manager = tmux;
-  };
-
   bsh = fetchurl {
     url = "http://www.beanshell.org/bsh-2.0b5.jar";
     hash = "sha256-YjIZlWOAc1SzvLWs6z3BNlAvAixrDvdDmHqD9m/uWlw=";
@@ -32592,6 +32587,10 @@ with pkgs;
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
+  imhex = callPackage ../by-name/im/imhex/package.nix {
+    llvm = llvm_17;
+  };
+
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
@@ -35746,7 +35745,9 @@ with pkgs;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
-  ueberzugpp = darwin.apple_sdk_11_0.callPackage ../tools/graphics/ueberzugpp { };
+  ueberzugpp = callPackage ../by-name/ue/ueberzugpp/package.nix {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   uefi-run = callPackage ../tools/virtualization/uefi-run { };
 
