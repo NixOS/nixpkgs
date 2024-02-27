@@ -21,10 +21,10 @@
     };
   }
   {
-    name = "gcc-11.4.0.tar.xz";
+    name = "gcc-13.2.0.tar.xz";
     archive = fetchurl {
-      sha256 = "1ncd7akww0hl5kkmw1dj3qgqp3phdrr5dfnm7jia9s07n0ib4b9z";
-      url = "mirror://gnu/gcc/gcc-11.4.0/gcc-11.4.0.tar.xz";
+      sha256 = "1nj3qyswcgc650sl3h0480a171ixp33ca13zl90p61m689jffxg2";
+      url = "mirror://gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz";
     };
   }
   {
