@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.3.2";
+  version = "0.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p6Vumfr+vRDr0D9PnEZItp9vNlCLIb59HpBg1KdyHGE=";
+    hash = "sha256-LCpD1E+Dc+vBPC3Z739F2BfV3IKD47mkGLQyMVyxdZM=";
   };
 
   propagatedBuildInputs = [
