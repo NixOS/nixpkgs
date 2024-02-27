@@ -1,5 +1,12 @@
 # darwin.linux-builder {#sec-darwin-builder}
 
+:::{.warning}
+By default, `darwin.linux-builder` uses a publicly-known private SSH **host key** (this is different from the SSH key used by the user that connects to the builder).
+
+Given the intended use case for it (a Linux builder that runs **on the same machine**), this shouldn't be an issue.
+However, if you plan to deviate from this use case in any way (e.g. by exposing this builder to remote machines), you should understand the security implications of doing so and take any appropriate measures.
+:::
+
 `darwin.linux-builder` provides a way to bootstrap a Linux remote builder on a macOS machine.
 
 This requires macOS version 12.4 or later.
