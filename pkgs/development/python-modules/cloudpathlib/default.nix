@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rj8v4EUMPdB5zmbP4VQli2H6GjDor3BHaA95GwoKS5E=";
+    hash = "sha256-4CwwCdGUKUmie9PmAmrVxpAhk3b2WG+Cmx3QAADkyYQ=";
   };
 
   nativeBuildInputs = [
