@@ -112,10 +112,9 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     # Disable any integration tests, which need to contact the internet.
-    # Also disable the `storage_benchmark_*` tests. With Protobuf < v23.x they
-    # require -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=ON. With
-    # Protobuf  >= v23.x they require They require setting
-    # -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=OFF
+    # Also disable the `storage_benchmark_*` tests. 
+    # With Protobuf < 23.x they require -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=ON.
+    # With Protobuf >= 23.x they require They require setting -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=OFF
     ctest --label-exclude integration-test --exclude-regex storage_benchmarks_
 
     runHook postInstallCheck
