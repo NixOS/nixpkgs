@@ -13,20 +13,20 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.6.0";
+  version = "0.7.0";
   pname = "tabby";
 
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
     rev = "v${version}";
-    hash = "sha256-cZvfJMFsf7m8o5YKpsJpcrRmxJCQOFxrDzJZXMzVeFA=";
+    hash = "sha256-BTPJWvqO4IuQAiUEER9PYfu4aQsz5RI77WsA/gQu5Jc=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-iv8MpBfGGUFkjUZ9eAGq65vCy62VJQGTYIS0r9GRyfo=";
+  cargoHash = "sha256-Du0ya9J+0tz72mSid5If0VFX2lLC7YtwNQ/MALpFv2M=";
 
-  # https://github.com/TabbyML/tabby/blob/v0.6.0/Dockerfile#L40C5-L40C58
+  # https://github.com/TabbyML/tabby/blob/v0.7.0/.github/workflows/release.yml#L39
   cargoBuildFlags = [
     "--release"
     "--package" "tabby"
