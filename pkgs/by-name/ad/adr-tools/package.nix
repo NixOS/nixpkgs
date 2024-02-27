@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   sourceRoot = "${pname}-${version}/src";
 
   postInstall = ''
-    mkdir -p $out/
-    cp -r ./* $out/
+    mkdir -p $out/bin
+    cp -r ./* $out/bin
   '';
 
   meta = with lib; {
