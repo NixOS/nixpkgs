@@ -119,7 +119,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.xserver.displayManager.sessionPackages = [
+    services.displayManager.sessionPackages = [
       pkgs.surf-display
     ];
 

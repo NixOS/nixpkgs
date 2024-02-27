@@ -246,11 +246,11 @@ in {
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
     services.pipewire.enable = mkDefault true;
 
-    services.xserver.displayManager = {
+    services.displayManager = {
       sessionPackages = [kdePackages.plasma-workspace];
       defaultSession = mkDefault "plasma";
     };
-    services.xserver.displayManager.sddm = {
+    services.displayManager.sddm = {
       package = kdePackages.sddm;
       theme = mkDefault "breeze";
       wayland.compositor = "kwin";

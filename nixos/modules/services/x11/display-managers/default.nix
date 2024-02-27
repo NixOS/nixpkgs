@@ -69,14 +69,14 @@ let
           source ~/.xprofile
       fi
 
-      ${optionalString cfg.displayManager.job.logToJournal ''
+      ${optionalString config.services.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
           export _DID_SYSTEMD_CAT=1
           exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
         fi
       ''}
 
-      ${optionalString cfg.displayManager.job.logToFile ''
+      ${optionalString config.services.displayManager.logToFile ''
         exec &> >(tee ~/.xsession-errors)
       ''}
 
@@ -225,7 +225,7 @@ in
     assertions = [
       {
         assertion = cfg.desktopManager.default != null || cfg.windowManager.default != null -> cfg.displayManager.defaultSession == defaultSessionFromLegacyOptions;
-        message = "You cannot use both services.xserver.displayManager.defaultSession option and legacy options (services.xserver.desktopManager.default and services.xserver.windowManager.default).";
+        message = "You cannot use both services.displayManager.defaultSession option and legacy options (services.xserver.desktopManager.default and services.xserver.windowManager.default).";
       }
     ];
 

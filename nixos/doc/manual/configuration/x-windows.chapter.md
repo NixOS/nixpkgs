@@ -38,7 +38,7 @@ login prompt and manages the X server) is LightDM. You can select an
 alternative one by picking one of the following lines:
 
 ```nix
-services.xserver.displayManager.sddm.enable = true;
+services.displayManager.sddm.enable = true;
 services.xserver.displayManager.gdm.enable = true;
 ```
 
@@ -84,7 +84,7 @@ desktop environment. If you wanted no desktop environment and i3 as your
 your window manager, you'd define:
 
 ```nix
-services.xserver.displayManager.defaultSession = "none+i3";
+services.displayManager.defaultSession = "none+i3";
 ```
 
 Every display manager in NixOS supports auto-login, here is an example
@@ -92,8 +92,8 @@ using lightdm for a user `alice`:
 
 ```nix
 services.xserver.displayManager.lightdm.enable = true;
-services.xserver.displayManager.autoLogin.enable = true;
-services.xserver.displayManager.autoLogin.user = "alice";
+services.displayManager.autoLogin.enable = true;
+services.displayManager.autoLogin.user = "alice";
 ```
 
 ## Intel Graphics drivers {#sec-x11--graphics-cards-intel}

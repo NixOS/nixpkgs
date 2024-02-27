@@ -56,7 +56,7 @@ in
 
     security.polkit.enable = true;
 
-    services.xserver.displayManager.sessionPackages = [ cfg.finalPackage ];
+    services.displayManager.sessionPackages = [ cfg.finalPackage ];
 
     xdg.portal = {
       enable = mkDefault true;

@@ -121,7 +121,7 @@ in
           check = d:
             lib.assertMsg (d != null -> (lib.types.str.check d && lib.elem d config.services.displayManager.sessionData.sessionNames)) ''
                 Default graphical session, '${d}', not found.
-                Valid names for 'services.xserver.displayManager.defaultSession' are:
+                Valid names for 'services.displayManager.defaultSession' are:
                   ${lib.concatStringsSep "\n  " cfg.displayManager.sessionData.sessionNames}
               '';
         };
@@ -226,7 +226,7 @@ in
     systemd.services.display-manager.enable =
       let dmConf = config.services.xserver.displayManager;
           noDmUsed = !(dmConf.gdm.enable
-                    || dmConf.sddm.enable
+                    || cfg.sddm.enable
                     || dmConf.xpra.enable
                     || dmConf.lightdm.enable);
       in lib.mkIf noDmUsed (lib.mkDefault false);

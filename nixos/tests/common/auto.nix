@@ -30,12 +30,10 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = cfg.user;
-      };
+    services.xserver.displayManager.lightdm.enable = true;
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = cfg.user;
     };
 
     # lightdm by default doesn't allow auto login for root, which is
