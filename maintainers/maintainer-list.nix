@@ -7016,6 +7016,15 @@
     github = "ghostbuster91";
     githubId = 5662622;
   };
+  ghthor = {
+    email = "ghthor@gmail.com";
+    github = "ghthor";
+    githubId = 160298;
+    name = "Will Owens";
+    keys = [{
+      fingerprint = "8E98 BB01 BFF8 AEA4 E303  FC4C 8074 09C9 2CE2 3033";
+    }];
+  };
   ghuntley = {
     email = "ghuntley@ghuntley.com";
     github = "ghuntley";
