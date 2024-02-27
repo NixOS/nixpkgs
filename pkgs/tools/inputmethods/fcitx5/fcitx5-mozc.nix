@@ -91,28 +91,20 @@ buildBazelPackage {
 
       unzip -o icons.zip
 
-      install -Dm444 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx-mozc.png
-      install -Dm444 alpha_full.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-full.svg
-      install -Dm444 alpha_half.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-alpha-half.svg
-      install -Dm444 direct.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-direct.svg
-      install -Dm444 hiragana.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-hiragana.svg
-      install -Dm444 katakana_full.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-full.svg
-      install -Dm444 katakana_half.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-katakana-half.svg
-      install -Dm444 outlined/dictionary.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-dictionary.svg
-      install -Dm444 outlined/properties.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-properties.svg
-      install -Dm444 outlined/tool.svg $out/share/icons/hicolor/scalable/apps/org.fcitx.Fcitx5.fcitx-mozc-tool.svg
-
       # These are relative symlinks, they will always resolve to files within $out
+
+      install -Dm444 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx-mozc.png
       ln -s org.fcitx.Fcitx5.fcitx-mozc.png $out/share/icons/hicolor/128x128/apps/fcitx-mozc.png
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-alpha-full.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-alpha-full.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-alpha-half.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-alpha-half.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-direct.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-direct.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-hiragana.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-hiragana.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-katakana-full.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-katakana-full.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-katakana-half.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-katakana-half.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-dictionary.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-dictionary.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-properties.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-properties.svg
-      ln -s org.fcitx.Fcitx5.fcitx-mozc-tool.svg $out/share/icons/hicolor/scalable/apps/fcitx-mozc-tool.svg
+
+      rm {mozc,dictionary,properties,tool}.svg
+      for svg in *.svg outlined/*.svg; do
+        name=$(basename -- ''${svg//_/-})
+        path=$out/share/icons/hicolor/scalable/apps
+        prefix=org.fcitx.Fcitx5.fcitx-mozc
+
+        install -Dm444 $svg $path/$prefix-$name
+        ln -s $prefix-$name $path/fcitx-mozc-$name
+      done
 
       runHook postInstall
     '';
