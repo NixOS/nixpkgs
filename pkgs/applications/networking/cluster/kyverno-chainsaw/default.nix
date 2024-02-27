@@ -27,5 +27,6 @@ buildGoModule rec {
     changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "chainsaw";
+    maintainers = with maintainers; [ Sanskarzz ];
   };
 }
