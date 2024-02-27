@@ -91,7 +91,7 @@ let
             depth=$(( $depth * 2 ))
         done
         if [[ -z "$last_tag" ]]; then
-            echo "Cound not found a tag within last 10000 commits" > /dev/stderr
+            echo "Could not find a tag within last 10000 commits" > /dev/stderr
             last_tag="0"
         fi
         if [[ -n "$tag_prefix" ]]; then
