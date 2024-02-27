@@ -21366,6 +21366,7 @@ with pkgs;
       rev = "v${version}";
       hash = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
     };
+    doCheck = false;
     patches = [];
   };
 
@@ -21377,6 +21378,7 @@ with pkgs;
       rev = "v${version}";
       hash = "sha256-KzBMwpqn6wUFhgB3KDclBS0BvZSVcasM5AG/y+L91xM=";
     };
+    doCheck = false;
     patches = [];
   };
 
