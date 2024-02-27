@@ -1,4 +1,5 @@
 {
+  addDriverRunpath,
   glibc,
   jq,
   lib,
@@ -10,6 +11,7 @@
 let
   mountOptions = { options = ["ro" "nosuid" "nodev" "bind"]; };
   mounts = [
+    # FIXME: Making /usr mounts optional
     { hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-control";
       containerPath = "/usr/bin/nvidia-cuda-mps-control"; }
     { hostPath = lib.getExe' nvidia-driver "nvidia-cuda-mps-server";
@@ -22,6 +24,14 @@ let
       containerPath = "/usr/bin/nvidia-smi"; }
     { hostPath = lib.getExe' nvidia-container-toolkit "nvidia-ctk";
       containerPath = "/usr/bin/nvidia-ctk"; }
+    { hostPath = "${lib.getLib glibc}/lib";
+      containerPath = "${lib.getLib glibc}/lib"; }
+
+    # FIXME: use closureinfo
+    {
+      hostPath = addDriverRunpath.driverLink;
+      containerPath = addDriverRunpath.driverLink;
+    }
     { hostPath = "${lib.getLib glibc}/lib";
       containerPath = "${lib.getLib glibc}/lib"; }
     { hostPath = "${lib.getLib glibc}/lib64";
