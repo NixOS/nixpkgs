@@ -29,7 +29,7 @@ class PollingConditionProtocol(Protocol):
 class CreateMachineProtocol(Protocol):
     def __call__(
         self,
-        start_command: str,
+        start_command: str | dict,
         *,
         name: Optional[str] = None,
         keep_vm_state: bool = False,
