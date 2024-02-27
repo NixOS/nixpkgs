@@ -4,6 +4,12 @@ buildGoModule rec {
   pname = "gauge";
   version = "1.6.4";
 
+  patches = [
+    # adds a check which adds an error message when trying to
+    # install plugins imperatively when using the wrapper
+    ./nix-check.patch
+  ];
+
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge";
