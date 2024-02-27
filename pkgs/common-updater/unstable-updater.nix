@@ -10,7 +10,7 @@
 # commit.
 { url ? null # The git url, if empty it will be set to src.gitRepoUrl
 , branch ? null
-, stableVersion ? false # Use version format according to RFC 107 (i.e. LAST_TAG+date=YYYY-MM-DD)
+, stableVersion ? false # Use version format according to RFC 147 (i.e. LAST_TAG-unstable-YYYY-MM-DD or 0-unstable-YYYY-MM-DD)
 , tagPrefix ? "" # strip this prefix from a tag name when using stable version
 , shallowClone ? true
 }:
@@ -92,12 +92,12 @@ let
         done
         if [[ -z "$last_tag" ]]; then
             echo "Cound not found a tag within last 10000 commits" > /dev/stderr
-            exit 1
+            last_tag="0"
         fi
         if [[ -n "$tag_prefix" ]]; then
           last_tag="''${last_tag#$tag_prefix}"
         fi
-        new_version="$last_tag+date=$commit_date"
+        new_version="$last_tag-unstable-$commit_date"
     fi
     popd
     # ${coreutils}/bin/rm -rf "$tmpdir"
