@@ -87,6 +87,10 @@ rec {
 
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
+
+     Example:
+      lib.meta.platformMatch { system = "aarch64-darwin"; } "aarch64-darwin"
+      => true
   */
   platformMatch = platform: elem: (
     # Check with simple string comparison if elem was a string.
