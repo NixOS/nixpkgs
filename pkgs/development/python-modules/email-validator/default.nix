@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "2.1.0";
+  version = "2.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JoshData";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-58DuQslADM7glrnlSSP6TtIDTlwuS0/GK8+izatqDxI=";
+    hash = "sha256-btHISb/Z6l9wV6R/1iGPx8H0RMgtvuUcI/ZBI0H8x+U=";
   };
 
   propagatedBuildInputs = [
