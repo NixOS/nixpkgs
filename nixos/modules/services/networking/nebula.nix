@@ -88,6 +88,24 @@ in
               example = [ "192.168.100.1" ];
             };
 
+            dns.enable = mkOption {
+              type = types.bool;
+              default = false;
+              description = lib.mdDoc "Whether this node should serve DNS.";
+            };
+
+            dns.host = mkOption {
+              type = types.str;
+              default = "[::]";
+              description = lib.mdDoc "the interface to serve DNS on.";
+            };
+
+            dns.port = mkOption {
+              type = types.port;
+              default = 53;
+              description = lib.mdDoc "Port to serve DNS on.";
+            };
+
             listen.host = mkOption {
               type = types.str;
               default = "0.0.0.0";
@@ -138,9 +156,11 @@ in
               '';
               example = literalExpression ''
                 {
-                  lighthouse.dns = {
-                    host = "0.0.0.0";
-                    port = 53;
+                  punchy = {
+                    punch = true;
+                    respond = true;
+                    delay = "1s";
+                    respond_delay = "5s";
                   };
                 }
               '';
@@ -166,6 +186,11 @@ in
           lighthouse = {
             am_lighthouse = netCfg.isLighthouse;
             hosts = netCfg.lighthouses;
+            serve_dns = netCfg.dns.enable;
+            dns = lib.attrsets.optionalAttrs netCfg.dns.enable {
+              host = netCfg.dns.host;
+              port = netCfg.dns.port;
+            };
           };
           relay = {
             am_relay = netCfg.isRelay;
@@ -181,7 +206,11 @@ in
             dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
           };
           firewall = {
-            inbound = netCfg.firewall.inbound;
+            inbound = netCfg.firewall.inbound ++ lists.optional netCfg.dns.enable {
+              port = netCfg.dns.port;
+              proto = "udp";
+              host = "any";
+            };
             outbound = netCfg.firewall.outbound;
           };
         } netCfg.settings;
@@ -200,8 +229,8 @@ in
               Restart = "always";
               ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
               UMask = "0027";
-              CapabilityBoundingSet = "CAP_NET_ADMIN";
-              AmbientCapabilities = "CAP_NET_ADMIN";
+              CapabilityBoundingSet = if settings.lighthouse.serve_dns then "CAP_NET_ADMIN CAP_NET_BIND_SERVICE" else "CAP_NET_ADMIN";
+              AmbientCapabilities = if settings.lighthouse.serve_dns then "CAP_NET_ADMIN CAP_NET_BIND_SERVICE" else "CAP_NET_ADMIN";
               LockPersonality = true;
               NoNewPrivileges = true;
               PrivateDevices = false; # needs access to /dev/net/tun (below)
@@ -227,9 +256,9 @@ in
           };
         }) enabledNetworks);
 
-    # Open the chosen ports for UDP.
-    networking.firewall.allowedUDPPorts =
-      unique (mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks);
+    # Open the chosen ports for UDP, as well as the dns port if serving dns
+    networking.firewall.allowedUDPPorts = unique ((mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks) ++
+      (mapAttrsToList(netName: netCfg: netCfg.dns.port)) enabledNetworks);
 
     # Create the service users and groups.
     users.users = mkMerge (mapAttrsToList (netName: netCfg:
