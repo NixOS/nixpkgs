@@ -29,9 +29,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall =
-	''
+  ''
       install -D FlashGBX/res/icon.png $out/share/icons/hicolor/256x256/apps/flashgbx.png
-	'';
+  '';
 
   pyproject = true;
 
