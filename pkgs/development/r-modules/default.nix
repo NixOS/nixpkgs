@@ -423,6 +423,7 @@ let
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = with pkgs; [ postgresql postgresql ];
     RProtoBuf = [ pkgs.protobuf ];
+    RQuantLib = with pkgs; [ quantlib.dev boost.dev ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
