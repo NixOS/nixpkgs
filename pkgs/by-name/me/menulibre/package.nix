@@ -6,6 +6,7 @@
 , intltool
 , gobject-introspection
 , wrapGAppsHook
+, nix-update-script
 , testers
 , menulibre
 }:
@@ -45,9 +46,12 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = menulibre;
-    command = "HOME=$TMPDIR menulibre --version | cut -d' ' -f2";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = menulibre;
+      command = "HOME=$TMPDIR menulibre --version | cut -d' ' -f2";
+    };
   };
 
   meta = with lib; {
