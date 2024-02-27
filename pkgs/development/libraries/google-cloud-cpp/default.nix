@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     # require -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=ON. With
     # Protobuf  >= v23.x they require They require setting
     # -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=OFF
-    ctest --label-exclude integration-test --exclude-regex storage_benchmarks_ 
+    ctest --label-exclude integration-test --exclude-regex storage_benchmarks_
 
     runHook postInstallCheck
   '';
