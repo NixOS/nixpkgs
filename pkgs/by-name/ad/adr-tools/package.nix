@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/npryce/${pname}";
     description = "CLI tool for working with Architecture Decision Records";
-    license = licenses.cc-by-40;
+    license = licenses.gpl3;
     maintainers = [ maintainers.bbb ];
     mainProgram = "adr";
   };
