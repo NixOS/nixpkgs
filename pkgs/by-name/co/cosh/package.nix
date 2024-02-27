@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ openssl ];
 
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoLock.lockFile = ./Cargo.lock;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   buildPhase = ''
     runHook preBuild
