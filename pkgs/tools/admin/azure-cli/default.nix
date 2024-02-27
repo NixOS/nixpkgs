@@ -75,7 +75,7 @@ let
   };
 in
 
-py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
+py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
   pname = "azure-cli";
   inherit version src;
 
@@ -254,7 +254,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   '' + lib.optionalString (withExtensions != [ ]) ''
     --set AZURE_EXTENSION_DIR ${extensionDir} \
   '' + ''
-    --set PYTHONPATH $PYTHONPATH
+    --set PYTHONPATH "${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages}"
   '';
 
   doInstallCheck = true;
