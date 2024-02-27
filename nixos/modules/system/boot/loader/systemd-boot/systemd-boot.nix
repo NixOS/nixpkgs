@@ -49,12 +49,10 @@ let
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
-  } ''
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" { } ''
     mkdir -p $out/bin
     install -m755 ${systemdBootBuilder} $out/bin/systemd-boot-builder
-    mypy \
+    ${lib.getExe pkgs.buildPackages.mypy} \
       --no-implicit-optional \
       --disallow-untyped-calls \
       --disallow-untyped-defs \

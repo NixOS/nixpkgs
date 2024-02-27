@@ -18944,8 +18944,6 @@ with pkgs;
 
   drm_info = callPackage ../development/tools/drm_info { };
 
-  drush = callPackage ../development/tools/misc/drush { };
-
   dura = callPackage ../development/tools/misc/dura {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -31138,9 +31136,6 @@ with pkgs;
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   eww = callPackage ../applications/window-managers/eww { };
-  eww-wayland = callPackage ../applications/window-managers/eww {
-    withWayland = true;
-  };
 
   exaile = callPackage ../applications/audio/exaile { };
 
