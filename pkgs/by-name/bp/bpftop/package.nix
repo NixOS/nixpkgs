@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     description = "A dynamic real-time view of running eBPF programs";
     homepage = "https://github.com/Netflix/bpftop";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mfrw ];
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      mfrw
+    ];
     mainProgram = "bpftop";
   };
 }
