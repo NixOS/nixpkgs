@@ -220,7 +220,7 @@ in
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;
-    services.xserver.displayManager.sessionPackages = [ cfg.package ];
+    services.displayManager.sessionPackages = [ cfg.package ];
 
     environment.etc."phosh/phoc.ini".source =
       if builtins.isPath cfg.phocConfig then cfg.phocConfig

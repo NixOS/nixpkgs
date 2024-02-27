@@ -38,8 +38,8 @@ in
 
   config = mkIf cfg.enable
     {
-      services.xserver.displayManager.sessionPackages = [ pkgs.deepin.dde-session ];
-      services.xserver.displayManager.defaultSession = mkDefault "dde-x11";
+      services.displayManager.sessionPackages = [ pkgs.deepin.dde-session ];
+      services.displayManager.defaultSession = mkDefault "dde-x11";
 
       # Update the DBus activation environment after launching the desktop manager.
       services.xserver.displayManager.sessionCommands = ''

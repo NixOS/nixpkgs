@@ -87,7 +87,7 @@ in
         default = null;
         example = "none";
         description = lib.mdDoc ''
-          **Deprecated**, please use [](#opt-services.xserver.displayManager.defaultSession) instead.
+          **Deprecated**, please use [](#opt-services.displayManager.defaultSession) instead.
 
           Default desktop manager loaded if none have been chosen.
         '';

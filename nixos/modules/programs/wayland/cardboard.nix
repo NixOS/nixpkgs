@@ -17,7 +17,7 @@ in
       environment.systemPackages = [ cfg.package ];
 
       # To make a cardboard session available for certain DMs like SDDM
-      services.xserver.displayManager.sessionPackages = [ cfg.package ];
+      services.displayManager.sessionPackages = [ cfg.package ];
     }
     (import ./wayland-session.nix { inherit lib pkgs; })
   ]);
