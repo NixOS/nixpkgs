@@ -51,7 +51,6 @@
   pscid = "pscid";
   remod-cli = "remod";
   teck-programmer = "teck-firmware-upgrade";
-  typescript-language-server = "typescript-language-server";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }
