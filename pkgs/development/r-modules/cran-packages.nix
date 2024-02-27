@@ -4395,7 +4395,7 @@ in with self; {
   RPushbullet = derive2 { name="RPushbullet"; version="0.3.4"; sha256="1mx433hvx660a63s5dzn655zmqv1c1qij0hzddl9z38032brc4ii"; depends=[curl jsonlite]; };
   RPyGeo = derive2 { name="RPyGeo"; version="1.0.0"; sha256="1alqgx6blqqwxm76w05g82kc2icx8nvjw7qkdz73gf9ckgza5bb3"; depends=[magrittr purrr raster reticulate rmarkdown sf stringr]; };
   RQEntangle = derive2 { name="RQEntangle"; version="0.1.3"; sha256="178haddk8nnscy2vym3k2a3ca9lf6nl7rpjja8lxqdjninvhvwb2"; depends=[iterators itertools]; };
-  RQuantLib = derive2 { name="RQuantLib"; version="0.4.20"; sha256="0pl4ggr09drzr60935j4md597fdp53p6cjd1885knm78syh5ansn"; depends=[Rcpp zoo]; };
+  RQuantLib = derive2 { name="RQuantLib"; version="0.4.21"; sha256="06xj6cl17j821jbs8dk1hadzn18k10lqq6550dj65d837dx63hnj"; depends=[Rcpp zoo]; };
   RRBoost = derive2 { name="RRBoost"; version="0.1"; sha256="0zp3csrpi0awk88m6sq5sf5v7j32q5sd4mwv61x6bblg991k404k"; depends=[RobStatTM rpart]; };
   RRF = derive2 { name="RRF"; version="1.9.4"; sha256="1kdyw0v1m3ajf88gzs70p6l6pic4g46ccwqxi9iznimayby6ygjb"; depends=[]; };
   RRI = derive2 { name="RRI"; version="1.1"; sha256="0msdc5j5vx4snl8r3q5nn0mw2i80jds5pjykhmigcrx6jzg6h6i7"; depends=[Rcpp RcppArmadillo]; };
