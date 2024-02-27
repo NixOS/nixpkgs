@@ -275,7 +275,6 @@ createTree() {
 # )
 # checkFileset './a' # Pass the fileset as the argument
 checkFileset() {
-    # New subshell so that we can have a separate trap handler, see `trap` below
     local fileset=$1
 
     # Create the tree
@@ -283,16 +282,20 @@ checkFileset() {
 
     # Process the tree into separate arrays for included paths, excluded paths and excluded files.
     local -a included=()
+    local -a includedFiles=()
     local -a excluded=()
     local -a excludedFiles=()
     for p in "${!tree[@]}"; do
         case "${tree[$p]}" in
             1)
                 included+=("$p")
+                # If keys end with a `/` we treat them as directories, otherwise files
+                if [[ ! "$p" =~ /$ ]]; then
+                    includedFiles+=("$p")
+                fi
                 ;;
             0)
                 excluded+=("$p")
-                # If keys end with a `/` we treat them as directories, otherwise files
                 if [[ ! "$p" =~ /$ ]]; then
                     excludedFiles+=("$p")
                 fi
@@ -301,6 +304,10 @@ checkFileset() {
                 die "Unsupported tree value: ${tree[$p]}"
         esac
     done
+
+    # Test that lib.fileset.toList contains exactly the included files.
+    # The /#/./ part prefixes each element with `./`
+    expectEqual "toList ($fileset)" "sort lessThan [ ${includedFiles[*]/#/./} ]"
 
     expression="toSource { root = ./.; fileset = $fileset; }"
 
@@ -509,6 +516,19 @@ checkFileset './c'
 expectEqual '_toSourceFilter (_create /. null) "/foo" ""' 'false'
 expectEqual '_toSourceFilter (_create /. { foo = "regular"; }) "/foo" ""' 'true'
 expectEqual '_toSourceFilter (_create /. { foo = null; }) "/foo" ""' 'false'
+
+
+## lib.fileset.toList
+# This function is mainly tested in checkFileset
+
+# The error context for an invalid argument must be correct
+expectFailure 'toList null' 'lib.fileset.toList: Argument is of type null, but it should be a file set or a path instead.'
+
+# Works for the empty fileset
+expectEqual 'toList _emptyWithoutBase' '[ ]'
+
+# Works on empty paths
+expectEqual 'toList ./.' '[ ]'
 
 
 ## lib.fileset.union, lib.fileset.unions
