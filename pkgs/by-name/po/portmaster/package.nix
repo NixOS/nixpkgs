@@ -44,6 +44,6 @@ buildGoModule rec {
     description = "A free and open-source application firewall that does the heavy lifting for you";
     homepage = "https://safing.io";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ nyanbinary syntax626 ];
+    maintainers = with maintainers; [ nyanbinary sntx ];
   };
 }

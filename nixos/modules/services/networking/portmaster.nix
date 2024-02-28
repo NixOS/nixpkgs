@@ -89,5 +89,5 @@ with lib; {
     };
   };
 
-  meta.maintainers = with maintainers; [ syntax626 ];
+  meta.maintainers = with maintainers; [ sntx ];
 }
