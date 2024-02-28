@@ -33,8 +33,10 @@
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
+, withCdio ? withFullDeps && withGPL # audio CD grabbing
 , withCelt ? withFullDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
+, withCodec2 ? withFullDeps # codec2 en/decoding
 , withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
@@ -51,8 +53,12 @@
 , withGsm ? withFullDeps # GSM de/encoder
 , withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
+, withIec61883 ? withFullDeps # Iec61883
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
+, withJxl ? withFullDeps && lib.versionAtLeast version "6.1" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLcms2 ? withFullDeps && lib.versionAtLeast version "5.0" # ICC profile support
+, withLv2 ? withFullDeps # LV2 audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
@@ -63,7 +69,9 @@
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
-, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder & AMR-WB decoder
+, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
+, withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
+, withOpencv ? withFullDeps # video filtering with opencv
 , withOpengl ? false # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
@@ -71,11 +79,17 @@
 , withOpus ? withHeadlessDeps # Opus de/encoder
 , withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && !stdenv.isDarwin # Pulseaudio input support
+, withRabbitmq ? withFullDeps # RabbitMQ support
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
+, withRist ? withFullDeps # RIST support
 , withRtmp ? false # RTMP[E] support
+, withRubberband ? withFullDeps && withGPL # Rubberband filter
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
 , withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
+, withShine ? withFullDeps # Fixed-point MP3 encoding
+, withSnappy ? withFullDeps # Snappy compression, needed for hap encoding
+, withSndio ? withFullDeps # MIDI framework
 , withSoxr ? withHeadlessDeps # Resampling via soxr
 , withSpeex ? withHeadlessDeps # Speex de/encoder
 , withSrt ? withHeadlessDeps # Secure Reliable Transport (SRT) protocol
@@ -83,10 +97,13 @@
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support
+, withTesseract ? false # Tesseract ocr filter ~1GB
 , withTheora ? withHeadlessDeps # Theora encoder
+, withTwolame ? withFullDeps # MP2 encoding
 , withV4l2 ? withHeadlessDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
+, withVapoursynth ? withFullDeps # VapourSynth demuxer
 , withVdpau ? withSmallDeps # Vdpau hardware acceleration
 , withVidStab ? withFullDeps && withGPL # Video stabilization
 , withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
@@ -191,6 +208,7 @@
 , bzip2
 , celt
 , chromaprint
+, codec2
 , clang
 , dav1d
 , fdk_aac
@@ -206,18 +224,24 @@
 , intel-media-sdk
 , ladspaH
 , lame
+, lcms
 , libaom
 , libaribcaption
 , libass
+, libavc1394
 , libbluray
 , libbs2b
 , libcaca
+, libcdio
+, libcdio-paranoia
 , libdc1394
 , libdrm
 , libGL
 , libGLU
 , libiconv
+, libiec61883
 , libjack2
+, libjxl
 , libmodplug
 , libmysofa
 , libogg
@@ -227,6 +251,7 @@
 , libplacebo_5
 , libpulseaudio
 , libraw1394
+, librist
 , librsvg
 , libssh
 , libtensorflow
@@ -244,23 +269,33 @@
 , libXext
 , libxml2
 , libXv
+, lilv
 , nv-codec-headers
 , nv-codec-headers-12
 , ocl-icd # OpenCL ICD
 , openal
 , opencl-headers  # OpenCL headers
 , opencore-amr
+, opencv2
 , openh264
 , openjpeg
+, rabbitmq-c
 , rav1e
 , rtmpdump
+, rubberband
 , samba
 , SDL2
 , shaderc
+, shine
+, snappy
+, sndio
 , soxr
 , speex
 , srt
 , svt-av1
+, tesseract
+, twolame
+, vapoursynth
 , vid-stab
 , vo-amrwbenc
 , vulkan-headers
@@ -476,8 +511,11 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
+    (enableFeature withCaca "libcaca")
+    (enableFeature withCdio "libcdio")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
+    (enableFeature withCodec2 "libcodec2")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
     (enableFeature withDav1d "libdav1d")
@@ -486,6 +524,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withFdkAac "libfdk-aac")
     (enableFeature withFlite "libflite")
     (enableFeature withFontconfig "fontconfig")
+    (enableFeature withFontconfig "libfontconfig")
     (enableFeature withFreetype "libfreetype")
     (enableFeature withFrei0r "frei0r")
     (enableFeature withFribidi "libfribidi")
@@ -496,8 +535,16 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withHarfbuzz "libharfbuzz")
   ] ++ [
     (enableFeature withIconv "iconv")
+    (enableFeature withIec61883 "libiec61883")
     (enableFeature withJack "libjack")
+  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+    (enableFeature (withJxl && versionAtLeast finalAttrs.version "6.1") "libjxl")
+  ] ++ [
     (enableFeature withLadspa "ladspa")
+  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+    (enableFeature withLcms2 "lcms2")
+  ] ++ [
+    (enableFeature withLv2 "lv2")
     (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
     (enableFeature withModplug "libmodplug")
@@ -509,6 +556,8 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenal "openal")
     (enableFeature withOpencl "opencl")
     (enableFeature withOpencoreAmrnb "libopencore-amrnb")
+    (enableFeature withOpencoreAmrwb "libopencore-amrwb")
+    (enableFeature withOpencv "libopencv")
     (enableFeature withOpengl "opengl")
     (enableFeature withOpenh264 "libopenh264")
     (enableFeature withOpenjpeg "libopenjpeg")
@@ -518,13 +567,19 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withPlacebo "libplacebo")
   ] ++ [
     (enableFeature withPulse "libpulse")
+    (enableFeature withRabbitmq "librabbitmq")
     (enableFeature withRav1e "librav1e")
+    (enableFeature withRist "librist")
     (enableFeature withRtmp "librtmp")
+    (enableFeature withRubberband "librubberband")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
   ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
     (enableFeature withShaderc "libshaderc")
   ] ++ [
+    (enableFeature withShine "libshine")
+    (enableFeature withSnappy "libsnappy")
+    (enableFeature withSndio "sndio")
     (enableFeature withSoxr "libsoxr")
     (enableFeature withSpeex "libspeex")
     (enableFeature withSrt "libsrt")
@@ -532,10 +587,13 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withSvg "librsvg")
     (enableFeature withSvtav1 "libsvtav1")
     (enableFeature withTensorflow "libtensorflow")
+    (enableFeature withTesseract "libtesseract")
     (enableFeature withTheora "libtheora")
+    (enableFeature withTwolame "libtwolame")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
     (enableFeature withVaapi "vaapi")
+    (enableFeature withVapoursynth "vapoursynth")
     (enableFeature withVdpau "vdpau")
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
     (enableFeature withVmaf "libvmaf")
@@ -597,8 +655,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
+  ++ optionals withCdio [ libcdio libcdio-paranoia ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
+  ++ optionals withCodec2 [ codec2 ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
@@ -613,8 +673,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withGsm [ gsm ]
   ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
+  ++ optionals withIec61883 [ libiec61883 libavc1394 ]
   ++ optionals withJack [ libjack2 ]
+  ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLcms2 [ lcms ]
+  ++ optionals withLv2 [ lilv ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
@@ -623,7 +687,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
-  ++ optionals withOpencoreAmrnb [ opencore-amr ]
+  ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
+  ++ optionals withOpencv [ opencv2 ]
   ++ optionals withOpengl [ libGL libGLU ]
   ++ optionals withOpenh264 [ openh264 ]
   ++ optionals withOpenjpeg [ openjpeg ]
@@ -631,11 +696,17 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withOpus [ libopus ]
   ++ optionals withPlacebo [ (if (lib.versionAtLeast finalAttrs.version "6.1") then libplacebo else libplacebo_5) vulkan-headers ]
   ++ optionals withPulse [ libpulseaudio ]
+  ++ optionals withRabbitmq [ rabbitmq-c ]
   ++ optionals withRav1e [ rav1e ]
+  ++ optionals withRist [ librist ]
   ++ optionals withRtmp [ rtmpdump ]
+  ++ optionals withRubberband [ rubberband ]
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
   ++ optionals withShaderc [ shaderc ]
+  ++ optionals withShine [ shine ]
+  ++ optionals withSnappy [ snappy ]
+  ++ optionals withSndio [ sndio ]
   ++ optionals withSoxr [ soxr ]
   ++ optionals withSpeex [ speex ]
   ++ optionals withSrt [ srt ]
@@ -643,9 +714,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSvg [ librsvg ]
   ++ optionals withSvtav1 [ svt-av1 ]
   ++ optionals withTensorflow [ libtensorflow ]
+  ++ optionals withTesseract [ tesseract ]
   ++ optionals withTheora [ libtheora ]
+  ++ optionals withTwolame [ twolame ]
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
+  ++ optionals withVapoursynth [ vapoursynth ]
   ++ optionals withVdpau [ libvdpau ]
   ++ optionals withVidStab [ vid-stab ]
   ++ optionals withVmaf [ libvmaf ]
