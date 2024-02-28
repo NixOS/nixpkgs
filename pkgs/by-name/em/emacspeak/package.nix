@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "emacspeak";
-  version = "58.0";
+  version = "59.0";
 
   src = fetchFromGitHub {
     owner = "tvraman";
     repo = "emacspeak";
     rev = finalAttrs.version;
-    hash = "sha256-5pWC17nvy3ZuG0bR//LqDVpKsH5hFSFf63Q33a1BfBk=";
+    hash = "sha256-npS/wlqI7nBde/2S/rzp79jdfYXIIhgsVs5VizxEDAQ=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
     # Emacspeak requires a minimal Emacs version; let's use the broken flag
-    broken = lib.versionOlder (lib.getVersion emacs) "28.2";
+    broken = lib.versionOlder (lib.getVersion emacs) "29.1";
   };
 })
