@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "8.0.1";
+  version = "8.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-3W5XfSOaKCCBjDHJh8IP/5I48py3j6i2O3FfhbcQzbY=";
+    hash = "sha256-wDEHHc+TFlrp2X2/03NNxZut1bn1Sn7y4Sk5nGYBvEs=";
   };
 
   nativeBuildInputs = [

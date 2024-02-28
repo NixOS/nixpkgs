@@ -24,7 +24,14 @@
 
 let
   pname = "ollama";
-  version = "0.1.26";
+  version = "0.1.27";
+  src = fetchFromGitHub {
+    owner = "jmorganca";
+    repo = "ollama";
+    rev = "v${version}";
+    hash = "sha256-+ayby+yVknFHLTyLjMAPMnOTMSzTKqzi9caN/TppcEg=";
+    fetchSubmodules = true;
+  };
 
   validAccel = lib.assertOneOf "ollama.acceleration" acceleration [ null "rocm" "cuda" ];
 
@@ -74,14 +81,6 @@ let
       buildGoModule.override { stdenv = overrideCC stdenv gcc12; }
     else
       buildGoModule;
-
-  src = fetchFromGitHub {
-    owner = "jmorganca";
-    repo = "ollama";
-    rev = "v${version}";
-    hash = "sha256-Kw3tt9ayEMgI2V6OeaOkWfNwqfCL7MDD/nN5iXk5LnY=";
-    fetchSubmodules = true;
-  };
   preparePatch = patch: hash: fetchpatch {
     url = "file://${src}/llm/patches/${patch}";
     inherit hash;

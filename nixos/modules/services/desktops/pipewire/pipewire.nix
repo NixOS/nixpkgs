@@ -293,6 +293,18 @@ in {
         assertion = (cfg.alsa.enable || cfg.pulse.enable) -> cfg.audio.enable;
         message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Set `services.pipewire.audio.enable` to true.";
       }
+      {
+        assertion = builtins.length
+          (builtins.attrNames
+            (
+              lib.filterAttrs
+                (name: value:
+                  lib.hasPrefix "pipewire/" name || name == "pipewire"
+                )
+                config.environment.etc
+            )) == 1;
+        message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported in 24.05. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";
+      }
     ];
 
     environment.systemPackages = [ cfg.package ]
