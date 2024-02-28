@@ -20,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.1";
-  format = "setuptools";
+  version = "0.10.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
-    repo = pname;
+    repo = "mmengine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PG6KSoM5VUyU84z66eZknQfMhS4YWAmyWCIIpRwUOpU=";
+    hash = "sha256-fKtPDdeKB3vX2mD+Tsicq8KOkPDSACzKK1XLyugdPQ4=";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,12 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+  ''
+  # Otherwise, the backprop hangs forever. More precisely, this exact line:
+  # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
+  # Solution suggested in https://github.com/pytorch/pytorch/issues/91547#issuecomment-1370011188
+  + ''
+    export MKL_NUM_THREADS=1
   '';
 
   pythonImportsCheck = [
@@ -77,6 +83,14 @@ buildPythonPackage rec {
     "test_lazy_import"
     # AssertionError
     "test_lazy_module"
+
+    # Require unpackaged aim
+    "test_experiment"
+    "test_add_config"
+    "test_add_image"
+    "test_add_scalar"
+    "test_add_scalars"
+    "test_close"
   ];
 
   meta = with lib; {

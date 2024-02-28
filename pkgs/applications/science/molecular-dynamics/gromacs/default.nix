@@ -7,6 +7,7 @@
 , perl
 , blas
 , lapack
+, llvmPackages
 , mpi
 , cudaPackages
 , plumed
@@ -17,6 +18,10 @@
 , enablePlumed ? false
 , cpuAcceleration ? null
 }:
+
+
+# CUDA is only implemented for single precission
+assert enableCuda -> singlePrec;
 
 let
   inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot;
@@ -40,8 +45,8 @@ let
       }
     else
       {
-        version = "2023.3";
-        hash = "sha256-Tsj40MevdrE/j9FtuOLBIOdJ3kOa6VVNn2U/gS140cs=";
+        version = "2024";
+        hash = "sha256-BNIm1SBmqLw6QuANYhPec3tOwpLiZwMGWST/AZVoAeI=";
       };
 
 in stdenv.mkDerivation rec {
@@ -74,10 +79,11 @@ in stdenv.mkDerivation rec {
     lapack
   ] ++ lib.optional enableMpi mpi
   ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cccl
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api
-  ];
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;

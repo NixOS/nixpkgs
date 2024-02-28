@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     sphinx
+    # sphinxemoji.py imports pkg_resources directly
+    setuptools
    ];
 
   pythonImportsCheck = [

@@ -18,5 +18,6 @@ buildGoModule rec {
     description = "A cross-platform Proxy/VPN software";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ xrelkd ];
+    mainProgram = "brook";
   };
 }

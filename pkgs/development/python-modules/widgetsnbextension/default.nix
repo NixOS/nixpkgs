@@ -2,22 +2,25 @@
 , buildPythonPackage
 , fetchPypi
 , jupyter-packaging
-, notebook
 , ipywidgets
 }:
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "4.0.9";
-  format = "setuptools";
+  version = "4.0.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PB9eRtwRZt/UCkLWhealE5b9NP+Hh0Kj5HxvDMSio4U=";
+    hash = "sha256-ZBlsX/O5qRg6jmmaQif7C3AC8lLIFAmOZsTRzQZEaI8=";
   };
 
   nativeBuildInputs = [
     jupyter-packaging
+  ];
+
+  pythonImportsCheck = [
+    "widgetsnbextension"
   ];
 
   # No tests in archive

@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.10.0";
+  version = "1.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VffgHJLsfnT3xqELV7Ze1o1rqohKxscC3SDthP8TwzI=";
+    hash = "sha256-3otPmMVV/Wx7k/oec5c1r6GcZGzhMSKifJB8S5nBSZw=";
   };
 
   nativeBuildInputs = [
@@ -74,13 +74,18 @@ buildPythonPackage rec {
     dirty-equals
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
-    # makes network requests
+    # Tests make network requests
     "test_streaming_response"
+    "test_copy_build_request"
   ];
 
   disabledTestPaths = [
-    # makes network requests
+    # Test makes network requests
     "tests/api_resources"
   ];
 

@@ -14,6 +14,8 @@ anyhow = "1.0"
 lazy_static = "1.4.0"
 colored = "2.0.4"
 itertools = "0.11.0"
+rowan = "0.15.11"
 
 [dev-dependencies]
 temp-env = "0.3.5"
+indoc = "2.0.4"

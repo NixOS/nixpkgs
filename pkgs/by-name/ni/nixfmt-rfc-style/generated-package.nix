@@ -8,8 +8,8 @@ mkDerivation {
   pname = "nixfmt";
   version = "0.5.0";
   src = fetchzip {
-    url = "https://github.com/piegamesde/nixfmt/archive/1eff7a84ac82fbebb5f586244f1c80e1fcc4f494.tar.gz";
-    sha256 = "1pg876sr58h7v087kbjsnfr4pzvqpwzibl06w2468qs1sywmd283";
+    url = "https://github.com/piegamesde/nixfmt/archive/d6930fd0c62c4d7ec9e4a814adc3d2f590d96271.tar.gz";
+    sha256 = "1ijrdzdwricv4asmy296j7gzvhambv96nlxi3qrxb4lj1by6a34m";
   };
   isLibrary = true;
   isExecutable = true;

@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
+    mainProgram = "lnxrouter";
   };
 }

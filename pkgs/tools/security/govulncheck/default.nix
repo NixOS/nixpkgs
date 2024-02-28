@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "govulncheck";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1x2hj4HD3KAo9w1QXh5qsWtcAM0Kly5u/DRd13Mqa5w=";
+    hash = "sha256-GLZaJ/hVA1A2Mek1G7QkDGowqa5Bm4sRh0Y7QMhud/w=";
   };
 
   patches = [

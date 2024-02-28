@@ -790,13 +790,21 @@ in
         '';
       };
       systemd.tmpfiles.settings."10-sourcehut-gitsrht" = mkIf cfg.git.enable (
-        builtins.listToAttrs (map (name: {
-          name = "/var/log/sourcehut/gitsrht-${name}";
-          value.f = {
-            inherit (cfg.git) user group;
-            mode = "0644";
-          };
-        }) [ "keys" "shell" "update-hook" ])
+        mkMerge [
+          (builtins.listToAttrs (map (name: {
+            name = "/var/log/sourcehut/gitsrht-${name}";
+            value.f = {
+              inherit (cfg.git) user group;
+              mode = "0644";
+            };
+          }) [ "keys" "shell" "update-hook" ]))
+          {
+            ${cfg.settings."git.sr.ht".repos}.d = {
+              inherit (cfg.git) user group;
+              mode = "0644";
+            };
+          }
+        ]
       );
       systemd.services.sshd = {
         preStart = mkIf cfg.hg.enable ''
@@ -1370,5 +1378,5 @@ in
   ];
 
   meta.doc = ./default.md;
-  meta.maintainers = with maintainers; [ tomberek nessdoor ];
+  meta.maintainers = with maintainers; [ tomberek nessdoor christoph-heiss ];
 }

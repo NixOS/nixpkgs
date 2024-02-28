@@ -2,41 +2,30 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , cryptography
 , ifaddr
-, pytest-asyncio
+, pytest-asyncio_0_21
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "2.11.2";
-  format = "pyproject";
+  version = "2.12.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "XKNX";
-    repo = pname;
+    repo = "xknx";
     rev = "refs/tags/${version}";
-    hash = "sha256-rKvHb0wkWVuZO8M8uIQdOiY1N6DmGSpqUgz4YYbUfSM=";
+    hash = "sha256-O8xhih/EVULTq4jdmxInzXRO4m6PJA9pyzsHjR+58dQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "unpin-setuptools.patch";
-      url = "https://github.com/XKNX/xknx/commit/c0826aec52ab69b8bd81f600bea154fae16f334e.patch";
-      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -46,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytestCheckHook
   ];
 
@@ -59,6 +48,15 @@ buildPythonPackage rec {
     "test_scan_timeout"
     "test_start_secure_routing_knx_keys"
     "test_start_secure_routing_manual"
+    # RuntimeError: Event loop is closed
+    "test_has_group_address_localtime"
+    "test_invalid_authentication"
+    "test_invalid_frames"
+    "test_no_authentication"
+    "test_process_read_localtime"
+    "test_sync_date"
+    "test_sync_datetime"
+    "test_sync_time_local"
   ];
 
   meta = with lib; {

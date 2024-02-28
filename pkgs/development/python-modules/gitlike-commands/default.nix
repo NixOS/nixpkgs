@@ -1,14 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gitlike-commands";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,17 +16,8 @@ buildPythonPackage rec {
     owner = "unixorn";
     repo = "gitlike-commands";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VjweN4gigzCNvg6TccZx2Xw1p7SusKplxUTZjItTQc0=";
+    hash = "sha256-Z0l8nCKov1iMJvI3YTHvg0ey+oPju3rgaKtmk6OX44g=";
   };
-
-  patches = [
-    # Replace distutils, https://github.com/unixorn/gitlike-commands/pull/8
-    (fetchpatch {
-      name = "replace-distutils.patch";
-      url = "https://github.com/unixorn/gitlike-commands/commit/8a97206aff50a25ac6860032aa03925899c3d0aa.patch";
-      hash = "sha256-a2utKbf9vrQlYlPcdj/+OAqWf7VkuC5kvbJ53SK52IA=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core

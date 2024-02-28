@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "citus";
-  version = "12.1.0";
+  version = "12.1.2";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "citus";
     rev = "v${version}";
-    hash = "sha256-ypuinDOHvgjRdbnTTFBpALy6rIR3rrP00JDvlHtmCTk=";
+    hash = "sha256-0uYNMLAYigtGlDRvOEkQeC5i58QfXcdSVjTQwWVFX+8=";
   };
 
   buildInputs = [

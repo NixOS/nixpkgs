@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/LamdaLamdaLamda/cocom";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cocom";
   };
 }

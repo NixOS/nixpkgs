@@ -9,12 +9,13 @@
 , pyjwt
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +24,12 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o7u/C9Ylw903Hat4xZdb0YYVtXKSu2WljD9uiLQeFIU=";
+    hash = "sha256-nPXs6thXAshDojgHSNyEeBN/jNJkfFECSuY5f51Zozo=";
   };
+
+  pythonRelaxDeps = [
+    "hishel"
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -33,6 +38,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

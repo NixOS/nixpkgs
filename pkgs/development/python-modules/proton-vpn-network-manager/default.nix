@@ -8,19 +8,20 @@
 , proton-vpn-connection
 , pycairo
 , pygobject3
+, pytest-asyncio
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-network-manager";
-  version = "0.3.0-unstable-2023-09-05";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager";
-    rev = "6ffd04fa0ae88a89d2b733443317066ef23b3ccd";
-    hash = "sha256-Bqlwo7U/mwodQarl30n3/BNETqit1MVQUJT+mAhC6AI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UEXoIFLB3/q3G3ASrgsXxF21iT5rCWm4knGezcmxmnk=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +41,13 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton/vpn/backend/linux/networkmanager --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton/vpn/backend/linux/networkmanager --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.backend.linux.networkmanager" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 

@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchurl {
     url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-    hash = "sha256-BmCLF/4wjBDxToMW0OYqI6PZwqmctgBs7nBygmJ+YOU=";
+    hash = "sha256-adFQCuHkorXixn/dId/vrCcnjQ2VDDQM049UrodjFgA=";
   };
 
   nativeBuildInputs = [

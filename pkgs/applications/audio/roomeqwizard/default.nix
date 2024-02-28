@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "roomeqwizard";
-  version = "5.30.5";
+  version = "5.30.9";
 
   src = fetchurl {
     url = "https://www.roomeqwizard.com/installers/REW_linux_no_jre_${lib.replaceStrings [ "." ] [ "_" ] version}.sh";
-    sha256 = "sha256-lxOI6vvPFtC/oYs2cKV0IhRbvaFzK8wBmSXPUwhAsi0=";
+    sha256 = "sha256-gyitOq/HTDruP4nY6B7y1E+pL43yRhldyiiXEjKyogU=";
   };
 
   dontUnpack = true;
@@ -114,5 +114,6 @@ stdenv.mkDerivation rec {
       REW is free software for room acoustic measurement, loudspeaker
       measurement and audio device measurement.
     '';
+    mainProgram = "roomeqwizard";
   };
 }

@@ -21,7 +21,7 @@
 , double-conversion
 , util-linux
 , systemd
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? stdenv.hostPlatform.isLinux
 , libb2
 , md4c
 , mtdev
@@ -87,7 +87,7 @@
 , dconf
 , gtk3
   # options
-, libGLSupported ? stdenv.isLinux
+, libGLSupported ? stdenv.hostPlatform.isLinux
 , libGL
 , debug ? false
 , developerBuild ? false
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     unixODBCDrivers.mariadb
   ] ++ lib.optionals systemdSupport [
     systemd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux
     mtdev
     lksctp-tools
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AGL
     AVFoundation
     AppKit
@@ -178,9 +178,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     at-spi2-core
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libinput
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     AppKit
     CoreBluetooth
   ]
@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
-    ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -203,9 +203,9 @@ stdenv.mkDerivation rec {
 
   # https://bugreports.qt.io/browse/QTBUG-97568
   postPatch = ''
-    substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/QtAutoDetect.cmake --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+    substituteInPlace src/corelib/CMakeLists.txt --replace-fail "/bin/ls" "${coreutils}/bin/ls"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
   '';
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
@@ -225,16 +225,16 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_libproxy=ON"
     "-DQT_FEATURE_system_sqlite=ON"
     "-DQT_FEATURE_openssl_linked=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DQT_FEATURE_sctp=ON"
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
   ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
-  env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
     "-framework GSS"
   ]);

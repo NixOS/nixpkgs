@@ -4,13 +4,13 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "0.35.1";
+    version = "0.35.2";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-5XMdI+TMUd+U6bvDQT9Q62ATxtbnRAJ/XDYWHgVEUbU=";
+      hash = "sha256-ctgDuWbNLMyQrxnarTbCtGXM5G+bPeS4Xa7eTbkFo0k=";
     };
 
     nativeBuildInputs = [

@@ -1229,10 +1229,12 @@ in
   in
 
   {
-    haskell = lib.recursiveUpdate prev.haskell {
-      compiler.${ghcName} = prev.haskell.compiler.${ghcName}.override {
-        # Unfortunately, the GHC setting is named differently for historical reasons
-        enableProfiledLibs = enableProfiling;
+    haskell = prev.haskell // {
+      compiler = prev.haskell.compiler // {
+        ${ghcName} = prev.haskell.compiler.${ghcName}.override {
+          # Unfortunately, the GHC setting is named differently for historical reasons
+          enableProfiledLibs = enableProfiling;
+        };
       };
     };
   })
@@ -1244,31 +1246,33 @@ in
   in
 
   {
-    haskell = lib.recursiveUpdate prev.haskell {
-      packages.${ghcName} = prev.haskell.packages.${ghcName}.override {
-        overrides = hfinal: hprev: {
-          mkDerivation = args: hprev.mkDerivation (args // {
-            # Since we are forcing our ideas upon mkDerivation, this change will
-            # affect every package in the package set.
-            enableLibraryProfiling = enableProfiling;
+    haskell = prev.haskell // {
+      packages = prev.haskell.packages // {
+        ${ghcName} = prev.haskell.packages.${ghcName}.override {
+          overrides = hfinal: hprev: {
+            mkDerivation = args: hprev.mkDerivation (args // {
+              # Since we are forcing our ideas upon mkDerivation, this change will
+              # affect every package in the package set.
+              enableLibraryProfiling = enableProfiling;
 
-            # To actually use profiling on an executable, executable profiling
-            # needs to be enabled for the executable you want to profile. You
-            # can either do this globally or…
-            enableExecutableProfiling = enableProfiling;
-          });
+              # To actually use profiling on an executable, executable profiling
+              # needs to be enabled for the executable you want to profile. You
+              # can either do this globally or…
+              enableExecutableProfiling = enableProfiling;
+            });
 
-          # …only for the package that contains an executable you want to profile.
-          # That saves on unnecessary rebuilds for packages that you only depend
-          # on for their library, but also contain executables (e.g. pandoc).
-          my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
+            # …only for the package that contains an executable you want to profile.
+            # That saves on unnecessary rebuilds for packages that you only depend
+            # on for their library, but also contain executables (e.g. pandoc).
+            my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
 
-          # If you are disabling profiling to save on build time, but want to
-          # retain the ability to substitute from the binary cache. Drop the
-          # override for mkDerivation above and instead have an override like
-          # this for the specific packages you are building locally and want
-          # to make cheaper to build.
-          my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+            # If you are disabling profiling to save on build time, but want to
+            # retain the ability to substitute from the binary cache. Drop the
+            # override for mkDerivation above and instead have an override like
+            # this for the specific packages you are building locally and want
+            # to make cheaper to build.
+            my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+          };
         };
       };
     };

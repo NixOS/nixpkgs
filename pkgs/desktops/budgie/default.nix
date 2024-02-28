@@ -8,5 +8,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   budgie-desktop-with-plugins = callPackage ./budgie-desktop/wrapper.nix { };
   budgie-gsettings-overrides = callPackage ./budgie-gsettings-overrides { };
   budgie-screensaver = callPackage ./budgie-screensaver { };
+  budgie-session = callPackage ./budgie-session { };
   magpie = callPackage ./magpie { };
 })

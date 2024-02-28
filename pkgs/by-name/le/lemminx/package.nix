@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , makeWrapper
-, jre
+, jre_headless
 , maven
 , writeScript
 , lemminx
@@ -67,7 +67,7 @@ maven.buildMavenPackage rec {
     install -Dm644 org.eclipse.lemminx/target/org.eclipse.lemminx-uber.jar \
       $out/share
 
-    makeWrapper ${jre}/bin/java $out/bin/lemminx \
+    makeWrapper ${jre_headless}/bin/java $out/bin/lemminx \
       --add-flags "-jar $out/share/org.eclipse.lemminx-uber.jar"
 
     runHook postInstall

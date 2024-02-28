@@ -4,20 +4,25 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pymicrobot";
-  version = "0.0.9";
-  format = "setuptools";
+  version = "0.0.18";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "PyMicroBot";
     inherit version;
-    hash = "sha256-dhhRHXdck7hJGkXQpkiMulLsnMluZ5ADZ9L8cNm6dFs=";
+    hash = "sha256-+CF1m/Z5txSOQSUp4TOCTS0fRNcL/zuWCpbox8yIOIk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     bleak

@@ -18,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.60.2";
-  format = "pyproject";
+  version = "0.62.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-3hYgb2uvyFQmtfdVKBorGhTgVt/Dq1roXTu7xvE7SHY=";
+    hash = "sha256-LMcyYDUH/jGrDW8sjrT9kHdIWQ20fOOcOJRhUpKMGi8=";
   };
 
   postPatch = ''

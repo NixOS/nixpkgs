@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "3.0.5";
+  version = "3.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     owner = "spec-first";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-VaHdUxZ72JCm9zFMSEg3EW1uwfn+IIYy3yrtW9qC6rA=";
+    hash = "sha256-0EaJwxT80qLqlrxYk4H7Pf/UKq2pA/8HGL8OiqNA/2s=";
   };
 
   nativeBuildInputs = [

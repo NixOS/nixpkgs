@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "paper-clip";
-  version = "4.0";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "Diego-Ivan";
     repo = "Paper-Clip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8RZE6YzoJ98D++w7v007cdurMdfZoX3oQvN94F1d9cI=";
+    hash = "sha256-lkPX8S/0e7qEAfRiq0MyacDrqSWllncd9STxR7NKUFw=";
   };
 
   nativeBuildInputs = [

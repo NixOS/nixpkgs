@@ -3,6 +3,7 @@
 with lib;
 
 let
+  cfg = config.services.pcscd;
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
 
   package = if config.security.polkit.enable
@@ -41,13 +42,19 @@ in
         See {manpage}`reader.conf(5)` for valid options.
       '';
     };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = lib.mdDoc "Extra command line arguments to be passed to the PCSC daemon.";
+    };
   };
 
   config = mkIf config.services.pcscd.enable {
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ package.out ];
-    systemd.packages = [ (getBin package) ];
+    environment.systemPackages = [ package ];
+    systemd.packages = [ package ];
 
     services.pcscd.plugins = [ pkgs.ccid ];
 
@@ -64,7 +71,7 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${getBin package}/bin/pcscd -f -x -c ${cfgFile}" ];
+      serviceConfig.ExecStart = [ "" "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}" ];
     };
   };
 }

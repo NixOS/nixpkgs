@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.linux;
     license = licenses.mpl20;
     maintainers = with maintainers; [ samhug ];
+    mainProgram = "pop-launcher";
   };
 }

@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.madjar ];
     platforms = platforms.unix;
+    mainProgram = "sshpass";
   };
 }

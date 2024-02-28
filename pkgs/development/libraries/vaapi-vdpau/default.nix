@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                   sha256 = "15snqf60ib0xb3cnav5b2r55qv8lv2fa4p6jwxajh8wbvqpw0ibz"; })
     (fetchpatch { url = "https://src.fedoraproject.org/rpms/libva-vdpau-driver/raw/0ad71107e28a60ea453ac70e895cf64342bd58d0/f/implement-vaquerysurfaceattributes.patch";
                   sha256 = "1dapx3bqqblw6l2iqqw1yff6qifam8q4m2rq343kwb3dqhy2ymy5"; })
-    (fetchpatch { url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-include-linux-videodev2.h.patch";
+    (fetchpatch { url = "https://github.com/gentoo/gentoo/raw/34d5cc6fcf1d76c1c2833cb534717246c221214c/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-include-linux-videodev2.h.patch";
                   sha256 = "1m4is6lk580mppsx2mvdv1xifj6gvx724si4qynsm9qrdfdc9fby"; })
   ];
 

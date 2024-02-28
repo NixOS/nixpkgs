@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.free;
     maintainers = with maintainers; [ ];
+    mainProgram = "snd";
   };
 }

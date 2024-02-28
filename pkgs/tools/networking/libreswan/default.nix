@@ -157,5 +157,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.freebsd;
     license = with licenses; [ gpl2Plus mpl20 ] ;
     maintainers = with maintainers; [ afranchuk rnhmjoj ];
+    mainProgram = "ipsec";
   };
 }

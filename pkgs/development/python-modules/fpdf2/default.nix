@@ -12,23 +12,24 @@
 , qrcode
 , camelot
 , uharfbuzz
+, lxml
 }:
 
 buildPythonPackage rec {
   pname = "fpdf2";
-  version = "2.7.6";
+  version = "2.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
     rev = version;
-    hash = "sha256-wiCKmS+GlrYV2/6TEdXUbmWIMWU4hyzswFJZR9EOWxc=";
+    hash = "sha256-6B68kwxAW3cHpwMTDhj3C4zEOR6o6USqpSXB7uxcEXs=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=fpdf --cov-report=xml" ""
+      --replace-fail "--cov=fpdf --cov-report=xml" ""
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     qrcode
     camelot
     uharfbuzz
+    lxml
   ];
 
   disabledTestPaths = [

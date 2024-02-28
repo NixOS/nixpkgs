@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "kubernetes-sigs";
-    repo   = "kind";
-    sha256 = "sha256-5yDoxrsnmz8N0Y35juItLtyclTz+pSb75B1P716XPxU=";
+    rev = "v${version}";
+    owner = "kubernetes-sigs";
+    repo = "kind";
+    hash = "sha256-DJTsyGEQA36MSmW5eWYTV1Tk6JOBIVJrEARA/x70S0U=";
   };
 
   patches = [
@@ -18,26 +18,28 @@ buildGoModule rec {
 
   vendorHash = "sha256-J/sJd2LLMBr53Z3sGrWgnWA8Ry+XqqfCEObqFyUD96g=";
 
-  CGO_ENABLED = 0;
-  GOFLAGS = [ "-trimpath" ];
-  ldflags = [ "-w" ];
-
-  doCheck = false;
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  CGO_ENABLED = 0;
+
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
+
   postInstall = ''
-    for shell in bash fish zsh; do
-      $out/bin/kind completion $shell > kind.$shell
-      installShellCompletion kind.$shell
-    done
+    installShellCompletion --cmd kind \
+      --bash <($out/bin/kind completion bash) \
+      --fish <($out/bin/kind completion fish) \
+      --zsh <($out/bin/kind completion zsh)
   '';
 
   meta = with lib; {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
-    homepage    = "https://github.com/kubernetes-sigs/kind";
+    homepage = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
-    license     = licenses.asl20;
+    license = licenses.asl20;
+    mainProgram = "kind";
   };
 }

@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     maintainers = with maintainers; [ quag ];
     platforms = platforms.linux;
+    mainProgram = "BasiliskII";
   };
 })

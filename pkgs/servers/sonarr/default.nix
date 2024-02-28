@@ -1,12 +1,28 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, dotnet-runtime, icu, ffmpeg, openssl, sqlite, curl, makeWrapper, nixosTests }:
 
+let
+  os = if stdenv.isDarwin then "osx" else "linux";
+  arch = {
+    x86_64-linux = "x64";
+    aarch64-linux = "arm64";
+    x86_64-darwin = "x64";
+    aarch64-darwin = "arm64";
+  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  hash = {
+    x64-linux_hash = "sha256-9YNhyhxnnn2CesXLJH5Cs7yB9w23YUAZPrk9vEHvevk=";
+    arm64-linux_hash = "sha256-RBCyfozmBpWrmsfMcdb1BqcBXj64CMDrgpMZTzj85ZQ=";
+    x64-osx_hash = "sha256-+AKENBZohBUEKQEM3L69EzC84MhCX3fGvsNFn5p2v84=";
+    arm64-osx_hash = "sha256-Arx8usecAN+d0NGL7Hv+rB4GG7p/KLAaqpJFgNg7C2Y=";
+  }."${arch}-${os}_hash";
+in
 stdenv.mkDerivation rec {
   pname = "sonarr";
-  version = "3.0.10.1567";
+  version = "4.0.1.929";
 
   src = fetchurl {
-    url = "https://download.sonarr.tv/v3/main/${version}/Sonarr.main.${version}.linux.tar.gz";
-    hash = "sha256-6zdp/Bg+9pcrElW5neB+BC16Vn1VhTjhMRRIxGrKhxc=";
+    url = "https://github.com/Sonarr/Sonarr/releases/download/v${version}/Sonarr.main.${version}.${os}-${arch}.tar.gz";
+    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,12 +30,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r * $out/bin/
-    makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \
-      --add-flags "$out/bin/Sonarr.exe" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-          curl sqlite libmediainfo ]}
+    mkdir -p $out/{bin,share/sonarr-${version}}
+    cp -r * $out/share/sonarr-${version}/.
+
+    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/NzbDrone \
+      --add-flags "$out/share/sonarr-${version}/Sonarr.dll" \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite openssl icu ]}
 
     runHook postInstall
   '';

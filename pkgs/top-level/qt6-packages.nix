@@ -29,9 +29,13 @@ makeScopeWithSplicing' {
   inherit stdenv;
 
   # LIBRARIES
+  accounts-qt = callPackage ../development/libraries/accounts-qt { };
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
   kdsoap = callPackage ../development/libraries/kdsoap { };
+
+  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+  kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
@@ -70,6 +74,10 @@ makeScopeWithSplicing' {
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
+  qwlroots = callPackage ../development/libraries/qwlroots {
+    wlroots = pkgs.wlroots_0_17;
+  };
+
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
   qzxing = callPackage ../development/libraries/qzxing { };
@@ -83,6 +91,12 @@ makeScopeWithSplicing' {
   # Not a library, but we do want it to be built for every qt version there
   # is, to allow users to choose the right build if needed.
   sddm = callPackage ../applications/display-managers/sddm {};
+
+  signond = callPackage ../development/libraries/signond {};
+
+  waylib = callPackage ../development/libraries/waylib { };
+
+  wayqt = callPackage ../development/libraries/wayqt { };
 
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Convert to a throw on 01-01-2023.

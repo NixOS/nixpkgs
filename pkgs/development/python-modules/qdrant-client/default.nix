@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.7.1";
+  version = "1.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "qdrant";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HQJgiy0tBOdXveNzrJcWcnGZAp9eHu3qRjgONj4aTQg=";
+    hash = "sha256-VU2/kK7zpiuHbPtt1Qh8pdgen4KoIIKsyC479LATO84=";
   };
 
   nativeBuildInputs = [

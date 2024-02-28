@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ stteague ];
     platforms = platforms.unix;
     broken = stdenv.system == "x86_64-darwin";
+    mainProgram = "flamp";
   };
 })

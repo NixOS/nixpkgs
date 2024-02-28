@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     zeromq
   ];
 
+  env.CXXFLAGS = "-include cstdint";
+
   # cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
 

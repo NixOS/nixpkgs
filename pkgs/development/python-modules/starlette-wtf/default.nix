@@ -6,6 +6,8 @@
 , python-multipart
 , starlette
 , wtforms
+, httpx
+, jinja2
 , pytestCheckHook
 }:
 
@@ -33,6 +35,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    httpx
+    jinja2
   ];
 
   meta = with lib; {

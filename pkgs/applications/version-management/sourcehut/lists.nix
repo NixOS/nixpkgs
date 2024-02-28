@@ -14,26 +14,30 @@
 , setuptools
 }:
 
-buildPythonPackage rec {
-  pname = "listssrht";
-  version = "0.57.8";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+let
+  version = "0.57.14";
+  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.36"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    sha256 = "sha256-nQZRSTAyTWxcPHrRVCZ5TgcrNgrlxBFc1vRds0cQwA0=";
+    hash = "sha256-rzOxlat7Lbgt0Wl6vvnAC+fS3MynFVKFvVdIdxgA5e0=";
   };
 
   listssrht-api = buildGoModule ({
     inherit src version;
     pname = "listssrht-api";
     modRoot = "api";
-    vendorHash = "sha256-E5Zzft9ANJT/nhhCuenZpdo3t9QYLmA+AyDyrbGectE=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+    vendorHash = "sha256-OWgrPvXVlvJPcoABP0ZxKzoYFhU44j/I44sBBRbd6KY=";
+  } // gqlgen);
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "listssrht";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -69,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
 }

@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with maintainers; [ sheenobu ];
     platforms = with platforms; unix;
+    mainProgram = "sipsak";
   };
 
 }

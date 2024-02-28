@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-camo";
-  version = "2.4.8";
+  version = "2.4.9";
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Y2Zhr8MhIN13AYMq0t9QASfd2Mgp4tiFmrpc6VTIUq0=";
+    sha256 = "sha256-d2W7XI/4MKyn9PgIYUJKew/WWA9z5Ut78bsk6Z5Qfxk=";
   };
 
-  vendorHash = "sha256-O3JatOmQrNZRxKa9dTYQpVoPUIuFIbnEXpak3PXJquA=";
+  vendorHash = "sha256-BGQ+2i3HQCKOSUTl2+xaQqQQE7MCtmJ1IHL2ZRz5whk=";
 
   ldflags = [ "-s" "-w" "-X=main.ServerVersion=${version}" ];
 

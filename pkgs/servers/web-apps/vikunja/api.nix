@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vikunja-api";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "api";
     rev = "v${version}";
-    hash = "sha256-hqyopIV/cLLC8An+ELN0a/cFAq6BoCZZjBRviaJ5ygI=";
+    hash = "sha256-tYhlAF1VuM/Xz4HP7DtI0hGsiNyYxzFiNIEbm8n9DC8=";
   };
 
   nativeBuildInputs =
@@ -24,7 +24,7 @@ buildGoModule rec {
     in
     [ fakeGit mage ];
 
-  vendorHash = "sha256-+V6a6h5pg8FU87pA4JxZo07HGBXIgCv4FjmtjIpQUP4=";
+  vendorHash = "sha256-OD/7RCCrRdlrsRW7CRT01cDUvNnedNdTZ8YgDFGaE4o=";
 
   # checks need to be disabled because of needed internet for some checks
   doCheck = false;

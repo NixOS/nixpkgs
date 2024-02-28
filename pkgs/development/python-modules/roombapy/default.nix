@@ -5,41 +5,40 @@
 , orjson
 , paho-mqtt
 , poetry-core
+, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.10";
-  format = "pyproject";
+  version = "1.6.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
     rev = "refs/tags/${version}";
-    hash = "sha256-aGNSySSKCx/8GYUdDWMSAhMBex738UACqnqj/Qx1m38=";
+    hash = "sha256-5TFuOk3fj4kg5MyWz7HQ/zWdvceFa3mWnFx+Yuq2III=";
   };
-
-  postPatch = ''
-    # hbmqtt was replaced by amqtt
-    substituteInPlace tests/test_roomba_integration.py \
-      --replace "from hbmqtt.broker import Broker" "from amqtt.broker import Broker"
-
-    substituteInPlace pyproject.toml \
-      --replace 'orjson = ">=3.8.7"' 'orjson = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "orjson"
   ];
 
   propagatedBuildInputs = [
     orjson
     paho-mqtt
+    pydantic
   ];
 
   nativeCheckInputs = [

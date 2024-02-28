@@ -24,5 +24,6 @@ stdenv.mkDerivation (rec {
     license = licenses.gpl3Plus;
     maintainers = [];
     platforms = platforms.linux;
+    mainProgram = "pqiv";
   };
 })

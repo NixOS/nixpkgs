@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kode-mono";
-  version = "1.204";
+  version = "1.205";
 
   src = fetchzip {
     url = "https://github.com/isaozler/kode-mono/releases/download/${finalAttrs.version}/kode-mono-fonts.zip";
-    hash = "sha256-0mAE06963HaBKBKBvTnt8q7QAY1FakEGUx1wAqOZVH4=";
+    hash = "sha256-DRe2Qi+Unhr5ebQdTG6QgvQEUTNOdnosFbQC8kpHNYU=";
     stripRoot = false;
   };
 

@@ -198,12 +198,12 @@ in rec {
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "2.2.0";
+    version = "2.3.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "9p+KO3/SrASHGtEk8ioW+BnC4cXndYx4FL0T70lKU2w=";
+      sha256 = "IrNDBRopg9lgN5AfeXbhhh+uXiWQD2bjS1sNOgOJsu4=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
@@ -531,6 +531,23 @@ in rec {
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ ronanmacf ];
+    };
+  };
+
+  rose-pine = mkTmuxPlugin {
+    pluginName = "rose-pine";
+    version = "unstable-2024-01-08";
+    rtpFilePath = "rose-pine.tmux";
+    src = fetchFromGitHub {
+      owner = "rose-pine";
+      repo = "tmux";
+      rev = "dd6d01338ac4afeb96542dcf24e4a7fe179b69e6";
+      sha256 = "sha256-Tccb4VjdotOSw7flJV4N0H4557NxRhXiCecZBPU9ICQ=";
+    };
+    meta = {
+      homepage = "https://github.com/rose-pine/tmux";
+      description = "Rosé Pine theme for tmux";
+      license = lib.licenses.mit;
     };
   };
 

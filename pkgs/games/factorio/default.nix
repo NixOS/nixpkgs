@@ -199,6 +199,7 @@ let
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [ Baughn elitak erictapen priegger lukegb ];
       platforms = [ "x86_64-linux" ];
+      mainProgram = "factorio";
     };
   };
 

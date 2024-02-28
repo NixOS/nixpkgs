@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , gitUpdater
 , nixosTests
 , testers
@@ -27,39 +26,24 @@
 , python3
 , qtdeclarative
 , qtbase
+, validatePkgConfig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
     rev = finalAttrs.version;
-    hash = "sha256-rJKWhW082ndVPEQHjuSriKtl0zQw86adxiINkZQq1hY=";
+    hash = "sha256-9AQCWCZFbt4XcmKsjoTXJlWOm02/kBhpPxbHRtftNFM=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
-  ];
-
-  patches = [
-    # Remove when version > 1.0.1
-    (fetchpatch {
-      name = "0001-lomiri-indicator-network-Make-less-assumptions-about-where-files-will-end-up.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/065212b22ab9aa8d25a61b5482ad6511e4c8510b.patch";
-      hash = "sha256-WrDTBKusK1808W8LZRGWaTOExu7gKpYBvkQ8hzoHoHk=";
-    })
-
-    # Remove when version > 1.0.1
-    (fetchpatch {
-      name = "0002-lomiri-indicator-network-Honour-CMAKE_INSTALL_DOCDIR_fordocumentation-installation.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/commit/79b9e12313f765ab6e95b4d4dfefbdbca50ef3c6.patch";
-      hash = "sha256-vRfdegEi892UlrC9c1+5Td7CHLh7u0foPggLNBfc8lw=";
-    })
   ];
 
   postPatch = ''
@@ -79,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     pkg-config
     qtdeclarative
+    validatePkgConfig
   ];
 
   buildInputs = [
@@ -138,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Ayatana indiator exporting the network settings menu through D-Bus";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-indicator-network";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

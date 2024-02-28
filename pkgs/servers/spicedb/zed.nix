@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "zed";
-  version = "0.16.2";
+  version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
     rev = "v${version}";
-    hash = "sha256-MxIeQ8WbTEH342EA03irjpDjfZZyc0sau2hOZOGT27w=";
+    hash = "sha256-PLOzzsW0v4T12NFrQlOYcsC7Cd3OnGD0TYmuavqEtxw=";
   };
 
   vendorHash = "sha256-KhtT0v0FJiOvYUhN/rBYxbkUKs0DdIc5HwlhVUAi9cA=";

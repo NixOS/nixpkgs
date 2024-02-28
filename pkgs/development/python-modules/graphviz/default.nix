@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , fetchpatch
 , substituteAll
-, graphviz
+, graphviz-nox
 , xdg-utils
 , makeFontsConf
 , freefont_ttf
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      inherit graphviz;
+      graphviz = graphviz-nox;
       xdgutils = xdg-utils;
     })
     # https://github.com/xflr6/graphviz/issues/209

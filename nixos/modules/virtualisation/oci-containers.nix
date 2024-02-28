@@ -252,10 +252,13 @@ let
       text = ''
         ${cfg.backend} rm -f ${name} || true
         ${optionalString (isValidLogin container.login) ''
+          # try logging in, if it fails, check if image exists locally
           ${cfg.backend} login \
           ${container.login.registry} \
           --username ${container.login.username} \
-          --password-stdin < ${container.login.passwordFile}
+          --password-stdin < ${container.login.passwordFile} \
+          || ${cfg.backend} image inspect ${container.image} >/dev/null \
+          || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
         ''}
         ${optionalString (container.imageFile != null) ''
           ${cfg.backend} load -i ${container.imageFile}
@@ -308,9 +311,10 @@ let
     );
 
     preStop = if cfg.backend == "podman"
-      then "[ $SERVICE_RESULT = success ] || podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
-      else "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
-    postStop =  if cfg.backend == "podman"
+      then "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
+      else "${cfg.backend} stop ${name}";
+
+    postStop = if cfg.backend == "podman"
       then "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
       else "${cfg.backend} rm -f ${name} || true";
 

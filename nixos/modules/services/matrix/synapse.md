@@ -126,8 +126,9 @@ then enable `services.matrix-synapse.settings.enable_registration = true;`.
 Otherwise, or you can generate a registration secret with
 {command}`pwgen -s 64 1` and set it with
 [](#opt-services.matrix-synapse.settings.registration_shared_secret).
-To create a new user or admin, run the following after you have set the secret
-and have rebuilt NixOS:
+To create a new user or admin from the terminal your client listener
+must be configured to use TCP sockets. Then you can run the following
+after you have set the secret and have rebuilt NixOS:
 ```ShellSession
 $ nix-shell -p matrix-synapse
 $ register_new_matrix_user -k your-registration-shared-secret http://localhost:8008

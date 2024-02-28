@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, unstableGitUpdater }:
 stdenv.mkDerivation {
   pname = "yuzu-compatibility-list";
-  version = "unstable-2024-01-21";
+  version = "unstable-2024-02-26";
 
   src = fetchFromGitHub {
     owner = "flathub";
     repo = "org.yuzu_emu.yuzu";
-    rev = "a3dd360e8b6e8c0c93d40f00416534c8b4bcd59a";
-    hash = "sha256-nXh5cJTS1zCa6GoH+AoisTIohsRruycqosxpmFAsaSw=";
+    rev = "9c2032a3c7e64772a8112b77ed8b660242172068";
+    hash = "sha256-ITh/W4vfC9w9t+TJnPeTZwWifnhTNKX54JSSdpgaoBk=";
   };
 
   buildCommand = ''

@@ -1,4 +1,5 @@
 { lib, stdenv
+, fetchpatch
 , fetchFromGitHub
 , cmake
 # Remove gcc and python references
@@ -277,6 +278,11 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.3_9.patch
+    # Fix compilation with GCC 13
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/fe1b3592776c26e349e9985d47d3178568dfe6ec.patch";
+      hash = "sha256-bu6fJuUo/i4kM+cZqSw8moB0ymoSVooLfwUIW+WDpWI=";
+    })
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must

@@ -320,6 +320,7 @@ let
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
+    CellBarcode = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [ libtiff libjpeg cairo.dev xorg.libXt.dev fontconfig.lib ];
@@ -327,6 +328,7 @@ let
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
     curl = [ pkgs.curl.dev ];
+    CytoML = [ pkgs.libxml2.dev ];
     data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = with pkgs; [ xorg.libXft.dev ];
     diversitree = with pkgs; [ gsl fftw ];
@@ -341,11 +343,13 @@ let
     GLAD = [ pkgs.gsl ];
     glpkAPI = with pkgs; [ gmp glpk ];
     gmp = [ pkgs.gmp.dev ];
+    GPBayes = [ pkgs.gsl ];
     graphscan = [ pkgs.gsl ];
     gsl = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
+    highs = [ pkgs.which pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
     iBMQ = [ pkgs.gsl ];
@@ -355,9 +359,12 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl ];
     kza = [ pkgs.fftw.dev ];
+    Libra = [ pkgs.gsl ];
+    LOMAR = [ pkgs.gmp.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
     rvg = [ pkgs.libpng.dev ];
+    MAGEE = [ pkgs.zlib.dev pkgs.bzip2.dev ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
@@ -368,6 +375,7 @@ let
     nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
+    pak = [ pkgs.curl.dev ];
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
@@ -424,7 +432,9 @@ let
     webp = [ pkgs.pkg-config ];
     seqminer = with pkgs; [ zlib.dev bzip2 ];
     sf = with pkgs; [ gdal proj geos libtiff curl ];
+    strawr = with pkgs; [ curl.dev ];
     terra = with pkgs; [ gdal proj geos ];
+    apcf = with pkgs; [ geos ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
     simplexreg = [ pkgs.gsl ];
     spate = [ pkgs.fftw.dev ];
@@ -461,6 +471,7 @@ let
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = with pkgs; [ zlib.dev curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
+    vcfppR = [ pkgs.curl.dev pkgs.bzip2 pkgs.zlib.dev pkgs.xz];
     hdf5r = [ pkgs.hdf5.dev ];
     httpgd = with pkgs; [ cairo.dev ];
     SymTS = [ pkgs.gsl ];
@@ -524,6 +535,8 @@ let
     chebpol = [ pkgs.pkg-config ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
+    archive = [ pkgs.libarchive];
+    SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
@@ -542,6 +555,7 @@ let
     tesseract = [ pkgs.pkg-config ];
     Cairo = [ pkgs.pkg-config ];
     CLVTools = [ pkgs.gsl ];
+    excursions = [ pkgs.gsl ];
     JMcmprsk = [ pkgs.gsl ];
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];
@@ -623,6 +637,7 @@ let
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     PoissonBinomial = [ pkgs.fftw.dev ];
+    PoissonMultinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
     flowWorkspace = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.mecab ];
@@ -977,6 +992,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    Cyclops = old.Cyclops.overrideAttrs (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
     RcppParallel = old.RcppParallel.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
@@ -1304,7 +1323,7 @@ let
         substituteInPlace R/zzz.R \
           --replace ".onLoad <- function(...) {" \
             ".onLoad <- function(...) {
-          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/lib/${pkgs.python3Packages.python.libPrefix}/site-packages/pyspark\"))
+          Sys.setenv(\"SPARK_HOME\" = Sys.getenv(\"SPARK_HOME\", unset = \"${pkgs.python3Packages.pyspark}/${pkgs.python3Packages.python.sitePackages}/pyspark\"))
           Sys.setenv(\"JAVA_HOME\" = Sys.getenv(\"JAVA_HOME\", unset = \"${pkgs.jdk}\"))"
       '';
     });
@@ -1406,6 +1425,15 @@ let
     torch = old.torch.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
+      '';
+    });
+
+    pak = old.pak.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        patchShebangs src/library/curl/configure
+        patchShebangs src/library/pkgdepends/configure
+        patchShebangs src/library/ps/configure
       '';
     });
   };

@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ joachifm ];
     platforms = platforms.linux;
+    mainProgram = "dnscrypt-wrapper";
   };
 }

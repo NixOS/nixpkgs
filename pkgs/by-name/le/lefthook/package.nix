@@ -6,16 +6,16 @@
 
 let
   pname = "lefthook";
-  version = "1.5.7";
+  version = "1.6.2";
 in
-buildGoModule rec {
+buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${version}";
-    hash = "sha256-0z4hTx9ClGh20Ncf23SbwuPBdGoFz80FQUx7s77l7y8=";
+    hash = "sha256-+4ihh8VnNFSGpJL7SFHHPuvqQCt2LJlUk6OJ9fuFV+M=";
   };
 
   vendorHash = "sha256-/VLS7+nPERjIU7V2CzqXH69Z3/y+GKZbAFn+KcRKRuA=";

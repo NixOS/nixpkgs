@@ -63,6 +63,7 @@ buildDotnetModule rec {
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
+    mainProgram = "jellyfin";
     platforms = dotnet-runtime.meta.platforms;
   };
 }

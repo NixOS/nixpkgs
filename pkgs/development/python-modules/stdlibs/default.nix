@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "stdlibs";
-  version = "2023.12.15";
+  version = "2024.1.28";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = "stdlibs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1Av10FNJkCC2XGNx1LDqd0GwiNPIDPXPFatW8+2XoaI=";
+    hash = "sha256-xf46ih7viVUKNIT1tLs5MQPNjNtQlQ2N9BJIGPt4Srk=";
   };
 
   nativeBuildInputs = [

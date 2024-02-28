@@ -13,30 +13,27 @@
 
 buildPythonPackage rec {
   pname = "mdformat-gfm";
-  version = "0.3.5";
-  format = "pyproject";
+  version = "0.3.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hukkin";
-    repo = pname;
+    repo = "mdformat-gfm";
     rev = "refs/tags/${version}";
-    hash = "sha256-7sIa50jCN+M36Y0C05QaAL+TVwLzKxJ0gzpZI1YQFxg=";
+    hash = "sha256-c1jJwyTL8IgQnIAJFoPSuJ8VEYgnQ4slZyV0bHlUHLQ=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  buildInputs = [
-    mdformat
-    markdown-it-py
-    mdit-py-plugins
-  ];
-
   propagatedBuildInputs = [
+    markdown-it-py
+    mdformat
     mdformat-tables
+    mdit-py-plugins
     linkify-it-py
   ];
 

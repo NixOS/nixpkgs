@@ -4,9 +4,13 @@
 {
   adaptive_lighting = callPackage ./adaptive_lighting {};
 
+  emporia_vue = callPackage ./emporia_vue {};
+
   govee-lan = callPackage ./govee-lan {};
 
   gpio = callPackage ./gpio {};
+
+  localtuya = callPackage ./localtuya {};
 
   miele = callPackage ./miele {};
 

@@ -82,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ PowerUser64 ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+    mainProgram = "sonobus";
   };
 })

@@ -6,18 +6,15 @@
 , ninja
 , openssl
 }:
-let
-  name = "tlmi-auth";
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "tlmi-auth";
   version = "1.0.1";
-in
-stdenv.mkDerivation {
-  pname = name;
-  version = version;
 
   src = fetchFromGitHub {
     owner = "lenovo";
-    repo = name;
-    rev = "v${version}";
+    repo = "tlmi-auth";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/juXQrb3MsQ6FxmrAa7E1f0vIMu1397tZ1pzLfr56M4=";
   };
 
@@ -25,6 +22,9 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+  ];
+
+  buildInputs = [
     openssl
   ];
 
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
     homepage = "https://github.com/lenovo/tlmi-auth";
     maintainers = with maintainers; [ snpschaaf ];
     description = "Utility for creating signature strings needed for thinklmi certificate based authentication";
-    mainProgram = name;
+    mainProgram = "tlmi-auth";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-}
+})

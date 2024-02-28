@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "netease cloud music terminal client by rust";
     maintainers = with maintainers; [ vonfry ];
     license = licenses.mit;
+    mainProgram = "ncmt";
   };
 }

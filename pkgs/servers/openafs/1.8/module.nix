@@ -93,6 +93,21 @@ stdenv.mkDerivation {
       url = "https://git.openafs.org?p=openafs.git;a=patch;h=4f1d8104d17d2b4e95c7abaf5498db6b80aefa8f";
       hash = "sha256-XJpqbDB/LOuqZj3gPHlcLeGzAQCGvPH8ArgWf+sbBJU=";
     })
+    # Linux: Fix to use time_t instead of time64_t
+    (fetchpatch {
+      url = "https://git.openafs.org?p=openafs.git;a=patch;h=56763a199f92101c35d6b9b733302cb08fe0cdbe";
+      hash = "sha256-A2z+smBLQg6k+cHPpNr2s/SgoYuCOMNLcvm5LFRiqeM=";
+    })
+    # dir: Introduce struct DirEntryFlex
+    (fetchpatch {
+      url = "https://git.openafs.org?p=openafs.git;a=patch;h=fd527549c2d2b29a955f8c0427ac67c5d49ef38c";
+      hash = "sha256-jblsaJuTt3BsW5MG69ETcao/ZzSuh9aKRZyTIxZ7Ty4=";
+    })
+    # Linux 6.7: convert to inode a/mtime accessor funcs
+    (fetchpatch {
+      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6edf9d350c6ffd9d5e51fb8106701c1bc2f6a4d9";
+      hash = "sha256-oQVyKzIcqzYDZHSut9Mw1t3kcEC5HGUX6eGlGJ9fZYo=";
+    })
   ];
 
   nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]

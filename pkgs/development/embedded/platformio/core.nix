@@ -43,6 +43,11 @@ with python3Packages; buildPythonApplication rec {
     })
   ];
 
+  postPatch = ''
+    # Disable update checks at runtime
+    substituteInPlace platformio/maintenance.py --replace-fail '    check_platformio_upgrade()' ""
+  '';
+
   nativeBuildInputs = [
     installShellFiles
     pythonRelaxDepsHook
@@ -72,7 +77,8 @@ with python3Packages; buildPythonApplication rec {
     uvicorn
     wsproto
     zeroconf
-
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    chardet
   ];
 
   preCheck = ''

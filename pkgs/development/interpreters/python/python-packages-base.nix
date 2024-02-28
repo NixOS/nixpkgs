@@ -98,8 +98,4 @@ in {
   python = toPythonModule python;
   # Dont take pythonPackages from "global" pkgs scope to avoid mixing python versions
   pythonPackages = self;
-
-  # Remove?
-  recursivePthLoader = toPythonModule (callPackage ../../../development/python-modules/recursive-pth-loader { });
-
 }

@@ -30,5 +30,6 @@ buildRubyGem rec {
     license     = licenses.mit;
     maintainers = with maintainers; [ nixy ];
     platforms   = platforms.unix;
+    mainProgram = "hss";
   };
 }

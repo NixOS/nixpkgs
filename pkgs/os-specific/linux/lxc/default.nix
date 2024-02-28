@@ -12,7 +12,6 @@
   nix-update-script,
   nixosTests,
   openssl,
-  pam,
   pkg-config,
   systemd,
 }:
@@ -41,11 +40,16 @@ stdenv.mkDerivation rec {
     libseccomp
     libselinux
     openssl
-    pam
     systemd
   ];
 
-  patches = [ ./add-meson-options.patch ];
+  patches = [
+     # make build more nix compatible
+    ./add-meson-options.patch
+
+    # fix docbook2man version detection
+    ./docbook-hack.patch
+  ];
 
   mesonFlags = [
     "-Dinstall-init-files=false"

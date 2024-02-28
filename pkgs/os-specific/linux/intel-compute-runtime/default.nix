@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "23.43.27642.18";
+  version = "24.05.28454.6";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    hash = "sha256-AXHNIWCezPYTzc+SXp1B4BzhfSfM2GUCpWLtCT1SE7I=";
+    hash = "sha256-gX6zvZcwZXcSj3ch/eIWqIefccKuab0voh2vHHJTTso=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -51,8 +51,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/intel/compute-runtime";
     description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
+    homepage = "https://github.com/intel/compute-runtime";
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ SuperSandro2000 ];

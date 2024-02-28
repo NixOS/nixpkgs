@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "famistudio";
   };
 }

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx";
     rev = "v${version}";
-    hash = "sha256-/RGL2mCfJiJInnt5zgc1xXPqZxXCAcoWIbky99okvL0=";
+    hash = "sha256-OLJrwibw9uX5ty7FRZ0q8zx0i1vQXRKK8reQsJFFxAI=";
   };
 
   vendorHash = null;
@@ -31,8 +31,10 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    install -m 444 -D config/apx.json -t $out/share/apx/
+    install -Dm444 config/apx.json -t $out/share/apx/
     installManPage man/man1/*
+    install -Dm444 README.md -t $out/share/docs/apx
+    install -Dm444 COPYING.md $out/share/licenses/apx/LICENSE
   '';
 
   meta = with lib; {

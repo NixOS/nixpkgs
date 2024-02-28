@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils";
-  version = "8.2.0";
+  version = "8.2.1";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vwDS+hIBDfiwrekzcd71jmMssypr/cX1oP+Oah+xvzI=";
+    hash = "sha256-hWJ1EVgXX50YfF8itXVVq+PIcPAyXIztEsNMbZh3Kb4=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -134,16 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
-    })
-    # Fix display issues when using virtio-gpu on 8.2.0 https://gitlab.com/qemu-project/qemu/-/issues/2051
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/9d5b42beb6978dc6219d5dc029c9d453c6b8d503.diff";
-      sha256 = "sha256-NknkH/gFTsMcdq8/ArwM4+qrpU+ZHd+xVMFUuMJTtf0=";
-    })
-    (fetchpatch {
-      name = "CVE-2023-6693.patch";
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/2220e8189fb94068dbad333228659fbac819abb0.patch";
-      sha256 = "sha256-uoFFFsVZ8XnsI2GD7xsRFNWghWL7/PSYTc1yhXI6nv4=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;

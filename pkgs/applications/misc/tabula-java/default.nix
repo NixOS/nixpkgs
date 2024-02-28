@@ -45,5 +45,6 @@ maven.buildMavenPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.jakewaksbaum ];
     platforms = platforms.all;
+    mainProgram = "tabula-java";
   };
 }

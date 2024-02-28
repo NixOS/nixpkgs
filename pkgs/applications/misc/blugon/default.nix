@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jumper149/blugon";
     platforms = platforms.unix;
     maintainers = with maintainers; [ jumper149 ];
+    mainProgram = "blugon";
   };
 }

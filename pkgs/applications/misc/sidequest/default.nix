@@ -106,6 +106,7 @@
         license = licenses.mit;
         maintainers = with maintainers; [ joepie91 rvolosatovs ];
         platforms = [ "x86_64-linux" ];
+        mainProgram = "SideQuest";
       };
     };
 

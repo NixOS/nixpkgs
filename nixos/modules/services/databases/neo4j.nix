@@ -35,65 +35,64 @@ let
 
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
-    dbms.allow_upgrade=${boolToString cfg.allowUpgrade}
-    dbms.default_listen_address=${cfg.defaultListenAddress}
-    dbms.databases.default_to_read_only=${boolToString cfg.readOnly}
+    server.default_listen_address=${cfg.defaultListenAddress}
+    server.databases.default_to_read_only=${boolToString cfg.readOnly}
     ${optionalString (cfg.workerCount > 0) ''
       dbms.threads.worker_count=${toString cfg.workerCount}
     ''}
 
     # Directories (readonly)
-    dbms.directories.certificates=${cfg.directories.certificates}
-    dbms.directories.plugins=${cfg.directories.plugins}
-    dbms.directories.lib=${cfg.package}/share/neo4j/lib
+    # dbms.directories.certificates=${cfg.directories.certificates}
+    server.directories.plugins=${cfg.directories.plugins}
+    server.directories.lib=${cfg.package}/share/neo4j/lib
     ${optionalString (cfg.constrainLoadCsv) ''
-      dbms.directories.import=${cfg.directories.imports}
+      server.directories.import=${cfg.directories.imports}
    ''}
 
     # Directories (read and write)
-    dbms.directories.data=${cfg.directories.data}
-    dbms.directories.logs=${cfg.directories.home}/logs
-    dbms.directories.run=${cfg.directories.home}/run
+    server.directories.data=${cfg.directories.data}
+    server.directories.logs=${cfg.directories.home}/logs
+    server.directories.run=${cfg.directories.home}/run
 
     # HTTP Connector
     ${optionalString (cfg.http.enable) ''
-      dbms.connector.http.enabled=${boolToString cfg.http.enable}
-      dbms.connector.http.listen_address=${cfg.http.listenAddress}
-      dbms.connector.http.advertised_address=${cfg.http.listenAddress}
+      server.http.enabled=${boolToString cfg.http.enable}
+      server.http.listen_address=${cfg.http.listenAddress}
+      server.http.advertised_address=${cfg.http.listenAddress}
     ''}
 
     # HTTPS Connector
-    dbms.connector.https.enabled=${boolToString cfg.https.enable}
-    dbms.connector.https.listen_address=${cfg.https.listenAddress}
-    dbms.connector.https.advertised_address=${cfg.https.listenAddress}
+    server.https.enabled=${boolToString cfg.https.enable}
+    server.https.listen_address=${cfg.https.listenAddress}
+    server.https.advertised_address=${cfg.https.listenAddress}
 
     # BOLT Connector
-    dbms.connector.bolt.enabled=${boolToString cfg.bolt.enable}
-    dbms.connector.bolt.listen_address=${cfg.bolt.listenAddress}
-    dbms.connector.bolt.advertised_address=${cfg.bolt.listenAddress}
-    dbms.connector.bolt.tls_level=${cfg.bolt.tlsLevel}
+    server.bolt.enabled=${boolToString cfg.bolt.enable}
+    server.bolt.listen_address=${cfg.bolt.listenAddress}
+    server.bolt.advertised_address=${cfg.bolt.listenAddress}
+    server.bolt.tls_level=${cfg.bolt.tlsLevel}
 
     # SSL Policies
     ${concatStringsSep "\n" sslPolicies}
 
     # Default retention policy from neo4j.conf
-    dbms.tx_log.rotation.retention_policy=1 days
+    db.tx_log.rotation.retention_policy=1 days
 
     # Default JVM parameters from neo4j.conf
-    dbms.jvm.additional=-XX:+UseG1GC
-    dbms.jvm.additional=-XX:-OmitStackTraceInFastThrow
-    dbms.jvm.additional=-XX:+AlwaysPreTouch
-    dbms.jvm.additional=-XX:+UnlockExperimentalVMOptions
-    dbms.jvm.additional=-XX:+TrustFinalNonStaticFields
-    dbms.jvm.additional=-XX:+DisableExplicitGC
-    dbms.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
-    dbms.jvm.additional=-Djdk.tls.rejectClientInitiatedRenegotiation=true
-    dbms.jvm.additional=-Dunsupported.dbms.udc.source=tarball
+    server.jvm.additional=-XX:+UseG1GC
+    server.jvm.additional=-XX:-OmitStackTraceInFastThrow
+    server.jvm.additional=-XX:+AlwaysPreTouch
+    server.jvm.additional=-XX:+UnlockExperimentalVMOptions
+    server.jvm.additional=-XX:+TrustFinalNonStaticFields
+    server.jvm.additional=-XX:+DisableExplicitGC
+    server.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
+    server.jvm.additional=-Djdk.tls.rejectClientInitiatedRenegotiation=true
+    server.jvm.additional=-Dunsupported.dbms.udc.source=tarball
 
-    #dbms.memory.heap.initial_size=12000m
-    #dbms.memory.heap.max_size=12000m
-    #dbms.memory.pagecache.size=4g
-    #dbms.tx_state.max_off_heap_memory=8000m
+    #server.memory.off_heap.transaction_max_size=12000m
+    #server.memory.heap.max_size=12000m
+    #server.memory.pagecache.size=4g
+    #server.tx_state.max_off_heap_memory=8000m
 
     # Extra Configuration
     ${cfg.extraServerConfig}
@@ -124,14 +123,6 @@ in {
       default = false;
       description = lib.mdDoc ''
         Whether to enable Neo4j Community Edition.
-      '';
-    };
-
-    allowUpgrade = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Allow upgrade of Neo4j database files from an older version.
       '';
     };
 

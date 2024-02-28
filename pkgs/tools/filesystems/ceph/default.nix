@@ -195,7 +195,10 @@ let
           hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
         };
 
-        patches = (old.patches or []) ++ [
+        # Not using the normal `(old.patches or []) ++` pattern here to use
+        # the overridden package's patches, because current nixpkgs's `cryptography`
+        # has patches that do not apply on this old version.
+        patches = [
           # Fix https://nvd.nist.gov/vuln/detail/CVE-2023-49083 which has no upstream backport.
           # See https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a#diff-f5134bf8f3cf0a5cc8601df55e50697acc866c603a38caff98802bd8e17976c5R1893
           ./python-cryptography-Cherry-pick-fix-for-CVE-2023-49083-on-cryptography-40.patch
@@ -278,10 +281,10 @@ let
   ]);
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "18.2.0";
+  version = "18.2.1";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256:0k9nl6xi5brva51rr14m7ig27mmmd7vrpchcmqc40q3c2khn6ns9";
+    hash = "sha256-gHWwNHf0KtI7Hv0MwaCqP6A3YR/AWakfUZTktRyddko=";
   };
 in rec {
   ceph = stdenv.mkDerivation {

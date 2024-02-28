@@ -8,7 +8,7 @@ buildGoModule rec {
     owner  = "KubeNetworks";
     repo   = "kubevpn";
     rev    = "v${version}";
-    sha256 = "sha256-/WXJmqgfA2hG+1y62uvTMLbPWbamUObfGpgEBUJwgE4=";
+    hash = "sha256-inGqkkzXPjg2VHtPZEPWDTuioPchrf/kiLGjvgXpcI4=";
   };
 
   vendorHash = null;

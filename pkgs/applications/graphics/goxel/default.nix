@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goxel";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
     rev = "v${version}";
-    hash = "sha256-mB4ln2uIhK/hsX+hUpeZ8H4aumaAUl5vaFkqolJtLRg=";
+    hash = "sha256-ueA0YW2n/DXd9AytDzfPtvtXbvuUm4VDwcdvHWObKxc=";
   };
 
   nativeBuildInputs = [ scons pkg-config wrapGAppsHook ];

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
     rev = "v${version}";
-    hash = "sha256-5itlZfnloQXV/aCiNgOOZzEeO1d+NLY4qSk8uMVAOmA=";
+    hash = "sha256-shPCCKcmacSB/mqwLU6BPR1p+/9Myg759MMehj9yijI=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -25,5 +25,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pradyuman ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "grpcui";
   };
 }

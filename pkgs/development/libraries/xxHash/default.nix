@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Cyan4973/xxHash";
     license = with licenses; [ bsd2 gpl2 ];
+    mainProgram = "xxhsum";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.all;
   };

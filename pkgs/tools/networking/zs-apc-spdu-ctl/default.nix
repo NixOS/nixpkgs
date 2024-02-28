@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.fogti ];
     platforms = platforms.linux;
+    mainProgram = "zs-apc-spdu-ctl";
   };
 }

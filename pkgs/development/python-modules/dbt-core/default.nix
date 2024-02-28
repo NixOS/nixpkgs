@@ -1,13 +1,12 @@
 { lib
-, python3
-, buildPythonPackage
-, fetchFromGitHub
 , agate
+, buildPythonPackage
 , cffi
 , click
 , colorama
 , dbt-extractor
 , dbt-semantic-interfaces
+, fetchFromGitHub
 , hologram
 , idna
 , isodate
@@ -19,10 +18,13 @@
 , packaging
 , pathspec
 , protobuf
+, python3
+, pythonOlder
 , pythonRelaxDepsHook
 , pytz
 , pyyaml
 , requests
+, setuptools
 , sqlparse
 , typing-extensions
 , urllib3
@@ -31,20 +33,23 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.7.4";
-  format = "setuptools";
+  version = "1.7.8";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+2tmLclBZrY9SDCKvQ4QNbI4665BtsrEI1sBSY3GVGM=";
+    hash = "sha256-EpKZiSDU5fivG3TIarirPgxRGQ3Sf1hwNvCKdQx25c0=";
   };
 
   sourceRoot = "${src.name}/core";
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -53,6 +58,7 @@ buildPythonPackage rec {
     "mashumaro"
     "networkx"
     "logbook"
+    "urllib3"
   ];
 
   propagatedBuildInputs = [

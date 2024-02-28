@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, dtc, pkgsCross }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, dtc, pkgsCross }:
 
 stdenv.mkDerivation rec {
   pname = "spike";
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-4D2Fezej0ioOOupw3kgMT5VLs+/jXQjwvek6v0AVMzI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fesvr-fix-compilation-with-gcc-13.patch";
+      url = "https://github.com/riscv-software-src/riscv-isa-sim/commit/0a7bb5403d0290cea8b2356179d92e4c61ffd51d.patch";
+      hash = "sha256-JUMTbGawvLkoOWKkruzLzUFQytVR3wqTlGu/eegRFEE=";
+    })
+  ];
 
   nativeBuildInputs = [ dtc ];
   enableParallelBuilding = true;

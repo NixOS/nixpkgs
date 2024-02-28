@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "aioquic"
+    "cryptography"
   ];
 
   propagatedBuildInputs = [

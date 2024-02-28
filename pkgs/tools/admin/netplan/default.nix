@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
 
     # from upstream https://github.com/canonical/netplan/blob/ee0d5df7b1dfbc3197865f02c724204b955e0e58/rpm/netplan.spec#L81
     sed -e "s/-Werror//g" -i Makefile
+
+    substituteInPlace netplan/cli/utils.py \
+      --replace-fail "/usr/libexec/netplan/generate" "${placeholder "out"}/lib/netplan/generate"
   '';
 
   makeFlags = [
@@ -66,5 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.linux;
+    mainProgram = "netplan";
   };
 }

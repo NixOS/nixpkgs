@@ -18,8 +18,6 @@ import ../make-test-python.nix (
     nodes.machine =
       { lib, ... }:
       {
-        environment.systemPackages = [ pkgs.lxd-to-incus ];
-
         virtualisation = {
           diskSize = 6144;
           cores = 2;
@@ -77,11 +75,11 @@ import ../make-test-python.nix (
         return ("inactive" in output)
 
       def lxd_instance_is_up(_) -> bool:
-          status, _ = machine.execute("lxc exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+          status, _ = machine.execute("lxc exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
           return status == 0
 
       def incus_instance_is_up(_) -> bool:
-          status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+          status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
           return status == 0
 
       with machine.nested("initialize lxd and resources"):

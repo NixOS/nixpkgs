@@ -48,8 +48,8 @@
 , OpenGL
 , audiofile
 , libiconv
-, withStatic ? false
-# passthru.tests
+, withStatic ? stdenv.hostPlatform.isMinGW
+  # passthru.tests
 , testers
 }:
 
@@ -58,13 +58,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.28.5";
+  version = "2.30.0";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-YcM7bfLo+KkWx8LdtG4z2UwJvzlEkvIkm+M5aMSztwU=";
+    hash = "sha256-uKL9/T6vCEqMqmD3Q3rCMtKPRJZ4fRYVUr+4628/Ajg=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit openglSupport;
-    updateScript = nix-update-script { extraArgs = ["--version-regex" "release-(.*)"]; };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex" "release-(.*)" ]; };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };

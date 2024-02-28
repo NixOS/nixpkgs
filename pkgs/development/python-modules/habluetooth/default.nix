@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "2.1.0";
+  version = "2.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oPdKmaj2wKgOQw7QYwOQc8efcNtQiGryZgNJ+bbB6L8=";
+    hash = "sha256-Ka8WqOYsZFvNl7uOsGR6S4entw7GTnF9MZcOB3uJMvg=";
   };
 
   postPatch = ''

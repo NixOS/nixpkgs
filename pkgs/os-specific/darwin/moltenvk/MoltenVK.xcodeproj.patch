@@ -16,7 +16,7 @@ index c23afce4..12ac12f4 100644
  		2FEA0D1B249040CA00EEF3AD /* PBXContainerItemProxy */ = {
  			isa = PBXContainerItemProxy;
  			containerPortal = A9C86CB61C55B8350096CAF2 /* MoltenVKShaderConverter.xcodeproj */;
-@@ -400,20 +393,6 @@
+@@ -400,27 +393,6 @@
  			remoteGlobalIDString = A93903C71C57E9ED00FE90DC;
  			remoteInfo = "MVKSPIRVToMSLConverter-macOS";
  		};
@@ -34,9 +34,16 @@ index c23afce4..12ac12f4 100644
 -			remoteGlobalIDString = A9092A8C1A81717B00051823;
 -			remoteInfo = MoltenVKShaderConverter;
 -		};
- /* End PBXContainerItemProxy section */
- 
- /* Begin PBXFileReference section */
+-		DCA2CEAE2A45DFD400FB75B6 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = A9C86CB61C55B8350096CAF2 /* MoltenVKShaderConverter.xcodeproj */;
+-			proxyType = 1;
+-			remoteGlobalIDString = DCFD7F6F2A45BDA0007BBBF7;
+-			remoteInfo = "MoltenVKShaderConverter-xrOS";
+-		};
+		DCBC41212A45DB1000F49BD1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9C86CB61C55B8350096CAF2 /* MoltenVKShaderConverter.xcodeproj */;
 @@ -1019,7 +998,6 @@
  			buildRules = (
  			);
@@ -61,7 +68,7 @@ index c23afce4..12ac12f4 100644
  			);
  			name = "MoltenVK-macOS";
  			productName = MoltenVK;
-@@ -1476,24 +1452,6 @@
+@@ -1476,29 +1452,6 @@
  		};
  /* End PBXSourcesBuildPhase section */
  
@@ -80,6 +87,11 @@ index c23afce4..12ac12f4 100644
 -			isa = PBXTargetDependency;
 -			name = MoltenVKShaderConverter;
 -			targetProxy = A9B1C7F4251AA5AF001D12CC /* PBXContainerItemProxy */;
+-		};
+-		DCA2CEAF2A45DFD400FB75B6 /* PBXTargetDependency */ = {
+-			isa = PBXTargetDependency;
+-			name = "MoltenVKShaderConverter-xrOS";
+-			targetProxy = DCA2CEAE2A45DFD400FB75B6 /* PBXContainerItemProxy */;
 -		};
 -/* End PBXTargetDependency section */
 -

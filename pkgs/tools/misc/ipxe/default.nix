@@ -107,7 +107,6 @@ stdenv.mkDerivation rec {
     { description = "Network boot firmware";
       homepage = "https://ipxe.org/";
       license = licenses.gpl2Only;
-      maintainers = with maintainers; [ ehmry ];
       platforms = platforms.linux;
     };
 }

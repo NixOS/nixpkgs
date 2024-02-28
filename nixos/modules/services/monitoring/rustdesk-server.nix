@@ -24,6 +24,24 @@ in {
         The public facing IP of the RustDesk relay.
       '';
     };
+
+    extraSignalArgs = mkOption {
+      type = listOf str;
+      default = [];
+      example = [ "-k" "_" ];
+      description = ''
+        A list of extra command line arguments to pass to the `hbbs` process.
+      '';
+    };
+
+    extraRelayArgs = mkOption {
+      type = listOf str;
+      default = [];
+      example = [ "-k" "_" ];
+      description = ''
+        A list of extra command line arguments to pass to the `hbbr` process.
+      '';
+    };
   };
 
   config = let
@@ -83,11 +101,11 @@ in {
     };
 
     systemd.services.rustdesk-signal = lib.mkMerge [ serviceDefaults {
-      serviceConfig.ExecStart = "${cfg.package}/bin/hbbs -r ${cfg.relayIP}";
+      serviceConfig.ExecStart = "${cfg.package}/bin/hbbs -r ${cfg.relayIP} ${lib.escapeShellArgs cfg.extraSignalArgs}";
     } ];
 
     systemd.services.rustdesk-relay = lib.mkMerge [ serviceDefaults {
-      serviceConfig.ExecStart = "${cfg.package}/bin/hbbr";
+      serviceConfig.ExecStart = "${cfg.package}/bin/hbbr ${lib.escapeShellArgs cfg.extraRelayArgs}";
     } ];
   };
 

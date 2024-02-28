@@ -28,5 +28,6 @@ buildGoModule rec {
     description = "Interactive WebServer";
     license = licenses.mit;
     maintainers = with maintainers; [ pradeepchhetri ];
+    mainProgram = "httplab";
   };
 }

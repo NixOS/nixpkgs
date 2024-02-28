@@ -38,5 +38,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ oluceps ];
+    mainProgram = "hysteria";
   };
 }

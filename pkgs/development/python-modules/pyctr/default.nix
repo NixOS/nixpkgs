@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyctr";
-  version = "0.7.3";
+  version = "0.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lpW2pcT5oG7tBUXRj7cTD9hCx51hVhVODq9RxP9GKIg=";
+    hash = "sha256-1nPP+rz/8BiFHu3nGcHuqCPwyyR55LUhoBprHFTudWQ=";
   };
 
   propagatedBuildInputs = [

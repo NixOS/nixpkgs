@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , core
+, repo
 , makeWrapper
 , retroarch
 , zlib
@@ -70,7 +71,10 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
-  passthru = { inherit core libretroCore; };
+  passthru = {
+    inherit core libretroCore;
+    updateScript = [ ./update_cores.py repo ];
+  };
 
   meta = with lib; {
     inherit mainProgram;

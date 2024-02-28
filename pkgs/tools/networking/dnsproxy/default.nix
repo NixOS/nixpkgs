@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/AdguardTeam/dnsproxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ contrun ];
+    mainProgram = "dnsproxy";
   };
 }

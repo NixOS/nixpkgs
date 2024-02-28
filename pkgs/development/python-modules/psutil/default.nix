@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.6";
+  version = "5.9.8";
   format = "setuptools";
 
   inherit stdenv;
@@ -20,8 +20,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5Lkt3NfdTN0/kAGA6h4QSTLHvOI0+4iXbio7KWRBIlo=";
+    hash = "sha256-a+Em4yJUht/yhqj7mgYkalJT9MfFO0depfWsk05kGUw=";
   };
+
+  postPatch = ''
+    # stick to the old SDK name for now
+    # https://developer.apple.com/documentation/iokit/kiomasterportdefault/
+    # https://developer.apple.com/documentation/iokit/kiomainportdefault/
+    substituteInPlace psutil/arch/osx/cpu.c \
+      --replace-fail kIOMainPortDefault kIOMasterPortDefault
+  '';
 
   buildInputs =
     # workaround for https://github.com/NixOS/nixpkgs/issues/146760

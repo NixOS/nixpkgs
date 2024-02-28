@@ -6,15 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iredis";
-  version = "1.14.0";
+  version = "1.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laixintao";
     repo = "iredis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5TMO1c29ahAQDbAJZb3u2oY0Z8M+6b8hwbNfqMsuPzM=";
+    hash = "sha256-ojS2wtxggZPp73n9SjPRAzBlnF1ScK/pNVGvAYKmQ5Y=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'wcwidth = "0.1.9"' 'wcwidth = "*"'
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core

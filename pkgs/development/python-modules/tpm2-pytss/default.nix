@@ -55,6 +55,15 @@ buildPythonPackage rec {
       sha256 = "sha256-Wxe9u7Cvv2vKMGTcK3X8W1Mq/nCt70zrzWUKA+83Sas=";
     })
 
+    # Inheritance in newer cryptography is not possible anymore
+    # for `RSAPrivateNumbers` because of a Rust implementation.
+    # https://github.com/tpm2-software/tpm2-pytss/pull/562
+    (fetchpatch {
+      name = "fix-newer-cryptography-42-0-1-support.patch";
+      url = "https://github.com/tpm2-software/tpm2-pytss/commit/0fbb9d099370c0a7031dd13990986538f586836a.patch";
+      sha256 = "sha256-xnQIr4/iJra0+rn5estVqSvG8pXcuwWykmmayBpCzgw=";
+    })
+
     # Fix hardcoded `fapi-config.json` configuration path
     ./fapi-config.patch
   ];

@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "An anime tracker for AniList featuring a TUI";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ natto1784 ];
+    mainProgram = "anup";
   };
 }

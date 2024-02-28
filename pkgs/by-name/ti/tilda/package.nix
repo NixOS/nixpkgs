@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tilda";
-  version = "1.5.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lanoxx";
     repo = "tilda";
     rev = "tilda-${finalAttrs.version}";
-    hash = "sha256-uDx28jmjNUyzJbgTJiHbjI9U5mYb9bnfl/9AjbxNUWA=";
+    hash = "sha256-Gseti810JwhYQSaGdE2KRRqnwNmthNBiFvXH9DyVpak=";
   };
 
   nativeBuildInputs = [

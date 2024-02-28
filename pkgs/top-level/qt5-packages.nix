@@ -245,6 +245,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   quazip = callPackage ../development/libraries/quazip { };
 
+  quickflux = callPackage ../development/libraries/quickflux { };
+
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qwt = callPackage ../development/libraries/qwt/default.nix { };
@@ -254,6 +256,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
   qzxing = callPackage ../development/libraries/qzxing { };
+
+  rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
 
   soqt = callPackage ../development/libraries/soqt { };
 

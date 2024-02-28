@@ -19,6 +19,7 @@
 , kunitconversion
 , libquotient
 , networkmanager-qt
+, prison
 , qqc2-desktop-style
 , qtpositioning
 , qtquickcontrols2
@@ -53,6 +54,7 @@ mkDerivation {
     kunitconversion
     libquotient
     networkmanager-qt
+    prison
     qqc2-desktop-style
     qtpositioning
     qtquickcontrols2

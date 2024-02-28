@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "py-dmidecode";
-  version = "0.1.2";
+  version = "0.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "py_dmidecode";
     inherit version;
-    hash = "sha256-nMy/jOlg7yUPfGF27MN0NyVM0vuTIBuJTV2GKNP13UA=";
+    hash = "sha256-pS1fRWuWLnXuNEGYXU/j1njC8THWQOHbnVOF9+c13Cw=";
   };
 
   nativeBuildInputs = [

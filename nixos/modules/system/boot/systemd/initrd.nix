@@ -57,6 +57,7 @@ let
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
     "systemd-halt.service"
+    "systemd-hibernate-resume.service"
     "systemd-journald-audit.socket"
     "systemd-journald-dev-log.socket"
     "systemd-journald.service"
@@ -88,8 +89,6 @@ let
     inherit upstreamWants;
     inherit (cfg) packages package;
   };
-
-  fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };

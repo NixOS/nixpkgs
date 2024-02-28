@@ -57,7 +57,7 @@ let
     homepage = "https://onionshare.org/";
 
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lourkeur ];
+    maintainers = with maintainers; [ bbjubjub ];
     mainProgram = "onionshare-cli";
   };
 

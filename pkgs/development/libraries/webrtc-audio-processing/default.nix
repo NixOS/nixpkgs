@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchurl
 , darwin
 , abseil-cpp
 , meson
@@ -19,6 +20,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-8CDt4kMt2Owzyv22dqWIcFuHeg4Y3FxB405cLw3FZ+g=";
   };
+
+  patches = [
+    # Fix an include oppsie that happens to not happen on glibc
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/merge_requests/38
+    (fetchurl {
+      url = "https://git.alpinelinux.org/aports/plain/community/webrtc-audio-processing-1/0001-rtc_base-Include-stdint.h-to-fix-build-failures.patch?id=625e19c19972e69e034c0870a31b375833d1ab5d";
+      hash = "sha256-9nI22SJoU0H3CzsPSAObtCFTadtvkzdnqIh6mxmUuds=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 

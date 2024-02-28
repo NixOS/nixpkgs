@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/julien-r44/fast-ssh";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "fast-ssh";
   };
 }

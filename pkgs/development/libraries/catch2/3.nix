@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/catchorg/Catch2/blob/${src.rev}/docs/release-notes.md";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ dotlambda ];
-    platforms = lib.platforms.unix;
+    platforms = with lib.platforms; unix ++ windows;
   };
 }

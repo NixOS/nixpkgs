@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.0";
+  version = "5.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zjQmUmkqwtXNnZKssNpl24p4FQscZKGiiJj5iwYl2UM=";
+    hash = "sha256-+z8Jj0eA/mYH1r8ZQUyYUFMk7h1mBxjoTD5YZk0cH0k=";
   };
 
   patches = [

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "colorlog";
-  version = "6.8.0";
+  version = "6.8.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+7b9+dVoXyUX84j7Kbsn1U6GVN0x9YvCo7IX6WepXKY=";
+    hash = "sha256-Pj4HmkH+taG2T5eLXqT0YECpTxHw6Lu4Jh49u+ymTUQ=";
   };
 
   nativeBuildInputs = [

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "2.0.0";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
-    hash = "sha256-CunFRQHKk3q8CU60TSRnRoCW7+9X1+JpJHm773HhmZs=";
+    hash = "sha256-l6C9cJ0MfffzULuH9DIoNzGKqp7o4cwpbDrbC93yc/g=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

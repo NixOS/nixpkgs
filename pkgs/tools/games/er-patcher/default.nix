@@ -36,5 +36,6 @@ stdenvNoCC.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
+    mainProgram = "er-patcher";
   };
 }

@@ -97,5 +97,6 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
+    mainProgram = "Foxotron";
   };
 }

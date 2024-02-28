@@ -32,7 +32,7 @@ let
       callPackage = self.newScope ({
         inherit (self) qtModule;
         inherit srcs python3;
-        stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in
     {
@@ -65,16 +65,6 @@ let
             url = "https://github.com/qt/qtbase/commit/fc1549c01445bb9c99d3ba6de8fa9da230614e72.patch";
             revert = true;
             hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
-          })
-          # CVE-2023-51714: Potential Integer Overflow in Qt's HTTP2 implementation
-          # https://www.qt.io/blog/security-advisory-potential-integer-overflow-in-qts-http2-implementation
-          (fetchpatch2 {
-            url = "https://download.qt.io/official_releases/qt/6.5/0001-CVE-2023-51714-qtbase-6.5.diff";
-            hash = "sha256-0Xnolq9dWkKUrmLUlv15uQ9nkZXrY3AsmvChaLX8P2I=";
-          })
-          (fetchpatch2 {
-            url = "https://download.qt.io/official_releases/qt/6.6/0002-CVE-2023-51714-qtbase-6.6.diff";
-            hash = "sha256-+/u3vy5Ci6Z4jy00L07iYAnqHvVdqUzqVnT9uVIqs60=";
           })
         ];
       };
@@ -119,7 +109,7 @@ let
         qtwebengine
         qtwebsockets
         qtwebview
-      ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ])) { };
+      ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwayland libglvnd ])) { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
@@ -173,7 +163,7 @@ let
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
         qtModule = callPackage ({ qtModule }: qtModule.override {
-          stdenv = if stdenv.isDarwin
+          stdenv = if stdenv.hostPlatform.isDarwin
             then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
             else stdenv;
         }) { };

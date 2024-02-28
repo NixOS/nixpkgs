@@ -165,10 +165,17 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
 
-        options.pam_allowed_login_groups = lib.mkOption {
-          description = lib.mdDoc "Kanidm groups that are allowed to login using PAM.";
-          example = "my_pam_group";
-          type = lib.types.listOf lib.types.str;
+        options = {
+          pam_allowed_login_groups = lib.mkOption {
+            description = lib.mdDoc "Kanidm groups that are allowed to login using PAM.";
+            example = "my_pam_group";
+            type = lib.types.listOf lib.types.str;
+          };
+          hsm_pin_path = lib.mkOption {
+            description = lib.mdDoc "Path to a HSM pin.";
+            default = "/var/cache/kanidm-unixd/hsm-pin";
+            type = lib.types.path;
+          };
         };
       };
       description = lib.mdDoc ''

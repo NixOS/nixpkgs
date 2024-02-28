@@ -31,7 +31,7 @@
 , gdk-pixbuf
 }:
 let
-  version = "0.24.0";
+  version = "0.25.1";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -44,7 +44,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
-    hash = "sha256-n0OiNxw9QDibX5HBSzq6jdOxyUd0bPkjKd+mtb/S/BY=";
+    hash = "sha256-Hm+ILxFXHaP0Zh96GZLG4h1Y7h1kapbn844NVFiyIjw=";
     fetchSubmodules = true;
   };
 
@@ -63,8 +63,9 @@ buildDotnetModule rec {
     updateScript = ./update.sh;
   };
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_7_0 sdk_6_0 ];
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  # SDK 6.0 required for Robust.LoaderApi
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_8_0 sdk_6_0 ];
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetFlags = [
     "-p:FullRelease=true"

@@ -25,15 +25,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.27.2";
-    rev = "ae07f9a11715245f7d25d2a13699c260c2ae8ebb";
-    hash = "sha256-VgP3st26Wkx51tTM++tKAZX7+BmPGgy1MIJFGLDu4JU=";
+    version = "1.27.3";
+    rev = "0fd81ee7ffcd7cfc864094b24dc9b5c3ade89ff2";
+    hash = "sha256-WNyyUw3517oKqMd1sJMk9CiLa/V7UrhwlRS+AWNNOOo=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash = {
-    x86_64-linux = "sha256-389CaxJ3F66eMID7+KgwzCdlT2QPOTkKPLnqpmM49ig=";
-    aarch64-linux = "sha256-ui7AUzWouAn2DZ7kUpp1huNxPGBqzKXqtwcuRZUhmqo=";
+    x86_64-linux = "sha256-wTGHfeFkCuijPdX//lT5GPspaxZsxzBHJffH1tpVM2w=";
+    aarch64-linux = "sha256-9/Wem+Gk/7bFeMNFC4J3mdTm3mrNmyMxiu5oadQcovU=";
   }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
 buildBazelPackage {
@@ -70,7 +70,7 @@ buildBazelPackage {
     # use system C/C++ tools
     ./0003-nixpkgs-use-system-C-C-toolchains.patch
 
-    # bump proxy-wasm-cpp-host until > 1.27.2/1.28.0
+    # bump proxy-wasm-cpp-host until > 1.27.3/1.28.0
     (fetchpatch {
       url = "https://github.com/envoyproxy/envoy/pull/31451.patch";
       hash = "sha256-n8k7bho3B8Gm0dJbgf43kU7ymvo15aGJ2Twi2xR450g=";
@@ -191,6 +191,7 @@ buildBazelPackage {
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
+    changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];

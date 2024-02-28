@@ -1,13 +1,16 @@
 { lib
-, ansiwrap
+, stdenv
 , azure-datalake-store
+, azure-identity
 , azure-storage-blob
 , boto3
 , buildPythonPackage
 , click
 , entrypoints
-, fetchPypi
+, fetchFromGitHub
 , gcsfs
+, ipykernel
+, moto
 , nbclient
 , nbformat
 , pyarrow
@@ -17,6 +20,7 @@
 , pythonOlder
 , pyyaml
 , requests
+, setuptools
 , tenacity
 , tqdm
 }:
@@ -24,17 +28,22 @@
 buildPythonPackage rec {
   pname = "papermill";
   version = "2.5.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6ntwwFU/Vv6RsPqcxeFwEs1pkyCosBU3PnhwxeYIbHI=";
+  src = fetchFromGitHub {
+    owner = "nteract";
+    repo = "papermill";
+    rev = "refs/tags/${version}";
+    hash = "sha256-x6f5hhTdOPDVFiBvRhfrXq1wd5keYiuUshXnT0IkjX0=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    ansiwrap
     click
     pyyaml
     nbformat
@@ -48,6 +57,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     azure = [
       azure-datalake-store
+      azure-identity
       azure-storage-blob
     ];
     gcs = [
@@ -65,25 +75,34 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
+    ipykernel
+    moto
     pytest-mock
-  ];
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.azure
+    ++ passthru.optional-dependencies.s3
+    ++ passthru.optional-dependencies.gcs;
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # The test suite depends on cloud resources azure/aws
-  doCheck = false;
-
   pythonImportsCheck = [
     "papermill"
   ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # might fail due to the sandbox
+    "test_end2end_autosave_slow_notebook"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Parametrize and run Jupyter and interact with notebooks";
     homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    mainProgram = "papermill";
   };
 }

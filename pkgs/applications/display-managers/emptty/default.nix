@@ -28,5 +28,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ urandom ];
     # many undefined functions
     broken = stdenv.isDarwin;
+    mainProgram = "emptty";
   };
 }

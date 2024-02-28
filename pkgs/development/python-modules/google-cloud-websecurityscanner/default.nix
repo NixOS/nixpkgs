@@ -8,19 +8,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "1.14.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vktbTjzNYMa8otEGGq36fYOKcNuNasWql4SBWbk84Iw=";
+    hash = "sha256-loiKMV7guByukm9XBohVbCDsV607i8PXiQaJ8GZS6Go=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core

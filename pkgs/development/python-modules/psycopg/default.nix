@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -35,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.15";
+  version = "3.1.17";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-8M2Rm9AtOvZwZhKGuR96XiOOmllqcWAZJuEmUXxzsRw=";
+    hash = "sha256-Paq4Wkvv6d6+fNcvRO/yfj7OWCMygqccKIdfsohHUMM=";
   };
 
   patches = [

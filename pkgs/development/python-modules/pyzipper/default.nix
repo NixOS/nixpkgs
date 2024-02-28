@@ -4,12 +4,13 @@
 , pythonOlder
 , pytestCheckHook
 , pycryptodomex
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyzipper";
   version = "0.3.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,11 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-+fZXoAUeB/bUI3LrIFlMTktJgn+GNFBiDHvH2Jgo0pg=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     pycryptodomex
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -45,6 +50,8 @@ buildPythonPackage rec {
     "test_main"
     "test_temp_dir__forked_child"
     "test_test_command"
+    # Test wants to import asyncore
+    "test_CleanImport"
   ];
 
   meta = with lib; {

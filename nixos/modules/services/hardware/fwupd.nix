@@ -51,7 +51,9 @@ let
     # to install it because it would create a cyclic dependency between
     # the outputs. We also need to enable the remote,
     # which should not be done by default.
-    lib.optionalAttrs cfg.enableTestRemote (enableRemote cfg.package.installedTests "fwupd-tests")
+    lib.optionalAttrs
+      (cfg.daemonSettings.TestDevices or false)
+      (enableRemote cfg.package.installedTests "fwupd-tests")
   );
 
 in {
@@ -83,15 +85,6 @@ in {
         example = [ "lvfs-testing" ];
         description = lib.mdDoc ''
           Enables extra remotes in fwupd. See `/etc/fwupd/remotes.d`.
-        '';
-      };
-
-      enableTestRemote = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to enable test remote. This is used by
-          [installed tests](https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md).
         '';
       };
 
@@ -128,6 +121,16 @@ in {
                 or if this partition is not mounted at /boot/efi, /boot, or /efi
               '';
             };
+
+            TestDevices = mkOption {
+              internal = true;
+              type = types.bool;
+              default = false;
+              description = lib.mdDoc ''
+                Create virtual test devices and remote for validating daemon flows.
+                This is only intended for CI testing and development purposes.
+              '';
+            };
           };
         };
         default = {};
@@ -153,13 +156,13 @@ in {
     (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins"] [ "services" "fwupd" "daemonSettings" "DisabledPlugins" ])
     (mkRenamedOptionModule [ "services" "fwupd" "disabledDevices" ] [ "services" "fwupd" "daemonSettings" "DisabledDevices" ])
     (mkRenamedOptionModule [ "services" "fwupd" "disabledPlugins" ] [ "services" "fwupd" "daemonSettings" "DisabledPlugins" ])
+    (mkRemovedOptionModule [ "services" "fwupd" "enableTestRemote" ] "This option was removed after being removed upstream. It only provided a method for testing fwupd functionality, and should not have been exposed for use outside of nix tests.")
   ];
 
   ###### implementation
   config = mkIf cfg.enable {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
     services.fwupd.daemonSettings = {
-      DisabledPlugins = cfg.package.defaultDisabledPlugins;
       EspLocation = config.boot.loader.efi.efiSysMountPoint;
     };
 

@@ -1,32 +1,29 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , rustPlatform
 , libiconv
 , numpy
 , scipy
+, nix-update-script
 }:
 
 buildPythonPackage rec {
   pname = "clarabel";
-  version = "0.6.0.post1";
+  version = "0.7.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "oxfordcontrol";
-    repo  = "Clarabel.rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5Mw+3WRMuz3BxLWRdsnXHjetsNrM3EZRZld8lVTNKgo=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-udpW9SKAaoR/Ps4I9fIfq3UG7sMUiyJEYZDeUgbdHm8=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-R/o12m2UqKte4H1pvW9DN0YPDhgNIxt0mXrfBDMzcwM=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} ./Cargo.lock
-  '';
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -51,6 +48,8 @@ buildPythonPackage rec {
     python examples/python/example_qp.py
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/oxfordcontrol/Clarabel.rs/releases/tag/v${version}/CHANGELOG.md";

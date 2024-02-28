@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Python logging handler that allows multiple processes to safely write to the same log file concurrently";
     homepage = "https://pypi.org/project/concurrent-log-handler";
     license = licenses.asl20;
-    maintainers = [ maintainers.lourkeur ];
+    maintainers = [ maintainers.bbjubjub ];
   };
 }

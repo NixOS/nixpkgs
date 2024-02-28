@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
 
   pname = "omniorb";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/omniorb/omniORB/omniORB-${version}/omniORB-${version}.tar.bz2";
-    hash = "sha256-D0K8Prc3yuaA2vqFs645WOn1ajeRLF+2uHWTP4+3OQ0=";
+    hash = "sha256-HHRTMNAZBK/Xoe0KWJa5puU6waS4ZKSFA7k8fuy/H6g=";
   };
 
   nativeBuildInputs = [ pkg-config ];

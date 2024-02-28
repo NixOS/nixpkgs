@@ -3,9 +3,10 @@
 { baseName ? "lfe"
 , version
 , maximumOTPVersion
-, sha256 ? null
+, sha256 ? ""
+, hash ? ""
 , rev ? version
-, src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
+, src ? fetchFromGitHub { inherit hash rev sha256; owner = "lfe"; repo = "lfe"; }
 , patches ? []
 }:
 

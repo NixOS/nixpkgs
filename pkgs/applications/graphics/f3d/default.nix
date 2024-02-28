@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin pbsds ];
     platforms = with platforms; unix;
+    mainProgram = "f3d";
   };
 }

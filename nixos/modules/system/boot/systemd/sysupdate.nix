@@ -3,7 +3,7 @@
 let
   cfg = config.systemd.sysupdate;
 
-  format = pkgs.formats.ini { };
+  format = pkgs.formats.ini { listToValue = toString; };
 
   definitionsDirectory = utils.systemdUtils.lib.definitions
     "sysupdate.d"
@@ -79,7 +79,7 @@ in
           Source = {
             Type = "url-file";
             Path = "https://download.example.com/";
-            MatchPattern = "nixos_@v.efi.xz";
+            MatchPattern = [ "nixos_@v+@l-@d.efi" "nixos_@v+@l.efi" "nixos_@v.efi" ];
           };
 
           Target = {

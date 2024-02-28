@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = [ maintainers.mounium ];
     platforms = platforms.all;
+    mainProgram = "fehlstart";
   };
 }

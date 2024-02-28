@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/foundriesio/fioctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ nixinator matthewcroughan ];
+    mainProgram = "fioctl";
   };
 }

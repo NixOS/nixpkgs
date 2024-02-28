@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "8.0.1";
+  version = "8.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-zDnRmety/kG83P7hZOtbWRUztMYlWA4/mprMaGkGTXw=";
+    hash = "sha256-OTVlyoZorh4OOOThMrUc8CgIb7Bqen2Ued61Aj4vaNQ=";
   };
 
   nativeBuildInputs = [

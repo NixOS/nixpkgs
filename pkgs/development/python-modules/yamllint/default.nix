@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
@@ -6,21 +7,20 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.33.0";
-  format = "pyproject";
+  version = "1.35.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
-    repo = pname;
+    repo = "yamllint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hWN5PhEAhckp250Dj7h5PpyH/E1jCi38O4VmMYgPtzE=";
+    hash = "sha256-+7Q2cPl4XElI2IfLAkteifFVTrGkj2IjZk7nPuc6eYM=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,9 @@ buildPythonPackage rec {
     "test_run_with_locale"
   ];
 
-  pythonImportsCheck = [ "yamllint" ];
+  pythonImportsCheck = [
+    "yamllint"
+  ];
 
   meta = with lib; {
     description = "A linter for YAML files";

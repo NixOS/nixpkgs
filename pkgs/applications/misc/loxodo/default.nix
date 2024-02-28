@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication {
     [Desktop Entry]
     Type=Application
     Exec=$out/bin/loxodo
-    Icon=$out/lib/${python3.libPrefix}/site-packages/resources/loxodo-icon.png
+    Icon=$out/${python3.sitePackages}/resources/loxodo-icon.png
     Name=Loxodo
     GenericName=Password Vault
     Categories=Application;Other;

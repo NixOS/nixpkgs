@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sohalt ];
+    mainProgram = "spacenav-cube-example";
   };
 }

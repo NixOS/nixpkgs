@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XCjXcKC5pwKGK9bDdVuizS95lN1RjJguXOKY1/N0ZqQ=";
+    hash = "sha256-f48Dohyd4sMwFZM6/O9yv45KLV3+w7QAkih95uQbCTo=";
   };
 
   nativeBuildInputs = [
@@ -45,13 +45,8 @@ buildPythonPackage rec {
     unittestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  preCheck = ''
-    # https://github.com/nose-devs/nose2/issues/588
-    substituteInPlace nose2/tests/functional/test_junitxml_plugin.py \
-      --replace "test_skip_reason_in_message" "dont_test_skip_reason_in_message"
-  '';
-
   meta = with lib; {
+    changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
     description = "Test runner for Python";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;

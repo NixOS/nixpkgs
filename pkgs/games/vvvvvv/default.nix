@@ -6,11 +6,10 @@
 , makeWrapper
 , copyDesktopItems
 , makeDesktopItem
+, faudio
 , physfs
 , SDL2
-, SDL2_mixer
 , tinyxml-2
-, utf8cpp
 , Foundation
 , IOKit
 , makeAndPlay ? false
@@ -18,18 +17,15 @@
 
 stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "2.3.6";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
     rev = version;
-    sha256 = "sha256-sLNO4vkmlirsqJmCV9YWpyNnIiigU1KMls7rOgWgSmQ=";
+    sha256 = "sha256-AecaEWjWELRnCzTdMz+rDXVKnpPF+LNmxiKqMwQMm4k=";
+    fetchSubmodules = true;
   };
-
-  patches = [
-    ./utf8cpp.patch
-  ];
 
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
@@ -45,21 +41,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    faudio
     physfs
     SDL2
-    SDL2_mixer
     tinyxml-2
-    utf8cpp
   ] ++ lib.optionals stdenv.isDarwin [ Foundation IOKit ];
-
-  # Help CMake find SDL_mixer.h
-  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_mixer}/include/SDL2";
 
   cmakeDir = "../desktop_version";
 
   cmakeFlags = [
     "-DBUNDLE_DEPENDENCIES=OFF"
-    "-DCMAKE_CXX_FLAGS='-I${lib.getDev utf8cpp}/include/utf8cpp'"
   ] ++ lib.optional makeAndPlay "-DMAKEANDPLAY=ON";
 
   desktopItems = [
@@ -80,8 +71,13 @@ stdenv.mkDerivation rec {
 
     install -Dm755 VVVVVV $out/bin/${pname}
     install -Dm644 "$src/desktop_version/icon.ico" "$out/share/pixmaps/VVVVVV.png"
+    cp -r "$src/desktop_version/fonts/" "$out/share/"
+    cp -r "$src/desktop_version/lang/" "$out/share/"
 
-    wrapProgram $out/bin/${pname} --add-flags "-assets ${dataZip}"
+    wrapProgram $out/bin/${pname} \
+      --add-flags "-assets ${dataZip}" \
+      --add-flags "-langdir $out/share/lang" \
+      --add-flags "-fontsdir $out/share/fonts"
 
     runHook postInstall
   '';

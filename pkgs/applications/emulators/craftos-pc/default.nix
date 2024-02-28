@@ -16,18 +16,18 @@
 }:
 
 let
-  version = "2.8";
+  version = "2.8.1";
   craftos2-lua = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2-lua";
     rev = "v${version}";
-    hash = "sha256-xuNcWt3Wnh3WlYe6pB4dvP3PY9S5ghL9QQombGn8iyY=";
+    hash = "sha256-8bl83AOIWtUQ06F2unYEF08VT13o9EGo9YDZpdNxd8w=";
   };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
     rev = "v${version}";
-    hash = "sha256-WZs/KIdpqLLzvpH2hiJpe/AehluoQMtewBbAb4htz8k=";
+    hash = "sha256-aCRJ3idSrRM8ydt8hP8nA1RR0etPnWpQKphXcOGgTfk=";
   };
 in
 
@@ -39,17 +39,8 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    hash = "sha256-nT/oN2XRU1Du1/IHlkRCzLqFwQ5s9Sr4FQs3ES+aPFs=";
+    hash = "sha256-iQCv4EDdqmnU0fYxMwpCZ2Z5p43P0MGBNIG/dZrWndg=";
   };
-
-  patches = [
-    ( # Fixes CCEmuX. This is a one-character change that did not make it into the release.
-      fetchpatch {
-        url = "https://github.com/MCJack123/craftos2/commit/9ef7e16b69ead69b5fe076724842a1e24b3de058.patch";
-        hash = "sha256-SjNnsooDFt3JoVOO0xf6scrGXEQQmrQf91GY7VWaTOw=";
-      }
-    )
-  ];
 
   buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
 

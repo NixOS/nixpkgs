@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uDKCT0Uoa5WQekMUFm2iZmzm+oWAZ6IWMwfpchkUZY0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "static" ];
 
   nativeBuildInputs = [
     cmake
@@ -31,9 +31,17 @@ stdenv.mkDerivation rec {
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor
       xorg.libXinerama xorg.libXi
     ]
-    ++ lib.optional (openclSupport && !stdenv.isDarwin) ocl-icd
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [OpenCL Cocoa CoreVideo IOKit AppKit AGL ])
-    ++ lib.optional cudaSupport [
+    ++ lib.optionals (openclSupport && !stdenv.isDarwin) [ ocl-icd ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      OpenCL
+      Cocoa
+      CoreVideo
+      IOKit
+      AppKit
+      AGL
+      MetalKit
+    ])
+    ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
     ];
 
@@ -50,7 +58,7 @@ stdenv.mkDerivation rec {
     [ "-DNO_TUTORIALS=1"
       "-DNO_REGRESSION=1"
       "-DNO_EXAMPLES=1"
-      "-DNO_METAL=1" # don’t have metal in apple sdk
+      (lib.cmakeBool "NO_METAL" (!stdenv.isDarwin))
       (lib.cmakeBool "NO_OPENCL" (!openclSupport))
       (lib.cmakeBool "NO_CUDA" (!cudaSupport))
     ] ++ lib.optionals (!stdenv.isDarwin) [
@@ -65,7 +73,9 @@ stdenv.mkDerivation rec {
     NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
   '';
 
-  postInstall = "rm $out/lib/*.a";
+  postInstall = ''
+    moveToOutput "lib/*.a" $static
+  '';
 
   meta = {
     description = "An Open-Source subdivision surface library";

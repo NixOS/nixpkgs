@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
+    mainProgram = "fastd";
   };
 }

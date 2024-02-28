@@ -2,27 +2,36 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bkcrack";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "kimci86";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VfPRX9lOPyen8CujiBtTCbD5e7xd9X2OQ1uZ6JWKwtY=";
+    repo = "bkcrack";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x7JK7+DcD2uSWZRTJQPGCcF2mHBlu6FwYUbuYzbvD+s=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DBKCRACK_BUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}"
+  ];
+
   postInstall = ''
-    mkdir -p $out/bin $out/share/licenses/bkcrack
+    mkdir -p $out/bin $out/share/doc/bkcrack $out/share/licenses/bkcrack
     mv $out/bkcrack $out/bin/
     mv $out/license.txt $out/share/licenses/bkcrack
-    rm -r $out/example $out/tools $out/readme.md
+    mv $out/example $out/tools $out/readme.md $out/share/doc/bkcrack
   '';
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Crack legacy zip encryption with Biham and Kocher's known plaintext attack";
@@ -30,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ erdnaxe ];
+    mainProgram = "bkcrack";
   };
-}
+})

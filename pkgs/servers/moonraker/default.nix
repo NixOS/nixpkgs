@@ -18,18 +18,18 @@ let
       jinja2
       dbus-next
       apprise
+      python-periphery
     ]
-    ++ (lib.optionals useGpiod [ libgpiod ])
   );
 in stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "unstable-2023-12-16";
+  version = "unstable-2023-12-27";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    rev = "42357891a3716cd332ef60b28af09f8732dbf67a";
-    sha256 = "sha256-5w336GaHUkbmhAPvhOO3kNW5q7qTFVw3p0Q+Rv+YdYM=";
+    rev = "c226e9c1e44d65ff6ea400b81e3cedba7f637976";
+    sha256 = "sha256-wdf4uab8pJEWaX6PFN9Y9pykmylmxJ4Oo5pwSQcyjCc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

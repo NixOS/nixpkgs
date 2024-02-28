@@ -6,6 +6,7 @@
 , pysigma-pipeline-sysmon
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 }:
 
@@ -23,8 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-VymaxX+iqrRlf+WEt4xqEvNt5kg8xI5O/MoYahayu0o=";
   };
 
+  pythonRelaxDeps = [
+    "pysigma"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -35,11 +41,6 @@ buildPythonPackage rec {
     pysigma-pipeline-sysmon
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pysigma = "^0.7.2"' 'pysigma = "*"'
-  '';
 
   pythonImportsCheck = [
     "sigma.backends.qradar"

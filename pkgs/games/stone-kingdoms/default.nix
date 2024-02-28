@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "stone-kingdoms";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "stone-kingdoms";
     repo = pname;
     rev = version;
-    hash = "sha256-FQrg/1/nfFC/irCWSLbnb9GYSUv//ovvcjzvIg94oEI=";
+    hash = "sha256-qdaGowzAmMSCJrXzWLPDmyICsmvs0w+tfTsqKQewzJ8=";
   };
 
   nativeBuildInputs = [
