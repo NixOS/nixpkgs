@@ -17174,6 +17174,12 @@
       fingerprint = "E173 237A C782 296D 98F5  ADAC E13D FD4B 4712 7951";
     }];
   };
+  sdht0 = {
+    email = "nixpkgs@sdht.in";
+    github = "sdht0";
+    githubId = 867424;
+    name = "Siddhartha Sahu";
+  };
   sdier = {
     email = "scott@dier.name";
     matrix = "@sdier:matrix.org";
