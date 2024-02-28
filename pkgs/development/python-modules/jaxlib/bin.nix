@@ -2,16 +2,7 @@
 # backend will require some additional work. Those wheels are located here:
 # https://storage.googleapis.com/jax-releases/libtpu_releases.html.
 
-# For future reference, the easiest way to test the GPU backend is to run
-#   NIX_PATH=.. nix-shell -p python3 python3Packages.jax "python3Packages.jaxlib-bin.override { cudaSupport = true; }"
-#   export XLA_FLAGS=--xla_gpu_force_compilation_parallelism=1
-#   python -c "from jax.lib import xla_bridge; assert xla_bridge.get_backend().platform == 'gpu'"
-#   python -c "from jax import random; random.PRNGKey(0)"
-#   python -c "from jax import random; x = random.normal(random.PRNGKey(0), (100, 100)); x @ x"
-# There's no convenient way to test the GPU backend in the derivation since the
-# nix build environment blocks access to the GPU. See also:
-#   * https://github.com/google/jax/issues/971#issuecomment-508216439
-#   * https://github.com/google/jax/issues/5723#issuecomment-913038780
+# See `python3Packages.jax.passthru` for CUDA tests.
 
 { absl-py
 , autoPatchelfHook
