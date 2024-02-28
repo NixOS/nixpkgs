@@ -548,6 +548,7 @@
   ./services/hardware/lcd.nix
   ./services/hardware/lirc.nix
   ./services/hardware/nvidia-container-toolkit-cdi-generator
+  ./services/hardware/monado.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/openrgb.nix
   ./services/hardware/pcscd.nix
