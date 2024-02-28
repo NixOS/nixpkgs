@@ -54,24 +54,30 @@ let
       postFixup = ''
         rm $out/nix-support/propagated-build-inputs
       '';
-
-      passthru = old.passthru // {
-        inherit (this) selectedPlugins availablePlugins withPlugins python;
-        tests = old.passthru.tests // {
-          nixos = old.passthru.tests.nixos.passthru.override {
-            nixopsPkg = rawPackage;
-          };
-        }
-          # Make sure we also test with a configuration that's been extended with a plugin.
-          // lib.optionalAttrs (this.selectedPlugins == [ ]) {
-          withAPlugin =
-            lib.recurseIntoAttrs
-              (this.withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
-        };
-      };
     }));
 
-    public = this.rawPackage;
+    # Extra package attributes that aren't derivation attributes, just like `mkDerivation`'s `passthru`.
+    extraPackageAttrs = {
+      inherit (this) selectedPlugins availablePlugins withPlugins python;
+      tests = this.rawPackage.tests // {
+        nixos = this.rawPackage.tests.nixos.passthru.override {
+          nixopsPkg = this.rawPackage;
+        };
+      }
+        # Make sure we also test with a configuration that's been extended with a plugin.
+        // lib.optionalAttrs (this.selectedPlugins == [ ]) {
+        withAPlugin =
+          lib.recurseIntoAttrs
+            (this.withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
+      };
+      overrideAttrs = f: this.extend (this: oldThis: {
+        rawPackage = oldThis.rawPackage.overrideAttrs f;
+      });
+    };
+
+    package = lib.lazyDerivation { outputs = [ "out" "dist" ]; derivation = this.rawPackage; } // this.extraPackageAttrs;
+
+    public = this.package;
   };
 
   minimal = encapsulate nixopsContextBase;
