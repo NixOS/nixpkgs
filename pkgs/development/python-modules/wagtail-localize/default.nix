@@ -18,12 +18,12 @@
 buildPythonPackage rec {
   pname = "wagtail-localize";
   version = "1.8.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "wagtail-localize";
     owner = "wagtail";
     rev = "refs/tags/v${version}";
     hash = "sha256-WOkixwcGvsH4vgL7KAQeeGtoh3+Usr9drXb3Uho1AS0=";
