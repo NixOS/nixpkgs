@@ -2,6 +2,7 @@
 , fetchFromGitLab
 , libpcap, perl
 , asciidoctor
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   dontBuild = true;
+
+  passthru.tests = nixosTests.clarissa;
 
   meta = with lib; {
     description = "Near-real-time network census daemon";
