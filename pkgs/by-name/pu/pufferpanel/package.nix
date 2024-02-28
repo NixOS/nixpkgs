@@ -12,13 +12,13 @@
 }:
 buildGoModule rec {
   pname = "pufferpanel";
-  version = "2.6.9";
+  version = "2.6.10";
 
   src = fetchFromGitHub {
     owner = "PufferPanel";
     repo = "PufferPanel";
     rev = "v${version}";
-    hash = "sha256-+ZZUoqCiSbrkaeYrm9X8SuX0INsGFegQNwa3WjBvgHQ=";
+    hash = "sha256-NGZ5jSlx8f6qgBamHxECq7x/7uKsWjAINzAPHTuoKp8=";
   };
 
   patches = [
@@ -48,6 +48,13 @@ buildGoModule rec {
     src = "${src}/${npmRoot}";
     hash = "sha256-oWFXtV/dxzHv3sfIi01l1lHE5tcJgpVq87XgS6Iy62g=";
   };
+
+  # buildGoModule “helpfully” passes nativeBuildInputs (along with npm hook) to
+  # the goModules derivation. This breaks the build since the hook cannot find
+  # required dependencies.
+  overrideModAttrs = (_: {
+    inherit npmRoot npmDeps;
+  });
 
   vendorHash = "sha256-402ND99FpU+zNV1e5Th1+aZKok49cIEdpPPLLfNyL3E=";
   proxyVendor = true;
