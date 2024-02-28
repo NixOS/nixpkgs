@@ -1521,20 +1521,32 @@ self: super: {
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
 
-  dhall-lsp-server =
-    # 2022-09-20: We have overridden lsp to not be the stackage version.
-    # dhall-lsp-server needs the older 1.4.0.0 lsp
-    let overridden-dhall-lsp-server = super.dhall-lsp-server.override {
-          lsp = dontCheck (super.lsp_1_4_0_0.override {
-            lsp-types = super.lsp-types_1_4_0_1;
-          });
-        };
-    in appendPatch (fetchpatch {
-      # This patch can be removed once the change question is in a tracked release.
-      url = "https://github.com/dhall-lang/dhall-haskell/pull/2539/commits/5dd0f0ba2d836fea3ef499c7aed04e83269c203f.patch";
-      sha256 = "sha256-xjVuLDBptDGfTf7MVmPb0WuuFWRLpgDYX2ybbgjAjzs=";
-      relative = "dhall-lsp-server";
-    }) overridden-dhall-lsp-server;
+
+  # 2024-02-28: The Hackage version dhall-lsp-server-1.1.3 requires
+  # lsp-1.4.0.0 which is hard to build with this LTS. However, the latest
+  # git version of dhall-lsp-server works with lsp-2.1.0.0, and only
+  # needs jailbreaking to build successfully.
+  dhall-lsp-server = lib.pipe
+    (super.dhall-lsp-server.overrideScope (lself: lsuper: {
+      lsp = doJailbreak lself.lsp_2_1_0_0;  # sorted-list <0.2.2
+      lsp-types = lself.lsp-types_2_0_2_0;
+    }))
+    [
+      # Use latest main branch version of dhall-lsp-server.
+      (assert super.dhall-lsp-server.version == "1.1.3"; overrideSrc {
+        version = "unstable-2024-02-19";
+        src = pkgs.fetchFromGitHub {
+          owner = "dhall-lang";
+          repo = "dhall-haskell";
+          rev = "277d8b1b3637ba2ce125783cc1936dc9591e67a7";
+          hash = "sha256-YvL3XEltU9sdU45ULHeD3j1mPGZoO1J81MW7f2+10ok=";
+        } + "/dhall-lsp-server";
+      })
+      # New version needs an extra dependency
+      (addBuildDepend self.text-rope)
+      # bounds too strict: mtl <2.3, transformers <0.6
+      doJailbreak
+    ];
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
