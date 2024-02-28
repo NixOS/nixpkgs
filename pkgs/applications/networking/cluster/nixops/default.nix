@@ -30,9 +30,9 @@ let
   # selector is a function mapping pythonPackages to a list of plugins
   # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
   withPlugins' = { availablePlugins }: selector: let
-   selected = selector availablePlugins;
+   selectedPlugins = selector availablePlugins;
    r = python.pkgs.toPythonApplication (python.pkgs.nixops.overridePythonAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ selected;
+    propagatedBuildInputs = old.propagatedBuildInputs ++ selectedPlugins;
 
     # Propagating dependencies leaks them through $PYTHONPATH which causes issues
     # when used in nix-shell.
