@@ -43,14 +43,20 @@ let
       inherit withPlugins python;
     };
   }));
-in withPlugins (ps: [
-  ps.nixops-aws
-  ps.nixops-digitalocean
-  ps.nixops-encrypted-links
-  ps.nixops-gce
-  ps.nixops-hercules-ci
-  ps.nixops-hetzner
-  ps.nixops-hetznercloud
-  ps.nixops-libvirtd
-  ps.nixops-vbox
-])
+
+in {
+  nixops_unstable_minimal = withPlugins (ps: []);
+
+  # Not recommended; too fragile.
+  nixops_unstable_full = withPlugins (ps: [
+    ps.nixops-aws
+    ps.nixops-digitalocean
+    ps.nixops-encrypted-links
+    ps.nixops-gce
+    ps.nixops-hercules-ci
+    ps.nixops-hetzner
+    ps.nixops-hetznercloud
+    ps.nixops-libvirtd
+    ps.nixops-vbox
+  ]);
+}
