@@ -726,6 +726,8 @@ with pkgs;
 
   inspec = callPackage ../tools/misc/inspec { };
 
+  kdePackages = callPackage ../kde { };
+
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
   probe-rs = callPackage ../development/tools/rust/probe-rs {
@@ -13257,8 +13259,6 @@ with pkgs;
 
   smpq = callPackage ../applications/misc/smpq { };
 
-  sn0int = callPackage ../tools/security/sn0int { };
-
   snabb = callPackage ../tools/networking/snabb { };
 
   snallygaster = callPackage ../tools/security/snallygaster { };
@@ -14509,8 +14509,6 @@ with pkgs;
   wifish = callPackage ../tools/networking/wifish { };
 
   wimboot = callPackage ../tools/misc/wimboot { };
-
-  wit-bindgen = callPackage ../tools/misc/wit-bindgen { };
 
   wire = callPackage ../development/tools/wire { };
 
@@ -16971,7 +16969,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-limit = callPackage ../development/tools/rust/cargo-limit { };
-  cargo-make = callPackage ../development/tools/rust/cargo-make { };
   cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-mommy = callPackage ../development/tools/rust/cargo-mommy { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
@@ -35325,6 +35322,10 @@ with pkgs;
     plasmoidSupport = false;
     systemdSupport = true;
   };
+  syncthingtray-qt6 = kdePackages.callPackage ../applications/misc/syncthingtray {
+    # renamed in KF5 -> KF6
+    plasma-framework = kdePackages.libplasma;
+  };
 
   synergy = libsForQt5.callPackage ../applications/misc/synergy {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
@@ -36801,11 +36802,11 @@ with pkgs;
 
   lightning-pool = callPackage ../applications/blockchains/lightning-pool { };
 
-  litecoin  = disable-warnings-if-gcc13 (libsForQt5.callPackage ../applications/blockchains/litecoin {
+  litecoin  = libsForQt5.callPackage ../applications/blockchains/litecoin {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     boost = pkgs.boost177;
-  });
-  litecoind = disable-warnings-if-gcc13 (litecoin.override { withGui = false; });
+  };
+  litecoind = litecoin.override { withGui = false; };
 
   livedl = callPackage ../tools/misc/livedl { };
 
