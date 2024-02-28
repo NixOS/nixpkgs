@@ -35,13 +35,13 @@ let
       nixopsvbox = nixops-vbox;
     };
 
-    withPlugins = this.withPlugins' { availablePlugins = this.plugins this.python.pkgs; };
+    availablePlugins = this.plugins this.python.pkgs;
 
     # selector is a function mapping pythonPackages to a list of plugins
     # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
-    withPlugins' = { availablePlugins }: selector:
+    withPlugins = selector:
       let
-        selectedPlugins = selector availablePlugins;
+        selectedPlugins = selector this.availablePlugins;
         r = this.python.pkgs.toPythonApplication (this.python.pkgs.nixops.overridePythonAttrs (old: {
           propagatedBuildInputs = old.propagatedBuildInputs ++ selectedPlugins;
 
@@ -52,8 +52,8 @@ let
           '';
 
           passthru = old.passthru // {
-            inherit availablePlugins selectedPlugins;
-            inherit (this) withPlugins python;
+            inherit selectedPlugins;
+            inherit (this) availablePlugins withPlugins python;
             tests = old.passthru.tests // {
               nixos = old.passthru.tests.nixos.passthru.override {
                 nixopsPkg = r;
