@@ -16,14 +16,14 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${version}"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildHash=${version}"
+    "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${finalAttrs.version}"
+    "-X github.com/kyverno/chainsaw/pkg/version.BuildHash=${finalAttrs.version}"
     "-X github.com/kyverno/chainsaw/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
   meta = with lib; {
-    description = "Chainsaw is a tool developed to run end to end tests in Kubernetes clusters.";
-    homepage = "https://github.com/kyverno/chainsaw";
+    description = "Chainsaw is a tool developed to run end-to-end tests in Kubernetes clusters.";
+    homepage = "https://kyverno.github.io/chainsaw/";
     changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     mainProgram = "chainsaw";
