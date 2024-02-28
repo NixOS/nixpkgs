@@ -5,7 +5,7 @@ let
   cfg = config.services.ollama;
   ollamaPackage = cfg.package.override {
     inherit (cfg) acceleration;
-    linuxPackages = config.boot.kernelPackages.overrideAttrs {
+    linuxPackages = config.boot.kernelPackages // {
       nvidia_x11 = config.hardware.nvidia.package;
     };
   };
