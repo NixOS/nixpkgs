@@ -922,6 +922,7 @@ rec {
                   --sort name \
                   --exclude=./proc \
                   --exclude=./sys \
+                  --exclude=.${builtins.storeDir} \
                   --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                   --hard-dereference \
                   -cf $out/layer.tar .

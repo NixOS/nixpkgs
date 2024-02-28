@@ -639,6 +639,20 @@ rec {
     includeStorePaths = false;
   };
 
+  helloOnRootNoStoreFakechroot = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+    includeStorePaths = false;
+    enableFakechroot = true;
+  };
+
   etc =
     let
       inherit (pkgs) lib;
