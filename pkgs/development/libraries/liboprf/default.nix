@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "stef";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "sha256-EHUz86JyKDdAJT+taqnjPfdqaGRNPHS7xqU6YA6jXS4="; 
+    sha256 = "sha256-EHUz86JyKDdAJT+taqnjPfdqaGRNPHS7xqU6YA6jXS4=";
   };
 
   nativeBuildInputs = [ libsodium makeWrapper ];
