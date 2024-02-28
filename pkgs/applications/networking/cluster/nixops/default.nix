@@ -1,4 +1,4 @@
-{ python3 }:
+{ lib, python3 }:
 
 let
   python = python3.override {
@@ -47,6 +47,12 @@ let
         nixos = old.passthru.tests.nixos.passthru.override {
           nixopsPkg = r;
         };
+      }
+      # Make sure we also test with a configuration that's been extended with a plugin.
+      // lib.optionalAttrs (selectedPlugins == []) {
+        withAPlugin =
+          lib.recurseIntoAttrs
+            (withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
       };
     };
   }));
