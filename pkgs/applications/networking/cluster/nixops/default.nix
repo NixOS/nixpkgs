@@ -1,71 +1,86 @@
 { lib, python3 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      nixops = self.callPackage ./unwrapped.nix { };
-    } // (plugins self);
-  };
+  inherit (lib) extends;
 
-  plugins = ps: with ps; rec {
-    nixops-aws = callPackage ./plugins/nixops-aws.nix { };
-    nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
-    nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
-    nixops-gce = callPackage ./plugins/nixops-gce.nix { };
-    nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
-    nixops-hetzner = callPackage ./plugins/nixops-hetzner.nix { };
-    nixops-hetznercloud = callPackage ./plugins/nixops-hetznercloud.nix { };
-    nixops-libvirtd = callPackage ./plugins/nixops-libvirtd.nix { };
-    nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
-    nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
-
-    # aliases for backwards compatibility
-    nixops-gcp = nixops-gce;
-    nixops-virtd = nixops-libvirtd;
-    nixopsvbox = nixops-vbox;
-  };
-
-  withPlugins = withPlugins' { availablePlugins = plugins python.pkgs; };
-
-  # selector is a function mapping pythonPackages to a list of plugins
-  # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
-  withPlugins' = { availablePlugins }: selector:
+  # doc: https://github.com/NixOS/nixpkgs/pull/158781/files#diff-854251fa1fe071654921224671c8ba63c95feb2f96b2b3a9969c81676780053a
+  encapsulate = layerZero:
     let
-      selectedPlugins = selector availablePlugins;
-      r = python.pkgs.toPythonApplication (python.pkgs.nixops.overridePythonAttrs (old: {
-        propagatedBuildInputs = old.propagatedBuildInputs ++ selectedPlugins;
+      fixed = layerZero ({ extend = f: encapsulate (extends f layerZero); } // fixed);
+    in fixed.public;
 
-        # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-        # when used in nix-shell.
-        postFixup = ''
-          rm $out/nix-support/propagated-build-inputs
-        '';
+  nixopsContextBase = this: {
 
-        passthru = old.passthru // {
-          inherit availablePlugins selectedPlugins;
-          inherit withPlugins python;
-          tests = old.passthru.tests // {
-            nixos = old.passthru.tests.nixos.passthru.override {
-              nixopsPkg = r;
+    python = python3.override {
+      packageOverrides = self: super: {
+        nixops = self.callPackage ./unwrapped.nix { };
+      } // (this.plugins self);
+    };
+
+    plugins = ps: with ps; rec {
+      nixops-aws = callPackage ./plugins/nixops-aws.nix { };
+      nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
+      nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
+      nixops-gce = callPackage ./plugins/nixops-gce.nix { };
+      nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
+      nixops-hetzner = callPackage ./plugins/nixops-hetzner.nix { };
+      nixops-hetznercloud = callPackage ./plugins/nixops-hetznercloud.nix { };
+      nixops-libvirtd = callPackage ./plugins/nixops-libvirtd.nix { };
+      nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
+      nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
+
+      # aliases for backwards compatibility
+      nixops-gcp = nixops-gce;
+      nixops-virtd = nixops-libvirtd;
+      nixopsvbox = nixops-vbox;
+    };
+
+    withPlugins = this.withPlugins' { availablePlugins = this.plugins this.python.pkgs; };
+
+    # selector is a function mapping pythonPackages to a list of plugins
+    # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
+    withPlugins' = { availablePlugins }: selector:
+      let
+        selectedPlugins = selector availablePlugins;
+        r = this.python.pkgs.toPythonApplication (this.python.pkgs.nixops.overridePythonAttrs (old: {
+          propagatedBuildInputs = old.propagatedBuildInputs ++ selectedPlugins;
+
+          # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+          # when used in nix-shell.
+          postFixup = ''
+            rm $out/nix-support/propagated-build-inputs
+          '';
+
+          passthru = old.passthru // {
+            inherit availablePlugins selectedPlugins;
+            inherit (this) withPlugins python;
+            tests = old.passthru.tests // {
+              nixos = old.passthru.tests.nixos.passthru.override {
+                nixopsPkg = r;
+              };
+            }
+              # Make sure we also test with a configuration that's been extended with a plugin.
+              // lib.optionalAttrs (selectedPlugins == [ ]) {
+              withAPlugin =
+                lib.recurseIntoAttrs
+                  (this.withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
             };
-          }
-            # Make sure we also test with a configuration that's been extended with a plugin.
-            // lib.optionalAttrs (selectedPlugins == [ ]) {
-            withAPlugin =
-              lib.recurseIntoAttrs
-                (withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
           };
-        };
-      }));
-    in
-    r;
+        }));
+      in
+      r;
+
+    public = this.withPlugins (ps: []);
+  };
+
+  minimal = encapsulate nixopsContextBase;
 
 in
 {
-  nixops_unstable_minimal = withPlugins (ps: [ ]);
+  nixops_unstable_minimal = minimal;
 
   # Not recommended; too fragile.
-  nixops_unstable_full = withPlugins (ps: [
+  nixops_unstable_full = minimal.withPlugins (ps: [
     ps.nixops-aws
     ps.nixops-digitalocean
     ps.nixops-encrypted-links
