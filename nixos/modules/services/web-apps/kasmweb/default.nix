@@ -15,23 +15,6 @@ in
       '';
     };
 
-    postgres = {
-      user = lib.mkOption {
-        default = "kasmweb";
-        type = lib.types.str;
-        description = lib.mdDoc ''
-          Username to use for the postgres database.
-        '';
-      };
-      password = lib.mkOption {
-        default = "kasmweb";
-        type = lib.types.str;
-        description = lib.mdDoc ''
-          password to use for the postgres database.
-        '';
-      };
-    };
-
     redisPassword = lib.mkOption {
       default = "kasmweb";
       type = lib.types.str;
@@ -134,14 +117,16 @@ in
         after = ["network-online.target"];
         serviceConfig = {
           Type = "oneshot";
+          TimeoutStartSec = 300;
           ExecStart = pkgs.substituteAll {
             src = ./initialize_kasmweb.sh;
             isExecutable = true;
             binPath = lib.makeBinPath [ pkgs.docker pkgs.openssl pkgs.gnused pkgs.yq-go ];
             runtimeShell = pkgs.runtimeShell;
             kasmweb = pkgs.kasmweb;
-            postgresUser = cfg.postgres.user;
-            postgresPassword = cfg.postgres.password;
+            postgresUser = "postgres";
+            postgresPassword = "postgres";
+            coreutils = pkgs.coreutils;
             inherit (cfg)
               datastorePath
               sslCertificate
@@ -162,7 +147,7 @@ in
       oci-containers.backend = "docker";
       oci-containers.containers = {
         kasm_db = {
-          image = "postgres:12-alpine";
+          image = "postgres:16-alpine";
           autoStart = true;
           environment = {
             POSTGRES_PASSWORD = cfg.postgres.password;

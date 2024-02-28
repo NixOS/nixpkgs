@@ -31,11 +31,6 @@ if [ ! -e /opt/kasm/current/.done_initing_data ]; then
     /opt/kasm/current/conf/app/api.app.config.yaml \
     --populate-production \
     --seed-file \
-    /opt/kasm/current/conf/database/seed_data/default_connection_proxies.yaml \
-  && /usr/bin/kasm_server.so --cfg \
-    /opt/kasm/current/conf/app/api.app.config.yaml \
-    --populate-production \
-    --seed-file \
     /opt/kasm/current/conf/database/seed_data/default_images_amd64.yaml \
   && touch /opt/kasm/current/.done_initing_data
 
@@ -47,7 +42,7 @@ fi
 EOF
 
 docker network inspect kasm_default_network >/dev/null || docker network create kasm_default_network --subnet @networkSubnet@
-if docker volume inspect kasmweb_db >/dev/null; then
+if [ -e @datastorePath@/ids.env ]; then
     source @datastorePath@/ids.env
 else
     API_SERVER_ID=$(cat /proc/sys/kernel/random/uuid)
@@ -60,11 +55,11 @@ else
     echo "export SERVER_ID=$SERVER_ID" >> @datastorePath@/ids.env
 
     mkdir -p @datastorePath@/certs
-    openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout @datastorePath@/certs/kasm_nginx.key -out @datastorePath@/certs/kasm_nginx.crt -subj "/C=US/ST=VA/L=None/O=None/OU=DoFu/CN=$(hostname)/emailAddress=none@none.none" 2> /dev/null
+    openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout @datastorePath@/certs/kasm_nginx.key -out @datastorePath@/certs/kasm_nginx.crt -subj "/C=US/ST=VA/L=None/O=None/OU=DoFu/CN=$(@coreutils@/bin/hostname)/emailAddress=none@none.none" 2> /dev/null
 
     mkdir -p @datastorePath@/file_mappings
 
-    docker volume create kasmweb_db
+    docker volume create kasmweb_db || true
     rm @datastorePath@/.done_initing_data
 fi
 
@@ -118,9 +113,9 @@ sed -i -e "s/GUACTOKEN/@defaultGuacToken@/g" \
     -e "s/APIHOSTNAME/proxy/g" \
     @datastorePath@/conf/app/kasmguac.app.config.yaml
 
-sed -i -e "s/GUACTOKEN/@defaultGuacToken@/g" \
-    -e "s/APIHOSTNAME/proxy/g" \
-    @datastorePath@/conf/database/seed_data/default_connection_proxies.yaml
+# sed -i -e "s/GUACTOKEN/@defaultGuacToken@/g" \
+#     -e "s/APIHOSTNAME/proxy/g" \
+#     @datastorePath@/conf/database/seed_data/default_connection_proxies.yaml
 
 sed -i "s/00000000-0000-0000-0000-000000000000/$SERVER_ID/g" \
     @datastorePath@/conf/database/seed_data/default_agents.yaml
