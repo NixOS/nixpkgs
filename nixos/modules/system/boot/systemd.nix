@@ -97,6 +97,7 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      "systemd-boot-random-seed.service"
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
