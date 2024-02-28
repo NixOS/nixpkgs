@@ -145,11 +145,14 @@ in
       jellyfin = {
         inherit (cfg) group;
         isSystemUser = true;
+        uid = config.ids.uids.jellyfin;
       };
     };
 
     users.groups = mkIf (cfg.group == "jellyfin") {
-      jellyfin = {};
+      jellyfin = {
+        gid = config.ids.gids.jellyfin;
+      };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
