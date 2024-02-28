@@ -5,8 +5,7 @@
   utils,
   ...
 }: let
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.plasma6;
+  cfg = config.services.desktopManager.plasma6;
 
   inherit (pkgs) kdePackages;
   inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOptionMD types;
@@ -17,7 +16,7 @@
   '';
 in {
   options = {
-    services.xserver.desktopManager.plasma6 = {
+    services.desktopManager.plasma6 = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -43,6 +42,12 @@ in {
       example = literalExpression "[ pkgs.kdePackages.elisa ]";
     };
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "xserver" "desktopManager" "plasma6" "enable" ] [ "services" "desktopManager" "plasma6" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "desktopManager" "plasma6" "enableQt5Integration" ] [ "services" "desktopManager" "plasma6" "enableQt5Integration" ])
+    (lib.mkRenamedOptionModule [ "services" "xserver" "desktopManager" "plasma6" "notoPackage" ] [ "services" "desktopManager" "plasma6" "notoPackage" ])
+  ];
 
   config = mkIf cfg.enable {
     assertions = [
@@ -161,7 +166,7 @@ in {
     in
       requiredPackages
       ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages
-      ++ lib.optionals config.services.xserver.desktopManager.plasma6.enableQt5Integration [
+      ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
         breeze.qt5
         plasma-integration.qt5
         pkgs.plasma5Packages.kwayland-integration
@@ -185,7 +190,7 @@ in {
       "/libexec" # for drkonqi
     ];
 
-    environment.etc."X11/xkb".source = xcfg.xkb.dir;
+    environment.etc."X11/xkb".source = config.services.xserver.xkb.dir;
 
     # Add ~/.config/kdedefaults to XDG_CONFIG_DIRS for shells, since Plasma sets that.
     # FIXME: maybe we should append to XDG_CONFIG_DIRS in /etc/set-environment instead?
