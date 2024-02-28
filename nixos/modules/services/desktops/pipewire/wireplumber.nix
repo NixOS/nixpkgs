@@ -3,16 +3,39 @@
 let
   inherit (builtins) attrNames concatMap length;
   inherit (lib) maintainers;
-  inherit (lib.attrsets) attrByPath filterAttrs;
+  inherit (lib.attrsets) attrByPath filterAttrs mapAttrsToList attrsToList concatMapAttrs;
   inherit (lib.lists) flatten optional;
   inherit (lib.modules) mkIf;
-  inherit (lib.options) literalExpression mkOption;
-  inherit (lib.strings) hasPrefix;
-  inherit (lib.types) bool listOf package;
+  inherit (lib.options) literalExpression mkOption mdDoc;
+  inherit (lib.strings) hasPrefix concatMapStringsSep concatStringsSep;
+  inherit (lib.types) bool listOf attrsOf package lines;
 
   pwCfg = config.services.pipewire;
   cfg = pwCfg.wireplumber;
   pwUsedForAudio = pwCfg.audio.enable;
+
+  json = pkgs.formats.json {};
+
+  mapConfigToFiles = location: ext: writeFn: config:
+    concatMapAttrs
+      (name: value: {
+        "share/wireplumber/${location}/${name}.${ext}" = writeFn name value;
+      })
+      config;
+
+  configSectionsToConfFile = name: value:
+    pkgs.writeText
+      name
+      (concatStringsSep "\n" (
+        mapAttrsToList
+          (section: content: "${section} = " + (builtins.toJSON content))
+          value
+      ));
+
+  extraConfigPkgFromFiles = locations: filesSet: pkgs.runCommand "wireplumber-extra-config" { } ''
+    mkdir -p ${concatMapStringsSep " " (l: "$out/share/wireplumber/${l}") locations}
+    ${concatMapStringsSep ";" ({name, value}: "ln -s ${value} $out/${name}") (attrsToList filesSet)}
+  '';
 in
 {
   meta.maintainers = [ maintainers.k900 ];
@@ -31,6 +54,103 @@ in
         default = pkgs.wireplumber;
         defaultText = literalExpression "pkgs.wireplumber";
         description = "The WirePlumber derivation to use.";
+      };
+
+      extraConfig = mkOption {
+        # Two layer attrset is necessary before using JSON, because of the whole
+        # config file not being a JSON object, but a concatenation of JSON objects
+        # in sections.
+        type = attrsOf (attrsOf json.type);
+        default = { };
+        example = literalExpression ''{
+          "log-level-debug" = {
+            "context.properties" = {
+              # Output Debug log messages as opposed to only the default level (Notice)
+              "log.level" = "D";
+            };
+          };
+          "celluloid-default-volume" = {
+            "stream.rules" = [
+              {
+                matches = [
+                  {
+                    "application.name" = "io.github.celluloid_player.Celluloid";
+                  }
+                ];
+                actions = {
+                  update-props = {
+                    "state.default-volume" = 0.5;
+                  };
+                };
+              }
+            ];
+          };
+          "wh-1000xm3-ldac-hq" = {
+            "monitor.bluez.rules" = [
+              {
+                matches = [
+                  {
+                    # Match any bluetooth device with ids equal to that of a WH-1000XM3
+                    "device.name" = "~bluez_card.*";
+                    "device.product.id" = "0x0cd3";
+                    "device.vendor.id" = "usb:054c";
+                  }
+                ];
+                actions = {
+                  update-props = {
+                    # Set quality to high quality instead of the default of auto
+                    "bluez5.a2dp.ldac.quality" = "hq";
+                  };
+                };
+              }
+            ];
+          };
+          "communication-duck-lower-priority" = {
+            # Instead of corking (pausing; the default for this endpoint) audio
+            # from lower priority virtual items, only duck (lower the volume of)
+            # them when a client connects to the communication virtual item.
+            #
+            # Virtual items are suitable for mobile OSes, car infotainment systems,
+            # and the like. Desktop Linux Applications are not set up to work with
+            # these for now.
+            virtual-item-roles = {
+              Communication = {
+                "action.default" = "duck";
+              };
+            };
+          };
+        }'';
+        description = mdDoc ''
+          Additional configuration for the WirePlumber daemon when run in
+          single-instance mode (the default in nixpkgs and currently the only
+          supported way to run WirePlumber configured via `extraConfig`).
+
+          See also:
+          - [The configuration file][docs-the-conf-file]
+          - [Modifying configuration][docs-modifying-config]
+          - [Locations of files][docs-file-locations]
+          - and the [configuration section][docs-config-section] of the docs in general
+
+          [docs-the-conf-file]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/conf_file.html
+          [docs-modifying-config]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/modifying_configuration.html
+          [docs-file-locations]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/locations.html
+          [docs-config-section]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration.html
+        '';
+      };
+
+      extraScripts = mkOption {
+        type = attrsOf lines;
+        default = { };
+        description = mdDoc ''
+          Additional scripts for WirePlumber to be used by configuration files.
+
+          Every item in this attrset becomes a separate lua file `/etc/wireplumber/scripts`.
+
+          See also:
+          - [Location of files][docs-file-locations]
+
+          [docs-file-locations]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/locations.html
+        '';
       };
 
       configPackages = mkOption {
@@ -96,7 +216,15 @@ in
         }
       '';
 
+      extraConfigPkg = extraConfigPkgFromFiles
+        [ "wireplumber.conf.d" "scripts" ]
+        (
+          mapConfigToFiles "wireplumber.conf.d" "conf" (configSectionsToConfFile) cfg.extraConfig
+          // mapConfigToFiles "scripts" "lua" (pkgs.writeText) cfg.extraScripts
+        );
+
       configPackages = cfg.configPackages
+          ++ [ extraConfigPkg ]
           ++ optional (!pwUsedForAudio) pwNotForAudioConfigPkg
           ++ optional pwCfg.systemWide systemwideConfigPkg;
 
@@ -137,7 +265,7 @@ in
                   )
                   config.environment.etc
               )) == 1;
-          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `services.pipewire.wireplumber.configPackages` instead.";
+          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `extraConfig`, `extraScripts`, or `configPackages` in `services.pipewire.wireplumber` instead.";
         }
       ];
 
