@@ -12,7 +12,7 @@
 , sourceDebug ? false
 }:
 
-assert csmSupport -> seabios != null;
+assert csmSupport -> throw "CSM support has been dropped upstream due to security and maintenance concerns. For qemu, seabios is the default and can be used instead.";
 
 let
 
