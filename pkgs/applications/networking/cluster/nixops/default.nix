@@ -29,37 +29,40 @@ let
 
   # selector is a function mapping pythonPackages to a list of plugins
   # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
-  withPlugins' = { availablePlugins }: selector: let
-   selectedPlugins = selector availablePlugins;
-   r = python.pkgs.toPythonApplication (python.pkgs.nixops.overridePythonAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ selectedPlugins;
+  withPlugins' = { availablePlugins }: selector:
+    let
+      selectedPlugins = selector availablePlugins;
+      r = python.pkgs.toPythonApplication (python.pkgs.nixops.overridePythonAttrs (old: {
+        propagatedBuildInputs = old.propagatedBuildInputs ++ selectedPlugins;
 
-    # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-    # when used in nix-shell.
-    postFixup = ''
-      rm $out/nix-support/propagated-build-inputs
-    '';
+        # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+        # when used in nix-shell.
+        postFixup = ''
+          rm $out/nix-support/propagated-build-inputs
+        '';
 
-    passthru = old.passthru // {
-      inherit availablePlugins selectedPlugins;
-      inherit withPlugins python;
-      tests = old.passthru.tests // {
-        nixos = old.passthru.tests.nixos.passthru.override {
-          nixopsPkg = r;
+        passthru = old.passthru // {
+          inherit availablePlugins selectedPlugins;
+          inherit withPlugins python;
+          tests = old.passthru.tests // {
+            nixos = old.passthru.tests.nixos.passthru.override {
+              nixopsPkg = r;
+            };
+          }
+            # Make sure we also test with a configuration that's been extended with a plugin.
+            // lib.optionalAttrs (selectedPlugins == [ ]) {
+            withAPlugin =
+              lib.recurseIntoAttrs
+                (withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
+          };
         };
-      }
-      # Make sure we also test with a configuration that's been extended with a plugin.
-      // lib.optionalAttrs (selectedPlugins == []) {
-        withAPlugin =
-          lib.recurseIntoAttrs
-            (withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
-      };
-    };
-  }));
-  in r;
+      }));
+    in
+    r;
 
-in {
-  nixops_unstable_minimal = withPlugins (ps: []);
+in
+{
+  nixops_unstable_minimal = withPlugins (ps: [ ]);
 
   # Not recommended; too fragile.
   nixops_unstable_full = withPlugins (ps: [
