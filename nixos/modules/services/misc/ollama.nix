@@ -1,11 +1,13 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib.types) nullOr enum;
+  inherit (lib) types;
 
   cfg = config.services.ollama;
   ollamaPackage = cfg.package.override {
     inherit (cfg) acceleration;
-    linuxPackages.nvidia_x11 = config.hardware.nvidia.package;
+    linuxPackages = config.boot.kernelPackages.overrideAttrs {
+      nvidia_x11 = config.hardware.nvidia.package;
+    };
   };
 in
 {
@@ -15,14 +17,14 @@ in
         lib.mdDoc "Server for local large language models"
       );
       listenAddress = lib.mkOption {
-        type = lib.types.str;
+        type = types.str;
         default = "127.0.0.1:11434";
         description = lib.mdDoc ''
           Specifies the bind address on which the ollama server HTTP interface listens.
         '';
       };
       acceleration = lib.mkOption {
-        type = nullOr (enum [ "rocm" "cuda" ]);
+        type = types.nullOr (types.enum [ "rocm" "cuda" ]);
         default = null;
         example = "rocm";
         description = lib.mdDoc ''
