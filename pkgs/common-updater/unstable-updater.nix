@@ -11,6 +11,7 @@
 { url ? null # The git url, if empty it will be set to src.gitRepoUrl
 , branch ? null
 , hardcodeZeroVersion ? false # Use a made-up version "0" instead of latest tag. Use when there is no previous release, or the project's tagging system is incompatible with what we expect from versions
+, tagFormat ? ".*" # A grep -Eo pattern that tags must match to be considered valid
 , tagPrefix ? "" # strip this prefix from a tag name
 , tagConverter ? null # A command to convert more complex tag formats. It receives the git tag via stdin and should convert it into x.y.z format to stdout
 , shallowClone ? true
@@ -23,6 +24,7 @@ let
     url=""
     branch=""
     hardcode_zero_version=""
+    tag_format=""
     tag_prefix=""
     tag_converter=""
     shallow_clone=""
@@ -39,6 +41,9 @@ let
             ;;
           --hardcode-zero-version)
             hardcode_zero_version=1
+            ;;
+          --tag-format=*)
+            tag_format="''${flag#*=}"
             ;;
           --tag-prefix=*)
             tag_prefix="''${flag#*=}"
@@ -90,6 +95,11 @@ let
             while (( $depth < 10000 )); do
                 last_tag="$(${git}/bin/git describe --tags --abbrev=0 2> /dev/null || true)"
                 if [[ -n "$last_tag" ]]; then
+                    tag_matched="$(echo ''${last_tag} | grep -Eo ''${tag_format} || true)"
+                    if [[ -z "$tag_matched" ]]; then
+                        ${lib.getExe git} tag -d ''${last_tag}
+                        continue
+                    fi
                     break
                 fi
                 ${git}/bin/git fetch --depth="$depth" --tags
@@ -108,13 +118,15 @@ let
             last_tag="0"
         fi
         if [[ -n "$tag_prefix" ]]; then
+            echo "Stripping prefix '$tag_prefix' from tag '$last_tag'"
             last_tag="''${last_tag#$tag_prefix}"
         fi
         if [[ -n "$tag_converter" ]]; then
+            echo "Running '$last_tag' through: $tag_converter"
             last_tag="$(echo ''${last_tag#$tag_prefix} | ''${tag_converter})"
         fi
         if [[ ! "$last_tag" =~ ^[[:digit:]] ]]; then
-            echo "Last tag '$last_tag' (after removing prefix '$tag_prefix') does not start with a digit" > /dev/stderr
+            echo "Last tag '$last_tag' does not start with a digit" > /dev/stderr
             exit 1
         fi
     else
@@ -135,6 +147,7 @@ in
 [
   updateScript
   "--url=${builtins.toString url}"
+  "--tag-format=${tagFormat}"
   "--tag-prefix=${tagPrefix}"
 ] ++ lib.optionals (branch != null) [
   "--branch=${branch}"
