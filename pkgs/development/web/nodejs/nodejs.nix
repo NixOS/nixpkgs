@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, nukeReferences, openssl, python, zlib, libuv, http-parser, bash
-, pkg-config, which, buildPackages
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, http-parser, bash
+, pkg-config, which, buildPackages, removeReferencesTo
 # for `.pkgs` attribute
 , callPackage
 # Updater dependencies
@@ -69,7 +69,7 @@ let
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu bash ];
 
-    nativeBuildInputs = [ nukeReferences which pkg-config python ]
+    nativeBuildInputs = [ which pkg-config python removeReferencesTo ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
     outputs = [ "out" "dev" "libv8" ];
@@ -158,7 +158,7 @@ let
       ''}
 
       # remove references to build time dependencies
-      nuke-refs $out/bin/node
+      find "$out" -type f -exec remove-references-to -t ${lib.replaceStrings  [":"] [" -t "] (lib.makeSearchPathOutput "dev" "include" self.buildInputs)} '{}' +
 
       moveToOutput "include" "$dev"
 
