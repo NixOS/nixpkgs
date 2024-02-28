@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "duden";
   version = "0.19.1";
   pyproject = true;
@@ -35,6 +35,7 @@ python3.pkgs.buildPythonPackage rec {
     homepage = "https://github.com/radomirbosak/duden";
     changelog = "https://github.com/radomirbosak/duden/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ linuxissuper ];
+    mainProgram = "duden";
   };
 }
