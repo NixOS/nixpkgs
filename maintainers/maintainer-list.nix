@@ -16693,6 +16693,12 @@
     githubId = 6445619;
     name = "Ruben Cano Diaz";
   };
+  RudiOnTheAir = {
+    name = "Rüdiger Schwoon";
+    email = "wolf@schwoon.info";
+    github = "RudiOnTheAir";
+    githubId = 47517341;
+  };
   rudolfvesely = {
     name = "Rudolf Vesely";
     email = "i@rudolfvesely.com";
