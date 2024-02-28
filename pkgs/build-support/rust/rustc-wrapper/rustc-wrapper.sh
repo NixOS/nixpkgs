@@ -13,7 +13,7 @@ for arg; do
     esac
 done
 
-extraBefore=("${defaultSysroot[@]}")
+extraBefore=(@defaultArgs@ "${defaultSysroot[@]}")
 extraAfter=($NIX_RUSTFLAGS)
 
 # Optionally print debug info.
