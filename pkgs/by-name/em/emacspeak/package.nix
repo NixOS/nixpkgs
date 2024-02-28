@@ -61,5 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "emacspeak";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
+    # Emacspeak requires a minimal Emacs version; let's use the broken flag
+    broken = lib.versionOlder (lib.getVersion emacs) "28.2";
   };
 })
