@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nukeReferences, openssl, python, zlib, libuv, http-parser, bash
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -6,7 +6,7 @@
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
 , darwin, xcbuild
-, icu
+, procps, icu
 }:
 
 { enableNpm ? true, version, sha256, patches ? [] } @args:
@@ -69,10 +69,10 @@ let
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu bash ];
 
-    nativeBuildInputs = [ nukeReferences which pkg-config python ]
+    nativeBuildInputs = [ which pkg-config python ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-    outputs = [ "out" "dev" "libv8" ];
+    outputs = [ "out" "libv8" ];
     setOutputFlags = false;
     moveToDev = false;
 
@@ -157,13 +157,8 @@ let
         done
       ''}
 
-      # remove references to build time dependencies
-      nuke-refs $out/bin/node
-
-      moveToOutput "include" "$dev"
-
       # install the missing headers for node-gyp
-      cp -r ${lib.concatStringsSep " " copyLibHeaders} $dev/include/node
+      cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
 
       # assemble a static v8 library and put it in the 'libv8' output
       mkdir -p $libv8/lib
