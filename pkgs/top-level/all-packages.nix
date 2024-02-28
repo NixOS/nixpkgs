@@ -32117,7 +32117,9 @@ with pkgs;
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
-  himalaya = callPackage ../applications/networking/mailreaders/himalaya { };
+  himalaya = callPackage ../applications/networking/mailreaders/himalaya {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
+  };
 
   hydrogen-web-unwrapped = callPackage ../applications/networking/instant-messengers/hydrogen-web/unwrapped.nix { };
 

@@ -18,6 +18,7 @@ in
       # version number.
       config.system.nixos = {
         revision = mkForce "constant-nixos-revision";
+        versionSuffix = mkForce "test";
         label = mkForce "test";
       };
     }
