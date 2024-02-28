@@ -89,5 +89,5 @@ with lib; {
     };
   };
 
-  meta.maintainers = with maintainers; [ sntx ];
+  meta.maintainers = with maintainers; [ nyanbinary sntx ];
 }
