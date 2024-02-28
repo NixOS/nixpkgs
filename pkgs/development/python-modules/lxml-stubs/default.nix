@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pytest-mypy-plugins
 , lxml
+, pytest-mypy-plugins
+, pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Output difference
+    # Output difference, https://github.com/lxml/lxml-stubs/issues/101
     "etree_element_iterchildren"
   ];
 
