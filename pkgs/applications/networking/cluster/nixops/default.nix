@@ -41,7 +41,7 @@ let
     '';
 
     passthru = old.passthru // {
-      inherit availablePlugins;
+      inherit availablePlugins selectedPlugins;
       inherit withPlugins python;
       tests = old.passthru.tests // {
         nixos = old.passthru.tests.nixos.passthru.override {
