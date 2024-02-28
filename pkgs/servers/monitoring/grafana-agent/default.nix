@@ -2,10 +2,11 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
-, prefetch-yarn-deps
 , grafana-agent
+, nix-update-script
 , nixosTests
 , nodejs
+, prefetch-yarn-deps
 , stdenv
 , systemd
 , testers
@@ -89,13 +90,18 @@ buildGoModule rec {
       $out/bin/grafana-agent
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) grafana-agent;
-    version = testers.testVersion {
-      inherit version;
-      command = "${lib.getExe grafana-agent} --version";
-      package = grafana-agent;
+  passthru = {
+    tests = {
+      inherit (nixosTests) grafana-agent;
+      version = testers.testVersion {
+        inherit version;
+        command = "${lib.getExe grafana-agent} --version";
+        package = grafana-agent;
+      };
     };
+    updateScript = nix-update-script { };
+    # alias for nix-update to be able to find and update this attribute
+    offlineCache = frontendYarnOfflineCache;
   };
 
   meta = {
