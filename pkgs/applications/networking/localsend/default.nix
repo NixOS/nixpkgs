@@ -11,7 +11,7 @@
 
 let
   pname = "localsend";
-  version = "1.13.1";
+  version = "1.14.0";
 
   linux = flutter313.buildFlutterApplication {
     inherit pname version;
@@ -20,7 +20,7 @@ let
       owner = pname;
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-GJHCKNtKvwQAG3AUkhk0G4k/qsmLOUQAyyi9Id7NJh8=";
+      hash = "sha256-CO0uFcZnOfE31EZxRUpgtod3+1lyXPpbytHB45DEM98=";
     };
 
     sourceRoot = "source/app";
@@ -57,6 +57,8 @@ let
       categories = [ "Network" ];
     };
 
+    passthru.updateScript = ./update.sh;
+
     meta = meta // {
       mainProgram = "localsend_app";
     };
@@ -67,7 +69,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-YCy6NlmEPsOFtIZ27mOYDnMPd1tj3YO2bwNDdM3K/uY=";
+      hash = "sha256-L7V48QoOA0cjx45n+9Xav/zzCzCsZB3TBip0WGusMXg=";
     };
 
     nativeBuildInputs = [ undmg ];
