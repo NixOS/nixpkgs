@@ -10,17 +10,17 @@
 
 stdenv.mkDerivation rec {
   pname = "nsis";
-  version = "3.06.1";
+  version = "3.09";
 
   src =
     fetchurl {
       url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}-src.tar.bz2";
-      sha256 = "1w1z2m982l6j8lw8hy91c3979wbnqglcf4148f9v79vl32znhpcv";
+      sha256 = "0cd846c6e9c59068020a87bfca556d4c630f2c5d554c1098024425242ddc56e2";
     };
   srcWinDistributable =
     fetchzip {
       url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
-      sha256 = "04qm9jqbcybpwcrjlksggffdyafzwxxcaz9xhjw8w5rb95x7lw5q";
+      sha256 = "f5dc52eef1f3884230520199bac6f36b82d643d86b003ce51bd24b05c6ba7c91";
     };
 
   postUnpack = ''
