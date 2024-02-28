@@ -1099,14 +1099,6 @@ let
       '';
     });
 
-    RQuantLib = old.RQuantLib.overrideAttrs (attrs: {
-      # This can be removed when next update hits CRAN
-      postPatch = ''
-        substituteInPlace src/utils.cpp \
-          --replace-fail "QL_PACKAGE_VERSION" "PACKAGE_VERSION"
-      '';
-    });
-
     devEMF = old.devEMF.overrideAttrs (attrs: {
       NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
       NIX_LDFLAGS = "-lX11";
