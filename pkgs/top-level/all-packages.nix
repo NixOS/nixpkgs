@@ -726,6 +726,8 @@ with pkgs;
 
   inspec = callPackage ../tools/misc/inspec { };
 
+  kdePackages = callPackage ../kde { };
+
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
   probe-rs = callPackage ../development/tools/rust/probe-rs {
@@ -35319,6 +35321,10 @@ with pkgs;
     kioPluginSupport = false;
     plasmoidSupport = false;
     systemdSupport = true;
+  };
+  syncthingtray-qt6 = kdePackages.callPackage ../applications/misc/syncthingtray {
+    # renamed in KF5 -> KF6
+    plasma-framework = kdePackages.libplasma;
   };
 
   synergy = libsForQt5.callPackage ../applications/misc/synergy {
