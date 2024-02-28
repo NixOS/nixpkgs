@@ -32,11 +32,20 @@
 }:
 
 let
-  inherit (cudaPackagesGoogle) autoAddOpenGLRunpathHook cudatoolkit cudnn cudaVersion;
+  inherit (cudaPackagesGoogle) autoAddOpenGLRunpathHook cudaVersion;
 
   version = "0.4.24";
 
   inherit (python) pythonVersion;
+
+  cudaLibPath = lib.makeLibraryPath (with cudaPackagesGoogle; [
+    cuda_cudart.lib # libcudart.so
+    cuda_cupti.lib # libcupti.so
+    cudnn.lib # libcudnn.so
+    libcufft.lib # libcufft.so
+    libcusolver.lib # libcusolver.so
+    libcusparse.lib # libcusparse.so
+  ]);
 
   # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
   # official instructions recommend installing CPU-only versions via PyPI.
@@ -189,18 +198,12 @@ buildPythonPackage {
   # autoPatchelfHook. That means we need to sneak them into rpath. This step
   # must be done after autoPatchelfHook and the automatic stripping of
   # artifacts. autoPatchelfHook runs in postFixup and auto-stripping runs in the
-  # patchPhase. Dependencies:
-  #   * libcudart.so.11.0 -> cudatoolkit_11.lib
-  #   * libcublas.so.11   -> cudatoolkit_11
-  #   * libcuda.so.1      -> opengl driver in /run/opengl-driver/lib
+  # patchPhase.
   preInstallCheck = lib.optional cudaSupport ''
     shopt -s globstar
 
     for file in $out/**/*.so; do
-      rpath=$(patchelf --print-rpath $file)
-      # For some reason `makeLibraryPath` on `cudatoolkit_11` maps to
-      # <cudatoolkit_11.lib>/lib which is different from <cudatoolkit_11>/lib.
-      patchelf --set-rpath "$rpath:${cudatoolkit}/lib:${lib.makeLibraryPath [ cudatoolkit.lib cudnn ]}" $file
+      patchelf --add-rpath "${cudaLibPath}" "$file"
     done
   '';
 
@@ -211,12 +214,14 @@ buildPythonPackage {
     scipy
   ];
 
-  # Note that cudatoolkit is snecessary since jaxlib looks for "ptxas" in $PATH.
-  # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
-  # more info.
+  # jaxlib looks for ptxas at runtime, eg when running `jax.random.PRNGKey(0)`.
+  # Linking into $out is the least bad solution. See
+  # * https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621
+  # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
+  # for more info.
   postInstall = lib.optional cudaSupport ''
-    mkdir -p $out/bin
-    ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
+    mkdir -p $out/${python.sitePackages}/jaxlib/cuda/bin
+    ln -s ${lib.getExe' cudaPackagesGoogle.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jaxlib/cuda/bin/ptxas
   '';
 
   inherit (jaxlib-build) pythonImportsCheck;
@@ -229,8 +234,8 @@ buildPythonPackage {
     maintainers = with maintainers; [ samuela ];
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
     broken =
-      !(cudaSupport -> (cudaPackagesGoogle ? cudatoolkit) && lib.versionAtLeast cudatoolkit.version "11.1")
-      || !(cudaSupport -> (cudaPackagesGoogle ? cudnn) && lib.versionAtLeast cudnn.version "8.2")
+      !(cudaSupport -> lib.versionAtLeast cudaVersion "11.1")
+      || !(cudaSupport -> lib.versionAtLeast cudaPackagesGoogle.cudnn.version "8.2")
       || !(cudaSupport -> stdenv.isLinux)
       || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"));
   };
