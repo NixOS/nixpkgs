@@ -150,8 +150,8 @@ in
           image = "postgres:16-alpine";
           autoStart = true;
           environment = {
-            POSTGRES_PASSWORD = cfg.postgres.password;
-            POSTGRES_USER = cfg.postgres.user;
+            POSTGRES_PASSWORD = "postgres";
+            POSTGRES_USER = "postgres";
             POSTGRES_DB = "kasm";
           };
           volumes = [
