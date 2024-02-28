@@ -8,7 +8,7 @@ buildPythonApplication rec {
     owner = "nwg-piotr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PTMF9w4PMkKuhjLAP7856lOOiuyj5YZOoax0K9bgGgQ=";
+    hash = "sha256-PTMF9w4PMkKuhjLAP7856lOOiuyj5YZOoax0K9bgGgQ=";
   };
 
   propagatedBuildInputs = [ i3ipc importlib-metadata ];
