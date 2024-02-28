@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , graphviz
 , graphvizPkgs
 , isPyPy
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "objgraph";
-  version = "3.6.0";
-  format = "setuptools";
+  version = "3.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7" || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NpVnw3tPL5KBYLb27e3L6o/H6SmDGHf9EFbHipAMF9M=";
+    hash = "sha256-/pbHQUe7yq6GZbOW5TiL3MMZfe67pOY4HwUgLuW0U6c=";
   };
 
   patches = [
@@ -26,6 +27,10 @@ buildPythonPackage rec {
       src = ./hardcode-graphviz-path.patch;
       graphviz = graphvizPkgs;
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   passthru.optional-dependencies = {
