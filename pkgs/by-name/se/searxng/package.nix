@@ -72,6 +72,7 @@ python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/searxng/searxng";
     description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
+    mainProgram = "searxng-run";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ SuperSandro2000 _999eagle ];
   };
