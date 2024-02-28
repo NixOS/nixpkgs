@@ -202,6 +202,7 @@ in {
   cinnamon = handleTest ./cinnamon.nix {};
   cinnamon-wayland = handleTest ./cinnamon-wayland.nix {};
   cjdns = handleTest ./cjdns.nix {};
+  clarissa = handleTest ./clarissa.nix {};
   clatd = handleTest ./clatd.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
