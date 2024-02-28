@@ -140,6 +140,21 @@ let
         ];
       });
 
+      brother = super.brother.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-rRzcWT9DcNTBUYxyYYC7WORBbrkgj0toCp2e8ADUN5s=";
+        };
+      });
+
+      debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
+        # tests are deadlocking too often
+        # https://github.com/NixOS/nixpkgs/issues/262000
+        doCheck = false;
+      });
+
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
         src = fetchFromGitHub {
@@ -374,6 +389,16 @@ let
         };
       });
 
+      wyoming = super.wyoming.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.2";
+        src = fetchFromGitHub {
+          owner = "rhasspy";
+          repo = "wyoming";
+          rev = "refs/tags/${version}";
+          hash = "sha256-2bc5coKL5KlTeL9fdghPmRF66NXfimHOKGtE2yPXgrA=";
+        };
+      });
+
       xbox-webapi = super.xbox-webapi.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.11";
         src = fetchFromGitHub {
@@ -428,7 +453,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.2.2";
+  hassVersion = "2024.2.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -446,13 +471,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-nzx1ZaIBjzA2cgCkSlRLCr2Xd51i6kBHSKnfGgt9RpQ=";
+    hash = "sha256-k1Rfx8TsMBbLFfaY6FAn5ebyZlHbxg0k/HYXVRIkNMU=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-ITwY3cB5YFmY1qTXBHpulEULdF0yKme334wxQVULvW8=";
+    hash = "sha256-rkD1rZz4sYV1L78c2gc4g/cGoxJRYqK41SUOskeoqYg=";
   };
 
   nativeBuildInputs = with python.pkgs; [

@@ -667,7 +667,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_6_1;
+    linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_7;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

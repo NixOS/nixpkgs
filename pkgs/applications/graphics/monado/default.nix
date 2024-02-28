@@ -41,6 +41,7 @@
 , wayland-scanner
 , libdrm
 , zlib
+, nixosTests
 # Set as 'false' to build monado without service support, i.e. allow VR
 # applications linking against libopenxr_monado.so to use OpenXR standalone
 # instead of via the monado-service program. For more information see:
@@ -136,6 +137,10 @@ stdenv.mkDerivation {
     # We don't have $HOME/.steam when building
     ./force-enable-steamvr_lh.patch
   ];
+
+  passthru.tests = {
+    basic-service = nixosTests.monado;
+  };
 
   meta = with lib; {
     description = "Open source XR runtime";

@@ -1,6 +1,4 @@
-{ clang
-, lib
-, libclang
+{ lib
 , fetchFromGitHub
 , pipewire
 , pkg-config
@@ -22,8 +20,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-7XuDZ57+F8Ot5oNO9/BXjFljNmoMgNgURfmPEIy2PHo=";
 
   nativeBuildInputs = [
-    clang
     pkg-config
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -31,8 +29,6 @@ rustPlatform.buildRustPackage rec {
     wayland
     wayland-protocols
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   meta = with lib; {
     description = "Suspends automatic idling of Wayland compositors when media is being played through Pipewire.";
