@@ -1905,6 +1905,8 @@ let
 
     xtmpl_ppx = callPackage ../development/ocaml-modules/xtmpl/ppx.nix { };
 
+    xxhash = callPackage ../development/ocaml-modules/xxhash/default.nix { };
+
     ### Y ###
 
     yaml = callPackage ../development/ocaml-modules/yaml { };
