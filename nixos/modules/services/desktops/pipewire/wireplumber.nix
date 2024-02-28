@@ -98,6 +98,18 @@ in
           assertion = !config.hardware.bluetooth.hsphfpd.enable;
           message = "Using WirePlumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
         }
+        {
+          assertion = builtins.length
+            (builtins.attrNames
+              (
+                lib.filterAttrs
+                  (name: value:
+                    lib.hasPrefix "wireplumber/" name || name == "wireplumber"
+                  )
+                  config.environment.etc
+              )) == 1;
+          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `services.wireplumber.configPackages` instead.";
+        }
       ];
 
       environment.systemPackages = [ cfg.package ];
