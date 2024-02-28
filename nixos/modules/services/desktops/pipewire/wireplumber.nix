@@ -108,7 +108,7 @@ in
                   )
                   config.environment.etc
               )) == 1;
-          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `services.wireplumber.configPackages` instead.";
+          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `services.pipewire.wireplumber.configPackages` instead.";
         }
       ];
 
