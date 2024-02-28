@@ -1925,7 +1925,10 @@ self: super: {
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
   # Test suite does not compile.
-  feed = dontCheck super.feed;
+  feed = overrideCabal (drv: {
+    jailbreak = lib.warnIf (lib.toInt drv.revision >= 4) "haskellPackages.feed: jailbreak can be removed" true;
+    doCheck = false;
+  }) super.feed;
 
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or []) ++ [ pkgs.buildPackages.installShellFiles ];
