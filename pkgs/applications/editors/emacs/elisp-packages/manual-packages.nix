@@ -5,6 +5,8 @@ let
   inherit (self) callPackage;
 in
 {
+  inherit (pkgs) cask;
+
   acm = callPackage ./manual-packages/acm { };
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };
@@ -14,8 +16,6 @@ in
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
   beancount = callPackage ./manual-packages/beancount { };
-
-  cask = callPackage ./manual-packages/cask { };
 
   codeium = callPackage ./manual-packages/codeium { };
 
