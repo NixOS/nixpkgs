@@ -8,7 +8,7 @@
 
   src = fetchurl {
     url = "https://github.com/upscayl/upscayl/releases/download/v${version}/upscayl-${version}-linux.AppImage";
-    hash = "sha256-33jJRMvRQxL7rPJ6VigEKcDhge46CAA0jJUOhzEyWzA=";
+    hash = "sha256-EoTFvlLsXQYZldXfEHhP3/bHygm+NdeDsf+p138mM8w";
   };
 
   appimageContents = appimageTools.extractType2 {
