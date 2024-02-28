@@ -13257,8 +13257,6 @@ with pkgs;
 
   smpq = callPackage ../applications/misc/smpq { };
 
-  sn0int = callPackage ../tools/security/sn0int { };
-
   snabb = callPackage ../tools/networking/snabb { };
 
   snallygaster = callPackage ../tools/security/snallygaster { };
