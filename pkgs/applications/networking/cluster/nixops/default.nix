@@ -46,34 +46,30 @@ let
         selectedPlugins = selector this.availablePlugins;
       });
 
-    rawPackage =
-      let
-        r = this.python.pkgs.toPythonApplication (this.python.pkgs.nixops.overridePythonAttrs (old: {
-          propagatedBuildInputs = old.propagatedBuildInputs ++ this.selectedPlugins;
+    rawPackage = this.python.pkgs.toPythonApplication (this.python.pkgs.nixops.overridePythonAttrs (old: {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ this.selectedPlugins;
 
-          # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-          # when used in nix-shell.
-          postFixup = ''
-            rm $out/nix-support/propagated-build-inputs
-          '';
+      # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+      # when used in nix-shell.
+      postFixup = ''
+        rm $out/nix-support/propagated-build-inputs
+      '';
 
-          passthru = old.passthru // {
-            inherit (this) selectedPlugins availablePlugins withPlugins python;
-            tests = old.passthru.tests // {
-              nixos = old.passthru.tests.nixos.passthru.override {
-                nixopsPkg = r;
-              };
-            }
-              # Make sure we also test with a configuration that's been extended with a plugin.
-              // lib.optionalAttrs (this.selectedPlugins == [ ]) {
-              withAPlugin =
-                lib.recurseIntoAttrs
-                  (this.withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
-            };
+      passthru = old.passthru // {
+        inherit (this) selectedPlugins availablePlugins withPlugins python;
+        tests = old.passthru.tests // {
+          nixos = old.passthru.tests.nixos.passthru.override {
+            nixopsPkg = rawPackage;
           };
-        }));
-      in
-      r;
+        }
+          # Make sure we also test with a configuration that's been extended with a plugin.
+          // lib.optionalAttrs (this.selectedPlugins == [ ]) {
+          withAPlugin =
+            lib.recurseIntoAttrs
+              (this.withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
+        };
+      };
+    }));
 
     public = this.rawPackage;
   };
