@@ -37,13 +37,19 @@ let
 
     availablePlugins = this.plugins this.python.pkgs;
 
+    selectedPlugins = [];
+
     # selector is a function mapping pythonPackages to a list of plugins
     # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
     withPlugins = selector:
-      let
+      this.extend (this: _old: {
         selectedPlugins = selector this.availablePlugins;
+      });
+
+    rawPackage =
+      let
         r = this.python.pkgs.toPythonApplication (this.python.pkgs.nixops.overridePythonAttrs (old: {
-          propagatedBuildInputs = old.propagatedBuildInputs ++ selectedPlugins;
+          propagatedBuildInputs = old.propagatedBuildInputs ++ this.selectedPlugins;
 
           # Propagating dependencies leaks them through $PYTHONPATH which causes issues
           # when used in nix-shell.
@@ -52,15 +58,14 @@ let
           '';
 
           passthru = old.passthru // {
-            inherit selectedPlugins;
-            inherit (this) availablePlugins withPlugins python;
+            inherit (this) selectedPlugins availablePlugins withPlugins python;
             tests = old.passthru.tests // {
               nixos = old.passthru.tests.nixos.passthru.override {
                 nixopsPkg = r;
               };
             }
               # Make sure we also test with a configuration that's been extended with a plugin.
-              // lib.optionalAttrs (selectedPlugins == [ ]) {
+              // lib.optionalAttrs (this.selectedPlugins == [ ]) {
               withAPlugin =
                 lib.recurseIntoAttrs
                   (this.withPlugins (ps: with ps; [ nixops-encrypted-links ])).tests;
@@ -70,7 +75,7 @@ let
       in
       r;
 
-    public = this.withPlugins (ps: []);
+    public = this.rawPackage;
   };
 
   minimal = encapsulate nixopsContextBase;
