@@ -32,6 +32,7 @@ let
           pkgs.hello
           pkgs.figlet
         ];
+        virtualisation.memorySize = 2048;
 
         # TODO: make this efficient, https://github.com/NixOS/nixpkgs/issues/180529
         system.includeBuildDependencies = true;
