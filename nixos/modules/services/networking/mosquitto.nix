@@ -331,7 +331,7 @@ let
   formatListener = idx: listener:
     [
       "listener ${toString listener.port} ${toString listener.address}"
-      "acl_file /etc/mosquitto/mosquitto-acl-${toString idx}.conf"
+      "acl_file /etc/mosquitto/acl-${toString idx}.conf"
     ]
     ++ optional (! listener.omitPasswordAuth) "password_file ${cfg.dataDir}/passwd-${toString idx}"
     ++ formatFreeform {} listener.settings
@@ -690,7 +690,7 @@ in
     environment.etc = listToAttrs (
       imap0
         (idx: listener: {
-          name = "mosquitto/mosquitto-acl-${toString idx}.conf";
+          name = "mosquitto/acl-${toString idx}.conf";
           value = {
             user = config.users.users.mosquitto.name;
             group = config.users.users.mosquitto.group;

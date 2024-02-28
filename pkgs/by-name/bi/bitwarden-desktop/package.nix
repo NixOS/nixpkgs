@@ -29,7 +29,7 @@ let
   icon = "bitwarden";
   electron = electron_28;
 in buildNpmPackage rec {
-  pname = "bitwarden";
+  pname = "bitwarden-desktop";
   version = "2024.2.0";
 
   src = fetchFromGitHub {
@@ -41,8 +41,7 @@ in buildNpmPackage rec {
 
   patches = [
     (fetchpatch2 {
-      # https://github.com/bitwarden/clients/pull/7508
-      url = "https://github.com/amarshall/bitwarden-clients/commit/e85fa4ef610d9dd05bd22a9b93d54b0c7901776d.patch";
+      url = "https://github.com/bitwarden/clients/commit/746bf0a4745423b9e70c2c54dcf76a95ffb62e11.patch";
       hash = "sha256-P9MTsiNbAb2kKo/PasIm9kGm0lQjuVUxAJ3Fh1DfpzY=";
     })
   ];
@@ -68,7 +67,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-KJUz5hvdsurnohUWRZedXvuWMnLtR0dcdTeHtJGrZBs=";
+    hash = "sha256-LjwtOmIJlwtOiy36Y0pP+jJEwfmCGTN4RhqgmD3Yj6E=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
