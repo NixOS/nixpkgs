@@ -10565,6 +10565,8 @@ self: super: with self; {
 
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
 
+  pyexiftool = callPackage ../development/python-modules/pyexiftool { };
+
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
   pyezviz = callPackage ../development/python-modules/pyezviz { };
