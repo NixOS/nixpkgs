@@ -56,13 +56,13 @@ in
         -- PipeWire is not used for audio, so prevent it from grabbing audio devices
         alsa_monitor.enable = function() end
       '';
-      systemwideConfigPkg = pkgs.writeTextDir "wireplumber/main.lua.d/80-systemwide.lua" ''
+      systemwideConfigPkg = pkgs.writeTextDir "share/wireplumber/main.lua.d/80-systemwide.lua" ''
         -- When running system-wide, these settings need to be disabled (they
         -- use functions that aren't available on the system dbus).
         alsa_monitor.properties["alsa.reserve"] = false
         default_access.properties["enable-flatpak-portal"] = false
       '';
-      systemwideBluetoothConfigPkg = pkgs.writeTextDir "wireplumber/bluetooth.lua.d/80-systemwide.lua" ''
+      systemwideBluetoothConfigPkg = pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/80-systemwide.lua" ''
         -- When running system-wide, logind-integration needs to be disabled.
         bluez_monitor.properties["with-logind"] = false
       '';
