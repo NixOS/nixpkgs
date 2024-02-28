@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, emptyFile }:
 
 let
   inherit (lib) extends;
@@ -64,6 +64,13 @@ let
         nixos = this.rawPackage.tests.nixos.passthru.override {
           nixopsPkg = this.rawPackage;
         };
+        commutative_addAvailablePlugins_withPlugins =
+          assert
+            (this.public.addAvailablePlugins (self: super: { inherit emptyFile; })).withPlugins (ps: [ emptyFile ])
+            ==
+            # Note that this value proves that the package is not instantiated until the end, where it's valid again.
+            (this.public.withPlugins (ps: [ emptyFile ])).addAvailablePlugins (self: super: { inherit emptyFile; });
+          emptyFile;
       }
         # Make sure we also test with a configuration that's been extended with a plugin.
         // lib.optionalAttrs (this.selectedPlugins == [ ]) {
