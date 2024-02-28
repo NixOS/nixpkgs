@@ -14,10 +14,10 @@ let
     python = python3.override {
       packageOverrides = self: super: {
         nixops = self.callPackage ./unwrapped.nix { };
-      } // (this.plugins self);
+      } // (this.plugins self super);
     };
 
-    plugins = ps: with ps; rec {
+    plugins = ps: _super: with ps; rec {
       nixops-aws = callPackage ./plugins/nixops-aws.nix { };
       nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
       nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
@@ -35,7 +35,8 @@ let
       nixopsvbox = nixops-vbox;
     };
 
-    availablePlugins = this.plugins this.python.pkgs;
+    # We should not reapply the overlay, but it tends to work out. (It's been this way since poetry2nix was dropped.)
+    availablePlugins = this.plugins this.python.pkgs this.python.pkgs;
 
     selectedPlugins = [];
 
@@ -72,6 +73,15 @@ let
       };
       overrideAttrs = f: this.extend (this: oldThis: {
         rawPackage = oldThis.rawPackage.overrideAttrs f;
+      });
+      /**
+       * nixops.addAvailablePlugins: Overlay -> Package
+       *
+       * Add available plugins to the package. You probably also want to enable
+       * them with the `withPlugins` method.
+       */
+      addAvailablePlugins = newPlugins: this.extend (finalThis: oldThis: {
+        plugins = lib.composeExtensions oldThis.plugins newPlugins;
       });
     };
 
