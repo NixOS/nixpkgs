@@ -12,6 +12,7 @@
 , branch ? null
 , hardcodeZeroVersion ? false # Use a made-up version "0" instead of latest tag. Use when there is no previous release, or the project's tagging system is incompatible with what we expect from versions
 , tagPrefix ? "" # strip this prefix from a tag name
+, tagConverter ? null # A command to convert more complex tag formats. It receives the git tag via stdin and should convert it into x.y.z format to stdout
 , shallowClone ? true
 }:
 
@@ -23,6 +24,7 @@ let
     branch=""
     hardcode_zero_version=""
     tag_prefix=""
+    tag_converter=""
     shallow_clone=""
 
     while (( $# > 0 )); do
@@ -40,6 +42,9 @@ let
             ;;
           --tag-prefix=*)
             tag_prefix="''${flag#*=}"
+            ;;
+          --tag-converter=*)
+            tag_converter="''${flag#*=}"
             ;;
           --shallow-clone)
             shallow_clone=1
@@ -105,6 +110,9 @@ let
         if [[ -n "$tag_prefix" ]]; then
             last_tag="''${last_tag#$tag_prefix}"
         fi
+        if [[ -n "$tag_converter" ]]; then
+            last_tag="$(echo ''${last_tag#$tag_prefix} | ''${tag_converter})"
+        fi
         if [[ ! "$last_tag" =~ ^[[:digit:]] ]]; then
             echo "Last tag '$last_tag' (after removing prefix '$tag_prefix') does not start with a digit" > /dev/stderr
             exit 1
@@ -130,6 +138,8 @@ in
   "--tag-prefix=${tagPrefix}"
 ] ++ lib.optionals (branch != null) [
   "--branch=${branch}"
+] ++ lib.optionals (tagConverter != null) [
+  "--tag-converter=${tagConverter}"
 ] ++ lib.optionals hardcodeZeroVersion [
   "--hardcode-zero-version"
 ] ++ lib.optionals shallowClone [
