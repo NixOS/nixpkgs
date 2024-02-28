@@ -337,6 +337,7 @@ let
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     Formula = [ pkgs.gmp ];
+    gdalraster = with pkgs; [ pkg-config gdal proj.dev sqlite.dev ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
     ggiraph = with pkgs; [ pkgs.libpng.dev ];
     git2r = with pkgs; [ zlib.dev openssl.dev libssh2.dev libgit2 pkg-config ];
