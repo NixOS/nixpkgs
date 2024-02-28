@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = nixVersions;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://hboehm.info/gc/";
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
     longDescription = ''
@@ -76,10 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
       Alternatively, the garbage collector may be used as a leak detector for
       C or C++ programs, though that is not its primary goal.
     '';
-    # non-copyleft, X11-style license
     changelog = "https://github.com/ivmai/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
-    license = "https://hboehm.info/gc/license.txt";
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    license = "https://hboehm.info/gc/license.txt"; # non-copyleft, X11-style license
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
 })
