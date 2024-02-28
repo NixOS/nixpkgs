@@ -9860,8 +9860,6 @@ with pkgs;
 
   kyverno = callPackage ../applications/networking/cluster/kyverno { };
 
-  kyverno-chainsaw = callPackage ../application/networking/cluster/kyverno-chainsaw { };
-
   k6 = callPackage ../development/tools/k6 { };
 
   l2md = callPackage ../tools/text/l2md { };
