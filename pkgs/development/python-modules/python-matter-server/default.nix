@@ -5,6 +5,7 @@
 
 # build
 , setuptools
+, pythonRelaxDepsHook
 
 # propagates
 , aiohttp
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.5.3";
+  version = "5.7.0b1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -38,16 +39,22 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-8daAABR5l8ZEX+PR4XrxRHlLllgnOVE4Q9yY/7UQXHw=";
+    hash = "sha256-icWp5DiUoTn1l0wNFk83jCpbVsb6MN2qM3QvI6uZaic=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace '--cov' ""
   '';
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "home-assistant-chip-clusters"
   ];
 
   propagatedBuildInputs = [
