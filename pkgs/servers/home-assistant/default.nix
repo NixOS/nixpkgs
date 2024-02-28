@@ -31,6 +31,15 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aemet-opendata = super.aemet-opendata.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.7";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-kmU2HtNyYhfwWQv6asOtDpLZ6+O+eEICzBNLxUhAwaY=";
+        };
+      });
+
       aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
         version = "22.10.1";
         src = fetchFromGitHub {
