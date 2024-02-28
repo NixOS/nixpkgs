@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "4.2.0";
+  version = "5.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "vallox_websocket_api";
     rev = "refs/tags/${version}";
-    hash = "sha256-e05MP130okj8j20yMn8a7P6PYZ4PKwCOlAf0ZlUR5aI=";
+    hash = "sha256-ZYcLoOYwQK1+txiBuCEIDp+tYM3eXFtOSR0iNIrIP0w=";
   };
 
   nativeBuildInputs = [
