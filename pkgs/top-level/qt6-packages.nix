@@ -33,6 +33,9 @@ makeScopeWithSplicing' {
 
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
+  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+  kimageannotator = callPackage ../development/libraries/kimageannotator { };
+
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
