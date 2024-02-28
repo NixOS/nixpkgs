@@ -1,6 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kyverno-chainsaw";
   version = "0.1.6";
   cli = "chainsaw";
@@ -8,7 +8,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-14swkcv70qn1ka0pb3za9a4r15shm1aw93by2k3b1kx3qdar1bcs";
   };
 
@@ -24,9 +24,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Chainsaw is a tool developed to run end to end tests in Kubernetes clusters.";
     homepage = "https://github.com/kyverno/chainsaw";
-    changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${version}";
+    changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     mainProgram = "chainsaw";
     maintainers = with maintainers; [ Sanskarzz ];
   };
-}
+})
