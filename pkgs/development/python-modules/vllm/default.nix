@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     rev = "v${version}";
-    hash = nixpkgs.lib.fakeSha256;
+    hash = "sha256-ZFwlR8Xnen7FFblwzPJm0k+3iEo2p27QhfRaDfzwbOM=";
   };
 
   # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
