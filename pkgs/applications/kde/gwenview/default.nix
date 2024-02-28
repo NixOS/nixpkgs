@@ -16,6 +16,10 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
     mainProgram = "gwenview";
   };
+
+  # Fix build with versioned kImageAnnotator
+  patches = [./kimageannotator.patch];
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     baloo kactivities kio kitemmodels kparts libkdcraw libkipi phonon
