@@ -28,8 +28,8 @@ let
   # selector is a function mapping pythonPackages to a list of plugins
   # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
   withPlugins = selector: let
-    selected = selector (plugins python.pkgs);
-  in python.pkgs.toPythonApplication (python.pkgs.nixops.overridePythonAttrs (old: {
+   selected = selector (plugins python.pkgs);
+   r = python.pkgs.toPythonApplication (python.pkgs.nixops.overridePythonAttrs (old: {
     propagatedBuildInputs = old.propagatedBuildInputs ++ selected;
 
     # Propagating dependencies leaks them through $PYTHONPATH which causes issues
@@ -41,8 +41,14 @@ let
     passthru = old.passthru // {
       plugins = plugins python.pkgs;
       inherit withPlugins python;
+      tests = old.passthru.tests // {
+        nixos = old.passthru.tests.nixos.passthru.override {
+          nixopsPkg = r;
+        };
+      };
     };
   }));
+  in r;
 
 in {
   nixops_unstable_minimal = withPlugins (ps: []);

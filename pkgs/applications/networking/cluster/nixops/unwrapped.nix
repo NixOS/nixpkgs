@@ -50,7 +50,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "nixops" ];
 
   passthru = {
-    tests.nixops = nixosTests.nixops.unstable;
+    tests.nixos = nixosTests.nixops.unstable;
     updateScript = unstableGitUpdater {};
   };
 
