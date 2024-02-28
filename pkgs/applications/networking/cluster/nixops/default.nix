@@ -90,6 +90,9 @@ let
       addAvailablePlugins = newPlugins: this.extend (finalThis: oldThis: {
         plugins = lib.composeExtensions oldThis.plugins newPlugins;
       });
+
+      # For those who need or dare.
+      internals = this;
     };
 
     package = lib.lazyDerivation { outputs = [ "out" "dist" ]; derivation = this.rawPackage; } // this.extraPackageAttrs;
