@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "popeye";
-  version = "0.20.3";
+  version = "0.20.4";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-Iq33TEl6yCw4e6LeOsXcaMGRmOJqq9XV4KChEArDL6Q=";
+    sha256 = "sha256-rUG2tZokWXWVvGiyDAxVYfVwSDInaLptBCBuawtP1bc=";
   };
 
   ldflags = [
