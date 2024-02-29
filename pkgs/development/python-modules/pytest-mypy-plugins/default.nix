@@ -11,22 +11,27 @@
 , pythonOlder
 , pyyaml
 , regex
+, setuptools
 , tomlkit
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
   version = "3.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "typeddjango";
-    repo = pname;
+    repo = "pytest-mypy-plugins";
     rev = "refs/tags/${version}";
     hash = "sha256-FXJWOeHXeKH8kDzgujOQyu3ZtIwZ5+gc4Fxod3mRRio=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     pytest
