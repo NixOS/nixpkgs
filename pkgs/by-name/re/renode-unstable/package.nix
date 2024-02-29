@@ -7,10 +7,10 @@
   inherit buildUnstable;
 }).overrideAttrs (finalAttrs: _: {
   pname = "renode-unstable";
-  version = "1.14.0+20240222git83285cc63";
+  version = "1.14.0+20240226git732d357b4";
 
   src = fetchurl {
     url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-portable.tar.gz";
-    hash = "sha256-RFZdl2t1356h4Hvab6Gn3LZZnCWlQlK6C0otlXzVlMI=";
+    hash = "sha256-08xV/6ch6dWA4pwg8tuDywYhQ4ZIFRD5zegojDZtAHE=";
   };
 })

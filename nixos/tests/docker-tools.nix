@@ -46,6 +46,18 @@ let
         echo 'runAsRoot has run.'
       '';
     };
+
+  chownTestImage =
+    pkgs.dockerTools.streamLayeredImage {
+      name = "chown-test";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        touch /testfile
+        chown 12345:12345 /testfile
+      '';
+      config.Cmd = [ "${pkgs.coreutils}/bin/stat" "-c" "%u:%g" "/testfile" ];
+    };
 in {
   name = "docker-tools";
   meta = with pkgs.lib.maintainers; {
@@ -71,12 +83,27 @@ in {
             docker.succeed("${examples.helloOnRoot} | docker load")
             docker.succeed("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+
         with subtest("includeStorePath = false; breaks example"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
             docker.fail("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; breaks example (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
+            docker.fail("docker run --rm hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+
+        with subtest("Ensure ZERO paths are added to the store"):
+            docker.fail("${examples.helloOnRootNoStore} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+        with subtest("Ensure ZERO paths are added to the store (fakechroot)"):
+            docker.fail("${examples.helloOnRootNoStoreFakechroot} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
+
         with subtest("includeStorePath = false; works with mounted store"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
+            docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
+            docker.succeed("docker image rm hello:latest")
+        with subtest("includeStorePath = false; works with mounted store (fakechroot)"):
+            docker.succeed("${examples.helloOnRootNoStoreFakechroot} | docker load")
             docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
 
@@ -549,6 +576,12 @@ in {
         docker.succeed(
             "${examples.nix-shell-build-derivation} | docker load",
             "docker run --rm -it nix-shell-build-derivation"
+        )
+
+    with subtest("streamLayeredImage: chown is persistent in fakeRootCommands"):
+        docker.succeed(
+            "${chownTestImage} | docker load",
+            "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
   '';
 })
