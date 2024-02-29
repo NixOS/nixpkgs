@@ -13,14 +13,14 @@
 let
   finalAttrs = {
     pname = "duden";
-    version = "0.18.0";
+    version = "0.19.1";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "radomirbosak";
       repo = "duden";
       rev = finalAttrs.version;
-      hash = "sha256-ZrarN09Znw4m6YiZxD7q7dTJ49WjmHDobLnOt8JCwvc=";
+      hash = "sha256-c6IItrjFVbsdYg3sDrExcxv7aRcKhd/M5hiZD+wBZ2Y=";
     };
 
     nativeBuildInputs = [
@@ -49,7 +49,7 @@ let
       '';
       license = with lib.licenses; [ mit ];
       mainProgram = "duden";
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      maintainers = with lib.maintainers; [ AndersonTorres linuxissuper ];
     };
   };
 in
