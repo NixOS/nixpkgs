@@ -584,6 +584,7 @@
   ./services/home-automation/govee2mqtt.nix
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/homeassistant-satellite.nix
+  ./services/home-automation/homebridge.nix
   ./services/home-automation/zigbee2mqtt.nix
   ./services/home-automation/zwave-js.nix
   ./services/logging/SystemdJournal2Gelf.nix
