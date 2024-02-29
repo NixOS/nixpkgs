@@ -40,7 +40,7 @@
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
 , withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
-, withFdkAac ? withFullDeps && withUnfree # Fraunhofer FDK AAC de/encoder
+, withFdkAac ? withFullDeps && (!withGPL || withUnfree) # Fraunhofer FDK AAC de/encoder
 , withFlite ? withFullDeps # Voice Synthesis
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
@@ -63,7 +63,8 @@
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
-, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder & AMR-WB decoder
+, withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
+, withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
 , withOpengl ? false # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
@@ -476,6 +477,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
+    (enableFeature withCaca "libcaca")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCuda "cuda")
@@ -486,6 +488,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withFdkAac "libfdk-aac")
     (enableFeature withFlite "libflite")
     (enableFeature withFontconfig "fontconfig")
+    (enableFeature withFontconfig "libfontconfig")
     (enableFeature withFreetype "libfreetype")
     (enableFeature withFrei0r "frei0r")
     (enableFeature withFribidi "libfribidi")
@@ -509,6 +512,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOpenal "openal")
     (enableFeature withOpencl "opencl")
     (enableFeature withOpencoreAmrnb "libopencore-amrnb")
+    (enableFeature withOpencoreAmrwb "libopencore-amrwb")
     (enableFeature withOpengl "opengl")
     (enableFeature withOpenh264 "libopenh264")
     (enableFeature withOpenjpeg "libopenjpeg")
@@ -588,7 +592,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
   ++ optionals withCudaLLVM [ clang ];
 
-  buildInputs = optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
+  buildInputs = []
   ++ optionals withAlsa [ alsa-lib ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAribcaption [ libaribcaption ]
@@ -620,10 +624,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
+  ++ optionals (withNvdec || withNvenc) [ (if (lib.versionAtLeast finalAttrs.version "6") then nv-codec-headers-12 else nv-codec-headers) ]
   ++ optionals withOgg [ libogg ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
-  ++ optionals withOpencoreAmrnb [ opencore-amr ]
+  ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
   ++ optionals withOpengl [ libGL libGLU ]
   ++ optionals withOpenh264 [ openh264 ]
   ++ optionals withOpenjpeg [ openjpeg ]
