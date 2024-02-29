@@ -12,7 +12,7 @@ let
     mkOption
     recursiveUpdate
     ;
-  inherit (lib.types) bool;
+  inherit (lib.types) bool str;
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
 in
@@ -37,6 +37,18 @@ in
         description = "Configuration for Navidrome, see <https://www.navidrome.org/docs/usage/configuration-options/> for supported values.";
       };
 
+      user = mkOption {
+        type = str;
+        default = "navidrome";
+        description = "User under which Navidrome runs.";
+      };
+
+      group = mkOption {
+        type = str;
+        default = "navidrome";
+        description = "Group under which Navidrome runs.";
+      };
+
       openFirewall = mkOption {
         type = bool;
         default = false;
@@ -58,7 +70,8 @@ in
           ExecStart = ''
             ${cfg.package}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
           '';
-          DynamicUser = true;
+          User = cfg.user;
+          Group = cfg.group;
           StateDirectory = "navidrome";
           WorkingDirectory = "/var/lib/navidrome";
           RuntimeDirectory = "navidrome";
@@ -100,6 +113,16 @@ in
           ProtectHostname = true;
         };
       };
+
+      users.users = mkIf (cfg.user == "navidrome") {
+        navidrome = {
+          inherit (cfg) group;
+          isSystemUser = true;
+        };
+      };
+
+      users.groups = mkIf (cfg.group == "navidrome") { navidrome = { }; };
+
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
 }
