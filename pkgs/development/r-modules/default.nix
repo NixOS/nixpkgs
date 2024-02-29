@@ -891,6 +891,7 @@ let
     "fixest"
     "paxtoolsr"
     "systemPipeShiny"
+    "matlab2r"
   ];
 
   packagesToSkipCheck = [
