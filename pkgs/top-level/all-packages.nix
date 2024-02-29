@@ -8044,7 +8044,7 @@ with pkgs;
 
   fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 { };
 
-  fcitx5-with-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
+  fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
 
   fcitx5-bamboo = callPackage ../tools/inputmethods/fcitx5/fcitx5-bamboo.nix { };
 
