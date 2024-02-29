@@ -10,7 +10,7 @@
 
 , pkgs
 , cmake
-, gcc12
+, gcc11
 , clblast
 , libdrm
 , rocmPackages
@@ -59,6 +59,13 @@ let
       cudaPackages.cudatoolkit
       cudaPackages.cuda_cudart
     ];
+    postBuild = ''
+      rm "$out/lib64"
+      ln -s "lib" "$out/lib64"
+
+      ln -s "stubs/libcuda.so" "$out/lib/libcuda.so"
+      ln -s "stubs/libcuda.so" "$out/lib/libcuda.so.1"
+    '';
   };
 
   runtimeLibs = lib.optionals enableRocm [
@@ -78,7 +85,7 @@ let
 
   goBuild =
     if enableCuda then
-      buildGoModule.override { stdenv = overrideCC stdenv gcc12; }
+      buildGoModule.override { stdenv = overrideCC stdenv gcc11; }
     else
       buildGoModule;
   preparePatch = patch: hash: fetchpatch {
@@ -137,9 +144,9 @@ goBuild ((lib.optionalAttrs enableRocm {
       --subst-var-by cmakeIncludePatch '${./cmake-include.patch}'
     # `ollama/llm/generate/gen_common.sh` -> "avoid duplicate main symbols when we link into the cgo binary"
     substituteInPlace llm/llama.cpp/examples/server/server.cpp \
-      --replace-fail 'int main(' 'int __main('
+      --replace 'int main(' 'int __main('
     # replace inaccurate version number with actual release version
-    substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
+    substituteInPlace version/version.go --replace 0.0.0 '${version}'
   '';
   preBuild = ''
     export OLLAMA_SKIP_PATCHING=true
