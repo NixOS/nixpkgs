@@ -78,7 +78,6 @@ in
     extraNativeBuildInputs ? [],
     extraPropagatedBuildInputs ? [],
     extraCmakeFlags ? [],
-    meta ? {},
     ...
   } @ args: let
     # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
@@ -101,18 +100,6 @@ in
       cmakeFlags = ["-DQT_MAJOR_VERSION=6"] ++ extraCmakeFlags;
 
       separateDebugInfo = true;
-
-      meta =
-        {
-          description = projectInfo.${pname}.description;
-          homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
-          license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
-          maintainers = lib.teams.qt-kde.members;
-          # Platforms are currently limited to what upstream tests in CI, but can be extended if
-          # there's interest.
-          platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-        }
-        // meta;
     };
 
     cleanArgs = builtins.removeAttrs args [
@@ -122,5 +109,17 @@ in
       "extraCmakeFlags"
       "meta"
     ];
+
+    meta = let
+      pos = builtins.unsafeGetAttrPos "pname" args;
+    in {
+      description = projectInfo.${pname}.description;
+      homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
+      license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
+      maintainers = lib.teams.qt-kde.members;
+      # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
+      platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+      position = "${pos.file}:${toString pos.line}";
+    } // (args.meta or { });
   in
-    stdenv.mkDerivation (defaultArgs // cleanArgs)
+    stdenv.mkDerivation (defaultArgs // cleanArgs) // { inherit meta; }
