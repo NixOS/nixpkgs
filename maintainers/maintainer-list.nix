@@ -20280,6 +20280,12 @@
     githubId = 326263;
     name = "Danny Wilson";
   };
+  vizid = {
+    email = "vizid1337@gmail.com";
+    github = "ViZiD";
+    githubId = 7444430;
+    name = "Radik Islamov";
+  };
   vklquevs = {
     email = "vklquevs@gmail.com";
     github = "vklquevs";

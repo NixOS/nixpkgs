@@ -10893,8 +10893,6 @@ with pkgs;
 
   molotov = callPackage ../applications/video/molotov { };
 
-  moneyplex = callPackage ../applications/office/moneyplex { };
-
   monit = callPackage ../tools/system/monit { };
 
   monocraft = callPackage ../data/fonts/monocraft { };
@@ -35971,8 +35969,6 @@ with pkgs;
   viper4linux-gui = libsForQt5.callPackage ../applications/audio/viper4linux-gui { };
 
   vkeybd = callPackage ../applications/audio/vkeybd { };
-
-  vlc = libsForQt5.callPackage ../applications/video/vlc { };
 
   libvlc = vlc.override {
     withQt5 = false;
