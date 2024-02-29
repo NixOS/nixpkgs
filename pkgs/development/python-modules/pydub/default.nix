@@ -1,11 +1,11 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , ffmpeg-full
 , pytestCheckHook
-, setuptools
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -21,6 +21,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-FTEMT47wPXK5i4ZGjTVAhI/NjJio3F2dbBZzYzClU3c=";
   };
+
+  patches = [
+    # Fix test assertions, https://github.com/jiaaro/pydub/pull/769
+    (fetchpatch {
+      name = "fix-assertions.patch";
+      url = "https://github.com/jiaaro/pydub/commit/66c1bf7813ae8621a71484fdcdf609734c0d8efd.patch";
+      hash = "sha256-3OIzvTgGK3r4/s5y7izHvouB4uJEmjO6cgKvegtTf7A=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
