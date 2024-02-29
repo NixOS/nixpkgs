@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-+MSNX+CFmIQII+SFjM2TQKCgRMOTdsOIVAP8ur4WjQY=";
   };
 
-  patches = [ ./secret.patch ];
+  patches = [ ./pydantic.patch ./secret.patch ];
 
   propagatedBuildInputs = [
     aiofiles

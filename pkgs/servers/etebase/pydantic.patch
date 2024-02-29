@@ -1,0 +1,39 @@
+diff --git a/etebase_server/fastapi/exceptions.py b/etebase_server/fastapi/exceptions.py
+index 1a98fcb..e93b002 100644
+--- a/etebase_server/fastapi/exceptions.py
++++ b/etebase_server/fastapi/exceptions.py
+@@ -1,7 +1,7 @@
+ from fastapi import status, HTTPException
+ import typing as t
+ 
+-from pydantic import BaseModel
++from pydantic.v1 import BaseModel
+ from django.core.exceptions import ValidationError as DjangoValidationError
+ 
+ 
+diff --git a/etebase_server/fastapi/msgpack.py b/etebase_server/fastapi/msgpack.py
+index 3871d15..e702e25 100644
+--- a/etebase_server/fastapi/msgpack.py
++++ b/etebase_server/fastapi/msgpack.py
+@@ -1,7 +1,7 @@
+ import typing as t
+ 
+ from fastapi.routing import APIRoute, get_request_handler
+-from pydantic import BaseModel
++from pydantic.v1 import BaseModel
+ from starlette.requests import Request
+ from starlette.responses import Response
+ 
+diff --git a/etebase_server/fastapi/utils.py b/etebase_server/fastapi/utils.py
+index 334633c..7d8242d 100644
+--- a/etebase_server/fastapi/utils.py
++++ b/etebase_server/fastapi/utils.py
+@@ -5,7 +5,7 @@ import msgpack
+ import base64
+ 
+ from fastapi import status, Query, Depends
+-from pydantic import BaseModel as PyBaseModel
++from pydantic.v1 import BaseModel as PyBaseModel
+ 
+ from django.db.models import Model, QuerySet
+ from django.core.exceptions import ObjectDoesNotExist
