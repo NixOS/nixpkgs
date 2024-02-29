@@ -1,31 +1,25 @@
 { lib
-, cargo
 , cmake
 , darwin
 , fetchFromGitHub
-, libgit2
 , openssl
 , pkg-config
-, python3
 , rustPlatform
-, rustc
 , stdenv
-, zlib
 }:
 
-python3.pkgs.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.1.11";
-  pyproject = true;
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = version;
-    hash = "sha256-0J6m/DgalYA+GGmgjFrNoo9KAv6WgMcx+gasgqG5v1Q=";
+    hash = "sha256-tM8NX4BPGm8Xxlau+qpKSljTdSJutipsYFsZAdtmZuo=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
@@ -34,25 +28,20 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    cargo
     cmake
     pkg-config
-    rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
-    rustc
   ];
 
   buildInputs = [
-    libgit2
     openssl
-    zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  dontUseCmakeConfigure = true;
+  cargoBuildFlags = [ "--package" "uv" ];
 
-  pythonImportsCheck = [ "uv" ];
+  # Tests require network access
+  doCheck = false;
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -61,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "An extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
-    changelog = "https://github.com/astral-sh/uv/releases/tag/${version}";
+    changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ marsam ];
     mainProgram = "uv";
