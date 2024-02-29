@@ -12,13 +12,13 @@
 buildPythonPackage rec {
   pname = "yolink-api";
   version = "0.3.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
-    repo = pname;
+    repo = "yolink-api";
     rev = "refs/tags/v${version}";
     hash = "sha256-RXO++8Dh0hLkjXev/WDhPixLHKXlqRabbrPW6Hs/xoM=";
   };
