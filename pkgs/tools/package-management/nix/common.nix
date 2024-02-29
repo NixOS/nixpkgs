@@ -81,6 +81,7 @@ in
 
   # passthru tests
 , pkgsi686Linux
+
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -250,6 +251,7 @@ self = stdenv.mkDerivation {
 
     tests = {
       nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+      compareEval = callPackage ./tests/compareEval.nix { nix = self; };
     };
   };
 
