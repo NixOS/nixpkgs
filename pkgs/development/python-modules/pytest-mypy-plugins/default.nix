@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kIA2tVOsKsav4tRqZiWCMcRgbRnxAEo7SpmxC2pt9B0=";
+    hash = "sha256-FXJWOeHXeKH8kDzgujOQyu3ZtIwZ5+gc4Fxod3mRRio=";
   };
 
   buildInputs = [
