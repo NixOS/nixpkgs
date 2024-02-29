@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "userpath";
   version = "1.9.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
