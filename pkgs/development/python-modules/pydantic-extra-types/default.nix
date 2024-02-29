@@ -41,10 +41,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.all;
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   meta = with lib; {
     description = "Extra Pydantic types";
     homepage = "https://github.com/pydantic/pydantic-extra-types";

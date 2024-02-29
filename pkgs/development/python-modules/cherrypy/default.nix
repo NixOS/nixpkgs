@@ -69,11 +69,6 @@ buildPythonPackage rec {
     export CI=true
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # Keyboard interrupt ends test suite run
     "KeyboardInterrupt"

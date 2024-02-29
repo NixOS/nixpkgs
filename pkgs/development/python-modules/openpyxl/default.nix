@@ -41,10 +41,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
   disabledTests = [
     # Tests broken since lxml 2.12; https://foss.heptapod.net/openpyxl/openpyxl/-/issues/2116
     "test_read"

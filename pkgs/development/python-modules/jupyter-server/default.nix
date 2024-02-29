@@ -80,10 +80,6 @@ buildPythonPackage rec {
     flaky
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH=$out/bin:$PATH

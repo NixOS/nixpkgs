@@ -73,11 +73,6 @@ buildPythonPackage rec {
     webtest
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     # performance test
     "tests/unit/tools/pbkdf2_test.py"

@@ -37,11 +37,6 @@ buildPythonPackage rec {
     "google.iam.v1"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   meta = with lib; {
     description = "GRPC library for the google-iam-v1 service";
     homepage = "https://github.com/googleapis/python-grpc-google-iam-v1";

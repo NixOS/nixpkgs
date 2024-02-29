@@ -60,10 +60,6 @@ buildPythonPackage rec {
     "jupyter_collaboration"
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   preCheck = ''
     export HOME=$TEMP
   '';

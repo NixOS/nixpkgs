@@ -45,10 +45,6 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pytestFlagsArray = [
-    "-Wignore::DeprecationWarning"
-  ];
-
   pythonImportsCheck = [ "acoustics" ];
 
   meta = with lib; {

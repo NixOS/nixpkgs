@@ -66,11 +66,6 @@ buildPythonPackage rec {
     "omegaconf"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   meta = with lib; {
     description = "Framework for configuring complex applications";
     homepage = "https://github.com/omry/omegaconf";

@@ -63,11 +63,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    # DeprecationWarning: pyreverse will drop support for resolving and
-    # displaying implemented interfaces in pylint 3.0. The
-    # implementation relies on the '__implements__'  attribute proposed
-    # in PEP 245, which was rejected in 2006.
-    "-W" "ignore::DeprecationWarning"
     "-v"
   ];
 

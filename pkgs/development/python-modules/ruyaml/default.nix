@@ -41,10 +41,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   pythonImportsCheck = [
     "ruyaml"
   ];

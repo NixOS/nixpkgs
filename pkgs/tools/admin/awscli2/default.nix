@@ -111,10 +111,6 @@ with py.pkgs; buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "-Wignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
     # Integration tests require networking
     "tests/integration"

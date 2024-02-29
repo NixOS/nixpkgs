@@ -46,11 +46,6 @@ buildPythonPackage rec {
     # pandas is not supported on i686 or risc-v
     lib.optional (!stdenv.isi686 && !stdenv.hostPlatform.isRiscV) pandas;
 
-  pytestFlagsArray = [
-    "-W" "ignore::FutureWarning"
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   # Remove performance testing.
   # Too sensitive for on Hydra.
   disabledTests = [

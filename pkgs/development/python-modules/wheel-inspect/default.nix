@@ -61,11 +61,6 @@ buildPythonPackage rec {
     "wheel_inspect"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   meta = with lib; {
     description = "Extract information from wheels";
     homepage = "https://github.com/jwodder/wheel-inspect";

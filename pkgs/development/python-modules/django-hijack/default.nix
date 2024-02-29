@@ -63,7 +63,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--pyargs" "hijack"
-    "-W" "ignore::DeprecationWarning"
   ];
 
   # needed for npmDeps update
