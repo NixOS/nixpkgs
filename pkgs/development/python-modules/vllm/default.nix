@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hfd4ScU0mkZ7z4+w08BUA1K9bPXSiFThfiO+Ll2MTtg=";
+    hash = "sha256-ZFwlR8Xnen7FFblwzPJm0k+3iEo2p27QhfRaDfzwbOM=";
   };
 
   # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
@@ -62,11 +62,11 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace "cupy-cuda12x == 12.1.0" "cupy == 12.3.0"
     substituteInPlace requirements-build.txt \
-      --replace "torch==2.1.2" "torch == 2.2.0"
+      --replace "torch==2.1.2" "torch == 2.2.1"
     substituteInPlace pyproject.toml \
-      --replace "torch == 2.1.2" "torch == 2.2.0"
+      --replace "torch == 2.1.2" "torch == 2.2.1"
     substituteInPlace requirements.txt \
-      --replace "torch == 2.1.2" "torch == 2.2.0"
+      --replace "torch == 2.1.2" "torch == 2.2.1"
   '' + lib.optionalString rocmSupport ''
     substituteInPlace setup.py \
       --replace "'hipcc', '--version'" "'${writeShellScript "hipcc-version-stub" "echo HIP version: 0.0"}'"
