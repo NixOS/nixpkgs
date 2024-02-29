@@ -32,6 +32,8 @@ makeScopeWithSplicing' {
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
+  fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
+
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
