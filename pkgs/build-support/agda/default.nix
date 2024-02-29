@@ -75,13 +75,14 @@ let
         buildPhase = if buildPhase != null then buildPhase else ''
           runHook preBuild
           agda ${includePathArgs} ${everythingFile}
+          rm ${everythingFile} ${lib.interfaceFile Agda.version everythingFile}
           runHook postBuild
         '';
 
         installPhase = if installPhase != null then installPhase else ''
           runHook preInstall
           mkdir -p $out
-          find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile Agda.version everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
+          find \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
 
