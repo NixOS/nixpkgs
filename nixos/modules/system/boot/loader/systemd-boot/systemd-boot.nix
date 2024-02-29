@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -20,7 +20,7 @@ let
 
     nix = config.nix.package.out;
 
-    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
+    timeout = optionalString (config.boot.loader.defaults.timeout != null) config.boot.loader.defaults.timeout;
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
@@ -89,7 +89,7 @@ in {
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
     ];
 
-  options.boot.loader.systemd-boot = {
+  options.boot.loader.systemd-boot = utils.mkBootLoaderOption {
     enable = mkOption {
       default = false;
 
@@ -315,8 +315,6 @@ in {
 
     boot.loader.grub.enable = mkDefault false;
 
-    boot.loader.supportsInitrdSecrets = true;
-
     boot.loader.systemd-boot.extraFiles = mkMerge [
       (mkIf cfg.memtest86.enable {
         "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
@@ -341,11 +339,13 @@ in {
       })
     ];
 
+    boot.loader.systemd-boot = {
+      id = "systemd-boot";
+      installHook = finalSystemdBootBuilder;
+      supportsInitrdSecrets = true;
+    };
+
     system = {
-      build.installBootLoader = finalSystemdBootBuilder;
-
-      boot.loader.id = "systemd-boot";
-
       requiredKernelConfig = with config.lib.kernelConfig; [
         (isYes "EFI_STUB")
       ];

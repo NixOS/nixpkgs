@@ -75,18 +75,18 @@ let
   # Timeout in syslinux is in units of 1/10 of a second.
   # null means max timeout (35996, just under 1h in 1/10 seconds)
   # 0 means disable timeout
-  syslinuxTimeout = if config.boot.loader.timeout == null then
+  syslinuxTimeout = if config.boot.loader.defaults.timeout == null then
       35996
     else
-      config.boot.loader.timeout * 10;
+      config.boot.loader.defaults.timeout * 10;
 
   # Timeout in grub is in seconds.
   # null means max timeout (infinity)
   # 0 means disable timeout
-  grubEfiTimeout = if config.boot.loader.timeout == null then
+  grubEfiTimeout = if config.boot.loader.defaults.timeout == null then
       -1
     else
-      config.boot.loader.timeout;
+      config.boot.loader.defaults.timeout;
 
   # The configuration file for syslinux.
 
@@ -870,7 +870,7 @@ in
         }
       ];
 
-    boot.loader.timeout = 10;
+    boot.loader.defaults.timeout = lib.mkDefault 10;
 
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({

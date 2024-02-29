@@ -149,6 +149,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Containers does not require booting mechanisms.
+    boot.enable = false;
 
     hardware.nvidia-container-toolkit-cdi-generator.enable = lib.mkIf cfg.cdi.dynamic.nvidia.enable true;
 

@@ -1,9 +1,13 @@
-{ lib, ... }:
+{ utils, lib, ... }:
 
 with lib;
 
 {
-  options.boot.loader.efi = {
+  options.boot.loader.efi = utils.mkBootLoaderOption {
+    enable = mkOption {
+      default = false;
+      internal = true;
+    };
 
     canTouchEfiVariables = mkOption {
       default = false;

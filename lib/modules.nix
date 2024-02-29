@@ -1121,7 +1121,7 @@ let
     inherit from to;
     visible = false;
     warn = true;
-    use = builtins.trace "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
+    use = lib.warn "Obsolete option `${showOption from}' is used. It was renamed to `${showOption to}'.";
   };
 
   mkRenamedOptionModuleWith = {

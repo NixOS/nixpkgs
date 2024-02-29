@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 
 let
   inherit (lib)
@@ -77,7 +77,7 @@ let
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "${config.system.nixos.distroName}${efiSysMountPoint'}" else args.efiBootloaderId;
-      timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
+      timeout = if config.boot.loader.defaults.timeout == null then -1 else config.boot.loader.defaults.timeout;
       theme = f cfg.theme;
       inherit efiSysMountPoint;
       inherit (args) devices;
@@ -120,8 +120,7 @@ in
 
   options = {
 
-    boot.loader.grub = {
-
+    boot.loader.grub = utils.mkBootLoaderOption {
       enable = mkOption {
         default = !config.boot.isContainer;
         defaultText = literalExpression "!config.boot.isContainer";
@@ -719,14 +718,16 @@ in
         { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
       ];
 
-      boot.loader.supportsInitrdSecrets = true;
-
       system.systemBuilderArgs.configurationName = cfg.configurationName;
       system.systemBuilderCommands = ''
         echo -n "$configurationName" > $out/configuration-name
       '';
 
-      system.build.installBootLoader =
+      system.build.grub = grub;
+      boot.loader.grub = {
+        id = "grub";
+        supportsInitrdSecrets = true;
+        installHook =
         let
           install-grub-pl = pkgs.substituteAll {
             src = ./install-grub.pl;
@@ -747,11 +748,7 @@ in
         ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
       '') + cfg.extraInstallCommands);
 
-      system.build.grub = grub;
-
-      # Common attribute for boot loaders so only one of them can be
-      # set at once.
-      system.boot.loader.id = "grub";
+      };
 
       environment.systemPackages = optional (grub != null) grub;
 

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -15,7 +15,7 @@ let
       "${builderGeneric} -c";
 
   blCfg = config.boot.loader;
-  timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
+  timeoutStr = if blCfg.defaults.timeout == null then "-1" else toString blCfg.defaults.timeout;
 
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
   optional = pkgs.lib.optionalString;
@@ -44,7 +44,7 @@ in
 {
   options = {
 
-    boot.loader.raspberryPi = {
+    boot.loader.raspberryPi = utils.mkBootLoaderOption {
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -143,8 +143,10 @@ in
         message = "Only Raspberry Pi >= 3 supports aarch64.";
       };
 
-      system.build.installBootLoader = builder;
-      system.boot.loader.id = "raspberrypi";
+      boot.loader.raspberryPi = {
+        id = "raspberrypi";
+        installHook = builder;
+      };
       system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
     })
   ];
