@@ -116,7 +116,7 @@ let
       ./patches/findstring.patch
 
       (substituteAll {
-        src = ./locale-binary-path.patch;
+        src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
 
