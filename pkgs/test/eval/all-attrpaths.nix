@@ -1,8 +1,10 @@
-# Adapted from lib/tests/release.nix
 { pkgs-path ? ../../..
 , pkgs ? import pkgs-path {}
 , lib ? pkgs.lib
 , nix ? pkgs.nix
+  # Normally we don't need the actual list, because we're just checking that
+  # evaluation works. So let's generate less garbage.
+, writePaths ? false
 }:
 
 #
@@ -39,8 +41,13 @@ pkgs.runCommand "all-attrs-eval-under-tryEval" {
   cp -r ${pkgs-path}/.version .version
   cp -r ${pkgs-path}/doc doc
   echo "Running pkgs/top-level/release-attrpaths-superset.nix"
-  nix-instantiate --eval --strict --json pkgs/top-level/release-attrpaths-superset.nix -A names > /dev/null
+  nix-instantiate --eval --strict --json pkgs/top-level/release-attrpaths-superset.nix -A names \
+    ${if writePaths then "> paths.json" else "> /dev/null"}
 
   mkdir $out
-  echo success > $out/${nix.version}
+  ${if writePaths then
+    "mv paths.json $out"
+    else
+    "echo success > $out/${nix.version}"
+  }
 ''
