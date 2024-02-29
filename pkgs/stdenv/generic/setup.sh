@@ -815,9 +815,6 @@ fi
 ######################################################################
 # Textual substitution functions.
 
-# only log once, due to max logging limit on hydra
-_substituteStream_has_warned_replace_deprecation=false
-
 substituteStream() {
     local var=$1
     local description=$2
@@ -827,12 +824,6 @@ substituteStream() {
         local replace_mode="$1"
         case "$1" in
             --replace)
-                # deprecated 2023-11-22
-                # this will either get removed, or switch to the behaviour of --replace-fail in the future
-                if ! "$_substituteStream_has_warned_replace_deprecation"; then
-                    echo "substituteStream(): WARNING: '--replace' is deprecated, use --replace-{fail,warn,quiet}. ($description)" >&2
-                    _substituteStream_has_warned_replace_deprecation=true
-                fi
                 replace_mode='--replace-warn'
                 ;&
             --replace-quiet|--replace-warn|--replace-fail)
