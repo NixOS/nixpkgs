@@ -21,7 +21,7 @@ let
       , testers, nixosTests, thisAttr
 
       # JIT
-      , jitSupport ? false
+      , jitSupport
       , nukeReferences, patchelf, llvmPackages
       , makeRustPlatform, buildPgxExtension, cargo, rustc
 
