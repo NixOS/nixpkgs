@@ -52,7 +52,7 @@ let
 in
 makeImpureTest {
   name = "opencl-example";
-  testedPackage = "rocmPackages_5.clr";
+  testedPackage = "rocmPackages_6.clr";
 
   sandboxPaths = [ "/sys" "/dev/dri" "/dev/kfd" ];
 

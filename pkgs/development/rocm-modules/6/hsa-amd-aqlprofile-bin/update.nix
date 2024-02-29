@@ -26,7 +26,7 @@ let
       ((patch++))
       extVersion="$(echo "$deb" | grep -o -P "(?<=\.....).*(?=\..*-)")"
 
-      if (( ''${#extVersion} == 5 )) && (( $extVersion <= ${extVersion} )); then
+      if (( ''${#extVersion} == 6 )) && (( $extVersion <= ${extVersion} )); then
         url="https://repo.radeon.com/rocm/apt/${major}.${minor}.$patch/pool/main/h/${prefix}/"
         res="$(curl -sL "$url")"
         deb="${prefix}$(echo "$res" | grep -o -P "(?<=href=\"${prefix}).*(?=\">)" | tail -1)"
@@ -39,14 +39,19 @@ let
     version="$(echo $extVersion | sed "s/0/./1" | sed "s/0/./1")"
     IFS='.' read -a version_arr <<< "$version"
 
-    if (( ''${#extVersion} == 5 )); then
+    if (( ''${version_arr[0]} > 6 )); then
+      echo "'rocmPackages_6.${prefix}-bin' is already at it's maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${prefix}-bin'." 1>&2
+      exit 1
+    fi
+
+    if (( ''${#extVersion} == 6 )); then
       repoVersion="$version"
 
       if (( ''${version:4:1} == 0 )); then
         repoVersion=''${version:0:3}
       fi
 
-      update-source-version rocmPackages_5.${prefix}-bin "$version" "" "$apt/$repoVersion/$pool$deb" --ignore-same-hash
+      update-source-version rocmPackages_6.${prefix}-bin "$version" "" "$apt/$repoVersion/$pool$deb" --ignore-same-hash
     fi
   '';
 in [ updateScript ]

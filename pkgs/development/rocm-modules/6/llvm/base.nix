@@ -170,6 +170,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ ncsa ] ++ extraLicenses;
     maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = isBroken;
+    broken = isBroken || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
