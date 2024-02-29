@@ -57,11 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '-mcode-object-version=4' '-mcode-object-version=5'
   '';
 
-  fixupPhase = ''
-    mkdir $out/hsa
-    ln -s $out/{include,lib} $out/hsa
-  '';
-
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
     owner = finalAttrs.src.owner;
