@@ -37,7 +37,7 @@ in
             type = lib.types.str;
             default = "127.0.0.1:8009";
             example = "[::]:8008";
-            description = lib.mdDoc "The interface and port to listen on.";
+            description = lib.mdDoc "The interface and port or path (for unix socket) to listen on.";
           };
 
           SYNCV3_LOG_LEVEL = lib.mkOption {
