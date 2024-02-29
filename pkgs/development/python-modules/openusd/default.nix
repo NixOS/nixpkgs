@@ -15,6 +15,8 @@
   imath,
   jinja2,
   lib,
+  libGL,
+  libX11,
   ninja,
   numpy,
   opencolorio,
@@ -29,6 +31,10 @@
   qt6,
   setuptools,
   tbb,
+  withDocs ? false,
+  withOsl ? true,
+  withTools ? true,
+  withUsdView ? true,
   writeShellScriptBin,
 }:
 
@@ -53,37 +59,38 @@ buildPythonPackage rec {
 
   stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   format = "other";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
-    "-DPXR_BUILD_DOCUMENTATION=ON"
     "-DPXR_BUILD_DRACO_PLUGIN=ON"
     "-DPXR_BUILD_EMBREE_PLUGIN=ON"
     "-DPXR_BUILD_EXAMPLES=OFF"
     "-DPXR_BUILD_IMAGING=ON"
     "-DPXR_BUILD_MONOLITHIC=ON" # Seems to be commonly linked to monolithically
-    "-DPXR_BUILD_PYTHON_DOCUMENTATION=ON"
+    "-DPXR_BUILD_TESTS=OFF"
     "-DPXR_BUILD_TUTORIALS=OFF"
-    "-DPXR_BUILD_USDVIEW=ON"
     "-DPXR_BUILD_USD_IMAGING=ON"
-    "-DPXR_BUILD_USD_TOOLS=ON"
-    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.isDarwin))
+    (lib.cmakeBool "PXR_BUILD_DOCUMENTATION" withDocs)
+    (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
+    (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
+    (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.isDarwin && withOsl))
   ];
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    git
-    graphviz-nox
-    ninja
-    qt6.wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+    ]
+    ++ lib.optionals withDocs [
+      git
+      graphviz-nox
+      doxygen
+    ]
+    ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
 
   buildInputs =
     [
@@ -97,41 +104,53 @@ buildPythonPackage rec {
       opencolorio
       openimageio
       opensubdiv
-      osl
       ptex
-      qt6.qtbase
       tbb
     ]
-    ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ]);
+    ++ lib.optionals stdenv.isLinux [
+      libGL
+      libX11
+    ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
+    ++ lib.optionals withOsl [ osl ]
+    ++ lib.optionals withUsdView [ qt6.qtbase ]
+    ++ lib.optionals (withUsdView && stdenv.isLinux) [
+      qt6.qtbase
+      qt6.qtwayland
+    ];
 
-  propagatedBuildInputs = [
-    boost
-    jinja2
-    numpy
-    pyopengl
-    pyqt6
-    pyside-tools-uic
-    pyside6
-    setuptools
-  ];
+  propagatedBuildInputs =
+    [
+      boost
+      jinja2
+      numpy
+      pyopengl
+      setuptools
+    ]
+    ++ lib.optionals (withTools || withUsdView) [
+      pyside-tools-uic
+      pyside6
+    ]
+    ++ lib.optionals withUsdView [ pyqt6 ];
 
   pythonImportsCheck = [
     "pxr"
     "pxr.Usd"
   ];
 
-  postInstall = ''
-    # Make python lib properly accessible
-    target_dir=$out/${python.sitePackages}
-    mkdir -p $(dirname $target_dir)
-    mv $out/lib/python $target_dir
-
-    mv $out/docs $doc
-
-    rm $out/share -r # only examples
-    rm $out/tests -r
-  '';
+  postInstall =
+    ''
+      # Make python lib properly accessible
+      target_dir=$out/${python.sitePackages}
+      mkdir -p $(dirname $target_dir)
+      mv $out/lib/python $target_dir
+    ''
+    + lib.optionalString withDocs ''
+      mv $out/docs $doc
+    ''
+    + ''
+      rm $out/share -r # only examples
+    '';
 
   meta = {
     description = "Universal Scene Description";
