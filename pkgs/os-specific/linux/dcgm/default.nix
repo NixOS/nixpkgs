@@ -86,13 +86,13 @@ let
 # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/build.sh#L22
 in gcc11Stdenv.mkDerivation rec {
   pname = "dcgm";
-  version = "3.2.5"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
+  version = "3.3.5"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iMyYOr3dSpdRV2S/TlB/tEOAWYhK09373ZRbd5vzogQ=";
+    hash = "sha256-n/uWvgvxAGfr1X51XgtHfFGDOO5AMBSV5UWQQpsylpg=";
   };
 
   # Add our paths to the CUDA paths so FindCuda.cmake can find them.
