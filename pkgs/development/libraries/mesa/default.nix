@@ -3,7 +3,7 @@
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, libelf, libvdpau
+, elfutils, libvdpau
 , libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
 , galliumDrivers ?
@@ -241,7 +241,7 @@ self = stdenv.mkDerivation {
   buildInputs = with xorg; [
     expat glslang llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
-    libffi libvdpau libelf libXvMC
+    libffi libvdpau libXvMC
     libpthreadstubs openssl
     zstd
   ] ++ lib.optionals withLibunwind [
@@ -249,7 +249,7 @@ self = stdenv.mkDerivation {
   ] ++ [
     python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
+    ++ lib.optionals stdenv.isLinux [ elfutils libomxil-bellagio libva-minimal udev lm_sensors ]
     ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
