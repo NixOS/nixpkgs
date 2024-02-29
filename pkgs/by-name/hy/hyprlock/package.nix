@@ -14,16 +14,6 @@
 , libdrm
 , mesa
 , nix-update-script
-, expat
-, libXdmcp
-, pcre2
-, util-linux
-, libselinux
-, libsepol
-, pcre
-, fribidi
-, libthai
-, libdatrie
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,23 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    expat
-    fribidi
     hyprlang
-    libdatrie
     libdrm
     libGL
-    libselinux
-    libsepol
-    libthai
-    libXdmcp
     libxkbcommon
     mesa
     pam
     pango
-    pcre
-    pcre2
-    util-linux
     wayland
     wayland-protocols
   ];

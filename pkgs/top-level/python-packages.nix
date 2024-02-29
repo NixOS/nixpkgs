@@ -4965,9 +4965,7 @@ self: super: with self; {
 
   graphtage = callPackage ../development/python-modules/graphtage { };
 
-  graphviz = callPackage ../development/python-modules/graphviz {
-    inherit (pkgs) graphviz;
-  };
+  graphviz = callPackage ../development/python-modules/graphviz { };
 
   grappelli-safe = callPackage ../development/python-modules/grappelli-safe { };
 
@@ -10566,6 +10564,8 @@ self: super: with self; {
   pyexcel-ods = callPackage ../development/python-modules/pyexcel-ods { };
 
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
+
+  pyexiftool = callPackage ../development/python-modules/pyexiftool { };
 
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 

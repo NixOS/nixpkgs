@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "0-unstable-2024-02-15";
+  version = "1.0-unstable-2024-02-15";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";

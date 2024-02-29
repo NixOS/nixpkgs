@@ -56,13 +56,13 @@ in
         -- PipeWire is not used for audio, so prevent it from grabbing audio devices
         alsa_monitor.enable = function() end
       '';
-      systemwideConfigPkg = pkgs.writeTextDir "wireplumber/main.lua.d/80-systemwide.lua" ''
+      systemwideConfigPkg = pkgs.writeTextDir "share/wireplumber/main.lua.d/80-systemwide.lua" ''
         -- When running system-wide, these settings need to be disabled (they
         -- use functions that aren't available on the system dbus).
         alsa_monitor.properties["alsa.reserve"] = false
         default_access.properties["enable-flatpak-portal"] = false
       '';
-      systemwideBluetoothConfigPkg = pkgs.writeTextDir "wireplumber/bluetooth.lua.d/80-systemwide.lua" ''
+      systemwideBluetoothConfigPkg = pkgs.writeTextDir "share/wireplumber/bluetooth.lua.d/80-systemwide.lua" ''
         -- When running system-wide, logind-integration needs to be disabled.
         bluez_monitor.properties["with-logind"] = false
       '';
@@ -97,6 +97,18 @@ in
         {
           assertion = !config.hardware.bluetooth.hsphfpd.enable;
           message = "Using WirePlumber conflicts with hsphfpd, as it provides the same functionality. `hardware.bluetooth.hsphfpd.enable` needs be set to false";
+        }
+        {
+          assertion = builtins.length
+            (builtins.attrNames
+              (
+                lib.filterAttrs
+                  (name: value:
+                    lib.hasPrefix "wireplumber/" name || name == "wireplumber"
+                  )
+                  config.environment.etc
+              )) == 1;
+          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `services.wireplumber.configPackages` instead.";
         }
       ];
 

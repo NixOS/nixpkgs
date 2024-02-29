@@ -5805,6 +5805,13 @@
     githubId = 8706;
     name = "Rafael Fernández López";
   };
+  erethon = {
+    email = "dgrig@erethon.com";
+    matrix = "@dgrig:erethon.com";
+    github = "erethon";
+    githubId = 1254842;
+    name = "Dionysis Grigoropoulos";
+  };
   ericbmerritt = {
     email = "eric@afiniate.com";
     github = "ericbmerritt";
@@ -16686,6 +16693,12 @@
     githubId = 6445619;
     name = "Ruben Cano Diaz";
   };
+  RudiOnTheAir = {
+    name = "Rüdiger Schwoon";
+    email = "wolf@schwoon.info";
+    github = "RudiOnTheAir";
+    githubId = 47517341;
+  };
   rudolfvesely = {
     name = "Rudolf Vesely";
     email = "i@rudolfvesely.com";
@@ -17173,6 +17186,12 @@
     keys = [{
       fingerprint = "E173 237A C782 296D 98F5  ADAC E13D FD4B 4712 7951";
     }];
+  };
+  sdht0 = {
+    email = "nixpkgs@sdht.in";
+    github = "sdht0";
+    githubId = 867424;
+    name = "Siddhartha Sahu";
   };
   sdier = {
     email = "scott@dier.name";

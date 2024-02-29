@@ -96,6 +96,10 @@ let
 
   pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
 
+    imports = [
+      (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+    ];
+
     options = {
 
       name = mkOption {
@@ -462,16 +466,23 @@ let
         '';
       };
 
-      enableKwallet = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          If enabled, pam_wallet will attempt to automatically unlock the
-          user's default KDE wallet upon login. If the user has no wallet named
-          "kdewallet", or the login password does not match their wallet
-          password, KDE will prompt separately after login.
-        '';
+      kwallet = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = lib.mdDoc ''
+            If enabled, pam_wallet will attempt to automatically unlock the
+            user's default KDE wallet upon login. If the user has no wallet named
+            "kdewallet", or the login password does not match their wallet
+            password, KDE will prompt separately after login.
+          '';
+        };
+
+        package = mkPackageOption pkgs.plasma5Packages "kwallet-pam" {
+          pkgsText = "pkgs.plasma5Packages";
+        };
       };
+
       sssdStrictAccess = mkOption {
         default = false;
         type = types.bool;
@@ -686,7 +697,7 @@ let
             (config.security.pam.enableEcryptfs
               || config.security.pam.enableFscrypt
               || cfg.pamMount
-              || cfg.enableKwallet
+              || cfg.kwallet.enable
               || cfg.enableGnomeKeyring
               || config.services.intune.enable
               || cfg.googleAuthenticator.enable
@@ -711,9 +722,7 @@ let
               { name = "mount"; enable = cfg.pamMount; control = "optional"; modulePath = "${pkgs.pam_mount}/lib/security/pam_mount.so"; settings = {
                 disable_interactive = true;
               }; }
-              { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
-                kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
-              }; }
+              { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
               { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; }
               { name = "intune"; enable = config.services.intune.enable; control = "optional"; modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so"; }
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
@@ -848,9 +857,7 @@ let
             order = "user,group,default";
             debug = true;
           }; }
-          { name = "kwallet5"; enable = cfg.enableKwallet; control = "optional"; modulePath = "${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so"; settings = {
-            kwalletd = "${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5";
-          }; }
+          { name = "kwallet"; enable = cfg.kwallet.enable; control = "optional"; modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so"; }
           { name = "gnome_keyring"; enable = cfg.enableGnomeKeyring; control = "optional"; modulePath = "${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so"; settings = {
             auto_start = true;
           }; }

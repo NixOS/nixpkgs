@@ -345,13 +345,17 @@ checkFileset() {
 
 #### Error messages #####
 
+# We're using [[:blank:]] here instead of \s, because only the former is POSIX
+# (see https://pubs.opengroup.org/onlinepubs/007908799/xbd/re.html#tag_007_003_005).
+# And indeed, Darwin's bash only supports the former
+
 # Absolute paths in strings cannot be passed as `root`
 expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \(/nix/store/foobar\) is a string-like value, but it should be a path instead.
-\s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
+[[:blank:]]*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 expectFailure 'toSource { root = cleanSourceWith { src = ./.; }; fileset = ./.; }' 'lib.fileset.toSource: `root` is a `lib.sources`-based value, but it should be a path instead.
-\s*To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
-\s*Note that this only works for sources created from paths.'
+[[:blank:]]*To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
+[[:blank:]]*Note that this only works for sources created from paths.'
 
 # Only paths are accepted as `root`
 expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `root` is of type int, but it should be a path instead.'
@@ -361,9 +365,9 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./foo/mock-root; fileset = ./bar/mock-root; }
 ' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \('"$work"'/foo/mock-root\):
-\s*`root`: Filesystem root is "'"$work"'/foo/mock-root"
-\s*`fileset`: Filesystem root is "'"$work"'/bar/mock-root"
-\s*Different filesystem roots are not supported.'
+[[:blank:]]*`root`: Filesystem root is "'"$work"'/foo/mock-root"
+[[:blank:]]*`fileset`: Filesystem root is "'"$work"'/bar/mock-root"
+[[:blank:]]*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # `root` needs to exist
@@ -372,8 +376,8 @@ expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `
 # `root` needs to be a file
 touch a
 expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a file, but it should be a directory instead. Potential solutions:
-\s*- If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
-\s*- If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as '"$work"', and set `fileset` to the file path.'
+[[:blank:]]*- If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
+[[:blank:]]*- If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as '"$work"', and set `fileset` to the file path.'
 rm -rf -- *
 
 # The fileset argument should be evaluated, even if the directory is empty
@@ -382,36 +386,36 @@ expectFailure 'toSource { root = ./.; fileset = abort "This should be evaluated"
 # Only paths under `root` should be able to influence the result
 mkdir a
 expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
-\s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
-\s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
+[[:blank:]]*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
+[[:blank:]]*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
 rm -rf -- *
 
 # non-regular and non-symlink files cannot be added to the Nix store
 mkfifo a
 expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` contains a file that cannot be added to the store: '"$work"'/a
-\s*This file is neither a regular file nor a symlink, the only file types supported by the Nix store.
-\s*Therefore the file set cannot be added to the Nix store as is. Make sure to not include that file to avoid this error.'
+[[:blank:]]*This file is neither a regular file nor a symlink, the only file types supported by the Nix store.
+[[:blank:]]*Therefore the file set cannot be added to the Nix store as is. Make sure to not include that file to avoid this error.'
 rm -rf -- *
 
 # Path coercion only works for paths
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
 expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a file set or a path instead.
-\s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
+[[:blank:]]*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 expectFailure 'toSource { root = ./.; fileset = cleanSourceWith { src = ./.; }; }' 'lib.fileset.toSource: `fileset` is a `lib.sources`-based value, but it should be a file set or a path instead.
-\s*To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
-\s*Note that this only works for sources created from paths.'
+[[:blank:]]*To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
+[[:blank:]]*Note that this only works for sources created from paths.'
 
 # Path coercion errors for non-existent paths
 expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.
-\s*To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.'
+[[:blank:]]*To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.'
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
-\s*To turn it into a usable source, use `lib.fileset.toSource`.
-\s*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
+[[:blank:]]*To turn it into a usable source, use `lib.fileset.toSource`.
+[[:blank:]]*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
 expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set is not supported.
-\s*To turn it into a usable source, use `lib.fileset.toSource`.
-\s*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
+[[:blank:]]*To turn it into a usable source, use `lib.fileset.toSource`.
+[[:blank:]]*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
@@ -423,9 +427,9 @@ expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 2;
 
 # Future versions of the internal representation are unsupported
 expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 4; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-\s*- Internal version of the file set: 4
-\s*- Internal version of the library: 3
-\s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
+[[:blank:]]*- Internal version of the file set: 4
+[[:blank:]]*- Internal version of the library: 3
+[[:blank:]]*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
 expectEqual '{
@@ -539,16 +543,16 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = union ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.union: Filesystem roots are not the same:
-\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
-\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
-\s*Different filesystem roots are not supported.'
+[[:blank:]]*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+[[:blank:]]*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+[[:blank:]]*Different filesystem roots are not supported.'
 
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = unions [ ./foo/mock-root ./bar/mock-root ]; }
 ' 'lib.fileset.unions: Filesystem roots are not the same:
-\s*Element 0: Filesystem root is "'"$work"'/foo/mock-root"
-\s*Element 1: Filesystem root is "'"$work"'/bar/mock-root"
-\s*Different filesystem roots are not supported.'
+[[:blank:]]*Element 0: Filesystem root is "'"$work"'/foo/mock-root"
+[[:blank:]]*Element 1: Filesystem root is "'"$work"'/bar/mock-root"
+[[:blank:]]*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # Coercion errors show the correct context
@@ -652,9 +656,9 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = intersection ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.intersection: Filesystem roots are not the same:
-\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
-\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
-\s*Different filesystem roots are not supported.'
+[[:blank:]]*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+[[:blank:]]*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+[[:blank:]]*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # Coercion errors show the correct context
@@ -761,8 +765,8 @@ rm -rf -- *
 # Also not the other way around
 mkdir a
 expectFailure 'toSource { root = ./a; fileset = difference ./. ./a; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
-\s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
-\s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
+[[:blank:]]*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
+[[:blank:]]*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
 rm -rf -- *
 
 # Difference actually works
@@ -839,7 +843,7 @@ expectFailure 'fileFilter null (abort "this is not needed")' 'lib.fileset.fileFi
 
 # The second argument needs to be an existing path
 expectFailure 'fileFilter (file: abort "this is not needed") _emptyWithoutBase' 'lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
-\s*If you need to filter files in a file set, use `intersection fileset \(fileFilter pred \./\.\)` instead.'
+[[:blank:]]*If you need to filter files in a file set, use `intersection fileset \(fileFilter pred \./\.\)` instead.'
 expectFailure 'fileFilter (file: abort "this is not needed") null' 'lib.fileset.fileFilter: Second argument is of type null, but it should be a path instead.'
 expectFailure 'fileFilter (file: abort "this is not needed") ./a' 'lib.fileset.fileFilter: Second argument \('"$work"'/a\) is a path that does not exist.'
 
@@ -1103,7 +1107,7 @@ rm -rf -- *
 
 # String-like values are not supported
 expectFailure 'fromSource (lib.cleanSource "")' 'lib.fileset.fromSource: The source origin of the argument is a string-like value \(""\), but it should be a path instead.
-\s*Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.'
+[[:blank:]]*Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.'
 
 # Wrong type
 expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
@@ -1420,10 +1424,10 @@ expectEqual '(import '"$storePath"' { fs = lib.fileset; }).outPath' \""$storePat
 
 ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
 expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*\) is a store path within a working tree of a Git repository.
-\s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-\s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
-\s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
-\s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+[[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+[[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+[[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 
 ## Even with submodules
 if [[ -n "$fetchGitSupportsSubmodules" ]]; then
@@ -1447,15 +1451,15 @@ if [[ -n "$fetchGitSupportsSubmodules" ]]; then
 
     ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
     expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTrackedWith: The second argument \(.*\) is a store path within a working tree of a Git repository.
-    \s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-    \s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
-    \s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
-    \s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+    [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+    [[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+    [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+    [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
     expectFailure 'import "${./.}/sub" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*/sub\) is a store path within a working tree of a Git repository.
-    \s*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-    \s*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
-    \s*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
-    \s*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+    [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+    [[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+    [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+    [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 fi
 rm -rf -- *
 
