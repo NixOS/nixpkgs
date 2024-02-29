@@ -20,19 +20,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-+Y7dnq8gwVxefwvRnamqGneCTI4uUXgAo0SEffIvNB0=";
+    hash = "sha256-vO6ak5rT6ntBC20vYC36zcEcHv7Cki9y8A+c7ThfsUg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-TWq4L7Pe4/s0+hGjvTixoOFQ3P6tJXzV4/VgKcJ0tWU=";
+      "smithay-0.3.0" = "sha256-ZEWamojE5ZRlhPVv/DK2Mj+QIz7zudw9+AxFD7Onr9Q=";
     };
   };
 
@@ -63,6 +63,22 @@ rustPlatform.buildRustPackage rec {
   ];
 
   LIBCLANG_PATH = "${libclang.lib}/lib";
+
+  passthru.providedSessions = ["niri"];
+
+  postInstall = ''
+    mkdir -p $out/share/{systemd/user,wayland-sessions,xdg-desktop-portal}
+
+    cp ./resources/niri-session $out/bin/niri-session
+    cp ./resources/niri.service $out/share/systemd/user/niri.service
+    cp ./resources/niri-shutdown.target $out/share/systemd/user/niri-shutdown.target
+    cp ./resources/niri.desktop $out/share/wayland-sessions/niri.desktop
+    cp ./resources/niri-portals.conf $out/share/xdg-desktop-portal/niri-portals.conf
+  '';
+
+  postFixup = ''
+    sed -i "s#/usr#$out#" $out/share/systemd/user/niri.service
+  '';
 
   meta = with lib; {
     description = "A scrollable-tiling Wayland compositor";

@@ -307,6 +307,9 @@ in
         Restart = "on-failure";
       };
       environment = env;
+      # Allow the consumer to access the private /tmp directory of the server.
+      # This is required to support consuming files via a local folder.
+      unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
     };
 
     systemd.services.paperless-web = {
