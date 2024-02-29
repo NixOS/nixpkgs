@@ -40012,6 +40012,8 @@ with pkgs;
 
   faust2lv2 = libsForQt5.callPackage ../applications/audio/faust/faust2lv2.nix { };
 
+  faust2sndfile = callPackage ../applications/audio/faust/faust2sndfile.nix { };
+
   faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
 
   faustPhysicalModeling = callPackage ../applications/audio/faustPhysicalModeling  { };
