@@ -53,6 +53,7 @@
 , CoinMP
 , libwps
 , libabw
+, libargon2
 , libmysqlclient
 , autoconf
 , automake
@@ -215,12 +216,12 @@ in stdenv.mkDerivation (finalAttrs: {
     tar -xf ${srcs.translations}
   '';
 
-  patches = [
+  patches = lib.optionals (variant == "still") [
     # Remove build config to reduce the amount of `-dev` outputs in the
     # runtime closure. This behavior was introduced by upstream in commit
     # cbfac11330882c7d0a817b6c37a08b2ace2b66f4
     ./0001-Strip-away-BUILDCONFIG.patch
-
+  ] ++ [
     # Backport fix for tests broken by expired test certificates.
     (fetchpatch {
       url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=ececb678b8362e3be8e02768ddd5e4197d87dc2a";
@@ -420,6 +421,8 @@ in stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   configureFlags = [
+    "--without-buildconfig-recorded"
+
     (lib.withFeature withHelp "help")
     "--with-boost=${getDev boost}"
     "--with-boost-libdir=${getLib boost}/lib"
@@ -478,6 +481,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "--without-system-libqxp"
     "--without-system-dragonbox"
     "--without-system-libfixmath"
+
+    # is packaged but headers can't be found because there is no pkg-config file
+    "--without-system-zxcvbn"
   ] ++ [
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
@@ -555,6 +561,7 @@ in stdenv.mkDerivation (finalAttrs: {
     libXinerama
     libXtst
     libabw
+    libargon2
     libatomic_ops
     libcdr
     libe-book
