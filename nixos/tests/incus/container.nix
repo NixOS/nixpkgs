@@ -5,6 +5,8 @@ let
     configuration = {
       # Building documentation makes the test unnecessarily take a longer time:
       documentation.enable = lib.mkForce false;
+
+      boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
     } // extra;
   };
 
@@ -39,6 +41,12 @@ in
         machine.succeed("incus restart container")
         with machine.nested("Waiting for instance to start and be usable"):
           retry(instance_is_up)
+
+    def check_sysctl(instance):
+        with subtest("systemd sysctl settings are applied"):
+            machine.succeed(f"incus exec {instance} -- systemctl status systemd-sysctl")
+            sysctl = machine.succeed(f"incus exec {instance} -- sysctl net.ipv4.ip_forward").strip().split(" ")[-1]
+            assert "1" == sysctl, f"systemd-sysctl configuration not correctly applied, {sysctl} != 1"
 
     machine.wait_for_unit("incus.service")
 
@@ -83,6 +91,7 @@ in
     with subtest("lxc-container generator configures plain container"):
         # reuse the existing container to save some time
         machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+        check_sysctl("container")
 
     with subtest("lxc-container generator configures nested container"):
         machine.execute("incus delete --force container")
@@ -94,6 +103,8 @@ in
         target = machine.succeed("incus exec container readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
         assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
 
+        check_sysctl("container")
+
     with subtest("lxc-container generator configures privileged container"):
         machine.execute("incus delete --force container")
         machine.succeed("incus launch nixos container --config security.privileged=true")
@@ -101,5 +112,7 @@ in
           retry(instance_is_up)
 
         machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+
+        check_sysctl("container")
   '';
 })

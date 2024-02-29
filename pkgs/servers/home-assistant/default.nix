@@ -31,6 +31,15 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aemet-opendata = super.aemet-opendata.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.7";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-kmU2HtNyYhfwWQv6asOtDpLZ6+O+eEICzBNLxUhAwaY=";
+        };
+      });
+
       aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
         version = "22.10.1";
         src = fetchFromGitHub {
@@ -453,7 +462,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.2.4";
+  hassVersion = "2024.2.5";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -471,13 +480,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-k1Rfx8TsMBbLFfaY6FAn5ebyZlHbxg0k/HYXVRIkNMU=";
+    hash = "sha256-RRoxWNcubpxzmExzrifRKhgNm0IM5OuNZYHz6tp9zm8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-rkD1rZz4sYV1L78c2gc4g/cGoxJRYqK41SUOskeoqYg=";
+    hash = "sha256-qhUfOMSM4FKUQ9LdeoHLLrVm5cWFrlTER02s+tLVAMU=";
   };
 
   nativeBuildInputs = with python.pkgs; [

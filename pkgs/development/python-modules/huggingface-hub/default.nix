@@ -1,7 +1,8 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, fetchFromGitHub
+, setuptools
 , filelock
 , fsspec
 , packaging
@@ -13,8 +14,8 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.20.3";
-  format = "setuptools";
+  version = "0.21.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,8 +23,12 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-21Ay8RVS2vtQIh4bBUxE8jFk6F+yeFBJ3XgvRRNtNgI=";
+    hash = "sha256-0Nr6qs9rzuBQo8SGuQ2Ai2Q+E+Gs4DT/AMrYf7dYM/E=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     filelock

@@ -904,22 +904,23 @@ rec {
         else throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
       ) + "-patched"
     , patches ? [ ]
+    , prePatch ? ""
     , postPatch ? ""
     , ...
     }@args:
-    if patches == [ ] && postPatch == ""
+    if patches == [ ] && prePatch == "" && postPatch == ""
     then src # nothing to do, so use original src to avoid additional drv
     else stdenvNoCC.mkDerivation
-      {
-        inherit name src patches postPatch;
+      ({
+        inherit name src patches prePatch postPatch;
         preferLocalBuild = true;
         allowSubstitutes = false;
         phases = "unpackPhase patchPhase installPhase";
         installPhase = "cp -R ./ $out";
       }
-    # Carry `meta` information from the underlying `src` if present.
-    // (optionalAttrs (src?meta) { inherit (src) meta; })
-    // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
+      # Carry `meta` information from the underlying `src` if present.
+      // (optionalAttrs (src?meta) { inherit (src) meta; })
+      // (removeAttrs args [ "src" "name" "patches" "prePatch" "postPatch" ]));
 
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file"
