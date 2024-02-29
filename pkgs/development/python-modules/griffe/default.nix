@@ -13,13 +13,13 @@
 buildPythonPackage rec {
   pname = "griffe";
   version = "0.41.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "griffe";
     rev = "refs/tags/${version}";
     hash = "sha256-or0kXc8YJl7+95gM54MaviDdErN0vqBnCtAavZM938k=";
   };
