@@ -26,6 +26,7 @@ let
   });
 
   jsoncpp-static = jsoncpp.override { enableStatic = true; };
+  yaml-cpp-static = yaml-cpp.override { static = true; };
 
   # DCGM depends on 3 different versions of CUDA at the same time.
   # The runtime closure, thankfully, is quite small because most things
@@ -123,7 +124,7 @@ in gcc11Stdenv.mkDerivation rec {
     fmt_9
     jsoncpp-static
     libevent-nossl-static
-    yaml-cpp
+    yaml-cpp-static
   ];
 
   disallowedReferences = lib.concatMap (x: x.pkgSet) cudaPackageSetByVersion;
