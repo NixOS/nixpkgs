@@ -123,6 +123,10 @@ stdenv.mkDerivation (rec {
 
   dontAddPrefix = !crossCompiling;
 
+  # FIXME @stigtsp disabled this in https://github.com/NixOS/nixpkgs/pull/241848
+  # but does not fully remember what exact issue they caused in local builds.
+  # @Atemu: This should be investigated and either be enabled again or have a
+  # good reason attached why it's disabled.
   enableParallelBuilding = false;
 
   # perl includes the build date, the uname of the build system and the
