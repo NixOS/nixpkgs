@@ -95,7 +95,7 @@
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
-, withTensorflow ? false # Tensorflow dnn backend support
+, withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withHeadlessDeps && stdenv.isLinux  # Video 4 Linux support
 , withV4l2M2m ? withV4l2
