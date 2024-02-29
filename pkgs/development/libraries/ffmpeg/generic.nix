@@ -89,7 +89,7 @@
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
 , withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
-, withRtmp ? false # RTMP[E] support
+, withRtmp ? withFullDeps # RTMP[E] support
 , withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
 , withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
