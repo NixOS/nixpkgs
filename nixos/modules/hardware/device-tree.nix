@@ -195,6 +195,20 @@ in
           '';
         };
 
+        runtimeOverlays = mkOption {
+          default = [];
+          example = literalExpression ''
+            [
+              "rockchip/overlay/rk3588-disable-led.dtbo"
+              "rockchip/overlay/rk3588-wifi-ap6275p.dtbo"
+            ]
+          '';
+          type = types.listOf types.str;
+          description = lib.mdDoc ''
+            List of overlays to apply at runtime, relative to the dtb base.
+          '';
+        };
+
         package = mkOption {
           default = null;
           type = types.nullOr types.path;
@@ -222,5 +236,9 @@ in
     hardware.deviceTree.package = if (cfg.overlays != [])
       then pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
       else filteredDTBs;
+
+      system.extraSystemBuilderCmds = ''
+        echo ${builtins.concatStringsSep " " config.hardware.deviceTree.runtimeOverlays} > $out/devicetree-overlays
+      '';
   };
 }
