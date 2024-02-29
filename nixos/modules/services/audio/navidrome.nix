@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption;
+  inherit (lib) mkEnableOption mkPackageOption mkOption maintainers;
   inherit (lib.types) bool str;
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
@@ -134,4 +134,5 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
+    meta.maintainers = with maintainers; [ nu-nu-ko ];
 }
