@@ -79,7 +79,7 @@
 , withOpencl ? withFullDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
 , withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
-, withOpengl ? false # OpenGL rendering
+, withOpengl ? withFullDeps && !stdenv.isDarwin # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
 , withOpenmpt ? withFullDeps # Tracked music files decoder
