@@ -39878,6 +39878,10 @@ with pkgs;
     };
   };
 
+  compressDrv = callPackage ../build-support/compress-drv { };
+
+  compressDrvWeb = callPackage ../build-support/compress-drv/web.nix { };
+
   duti = callPackage ../os-specific/darwin/duti {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
