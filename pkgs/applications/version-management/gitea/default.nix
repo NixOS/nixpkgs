@@ -6,6 +6,7 @@
 , git
 , bash
 , coreutils
+, compressDrvWeb
 , gitea
 , gzip
 , openssh
@@ -13,8 +14,6 @@
 , sqliteSupport ? true
 , pamSupport ? true
 , runCommand
-, brotli
-, xorg
 , nixosTests
 }:
 
@@ -67,17 +66,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    data-compressed = runCommand "gitea-data-compressed" {
-      nativeBuildInputs = [ brotli xorg.lndir ];
-    } ''
-      mkdir $out
-      lndir ${gitea.data}/ $out/
-
-      # Create static gzip and brotli files
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
-        -exec gzip --best --keep --force {} ';' \
-        -exec brotli --best --keep --no-copy-stat {} ';'
-    '';
+    data-compressed = lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"." (compressDrvWeb gitea.data);
 
     tests = nixosTests.gitea;
   };
