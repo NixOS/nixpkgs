@@ -1,8 +1,4 @@
 { lib
-, stdenv
-, pkgsBuildBuild
-, fetchurl
-, fetchpatch
 , SDL
 , SDL_image
 , a52dec
@@ -11,6 +7,8 @@
 , avahi
 , dbus
 , faad2
+, fetchpatch
+, fetchurl
 , ffmpeg
 , flac
 , fluidsynth
@@ -48,6 +46,7 @@
 , libpulseaudio
 , libraw1394
 , librsvg
+, libsForQt5
 , libsamplerate
 , libspatialaudio
 , libssh2
@@ -65,23 +64,20 @@
 , ncurses
 , perl
 , pkg-config
+, pkgsBuildBuild
 , protobuf
-, qtbase
-, qtsvg
-, qtwayland
-, qtx11extras
 , removeReferencesTo
 , samba
 , schroedinger
 , speex
 , srt
+, stdenv
 , systemd
 , taglib
 , unzip
 , wayland
 , wayland-protocols
 , wrapGAppsHook
-, wrapQtAppsHook
 , xcbutilkeysyms
 , zlib
 
@@ -98,7 +94,7 @@
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
 let
-  inherit (lib) optionalString optional optionals;
+  inherit (lib) optionalString optionals;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
@@ -118,8 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
     wrapGAppsHook
   ]
-  ++ optional chromecastSupport protobuf
-  ++ optionals withQt5 [ wrapQtAppsHook ]
+  ++ optionals chromecastSupport [ protobuf ]
+  ++ optionals withQt5 [ libsForQt5.wrapQtAppsHook ]
   ++ optionals waylandSupport [
     wayland
     wayland-protocols
@@ -191,8 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilkeysyms
     zlib
   ]
-  ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
-  ++ optional jackSupport libjack2
+  ++ optionals (!stdenv.hostPlatform.isAarch && !onlyLibVLC) [ live555 ]
+  ++ optionals jackSupport [ libjack2 ]
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
   ++ optionals skins2Support [
     freetype
@@ -201,8 +197,12 @@ stdenv.mkDerivation (finalAttrs: {
     libXpm
   ]
   ++ optionals waylandSupport [ wayland wayland-protocols ]
-  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ]
-  ++ optional (waylandSupport && withQt5) qtwayland;
+  ++ optionals withQt5 (with libsForQt5; [
+    qtbase
+    qtsvg
+    qtx11extras
+  ])
+  ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
 
   env = {
     # vlc depends on a c11-gcc wrapper script which we don't have so we need to
@@ -218,41 +218,27 @@ stdenv.mkDerivation (finalAttrs: {
     # upstream issue: https://code.videolan.org/videolan/vlc/-/issues/25473
     (fetchpatch {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
-      sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
+      hash = "sha256-qs3gY1ksCZlf931TSZyMuT2JD0sqrmcRCZwL+wVG0U8=";
     })
   ];
 
   postPatch = ''
-    substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
-      /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
-  '' + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
-    # Upstream luac can't cross compile, so we have to install the lua
-    # sources, not bytecode:
-    # https://www.lua.org/wshop13/Jericke.pdf#page=39
-    substituteInPlace share/Makefile.am --replace $'.luac \\\n' $'.lua \\\n'
+    substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
+      --replace \
+        /usr/share/fonts/truetype/freefont \
+        ${freefont_ttf}/share/fonts/truetype
+  ''
+  # Upstream luac can't cross compile, so we have to install the lua sources
+  # instead of bytecode:
+  # https://www.lua.org/wshop13/Jericke.pdf#page=39
+  + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+      substituteInPlace share/Makefile.am \
+        --replace $'.luac \\\n' $'.lua \\\n'
   '';
 
   enableParallelBuilding = true;
 
   dontWrapGApps = true; # to prevent double wrapping of Qtwrap and Gwrap
-
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
-  # - Touch plugins (plugins cache keyed off mtime and file size:
-  #     https://github.com/NixOS/nixpkgs/pull/35124#issuecomment-370552830
-  # - Remove references to the Qt development headers (used in error messages)
-  #
-  # pkgsBuildBuild is used here because buildPackages.libvlc somehow
-  # depends on a qt5.qttranslations that doesn't build, even though it
-  # should be the same as pkgsBuildBuild.qt5.qttranslations.
-  postFixup = ''
-    find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
-    ${if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc}/lib/vlc/vlc-cache-gen $out/vlc/plugins
-  '' + optionalString withQt5 ''
-    remove-references-to -t "${qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
-  '';
 
   # Most of the libraries are auto-detected so we don't need to set a bunch of
   # "--enable-foo" flags here
@@ -260,9 +246,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-srt" # Explicit enable srt to ensure the patch is applied.
     "--with-kde-solid=$out/share/apps/solid/actions"
   ]
-  ++ optional onlyLibVLC "--disable-vlc"
-  ++ optional skins2Support "--enable-skins2"
-  ++ optional waylandSupport "--enable-wayland"
+  ++ optionals onlyLibVLC [ "--disable-vlc" ]
+  ++ optionals skins2Support [ "--enable-skins2" ]
+  ++ optionals waylandSupport [ "--enable-wayland" ]
   ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
@@ -283,6 +269,24 @@ stdenv.mkDerivation (finalAttrs: {
   # Given in EXTRA_DIST, but not in install-data target
   postInstall = ''
     cp -R share/hrtfs $out/share/vlc
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  # - Touch plugins (plugins cache keyed off mtime and file size:
+  #     https://github.com/NixOS/nixpkgs/pull/35124#issuecomment-370552830
+  # - Remove references to the Qt development headers (used in error messages)
+  #
+  # pkgsBuildBuild is used here because buildPackages.libvlc somehow
+  # depends on a qt5.qttranslations that doesn't build, even though it
+  # should be the same as pkgsBuildBuild.qt5.qttranslations.
+  postFixup = ''
+    find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
+    ${if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc}/lib/vlc/vlc-cache-gen $out/vlc/plugins
+  '' + optionalString withQt5 ''
+    remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
   meta = {
