@@ -353,60 +353,9 @@ let
     passthru.psqlSchema = postgresql.psqlSchema;
   };
 
-  mkPackages = self: {
-    postgresql_12 = self.callPackage generic {
-      version = "12.18";
-      psqlSchema = "12";
-      hash = "sha256-T5kZcl2UHOmGjgf+HtHTqGdIWZtIM4ZUdYOSi3TDkYo=";
-      this = self.postgresql_12;
-      thisAttr = "postgresql_12";
-      inherit self;
-    };
-
-    postgresql_13 = self.callPackage generic {
-      version = "13.14";
-      psqlSchema = "13";
-      hash = "sha256-uN8HhVGJiWC9UA3F04oXfpkFN234H+fytmChQH+mpe0=";
-      this = self.postgresql_13;
-      thisAttr = "postgresql_13";
-      inherit self;
-    };
-
-    postgresql_14 = self.callPackage generic {
-      version = "14.11";
-      psqlSchema = "14";
-      hash = "sha256-pnC9fc4i3K1Cl7JhE2s7HUoJpvVBcZViqhTKY78paKg=";
-      this = self.postgresql_14;
-      thisAttr = "postgresql_14";
-      inherit self;
-    };
-
-    postgresql_15 = self.callPackage generic {
-      version = "15.6";
-      psqlSchema = "15";
-      hash = "sha256-hFUUbtnGnJOlfelUrq0DAsr60DXCskIXXWqh4X68svs=";
-      this = self.postgresql_15;
-      thisAttr = "postgresql_15";
-      inherit self;
-    };
-
-    postgresql_16 = self.callPackage generic {
-      version = "16.2";
-      psqlSchema = "16";
-      hash = "sha256-RG6IKU28LJCFq0twYaZG+mBLS+wDUh1epnHC5a2bKVI=";
-      this = self.postgresql_16;
-      thisAttr = "postgresql_16";
-      inherit self;
-    };
-  };
-
-in self:
-  let packages = mkPackages self; in
-  packages
-  // self.lib.mapAttrs'
-    (attrName: postgres: self.lib.nameValuePair "${attrName}_jit" (postgres.override rec {
-      jitSupport = true;
-      thisAttr = "${attrName}_jit";
-      this = self.${thisAttr};
-    }))
-    packages
+in
+# passed by <major>.nix
+versionArgs:
+# passed by default.nix
+{ self, ... } @defaultArgs:
+self.callPackage generic (defaultArgs // versionArgs)
