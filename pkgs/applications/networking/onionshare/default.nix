@@ -155,8 +155,10 @@ rec {
       cp $src/org.onionshare.OnionShare.appdata.xml $out/share/appdata
     '';
 
+    dontWrapQtApps = true;
+
     preFixup = ''
-      wrapQtApp $out/bin/onionshare
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     '';
 
     doCheck = false;
