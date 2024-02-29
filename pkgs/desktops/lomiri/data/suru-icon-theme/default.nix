@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suru-icon-theme";
-  version = "20.05.1";
+  version = "2024.02.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/suru-icon-theme";
     rev = finalAttrs.version;
-    hash = "sha256-jJ6J+SjSABZCgnCF9cIFBpeSXX2LMnV+nPLPpoXQv30=";
+    hash = "sha256-7T9FILhZrs5bbdBEV/FszCOwUd/C1Rl9tbDt77SIzRk=";
   };
 
   strictDeps = true;
@@ -50,6 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Suru Icon Theme for Lomiri Operating Environment";
     homepage = "https://gitlab.com/ubports/development/core/suru-icon-theme";
+    changelog = "https://gitlab.com/ubports/development/core/suru-icon-theme/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.cc-by-sa-30;
     maintainers = teams.lomiri.members;
     platforms = platforms.all;

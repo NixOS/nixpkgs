@@ -1,29 +1,29 @@
 { lib
-, stdenvNoCC
-, fetchFromGitHub
 , bash
 , coreutils
+, fetchFromGitHub
 , findutils
 , gettext
 , gnused
+, installShellFiles
 , less
 , ncurses
 , nixos-option
+, stdenvNoCC
 , unixtools
-, installShellFiles
 , unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "unstable-2024-02-20";
+  version = "0-unstable-2024-02-24";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "517601b37c6d495274454f63c5a483c8e3ca6be1";
-    hash = "sha256-tgZ38NummEdnXvxj4D0StHBzXgceAw8CptytHljH790=";
+    rev = "4ee704cb13a5a7645436f400b9acc89a67b9c08a";
+    hash = "sha256-MSbxtF3RThI8ANs/G4o1zIqF5/XlShHvwjl9Ws0QAbI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D -m755 home-manager/home-manager $out/bin/home-manager
     install -D -m755 lib/bash/home-manager.sh $out/share/bash/home-manager.sh
 
+    installShellCompletion --bash --name home-manager.bash home-manager/completion.bash
+    installShellCompletion --fish --name home-manager.fish home-manager/completion.fish
+    installShellCompletion --zsh --name _home-manager home-manager/completion.zsh
+
+    for pofile in home-manager/po/*.po; do
+      lang="''${pofile##*/}"
+      lang="''${lang%%.*}"
+      mkdir -p "$out/share/locale/$lang/LC_MESSAGES"
+      msgfmt -o "$out/share/locale/$lang/LC_MESSAGES/home-manager.mo" "$pofile"
+    done
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
     substituteInPlace $out/bin/home-manager \
       --subst-var-by bash "${bash}" \
       --subst-var-by DEP_PATH "${
@@ -57,19 +72,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --subst-var-by HOME_MANAGER_LIB '${placeholder "out"}/share/bash/home-manager.sh' \
       --subst-var-by HOME_MANAGER_PATH "${finalAttrs.src}" \
       --subst-var-by OUT '${placeholder "out"}'
-
-    installShellCompletion --bash --name home-manager.bash home-manager/completion.bash
-    installShellCompletion --fish --name home-manager.fish home-manager/completion.fish
-    installShellCompletion --zsh --name _home-manager home-manager/completion.zsh
-
-    for pofile in home-manager/po/*.po; do
-      lang="''${pofile##*/}"
-      lang="''${lang%%.*}"
-      mkdir -p "$out/share/locale/$lang/LC_MESSAGES"
-      msgfmt -o "$out/share/locale/$lang/LC_MESSAGES/home-manager.mo" "$pofile"
-    done
-
-    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater {
@@ -86,8 +88,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       (non global) packages and dotfiles.
     '';
     license = lib.licenses.mit;
+    mainProgram = "home-manager";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    mainProgram = "home-manager";
   };
 })
