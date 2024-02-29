@@ -2,24 +2,34 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-
-# tests
 , ffmpeg-full
-, python
+, pytestCheckHook
+, setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pydub";
   version = "0.25.1";
-  format = "setuptools";
+  pyproject = true;
 
-  # pypi version doesn't include required data files for tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "jiaaro";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0xskllq66wqndjfmvp58k26cv3w480sqsil6ifwp4gghir7hqc8m";
+    repo = "pydub";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FTEMT47wPXK5i4ZGjTVAhI/NjJio3F2dbBZzYzClU3c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    ffmpeg-full
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pydub"
@@ -27,17 +37,14 @@ buildPythonPackage rec {
     "pydub.playback"
   ];
 
-  nativeCheckInputs = [
-    ffmpeg-full
+  pytestFlagsArray = [
+    "test/test.py"
   ];
-
-  checkPhase = ''
-    ${python.interpreter} test/test.py
-  '';
 
   meta = with lib; {
     description = "Manipulate audio with a simple and easy high level interface";
     homepage = "http://pydub.com";
+    changelog = "https://github.com/jiaaro/pydub/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
