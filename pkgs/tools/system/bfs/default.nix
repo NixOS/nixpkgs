@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    hash = "sha256-lsVfsNVjFX38YaYVBJWEst3c3RhUCbK2ycteqZZUM3M=";
+    hash = "sha256-xq29KzONDkq+KeABl8rpu0vr50KKFw/UKPFDXcAMNoo=";
   };
 
   buildInputs = [ oniguruma ] ++ lib.optionals stdenv.isLinux [ libcap acl liburing ];
