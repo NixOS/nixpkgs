@@ -318,5 +318,7 @@
   "passwd(5)": "https://man.archlinux.org/man/passwd.5",
   "group(5)": "https://man.archlinux.org/man/group.5",
   "login.defs(5)": "https://man.archlinux.org/man/login.defs.5",
-  "nix-shell(1)": "https://nixos.org/manual/nix/stable/command-ref/nix-shell.html"
+  "unshare(1)": "https://man.archlinux.org/man/unshare.1.en",
+  "nix-shell(1)": "https://nixos.org/manual/nix/stable/command-ref/nix-shell.html",
+  "mksquashfs(1)": "https://man.archlinux.org/man/extra/squashfs-tools/mksquashfs.1.en"
 }

@@ -39,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     hash = "sha256-7O+DX4uuncUqx5zEKQprZE6tctteT6NU01V2EBHiFqA=";
   };
 
+  # build pkg-config is required to locate the native `scdoc` input
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     bash-completion
     # cmake # currently conflicts with meson
@@ -50,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     pkg-config
     python3
     sassc
-    pantheon.granite
     scdoc
     vala
     wrapGAppsHook
@@ -68,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     libhandy
     libpulseaudio
     librsvg
+    pantheon.granite
     # systemd # ends with broken permission
   ];
 

@@ -1,8 +1,7 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , curl
 , duktape
+, fetchFromGitHub
 , html-tidy
 , openssl
 , pcre
@@ -10,24 +9,45 @@
 , pkg-config
 , quickjs
 , readline
+, stdenv
+, unixODBC
 , which
+, withODBC ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "edbrowse";
   version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "CMB";
-    repo = pname;
-    rev = "v${version}";
+    repo = "edbrowse";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZXxzQBAmu7kM3sjqg/rDLBXNucO8sFRFKXV8UxQVQZU=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/src";
+
+  patches = [
+    # Fixes some small annoyances on src/makefile
+     ./0001-small-fixes.patch
+  ];
+
+  patchFlags =  [
+    "-p2"
+  ];
+
+  postPatch = ''
+    for file in $(find ./tools/ -type f ! -name '*.c'); do
+      patchShebangs $file
+    done
+  '';
 
   nativeBuildInputs = [
     pkg-config
     which
   ];
+
   buildInputs = [
     curl
     duktape
@@ -37,27 +57,23 @@ stdenv.mkDerivation rec {
     perl
     quickjs
     readline
+  ] ++ lib.optionals withODBC [
+    unixODBC
   ];
-
-  patches = [
-    # Fixes some small annoyances on src/makefile
-    ./0001-small-fixes.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/makefile --replace\
-      '-L/usr/local/lib/quickjs' '-L${quickjs}/lib/quickjs'
-    for i in $(find ./tools/ -type f ! -name '*.c'); do
-      patchShebangs $i
-    done
-  '';
 
   makeFlags = [
-    "-C" "src"
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  preBuild = ''
+    buildFlagsArray+=(
+      BUILD_EDBR_ODBC=${if withODBC then "on" else "off"}
+      EBDEMIN=on
+      QUICKJS_LDFLAGS="-L${quickjs}/lib/quickjs -lquickjs -ldl -latomic"
+    )
+  '';
+
+  meta = {
     homepage = "https://edbrowse.org/";
     description = "Command Line Editor Browser";
     longDescription = ''
@@ -71,10 +87,14 @@ stdenv.mkDerivation rec {
       send email, with no human intervention whatsoever. edbrowse can also tap
       into databases through odbc. It was primarily written by Karl Dahlke.
     '';
-    license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl1Plus ];
     mainProgram = "edbrowse";
+    maintainers = with lib.maintainers; [
+      schmitthenner
+      equirosa
+      AndersonTorres
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})
 # TODO: send the patch to upstream developers

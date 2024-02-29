@@ -491,8 +491,6 @@ with pkgs;
 
   banana-vera = callPackage ../development/tools/analysis/banana-vera { };
 
-  chrysalis = callPackage ../applications/misc/chrysalis { };
-
   ciel = callPackage ../tools/package-management/ciel { };
 
   circt = callPackage ../development/compilers/circt { };
@@ -5631,8 +5629,6 @@ with pkgs;
   };
 
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
-
-  home-manager = callPackage ../tools/package-management/home-manager { };
 
   homepage-dashboard = callPackage ../servers/homepage-dashboard {
     inherit (darwin) cctools;
@@ -12414,8 +12410,6 @@ with pkgs;
   openmpi = callPackage ../development/libraries/openmpi { };
 
   ouch = callPackage ../tools/compression/ouch { };
-
-  outils = callPackage ../tools/misc/outils { };
 
   mpi = openmpi; # this attribute should used to build MPI applications
   mpiCheckPhaseHook = callPackage ../build-support/setup-hooks/mpi-check-hook { };
@@ -20123,7 +20117,22 @@ with pkgs;
   ttyd = callPackage ../servers/ttyd { };
 
   turbogit = callPackage ../development/tools/turbogit {
-    libgit2 = libgit2_1_3_0;
+    libgit2 = libgit2.overrideAttrs rec {
+      version = "1.3.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "libgit2";
+        repo = "libgit2";
+        rev = "v${version}";
+        hash = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
+      };
+      patches = [];
+      # tests fail on old version
+      doCheck = false;
+      meta = libgit2.meta // {
+        maintainers = [];
+        knownVulnerabilities = [ "CVE-2024-24575" "CVE-2024-24577" "CVE-2022-29187" "CVE 2022-24765" ];
+      };
+    };
   };
 
   tweak = callPackage ../applications/editors/tweak { };
@@ -21344,39 +21353,6 @@ with pkgs;
 
   libgit2 = callPackage ../development/libraries/libgit2 {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  libgit2_1_3_0 = libgit2.overrideAttrs rec {
-    version = "1.3.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      hash = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
-    };
-    patches = [];
-  };
-
-  libgit2_1_5 = libgit2.overrideAttrs rec {
-    version = "1.5.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      hash = "sha256-KzBMwpqn6wUFhgB3KDclBS0BvZSVcasM5AG/y+L91xM=";
-    };
-    patches = [];
-  };
-
-  libgit2_1_6 = libgit2.overrideAttrs rec {
-    version = "1.6.5";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "v${version}";
-      hash = "sha256-2tgXnrB85dEfxu7giETqMuFxfm0RH5MicHZqO3ezGu0=";
-    };
-    patches = [ ];
   };
 
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
@@ -31006,8 +30982,6 @@ with pkgs;
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/ed { }))
     ed edUnstable;
-
-  edbrowse = callPackage ../applications/editors/edbrowse { };
 
   edlin = callPackage ../applications/editors/edlin { };
 
