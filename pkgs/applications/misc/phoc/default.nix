@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src;
         preferLocalBuild = true;
         allowSubstitutes = false;
-        phases = "unpackPhase installPhase";
         installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
       })
     ];
