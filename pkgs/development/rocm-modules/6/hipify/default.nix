@@ -32,10 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
-  # Fixup bad symlinks
   postInstall = ''
-    mkdir $out/hip
-    ln -s $out/bin $out/hip/bin
     patchShebangs $out/bin
   '';
 
