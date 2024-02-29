@@ -13,6 +13,6 @@ generic: {
 
   v40 = generic {
     version = "4.0.48";
-    sha256 = "sha256-WK8Zzkd/s9M7N5Qr2kejtp/f/n1wb5zRSfh0RiI2K+Q=";
+    hash = "sha256-WK8Zzkd/s9M7N5Qr2kejtp/f/n1wb5zRSfh0RiI2K+Q=";
   };
 }
