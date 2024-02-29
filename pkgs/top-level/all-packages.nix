@@ -19495,15 +19495,6 @@ with pkgs;
 
   haskell-ci = haskell.lib.compose.justStaticExecutables haskellPackages.haskell-ci;
 
-  neoload = callPackage ../development/tools/neoload {
-    licenseAccepted = (config.neoload.accept_license or false);
-    fontsConf = makeFontsConf {
-      fontDirectories = [
-        dejavu_fonts.minimal
-      ];
-    };
-  };
-
   nailgun = callPackage ../development/tools/nailgun { };
 
   nap = callPackage ../development/tools/nap { };
