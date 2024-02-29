@@ -59,7 +59,7 @@ in
 
   config =
     let
-      inherit (lib) mkIf optional;
+      inherit (lib) mkIf optional getExe;
     in
     mkIf cfg.enable {
       systemd.services.navidrome = {
@@ -68,7 +68,7 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           ExecStart = ''
-            ${cfg.package}/bin/navidrome --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+            ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
           '';
           User = cfg.user;
           Group = cfg.group;
