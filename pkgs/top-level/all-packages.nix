@@ -24052,7 +24052,7 @@ with pkgs;
 
   opencl-clhpp = callPackage ../development/libraries/opencl-clhpp { };
 
-  opencollada = disable-warnings-if-gcc13 (callPackage ../development/libraries/opencollada { });
+  opencollada = callPackage ../development/libraries/opencollada { };
 
   opencore-amr = callPackage ../development/libraries/opencore-amr { };
 
