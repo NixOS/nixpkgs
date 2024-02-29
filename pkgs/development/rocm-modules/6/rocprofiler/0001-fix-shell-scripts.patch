@@ -1,18 +1,18 @@
 diff --git a/bin/rocprofv2 b/bin/rocprofv2
-index 92f7489..8839d4d 100755
+index d0445e7..6079af8 100755
 --- a/bin/rocprofv2
 +++ b/bin/rocprofv2
-@@ -2,7 +2,8 @@
- set -eo pipefail
- CURRENT_DIR="$(dirname -- "$0")"
- ROCPROFV2_DIR=$(dirname -- $(realpath ${BASH_SOURCE[0]}))
--ROCM_DIR=$(dirname -- "$ROCPROFV2_DIR")
-+ROCPROFILER_DIR=$(dirname -- "$ROCPROFV2_DIR")
+@@ -7,7 +7,8 @@ if [ -n "${ROCP_PRELOAD}" ]; then LD_PRELOAD="${ROCP_PRELOAD}"; fi
+ 
+ CURRENT_DIR="$( dirname -- "$0"; )";
+ ROCPROFV2_DIR=$(dirname -- $(realpath ${BASH_SOURCE[0]}));
+-ROCM_DIR=$( dirname -- "$ROCPROFV2_DIR"; )
++ROCPROFILER_DIR=$( dirname -- "$ROCPROFV2_DIR"; )
 +ROCM_DIR=@rocmtoolkit_merged@
- PLUGIN_LIST=("ctf" "perfetto" "file" "att")
+ PLUGIN_LIST=("ctf" "perfetto" "file" "att" "cli")
  RUN_FROM_BUILD=0
  if [[ $ROCPROFV2_DIR == *"/build"* ]]; then
-@@ -10,7 +11,7 @@ if [[ $ROCPROFV2_DIR == *"/build"* ]]; then
+@@ -15,7 +16,7 @@ if [[ $ROCPROFV2_DIR == *"/build"* ]]; then
    ROCM_DIR=$ROCPROFV2_DIR
  fi
  
@@ -20,19 +20,17 @@ index 92f7489..8839d4d 100755
 +export ROCPROFILER_METRICS_PATH=$ROCPROFILER_DIR/libexec/rocprofiler/counters/derived_counters.xml
  export LD_LIBRARY_PATH=$ROCM_DIR/lib:$LD_LIBRARY_PATH
  
- usage() {
-@@ -70,8 +71,8 @@ while [ 1 ]; do
+ # Define color code
+@@ -83,7 +84,7 @@ while [ 1 ]; do
        exit 1
      fi
-   elif [[ "$1" = "--list-counters" ]]; then
+   elif [[ "$1" == "--list-counters" ]]; then
 -    export LD_PRELOAD=$LD_PRELOAD:$ROCM_DIR/lib/rocprofiler/librocprofiler_tool.so
--    eval $ROCM_DIR/libexec/rocprofiler/ctrl
-+    export LD_PRELOAD=$LD_PRELOAD:$ROCPROFILER_DIR/lib/rocprofiler/librocprofiler_tool.so
-+    eval $ROCPROFILER_DIR/libexec/rocprofiler/ctrl
++    export LD_PRELOAD=$LD_PRELOAD:$ROC_DIR/lib/rocprofiler/librocprofiler_tool.so
+     eval $ROCM_DIR/libexec/rocprofiler/ctrl
      exit 1
-   elif [[ "$1" = "-i" || "$1" = "--input" ]]; then
-     if [ $2 ] && [ -n $2 ] && [ -r $2 ]; then
-@@ -171,7 +172,7 @@ while [ 1 ]; do
+   elif [[ "$1" == "-i" || "$1" == "--input" ]]; then
+@@ -221,7 +222,7 @@ while [ 1 ]; do
        if [ $RUN_FROM_BUILD == 1 ]; then
          ATT_PATH=$ROCM_DIR/plugin/att/att/att.py
        else
@@ -41,7 +39,7 @@ index 92f7489..8839d4d 100755
          export ROCPROFV2_ATT_LIB_PATH=$ROCM_DIR/lib/hsa-amd-aqlprofile/librocprofv2_att.so
        fi
        ATT_ARGV=$3
-@@ -236,13 +237,13 @@ if [ -n "$PMC_LINES" ] && [ ! -n "$ATT_ARGV" ]; then
+@@ -294,13 +295,13 @@ if [ -n "$PMC_LINES" ] && [ ! -n "$ATT_ARGV" ]; then
        export OUTPUT_PATH=$FINAL_PATH
      fi
      let COUNTER=COUNTER+1
@@ -58,11 +56,11 @@ index 92f7489..8839d4d 100755
  
  get_pmc_results_txt_path() {
 diff --git a/bin/rpl_run.sh b/bin/rpl_run.sh
-index c1a3daa..bc868a5 100755
+index 6b236ed..a9c233c 100755
 --- a/bin/rpl_run.sh
 +++ b/bin/rpl_run.sh
-@@ -24,16 +24,17 @@
- 
+@@ -25,16 +25,17 @@
+ ROCPROF_ARGS="$*"
  time_stamp=`date +%y%m%d_%H%M%S`
  BIN_DIR=$(dirname $(realpath ${BASH_SOURCE[0]}))
 -ROOT_DIR=$(dirname $BIN_DIR)
@@ -80,9 +78,9 @@ index c1a3daa..bc868a5 100755
 -PROF_BIN_DIR=$ROOT_DIR/libexec/rocprofiler
 +PROF_BIN_DIR=$ROCPROFILER_DIR/libexec/rocprofiler
  
- if [ -z "$ROCP_PYTHON_VERSION" ] ; then
-   ROCP_PYTHON_VERSION=python3
-@@ -73,7 +74,7 @@ export ROCP_METRICS=$TLIB_PATH/metrics.xml
+ # check if rocprof is supportd on this gpu arch
+ V1_SUPPORTED_GPU_ARCHS=("gfx80x","gfx90x","gfx10xx","gfx94x")
+@@ -80,7 +81,7 @@ unset ROCP_PROXY_QUEUE
  # Disable AQL-profile read API
  export AQLPROFILE_READ_API=0
  # ROC Profiler package path
@@ -91,7 +89,7 @@ index c1a3daa..bc868a5 100755
  # enabled SPM KFD mode
  export ROCP_SPM_KFD_MODE=1
  
-@@ -350,7 +351,7 @@ convert_time_val() {
+@@ -400,7 +401,7 @@ unset_v1_envs() {
  
  ################################################################################################
  # main
@@ -100,7 +98,7 @@ index c1a3daa..bc868a5 100755
  # Parsing arguments
  if [ -z "$1" ] ; then
    usage
-@@ -557,7 +558,7 @@ elif [ "$input_type" = "txt" -o "$input_type" = "none" ] ; then
+@@ -633,7 +634,7 @@ elif [ "$input_type" = "txt" -o "$input_type" = "none" ] ; then
    else
      echo "<metric></metric>" > $RES_DIR/input.xml
    fi
