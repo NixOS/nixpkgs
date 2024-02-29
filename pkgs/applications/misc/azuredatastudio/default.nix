@@ -18,6 +18,7 @@
 , gtk3
 , icu
 , libdrm
+, libsecret
 , libunwind
 , libuuid
 , libxkbcommon
@@ -139,6 +140,7 @@ stdenv.mkDerivation rec {
       nss
       nspr
       libdrm
+      libsecret
       xorg.libX11
       xorg.libxcb
       xorg.libXcomposite
