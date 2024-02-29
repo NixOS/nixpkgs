@@ -10,7 +10,6 @@ let
     mkEnableOption
     mkPackageOption
     mkOption
-    recursiveUpdate
     ;
   inherit (lib.types) bool str;
   cfg = config.services.navidrome;
@@ -24,9 +23,8 @@ in
 
       package = mkPackageOption pkgs "navidrome" { };
 
-      settings = mkOption rec {
+      settings = mkOption {
         type = settingsFormat.type;
-        apply = recursiveUpdate default;
         default = {
           Address = "127.0.0.1";
           Port = 4533;
