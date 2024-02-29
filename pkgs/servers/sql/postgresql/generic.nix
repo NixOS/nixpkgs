@@ -12,7 +12,7 @@ let
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
-      , this, self, newScope, buildEnv
+      , self, newScope, buildEnv
 
       # source specification
       , version, hash, muslPatches
@@ -32,7 +32,7 @@ let
       # detection of crypt fails when using llvm stdenv, so we add it manually
       # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
       , libxcrypt
-    }:
+    } @args:
   let
     atLeast = lib.versionAtLeast version;
     olderThan = lib.versionOlder version;
@@ -215,9 +215,9 @@ let
     disallowedReferences = [ stdenv'.cc ];
 
     passthru = let
+      this = self.callPackage generic args;
       jitToggle = this.override {
         jitSupport = !jitSupport;
-        this = jitToggle;
       };
     in
     {
