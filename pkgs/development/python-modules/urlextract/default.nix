@@ -7,13 +7,14 @@
 , platformdirs
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , uritools
 }:
 
 buildPythonPackage rec {
   pname = "urlextract";
   version = "1.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-cFCOArqd83LiXPBkLbNnzs4nPocSzQzngXj8XdfqANs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     filelock
