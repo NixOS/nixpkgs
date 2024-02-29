@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "slither-analyzer";
   version = "0.10.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -29,13 +29,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
+    setuptools
   ];
 
   propagatedBuildInputs = [
     crytic-compile
     packaging
     prettytable
-    setuptools
     web3
   ];
 
