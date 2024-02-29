@@ -22,7 +22,8 @@ with lib;
 
 let
   workDir = if cfg.workDir == null then runtimeDir else cfg.workDir;
-  package = cfg.package.override { inherit (cfg) nodeRuntimes; };
+  # Support old github-runner versions which don't have the `nodeRuntimes` arg yet.
+  package = cfg.package.override (old: optionalAttrs (hasAttr "nodeRuntimes" old) { inherit (cfg) nodeRuntimes; });
 in
 {
   description = "GitHub Actions runner";
