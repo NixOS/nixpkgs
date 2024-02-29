@@ -7,7 +7,10 @@
 , fetchFromGitHub
 , flask
 , flask-cors
+, awscli
 , moto
+, boto3
+, setuptools
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -16,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.9.1";
-  format = "setuptools";
+  version = "2.11.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiobotocore";
     rev = "refs/tags/${version}";
-    hash = "sha256-cODdmP/O24fNIugzl4AYdf3g4Gzwx3JseYKbZKgEPbc=";
+    hash = "sha256-H9nsLPxjv3H5y6+5piBt6Pb+Wks4vwOitM+WQtyViPs=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -34,12 +37,25 @@ buildPythonPackage rec {
     sed -i "s/'botocore>=.*'/'botocore'/" setup.py
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     aioitertools
     botocore
     wrapt
   ];
+
+  passthru.optional-dependencies = {
+    awscli = [
+      awscli
+    ];
+    boto3 = [
+      boto3
+    ];
+  };
 
   nativeCheckInputs = [
     dill
