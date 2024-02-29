@@ -4,6 +4,7 @@
 , fetchpatch
 , fetchpatch2
 , gitUpdater
+, nixosTests
 , bash
 , cmake
 , dbus
@@ -181,6 +182,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # not packaged/working yet
       # "lomiri-touch"
     ];
+    tests.lomiri = nixosTests.lomiri;
     updateScript = gitUpdater { };
   };
 
