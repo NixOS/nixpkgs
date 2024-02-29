@@ -32,6 +32,11 @@ makeScopeWithSplicing' {
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
+  dfl-applications = callPackage ../development/libraries/dfl/applications.nix { };
+  dfl-ipc = callPackage ../development/libraries/dfl/ipc.nix { };
+  dfl-login1 = callPackage ../development/libraries/dfl/login1.nix { };
+  dfl-utils = callPackage ../development/libraries/dfl/utils.nix { };
+
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
