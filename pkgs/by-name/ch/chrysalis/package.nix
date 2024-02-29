@@ -2,13 +2,13 @@
 
 let
   pname = "chrysalis";
-  version = "0.13.2";
+  version = "0.13.3";
   name = "${pname}-${version}-binary";
   src = fetchurl {
     url =
       "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}-x64.AppImage";
     hash =
-      "sha512-WuItdQ/hDxbZZ3zulHI74NUkuYfesV/31rA1gPakCFgX2hpPrmKzwUez2vqt4N5qrGyphrR0bcelUatGZhOn5A==";
+      "sha512-F6Y87rgIclj1OA3gVX/gqqp9AvXKQlBXrbqk/26F1KHPF9NzHJgVmeszSo3Nhb6xg4CzWmzkqc8IW2H/Bg57kw==";
   };
   appimageContents = appimageTools.extract { inherit name src; };
 in appimageTools.wrapType2 rec {
@@ -38,11 +38,13 @@ in appimageTools.wrapType2 rec {
     install -Dm444 ${appimageContents}/usr/share/icons/hicolor/256x256/chrysalis.png -t $out/share/pixmaps
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "A graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aw ];
+    maintainers = with maintainers; [ aw eclairevoyant nshalman ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "chrysalis";
   };
