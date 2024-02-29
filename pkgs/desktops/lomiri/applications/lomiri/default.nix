@@ -5,6 +5,7 @@
 , fetchpatch2
 , gitUpdater
 , linkFarm
+, nixosTests
 , ayatana-indicator-datetime
 , bash
 , biometryd
@@ -263,6 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.lomiri = nixosTests.lomiri;
     updateScript = gitUpdater { };
     greeter = linkFarm "lomiri-greeter" [{
       path = "${finalAttrs.finalPackage}/share/lightdm/greeters/lomiri-greeter.desktop";
