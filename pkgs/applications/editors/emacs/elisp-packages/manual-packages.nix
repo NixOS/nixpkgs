@@ -5,6 +5,8 @@ let
   inherit (self) callPackage;
 in
 {
+  inherit (pkgs) emacspeak;
+
   acm = callPackage ./manual-packages/acm { };
 
   acm-terminal = callPackage ./manual-packages/acm-terminal { };
@@ -30,8 +32,6 @@ in
   el-easydraw = callPackage ./manual-packages/el-easydraw { };
 
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
-
-  emacspeak = callPackage ./manual-packages/emacspeak { };
 
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
