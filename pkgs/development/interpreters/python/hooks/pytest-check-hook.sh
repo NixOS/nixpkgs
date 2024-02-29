@@ -33,6 +33,10 @@ function pytestCheckPhase() {
 
     # Compose arguments
     args=" -m pytest"
+    if [ -n "$dontIgnoreWarnings-}" ]; then
+      args+=" -W ignore::DeprecationWarning -W ignore::FutureWarning -W ignore::UserWarning"
+    fi
+
     if [ -n "$disabledTests" ]; then
         disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
       args+=" -k \""$disabledTestsString"\""
