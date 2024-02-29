@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "upbound";
-  version = "0.24.1";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "up";
     rev = "v${version}";
-    sha256 = "sha256-1WSkNL1XpgnkWeL4tDiOxoKX6N5LYepD3DU0109pWC4=";
+    sha256 = "sha256-MDpe5CM5pgbrdVozh1yXiALLd8BkhrtNjL/su2JubcE=";
   };
 
   vendorHash = "sha256-jHVwI5fQbS/FhRptRXtNezG1djaZKHJgpPJfuEH/zO0=";
