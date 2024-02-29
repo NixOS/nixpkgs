@@ -812,7 +812,16 @@ stdenv.mkDerivation (finalAttrs: {
       ++ optional withGPLv3 gpl3Plus
       ++ optional withUnfree unfreeRedistributable
       ++ optional (withGPL && withUnfree) unfree;
-    pkgConfigModules = [ "libavutil" ];
+    pkgConfigModules = [ ]
+      ++ optional buildAvcodec "libavcodec"
+      ++ optional buildAvdevice "libavdevice"
+      ++ optional buildAvfilter "libavfilter"
+      ++ optional buildAvformat "libavformat"
+      ++ optional buildAvresample "libavresample"
+      ++ optional buildAvutil "libavutil"
+      ++ optional buildPostproc "libpostproc"
+      ++ optional buildSwresample "libswresample"
+      ++ optional buildSwscale "libswscale";
     platforms = platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
