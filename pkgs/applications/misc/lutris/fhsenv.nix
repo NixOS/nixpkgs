@@ -12,6 +12,14 @@ let
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
   ];
+  gstreamerDeps = pkgs: with pkgs.gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+    gst-libav
+  ];
 
 in buildFHSEnv {
   name = "lutris";
@@ -121,6 +129,7 @@ in buildFHSEnv {
     # Winetricks
     fribidi
   ] ++ xorgDeps pkgs
+    ++ gstreamerDeps pkgs
     ++ extraLibraries pkgs;
 
   extraInstallCommands = ''

@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, myconnpy }:
+{ lib, buildKodiAddon, fetchFromGitHub, myconnpy }:
 
 buildKodiAddon rec {
   pname = "mediathekview";
@@ -16,14 +16,10 @@ buildKodiAddon rec {
     myconnpy
   ];
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.mediathekview";
-  };
-
   meta = with lib; {
     homepage = "https://github.com/mediathekview/plugin.video.mediathekview";
     description = "Access media libraries of German speaking broadcasting stations";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    maintainers = teams.kodi.members ++ [ lib.maintainers.dschrempf ];
   };
 }
