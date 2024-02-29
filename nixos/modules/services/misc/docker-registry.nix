@@ -63,6 +63,12 @@ in {
       type = types.port;
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc "Opens the port used by the firewall.";
+    };
+
     storagePath = mkOption {
       type = types.nullOr types.path;
       default = "/var/lib/docker-registry";
@@ -154,5 +160,9 @@ in {
         isSystemUser = true;
       };
     users.groups.docker-registry = {};
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+    };
   };
 }
