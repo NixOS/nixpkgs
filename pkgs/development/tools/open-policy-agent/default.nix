@@ -11,13 +11,13 @@ assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm o
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.61.0";
+  version = "0.62.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    hash = "sha256-d0/S9XP/W6Mhs1b9IBzm7kerb6SJ7UzsYS0DnTDVfvY=";
+    hash = "sha256-Afaa6ykGyZQGjzSDYuJ954LF0IOzRDG8rV9hgXVT7YE=";
   };
 
   vendorHash = null;
