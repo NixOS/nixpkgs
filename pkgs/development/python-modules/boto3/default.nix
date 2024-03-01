@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , jmespath
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ];
 

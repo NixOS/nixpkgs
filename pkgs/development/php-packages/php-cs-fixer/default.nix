@@ -5,22 +5,22 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "php-cs-fixer";
-  version = "3.50.0";
+  version = "3.51.0";
 
   src = fetchFromGitHub {
     owner = "PHP-CS-Fixer";
     repo = "PHP-CS-Fixer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-T0R/TfCLG9+Vcbsm5W8/7weI+e1RuSzTBc3VmRlG74c=";
+    hash = "sha256-49MzEEHFbr4jRYALdFqcQAOoQ3btoPkI9bpYJSxxnTo=";
   };
 
-  # TODO: Open a PR against https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   # Missing `composer.lock` from the repository.
+  # Issue open at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7590
   composerLock = ./composer.lock;
-  vendorHash = "sha256-kcEB7UZ++ZY5vhaoPGjaC3q1fpxYcZ/yZeMP3AdQBEk=";
+  vendorHash = "sha256-WhLMU4aCZwNPC+k537nWQfQ0qyI/GGrR4JtgT4chuHg=";
 
   meta = {
-    changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
     description = "A tool to automatically fix PHP coding standards issues";
     homepage = "https://cs.symfony.com/";
     license = lib.licenses.mit;

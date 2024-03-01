@@ -127,6 +127,7 @@ in {
 
         spectacle
         systemsettings
+        kcmutils
 
         # Gear
         baloo
