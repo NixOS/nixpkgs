@@ -192,6 +192,7 @@ in {
         kernelPatches.request_key_helper
         kernelPatches.rust_1_74
         kernelPatches.rust_1_75
+        kernelPatches.rust_1_76
       ];
     };
 
@@ -204,6 +205,7 @@ in {
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.rust_1_75
+          kernelPatches.rust_1_76
         ];
       };
       latest = packageAliases.linux_latest.kernel;

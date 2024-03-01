@@ -5,7 +5,7 @@
 , certifi
 , chardet
 , idna
-, nose
+, pynose
 , requests
 , urllib3
 }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
   ];
 
   pythonImportsCheck = [

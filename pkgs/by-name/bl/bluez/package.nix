@@ -113,7 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     pythonPath = with python3.pkgs; [
       dbus-python
       pygobject3
-      recursive-pth-loader
     ];
   in
   ''

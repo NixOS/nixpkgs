@@ -1,5 +1,6 @@
 { lib, fetchPypi, buildPythonPackage
 , nose, numpy, future
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -13,6 +14,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ future ];
+
+  # uses removed lib2to3.tests
+  doCheck = pythonOlder "3.12";
+
   nativeCheckInputs = [ nose numpy ];
 
   checkPhase = ''

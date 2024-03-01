@@ -24,14 +24,19 @@ buildPythonPackage rec {
     hash = "sha256-O8xhih/EVULTq4jdmxInzXRO4m6PJA9pyzsHjR+58dQ=";
   };
 
+  patches = [
+    ./pytest-asyncio-0.22-compat.patch
+  ];
+
   nativeBuildInputs = [
     setuptools
   ];
 
   propagatedBuildInputs = [
-    async-timeout
     cryptography
     ifaddr
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
