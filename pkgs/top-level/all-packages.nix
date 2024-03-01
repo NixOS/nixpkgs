@@ -37082,8 +37082,6 @@ with pkgs;
 
   lpairs2 = callPackage ../games/lgames/lpairs2 { };
 
-  ltris = callPackage ../games/lgames/ltris { };
-
   maelstrom = callPackage ../games/maelstrom { };
 
   mar1d = callPackage ../games/mar1d { } ;
