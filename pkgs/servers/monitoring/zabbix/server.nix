@@ -16,13 +16,13 @@ assert postgresqlSupport -> !mysqlSupport;
 let
   inherit (lib) optional optionalString;
 in
-  import ./versions.nix ({ version, hash, ... }:
+  import ./versions.nix ({ version, hash, srcdir ? "stable", ... }:
     stdenv.mkDerivation {
       pname = "zabbix-server";
       inherit version;
 
       src = fetchurl {
-        url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+        url = "https://cdn.zabbix.com/zabbix/sources/${srcdir}/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
         inherit hash;
       };
 
