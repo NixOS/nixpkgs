@@ -1,17 +1,8 @@
 { lib
 , fetchFromGitHub
-, aiofiles
-, django_3
-, fastapi
-, msgpack
-, pynacl
-, redis
-, typing-extensions
 , withLdap ? true
 , python3
-, python-ldap
 , withPostgres ? true
-, psycopg2
 , nix-update-script
 , nixosTests
 }:
@@ -38,12 +29,20 @@ python.pkgs.buildPythonPackage rec {
   patches = [ ./secret.patch ];
 
   propagatedBuildInputs = [
+  propagatedBuildInputs = with python.pkgs; [
     aiofiles
     django_3
     fastapi
     msgpack
     pynacl
     redis
+    uvicorn
+    websockets
+    watchfiles
+    uvloop
+    pyyaml
+    python-dotenv
+    httptools
     typing-extensions
   ] ++ lib.optional withLdap python-ldap
     ++ lib.optional withPostgres psycopg2;
