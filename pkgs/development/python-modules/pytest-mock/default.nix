@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , fetchpatch
@@ -31,6 +32,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # Regression in 3.11.7 and 3.12.1; https://github.com/pytest-dev/pytest-mock/issues/401
+    "test_failure_message_with_name"
+    "test_failure_message_with_no_name"
   ];
 
   pythonImportsCheck = [ "pytest_mock" ];

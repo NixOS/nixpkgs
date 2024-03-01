@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MhcAOZty7Q4DfQB0xinndB9rLsLdqSlWq+PpZx0+Jo4=";
   };
 
+  patches = [
+    ./CVE-2024-25629.patch
+  ];
+
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = lib.optionals withCMake [ cmake ];

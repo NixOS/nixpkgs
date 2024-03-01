@@ -5,6 +5,7 @@
 , freezegun
 , isodate
 , lxml
+, pytestCheckHook
 , pythonOlder
 , xmlsec
 }:
@@ -51,10 +52,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "onelogin.saml2"
+  ];
+
+  disabledTests = [
+    # Tests require network acces or additions files
+    "OneLogin_Saml2_Metadata_Test"
+    "OneLogin_Saml2_Response_Test"
+    "OneLogin_Saml2_Utils_Test"
+    "OneLogin_Saml2_Settings_Test"
+    "OneLogin_Saml2_Auth_Test"
+    "OneLogin_Saml2_Authn_Request_Test"
+    "OneLogin_Saml2_IdPMetadataParser_Test"
+    "OneLogin_Saml2_Logout_Request_Test"
   ];
 
   meta = with lib; {

@@ -1889,7 +1889,11 @@ self: super: {
       skylighting-core = self.skylighting-core_0_14;
     };
   in {
-    pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
+    pandoc-cli = overrideCabal (old: {
+      postInstall = ''
+        install -Dm 555 '${self.pandoc}'/share/man/man1/* -t "$out"/share/man/man1/
+      '' + (old.postInstall or "");
+    }) (super.pandoc-cli.overrideScope pandoc-cli-overlay);
     pandoc_3_1_9 = doDistribute (super.pandoc_3_1_9.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
