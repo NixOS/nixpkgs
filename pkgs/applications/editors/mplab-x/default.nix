@@ -1,5 +1,4 @@
-{ lib, stdenvNoCC, bubblewrap, buildFHSEnv, execline, fakeroot, fetchurl, glibc
-, rsync, runtimeShell, writeText }:
+{ lib, stdenvNoCC, bubblewrap, buildFHSEnv, fakeroot, fetchurl, glibc, rsync }:
 
 let
   fhsEnv = buildFHSEnv {
@@ -7,34 +6,8 @@ let
     targetPkgs = pkgs: [ fakeroot glibc ];
   };
 
-  mplab-ide-script = writeText "mplab_ide" ''
-    #!${execline}/bin/execlineb -s0
-
-    importas -i XDG_RUNTIME_DIR XDG_RUNTIME_DIR
-    define rt ''${XDG_RUNTIME_DIR}/mplab-x
-    if { mkdir -p $rt }
-
-    unshare -mUr --
-    if { mount -t tmpfs mplab-x $rt }
-    if { mkdir ''${rt}/lower ''${rt}/mount }
-    if { ${rsync}/bin/rsync -rlp @out@/etc/ ''${rt}/lower/etc/ }
-    if { mount -t overlay etc -o lowerdir=/:''${rt}/lower ''${rt}/mount }
-
-    ${bubblewrap}/bin/bwrap
-      --bind    ''${rt}/mount  /
-      --ro-bind ${glibc}/lib   /lib
-      --ro-bind ${glibc}/lib64 /lib64
-      --dev /dev
-      --proc /proc
-      --tmpfs /tmp
-      --
-
-    if { echo @out@/opt/microchip/mplabx/v6.20/mplab_platform/bin/mplab_ide $@ }
-    busybox sh
-  '';
-
 in stdenvNoCC.mkDerivation rec {
-  pname = "mplab-x";
+  pname = "mplab-x-unwrapped";
   version = "6.20";
 
   src = fetchurl {
@@ -78,21 +51,18 @@ in stdenvNoCC.mkDerivation rec {
 
     runHook postBuild
   '';
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/etc $out/usr/share
+    mkdir -p $out/etc $out/usr/share
     cp -r chroot/etc/.mplab_ide $out/etc/
     cp -r chroot/etc/udev $out/etc/
     cp -r chroot/usr/share/applications chroot/usr/share/icons $out/usr/share/
     cp -r chroot/opt $out/
 
-    substituteAll ${mplab-ide-script} $out/bin/mplab_ide
-    chmod +x $out/bin/mplab_ide
-
     runHook postInstall
   '';
+  dontFixup = true;
 
   passthru = { inherit fhsEnv; };
 
@@ -104,6 +74,5 @@ in stdenvNoCC.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ remexre ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "mplab_ide";
   };
 }
