@@ -30,6 +30,9 @@ in
         description = lib.mdDoc ''
           List of packages that provide WirePlumber configuration, in the form of
           `share/wireplumber/*/*.lua` files.
+
+          LV2 dependencies will be picked up from config packages automatically
+          via `passthru.requiredLv2Packages`.
         '';
       };
 
@@ -42,7 +45,8 @@ in
           be made available to WirePlumber for [filter chains][wiki-filter-chain].
 
           Config packages have their required LV2 plugins added automatically,
-          so they don't need to be specified here.
+          so they don't need to be specified here. Config packages need to set
+          `passthru.requiredLv2Packages` for this to work.
 
           [wiki-filter-chain]: https://docs.pipewire.org/page_module_filter_chain.html
         '';
@@ -108,7 +112,7 @@ in
                   )
                   config.environment.etc
               )) == 1;
-          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `services.wireplumber.configPackages` instead.";
+          message = "Using `environment.etc.\"wireplumber<...>\"` directly is no longer supported in 24.05. Use `services.pipewire.wireplumber.configPackages` instead.";
         }
       ];
 

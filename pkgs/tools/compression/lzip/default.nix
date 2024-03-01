@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
     ./mingw-install-exe-file.patch
+    # https://lists.nongnu.org/archive/html/lzip-bug/2024-02/msg00015.html
+    # patch provided by upstream, to be removed in the next release
+    ./mingw-mkdir-one-argument.patch
   ];
 
   configureFlags = [

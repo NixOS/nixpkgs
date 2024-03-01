@@ -12495,6 +12495,12 @@
     github = "MichaelBrunn3r";
     githubId = 19626539;
   };
+  MichaelCDormann = {
+    email = "michael.c.dormann@gmail.com";
+    name = "Michael Dormann";
+    github = "MichaelCDormann";
+    githubId = 12633081;
+  };
   michaelCTS = {
     email = "michael.vogel@cts.co";
     name = "Michael Vogel";
@@ -14178,7 +14184,8 @@
     githubId = 332423;
   };
   nu-nu-ko = {
-    email = "host@nuko.city";
+    email = "nuko@shimeji.cafe";
+    matrix = "@nuko:shimeji.cafe";
     github = "nu-nu-ko";
     githubId = 153512689;
     name = "nuko";

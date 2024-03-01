@@ -231,6 +231,7 @@ stdenv.mkDerivation (self: rec {
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
     license = licenses.publicDomain; # and FreeBSD
+    mainProgram = "sbcl";
     maintainers = lib.teams.lisp.members;
     platforms = attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled

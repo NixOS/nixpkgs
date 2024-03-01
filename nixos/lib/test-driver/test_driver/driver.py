@@ -7,6 +7,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
 
+from colorama import Fore, Style
+
 from test_driver.logger import rootlog
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
@@ -226,7 +228,10 @@ class Driver:
                 )
 
             rootlog.warning(
-                "Using create_machine with a single dictionary argument is deprecated, and will be removed in NixOS 24.11"
+                Fore.YELLOW
+                + Style.BRIGHT
+                + "WARNING: Using create_machine with a single dictionary argument is deprecated and will be removed in NixOS 24.11"
+                + Style.RESET_ALL
             )
         # End legacy args handling
 
