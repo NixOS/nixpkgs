@@ -31,7 +31,7 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "18.6.3";
+      version = "18.6.5";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
@@ -52,8 +52,8 @@ let
           outputHashAlgo = "sha256";
           outputHash =
             if studioVariant
-            then "sha256-OX8PyMhfl0jRdXBNsjlwkCAh8XUNJv8HEbmyAdjIv18="
-            else "sha256-PNzdVxGgXIHM2vi3ChHx67TQBFlCYBOZCiFkDi/RSu4=";
+            then "sha256-Ua5R0G4okBpz9SyyA2zn6nVflY9AlWch7Kx6PrW/nMg="
+            else "sha256-oCK7w5jB7h4PSKg2IJwriyAVi/kj4TurloBcfDAe6BQ=";
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -82,7 +82,7 @@ let
             "email" = "someone@nixos.org";
             "phone" = "+31 71 452 5670";
             "country" = "nl";
-            "street" = "Hogeweide 346";
+            "street" = "-";
             "state" = "Province of Utrecht";
             "city" = "Utrecht";
             "product" = PRODUCT;
@@ -110,6 +110,7 @@ let
           --data-ascii "$REQJSON" \
           --compressed \
           "$SITEURL/$DOWNLOADID")
+        echo "resolveurl is $RESOLVEURL"
 
         curl \
           --retry 3 --retry-delay 3 \
@@ -233,6 +234,10 @@ buildFHSEnv {
     zlib
   ];
 
+  extraPreBwrapCmds = lib.optionalString studioVariant ''
+    mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
+  '';
+
   extraBwrapArgs = lib.optionals studioVariant [
     "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
   ];
@@ -253,7 +258,7 @@ buildFHSEnv {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll ];
+    maintainers = with maintainers; [ jshcmpbll orivej ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve";

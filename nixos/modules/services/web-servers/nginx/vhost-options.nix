@@ -235,9 +235,9 @@ with lib;
         which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
         and activate the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
-        Note that HTTP/3 support is experimental and
-        *not* yet recommended for production.
+        Note that HTTP/3 support is experimental and *not* yet recommended for production.
         Read more at https://quic.nginx.org/
+        HTTP/3 availability must be manually advertised, preferably in each location block.
       '';
     };
 
@@ -250,8 +250,7 @@ with lib;
         which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`
         and activate the QUIC transport protocol
         `services.nginx.virtualHosts.<name>.quic = true;`.
-        Note that special application protocol support is experimental and
-        *not* yet recommended for production.
+        Note that special application protocol support is experimental and *not* yet recommended for production.
         Read more at https://quic.nginx.org/
       '';
     };

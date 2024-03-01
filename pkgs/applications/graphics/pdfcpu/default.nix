@@ -64,5 +64,6 @@ buildGoModule rec {
     homepage = "https://pdfcpu.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
+    mainProgram = "pdfcpu";
   };
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "redli";
-  version = "0.9.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "IBM-Cloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AeIGlRsUWK6q0GJJFmvJwpuGy312VPsMhkxMqDDzay4=";
+    hash = "sha256-DKARqhoSaTQEUm+xUwAFFLR65q1L+bab7+50LONwvEQ=";
   };
 
   vendorHash = null;
@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/IBM-Cloud/redli";
     license = licenses.asl20;
     maintainers = with maintainers; [ tchekda ];
+    mainProgram = "redli";
   };
 }

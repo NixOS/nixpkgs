@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-ld";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
     rev = version;
-    hash = "sha256-+z9t7BLugZO1WhyYEq6FI38TMh2EwfgfAv3RDFSjwtc=";
+    hash = "sha256-h+odOVyiGmEERMECoFOj5P7FPiMR8IPRzroFA4sKivg=";
   };
 
   doCheck = true;
@@ -48,9 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.linux;
-
-    # 32 bit builds are broken due to a missing #define value:
-    # https://github.com/Mic92/nix-ld/issues/64
-    broken = stdenv.is32bit;
   };
 }

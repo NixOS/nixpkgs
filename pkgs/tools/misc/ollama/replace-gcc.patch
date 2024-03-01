@@ -1,0 +1,11 @@
+--- a/llm/generate/gen_common.sh
++++ b/llm/generate/gen_common.sh
+@@ -86,7 +89,7 @@
+     cmake -S ${LLAMACPP_DIR} -B ${BUILD_DIR} ${CMAKE_DEFS}
+     cmake --build ${BUILD_DIR} ${CMAKE_TARGETS} -j8
+     mkdir -p ${BUILD_DIR}/lib/
+-    g++ -fPIC -g -shared -o ${BUILD_DIR}/lib/libext_server.${LIB_EXT} \
++    $CXX -fPIC -g -shared -o ${BUILD_DIR}/lib/libext_server.${LIB_EXT} \
+         ${GCC_ARCH} \
+         ${WHOLE_ARCHIVE} ${BUILD_DIR}/examples/server/libext_server.a ${NO_WHOLE_ARCHIVE} \
+         ${BUILD_DIR}/common/libcommon.a \

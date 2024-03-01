@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aioairq";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "CorantGmbH";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SRsDSHTZkkygaQZjHENKNLx3ZWMi/PubS1m/MonEKNk=";
+    hash = "sha256-Sau0Ih+9WRChbztl8yjXVWy4/QxyllQKOPslbZroBeQ=";
   };
 
   propagatedBuildInputs = [

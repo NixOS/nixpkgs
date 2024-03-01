@@ -23,6 +23,10 @@
 
     Add files in file sets to the store to use as derivation sources.
 
+  - [`lib.fileset.toList`](#function-library-lib.fileset.toList):
+
+    The list of files contained in a file set.
+
   Combinators:
   - [`lib.fileset.union`](#function-library-lib.fileset.union)/[`lib.fileset.unions`](#function-library-lib.fileset.unions):
 
@@ -102,6 +106,7 @@ let
     _coerceMany
     _toSourceFilter
     _fromSourceFilter
+    _toList
     _unionMany
     _fileFilter
     _printFileset
@@ -411,6 +416,38 @@ in {
         src = root;
         filter = sourceFilter;
       };
+
+
+  /*
+    The list of file paths contained in the given file set.
+
+    :::{.note}
+    This function is strict in the entire file set.
+    This is in contrast with combinators [`lib.fileset.union`](#function-library-lib.fileset.union),
+    [`lib.fileset.intersection`](#function-library-lib.fileset.intersection) and [`lib.fileset.difference`](#function-library-lib.fileset.difference).
+
+    Thus it is recommended to call `toList` on file sets created using the combinators,
+    instead of doing list processing on the result of `toList`.
+    :::
+
+    The resulting list of files can be turned back into a file set using [`lib.fileset.unions`](#function-library-lib.fileset.unions).
+
+    Type:
+      toList :: FileSet -> [ Path ]
+
+    Example:
+      toList ./.
+      [ ./README.md ./Makefile ./src/main.c ./src/main.h ]
+
+      toList (difference ./. ./src)
+      [ ./README.md ./Makefile ]
+  */
+  toList =
+    # The file set whose file paths to return.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset:
+    _toList (_coerce "lib.fileset.toList: Argument" fileset);
 
   /*
     The file set containing all files that are in either of two given file sets.
@@ -763,6 +800,12 @@ in {
     Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
     The first argument allows configuration with an attribute set,
     while the second argument is the path to the Git working tree.
+
+    `gitTrackedWith` does not perform any filtering when the path is a [Nix store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path) and not a repository.
+    In this way, it accommodates the use case where the expression that makes the `gitTracked` call does not reside in an actual git repository anymore,
+    and has presumably already been fetched in a way that excludes untracked files.
+    Fetchers with such equivalent behavior include `builtins.fetchGit`, `builtins.fetchTree` (experimental), and `pkgs.fetchgit` when used without `leaveDotGit`.
+
     If you don't need the configuration,
     you can use [`gitTracked`](#function-library-lib.fileset.gitTracked) instead.
 

@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.22.0";
+  version = "4.23.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "briis";
     repo = "pyunifiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qzom1mLTfP683GCYlUav/MlOkYj+AiEe13b74ceW7gI=";
+    hash = "sha256-sBdu4XJkEtHf6dlHgJKFQvONp1x89NiS2EgxMiJFX7A=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

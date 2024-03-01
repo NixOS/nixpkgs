@@ -1,31 +1,39 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
 , click
 , dateutils
+, dbt-postgres
+, fetchFromGitHub
 , hatchling
+, hypothesis
 , importlib-metadata
 , jinja2
 , jsonschema
 , more-itertools
 , pydantic
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , typing-extensions
-, hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.2.2";
+  version = "0.4.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-pnhmfj349uMjSsmdr53dY1Xur6huRKHiXWI7DXYK1gE=";
+    repo = "dbt-semantic-interfaces";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uvwcnOKjwxEmA+/QRGSRofpoE4jZzmE02mGSDLINrJw=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     click
@@ -37,10 +45,6 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     typing-extensions
-  ];
-
-  nativeBuildInputs = [
-    hatchling
   ];
 
   nativeCheckInputs = [

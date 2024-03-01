@@ -3,7 +3,6 @@
 , buildPackages
 , substituteAll
 , fetchurl
-, fetchpatch
 , pkg-config
 , gettext
 , graphene
@@ -55,6 +54,7 @@
 , Cocoa
 , libexecinfo
 , broadwaySupport ? true
+, testers
 }:
 
 let
@@ -67,9 +67,9 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.12.3";
+  version = "4.12.5";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -80,21 +80,9 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "FIziYvbIZIdFX7HZeTw/WLw+HaR3opYX+tsEIPWHCok=";
+    url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
+    sha256 = "KLNW1ZDuaO9ibi75ggst0hRBSEqaBCpaPwxA6d/E9Pg=";
   };
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
-    ./patches/4.0-fix-darwin-build.patch
-
-    # gdk: Fix compilation on macos
-    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/6208
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/aa888c0b3f775776fe3b71028396b7a8c6adb1d6.patch";
-      sha256 = "sha256-Jw6BvWDX0wIs4blUiX3qdQCR574yhcaO06Vy/IqfbJo=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -117,7 +105,7 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ] ++ lib.optionals vulkanSupport [
     shaderc # for glslc
-  ] ++ setupHooks;
+  ] ++ finalAttrs.setupHooks;
 
   buildInputs = [
     libxkbcommon
@@ -253,7 +241,7 @@ stdenv.mkDerivation rec {
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
   '' + lib.optionalString x11Support ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -265,6 +253,11 @@ stdenv.mkDerivation rec {
       packageName = "gtk";
       versionPolicy = "odd-unstable";
       attrPath = "gtk4";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -284,6 +277,13 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
     platforms = platforms.all;
-    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
+    pkgConfigModules = [
+      "gtk4"
+      "gtk4-broadway"
+      "gtk4-unix-print"
+      "gtk4-wayland"
+      "gtk4-x11"
+    ];
   };
-}
+})

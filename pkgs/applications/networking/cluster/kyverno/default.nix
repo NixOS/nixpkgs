@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kyverno";
-  version = "1.10.5";
+  version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${version}";
-    sha256 = "sha256-APv9Z8cxcG283sEvC3/xwNMXStytM2dr/pemTES0Ltk=";
+    sha256 = "sha256-6Qrd7/h9G8KvzUxPNXUV/RnWImFrxm1FILeik8bWLnA=";
   };
 
   ldflags = [
@@ -18,7 +18,7 @@ buildGoModule rec {
     "-X github.com/kyverno/kyverno/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
-  vendorHash = "sha256-R2810TRxKDPOBfdCSNFJ4425tHQC6R4d5Xltd7jK2V8=";
+  vendorHash = "sha256-Vw8f2+b5UNc7DqCmu2cN2De1mrONe0M6F68H9SPrD3w=";
 
   subPackages = [ "cmd/cli/kubectl-kyverno" ];
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = kyverno;
     command = "kyverno version";
-    inherit version;
+    version = "v${version}"; # needed because testVersion uses grep -Fw
   };
 
   meta = with lib; {

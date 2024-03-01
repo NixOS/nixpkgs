@@ -2,57 +2,55 @@
 , stdenv
 , fetchzip
 , ant
+, canonicalize-jars-hook
 , jdk
 , makeWrapper
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calcoo";
   version = "2.1.0";
 
   src = fetchzip {
-    url = "mirror://sourceforge/project/calcoo/calcoo/${version}/${pname}-${version}.zip";
+    url = "mirror://sourceforge/calcoo/calcoo-${finalAttrs.version}.zip";
     hash = "sha256-Bdavj7RaI5CkWiOJY+TPRIRfNelfW5qdl/74J1KZPI0=";
   };
 
-  patches = [
-    # Sets javac encoding option on build.xml
-    ./0001-javac-encoding.diff
-  ];
-
   nativeBuildInputs = [
     ant
+    canonicalize-jars-hook
     jdk
     makeWrapper
   ];
 
   dontConfigure = true;
 
+  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=iso-8859-1";
+
   buildPhase = ''
     runHook preBuild
-
     ant
-
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
-    mv dist/lib/calcoo.jar $out/share/${pname}
+    install -Dm644 dist/lib/calcoo.jar -t $out/share/calcoo
 
     makeWrapper ${jdk}/bin/java $out/bin/calcoo \
-    --add-flags "-jar $out/share/${pname}/calcoo.jar"
+        --add-flags "-jar $out/share/calcoo/calcoo.jar"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://calcoo.sourceforge.net/";
+  meta = {
+    changelog = "https://calcoo.sourceforge.net/changelog.html";
     description = "RPN and algebraic scientific calculator";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    homepage = "https://calcoo.sourceforge.net/";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "calcoo";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (jdk.meta) platforms;
   };
-}
+})

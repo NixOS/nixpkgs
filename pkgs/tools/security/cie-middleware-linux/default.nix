@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , strip-nondeterminism
 , meson
@@ -90,6 +91,15 @@ stdenv.mkDerivation {
     pcsclite
     curl
     libxml2
+  ];
+
+  patches = [
+    # Fix gcc-13 build by adding missing include.
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/M0Rf30/cie-middleware-linux/commit/1da1196152f7a3bbe92ba3ce993ebb6785ff049e.patch";
+      hash = "sha256-aM23A1ZX8kebgX6RXVS78SEa+to93glUmIYO+lfUzfg=";
+    })
   ];
 
   postPatch = ''

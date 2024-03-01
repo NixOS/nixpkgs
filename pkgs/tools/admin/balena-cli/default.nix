@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildNpmPackage
+, overrideSDK
 , fetchFromGitHub
 , testers
 , balena-cli
@@ -10,18 +11,23 @@
 , darwin
 }:
 
-buildNpmPackage rec {
+let
+  # Fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' = buildNpmPackage.override {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+in buildNpmPackage' rec {
   pname = "balena-cli";
-  version = "17.0.0";
+  version = "18.0.0";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
     rev = "v${version}";
-    hash = "sha256-sNpxjSumiP+4fX6b3j+HEl/lr4pvudrhfTzr2TYastE=";
+    hash = "sha256-qXOjuVIBjKvsTp9tHxlvYM2oKHLvfGToBE0tAS/F+Ug=";
   };
 
-  npmDepsHash = "sha256-q2Yc6e5dEiP2Q4tFIeqj4mswM1/pX1pdGeoagyiupvs=";
+  npmDepsHash = "sha256-VmhyfhyV6mrF3pM5xQGcPowIaAzXJprOmmf4uSTetOA=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json

@@ -1,13 +1,13 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
-, cmake, ninja, libxml2, libllvm, version, python3
+, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
 
 let
-  self = stdenv.mkDerivation (rec {
+  self = stdenv.mkDerivation (finalAttrs: rec {
     pname = "clang";
     inherit version;
 
@@ -21,6 +21,7 @@ let
     sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake ninja python3 ]
+      ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
@@ -52,11 +53,10 @@ let
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
       ../../common/clang/add-nostdlibinc-flag.patch
-      # FIMXE: do we need this patch?
-      # (substituteAll {
-      #   src = ../../clang-11-12-LLVMgold-path.patch;
-      #  libllvmLibdir = "${libllvm.lib}/lib";
-      # })
+      (substituteAll {
+        src = ../../common/clang/clang-at-least-16-LLVMgold-path.patch;
+       libllvmLibdir = "${libllvm.lib}/lib";
+      })
     ];
 
     postPatch = ''
@@ -71,7 +71,7 @@ let
       ln -sv $out/bin/clang $out/bin/cpp
 
       mkdir -p $lib/lib/clang
-      mv $lib/lib/18 $lib/lib/clang/18
+      mv $lib/lib/${lib.versions.major version} $lib/lib/clang/${lib.versions.major version}
 
       # Move libclang to 'lib' output
       moveToOutput "lib/libclang.*" "$lib"
@@ -96,7 +96,12 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
-      hardeningUnsupportedFlags = [ "fortify3" ];
+      hardeningUnsupportedFlags = [
+        "fortify3"
+      ];
+      hardeningUnsupportedFlagsByTargetPlatform = targetPlatform:
+        lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
+        ++ (finalAttrs.passthru.hardeningUnsupportedFlags or []);
     };
 
     meta = llvm_meta // {

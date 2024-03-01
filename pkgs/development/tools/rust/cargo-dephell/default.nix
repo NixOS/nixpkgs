@@ -6,7 +6,7 @@
 , curl
 , openssl
 , darwin
-, libgit2_1_3_0
+, libgit2
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,13 +35,17 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     curl
     darwin.apple_sdk.frameworks.Security
-    libgit2_1_3_0
+    libgit2
   ];
 
   # update Cargo.lock to work with openssl 3
   postPatch = ''
     ln -sf ${./Cargo.lock} Cargo.lock
   '';
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
     description = "A tool to analyze the third-party dependencies imported by a rust crate or rust workspace";

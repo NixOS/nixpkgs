@@ -23,6 +23,12 @@ buildPythonPackage rec {
 
   sourceRoot = "source/openllm-client";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.18.0" "hatchling" \
+      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs"
+  '';
+
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs
@@ -47,7 +53,7 @@ buildPythonPackage rec {
       transformers
       # diffusers
       soundfile
-    ] ++ transformers.agents;
+    ] ++ transformers.optional-dependencies.agents;
     full = passthru.optional-dependencies.grpc ++ passthru.optional-dependencies.agents;
   };
 

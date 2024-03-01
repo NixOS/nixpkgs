@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "starship" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -112,6 +112,14 @@ let
       hash = "sha256-DNorfyl3C4RBclF2KDgwvQQwixpTwSRu7fIvihPN8JY=";
     };
 
+    starship = fetchFromGitHub {
+      name = "starship";
+      owner = "catppuccin";
+      repo = "starship";
+      rev = "5629d2356f62a9f2f8efad3ff37476c19969bd4f";
+      hash = "sha256-nsRuxQFKbQkyEI4TXgvAjcroVdG+heKX5Pauq/4Ota0=";
+    };
+
     waybar = fetchFromGitHub {
       name = "waybar";
       owner = "catppuccin";
@@ -194,6 +202,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/refind/assets
     cp ${sources.refind}/${variant}.conf $out/refind/
     cp -r ${sources.refind}/assets/${variant} $out/refind/assets/
+
+  '' + lib.optionalString (lib.elem "starship" themeList) ''
+    mkdir -p $out/starship
+    cp ${sources.starship}/palettes/${variant}.toml $out/starship/
 
   '' + lib.optionalString (lib.elem "waybar" themeList) ''
     mkdir -p $out/waybar

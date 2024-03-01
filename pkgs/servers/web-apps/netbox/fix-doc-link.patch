@@ -1,0 +1,10 @@
+diff --git a/docs/plugins/development/data-backends.md b/docs/plugins/development/data-backends.md
+index feffa5bed..8b7226a41 100644
+--- a/docs/plugins/development/data-backends.md
++++ b/docs/plugins/development/data-backends.md
+@@ -20,4 +20,4 @@ backends = [MyDataBackend]
+ !!! tip
+     The path to the list of search indexes can be modified by setting `data_backends` in the PluginConfig instance.
+ 
+-::: core.data_backends.DataBackend
++::: netbox.data_backends.DataBackend

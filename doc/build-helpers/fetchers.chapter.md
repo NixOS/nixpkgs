@@ -80,6 +80,10 @@ stdenv.mkDerivation {
 
 The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand, will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
 
+Additional parameters to `fetchurl`:
+- `downloadToTemp`: Defaults to `false`. If `true`, saves the source to `$downloadedFile`, to be used in conjunction with `postFetch`
+- `postFetch`: Shell code executed after the file has been fetched successfully. Use it for postprocessing, to check or transform the file.
+
 ## `fetchpatch` {#fetchpatch}
 
 `fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example, it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.

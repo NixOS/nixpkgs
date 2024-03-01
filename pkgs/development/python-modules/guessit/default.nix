@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "guessit";
-  version = "3.7.1";
+  version = "3.8.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LBjZgu5tsw211ZVXrdAySitJvzlAp1KUdRBjKitYo8E=";
+    hash = "sha256-Zhn8u/mgUQ7IwsM3RMQlHK0FB7HVc9Bch13hftxe2+0=";
   };
 
   propagatedBuildInputs = [

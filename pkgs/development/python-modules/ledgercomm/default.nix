@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ledgercomm";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HunJjIRa3IpSL/3pZPf6CroLxEK/l7ihh737VOAILgU=";
+    hash = "sha256-AVz8BfFrjFn4zB2fwLiTWSPx/MOAbTPutrDgVbRPWpE=";
   };
 
   nativeBuildInputs = [

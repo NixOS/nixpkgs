@@ -1,8 +1,8 @@
 diff --git a/src/EWS/calendar/e-cal-backend-ews-utils.c b/src/EWS/calendar/e-cal-backend-ews-utils.c
-index 653a8fb..ad80283 100644
+index b7c65ae..b334198 100644
 --- a/src/EWS/calendar/e-cal-backend-ews-utils.c
 +++ b/src/EWS/calendar/e-cal-backend-ews-utils.c
-@@ -2406,7 +2406,19 @@ e_cal_backend_ews_get_configured_evolution_icaltimezone (void)
+@@ -2425,7 +2425,19 @@ e_cal_backend_ews_get_configured_evolution_icaltimezone (void)
  		if (schema) {
  			GSettings *settings;
  

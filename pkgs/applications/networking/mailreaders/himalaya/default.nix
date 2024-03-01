@@ -2,37 +2,42 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, pkg-config
+, AppKit
+, Cocoa
+, Security
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
 , notmuch
-, withImapBackend ? true
-, withNotmuchBackend ? false
-, withSmtpSender ? true
+, gpgme
+, buildNoDefaultFeatures ? false
+, buildFeatures ? []
 }:
 
 rustPlatform.buildRustPackage rec {
+  inherit buildNoDefaultFeatures buildFeatures;
+
   pname = "himalaya";
-  version = "0.8.4";
+  version = "1.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AImLYRRCL6IvoSeMFH2mbkNOvUmLwIvhWB3cOoqDljk=";
+    hash = "sha256-B7eswDq4tKyg881i3pLd6h+HsObK0c2dQnYuvPAGJHk=";
   };
 
-  cargoSha256 = "deJZPaZW6rb7A6wOL3vcphBXu0F7EXc1xRwSDY/v8l4=";
+  cargoSha256 = "jOzuCXsrtXp8dmJTBqrEq4nog6smEPbdsFAy+ruPtY8=";
 
-  nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
+  nativeBuildInputs = [ ]
+    ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) pkg-config
+    ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  buildInputs = lib.optional withNotmuchBackend notmuch;
-
-  buildNoDefaultFeatures = true;
-  buildFeatures = [ ]
-    ++ lib.optional withImapBackend "imap-backend"
-    ++ lib.optional withNotmuchBackend "notmuch-backend"
-    ++ lib.optional withSmtpSender "smtp-sender";
+  buildInputs = [ ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa Security ]
+    ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch
+    ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) gpgme;
 
   postInstall = lib.optionalString installManPages ''
     mkdir -p $out/man
@@ -46,8 +51,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "CLI to manage your emails.";
-    homepage = "https://pimalaya.org/himalaya/";
+    description = "CLI to manage emails";
+    homepage = "https://pimalaya.org/himalaya/cli/latest/";
     changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ soywod toastal yanganto ];

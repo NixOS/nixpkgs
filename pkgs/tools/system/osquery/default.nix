@@ -84,7 +84,7 @@ buildStdenv.mkDerivation rec {
   passthru.tests.osquery = nixosTests.osquery;
 
   meta = with lib; {
-    description = "SQL powered operating system instrumentation, monitoring, and analytics.";
+    description = "SQL powered operating system instrumentation, monitoring, and analytics";
     longDescription = ''
       The system controls table is not included as it does not presently compile with glibc >= 2.32.
       For more information, refer to https://github.com/osquery/osquery/issues/7823

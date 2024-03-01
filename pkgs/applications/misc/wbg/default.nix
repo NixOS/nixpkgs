@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
+    mainProgram = "wbg";
   };
 }

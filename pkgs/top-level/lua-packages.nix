@@ -59,6 +59,45 @@ rec {
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
 
+ lua-pam = callPackage({fetchFromGitHub, linux-pam, openpam}: buildLuaPackage rec {
+    pname = "lua-pam";
+    version = "unstable-2015-07-03";
+    # Needed for `disabled`, overridden in buildLuaPackage
+    name = "${pname}-${version}";
+
+    src = fetchFromGitHub {
+      owner = "devurandom";
+      repo = "lua-pam";
+      rev = "3818ee6346a976669d74a5cbc2a83ad2585c5953";
+      hash = "sha256-YlMZ5mM9Ij/9yRmgA0X1ahYVZMUx8Igj5OBvAMskqTg=";
+      fetchSubmodules = true;
+    };
+
+    # The makefile tries to link to `-llua<luaversion>`
+    LUA_LIBS = "-llua";
+
+    buildInputs = lib.optionals stdenv.isLinux [linux-pam]
+      ++ lib.optionals stdenv.isDarwin [openpam];
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 pam.so $out/lib/lua/${lua.luaversion}/pam.so
+
+      runHook postInstall
+    '';
+
+    # The package does not build with lua 5.4 or luaJIT
+    disabled = luaAtLeast "5.4" || isLuaJIT;
+
+    meta = with lib; {
+      description = "Lua module for PAM authentication";
+      homepage = "https://github.com/devurandom/lua-pam";
+      license = licenses.mit;
+      maintainers = with maintainers; [ traxys ];
+    };
+ }) {};
+
  lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-core";
     version = "0.1.24";

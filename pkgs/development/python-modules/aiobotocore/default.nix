@@ -7,7 +7,10 @@
 , fetchFromGitHub
 , flask
 , flask-cors
+, awscli
 , moto
+, boto3
+, setuptools
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -16,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.6.0";
-  format = "setuptools";
+  version = "2.11.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiobotocore";
     rev = "refs/tags/${version}";
-    hash = "sha256-e8FBUG08yWNL9B51Uv4ftYx1C0kcdoweOreUtvvvTAk=";
+    hash = "sha256-H9nsLPxjv3H5y6+5piBt6Pb+Wks4vwOitM+WQtyViPs=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -34,12 +37,25 @@ buildPythonPackage rec {
     sed -i "s/'botocore>=.*'/'botocore'/" setup.py
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     aioitertools
     botocore
     wrapt
   ];
+
+  passthru.optional-dependencies = {
+    awscli = [
+      awscli
+    ];
+    boto3 = [
+      boto3
+    ];
+  };
 
   nativeCheckInputs = [
     dill
@@ -81,6 +97,8 @@ buildPythonPackage rec {
     "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
     "test_sso_credential_fetcher_can_fetch_credentials"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python client for amazon services";

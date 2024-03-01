@@ -29,10 +29,36 @@ makeScopeWithSplicing' {
   inherit stdenv;
 
   # LIBRARIES
+  accounts-qt = callPackage ../development/libraries/accounts-qt { };
+  appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
+
+  fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
+
+  kdsoap = callPackage ../development/libraries/kdsoap { };
+
+  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+  kimageannotator = callPackage ../development/libraries/kimageannotator { };
+
+  futuresql = callPackage ../development/libraries/futuresql { };
+  kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+  libquotient = callPackage ../development/libraries/libquotient { };
+  mlt = pkgs.mlt.override {
+    qt = qt6;
+  };
+
+  qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
+    inherit (qt6) qtbase qt5compat;
+  };
+  qcoro = callPackage ../development/libraries/qcoro { };
+  qgpgme = callPackage ../development/libraries/gpgme { };
+  packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   qt6ct = callPackage ../tools/misc/qt6ct { };
 
   qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
+
+  qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -44,9 +70,15 @@ makeScopeWithSplicing' {
     qt5Kvantum = pkgs.libsForQt5.qtstyleplugin-kvantum;
   };
 
+  qtutilities = callPackage ../development/libraries/qtutilities { };
+
   quazip = callPackage ../development/libraries/quazip { };
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
+
+  qwlroots = callPackage ../development/libraries/qwlroots {
+    wlroots = pkgs.wlroots_0_17;
+  };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
@@ -57,6 +89,16 @@ makeScopeWithSplicing' {
     qt6Support = true;
     suffix = "qt6";
   };
+
+  # Not a library, but we do want it to be built for every qt version there
+  # is, to allow users to choose the right build if needed.
+  sddm = callPackage ../applications/display-managers/sddm {};
+
+  signond = callPackage ../development/libraries/signond {};
+
+  waylib = callPackage ../development/libraries/waylib { };
+
+  wayqt = callPackage ../development/libraries/wayqt { };
 
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Convert to a throw on 01-01-2023.

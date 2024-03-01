@@ -15,7 +15,7 @@ let
     python pytest nose3 cryptography pyyaml requests mock requests-mock
     python-dateutil setuptools;
 
-  version = "4.28.1";
+  version = "4.69";
 
 in
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    hash = "sha256-z9DFtKTvnivY5D2EUHfrmndlUBTfico8o9G3J017f90=";
+    hash = "sha256-F8VyeIj9I7oDpHTyGw1T8ZvC6kxYf15soY9ni0Zg7u4=";
   };
 
   pythonPaths = [ cryptography pyyaml requests ];

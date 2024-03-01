@@ -84,8 +84,8 @@ let
       mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
-      recursiveUpdate matchAttrs overrideExisting showAttrPath getOutput getBin
-      getLib getDev getMan chooseDevOutputs zipWithNames zip
+      recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
+      getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets
       updateManyAttrsByPath;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
@@ -116,11 +116,12 @@ let
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing makeScopeWithSplicing';
-    inherit (self.derivations) lazyDerivation;
+    inherit (self.derivations) lazyDerivation optionalDrvAttr;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet getLicenseFromSpdxId getExe getExe';
-    inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile;
+    inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile
+      packagesFromDirectoryRecursive;
     inherit (self.sources) cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext

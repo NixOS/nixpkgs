@@ -1,7 +1,7 @@
 { buildPecl, lib, pcre2, php, fetchFromGitHub }:
 
 let
-  version = "1.4.0";
+  version = "1.5.0";
 in buildPecl {
   inherit version;
   pname = "ds";
@@ -10,7 +10,7 @@ in buildPecl {
     owner = "php-ds";
     repo = "ext-ds";
     rev = "v${version}";
-    sha256 = "sha256-IqNv2jVW1Hg1hV8H9vEyLT5BWsFkGHR+WlAOHJhlW84=";
+    sha256 = "sha256-lL1PUjc4bMTsWm2th0wDxnMaGuVziBUtgK88bUJXuBY=";
   };
 
   buildInputs = [ pcre2 ];

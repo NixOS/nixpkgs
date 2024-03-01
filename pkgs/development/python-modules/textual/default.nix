@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.41.0";
+  version = "0.47.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-K3JpAVkw6njUT2AGGLL3ACagPK0K6Ny4PvCsbmuNvTo=";
+    hash = "sha256-RFaZKQ+0o6ZvfZxx95a1FjSHVJ0VOIAfzkdxYQXYBKU=";
   };
 
   nativeBuildInputs = [

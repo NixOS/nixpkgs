@@ -4,10 +4,10 @@
 , zope-configuration
 , zope-deferredimport
 , zope-deprecation
-, zope_event
+, zope-event
 , zope-hookable
 , zope-i18nmessageid
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -25,13 +25,13 @@ buildPythonPackage rec {
     zope-configuration
     zope-deferredimport
     zope-deprecation
-    zope_event
+    zope-event
     zope-hookable
     zope-i18nmessageid
-    zope_interface
+    zope-interface
   ];
 
-  # ignore tests because of a circular dependency on zope_security
+  # ignore tests because of a circular dependency on zope-security
   doCheck = false;
 
   pythonImportsCheck = [

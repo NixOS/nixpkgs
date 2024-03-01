@@ -188,6 +188,6 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = lib.teams.buildbot.members;
 
 }

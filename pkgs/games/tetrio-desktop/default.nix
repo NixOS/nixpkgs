@@ -6,6 +6,7 @@
 , wrapGAppsHook
 , alsa-lib
 , cups
+, libGL
 , libX11
 , libXScrnSaver
 , libXtst
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   libPath = lib.makeLibraryPath [
+    libGL
     libpulseaudio
     systemd
   ];

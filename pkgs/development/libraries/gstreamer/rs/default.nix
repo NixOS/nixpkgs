@@ -234,7 +234,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic &&
-    stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf;
+    stdenv.hostPlatform.isElf;
   installCheckPhase = ''
     runHook preInstallCheck
     readelf -a $out/lib/gstreamer-1.0/libgstrswebp.so | grep -F 'Shared library: [libwebpdemux.so'

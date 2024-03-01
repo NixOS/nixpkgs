@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation {
   pname = "M33-Linux";
@@ -10,6 +10,16 @@ stdenv.mkDerivation {
     rev = "5c1b90c13d260771dac970b49fdc9f840fee5f4a";
     sha256 = "1bvbclkyfcv23vxb4s1zssvygklks1nhp4iwi4v90c1fvyz0356f";
   };
+
+  patches = [
+    # Pull the `gcc-13` build fix pending upstream inclusion:
+    #   https://github.com/donovan6000/M33-Linux/pull/6
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/donovan6000/M33-Linux/commit/272e4488ef05cfd95fcc952becfc0ac982306d0c.patch";
+      hash = "sha256-ubdCwXFVljvOCzYrWVJgU6PY1j6Ei6aaclhXaGwZT2w=";
+    })
+  ];
 
   installPhase = ''
     install -Dm755 m33-linux $out/bin/m33-linux

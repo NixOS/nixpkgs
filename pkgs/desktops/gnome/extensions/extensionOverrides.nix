@@ -104,10 +104,6 @@ super: lib.trivial.pipe super [
         nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
       })
     ];
-    postFixup = ''
-      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/ding.js"
-      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/createThumbnail.js"
-    '';
   }))
 
   (patchExtension "pano@elhan.io" (old: {
@@ -117,6 +113,16 @@ super: lib.trivial.pipe super [
         inherit gsound libgda;
       })
     ];
+  }))
+
+  (patchExtension "system-monitor-next@paradoxxx.zero.gmail.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/system-monitor-next_at_paradoxxx.zero.gmail.com.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
+    meta.maintainers = with lib.maintainers; [ andersk ];
   }))
 
   (patchExtension "tophat@fflewddur.github.io" (old: {

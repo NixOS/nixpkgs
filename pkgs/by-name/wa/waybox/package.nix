@@ -5,6 +5,8 @@
 , libGL
 , libxkbcommon
 , libxml2
+, libevdev
+, libinput
 , mesa
 , meson
 , ninja
@@ -19,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybox";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "wizbright";
     repo = "waybox";
     rev = finalAttrs.version;
-    hash = "sha256-G8dRa4hgev3x58uqp5To5OzF3zcPSuT3NL9MPnWf2M8=";
+    hash = "sha256-hAXS9laDfigWR2pfNmdPiOeez3NpTIuKHnpeQyYa9IQ=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxkbcommon
     libxml2
+    libevdev
+    libinput
     mesa # for libEGL
     pixman
     udev

@@ -4,9 +4,10 @@ with lib;
 
 let
 
-  inherit (pkgs) cups cups-pk-helper cups-filters xdg-utils;
+  inherit (pkgs) cups-pk-helper cups-filters xdg-utils;
 
   cfg = config.services.printing;
+  cups = cfg.package;
 
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
@@ -139,6 +140,8 @@ in
           Whether to enable printing support through the CUPS daemon.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "cups" {};
 
       stateless = mkOption {
         type = types.bool;

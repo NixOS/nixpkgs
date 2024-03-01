@@ -14,6 +14,8 @@
 , pythran
 , wheel
 , nose
+, setuptools
+, hypothesis
 , pytestCheckHook
 , pytest-xdist
 , numpy
@@ -32,8 +34,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.11.3";
-  srcHash = "sha256-swxRfFjTcKjKQv6GFdWNR6IKhdJQYhZSR7UWLtcnrXw=";
+  version = "1.12.0";
+  srcHash = "sha256-PuiyYTgSegDTV9Kae5N68FOXT1jyJrNv9p2aFP70Z20=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -74,15 +76,18 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
+    (fetchpatch {
+      name = "openblas-0.3.26-compat.patch";
+      url = "https://github.com/scipy/scipy/commit/8c96a1f742335bca283aae418763aaba62c03378.patch";
+      hash = "sha256-SGoYDxwSAkr6D5/XEqHLerF4e4nmmI+PX+z+3taWAps=";
+    })
   ];
 
-  # Relax deps a bit
+  # Upstream complicated numpy version pinning is causing issues in the
+  # configurePhase, so we pass on it.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'meson-python>=0.12.1,<0.14.0' 'meson-python' \
-      --replace 'numpy==' 'numpy>=' \
-      --replace "pybind11>=2.10.4,<2.11.1" "pybind11>=2.10.4,<2.12.0" \
-      --replace 'wheel<0.41.0' 'wheel'
+      --replace-fail 'numpy==' 'numpy>=' \
   '';
 
   nativeBuildInputs = [
@@ -92,6 +97,7 @@ in buildPythonPackage {
     pythran
     pkg-config
     wheel
+    setuptools
   ];
 
   buildInputs = [
@@ -110,6 +116,7 @@ in buildPythonPackage {
 
   nativeCheckInputs = [
     nose
+    hypothesis
     pytestCheckHook
     pytest-xdist
   ];
@@ -159,42 +166,9 @@ in buildPythonPackage {
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    # Adapted from pytestCheckHook because scipy uses a custom check phase.
-    # It needs to pass `$args` as a Python list to `scipy.test` rather than as
-    # arguments to pytest on the command-line.
-    args=""
-    if [ -n "$disabledTests" ]; then
-      disabledTestsString=$(_pytestComputeDisabledTestsString "''${disabledTests[@]}")
-      args+="'-k','$disabledTestsString'"
-    fi
-
-    if [ -n "''${disabledTestPaths-}" ]; then
-        eval "disabledTestPaths=($disabledTestPaths)"
-    fi
-
-    for path in ''${disabledTestPaths[@]}; do
-      if [ ! -e "$path" ]; then
-        echo "Disabled tests path \"$path\" does not exist. Aborting"
-        exit 1
-      fi
-      args+="''${args:+,}'--ignore=\"$path\"'"
-    done
-    args+="''${args:+,}$(printf \'%s\', "''${pytestFlagsArray[@]}")"
-    args=''${args%,}
-
-    pushd "$out"
+  preCheck = ''
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test(
-        'fast',
-        verbose=10,
-        extra_argv=[$args],
-        parallel=$NIX_BUILD_CORES
-    ) != True)"
-    popd
-    runHook postCheck
+    cd $out
   '';
 
   requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
@@ -214,6 +188,7 @@ in buildPythonPackage {
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = with lib; {
+    changelog = "https://github.com/scipy/scipy/releases/tag/v${version}";
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";

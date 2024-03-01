@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.3.0";
+  version = "0.4.0";
   pname = "undervolt";
 
   src = fetchFromGitHub {
     owner = "georgewhewell";
     repo = "undervolt";
     rev = version;
-    sha256 = "1aybk8vbb4745raz7rvpkk6b98xrdiwjhkpbv3kwsgsr9sj42lp0";
+    hash = "sha256-G+CK/lnZXkQdyNZPqY9P3owVJsd22H3K8wSpjHFG0ow=";
   };
 
   meta = with lib; {

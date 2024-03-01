@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.1.3";
+  version = "2.1.4";
 
   format = "setuptools";
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-uxIBt/mGmld8bxUWQvAspaX39EVfguX5qDgJ/ecz3hM=";
+    hash = "sha256-0mITsNQQWG6lVQSxnDdU4ta548AR9q+zs/E96uwtG/U=";
   };
 
   nativeCheckInputs = [

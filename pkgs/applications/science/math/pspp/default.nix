@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pspp";
-  version = "1.6.2";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-cylMovWy9/xBu/i3jFiIyAdfQ8YJf9SCq7BPhasIR7Y=";
+    sha256 = "sha256-qPbLiGr1sIOENXm81vsZHAVKzOKMxotY58XwmZai2N8=";
   };
 
   nativeBuildInputs = [ pkg-config texinfo python3 makeWrapper ];

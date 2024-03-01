@@ -10,6 +10,7 @@
 , fftw
 , gnutls
 , libcdio
+, libebur128
 , libmtp
 , libpthreadstubs
 , libtasn1
@@ -34,21 +35,23 @@
 , gst_all_1
 , withVlc ? true
 , libvlc
+, nix-update-script
 }:
 
 let
-  inherit (lib) optionals;
+  inherit (lib) optionals optionalString;
 
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.21";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-McwnYHaw0LYDeHLDQzfqRIYMV2FoiMdHyOL/EE8/esU=";
+    hash = "sha256-hzZx530HD7R3JOG6cCsoaW9puYkmu7m5lr+EfobKX7o=";
+    fetchSubmodules = true;
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -64,6 +67,7 @@ stdenv.mkDerivation rec {
     fftw
     gnutls
     libcdio
+    libebur128
     libidn2
     libmtp
     libpthreadstubs
@@ -89,7 +93,7 @@ stdenv.mkDerivation rec {
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
-  ]) ++ lib.optional withVlc libvlc;
+  ]) ++ optionals withVlc [ libvlc ];
 
   nativeBuildInputs = [
     cmake
@@ -101,12 +105,14 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
-  postInstall = lib.optionalString withGstreamer ''
+  postInstall = optionalString withGstreamer ''
     qtWrapperArgs+=(
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
       --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules"
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Music player and music collection organizer";

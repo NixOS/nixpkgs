@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.25.0";
+  version = "5.27.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
-    repo = pname;
+    repo = "gdu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TtfTIG0XlEDXVjIZ6Vpy/Z5StXcxyaEocwoe7M75YDw=";
+    hash = "sha256-hQyvYLegGimYTRz0J/2tmaC6N4LfjB1ivWgN29DwNhA=";
   };
 
-  vendorHash = "sha256-DkH1H2XvVlDMFuFSbCmhPMC709upPvXhpzlEgNq5zoA=";
+  vendorHash = "sha256-weNcJjofI7Aoy0Eya0KprXHAn7aTA0rQJYrJ4+t65hI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,11 +27,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
+    "-X=github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
   ];
 
   postPatch = ''
-    substituteInPlace cmd/gdu/app/app_test.go --replace "development" "${version}"
+    substituteInPlace cmd/gdu/app/app_test.go \
+      --replace-fail "development" "${version}"
   '';
 
   postInstall = ''

@@ -1410,9 +1410,11 @@ in
 
     systemd.services.domainname = lib.mkIf (cfg.domain != null) {
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       serviceConfig.ExecStart = ''${pkgs.nettools}/bin/domainname "${cfg.domain}"'';
+      serviceConfig.Type = "oneshot";
     };
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
@@ -1446,16 +1448,6 @@ in
       }))
       listToAttrs
     ];
-
-    # The network-interfaces target is kept for backwards compatibility.
-    # New modules must NOT use it.
-    systemd.targets.network-interfaces =
-      { description = "All Network Interfaces (deprecated)";
-        wantedBy = [ "network.target" ];
-        before = [ "network.target" ];
-        after = [ "network-pre.target" ];
-        unitConfig.X-StopOnReconfiguration = true;
-      };
 
     systemd.services = {
       network-local-commands = {

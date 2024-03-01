@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-REi38rIVZmWawFGcrPl9QzSthW4jHZDr/0ug7kJRz3Y=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "hatchling==1.18.0" "hatchling"
+  '';
+
   nativeBuildInputs = [
     hatchling
   ];

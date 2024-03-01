@@ -1,20 +1,15 @@
 { lib, stdenv, fetchurl
 , pkg-config
 , SDL2, libpng, libjpeg, libtiff, giflib, libwebp, libXpm, zlib, Foundation
-, version ? "2.6.3"
-, hash ? "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw="
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_image";
-in
-
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "2.8.2";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_image/release/${pname}-${version}.tar.gz";
-    inherit hash;
+    url = "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${finalAttrs.version}.tar.gz";
+    hash = "sha256-j0hrv7z4Rk3VjJ5dkzlKsCVc5otRxalmqRgkSCCnbdw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -44,4 +39,4 @@ stdenv.mkDerivation {
     license = licenses.zlib;
     maintainers = with maintainers; [ cpages ];
   };
-}
+})

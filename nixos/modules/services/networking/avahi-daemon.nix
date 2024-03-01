@@ -95,7 +95,6 @@ in
     ipv6 = mkOption {
       type = types.bool;
       default = false;
-      defaultText = literalExpression "config.networking.enableIPv6";
       description = lib.mdDoc "Whether to use IPv6.";
     };
 
@@ -274,17 +273,17 @@ in
 
     system.nssModules = optional (cfg.nssmdns4 || cfg.nssmdns6) pkgs.nssmdns;
     system.nssDatabases.hosts = let
-      mdnsMinimal = if (cfg.nssmdns4 && cfg.nssmdns6) then
-        "mdns_minimal"
+      mdns = if (cfg.nssmdns4 && cfg.nssmdns6) then
+        "mdns"
       else if (!cfg.nssmdns4 && cfg.nssmdns6) then
-        "mdns6_minimal"
+        "mdns6"
       else if (cfg.nssmdns4 && !cfg.nssmdns6) then
-        "mdns4_minimal"
+        "mdns4"
       else
         "";
     in optionals (cfg.nssmdns4 || cfg.nssmdns6) (mkMerge [
-      (mkBefore [ "${mdnsMinimal} [NOTFOUND=return]" ]) # before resolve
-      (mkAfter [ "mdns" ]) # after dns
+      (mkBefore [ "${mdns}_minimal [NOTFOUND=return]" ]) # before resolve
+      (mkAfter [ "${mdns}" ]) # after dns
     ]);
 
     environment.systemPackages = [ cfg.package ];

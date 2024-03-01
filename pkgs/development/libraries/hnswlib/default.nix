@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , python3
 }:
@@ -13,26 +12,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hnswlib";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "nmslib";
     repo = "hnswlib";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-XXz0NIQ5dCGwcX2HtbK5NFTalP0TjLO6ll6TmH3oflI=";
+    hash = "sha256-1KkAX42j/I06KO4wCnDsDifN1JiENqYKR5NNHBjyuVA=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-37365.patch";
-      url = "https://github.com/nmslib/hnswlib/commit/f6d170ce0b41f9e75ace473b09df6e7872590757.patch";
-      hash = "sha256-28nakC0rh6kx6yYjv7m6r9/yJ+lWQuooRFyYYQN2rX8=";
-    })
-  ];
 
   # this is a header-only library, so we don't need to build it
   # we need `cmake` only to run tests
-  nativeBuildInputs = lib.optionals finalAttrs.finalPackage.doCheck [
+  nativeCheckInputs = [
     cmake
     python
   ];

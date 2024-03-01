@@ -8,8 +8,7 @@
 , python3
 , python3Packages
 , libffi
-# TODO: Gold plugin on LLVM16 has a severe memory corruption bug: https://github.com/llvm/llvm-project/issues/61350.
-, enableGoldPlugin ? false
+, enableGoldPlugin ? true
 , libbfd
 , libpfm
 , libxml2
@@ -66,8 +65,8 @@ let
   else python3;
 
 in
-  assert (lib.assertMsg (!enableGoldPlugin) "Gold plugin cannot be enabled on LLVM16 due to a upstream issue: https://github.com/llvm/llvm-project/issues/61350");
-  stdenv.mkDerivation (rec {
+
+stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
@@ -87,10 +86,14 @@ in
 
   nativeBuildInputs = [ cmake ninja python ]
     ++ optionals enableManpages [
-      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-      # splicing does *not* work with the latter. (TODO: fix)
-      python3Packages.sphinx python3Packages.recommonmark
-    ];
+    # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+    # splicing does *not* work with the latter. (TODO: fix)
+    python3Packages.sphinx
+  ] ++ optionals (lib.versionOlder version "18" && enableManpages) [
+    python3Packages.recommonmark
+  ] ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
+    python3Packages.myst-parser
+  ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -221,7 +224,7 @@ in
     rm unittests/IR/PassBuilderCallbacksTest.cpp
     rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
   '' + optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../../TLI-musl.patch}
+    patch -p1 -i ${../../common/llvm/TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
@@ -325,12 +328,12 @@ in
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (false) [
+  ] ++ optionals enableGoldPlugin [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (

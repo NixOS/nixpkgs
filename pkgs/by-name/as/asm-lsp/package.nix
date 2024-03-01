@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/bergercookie/asm-lsp";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ NotAShelf ];
-    mainProgram = pname;
+    mainProgram = "asm-lsp";
     platforms = lib.platforms.linux;
   };
 }

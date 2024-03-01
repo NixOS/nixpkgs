@@ -8,15 +8,15 @@ let
   });
 in pythonPackages.buildPythonApplication rec {
   pname = "video2midi";
-  version = "0.4.6.5";
+  version = "0.4.7.2";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "svsdval";
     repo = pname;
-    rev = version;
-    sha256 = "0qzrxqhsxn0h71nfrsi9g78hx3pqm3b8sr6fjq01k4k6dd2nwfam";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-lM3SBgGUW5MTUtsywy57fBiHEg58a8Fcpqb+EcRaYQ4=";
   };
 
   propagatedBuildInputs = with pythonPackages; [ opencv4_ midiutil pygame pyopengl ];

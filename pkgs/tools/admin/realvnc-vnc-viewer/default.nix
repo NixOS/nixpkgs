@@ -17,6 +17,7 @@ let
     };
     maintainers = with maintainers; [ emilytrau onedragon ];
     platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    mainProgram = "vncviewer";
   };
 in
 if stdenv.isDarwin then callPackage ./darwin.nix { inherit pname version meta; }

@@ -1,0 +1,1 @@
+Given Nixpkgs path does not contain a pkgs/by-name subdirectory, no check necessary.

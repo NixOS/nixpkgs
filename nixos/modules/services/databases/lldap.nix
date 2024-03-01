@@ -104,6 +104,7 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

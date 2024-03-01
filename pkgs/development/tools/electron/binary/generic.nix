@@ -12,7 +12,7 @@
 , mesa
 , libxkbcommon
 , libxshmfence
-, libglvnd
+, libGL
 , alsa-lib
 , cairo
 , cups
@@ -35,6 +35,7 @@ let
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
+    mainProgram = "electron";
     maintainers = with maintainers; [ travisbhartwell manveru ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
@@ -101,7 +102,7 @@ let
     ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
     ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libglvnd ]
+    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libGL ]
   );
 
   linux = {
@@ -129,6 +130,11 @@ let
         --set-rpath "${electronLibPath}:$out/libexec/electron" \
         $out/libexec/electron/.electron-wrapped \
         ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
+
+      # patch libANGLE
+      patchelf \
+        --set-rpath "${lib.makeLibraryPath [ libGL pciutils ]}" \
+        $out/libexec/electron/lib*GL*
     '';
   };
 

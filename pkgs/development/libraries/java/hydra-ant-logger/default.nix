@@ -1,4 +1,10 @@
-{ fetchFromGitHub, lib, stdenv, ant, jdk }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk
+, canonicalize-jars-hook
+}:
 
 stdenv.mkDerivation {
   pname = "hydra-ant-logger";
@@ -8,19 +14,30 @@ stdenv.mkDerivation {
     owner = "NixOS";
     repo = "hydra-ant-logger";
     rev = "dae3224f4ed42418d3492bdf5bee4f825819006f";
-    sha256 = "sha256-5oQ/jZfz7izTcYR+N801HYh4lH2MF54PCMnmA4CpRwc=";
+    hash = "sha256-5oQ/jZfz7izTcYR+N801HYh4lH2MF54PCMnmA4CpRwc=";
   };
 
-  buildInputs = [ ant jdk ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    canonicalize-jars-hook
+  ];
 
-  buildPhase = "mkdir lib; ant";
+  buildPhase = ''
+    runHook preBuild
+    mkdir lib
+    ant
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir -p $out/share/java
-    cp -v *.jar $out/share/java
+    runHook preBuild
+    install -Dm644 *.jar -t $out/share/java
+    runHook postBuild
   '';
 
   meta = {
+    homepage = "https://github.com/NixOS/hydra-ant-logger";
     platforms = lib.platforms.unix;
   };
 }

@@ -29,15 +29,16 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.74.1";
+  version = "0.74.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IyjD8cmYNQoY4OUTNI6fxYHVfqTnuJrt8R4OPGUEK08=";
+    url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-pTX7Kpj+qKJEnNGgLMz1GQEx3d/1LnFa/azj/rU26uc=";
   };
 
   patches = [
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     cairo
     fribidi
     gnutls
+    pango # duplicated with propagatedBuildInputs to support gtkVersion == null
     pcre2
     zlib
     icu
@@ -75,9 +77,10 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
-    # Required by vte-2.91.pc.
-    (if gtkVersion == "3" then gtk3 else gtk4)
+  # Required by vte-2.91.pc.
+  propagatedBuildInputs = lib.optionals (gtkVersion != null) [
+    (assert (gtkVersion == "3" || gtkVersion == "4");
+    if gtkVersion == "3" then gtk3 else gtk4)
     glib
     pango
   ];
@@ -110,7 +113,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "vte";
       versionPolicy = "odd-unstable";
     };
     tests = {
@@ -133,4 +136,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ astsmtl antono ] ++ teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

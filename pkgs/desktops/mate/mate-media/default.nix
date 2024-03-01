@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-media";
-  version = "1.26.1";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "KLKiGiltkVx8BtnSFvSahUHNPOyJWzJZvKBoqF4m6ws=";
+    sha256 = "r0ZjlXTMOIUTCJyhC7FB/8Pm0awz5zDkII21dZZChQ8=";
   };
 
   buildInputs = [

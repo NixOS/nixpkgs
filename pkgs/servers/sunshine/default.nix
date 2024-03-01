@@ -171,6 +171,7 @@ stdenv.mkDerivation rec {
     description = "Sunshine is a Game stream host for Moonlight";
     homepage = "https://github.com/LizardByte/Sunshine";
     license = licenses.gpl3Only;
+    mainProgram = "sunshine";
     maintainers = with maintainers; [ devusb ];
     platforms = platforms.linux;
   };

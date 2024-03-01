@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "glyphsets";
-  version = "0.6.5";
+  version = "0.6.11";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zp4VLJ9h6lkz7KOM7LWKAj7UX1KziLobzeT9Dosv5UU=";
+    hash = "sha256-ACeD9O/kOE2we95gW4ak8504Y+azoqNyMeeVaWmEzak=";
   };
 
   patches = [

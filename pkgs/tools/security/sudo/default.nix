@@ -12,13 +12,13 @@
 , withSssd ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
-  version = "1.9.15p3";
+  version = "1.9.15p5";
 
   src = fetchurl {
-    url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-eMh6HM7EL3oJUAL+KxR4pRBgNjWeNiuGdTSo4AVqBJQ=";
+    url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
+    hash = "sha256-VY0QuaGZH7O5+n+nsH7EQFt677WzywsIcdvIHjqI5Vg=";
   };
 
   prePatch = ''
@@ -85,5 +85,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ sudo bsd2 bsd3 zlib ];
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.linux;
+    mainProgram = "sudo";
   };
-}
+})

@@ -1,25 +1,18 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "baboossh";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cybiere";
     repo = "baboossh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dorIqnJuAS/y9W6gyt65QjwGwx4bJHKLmdqRPzY25yA=";
-  };
-
-  patches = fetchpatch {
-    name = "py3compat-utils.patch";
-    url = "https://github.com/cybiere/baboossh/commit/f7a75ebeda0c69ab5b119894b9e1488fc0a935a8.patch";
-    hash = "sha256-gctuu/Qd3nmJIWv2mTyrGwjlQD1U+OhGK6Zh/Un06/E=";
+    hash = "sha256-E/a6dL6BpQ6D8v010d8/qav/fkxpCYNvSvoPAZsm0Hk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -41,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/cybiere/baboossh";
     changelog = "https://github.com/cybiere/baboossh/releases/tag/v${version}";
     license = licenses.gpl3Only;
+    mainProgram = "baboossh";
     maintainers = with maintainers; [ fab ];
   };
 }

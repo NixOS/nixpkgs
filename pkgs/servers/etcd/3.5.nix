@@ -1,13 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests, k3s }:
 
 let
-  version = "3.5.10";
+  version = "3.5.12";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    hash = "sha256-X/de8YA55SZ6p8r/pV8CGxfDKN8voJlyA0r4ckan6ZE=";
+    hash = "sha256-Z2WXNzFJYfRQCldUspQjUR5NyUzCCINycuEXWaTn4vU=";
   };
 
   CGO_ENABLED = 0;
@@ -25,7 +25,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-kFR6RvHoNM4SZOgJd7inUuw5GfRLM+3WsKU73We8UzU=";
+    vendorHash = "sha256-S5cEIV4hKRjn9JFEKWBiSEPytHtVacsSnG6T8dofgyk=";
 
     modRoot = "./server";
 
@@ -45,7 +45,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-oVabZ2JZlLKHFCuAeeWRTrcSCxzz05HlvDu/YSMKuCs=";
+    vendorHash = "sha256-Vgp44Kg6zUDYVJU6SiYd8ZEcAWqKPPTsqYafcfk89Cc=";
 
     modRoot = "./etcdutl";
   };
@@ -55,7 +55,7 @@ let
 
     inherit CGO_ENABLED meta src version;
 
-    vendorHash = "sha256-0j35caQfLh7kwDKgmTe1novqKfz/3JlQLbUk3+GFPhk=";
+    vendorHash = "sha256-PZLsekZzwlGzccCirNk9uUj70Ue5LMDs6LMWBI9yivs=";
 
     modRoot = "./etcdctl";
   };
@@ -67,7 +67,10 @@ symlinkJoin {
 
   passthru = {
     inherit etcdserver etcdutl etcdctl;
-    tests = { inherit (nixosTests) etcd etcd-cluster; };
+    tests = {
+      inherit (nixosTests) etcd etcd-cluster;
+      k3s = k3s.passthru.tests.etcd;
+    };
   };
 
   paths = [

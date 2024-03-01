@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "requests-ratelimiter";
-  version = "0.4.2";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JWCook";
     repo = "requests-ratelimiter";
-    rev = "v${version}";
-    hash = "sha256-w4cBQRpk9UTuGA0lPDsqpQ3UEIQdYe38NYXz+V4+Lvc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JdxyBLrxXXb2KJ89qWl7yXP0fIafgnAguPGsN5iit8Y=";
   };
 
   nativeBuildInputs = [

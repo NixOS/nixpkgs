@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "86Box";
-  version = "4.0.1";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     rev = "v${version}";
-    hash = "sha256-1005Czm4CftL96G0+sKV1wx/ogXTKS0vQAzZHtIMlKA=";
+    hash = "sha256-JYOJFXiUTLRs6AEMYNx88PwcVw13ChQzV1ZE5OtX6Ds=";
   };
 
   nativeBuildInputs = [

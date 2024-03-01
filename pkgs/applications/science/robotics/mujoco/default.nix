@@ -22,8 +22,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "344117638c8ff7e239044fd0fa7085839fc03021";
-      hash = "sha256-gztnxui9Fe/FTieMjdvfJjWHjkImtlsHn6fM1FruyME=";
+      rev = "e45585a4b8e75c28479fa4107182c28172799640";
+      hash = "sha256-pgHvmRpPd99ePUVRsi7WXLVSZngZ5q6r1vWW4mdGvxY=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -34,8 +34,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "e8515f78ac098329ab9f8cab21c87caede090a3f";
-      hash = "sha256-HXKtFJsKGpug+wNPjYynTuyaG0igo3oG4rFQktveh1g=";
+      rev = "454f89af9d6f3525b1df5f9ef9c86df58bf2d4d3";
+      hash = "sha256-a9QAnv6vIM8a9Bn8ZmfeMT0+kbtb0QGxM0+m5xwIqm8=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -129,13 +129,15 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.0.1";
+  version = "3.1.2";
 
+  # Bumping version? Make sure to look though the MuJoCo's commit
+  # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
-    repo = pname;
-    rev = version;
-    hash = "sha256-UXE+7KDti8RarpoJoo9Ei3TgW/Qdnj3ASRo8uTWhGrU=";
+    repo = "mujoco";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Zbz6qq2Sjhcrf8QAGFlYkSZ8mA/wQaP81gRzMj3xh+g=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -178,7 +180,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator.";
     homepage = "https://mujoco.org/";
+    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela tmplt ];
+    broken = stdenv.isDarwin;
   };
 }

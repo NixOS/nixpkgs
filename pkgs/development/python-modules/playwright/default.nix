@@ -11,6 +11,7 @@
 , setuptools
 , setuptools-scm
 , playwright-driver
+, pythonRelaxDepsHook
 }:
 
 let
@@ -54,10 +55,7 @@ buildPythonPackage rec {
 
     substituteInPlace pyproject.toml \
       --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.41.2", "auditwheel==5.4.0"]' \
-                'requires = ["setuptools", "setuptools-scm", "wheel"]' \
-      --replace 'version_file = "playwright/_repo_version.py"' ""
-    # FIXME version_file is available in setuptools-scm>=8.0.0
-    echo "__version__ = version = '${version}'" > playwright/_repo_version.py
+                'requires = ["setuptools", "setuptools-scm", "wheel"]'
 
     # Skip trying to download and extract the driver.
     # This is done manually in postInstall instead.
@@ -70,8 +68,16 @@ buildPythonPackage rec {
   '';
 
 
-  nativeBuildInputs = [ git setuptools-scm setuptools ]
-    ++ lib.optionals stdenv.isLinux [ auditwheel ];
+  nativeBuildInputs = [
+    git
+    setuptools-scm
+    setuptools
+    pythonRelaxDepsHook
+  ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
+
+  pythonRelaxDeps = [
+    "pyee"
+  ];
 
   propagatedBuildInputs = [
     greenlet
@@ -81,8 +87,6 @@ buildPythonPackage rec {
   postInstall = ''
     ln -s ${driver} $out/${python.sitePackages}/playwright/driver
   '';
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   # Skip tests because they require network access.
   doCheck = false;

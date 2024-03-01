@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "awacs";
-  version = "2.4.0";
+  version = "2.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iflg6tjqFl1gWOzlJhQwGHhAQ/pKm9n8GVvUz6fSboM=";
+    hash = "sha256-sNo1auVjdOqHLGzbAJRrsi6c2BfD861rAIAZ46RdgEA=";
   };
 
   propagatedBuildInputs = lib.lists.optionals (pythonOlder "3.8") [

@@ -2,10 +2,20 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, markdown-it-py
+
+# build-system
 , poetry-core
+
+# dependencies
+, markdown-it-py
 , pygments
 , typing-extensions
+
+# optional-dependencies
+, ipywidgets
+
+# tests
+, attrs
 , pytestCheckHook
 , setuptools
 
@@ -18,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.5.2";
+  version = "13.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +37,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ycDmFJa68OOrNqIy/hGKxbjoaIbiniiO4UAPNSyZvDk=";
+    hash = "sha256-L72an7vHC+aBj8NlLOjofDrQGvmFxJpdbfiEubfg0GM=";
   };
 
   nativeBuildInputs = [
@@ -37,13 +47,20 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     markdown-it-py
     pygments
-    setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
+  passthru.optional-dependencies = {
+    jupyter = [
+      ipywidgets
+    ];
+  };
+
   nativeCheckInputs = [
+    attrs
     pytestCheckHook
+    setuptools
   ];
 
   disabledTests = [

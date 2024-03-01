@@ -38,6 +38,7 @@ let
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ j0lol ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "notesnook";
   };
 
   linux = appimageTools.wrapType2 rec {

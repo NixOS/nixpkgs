@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "georss-generic-client";
-  version = "0.7";
+  version = "0.8";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-georss-generic-client";
     rev = "v${version}";
-    hash = "sha256-58NpACrJK29NUnx3RrsLFPPo+6A/JlIlkrv8N9juMu0=";
+    hash = "sha256-Y19zMHL6DjAqiDi47Lmst8m9d9kEtTgyRiECKo6CqZY=";
   };
 
   propagatedBuildInputs = [

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.4.6";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-zCivxYHhaVqzPe3qBUKXgMgEE6niGqkHJM77rfEUoFo=";
+    hash = "sha256-DevAkIzgt39V5vp+a15TBCMeYbny/TkJzyub425N7/o=";
   };
 
-  cargoHash = "sha256-O8X+oLKhKeQGeUrsRVeakZjaMKPiXdIns48rV8Q9JA8=";
+  cargoHash = "sha256-gcYCTKa+i2v/T1C0j89rJjD73tmiUow11E+59oiR7sk=";
 
   nativeBuildInputs = [
     pkg-config

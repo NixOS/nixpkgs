@@ -16,9 +16,9 @@
 , pytestCheckHook
 , pytest-lazy-fixture
 , pkg-config
-, scipy
-, fetchpatch
+, setuptools
 , setuptools-scm
+, oldest-supported-numpy
 }:
 
 let
@@ -27,28 +27,37 @@ in
 
 buildPythonPackage rec {
   pname = "pyarrow";
-  format = "setuptools";
   inherit (arrow-cpp) version src;
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   sourceRoot = "apache-arrow-${version}/python";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml setup.py \
+      --replace "setuptools_scm < 8.0.0" "setuptools_scm"
+  '';
+
   nativeBuildInputs = [
     cmake
     cython
     pkg-config
+    setuptools
     setuptools-scm
+    oldest-supported-numpy
   ];
 
   buildInputs = [ arrow-cpp ];
 
   propagatedBuildInputs = [
     cffi
+    numpy
+  ];
+
+  checkInputs = [
     cloudpickle
     fsspec
-    numpy
-    scipy
   ];
 
   nativeCheckInputs = [

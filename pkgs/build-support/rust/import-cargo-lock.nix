@@ -193,7 +193,7 @@ let
 
         if grep -q workspace "$out/Cargo.toml"; then
           chmod u+w "$out/Cargo.toml"
-          ${replaceWorkspaceValues} "$out/Cargo.toml" "${tree}/Cargo.toml"
+          ${replaceWorkspaceValues} "$out/Cargo.toml" "$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $crateCargoTOML | ${jq}/bin/jq -r .workspace_root)/Cargo.toml"
         fi
 
         # Cargo is happy with empty metadata.

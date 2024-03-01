@@ -5,6 +5,7 @@
 , jinja2
 , jinja2-pluralize
 , pluggy
+, poetry-core
 , pycodestyle
 , pyflakes
 , pygments
@@ -18,16 +19,20 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "7.7.0";
-  format = "setuptools";
+  version = "8.0.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-YGFM9+ciz3+xveSXr6wLUUKU4eJlNESWItrE2ilhI/s=";
+    hash = "sha256-OTVlyoZorh4OOOThMrUc8CgIb7Bqen2Ued61Aj4vaNQ=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     chardet

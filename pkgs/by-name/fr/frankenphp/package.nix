@@ -3,6 +3,7 @@
 , buildGoModule
 , fetchFromGitHub
 , php
+, brotli
 , testers
 , frankenphp
 , darwin
@@ -25,13 +26,13 @@ let
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-QgLCcZUDjeEdo8ijUXeubRkLI9DDlMctzHlGSjDCZoc=";
+    hash = "sha256-tQ35GZuw7Ag1YfmOUarVY45yk4yugNLJetEV4m2w3GE=";
   };
 
   sourceRoot = "source/caddy";
@@ -39,9 +40,9 @@ in buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-Lgj/pFtSQIgjrycajJ1zNY3ytvArmuk0E3IjsAzsNdM=";
+  vendorHash = "sha256-sv3IcNj1rjolgF0HZZnJ3dLV9+QeRw3ItRguz6Un9CY=";
 
-  buildInputs = [ phpUnwrapped ] ++ phpUnwrapped.buildInputs;
+  buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
   nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];
@@ -68,7 +69,7 @@ in buildGoModule rec {
 
   preFixup = ''
     mkdir -p $out/lib
-    ln -s "${phpEmbedWithZts}/lib/php.ini" "$out/lib/php.ini"
+    ln -s "${phpEmbedWithZts}/lib/php.ini" "$out/lib/frankenphp.ini"
 
     wrapProgram $out/bin/frankenphp --set-default PHP_INI_SCAN_DIR $out/lib
   '';

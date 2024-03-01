@@ -3,25 +3,35 @@
 , fetchPypi
 , cryptography
 , deprecated
+, pytestCheckHook
 , pythonOlder
+, setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "jwcrypto";
-  version = "1.5.0";
-  format = "setuptools";
+  version = "1.5.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LB3FHPjjjd8yR5Xf6UJt7p3UbK9H9TXMvBh4H7qBC40=";
+    hash = "sha256-CBX7q2E9uZuthWkdpfE2+IYEIzlmZ3KKJkvPpuHbNrA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography
     deprecated
+    typing-extensions
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "jwcrypto"

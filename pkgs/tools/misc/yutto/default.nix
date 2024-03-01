@@ -9,14 +9,14 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b31";
+  version = "2.0.0b35";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PWUZ4adH6uaNRIXVMGN3Yun7muYljQC8xDeEes0MB2U=";
+    hash = "sha256-r4Lc5PMkhwLMC6nKArvpf9M4N+eoV6OmZK2uhY6xZxA=";
   };
 
   nativeBuildInputs = [
@@ -24,12 +24,13 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    aiohttp
+    httpx
     aiofiles
     biliass
     dict2xml
     colorama
-  ];
+    typing-extensions
+  ] ++ (with httpx.optional-dependencies; http2 ++ socks);
 
   preFixup = ''
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg ]})

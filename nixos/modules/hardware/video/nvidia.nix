@@ -47,7 +47,8 @@ in {
           TRUNK_LINK_FAILURE_MODE=0;
           NVSWITCH_FAILURE_MODE=0;
           ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-          TOPOLOGY_FILE_PATH=nvidia_x11.fabricmanager + "/share/nvidia-fabricmanager/nvidia/nvswitch";
+          TOPOLOGY_FILE_PATH="${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+          DATABASE_PATH="${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         };
         defaultText = lib.literalExpression ''
         {
@@ -69,7 +70,8 @@ in {
           TRUNK_LINK_FAILURE_MODE=0;
           NVSWITCH_FAILURE_MODE=0;
           ABORT_CUDA_JOBS_ON_FM_EXIT=1;
-          TOPOLOGY_FILE_PATH=nvidia_x11.fabricmanager + "/share/nvidia-fabricmanager/nvidia/nvswitch";
+          TOPOLOGY_FILE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+          DATABASE_PATH="''${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
         }
         '';
         description = lib.mdDoc ''
@@ -584,24 +586,50 @@ in {
         boot.extraModulePackages = [
           nvidia_x11.bin
         ];
-        systemd.services.nvidia-fabricmanager = {
-          enable = true;
-          description = "Start NVIDIA NVLink Management";
-          wantedBy = [ "multi-user.target" ];
-          unitConfig.After = [ "network-online.target" ];
-          unitConfig.Requires = [ "network-online.target" ];
-          serviceConfig = {
-            Type = "forking";
-            TimeoutStartSec = 240;
-            ExecStart = let
-              nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
-              in
-                nvidia_x11.fabricmanager + "/bin/nv-fabricmanager -c " + nv-fab-conf;
-            LimitCORE="infinity";
-          };
-        };
-        environment.systemPackages =
-          lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager;
-      })
-    ]);
+
+        systemd = {
+          tmpfiles.rules =
+            lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+            "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
+          services = lib.mkMerge [
+            ({
+              nvidia-fabricmanager = {
+                enable = true;
+                description = "Start NVIDIA NVLink Management";
+                wantedBy = [ "multi-user.target" ];
+                unitConfig.After = [ "network-online.target" ];
+                unitConfig.Requires = [ "network-online.target" ];
+                serviceConfig = {
+                  Type = "forking";
+                  TimeoutStartSec = 240;
+                  ExecStart = let
+                    nv-fab-conf = settingsFormat.generate "fabricmanager.conf" cfg.datacenter.settings;
+                    in
+                      "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                  LimitCORE="infinity";
+                };
+              };
+            })
+            (lib.mkIf cfg.nvidiaPersistenced {
+              "nvidia-persistenced" = {
+                description = "NVIDIA Persistence Daemon";
+                wantedBy = ["multi-user.target"];
+                serviceConfig = {
+                  Type = "forking";
+                  Restart = "always";
+                  PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+                  ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                  ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+                };
+              };
+            })
+          ];
+      };
+
+      environment.systemPackages =
+        lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
+        ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+    })
+  ]);
 }

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ms-active-directory";
-  version = "1.12.1";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zorn96";
     repo = "ms_active_directory";
-    rev = "v${version}";
-    hash = "sha256-mErQib8xTgo29iPAtiLnhxLXyFboAzyEW9A/QMseM6k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+wfhtEGuC1R5jbEnWm4mDHIR096KKEcG/K8SuItwjGk=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for integrating with Microsoft Active Directory domains";
     homepage = "https://github.com/zorn96/ms_active_directory/";
+    changelog = "https://github.com/zorn96/ms_active_directory/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

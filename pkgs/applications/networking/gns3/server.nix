@@ -8,6 +8,7 @@
 , fetchFromGitHub
 , pkgsStatic
 , stdenv
+, nixosTests
 , testers
 , gns3-server
 }:
@@ -75,9 +76,12 @@ python3.pkgs.buildPythonApplication {
     "--reruns 3"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = gns3-server;
-    command = "${lib.getExe gns3-server} --version";
+  passthru.tests = {
+    inherit (nixosTests) gns3-server;
+    version = testers.testVersion {
+      package = gns3-server;
+      command = "${lib.getExe gns3-server} --version";
+    };
   };
 
   meta = with lib; {

@@ -4,21 +4,26 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.7.2";
-  format = "setuptools";
+  version = "0.7.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nielstron";
-    repo = pname;
+    repo = "pyfronius";
     rev = "release-${version}";
-    hash = "sha256-eWe4nXKW9oP9lqehy6BK7ABaIqP3dgRX6ymW1Okfd9g=";
+    hash = "sha256-7GtY/6uuLe7K9T7xMVt2ytpA6MKVWnyEoLtA5dSMiH4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "blas";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
-    sha256 = "sha256-LZ/e59NhlU/uUyEApQ5gKCbJzBFT+M0Fe6pl7VfpAoM=";
+    sha256 = "sha256-zMQbXQiOUNsAMDF66bDJrzdXEME5KsrR/iCWAtpaWq0=";
   };
 
   passthru = { inherit blas64; };

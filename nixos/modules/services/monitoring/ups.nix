@@ -590,6 +590,7 @@ in
       "d /var/lib/nut 700"
     ];
 
+    services.udev.packages = [ pkgs.nut ];
 
 /*
     users.users.nut =

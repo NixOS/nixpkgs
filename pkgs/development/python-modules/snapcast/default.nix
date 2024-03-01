@@ -5,12 +5,13 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.3.3";
-  format = "setuptools";
+  version = "2.3.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     owner = "happyleavesaoc";
     repo = "python-snapcast";
     rev = "refs/tags/${version}";
-    hash = "sha256-IFgSO0PjlFb4XJarx50Xnx6dF4tBKk3sLcoLWVdpnk8=";
+    hash = "sha256-qADcLrE5QwoYBDEmh7hrDJZIND2k3F0OTCEHdHDu3Y0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     construct

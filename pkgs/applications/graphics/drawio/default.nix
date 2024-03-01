@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "22.1.2";
+  version = "23.1.5";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-4S4N7vfDwzlNutPfHozy/z0LOAr8q8EepXV4tsy+yAU=";
+    hash = "sha256-ThmTahuU0o/vr6h/T/zCyEB5/APJlVA6t1TNfZgqTJ0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-QM7qazr8Iv4gjO7vF5Wj564D/yB+ZWmMGQDtTFytK00=";
+    hash = "sha256-hL89WVYy/EQe6Zppmr17Q9T2o/UjBvydDIgGpr7AA5M=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   '' + ''
     yarn --offline run electron-builder --dir \
-      --config electron-builder-linux-mac.json \
+      ${if stdenv.isDarwin then "--config electron-builder-linux-mac.json" else ""} \
       -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
       -c.electronVersion=${electron.version}
 
@@ -112,5 +112,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ qyliss darkonion0 ];
     platforms = platforms.darwin ++ platforms.linux;
+    mainProgram = "drawio";
   };
 }

@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
   src = ./.;
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = [
     coreutils
@@ -31,6 +31,10 @@ python3Packages.buildPythonApplication {
   ]
     ++ (lib.optionals enableOCR [ imagemagick_light tesseract4 ])
     ++ extraPythonPackages python3Packages;
+
+  nativeBuildInputs = [
+    python3Packages.setuptools
+  ];
 
   passthru.tests = {
     inherit (nixosTests.nixos-test-driver) driver-timeout;

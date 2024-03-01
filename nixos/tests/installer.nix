@@ -83,46 +83,34 @@ let
                   , postInstallCommands, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig, testFlakeSwitch, clevisTest, clevisFallbackTest
                   }:
-    let iface = "virtio";
-        isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
-        bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
+    let
+      qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
+      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+      qemu = qemu-common.qemuBinary pkgs.qemu_test;
     in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then ''
       machine.succeed("true")
     '' else ''
-      import subprocess
-      tpm_folder = os.environ['NIX_BUILD_TOP']
-      def assemble_qemu_flags():
-          flags = "-cpu max"
-          ${if (system == "x86_64-linux" || system == "i686-linux")
-            then ''flags += " -m 1024"''
-            else ''flags += " -m 768 -enable-kvm -machine virt,gic-version=host"''
-          }
-          ${optionalString clevisTest ''flags += f" -chardev socket,id=chrtpm,path={tpm_folder}/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"''}
-          ${optionalString clevisTest ''flags += " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:11:02 -netdev vde,id=vlan1,sock=\"$QEMU_VDE_SOCKET_1\""''}
-          return flags
-
-
-      qemu_flags = {"qemuFlags": assemble_qemu_flags()}
-
       import os
+      import subprocess
+
+      tpm_folder = os.environ['NIX_BUILD_TOP']
+
+      startcommand = "${qemu} -m 2048"
+
+      ${optionalString clevisTest ''
+        startcommand += f" -chardev socket,id=chrtpm,path={tpm_folder}/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
+        startcommand += " -device virtio-net-pci,netdev=vlan1,mac=52:54:00:12:11:02 -netdev vde,id=vlan1,sock=\"$QEMU_VDE_SOCKET_1\""
+      ''}
+      ${optionalString isEfi ''
+        startcommand +=" -drive if=pflash,format=raw,unit=0,readonly=on,file=${pkgs.OVMF.firmware} -drive if=pflash,format=raw,unit=1,readonly=on,file=${pkgs.OVMF.variables}"
+      ''}
 
       image_dir = machine.state_dir
       disk_image = os.path.join(image_dir, "machine.qcow2")
-
-      hd_flags = {
-          "hdaInterface": "${iface}",
-          "hda": disk_image,
-      }
-      ${optionalString isEfi ''
-        hd_flags.update(
-            bios="${pkgs.OVMF.fd}/FV/${bios}"
-        )''
-      }
-      default_flags = {**hd_flags, **qemu_flags}
-
+      startcommand += f" -drive file={disk_image},if=virtio,werror=report"
 
       def create_machine_named(name):
-          return create_machine({**default_flags, "name": name})
+          return create_machine(startcommand, name=name)
 
       class Tpm:
             def __init__(self):
@@ -158,7 +146,9 @@ let
       start_all()
       ${optionalString clevisTest ''
       tang.wait_for_unit("sockets.target")
+      tang.systemctl("start network-online.target")
       tang.wait_for_unit("network-online.target")
+      machine.systemctl("start network-online.target")
       machine.wait_for_unit("network-online.target")
       ''}
       machine.wait_for_unit("multi-user.target")
@@ -187,6 +177,7 @@ let
 
       ${optionalString clevisTest ''
         with subtest("Create the Clevis secret with Tang"):
+             machine.systemctl("start network-online.target")
              machine.wait_for_unit("network-online.target")
              machine.succeed('echo -n password | clevis encrypt sss \'{"t": 2, "pins": {"tpm2": {}, "tang": {"url": "http://192.168.1.2"}}}\' -y > /mnt/etc/nixos/clevis-secret.jwe')''}
 
@@ -468,7 +459,7 @@ let
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
-          virtualisation.memorySize = 1536;
+          virtualisation.memorySize = 2048;
 
           boot.initrd.systemd.enable = systemdStage1;
 
@@ -510,14 +501,8 @@ let
             ntp
             perlPackages.ListCompare
             perlPackages.XMLLibXML
-            python3Minimal
             # make-options-doc/default.nix
-            (let
-                self = (pkgs.python3Minimal.override {
-                  inherit self;
-                  includeSiteCustomize = true;
-                });
-              in self.withPackages (p: [ p.mistune ]))
+            (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
             texinfo
@@ -529,8 +514,7 @@ let
             curl
           ]
           ++ optionals (bootLoader == "grub") (let
-            zfsSupport = lib.any (x: x == "zfs")
-              (extraInstallerConfig.boot.supportedFilesystems or []);
+            zfsSupport = extraInstallerConfig.boot.supportedFilesystems.zfs or false;
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })
@@ -878,6 +862,78 @@ in {
     '';
   };
 
+  # Same as the previous, but with ZFS /boot.
+  separateBootZfs = makeInstallerTest "separateBootZfs" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "zfs" ];
+    };
+
+    extraConfig = ''
+      # Using by-uuid overrides the default of by-id, and is unique
+      # to the qemu disks, as they don't produce by-id paths for
+      # some reason.
+      boot.zfs.devNodes = "/dev/disk/by-uuid/";
+      networking.hostId = "00000000";
+    '';
+
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 256MB"   # /boot
+          + " mkpart primary linux-swap 256MB 1280M"
+          + " mkpart primary ext2 1280M -1s", # /
+          "udevadm settle",
+
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+
+          "mkfs.ext4 -L nixos /dev/vda3",
+          "mount LABEL=nixos /mnt",
+
+          # Use as many ZFS features as possible to verify that GRUB can handle them
+          "zpool create"
+            " -o compatibility=grub2"
+            " -O utf8only=on"
+            " -O normalization=formD"
+            " -O compression=lz4"      # Activate the lz4_compress feature
+            " -O xattr=sa"
+            " -O acltype=posixacl"
+            " bpool /dev/vda1",
+          "zfs create"
+            " -o recordsize=1M"        # Prepare activating the large_blocks feature
+            " -o mountpoint=legacy"
+            " -o relatime=on"
+            " -o quota=1G"
+            " -o filesystem_limit=100" # Activate the filesystem_limits features
+            " bpool/boot",
+
+          # Snapshotting the top-level dataset would trigger a bug in GRUB2: https://github.com/openzfs/zfs/issues/13873
+          "zfs snapshot bpool/boot@snap-1",                     # Prepare activating the livelist and bookmarks features
+          "zfs clone bpool/boot@snap-1 bpool/test",             # Activate the livelist feature
+          "zfs bookmark bpool/boot@snap-1 bpool/boot#bookmark", # Activate the bookmarks feature
+          "zpool checkpoint bpool",                             # Activate the zpool_checkpoint feature
+          "mkdir -p /mnt/boot",
+          "mount -t zfs bpool/boot /mnt/boot",
+          "touch /mnt/boot/empty",                              # Activate zilsaxattr feature
+          "dd if=/dev/urandom of=/mnt/boot/test bs=1M count=1", # Activate the large_blocks feature
+
+          # Print out all enabled and active ZFS features (and some other stuff)
+          "sync /mnt/boot",
+          "zpool get all bpool >&2",
+
+          # Abort early if GRUB2 doesn't like the disks
+          "grub-probe --target=device /mnt/boot >&2",
+      )
+    '';
+
+    # umount & export bpool before shutdown
+    # this is a fix for "cannot import 'bpool': pool was previously in use from another system."
+    postInstallCommands = ''
+      machine.succeed("umount /mnt/boot")
+      machine.succeed("zpool export bpool")
+    '';
+  };
+
   # zfs on / with swap
   zfsroot = makeInstallerTest "zfs-root" {
     extraInstallerConfig = {
@@ -897,7 +953,7 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary 1M 100MB"  # bpool
+          + " mkpart primary 1M 100MB"  # /boot
           + " mkpart primary linux-swap 100M 1024M"
           + " mkpart primary 1024M -1s", # rpool
           "udevadm settle",
@@ -909,19 +965,11 @@ in {
           "zfs create -o mountpoint=legacy rpool/root/usr",
           "mkdir /mnt/usr",
           "mount -t zfs rpool/root/usr /mnt/usr",
-          "zpool create -o compatibility=grub2 bpool /dev/vda1",
-          "zfs create -o mountpoint=legacy bpool/boot",
+          "mkfs.vfat -n BOOT /dev/vda1",
           "mkdir /mnt/boot",
-          "mount -t zfs bpool/boot /mnt/boot",
+          "mount LABEL=BOOT /mnt/boot",
           "udevadm settle",
       )
-    '';
-
-    # umount & export bpool before shutdown
-    # this is a fix for "cannot import 'bpool': pool was previously in use from another system."
-    postInstallCommands = ''
-      machine.succeed("umount /mnt/boot")
-      machine.succeed("zpool export bpool")
     '';
   };
 
@@ -1195,68 +1243,6 @@ in {
         "swapon -L swap",
         "mkfs.bcachefs -L root --metadata_replicas 2 --foreground_target ssd --promote_target ssd --background_target hdd --label ssd /dev/vda3 --label hdd /dev/vda4",
         "mount -t bcachefs /dev/vda3:/dev/vda4 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
-  };
-
-  bcachefsLinuxTesting = makeInstallerTest "bcachefs-linux-testing" {
-    extraInstallerConfig = {
-      imports = [ no-zfs-module ];
-
-      boot = {
-        supportedFilesystems = [ "bcachefs" ];
-        kernelPackages = pkgs.linuxPackages_testing;
-      };
-    };
-
-    extraConfig = ''
-      boot.kernelPackages = pkgs.linuxPackages_testing;
-    '';
-
-    createPartitions = ''
-      machine.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "mkfs.bcachefs -L root /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
-  };
-
-  bcachefsUpgradeToLinuxTesting = makeInstallerTest "bcachefs-upgrade-to-linux-testing" {
-    extraInstallerConfig = {
-      imports = [ no-zfs-module ];
-      boot.supportedFilesystems = [ "bcachefs" ];
-      # We don't have network access in the VM, we need this for `nixos-install`
-      system.extraDependencies = [ pkgs.linux_testing ];
-    };
-
-    extraConfig = ''
-      boot.kernelPackages = pkgs.linuxPackages_testing;
-    '';
-
-    createPartitions = ''
-      machine.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "mkfs.bcachefs -L root /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",

@@ -44,14 +44,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "10.3";
+  version = "10.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
     rev = "refs/tags/${version}";
-    hash = "sha256-R35R2dHfjcVQbEa2319FEMjPGl1Y5/u2KEHeR0wTYEo=";
+    hash = "sha256-jeU3mXaARToN1NZ+pcogCu70foGc5xAmijLUSfd9k9U=";
   };
 
   nativeBuildInputs = [ hatchling ];

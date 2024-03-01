@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "devialet";
-  version = "1.4.3";
+  version = "1.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "fwestenberg";
     repo = "devialet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DVwf1zQXwPe8W2SzL9CnYE+gwLgPEnI+tQTfR+ijwF4=";
+    hash = "sha256-oGa5tRCJAWBg/877UmmXnX7fkFLoxhyuG6gpXmyhRKo=";
   };
 
   nativeBuildInputs = [

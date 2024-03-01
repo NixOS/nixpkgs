@@ -2,7 +2,6 @@
 , stdenvNoCC }:
 
 let
-  inherit (lib) hasPrefix hasSuffix removeSuffix;
   escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
   fileName = pathStr: lib.last (lib.splitString "/" pathStr);
   scriptsDir = "$out/share/mpv/scripts";
@@ -37,6 +36,9 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
     dontBuild = true;
     preferLocalBuild = true;
 
+    # Prevent `patch` from emitting `.orig` files (that end up in the output)
+    patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
+
     outputHashMode = "recursive";
     installPhase = ''
       runHook preInstall
@@ -52,7 +54,7 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
           exit 1
         }
         mkdir -p "${scriptsDir}"
-        cp -a "${scriptPath}" "${scriptsDir}/${lib.removeSuffix ".lua" scriptName}"
+        cp -a "${scriptPath}" "${scriptsDir}/${scriptName}"
       else
         install -m644 -Dt "${scriptsDir}" \
           ${escapedList ([ scriptPath ] ++ extraScripts)}
@@ -62,6 +64,17 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
     '';
 
     passthru = { inherit scriptName; };
-    meta.platforms = lib.platforms.all;
+    meta = {
+      platforms = lib.platforms.all;
+    } // (
+      let pos =
+        if (args.meta or {}) ? description then
+          builtins.unsafeGetAttrPos "description" args.meta
+        else
+          builtins.unsafeGetAttrPos "pname" args;
+      in lib.optionalAttrs
+        (pos != null)
+        { position = "${pos.file}:${toString pos.line}"; }
+    );
   })
 ))

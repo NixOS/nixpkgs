@@ -40,14 +40,14 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
@@ -57,11 +57,12 @@ self: super: {
 
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
-  weeder_2_4_1 = super.weeder_2_4_1.override {
+  # Allow dhall 1.42.*
+  weeder_2_4_1 = doJailbreak (super.weeder_2_4_1.override {
     # weeder < 2.6 only supports algebraic-graphs < 0.7
     # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
     algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
-  };
+  });
 
   hls-cabal-plugin = super.hls-cabal-plugin.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
@@ -73,7 +74,11 @@ self: super: {
 
   stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
 
-  haskell-language-server = disableCabalFlag "fourmolu" (super.haskell-language-server.override { hls-fourmolu-plugin = null; });
+  haskell-language-server = disableCabalFlag "fourmolu" (super.haskell-language-server.override {
+    hls-fourmolu-plugin = null;
+    # Not buildable if GHC > 9.2.3, so we ship no compatible GHC
+    hls-stan-plugin = null;
+  });
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
@@ -85,12 +90,6 @@ self: super: {
   # https://github.com/haskell-infra/hackage-trustees/issues/347
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
-
-  # Apply patches from head.hackage.
-  language-haskell-extract = appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
-    sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
-  }) (doJailbreak super.language-haskell-extract);
 
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;

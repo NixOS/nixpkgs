@@ -4,7 +4,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nixosTests
 , installShellFiles, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
-, withKTLS ? false
+, withKTLS ? true
 , withStream ? true
 , withMail ? false
 , withPerl ? true
@@ -25,6 +25,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , fixPatch ? p: p
 , postPatch ? ""
 , preConfigure ? ""
+, preInstall ? ""
 , postInstall ? ""
 , meta ? null
 , nginx-doc ? outer.nginx-doc
@@ -68,6 +69,7 @@ stdenv.mkDerivation {
     ++ mapModules "inputs";
 
   configureFlags = [
+    "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
     "--with-http_realip_module"
@@ -178,19 +180,19 @@ stdenv.mkDerivation {
     if [[ -e man/nginx.8 ]]; then
       installManPage man/nginx.8
     fi
-  '';
+  '' + preInstall;
 
   disallowedReferences = map (m: m.src) modules;
 
   postInstall =
     let
-      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/sbin/nginx\n") modules;
+      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/bin/nginx\n") modules;
     in noSourceRefs + postInstall;
 
   passthru = {
     inherit modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-etag-compression nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;
@@ -202,6 +204,6 @@ stdenv.mkDerivation {
     license     = [ licenses.bsd2 ]
       ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ fpletz ajs124 raitobezarius ];
+    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members;
   };
 }

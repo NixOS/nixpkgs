@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -19,7 +18,6 @@
 , pygments
 , requests
 , snowballstemmer
-, sphinxcontrib-apidoc
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
 , sphinxcontrib-htmlhelp
@@ -77,9 +75,6 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
-
-    # extra plugins which are otherwise not found by sphinx-build
-    sphinxcontrib-apidoc
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
@@ -100,6 +95,11 @@ buildPythonPackage rec {
   disabledTests = [
     # requires network access
     "test_latex_images"
+    # racy
+    "test_defaults"
+    "test_check_link_response_only"
+    "test_anchors_ignored_for_url"
+    "test_autodoc_default_options"
   ] ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous

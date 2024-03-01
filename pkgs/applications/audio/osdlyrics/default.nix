@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osdlyrics";
-  version = "0.5.14";
+  version = "0.5.15";
 
   src = fetchFromGitHub {
     owner = "osdlyrics";
     repo = "osdlyrics";
     rev = version;
-    sha256 = "sha256-NVUQLmddXnpryt1AuHSwgPnWkgxWMBNJac09TJ12Yzo=";
+    hash = "sha256-4jEF1LdMwaLNF6zvzAuGW8Iu4dzhrFLutX69LwSjTAI=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
     (python3.withPackages (pp: with pp; [
       chardet
       dbus-python
-      future
       pycurl
       pygobject3
     ]))
@@ -81,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "Standalone lyrics fetcher/displayer";
     homepage = "https://github.com/osdlyrics/osdlyrics";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pedrohlc ];
     platforms = platforms.linux;
   };
 }

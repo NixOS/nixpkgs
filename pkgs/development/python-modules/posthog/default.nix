@@ -14,7 +14,7 @@
 }:
 let
   pname = "posthog";
-  version = "3.1.0";
+  version = "3.4.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "PostHog";
     repo = "posthog-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+FxRC1NxDaZHjMQFTyRymvHp6A3VE76kANgpVtq2WEs=";
+    hash = "sha256-PhZBpcMwU7fjmE0g+l83zHm+95N60Sbd9pNNc4Roa2A=";
   };
 
   propagatedBuildInputs = [

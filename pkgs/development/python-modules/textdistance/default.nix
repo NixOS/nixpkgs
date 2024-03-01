@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "textdistance";
-  version = "4.6.0";
+  version = "4.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cyxQMVzU7pRjg4ZDzxnWkiEwLDYDHqpgcMMMwKpdqMo=";
+    hash = "sha256-JYllgBse+FaGppq/bDzv3F2iHC+9iMkMaHJfV6fUXyE=";
   };
 
   # There aren't tests

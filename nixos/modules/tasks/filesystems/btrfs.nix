@@ -4,8 +4,8 @@ with lib;
 
 let
 
-  inInitrd = any (fs: fs == "btrfs") config.boot.initrd.supportedFilesystems;
-  inSystem = any (fs: fs == "btrfs") config.boot.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
+  inSystem = config.boot.supportedFilesystems.btrfs or false;
 
   cfgScrub = config.services.btrfs.autoScrub;
 

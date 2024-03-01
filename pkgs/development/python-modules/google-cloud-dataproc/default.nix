@@ -10,19 +10,24 @@
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.7.0";
-  format = "setuptools";
+  version = "5.9.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CGIpoPmHRIu5ICnhZiEqzvhdTo5dlPKCKt0hs4K/HAQ=";
+    hash = "sha256-E1LjzE4UbbHwn6QodVkkjIs9nAz+zqVsJcP09j1Y5Pg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-api-core

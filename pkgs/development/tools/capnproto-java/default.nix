@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "capnproto-java";
-  version = "0.1.15";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256:IcmzI1G0mXOlpzmiyeLD7o1p/eOeVpwkiGsgy5OIjxw=";
+    hash = "sha256-7uYtRHKsJvbE1b0HbNXGbRXpkUHHLjMDIWLlOUcQWDk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

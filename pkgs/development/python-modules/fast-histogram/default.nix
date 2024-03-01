@@ -42,8 +42,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonImportsCheck = [ "fast_histogram" ];
 
   meta = with lib; {

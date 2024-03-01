@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxisf";
-  version = "0.2.10";
+  version = "0.2.11";
 
   src = fetchFromGitea {
     domain = "gitea.nouspiro.space";
     owner = "nou";
     repo = "libXISF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ME0x+1VyfuhJCldwJfjQCtfe9XQk1ptmhv4ghOyNuGA=";
+    hash = "sha256-wXIbU9/xUyECluL6k1oKS3NBpoC/qjQdW9e485qmlgo=";
   };
 
   patches = [

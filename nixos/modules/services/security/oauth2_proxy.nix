@@ -572,6 +572,7 @@ in
       description = "OAuth2 Proxy";
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
       serviceConfig = {

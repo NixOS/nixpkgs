@@ -9,7 +9,6 @@
 , timg
 , xdg-utils
 , xsel
-,
 }:
 
 let
@@ -31,10 +30,10 @@ let
     xsel
   ];
 in
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "offpunk";
-  version = "2.1";
-  format = "pyproject";
+  version = "2.2";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.7";
 
@@ -42,7 +41,7 @@ python3Packages.buildPythonPackage rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    hash = "sha256-IFqasTI2dZCauLUAq6/rvwkfraVK7SGUXpHCPEgSPGk=";
+    hash = "sha256-ygVL17qqmNB7hzw1VuYIAbirbaq4EVppWCHSvTl+/Jw=";
   };
 
   nativeBuildInputs = [ python3Packages.hatchling installShellFiles ];
@@ -54,11 +53,12 @@ python3Packages.buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = offpunk; };
 
-  meta = with lib; {
-    description = "An Offline-First browser for the smolnet ";
+  meta = {
+    description = "A command-line and offline-first smolnet browser/feed reader";
     homepage = src.meta.homepage;
-    maintainers = with maintainers; [ DamienCassou ];
-    platforms = platforms.linux;
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
+    mainProgram = "offpunk";
+    maintainers = with lib.maintainers; [ DamienCassou ];
+    platforms = lib.platforms.linux;
   };
 }

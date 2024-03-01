@@ -5,30 +5,26 @@
 , pkg-config
 , openssl
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.13.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JUyoOtlypDWK6HxsonVzbfQAdcXk728a8gVI/5GI2fs=";
+    hash = "sha256-Ogbfzb57HaWJD2AR9fequty9SyXJ8aqbQ6Tlt82EP/c=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "criterion-0.4.0" = "sha256-0EKLRdxbH2czkZjmuaYLzkTBU687y6Iw9yqNV2TbsDw=";
-    };
-  };
+  cargoHash = "sha256-EmSM8lRCjX9XZVr34SpMhTIKWxRsaJ+g4EphV8bahsU=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -46,10 +42,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A fast, async, stream-based link checker written in Rust.";
+    description = "A fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ totoroot tuxinaut ];
+    mainProgram = "lychee";
   };
 }

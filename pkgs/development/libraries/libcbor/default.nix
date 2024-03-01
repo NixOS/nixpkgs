@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "unstable-2023-01-29"; # Musl fix hasn't been released yet.
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
-    rev = "cb4162f40d94751141b4d43b07c4add83e738a68";
-    sha256 = "sha256-ZTa+wG1g9KsVoqJG/yqxo2fJ7OhPnaI9QcfOmpOT3pg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-eE11hYPsOKqfoX8fx/oYfOAichhUe4mMpNQNVZ6vAUI=";
   };
 
   outputs = [ "out" "dev" ];

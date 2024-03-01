@@ -94,6 +94,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.go2rtc = {
+      wants = [ "network-online.target" ];
       after = [
         "network-online.target"
       ];

@@ -8,10 +8,13 @@
 , ffmpeg
 , fftw
 , flac
+, gbenchmark
 , glibcLocales
+, gtest
 , hidapi
 , lame
 , libebur128
+, libdjinterop
 , libGLU
 , libid3tag
 , libkeyfinder
@@ -26,6 +29,7 @@
 , libxcb
 , lilv
 , lv2
+, microsoft-gsl
 , mp4v2
 , opusfile
 , pcre
@@ -52,13 +56,13 @@
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.3.6";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-VdgCsd/7vMFUleOU0ESoZDQ8yhQSsLZADVi4XI76Ouw=";
+    hash = "sha256-JSWUzerm7D6AKq6g/9eRrt3EE2movRdM+VLUg07sLHo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -69,12 +73,15 @@ mkDerivation rec {
     ffmpeg
     fftw
     flac
+    gbenchmark
     glibcLocales
+    gtest
     hidapi
     lame
     libebur128
     libGLU
     libid3tag
+    libdjinterop
     libkeyfinder
     libmad
     libmodplug
@@ -87,6 +94,7 @@ mkDerivation rec {
     libxcb
     lilv
     lv2
+    microsoft-gsl
     mp4v2
     opusfile
     pcre

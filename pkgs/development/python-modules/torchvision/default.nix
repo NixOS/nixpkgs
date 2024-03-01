@@ -8,18 +8,16 @@
 , pillow
 , pytest
 , scipy
-, symlinkJoin
 , torch
 , which
 }:
 
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) backendStdenv cudaVersion;
+  inherit (cudaPackages) backendStdenv;
 
   pname = "torchvision";
-  version = "0.16.1";
-  format = "setuptools";
+  version = "0.17.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +26,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TsYBDtedTQ3+F3LM4JwzkGH2XOr0WSp1Au5YoR07rSA=";
+    hash = "sha256-K2irwwf6qgyfZqJH1NUasDmBSA4mH2Rclx7A7zP4kiQ=";
   };
 
   nativeBuildInputs = [

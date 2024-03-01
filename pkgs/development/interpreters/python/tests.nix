@@ -125,6 +125,9 @@ let
     extension = self: super: {
       foobar = super.numpy;
     };
+    # `pythonInterpreters.pypy39_prebuilt` does not expose an attribute
+    # name (is not present in top-level `pkgs`).
+    is_prebuilt = python: python.pythonAttr == null;
   in lib.optionalAttrs (python.isPy3k) ({
     test-packageOverrides = let
       myPython = let
@@ -138,7 +141,10 @@ let
     # test-overrideScope = let
     #  myPackages = python.pkgs.overrideScope extension;
     # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
-  } // lib.optionalAttrs (python ? pythonAttr) {
+    #
+    # Have to skip prebuilt python as it's not present in top-level
+    # `pkgs` as an attribute.
+  } // lib.optionalAttrs (python ? pythonAttr && !is_prebuilt python) {
     # Test applying overrides using pythonPackagesOverlays.
     test-pythonPackagesExtensions = let
       pkgs_ = pkgs.extend(final: prev: {

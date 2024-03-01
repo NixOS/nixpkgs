@@ -10,21 +10,31 @@
 , pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "notifications-python-client";
-  version = "8.1.0";
+  version = "9.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alphagov";
-    repo = pname;
+    repo = "notifications-python-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-pdBPjc2j0/PSk224r8un22pNQ9g1jMdhPn8XmoKp+ng=";
+    hash = "sha256-HDxCVwagHFenx0S2TPxiMIyyq4ovxe0yNi76sX2CC9s=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     docopt
@@ -39,11 +49,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   pythonImportsCheck = [
     "notifications_python_client"

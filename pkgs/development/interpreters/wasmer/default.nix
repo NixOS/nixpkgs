@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.2.1";
+  version = "4.2.5";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-GROw9TYKC53ECJUeYhCez8f2jImPla/lGgsP91tTGjQ=";
+    hash = "sha256-zCaN0F6a8qkZkOmHMU0D70KaY4H8pUXElJbyvOCjogc=";
   };
 
-  cargoHash = "sha256-JE7FDF4MWhqJbL7ZP+yzfV7/Z79x0NuQLYNwWwMjAao=";
+  cargoHash = "sha256-ugysqLQlnSzm0W4zW6LPSn6KjwpAtJZGEkzk/nWahWg=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
 
-  env.LLVM_SYS_140_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+  env.LLVM_SYS_150_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
 
   # Tests are failing due to `Cannot allocate memory` and other reasons
   doCheck = false;
@@ -67,6 +67,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://wasmer.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne shamilton ];
+    maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
   };
 }

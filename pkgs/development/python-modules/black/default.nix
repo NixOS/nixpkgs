@@ -5,7 +5,6 @@
 , pythonOlder
 , pytestCheckHook
 , aiohttp
-, aiohttp-cors
 , click
 , colorama
 , hatch-fancy-pypi-readme
@@ -19,7 +18,6 @@
 , platformdirs
 , tokenize-rt
 , tomli
-, typed-ast
 , typing-extensions
 , uvloop
 }:
@@ -77,6 +75,10 @@ buildPythonPackage rec {
     pytestCheckHook
     parameterized
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"

@@ -3,7 +3,8 @@
 , fetchFromGitHub
 
 # build-system
-, hatchling
+, setuptools
+, setuptools-scm
 
 # non-propagates
 , django
@@ -17,18 +18,19 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "23.2";
+  version = "24.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RYGwi+hRfTqPAikrv33w27v1/WLwRvXexSusJKdr2o8=";
+    hash = "sha256-TCHie5h/VRJ9NSg7wKnWotFHm328kxIp+xFXEa8wL1c=";
   };
 
   nativeBuildInputs = [
-    hatchling
+    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

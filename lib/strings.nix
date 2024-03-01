@@ -95,8 +95,7 @@ rec {
         concatStringsSep "/" ["usr" "local" "bin"]
         => "usr/local/bin"
   */
-  concatStringsSep = builtins.concatStringsSep or (separator: list:
-    lib.foldl' (x: y: x + y) "" (intersperse separator list));
+  concatStringsSep = builtins.concatStringsSep;
 
   /* Maps a function over a list of strings and then concatenates the
      result with the specified separator interspersed between
@@ -561,7 +560,7 @@ rec {
     ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
 
   # warning added 12-12-2022
-  replaceChars = lib.warn "replaceChars is a deprecated alias of replaceStrings, replace usages of it with replaceStrings." builtins.replaceStrings;
+  replaceChars = lib.warn "lib.replaceChars is a deprecated alias of lib.replaceStrings." builtins.replaceStrings;
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -1133,7 +1132,7 @@ rec {
             "/prefix/nix-profiles-library-paths.patch"
             "/prefix/compose-search-path.patch" ]
   */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
+  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead."
     (rootPath: file:
       let
         lines = lib.splitString "\n" (readFile file);

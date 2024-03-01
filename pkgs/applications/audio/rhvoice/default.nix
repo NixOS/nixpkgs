@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ berce ];
     platforms = with lib.platforms; all;
+    mainProgram = "RHVoice-test";
   };
 }

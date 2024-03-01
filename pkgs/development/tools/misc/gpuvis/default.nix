@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 gtk3 freetype ];
 
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' has not been declared
+    "-include cstdint"
+  ];
+
   meta = with lib; {
     description = "GPU Trace Visualizer";
     homepage = "https://github.com/mikesart/gpuvis";

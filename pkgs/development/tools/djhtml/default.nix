@@ -5,7 +5,7 @@
 }:
 buildPythonApplication rec {
   pname = "djhtml";
-  version = "3.0.5";
+  version = "3.0.6";
 
   format = "setuptools";
   disabled = pythonOlder "3.7";
@@ -13,8 +13,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rtts";
     repo = pname;
-    rev = version;
-    hash = "sha256-m13lw1x+URAYuDc0gXRIxfRnd6kQxeAuLDqYXeOgQE0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3bviLyTLpHcAUWAaAmNZukWBDwFs8yFOAxl2bSk9GNY=";
   };
 
   pythonImportsCheck = [ "djhtml" ];

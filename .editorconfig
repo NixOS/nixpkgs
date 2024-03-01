@@ -108,3 +108,7 @@ charset = unset
 [lib/tests/*.plist]
 indent_style = tab
 insert_final_newline = unset
+
+[pkgs/kde/generated/**]
+insert_final_newline = unset
+end_of_line = unset

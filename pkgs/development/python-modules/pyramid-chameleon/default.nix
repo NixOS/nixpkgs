@@ -7,7 +7,7 @@
 , pyramid
 , pytestCheckHook
 , setuptools
-, zope_interface
+, zope-interface
 }:
 
 buildPythonPackage rec {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     chameleon
     pyramid
     setuptools
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [

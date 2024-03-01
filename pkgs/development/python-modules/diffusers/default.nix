@@ -21,6 +21,7 @@
 , jax
 , jaxlib
 , jinja2
+, peft
 , protobuf
 , tensorboard
 , torch
@@ -30,7 +31,6 @@
 , pytest-xdist
 , pytestCheckHook
 , requests-mock
-, ruff
 , scipy
 , sentencepiece
 , torchsde
@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.24.0";
+  version = "0.26.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ccWF8hQzPhFY/kqRum2tbanI+cQiT25MmvPZN+hGadc=";
+    hash = "sha256-1pIe1OU+vIrHM6KIZtHRMXklBZrugDV+I/OBNQYqvXI=";
   };
 
   nativeBuildInputs = [
@@ -81,6 +81,7 @@ buildPythonPackage rec {
       accelerate
       datasets
       jinja2
+      peft
       protobuf
       tensorboard
     ];
@@ -99,7 +100,6 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     requests-mock
-    ruff
     scipy
     sentencepiece
     torchsde
@@ -141,6 +141,8 @@ buildPythonPackage rec {
     "test_deprecate_stacklevel"
     # fails due to precision of floating point numbers
     "test_model_cpu_offload_forward_pass"
+    # tries to run ruff which we have intentionally removed from nativeCheckInputs
+    "test_is_copy_consistent"
   ];
 
   meta = with lib; {

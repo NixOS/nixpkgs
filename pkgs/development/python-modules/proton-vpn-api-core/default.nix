@@ -11,16 +11,16 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.20.1-unstable-2023-10-10";
+  version = "0.20.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
-    rev = "9c03fc30d3ff08559cab3644eadde027b029375d";
-    hash = "sha256-vnz1+NazQceAs9KA3Jq0tsJditRoG/LoBR+0wuDzzHk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-acck0Nc/15soTJBC/4y83ID9fjF/q4vrYr6SsLAAVRY=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton/vpn/core/ --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton/vpn/core/ --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.core" ];
@@ -51,11 +51,6 @@ buildPythonPackage {
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
   '';
-
-  disabledTestPaths = [
-    # Has a single test failing with Permission denied: '/run'
-    "tests/test_session.py"
-  ];
 
   meta = with lib; {
     description = "Acts as a facade to the other Proton VPN components, exposing a uniform API to the available Proton VPN services";

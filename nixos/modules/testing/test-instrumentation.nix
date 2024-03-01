@@ -207,7 +207,10 @@ in
     networking.usePredictableInterfaceNames = false;
 
     # Make it easy to log in as root when running the test interactively.
-    users.users.root.initialHashedPassword = mkOverride 150 "";
+    # This needs to be a file because of a quirk in systemd credentials,
+    # where you cannot specify an empty string as a value. systemd-sysusers
+    # uses credentials to set passwords on users.
+    users.users.root.hashedPasswordFile = mkOverride 150 "${pkgs.writeText "hashed-password.root" ""}";
 
     services.xserver.displayManager.job.logToJournal = true;
 

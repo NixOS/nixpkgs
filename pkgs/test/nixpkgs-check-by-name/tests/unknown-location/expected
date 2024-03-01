@@ -1,0 +1,1 @@
+pkgs.foo: Cannot determine the location of this attribute using `builtins.unsafeGetAttrPos`.

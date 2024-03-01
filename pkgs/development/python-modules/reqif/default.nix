@@ -1,52 +1,55 @@
 { lib
+, beautifulsoup4
 , buildPythonPackage
-, python
 , fetchFromGitHub
 , hatchling
-, beautifulsoup4
-, lxml
 , jinja2
+, lxml
 , pytestCheckHook
+, python
 , pythonOlder
+, pythonRelaxDepsHook
+, xmlschema
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.35";
-  format = "pyproject";
+  version = "0.0.40";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
-    repo = pname;
+    repo = "reqif";
     rev = "refs/tags/${version}";
-    hash = "sha256-3yOLOflPqzJRv3qCQXFK3rIFftBq8FkYy7XhOfWH82Y=";
+    hash = "sha256-VQvwynFv/DN5RHT00rxtDcJ9wsEpKdsh3rdyUakBr2Q=";
   };
 
   postPatch = ''
-    substituteInPlace ./tests/unit/conftest.py --replace \
-       "os.path.abspath(os.path.join(__file__, \"../../../../reqif\"))" \
+    substituteInPlace ./tests/unit/conftest.py \
+      --replace-fail "os.path.abspath(os.path.join(__file__, \"../../../../reqif\"))" \
       "\"${placeholder "out"}/${python.sitePackages}/reqif\""
-    substituteInPlace requirements.txt --replace "==" ">="
   '';
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     beautifulsoup4
     lxml
     jinja2
-  ];
-
-  pythonImportsCheck = [
-    "reqif"
+    xmlschema
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "reqif"
   ];
 
   meta = with lib; {

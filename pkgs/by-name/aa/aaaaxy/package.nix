@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildGoModule
 , alsa-lib
-, libglvnd
+, libGL
 , libX11
 , libXcursor
 , libXext
@@ -14,26 +14,27 @@
 , pkg-config
 , zip
 , advancecomp
+, makeWrapper
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.4.119";
+  version = "1.5.23";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-M+HNYQl53vQZdKn/CyF5OZPyKGq/4A9DPoDV3fRdWMY=";
+    hash = "sha256-AB2MBXNWfWo8X5QTt2w8nrSG3v9qpIkMB7BUUKQtQEk=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-NoWfCn9P/i/8Xv0w2wqTFG3yoayGzc1TyF02zANP7Rg=";
+  vendorHash = "sha256-ECKzKGMQjmZFHn/lzVzijpXlFcAKuUsiD/HVz59clAc=";
 
   buildInputs = [
     alsa-lib
-    libglvnd
+    libGL
     libX11 libXcursor libXext libXi libXinerama libXrandr
     libXxf86vm
   ];
@@ -43,6 +44,7 @@ buildGoModule rec {
     pkg-config
     zip
     advancecomp
+    makeWrapper
   ];
 
   outputs = [ "out" "testing_infra" ];
@@ -56,7 +58,27 @@ buildGoModule rec {
     patchShebangs scripts/
     substituteInPlace scripts/regression-test-demo.sh \
       --replace 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
+
+    substituteInPlace Makefile --replace \
+      'CPPFLAGS ?= -DNDEBUG' \
+      'CPPFLAGS ?= -DNDEBUG -D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so\" -D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so\"'
   '';
+
+  overrideModAttrs = (_: {
+    # We can't patch in the path to libGL directly because
+    # this is a fixed output derivation and when the path to libGL
+    # changes, the hash would change.
+    # To work around this, use environment variables.
+    postBuild = ''
+      substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_others.go' \
+        --replace \
+        '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
+        '{os.Getenv("EBITENGINE_LIBGL")}' \
+        --replace \
+        '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
+        '{os.Getenv("EBITENGINE_LIBGLESv2")}'
+    '';
+  });
 
   makeFlags = [
     "BUILDTYPE=release"
@@ -74,6 +96,10 @@ buildGoModule rec {
     install -Dm644 'aaaaxy.png' -t "$out/share/icons/hicolor/128x128/apps/"
     install -Dm644 'aaaaxy.desktop' -t "$out/share/applications/"
     install -Dm644 'io.github.divverent.aaaaxy.metainfo.xml' -t "$out/share/metainfo/"
+
+    wrapProgram $out/bin/aaaaxy \
+      --set EBITENGINE_LIBGL     '${lib.getLib libGL}/lib/libGL.so' \
+      --set EBITENGINE_LIBGLESv2 '${lib.getLib libGL}/lib/libGLESv2.so'
 
     install -Dm755 'scripts/run-timedemo.sh' -t "$testing_infra/scripts/"
     install -Dm755 'scripts/regression-test-demo.sh' -t "$testing_infra/scripts/"

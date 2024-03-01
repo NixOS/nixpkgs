@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20230909";
+  version = "20240212";
 
   src = fetchurl {
     url = "http://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Hl5sdlQN/oEEQmzX/T9xXMZAT5A5ySA0RwErjy9re4Y=";
+    hash = "sha256-lx1aNkA1NJ6YTYLCpI1Uagxz5S87jyqimjvj0kCP+qg=";
   };
 
   patches = [

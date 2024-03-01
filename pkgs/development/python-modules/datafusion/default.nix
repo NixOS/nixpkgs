@@ -9,6 +9,7 @@
 , protobuf
 , pyarrow
 , Security
+, SystemConfiguration
 }:
 
 let
@@ -31,7 +32,7 @@ in
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "25.0.0";
+  version = "35.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -39,13 +40,13 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "arrow-datafusion-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-oC+fp41a9rsdobpvShZ7sDdtYPJQQ7JLg6MFL+4Pksg=";
+    hash = "sha256-43XY7j/8x+7SCY4W8nysaeWax2nvTTHZXMmy3hSz6pI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "datafusion-cargo-deps";
     inherit src pname version;
-    hash = "sha256-0e0ZRgwcS/46mi4c2loAnBA2bsaD+/RiMh7oNg3EvHY=";
+    hash = "sha256-YWAyEMojw0bc/fu5kIZKMNPEgsAIpWqjVNodWXbgTl4=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -53,7 +54,11 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+    SystemConfiguration
+  ];
 
   propagatedBuildInputs = [ pyarrow ];
 

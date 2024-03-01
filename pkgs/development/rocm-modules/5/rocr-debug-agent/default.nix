@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "rocr_debug_agent";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-AUDbNrFtUQ5Hm+uv5KMovh7P9wXQKLyRNx9gEQFnv6Y=";
@@ -50,10 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Library that provides some debugging functionality for ROCr";
-    homepage = "https://github.com/ROCm-Developer-Tools/rocr_debug_agent";
+    homepage = "https://github.com/ROCm/rocr_debug_agent";
     license = with licenses; [ ncsa ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

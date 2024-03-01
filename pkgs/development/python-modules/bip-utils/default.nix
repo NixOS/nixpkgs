@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bip-utils";
-  version = "2.8.0";
+  version = "2.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "ebellocchia";
     repo = "bip_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FW3ni7kPB0VeVK/uWjDEeWgilP9dNiuvSaboUpG5DLo=";
+    hash = "sha256-D+LalbrwsjxwYW8l38D1l4tGAsjrZ+bS+/Ppgaxkzy4=";
   };
 
   propagatedBuildInputs = [

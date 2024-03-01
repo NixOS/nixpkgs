@@ -10,7 +10,7 @@
   git
 , # oil deps
   file
-, glibcLocales
+, pkgsBuildBuild
 , six
 , typing
 }:
@@ -120,10 +120,12 @@ rec {
       rm cpp/stdlib.h # keep modules from finding the wrong stdlib?
       # work around hard parse failure documented in oilshell/oil#1468
       substituteInPlace osh/cmd_parse.py --replace 'elif self.c_id == Id.Op_LParen' 'elif False'
+      # disable fragile libc tests
+      substituteInPlace build/py.sh --replace "py-ext-test pyext/libc_test.py" "#py-ext-test pyext/libc_test.py"
     '';
 
     # See earlier note on glibcLocales TODO: verify needed?
-    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
+    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${pkgsBuildBuild.glibcLocales}/lib/locale/locale-archive";
 
     # not exhaustive; sample what resholve uses as a sanity check
     pythonImportsCheck = [

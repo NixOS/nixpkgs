@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "pcbnewTransition";
-  version = "0.3.4";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3CJUG1kd63Lg0r9HpJRIvttHS5s2EuZRoxeXrqsJ/kQ=";
+    hash = "sha256-M4r6IeARVZq+KO7Q0tbHFD/BMeLN6vmuxfnstmMPgdg=";
   };
 
   propagatedBuildInputs = [

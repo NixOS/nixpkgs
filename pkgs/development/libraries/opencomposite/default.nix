@@ -11,17 +11,19 @@
 , vulkan-headers
 , vulkan-loader
 , xorg
+
+, nix-update-script
 }:
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "unstable-2023-09-11";
+  version = "unstable-2024-02-05";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "cca18158a4b6921df54e84a3b23ff459f76a2bde";
-    hash = "sha256-VREApt4juz283aJVLZoBbqg01PNs4XBxmpr/UIMlaK8=";
+    rev = "c1649b0e4f3c4f51c12904c0b818263006d56f00";
+    hash = "sha256-K8Vtd60cKmhEKMBrlNZxoC73m1BY0014ejJM2mWkwsA=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +51,10 @@ stdenv.mkDerivation {
     cp -r bin/ $out/lib/opencomposite
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=openxr" ];
+  };
 
   meta = with lib; {
     description = "Reimplementation of OpenVR, translating calls to OpenXR";

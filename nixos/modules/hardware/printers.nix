@@ -2,18 +2,23 @@
 with lib;
 let
   cfg = config.hardware.printers;
-  ppdOptionsString = options: optionalString (options != {})
-    (concatStringsSep " "
-      (mapAttrsToList (name: value: "-o '${name}'='${value}'") options)
-    );
-  ensurePrinter = p: ''
-    ${pkgs.cups}/bin/lpadmin -p '${p.name}' -E \
-      ${optionalString (p.location != null) "-L '${p.location}'"} \
-      ${optionalString (p.description != null) "-D '${p.description}'"} \
-      -v '${p.deviceUri}' \
-      -m '${p.model}' \
-      ${ppdOptionsString p.ppdOptions}
+
+  ensurePrinter = p: let
+    args = cli.toGNUCommandLineShell {} ({
+      p = p.name;
+      v = p.deviceUri;
+      m = p.model;
+    } // optionalAttrs (p.location != null) {
+      L = p.location;
+    } // optionalAttrs (p.description != null) {
+      D = p.description;
+    } // optionalAttrs (p.ppdOptions != {}) {
+      o = mapAttrsToList (name: value: "'${name}'='${value}'") p.ppdOptions;
+    });
+  in ''
+    ${pkgs.cups}/bin/lpadmin ${args} -E
   '';
+
   ensureDefaultPrinter = name: ''
     ${pkgs.cups}/bin/lpadmin -d '${name}'
   '';

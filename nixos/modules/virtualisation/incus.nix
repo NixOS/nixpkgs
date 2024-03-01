@@ -97,6 +97,12 @@ in
           considered failed and systemd will attempt to restart it.
         '';
       };
+
+      ui = {
+        enable = lib.mkEnableOption (lib.mdDoc "(experimental) Incus UI");
+
+        package = lib.mkPackageOption pkgs [ "incus" "ui" ] { };
+      };
     };
   };
 
@@ -150,20 +156,27 @@ in
       after = [
         "network-online.target"
         "lxcfs.service"
-      ] ++ (lib.optional cfg.socketActivation "incus.socket");
+        "incus.socket"
+      ];
       requires = [
         "lxcfs.service"
-      ] ++ (lib.optional cfg.socketActivation "incus.socket");
+        "incus.socket"
+      ];
       wants = [
         "network-online.target"
       ];
 
-      path = lib.mkIf config.boot.zfs.enabled [ config.boot.zfs.package ];
+      path = lib.mkIf config.boot.zfs.enabled [
+        config.boot.zfs.package
+        "${config.boot.zfs.package}/lib/udev"
+      ];
 
-      environment = {
+      environment = lib.mkMerge [ {
         # Override Path to the LXC template configuration directory
         INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
-      };
+      } (lib.mkIf (cfg.ui.enable) {
+        "INCUS_UI" = cfg.ui.package;
+      }) ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
@@ -183,7 +196,7 @@ in
       };
     };
 
-    systemd.sockets.incus = lib.mkIf cfg.socketActivation {
+    systemd.sockets.incus = {
       description = "Incus UNIX socket";
       wantedBy = [ "sockets.target" ];
 
@@ -191,7 +204,6 @@ in
         ListenStream = "/var/lib/incus/unix.socket";
         SocketMode = "0660";
         SocketGroup = "incus-admin";
-        Service = "incus.service";
       };
     };
 

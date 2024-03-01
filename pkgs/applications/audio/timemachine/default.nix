@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nico202 ];
+    mainProgram = "timemachine";
   };
 }
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
       url  = "https://github.com/jedisct1/libsodium/commit/ffd1e374989197b44d815ac8b5d8f0b43b6ce534.patch";
       hash = "sha256-jG0VirIoFBwYmRx6zHSu2xe6pXYwbeqNVhPJxO6eJEY=";
     })
-  ] ++ lib.optional stdenv.hostPlatform.isMinGW ./mingw-no-fortify.patch;
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

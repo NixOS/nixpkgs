@@ -68,10 +68,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    smoke-test = nixosTests.bitcoind-knots;
-  };
-
   meta = with lib; {
     description = "A derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";

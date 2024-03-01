@@ -16,7 +16,6 @@
 , libssh
 , zstd
 , lz4
-, boost
 , readline
 , libtirpc
 , rpcsvc-proto
@@ -35,8 +34,8 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 
-  mysqlShellVersion = "8.2.1";
-  mysqlServerVersion = "8.2.0";
+  mysqlShellVersion = "8.3.0";
+  mysqlServerVersion = "8.3.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -45,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-itPj8cWuIVS+Y4rPVW6JgfcC0FKsxZV+d23xciwhGXk=";
+      hash = "sha256-HyFJWgt6grJKRT1S4hU6gUs8pwTsz5mXZtVFvOUvOG4=";
     })
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-m6WdFow28bxW52q+m8PniZCU/1Ej4secdPQi8GKlziE=";
+      hash = "sha256-O0j/gvS9fR/xp9plytjj249H7LY/+eyst1IsFpy318U=";
     })
   ];
 
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.isDarwin [ cctools DarwinTools ];
 
   buildInputs = [
-    boost
     curl
     libedit
     libssh
@@ -98,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Build MySQL
     echo "Building mysqlclient mysqlxclient"
 
-    cmake -DWITH_BOOST=system -DWITH_SYSTEM_LIBS=ON -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
+    cmake -DWITH_SYSTEM_LIBS=ON -DWITH_FIDO=system -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
 
     cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient

@@ -7,7 +7,10 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = pkgs.libsForQt5.sddm;
+  sddm = cfg.package.override(old: {
+    withWayland = cfg.wayland.enable;
+    extraPackages = old.extraPackages or [] ++ cfg.extraPackages;
+  });
 
   iniFmt = pkgs.formats.ini { };
 
@@ -108,6 +111,8 @@ in
         '';
       };
 
+      package = mkPackageOption pkgs [ "plasma5Packages" "sddm" ] {};
+
       enableHidpi = mkOption {
         type = types.bool;
         default = true;
@@ -135,6 +140,15 @@ in
         default = "";
         description = lib.mdDoc ''
           Greeter theme to use.
+        '';
+      };
+
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        defaultText = "[]";
+        description = lib.mdDoc ''
+          Extra Qt plugins / QML libraries to add to the environment.
         '';
       };
 
@@ -209,7 +223,7 @@ in
                 keymap_variant = xcfg.xkb.variant;
                 keymap_options = xcfg.xkb.options;
               };
-            }; in "${pkgs.weston}/bin/weston --shell=fullscreen-shell.so -c ${westonIni}";
+            }; in "${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
           description = lib.mdDoc "Command used to start the selected compositor";
         };
       };
@@ -233,15 +247,7 @@ in
       }
     ];
 
-    services.xserver.displayManager.job = {
-      environment = {
-        # Load themes from system environment
-        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
-        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
-      };
-
-      execCmd = "exec /run/current-system/sw/bin/sddm";
-    };
+    services.xserver.displayManager.job.execCmd = "exec /run/current-system/sw/bin/sddm";
 
     security.pam.services = {
       sddm.text = ''

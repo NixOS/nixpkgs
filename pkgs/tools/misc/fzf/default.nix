@@ -8,7 +8,6 @@
 , bc
 , ncurses
 , perl
-, glibcLocales
 , testers
 , fzf
 }:
@@ -19,22 +18,22 @@ let
   # warnings on non-nixos machines
   ourPerl = if !stdenv.isLinux then perl else (
     writeShellScriptBin "perl" ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+      export PERL_BADLANG=0
       exec ${perl}/bin/perl "$@"
     '');
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.44.1";
+  version = "0.46.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-oL3AA/3RPKcXLBNYaBYleueQph7/xvN/UEhwcYM9lAs=";
+    hash = "sha256-gMSelLwIIYv/vkbdWi4Cw3FEy4lbC8P/5+T+c/e66+c=";
   };
 
-  vendorHash = "sha256-EutNjyW5bvGvMZP9xBrcu91TOAbl9TDZe2+g0/qnuAQ=";
+  vendorHash = "sha256-8ojmIETUyZ3jDhrqkHYnxptRG8vdj0GADYvEpw0wi6w=";
 
   CGO_ENABLED = 0;
 

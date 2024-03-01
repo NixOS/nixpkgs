@@ -4,7 +4,7 @@
 , fetchPypi
 , python
 , zc-buildout
-, zope_testrunner
+, zope-testrunner
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zc-buildout ];
 
-  nativeCheckInputs = [ zope_testrunner ];
+  nativeCheckInputs = [ zope-testrunner ];
 
   checkPhase = ''
     ${python.interpreter} -m zope.testrunner --test-path=src []

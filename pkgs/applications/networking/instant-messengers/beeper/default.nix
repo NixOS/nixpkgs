@@ -11,11 +11,11 @@
 }:
 let
   pname = "beeper";
-  version = "3.90.11";
+  version = "3.97.44";
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.90.11-build-2312112f0wxx20y.AppImage";
-    hash = "sha256-ZYv0PUvZiw8pcszCVCd7mHE/+VHb+I25OPu5R7vI1j4=";
+    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.97.44-build-2402237nrc018ws-x86_64.AppImage";
+    hash = "sha256-z7SKs3ID8tnBwhhd6Z1khR+qjMQ7ivbkCAB49XYxnSs=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
@@ -77,7 +77,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://beeper.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll mjm ];
+    maintainers = with maintainers; [ jshcmpbll mjm edmundmiller ];
     platforms = [ "x86_64-linux" ];
   };
 }

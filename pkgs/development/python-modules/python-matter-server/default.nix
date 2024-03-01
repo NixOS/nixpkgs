@@ -5,6 +5,7 @@
 
 # build
 , setuptools
+, pythonRelaxDepsHook
 
 # propagates
 , aiohttp
@@ -18,6 +19,7 @@
 # optionals
 , cryptography
 , home-assistant-chip-core
+, zeroconf
 
 # tests
 , python
@@ -28,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.0.3";
+  version = "5.7.0b2";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -37,16 +39,22 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-bR6AVoy9f02RKZ57dnHTDAv5LTCcd/qBbzMDRKsGbfM=";
+    hash = "sha256-fMtvVizHeAzLdou0U1tqbmQATIBLK4w9I7EwMlzB8QA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace '--cov' ""
   '';
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "home-assistant-chip-clusters"
   ];
 
   propagatedBuildInputs = [
@@ -63,6 +71,7 @@ buildPythonPackage rec {
     server = [
       cryptography
       home-assistant-chip-core
+      zeroconf
     ];
   };
 
@@ -70,7 +79,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = let
     pythonEnv = python.withPackages (_: propagatedBuildInputs ++ nativeCheckInputs ++ [ pytest ]);

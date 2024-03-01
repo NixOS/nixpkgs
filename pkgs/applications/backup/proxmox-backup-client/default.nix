@@ -150,6 +150,6 @@ rustPlatform.buildRustPackage {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ cofob christoph-heiss ];
     platforms = platforms.linux;
-    mainProgram = pname;
+    mainProgram = "proxmox-backup-client";
   };
 }

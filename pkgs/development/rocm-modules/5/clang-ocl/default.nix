@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "clang-ocl";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-uMSvcVJj+me2E+7FsXZ4l4hTcK6uKEegXpkHGcuist0=";
@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "OpenCL compilation with clang compiler";
-    homepage = "https://github.com/RadeonOpenCompute/clang-ocl";
+    homepage = "https://github.com/ROCm/clang-ocl";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

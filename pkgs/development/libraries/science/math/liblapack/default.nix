@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblapack";
-  version = "3.11";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
     repo = "lapack";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-AYD78u70y8cY19hmM/aDjQEzxO8u9lPWhCFxRe5cqXI=";
+    sha256 = "sha256-xn9HL4YF8JPka1gwet5bGGo2k505H3RfWpxkUIYNecQ=";
   };
 
   nativeBuildInputs = [ gfortran cmake ];

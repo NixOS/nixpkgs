@@ -1,8 +1,8 @@
 diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 --- a/cmake/modules/SetUpMacOS.cmake
 +++ b/cmake/modules/SetUpMacOS.cmake
-@@ -28,17 +28,10 @@ if(CMAKE_VERSION VERSION_LESS 3.14.4)
- endif()
+@@ -8,17 +8,10 @@
+ set(ROOT_PLATFORM macosx)
  
  if (CMAKE_SYSTEM_NAME MATCHES Darwin)
 -  EXECUTE_PROCESS(COMMAND sw_vers "-productVersion"
@@ -19,7 +19,7 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
      #TODO: check haveconfig and rpath -> set rpath true
      #TODO: check Thread, define link command
      #TODO: more stuff check configure script
-@@ -57,22 +50,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+@@ -37,22 +30,7 @@
         SET(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -m64")
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
         SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
@@ -42,7 +42,7 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
  
    if (CMAKE_COMPILER_IS_GNUCXX)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe -W -Wshadow -Wall -Woverloaded-virtual -fsigned-char -fno-common")
-@@ -130,7 +108,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+@@ -96,7 +74,6 @@
    endif()
  
    #---Set Linker flags----------------------------------------------------------------------
@@ -53,7 +53,7 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 diff a/config/root-config.in b/config/root-config.in
 --- a/config/root-config.in
 +++ b/config/root-config.in
-@@ -312,12 +312,6 @@ macosxicc)
+@@ -307,12 +307,6 @@
     ;;
  macosx64|macosxarm64)
     # MacOS X with gcc (GNU cc v4.x) in 64 bit mode
@@ -66,7 +66,7 @@ diff a/config/root-config.in b/config/root-config.in
     auxcflags="${cxxversionflag} -m64"
     auxldflags="-m64"
     auxlibs="-lm -ldl"
-@@ -378,18 +372,11 @@ freebsd* | openbsd* | linux*)
+@@ -387,17 +381,11 @@
     done
     ;;
  macosx*)
@@ -74,7 +74,6 @@ diff a/config/root-config.in b/config/root-config.in
        auxcflags="-pthread $auxcflags"
        auxlibs="-lpthread $auxlibs"
 -   else
--      auxcflags="-D_REENTRANT $auxcflags"
 -      auxlibs="-lpthread $auxlibs"
 -   fi
     for f in $features ; do

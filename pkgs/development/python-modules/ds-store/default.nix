@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, mac_alias
+, mac-alias
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    mac_alias
+    mac-alias
   ];
 
   nativeCheckInputs = [

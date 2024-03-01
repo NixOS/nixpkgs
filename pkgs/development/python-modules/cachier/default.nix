@@ -1,29 +1,31 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , pythonRelaxDepsHook
 , setuptools
 , watchdog
 , portalocker
-, pathtools
 , pytestCheckHook
 , pymongo
 , dnspython
 , pymongo-inmemory
 , pandas
+, birch
 }:
 
 buildPythonPackage rec {
   pname = "cachier";
-  version = "2.2.1";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nm98LT87Z7yErKvIqMp93OEX9TDojqqtItgryHgSQJQ=";
+  src = fetchFromGitHub {
+    owner = "python-cachier";
+    repo = "cachier";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3rKsgcJQ9RQwosVruD7H99msB8iGtAai320okrCZCTI=";
   };
 
   pythonRemoveDeps = [ "setuptools" ];
@@ -36,14 +38,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     watchdog
     portalocker
-    pathtools
   ];
 
   preCheck = ''
-    substituteInPlace pytest.ini \
+    substituteInPlace pyproject.toml \
       --replace  \
-        "--cov" \
-        "#--cov"
+        '"--cov' \
+        '#"--cov'
   '';
 
   nativeCheckInputs = [
@@ -52,6 +53,7 @@ buildPythonPackage rec {
     dnspython
     pymongo-inmemory
     pandas
+    birch
   ];
 
   disabledTests = [
@@ -75,7 +77,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "cachier"
-    "cachier.scripts"
   ];
 
   meta = {

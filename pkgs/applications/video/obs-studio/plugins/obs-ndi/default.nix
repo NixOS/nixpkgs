@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
-  version = "4.10.0";
+  version = "4.13.0";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake qtbase ];
   buildInputs = [ obs-studio qtbase ndi ];
 
   src = fetchFromGitHub {
     owner = "Palakis";
     repo = "obs-ndi";
-    rev = "dummy-tag-${version}";
-    sha256 = "sha256-eQ/hQ2AnwyBNOotqlUZq07m4FXoeir2f7cTVq594obc=";
+    rev = version;
+    sha256 = "sha256-ugAMSTXbbIZ61oWvoggVJ5kZEgp/waEcWt89AISrSdE=";
   };
 
   patches = [
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Add path (variable added in hardcode-ndi-path.patch)
-    sed -i -e s,@NDI@,${ndi},g src/obs-ndi.cpp
+    # Add path (variable added in hardcode-ndi-path.patch
+    sed -i -e s,@NDI@,${ndi},g src/plugin-main.cpp
 
     # Replace bundled NDI SDK with the upstream version
     # (This fixes soname issues)
@@ -28,12 +28,7 @@ stdenv.mkDerivation rec {
     ln -s ${ndi}/include lib/ndi
   '';
 
-  postInstall = ''
-    mkdir $out/lib $out/share
-    mv $out/obs-plugins/64bit $out/lib/obs-plugins
-    rm -rf $out/obs-plugins
-    mv $out/data $out/share/obs
-  '';
+  cmakeFlags = [ "-DENABLE_QT=ON" ];
 
   dontWrapQtApps = true;
 

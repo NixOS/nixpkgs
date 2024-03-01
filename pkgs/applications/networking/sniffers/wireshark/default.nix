@@ -54,7 +54,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.2.0";
+  version = "4.2.3";
 
   outputs = [ "out" "dev" ];
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-0ny2x5sGG/T7q8RehCKVH/vrSihWytvUDVYiMnfhh9s=";
+    hash = "sha256-2kJBVO40F1m43317g337bk84ZSf6WPK04ir0xc5qxTc=";
   };
 
   patches = [
@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
     changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz paveloom ];
+    maintainers = with maintainers; [ bjornfor fpletz ];
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }

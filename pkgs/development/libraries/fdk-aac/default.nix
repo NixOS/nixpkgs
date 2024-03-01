@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fdk-aac";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/opencore-amr/fdk-aac/${pname}-${version}.tar.gz";
-    sha256 = "sha256-yehjDPnUM/POrXSQahUg0iI/ibzT+pJUhhAXRAuOsi8=";
+    sha256 = "sha256-gptrie7zgkCc2mhX/YKvhPq7Y0F7CO3p6npVP4Ect54=";
   };
 
   outputs = [ "out" "dev" ];

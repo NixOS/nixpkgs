@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "fcnqCBh04e+w8g079JyuyY2RPu34M+/X+Q8ObE+42i4=";
   };
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(PWD)"
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ lib.maintainers.kylehendricks ];
     platforms = platforms.linux;
+    broken = versionOlder kernel.version "5.15";
   };
 }

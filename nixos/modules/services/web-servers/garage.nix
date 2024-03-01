@@ -30,7 +30,7 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum ([ "info" "debug" "trace" ]);
+      type = types.enum ([ "error" "warn" "info" "debug" "trace" ]);
       default = "info";
       example = "debug";
       description = lib.mdDoc "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server> for examples.";

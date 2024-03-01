@@ -1,33 +1,37 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , setuptools
-, wheel
 , packaging
 , ply
 , toml
 , tomli
+
+# tests
+, poppler-qt5
+, qgis
+, qgis-ltr
 }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.7.12";
-
-  format = "pyproject";
+  version = "6.8.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-COZvdCWS64GKyP2kFz4u1kyfLUC3C+4R2xxJkSfZhFA=";
+    hash = "sha256-iIVHsBi7JMNq3tUZ6T0+UT1MaqC6VbfMGv+9Rc8Qdiw=";
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [ packaging ply toml ] ++ lib.optionals (pythonOlder "3.11") [
+  propagatedBuildInputs = [
+    packaging
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
@@ -35,6 +39,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "sipbuild" ];
+
+  passthru.tests = {
+    # test depending packages
+    inherit poppler-qt5 qgis qgis-ltr;
+  };
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";

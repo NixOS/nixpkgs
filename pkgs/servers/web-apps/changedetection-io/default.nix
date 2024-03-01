@@ -5,19 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.45.8.1";
+  version = "0.45.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = version;
-    hash = "sha256-DRbqWcbk9fwFp/gSCbAqEv8ZhWsOOnBBXCK8jXT5HdY=";
+    hash = "sha256-O+kWivVc/FZmIDjOE/fsUccrOyHrQ8GakjulEnm4w88=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "apprise~=1.6.0" "apprise" \
+      --replace "apprise~=1.7.1" "apprise" \
       --replace "cryptography~=3.4" "cryptography" \
       --replace "dnspython~=2.4" "dnspython" \
       --replace "pytest ~=7.2" "" \
@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     jinja2-time
     jsonpath-ng
     jq
+    loguru
     lxml
     paho-mqtt
     pillow
@@ -76,5 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mikaelfangel ];
+    mainProgram = "changedetection.io";
   };
 }

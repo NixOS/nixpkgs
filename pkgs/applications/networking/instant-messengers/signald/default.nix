@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle, git, perl
-, makeWrapper, fetchpatch, substituteAll, jre_minimal
+{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
+gradle, git, perl, makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
 # NOTE: when updating the package, please check if some of the hacks in `deps.installPhase`
@@ -80,7 +80,7 @@ let
     outputHash = {
       x86_64-linux = "sha256-9DHykkvazVBN2kfw1Pbejizk/R18v5w8lRBHZ4aXL5Q=";
       aarch64-linux = "sha256-RgAiRbUojBc+9RN/HpAzzpTjkjZ6q+jebDsqvah5XBw=";
-    }.${stdenv.system} or (throw "Unsupported platform");
+    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
 in stdenv.mkDerivation {
@@ -114,7 +114,7 @@ in stdenv.mkDerivation {
     mkdir -p $out
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
-      --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
+      --prefix PATH : ${lib.makeBinPath [ coreutils findutils gnused ]} \
       --set JAVA_HOME "${jre'}"
 
     runHook postInstall
@@ -137,7 +137,7 @@ in stdenv.mkDerivation {
       binaryBytecode  # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ expipiplus1 ma27 ];
+    maintainers = with maintainers; [ expipiplus1 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

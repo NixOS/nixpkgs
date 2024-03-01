@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
+    mainProgram = "redir";
   };
 }

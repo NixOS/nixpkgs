@@ -126,6 +126,7 @@
 
     with subtest("Testing successful DHCP start"):
         dhcpConf.wait_for_unit("adguardhome.service")
+        client.systemctl("start network-online.target")
         client.wait_for_unit("network-online.target")
         # Test IP assignment via DHCP
         dhcpConf.wait_until_succeeds("ping -c 5 10.0.10.100")

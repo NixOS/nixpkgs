@@ -1,9 +1,9 @@
 { lib
-, buildGoModule
+, buildGo122Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go
+, go_1_22
 , git
 , enumer
 , mockgen
@@ -14,22 +14,27 @@
 , stdenv
 }:
 
+let
+  buildGoModule = buildGo122Module;
+  go = go_1_22;
+in
+
 buildGoModule rec {
   pname = "evcc";
-  version = "0.122.1";
+  version = "0.124.4";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
-    repo = pname;
+    repo = "evcc";
     rev = version;
-    hash = "sha256-mD4D2DVai9KV7/RYFmcY7iOGVQGRpwg+rTfNsP8OpCY=";
+    hash = "sha256-sSR0aRSIUPph1YGfY6ihUffKiyauSbO7eUSVa3jaY6s=";
   };
 
-  vendorHash = "sha256-B4gR9sXpGuVv3x6sktFSPlbhq5n5aD5d7ksz67X5nY8=";
+  vendorHash = "sha256-1ZSMI6mz8CkibP3KwWJ3I05BMoBu9r+Fn8vLLDTpVfA=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-KTMUZOW56vPGoJviKRJWM9UL28gXL0L3j4ZmUzSeavU=";
+    hash = "sha256-Uu1idwI3zRQmu2xBrbMcFBmJuO/z+N5+6eSRK+n1pg8=";
   };
 
   nativeBuildInputs = [

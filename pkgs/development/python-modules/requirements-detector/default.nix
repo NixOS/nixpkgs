@@ -4,35 +4,41 @@
 , fetchFromGitHub
 , packaging
 , poetry-core
-, poetry-semver
+, semver
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "requirements-detector";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "landscapeio";
-    repo = pname;
+    repo = "requirements-detector";
     rev = "refs/tags/${version}";
     hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
 
+  pythonRelaxDeps = [
+    "astroid"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     astroid
     packaging
-    poetry-semver
     toml
+    semver
   ];
 
   nativeCheckInputs = [

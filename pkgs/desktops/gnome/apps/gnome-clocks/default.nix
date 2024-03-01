@@ -9,7 +9,6 @@
 , itstool
 , desktop-file-utils
 , vala
-, gobject-introspection
 , libxml2
 , gtk4
 , glib
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     desktop-file-utils
     libxml2
-    gobject-introspection # for finding vapi files
   ];
 
   buildInputs = [

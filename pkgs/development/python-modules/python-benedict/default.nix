@@ -7,6 +7,7 @@
 , openpyxl
 , orjson
 , phonenumbers
+, beautifulsoup4
 , pytestCheckHook
 , python-dateutil
 , python-decouple
@@ -16,7 +17,7 @@
 , pythonRelaxDepsHook
 , pyyaml
 , requests
-, six
+, setuptools
 , toml
 , xlrd
 , xmltodict
@@ -24,52 +25,94 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.32.1";
-  format = "setuptools";
+  version = "0.33.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
-    repo = pname;
+    repo = "python-benedict";
     rev = "refs/tags/${version}";
-    hash = "sha256-q9EIOMmUcttL1ohxQD+SkZTxKv8PwdN29+ez2xB7rvM=";
+    hash = "sha256-QRWyMqHW4C3+718mgp9z/dQ1loesm0Vaf2TzW3yqF3A=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "boto3"
   ];
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    boto3
-    ftfy
-    mailchecker
-    openpyxl
-    phonenumbers
-    python-dateutil
     python-fsutil
     python-slugify
-    pyyaml
     requests
-    toml
-    xlrd
-    xmltodict
   ];
+
+  passthru.optional-dependencies = {
+    all = [
+      beautifulsoup4
+      boto3
+      ftfy
+      mailchecker
+      openpyxl
+      phonenumbers
+      python-dateutil
+      pyyaml
+      toml
+      xlrd
+      xmltodict
+    ];
+    html = [
+      beautifulsoup4
+      xmltodict
+    ];
+    io = [
+      beautifulsoup4
+      openpyxl
+      pyyaml
+      toml
+      xlrd
+      xmltodict
+    ];
+    parse = [
+      ftfy
+      mailchecker
+      phonenumbers
+      python-dateutil
+    ];
+    s3 = [
+      boto3
+    ];
+    toml = [
+      toml
+    ];
+    xls = [
+      openpyxl
+      xlrd
+    ];
+    xml = [
+      xmltodict
+    ];
+    yaml = [
+      pyyaml
+    ];
+  };
 
   nativeCheckInputs = [
     orjson
     pytestCheckHook
     python-decouple
-    six
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     # Tests require network access
     "test_from_base64_with_valid_url_valid_content"
+    "test_from_html_with_valid_file_valid_content"
+    "test_from_html_with_valid_url_valid_content"
     "test_from_json_with_valid_url_valid_content"
     "test_from_pickle_with_valid_url_valid_content"
     "test_from_plist_with_valid_url_valid_content"

@@ -149,6 +149,13 @@ let
       done
     fi
 
+    # propagate /etc from the actual host if nested
+    if [[ -e /.host-etc ]]; then
+      ro_mounts+=(--ro-bind /.host-etc /.host-etc)
+    else
+      ro_mounts+=(--ro-bind /etc /.host-etc)
+    fi
+
     for i in ${lib.escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
@@ -180,6 +187,26 @@ let
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
+    ${lib.optionalString privateTmp ''
+    # sddm places XAUTHORITY in /tmp
+    if [[ "$XAUTHORITY" == /tmp/* ]]; then
+      x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
+    fi
+
+    # dbus-run-session puts the socket in /tmp
+    IFS=";" read -ra addrs <<<"$DBUS_SESSION_BUS_ADDRESS"
+    for addr in "''${addrs[@]}"; do
+      [[ "$addr" == unix:* ]] || continue
+      IFS="," read -ra parts <<<"''${addr#unix:}"
+      for part in "''${parts[@]}"; do
+        printf -v part '%s' "''${part//\\/\\\\}"
+        printf -v part '%b' "''${part//%/\\x}"
+        [[ "$part" == path=/tmp/* ]] || continue
+        x11_args+=(--ro-bind-try "''${part#path=}" "''${part#path=}")
+      done
+    done
+    ''}
+
     cmd=(
       ${bubblewrap}/bin/bwrap
       --dev-bind /dev /dev
@@ -193,7 +220,6 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
-      --ro-bind /etc /.host-etc
       ${lib.optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel

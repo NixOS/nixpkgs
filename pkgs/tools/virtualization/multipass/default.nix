@@ -16,16 +16,16 @@
 , qemu
 , qemu-utils
 , qtbase
-, qtx11extras
+, qtwayland
+, wrapQtAppsHook
 , slang
 , stdenv
-, wrapQtAppsHook
 , xterm
 }:
 
 let
   pname = "multipass";
-  version = "1.12.2";
+  version = "1.13.1";
 
   # This is done here because a CMakeLists.txt from one of it's submodules tries
   # to modify a file, so we grab the source for the submodule here, copy it into
@@ -46,7 +46,7 @@ stdenv.mkDerivation
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1k0jbYMwfYuHmM/Cm76sbo3+mN6WypALMQBwlZ+9d+c=";
+    hash = "sha256-QttgWSuhxcuOyMNF9Ve1w0ftT41+hNz3WW5Vag/88X4=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -70,8 +70,8 @@ stdenv.mkDerivation
 
     # Patch the patch of the OVMF binaries to use paths from the nix store.
     substituteInPlace ./src/platform/backends/qemu/linux/qemu_platform_detail_linux.cpp \
-      --replace "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
-      --replace "QEMU_EFI.fd" "${OVMF.fd}/FV/QEMU_EFI.fd"
+      --replace "OVMF.fd" "${OVMF.firmware}" \
+      --replace "QEMU_EFI.fd" "${OVMF.firmware}"
 
     # Copy the grpc submodule we fetched into the source code.
     cp -r --no-preserve=mode ${grpc_src} 3rd-party/grpc
@@ -104,7 +104,7 @@ stdenv.mkDerivation
     libxml2
     openssl
     qtbase
-    qtx11extras
+    qtwayland
   ];
 
   nativeBuildInputs = [
@@ -122,7 +122,6 @@ stdenv.mkDerivation
       dnsmasq
       iproute2
       iptables
-      OVMF.fd
       qemu
       qemu-utils
       xterm
@@ -134,7 +133,7 @@ stdenv.mkDerivation
   };
 
   meta = with lib; {
-    description = "Ubuntu VMs on demand for any workstation.";
+    description = "Ubuntu VMs on demand for any workstation";
     homepage = "https://multipass.run";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jnsgruk ];

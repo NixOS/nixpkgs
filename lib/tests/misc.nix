@@ -1902,7 +1902,7 @@ runTests {
     expected = true;
   };
 
-  # lazyDerivation
+  # DERIVATIONS
 
   testLazyDerivationIsLazyInDerivationForAttrNames = {
     expr = attrNames (lazyDerivation {
@@ -1955,9 +1955,39 @@ runTests {
     expected = derivation;
   };
 
+  testOptionalDrvAttr = let
+    mkDerivation = args: derivation (args // {
+      builder = "builder";
+      system = "system";
+      __ignoreNulls = true;
+    });
+  in {
+    expr = (mkDerivation {
+      name = "foo";
+      x = optionalDrvAttr true 1;
+      y = optionalDrvAttr false 1;
+    }).drvPath;
+    expected = (mkDerivation {
+      name = "foo";
+      x = 1;
+    }).drvPath;
+  };
+
   testTypeDescriptionInt = {
     expr = (with types; int).description;
     expected = "signed integer";
+  };
+  testTypeDescriptionIntsPositive = {
+    expr = (with types; ints.positive).description;
+    expected = "positive integer, meaning >0";
+  };
+  testTypeDescriptionIntsPositiveOrEnumAuto = {
+    expr = (with types; either ints.positive (enum ["auto"])).description;
+    expected = ''positive integer, meaning >0, or value "auto" (singular enum)'';
+  };
+  testTypeDescriptionListOfPositive = {
+    expr = (with types; listOf ints.positive).description;
+    expected = "list of (positive integer, meaning >0)";
   };
   testTypeDescriptionListOfInt = {
     expr = (with types; listOf int).description;
@@ -2054,5 +2084,38 @@ runTests {
   testPlatformMatchMissingSystem = {
     expr = meta.platformMatch { } "x86_64-linux";
     expected = false;
+  };
+
+  testPackagesFromDirectoryRecursive = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
+  # Check that `packagesFromDirectoryRecursive` can process a directory with a
+  # top-level `package.nix` file into a single package.
+  testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      directory = ./packages-from-directory/c;
+    };
+    expected = "c";
   };
 }

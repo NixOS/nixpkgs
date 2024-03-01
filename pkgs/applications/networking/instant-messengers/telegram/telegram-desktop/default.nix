@@ -36,23 +36,7 @@
 , rnnoise
 , protobuf
 , abseil-cpp
-  # Transitive dependencies:
-, util-linuxMinimal
-, pcre
-, libpthreadstubs
-, libXdamage
-, libXdmcp
-, libselinux
-, libsepol
-, libepoxy
-, at-spi2-core
-, libXtst
-, libthai
-, libdatrie
 , xdg-utils
-, libsysprof-capture
-, libpsl
-, brotli
 , microsoft-gsl
 , rlottie
 , stdenv
@@ -80,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.12.2";
+  version = "4.14.15";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-jIOJ7iFF2SMZOBTVzc0ECEZrkXPY060jk3fxt7kIWSg=";
+    hash = "sha256-706FAtXS541D7H/Qc86eC1FLUWu1/tZuCq3GgJ0L/Ds=";
   };
 
   patches = [
@@ -103,13 +87,16 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+      --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
-      --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+      --replace-fail '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
+      --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -160,22 +147,6 @@ stdenv.mkDerivation rec {
     glibmm_2_68
     webkitgtk_6_0
     jemalloc
-    # Transitive dependencies:
-    util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
-    pcre
-    libpthreadstubs
-    libXdamage
-    libXdmcp
-    libselinux
-    libsepol
-    libepoxy
-    at-spi2-core
-    libXtst
-    libthai
-    libdatrie
-    libsysprof-capture
-    libpsl
-    brotli
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
     CoreFoundation
@@ -222,6 +193,7 @@ stdenv.mkDerivation rec {
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
+    "-DDESKTOP_APP_DISABLE_SCUDO=ON"
   ];
 
   preBuild = ''

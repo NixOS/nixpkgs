@@ -5,6 +5,7 @@
 , isPyPy
 , fetchPypi
 , postgresql
+, postgresqlTestHook
 , openssl
 , sphinxHook
 , sphinx-better-theme
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.9.7";
+  version = "2.9.9";
   format = "setuptools";
 
   # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8AzDW9cRnx/tF7hb0QB4VRlN3iy9jeAauOuxdIdECtg=";
+    hash = "sha256-0UVL3pP7HiJBZoEWlNYA50ZDDABvuwMeoG7MLqQb8VY=";
   };
 
   postPatch = ''
@@ -48,8 +49,17 @@ buildPythonPackage rec {
 
   sphinxRoot = "doc/src";
 
-  # Requires setting up a PostgreSQL database
+  # test suite breaks at some point with:
+  #   current transaction is aborted, commands ignored until end of transaction block
   doCheck = false;
+
+  nativeCheckInputs = [
+    postgresqlTestHook
+  ];
+
+  env = {
+    PGDATABASE = "psycopg2_test";
+  };
 
   pythonImportsCheck = [
     "psycopg2"

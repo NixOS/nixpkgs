@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pastescript";
-  version = "3.3.0";
+  version = "3.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PasteScript";
     inherit version;
-    hash = "sha256-3eyAGhOsZn4JTt3ij5AhLN6nvcmhjUNxsI9abvfS66I=";
+    hash = "sha256-k0jvBlr/Is8ViMEt+wIMx1HGSC4hb4o8dRL6QKQ/kNw=";
   };
 
   propagatedBuildInputs = [

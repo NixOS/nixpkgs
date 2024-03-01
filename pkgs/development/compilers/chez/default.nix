@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl
 , coreutils, cctools
-, ncurses, libiconv, libX11, libuuid
+, ncurses, libiconv, libX11, libuuid, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "9.6.4";
+  version = "10.0.0";
 
   src = fetchurl {
     url = "https://github.com/cisco/ChezScheme/releases/download/v${finalAttrs.version}/csv${finalAttrs.version}.tar.gz";
-    hash = "sha256-9YJ2gvolnEeXX/4Hh4X7Vh5KXFT3ZDMe9mwyEyhDaF0=";
+    hash = "sha256-03GZASte0ZhcQGnWqH/xjl4fWi3yfkApkfr0XcTyIyw=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin cctools;
@@ -28,18 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
   ** NixOS or in any chroot build.
   */
   patchPhase = ''
-    substituteInPlace ./configure \
-      --replace "git submodule init && git submodule update || exit 1" "true"
-
-    substituteInPlace ./workarea \
-      --replace "/bin/ln" ln \
-      --replace "/bin/cp" cp
-
     substituteInPlace ./makefiles/installsh \
-      --replace "/usr/bin/true" "${coreutils}/bin/true"
+      --replace-warn "/usr/bin/true" "${coreutils}/bin/true"
 
     substituteInPlace zlib/configure \
-      --replace "/usr/bin/libtool" libtool
+      --replace-warn "/usr/bin/libtool" libtool
   '';
 
   /*
@@ -52,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ** for.
   */
   configurePhase = ''
-    ./configure --threads --installprefix=$out --installman=$out/share/man
+    ./configure --as-is --threads --installprefix=$out --installman=$out/share/man
   '';
 
   /*
@@ -64,12 +57,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     description  = "A powerful and incredibly fast R6RS Scheme compiler";
     homepage     = "https://cisco.github.io/ChezScheme/";
     license      = lib.licenses.asl20;
     maintainers  = with lib.maintainers; [ thoughtpolice ];
     platforms    = lib.platforms.unix;
-    badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
+    mainProgram  = "scheme";
   };
 })

@@ -5,13 +5,13 @@
 
 python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2023-10-31";
+  version = "0-unstable-2024-02-24";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "b05a15540e1dc2dfb8e4e25aa537b2a68e713844";
-    hash = "sha256-x0PyS+A4KjbBnTpca17Wx3BQjtOHvVuWpusPPc1ULnU=";
+    owner = "searxng";
+    repo = "searxng";
+    rev = "d72fa99bd0a4d702a55188b07919ce5a764b1d6c";
+    hash = "sha256-1A7dyWrF63fSSvWP+2HrCS6H8o/4CUlqiP0KANVZHUA=";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
 
   preBuild =
     let
-      versionString = lib.concatStringsSep "." (builtins.tail (lib.splitString "-" version));
+      versionString = lib.concatStringsSep "." (builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version)));
       commitAbbrev = builtins.substring 0 8 src.rev;
     in
     ''
@@ -66,13 +66,14 @@ python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
     ln -s ../${python3.sitePackages}/searx/static $out/share/
 
     # copy config schema for the limiter
-    cp searx/botdetection/limiter.toml $out/${python3.sitePackages}/searx/botdetection/limiter.toml
+    cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
   '';
 
   meta = with lib; {
     homepage = "https://github.com/searxng/searxng";
     description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
+    mainProgram = "searxng-run";
     maintainers = with maintainers; [ SuperSandro2000 _999eagle ];
   };
 })

@@ -2,12 +2,15 @@ self: dontUse: with self;
 
 let
   inherit (python) pythonOnBuildForHost;
+  inherit (pkgs) runCommand;
   pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
-  makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
+  makePythonHook = let
+    defaultArgs = { passthru.provides.setupHook = true; };
+  in args: pkgs.makeSetupHook (lib.recursiveUpdate defaultArgs args);
 
   condaInstallHook = callPackage ({ makePythonHook, gnutar, lbzip2 }:
     makePythonHook {
@@ -67,8 +70,8 @@ in {
       # Such conflicts don't happen within the standard nixpkgs python package
       #   set, but in downstream projects that build packages depending on other
       #   versions of this hook's dependencies.
-      passthru.tests = import ./pypa-build-hook-tests.nix {
-        inherit pythonOnBuildForHost runCommand;
+      passthru.tests = callPackage ./pypa-build-hook-test.nix {
+        inherit pythonOnBuildForHost;
       };
     } ./pypa-build-hook.sh) {
       inherit (pythonOnBuildForHost.pkgs) build;
@@ -107,7 +110,7 @@ in {
     makePythonHook {
       name = "python-catch-conflicts-hook";
       substitutions = let
-        useLegacyHook = lib.versionOlder python.pythonVersion "3.10";
+        useLegacyHook = lib.versionOlder python.pythonVersion "3";
       in {
         inherit pythonInterpreter pythonSitePackages;
         catchConflicts = if useLegacyHook then
@@ -116,6 +119,10 @@ in {
           ../catch_conflicts/catch_conflicts.py;
       } // lib.optionalAttrs useLegacyHook {
         inherit setuptools;
+      };
+      passthru.tests = import ./python-catch-conflicts-hook-tests.nix {
+        inherit pythonOnBuildForHost runCommand;
+        inherit (pkgs) coreutils gnugrep writeShellScript;
       };
     } ./python-catch-conflicts-hook.sh) {};
 
@@ -171,6 +178,16 @@ in {
         inherit pythonSitePackages;
       };
     } ./python-remove-tests-dir-hook.sh) {};
+
+  pythonRuntimeDepsCheckHook = callPackage ({ makePythonHook, packaging }:
+    makePythonHook {
+      name = "python-runtime-deps-check-hook.sh";
+      propagatedBuildInputs = [ packaging ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        hook = ./python-runtime-deps-check-hook.py;
+      };
+    } ./python-runtime-deps-check-hook.sh) {};
 
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {

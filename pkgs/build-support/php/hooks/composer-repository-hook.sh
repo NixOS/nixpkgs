@@ -10,6 +10,8 @@ preBuildHooks+=(composerRepositoryBuildHook)
 preCheckHooks+=(composerRepositoryCheckHook)
 preInstallHooks+=(composerRepositoryInstallHook)
 
+source @phpScriptUtils@
+
 composerRepositoryConfigureHook() {
     echo "Executing composerRepositoryConfigureHook"
 
@@ -18,7 +20,8 @@ composerRepositoryConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
-        COMPOSER_ROOT_VERSION="${version}" \
+        setComposeRootVersion
+
         composer \
             --no-ansi \
             --no-install \
@@ -54,6 +57,8 @@ composerRepositoryBuildHook() {
     echo "Executing composerRepositoryBuildHook"
 
     mkdir -p repository
+
+    setComposeRootVersion
 
     # Build the local composer repository
     # The command 'build-local-repo' is provided by the Composer plugin

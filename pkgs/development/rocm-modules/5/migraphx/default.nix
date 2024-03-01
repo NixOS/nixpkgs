@@ -59,7 +59,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-lg3pxHBpwqxBvdOQgE44YKLuumhkVF6b3Xx4+cw7jNQ=";
@@ -123,7 +123,7 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
 
     # JIT library was removed from composable_kernel...
-    # https://github.com/ROCmSoftwarePlatform/composable_kernel/issues/782
+    # https://github.com/ROCm/composable_kernel/issues/782
     substituteInPlace src/targets/gpu/CMakeLists.txt \
       --replace " COMPONENTS jit_library" "" \
       --replace " composable_kernel::jit_library" "" \
@@ -162,10 +162,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "AMD's graph optimization engine";
-    homepage = "https://github.com/ROCmSoftwarePlatform/AMDMIGraphX";
+    homepage = "https://github.com/ROCm/AMDMIGraphX";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin fpletz ];
     platforms = platforms.linux;
+    mainProgram = "wavemon";
   };
 }

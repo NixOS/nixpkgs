@@ -4,7 +4,9 @@
 , setuptools-scm
 , setuptools
 , vdf
-, bash
+, pillow
+, substituteAll
+, writeShellScript
 , steam-run
 , winetricks
 , yad
@@ -14,36 +16,41 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gKrdUwX5TzeHHXuwhUyI4REPE6TNiZ6lhonyMCHcBCA=";
+    sha256 = "sha256-5FpcIaQodvNjdqUfD9hvXlrdhszr98j0zm3MCCpZFoc=";
   };
 
   patches = [
     # Use steam-run to run Proton binaries
-    ./steam-run.patch
+    (substituteAll {
+      src = ./steam-run.patch;
+      steamRun = lib.getExe steam-run;
+      bash = writeShellScript "steam-run-bash" ''
+        exec ${lib.getExe steam-run} bash "$@"
+      '';
+    })
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     setuptools # implicit dependency, used to find data/icon_placeholder.png
     vdf
+    pillow
   ];
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [
-      bash
-      steam-run
       winetricks
       yad
     ]}"
+    # Steam Runtime does not work outside of steam-run, so don't use it
+    "--set STEAM_RUNTIME 0"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

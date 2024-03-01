@@ -25,17 +25,16 @@
 , tqdm
 , typing-extensions
 , unpaper
-, wheel
 , installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "15.4.0";
+  version = "16.1.1";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -47,10 +46,8 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-cbKqisaRAeT8ljANbYiUDrptAoQmmIkMu1ya8O6nXvQ=";
+    hash = "sha256-XCYNz1QQodUEidz1+A79yleqOnOCK3zJ8mBIPU5JEQg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   patches = [
     (substituteAll {
@@ -66,7 +63,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
     installShellFiles
   ];
 
@@ -106,5 +102,6 @@ buildPythonPackage rec {
     license = with licenses; [ mpl20 mit ];
     maintainers = with maintainers; [ kiwi dotlambda ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
+    mainProgram = "ocrmypdf";
   };
 }

@@ -22,6 +22,7 @@
 , libbladeRF
 , rtl-sdr
 , soapysdr-with-plugins
+, gnuradioAtLeast
 }:
 
 let
@@ -44,7 +45,7 @@ let
 in mkDerivation {
   pname = "gr-osmosdr";
   inherit version src;
-  disabledForGRafter = "3.11";
+  disabled = gnuradioAtLeast "3.11";
 
   outputs = [ "out" "dev" ];
 

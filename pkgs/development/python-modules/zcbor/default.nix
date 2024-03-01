@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "zcbor";
-  version = "0.7.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0mGp7Hnq8ZNEUx/9eQ6UD9/cOuLl6S5Aif1qNh1+jYA=";
+    hash = "sha256-U3Y/r3tBhzK6bGnMxdqKzS7bLHyAzgpGZ5PVK9pw7Pk=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A low footprint CBOR library in the C language (C++ compatible), tailored for use in microcontrollers";
     homepage = "https://pypi.org/project/zcbor/";
+    changelog = "https://github.com/NordicSemiconductor/zcbor/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ otavio ];
   };

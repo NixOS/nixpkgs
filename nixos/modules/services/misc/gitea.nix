@@ -234,6 +234,13 @@ in
         description = lib.mdDoc "Path to the git repositories.";
       };
 
+      camoHmacKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/camoHmacKey";
+        description = lib.mdDoc "Path to a file containing the camo HMAC key.";
+      };
+
       mailerPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -429,6 +436,10 @@ in
         LFS_JWT_SECRET = "#lfsjwtsecret#";
       };
 
+      camo = mkIf (cfg.camoHmacKeyFile != null) {
+        HMAC_KEY = "#hmackey#";
+      };
+
       session = {
         COOKIE_NAME = lib.mkDefault "session";
       };
@@ -570,6 +581,10 @@ in
               ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
             ''}
 
+            ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
+              ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
+            ''}
+
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
             ''}
@@ -666,6 +681,11 @@ in
       optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
       optional (cfg.extraConfig != null) ''
         services.gitea.`extraConfig` is deprecated, please use services.gitea.`settings`.
+      '' ++
+      optional (lib.getName cfg.package == "forgejo") ''
+        Running forgejo via services.gitea.package is no longer supported.
+        Please use services.forgejo instead.
+        See https://nixos.org/manual/nixos/unstable/#module-forgejo for migration instructions.
       '';
 
     # Create database passwordFile default when password is configured.

@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, ocamlPackages }:
+{ darwin, fetchurl, lib, ocamlPackages, stdenv }:
 
 let
   pname = "alt-ergo";
@@ -28,7 +28,7 @@ ocamlPackages.buildDunePackage {
 
   inherit pname version src;
 
-  nativeBuildInputs = [ ocamlPackages.menhir ];
+  nativeBuildInputs = [ ocamlPackages.menhir ] ++ lib.optionals stdenv.isDarwin [ darwin.sigtool ];
   buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ]);
 
   meta = {

@@ -2,6 +2,7 @@
 , stdenvNoCC
 , buildDotnetModule
 , fetchFromGitHub
+, dotnetCorePackages
 , makeDesktopItem
 , copyDesktopItems
 , ffmpeg
@@ -16,17 +17,20 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2023.1026.0";
+  version = "2024.221.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-kbi4Um1MRctpwD7ndlcB+K7AxDbWHqAHmkJbEI0fNzI=";
+    hash = "sha256-isRGruIMU05/4WDI0jkgycmA0sxkBL4pu9fclTr8VtY=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
   nugetDeps = ./deps.nix;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -83,7 +87,7 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ gepbird thiagokokada ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };

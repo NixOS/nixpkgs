@@ -1,27 +1,38 @@
-{ lib, stdenv, fetchurl
-, pkg-config, openssl, libbsd, libevent, libuuid, libossp_uuid, libmd, zlib, ncurses, bison
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, openssl
+, libbsd
+, libevent
+, libuuid
+, libossp_uuid
+, libmd
+, zlib
+, ncurses
+, bison
 , autoPatchelfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.94";
+  version = "0.96";
 
   src = fetchurl {
-    url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    hash = "sha256-hG0/a+sk6uZCxR908YfZCW44qx/SIwwGO9mUaxxHZ3k=";
+    url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
+    hash = "sha256-/R7r6IJtgkuNQwoLxys/1HcXW+l3PVkjnPXphFpAFTs=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
-  ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
+    ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
   configureFlags = [ "--enable-gotd" ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    # The configure script assumes dependencies on Darwin are install via
+    # The configure script assumes dependencies on Darwin are installed via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of
     # dependencies which fails the nixpkgs configurePhase.
     substituteInPlace configure --replace 'xdarwin' 'xhomebrew'
@@ -38,7 +49,7 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    test "$($out/bin/got --version)" = '${pname} ${version}'
+    test "$($out/bin/got --version)" = "${finalAttrs.pname} ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -59,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ abbe afh ];
   };
-}
+})

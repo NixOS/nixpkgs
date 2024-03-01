@@ -20,8 +20,8 @@ let
   clevisDatasets = map (e: e.device) (filter (e: e.device != null && (hasAttr e.device config.boot.initrd.clevis.devices) && e.fsType == "zfs" && (fsNeededForBoot e)) config.system.build.fileSystems);
 
 
-  inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
-  inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.zfs or false;
+  inSystem = config.boot.supportedFilesystems.zfs or false;
 
   autosnapPkg = pkgs.zfstools.override {
     zfs = cfgZfs.package;
@@ -71,7 +71,7 @@ let
     done
     poolReady() {
       pool="$1"
-      state="$("${zpoolCmd}" import 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
+      state="$("${zpoolCmd}" import -d "${cfgZfs.devNodes}" 2>/dev/null | "${awkCmd}" "/pool: $pool/ { found = 1 }; /state:/ { if (found == 1) { print \$2; exit } }; END { if (found == 0) { print \"MISSING\" } }")"
       if [[ "$state" = "ONLINE" ]]; then
         return 0
       else
@@ -108,12 +108,12 @@ let
 
   getKeyLocations = pool: if isBool cfgZfs.requestEncryptionCredentials then {
     hasKeys = cfgZfs.requestEncryptionCredentials;
-    command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}";
+    command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus -t volume,filesystem ${pool}";
   } else let
     keys = filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials;
   in {
     hasKeys = keys != [];
-    command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString keys}";
+    command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus -t volume,filesystem ${toString keys}";
   };
 
   createImportService = { pool, systemd, force, prefix ? "" }:
@@ -130,7 +130,8 @@ let
         "systemd-ask-password-console.service"
       ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
-      before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+      before = getPoolMounts prefix pool ++ [ "shutdown.target" "zfs-import.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig = {
         DefaultDependencies = "no";
       };
@@ -346,24 +347,12 @@ in
       removeLinuxDRM = lib.mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
-          Linux 6.2 dropped some kernel symbols required on aarch64 required by zfs.
-          Enabling this option will bring them back to allow this kernel version.
-          Note that in some jurisdictions this may be illegal as it might be considered
-          removing copyright protection from the code.
-          See https://www.ifross.org/?q=en/artikel/ongoing-dispute-over-value-exportsymbolgpl-function for further information.
+        description = ''
+          Patch the kernel to change symbols needed by ZFS from
+          EXPORT_SYMBOL_GPL to EXPORT_SYMBOL.
 
-          If configure your kernel package with `zfs.latestCompatibleLinuxPackages`, you will need to also pass removeLinuxDRM to that package like this:
-
-          ```
-          { pkgs, ... }: {
-            boot.kernelPackages = (pkgs.zfs.override {
-              removeLinuxDRM = pkgs.hostPlatform.isAarch64;
-            }).latestCompatibleLinuxPackages;
-
-            boot.zfs.removeLinuxDRM = true;
-          }
-          ```
+          Currently has no effect, but may again in future if a kernel
+          update breaks ZFS due to symbols being newly changed to GPL.
         '';
       };
     };
@@ -508,9 +497,15 @@ in
     };
 
     services.zfs.zed = {
-      enableMail = mkEnableOption (lib.mdDoc "ZED's ability to send emails") // {
-        default = cfgZfs.package.enableMail;
-        defaultText = literalExpression "config.${optZfs.package}.enableMail";
+      enableMail = mkOption {
+        type = types.bool;
+        default = config.services.mail.sendmailSetuidWrapper != null;
+        defaultText = literalExpression ''
+          config.services.mail.sendmailSetuidWrapper != null
+        '';
+        description = mdDoc ''
+          Whether to enable ZED's ability to send emails.
+        '';
       };
 
       settings = mkOption {
@@ -551,14 +546,6 @@ in
           message = "The kernel module and the userspace tooling versions are not matching, this is an unsupported usecase.";
         }
         {
-          assertion = cfgZED.enableMail -> cfgZfs.package.enableMail;
-          message = ''
-            To allow ZED to send emails, ZFS needs to be configured to enable
-            this. To do so, one must override the `zfs` package and set
-            `enableMail` to true.
-          '';
-        }
-        {
           assertion = config.networking.hostId != null;
           message = "ZFS requires networking.hostId to be set";
         }
@@ -589,7 +576,7 @@ in
         kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
         extraModulePackages = [
-          (cfgZfs.modulePackage.override { inherit (cfgZfs) removeLinuxDRM; })
+          cfgZfs.modulePackage
         ];
       };
 
@@ -668,10 +655,17 @@ in
       # TODO FIXME See https://github.com/NixOS/nixpkgs/pull/99386#issuecomment-798813567. To not break people's bootloader and as probably not everybody would read release notes that thoroughly add inSystem.
       boot.loader.grub = mkIf (inInitrd || inSystem) {
         zfsSupport = true;
+        zfsPackage = cfgZfs.package;
       };
 
       services.zfs.zed.settings = {
-        ZED_EMAIL_PROG = mkIf cfgZED.enableMail (mkDefault "${pkgs.mailutils}/bin/mail");
+        ZED_EMAIL_PROG = mkIf cfgZED.enableMail (mkDefault (
+          config.security.wrapperDir + "/" +
+          config.services.mail.sendmailSetuidWrapper.program
+        ));
+        # subject in header for sendmail
+        ZED_EMAIL_OPTS = mkIf cfgZED.enableMail (mkDefault "@ADDRESS@");
+
         PATH = lib.makeBinPath [
           cfgZfs.package
           pkgs.coreutils
@@ -718,21 +712,6 @@ in
 
       services.udev.packages = [ cfgZfs.package ]; # to hook zvol naming, etc.
       systemd.packages = [ cfgZfs.package ];
-
-      # Export kernel_neon_* symbols again.
-      # This change is necessary until ZFS figures out a solution
-      # with upstream or in their build system to fill the gap for
-      # this symbol.
-      # In the meantime, we restore what was once a working piece of code
-      # in the kernel.
-      boot.kernelPatches = lib.optional (cfgZfs.removeLinuxDRM && pkgs.stdenv.hostPlatform.system == "aarch64-linux") {
-        name = "export-neon-symbols-as-gpl";
-        patch = pkgs.fetchpatch {
-          url = "https://github.com/torvalds/linux/commit/aaeca98456431a8d9382ecf48ac4843e252c07b3.patch";
-          hash = "sha256-L2g4G1tlWPIi/QRckMuHDcdWBcKpObSWSRTvbHRIwIk=";
-          revert = true;
-        };
-      };
 
       systemd.services = let
         createImportService' = pool: createImportService {

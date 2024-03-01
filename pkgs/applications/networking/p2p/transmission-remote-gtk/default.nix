@@ -7,6 +7,7 @@
 , geoip
 , gettext
 , glib
+, glib-networking
 , gtk3
 , json-glib
 , libappindicator
@@ -50,7 +51,9 @@ stdenv.mkDerivation rec {
     libmrss
     libproxy
     libsoup_3
-  ] ++ libsoup_3.propagatedUserEnvPackages;
+    # For TLS support.
+    glib-networking
+  ];
 
   doCheck = false; # Requires network access
 

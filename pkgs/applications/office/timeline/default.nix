@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems wrapGAppsHook ];
 
   pythonPath = with python3.pkgs; [
-    wxPython_4_2
+    wxpython
     humblewx
     icalendar
     markdown

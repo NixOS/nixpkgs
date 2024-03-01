@@ -22,13 +22,13 @@
 }:
 
 let
-  apparmor-version = "3.1.6";
+  apparmor-version = "3.1.7";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
     license = with licenses; [ gpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ julm thoughtpolice ajs124 ];
+    maintainers = with maintainers; [ julm thoughtpolice ] ++ teams.helsinki-systems.members;
     platforms = platforms.linux;
   };
 
@@ -36,7 +36,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    hash = "sha256-VPgRmmQv+kgLduc6RTu9gotyjT6OImUXsPeatgG7m9E=";
+    hash = "sha256-AzY05bcpNYXix2GL4Rhc9d3RBA1pd2fwOa7yoiwc2nQ=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''

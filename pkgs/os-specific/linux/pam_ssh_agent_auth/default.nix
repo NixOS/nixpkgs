@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pam, openssl, perl }:
+{ lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, pam, openssl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "pam_ssh_agent_auth";
@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   prePatch = "cp -r ${ed25519-donna}/. ed25519-donna/.";
 
   enableParallelBuilding = true;
+
+  passthru.tests.sudo = nixosTests.ssh-agent-auth;
 
   meta = {
     homepage = "https://github.com/jbeverly/pam_ssh_agent_auth";
