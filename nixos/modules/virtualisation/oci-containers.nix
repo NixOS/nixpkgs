@@ -312,7 +312,7 @@ let
 
     preStop = if cfg.backend == "podman"
       then "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
-      else "${cfg.backend} stop ${name}";
+      else "${cfg.backend} stop ${name} || true";
 
     postStop = if cfg.backend == "podman"
       then "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
