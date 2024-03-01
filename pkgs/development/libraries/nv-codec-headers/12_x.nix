@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "FFmpeg version of headers for NVENC";
     homepage = "https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git";
     license = licenses.mit;
-    maintainers = with maintainers; [ MP2E ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

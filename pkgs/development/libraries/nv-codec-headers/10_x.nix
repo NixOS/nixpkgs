@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "FFmpeg version of headers for NVENC";
     homepage = "https://ffmpeg.org/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.MP2E ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -23,6 +23,6 @@ mkDerivation {
     description = "Multiplayer server browser for many Doom source ports";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.MP2E ];
+    maintainers = [ ];
   };
 }
