@@ -35,6 +35,7 @@
 { pname
 , withLinuxHeaders ? false
 , profilingLibraries ? false
+, withLdFallbackPatch ? false
 , withGd ? false
 , withLibcrypt ? false
 , extraBuildInputs ? []
@@ -77,9 +78,6 @@ stdenv.mkDerivation ({
       /* Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.  */
       ./dont-use-system-ld-so-preload.patch
 
-      /* Implement LD_FALLBACK_PATH */
-      ./ld-fallback.patch
-
       /* The command "getconf CS_PATH" returns the default search path
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
@@ -105,6 +103,7 @@ stdenv.mkDerivation ({
        */
       ./local-qsort-memory-corruption.patch
     ]
+    ++ lib.optional withLdFallbackPatch ./ld-fallback.patch
     /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
        every HPC piece of software, without this patch CUDA compilation on ARM
        is effectively broken. See
@@ -218,7 +217,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withLdFallbackPatch" "withGd" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {
