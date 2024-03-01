@@ -17,7 +17,6 @@ in
 python.pkgs.buildPythonPackage rec {
   pname = "etebase-server";
   version = "0.11.0";
-  format = "other";
 
   src = fetchFromGitHub {
     owner = "etesync";
@@ -28,7 +27,8 @@ python.pkgs.buildPythonPackage rec {
 
   patches = [ ./secret.patch ];
 
-  propagatedBuildInputs = [
+  doCheck = false;
+
   propagatedBuildInputs = with python.pkgs; [
     aiofiles
     django_3
@@ -47,15 +47,17 @@ python.pkgs.buildPythonPackage rec {
   ] ++ lib.optional withLdap python-ldap
     ++ lib.optional withPostgres psycopg2;
 
-  installPhase = ''
+  postInstall = ''
     mkdir -p $out/bin $out/lib
-    cp -r . $out/lib/etebase-server
-    ln -s $out/lib/etebase-server/manage.py $out/bin/etebase-server
+    cp manage.py $out/bin/etebase-server
     wrapProgram $out/bin/etebase-server --prefix PYTHONPATH : "$PYTHONPATH"
     chmod +x $out/bin/etebase-server
   '';
 
   passthru.updateScript = nix-update-script {};
+  passthru.python = python;
+  # PYTHONPATH of all dependencies used by the package
+  passthru.pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
   passthru.tests = {
     nixosTest = nixosTests.etebase-server;
   };
