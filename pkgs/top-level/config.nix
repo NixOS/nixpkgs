@@ -128,6 +128,27 @@ let
       '';
     };
 
+    glibc.withLdFallbackPatch = mkMassRebuild {
+      description = lib.mdDoc ''
+        Whether to build `glibc` with LD_FALLBACK_PATH patch enabled by
+        default.
+
+        In short: the patch implements LD_FALLBACK_PATH environment variable
+        that provides a way to override system libraries without the need for
+        any `chroot`s. This is very useful for overriding CUDA, OpenCL, libGL,
+        and similar vendor-specific libraries per-application (especially
+        while doing development of said application) or for running
+        closed-source programs (like games) requiring specific versions of
+        system libraries.
+
+        See `pkgs/development/libraries/glibc/ld-fallback.patch` for more
+        info.
+
+        Changing the default will cause a mass rebuild.
+      '';
+      # I.e., see ../development/libraries/glibc/ld-fallback.patch
+    };
+
     cudaSupport = mkMassRebuild {
       feature = "build packages with CUDA support by default";
     };

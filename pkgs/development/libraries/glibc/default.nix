@@ -1,6 +1,8 @@
-{ lib, stdenv, callPackage
+{ lib, config
+, stdenv, callPackage
 , withLinuxHeaders ? true
 , profilingLibraries ? false
+, withLdFallbackPatch ? config.glibc.withLdFallbackPatch
 , withGd ? false
 , enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false
 , pkgsBuildBuild
@@ -16,8 +18,11 @@ let
 in
 
 (callPackage ./common.nix { inherit stdenv; } {
-  inherit withLinuxHeaders withGd profilingLibraries enableCET;
-  pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
+  inherit withLinuxHeaders withLdFallbackPatch withGd profilingLibraries enableCET;
+  pname = "glibc"
+    + lib.optionalString withLdFallbackPatch "-ldfallback"
+    + lib.optionalString withGd "-gd"
+    + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 
     # Note:
