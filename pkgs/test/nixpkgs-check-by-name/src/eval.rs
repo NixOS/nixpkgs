@@ -183,6 +183,7 @@ pub fn check_values(
                     Attribute::NonByName(non_by_name_attribute) => handle_non_by_name_attribute(
                         nixpkgs_path,
                         nix_file_store,
+                        &attribute_name,
                         non_by_name_attribute,
                     )?,
                     Attribute::ByName(by_name_attribute) => by_name(
@@ -431,6 +432,7 @@ fn by_name_override(
 fn handle_non_by_name_attribute(
     nixpkgs_path: &Path,
     nix_file_store: &mut NixFileStore,
+    attribute_name: &str,
     non_by_name_attribute: NonByNameAttribute,
 ) -> validation::Result<ratchet::Package> {
     use ratchet::RatchetState::*;
@@ -481,11 +483,17 @@ fn handle_non_by_name_attribute(
             location: Some(location),
         }) = non_by_name_attribute {
 
-        // Parse the Nix file in the location and figure out whether it's an
-        // attribute definition of the form `= callPackage <arg1> <arg2>`,
+        // Parse the Nix file in the location
+        let nix_file = nix_file_store.get(&location.file)?;
+
+        // The relative path of the Nix file, for error messages
+        let relative_location_file = location.relative_file(nixpkgs_path).with_context(|| {
+            format!("Failed to resolve the file where attribute {attribute_name} is defined")
+        })?;
+
+        // Figure out whether it's an attribute definition of the form `= callPackage <arg1> <arg2>`,
         // returning the arguments if so.
-        let (optional_syntactic_call_package, _definition) = nix_file_store
-            .get(&location.file)?
+        let (optional_syntactic_call_package, _definition) = nix_file
             .call_package_argument_info_at(
                 location.line,
                 location.column,
@@ -493,7 +501,10 @@ fn handle_non_by_name_attribute(
                 // strips the absolute Nixpkgs path from it, such that
                 // syntactic_call_package.relative_path is relative to Nixpkgs
                 nixpkgs_path
-            )?;
+                )
+            .with_context(|| {
+                format!("Failed to get the definition info for attribute {attribute_name}")
+            })?;
 
         // At this point, we completed two different checks for whether it's a
         // `callPackage`
@@ -529,7 +540,7 @@ fn handle_non_by_name_attribute(
                     _ => {
                         // Otherwise, the path is outside `pkgs/by-name`, which means it can be
                         // migrated
-                        Loose((syntactic_call_package, location.file))
+                        Loose((syntactic_call_package, relative_location_file))
                     }
                 }
             }
