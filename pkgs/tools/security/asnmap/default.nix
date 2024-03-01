@@ -9,12 +9,17 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "asnmap";
     rev = "refs/tags/v${version}";
     hash = "sha256-Of4IVra6kMHY9btWcF9grM/r3lTWFP/geeT309Seasw=";
   };
 
   vendorHash = "sha256-RDv8vkBI3miyeNAbhUsMpuZCYRUZ0ATfXYHxaTgTVfA=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   # Tests require network access
   doCheck = false;
