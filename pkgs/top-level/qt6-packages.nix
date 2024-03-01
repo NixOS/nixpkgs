@@ -43,6 +43,8 @@ makeScopeWithSplicing' {
 
   fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
 
+  fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
+
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
   kcolorpicker = callPackage ../development/libraries/kcolorpicker { };

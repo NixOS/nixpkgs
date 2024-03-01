@@ -325,6 +325,7 @@ mapAliases ({
   fcitx5-configtool = libsForQt5.fcitx5-configtool; # Added 2024-03-01
   fcitx5-skk-qt = libsForQt5.fcitx5-skk-qt; # Added 2024-03-01
   fcitx5-unikey = libsForQt5.fcitx5-unikey; # Added 2024-03-01
+  fcitx5-with-addons = libsForQt5.fcitx5-with-addons; # Added 2024-03-01
 
   ### G ###
 
