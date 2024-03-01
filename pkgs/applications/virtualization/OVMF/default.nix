@@ -74,7 +74,6 @@ let
 in
 
 assert platformSpecific ? ${cpuName};
-assert systemManagementModeRequired -> stdenv.hostPlatform.isx86;
 assert msVarsTemplate -> fdSize4MB;
 assert msVarsTemplate -> platformSpecific.${cpuName} ? msVarsArgs;
 
