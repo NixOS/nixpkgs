@@ -35917,6 +35917,16 @@ let
         sha512 = "ygPCgYyiFKQNyRi/CK3s3U5RimosBtrIq7TaMYK5ek93mUl9CZ6xxqw2T+1G4kVc9dAmwI71bWLQNKRToV8SsQ==";
       };
     };
+    "liquidsoap-prettier" = {
+      name = "liquidsoap-prettier";
+      packageName = "liquidsoap-prettier";
+      version = "1.0.0";
+      src = fetchgit {
+        url = "https://github.com/savonet/liquidsoap-prettier";
+        rev = "dbb495aa7b1f1632b6528e976e6a926372339211";
+        sha256 = "0khwa7scmrznd9dllcjjyprjvajgz614q6lbfi4y1l795xjjqg4g";
+      };
+    };
     "listenercount-1.0.1" = {
       name = "listenercount";
       packageName = "listenercount";
