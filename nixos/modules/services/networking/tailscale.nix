@@ -66,6 +66,17 @@ in {
       default = [];
       example = ["--ssh"];
     };
+
+    state = mkOption {
+      description = lib.mdDoc "Use -state=mem: with tailscaled";
+      type = with lib.types; nullOr (oneOf [
+        path
+        (strMatching "arn:aws:ssm:[^\s]+")
+        (strMatching "kube:[^\s]+")
+        (enum [ "mem:" ])
+      ]);
+      default = null;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -80,7 +91,7 @@ in {
       ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
+        ''"FLAGS=--tun=${lib.escapeShellArg cfg.interfaceName} ${(lib.optionalString (cfg.state != null) "--state=${cfg.state}")}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
       ]);
