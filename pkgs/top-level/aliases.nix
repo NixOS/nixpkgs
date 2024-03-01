@@ -300,6 +300,7 @@ mapAliases ({
   firmwareLinuxNonfree = linux-firmware; # Added 2022-01-09
   fishfight = jumpy; # Added 2022-08-03
   fitnesstrax = throw "fitnesstrax was removed from nixpkgs because it disappeared upstream and no longer compiles"; # added 2023-07-04
+  flashrom-stable = flashprog;   # Added 2024-03-01
   flatbuffers_2_0 = flatbuffers; # Added 2022-05-12
   flutter2 = throw "flutter2 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2023-07-03
   flutter37 = throw "flutter37 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2023-07-03

@@ -11,13 +11,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "flashrom-stable";
-  version = "1.1";
+  pname = "flashprog";
+  version = "1.0.1";
 
   src = fetchgit {
-    url = "https://review.coreboot.org/flashrom-stable";
-    rev = "272aae888ce5abf5e999d750ee4577407db32246";
-    hash = "sha256-DR4PAING69+TMsyycGxt1cu0ba1tTlG36+H/pJ0oP4E=";
+    url = "https://review.sourcearcade.org/flashprog";
+    rev = "2ca11f9a4101ea230081d448ab2b570425b7f0bd";
+    hash = "sha256-pm9g9iOJAKnzzY9couzt8RmqZFbIpKcO++zsUJ9o49U=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "CONFIG_INTERNAL_X86=no" "CONFIG_INTERNAL_DMI=no" "CONFIG_RAYER_SPI=0" ];
 
   meta = with lib; {
-    homepage = "https://www.flashrom.org";
+    homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = with licenses; [ gpl2 gpl2Plus ];
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.all;
-    mainProgram = "flashrom";
+    mainProgram = "flashprog";
   };
 }
