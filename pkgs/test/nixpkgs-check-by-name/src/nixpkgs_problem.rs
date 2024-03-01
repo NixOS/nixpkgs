@@ -213,6 +213,8 @@ impl fmt::Display for NixpkgsProblem {
                       However, in this PR, the second argument is empty. See the definition in {}:{}:
 
                     {}
+
+                      Such a definition is provided automatically and therefore not necessary. Please remove it.
                     ",
                     structure::relative_dir_for_package(package_name).display(),
                     structure::relative_file_for_package(package_name).display(),

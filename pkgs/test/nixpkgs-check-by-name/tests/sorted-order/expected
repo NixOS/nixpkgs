@@ -6,6 +6,8 @@
 
     a = self.callPackage ./pkgs/by-name/a/a/package.nix { };
 
+  Such a definition is provided automatically and therefore not necessary. Please remove it.
+
 - Attribute `pkgs.b` is a new top-level package using `pkgs.callPackage ... { /* ... */ }`.
   Please define it in pkgs/by-name/b/b/package.nix instead.
   See `pkgs/by-name/README.md` for more details.
@@ -18,6 +20,8 @@
   However, in this PR, the second argument is empty. See the definition in all-packages.nix:4:
 
     c = self.callPackage ./pkgs/by-name/c/c/package.nix { };
+
+  Such a definition is provided automatically and therefore not necessary. Please remove it.
 
 - Attribute `pkgs.d` is a new top-level package using `pkgs.callPackage ... { /* ... */ }`.
   Please define it in pkgs/by-name/d/d/package.nix instead.
