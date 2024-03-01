@@ -16582,6 +16582,11 @@
       fingerprint = "1401 1B63 393D 16C1 AA9C  C521 8526 B757 4A53 6236";
     }];
   };
+  RoseHobgoblin = {
+    name = "J. L. Bowden";
+    github = "rosehobgoblin";
+    githubId = 84164410;
+  };
   rossabaker = {
     name = "Ross A. Baker";
     email = "ross@rossabaker.com";
