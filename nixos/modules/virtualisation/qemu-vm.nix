@@ -1046,14 +1046,6 @@ in
 
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
-    systemd.tmpfiles.settings."10-qemu-vm" = {
-      "/etc/NIXOS".f = {
-        mode = "0644";
-        user = "root";
-        group = "root";
-      };
-    };
-
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
     # allows Nix operations to work in the VM.  The path to the
