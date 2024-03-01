@@ -10,7 +10,8 @@
 , CoreAudio
 , CoreServices
 , Carbon
-, withALSA ? stdenv.hostPlatform.isLinux && !stdenv.isDarwin }:
+, withALSA ? !stdenv.targetPlatform.isWindows && !stdenv.isDarwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "portaudio";
