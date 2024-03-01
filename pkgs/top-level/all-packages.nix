@@ -9785,9 +9785,7 @@ with pkgs;
 
   kool = callPackage ../development/tools/misc/kool { };
 
-  kore = callPackage ../development/web/kore {
-    openssl = openssl_1_1;
-  };
+  kore = callPackage ../development/web/kore { };
 
   krakenx = callPackage ../tools/system/krakenx { };
 
