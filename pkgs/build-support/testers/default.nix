@@ -107,7 +107,7 @@
             (lib.setDefaultModuleLocation "the argument that was passed to pkgs.runNixOSTest" testModule)
           ];
           hostPkgs = pkgs;
-          node.pkgs = pkgs;
+          node.pkgs = pkgsLinux;
         };
 
   # See doc/builders/testers.chapter.md or
