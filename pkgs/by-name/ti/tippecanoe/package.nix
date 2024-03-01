@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
+    mainProgram = "tippecanoe";
   };
 })
