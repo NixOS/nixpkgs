@@ -29,7 +29,7 @@ let
 
   # This is still required to work around the eval trickery some scripts do
   commonPrologue = "${writeText "xdg-utils-prologue" ''
-    export PATH=$PATH:${coreutils}/bin
+    export PATH=$PATH:${lib.makeBinPath [ coreutils ]}
   ''}";
 
   solutions = [
@@ -120,7 +120,10 @@ let
         "$KDE_SESSION_VERSION" = true;
         "$KTRADER" = true;
       };
-      prologue = commonPrologue;
+      prologue = "${writeText "xdg-mime-prologue" ''
+        export PERL5LIB=${with perlPackages; makePerlPath [ FileMimeInfo ]}
+        export PATH=$PATH:${lib.makeBinPath [ coreutils perlPackages.FileMimeInfo ]}
+      ''}";
     }
 
     {
