@@ -87,6 +87,33 @@ in
           ExecStart = "${pkgs.komga}/bin/komga";
 
           StateDirectory = mkIf (cfg.stateDir == "/var/lib/komga") "komga";
+
+          RemoveIPC = true;
+          NoNewPrivileges = true;
+          CapabilityBoundingSet = "";
+          SystemCallFilter = [ "@system-service" ];
+          ProtectSystem = "full";
+          PrivateTmp = true;
+          ProtectProc = "invisible";
+          ProtectClock = true;
+          ProcSubset = "pid";
+          PrivateUsers = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectKernelTunables = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
+          LockPersonality = true;
+          RestrictNamespaces = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          RestrictSUIDSGID = true;
+          RestrictRealtime = true;
         };
       };
     };
