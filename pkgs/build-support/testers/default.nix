@@ -1,4 +1,4 @@
-{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
+{ pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
 # Documentation is in doc/builders/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
@@ -123,12 +123,7 @@
           inherit pkgs;
           extraConfigurations = [(
             { lib, ... }: {
-              config.nixpkgs.pkgs = lib.mkDefault (
-                import pkgs.path {
-                  inherit (pkgs) config overlays;
-                  system = stdenv.hostPlatform.parsed.cpu.name + "-linux";
-                }
-              );
+              config.nixpkgs.pkgs = lib.mkDefault pkgsLinux;
             }
           )];
         });
