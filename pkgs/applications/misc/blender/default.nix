@@ -291,10 +291,6 @@ stdenv.mkDerivation (finalAttrs: {
       ps.zstandard
     ];
 
-  # Since some dependencies are built with gcc 6, we need gcc 6's
-  # libstdc++ in our RPATH. Sigh.
-  NIX_LDFLAGS = lib.optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
-
   blenderExecutable =
     placeholder "out"
     + (if stdenv.isDarwin then "/Applications/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
