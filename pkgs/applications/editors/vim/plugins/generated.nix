@@ -16851,5 +16851,16 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  vim-tabby = buildVimPlugin {
+    pname = "vim-tabby";
+    version = "2024-02-01";
+    src = fetchFromGitHub {
+      owner = "TabbyML";
+      repo = "vim-tabby";
+      rev = "0b62bc2ed5c7d930c7435c3504d5c18ea6379b28";
+      sha256 = "06crxhvwz04s6sfj0q22kkp3g5zvip13088m95qwznw9bv2gpx3s";
+    };
+    meta.homepage = "https://github.com/TabbyML/vim-tabby/";
+  };
 
 }
