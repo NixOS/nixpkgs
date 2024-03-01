@@ -218,11 +218,31 @@ in {
         RestrictSUIDSGID = true;
         inherit StateDirectory;
         StateDirectoryMode = "0700";
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
+        RemoveIPC = true;
+        NoNewPrivileges = true;
+        CapabilityBoundingSet = "";
+        SystemCallFilter = [ "@system-service" ];
+        ProtectProc = "invisible";
+        ProtectClock = true;
+        ProcSubset = "pid";
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
         ];
+        LockPersonality = true;
+        RestrictNamespaces = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        SystemCallArchitectures = "native";
+        MemoryDenyWriteExecute = true;
+        RestrictSUIDSGID = true;
+        RestrictRealtime = true;
         Restart = "always";
         UMask = "0077";
       };
@@ -232,7 +252,7 @@ in {
     systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = dataDir;
+        inherit (configEnv) DATA_FOLDER;
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
@@ -244,6 +264,27 @@ in {
         User = lib.mkDefault user;
         Group = lib.mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
+        ReadOnlyDirectories = lib.mkIf (!lib.hasPrefix configEnv.DATA_FOLDER cfg.backupDir) [ configEnv.DATA_FOLDER ];
+        ReadWriteDirectories = [ "-${cfg.backupDir}" ];
+
+        # Hardening
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
       };
       wantedBy = [ "multi-user.target" ];
     };
