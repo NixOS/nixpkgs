@@ -31,7 +31,14 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin [ autoconf which xcbuild ];
 
-  dontConfigure = true;
+  # dontConfigure = true;
+  configurePhase = ''
+    runHook preConfigure
+
+    bash configure --with-xcode-path=$(xcode-select -p)
+
+    runHook postConfigure
+  '';
 
   postPatch = ''
     # The rpm/deb task definitions require a Gradle plugin which we don't
