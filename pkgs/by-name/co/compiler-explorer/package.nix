@@ -8,7 +8,6 @@
 , python3Full
 , rsync
 , nodejs_20
-, husky
 , typescript
 , cmake
 , coreutils
@@ -68,7 +67,7 @@ buildNpmPackage rec {
   };
   npmDepsHash = "sha256-8e8JtVeJXx1NxwYlN4SRJB2K/RJv9plnAwlRNWHWD1M=";
 
-  nativeBuildInputs = [ nodejs_20 typescript husky rsync ];
+  nativeBuildInputs = [ nodejs_20 typescript rsync ];
   dontNpmBuild = true;
   dontNpmInstall = true;
   CYPRESS_INSTALL_BINARY = 0;
@@ -101,37 +100,28 @@ buildNpmPackage rec {
     # Now install only the production dependencies in our output directory
     cd out/dist
     npm install --no-audit --ignore-scripts --production
-    #rm -rf node_modules/.cache/ node_modules/monaco-editor/
-    #find node_modules -name \*.ts -delete
-
-    # Output some magic for GH to set the branch name and release name
-
-    # Run to make sure we haven't just made something that won't work
-    node --no-warnings=ExperimentalWarning --loader ts-node/esm ./app.js --version --dist
-
     cd ../..
     rsync -av out/dist/ $out/
     rsync -av out/webpack/static/ $out/static/
-
   '';
 
 
-   installPhase = ''
-     cd $out
-     cp ${ceConfigFile} etc/config/compiler-explorer.defaults.properties
-     cp ${executionConfigFile} etc/config/execution.defaults.properties
-     cp ${cConfigFile} etc/config/c.defaults.properties
-     cp ${cppConfigFile} etc/config/c++.defaults.properties
-     cp ${rustConfigFile} etc/config/rust.defaults.properties
-     cp ${pythonConfigFile} etc/config/python.defaults.properties
-     cp ${goConfigFile} etc/config/go.defaults.properties
+  installPhase = ''
+    cd $out
+    cp ${ceConfigFile} etc/config/compiler-explorer.defaults.properties
+    cp ${executionConfigFile} etc/config/execution.defaults.properties
+    cp ${cConfigFile} etc/config/c.defaults.properties
+    cp ${cppConfigFile} etc/config/c++.defaults.properties
+    cp ${rustConfigFile} etc/config/rust.defaults.properties
+    cp ${pythonConfigFile} etc/config/python.defaults.properties
+    cp ${goConfigFile} etc/config/go.defaults.properties
 
-     makeWrapper ${nodejs_20}/bin/node bin/compiler-explorer \
-         --chdir "$out" \
-         --add-flags ./app.js \
-         --add-flags "--webpackContent ./static" \
-         --set NODE_ENV production
-   '';
+    makeWrapper ${nodejs_20}/bin/node bin/compiler-explorer \
+        --chdir "$out" \
+        --add-flags ./app.js \
+        --add-flags "--webpackContent ./static" \
+        --set NODE_ENV production
+  '';
 
   meta = with lib; {
     description = "Compiler Explorer Is an interactive compiler exploration website. Edit code in C, C++, Rust, python, go and compile it in real time" ;
