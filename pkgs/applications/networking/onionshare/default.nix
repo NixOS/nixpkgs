@@ -1,39 +1,40 @@
 { lib
 , stdenv
 , buildPythonApplication
-, substituteAll
-, fetchFromGitHub
-, isPy3k
+, cepa
 , colorama
+, fetchFromGitHub
 , flask
+, flask-compress
 , flask-httpauth
 , flask-socketio
 , gevent-socketio
 , gevent-websocket
-, cepa
+, obfs4
 , psutil
-, pyqt5
 , pycrypto
 , pynacl
-, pyside2
+, pyqt5
+, pyside6
 , pysocks
 , pytestCheckHook
 , qrcode
 , qt5
 , requests
-, unidecode
-, tor
-, obfs4
 , snowflake
+, substituteAll
+, tor
+, unidecode
+, waitress
 }:
 
 let
-  version = "2.6";
+  version = "2.6.1";
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "sha256-LA7XlzoCXUiG/9subTddAd22336wO9sOHCIBlQK4Ga4=";
+    sha256 = "sha256-LR3Ao4Q8kEDwrFV+gYdMSEeYF4hDtEa1rJgvRRrJMwc=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -79,23 +80,27 @@ rec {
       })
     ];
     propagatedBuildInputs = [
+      cepa
       colorama
       flask
+      flask-compress
       flask-httpauth
       flask-socketio
       gevent-socketio
       gevent-websocket
-      cepa
       psutil
       pycrypto
       pynacl
+      pyside6
+      qrcode
       requests
       unidecode
+      waitress
     ];
 
     buildInputs = [
-      tor
       obfs4
+      tor
     ];
 
     nativeCheckInputs = [
@@ -107,9 +112,11 @@ rec {
       export HOME="$(mktemp -d)"
     '';
 
-    disabledTests = [
+    disabledTests = lib.optionals stdenv.isLinux [
       "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
     ] ++ lib.optionals stdenv.isDarwin [
+      # requires meek-client which is not packaged
+      "test_get_tor_paths_darwin"
       # on darwin (and only on darwin) onionshare attempts to discover
       # user's *real* homedir via /etc/passwd, making it more painful
       # to fake
@@ -128,16 +135,15 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
-      ./fix-qrcode-gui.patch
     ];
 
     propagatedBuildInputs = [
       onionshare
-      pyqt5
-      pyside2
       psutil
-      qrcode
+      pyqt5
+      pyside6
       pysocks
+      qrcode
     ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];

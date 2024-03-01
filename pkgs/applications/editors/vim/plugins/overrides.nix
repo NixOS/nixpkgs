@@ -998,7 +998,7 @@
         inherit (old) version src;
         sourceRoot = "source/spectre_oxi";
 
-        cargoHash = "sha256-822+3s6FJVqBRYJAL/89bJfGv8fNhSN3nQelB29mXvQ=";
+        cargoHash = "sha256-gCGuD5kipgfR0Le8npNmyBxNsUq0PavXvKkxkiPx13E=";
 
 
         preCheck = ''
@@ -1669,6 +1669,14 @@
 
   vim-surround = super.vim-surround.overrideAttrs {
     dependencies = with self; [ vim-repeat ];
+  };
+
+  vim-tabby = super.vim-tabby.overrideAttrs {
+    postPatch = ''
+      substituteInPlace autoload/tabby/globals.vim --replace-fail \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', 'node')" \
+        "let g:tabby_node_binary = get(g:, 'tabby_node_binary', '${nodejs}/bin/node')"
+    '';
   };
 
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs {

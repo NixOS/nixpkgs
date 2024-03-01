@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
-, libgit2
 , openssl
 , zlib
 , stdenv
@@ -26,7 +25,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [

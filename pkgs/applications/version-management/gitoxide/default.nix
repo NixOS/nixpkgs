@@ -9,9 +9,14 @@
 , SystemConfiguration
 , curl
 , openssl
+, buildPackages
+, installShellFiles
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  canRunCmd = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
+in rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
   version = "0.33.0";
 
@@ -24,11 +29,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JOl/hhyuc6vqeK6/oXXMB3fGRapBsuOTaUG+BQ9QSnk=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
   buildInputs = [ curl ] ++ (if stdenv.isDarwin
     then [ libiconv Security SystemConfiguration ]
     else [ openssl ]);
+
+  preFixup = lib.optionalString canRunCmd ''
+    installShellCompletion --cmd gix \
+      --bash <(${gix} completions --shell bash) \
+      --fish <(${gix} completions --shell fish) \
+      --zsh <(${gix} completions --shell zsh)
+  '';
 
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;
