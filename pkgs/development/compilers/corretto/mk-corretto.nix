@@ -10,6 +10,10 @@
 , testers
 , which
 , xcbuild
+, zip
+, coreutils
+, xattr
+, setfile
 }:
 
 # Each Corretto version is based on a corresponding OpenJDK version. So
@@ -29,9 +33,8 @@ jdk.overrideAttrs (finalAttrs: oldAttrs: {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin [ autoconf which xcbuild ];
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin [ coreutils zip autoconf which xcbuild xattr setfile ];
 
-  # dontConfigure = true;
   configurePhase = ''
     runHook preConfigure
 

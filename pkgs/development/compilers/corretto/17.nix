@@ -9,11 +9,15 @@
 , testers
 , which
 , xcbuild
+, zip
+, coreutils
+, xattr
+, setfile
 }:
 
 let
   corretto = import ./mk-corretto.nix {
-    inherit lib stdenv autoconf rsync runCommand testers which xcbuild;
+    inherit lib stdenv autoconf rsync runCommand testers which xcbuild zip coreutils xattr setfile;
     jdk = jdk17;
     gradle = gradle_7;
     version = "17.0.8.8.1";
