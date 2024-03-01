@@ -89,6 +89,13 @@ composerInstallBuildHook() {
     # from the composer.json file.
     jq -r -c 'del(try .repositories[] | select(.type == "composer" or .type == "vcs"))' composer.json | sponge composer.json
 
+    # Drop the dev packages information when they are not needed
+    # It prevents the final `composer update` to check the requirements for them
+    if [[ "${composerNoDev}" == "1" ]]; then
+        jq -r -c 'del(."require-dev")' composer.json | sponge composer.json
+        jq -r -c '."packages-dev" = []' composer.lock | sponge composer.lock
+    fi
+
     # Configure composer to disable packagist and avoid using the network.
     composer config repo.packagist false
     # Configure composer to use the local repository.
