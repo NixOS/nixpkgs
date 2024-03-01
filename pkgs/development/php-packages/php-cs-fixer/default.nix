@@ -17,7 +17,7 @@ php.buildComposerProject (finalAttrs: {
   # TODO: Open a PR against https://github.com/PHP-CS-Fixer/PHP-CS-Fixer
   # Missing `composer.lock` from the repository.
   composerLock = ./composer.lock;
-  vendorHash = "sha256-kcEB7UZ++ZY5vhaoPGjaC3q1fpxYcZ/yZeMP3AdQBEk=";
+  vendorHash = "sha256-b0vrjv0dqQTD3nuo6nqpUtF4JkD8mj4OnNKKqp6hcvU=";
 
   meta = {
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/${finalAttrs.version}";
