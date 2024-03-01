@@ -1,7 +1,7 @@
 { lib , buildFishPlugin , fetchFromGitHub }:
 buildFishPlugin {
   pname = "gruvbox";
-  version = "unstable-2021-10-12";
+  version = "0-unstable-2021-10-12";
   src = fetchFromGitHub {
     owner = "jomik";
     repo = "fish-gruvbox";
