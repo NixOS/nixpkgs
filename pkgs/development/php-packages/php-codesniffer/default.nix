@@ -5,17 +5,17 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "php-codesniffer";
-  version = "3.7.2";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
-    owner = "squizlabs";
+    owner = "PHPCSStandards";
     repo = "PHP_CodeSniffer";
     rev = "${finalAttrs.version}";
-    hash = "sha256-EJF9e8gyUy5SZ+lmyWFPAabqnP7Fy5t80gfXWWxLpk8=";
+    hash = "sha256-HyAb0vfruJWch09GVWtKI+NOTpsUkkLRusFSwZlNHjA=";
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-svkQEKKFa0yFTiOihnAzVdi3oolq3r6JmlugyBZJATA=";
+  vendorHash = "sha256-nM0sKdD+fc3saPCvU+0KI7HM+LdSi0vJIoutwuZnx/Y=";
 
   meta = {
     changelog = "https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/tag/${finalAttrs.version}";
