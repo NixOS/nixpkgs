@@ -16,6 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
+  patches = [
+    # Use "${TMPDIR:-/tmp}" instead of the latter directly
+    # see <https://lists.sr.ht/~mpu/qbe/patches/49613>
+    ./001-dont-hardcode-tmp.patch
+  ];
+
   passthru = {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
   };
