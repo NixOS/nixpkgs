@@ -1,52 +1,70 @@
-From 5956982e611afe46f2aa6a1e241262379fdbcbb6 Mon Sep 17 00:00:00 2001
+From 9d7cc3850df04c15d9c82e51c9e9198ead7bf847 Mon Sep 17 00:00:00 2001
 From: Jan Malakhovski <oxij@oxij.org>
-Date: Wed, 9 Aug 2023 08:53:06 +0000
-Subject: [PATCH] Implement support for LD_FALLBACK_PATH env variable and
- related command line options
+Date: Mon, 14 Aug 2023 13:00:00 +0000
+Subject: [PATCH] Implement support for LD_FALLBACK_PATH envvar and related
+ command line options
 
 LD_FALLBACK_PATH has the same semantics as LD_LIBRARY_PATH but unlike
-LD_LIBRARY_PATH, instead of having the highest priority, it has the second-lowest
-(it gets used just before the default system directories).
+LD_LIBRARY_PATH, instead of having the highest priority, it has the
+second-lowest (it gets used just before the default system directories).
 
 Thus, LD_FALLBACK_PATH provides a way to specify fallback library paths.
 
+In other words, LD_FALLBACK_PATH provides a way to override system libraries
+without creating a chroot.
+
 Consider the following use cases:
 
-- Running a closed-source program (like Steam and its games) on an unsupported
-  distribution: closed-source programs commonly override LD_LIBRARY_PATH to
-  override system libraries with their own bundled versions, but they
-  frequently do it the wrong way by overriding it while ignoring the current
-  value of LD_LIBRARY_PATH, thus failing to pick up any non-system libraries
-  they don't bundle but require specific versions of.
+* Sometimes you just want to change a set of system libraries for a set of
+  programs without changing the system default. For instance, if you have
+  different GPUs requiring different libGL, CUDA, and/or OpenCL
+  implementations. (Though, specifically for libGL there are better solutions
+  for per-screen routing of OpenGL calls.)
 
-  LD_FALLBACK_PATH, being the low-priority option, can't be used to achieve
-  the same effect as LD_LIBRARY_PATH from the perspective of the closed-source
-  program's vendor, thus making it unlikely they would ever touch
-  LD_FALLBACK_PATH. But it can be used by other tools to supply needed default
-  libraries to the closed-source program in question.
+  LD_FALLBACK_PATH is especially useful in a developer setting given that
+  maintaining multiple (e.g. for each GPU type) per-project chroot
+  environments is pretty hard.
 
-- Similarly, sometimes you just want to change the underlying library for a
-  set of programs without changing the system default. For instance, if you
-  have different GPUs requiring different libGL's (though, specifically for
-  libGL there are several less ad-hoc solutions than this).
+* Running a closed-source program (like Steam and its games) on an unsupported
+  distribution (this patch was originally created for SLNOS, a distribution
+  based on NixOS): closed-source programs commonly override LD_LIBRARY_PATH to
+  replace system libraries with their own bundled versions, but they
+  frequently do it the wrong way by simply assigning LD_LIBRARY_PATH to point
+  at their own /lib directory instead of prepending that /lib path to the
+  current value of LD_LIBRARY_PATH, thus failing to pick up any non-system
+  libraries they don't bundle but require specific versions of.
 
-In general, before LD_FALLBACK_PATH there was no good way to solve these
-problems without generating a whole chroot. Now you can collect those
-libraries you want to override system defaults but not override those found
-via LD_LIBRARY_PATH in a directory somewhere and put its path into
-LD_FALLBACK_PATH.
+  From the perspective of a closed-source program's vendor, LD_FALLBACK_PATH
+  --- being the low-priority option --- can't really be used to consistently
+  achieve the same effect to as overriding LD_LIBRARY_PATH, thus making it
+  unlikely they would ever touch it. But it can be used by other tools to
+  supply needed default libraries to the closed-source program in question.
+
+With LD_FALLBACK_PATH, you can just drop all those libraries you want to
+replace your defaults into a directory and put its path into LD_FALLBACK_PATH,
+or use Nix or a similar package manager to do that for you.
 ---
- elf/dl-load.c               | 60 +++++++++++++++++++++++++++++++++++--
- elf/dl-main.h               |  7 +++++
- elf/dl-support.c            |  1 +
- elf/dl-usage.c              |  2 ++
- elf/rtld.c                  | 22 ++++++++++++++
- sysdeps/generic/ldsodefs.h  |  1 +
- sysdeps/generic/unsecvars.h |  1 +
- 7 files changed, 92 insertions(+), 2 deletions(-)
+ elf/dl-load.c                    | 100 ++++++++++++++++++++-----------
+ elf/dl-main.h                    |   7 +++
+ elf/dl-support.c                 |   1 +
+ elf/dl-usage.c                   |   2 +
+ elf/link.h                       |   1 +
+ elf/rtld.c                       |  22 +++++++
+ elf/tst-auditmod1.c              |   2 +
+ sysdeps/generic/ldsodefs.h       |   1 +
+ sysdeps/generic/unsecvars.h      |   1 +
+ sysdeps/i386/tst-auditmod3b.c    |   3 +
+ sysdeps/x86_64/tst-auditmod10b.c |   2 +
+ sysdeps/x86_64/tst-auditmod3b.c  |   2 +
+ sysdeps/x86_64/tst-auditmod4b.c  |   2 +
+ sysdeps/x86_64/tst-auditmod5b.c  |   2 +
+ sysdeps/x86_64/tst-auditmod6b.c  |   2 +
+ sysdeps/x86_64/tst-auditmod6c.c  |   2 +
+ sysdeps/x86_64/tst-auditmod7b.c  |   2 +
+ 17 files changed, 120 insertions(+), 34 deletions(-)
 
 diff --git a/elf/dl-load.c b/elf/dl-load.c
-index 9a87fda9c9..a8fd639238 100644
+index 9a87fda9c9..26291dc261 100644
 --- a/elf/dl-load.c
 +++ b/elf/dl-load.c
 @@ -101,6 +101,8 @@ int __stack_prot attribute_hidden attribute_relro
@@ -58,61 +76,102 @@ index 9a87fda9c9..a8fd639238 100644
  
  /* List of the hardware capabilities we might end up using.  */
  #ifdef SHARED
-@@ -701,6 +703,7 @@ cache_rpath (struct link_map *l,
+@@ -699,8 +701,53 @@ cache_rpath (struct link_map *l,
+ }
  
+ 
++static void
++_decompose_dl_path(const char* link_path,
++                   struct r_search_path_struct* env_path_list,
++                   const char* source,
++                   struct link_map *l)
++{
++  const char *errstring = NULL;
++
++  /* Decompose the LD_LIBRARY_PATH/LD_FALLBACK_PATH contents.  */
++
++  if (link_path != NULL && *link_path != '\0')
++    {
++      char *link_path_tmp = strdupa (link_path);
++
++      /* First determine how many elements it has.  */
++      size_t nlink_path = 1;
++      for (const char *cp = link_path_tmp; *cp != '\0'; ++cp)
++	if (*cp == ':' || *cp == ';')
++	  ++nlink_path;
++
++      env_path_list->dirs = (struct r_search_path_elem **)
++	malloc ((nlink_path + 1) * sizeof (struct r_search_path_elem *));
++      if (env_path_list->dirs == NULL)
++	{
++	  errstring = N_("cannot create cache for search path");
++	  _dl_signal_error (ENOMEM, NULL, NULL, errstring);
++	}
++
++      (void) fillin_rpath (link_path_tmp, env_path_list->dirs, ":;",
++			   source, NULL, l);
++
++      if (env_path_list->dirs[0] == NULL)
++	{
++	  free (env_path_list->dirs);
++	  env_path_list->dirs = (void *) -1;
++	}
++
++      env_path_list->malloced = 0;
++    }
++  else
++    env_path_list->dirs = (void *) -1;
++}
++
++
  void
  _dl_init_paths (const char *llp, const char *source,
 +		const char *lfp, const char *fsource,
  		const char *glibc_hwcaps_prepend,
  		const char *glibc_hwcaps_mask)
  {
-@@ -854,6 +857,45 @@ _dl_init_paths (const char *llp, const char *source,
+@@ -822,38 +869,8 @@ _dl_init_paths (const char *llp, const char *source,
+ 	l->l_rpath_dirs.dirs = (void *) -1;
      }
-   else
-     __rtld_env_path_list.dirs = (void *) -1;
-+
-+  /* Made by copying the above followed by
-+      %s/llp/lfp/g
-+      %s/env_path_list/fallback_path_list/g
-+      %s/source/fsource/g
-+   */
-+  if (lfp != NULL && *lfp != '\0')
-+    {
-+      char *lfp_tmp = strdupa (lfp);
-+
-+      /* Decompose the LD_LIBRARY_PATH contents.  First determine how many
-+	 elements it has.  */
-+      size_t nlfp = 1;
-+      for (const char *cp = lfp_tmp; *cp != '\0'; ++cp)
-+	if (*cp == ':' || *cp == ';')
-+	  ++nlfp;
-+
-+      __rtld_fallback_path_list.dirs = (struct r_search_path_elem **)
-+	malloc ((nlfp + 1) * sizeof (struct r_search_path_elem *));
-+      if (__rtld_fallback_path_list.dirs == NULL)
-+	{
-+	  errstring = N_("cannot create cache for search path");
-+	  goto signal_error;
-+	}
-+
-+      (void) fillin_rpath (lfp_tmp, __rtld_fallback_path_list.dirs, ":;",
-+			   fsource, NULL, l);
-+
-+      if (__rtld_fallback_path_list.dirs[0] == NULL)
-+	{
-+	  free (__rtld_fallback_path_list.dirs);
-+	  __rtld_fallback_path_list.dirs = (void *) -1;
-+	}
-+
-+      __rtld_fallback_path_list.malloced = 0;
-+    }
-+  else
-+    __rtld_fallback_path_list.dirs = (void *) -1;
-+
+ 
+-  if (llp != NULL && *llp != '\0')
+-    {
+-      char *llp_tmp = strdupa (llp);
+-
+-      /* Decompose the LD_LIBRARY_PATH contents.  First determine how many
+-	 elements it has.  */
+-      size_t nllp = 1;
+-      for (const char *cp = llp_tmp; *cp != '\0'; ++cp)
+-	if (*cp == ':' || *cp == ';')
+-	  ++nllp;
+-
+-      __rtld_env_path_list.dirs = (struct r_search_path_elem **)
+-	malloc ((nllp + 1) * sizeof (struct r_search_path_elem *));
+-      if (__rtld_env_path_list.dirs == NULL)
+-	{
+-	  errstring = N_("cannot create cache for search path");
+-	  goto signal_error;
+-	}
+-
+-      (void) fillin_rpath (llp_tmp, __rtld_env_path_list.dirs, ":;",
+-			   source, NULL, l);
+-
+-      if (__rtld_env_path_list.dirs[0] == NULL)
+-	{
+-	  free (__rtld_env_path_list.dirs);
+-	  __rtld_env_path_list.dirs = (void *) -1;
+-	}
+-
+-      __rtld_env_path_list.malloced = 0;
+-    }
+-  else
+-    __rtld_env_path_list.dirs = (void *) -1;
++  _decompose_dl_path(llp, &__rtld_env_path_list, source, l);
++  _decompose_dl_path(lfp, &__rtld_fallback_path_list, fsource, l);
  }
  
  
-@@ -1928,9 +1970,10 @@ open_path (const char *name, size_t namelen, int mode,
+@@ -1928,9 +1945,10 @@ open_path (const char *name, size_t namelen, int mode,
        if (sps->malloced)
  	free (sps->dirs);
  
@@ -125,29 +184,30 @@ index 9a87fda9c9..a8fd639238 100644
  	sps->dirs = (void *) -1;
      }
  
-@@ -2160,6 +2203,17 @@ _dl_map_object (struct link_map *loader, const char *name,
+@@ -2160,6 +2178,17 @@ _dl_map_object (struct link_map *loader, const char *name,
  	}
  #endif
  
 +      /* Try the LD_FALLBACK_PATH environment variable.  */
 +      /* Made by copying LD_LIBRARY_PATH snippet above followed by
 +          %s/env_path_list/fallback_path_list/g
-+          %s/LA_SER_LIBPATH/LA_SER_DEFAULT/g
++          %s/LA_SER_LIBPATH/LA_SER_FALLBACK/g
 +       */
 +      if (fd == -1 && __rtld_fallback_path_list.dirs != (void *) -1)
 +	fd = open_path (name, namelen, mode, &__rtld_fallback_path_list,
 +			&realname, &fb,
 +			loader ?: GL(dl_ns)[LM_ID_BASE]._ns_loaded,
-+			LA_SER_DEFAULT, &found_other_class);
++			LA_SER_FALLBACK, &found_other_class);
 +
        /* Finally, try the default path.  */
        if (fd == -1
  	  && ((l = loader ?: GL(dl_ns)[nsid]._ns_loaded) == NULL
-@@ -2342,6 +2396,8 @@ _dl_rtld_di_serinfo (struct link_map *loader, Dl_serinfo *si, bool counting)
+@@ -2342,6 +2371,9 @@ _dl_rtld_di_serinfo (struct link_map *loader, Dl_serinfo *si, bool counting)
       Here is where ld.so.cache gets checked, but we don't have
       a way to indicate that in the results for Dl_serinfo.  */
  
-+  add_path (&p, &__rtld_fallback_path_list, XXX_default);
++  /* Try the LD_FALLBACK_PATH environment variable.  */
++  add_path (&p, &__rtld_fallback_path_list, XXX_FALLBACK);
 +
    /* Finally, try the default path.  */
    if (!(loader->l_flags_1 & DF_1_NODEFLIB))
@@ -202,6 +262,18 @@ index 98f0b0d027..98b9da57aa 100644
    --glibc-hwcaps-prepend LIST\n\
                          search glibc-hwcaps subdirectories in LIST\n\
    --glibc-hwcaps-mask LIST\n\
+diff --git a/elf/link.h b/elf/link.h
+index 3b5954d981..9b227530ed 100644
+--- a/elf/link.h
++++ b/elf/link.h
+@@ -130,6 +130,7 @@ enum
+     LA_SER_LIBPATH = 0x02,	/* Directory from LD_LIBRARY_PATH.  */
+     LA_SER_RUNPATH = 0x04,	/* Directory from RPATH/RUNPATH.  */
+     LA_SER_CONFIG = 0x08,	/* Found through ldconfig.  */
++    LA_SER_FALLBACK = 0x20,	/* Directory from LD_FALLBACK_PATH.  */
+     LA_SER_DEFAULT = 0x40,	/* Default directory.  */
+     LA_SER_SECURE = 0x80	/* Unused.  */
+   };
 diff --git a/elf/rtld.c b/elf/rtld.c
 index a91e2a4471..d03ccbe077 100644
 --- a/elf/rtld.c
@@ -249,6 +321,19 @@ index a91e2a4471..d03ccbe077 100644
  	case 14:
  	  /* Where to place the profiling data file.  */
  	  if (!__libc_enable_secure
+diff --git a/elf/tst-auditmod1.c b/elf/tst-auditmod1.c
+index 573e37abd6..fb3a01e8bb 100644
+--- a/elf/tst-auditmod1.c
++++ b/elf/tst-auditmod1.c
+@@ -49,6 +49,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
 diff --git a/sysdeps/generic/ldsodefs.h b/sysdeps/generic/ldsodefs.h
 index e8b7359b04..1ff1b2cec1 100644
 --- a/sysdeps/generic/ldsodefs.h
@@ -262,10 +347,10 @@ index e8b7359b04..1ff1b2cec1 100644
  			    const char *glibc_hwcaps_mask)
    attribute_hidden;
 diff --git a/sysdeps/generic/unsecvars.h b/sysdeps/generic/unsecvars.h
-index 81397fb90b..8a47ca9284 100644
+index 8278c50a84..6fc015a2d5 100644
 --- a/sysdeps/generic/unsecvars.h
 +++ b/sysdeps/generic/unsecvars.h
-@@ -12,6 +12,7 @@
+@@ -11,6 +11,7 @@
    "LD_DYNAMIC_WEAK\0"							      \
    "LD_HWCAP_MASK\0"							      \
    "LD_LIBRARY_PATH\0"							      \
@@ -273,3 +358,108 @@ index 81397fb90b..8a47ca9284 100644
    "LD_ORIGIN_PATH\0"							      \
    "LD_PRELOAD\0"							      \
    "LD_PROFILE\0"							      \
+diff --git a/sysdeps/i386/tst-auditmod3b.c b/sysdeps/i386/tst-auditmod3b.c
+index 21c95fd711..5da63e790d 100644
+--- a/sysdeps/i386/tst-auditmod3b.c
++++ b/sysdeps/i386/tst-auditmod3b.c
+@@ -80,6 +80,9 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     case LA_SER_CONFIG:
+       flagstr = "LA_SER_CONFIG";
+       break;
++    case LA_SER_FALLBACK:
++      flagstr = "LA_SER_FALLBACK";
++      break;
+     case LA_SER_DEFAULT:
+       flagstr = "LA_SER_DEFAULT";
+       break;
+diff --git a/sysdeps/x86_64/tst-auditmod10b.c b/sysdeps/x86_64/tst-auditmod10b.c
+index b62537adf0..d0abbd8fa1 100644
+--- a/sysdeps/x86_64/tst-auditmod10b.c
++++ b/sysdeps/x86_64/tst-auditmod10b.c
+@@ -68,6 +68,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
+diff --git a/sysdeps/x86_64/tst-auditmod3b.c b/sysdeps/x86_64/tst-auditmod3b.c
+index 7aad92382e..72a0fb0bdf 100644
+--- a/sysdeps/x86_64/tst-auditmod3b.c
++++ b/sysdeps/x86_64/tst-auditmod3b.c
+@@ -52,6 +52,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
+diff --git a/sysdeps/x86_64/tst-auditmod4b.c b/sysdeps/x86_64/tst-auditmod4b.c
+index 1153ea442c..39e2338965 100644
+--- a/sysdeps/x86_64/tst-auditmod4b.c
++++ b/sysdeps/x86_64/tst-auditmod4b.c
+@@ -51,6 +51,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
+diff --git a/sysdeps/x86_64/tst-auditmod5b.c b/sysdeps/x86_64/tst-auditmod5b.c
+index 6a280fd61b..21de890f58 100644
+--- a/sysdeps/x86_64/tst-auditmod5b.c
++++ b/sysdeps/x86_64/tst-auditmod5b.c
+@@ -52,6 +52,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
+diff --git a/sysdeps/x86_64/tst-auditmod6b.c b/sysdeps/x86_64/tst-auditmod6b.c
+index 3533602c07..911109649d 100644
+--- a/sysdeps/x86_64/tst-auditmod6b.c
++++ b/sysdeps/x86_64/tst-auditmod6b.c
+@@ -51,6 +51,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
+diff --git a/sysdeps/x86_64/tst-auditmod6c.c b/sysdeps/x86_64/tst-auditmod6c.c
+index 8000e89224..e310b5a74d 100644
+--- a/sysdeps/x86_64/tst-auditmod6c.c
++++ b/sysdeps/x86_64/tst-auditmod6c.c
+@@ -51,6 +51,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
+diff --git a/sysdeps/x86_64/tst-auditmod7b.c b/sysdeps/x86_64/tst-auditmod7b.c
+index 5abe6d1bc9..4405fda1bd 100644
+--- a/sysdeps/x86_64/tst-auditmod7b.c
++++ b/sysdeps/x86_64/tst-auditmod7b.c
+@@ -51,6 +51,8 @@ la_objsearch (const char *name, uintptr_t *cookie, unsigned int flag)
+     flagstr = "LA_SER_RUNPATH";
+   else if (flag == LA_SER_CONFIG)
+     flagstr = "LA_SER_CONFIG";
++  else if (flag == LA_SER_FALLBACK)
++    flagstr = "LA_SER_FALLBACK";
+   else if (flag == LA_SER_DEFAULT)
+     flagstr = "LA_SER_DEFAULT";
+   else if (flag == LA_SER_SECURE)
