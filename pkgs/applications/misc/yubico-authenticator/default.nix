@@ -12,7 +12,7 @@
 }:
 
 flutter.buildFlutterApplication rec {
-  pname = "yubioath-flutter";
+  pname = "yubico-authenticator";
   version = "6.4.0";
 
   src = fetchFromGitHub {

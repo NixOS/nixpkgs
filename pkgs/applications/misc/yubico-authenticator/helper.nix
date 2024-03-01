@@ -12,7 +12,7 @@
 }:
 
 buildPythonApplication {
-  pname = "yubioath-flutter-helper";
+  pname = "yubico-authenticator-helper";
   inherit src version meta;
 
   pyproject = true;
