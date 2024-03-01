@@ -196,6 +196,30 @@ in {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         StateDirectory = "bitwarden_rs";
         StateDirectoryMode = "0700";
+        RemoveIPC = true;
+        NoNewPrivileges = true;
+        CapabilityBoundingSet = "";
+        SystemCallFilter = [ "@system-service" ];
+        ProtectProc = "invisible";
+        ProtectClock = true;
+        ProcSubset = "pid";
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
+        LockPersonality = true;
+        RestrictNamespaces = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        SystemCallArchitectures = "native";
+        MemoryDenyWriteExecute = true;
+        RestrictSUIDSGID = true;
+        RestrictRealtime = true;
         Restart = "always";
       };
       wantedBy = [ "multi-user.target" ];
@@ -217,6 +241,27 @@ in {
         User = mkDefault user;
         Group = mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
+        ReadOnlyDirectories = mkIf (!hasPrefix "/var/lib/bitwarden_rs" cfg.backupDir) [ "/var/lib/bitwarden_rs" ];
+        ReadWriteDirectories = [ "-${cfg.backupDir}" ];
+
+        # Hardening
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
       };
       wantedBy = [ "multi-user.target" ];
     };
