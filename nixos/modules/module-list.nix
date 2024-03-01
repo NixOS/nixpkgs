@@ -512,6 +512,7 @@
   ./services/editors/infinoted.nix
   ./services/finance/odoo.nix
   ./services/games/archisteamfarm.nix
+  ./services/games/armagetronad.nix
   ./services/games/crossfire-server.nix
   ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
