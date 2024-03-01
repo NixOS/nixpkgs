@@ -17,13 +17,13 @@
 
 let
 pname = "warp-terminal";
-version = "0.2024.02.20.08.01.stable_01";
+version = "0.2024.02.27.08.01.stable_03";
 
 linux = stdenv.mkDerivation (finalAttrs:  {
   inherit pname version meta;
   src = fetchurl {
     url = "https://releases.warp.dev/stable/v${finalAttrs.version}/warp-terminal-v${finalAttrs.version}-1-x86_64.pkg.tar.zst";
-    hash = "sha256-L8alnqSE4crrDozRfPaAAMkLc+5+8d9XBKd5ddsxmD0=";
+    hash = "sha256-CUCV1Oc1KV7MmY3enBt0z5a69zmfUMWlDcijZxuq/ck=";
   };
 
   sourceRoot = ".";
@@ -68,7 +68,7 @@ darwin = stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version meta;
   src = fetchurl {
     url = "https://releases.warp.dev/stable/v${finalAttrs.version}/Warp.dmg";
-    hash = "sha256-tFtoD8URMFfJ3HRkyKStuDStFkoRIV97y9kV4pbDPro=";
+    hash = "sha256-2nVeuVSkrakE5TolgPysILQ7F62uY37EnH8NQ+gsMyg=";
   };
 
   sourceRoot = ".";
