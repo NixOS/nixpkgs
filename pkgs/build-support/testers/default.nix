@@ -123,18 +123,12 @@
           inherit pkgs;
           extraConfigurations = [(
             { lib, ... }: {
-              # Carefully note that we intentionally don't do this:
-              #
-              # config.nixpkgs.pkgs = lib.mkDefault pkgs;
-              #
-              # … because we want to to be able to reinstantiate `nixpkgs.pkgs`
-              # with the (possibly different) `nixpkgs.system` specified in
-              # `./nixos/lib/testing/nodes.nix`.  This means that only package
-              # overrides specified in the `overlays` or
-              # `config.packageOverrides` arguments to Nixpkgs will be passed
-              # through to `nixpkgs.pkgs`.
-              config.nixpkgs.overlays = lib.mkDefault pkgs.overlays;
-              config.nixpkgs.config = lib.mkDefault pkgs.config;
+              config.nixpkgs.pkgs = lib.mkDefault (
+                import pkgs.path {
+                  inherit (pkgs) config overlays;
+                  system = stdenv.hostPlatform.parsed.cpu.name + "-linux";
+                }
+              );
             }
           )];
         });
