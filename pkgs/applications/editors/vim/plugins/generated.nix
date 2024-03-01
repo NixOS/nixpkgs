@@ -15300,6 +15300,18 @@ final: prev:
     meta.homepage = "https://github.com/machakann/vim-swap/";
   };
 
+  vim-tabby = buildVimPlugin {
+    pname = "vim-tabby";
+    version = "2024-02-01";
+    src = fetchFromGitHub {
+      owner = "TabbyML";
+      repo = "vim-tabby";
+      rev = "0b62bc2ed5c7d930c7435c3504d5c18ea6379b28";
+      sha256 = "06crxhvwz04s6sfj0q22kkp3g5zvip13088m95qwznw9bv2gpx3s";
+    };
+    meta.homepage = "https://github.com/TabbyML/vim-tabby/";
+  };
+
   vim-table-mode = buildVimPlugin {
     pname = "vim-table-mode";
     version = "2023-10-29";
@@ -16621,18 +16633,6 @@ final: prev:
       sha256 = "025rqfs0n2ryi7xwzpq5h2r7jhvxbrb2gjp6fqa072hapgqr0igb";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  vim-tabby = buildVimPlugin {
-    pname = "vim-tabby";
-    version = "2024-02-01";
-    src = fetchFromGitHub {
-      owner = "TabbyML";
-      repo = "vim-tabby";
-      rev = "0b62bc2ed5c7d930c7435c3504d5c18ea6379b28";
-      sha256 = "06crxhvwz04s6sfj0q22kkp3g5zvip13088m95qwznw9bv2gpx3s";
-    };
-    meta.homepage = "https://github.com/TabbyML/vim-tabby/";
   };
 
   catppuccin-nvim = buildVimPlugin {
