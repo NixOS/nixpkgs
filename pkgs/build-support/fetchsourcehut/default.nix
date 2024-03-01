@@ -1,11 +1,11 @@
-{ fetchgit, fetchhg, fetchzip, lib }:
+{ lib, repoRevToNameMaybe, fetchgit, fetchhg, fetchzip }:
 
 lib.makeOverridable (
 { owner
 , repo, rev
 , domain ? "sr.ht"
 , vc ? "git"
-, name ? "source"
+, name ? repoRevToNameMaybe repo rev "sourcehut"
 , fetchSubmodules ? false
 , ... # For hash agility
 } @ args:
