@@ -6,6 +6,7 @@
 , zlib
 , ncurses
 , libxml2
+, useRustLlvm ? false
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,10 +22,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jLbQ49fxLROEAgokbVAy8yDIRe/MhFJxutRzSEtlnEk=";
 
-  buildNoDefaultFeatures = true;
+  buildNoDefaultFeatures = !useRustLlvm;
 
-  nativeBuildInputs = [ llvmPackages_16.llvm ];
+  nativeBuildInputs = lib.optional (!useRustLlvm) llvmPackages_16.llvm;
   buildInputs = [ zlib ncurses libxml2 ];
+
+  # aya-rustc-llvm-proxy will run cargo-metadata from $cargoDeps, so we need to fixup the .cargo/config there.
+  postPatch = lib.optionalString useRustLlvm ''
+    substituteInPlace $cargoDepsCopy/.cargo/config --replace @vendor@ $cargoDepsCopy
+  '';
 
   # fails with: couldn't find crate `core` with expected target triple bpfel-unknown-none
   # rust-src and `-Z build-std=core` are required to properly run the tests
