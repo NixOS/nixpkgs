@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://www.videolan.org/vlc/download-macosx.html";
     license = lib.licenses.lgpl21Plus;
     mainProgram = "vlc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ pcasaretto ];
     platforms = lib.systems.inspect.patternLogicalAnd
       (lib.systems.inspect.patterns.isDarwin)
       (({
