@@ -8056,8 +8056,6 @@ with pkgs;
 
   fcitx5-skk = qt6Packages.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
 
-  fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
-
   fcitx5-anthy = callPackage ../tools/inputmethods/fcitx5/fcitx5-anthy.nix { };
 
   fcitx5-chewing = callPackage ../tools/inputmethods/fcitx5/fcitx5-chewing.nix { };
@@ -24402,7 +24400,7 @@ with pkgs;
   qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
-    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
+    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget kdePackages;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   });
 

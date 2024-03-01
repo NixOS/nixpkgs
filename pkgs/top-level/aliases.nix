@@ -322,6 +322,7 @@ mapAliases ({
   fcitx-configtool = throw "fcitx-configtool is deprecated, please use fcitx5 instead."; # Added 2023-03-13
 
   fcitx5-chinese-addons = libsForQt5.fcitx5-chinese-addons; # Added 2024-03-01
+  fcitx5-configtool = libsForQt5.fcitx5-configtool; # Added 2024-03-01
   fcitx5-skk-qt = libsForQt5.fcitx5-skk-qt; # Added 2024-03-01
   fcitx5-unikey = libsForQt5.fcitx5-unikey; # Added 2024-03-01
 
