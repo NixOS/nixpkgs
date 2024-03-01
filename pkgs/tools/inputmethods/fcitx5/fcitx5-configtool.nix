@@ -1,10 +1,14 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
+, pkg-config
 , extra-cmake-modules
 , fcitx5
 , fcitx5-qt
+, qtbase
+, qtsvg
+, wrapQtAppsHook
 , qtx11extras
 , qtquickcontrols2
 , kwidgetsaddons
@@ -14,12 +18,14 @@
 , xkeyboardconfig
 , libxkbfile
 , libXdmcp
-, plasma5Packages
+, kiconthemes
 , plasma-framework
 , kcmSupport ? true
 }:
 
-mkDerivation rec {
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+in stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
   version = "5.1.3";
 
@@ -31,17 +37,22 @@ mkDerivation rec {
   };
 
   cmakeFlags = [
+    (lib.cmakeBool "USE_QT6" isQt6)
     "-DKDE_INSTALL_USE_QT_SYS_PATHS=ON"
   ];
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     fcitx5
     fcitx5-qt
+    qtbase
+    qtsvg
     qtx11extras
     qtquickcontrols2
     kirigami2
@@ -52,7 +63,7 @@ mkDerivation rec {
   ] ++ lib.optionals kcmSupport [
     kdeclarative
     kwidgetsaddons
-    plasma5Packages.kiconthemes
+    kiconthemes
     plasma-framework
   ];
 

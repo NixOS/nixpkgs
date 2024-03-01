@@ -10,6 +10,7 @@
 , generateSplicesForMkScope
 , stdenv
 , pkgsHostTarget
+, kdePackages
 }:
 
 let
@@ -33,6 +34,13 @@ makeScopeWithSplicing' {
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
   fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
+  fcitx5-configtool = kdePackages.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix {
+    # Adjust for Qt5 -> Qt6 renames
+    kirigami2 = kdePackages.kirigami;
+    plasma-framework = kdePackages.libplasma;
+    qtquickcontrols2 = null;
+    qtx11extras = null;
+  };
 
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
