@@ -16583,9 +16583,9 @@
     }];
   };
   RoseHobgoblin = {
-	name = "J. L. Bowden"
-	github = "RoseHobgoblin"
-	githubId = "84164410"
+	name = "J. L. Bowden";
+	github = "rosehobgoblin";
+	githubId = "84164410";
   };
   rossabaker = {
     name = "Ross A. Baker";
