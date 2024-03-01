@@ -1,0 +1,87 @@
+From fab48ac3796efc4c9a53a46208bbe8838c4f28e8 Mon Sep 17 00:00:00 2001
+From: wrvsrx <wrvsrx@outlook.com>
+Date: Mon, 19 Feb 2024 09:27:04 +0800
+Subject: [PATCH] use a simple patch to avoid downloading from internet
+
+---
+ setup/install.py   |  1 +
+ setup/iso_codes.py | 15 +++++++++++----
+ setup/resources.py |  2 ++
+ 3 files changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/setup/install.py b/setup/install.py
+index 369156530956..844bb57bd198 100644
+--- a/setup/install.py
++++ b/setup/install.py
+@@ -365,6 +365,7 @@ def add_options(self, parser):
+             help='Do not download all history for the translations. Speeds up first time download but subsequent downloads will be slower.')
+ 
+     def pre_sub_commands(self, opts):
++        return
+         tdir = self.j(self.d(self.SRC), 'translations')
+         clone_cmd = [
+             'git', 'clone', f'https://github.com/{self.TRANSLATIONS_REPO}.git', 'translations']
+diff --git a/setup/iso_codes.py b/setup/iso_codes.py
+index 3a3bfecd1253..6d934394239a 100644
+--- a/setup/iso_codes.py
++++ b/setup/iso_codes.py
+@@ -11,10 +11,16 @@
+ 
+ 
+ class ISOData:
+-    URL = 'https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/main/iso-codes-main.zip'
++    VERSION = ('v' + os.getenv('ISOCODE_VERSION')) if os.getenv('ISOCODE_VERSION') else 'main'
++    ZIPFILE = os.getenv('ISOCODE_ZIP')
++    URL = f'https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/{VERSION}/iso-codes-{VERSION}.zip'
+ 
+     def __init__(self):
+-        self._zip_data = None
++        if self.ZIPFILE:
++            with open(self.ZIPFILE, 'rb') as f:
++                self._zip_data = BytesIO(f.read())
++        else:
++            self._zip_data = None
+ 
+     @property
+     def zip_data(self):
+@@ -24,12 +30,12 @@ def zip_data(self):
+ 
+     def db_data(self, name: str) -> bytes:
+         with zipfile.ZipFile(self.zip_data) as zf:
+-            with zf.open(f'iso-codes-main/data/{name}') as f:
++            with zf.open(f'iso-codes-{self.VERSION}/data/{name}') as f:
+                 return f.read()
+ 
+     def extract_po_files(self, name: str, output_dir: str) -> None:
+         name = name.split('.', 1)[0]
+-        pat = f'iso-codes-main/{name}/*.po'
++        pat = f'iso-codes-{self.VERSION}/{name}/*.po'
+         with zipfile.ZipFile(self.zip_data) as zf:
+             for name in fnmatch.filter(zf.namelist(), pat):
+                 dest = os.path.join(output_dir, name.split('/')[-1])
+@@ -39,4 +45,5 @@ def extract_po_files(self, name: str, output_dir: str) -> None:
+                 date_time = time.mktime(zi.date_time + (0, 0, -1))
+                 os.utime(dest, (date_time, date_time))
+ 
++
+ iso_data = ISOData()
+diff --git a/setup/resources.py b/setup/resources.py
+index def799757656..09f48a9838a6 100644
+--- a/setup/resources.py
++++ b/setup/resources.py
+@@ -136,6 +136,7 @@ class CACerts(Command):  # {{{
+     CA_PATH = os.path.join(Command.RESOURCES, 'mozilla-ca-certs.pem')
+ 
+     def run(self, opts):
++        return
+         try:
+             with open(self.CA_PATH, 'rb') as f:
+                 raw = f.read()
+@@ -164,6 +165,7 @@ class RecentUAs(Command):  # {{{
+     UA_PATH = os.path.join(Command.RESOURCES, 'user-agent-data.json')
+ 
+     def run(self, opts):
++        return 
+         from setup.browser_data import get_data
+         data = get_data()
+         with open(self.UA_PATH, 'w', encoding='utf-8') as f:
