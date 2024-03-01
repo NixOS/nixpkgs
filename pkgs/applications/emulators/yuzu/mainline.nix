@@ -131,7 +131,7 @@ stdenv.mkDerivation(finalAttrs: {
   ];
 
   # Does some handrolled SIMD
-  env.NIX_CFLAGS_COMPILE = "-msse4.1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isx86_64 "-msse4.1";
 
   # Fixes vulkan detection.
   # FIXME: patchelf --add-rpath corrupts the binary for some reason, investigate
@@ -174,7 +174,7 @@ stdenv.mkDerivation(finalAttrs: {
       Using the early-access branch is recommended if you would like to try out experimental features, with a cost of stability.
     '';
     mainProgram = "yuzu";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     license = with licenses; [
       gpl3Plus
       # Icons
