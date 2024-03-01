@@ -17,7 +17,7 @@ php.buildComposerProject (finalAttrs: {
   # Missing `composer.lock` from the repository.
   # Issue open at https://github.com/vimeo/psalm/issues/10446
   composerLock = ./composer.lock;
-  vendorHash = "sha256-URPyV1V/8BP8fbJqyYLf+XKG786hY2BbAzUphzPyPCs=";
+  vendorHash = "sha256-AgvAaHcCYosS3yRrp9EFdqTjg6NzQRCr8ELSza9DvZ8=";
 
   meta = {
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
