@@ -846,6 +846,7 @@ let
       AIC94XX_DEBUG = no;
 
       BLK_DEV_INTEGRITY       = yes;
+      BLK_DEV_ZONED           = yes;
 
       BLK_SED_OPAL = yes;
 
