@@ -6,26 +6,30 @@
 , nix-update-script
 , rustPlatform
 , pkg-config
+, capnproto
+, installShellFiles
 , openssl
 , sqlite
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sq";
-  version = "0.32.0";
+  version = "0.34.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     rev = "v${version}";
-    hash = "sha256-2a6LIW5ohSi7fbMwk/wmNJ0AOz5JIXiXJI7EoVKv1Sk=";
+    hash = "sha256-voFektWZnkmIQzI7s5nKzVVWQtEhzk2GKtxX926RtxU=";
   };
 
-  cargoHash = "sha256-beA0viJVDjfANsPegkc/x2syVp8uGKTMnrPcM7jcvG4=";
+  cargoHash = "sha256-3ncBpRi0v6g6wwPkSASDwt0d8cOOAUv9BwZaYvnif1U=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    capnproto
+    installShellFiles
   ];
 
   buildInputs = [
@@ -41,13 +45,18 @@ rustPlatform.buildRustPackage rec {
     "--skip=macros::time_it"
   ];
 
-  # Install manual pages, see https://gitlab.com/sequoia-pgp/sequoia-sq#building
-  postInstall = ''
-    mkdir -p $out/share/man
-    SQ_MAN=$out/share/man/man1 cargo run
-  '';
+  env.ASSET_OUT_DIR = "/tmp/";
 
   doCheck = true;
+
+  postInstall = ''
+    installManPage /tmp/man-pages/*.*
+    installShellCompletion \
+      --cmd sq \
+      --bash /tmp/shell-completions/sq.bash \
+      --fish /tmp/shell-completions/sq.fish \
+      --zsh /tmp/shell-completions/_sq
+  '';
 
   passthru.updateScript = nix-update-script { };
 
