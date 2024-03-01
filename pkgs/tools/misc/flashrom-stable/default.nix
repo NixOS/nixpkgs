@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     pciutils
   ];
 
-  makeFlags = [ "PREFIX=$(out)" "libinstall" ] ++ lib.optionals stdenv.isDarwin [ "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=no" ]
+  makeFlags = [ "PREFIX=$(out)" "libinstall" ]
+    ++ lib.optionals stdenv.isDarwin [ "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=no" ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "CONFIG_INTERNAL_X86=no" "CONFIG_INTERNAL_DMI=no" "CONFIG_RAYER_SPI=0" ];
 
   meta = with lib; {
