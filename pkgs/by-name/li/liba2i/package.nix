@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "git://www.alejandro-colomar.es/src/alx/alx/lib/liba2i.git";
-    rev = "0.6";
+    rev = finalAttrs.version;
     hash = "sha256-JrD1lU8LISeUSksncByQVnPY3IAdeknThewfork8Ma8=";
   };
 
