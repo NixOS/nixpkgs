@@ -1,18 +1,10 @@
-{ lib, buildFHSEnv, execline, fuse-overlayfs, glibc, mplab-x-unwrapped, rsync
-, systemdLibs, xorg, writeShellApplication }:
+{ lib, buildFHSEnv, execline, fuse-overlayfs, glibc, jdk8, mplab-x-unwrapped
+, rsync, systemdLibs, writeShellApplication }:
 
 let
   fhsEnv = buildFHSEnv {
-    name = "mplab-x-build-fhs-env";
-    targetPkgs = pkgs: [
-      glibc
-      systemdLibs
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
-    ];
+    name = "mplab-x-fhs-env";
+    targetPkgs = pkgs: [ glibc systemdLibs ];
   };
 
   stage2 = writeShellApplication {
@@ -29,10 +21,11 @@ let
       rsync -rlp ${fhsEnv.fhsenv}/             "$rt/overlay/"
       rsync -rlp ${mplab-x-unwrapped}/etc/     "$rt/overlay/etc/"
       ln -s ${mplab-x-unwrapped}/opt/microchip "$rt/overlay/opt/microchip"
+      ln -s "$HOME"                            "$rt/overlay/root"
 
       # Make and mount (with FUSE) the newroot subdirectory.
       mkdir "$rt/newroot"
-      fuse-overlayfs -o lowerdir=/:"$rt/overlay" "$rt/newroot"
+      fuse-overlayfs -o lowerdir="$rt/overlay":/ "$rt/newroot"
       trap 'fusermount -zu "$rt/newroot"' EXIT
 
       # Set up /dev in the new rootfs.
@@ -63,7 +56,8 @@ let
       # Chroot into the new rootfs and launch the IDE.
       export LD_LIBRARY_PATH="/lib''${LD_LIBRARY_PATH:+:}''${LD_LIBRARY_PATH:-}"
       chroot "$rt/newroot" execline-cd "$(pwd)" \
-        ${mplab-x-unwrapped}/opt/microchip/mplabx/v6.20/mplab_platform/bin/mplab_ide
+        ${mplab-x-unwrapped}/opt/microchip/mplabx/v6.20/mplab_platform/bin/mplab_ide \
+        --jdkhome ${jdk8}
     '';
 
     inherit (mplab-x-unwrapped) meta;
