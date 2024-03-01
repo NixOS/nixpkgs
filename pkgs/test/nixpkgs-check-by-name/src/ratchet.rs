@@ -154,17 +154,29 @@ impl ToNixpkgsProblem for UsesByName {
         (to, file): &Self::ToContext,
     ) -> NixpkgsProblem {
         if let Some(()) = optional_from {
-            NixpkgsProblem::MovedOutOfByName {
+            if to.empty_arg {
+                NixpkgsProblem::MovedOutOfByNameEmptyArg {
+                    package_name: name.to_owned(),
+                    call_package_path: to.relative_path.clone(),
+                    file: file.to_owned(),
+                }
+            } else {
+                NixpkgsProblem::MovedOutOfByNameNonEmptyArg {
+                    package_name: name.to_owned(),
+                    call_package_path: to.relative_path.clone(),
+                    file: file.to_owned(),
+                }
+            }
+        } else if to.empty_arg {
+            NixpkgsProblem::NewPackageNotUsingByNameEmptyArg {
                 package_name: name.to_owned(),
                 call_package_path: to.relative_path.clone(),
-                empty_arg: to.empty_arg,
                 file: file.to_owned(),
             }
         } else {
-            NixpkgsProblem::NewPackageNotUsingByName {
+            NixpkgsProblem::NewPackageNotUsingByNameNonEmptyArg {
                 package_name: name.to_owned(),
                 call_package_path: to.relative_path.clone(),
-                empty_arg: to.empty_arg,
                 file: file.to_owned(),
             }
         }

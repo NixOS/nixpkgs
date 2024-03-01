@@ -2,6 +2,7 @@
 
 use crate::utils::LineIndex;
 use anyhow::Context;
+use itertools::Either::{self, Left, Right};
 use rnix::ast;
 use rnix::ast::Expr;
 use rnix::ast::HasEntry;
@@ -86,8 +87,8 @@ pub struct CallPackageArgumentInfo {
 impl NixFile {
     /// Returns information about callPackage arguments for an attribute at a specific line/column
     /// index.
-    /// If the location is not of the form `<attr> = callPackage <arg1> <arg2>;`, `Ok((None, String))` is
-    /// returned, with String being how the definition looks like.
+    /// If the definition at the given location is not of the form `<attr> = callPackage <arg1> <arg2>;`,
+    /// `Ok((None, String))` is returned, with `String` being the definition itself.
     ///
     /// This function only returns `Err` for problems that can't be caused by the Nix contents,
     /// but rather problems in this programs code itself.
@@ -124,8 +125,8 @@ impl NixFile {
         relative_to: &Path,
     ) -> anyhow::Result<(Option<CallPackageArgumentInfo>, String)> {
         Ok(match self.attrpath_value_at(line, column)? {
-            Err(definition) => (None, definition),
-            Ok(attrpath_value) => {
+            Left(definition) => (None, definition),
+            Right(attrpath_value) => {
                 let definition = attrpath_value.to_string();
                 let attrpath_value =
                     self.attrpath_value_call_package_argument_info(attrpath_value, relative_to)?;
@@ -139,7 +140,7 @@ impl NixFile {
         &self,
         line: usize,
         column: usize,
-    ) -> anyhow::Result<Result<ast::AttrpathValue, String>> {
+    ) -> anyhow::Result<Either<String, ast::AttrpathValue>> {
         let index = self.line_index.fromlinecolumn(line, column);
 
         let token_at_offset = self
@@ -173,11 +174,11 @@ impl NixFile {
             // This is the only other way how `builtins.unsafeGetAttrPos` can return
             // attribute positions, but we only look for ones like `<attr-path> = <value>`, so
             // ignore this
-            return Ok(Err(node.to_string()));
+            return Ok(Left(node.to_string()));
         } else {
             // However, anything else is not expected and smells like a bug
             anyhow::bail!(
-                "Node in {} is neither an attribute node, nor an inherit node: {node:?}",
+                "Node in {} is neither an attribute node nor an inherit node: {node:?}",
                 self.path.display()
             )
         }
@@ -217,7 +218,9 @@ impl NixFile {
         // unwrap is fine because we confirmed that we can cast with the above check.
         // We could avoid this `unwrap` for a `clone`, since `cast` consumes the argument,
         // but we still need it for the error message when the cast fails.
-        Ok(Ok(ast::AttrpathValue::cast(attrpath_value_node).unwrap()))
+        Ok(Right(
+            ast::AttrpathValue::cast(attrpath_value_node).unwrap(),
+        ))
     }
 
     // Internal function mainly to make attrpath_value_at independently testable
@@ -446,24 +449,24 @@ mod tests {
 
         // These are builtins.unsafeGetAttrPos locations for the attributes
         let cases = [
-            (2, 3, Ok("foo = 1;")),
-            (3, 3, Ok(r#""bar" = 2;"#)),
-            (4, 3, Ok(r#"${"baz"} = 3;"#)),
-            (5, 3, Ok(r#""${"qux"}" = 4;"#)),
-            (8, 3, Ok("quux\n  # B\n  =\n  # C\n  5\n  # D\n  ;")),
-            (17, 7, Ok("quuux/**/=/**/5/**/;")),
-            (19, 10, Err("inherit toInherit;")),
-            (20, 22, Err("inherit (toInherit) toInherit;")),
+            (2, 3, Right("foo = 1;")),
+            (3, 3, Right(r#""bar" = 2;"#)),
+            (4, 3, Right(r#"${"baz"} = 3;"#)),
+            (5, 3, Right(r#""${"qux"}" = 4;"#)),
+            (8, 3, Right("quux\n  # B\n  =\n  # C\n  5\n  # D\n  ;")),
+            (17, 7, Right("quuux/**/=/**/5/**/;")),
+            (19, 10, Left("inherit toInherit;")),
+            (20, 22, Left("inherit (toInherit) toInherit;")),
         ];
 
         for (line, column, expected_result) in cases {
             let actual_result = nix_file
                 .attrpath_value_at(line, column)
                 .context(format!("line {line}, column {column}"))?
-                .map(|node| node.to_string());
+                .map_right(|node| node.to_string());
             let owned_expected_result = expected_result
                 .map(|x| x.to_string())
-                .map_err(|x| x.to_string());
+                .map_left(|x| x.to_string());
             assert_eq!(
                 actual_result, owned_expected_result,
                 "line {line}, column {column}"

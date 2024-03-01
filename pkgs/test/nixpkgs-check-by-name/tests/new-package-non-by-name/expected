@@ -18,4 +18,4 @@
   See `pkgs/by-name/README.md` for more details.
   Since the second `callPackage` argument is not `{ }`, the manual `callPackage` in /home/tweagysil/src/nixpkgs/by-name-improv/pkgs/test/nixpkgs-check-by-name/tests/new-package-non-by-name/all-packages.nix is still needed.
 
-This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch
+This PR introduces additional instances of discouraged patterns as listed above. Merging is discouraged but would not break the base branch.

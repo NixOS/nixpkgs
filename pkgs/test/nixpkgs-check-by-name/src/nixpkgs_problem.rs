@@ -68,7 +68,6 @@ pub enum NixpkgsProblem {
         package_name: String,
         file: PathBuf,
         line: usize,
-        column: usize,
         actual_path: PathBuf,
         expected_path: PathBuf,
     },
@@ -117,16 +116,24 @@ pub enum NixpkgsProblem {
         text: String,
         io_error: String,
     },
-    MovedOutOfByName {
+    MovedOutOfByNameEmptyArg {
         package_name: String,
         call_package_path: Option<PathBuf>,
-        empty_arg: bool,
         file: PathBuf,
     },
-    NewPackageNotUsingByName {
+    MovedOutOfByNameNonEmptyArg {
         package_name: String,
         call_package_path: Option<PathBuf>,
-        empty_arg: bool,
+        file: PathBuf,
+    },
+    NewPackageNotUsingByNameEmptyArg {
+        package_name: String,
+        call_package_path: Option<PathBuf>,
+        file: PathBuf,
+    },
+    NewPackageNotUsingByNameNonEmptyArg {
+        package_name: String,
+        call_package_path: Option<PathBuf>,
         file: PathBuf,
     },
     InternalCallPackageUsed {
@@ -203,8 +210,7 @@ impl fmt::Display for NixpkgsProblem {
 
                         {package_name} = callPackage ./{} {{ /* ... */ }};
 
-                      Notably the second argument must not be empty, which is not the case.
-                      It is defined in {}:{} as
+                      However, in this PR, the second argument is empty. See the definition in {}:{}:
 
                     {}
                     ",
@@ -222,8 +228,7 @@ impl fmt::Display for NixpkgsProblem {
 
                         {package_name} = callPackage ./{} {{ /* ... */ }};
 
-                      This is however not the case: A different `callPackage` is used.
-                      It is defined in {}:{} as
+                      However, in this PR, a different `callPackage` is used. See the definition in {}:{}:
 
                     {}
                     ",
@@ -241,8 +246,7 @@ impl fmt::Display for NixpkgsProblem {
 
                         {package_name} = callPackage ./{} {{ /* ... */ }};
 
-                      This is however not the case: The first callPackage argument is not right:
-                      It is defined in {}:{} as
+                      However, in this PR, the first `callPackage` argument is not a path. See the definition in {}:{}:
 
                     {}
                     ",
@@ -252,7 +256,7 @@ impl fmt::Display for NixpkgsProblem {
                     line,
                     indent_definition(*column, definition.clone()),
                 ),
-            NixpkgsProblem::WrongCallPackagePath { package_name, file, line, column, actual_path, expected_path } =>
+            NixpkgsProblem::WrongCallPackagePath { package_name, file, line, actual_path, expected_path } =>
                 writedoc! {
                     f,
                     "
@@ -260,14 +264,13 @@ impl fmt::Display for NixpkgsProblem {
 
                         {package_name} = callPackage {} {{ /* ... */ }};
 
-                      This is however not the case: The first `callPackage` argument is the wrong path.
-                      It is defined in {}:{}:{} as
+                      However, in this PR, the first `callPackage` argument is the wrong path. See the definition in {}:{}:
 
                         {package_name} = callPackage {} {{ /* ... */ }};
                     ",
                     structure::relative_dir_for_package(package_name).display(),
                     create_path_expr(file, expected_path),
-                    file.display(), line, column,
+                    file.display(), line,
                     create_path_expr(file, actual_path),
                 },
             NixpkgsProblem::NonSyntacticCallPackage { package_name, file, line, column, definition } => {
@@ -278,8 +281,7 @@ impl fmt::Display for NixpkgsProblem {
 
                         {package_name} = callPackage ./{} {{ /* ... */ }};
 
-                      This is however not the case.
-                      It is defined in {}:{} as
+                      However, in this PR, it isn't defined that way. See the definition in {}:{}
 
                     {}
                     ",
@@ -342,49 +344,48 @@ impl fmt::Display for NixpkgsProblem {
                     subpath.display(),
                     text,
                 ),
-            NixpkgsProblem::MovedOutOfByName { package_name, call_package_path, empty_arg, file } => {
+            NixpkgsProblem::MovedOutOfByNameEmptyArg { package_name, call_package_path, file } => {
                 let call_package_arg =
                     if let Some(path) = &call_package_path {
                         format!("./{}", path.display())
                     } else {
                         "...".into()
                     };
-                if *empty_arg {
-                    writedoc!(
-                        f,
-                        "
-                        - Attribute `pkgs.{package_name} was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ /* ... */ }}` in {}.
-                          Please move the package back and remove the manual `callPackage`.
-                        ",
-                        structure::relative_file_for_package(package_name).display(),
-                        file.display(),
-                        )
-                } else {
-                    // This can happen if users mistakenly assume that for custom arguments,
-                    // pkgs/by-name can't be used.
-                    writedoc!(
-                        f,
-                        "
-                        - Attribute `pkgs.{package_name}` was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ ... }}` in {}.
-                          While the manual `callPackage` is still needed, it's not necessary to move the package files.
-                        ",
-                        structure::relative_file_for_package(package_name).display(),
-                        file.display(),
-                        )
-                }
+                writedoc!(
+                    f,
+                    "
+                    - Attribute `pkgs.{package_name}` was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ /* ... */ }}` in {}.
+                      Please move the package back and remove the manual `callPackage`.
+                    ",
+                    structure::relative_file_for_package(package_name).display(),
+                    file.display(),
+                    )
             },
-            NixpkgsProblem::NewPackageNotUsingByName { package_name, call_package_path, empty_arg, file } => {
+            NixpkgsProblem::MovedOutOfByNameNonEmptyArg { package_name, call_package_path, file } => {
                 let call_package_arg =
                     if let Some(path) = &call_package_path {
                         format!("./{}", path.display())
                     } else {
                         "...".into()
                     };
-                let extra =
-                    if *empty_arg {
-                        format!("Since the second `callPackage` argument is `{{ }}`, no manual `callPackage` in {} is needed anymore.", file.display())
+                // This can happen if users mistakenly assume that for custom arguments,
+                // pkgs/by-name can't be used.
+                writedoc!(
+                    f,
+                    "
+                    - Attribute `pkgs.{package_name}` was previously defined in {}, but is now manually defined as `callPackage {call_package_arg} {{ ... }}` in {}.
+                      While the manual `callPackage` is still needed, it's not necessary to move the package files.
+                    ",
+                    structure::relative_file_for_package(package_name).display(),
+                    file.display(),
+                    )
+            },
+            NixpkgsProblem::NewPackageNotUsingByNameEmptyArg { package_name, call_package_path, file } => {
+                let call_package_arg =
+                    if let Some(path) = &call_package_path {
+                        format!("./{}", path.display())
                     } else {
-                        format!("Since the second `callPackage` argument is not `{{ }}`, the manual `callPackage` in {} is still needed.", file.display())
+                        "...".into()
                     };
                 writedoc!(
                     f,
@@ -392,9 +393,29 @@ impl fmt::Display for NixpkgsProblem {
                     - Attribute `pkgs.{package_name}` is a new top-level package using `pkgs.callPackage {call_package_arg} {{ /* ... */ }}`.
                       Please define it in {} instead.
                       See `pkgs/by-name/README.md` for more details.
-                      {extra}
+                      Since the second `callPackage` argument is `{{ }}`, no manual `callPackage` in {} is needed anymore.
                     ",
                     structure::relative_file_for_package(package_name).display(),
+                    file.display(),
+                )
+            },
+            NixpkgsProblem::NewPackageNotUsingByNameNonEmptyArg { package_name, call_package_path, file } => {
+                let call_package_arg =
+                    if let Some(path) = &call_package_path {
+                        format!("./{}", path.display())
+                    } else {
+                        "...".into()
+                    };
+                writedoc!(
+                    f,
+                    "
+                    - Attribute `pkgs.{package_name}` is a new top-level package using `pkgs.callPackage {call_package_arg} {{ /* ... */ }}`.
+                      Please define it in {} instead.
+                      See `pkgs/by-name/README.md` for more details.
+                      Since the second `callPackage` argument is not `{{ }}`, the manual `callPackage` in {} is still needed.
+                    ",
+                    structure::relative_file_for_package(package_name).display(),
+                    file.display(),
                 )
             },
             NixpkgsProblem::InternalCallPackageUsed { attr_name } =>
@@ -426,14 +447,13 @@ fn indent_definition(column: usize, definition: String) -> String {
 
 /// Creates a Nix path expression that when put into Nix file `from_file`, would point to the `to_file`.
 fn create_path_expr(from_file: impl AsRef<Path>, to_file: impl AsRef<Path>) -> String {
-    // FIXME: Clean these unwrap's up
-    // But these should never trigger because we only call this function with relative paths, and only
-    // with `from_file` being an actual file (so there's always a parent)
+    // These `expect` calls should never trigger because we only call this function with
+    // relative paths that have a parent. That's why we `expect` them!
     let from = RelativePath::from_path(&from_file)
-        .unwrap()
+        .expect("a relative path")
         .parent()
-        .unwrap();
-    let to = RelativePath::from_path(&to_file).unwrap();
+        .expect("a parent for this path");
+    let to = RelativePath::from_path(&to_file).expect("a path");
     let rel = from.relative(to);
     format!("./{rel}")
 }

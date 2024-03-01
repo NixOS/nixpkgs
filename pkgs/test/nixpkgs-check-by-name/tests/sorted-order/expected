@@ -2,8 +2,7 @@
 
     a = callPackage ./pkgs/by-name/a/a/package.nix { /* ... */ };
 
-  Notably the second argument must not be empty, which is not the case.
-  It is defined in all-packages.nix:2 as
+  However, in this PR, the second argument is empty. See the definition in all-packages.nix:2:
 
     a = self.callPackage ./pkgs/by-name/a/a/package.nix { };
 
@@ -16,8 +15,7 @@
 
     c = callPackage ./pkgs/by-name/c/c/package.nix { /* ... */ };
 
-  Notably the second argument must not be empty, which is not the case.
-  It is defined in all-packages.nix:4 as
+  However, in this PR, the second argument is empty. See the definition in all-packages.nix:4:
 
     c = self.callPackage ./pkgs/by-name/c/c/package.nix { };
 
@@ -26,4 +24,4 @@
   See `pkgs/by-name/README.md` for more details.
   Since the second `callPackage` argument is `{ }`, no manual `callPackage` in /home/tweagysil/src/nixpkgs/by-name-improv/pkgs/test/nixpkgs-check-by-name/tests/sorted-order/all-packages.nix is needed anymore.
 
-This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch
+This PR introduces additional instances of discouraged patterns as listed above. Merging is discouraged but would not break the base branch.

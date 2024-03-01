@@ -2,9 +2,8 @@
 
     foo = callPackage ./pkgs/by-name/fo/foo/package.nix { /* ... */ };
 
-  This is however not the case: A different `callPackage` is used.
-  It is defined in all-packages.nix:5 as
+  However, in this PR, a different `callPackage` is used. See the definition in all-packages.nix:5:
 
     foo = self.alt.callPackage ({ }: self.someDrv) { };
 
-This PR introduces the above problems, merging would break the base branch
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

@@ -2,8 +2,7 @@
 
     noEval = callPackage ./pkgs/by-name/no/noEval/package.nix { /* ... */ };
 
-  Notably the second argument must not be empty, which is not the case.
-  It is defined in all-packages.nix:9 as
+  However, in this PR, the second argument is empty. See the definition in all-packages.nix:9:
 
     noEval = self.callPackage ./pkgs/by-name/no/noEval/package.nix { };
 
@@ -11,9 +10,8 @@
 
     onlyMove = callPackage ./pkgs/by-name/on/onlyMove/package.nix { /* ... */ };
 
-  Notably the second argument must not be empty, which is not the case.
-  It is defined in all-packages.nix:7 as
+  However, in this PR, the second argument is empty. See the definition in all-packages.nix:7:
 
     onlyMove = self.callPackage ./pkgs/by-name/on/onlyMove/package.nix { };
 
-This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch
+This PR introduces additional instances of discouraged patterns as listed above. Merging is discouraged but would not break the base branch.

@@ -2,9 +2,8 @@
 
     nonDerivation = callPackage ./pkgs/by-name/no/nonDerivation/package.nix { /* ... */ };
 
-  This is however not the case.
-  It is defined in all-packages.nix:2 as
+  However, in this PR, it isn't defined that way. See the definition in all-packages.nix:2
 
     nonDerivation = self.someDrv;
 
-This PR introduces the above problems, merging would break the base branch
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

@@ -93,27 +93,25 @@ pub fn process<W: io::Write>(
             for error in errors {
                 writeln!(error_writer, "{}", error.to_string().red())?
             }
-            writeln!(error_writer, "{}", "The base branch is broken and still has above problems with this PR, these need to be fixed first.\nConsider reverting the PR that introduced these problems in order to prevent more failures of unrelated PRs.".yellow())?;
+            writeln!(error_writer, "{}", "The base branch is broken and still has above problems with this PR, which need to be fixed first.\nConsider reverting the PR that introduced these problems in order to prevent more failures of unrelated PRs.".yellow())?;
             Ok(false)
         }
         (Failure(_), Success(_)) => {
-            // Base branch fails, but the PR fixes it
             writeln!(
                 error_writer,
                 "{}",
-                "The base branch was broken, but this PR fixes it, nice job!".green()
+                "The base branch is broken, but this PR fixes it. Nice job!".green()
             )?;
             Ok(true)
         }
         (Success(_), Failure(errors)) => {
-            // Base branch succeeds, the PR breaks it
             for error in errors {
                 writeln!(error_writer, "{}", error.to_string().red())?
             }
             writeln!(
                 error_writer,
                 "{}",
-                "This PR introduces the above problems, merging would break the base branch"
+                "This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break."
                     .yellow()
             )?;
             Ok(false)
@@ -125,7 +123,8 @@ pub fn process<W: io::Write>(
                     for error in errors {
                         writeln!(error_writer, "{}", error.to_string().red())?
                     }
-                    writeln!(error_writer, "{}", "This PR introduces the above problems compared to the base branch, merging is discouraged, but would not break the base branch".yellow())?;
+                    writeln!(error_writer, "{}", "This PR introduces additional instances of discouraged patterns as listed above. Merging is discouraged but would not break the base branch.".yellow())?;
+
                     Ok(false)
                 }
                 Success(()) => {
@@ -225,7 +224,7 @@ mod tests {
         test_nixpkgs(
             "case_sensitive",
             &path,
-            "pkgs/by-name/fo: Duplicate case-sensitive package directories \"foO\" and \"foo\".\nThis PR introduces the above problems, merging would break the base branch\n",
+            "pkgs/by-name/fo: Duplicate case-sensitive package directories \"foO\" and \"foo\".\nThis PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.\n",
         )?;
 
         Ok(())

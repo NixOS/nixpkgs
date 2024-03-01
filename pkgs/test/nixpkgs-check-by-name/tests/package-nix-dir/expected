@@ -1,2 +1,2 @@
 pkgs/by-name/fo/foo: "package.nix" must be a file.
-This PR introduces the above problems, merging would break the base branch
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

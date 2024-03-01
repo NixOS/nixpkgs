@@ -2,9 +2,8 @@
 
     foo = callPackage ./pkgs/by-name/fo/foo/package.nix { /* ... */ };
 
-  This is however not the case: The first callPackage argument is not right:
-  It is defined in all-packages.nix:3 as
+  However, in this PR, the first `callPackage` argument is not a path. See the definition in all-packages.nix:3:
 
     foo = self.callPackage ({ someDrv, someFlag }: someDrv) { someFlag = true; };
 
-This PR introduces the above problems, merging would break the base branch
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

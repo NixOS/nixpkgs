@@ -2,9 +2,8 @@
 
     nonDerivation = callPackage ./pkgs/by-name/no/nonDerivation/package.nix { /* ... */ };
 
-  This is however not the case: The first `callPackage` argument is the wrong path.
-  It is defined in all-packages.nix:2:3 as
+  However, in this PR, the first `callPackage` argument is the wrong path. See the definition in all-packages.nix:2:
 
     nonDerivation = callPackage ./someDrv.nix { /* ... */ };
 
-This PR introduces the above problems, merging would break the base branch
+This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.
