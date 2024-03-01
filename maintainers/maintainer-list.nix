@@ -10429,6 +10429,12 @@
     githubId = 591860;
     name = "Lionello Lunesu";
   };
+  litchipi = {
+    email = "litchi.pi@proton.me";
+    github = "litchipi";
+    githubId = 61109829;
+    name = "Litchi Pi";
+  };
   livnev = {
     email = "lev@liv.nev.org.uk";
     github = "livnev";
