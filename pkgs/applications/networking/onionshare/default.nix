@@ -59,7 +59,6 @@ let
 
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bbjubjub ];
-    mainProgram = "onionshare-cli";
   };
 
   # TODO: package meek https://support.torproject.org/glossary/meek/
@@ -69,7 +68,7 @@ in
 rec {
   onionshare = buildPythonApplication {
     pname = "onionshare-cli";
-    inherit version meta;
+    inherit version;
     src = "${src}/cli";
     patches = [
       # hardcode store paths of dependencies
@@ -122,11 +121,15 @@ rec {
       # to fake
       "test_receive_mode_webhook"
     ];
+
+    meta = meta // {
+      mainProgram = "onionshare-cli";
+    };
   };
 
   onionshare-gui = buildPythonApplication {
     pname = "onionshare";
-    inherit version meta;
+    inherit version;
     src = "${src}/desktop";
     patches = [
       # hardcode store paths of dependencies
@@ -155,12 +158,18 @@ rec {
       cp $src/org.onionshare.OnionShare.appdata.xml $out/share/appdata
     '';
 
+    dontWrapQtApps = true;
+
     preFixup = ''
-      wrapQtApp $out/bin/onionshare
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     '';
 
     doCheck = false;
 
     pythonImportsCheck = [ "onionshare" ];
+
+    meta = meta // {
+      mainProgram = "onionshare";
+    };
   };
 }
