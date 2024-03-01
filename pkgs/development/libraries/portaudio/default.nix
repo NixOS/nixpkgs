@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config which ];
-  buildInputs = [ libjack2 ] ++ lib.optional withALSA [ alsa-lib ];
+  buildInputs = [ libjack2 ] ++ lib.optionals withALSA [ alsa-lib ];
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
