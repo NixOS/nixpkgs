@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlogout";
-  version = "1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "ArtsyMacaw";
     repo = "wlogout";
     rev = version;
-    hash = "sha256-xeTO8MBUrvcVA7WTRY7OhaVGInijuvXsVYEax8JmMZ0=";
+    hash = "sha256-n8r+E6GXXjyDYBTOMiv5musamaUFSpRTM2qHgb047og=";
   };
 
   strictDeps = true;
