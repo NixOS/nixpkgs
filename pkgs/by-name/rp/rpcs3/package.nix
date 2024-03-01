@@ -22,6 +22,7 @@
 , flatbuffers
 , llvm_16
 , cubeb
+, enableDiscordRpc ? false
 , faudioSupport ? true
 , faudio
 , SDL2
@@ -72,9 +73,11 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
     (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
+    (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
     (lib.cmakeBool "USE_NATIVE_INSTRUCTIONS" false)
+    (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
     (lib.cmakeBool "USE_FAUDIO" faudioSupport)
   ];
 
@@ -82,9 +85,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     qtbase qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
+    libevdev zlib libusb1 curl wolfssl python3 pugixml SDL2 flatbuffers llvm_16 libSM
   ] ++ cubeb.passthru.backendLibs
-    ++ lib.optionals faudioSupport [ faudio SDL2 ]
+    ++ lib.optional faudioSupport faudio
     ++ lib.optionals waylandSupport [ wayland qtwayland ];
 
   postInstall = ''
