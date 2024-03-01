@@ -12,8 +12,7 @@
 , xcbuild
 , zip
 , coreutils
-, xattr
-, setfile
+, darwin
 }:
 
 # Each Corretto version is based on a corresponding OpenJDK version. So
@@ -28,12 +27,26 @@ let
   # The version scheme is different between OpenJDK & Corretto.
   # See https://github.com/corretto/corretto-17/blob/release-17.0.8.8.1/build.gradle#L40
   # "major.minor.security.build.revision"
+  #
+  appleFrameworks = darwin.apple_sdk_11_0.frameworks;
+  metalFrameworks = [
+    appleFrameworks.Accelerate
+    appleFrameworks.Metal
+    appleFrameworks.MetalKit
+    appleFrameworks.MetalPerformanceShaders
+  ];
+
 in
 jdk.overrideAttrs (finalAttrs: oldAttrs: {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin [ coreutils zip autoconf which xcbuild xattr setfile ];
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ jdk gradle rsync ] ++ lib.optionals stdenv.isDarwin
+    (
+    [ coreutils zip autoconf which xcbuild darwin.xattr darwin.stubs.setfile ]
+      ++
+      metalFrameworks
+    );
 
   configurePhase = ''
     runHook preConfigure

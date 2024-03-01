@@ -97,8 +97,7 @@ in {
 
     corretto11 = callPackage ../development/compilers/corretto/11.nix { };
     corretto17 = callPackage ../development/compilers/corretto/17.nix {
-      xattr=darwin.xattr;
-      setfile=darwin.stubs.setfile;
+      darwin=darwin;
     };
     corretto19 = callPackage ../development/compilers/corretto/19.nix { };
 
