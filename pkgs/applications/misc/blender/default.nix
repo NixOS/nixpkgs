@@ -68,7 +68,7 @@
   pkg-config,
   potrace,
   pugixml,
-  python310Packages,
+  python310Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
   runCommand,
   spaceNavSupport ? stdenv.isLinux,
